@@ -1,0 +1,797 @@
+<?php
+/**
+ * $Id: nl.p3,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *
+ * @modulegroup LANG
+ * @module nl
+ * @package BASE
+ *
+ * ========================= NOTE ========================
+ * Please put site specific extensions and changes
+ * to TUTOS language files in a file called "nl_custom.p3"
+ * or "lang_custom.p3" (for all languages)
+ * using the same format like here
+ * =======================================================
+ *
+ * Translation by Marcel <mvisscher at mac.com>
+ *  and Jeroen Baten <jbaten at i2rs dot nl>
+ *  and Robert Brouwer <rbrouwer at wise-guys dot nl>
+ */
+$lang['content_encoding'] = "iso-8859-1";
+setlocale(LC_TIME,'nl_NL');
+#
+# Nederlandse teksten
+#
+$lang['PleaseLogin']     = "Inloggen AUB";
+$lang['Welcome_1']       = "Welkom %s";
+$lang['Welcome_2']       = "laatste login was %s vanaf %s";
+$lang['Password']        = "Wachtwoord";
+$lang['Username']        = "Gebruikersnaam";
+$lang['MOTD']            = "Bericht van de dag";
+$lang['Login']           = "Login";
+$lang['LostPassword']    = "Wachtwoord kwijt ?";
+$lang['LoggedIn']        = "U bent ingelogd. Maak een keuze uit het menu.";
+$lang['ReadOnlyAppoint'] = "U kunt deze afspraak alleen bekijken !";
+$lang['StartDate']       = "Startdatum";
+$lang['StartTime']       = "Starttijd";
+$lang['AppStart']        = "Start";
+$lang['AppCreatedBy']    = "Aangemaakt door";
+$lang['EndDate']         = "Einddatum";
+$lang['EndTime']         = "Eindtijd";
+$lang['AppEnd']          = "Eind";
+$lang['Participants']    = "Deelnemers";
+$lang['everybody']       = "iedereen";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "op";
+$lang['createdby']       = "aangemaakt door";
+$lang['Description']     = "Beschrijving";
+$lang['InfoEmail']       = "Informeer door e-mail";
+$lang['InviteEmail']     = "Nodig uit per e-mail";
+$lang['Invitation']      = "Invitation";
+$lang['IgnoreTime']      = "negeer bovenstaande tijden";
+$lang['IgnoreTime2']     = "(i.e.; de afspraak vindt plaats<br>op een niet bepaalde tijd op deze datum)";
+$lang['forphrase']       = "voor";
+$lang['nextweek']        = "volgende week";
+$lang['lastweek']        = "vorige week";
+$lang['plus4weeks']      = "4 weken verder";
+$lang['minus4weeks']     = "4 weken terug";
+$lang['only']            = "alleen";
+$lang['reload']          = "herladen";
+$lang['changeapp']       = "deze afspraak zien of wijzigen (%s - %s)";
+$lang['seeapp']          = "deze afspraakinfo zien (%s - %s)";
+$lang['AllEntries']      = "Toon alle %s ingaves";
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d.%m.%Y";
+$lang['DateFormat']      = "%s.%s.%s";
+$lang['DateShortFormat'] = "%s.%s";
+#
+$lang['Printable']       = "Printbaar formaat";
+$lang['PrintableInfo']   = "Toon als printbare pagina";
+$lang['managedProd']     = "Beheerde Producten & Projecten";
+$lang['soldProd']        = "Verkochte Producten & Projecten";
+$lang['Enter']           = "Enter";
+$lang['Reset']           = "Reset";
+$lang['Remove']          = "Verwijder";
+$lang['Delete']          = "Wissen";
+$lang['Change']          = "Wijzig";
+$lang['Modify']          = "Wijzig";
+$lang['created']         = "aangemaakt";
+$lang['DateTimeFrom']    = "van";
+$lang['DateTimeTill']    = "tot";
+$lang['Count']           = "Aantal";
+$lang['Showing']         = "Toon %s";
+$lang['show']            = "toon";
+$lang['lang']['auto']    = "automatisch (door browser)";
+$lang['lang']['en']      = "Engels";
+$lang['lang']['en-US']   = "Engels US";
+$lang['lang']['de']      = "Duits";
+$lang['lang']['fr']      = "Frans";
+$lang['lang']['es']      = "Spaans";
+$lang['lang']['es-MX']   = "Español/México";
+$lang['lang']['es-NI']   = "Español/Nicaragua";
+$lang['lang']['es-VE']   = "Español/Venezuela";
+$lang['lang']['it']      = "Italiaans";
+$lang['lang']['tw']      = "Traditioneel chinees";
+$lang['lang']['zh']      = "Simplify chinees";
+$lang['lang']['ru']      = "Russisch";
+$lang['lang']['pt']      = "Portugees";
+$lang['lang']['pl']      = "Pools";
+$lang['lang']['ko']      = "Koreaans";
+$lang['lang']['nl']      = "Nederlands";
+$lang['lang']['sv']      = "Zweeds";
+$lang['lang']['el']      = "Grieks";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "Wijzigingen OK ?";
+$lang['InputOk']         = "Invoer OK ?";
+$lang['Day1']            = "Maandag";
+$lang['Day2']            = "Dinsdag";
+$lang['Day3']            = "Woensdag";
+$lang['Day4']            = "Donderdag";
+$lang['Day5']            = "Vrijdag";
+$lang['Day6']            = "Zaterdag";
+$lang['Day0']            = "Zondag";
+$lang['SMonday']         = "Ma";
+$lang['STuesday']        = "Di";
+$lang['SWednesday']      = "Wo";
+$lang['SThursday']       = "Do";
+$lang['SFriday']         = "Vr";
+$lang['SSaturday']       = "Za";
+$lang['SSunday']         = "Zo";
+$lang['week']            = "Week";
+$lang['weeks']           = "weken";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Datum";
+$lang['NewEntry']        = "Nieuw";
+$lang['CloneEntry']      = "Kopieer";
+$lang['Search']          = "Zoek";
+$lang['PlsChangeName']   = "wijzig dit aub";
+$lang['SeeAddress']      = "toon adres van %s";
+$lang['NavFirst']        = "eerste";
+$lang['NavBack']         = "terug";
+$lang['NavNext']         = "volgende";
+$lang['NavLast']         = "laatste";
+$lang['DecPoint']        = ",";
+$lang['ThousandPoint']   = ".";
+$lang['yes']             = "ja";
+$lang['no']              = "nee";
+$lang['FldsRequired']    = "<font size=\"-1\'>Velden gemarkeerd met <font color=\"red\">(*)</font> zijn verplicht.</font>";
+$lang['any']             = "elke";
+$lang['all']             = "Alle";
+$lang['extended']        = "uitgebreid";
+$lang['OrderBy']         = "sorteer op %s";
+$lang['RevOrderBy']      = "keer sortering om op %s";
+$lang['Export']          = "Exporteer";
+$lang['ExportInfo']      = "Exporteer data als bestand";
+$lang['withmarked']      = "Met gemarkeerde %s";
+$lang['SetTo']           = "Stel %s in op %s";
+$lang['pcs']             = "stuks";
+$lang['Money']           = "Som";
+$lang['Currency']        = "Valuta";
+$lang['ActionNil']       = "doe niets";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Pagina %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Afspraak";
+$lang['Appointments']    = "Afspraken";
+$lang['NewAppoint']      = "Nieuwe afspraak";
+$lang['NewAppointR']     = "Nieuw (repeterend)";
+$lang['NewAppointInfo']  = "Maak een nieuwe afspraak";
+$lang['NewAppointInfoR'] = "Maak een nieuwe repeterende afspraak";
+$lang['AppointDetail']   = "Afspraakinfo";
+$lang['AppointModify']   = "Wijzig afspraak";
+$lang['AppointCreate']   = "Maak afspraak";
+$lang['AppointCommit']   = "Afspraak accepteren";
+$lang['AppointOverview'] = "Afspraakoverzicht";
+$lang['AppDelInfo']      = "Verwijder deze afspraak";
+$lang['AppChangeOrDel']  = "wie mag deze wissen of wijzigen";
+$lang['VisitAt']         = "Op bezoek bij/";
+$lang['VisitFrom']       = "Bezoek van";
+$lang['Visits']          = "Bezoeken";
+$lang['ModOldAppoint']   = "Wijzig bestaande afspraak";
+$lang['CreateAppoint']   = "Voer een nieuwe afspraak in";
+$lang['AppFirstDate']    = "Eerste Datum";
+$lang['AppLastDate']     = "Laatste Datum";
+$lang['AppNoLastDate']   = "geen einddatum";
+$lang['AppRepeatType']   = "Herhaal";
+$lang['AppRepeatDay']    = "dagelijks";
+$lang['AppRepeatWeek']   = "wekelijks op dezelfde dag als startdag";
+$lang['AppRepeatMonth']  = "Iedere maand op een vaste dag";
+$lang['AppRepeatYear']   = "ieder jaar op een vaste dag/maand";
+$lang['AppRepeatInfo1']  = "iedere %s";
+$lang['AppRepeatInfo2']  = "iedere maand op de %d dag";
+$lang['AppRepeatInfo3']  = "ieder jaar op %d/%m";
+$lang['AppRepeatInfo4']  = "iedere dag";
+$lang['AppSeeEntry']     = "toon invoer";
+$lang['AppSeeEntryI']    = "toon de afspraak";
+$lang['AppEmailRemind']  = "herinner alle deelnemers via e-mail";
+$lang['AppRemind'][0]    = "nooit";
+$lang['AppRemind'][15]   = "15 minuten voor aanvang";
+$lang['AppRemind'][60]   = "1 uur vantevoren";
+$lang['AppRemind'][1440] = "1 dag vantevoren";
+$lang['AppRemind'][10080]= "1 week vantevoren";
+$lang['AppAllSee']       = "alles wat u mag zien";
+$lang['AppAllTeams']     = "leden van al uw teams";
+$lang['AppEverything']   = "alles";
+$lang['AppGetIcal']      = "Download Ical File";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Kantoor";
+$lang['AppLoc'][1]       = "Buiten";
+$lang['AppLoc'][2]       = "Vakantie";
+$lang['AppLoc'][3]       = "Ziek";
+$lang['AppLoc'][4]       = "Uitgesteld";
+$lang['AppLoc'][5]       = "Optie";
+$lang['AppLoc'][6]       = "Prive";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "JA";
+$lang['AppState'][2]     = "NEE";
+$lang['AppPrivate']      = "prive";
+$lang['AppVoteInfo']     = "stem voor deze afspraak";
+$lang['AppVoteState']    = "huidige stem";
+$lang['AppVoteHead']     = "stem voor deze afspraak (%s)";
+$lang['AppVoteSelect']   = "Selecteer je stem";
+$lang['AppsSearch']      = "Kalender Zoek";
+$lang['SearchForAppExt'] = "Uitgebreid zoeken naar afspraken";
+$lang['SearchForApp']    = "Zoek een afspraak";
+$lang['AppUserSearch']   = "Toon alleen mijnoafspraken";
+$lang['AppSelInfo']      = "(laat leeg om alle afspraken te zien)";
+$lang['AppTrace']        = "traceer acceptatiestatus";
+$lang['AppTraceDesc']    = "(i.e. deelnemers kunnen accepteren of afwijzen)";
+$lang['AppCheck']        = "controleer deelnemers";
+$lang['AppCheckDesc']    = "(niet aanmaken indien conflicterend)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "TUTOS projectmanagement";
+$lang['PersonalPageFor']   = "Persoonlijke pagina van %s";
+$lang['PersonalSettings']  = "Gebruikersinstellingen";
+$lang['PersonalSettingsI'] = "Wijzig persoonlijke instellingen van %s";
+
+# User
+$lang['User']            = "Gebruiker";
+$lang['Users']           = "Gebruikers";
+$lang['UserOverview']    = "Overzicht gebruikers";
+$lang['UserCreate']      = "Maak gebruiker";
+$lang['UserModify']      = "Wijzig gebruiker";
+$lang['UserDel']         = "Wis gebruiker";
+$lang['UserInfo']        = "Gebruikersinfo";
+$lang['UserModInfo']     = "Wijzig %s gebruikersinfo";
+$lang['UserNewInfo']     = "Maak gebruikersinfo voor %s";
+$lang['UserDelInfo']     = "Wis de gebruikersinfo van %s";
+$lang['UserUnknown']     = "Onbekende gebruiker";
+$lang['UserLastSeen']    = "Laatst ingelogd op";
+$lang['UserLastHost']    = "Laatste host";
+$lang['UserAdmin']       = "Admin";
+$lang['UserLanguage']    = "Taal";
+$lang['UserTimezone']    = "Tijdszone";
+$lang['UserTheme']       = "Thema";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Feestdagen";
+$lang['UserNamedays']    = "Naamdagen";
+$lang['UserWorkdays']    = "Werkdagen";
+$lang['UserWeekstart']   = "Begin v/d week";
+$lang['UserDisabled']    = "Blokkeer account";
+$lang['UserDefaultGrp']  = "Standaardgroep voor nieuwe objecten";
+
+# Product/Projects
+$lang['ProductP']        = "Product/Project";
+$lang['ProductPs']       = "Producten/Projecten";
+$lang['Product']         = "Product";
+$lang['Products']        = "Producten";
+$lang['Project']         = "Project";
+$lang['Projects']        = "Projecten";
+$lang['ProductsSearch']  = "Producten/Projecten Zoeken";
+$lang['ProductsOverview']= "Producten/Projecten Overzicht";
+$lang['ProductsDetail']  = "Producten/Project Info";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Gerelateerde afspraken";
+$lang['ProdName']        = "Product/Project";
+$lang['ProdVersion']     = "Versie";
+$lang['ProdProd']        = "Gerelateerde Projecten";
+$lang['ProdProdNew']     = "Niewe relatie";
+$lang['ProdRoles']       = "Rollen";
+$lang['ProdFunc']        = "Functie";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Nieuwe Rol";
+$lang['ProdRole'][1]     = "Manager";
+$lang['ProdRole'][2]     = "Commercieel Manager";
+$lang['ProdRole'][3]     = "2. Manager";
+$lang['ProdRole'][4]     = "Verkoop";
+$lang['ProdRole'][5]     = "Ontwikkeling";
+$lang['ProdRole'][6]     = "Klant";
+$lang['ProdRole'][7]     = "Leverancier";
+$lang['ProdRole'][8]     = "Reseller";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Project Basis";
+$lang['ProdRole'][11]    = "Ancestor (stam) Project";
+$lang['ProdRole'][12]    = "Succesor (vervolg) Project";
+$lang['ProdRole'][13]    = "Sub Project";
+$lang['ProdPath']        = "Bestand locatie";
+$lang['ProdDesc']        = "Omschrijving";
+$lang['ProdDesc1']       = "Omschrijving 1";
+$lang['ProdDesc2']       = "Omschrijving 2";
+$lang['ProdState']       = "Status";
+$lang['ProdState_']      = "Onbekende Status";
+$lang['ProdStates'][0]   = "Acquisitie";
+$lang['ProdStates'][1]   = "In behandeling";
+$lang['ProdStates'][2]   = "Gereed";
+$lang['ProdStates'][3]   = "Geannuleerd";
+$lang['ProdStates'][4]   = "Offerte stadium";
+$lang['ProdStates'][5]   = "Offerte geannuleerd";
+$lang['ProdStates'][-2]  = "Elk niet gereed of geannuleerd";
+$lang['ProdClass1']      = "Classificatie 1";
+$lang['ProdClasses1'][1] = "Marketing";
+$lang['ProdClasses1'][2] = "BTL";
+$lang['ProdClasses1'][3] = "Consultancy";
+$lang['ProdClass2']      = "Classificatie 2";
+$lang['ProdClasses2'][1] = "Noordelijke regio";
+$lang['ProdClasses2'][2] = "Zuidelijke regio";
+$lang['ProdPrice']       = "Prijs";
+$lang['ProdCost']        = "Kosten";
+$lang['SearchForProd']   = "Zoek naar een product of project";
+$lang['SearchForProdExt']= "Uitgebreid zoeken naar een product of project";
+$lang['ProdCreateInfo']  = "Maak een nieuw product of project";
+$lang['ProdCloneInfo']   = "Kopieer dit project";
+$lang['ProdDelInfo']     = "Wis project %s";
+$lang['ProdModInfo']     = "Wijzig Product/Project %s";
+$lang['ProdCreator']     = "aangemaakt door";
+$lang['ProdCreation']    = "aangemaakt door %s op %s";
+$lang['ProdCreationS']   = "aangemaakt op";
+$lang['ProdStart']       = "Verw.begin";
+$lang['ProdEnd']         = "Verw.klaar";
+$lang['ProdProb']        = "Waarschijnlijkheid";
+$lang['ProdModifyT']     = "Wijzig dit Product/Project %s";
+$lang['ProdCreateT']     = "Maak een nieuw Product/Project";
+$lang['ProdCloneT']      = "Maak een nieuw Product / Project gebaseerd op %s";
+$lang['ProdSelInfo']     = "(laat leeg om alle producten/projecten te tonen)";
+$lang['ProdLinkInfo']    = "Toon Product/Project %s";
+$lang['ProdBetween']     = "aangemaakt tussen";
+$lang['ProdLinks']       = "Links";
+$lang['ProdStats']       = "Statistieken";
+$lang['ProdStatsInfo']   = "Statistieken van deze Producten/Projecten";
+$lang['ProdStatsTitle']  = "Product/Project Statistieken";
+$lang['ProdFields']      = "Velden";
+$lang['ProdRoleAddT']    = "Voeg een rol toe in %s";
+
+# Mail
+$lang['MailboxEmail']    = "e-mail";
+$lang['MailSendTo']      = "Stuur een mail aan %s";
+$lang['MailFrom']        = "Van";
+$lang['MailTo']          = "Aan";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Onderwerp";
+$lang['MailSent']        = "email verzenden %s aan %s.";
+$lang['MailSentCc']      = "email verzenden %s (Cc) aan %s.";
+$lang['MailSentBcc']     = "email verzenden %s (Bcc) aan %s.";
+$lang['MailCard']        = "Card van %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Datum";
+$lang['MailSize']        = "Grootte";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Wijzig permissies";
+$lang['AclModifyI']      = "wijzig permissies van %s";
+$lang['AclDetail']       = "Rechten-info";
+$lang['AclDetailI']      = "Toon permissies van %s";
+$lang['permissions']     = "permissies";
+$lang['ACLsee']          = "Toon permissies";
+$lang['ACLmod']          = "wijzig permissies";
+$lang['ACLread']         = "Toon";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "Wijzig";
+$lang['ACLdelete']       = "Wis";
+$lang['ACLreadI']        = "Bovenstaande gebruikers/teams mogen zien %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "Bovenstaande gebruikers/teams mogen wijzigen %s";
+$lang['ACLdelI']         = "Bovenstaande gebruikers/teams mogen wissen %s";
+$lang['ACLOverview']     = "Rechten Overzicht";
+$lang['ACLOverviewI']    = "Toon alle toegangsrechten";
+$lang['ACLKeepOld']      = "Alleen rechten toevoegen, bestaande rechten behouden";
+$lang['ACLRecursive']    = "Wijzig rechten op alle sub-objecten, recursief";
+$lang['Feature']         = "Optie";
+
+# Tasks
+$lang['Task']            = "Taak";
+$lang['Tasks']           = "Taken";
+$lang['TaskDetail']      = "Taak Info";
+$lang['TaskCreate']      = "Taak Maken";
+$lang['TaskNewSubtask']  = "Nieuwe subtaak";
+$lang['TaskCreateInfo']  = "Maak een nieuw subtaak in %s";
+$lang['TaskDelete']      = "Wis Taak %s";
+$lang['TaskModify']      = "Wijzig Taak %s";
+$lang['TaskOverview']    = "Taakoverzicht";
+$lang['TaskOverviewInfo']= "Toon taken van %s";
+$lang['TaskName']        = "Naam";
+$lang['TaskState']       = "Status";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Te Doen";
+$lang['TaskWorker']      = "Te Doen door";
+$lang['TaskVolumeFull']  = "Werk Volume";
+$lang['TaskVolumeDone']  = "Volume gereed";
+$lang['TaskVolumeTodo']  = "Volume te doen";
+$lang['TaskSubTask']     = "Subtaak van";
+$lang['hours']           = "uren";
+$lang['TaskCreation']    = "aangemaakt door %s op %s";
+$lang['TaskStates'][0]   = "Pre";
+$lang['TaskStates'][1]   = "In bewerking";
+$lang['TaskStates'][2]   = "Gereed";
+$lang['TaskStates'][3]   = "Te laat";
+$lang['TaskS_Start']     = "geplande start";
+$lang['TaskS_End']       = "gepland einde";
+$lang['TaskSched']       = "gepland";
+$lang['TaskReal']        = "real";
+$lang['TaskLinkInfo']    = "Toon taak %s";
+$lang['TaskCompleted']   = " %3.2f procent gereed";
+$lang['Completed']       = "Gereed";
+$lang['Reschedule']      = "Opnieuw plannen";
+$lang['Reschedule_s']    = "Opnieuw plannen start";
+$lang['Reschedule_e']    = "Opnieuw plannen einde";
+$lang['TaskGantt']       = "Gantt diagram";
+$lang['TaskImport']      = "Taak: CSV Import";
+$lang['ImportSrcFile']   = "Source file";
+$lang['ImportColNames']  = "Kolom namen in CSV file";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Bevestig Import";
+$lang['TaskSearch']        = "Taak Zoeken";
+$lang['SearchForTask']     = "Taak Zoeken";
+$lang['SearchForTaskExt']  = "Uitgebreid Taak Zoeken";
+$lang['TaskBetween']       = "Tijd tussen";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Bekijk de Gantt";
+$lang['GanttLinkInfo']   = "Gantt diagram";
+$lang['GanttTitle']      = "GANTT diagram";
+$lang['GanttStart']      = "Begin datum";
+$lang['GanttEnd']        = "Eind datum";
+$lang['GanttVolume']     = "Uren volume";
+$lang['GanttCompletion'] = "Klaar";
+
+# Company
+$lang['Company']           = "Bedrijf";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Zoek bedrijf";
+$lang['CompanyOverview']   = "Overzicht bedrijven";
+$lang['CompanyDetail']     = "Bedrijfsinformatie";
+$lang['CompanyModify']     = "Wijzig bedrijf";
+$lang['CompanyCreate']     = "Maak Bedrijf";
+$lang['CompanyCreateInfo'] = "maak een nieuw bedrijf";
+$lang['CompanyApps']       = "Afspraken met dit bedrijf";
+$lang['CompanyLinks']      = "Links";
+$lang['CompanyChgInfo']    = "Wijzig bedrijf %s";
+$lang['CompanyDelInfo']    = "Wis bedrijf %s";
+$lang['CompanyMembers']    = "Medewerkers";
+$lang['CompanyLinkInfo']   = "Toon bedrijf %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Afdeling";
+$lang['Departments']        = "Afdelingen";
+$lang['DepartmentSearch']   = "Zoek Afdeling";
+$lang['DepartmentOverview'] = "Overzicht Afdelingen";
+$lang['DepartmentDetail']   = "Afdeling Info";
+$lang['DepartmentModify']   = "Wijzig Afdeling";
+$lang['DepartmentCreate']   = "Maak Afdeling";
+$lang['DepCreateInfo']      = "Maak een nieuwe Afdeling";
+$lang['DepartmentMembers']  = "Leden van Afdeling";
+$lang['DepartmentApps']     = "Afspraken met deze Afdeling";
+$lang['DepartmentLinks']    = "Links";
+$lang['DepLinkInfo']        = "Toon Afdeling %s op %s";
+$lang['DepChgInfo']         = "Wijzig Afdeling %s";
+$lang['DepDelInfo']         = "Wis Afdeling %s";
+
+# Team
+$lang['Team']               = "Team";
+$lang['Teams']              = "Teams";
+$lang['TeamOverview']       = "Overzicht Teams";
+$lang['TeamDetail']         = "Team Info";
+$lang['TeamModify']         = "Wijzig Team";
+$lang['TeamCreate']         = "Maak Team";
+$lang['TeamMember']         = "Teamlid";
+$lang['TeamPosMember']      = "Mogelijk teamlid";
+$lang['TeamMail']           = "Mail aan team";
+$lang['TeamMailInfo']       = "stuur mail aan team %s";
+$lang['TeamApps']           = "Toon afspraken van team %s";
+$lang['TeamLinkInfo']       = "toon Team %s";
+$lang['TeamManager']        = "Team-manager";
+$lang['TeamName']           = "Teamnaam";
+$lang['TeamCreation']       = "aangemaakt op";
+$lang['TeamCount']          = "# Leden";
+$lang['TeamOverviewInfo']   = "Toon een lijst van alle teams";
+$lang['TeamCreateI']        = "maak een nieuw team";
+$lang['TeamDeleteI']        = "Wis team %s";
+$lang['TeamModifyI']        = "Wijzig team %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Adressen zoeken";
+$lang['AddressOverview'] = "Adressenoverzicht";
+$lang['AddressDetail']   = "Adresinfo";
+$lang['Address']         = "Adres";
+$lang['AddressEntries']  = "Adresboekinhoud";
+$lang['AdrLocChange']    = "wijzig adres van %s";
+$lang['AdrLocCreate']    = "maak een adres voor %s";
+$lang['AdrBMod']         = "Wijzig basis";
+$lang['AdrBModInfo']     = "wijzig basisinvoer van %s";
+$lang['AdrBDel']         = "Wis basis";
+$lang['AdrBDelInfo']     = "Wijzig basis en alle adressen van %s";
+$lang['AdrBNew']         = "Nieuwe invoer";
+$lang['AdrBNewInfo']     = "Maak een nieuwe basisinvoer";
+$lang['AdrCreateInfo']   = "Maak een nieuw adres";
+$lang['AdrLNew']         = "Nieuw adres";
+$lang['AdrLNewInfo']     = "maak een nieuw adres voor %s";
+$lang['AdrName']         = "Naam";
+$lang['AdrMailInfo']     = "stuur een mail aan %s";
+$lang['AdrGetVcard']     = "Download Vcard";
+$lang['AdrGetVcardI']    = "Ontvang dit adres als Vcard";
+$lang['AdrSeeEntry']     = "Toon invoer";
+$lang['AdrSeeEntryI']    = "Toon adresboekinvoer van %s";
+$lang['AdrLocTitle']     = "%s Adres";
+$lang['AdrBNewTitle']    = "Voer een nieuw basisadres in";
+$lang['AdrBChangeTitle'] = "Wijzig een basisadres";
+
+$lang['Location']        = "Lokatie";
+$lang['Location2']       = "Soort";
+$lang['AdrTitle']        = "Title";
+$lang['AdrFirstName']    = "Voornaam";
+$lang['AdrMiddleName']   = "Initaal";
+$lang['AdrLastName']     = "Achternaam";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Verjaardag";
+$lang['AdrPicture']      = "Foto";
+$lang['AdrCat1']         = "Thuis";
+$lang['AdrCat2']         = "Kantoor";
+$lang['AdrCpLoc']        = "Kopieer uit bedrijfsadres";
+$lang['ZIP']             = "Postcode";
+$lang['State']           = "Provincie";
+$lang['Country']         = "Land";
+$lang['Street']          = "Straat";
+$lang['City']            = "Stad";
+$lang['Phone']           = "Tel.";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "Fax.";
+$lang['AdrEmail']        = "e-mail";
+$lang['acc_info1']       = "Bank Rekening";
+$lang['acc_info2']       = "Bank Rekening";
+$lang['acc_nr']          = "Account Nr";
+$lang['AdrCustumerID']   = "Relatie nummer";
+$lang['ChangeLocInfo']   = "Wijzig het %s adres van %s";
+$lang['DeleteLocInfo']   = "Wis het %s adres van %s";
+$lang['AdrLinks']        = "Links";
+$lang['AdrCategory']     = "Categorie";
+$lang['AdrDescription']  = "Naam van Adres";
+$lang['ShowCal']         = "Toon kalender van %s";
+$lang['SearchForAdr']    = "Zoek in het Adresboek";
+$lang['SearchForAdrExt'] = "Uitgebreid zoeken in Adresboek";
+$lang['SearchForCmp']    = "Zoek een bedrijf";
+
+# Main Menu
+$lang['Calendar']        = "Kalender";
+$lang['Addresses']       = "Adressen";
+$lang['ProductMenu']     = "Producten & Projecten";
+$lang['Logout']          = "Uitloggen";
+$lang['CalendarInfo']    = "Kalender van Vandaag";
+$lang['AddressesInfo']   = "Zoek naar adressen";
+$lang['ProductInfo']     = "Producten & Projecten";
+$lang['LogoutInfo']      = "Uitloggen";
+
+# Help
+$lang['Help']            = "Help";
+$lang['HelpInfo']        = "Help voor deze pagina";
+
+# Resource
+$lang['ResCal']          = "Resourcegebruik";
+$lang['ResCalDetail']    = "Resourcegebruik voor %s in %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificaat";
+
+# MAP
+$lang['MapSearch']       = "Selecteer Kaart";
+$lang['MapHeader']       = "Toon een kaart van %s";
+
+# History
+$lang['HistoryDetail']   = "%s Historie";
+$lang['HistoryShow']     = "Historie van %s %s";
+$lang['HistoryFld']      = "Veld";
+$lang['HistoryOldV']     = "Oude waarde";
+$lang['HistoryNewV']     = "Nieuwe waarde";
+$lang['HistoryLink']     = "toon historie";
+$lang['HistoryLinkI']    = "toon historie van %s";
+$lang['HistoryDeleted']  = "tussentijds gewist";
+
+# Timetrack
+$lang['Timetrack']         = "Tijdspinspanning";
+$lang['Timetracks']        = "Tijdstracks";
+$lang['TimetrackCreate']   = "Geboekte Tijd";
+$lang['TimetrackCreateI']  = "geboekte tijd op %s";
+$lang['TimetrackDelI']     = "Wis deze geboekte tijd op %s";
+$lang['TimetrackNew']      = "Nieuwe Tijdstrack";
+$lang['TimetrackModify']   = "Wijzig Tijdstrack";
+$lang['TimetrackOverview'] = "Overzicht Tijdstrack";
+$lang['TimetrackWorker']   = "medewerker";
+$lang['TimetrackRef']      = "Referentie";
+$lang['TimetrackDate']     = "Datum";
+$lang['TimetrackSearch']   = "Zoek Tijdstrack";
+$lang['SearchForTT']       = "Zoek Tijdstrack";
+$lang['SearchForTTExt']    = "Uitgebreid Tijdstrack Zoeken";
+$lang['TimetrackBetween']  = "tussen";
+$lang['TimetrackBooked']   = "Geboekte Tijd";
+$lang['TimetrackBookedI']  = "Geboekte tijd van %s";
+$lang['TTStatsTitle']      = "Tijdstrack Statistieken";
+$lang['TTcph']             = "Kosten per uur";
+$lang['TTState']           = "Status";
+$lang['TTStates'][-1]      = "Geen status";
+$lang['TTStates'][1]       = "Facturabel";
+$lang['TTStates'][2]       = "Gefactureerd";
+$lang['TTStates'][3]       = "Betaald";
+$lang['TTStates'][4]       = "Niet facturabel";
+$lang['TTRecord']          = "Tijd schrijven";
+$lang['TTfinish']          = "Klaar";
+
+# Fax
+$lang['FaxCreate']         = "Nieuwe FAX";
+$lang['FaxSendTo']         = "Stuur een fax aan %s";
+$lang['FaxTo']             = "Aan:";
+$lang['FaxNr']             = "FAX Nr:";
+$lang['FaxNote']           = "Bewaar deze fax als een notitie voor %s";
+$lang['FaxSpooledTo']      = "Fax is gespoold naar %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Stuur een SMS naar %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Herinnering: Afspraak bij %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Administratie";
+$lang['AdminDBInfo']       = "Database Info";
+$lang['AdminDBTable']      = "Tabel";
+$lang['AdminDBCount']      = "Ingaves";
+$lang['AdminDBName']       = "Database Naam";
+$lang['AdminDBAlias']      = "Database Alias";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Database Gebruiker";
+$lang['AdminDBPass']       = "Password";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Poort";
+$lang['AdminDBType']       = "Type";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Recente Logins";
+$lang['AdminDBSync']       = "Database Synchro.";
+$lang['AdminDBSource']     = "Bron DB";
+$lang['AdminDBWhat']       = "Wat/Hoe";
+$lang['AdminDBTarget']     = "Doel DB";
+$lang['AdminDBRep']        = "Bestands Repository";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Database";
+$lang['DBInit']            = "Database Initialisatie";
+$lang['DBModify']          = "Database Wijzigen";
+$lang['DBModifyI']         = "Wijzig DB %s";
+$lang['DBCreate']          = "Database Maken";
+$lang['DBDetail']          = "Database Detail";
+$lang['DBLastDate']        = "Laatste synchro. datum";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "Laatste Synchro. ID";
+$lang['DBLastAnalyze']     = "Laatste analyse";
+$lang['DBrelogin']         = "Gebruik Database";
+$lang['DBreloginI']        = "relogin on %s";
+$lang['DBOverview']        = "Database Overzicht";
+$lang['DBUpdate']          = "Database Update";
+$lang['DBUpdateI']         = "Update database %s";
+$lang['AdminDBSyncM'][1]   = "Verwijder doel, kopieer daarna alles van bron naar doel";
+$lang['AdminDBSyncM'][2]   = "Kopieer alle nieuwe (sinds laatste sync) van doel naar bron, kopieer daarna alles";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL voor LOGO";
+$lang['CfgLogoLink']       = "URL Link van LOGO";
+$lang['CfgBugAutoName']    = "Naam schema voor bugs";
+$lang['CfgInvAutoName']    = "Naam schema voor fakturen";
+$lang['CfgVATlist']        = "Lijst met BTW percentages";
+$lang['CfgVersion']        = "TUTOS Versie";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Sales Forecast Rapport";
+$lang['UndefinedEndDate']   = "Onbekend einde";
+$lang['SalesBalanced']      = "Balanced Sales";
+$lang['AccumulatedRevenue'] = "Geaccumuleerde omzet";
+$lang['PeriodRevenue']      = "Omzet per Periode";
+$lang['Period']             = "Periode";
+$lang['Est_revenue']        = "Geschatte omzet";
+$lang['Graph']              = "Grafiek";
+$lang['GraphInfo']          = "Weergave in een grafiek";
+
+# Permissions
+$lang['perm'][usecalendar]       = "gebruik Kalender";
+$lang['perm'][usetaskmanagement] = "gebruik taken";
+$lang['perm'][usemaplink]        = "gebruik maplink";
+$lang['perm'][useprojects]       = "gebruik projecten";
+$lang['perm'][usetimetrack]      = "gebruik timetrack";
+$lang['perm'][usefax]            = "gebruik fax";
+$lang['perm'][usesms]            = "gebruik sms";
+$lang['perm'][useoverlib]        = "gebruik popups";
+$lang['perm'][useaddressbook]    = "gebruik adresboek";
+$lang['perm'][usemail]           = "gebruik mail";
+$lang['perm'][usehistory]        = "gebruik historie";                                                                              
+$lang['perm'][useteams]          = "gebruik teams";
+$lang['FeatureOff']              = "Feature globaal gedisabled";
+
+# Error Messages
+$lang['Err0001']         = "U heeft geen toestemming om %s te gebruiken: %s";
+$lang['Err0002']         = "start ligt na einde !";
+$lang['Err0006']         = "Maak aub een gedetailleerde selectie";
+$lang['Err0009']         = "Voer aub het <i>%s</i> veld in";
+$lang['Err0012']         = "Onbekend bedrijf <i>%s</i> !";
+$lang['Err0014']         = "Selecteer aub in het <i>%s</i> veld";
+$lang['Err0017']         = "Voer aug een nummer in in het <i>%s</i> veld !";
+$lang['Err0018']         = "Naam <i>%s</i> is geldig voor %d Invoer";
+$lang['Err0020']         = "U heeft geen permissies om dit bestand te wissen !";
+$lang['Err0021']         = "U kunt virtueel team 0 niet wijzigen";
+$lang['Err0022']         = "Sorry, door de permissies mag u dit niet zien %s";
+$lang['Err0023']         = "Sorry, door de permissies mag u dit niet wissen %s";
+$lang['Err0024']         = "Sorry, door de permissies mag u dit niet wijzigen %s";
+$lang['Err0025']         = "Ontbrekende of Wachtwoord";
+$lang['Err0026']         = "Login niet mogelijk";
+$lang['Err0027']         = "Login mislukt";
+$lang['Err0028']         = "Account verwijderd";
+$lang['Err0029']         = "Ontbrekend email adres afzender";
+$lang['Err0030']         = "Fax is niet gespoold !";
+$lang['Err0031']         = "Ontbrekend Faxnummer !";
+$lang['Err0032']         = "Sturen van Faxen is afgesloten !";
+$lang['Err0033']         = "Mail sturen is afgesloten ! Mail \"%s\" is <u>niet</u> verzonden.";
+$lang['Err0034']         = "mail is niet verzonden ! ontbrekende verzender \"%s\" e-mail.";
+$lang['Err0035']         = "mail is niet verzonden ! geen ontvangers of is al verzonden.";
+$lang['Err0036']         = "Product/Project bestaat al (%s) met deze naam en versie !";
+$lang['Err0037']         = "mail %s is niet verzonden ! Ontbrekend Mail Prototypebestand (%s) !";
+$lang['Err0038']         = "Ongeldige Datum in veld %s!";
+$lang['Err0039']         = "Addresinvoer bestaat al (%s) !";
+$lang['Err0040']         = "%s niet gevonden !";
+$lang['Err0041']         = "Wachtwoorden zijn niet gelijk !";
+$lang['Err0042']         = "Oude wachtwoord is onjuist !";
+$lang['Err0043']         = "e-mail %s is niet in een geldig (xxx@abc.com) e-mail formaat !";
+$lang['Err0044']         = "Bedrijf bestaat al (%s) !";
+$lang['Err0045']         = "Afdeling bestaat al (%s) !";
+$lang['Err0046']         = "Team bestaat al (%s) !";
+$lang['Err0047']         = "Kon de adminrechten niet verwijderen. Er moet tenminste 1 admin zijn in het systeem !";
+$lang['Err0048']         = "Niets gevonden !";
+$lang['Err0049']         = "Account %s is geblokkeerd !";
+$lang['Err0050']         = "Kon geen CSV inhoud vinden !";
+$lang['Err0051']         = "Kon geen CSV separator vinden !";
+$lang['Err0052']         = "U moet een classificatie selecteren!";
+$lang['Err0053']         = "U kunt niet uw eigen gebruikersaccount verwijderen";
+$lang['Err0054']         = "Sorry, u heeft niet de toegangsrechten voor het aanmaken van een %s";
+
+### Local Variables: ***
+### End: ***
+
+?>

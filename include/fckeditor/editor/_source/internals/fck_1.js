@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fck_1.js
  * 	This is the first part of the "FCK" object creation. This is the main
  * 	object that represents an editor instance.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-27 21:46:32
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -40,14 +43,7 @@ FCK.StartEditor = function()
 	// Attach the editor to the form onsubmit event
 	FCKTools.AttachToLinkedFieldFormSubmit( this.UpdateLinkedField ) ;
 
-	FCKUndo.SaveUndoStep() ;
-
 	this.SetStatus( FCK_STATUS_ACTIVE ) ;
-}
-
-function Window_OnFocus()
-{
-	FCK.Focus() ;
 }
 
 FCK.SetStatus = function( newStatus )
@@ -57,7 +53,7 @@ FCK.SetStatus = function( newStatus )
 	if ( newStatus == FCK_STATUS_ACTIVE )
 	{
 		// Force the focus in the window to go to the editor.
-		window.onfocus = window.document.body.onfocus = Window_OnFocus ;
+		window.onfocus = window.document.body.onfocus = FCK.Focus ;
 
 		// Force the focus in the editor.
 		if ( FCKConfig.StartupFocus )
@@ -89,6 +85,7 @@ FCK.SetStatus = function( newStatus )
 
 		FCKScriptLoader.AddScript( '_source/internals/fckcommands.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fcktoolbarbutton.js' ) ;
+		FCKScriptLoader.AddScript( '_source/classes/fcktoolbarcombo.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fckspecialcombo.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fcktoolbarspecialcombo.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fcktoolbarfontscombo.js' ) ;
@@ -123,6 +120,8 @@ FCK.SetStatus = function( newStatus )
 	}
 
 	this.Events.FireEvent( 'OnStatusChange', newStatus ) ;
+	if ( this.OnStatusChange ) this.OnStatusChange( newStatus ) ;
+
 }
 
 FCK.GetHTML = function( format )
@@ -163,12 +162,7 @@ FCK.GetXHTML = function( format )
 	if ( FCKConfig.FullPage )
 		var sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.getElementsByTagName( 'html' )[0], true, format ) ;
 	else
-	{
-		if ( FCKConfig.IgnoreEmptyParagraphValue && this.EditorDocument.body.innerHTML == '<P>&nbsp;</P>' )
-			var sXHTML = '' ;
-		else
-			var sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.body, false, format ) ;
-	}
+		var sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.body, false, format ) ;
 
 	if ( bSource )
 		this.SwitchEditMode() ;
@@ -208,7 +202,9 @@ FCK.OnDoubleClick = function( element )
 {
 	var oHandler = FCK.RegisteredDoubleClickHandlers[ element.tagName ] ;
 	if ( oHandler )
+	{
 		oHandler( element ) ;
+	}
 }
 
 // Register objects that can handle double click operations.
@@ -217,108 +213,3 @@ FCK.RegisterDoubleClickHandler = function( handlerFunction, tag )
 	FCK.RegisteredDoubleClickHandlers[ tag.toUpperCase() ] = handlerFunction ;
 }
 
-FCK.OnAfterSetHTML = function()
-{
-	var oProcessor, i = 0 ;
-	while( oProcessor = FCKDocumentProcessors[i++] )
-		oProcessor.ProcessDocument( FCK.EditorDocument ) ;
-
-	this.Events.FireEvent( 'OnAfterSetHTML' ) ;
-}
-
-// Advanced document processors.
-
-var FCKDocumentProcessors = new Array() ;
-
-var FCKDocumentProcessors_CreateFakeImage = function( fakeClass, realElement )
-{
-	var oImg = FCK.EditorDocument.createElement( 'IMG' ) ;
-	oImg.className = fakeClass ;
-	oImg.src = FCKConfig.FullBasePath + 'images/spacer.gif' ;
-	oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
-	oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
-	return oImg ;
-}
-
-// Link Anchors
-var FCKAnchorsProcessor = new Object() ;
-FCKAnchorsProcessor.ProcessDocument = function( document )
-{
-	var aLinks = document.getElementsByTagName( 'A' ) ;
-
-	var oLink ;
-	var i = aLinks.length - 1 ;
-	while ( i >= 0 && ( oLink = aLinks[i--] ) )
-	{
-		// If it is anchor.
-		if ( oLink.name.length > 0 && ( !oLink.getAttribute('href') || oLink.getAttribute('href').length == 0 ) )
-		{
-			var oImg = FCKDocumentProcessors_CreateFakeImage( 'FCK__Anchor', oLink.cloneNode(true) ) ;
-			oImg.setAttribute( '_fckanchor', 'true', 0 ) ;
-			
-			oLink.parentNode.insertBefore( oImg, oLink ) ;
-			oLink.parentNode.removeChild( oLink ) ;
-		}
-	}
-}
-
-FCKDocumentProcessors.addItem( FCKAnchorsProcessor ) ;
-
-// Flash Embeds.
-var FCKFlashProcessor = new Object() ;
-FCKFlashProcessor.ProcessDocument = function( document )
-{
-	/*
-	Sample code:
-	This is some <embed src="/UserFiles/Flash/Yellow_Runners.swf"></embed><strong>sample text</strong>. You are&nbsp;<a name="fred"></a> using <a href="http://www.fckeditor.net/">FCKeditor</a>.
-	*/
-
-	var aEmbeds = document.getElementsByTagName( 'EMBED' ) ;
-
-	var oEmbed ;
-	var i = aEmbeds.length - 1 ;
-	while ( i >= 0 && ( oEmbed = aEmbeds[i--] ) )
-	{
-		if ( oEmbed.src.endsWith( '.swf', true ) )
-		{
-			var oImg = FCKDocumentProcessors_CreateFakeImage( 'FCK__Flash', oEmbed.cloneNode(true) ) ;
-			oImg.setAttribute( '_fckflash', 'true', 0 ) ;
-			
-			FCKFlashProcessor.RefreshView( oImg, oEmbed ) ;
-
-			oEmbed.parentNode.insertBefore( oImg, oEmbed ) ;
-			oEmbed.parentNode.removeChild( oEmbed ) ;
-
-//			oEmbed.setAttribute( '_fckdelete', 'true', 0) ;
-//			oEmbed.style.display = 'none' ;
-//			oEmbed.hidden = true ;
-		}
-	}
-}
-
-FCKFlashProcessor.RefreshView = function( placholderImage, originalEmbed )
-{
-	if ( originalEmbed.width > 0 )
-		placholderImage.style.width = FCKTools.ConvertHtmlSizeToStyle( originalEmbed.width ) ;
-		
-	if ( originalEmbed.height > 0 )
-		placholderImage.style.height = FCKTools.ConvertHtmlSizeToStyle( originalEmbed.height ) ;
-}
-
-FCKDocumentProcessors.addItem( FCKFlashProcessor ) ;
-
-FCK.GetRealElement = function( fakeElement )
-{
-	var e = FCKTempBin.Elements[ fakeElement.getAttribute('_fckrealelement') ] ;
-
-	if ( fakeElement.getAttribute('_fckflash') )
-	{
-		if ( fakeElement.style.width.length > 0 )
-				e.width = FCKTools.ConvertStyleSizeToHtml( fakeElement.style.width ) ;
-		
-		if ( fakeElement.style.height.length > 0 )
-				e.height = FCKTools.ConvertStyleSizeToHtml( fakeElement.style.height ) ;
-	}
-	
-	return e ;
-}

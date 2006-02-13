@@ -1,0 +1,244 @@
+<?php
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 3.2
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+
+include_once 'modules/Calendar/db.p3';
+include_once 'modules/Calendar/Date.pinc';
+
+
+class preference extends DateTime {
+
+var $callist;
+
+ function preference()
+ {
+	global $tutos,$current_user,$dbconn,$lang,$msg;
+	
+	//Setting MySQL db
+	
+	$current_user->offset = 0;
+ 	$this->workday = array(0,1,2,3,4,5,6);
+ 	$current_user->workday = array(0,1,2,3,4,5,6);
+	$this->team=1;
+	
+	# Start of week
+        $this->weekstart = $tutos[weekstart];
+        $current_user->weekstart = $tutos[weekstart];
+	# Default all  holidays
+        foreach ($tutos[holiday] as $i => $f) {
+        $this->holiday[strtolower($i)] = $f;
+        }
+	
+	$auth = array();
+  	$al = split(" ",$tutos[authtype]);
+  	$cnt = 0;
+  	foreach ( $al as $a ) {
+    	require_once 'modules/Calendar/auth/auth_'. $a .'.pinc';
+    	$x = "auth_".$tutos[authtype];
+    	if ( class_exists ($x) ) {
+      	$auth[$cnt++] = new $x();
+    	} else {
+      		die("Missing Authentification: ".$x ."\n(see \$tutos[authtype] parameter)\n");
+    		}
+  	}
+
+	/*$dbname=0;
+	$this->dbconn = DB_Open($dbname);
+	$auth[0]->init($this->dbconn);*/
+	$_SESSION['userid'] = $current_user->id;
+	$this->user->id = $current_user->id;
+        //$_SESSION['dbnr'] = $db;
+        ReadLang($lang);
+	
+	$msg = "";
+  	if ( isset($_POST['msg']) ) {
+    		$msg .= HtmlEntities(UrlDecode($_POST['msg']));
+	  } elseif ( isset($_GET['msg']) ) {
+	    $msg .= HtmlEntities(UrlDecode($_GET['msg']));
+	  } elseif ( isset($_POST['msgid']) ) {
+	    if (isset($_SESSION[$_POST['msgid']])) {
+	      $msg .= UrlDecode($_SESSION[$_POST['msgid']]);
+	      unset($_SESSION[$_POST['msgid']]);
+	    } else {
+	      $msg = "?";
+	    }
+	  } elseif ( isset($_GET['msgid']) ) {
+	    if (isset($_SESSION[$_GET['msgid']])) {
+	      $msg .= UrlDecode($_SESSION[$_GET['msgid']]);
+	      unset($_SESSION[$_GET['msgid']]);
+	    } else {
+	      $msg = "?";
+    		}
+  	}
+
+ }
+
+function get_prefweeks() {
+    if ( !isset($this->prefweeks) || ($this->prefweeks == "") ) {
+      $this->prefweeks = 4;
+    }
+    return $this->prefweeks;
+  }
+
+function isWorkDay ($wd) {
+    return in_array($wd,$this->workday);
+  }
+Function menulink ( $href , $text , $info = "" ,$plus = "", $attr = "") {
+   global $tutos, $current_user;
+
+   if ( $href == "" ) {
+     return $text;
+   }
+   $href = addSessionKey($href,false);
+   if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
+   }
+
+   if ( ($plus != "") ) {
+     return sprintf ("<a class=\"nodeco\" href=\"%s\" %s  onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML)\" onmouseout=\"nd()\">%s</a>",$href,$attr,myentities($plus,1),myentities($info,1),$text);
+   } else {
+     return sprintf ("<a class=\"nodeco\" href=\"%s\" %s onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,$attr,myentities($info,1),myentities($info),$text);
+   }
+ }
+function findImage($fn) {
+    global $tutos,$image_path;
+    $x = $fn;
+    if ( file_exists(getcwd()."/". $image_path ."/". $fn .".png")  ) {
+      $fn = $image_path ."/". $fn .".png";
+    } else if ( file_exists(getcwd()."/" .$image_path. "/". $fn .".gif")  ) {
+      $fn = $image_path ."/". $fn .".gif";
+    } else if ( file_exists(getcwd()."/". $image_path ."/". $fn .".jpg")  ) {
+      $fn = $image_path ."/". $fn .".jpg";
+    } else if ( file_exists(getcwd()."/". $image_path."/". $fn .".gif")  ) {
+      $fn = $image_path ."/". $fn .".gif";
+    } else {
+      return "";
+    }
+    return $fn;
+  }
+  /**
+   * set the default images for the given theme
+   * preload
+   */
+  function setImages() {
+    $this->i[up]           = $this->findImage('up');
+    $this->i[down]         = $this->findImage('down');
+    $this->i[left]         = $this->findImage('left');
+    $this->i[right]        = $this->findImage('right');
+    $this->i[folder]       = $this->findImage('folder');
+    $this->i[paper]        = $this->findImage('paper');
+    $this->i[help]         = $this->findImage('help');
+    $this->i[logout]       = $this->findImage('logout');
+    $this->i[teams]        = $this->findImage('teams');
+    $this->i[user]         = $this->findImage('user');
+    $this->i[modify]       = $this->findImage('modify');
+    $this->i[delete]       = $this->findImage('delete');
+    $this->i[view]         = $this->findImage('view');
+    $this->i[first]        = $this->findImage('first');
+    $this->i[last]         = $this->findImage('last');
+    $this->i[appointment]  = $this->findImage('appointment');
+    $this->i[reload]       = $this->findImage('reload');
+    $this->i[calendar]     = $this->findImage('calendar');
+
+    $this->a[up]           = "UP";
+    $this->a[down]         = "DOWN";
+   // $this->a[left]       = htmlentities("<");
+   // $this->a[right]      = htmlentities(">");
+  }
+  /**
+   * get a image
+   */
+function getImage($type,$purpose) {
+    global $tutos,$lang;
+    if ( isset($_SERVER['HTTP_USER_AGENT']) &&  ( ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) ) {
+      if (isset($this->textbased[$type])) {
+        return $this->textbased[$type] ;
+      } else {
+        return "";
+      }
+    }
+
+    if (isset($this->i[$type])) {
+      if (!empty($this->i[$type])) {
+//        return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
+        return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" />";
+
+      } else {
+        return "";
+      }
+    }
+    $x = $this->findImage($type,"");
+    $this->i[$type] = $x;
+    if (! empty($x)) {
+//      return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
+ return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" />";
+    }
+    return "";
+#    return "@ $type @";
+  }
+  /**
+   * create a textarea with the given size and name
+   */
+    function textarea($name,$colspan,$maxsize,$value) {
+    $r = "";
+    $cols = 70;
+    $rows = 10;
+    if ($maxsize != -1) {
+      $cols = min($cols,$maxsize);
+      $rows = ceil($maxsize / $cols);
+    }
+    $rows = max(2,$rows);
+    $rows = min(10,$rows);
+
+    $r .= " <td colspan=\"". $colspan ."\">\n";
+    if ($maxsize != -1) {
+      $r .= "<script type=\"text/javascript\" language=\"JavaScript\">\n";
+      $r .= "<!--\n";
+      $r .= "function recount_". $name ."(x,maxlength) {\n";
+      $r .= "  myval = 0+ x.". $name . ".value.length;";
+      $r .= "  x.cnt_". $name .".value = myval;";
+      $r .= "  if (myval > maxlength ) {";
+      $r .= "    x.". $name .".value= x.". $name .".value.substring(0,maxlength);";
+      $r .= "    x.cnt_". $name .".value = maxlength;";
+      $r .= "  }";      
+      $r .= "}\n";
+      $r .= "//-->\n";
+      $r .= "</script>\n";
+    }
+    $r .= "<textarea ";
+    if ($maxsize != -1) {
+      $r .="onblur=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+      $r .="onkeyup=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+      $r .="onchange=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+    }
+    $r .= "id=\"". $name ."\" rows=\"". $rows ."\" cols=\"". $cols ."\" name=\"". $name ."\">". $value ."</textarea>\n";
+    if ($maxsize != -1) {
+        $r .= "<br /><font size=\"-2\">(<input size=\"3\" maxlength=\"3\" name=\"cnt_".$name."\" id=\"cnt_".$name."\" value=\"". strlen($value) ."\"> / ".$maxsize." characters)</font>";
+    }
+    $r .= " </td>\n";
+    return $r;
+  }
+   /**
+   * add a hidden field for a form
+   */
+   Function addHidden($fld,$value) {
+    if (is_array($value)) {
+      foreach ($value as $i) {
+        $this->hidden[] = array($fld ."[]",$i);
+      }
+    } else {
+      $this->hidden[] = array($fld,$value);
+    }
+  }
+
+}
+
+?>

@@ -1,7 +1,6 @@
-<?php 
-/*
+<?php /*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -14,6 +13,9 @@
  * 	
  * 	It defines the FCKeditor class that can be used to create editor
  * 	instances in PHP pages on server side.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-02 12:38:37
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -29,9 +31,8 @@ class FCKeditor
 	var $Value ;
 	var $Config ;
 
-	// PHP 5 Constructor (by Marcus Bointon <coolbru@users.sourceforge.net>)
-	function __construct( $instanceName )
- 	{
+	function FCKeditor( $instanceName )
+	{
 		$this->InstanceName	= $instanceName ;
 		$this->BasePath		= '/FCKeditor/' ;
 		$this->Width		= '100%' ;
@@ -40,12 +41,6 @@ class FCKeditor
 		$this->Value		= '' ;
 
 		$this->Config		= array() ;
-	}
-	
-	// PHP 4 Contructor
-	function FCKeditor( $instanceName )
-	{
-		$this->__construct( $instanceName ) ;
 	}
 
 	function Create()
@@ -64,13 +59,13 @@ class FCKeditor
 			$Link = "{$this->BasePath}editor/fckeditor.html?InstanceName={$this->InstanceName}" ;
 			
 			if ( $this->ToolbarSet != '' )
-				$Link .= "&amp;Toolbar={$this->ToolbarSet}" ;
+				$Link .= "&Toolbar={$this->ToolbarSet}" ;
 
 			// Render the linked hidden field.
-			$Html .= "<input type=\"hidden\" id=\"{$this->InstanceName}\" name=\"{$this->InstanceName}\" value=\"{$HtmlValue}\" />" ;
+			$Html .= "<input type=\"hidden\" id=\"{$this->InstanceName}\" name=\"{$this->InstanceName}\" value=\"{$HtmlValue}\">" ;
 
 			// Render the configurations hidden field.
-			$Html .= "<input type=\"hidden\" id=\"{$this->InstanceName}___Config\" value=\"" . $this->GetConfigFieldString() . "\" />" ;
+			$Html .= "<input type=\"hidden\" id=\"{$this->InstanceName}___Config\" value=\"" . $this->GetConfigFieldString() . "\">" ;
 
 			// Render the editor IFRAME.
 			$Html .= "<iframe id=\"{$this->InstanceName}___Frame\" src=\"{$Link}\" width=\"{$this->Width}\" height=\"{$this->Height}\" frameborder=\"no\" scrolling=\"no\"></iframe>" ;
@@ -97,19 +92,14 @@ class FCKeditor
 
 	function IsCompatible()
 	{
-		global $HTTP_USER_AGENT ;
-
-		if ( isset( $HTTP_USER_AGENT ) )
-			$sAgent = $HTTP_USER_AGENT ;
-		else
-			$sAgent = $_SERVER['HTTP_USER_AGENT'] ;
+		$sAgent = $_SERVER['HTTP_USER_AGENT'] ;
 
 		if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false )
 		{
 			$iVersion = (float)substr($sAgent, strpos($sAgent, 'MSIE') + 5, 3) ;
 			return ($iVersion >= 5.5) ;
 		}
-		else if ( strpos($sAgent, 'Gecko/') !== false )
+		else if ( strpos($sAgent, 'Gecko') !== false )
 		{
 			$iVersion = (int)substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
 			return ($iVersion >= 20030210) ;
@@ -126,7 +116,7 @@ class FCKeditor
 		foreach ( $this->Config as $sKey => $sValue )
 		{
 			if ( $bFirst == false )
-				$sParams .= '&amp;' ;
+				$sParams .= '&' ;
 			else
 				$bFirst = false ;
 			

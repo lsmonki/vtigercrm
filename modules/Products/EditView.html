@@ -21,7 +21,6 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-{ERROR_MESSAGE}
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
   <input type="hidden" name="module" value="Products">
   <input type="hidden" name="action">
@@ -48,13 +47,12 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr> 
       <td><div align="center"> 
-          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate();" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return validate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
           <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
         </div></td>
     </tr>
   </table>
   <div align="right"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
-{ERROR}
   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
     <tr> 
       <td> {BLOCK1_HEADER} 
@@ -99,16 +97,11 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr> 
       <td><div align="center"> 
-          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate();" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return validate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
           <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
         </div></td>
     </tr>
   </table>
-
-<input type="hidden" name="fileName" value="{FILE_NAME}">
-<input type="hidden" name="fileType" value="{FILE_TYPE}">
-<input type="hidden" name="fileSize" value="{FILE_Size}">
-
 </form>
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script language="JavaScript" type="text/javascript">
@@ -137,7 +130,6 @@ function check4null(form)
 			 errorMessage += "\n Product Name";
 			 form.productname.focus();
   }
-
   if (isError == true) {
 			 alert("Missing required fields: " + errorMessage);
 			 return false;
@@ -159,6 +151,41 @@ function productImg()
 	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
 	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
 	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
-	var extensiontype = new Array(".jpg","jpeg","pjpeg",".png","x-png", ".gif",".JPG",".JPEG",".PJPEG",".PNG","X-PNG","GIF")
+	var extensiontype = new Array(".jpg", ".png", ".gif")
 </script>
+<script>
+function validate() {
+
+		status = false
+		imageType = document.EditView.imagename.value
+
+		if(imageType != '')
+		{
+			for(i=0; i<extensiontype.length ; i++)
+			{
+				if (imageType.indexOf(extensiontype[i]) >= 0 )
+				{
+					status = true	
+				}	
+			}
+		}
+		else
+		{
+			status = true 
+		}
+		if(status == true)
+		{
+			if(!formValidate())
+				return false
+		}
+		else
+		{
+			alert("Kindly specify a valid Product Image File of type .jpg, .png or .gif")
+			return false
+		}
+
+		
+		
+}
+</script>		
 <!-- END: main -->

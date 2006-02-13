@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/themes/blue/layout_utils.php,v 1.3 2005/05/03 13:18:58 saraj Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.

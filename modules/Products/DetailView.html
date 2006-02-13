@@ -1,0 +1,101 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Cases/EditView.html,v 1.9 2004/07/11 20:08:51 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}product.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_PRODUCT}{MOD.LBL_COLON} {NAME}</td>
+        <td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="DetailView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="Products">
+			<input type="hidden" name="action">
+			<input type="hidden" name="isDuplicate" value=false>
+			<input type="hidden" name="mode">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="">
+		{EDITBUTTON}
+		{DUPLICATEBUTTON}
+		{DELETEBUTTON}
+				
+		</tr></table>
+	</td>
+	<td></td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	{BLOCK1_HEADER}
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	{BLOCK1}
+</table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	{BLOCK2_HEADER}
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	{BLOCK2}
+</table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	{BLOCK3_HEADER}
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	{BLOCK3}
+</table>
+</td></tr></table>
+<BR>
+{CUSTOMFIELD}
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	{BLOCK6_HEADER}
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	{BLOCK6}
+</table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	{BLOCK4_HEADER}
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	{BLOCK4}
+</table>
+</td></tr></table>
+
+</form>
+{JAVASCRIPT}
+<!-- END: main -->

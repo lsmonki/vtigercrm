@@ -1,0 +1,451 @@
+<?php
+/*
+ * Copyright 1999 - 2002 by Gero Kohnert
+ *
+ * CVS Info:  $Id: db.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ */
+
+/**
+ * Database base class
+ *
+ * @package DB
+ * @module db
+ */
+class tutos_db {
+  /**
+   * initialize db connection
+   */
+  function init(&$db) {
+    $this->conn = -1;
+    $this->lastquery = "";
+    $this->db = &$db;
+    $this->prefix = $db->prefix;
+    $this->txtlen = -1;
+  }
+  /**
+   * return more info about server client etcc
+   */
+  function moreinfo() {
+    return "";
+  }
+  /**
+   * handle reserved words in this database type
+   */
+  function colname($col) {
+    if ( isset($this->col[strtoupper($col)]) ) {
+      return $this->col[strtoupper($col)];
+    }
+    return $col;
+  }
+  /**
+   * handle reserved words in this database type
+   */
+  function colnameREV($col) {
+    if ( isset($this->colR[strtoupper($col)]) ) {
+      return $this->colR[strtoupper($col)];
+    }
+    return $col;
+  }
+  /**
+   * Clear a table
+   * tbl = name of table
+   * truncate a table or delete all from table
+   */
+  function truncatetable($tbl) {
+    echo "TRUNCATE not yet supported";
+    return -1;   
+  }
+  /**
+   * Drop a table
+   * tbl = array with table description
+   */
+  function droptable(&$tbl) {
+    echo "DROPTABLE not yet supported";
+    return -1;   
+  }
+  /**
+   * create a table
+   * tbl = array with table description
+   */
+  function createtable(&$tbl) {
+    echo "CREATETABLE not yet supported";
+    return -1;   
+  }
+  /**
+   * rename a table
+   * oldname = currentname
+   * newname = new table name
+   */
+  function renametable($oldname,$newname) {
+    echo "RENAMETABLE not yet supported";
+    return -1;   
+  }
+  /**
+   * drop an index
+   * idx = array with index description
+   */
+  function dropindex(&$idx) {
+    echo "DROPINDEX not yet supported";
+    return -1;   
+  }
+  /**
+   * create an index
+   * tbl = array with table description
+   */
+  function createindex(&$idx) {
+    echo "CREATEINDEX not yet supported";
+    return -1;   
+  }
+  /**
+   * create a column in a table
+   * col = array with column description
+   */
+  function createcolumn($tblname,$colname,&$col) {
+    echo "CREATECOLUMN not yet supported";
+    return -1;   
+  }
+  /**
+   * alter a column in an table
+   */
+  function altercolumn($name,&$col) {
+    echo "ALTERCOLUMN not yet supported";
+    return -1;   
+  }
+  /**
+   * get the phrase to limit a selection to a specific range
+   */
+  function getRange($q,$start,$cnt) {
+    return $q;   
+  }
+  /**
+   * do we need a count(*) to get the number of possible results in a select
+   */
+  function needCount() {
+    return true;   
+  }
+  /**
+   * method to call from check service
+   */
+  function checkservice () {
+    return;
+  }
+}
+/**
+ * Resultset base class (= template)
+ * @package DB
+ * @module result
+ * 
+ */
+class result {
+  /**
+   * initialize
+   */
+  function result(&$dbconn) {
+    $this->dbconn = &$dbconn;
+    $this->offset = 0;
+    $this->rowcnt = -1;
+  }
+  /**
+   * get a result entry
+   */
+  function get($pos,$fld) {
+    return "not implemented";
+  }
+  /**
+   * get a result entry as DateTime
+   */
+  function getDateTime($pos,$fld) {
+    return new DateTime($this->get($pos,$fld));
+  }
+  /**
+   * get a result entry as TUTOS object
+   */
+  function getObject($pos,$fld) {
+    return getObject($this->dbconn,$this->get($pos,$fld));
+  }
+  /**
+   * get the number of rows returned
+   */
+  function numrows() {
+    return "not implemented";
+  }
+  /**
+   * set the number of rows
+   */
+  function setrows($cnt) {
+    $this->rowcnt = $cnt;
+  }
+  /**
+   * set the offset of rows
+   */
+  function setoffset($cnt) {
+    $this->offset = $cnt;
+  }
+  /**
+   * number of fields returned
+   */
+  function numfields() {
+    return "not implemented";
+  }
+  /**
+   * the DB name of a field
+   */
+  function fieldname($nr) {
+    return "not implemented";
+  }
+  /**
+   * the DB type of a field
+   */
+  function fieldtype($nr) {
+    return "not implemented";
+  }
+  /**
+   * free the result
+   */
+  function free() {
+    return "not implemented";
+  }
+}
+/**
+ * Query class
+ * @package DB
+ * @module query
+ */
+class query {
+  function query(&$dbconn) {
+    $this->dbconn = &$dbconn;
+    $this->flds = array();
+    $this->alias = array();
+    # Fields in the Where Clause
+    $this->wc = array();
+    $this->table = "UNKNOWN";
+    $this->order = " ";
+    $this->range_start = "";
+    $this->range_cnt = "";
+    $this->use_range = false;
+  }
+  /**
+   *  Set the tablename for a query
+   */
+  function setTable($tbl) {
+    $this->table = $tbl;
+  }
+  /**
+   * Add Field for a select
+   */
+  function addFld($fld,$alias = "") {
+    $fld = $this->dbconn->colname($fld);
+    $this->flds[$fld] = true;
+    if ($alias != "") {
+      $this->alias[$fld] = $alias;
+    }
+  }
+  /**
+   * Add Field Value Pairs
+   */
+  function addFV($fld,$val,$type,$length = -1) {
+    $fld = $this->dbconn->colname($fld);
+    if ( $type == "STRING" ) {
+      if ( $length == -1 ) {
+        $this->flds[$fld] = $this->dbconn->String($val);
+      } else {
+        $this->flds[$fld] = $this->dbconn->String(substr($val,0,$length));
+      }
+    } else if ( $type == "TEXT" ) {
+      if ( $this->dbconn->getType() == "Oracle" ) {
+        $this->flds[$fld] = $this->dbconn->text($val);
+      } else {
+        $this->flds[$fld] = $this->dbconn->String($val);
+      }
+    } else if ( $type == "PASSWORD" ) {
+      $this->flds[$fld] = $this->dbconn->Password($val);
+    } else if ( $type == "NEXTID" ) {
+      if ($length == -1 ) {
+        $id = $this->dbconn->NextID("id");
+      } else {
+        $id = $this->dbconn->NextID($length);
+      }
+      $this->flds[$fld] = $id;
+      return $id;
+    } else if ( $type == "DATETIME" ) {
+      if ($val == null) {
+        $this->flds[$fld] = $this->dbconn->notime();
+      } else {
+        $this->flds[$fld] = $this->dbconn->datetime($val);
+      }
+    } else if ( $type == "DATE" ) {
+      $this->flds[$fld] = $this->dbconn->date($val);
+    } else if ( $type == "FLOAT" ) {
+      $this->flds[$fld] = sprintf("%f",$val);
+    } else if ( $type == "INT" ) {
+      $this->flds[$fld] = sprintf("%d",$val);
+    } else if ( $type == "OBJ" ) {
+	  if (is_object($val)) {
+        $this->flds[$fld] = sprintf("%d",$val->id);
+	  } else {
+        $this->flds[$fld] = "null";
+	  }
+    } else {
+      $this->flds[$fld] = $val;
+    }
+  }
+  /**
+   *  Add Field Value Pairs for the where clause of UPDATES using "AND" and " = " 
+   *  Type is type of fld
+   *  Value is the value the fld is compared to
+   *  type of cpmpare (defaults to =)
+   */
+  function addWC($fld,$val,$type,$cmp = " = ") {
+    $fld = $this->dbconn->colname($fld);
+    if ( $type == "STRING" ) {
+      $this->wc[$fld] = $cmp. $this->dbconn->String($val);
+    } else if ( $type == "PASSWORD" ) {
+      $this->wc[$fld] = $cmp. $this->dbconn->Password($val);
+    } else if ( $type == "DATETIME" ) {
+      $this->wc[$fld] = $cmp. $this->dbconn->datetime($val);
+    } else if ( $type == "DATE" ) {
+      $this->wc[$fld] = $cmp. $this->dbconn->date($val);
+    } else if ( $type == "OBJ" ) {
+      $this->wc[$fld] = $cmp. sprintf("%d",$val->id);
+    } else if ( $type == "INT" ) {
+      $this->wc[$fld] = $cmp. sprintf("%d",$val);
+    } else if ( $type == "FLOAT" ) {
+      $this->wc[$fld] = $cmp. sprintf("%f",$val);
+    } else {
+      $this->wc[$fld] = $cmp. $val;
+    }
+  }
+
+  /**
+   *  Add Order By Fields 
+   * val = ASC|DESC
+   */
+  function addOrder($fld,$val) {
+    $fld = $this->dbconn->colname($fld);
+
+    if (trim($this->order) == "") {
+      $this->order .= "ORDER BY ".$fld ;
+    } else {
+      $this->order .= ",".$fld ;
+    }
+    if ($val == "ASC") {
+      $this->order .= " ". $val;   
+    } else if ($val == 1) {
+      $this->order .= " ASC";   
+    } else {
+      $this->order .= " DESC";   
+    }
+  }
+
+  /**
+   *  Add Order By Fields 
+   * val = ASC|DESC
+   */
+  function addRange($start,$cnt) {
+    if ($start == "") $start = 0;
+    $this->range_start = $start;
+    $this->range_cnt   = $cnt;
+    $this->use_range = true;
+  }
+
+  /**
+   * get an INSERT query 
+   */
+  function getInsert() {
+    $flds = "(";
+    $vals = "(";
+    $pre = "";
+    @reset($this->flds);
+    while( list ($i,$f) = @each ($this->flds)) {
+      $flds .= $pre . $i;
+      $vals .= $pre . $f;
+      $pre = ",";
+    }
+    $flds .= ")";
+    $vals .= ")";
+    $q = "INSERT INTO ". $this->table ." ". $flds ." VALUES ". $vals;
+    return $q;
+  }
+  /**
+   * get an UPDATE query 
+   */
+  function getUpdate() {
+    $pre = " ";
+    $q = "UPDATE ". $this->table ." SET ";
+    @reset($this->flds);
+    while( list ($i,$f) = @each ($this->flds)) {
+      $q .= $pre . $i ." = ". $f;
+      $pre = ",";
+    }
+    $pre = " WHERE ";
+    @reset($this->wc);
+    while( list ($i,$f) = @each ($this->wc)) {
+      $q .= $pre ."(". $i . $f .")";
+      $pre = " AND ";
+    }
+    return $q;
+  }
+  /**
+   * get a SELECT query 
+   */
+  function getSelect($short = false) {
+    $q = "SELECT ";
+    $pre = "";
+    if ($short) {
+      foreach( $this->flds as $i => $f) {
+        break;
+      }
+      $q .= "count(". $i .") as c";
+    } else {
+      foreach( $this->flds as $i => $f) {
+        $q .= $pre . $i ;
+        if (isset($this->alias[$i])) {
+          $q .= " as " . $this->alias[$i];
+        }
+        $pre = ",";
+      }
+    }
+    $q .= " FROM " .  $this->table;
+    $pre = " WHERE ";
+    foreach ($this->wc as $i => $f) {
+      $q .= $pre ."(". $i . $f .")";
+      $pre = " AND ";
+    }
+    if (! $short) {
+      $q .= $this->order;
+      if ($this->use_range) {
+        $q = $this->dbconn->getRange($q,$this->range_start,$this->range_cnt);
+      }
+    }
+#   echo $q ." |". $this->use_range ."|<br>";
+    return $q;
+  }
+  /**
+   * run a SELECT query 
+   */
+  function runSelect() {
+
+    if ( $this->use_range && $this->dbconn->needcount()) {
+      $q = $this->getSelect(true);
+      $rc = $this->dbconn->Exec($q);
+      $cnt = $rc->get(0, "c");
+      $rc->free();
+#      echo "<br>".$cnt ."|".$q;
+      if ($this->range_start == -1) {
+        $this->range_start = $cnt - $this->range_cnt;
+      }
+    }
+
+    $q = $this->getSelect();
+#    echo "<br>".$q;
+    $r = $this->dbconn->Exec($q);
+
+    if ( $this->use_range && $this->dbconn->needcount()) {
+      $r->setrows($cnt);
+      $r->setoffset($this->range_start);
+    }
+    return  $r;
+  }
+}
+?>

@@ -1,0 +1,38 @@
+<?php
+/*
+ * Copyright 2004 by Gero Kohnert & Eliot Blennerhassett
+ *
+ *  CVS Info:  $Id: holiday_nz.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *  contributed by "Eliot Blennerhassett" <eliot@blennerhassett.gen.nz>
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+/* These are the dates for year starting 2004-04-01 */
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "New Year's Day (NZ)"),
+        array( Date => "02-01",          type => 1,    Desc => "New Year's Day+1 (NZ)"),
+        array( Date => "03-01",          type => 1,    Desc => "New Year's Day Observed(NZ)"),
+        array( Date => "04-01",          type => 1,    Desc => "New Year's Day+1 Observed (NZ)"),
+        array( Date => "06-02",          type => 1,    Desc => "Waitangi Day (NZ)"),
+        array( Date => "25-04",          type => 1,    Desc => "Anzac Day (NZ)"),
+        array( Date => "07-06",          type => 1,    Desc => "Queen's Birthday (NZ)"),
+        array( Date => "25-10",          type => 1,    Desc => "Labour Day (NZ)"),
+        array( Date => "25-12",          type => 1,    Desc => "Christmas Day (NZ)"),
+        array( Date => "26-12",          type => 1,    Desc => "Boxing Day (NZ)"),
+        array( Date => "27-12",          type => 1,    Desc => "Christmas Day Observed(NZ)"),
+        array( Date => "28-12",          type => 1,    Desc => "Boxing Day Observed (NZ)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Good Friday (NZ)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Easter Sunday (NZ)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Easter Monday (NZ)"),
+        array( Date => "12-11",          type => 0,    Desc => "Show Day (NZ - Canterbury)"),
+        array( Date => "26-01",          type => 0,    Desc => "Anniversary Day (NZ - Auckland)"),
+        );
+/* Queens Birthday is first Monday in June
+ * Labour day is 4th Monday in October
+ * Christmas and New Years holidays push to weekdays if falling in a weekend
+ * Most provincial anniversary days observed on Monday nearest actual day
+ */
+?>

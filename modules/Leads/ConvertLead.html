@@ -53,7 +53,7 @@
               &nbsp;{MOD.LBL_DO_NOT_CREATE_NEW_POTENTIAL}</td>
           </tr>
           <tr> 
-            <td width="20%" class="dataLabel"><font color="red">*</font>{MOD.LBL_POTENTIAL_NAME}</td>
+            <td width="20%" class="dataLabel">{MOD.LBL_POTENTIAL_NAME}</td>
             <td width="30%"><input name='potential_name' value='{POTENTIAL_NAME}' tabindex='3'></td>
           </tr>
           <tr> 
@@ -63,19 +63,6 @@
               <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> 
               <font size=1><em old="(yyyy-mm-dd)">({DATEFORMAT})</em></font></td>
           </tr>
-	  <tr>
-		<td width="20%" class="dataLabel">{MOD.LBL_POTENTIAL_AMOUNT}</td>
-		<td width="30%"><input name='potential_amount' type="text" tabindex='5' value="{POTENTIAL_AMOUNT}">
-		</td>
-	  </tr>
-	  <tr>
-		<td width="20%" class="dataLabel"><font color="red">*</font>{MOD.LBL_POTENTIAL_SALES_STAGE}</td>
-		<td width="30%"><select name="potential_sales_stage">{POTENTIAL_SALES_STAGE}
-			</select>
-		</td>
-	  </tr>
-
-	
         </table></td>
     </tr>
   </table>
@@ -111,24 +98,11 @@ function verify_data(form) {
                 	alert("Close Date field cannot be empty");
 			return false;	
 		}
-		x = dateValidate('closedate','Potential Close Date','GECD');
-		intval= intValidate('potential_amount','Potential Amount');
-
-		if(!x)
-		{
-			return false;
-		}
-		if(!intval)
-		{
-			return false;
-		}
+		return dateValidate('closedate','Potential Close Date','GECD');
+			
+		
         }
-	else
-	{	
-
-		return true;
-	}
-	
+        return true;
 }
 
 function togglePotFields(form)
@@ -137,17 +111,12 @@ function togglePotFields(form)
 	{
 		form.potential_name.disabled = true;
 		form.closedate.disabled = true;
-		form.potential_amount.disabled = true;
-		form.potential_sales_stage.disabled = true;
 		
 	}
 	else
 	{
 		form.potential_name.disabled = false;
 		form.closedate.disabled = false;
-		form.potential_amount.disabled = false;
-		form.potential_sales_stage.disabled = false;
-		form.potential_sales_stage.value="";
 	}	
 
 }

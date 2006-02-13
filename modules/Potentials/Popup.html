@@ -52,23 +52,6 @@ function add_data_to_relatedlist(entity_id,recordid)
 {
 	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
-function set_return_address(potential_id, potential_name, account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country) {
-        window.opener.document.EditView.potential_name.value = potential_name;
-        window.opener.document.EditView.potential_id.value = potential_id;
-        window.opener.document.EditView.account_name.value = account_name;
-        window.opener.document.EditView.account_id.value = account_id;
-        window.opener.document.EditView.bill_street.value = bill_street;
-        window.opener.document.EditView.ship_street.value = ship_street;
-        window.opener.document.EditView.bill_city.value = bill_city;
-        window.opener.document.EditView.ship_city.value = ship_city;
-        window.opener.document.EditView.bill_state.value = bill_state;
-        window.opener.document.EditView.ship_state.value = ship_state;
-        window.opener.document.EditView.bill_code.value = bill_code;
-        window.opener.document.EditView.ship_code.value = ship_code;
-        window.opener.document.EditView.bill_country.value = bill_country;
-        window.opener.document.EditView.ship_country.value = ship_country;
-}
-
 </script>
 </table>
 <!-- END: main -->

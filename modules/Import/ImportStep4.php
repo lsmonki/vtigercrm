@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/ImportStep4.php,v 1.18 2005/07/11 10:26:03 mickie Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -31,7 +31,6 @@ require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
-require_once('modules/Import/ImportProduct.php');
 
 set_time_limit(0);
 ini_set("display_errors",'0');
@@ -107,10 +106,6 @@ else if ( $_REQUEST['module'] == 'Potentials')
 else if ( $_REQUEST['module'] == 'Leads')
 {
 	$current_bean_type = "ImportLead";
-}
-else if ( $_REQUEST['module'] == 'Products')
-{
- 	$current_bean_type = "ImportProduct";
 }
 $focus = new $current_bean_type();
 //Constructing the custom field Array

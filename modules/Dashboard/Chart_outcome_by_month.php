@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Dashboard/Chart_outcome_by_month.php,v 1.17 2005/05/03 13:18:54 saraj Exp $
  * Description:  returns HTML for client-side image map.
  ********************************************************************************/
 
@@ -112,7 +112,6 @@ echo "<P><font size='1'><em>".$current_module_strings['LBL_MONTH_BY_OUTCOME_DESC
 if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 	$cal_lang = "en";
 	$cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-	$cal_dateformat = '%Y-%m-%d'; // fix providedd by Jlee for date bug in Dashboard
 
 ?>
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">

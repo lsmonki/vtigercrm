@@ -123,7 +123,7 @@ $the_form .= <<<EOQ
 		<input name='lastname' type="text" value=""><br>
 		$lbl_account_name<br>
 		<input name='account_name' type="text" value="" readonly>
-		<input name="account_id" type="hidden" value="">&nbsp;<input title="$app_strings[LBL_CHANGE_BUTTON_TITLE]" accessKey="$app_strings[LBL_CHANGE_BUTTON_KEY]" type="button" tabindex="3" class="button" value="$app_strings[LBL_CHANGE_BUTTON_LABEL]" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
+		<input name="account_id" type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
 		<br>
 		$lbl_phone<br>
 		<input name='phone' type="text" value=""><br>

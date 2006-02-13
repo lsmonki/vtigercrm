@@ -1,0 +1,791 @@
+<?php
+# $Id: el.p3,v 1.16 2005/05/03 13:18:52 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "el_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+# Translation by Dimitris Korbetis <dkorbetis@users.sourceforge.net> 
+# and  Katerina Kranou <ekran@flashmail.com>
+#
+
+$lang['content_encoding'] = "iso-8859-7";
+setlocale(LC_TIME,'el_GR');
+#
+# Greek Texts
+#
+$lang['PleaseLogin']     = "Σύνδεση";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "Κωδικός";
+$lang['Username']        = "Όνομα χρήστη";
+$lang['MOTD']            = "Το μήνυμα της ημέρας";
+$lang['Login']           = "Είσοδος";
+$lang['LostPassword']    = "lost password ?";
+$lang['LoggedIn']        = "Εχεις συνδεθεί. Επέλεξε κάτι στα αριστερά της οθόνης";
+$lang['ReadOnlyAppoint'] = "Μπορείς να δείς μόνο αυτή τη συνάντηση";
+$lang['StartDate']       = "Ημερομηνία έναρξης";
+$lang['StartTime']       = "Χρόνος έναρξης";
+$lang['AppStart']        = "Έναρξη";
+$lang['AppCreatedBy']    = "Δημιουργήθηκε";
+$lang['EndDate']         = "Ημερομηνία τέλους";
+$lang['EndTime']         = "Χρόνος τέλους";
+$lang['AppEnd']          = "τέλος";
+$lang['Participants']    = "Συμμετέχοντες";
+$lang['everybody']       = "Όλοι";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "στις";
+$lang['createdby']       = "Δημιουργήθηκε από";
+$lang['Description']     = "Περιγραφή";
+$lang['InfoEmail']       = "Ενημέρωση με Email";
+$lang['InviteEmail']     = "Πρόσκληση με Email";
+$lang['Invitation']      = "Πρόσκληση";
+$lang['IgnoreTime']      = "Αγνόησε τους παραπάνω χρόνους";
+$lang['IgnoreTime2']     = "(π.χ. η συνάντηση δεν γίνεται<br>σε συγκεκριμένη ώρα)";
+$lang['forphrase']       = "για";
+$lang['nextweek']        = "επόμενη εβδομάδα";
+$lang['lastweek']        = "προηγούμενη εβδομάδα";
+$lang['plus4weeks']      = "4 εβοδομάδες μετά";
+$lang['minus4weeks']     = "4 εβοδομάδες πριν";
+$lang['only']            = "μόνο";
+$lang['reload']          = "Επαναφόρτωση";
+$lang['changeapp']       = "δες ή άλλαξε αυτή τη συνάντηση (%s - %s)";
+$lang['seeapp']          = "δες λεπτομέρειες συνάντησης (%s - %s)";
+$lang['AllEntries']      = "δες %s καταχωρίσεις";
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d/%m/%Y";
+$lang['DateFormat']      = "%s/%s/%s";
+$lang['DateShortFormat'] = "%s/%s";
+#
+$lang['Printable']       = "Εκτυπώσιμο";
+$lang['PrintableInfo']   = "Προβολή ως εκτυπώσιμη Σελίδα";
+$lang['managedProd']     = "Προϊόντα & Έργα υπό Διαχείριση";
+$lang['soldProd']        = "Προϊόντα & Έργα που έχουν πουληθεί";
+$lang['Enter']           = "Καταχώριση";
+$lang['Reset']           = "Επανεκκίνηση";
+$lang['Remove']          = "Απαλοιφή";
+$lang['Delete']          = "Διαγραφή";
+$lang['Change']          = "Αλλαγή";
+$lang['Modify']          = "Τροποποίηση";
+$lang['created']         = "δημιουργήθηκε";
+$lang['DateTimeFrom']    = "από";
+$lang['DateTimeTill']    = "μέχρι";
+$lang['Count']           = "Μέτρηση";
+$lang['Showing']         = "Εμφάνιση %s";
+$lang['show']            = "εμφάνιση";
+$lang['lang']['auto']    = "αυτόματα (από τον browser)";
+$lang['lang']['en']      = "αγγλικά";
+$lang['lang']['en-US']   = "αγγλικά ΗΠΑ";
+$lang['lang']['de']      = "γερμανικά";
+$lang['lang']['fr']      = "γαλλικά";
+$lang['lang']['es']      = "ισπανικά";
+$lang['lang']['es-MX']   = "Ισπανικά/Μεξικό";
+$lang['lang']['es-NI']   = "Spanish/Nicaragua";
+$lang['lang']['es-VE']   = "Espaρol/Venezuela";
+$lang['lang']['it']      = "ιταλικά";
+$lang['lang']['tw']      = "Παραδοσιακά κινέζικα";
+$lang['lang']['zh']      = "Απλοποιημένα κινέζικα";
+$lang['lang']['ru']      = "ρωσικά";
+$lang['lang']['pt']      = "πορτογαλλικά";
+$lang['lang']['pl']      = "πολωνικά";
+$lang['lang']['ko']      = "κορεατικά";
+$lang['lang']['nl']      = "ολλανδικά";
+$lang['lang']['sv']      = "swedish";
+$lang['lang']['el']      = "greek";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "Αλλαγές OK ?";
+$lang['InputOk']         = "Εισαγωγή OK ?";
+$lang['Day1']            = "Δευτέρα";
+$lang['Day2']            = "Τρίτη";
+$lang['Day3']            = "Τετάρτη";
+$lang['Day4']            = "Πέμπτη";
+$lang['Day5']            = "Παρασκευή";
+$lang['Day6']            = "Σάββατο";
+$lang['Day0']            = "Κυριακή";
+$lang['SMonday']         = "Δε";
+$lang['STuesday']        = "Τρ";
+$lang['SWednesday']      = "Τε";
+$lang['SThursday']       = "Πε";
+$lang['SFriday']         = "Πα";
+$lang['SSaturday']       = "Σα";
+$lang['SSunday']         = "Κυ";
+$lang['week']            = "Εβδομάδα";
+$lang['weeks']           = "εβδομάδες";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Ημερομηνία";
+$lang['NewEntry']        = "Νέα";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "Αναζήτηση";
+$lang['PlsChangeName']   = "Αλλαγή Ονόματος";
+$lang['SeeAddress']      = "δες διεύθυνση %s";
+$lang['NavFirst']        = "πρώτο";
+$lang['NavBack']         = "πίσω";
+$lang['NavNext']         = "επόμενο";
+$lang['NavLast']         = "τελευταίο";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "ναι";
+$lang['no']              = "όχι";
+$lang['FldsRequired']    = "<font size=\"-1\">Τα πεδία με σήμανση<font color=\"red\">(*)</font> πρέπει να συμπληρωθούν.</font>";
+$lang['any']             = "οποιοδήποτε";
+$lang['all']             = "Όλα";
+$lang['extended']        = "εκτεταμένη";
+$lang['OrderBy']         = "κατά σειρά %s";
+$lang['RevOrderBy']      = "αναστροφή σειράς  %s";
+$lang['Export']          = "Εξαγωγή";
+$lang['ExportInfo']      = "Εξαγωγή δεδομένων σε μορφή αρχείου";
+$lang['withmarked']      = "επιλογή για %s";
+$lang['SetTo']           = "τοποθέτησε %s σε %s";
+$lang['pcs']             = "κομμάτια";
+$lang['Money']           = "Ποσό";
+$lang['Currency']        = "Νόμισμα";
+$lang['ActionNil']       = "καμία ενέργεια";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Συνάντηση";
+$lang['Appointments']    = "Συναντήσεις";
+$lang['NewAppoint']      = "Νέα Συνάντηση";
+$lang['NewAppointR']     = "Νέα (επανάληψη)";
+$lang['NewAppointInfo']  = "Δημιουργία νέας συνάντησης";
+$lang['NewAppointInfoR'] = "Δημιουργία νέας συνάντησης (επανάληψη)";
+$lang['AppointDetail']   = "Πληροφορίες Συνάντησης";
+$lang['AppointModify']   = "Αλλαγή Συνάντησης";
+$lang['AppointCreate']   = "Δημιουργία Συνάντησης";
+$lang['AppointCommit']   = "Δέσμευση Συνάντησης";
+$lang['AppointOverview'] = "Επισκόπηση Συνάντησης";
+$lang['AppDelInfo']      = "Διαγραφή αυτής της συνάντησης";
+$lang['AppChangeOrDel']  = "ποιος επιτρέπεται να κάνει αλλαγές ή διαγραφές";
+$lang['VisitAt']         = "Επίσκεψη στις";
+$lang['VisitFrom']       = "Επίσκεψη από";
+$lang['Visits']          = "Επισκέψεις";
+$lang['ModOldAppoint']   = "Τροποποίηση υπάρχουσας συνάντησης";
+$lang['CreateAppoint']   = "Καταχώριση νέας συνάντησης";
+$lang['AppFirstDate']    = "Πρώτη Μέρα";
+$lang['AppLastDate']     = "Τελευταία Μέρα";
+$lang['AppNoLastDate']   = "χωρίς ημέρα τέλους";
+$lang['AppRepeatType']   = "Επανάληψη";
+$lang['AppRepeatDay']    = "καθημερινά";
+$lang['AppRepeatWeek']   = "εβδομαδιαία με ίδια ημέρα έναρξης";
+$lang['AppRepeatMonth']  = "κάθε μήνα με δεδομένη ημέρα έναρξης";
+$lang['AppRepeatYear']   = "κάθε χρόνο με δεδομένα ημέρα/μήνα έναρξης";
+$lang['AppRepeatInfo1']  = "κάθε %s";
+$lang['AppRepeatInfo2']  = "κάθε μήνα στις %d day";
+$lang['AppRepeatInfo3']  = "κάθε χρόνο στις %d/%m";
+$lang['AppRepeatInfo4']  = "κάθε μέρα";
+$lang['AppSeeEntry']     = "δες καταχώριση";
+$lang['AppSeeEntryI']    = "δες συνάντηση";
+$lang['AppEmailRemind']  = "Ειδοποίησε όλους τους συμμετέχοντες με email";
+$lang['AppRemind'][0]    = "ποτέ";
+$lang['AppRemind'][15]   = "15 λεπτά πριν";
+$lang['AppRemind'][60]   = "1 ώρα πριν";
+$lang['AppRemind'][1440] = "1 μέρα πριν";
+$lang['AppRemind'][10080]= "1 εβδομάδα πριν";
+$lang['AppAllSee']       = "όλους όσους βλέπεις";
+$lang['AppAllTeams']     = "μέλη όλων των ομάδων σου";
+$lang['AppEverything']   = "όλα";
+$lang['AppGetIcal']      = "Πάρε ένα αρχείο Ical";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Γραφείο";
+$lang['AppLoc'][1]       = "Έξω";
+$lang['AppLoc'][2]       = "Διακοπές";
+$lang['AppLoc'][3]       = "άρρωστος";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = ";;;";
+$lang['AppState'][1]     = "ΝΑΙ";
+$lang['AppState'][2]     = "ΟΧΙ";
+$lang['AppPrivate']      = "προσωπικό";
+$lang['AppVoteInfo']     = "ψήφισε για αυτή την συνάντηση";
+$lang['AppVoteState']    = "παρούσα ψήφος";
+$lang['AppVoteHead']     = "Ψήφισε για αυτή την συνάντηση (%s)";
+$lang['AppVoteSelect']   = "Δίαλεξε ψήφο";
+$lang['AppsSearch']      = "Ημερολογιακή Αναζήτηση";
+$lang['SearchForAppExt'] = "Εκτεταμένη Αναζήτηση συνάντησης";
+$lang['SearchForApp']    = "Αναζήτηση συνάντησης";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(άφησε κενό για να δεις όλες τις συναντήσεις)";
+$lang['AppTrace']        = "παρακολούθηση ψηφοφορίας";
+$lang['AppTraceDesc']    = "(π.χ. οι συμμετέχοντες μπορούν να ψηφίσουν)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "My TUTOS";
+$lang['PersonalPageFor']   = "Προσωπική σελίδα του %s";
+$lang['PersonalSettings']  = "Ρυθμίσεις Χρήστη";
+$lang['PersonalSettingsI'] = "Αλλαγή προσωπικών ρυθμίσεων του %s";
+
+# User
+$lang['User']            = "Χρήστης";
+$lang['Users']           = "Users";
+$lang['UserOverview']    = "User Overview";
+$lang['UserCreate']      = "Δημιουργία Χρήστη";
+$lang['UserModify']      = "Μετατροπή Xρήστη";
+$lang['UserDel']         = "Διαγραφή Χρήστη";
+$lang['UserInfo']        = "Καταχώριση χρήστη";
+$lang['UserModInfo']     = "Αλλαγή %s καταχώρισης χρήστη";
+$lang['UserNewInfo']     = "Δημιουργία μιας καταχώρισης χρήστη για %s";
+$lang['UserDelInfo']     = "διαγραφή καταχώρισης Χρήστη του %s";
+$lang['UserUnknown']     = "’γνωστος Χρήστης";
+$lang['UserLastSeen']    = "Τελευταία σύνδεση";
+$lang['UserLastHost']    = "Τελευταίος host";
+$lang['UserAdmin']       = "Διαχειριστής";
+$lang['UserLanguage']    = "Γλώσσα";
+$lang['UserTimezone']    = "Ζώνη ώρας";
+$lang['UserTheme']       = "Θέμα";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Διακοπές";
+$lang['UserNamedays']    = "Namedays";
+$lang['UserWorkdays']    = "Working Days";
+$lang['UserWeekstart']   = "Start of Week";
+$lang['UserDisabled']    = "disable account";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "Προϊόν/Έργο";
+$lang['ProductPs']       = "Προϊόντα/Έργα";
+$lang['Product']         = "Προϊόν";
+$lang['Products']        = "Προϊόντα";
+$lang['Project']         = "Έργο";
+$lang['Projects']        = "Έργα";
+$lang['ProductsSearch']  = "Αναζήτηση Προϊόντων/Έργα";
+$lang['ProductsOverview']= "Επισκόπηση Προϊόντων/Έργων";
+$lang['ProductsDetail']  = "Λεπτομέρειες Προϊόντος/Έργου";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Σχετικές Συναντήσεις";
+$lang['ProdName']        = "Προϊόν/Έργο";
+$lang['ProdVersion']     = "Έκδοση";
+$lang['ProdProd']        = "σχετικά Έργα";
+$lang['ProdProdNew']     = "νέα σχέση";
+$lang['ProdRoles']       = "Ρόλοι";
+$lang['ProdFunc']        = "Λειτουργία";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Νέος Ρόλος";
+$lang['ProdRole'][1]     = "Διευθυντής";
+$lang['ProdRole'][2]     = "Εμπορικός Διευθυντής";
+$lang['ProdRole'][3]     = "2. Διευθυντής";
+$lang['ProdRole'][4]     = "Πωλήσεις";
+$lang['ProdRole'][5]     = "Ανάπτυξη";
+$lang['ProdRole'][6]     = "Πελάτης";
+$lang['ProdRole'][7]     = "Προμηθευτής";
+$lang['ProdRole'][8]     = "Μεταπώληση";
+$lang['ProdRole'][9]     = "Συνέταιρος";
+$lang['ProdRole'][10]    = "Έδρα Έργου";
+$lang['ProdRole'][11]    = "Προηγούμενο Έργο";
+$lang['ProdRole'][12]    = "Ακόλουθο Έργο";
+$lang['ProdRole'][13]    = "Υπο-Έργο";
+$lang['ProdPath']        = "Οδός Αρχείου";
+$lang['ProdDesc']        = "Περιγραφή";
+$lang['ProdDesc1']       = "Περιγραφή 1";
+$lang['ProdDesc2']       = "Περιγραφή 2";
+$lang['ProdState']       = "Κατάσταση";
+$lang['ProdState_']      = "’γνωστη Κατάσταση";
+$lang['ProdStates'][0]   = "Αγορά";
+$lang['ProdStates'][1]   = "Ενημερωμένο";
+$lang['ProdStates'][2]   = "Ολοκληρωμένο";
+$lang['ProdStates'][3]   = "’κυρο";
+$lang['ProdStates'][4]   = "Παρουσιάζεται ενημερωμένο";
+$lang['ProdStates'][5]   = "Παρουσιάζεται άκυρο";
+$lang['ProdStates'][-2]  = "μη ολοκληρωμένα ή άκυρα";
+$lang['ProdClass1']      = "Κατηγοριοποίηση 1";
+$lang['ProdClasses1'][1] = "Λογισμικό";
+$lang['ProdClasses1'][2] = "Hardware";
+$lang['ProdClasses1'][3] = "Γνωμοδότηση";
+$lang['ProdClass2']      = "Κατηγοριοποίηση 2";
+$lang['ProdClasses2'][1] = "Βόρεια Περιοχή";
+$lang['ProdClasses2'][2] = "Νότια Περιοχή";
+$lang['ProdPrice']       = "Τιμή";
+$lang['ProdCost']        = "Κόστος";
+$lang['SearchForProd']   = "Αναζήτηση προϊόντος ή έργου";
+$lang['SearchForProdExt']= "Εκτεταμένη Αναζήτηση προϊόντος ή έργου";
+$lang['ProdCreateInfo']  = "Δημιουργία νέου προϊόντος ή έργου";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "Διαγραφή έργου %s";
+$lang['ProdModInfo']     = "Αλλαγή Προϊόντος/Έργου %s";
+$lang['ProdCreator']     = "δημιουργήθηκε από";
+$lang['ProdCreation']    = "δημιουργήθηκε από %s σε %s";
+$lang['ProdCreationS']   = "δημιουργήθηκε σε";
+$lang['ProdStart']       = "πιθανή έναρξη";
+$lang['ProdEnd']         = "πιθανό τέλος";
+$lang['ProdProb']        = "Πιθανότητα";
+$lang['ProdModifyT']     = "Τροποποίηση Προϊόντος/Έργου %s";
+$lang['ProdCreateT']     = "Δημιουργία Προϊόντος/Έργου";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(άφησε κενό για να δεις όλα τα προϊόντα/έργα)";
+$lang['ProdLinkInfo']    = "Δες Προϊόν/Έργο %s";
+$lang['ProdBetween']     = "δημιουργία μεταξύ";
+$lang['ProdLinks']       = "Συνδέσεις";
+$lang['ProdStats']       = "Στατιστικά";
+$lang['ProdStatsInfo']   = "Στατιστικά Προϊόντων/Έργων";
+$lang['ProdStatsTitle']  = "Στατιστικά Προϊόντος/Έργου";
+$lang['ProdFields']      = "Πεδία";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mail
+$lang['MailboxEmail']    = "Email";
+$lang['MailSendTo']      = "Στείλε mail σε %s";
+$lang['MailFrom']        = "Από";
+$lang['MailTo']          = "Σε";
+$lang['MailCc']          = "Ακριβές αντίγραφο";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Θέμα";
+$lang['MailSent']        = "αποστολή mail %s σε %s.";
+$lang['MailSentCc']      = "αποστολή mail %s (Cc) σε %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Card of %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Ημερομηνία";
+$lang['MailSize']        = "Μέγεθος";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Αλλαγή Δικαιωμάτων";
+$lang['AclModifyI']      = "αλλαγή δικαιωμάτων %s";
+$lang['AclDetail']       = "Λεπτομέρειες Δικαιωμάτων";
+$lang['AclDetailI']      = "παρουσίαση δικαιωμάτων για %s";
+$lang['permissions']     = "δικαιώματα";
+$lang['ACLsee']          = "δες δικαιώματα";
+$lang['ACLmod']          = "αλλαγή δικαιωμάτων";
+$lang['ACLread']         = "δες";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "τροποποίηση";
+$lang['ACLdelete']       = "διαγραφή";
+$lang['ACLreadI']        = "στους παραπάνω χρήστες/ομάδες θα επιτραπεί να δουν %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "στους παραπάνω χρήστες/ομάδες θα επιτραπεί να τροποποιήσουν %s";
+$lang['ACLdelI']         = "στους παραπάνω χρήστες/ομάδες θα επιτραπεί να διαγράψουν %s";
+$lang['ACLOverview']     = "Επισκόπηση ";
+$lang['ACLOverviewI']    = "δες όλα τα δικαιώματα";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "feature";
+
+# Tasks
+$lang['Task']            = "Εργασία";
+$lang['Tasks']           = "Εργασίες";
+$lang['TaskDetail']      = "Λεπτομέρειες Εργασιών";
+$lang['TaskCreate']      = "Δημιουργία Εργασίας";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "δημιουργία νέας υπο-εργασίας %s";
+$lang['TaskDelete']      = "Διαγραφή Εργασίας %s";
+$lang['TaskModify']      = "Τροποποίηση Εργασίας %s";
+$lang['TaskOverview']    = "Επισκόπηση Εργασιών";
+$lang['TaskOverviewInfo']= "παρουσίαση εργασιών %s";
+$lang['TaskName']        = "Όνομα";
+$lang['TaskState']       = "Κατάσταση";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Μελλοντική Εργασία";
+$lang['TaskWorker']      = "μελλοντική εργασία από";
+$lang['TaskVolumeFull']  = "Όγκος Εργασίας";
+$lang['TaskVolumeDone']  = "Ολοκληρωμένος όγκος εργασίας";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Υπο-εργασία από";
+$lang['hours']           = "ώρες";
+$lang['TaskCreation']    = "δημιουργήθηκε από %s σε %s";
+$lang['TaskStates'][0]   = "Πρότερη";
+$lang['TaskStates'][1]   = "Παρούσα";
+$lang['TaskStates'][2]   = "Ολοκληρώθηκε";
+$lang['TaskStates'][3]   = "Εκπρόθεσμη";
+$lang['TaskS_Start']     = "προγραμματισμένη έναρξη";
+$lang['TaskS_End']       = "προγραμματισμένο τέλος";
+$lang['TaskSched']       = "προγραμματισμένη";
+$lang['TaskReal']        = "πραγματική";
+$lang['TaskLinkInfo']    = "Δες Εργασία %s";
+$lang['TaskCompleted']   = "Ολοκληρώθηκε %3.2f ποσοστό";
+$lang['Completed']       = "Ολοκληρώθηκε";
+$lang['Reschedule']      = "Reschedule";
+$lang['Reschedule_s']    = "Reschedule start";
+$lang['Reschedule_e']    = "Reschedule end";
+$lang['TaskGantt']       = "Διάγραμμα Gantt ";
+$lang['TaskImport']      = "Task: CSV Import";
+$lang['ImportSrcFile']   = "Source file";
+$lang['ImportColNames']  = "Columns name in CSV file";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Confirm Import";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Δες Gantt";
+$lang['GanttLinkInfo']   = "Διάγραμμα Gantt ";
+$lang['GanttTitle']      = "Διάγραμμα GANTT ";
+$lang['GanttStart']      = "Ημερομηνία έναρξης";
+$lang['GanttEnd']        = "Ηεμερομηνία τέλους ";
+$lang['GanttVolume']     = "όγκος χρόνου";
+$lang['GanttCompletion'] = "Ολοκληρώθηκε";
+
+# Company
+$lang['Company']           = "Εταιρεία";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Αναζήτηση Εταιρείας";
+$lang['CompanyOverview']   = "Επισκόπηση Εταιρείας";
+$lang['CompanyDetail']     = "Λεπτομέρειες Εταιρείας";
+$lang['CompanyModify']     = "Αλλαγή Εταιρείας";
+$lang['CompanyCreate']     = "Δημιουργία Εταιρείας";
+$lang['CompanyCreateInfo'] = "δημουργία νέας εταιρείας";
+$lang['CompanyApps']       = "Συναντήσεις με αυτή την εταιρεία";
+$lang['CompanyLinks']      = "Συνδέσεις";
+$lang['CompanyChgInfo']    = "Αλλαγή εταιρείας %s";
+$lang['CompanyDelInfo']    = "Διαγραφή εταιρείας %s";
+$lang['CompanyMembers']    = "Προσωπικό χωρίς τμήμα";
+$lang['CompanyLinkInfo']   = "Δες εταιρεία %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Τμήμα";
+$lang['Departments']        = "Τμήματα";
+$lang['DepartmentSearch']   = "Αναζήτηση Τμήματος";
+$lang['DepartmentOverview'] = "Επισκόπηση Τμήματος";
+$lang['DepartmentDetail']   = "Λεπτομέρειες Τμήματος";
+$lang['DepartmentModify']   = "Αλλαγή Τμήματος";
+$lang['DepartmentCreate']   = "Δημιουργία Τμήματος";
+$lang['DepCreateInfo']      = "δημιουργία νέου Τμήματος";
+$lang['DepartmentMembers']  = "Μέλη Τμήματος";
+$lang['DepartmentApps']     = "Συναντήσεις με αυτό το τμήμα";
+$lang['DepartmentLinks']    = "Συνδέσεις";
+$lang['DepLinkInfo']        = "Δες τμήμα %s σε %s";
+$lang['DepChgInfo']         = "Αλλαγή τμήματος %s";
+$lang['DepDelInfo']         = "Διαγραφή τμήματος %s";
+
+# Team
+$lang['Team']               = "Ομάδα";
+$lang['Teams']              = "Ομάδες";
+$lang['TeamOverview']       = "Επισκόπηση Ομάδας";
+$lang['TeamDetail']         = "Λεπτομέρειες Ομάδας";
+$lang['TeamModify']         = "Τροποποίηση Ομάδας";
+$lang['TeamCreate']         = "Δημιουργία Ομάδας";
+$lang['TeamMember']         = "Μέλη Ομάδας";
+$lang['TeamPosMember']      = "πιθανό Μέλος Ομάδας";
+$lang['TeamMail']           = "Mail προς Ομάδα";
+$lang['TeamMailInfo']       = "αποστολή mail σε ομάδα %s";
+$lang['TeamApps']           = "Δες Συναντήσεις της ομάδας %s";
+$lang['TeamLinkInfo']       = "Δες Ομάδα %s";
+$lang['TeamManager']        = "Επόπτης Λίστας";
+$lang['TeamName']           = "Όνομα Ομάδας";
+$lang['TeamCreation']       = "δημιουργήθηκε στις";
+$lang['TeamCount']          = "# Μέλη";
+$lang['TeamOverviewInfo']   = "Δες λίστα όλων των ομάδων";
+$lang['TeamCreateI']        = "δημιουργία νέας ομάδας";
+$lang['TeamDeleteI']        = "Διαγραφή ομάδας %s";
+$lang['TeamModifyI']        = "τροποποίηση ομάδας %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Αναζήτηση Διευθύνσεων";
+$lang['AddressOverview'] = "Επισκόπηση Διευθύνσεων";
+$lang['AddressDetail']   = "Λεπτομέρειες Διεύθυνσης";
+$lang['Address']         = "Διεύθυνση";
+$lang['AddressEntries']  = "Καταχωρίσεις στην ατζέντα";
+$lang['AdrLocChange']    = "αλλαγή διεύθυνσης %s";
+$lang['AdrLocCreate']    = "δημιουργία διεύθυνσης %s";
+$lang['AdrBMod']         = "Αλλαγή βάσης";
+$lang['AdrBModInfo']     = "αλλαγή καταχώρισης στη βάση %s";
+$lang['AdrBDel']         = "Διαγραφή βάσης";
+$lang['AdrBDelInfo']     = "διαγραφή της βάσης και όλων των καταχωρημένων διευθύνσεων του %s";
+$lang['AdrBNew']         = "Νέα Καταχώρηση";
+$lang['AdrBNewInfo']     = "Δημιουργία νέας καταχώρησης στη βάση";
+$lang['AdrCreateInfo']   = "δημιουργία νέας διεύθυνσης";
+$lang['AdrLNew']         = "Νέα Διεύθυνση";
+$lang['AdrLNewInfo']     = "δημιουργία νέας διεύθυνσης %s";
+$lang['AdrName']         = "Όνομα";
+$lang['AdrMailInfo']     = "αποστολή mail σε %s";
+$lang['AdrGetVcard']     = "Πάρε Vcard";
+$lang['AdrGetVcardI']    = "Πάρε αυτή τη διεύθυνση ως Vcard";
+$lang['AdrSeeEntry']     = "Δές καταχώριση";
+$lang['AdrSeeEntryI']    = "Δες στην ατζέντα την καταχώριση %s";
+$lang['AdrLocTitle']     = "%s Διεύθυνση";
+$lang['AdrBNewTitle']    = "Καταχώριση νέας διεύθυνσης στη βάση";
+$lang['AdrBChangeTitle'] = "Αλλαγή καταχώρισης διεύθυνσης στη βάση";
+
+$lang['Location']        = "Τόπος";
+$lang['Location2']       = "Τόπος";
+$lang['AdrTitle']        = "Τίτλος";
+$lang['AdrFirstName']    = "Όνομα";
+$lang['AdrMiddleName']   = "Πατρώνυμο";
+$lang['AdrLastName']     = "Επώνυμο";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Ημ. Γέννησης";
+$lang['AdrPicture']      = "Φωτογραφία";
+$lang['AdrCat1']         = "Σπίτι";
+$lang['AdrCat2']         = "Γραφείο";
+$lang['AdrCpLoc']        = "Αντίγραφο διεύθυνσης εταιρείας";
+$lang['ZIP']             = "Ταχ. Κώδικας";
+$lang['State']           = "Πολιτεία";
+$lang['Country']         = "Χώρα";
+$lang['Street']          = "Οδός";
+$lang['City']            = "Πόλη";
+$lang['Phone']           = "Τηλέφωνο";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "FAX";
+$lang['AdrEmail']        = "Email";
+$lang['acc_info1']       = "Bank Account";
+$lang['acc_info2']       = "Bank Account";
+$lang['acc_nr']          = "Account Nr";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Αλλαγή %s διεύθυνσης του %s";
+$lang['DeleteLocInfo']   = "Διαγραφή %s διεύθυνσης του %s";
+$lang['AdrLinks']        = "Συνδέσεις";
+$lang['AdrCategory']     = "Κατηγορία";
+$lang['AdrDescription']  = "Διεύθυνση";
+$lang['ShowCal']         = "Δες ημερολόγιο της %s";
+$lang['SearchForAdr']    = "Αναζήτηση στην Ατζέντα";
+$lang['SearchForAdrExt'] = "Εκτεταμένη Αναζήτηση στην Ατζέντα";
+$lang['SearchForCmp']    = "Αναζήτηση εταιρείας";
+
+# Main Menu
+$lang['Calendar']        = "Ημερολόγιο";
+$lang['Addresses']       = "Διευθύνσεις";
+$lang['ProductMenu']     = "Προϊόντα & Έργα";
+$lang['Logout']          = "Αποσύνδεση";
+$lang['CalendarInfo']    = "Σημερινό Ημερολόγιο";
+$lang['AddressesInfo']   = "Αναζήτηση διευθύνσεων";
+$lang['ProductInfo']     = "Προϊόντα & Έργα";
+$lang['LogoutInfo']      = "Αποσύνδεση από το Σύστημα";
+
+# Help
+$lang['Help']            = "Βοήθεια";
+$lang['HelpInfo']        = "Βοήθεια για αυτή τη σελίδα";
+
+# Resource
+$lang['ResCal']          = "Χρήση Υποδομής";
+$lang['ResCalDetail']    = "Χρήση Υποδομής για %s σε %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "Επιλογή Χάρτη";
+$lang['MapHeader']       = "Πάρε χάρτη από %s";
+
+# History
+$lang['HistoryDetail']   = "%s Ιστορικό";
+$lang['HistoryShow']     = "Ιστορικό %s %s";
+$lang['HistoryFld']      = "Πεδίο";
+$lang['HistoryOldV']     = "Παλιά Τιμή";
+$lang['HistoryNewV']     = "Νέα Τιμή";
+$lang['HistoryLink']     = "δες ιστορικό";
+$lang['HistoryLinkI']    = "δες ιστορικό %s";
+$lang['HistoryDeleted']  = "διεγράφη εντωμεταξύ";
+
+# Timetrack
+$lang['Timetrack']         = "Προσπάθεια";
+$lang['Timetracks']        = "Προσπάθειες";
+$lang['TimetrackCreate']   = "Δέσμευσε Χρόνο";
+$lang['TimetrackCreateI']  = "δέσμευση χρόνου στις %s";
+$lang['TimetrackDelI']     = "διαγραφή αυτής της ώρας που δεσμεύτηκε στις %s";
+$lang['TimetrackNew']      = "Νέα Χρονική Καταγραφή";
+$lang['TimetrackModify']   = "Αλλαγή Χρονικής Καταγραφής";
+$lang['TimetrackOverview'] = "Σύνοψιση Χρονικής Καταγραφής";
+$lang['TimetrackWorker']   = "Εργάτης";
+$lang['TimetrackRef']      = "Αναφορά";
+$lang['TimetrackDate']     = "Ημερομηνία";
+$lang['TimetrackSearch']   = "Αναζήτηση Χρονικής Καταγραφής";
+$lang['SearchForTT']       = "Αναζήτηση Χρονικής Καταγραφής";
+$lang['SearchForTTExt']    = "Εκτεταμένη Αναζήτηση Χρονικής Καταγραφής";
+$lang['TimetrackBetween']  = "μεταξύ";
+$lang['TimetrackBooked']   = "Δεσμευμένος Χρόνος";
+$lang['TimetrackBookedI']  = "δεσμευμένος χρόνος για %s";
+$lang['TTStatsTitle']      = "Στατιστικά Χρονικής Καταγραφής";
+$lang['TTcph']             = "Κόστος ανά ώρα";
+$lang['TTState']           = "Κατάσταση";
+$lang['TTStates'][-1]      = "καμία κατάσταση";
+$lang['TTStates'][1]       = "έχει ελεγχθεί";
+$lang['TTStates'][2]       = "έχει χρεωθεί";
+$lang['TTStates'][3]       = "έχει πληρωθεί";
+$lang['TTStates'][4]       = "Μη χρεώσιμο";
+$lang['TTRecord']          = "Time recording";
+$lang['TTfinish']          = "Finish";
+
+# Fax
+$lang['FaxCreate']         = "Νέο FAX";
+$lang['FaxSendTo']         = "Στείλε ένα fax σε %s";
+$lang['FaxTo']             = "Σε:";
+$lang['FaxNr']             = "FAX Νο:";
+$lang['FaxNote']           = "Σώσε αυτό το fax ως σημείωση για %s";
+$lang['FaxSpooledTo']      = "Έναρξη αποστολής Fax %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Αποστολή SMS σε %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Remember: Appointment at %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Διαχείριση";
+$lang['AdminDBInfo']       = "Πληφορορίες Βάσης δεδομένων ";
+$lang['AdminDBTable']      = "Πίνακας";
+$lang['AdminDBCount']      = "Καταχωρίσεις";
+$lang['AdminDBName']       = "Database Όνομα Βάσης Δεδομένων";
+$lang['AdminDBAlias']      = "Ψευδώνυμο Βάσης Δεδομένων";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Χρήστης Βάσης Δεδομένων";
+$lang['AdminDBPass']       = "Κωδικός";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Πόρτα";
+$lang['AdminDBType']       = "Τύπος";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Πρόσφατες Συνδέσεις";
+$lang['AdminDBSync']       = "Database Sync";
+$lang['AdminDBSource']     = "Προέλευση ΒΔ";
+$lang['AdminDBWhat']       = "Τι/Πώς";
+$lang['AdminDBTarget']     = "Προορισμός BΔ";
+$lang['AdminDBRep']        = "Φύλαξη Αρχείου";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Βάση Δεδομένων";
+$lang['DBInit']            = "Έναρξη Βάσης Δεδομένων";
+$lang['DBModify']          = "Database Τροποποίηση Βάσης Δεδομένων";
+$lang['DBModifyI']         = "Τροποποίηση BΔ %s";
+$lang['DBCreate']          = "Database Δημιουργία Βάσης Δεδομένων";
+$lang['DBDetail']          = "Λεπτομέρειες Βάσης Δεδομένων";
+$lang['DBLastDate']        = "LastSync Ημερομηνίας";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "LastSync ID";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "χρήση Βάσης Δεδομένων Database";
+$lang['DBreloginI']        = "επανασύνδεση στις %s";
+$lang['DBOverview']        = "Επισκόπηση Βάσης Δεδομένων";
+$lang['DBUpdate']          = "Ενημέρωση Βάσης Δεδομένων";
+$lang['DBUpdateI']         = "ενημέρωση βάσης δεδομένων %s";
+$lang['AdminDBSyncM'][1]   = "remove target, then copy all from source to target";
+$lang['AdminDBSyncM'][2]   = "copy all new (since last sync) from target to source, then copy all";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL για το LOGO";
+$lang['CfgLogoLink']       = "URL σύνδεσμου για το LOGO";
+$lang['CfgBugAutoName']    = "Μορφή ονομάτων για τα λάθη";
+$lang['CfgInvAutoName']    = "Μορφή ονομάτων για τις αναφορές";
+$lang['CfgVATlist']        = "κατηγορίες Φ.Π.Α";
+$lang['CfgVersion']        = "Έκδοση του TUTOS";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Sales Forecast Report";
+$lang['UndefinedEndDate']   = "Unknown enddate";
+$lang['SalesBalanced']      = "Balanced Sales";
+$lang['AccumulatedRevenue'] = "Accumulated revenue";
+$lang['PeriodRevenue']      = "Revenue per Period";
+$lang['Period']             = "Period";
+$lang['Est_revenue']        = "Estimated revenue";
+$lang['Graph']              = "Graph";
+$lang['GraphInfo']          = "Show in a graph";
+
+# Permissions
+$lang['perm'][usecalendar]       = "χρήση ημερολογίου";
+$lang['perm'][usetaskmanagement] = "χρήση εργασιών";
+$lang['perm'][usemaplink]        = "χρήση διασύνδεσης χαρτών";
+$lang['perm'][useprojects]       = "χρήση έργων";
+$lang['perm'][usetimetrack]      = "χρήση χρονικής καταγραφής";
+$lang['perm'][usefax]            = "χρήση fax";
+$lang['perm'][usesms]            = "χρήση sms";
+$lang['perm'][useoverlib]        = "χρήση popups";
+$lang['perm'][useaddressbook]    = "χρήση ατζέντας";
+$lang['perm'][usemail]           = "χρήση mail";
+$lang['perm'][usehistory]        = "display history";                                                                              
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff']              = "Χαρακτηριστικό καθολικά απενεργοποιημένο";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "έναρξη μετά το τέλος !";
+$lang['Err0006']         = "Κάνε λεπτομερή επιλογή";
+$lang['Err0009']         = "Συμπλήρωσε το πεδίο<i>%s</i> ";
+$lang['Err0012']         = "’γνωστη εταιρεία <i>%s</i> !";
+$lang['Err0014']         = "Επέλεξε μέσα στο <i>%s</i> πεδίο";
+$lang['Err0017']         = "Καταχώρισε έναν αριθμό στο <i>%s</i> πεδίο !";
+$lang['Err0018']         = "Το όνομα <i>%s</i> ισχύει για %d Καταχωρίσεις";
+$lang['Err0020']         = "Δεν επιτρέπεται να διαγράψεις αυτό το αρχείο !";
+$lang['Err0021']         = "Δεν μπορείς να αλλάξεις την εικονική ομάδα 0";
+$lang['Err0022']         = "Συγγνώμη, εξαιτίας δικαιωμάτων, δεν επιτρέπεται να το δεις αυτό %s";
+$lang['Err0023']         = "Συγγνώμη, εξαιτίας δικαιωμάτων, δεν επιτρέπεται να το διαγράψεις αυτό %s";
+$lang['Err0024']         = "Συγγνώμη, εξαιτίας δικαιωμάτων, δεν επιτρέπεται να το τροποποιήσεις αυτό %s";
+$lang['Err0025']         = "Απουσία Ονόματος Χρήστη ή κωδικού";
+$lang['Err0026']         = "Αδύνατη η σύνδεση";
+$lang['Err0027']         = "Ανεπιτυχής Σύνδεση";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Το Fax δεν ενεργοποιήθηκε!";
+$lang['Err0031']         = "Έλλειψη  Αριθμού Fax!";
+$lang['Err0032']         = "Η Αποστολή Fax  ανεστάλη/απενεργοποιήθηκε!";
+$lang['Err0033']         = "η αποστολή mail απενεργοποιήθηκε ! Το Mail \"%s\" δεν <u>not</u> στάλθηκε.";
+$lang['Err0034']         = "το mail δεν στάλθηκε ! άγνωστοι αποστολείς \"%s\" email.";
+$lang['Err0035']         = "το mail δεν στάλθηκε ! χωρίς παραλήπτες ή έχει ήδη αποσταλεί.";
+$lang['Err0036']         = "Προϊόν/Έργο ήδη υπάρχει εδώ (%s) με δοσμένα Όνομα και Έκδοση!";
+$lang['Err0037']         = "το mail %s δεν εστάλη ! Έλλειψη Πρωτότυπου Αρχείου Mail (%s)!";
+$lang['Err0038']         = "Μην έγκυρη Ημερομηνία στο πεδίο %s!";
+$lang['Err0039']         = "Η καταχώριση της Διεύθυνσης υπάρχει ήδη εδώ (%s) !";
+$lang['Err0040']         = "%s δε βρέθηκε!";
+$lang['Err0041']         = "Οι κωδικοί δεν είναι ίδιοι!";
+$lang['Err0042']         = "Ο παλιός κωδικός είναι λανθασμένος!";
+$lang['Err0043']         = "Το Email %s δεν έχει μια αποδεκτή (xxx@abc.com) email μορφή!";
+$lang['Err0044']         = "Η Εταιρεία υπάρχει ήδη εδώ (%s)!";
+$lang['Err0045']         = "Το Τμήμα υπάρχει ήδη εδώ (%s)!";
+$lang['Err0046']         = "Η Ομάδα υπάρχει ήδη εδώ (%s)!";
+$lang['Err0047']         = "Δεν μπορεί να μετακινηθεί ο διαχειριστής δεξιά. Πρέπει να υπάρχει τουλάχιστον ένας διαχειριστής!";
+$lang['Err0048']         = "Δε βρέθηκε τίποτε!";
+$lang['Err0049']         = "Account %s is disabled !";
+$lang['Err0050']         = "Could not find CSV contents !";
+$lang['Err0051']         = "Could not find CSV Separator";
+$lang['Err0052']         = "You must provide a classification";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+
+### Local Variables: ***
+### End: ***
+?>

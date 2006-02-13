@@ -392,41 +392,10 @@ if(isset($_REQUEST['action']))
 	$action = $_REQUEST['action'];
 }
 
-//Code added for 'Path Traversal/File Disclosure' security fix - Philip
-$is_module = false;
 if(isset($_REQUEST['module']))
 {
-        $module = $_REQUEST['module'];
-        if ($dir = @opendir("./modules"))
-        {
-                while (($file = readdir($dir)) !== false)
-                {
-                        if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic")
-                        {
-                                if(is_dir("./modules/".$file))
-                                {
-                                        if(!($file[0] == '.'))
-                                        {
-                                                if($file=="$module")
-                                                {
-                                                        $is_module = true;
-                                                }
-                                        }
-                                }
-                        }
-                }
-        }
-        if(!$is_module)
-        {
-                die("Hacking Attempt");
-        }
+	$module = $_REQUEST['module'];	
 }
-//Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
-if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
-{
-        die("An invalid record number specified to view details.");
-}
-
 // Check to see if there is an authenticated user in the session.
 if(isset($_SESSION["authenticated_user_id"]))
 {
@@ -455,7 +424,7 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateDefaultFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action) || ereg("^VendorPopup",$action) || ereg("^Star",$action) || ereg("^addPbProductRelToDB",$action) || ereg("^UpdateListPrice",$action) || ereg("^PriceBookPopup",$action) || ereg("^SalesOrderPopup",$action) || ereg("^CreatePDF",$action) || ereg("^CreateSOPDF",$action) || ereg("^redirect",$action) || ereg("^webmail",$action) || ereg("^left_main",$action) || ereg("^delete_message",$action) || ereg("^mime",$action) || ereg("^move_messages",$action) || ereg("^folders_create",$action) || ereg("^imap_general",$action) || ereg("^mime",$action) || ereg("^download",$action) || ereg("^about_us",$action) || ereg("^SendMailAction",$action) || ereg("^CreateXL",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateDefaultFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action) || ereg("^VendorPopup",$action) || ereg("^Star",$action) || ereg("^addPbProductRelToDB",$action) || ereg("^UpdateListPrice",$action) || ereg("^PriceBookPopup",$action) || ereg("^SalesOrderPopup",$action) || ereg("^CreatePDF",$action) || ereg("^CreateSOPDF",$action) || ereg("^redirect",$action) || ereg("^webmail",$action) || ereg("^left_main",$action) || ereg("^delete_message",$action) || ereg("^mime",$action) || ereg("^move_messages",$action) || ereg("^folders_create",$action) || ereg("^imap_general",$action) || ereg("^mime",$action) || ereg("^download",$action) || ereg("^about_us",$action) || ereg("^SendMailAction",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action) || ereg("^about_us",$action))

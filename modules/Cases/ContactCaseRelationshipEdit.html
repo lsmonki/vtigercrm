@@ -1,0 +1,69 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Cases/ContactCaseRelationshipEdit.html,v 1.4 2004/07/11 20:08:51 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Contacts.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_CONTACT_CASE_TITLE}  {CONTACT.NAME} {CASES.NAME}</td>
+	<td class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="formBorder"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="EditView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="Cases">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="action">
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveContactCaseRelationship'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
+</tr>
+</table> 
+
+<BR>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="0">
+<tr><td>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="20%" class="dataLabel">{MOD.LBL_CONTACT_NAME}</td>
+		<td width="30%"><input type="text" name='contact_name' rows="1" cols="30" value="{CONTACT.NAME}" readonly /><input name='contact_id' type="hidden" value='{CONTACT.ID}'>&nbsp;<input title="{APP.LBL_CHANGE_BUTTON_TITLE}" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" type="button" class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
+		<td width="20%" class="dataLabel">{MOD.LBL_CASE_SUBJECT}</td>
+		<td width="30%"><input type="text" name='case_name' rows="2" cols="30" value="{CASES.NAME}" readonly /><input name='case_id' type="hidden" value='{CASES.ID}'>&nbsp;<input title="Change [Alt+H]" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" type="button" class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Cases&action=Popup&html=Popup_picker&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
+	</tr><tr>
+		<td width="20%" class="dataLabel">{MOD.LBL_CONTACT_ROLE}</td>
+		<td width="30%"><select name='contact_role'>{CONTACT_ROLE_OPTIONS}</select></td>
+
+	</tr></table>
+</td></tr></table>
+</td></tr></table>
+	</form>
+{JAVASCRIPT}
+<!-- END: main -->

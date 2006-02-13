@@ -1,0 +1,137 @@
+<?php
+/**
+ * Copyright 1999 - 2002 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: history.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ *
+ * @modulegroup BASE
+ * @module history
+ * @package BASE
+ */
+
+/** ---------------------------------------------------------------------------
+ * Read the history of the given object
+ *
+ * @param Object $obj a object
+ */
+function readHistory (&$obj,$adr_id,$sort = "m_time" ,$dir,$start) {
+  global $tutos;
+  if ( ! isset($obj->id) ) {
+    return;
+  }
+
+  $query = new query($obj->dbconn);
+  $query->setTable($obj->dbconn->prefix ."history");
+  $query->addFld("*");
+
+  if ( $obj->id != -1 ) {
+    $query->addWC("obj_id",$obj,"OBJ");
+  }
+  if ( $adr_id != -1 ) {
+    $query->addWC("adr_id",$adr_id,"INT");
+  }
+  $query->addOrder($sort,$dir);
+  $query->addOrder("obj_id",$dir);
+
+  $query->addRange($start,$tutos[maxshow]);
+
+  $r = $query->runSelect();
+
+  $n = $r->numrows();
+  $obj->history_size = $n;
+  $a = 0;
+
+  if ( $start == -1 ) {
+    $a = $n - $tutos[maxshow];
+    $end = $n;
+    $start = $a;
+  } else {
+    $a = $start;
+    $end = $start + $tutos[maxshow];
+  }
+  while ( ($a < $n) && ($a < $end) ) {
+    $obj->history[$a] = array ( "field" => $r->get($a, "m_field") ,
+                                "old" => $r->get($a, "val_old") ,
+                                "new" => $r->get($a, "val_new"),
+                                "adr_id" => $r->get($a, "adr_id"),
+                                "obj_id" => $r->get($a, "obj_id"),
+                                "m_time" => $r->get($a, "m_time")
+                              );
+    $a++;
+  }
+  $r->free();
+  return;
+}
+/**
+ * Save the history
+ */
+function history_save (&$obj) {
+  global $tutos, $lang, $current_user;
+
+  $msg = "";
+  if ( !isset($obj->modified) || (count($obj->modified) < 1) ) {
+    return;
+  }
+
+  $t = new DateTime();
+  foreach ($obj->modified as $i => $f) {
+    if (!isset($f["field"]) || empty($f["field"]) ) {
+      continue;
+    }
+    $flds = "(obj_id,adr_id,m_field,m_time,val_old,val_new)";
+    $vals = " VALUES ";
+    if ( isset($f["obj_id"]) ) {
+      $vals .= "(" . $f["obj_id"];
+    } else {
+      $vals .= "(" . $obj->id;
+    }
+    if ( isset($f["adr_id"]) ) {
+      $vals .= "," . $f["adr_id"];
+    } else {
+      $vals .= "," . $current_user->id;
+    }
+    $vals .= "," . substr($obj->dbconn->String($f["field"]),0,60);
+    $vals .= "," . $obj->dbconn->DateTime($t);
+    # Field cutting patched from Brian Danilko <Brian.Danilko at instech.com.au>
+    if ( strlen($obj->dbconn->String($f["old"])) > 60 ) {
+      $vals .= "," . substr($obj->dbconn->String($f["old"]),0,55) ."...". substr($obj->dbconn->String($f["old"]),-2);
+    } else {
+      $vals .= "," . $obj->dbconn->String($f["old"]);
+    }
+    if ( strlen($obj->dbconn->String($f["new"])) > 60 ) {
+      $vals .= "," . substr($obj->dbconn->String($f["new"]),0,55) ."...". substr($obj->dbconn->String($f["new"]),-2);
+    } else {
+      $vals .= "," . $obj->dbconn->String($f["new"]);
+    }
+
+    $vals .= ")";
+
+    $q = "INSERT into ". $obj->dbconn->prefix ."history ". $flds . $vals;
+    $obj->dbconn->Exec($q);
+  }
+  return $msg;
+}
+/**
+ * get the datetime of last modification
+ */
+function history_get_lastmod (&$obj) {
+  $q = "SELECT m_time from ". $obj->dbconn->prefix ."history where obj_id = ". $obj->id ." order by m_time desc";
+  $r = $obj->dbconn->Exec($q);
+  if ( ($r == -1) || (1 > $r->numrows()) ) {
+    return "";
+  }
+  $d = $r->getDateTime(0, "m_time");
+  $r->free();
+  return $d;
+}
+/**
+ * Remove the history of the given object
+ */
+function history_delete (&$obj) {
+  $msg = "";
+  $q = "DELETE from ". $obj->dbconn->prefix ."history where m_field != 'Delete' AND obj_id = ". $obj->id;
+  $obj->dbconn->Exec($q);
+  return $msg;
+}
+?>

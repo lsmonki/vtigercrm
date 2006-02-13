@@ -28,11 +28,11 @@
     <td align="left"> <input class="dataInput" type="text" name="server" value="{MAILSERVER}" size="25" /></td>
   </tr>
   <tr>
-    <td nowrap class="dataLabel">{MOD.LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME}:</td>
+    <td nowrap class="dataLabel"><font color="red">*</font>{MOD.LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME}:</td>
     <td align="left"> <input class="dataInput" type="text" name="server_username" value="{USERNAME}" size="25"/></td>
   </tr>
   <tr>
-    <td nowrap class="dataLabel">{MOD.LBL_OUTGOING_MAIL_SERVER_PASSWORD}:</td>
+    <td nowrap class="dataLabel"><font color="red">*</font>{MOD.LBL_OUTGOING_MAIL_SERVER_PASSWORD}:</td>
     <td align="left"><input class="dataInput" type="password" name="server_password" value="{PASSWORD}" size="25"/></td>
   </tr>
 </table>
@@ -58,8 +58,7 @@ function validate_mail_server(form)
 		alert("Server Name could not be empty")	
 		return false;
 	}
-	return true;
-/*	if(trim(form.server_username.value) =='')
+	if(trim(form.server_username.value) =='')
 	{
 		alert("Server User Name could not be empty")	
 		return false;
@@ -71,7 +70,6 @@ function validate_mail_server(form)
 	}
 	
 	return true;
-*/
 }
 function trim(s)
 {

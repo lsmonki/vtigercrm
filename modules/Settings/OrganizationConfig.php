@@ -77,10 +77,10 @@ $dir_handle = @opendir($path) or die("Unable to open directory $path");
 
 while ($file = readdir($dir_handle))
 {
-        $filetyp =str_replace(".",'',strtolower(substr($file, -4)));
+        $filetyp = substr($file, -3);
    if($organization_logoname==$file)
    {    
-        if ($filetyp == 'jpeg' OR $filetyp == 'jpg' OR $filetyp == 'png')
+        if ($filetyp == 'gif' OR $filetyp == 'jpg' OR $filetyp == 'png')
         {
 		if($file!="." && $file!="..")
 		{

@@ -1,0 +1,68 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<html>
+<head>
+    <title></title>
+    <script language='javascript'>
+        function selectAction( url )
+        {
+            document.NewReport.action = url;
+            document.NewReport.submit();
+        }
+    </script>        
+</head>
+<body>
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+    <td>
+    <br>
+    <table width="100%" border="0" cellspacing="2" cellpadding="2">
+        <tr>
+            <td width="3%">
+		{REPORT_TAB_TYPE}
+            </td>
+
+          <td width="17%"><strong>{MOD.LBL_TABULAT_REPORT}</strong></td>
+          <td width="80%">&nbsp;</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="bodyText"><img src="{IMAGE_PATH}tabular.gif" width="140" height="100"></td>
+            <td class="bodyText">{MOD.LBL_REPORT_TYPE_HDR1}</td>
+
+        </tr>
+        <tr>
+            <td class="uline" colspan="3" style="line-height:1px">&nbsp;</td>
+        </tr>
+        <tr>
+            <td width="3%">
+		{REPORT_SUM_TYPE}
+            </td>
+
+          <td width="17%" class="bodyText bold"><strong>{MOD.LBL_SUMMARY_REPORT}</strong></td>
+
+            <td width="80%">&nbsp;</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="bodyText"><img src="{IMAGE_PATH}summarize.gif" width="140" height="100"></td>
+            <td class="bodyText">{MOD.LBL_REPORT_TYPE_HDR2}</td>
+        </tr>
+        <tr>
+            <td class="uline" colspan="3" style="height:1px"></td>
+        </tr>
+    </table></td>
+    </tr>
+</table>
+</body>
+</html>
+<!-- END: main -->

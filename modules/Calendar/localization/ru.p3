@@ -1,0 +1,789 @@
+<?php
+# $Id: ru.p3,v 1.16 2005/05/03 13:18:53 saraj Exp $
+#
+# Translation partly by "Timothy V. Bortnik" postmaster at lag.dp.ua
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "ru_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+$lang['content_encoding'] = "koi8-r";
+setlocale(LC_TIME,'ru_RU.KOI8-R');
+#
+# English Texts
+#
+$lang['PleaseLogin']     = "Вход в систему";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "Пароль";
+$lang['Username']        = "Имя";
+$lang['MOTD']            = "Тема дня";
+$lang['Login']           = "Логин";
+$lang['LostPassword']    = "забыли пароль ?";
+$lang['LoggedIn']        = "Вы авторизовались. Выберите необходимый пункт из меню слева.";
+$lang['ReadOnlyAppoint'] = "Вы можете только просматривать встречу!";
+$lang['StartDate']       = "Дата начала";
+$lang['StartTime']       = "Время начала";
+$lang['AppStart']        = "Старт";
+$lang['AppCreatedBy']    = "создан";
+$lang['EndDate']         = "Дата окончания";
+$lang['EndTime']         = "Время окончания";
+$lang['AppEnd']          = "Конец";
+$lang['Participants']    = "Участники";
+$lang['everybody']       = "всем";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "в";
+$lang['createdby']       = "создан";
+$lang['Description']     = "Описание";
+$lang['InfoEmail']       = "Информировать по Email";
+$lang['InviteEmail']     = "Приглашение по Email";
+$lang['Invitation']      = "Приглашение";
+$lang['IgnoreTime']      = "Игнорировать время";
+$lang['IgnoreTime2']     = "(т.e. встреча состоится в неопределенное время<br>этого дня(ей))";
+$lang['forphrase']       = "для";
+$lang['nextweek']        = "следующая неделя";
+$lang['lastweek']        = "последня неделя";
+$lang['plus4weeks']      = "+ 4 недели";
+$lang['minus4weeks']     = "- 4 недели";
+$lang['only']            = "только";
+$lang['reload']          = "перегрузить";
+$lang['changeapp']       = "Просмотр или изменение этой встречи(%s - %s)";
+$lang['seeapp']          = "Просмотр подробностей(%s - %s)";
+$lang['AllEntries']      = "Смотреть все %s записи";
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d/%m/%Y";
+$lang['DateFormat']      = "%s/%s/%s";
+$lang['DateShortFormat'] = "%s/%s";
+#
+$lang['Printable']       = "Распечатать";
+$lang['PrintableInfo']   = "Показать для печати";
+$lang['managedProd']     = "управление проектами";
+$lang['soldProd']        = "реализованные Продукты и Проекты";
+$lang['Enter']           = "Послать";
+$lang['Reset']           = "Отмена";
+$lang['Remove']          = "Удалить";
+$lang['Delete']          = "Стереть";
+$lang['Change']          = "Изменить";
+$lang['Modify']          = "Редактировать";
+$lang['created']         = "создан";
+$lang['DateTimeFrom']    = "От";
+$lang['DateTimeTill']    = "до";
+$lang['Count']           = "всего";
+$lang['Showing']         = "Показано %s";
+$lang['show']            = "показать";
+$lang['lang']['auto']    = "Auto (Автоматически по браузеру)";
+$lang['lang']['en']      = "English";
+$lang['lang']['en-US']   = "English US";
+$lang['lang']['de']      = "Dutch";
+$lang['lang']['fr']      = "French";
+$lang['lang']['es']      = "Spanish";
+$lang['lang']['es-MX']   = "Spanish/Mexico";
+$lang['lang']['es-NI']   = "Spanish/Nicaragua";
+$lang['lang']['es-VE']   = "EspaЯol/Venezuela";
+$lang['lang']['it']      = "Italian";
+$lang['lang']['tw']      = "Chinese (сложный)";
+$lang['lang']['zh']      = "Chinese (простой)";
+$lang['lang']['ru']      = "Русский";
+$lang['lang']['pt']      = "PortuguЙs";
+$lang['lang']['pl']      = "Polski";
+$lang['lang']['ko']      = "Korean";
+$lang['lang']['nl']      = "Dutch";
+$lang['lang']['sv']      = "swedish";
+$lang['lang']['el']      = "greek";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "Изменить OK ?";
+$lang['InputOk']         = "Данные верны OK ?";
+$lang['Day1']            = "Понедельник";
+$lang['Day2']            = "Вторник";
+$lang['Day3']            = "Среда";
+$lang['Day4']            = "Четверг";
+$lang['Day5']            = "Пятница";
+$lang['Day6']            = "Суббота";
+$lang['Day0']            = "Воскресенье";
+$lang['SMonday']         = "Пн";
+$lang['STuesday']        = "Вт";
+$lang['SWednesday']      = "Ср";
+$lang['SThursday']       = "Чт";
+$lang['SFriday']         = "Пт";
+$lang['SSaturday']       = "Сб";
+$lang['SSunday']         = "Вс";
+$lang['week']            = "Неделя";
+$lang['weeks']           = "недель";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Дата";
+$lang['NewEntry']        = "Добавить";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "Поиск";
+$lang['PlsChangeName']   = "Пожалуйста измените имя";
+$lang['SeeAddress']      = "смотри адрес %s";
+$lang['NavFirst']        = "начало";
+$lang['NavBack']         = "назад";
+$lang['NavNext']         = "дальше";
+$lang['NavLast']         = "конец";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "да";
+$lang['no']              = "нет";
+$lang['FldsRequired']    = "<font size=\"-1\">Помеченые поля<font color=\"red\">(*)</font> должны быть заполнены.</font>";
+$lang['any']             = "любой";
+$lang['all']             = "все";
+$lang['extended']        = "расширенный";
+$lang['OrderBy']         = "сортировать по %s";
+$lang['RevOrderBy']      = "обратная сортировка по %s";
+$lang['Export']          = "Экспорт";
+$lang['ExportInfo']      = "Экспорт в файл";
+$lang['withmarked']      = "с пометкой %s";
+$lang['SetTo']           = "уст. %s в %s";
+$lang['pcs']             = "части";
+$lang['Money']           = "Сумма";
+$lang['Currency']        = "Валюта";
+$lang['ActionNil']       = "ничего не делать";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Событие";
+$lang['Appointments']    = "События";
+$lang['NewAppoint']      = "Новое событие";
+$lang['NewAppointR']     = "Новое (повтор)";
+$lang['NewAppointInfo']  = "Создать новое событие";
+$lang['NewAppointInfoR'] = "Создать циклическое событие";
+$lang['AppointDetail']   = "Подробности события";
+$lang['AppointModify']   = "Изменить событие";
+$lang['AppointCreate']   = "Создать событие";
+$lang['AppointCommit']   = "Подтвердить событие";
+$lang['AppointOverview'] = "Обзор событий";
+$lang['AppDelInfo']      = "Удалить событие";
+$lang['AppChangeOrDel']  = "кто может изменить или удалить это ";
+$lang['VisitAt']         = "Визит в";
+$lang['VisitFrom']       = "Визит от";
+$lang['Visits']          = "Визиты";
+$lang['ModOldAppoint']   = "Изменение события";
+$lang['CreateAppoint']   = "Ввести новое событие";
+$lang['AppFirstDate']    = "Начальная дата";
+$lang['AppLastDate']     = "Дата окончания";
+$lang['AppNoLastDate']   = "нет даты окончания";
+$lang['AppRepeatType']   = "Циклично";
+$lang['AppRepeatDay']    = "ежедневно";
+$lang['AppRepeatWeek']   = "еженедельно с начала";
+$lang['AppRepeatMonth']  = "ежемесачно с начала";
+$lang['AppRepeatYear']   = "ежегодно в день/месяц";
+$lang['AppRepeatInfo1']  = "каждые %s";
+$lang['AppRepeatInfo2']  = "ежемесячно %d - того";
+$lang['AppRepeatInfo3']  = "ежегодно %d/%m";
+$lang['AppRepeatInfo4']  = "ежедневно";
+$lang['AppSeeEntry']     = "смотреть запись";
+$lang['AppSeeEntryI']    = "смотреть событие";
+$lang['AppEmailRemind']  = "Напомнить всем участникам по email";
+$lang['AppRemind'][0]    = "никогда";
+$lang['AppRemind'][15]   = "за 15 минут";
+$lang['AppRemind'][60]   = "за 1 час";
+$lang['AppRemind'][1440] = "за 1 день";
+$lang['AppRemind'][10080]= "за 1 неделю";
+$lang['AppAllSee']       = "все что могу увидеть";
+$lang['AppAllTeams']     = "вся моя группа";
+$lang['AppEverything']   = "все";
+$lang['AppGetIcal']      = "Получить файл Ical";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Офис";
+$lang['AppLoc'][1]       = "Вне";
+$lang['AppLoc'][2]       = "Отпуск";
+$lang['AppLoc'][3]       = "Больничный";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "ДА";
+$lang['AppState'][2]     = "НЕТ";
+$lang['AppPrivate']      = "частный";
+$lang['AppVoteInfo']     = "голосовать за это событие";
+$lang['AppVoteState']    = "текущее голосование";
+$lang['AppVoteHead']     = "Голосов за это событие (%s)";
+$lang['AppVoteSelect']   = "Выбери свое голосование";
+$lang['AppsSearch']      = "Поиск в календаре";
+$lang['SearchForAppExt'] = "Расширенный поиск встреч";
+$lang['SearchForApp']    = "Поиск встреч";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(не заполнять для просмотра всех встреч)";
+$lang['AppTrace']        = "отслеживать статус подтверждения";
+$lang['AppTraceDesc']    = "(т.e. участники могут голосовать)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "Мой TUTOS";
+$lang['PersonalPageFor']   = "Персональная страница %s";
+$lang['PersonalSettings']  = "Персональные настройки";
+$lang['PersonalSettingsI'] = "Персональные настройки %s";
+
+# User
+$lang['User']            = "пользователь";
+$lang['Users']           = "Пользователи";
+$lang['UserOverview']    = "Обзор пользователя";
+$lang['UserCreate']      = "Создать пользователя";
+$lang['UserModify']      = "Редактировать пользователя";
+$lang['UserDel']         = "Удалить пользователя";
+$lang['UserInfo']        = "Учетная запись";
+$lang['UserModInfo']     = "Изменить учетную запись %s";
+$lang['UserNewInfo']     = "Создать учетную запись %s";
+$lang['UserDelInfo']     = "Удалить учетную запись %s";
+$lang['UserUnknown']     = "Неизвестный пользователь";
+$lang['UserLastSeen']    = "Последний вход";
+$lang['UserLastHost']    = "Последний хост";
+$lang['UserAdmin']       = "Админ";
+$lang['UserLanguage']    = "Язык";
+$lang['UserTimezone']    = "Часовой пояс";
+$lang['UserTheme']       = "Тема";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Праздники";
+$lang['UserNamedays']    = "Именины";
+$lang['UserWorkdays']    = "Рабочие дни";
+$lang['UserWeekstart']   = "Начало недели";
+$lang['UserDisabled']    = "Выключить аккаунт";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "Продукт/Проект";
+$lang['ProductPs']       = "Продукт/Проект";
+$lang['Product']         = "Продукт";
+$lang['Products']        = "Продукт";
+$lang['Project']         = "Проект";
+$lang['Projects']        = "Проект";
+$lang['ProductsSearch']  = "Продукты/Проекты Поиск";
+$lang['ProductsOverview']= "Продукты/Проекты Обзор";
+$lang['ProductsDetail']  = "Продукты/Проекты Детали ";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Связанные встречи";
+$lang['ProdName']        = "Продукт/Проект";
+$lang['ProdVersion']     = "Версия";
+$lang['ProdProd']        = "связанные продукты";
+$lang['ProdProdNew']     = "новая связь";
+$lang['ProdRoles']       = "Роли";
+$lang['ProdFunc']        = "Функции";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Новая роль";
+$lang['ProdRole'][1]     = "Менеджер";
+$lang['ProdRole'][2]     = "Коммерческий менеджер";
+$lang['ProdRole'][3]     = "2. Менеджер";
+$lang['ProdRole'][4]     = "Продажи";
+$lang['ProdRole'][5]     = "Разработчик";
+$lang['ProdRole'][6]     = "Продавец";
+$lang['ProdRole'][7]     = "Поставщик";
+$lang['ProdRole'][8]     = "Реселлер";
+$lang['ProdRole'][9]     = "Партнер";
+$lang['ProdRole'][10]    = "Базовый проект";
+$lang['ProdRole'][11]    = "Проект-предок";
+$lang['ProdRole'][12]    = "Проект-наследник";
+$lang['ProdRole'][13]    = "Подпроект";
+$lang['ProdPath']        = "Каталог";
+$lang['ProdDesc']        = "Описание";
+$lang['ProdDesc1']       = "Описание 1";
+$lang['ProdDesc2']       = "Описание 2";
+$lang['ProdState']       = "Статус";
+$lang['ProdState_']      = "Неизвестный статус";
+$lang['ProdStates'][0]   = "Подготовка";
+$lang['ProdStates'][1]   = "В работе";
+$lang['ProdStates'][2]   = "Закончен";
+$lang['ProdStates'][3]   = "Отменен";
+$lang['ProdStates'][4]   = "Квота в процессе";
+$lang['ProdStates'][5]   = "Квота отменена";
+$lang['ProdStates'][-2]  = "все не законченные и не отмененные";
+$lang['ProdClass1']      = "Классификация 1";
+$lang['ProdClasses1'][1] = "Программы";
+$lang['ProdClasses1'][2] = "Аппаратура";
+$lang['ProdClasses1'][3] = "Поддержка";
+$lang['ProdClass2']      = "Классификация 2";
+$lang['ProdClasses2'][1] = "Центр";
+$lang['ProdClasses2'][2] = "Филиалы";
+$lang['ProdPrice']       = "Цена";
+$lang['ProdCost']        = "Стоимость";
+$lang['SearchForProd']   = "Поиск продуктов или проектов";
+$lang['SearchForProdExt']= "Расширенный поиск продуктов или проектов";
+$lang['ProdCreateInfo']  = "Создать новый продукт или проект";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "Удалить проект %s";
+$lang['ProdModInfo']     = "Изменить Продукт/Проект %s";
+$lang['ProdCreator']     = "создан";
+$lang['ProdCreation']    = "создан%s %s";
+$lang['ProdCreationS']   = "создан в";
+$lang['ProdStart']       = "ожидаемая дата начала";
+$lang['ProdEnd']         = "ожидаемая дата окончания";
+$lang['ProdProb']        = "Вероятность";
+$lang['ProdModifyT']     = "Изменить этот Продукт/Проект %s";
+$lang['ProdCreateT']     = "Создать новый Продукт/Проект";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(пустое значение показывает все Продукты/Проекты)";
+$lang['ProdLinkInfo']    = "Смотреть Продукты/Проекты %s";
+$lang['ProdBetween']     = "создан между";
+$lang['ProdLinks']       = "Ссылки";
+$lang['ProdStats']       = "Статистика";
+$lang['ProdStatsInfo']   = "Статистика для этих продуктов";
+$lang['ProdStatsTitle']  = "Статистика Продукта/Проекта";
+$lang['ProdFields']      = "Атрибуты";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mailboxes
+$lang['MailboxEmail']    = "Email";
+$lang['MailSendTo']      = "Отправить почту для %s";
+$lang['MailFrom']        = "От";
+$lang['MailTo']          = "Кому";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Тема";
+$lang['MailSent']        = "отправка почты %s в %s.";
+$lang['MailSentCc']      = "отправка почты %s (Cc) в %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Визитка от %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Дата";
+$lang['MailSize']        = "Размер";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Изменить права доступа";
+$lang['AclModifyI']      = "изменить права доступа для %s";
+$lang['AclDetail']       = "Подробней о правах доступа";
+$lang['AclDetailI']      = "показать права доступа для %s";
+$lang['permissions']     = "права доступа";
+$lang['ACLsee']          = "см. права доступа";
+$lang['ACLmod']          = "изменить права доступа";
+$lang['ACLread']         = "читать";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "изменять";
+$lang['ACLdelete']       = "удалять";
+$lang['ACLreadI']        = "следующие пользователи/группы смогут увидеть %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "следующие пользователи/группы смогут изменить %s";
+$lang['ACLdelI']         = "следующие пользователи/группы смогут удалить %s";
+$lang['ACLOverview']     = "Обзор разрешений";
+$lang['ACLOverviewI']    = "смотреть все разрешения";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "Модуль";
+
+# Tasks
+$lang['Task']            = "Задача";
+$lang['Tasks']           = "Задачи";
+$lang['TaskDetail']      = "Подробнее о задаче";
+$lang['TaskCreate']      = "Создать задачи";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "создать новую подзадачу в %s";
+$lang['TaskDelete']      = "Удалить задачу %s";
+$lang['TaskModify']      = "Изменит задачу %s";
+$lang['TaskOverview']    = "Обзор задач";
+$lang['TaskOverviewInfo']= "показать задачи для %s";
+$lang['TaskName']        = "Имя";
+$lang['TaskState']       = "Статус";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Что сделать";
+$lang['TaskWorker']      = "исполнитель";
+$lang['TaskVolumeFull']  = "Полный объем работ";
+$lang['TaskVolumeDone']  = "Объем выполненных работ";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Подзадача из";
+$lang['hours']           = "час";
+$lang['TaskCreation']    = "создан %s %s";
+$lang['TaskStates'][0]   = "Подготовка";
+$lang['TaskStates'][1]   = "В работе";
+$lang['TaskStates'][2]   = "Завершена";
+$lang['TaskStates'][3]   = "Просрочена";
+$lang['TaskS_Start']     = "время начала";
+$lang['TaskS_End']       = "время окончания";
+$lang['TaskSched']       = "временной";
+$lang['TaskReal']        = "реальный";
+$lang['TaskLinkInfo']    = "См. задачи %s";
+$lang['TaskCompleted']   = "Выполнено на  %3.2f процента";
+$lang['Completed']       = "Завершена";
+$lang['Reschedule']      = "Reschedule";
+$lang['Reschedule_s']    = "Reschedule start";
+$lang['Reschedule_e']    = "Reschedule end";
+$lang['TaskGantt']       = "Диаграмма Гантта";
+$lang['TaskImport']      = "Задача: CSV-Импорт";
+$lang['ImportSrcFile']   = "Исходный файл";
+$lang['ImportColNames']  = "Имя столбца в CSV-файле";
+$lang['ImportIndex']     = "Индекс WBS";
+$lang['ImportValid']     = "Импорт";
+$lang['ImportConfirm']   = "Подтвердить импорт";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Диаграмма Гантта";
+$lang['GanttLinkInfo']   = "Диаграмма Гантта";
+$lang['GanttTitle']      = "Диаграмма Гантта";
+$lang['GanttStart']      = "Дата начала";
+$lang['GanttEnd']        = "Дата завершения";
+$lang['GanttVolume']     = "количество часов";
+$lang['GanttCompletion'] = "Завершено";
+
+# Company
+$lang['Company']           = "Компания";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Поиск компании";
+$lang['CompanyOverview']   = "Обзор компании";
+$lang['CompanyDetail']     = "Подробней о компании";
+$lang['CompanyModify']     = "Изменить компанию";
+$lang['CompanyCreate']     = "Создать компанию";
+$lang['CompanyCreateInfo'] = "создание новой компании";
+$lang['CompanyApps']       = "Встреча с новой компанией";
+$lang['CompanyLinks']      = "Ссылки";
+$lang['CompanyChgInfo']    = "Изменить компанию %s";
+$lang['CompanyDelInfo']    = "Удалить компанию %s";
+$lang['CompanyMembers']    = "Сотрудники вне отделов";
+$lang['CompanyLinkInfo']   = "Смотреть компанию %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Отдел";
+$lang['Departments']        = "Отделы";
+$lang['DepartmentSearch']   = "Поиск отдела";
+$lang['DepartmentOverview'] = "Обзор отдела";
+$lang['DepartmentDetail']   = "Подробно о отделе";
+$lang['DepartmentModify']   = "Изменить отдел";
+$lang['DepartmentCreate']   = "Создать отдел";
+$lang['DepCreateInfo']      = "создание нового отдела";
+$lang['DepartmentMembers']  = "Сотрудники отдела";
+$lang['DepartmentApps']     = "Встречи с этим отделом";
+$lang['DepartmentLinks']    = "Ссылки";
+$lang['DepLinkInfo']        = "Смотреть отдел %s в %s";
+$lang['DepChgInfo']         = "Изменить отдел %s";
+$lang['DepDelInfo']         = "Удалить отдел %s";
+
+# Team
+$lang['Team']               = "группа";
+$lang['Teams']              = "группы";
+$lang['TeamOverview']       = "Обзор группы";
+$lang['TeamDetail']         = "Подробности о группе";
+$lang['TeamModify']         = "Изменить группу";
+$lang['TeamCreate']         = "Создание группы";
+$lang['TeamMember']         = "Участник группы";
+$lang['TeamPosMember']      = "возможные участники группы";
+$lang['TeamMail']           = "почта для группы";
+$lang['TeamMailInfo']       = "послать почту в группу %s";
+$lang['TeamApps']           = "Встречи группы %s";
+$lang['TeamLinkInfo']       = "Смотреть группу %s";
+$lang['TeamManager']        = "Список менеджеров";
+$lang['TeamName']           = "Имя группы";
+$lang['TeamCreation']       = "Создана ";
+$lang['TeamCount']          = "# участников";
+$lang['TeamOverviewInfo']   = "смотреть список всех групп";
+$lang['TeamCreateI']        = "создать новую группу";
+$lang['TeamDeleteI']        = "Удалить группу %s";
+$lang['TeamModifyI']        = "Изменить группу %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Поиск по адресной книге";
+$lang['AddressOverview'] = "Обзор адресной книги";
+$lang['AddressDetail']   = "Подробности адреса";
+$lang['Address']         = "Адрес";
+$lang['AddressEntries']  = "Записи адресной книги";
+$lang['AdrLocChange']    = "изменить адрес %s";
+$lang['AdrLocCreate']    = "создать адрес для  %s";
+$lang['AdrBMod']         = "Изменить";
+$lang['AdrBModInfo']     = "сменить базовую запись  %s";
+$lang['AdrBDel']         = "Удалить";
+$lang['AdrBDelInfo']     = "удалить из базы и все адреса %s";
+$lang['AdrBNew']         = "Новая запись";
+$lang['AdrBNewInfo']     = "Новая базовая запись";
+$lang['AdrCreateInfo']   = "создать новый адрес";
+$lang['AdrLNew']         = "новый адрес";
+$lang['AdrLNewInfo']     = "создать новый адрес для %s";
+$lang['AdrName']         = "Имя";
+$lang['AdrMailInfo']     = "Отправить почту для %s";
+$lang['AdrGetVcard']     = "Получить Vcard";
+$lang['AdrGetVcardI']    = "Получить адрес как Vcard";
+$lang['AdrSeeEntry']     = "Смотреть записи";
+$lang['AdrSeeEntryI']    = "Просмотр записной книги %s";
+$lang['AdrLocTitle']     = "%s адрес";
+$lang['AdrBNewTitle']    = "Ввести новую базовую запись";
+$lang['AdrBChangeTitle'] = "Изменить базовую запись";
+
+$lang['Location']        = "Место";
+$lang['Location2']       = "Место";
+$lang['AdrTitle']        = "Титул";
+$lang['AdrFirstName']    = "Имя";
+$lang['AdrMiddleName']   = "Отчество";
+$lang['AdrLastName']     = "Фамилия";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "День рождения";
+$lang['AdrPicture']      = "Фото";
+$lang['AdrCat1']         = "Домашний адрес";
+$lang['AdrCat2']         = "Рабочий адрес";
+$lang['AdrCpLoc']        = "Копия адреса компании";
+$lang['ZIP']             = "Почтовый индекс";
+$lang['State']           = "Штат";
+$lang['Country']         = "Страна";
+$lang['Street']          = "Улица";
+$lang['City']            = "Город";
+$lang['Phone']           = "Телефон";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "Факс";
+$lang['AdrEmail']        = "Email";
+$lang['acc_info1']       = "Банковский счет";
+$lang['acc_info2']       = "Банковский счет";
+$lang['acc_nr']          = " Nr Счета";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Изменить %s адрес  %s";
+$lang['DeleteLocInfo']   = "Удалить %s адрес  %s";
+$lang['AdrLinks']        = "Ссылки";
+$lang['AdrCategory']     = "Категории";
+$lang['AdrDescription']  = "Название адреса(тип)";
+$lang['ShowCal']         = "Смотреть календарь из %s";
+$lang['SearchForAdr']    = "Искать в адресной книге";
+$lang['SearchForAdrExt'] = "Расширенный поиск в адресной книге";
+$lang['SearchForCmp']    = "Искать компанию";
+
+# Main Menu
+$lang['Calendar']        = "Календарь";
+$lang['Addresses']       = "Адреса";
+$lang['ProductMenu']     = "Проекты & Продукты";
+$lang['Logout']          = "Выход";
+$lang['CalendarInfo']    = "Календарь на сегодня";
+$lang['AddressesInfo']   = "Поиск адреса";
+$lang['ProductInfo']     = "Проекты и Продукты";
+$lang['LogoutInfo']      = "Выход из системы";
+
+# Help
+$lang['Help']            = "Помощь";
+$lang['HelpInfo']        = "Помощь для этой страницы";
+
+# Resource
+$lang['ResCal']          = "Использование ресурсов";
+$lang['ResCalDetail']    = "Использование ресурсов для %s в %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "Выбор карты";
+$lang['MapHeader']       = "Взять карту из %s";
+
+# History
+$lang['HistoryDetail']   = "%s История";
+$lang['HistoryShow']     = "История для %s %s";
+$lang['HistoryFld']      = "Поле";
+$lang['HistoryOldV']     = "Старое значение";
+$lang['HistoryNewV']     = "Новое значение";
+$lang['HistoryLink']     = "смотреть историю";
+$lang['HistoryLinkI']    = "смотреть историю для %s";
+$lang['HistoryDeleted']  = "удаленное";
+
+# Timetrack
+$lang['Timetrack']         = "Достижение";
+$lang['Timetracks']        = "Efforts";
+$lang['TimetrackCreate']   = "затраты времени";
+$lang['TimetrackCreateI']  = "затраты времени для  %s";
+$lang['TimetrackDelI']     = "удалить эти затраты времени для %s";
+$lang['TimetrackNew']      = "Новые затраты времени";
+$lang['TimetrackModify']   = "Изменить затраты времени";
+$lang['TimetrackOverview'] = "Всего временных затрат";
+$lang['TimetrackWorker']   = "Работник";
+$lang['TimetrackRef']      = "Относится к ";
+$lang['TimetrackDate']     = "Дата";
+$lang['TimetrackSearch']   = "Поиск по затратам времени";
+$lang['SearchForTT']       = "Поиск по затратам времени";
+$lang['SearchForTTExt']    = "Расширенный поиск по затратам времени";
+$lang['TimetrackBetween']  = "между";
+$lang['TimetrackBooked']   = "зарезервированное время";
+$lang['TimetrackBookedI']  = "зарезервированное время для %s";
+$lang['TTStatsTitle']      = "Статистика по времени";
+$lang['TTcph']             = "Стоимость часа";
+$lang['TTState']           = "Состояние";
+$lang['TTStates'][-1]      = "без состояния";
+$lang['TTStates'][1]       = "учтено";
+$lang['TTStates'][2]       = "выставлен счет";
+$lang['TTStates'][3]       = "оплачено";
+$lang['TTStates'][4]       = "неоплачиваемый";
+$lang['TTRecord']          = "Запись времени";
+$lang['TTfinish']          = "Конец";
+
+# Fax
+$lang['FaxCreate']         = "Новый факс";
+$lang['FaxSendTo']         = "Послать факс для %s";
+$lang['FaxTo']             = "Кому:";
+$lang['FaxNr']             = "FAX ╧:";
+$lang['FaxNote']           = "Сохранить этот факс как заметку для %s";
+$lang['FaxSpooledTo']      = "Факс отправлен для %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Отправить SMS для %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Нопоминание: Встреча в %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Администрирование";
+$lang['AdminDBInfo']       = "Информация о Базе Данных";
+$lang['AdminDBTable']      = "Таблица";
+$lang['AdminDBCount']      = "Вхождения";
+$lang['AdminDBName']       = "Имя БД";
+$lang['AdminDBAlias']      = "Алиас БД";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Пользователь БД";
+$lang['AdminDBPass']       = "Пароль";
+$lang['AdminDBHost']       = "Хост";
+$lang['AdminDBPort']       = "Порт";
+$lang['AdminDBType']       = "Тип";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Недавние подключения";
+$lang['AdminDBSync']       = "Синхронизация БД";
+$lang['AdminDBSource']     = "Исходная DB";
+$lang['AdminDBWhat']       = "Что/Как";
+$lang['AdminDBTarget']     = "Целевая DB";
+$lang['AdminDBRep']        = "Репозиторий файлов";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "База Данных";
+$lang['DBInit']            = "Инициализация БД";
+$lang['DBModify']          = "Изменение БД";
+$lang['DBModifyI']         = "Изменить БД %s";
+$lang['DBCreate']          = "Создание БД";
+$lang['DBDetail']          = "Детали БД";
+$lang['DBLastDate']        = "Дата посл. синх.";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "ID посл. синх.";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "использовать БД";
+$lang['DBreloginI']        = "переконекктиться к %s";
+$lang['DBOverview']        = "Обзор Базы Данных";
+$lang['DBUpdate']          = "Обновление БД";
+$lang['DBUpdateI']         = "обновить БД %s";
+$lang['AdminDBSyncM'][1]   = "удалите целевую БД, затем скопируйте все из исходной БД в целевую БД";
+$lang['AdminDBSyncM'][2]   = "скопируйте все новое (после последней синхронизации) из целевой БД в исходную БД, затем скопируйте все";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL для LOGO";
+$lang['CfgLogoLink']       = "URL линк для LOGO";
+$lang['CfgBugAutoName']    = "именованная схема для ошибок";
+$lang['CfgInvAutoName']    = "именованная схема для счетов";
+$lang['CfgVATlist']        = "список НДС";
+$lang['CfgVersion']        = "Версия системы TUTOS";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Анализ будущих продаж (отчет)";
+$lang['UndefinedEndDate']   = "Неизвестная дата окончания";
+$lang['SalesBalanced']      = "Продажи, включенные в баланс";
+$lang['AccumulatedRevenue'] = "Общий доход";
+$lang['PeriodRevenue']      = "Доход за период";
+$lang['Period']             = "Период";
+$lang['Est_revenue']        = "Ожидаемый доход";
+$lang['Graph']              = "График";
+$lang['GraphInfo']          = "Показать на графике";
+
+# Permissions
+$lang['perm'][usecalendar]       = "календарь";
+$lang['perm'][usetaskmanagement] = "задачи";
+$lang['perm'][usemaplink]        = "карта";
+$lang['perm'][useprojects]       = "проекты";
+$lang['perm'][usetimetrack]      = "затраты времени";
+$lang['perm'][usefax]            = "fax";
+$lang['perm'][usesms]            = "sms";
+$lang['perm'][useoverlib]        = "popups";
+$lang['perm'][useaddressbook]    = "адресная книга";
+$lang['perm'][usemail]           = "email";
+$lang['perm'][usehistory]        = "display history";                                                                              
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff']              = "Особенность глобально отключена";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "начало после конца !";
+$lang['Err0006']         = "Пожалуйста сделайте подробный выбор";
+$lang['Err0009']         = "Пожалуйста заполните <i>%s</i> поля";
+$lang['Err0012']         = "Неизвеcтная %s <i>%s</i> !";
+$lang['Err0014']         = "Пожалуйста выберите <i>%s</i> поля";
+$lang['Err0017']         = "Пожалуйста введите число в поле <i>%s</i> !";
+$lang['Err0018']         = "Имя <i>%s</i> совпадает с %d записями";
+$lang['Err0020']         = "Вы не можете удалить этот файл !";
+$lang['Err0021']         = "Вы не можете изменить виртуальную группу 0";
+$lang['Err0022']         = "Извините, у Вас не прав для просмотра %s";
+$lang['Err0023']         = "Извините, у Вас не прав для удаления %s";
+$lang['Err0024']         = "Извините, у Вас не прав для изменения %s";
+$lang['Err0025']         = "Отсутствует имя и пароль";
+$lang['Err0026']         = "Вход не возможен";
+$lang['Err0027']         = "Ошибка входа";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Факс не отправлен !";
+$lang['Err0031']         = "Отсутствует номер факса !";
+$lang['Err0032']         = "Посылка факса отключена !";
+$lang['Err0033']         = "отправка почты отключена! Почта  \"%s\" <u>не была</u> отправлена.";
+$lang['Err0034']         = "почта не отправлена ! отсутствует адрес отправителя \"%s\" .";
+$lang['Err0035']         = "почта не отправлена ! нет получателей или уже ушло.";
+$lang['Err0036']         = "Продукт/Проект (%s) уже существует!";
+$lang['Err0037']         = "почта %s не отправлена ! Отсутствует файл настройки (%s) !";
+$lang['Err0038']         = "Неправильная дата в поле %s!";
+$lang['Err0039']         = "Уже есть такой адрес (%s) !";
+$lang['Err0040']         = "%s не найден !";
+$lang['Err0041']         = "Пароли не совпадают !";
+$lang['Err0042']         = "Старый пароль не правилен !";
+$lang['Err0043']         = "Адрес %s задан в неправильном (xxx@abc.com) формате !";
+$lang['Err0044']         = "Компания уже существует (%s) !";
+$lang['Err0045']         = "Отдел уже существует (%s) !";
+$lang['Err0046']         = "Группа уже существует (%s) !";
+$lang['Err0047']         = "Не могу отнять права администратора. Нужен хотя бы один администратор!";
+$lang['Err0048']         = "Не найдено!";
+$lang['Err0049']         = "Аккаунт %s выключен !";
+$lang['Err0050']         = "Неверное содержимое CSV-файла !";
+$lang['Err0051']         = "Не найден сепаратор CSV";
+$lang['Err0052']         = "Вы должны предоставить классификацию";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+
+### Local Variables: ***
+### End: ***
+?>

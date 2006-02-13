@@ -124,10 +124,8 @@ function check_form()
       <tr> 
         <td valign=top><input name='subject' size='30' maxlength='255' type="text"></td>
         <input name='date_start' id='inlineCal15CallSavejscal_field' maxlength='10' type="hidden" value=""></td>
-        <input name='due_date' maxlength='10' type="hidden" value=""></td>
-
-	<input name='time_start' type="hidden" maxlength='5' value="">
-	<input name='time_end' type="hidden" maxlength='5' value=""></td>
+        <input name='time_start' type="hidden" maxlength='5' value="">
+        <input name='time_end' type="hidden" maxlength='5' value=""></td>
         <script type="text/javascript">
 //		Calendar.setup ({
 //			inputField : "inlineCal15CallSavejscal_field", ifFormat : "%Y-%m-%d", showsTime : false, button : "inlineCal15CallSavejscal_trigger", singleClick : true, step : 1
@@ -425,8 +423,6 @@ function showCreateBox(start,end) {
 	var event_st_min=start.substring(10,12)
 
 	document.appSave.date_start.value=<?php echo $a;?>+"-"+<?php echo $b;?>+"-"+<?php echo $c;?>;
-	document.appSave.due_date.value=<?php echo $a;?>+"-"+<?php echo $b;?>+"-"+<?php echo $c;?>;	
-
 	document.appSave.time_start.value=event_st_hr+":"+event_st_min
 
 	createBoxObj=getObj("createBox")

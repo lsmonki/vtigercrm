@@ -1,0 +1,104 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the 
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+  <input type="hidden" name="module" value="{MODULE}">
+  <input type="hidden" name="step" value="2">
+  <input type="hidden" name="source" value="{SOURCE}">
+  <input type="hidden" name="source_id" value="{SOURCE_ID}">
+  <input type="hidden" name="action" value="Import">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME}</td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="hline"><img height='2' src='include/images/blank.gif'></td>
+    </tr>
+  </table>
+  <br>
+  <!-- BEGIN: instructions -->
+  <br>
+  <table width="80%" border="0" cellspacing="1" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td class="formSecHeader">{MOD.LBL_STEP_2_TITLE} </td>
+    </tr>
+    <tr> 
+      <td> <table width="100%" border="0" cellpadding="2" cellspacing="2">
+          <tr> 
+            <td>{INSTRUCTIONS_TITLE}</td>
+          </tr>
+        </table>
+        <table width="100%" border="0" cellpadding="2" cellspacing="2" style="margin-top:5px">
+          <!-- BEGIN: step -->
+          <tr> 
+            <td valign="top" width="10">{STEP_NUM}</td>
+            <td>{INSTRUCTION_STEP}</td>
+          </tr>
+          <!-- END: step -->
+        </table></td>
+    </tr>
+    <!-- END: instructions -->
+    <tr> 
+      <td> <table border="0" cellspacing="2" cellpadding="2" width="100%" style="margin-top:5px">
+          <tr> 
+            <td>{MOD.LBL_SELECT_FILE}<br> <input type="hidden" /> <input size="60" name="userfile" type="file"/></td>
+          </tr>
+          <tr> 
+            <td>{MOD.LBL_HAS_HEADER}&nbsp;
+              <input type="checkbox" name="has_header"{HAS_HEADER_CHECKED}></td>
+          </tr>
+        </table></td>
+    </tr>
+    <tr> 
+      <td> <table width="100%" cellpadding="2" cellspacing="0" border="0" class="formSecHeader">
+          <tr> 
+            <td align="right">
+				<input title="{MOD.LBL_NEXT}" accessKey="" class="button" type="submit" name="button" value="  {MOD.LBL_NEXT}  "  onclick="this.form.action.value='Import';this.form.step.value='3'; return verify_data(this.form);">
+				<input title="{MOD.LBL_BACK}" accessKey="" class="button" type="submit" name="button" value="  {MOD.LBL_BACK}  "  onclick="this.form.action.value='Import';this.form.step.value='1'; return true;">
+            </td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
+</form>
+{JAVASCRIPT} 
+<!-- END: main -->

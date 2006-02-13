@@ -1,0 +1,34 @@
+<?php
+# $Id: en.p3,v 1.16 2005/05/03 13:18:48 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "en_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+
+
+ $lang['AdminCCHelp']['dbname']  = "The name of the database where TUTOS should be installed";
+ $lang['AdminCCHelp']['dbtype']  = "The type/manufacturer of the database system";
+ $lang['AdminCCHelp']['dbalias'] = "an alias for this database (shown on login if multiple systems are defined)";
+ $lang['AdminCCHelp']['dbhost']  = "the network name or ip of the sytem hosting the database";
+ $lang['AdminCCHelp']['dbport']  = "the network port on the database host<br>(typically 5432 for postgres or 3306 for MySql).";
+ $lang['AdminCCHelp']['dbuser']  = "the username to access the database";
+ $lang['AdminCCHelp']['dbpasswd'] = "the password for the database user";
+ $lang['AdminCCHelp']['repository'] = "the path where files are stored. Relative paths start at [tutoshome] = ". realpath(getcwd() ."/". $tutos['base']);
+ $lang['AdminCCHelp']['dbprefix']   = "a prefix put in front of all tablenames<br>(leave empty if not sure)";
+
+
+ $lang['AdminCCHelp']['mailmode'] = "";
+ $lang['AdminCCHelp']['sendmail'] = "the path where TUTOS could find sendmail";
+ $lang['AdminCCHelp']['smtphost'] = "";
+
+ $lang['AdminCCHelp']['demo'] = "in demomode TUTOS will not allow to change user entries<br>and will not sent out mail";
+ $lang['AdminCCHelp']['debug'] = "debug info will be written to the given path";
+ $lang['AdminCCHelp']['errlog'] = "a file with path where debuginfo is written";
+ $lang['AdminCCHelp']['jpgraph'] = "a path where the jpgraph <a target=\"_blank\" href=\"http://www.aditus.nu/jpgraph/\">package</a> is installed relative to ".getcwd() ."/". $tutos['base'] ."/php\n";
+ $lang['AdminCCHelp']['sessionpath'] = "the directory where TUTOS stores the session files";
+
+
+?>

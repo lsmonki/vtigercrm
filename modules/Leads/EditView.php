@@ -128,8 +128,7 @@ $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
 //create the html select code here and assign it
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 
  $lead_tables = Array('leaddetails','crmentity','leadsubdetails','leadaddress','leadscf'); 

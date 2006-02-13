@@ -65,8 +65,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 $xtpl->assign("DATEFORMAT", $current_user->date_format);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
@@ -82,30 +81,6 @@ $xtpl->assign("ACCOUNT_NAME",$company);
 $xtpl->assign("CREATE_POTENTIAL","yes");
 $xtpl->assign("POTENTIAL_NAME", $potentialname);
 $xtpl->assign("DATE_CLOSED", $focus->closedate);
-$xtpl->assign("POTENTIAL_AMOUNT", $potential_amount);
-
-$sales_stage_query="select * from sales_stage";
-$sales_stage_result = $adb->query($sales_stage_query);
-$noofsalesRows = $adb->num_rows($sales_stage_result);
-$sales_stage_fld = '';
-for($j = 0; $j < $noofsalesRows; $j++)
-{
-	
-	$sales_stageValue=$adb->query_result($sales_stage_result,$j,strtolower(sales_stage));
-
-	if($value == $sales_stageValue)
-	{
-		$chk_val = "selected";
-	}
-	else
-	{
-		$chk_val = '';
-	}
-
-	$sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.$sales_stageValue.'</OPTION>';
-}
-$sales_stage_fld .= '</td>';
-$xtpl->assign("POTENTIAL_SALES_STAGE", $sales_stage_fld);
 
 $xtpl->parse("main");
 $xtpl->out("main");

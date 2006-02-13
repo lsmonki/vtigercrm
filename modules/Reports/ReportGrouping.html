@@ -1,0 +1,118 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<html>
+<head>
+<title></title>
+<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+<script language="JavaScript" type="text/JavaScript" src="include/general.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+    function selectAction( url )
+    {
+        document.NewReport.action = url;
+        document.NewReport.submit();
+    }
+</script>
+</head>
+<body>
+<table width="95%" cellspacing="0" cellpadding="0" align="center">
+  <tr> 
+    <td>
+        <br>    
+      <table width="100%" border="0" cellspacing="2" cellpadding="2">
+
+              
+        <tr>        
+            
+          <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
+              <tr class="bodyText">
+		
+                <td width="40%" nowrap>{MOD.LBL_GROUPING_SUMMARIZE}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
+
+              </tr>
+              <tr>
+
+                <td>
+                
+        <select name="Group1" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
+            <option value="none">{MOD.LBL_NONE}</option>    
+            {BLOCK1}            
+        </select>                        
+            </td>            
+                <td><select name="Sort1" class="select">
+		    {ASCDESC1}
+		</select></td>
+              </tr>
+            </table></td>
+
+        </tr>
+              
+        <tr>        
+        
+            <td width="6%">&nbsp;</td>
+            
+          <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
+              <tr class="bodyText">	
+                <td width="30%" nowrap>{MOD.LBL_GROUPING_THEN_BY}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
+              </tr>
+              <tr>
+                <td>
+                
+        <select name="Group2" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
+            <option value="none">{MOD.LBL_NONE}</option>    
+        {BLOCK2}          
+        </select>                        
+            </td>            
+                <td><select name="Sort2" class="select">
+                    {ASCDESC2}
+                  </select></td>
+              </tr>
+            </table></td>
+        </tr>
+              
+        <tr>        
+        
+            <td width="6%">&nbsp;</td>
+
+        
+            <td width="6%">&nbsp;</td>
+            
+          <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
+              <tr class="bodyText">
+		
+                <td width="40%" nowrap>{MOD.LBL_GROUPING_FINALLY_BY}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
+
+              </tr>
+
+              <tr>
+                <td>
+                
+        <select name="Group3" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
+            <option value="none">{MOD.LBL_NONE}</option>    
+            {BLOCK3}
+        </select>                        
+            </td>            
+                <td><select name="Sort3" class="select">
+			{ASCDESC3}
+                    </select></td>
+              </tr>
+            </table></td>
+        </tr>
+     
+</table> 
+   </td>
+    </table><br>
+</body>
+</html>
+<!-- END: main -->

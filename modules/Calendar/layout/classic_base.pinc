@@ -1,0 +1,444 @@
+<?php
+/**
+ * Copyright 2002 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: classic_base.pinc,v 1.16 2005/05/03 13:18:50 saraj Exp $
+ *  $Author: saraj $
+ */
+ global $calpath;
+ require_once $calpath .'layout/layout_base.pinc';
+/**
+ * This class implements the classic TUTOS layout
+ * a headline in an table together with a another table
+ * which has a left side navigation element an a big area on the right side
+ *
+ * @package BASE
+ * @module classic_base
+ */
+class classic_base extends layout_base {
+  /**
+   * initialize
+   */
+  function layout (&$user) {
+    $this->init($user);
+  }
+  /**
+   * initialize
+   */
+  function init (&$user) {
+    parent::init($user);
+    $this->stylename = "classic_layout";
+  }
+  /**
+   * HTML inititalization
+   */
+  function inithtml() {
+    global $tutos,$lang;
+
+    # ob_start("ob_gzhandler");
+    @ob_start();
+    if ( !isset($this->name) || empty($this->name) ) {
+      $this->name = "TUTOS";
+    }
+    Header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    Header("Expires: -1");
+    Header("Cache-Control: no-store, no-cache, must-revalidate");
+    Header("Cache-Control: max_age=0 ,post-check=0, pre-check=0",false);
+    Header("Pragma: no-cache");
+
+    Header("Content-Description: a TUTOS Page" );
+    Header("Content-Type: text/html;charset=". $lang['content_encoding']);
+
+/**
+    echo "<?xml version=\"1.0\"?>";
+    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"";
+    echo "  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
+*/
+
+    if (true) {
+      echo "<?xml version=\"1.0\"?>\n";
+      echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";  
+	  $xml = true;
+      $c = "/>"; 
+    } else {
+      echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
+      $c = ">"; 
+	  $xml = false;
+    }
+    if ( isset($tutos[lang]) && $tutos[lang] != "" ) {
+      #echo "<html dir=\"ltr\" lang=\"". $tutos[lang] ."\">\n";
+    } else {
+      #echo "<html dir=\"ltr\">\n";
+    }
+    #echo "<!-- Copyright 1999 - 2004 by Gero Kohnert gokohnert@users.sourceforge.net -->\n";
+    #echo "<!-- all rights reserved -->\n";
+    #echo "<head>\n";
+    #echo " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=". $lang['content_encoding'] ."\"".$c."\n";
+    #echo " <meta name=\"GENERATOR\" content=\"TUTOS ". $tutos[version] ."\"".$c."\n";
+    if ( isset($tutos[lang]) && $tutos[lang] != "" ) {
+      #echo " <meta name=\"language\" content=\"". $tutos[lang] ."\"".$c."\n";
+    }
+    #echo " <meta http-equiv=\"Expires\" content=\"-1\"".$c."\n";
+    if (is_readable(getcwd()."/".$tutos['base'] ."/html/". $this->theme->name .".css") ) {
+      #echo " <link rel=\"stylesheet\" href=\"". $tutos['base'] ."/html/". $this->theme->name .".css\" type=\"text/css\"".$c."\n";
+    } else {
+      #echo "\n<!-- NO THEME ". $this->theme->name ." found -->\n";
+    }
+    #echo " <link rel=\"stylesheet\" href=\"". $tutos['base'] ."/html/". $this->stylename .".css\" type=\"text/css\"".$c."\n";
+
+    $x = $_SERVER['REQUEST_URI'];
+    $x = htmlentities(delUrlParameter($x,"th"));
+    foreach ($tutos[themes] as $i) {
+      #echo " <link rel=\"alternate stylesheet\" title=\"TUTOS ". $i ." ". $lang['UserTheme'] ."\" href=\"". $tutos['base'] ."/html/".$i.".css\" type=\"text/css\"".$c."\n";
+      #echo " <link rel=\"Alternate\" href=\"". addUrlParaMeter($x,"th=".$i) ."\" title=\"".  myentities($lang['UserTheme'] .": ".$i) ."\"".$c."\n";
+    }
+
+    #echo " <meta name=\"MSSmartTagsPreventParsing\" content=\"TRUE\"".$c."\n";
+    #echo " <link rel=\"icon\" href=\"". $tutos['base'] ."/html/tutos_small.gif\" type=\"image/gif\"".$c."\n";
+    #echo " <link rel=\"SHORTCUT ICON\" href=\"". $tutos['base'] ."/html/tutos.ico\"".$c."\n";
+    #echo " <link rel=\"Copyright\" href=\"". $tutos['base'] ."/html/copyright.html\" title=\"Copyright\"".$c."\n";
+    #echo " <link rel=\"Help\" href=\"".  make_helplink() ."\" title=\"". $lang['Help']."\"".$c."\n";
+    #echo " <link rev=\"Made\" href=\"https://sourceforge.net/project/memberlist.php?group_id=8047\" hreflang=\"en\" target=\"url\" title=\"TUTOS Team\"".$c."\n";
+    $x = $_SERVER['REQUEST_URI'];
+    $x = htmlentities(delUrlParameter($x,"lg"));
+    foreach($lang['lang'] as $i => $f) {
+      #echo " <link rel=\"Alternate\" href=\"". addUrlParaMeter($x,"lg=".$i) ."\" title=\"".  myentities($lang['UserLanguage'] .": ".$f) ."\"".$c."\n";
+    }
+    #echo " <title>TUTOS: ". myentities($this->name) ."</title>\n";
+    #echo "</head>\n";
+  }
+  /**
+   * error output visible to user
+   */
+  function error($str) {
+    if ( $str == "" ) return "";
+    return "<span class=\"warn\">". $str ."</span><br />";
+  }
+  /**
+   * start a data table
+   */
+  function DataTableStart() {
+    #return "<table class=\"single\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\">\n";
+  }
+  /**
+   * end a data table
+   */
+  function DataTableEnd() {
+    return "</table>\n";
+  }
+  /**
+   * start a overview table
+   */
+  function OverviewTableStart() {
+    #return "<table class=\"single\" border=\"1\" cellpadding=\"3\" cellspacing=\"0\">\n";
+  }
+  /**
+   * end a overview table
+   */
+  function OverviewTableEnd() {
+    return "</table>\n";
+  }
+  /**
+   * start a overview row
+   */
+  function OverviewRowStart($line,$title = "") {
+    return "<tr title=\"". myentities($title) ."\" onmouseover=\"this.style.backgroundColor='#ffff72';\" onmouseout=\"this.style.backgroundColor=this.style.color;\" class=\"line". ($line % 2 +1) ."\">\n";
+  }
+  /**
+   * end a overview row
+   */
+  function OverviewRowEnd($line) {
+    return "</tr>\n";
+  }
+  /**
+   * default does not show icons
+   */
+  function showGuiIcons($start, $end, &$myobject, &$myparentobj, $which, $desc = false) {
+    return $start . $end;
+  }
+  /**
+   * start a massupdate row
+   */
+  function UpdateRowStart($cols) {
+    $r = "<tr>\n";
+    $r .= " <td align=\"right\" colspan=\"". $cols ."\">\n";
+    return $r;
+  }
+  /**
+   * end a massupdate row
+   */
+  function UpdateRowEnd($cols) {
+    global $lang;
+    $r = "";
+    $r .= " </td>\n";
+    $r .= " <td colspan=\"". $cols ."\">\n";
+    $r .= " <input type=\"submit\" value=\"". $lang['Enter'] ."\" /></td>\n";
+    $r .= "</tr>\n";
+    return $r;
+  }
+  /**
+   * shows a simple field descriptor (top)
+   */
+  Function showfield($text,$req = 0,$label = "") {
+    $r = "";
+    $r .= "<td class=\"desc\" valign=\"top\">";
+    if ( $label != "" ) {
+      $r .= "<label for=\"". $label ."\">";
+    }
+    $r.= $text;
+    if ( $label != "" ) {
+      $r .= "</label>";
+    }
+    if ( $req != 0 ) {
+      $r .= "<font color=\"red\">(*)</font>";
+    }
+    $r .= "</td>\n";
+    return $r;
+  }
+  /**
+   * shows a simple field descriptor (center)
+   */
+  Function showfieldc($text,$req = 0,$label = "") {
+    $r = "";
+    $r .= "<td class=\"desc\">";
+    if ( $label != "" ) {
+      $r .= "<label for=\"". $label ."\">";
+    }
+    $r .= $text;
+    if ( $label != "" ) {
+      $r .= "</label>";
+    }
+    if ( $req != 0 ) {
+      $r .= "<font color=\"red\">(*)</font>";
+    }
+    $r .= "</td>\n";
+    return $r;
+  }
+  /**
+   * shows data
+   */
+  Function showdata($text,$cols = 1) {
+    $r = "";
+    $r .= "<td colspan=\"". $cols ."\" class=\"data\">";
+    $r .= ( $text == "" ?  "&nbsp;" : $text);
+    $r .= "</td>\n";
+    return $r;
+  }
+  /**
+   * get all hidden fields
+   */
+  Function getHidden() {
+    $r = "";
+    foreach ($this->hidden as $v ) {
+      $r .= "<input id=\"". $v[0] ."\" type=\"hidden\" name=\"". $v[0] ."\" value=\"". $v[1] ."\" />\n";
+    }
+    $this->hidden = array();
+    return $r;
+  }
+  /**
+   * action form header 
+   * make the javascript stuff for massupdates
+   */
+  function actionformStart($url) {
+    global $tutos;
+
+    $r = "";
+    if ( $tutos[massupdate] == 1 ) {
+      $r .= "<script type=\"text/javascript\" language=\"JavaScript\">\n";
+      $r .= "<!--\n";
+      $r .= "function CheckAll2() {\n";
+      $r .= "  for (var i=0; i < document.forms['actionform'].elements.length; i++) {\n";
+      $r .= "   var e = document.forms['actionform'].elements[i];\n";
+      $r .= "   if (e.name != 'checkit')\n";
+      $r .= "     e.checked = document.forms['actionform'].checkit.checked;\n";
+      $r .= "  }\n";
+      $r .= "}\n";
+      $r .= "//-->\n";
+      $r .= "</script>\n";
+      $r .= "<form name=\"actionform\" method=\"get\" action=\"". $url ."\">\n";
+    }
+    return $r;
+  }
+  function actionformEnd($url) {
+    global $tutos;
+
+    $r = "";
+    if ( $tutos[massupdate] == 1 ) {
+      $r .= $this->getHidden();
+      hiddenFormElements();
+      $r .= "</form>";
+    }
+    return $r;
+  }
+  /**
+   * sortable header field in overviews
+   */
+  function orderheader($oname,$link,$base,$cols = 1) {
+    global $tutos, $lang;
+
+    $base =  addUrlParameter($base,"xf=".$oname,false);
+    $r = "<th nowrap=\"nowrap\" colspan=\"". $cols ."\">\n";
+    if ( $oname == "" ) {
+      $r .= $link;
+    } else {
+      $l =  addUrlParameter($base,"xo=1",false);
+      if ( isset ($_GET['xo']) && $_GET['xo'] == 1 &&  ($_GET['xf'] == $oname) ) {
+        $r .= "(". makelink($l ,$this->theme->getImage(up,'list'),sprintf($lang['OrderBy'], $link)) .")";
+      } else {
+        $r .= makelink($l ,$this->theme->getImage(up,'list'),sprintf($lang['OrderBy'], $link));
+      }
+      if ( isset ($_GET['xo']) && ($_GET['xf'] == $oname) ) {
+        $r .= "<b>". $link ."</b>";
+      } else {
+        $r .= $link;
+      }
+      $l =  addUrlParameter($base,"xo=2",false);
+      if ( isset ($_GET['xo']) && $_GET['xo'] == 2  &&  ($_GET['xf'] == $oname) ) {
+        $r .= "(". makelink($l ,$this->theme->getImage(down,'list'),sprintf($lang['RevOrderBy'],$link)) .")";
+      } else {
+        $r .= makelink($l ,$this->theme->getImage(down,'list'),sprintf($lang['RevOrderBy'],$link));
+      }
+    }
+    $r .= "</th>\n";
+    return $r;
+  }
+  /**
+   * add the default menu parts
+   */
+  function buildmenu() {
+    global $tutos,$lang,$calpath;
+
+    if ( ! isset($this->user->id) || ($this->user->id == -1) ) {
+      return;
+    }
+    if ( "help.php" == basename($_SERVER['PHP_SELF']) ) {
+      return;
+    }
+    if (! method_exists($this->user,"feature_ok") ) {
+      return;
+    }
+    if ( $this->user->feature_ok(usecalendar,PERM_SEE) ) {
+      require_once $calpath .'appointment.pinc';
+      $x = array( url => "calendar.php",
+                  image => $this->theme->getImage(appointment::getHtmlIcon(),'menu'),
+                  text => $lang['Calendar'],
+                  info => $lang['CalendarInfo'],
+                  category => array("overview","app","default")
+                );
+      $this->addMenu($x);
+    }
+    if ( $this->user->feature_ok(useaddressbook,PERM_SEL) ) {
+      $x = tutos_address::getSelectLink($this->user);
+      $x[category][] = "default";
+      if ( basename($_SERVER['PHP_SELF']) == "address_select.php" ) {
+        $x[url] = "";
+      }
+      $this->addMenu($x);
+    }
+    if ( $this->user->feature_ok(usebugtracking,PERM_SEL) ) {
+      loadmodule('bugtracking');
+      if (class_exists('bug')) {
+        $x = bug::getSelectLink($this->user,$lang['BugTrack']);
+        $x[category][] = "default";
+        if ( basename($_SERVER['PHP_SELF']) == "bug_select.php" ) {
+          $x[url] = "";
+        }
+        $this->addMenu($x);
+      }
+    }
+    if ( $this->user->feature_ok(useprojects,PERM_SEL) ) {
+      require_once $calpath .'product.pinc';
+      $x = product::getSelectLink($this->user,$lang['ProductMenu']);
+      $x[category][] = "default";
+      if ( basename($_SERVER['PHP_SELF']) == "product_select.php" ) {
+        $x[url] = "";
+      }
+      $this->addMenu($x);
+    }
+
+    if ( $this->user->feature_ok(useteams,PERM_SEL) ) {
+      $x = team::getSelectLink($this->user);
+      $x[category][] = "default";
+      if ( basename($_SERVER['PHP_SELF']) == "team_select.php" ) {
+        $x[url] = "";
+      }
+      $this->addMenu($x);
+    }
+    $x = array( url => "mytutos.php",
+                image => $this->theme->getImage(user,'menu'),
+                text => $this->user->getFullName(),
+                info => sprintf($lang['PersonalPageFor'],$this->user->getFullname()),
+                category => array("overview","default")
+              );
+    $this->addMenu($x);
+
+    $x = array( url => "admin_show.php",
+                image => $this->theme->getImage('admin','menu'),
+                info => $lang['UserAdmin'],
+                category => array("admin")
+              );
+    if ( $this->user->isAdmin() ) {
+      $x[text] = $lang['UserAdmin'];
+      $this->addMenu($x);
+    } else if ( $tutos[demo] == 1 ) {
+      $x[text] = $lang['UserAdmin'] ." (DEMO)";
+      $this->addMenu($x);
+    }
+
+    build_module_links($this);
+
+    $x = array( url => make_helplink(),
+                image => $this->theme->getImage(help,'menu'),
+                text => $lang['Help'],
+                info => $lang['HelpInfo'],
+                category => array("help","default")
+              );
+    $this->addMenu($x);
+
+    # Logout
+    $x = array( url => "logout.php",
+                image => $this->theme->getImage(logout,'menu'),
+                text => $lang['Logout'],
+                info => $lang['LogoutInfo'],
+                category => array("logout","admin","default")
+              );
+    $this->addMenu($x);
+
+    # Team Stuff
+    if ( ! class_exists ("url") ) {
+      loadmodule("url");
+    }
+
+    if ( class_exists ("url") ) {
+      if ( $this->user->feature_ok(useurl,PERM_SEE) ) {
+        $ulist = array();
+        foreach ( $this->user->teams as $idx => $val ) {
+          url::obj_read($this->user->teams[$idx]);
+          $ulist = array_merge($ulist,$this->user->teams[$idx]->list[useurl]);
+        }
+        if ( count($ulist) > 0 ) {
+          foreach ( $ulist as $idx => $val ) {
+            $x = array( url => $ulist[$idx]->getUrl() ,
+                        target => "url",
+                        info => $ulist[$idx]->getUrl() ,
+                        category => array("extern","url")
+                      );
+            if (strlen($ulist[$idx]->name) > 40) {
+              $x[text] = substr($ulist[$idx]->name,0,35) ."...". substr($ulist[$idx]->name,-2);
+            } else {
+              $x[text] = $ulist[$idx]->name;
+            }
+            $this->addMenu($x);
+          }
+        }
+      }
+    }
+  }
+  /**
+   * set focus to named field
+   */
+  function setfocus($fld) {
+     return "<script type=\"text/javascript\" language=\"JavaScript\"> document.". $fld .".focus(); </script>\n";
+  }
+}
+?>

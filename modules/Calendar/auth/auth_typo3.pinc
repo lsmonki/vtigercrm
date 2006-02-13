@@ -1,0 +1,134 @@
+<?php
+/*
+ * Copyright 2003 by Gero Kohnert
+ *
+ * CVS Info:  $Id: auth_typo3.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ */
+
+require_once 'auth.pinc';
+
+/**
+ * Authentification via typo3 database
+ *
+ * @modulegroup BASE
+ * @module auth_db
+ * @package BASE
+ */
+class auth_typo3 extends auth {
+  /**
+   * get the password
+   */
+  function auth_typo3() {
+	$this->pwlostsupport = false;
+	$this->pwchangesupport = false;
+  }
+  /**
+   * get the password
+   */
+  function getpw() {
+    if ( isset($_POST['pw']) ) {
+      return trim($_POST['pw']);
+    } elseif ( isset($_GET['pw']) ) {
+      return trim($_GET['pw']);
+    }
+    return;
+  }
+  /**
+   * get the username
+   */
+  function getuname() {
+    if ( isset($_POST['uname']) ) {
+      return trim($_POST['uname']);
+    } elseif ( isset($_GET['uname']) ) {
+      return trim($_GET['uname']);
+    }
+    return;
+  }
+  /**
+   * Check for permmision
+   * using a DB query
+   */
+  function check() {
+    global $current_user,$tutos,$lang;
+
+    $query =
+      "SELECT p.*, a.* FROM ". $this->dbconn->prefix ."people p, ". $this->dbconn->prefix ."addresses a ".
+      "WHERE  login = ". $this->dbconn->String($this->getuname()).
+      "       AND p.adr_id = a.id";
+
+    $result = $this->dbconn->Exec($query);
+
+    if ( ! $result ) {
+      ReadLang($lang);
+      $r[0] = "No Result for ". $this->getuname() ." / ". $this->getpw();
+      $r[1] = $lang['Err0026'];
+      return $r;
+    }
+
+    if ( 1 != $result->numrows()) {
+      ReadLang($lang);
+      $r[0]  = "not unique ";
+      $r[0] .= $result->numrows() ." Result for ". $this->getuname() ." / ". $this->getpw();
+      $r[1]  = $lang['Err0027'];
+      return $r;
+    }
+
+
+    /* OK there is a user and a Password so lets check */
+	if ( isset($tutos) ) {
+      $db = new database();
+	  $db->setName($tutos['typo3dbname']);
+	  $db->setHost($tutos['typo3dbhost']);
+	  $db->setUser($tutos['typo3dbuser']);
+	  $db->setPass($tutos['typo3dbpasswd']);
+	  $db->setType(DB_TYPE_MYSQL);  # typo3 always uses mysql
+	  $db->setRepository($this->dbconn->db->repository);
+      $dbc =  $db->getConnection();
+      $db->dbconn = &$dbc;
+	} else {
+  	  $dbc = $this->dbconn;
+	}
+
+    $query =
+      "SELECT * FROM be_users ".
+      "WHERE username = ". $dbc->String($this->getuname()).
+      "  AND password = ". $dbc->String(md5($this->getpw()));
+
+    $res = $dbc->Exec($query);
+
+
+    if ( 1 != $res->numrows()) {
+      ReadLang($lang);
+      $r[0] = "not unique ". $res->numrows() ." Result for ". $this->getuname() ." / ". $this->getpw() ." (". $_SERVER['REMOTE_ADDR'] .")";
+      $r[1] = $lang['Err0027'];
+      $result->free();
+      $res->free();
+      return $r;
+    }
+    $res->free();
+
+    $query =
+      "SELECT * FROM be_users ".
+      "WHERE username = ". $dbc->String($this->getuname()).
+      "  AND password = ". $dbc->String(md5($this->getpw()));
+
+    $res = $dbc->Exec($query);
+
+
+    if ( 1 != $res->numrows()) {
+      ReadLang($lang);
+      $r[0] = "not unique ". $res->numrows() ." Result for ". $this->getuname() ." / ". $this->getpw() ." (". $_SERVER['REMOTE_ADDR'] .")";
+      $r[1] = $lang['Err0027'];
+      $result->free();
+      $res->free();
+      return $r;
+    }
+    $res->free();
+
+    $current_user= new tutos_user($this->dbconn);
+    $current_user->read_result($result,0);
+    $result->free();
+  }
+}
+?>

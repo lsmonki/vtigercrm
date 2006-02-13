@@ -1,0 +1,650 @@
+<?php
+/*
+ * Copyright 2001 - 2003 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: db_pg.pinc,v 1.16 2005/05/03 13:18:50 saraj Exp $
+ *  $Author: saraj $
+ */
+
+require_once 'db.pinc';
+#
+# Register parse functions for datetime
+#
+$tutos['dateformat'][] = 'pgformat1';
+$tutos['dateformat'][] = 'pgformat2';
+$tutos['dateformat'][] = 'pgformat3';
+$tutos['dateformat'][] = 'pgformat4';
+$tutos['dateformat'][] = 'pgformat6';
+$tutos['dateformat'][] = 'pgformat5';
+
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat1(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})([-+][0-9]{1,2}[:0-9]{0,3})$", $str, $regs ) ) {
+    # Init via DB    1999-11-27 12:34:56+02  Postgres  DATESTYLE ISO
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = (integer)$regs[6];
+    $d->tz    = $regs[7];
+    $d->format = 1;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat2(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})\.([0-9]+)([-+][0-9]{1,2}[:0-9]{0,3})$", $str, $regs ) ) {
+    # Init via DB    1999-11-27 12:34:56.12+02  ISO with milliseconds
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = (integer)$regs[6];
+    $d->tz    = $regs[8];
+    $d->format = 9;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat3(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$", $str, $regs ) ) {
+    # Init via DB YYYY-MM-DD
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = 0;
+    $d->min   = 0;
+    $d->sec   = 0;
+    $d->format = 3;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat4(&$d,$str){
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$", $str, $regs ) ) {
+    # Init via DB 1999-11-27 12:34:56
+    $d->year = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day = (integer)$regs[3];
+    $d->hour = (integer)$regs[4];
+    $d->min = (integer)$regs[5];
+    $d->sec = (integer)$regs[6];
+    //$d->tz = $regs[8];
+    $d->format = 4;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat5(&$d,$str){
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-1][0-9])-([0-3][0-9]) ([0-2][0-9]):([0-5][0-9]):([0-5][0-9])?(.*[0-9])$", $str, $regs ) ) {
+    # Init via YYYY-MM-DD hh:mm:ss *
+    $d->month = (integer)$regs[2];
+    $d->day = (integer)$regs[3];
+    $d->year = (integer)$regs[1];
+    $d->hour = (integer)$regs[4];
+    $d->min = (integer)$regs[5];
+    $d->sec = (integer)$regs[6];
+    $d->format = 5;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function pgformat6(&$d,$str){
+  $regs = array();
+  if ( ereg( "^([0-9]{4}).([0-9]{1,2}).([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$", $str, $regs ) ) {
+    # Init via DB 2003.06.04 17:00:26  Postgres 7.3
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = (integer)$regs[6];
+    $d->format = 19;
+  }
+  return;
+}
+
+/**
+ * postgres database connection class
+ *
+ * @package DB
+ * @module db_pg
+ */
+class db_pg extends tutos_db {
+
+  /* ---------------------------------------------------------------------------
+   */
+  function db_pg(&$db) {
+    parent::init($db);
+
+    # Postgres 7.0
+    $this->version = 1; 
+    $this->encoding = "";
+
+    $this->openfunc = 'pg_pconnect';
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function open() {
+    global $phperrmsg;
+
+    $of = $this->openfunc;
+    if ( ! empty($this->db->host) ) {
+      $c = $of("dbname=". $this->db->name ." host=".$this->db->host." port=".$this->db->port ." user=".$this->db->user." password=".$this->db->pass);
+    } else {
+      $c = $of("dbname=". $this->db->name ." user=".$this->db->user." password=".$this->db->pass);
+    }
+
+    if ($c == false) {
+      Fatal_Error("Opening the database ".$this->getFullName() ,$phperrmsg ."\n". $this->error() );
+    }
+
+    pg_exec($c,"SET DATESTYLE TO ISO,US");
+
+
+    $this->conn = &$c;
+
+    // Retrieve the DB encoding
+    // /!\ pg_client_encoding requires PHP-4.0.3 or higher and PostgreSQL-7.0 or higher
+	if (function_exists('pg_client_encoding')) {
+      $this->encoding = pg_client_encoding($this->conn);
+	}
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function close() {
+    $this->timezone("");
+    if ( $this->conn != -1 ) {
+      pg_close($this->conn);
+      unset($this->conn);
+      $this->conn = -1;
+    }
+  }
+  /**
+   * return more info about server client etc
+   */
+  function moreinfo() {
+    if ( ! empty($this->db->host) ) {
+      return "Encoding = ". $this->encoding ."&nbsp;&nbsp;&nbsp;Host:Port = ". pg_host($this->conn) .":". pg_port($this->conn) ." ". pg_options($this->conn);
+    } else  {
+      return "Encoding = ". $this->encoding ."&nbsp;&nbsp;&nbsp;". pg_options($this->conn);
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function notime() {
+    return ("'epoch'");
+#    if ( $this->version == 1 ) {
+#      # Postgres 7.0
+#      return ("'epoch'");
+#    } else {
+#      return ("null");
+#    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function now() {
+    if ( $this->version == 1 ) {
+      # Postgres 7.0
+      return ("'now'");
+    } else {
+      return ("current_timestamp");
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function exec($query,$showerror = 1) {
+    $r = new result_pg($this);
+
+    if ( $this->conn == -1 ) {
+      echo  "No Database Connection";
+      return;
+    }
+
+    // If the DB encoding is UNICODE, encode the query in UTF-8
+    if ($this->encoding == 'UNICODE') {
+        $query = utf8_encode($query);
+    }
+
+    $result = @pg_query($this->conn,$query);
+    $this->lastquery = $query;
+
+    if ( ! $result) {
+      if ($showerror == 1) {
+        Fatal_Error("Exec ". $this->conn ."|". $this->error(),$query);
+      } else {
+        $this->lasterror =  $this->error();
+        return -1;
+      }
+    }
+    $this->lasterror = "";
+    $r->rs = &$result;
+    return $r;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function nextID($name = "id") {
+    $query = "SELECT nextval ('".$this->prefix . $name ."')";
+    $r = $this->exec($query);
+    if ( ($r == "") || (1 != $r->numrows()) ) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0, "nextval");
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setSeqID($id,$name = "id") {
+    $query = "SELECT setval ('". $this->prefix . $name ."',$id)";
+    $result = $this->exec($query);
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getSeqID($name = "id") {
+    $query = "SELECT currval ('". $this->prefix . $name ."')";
+    $r = $this->exec($query);
+    if ( ($r == "") || (1 != $r->numrows()) ) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0, "currval");
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function string($t) {
+    return "'". AddSlashes($t) ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datetimestring for d
+   */
+  function datetime(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+    $x = sprintf ("'%02d-%02d-%04d %02d:%02d:%02d'",$d->month,$d->day,$d->year,$d->hour,$d->min,$d->sec);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datestring for d
+   */
+  function date(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+
+    $x = sprintf ("'%02d-%02d-%04d'",$d->month,$d->day,$d->year);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * case insensitive string compare
+   */
+  function like($fld1,$name,$fld2 = "",$fld3 = "") {
+    $fld = $fld1;
+    if ( $fld2 != "" ) {
+      $fld .= "|| ' ' ||". $fld2;
+    }
+    if ( $fld3 != "" ) {
+      $fld .= "|| ' ' ||". $fld3;
+    }
+    $name = eregi_replace(" ","%",$name);
+    $name = eregi_replace("[\]","\\\\",$name);
+    $name = eregi_replace("'","\'",$name);
+    return (" LOWER(". $fld .") like '%". strtolower($name) ."%' ");
+  }
+  /* ---------------------------------------------------------------------------
+   * case sensitive strict string compare
+   */
+  function like2($fld,$name) {
+    $name = eregi_replace("[\]","\\\\",$name);
+    $name = eregi_replace("'","\'",$name);
+    return (" ". $fld ." = '". $name ."' ");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function password($pw) {
+    if ( $this->db->crypt != 1 ) {
+      return "'". $pw ."'";
+    }
+    return "'". crypt($pw,"271166") ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function begin($t) {
+    $r = $this->exec("BEGIN ". $t);
+    return $r;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function commit($t) {
+    $r = $this->exec("COMMIT ". $t);
+    return $r;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function abort($t) {
+    $r = $this->exec("ABORT ". $t);
+    return $r;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function lock($t) {
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function timezone($tz) {
+    global $tutos;
+
+    if ( !empty($tz)) {
+      putenv ("TZ=".$tz);
+      strftime("%H:%M %Z");
+      $this->exec("SET TIME ZONE  '". $tz ."'");
+    } else {
+      putenv ("TZ=". $tutos[defaultTZ]);
+      strftime("%H:%M %Z");
+      $this->exec("SET TIME ZONE '". $tutos[defaultTZ] ."'");
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getFullname() {
+    return "POSTGRES: ". $this->db->name ."@". $this->db->host .":". $this->db->port ." as ". $this->db->user;
+  }
+  /* ---------------------------------------------------------------------------
+   * set persistent mode
+   * 0 = no
+   * 1 = yes
+   */
+  function setPersistent($mode) {
+    if ( $mode == 1 ) {
+      $this->openfunc = 'pg_pconnect';
+    } else {
+      $this->openfunc = 'pg_connect';
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function error() {
+    if ( $this->conn != -1 ) {
+      $msg = pg_ErrorMessage($this->conn);
+    } else {
+      $msg = "no connection";
+    }
+    return "DBerror: ". $this->getFullname() ." ". $msg;
+  }
+  /**
+   * Clear a table
+   * tbl = name of table
+   * truncate a table
+   */
+  function truncatetable($tbl) {
+    $q = "TRUNCATE ". $this->prefix . $tbl;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function droptable(&$tbl) {
+    if (is_array($tbl)) {
+      $q = "DROP TABLE ". $this->prefix . $tbl[name] ;
+    } else {
+      $q = "DROP TABLE ". $this->prefix . $tbl ;
+    }
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createtable(&$tbl) {
+    $comment = array();
+
+    $q = "CREATE TABLE ". $this->prefix . $tbl[name] ;
+    $pre = " (";
+    foreach ($tbl as $i => $f) {
+      if (! is_array($f) ) {
+        continue;
+      }
+      if ($f[type] == "ID_TYPE") {
+        $t = "int4";
+      } else if ($f[type] == "TS_TYPE") {
+        $t = "timestamp";
+      } else if ($f[type] == "TX_TYPE") {
+        $t = "text";
+      } else if ($f[type] == "VARCHAR") {
+        $t = "varchar(". $f[size] .")";
+      } else {
+        $t = $f[type];
+      }
+      $c = $f[constraints];
+      $c = ereg_replace("PK","primary key",$c);
+      $c = ereg_replace("NN","not null",$c);
+      $c = ereg_replace("U","unique",$c);
+      $q .= $pre. $this->colname($i) ." ". $t ." ". $c;
+      $pre = ",";
+      $comment[] = "COMMENT ON COLUMN ". $this->prefix . $tbl[name] .".".$this->colname($i) ." IS '". $f[Desc] ."'";
+    }
+    $q .= ")";
+
+    $r = $this->exec($q,0);
+    if ($r != -1 ) {
+      $q = " COMMENT ON TABLE ". $this->prefix . $tbl[name] ." IS '". $tbl[Desc] ."'";
+      $this->exec($q,0);
+      foreach ($comment as $f ) {
+        $this->exec($f,0);
+      }
+    }
+    return $r;
+  }
+  /**
+   * rename a table
+   * oldtbl = current table descriptopn
+   * newname = new table name
+   */
+  function renametable(&$oldtbl,$newname) {
+    $q = "ALTER TABLE ". $this->prefix . $oldtbl[name] ." RENAME TO " . $this->prefix . $newname;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function dropindex(&$idx) {
+    $q = "DROP INDEX ". $this->prefix . $idx[name] ;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createindex(&$idx) {
+    if ( ! isset($idx[type]) ) {
+      $idx[type] = "";
+    }
+    $q = "CREATE ". $idx[type] ." INDEX ". $this->prefix . $idx[name] ." ON ". $this->prefix . $idx[table];
+
+    $pre = "(";
+    foreach ($idx[column] as $f) {
+      $q .= $pre . $this->colname($f);
+      $pre = ",";
+    }
+    $q .= ")";
+    $r = $this->exec($q,0);
+#   echo $r->numrows() ." ". $q ."<br>";
+    if ($r != -1 ) {
+      $q = "COMMENT ON INDEX ".  $this->prefix . $idx[name] ." IS '". $idx[Desc] ."'";
+      $this->exec($q);
+    }
+    return $r;
+  }
+  /**
+   * col = array with column description
+   */
+  function createcolumn($tblname,$colname,&$col) {
+    $q = "ALTER TABLE ". $this->prefix . $tblname ." ADD ";
+    if ($col[type] == "ID_TYPE") {
+      $t = "int4";
+    } else if ($col[type] == "TS_TYPE") {
+      $t = "timestamp";
+    } else if ($col[type] == "TX_TYPE") {
+      $t = "text";
+    } else if ($f[type] == "VARCHAR") {
+      $t = "varchar(". $f[size] .")";
+    } else {
+      $t = $col[type];
+    }
+    $c = $col[constraints];
+    $c = ereg_replace("PK","primary key",$c);
+    $c = ereg_replace("U","unique",$c);
+    $c = ereg_replace("NN","",$c);
+    $q .= $this->colname($colname) ." ". $t ." ". $c;
+    $r = $this->exec($q,0);
+
+    $q = "COMMENT ON COLUMN ". $this->prefix . $tblname .".". $this->colname($colname) ." IS '". $col[Desc] ."'";
+    $this->exec($q,0);
+
+    $q = "ALTER TABLE ". $this->prefix . $tblname ." DROP CONSTRAINT c_". $this->colname($colname);
+    $r = $this->exec($q,0);
+
+    $q = "ALTER TABLE ". $this->prefix . $tblname ." ADD CONSTRAINT c_". $this->colname($colname) ." " ;
+    $c = $col[constraints];
+    $c = ereg_replace("PK","",$c);
+    $c = ereg_replace("U","",$c);
+    $c = ereg_replace("NN","CHECK (". $this->colname($colname) ." is not null)",$c);
+    if ( $c != "" ) {
+      $q .=  $c;
+      $r = $this->exec($q,0);
+    }
+    return $r;
+  }
+  /**
+   * name = name of sequencer
+   */
+  function dropsequence(&$seq) {
+    $q = "drop sequence ". $this->prefix . $seq[name];
+    return $this->Exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function createsequence(&$seq) {
+    $q = "create sequence ". $this->prefix . $seq[name] ." start ". $seq['start'];
+    return $this->Exec($q,0);
+  }
+  /**
+   * get the phrase to limit a selection to a specific range
+   */
+  function getRange($q,$start,$cnt) {
+    return $q. " LIMIT ". $cnt ." OFFSET ". $start;   
+  }
+  /**
+   * do we need a count(*) to get the number of possible results in a select
+   */
+  function needCount() {
+    return true;   
+  }
+  /**
+   * method to call from check service
+   */
+  function checkservice() {
+    $now = new DateTime();
+    $diff = $now->getTimestamp() - $this->db->lastanalyze->getTimeStamp();
+
+    # only once a day
+    if ( $diff < 86400 ) return;
+
+    $q = "vacuum full";
+    $this->Exec($q,0);
+    $q = "analyze";
+    $this->Exec($q,0);
+    $this->db->setLastAnalyze($now);
+    $msg = $this->db->save();
+    return $msg;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function gettype() {
+    return "Postgres";
+  }
+}
+/**
+ * Postgres Resultset
+ * @package DB
+ * @module result_pg
+ */
+class result_pg extends result {
+
+  function result_pg(&$dbconn) {
+    parent::result($dbconn);
+    $this->rs = "";
+    $this->encoding = $dbconn->encoding; // Set DB encoding
+  }
+  /**
+   * ge a result entry
+   */
+  function get($pos,$fld) {
+    if ( empty($this->rs) ) return -1;
+    $result = pg_result($this->rs, $pos-$this->offset, $fld);
+
+    // If DB encoding is UNICODE, decode the result
+    if ($this->encoding == 'UNICODE') {
+        $result = utf8_decode($result);
+    }
+    
+    return $result;
+  }
+  /**
+   * get the number of rows returned
+   */
+  function numrows() {
+    if ($this->rowcnt != -1) return $this->rowcnt;
+    if ( empty($this->rs) ) return -1;
+    return pg_num_rows($this->rs);
+  }
+  /**
+   * number of fields returned
+   */
+  function numfields() {
+    if ( empty($this->rs) ) return -1;
+    return pg_num_fields($this->rs);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldname($nr) {
+    if ( empty($this->rs) ) return -1;
+    return pg_field_name($this->rs,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldtype($nr) {
+    if ( empty($this->rs) ) return -1;
+    return pg_field_type($this->rs,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function free() {
+    if ( empty($this->rs) ) return -1;
+    return pg_free_result($this->rs);
+  }
+
+}
+?>

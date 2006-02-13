@@ -1,0 +1,792 @@
+<?php
+# $Id: zh.p3,v 1.16 2005/05/03 13:18:53 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "zh_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+# Translation by "Keith Tsao" <keith.tsao@vatgroup.net>
+# Very minor tinkering by Ambrose Li <a.c.li@ieee.org>
+#
+#$lang['content_encoding']="iso-8859-1";
+#$lang['content_encoding'] = "Big5";
+$lang['content_encoding'] = "gb2312";
+setlocale(LC_TIME,'zh_CN');
+#
+# Traditional Chinese Texts
+#
+$lang['PleaseLogin']     = "请载入";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "密码";
+$lang['Username']        = "名称";
+$lang['MOTD']            = "是日金句";
+$lang['Login']           = "载入";
+$lang['LostPassword']    = "lost password ?";
+$lang['LoggedIn']        = "You are logged in. Please make a selection on the left side.";
+$lang['ReadOnlyAppoint'] = "只可以看到这个会议!";
+$lang['StartDate']       = "开始日期";
+$lang['StartTime']       = "开始时间";
+$lang['AppStart']        = "开始";
+$lang['AppCreatedBy']    = "创作人";
+$lang['EndDate']         = "完成日期";
+$lang['EndTime']         = "完成时间";
+$lang['AppEnd']          = "完成";
+$lang['Participants']    = "参与者";
+$lang['everybody']       = "所有人";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "在";
+$lang['createdby']       = "创作人";
+$lang['Description']     = "内容";
+$lang['InfoEmail']       = "以电邮通知";
+$lang['InviteEmail']     = "以电邮邀请";
+$lang['Invitation']      = "Invitation";
+$lang['IgnoreTime']      = "不用理会以上选择";
+$lang['IgnoreTime2']     = "(i.e. 这会议没有规定时间)";
+$lang['forphrase']       = "给";
+$lang['nextweek']        = "下一个星期";
+$lang['lastweek']        = "上一个星期";
+$lang['plus4weeks']      = "之后四星期";
+$lang['minus4weeks']     = "之前四星期";
+$lang['only']            = "只";
+$lang['reload']          = "更新";
+$lang['changeapp']       = "观看或更改会议(%s - %s)";
+$lang['seeapp']          = "观看会议细节(%s - %s)";
+$lang['AllEntries']      = "观看所有 %s 项目";
+#
+$lang['DateTimePHP']     = "Y年m月d日 H:i T";
+$lang['DateTimeStr']     = "%Y/%m/%d %H:%M %Z";
+$lang['DateTimeFormat']  = "%3\$s/%2\$s/%1\$s %4\$02d:%5\$02d %6\$s";
+#
+$lang['DateTimeSPHP']    = "m月d日 H:i";
+$lang['DateTimeSStr']    = "%m/%d %H:%M";
+$lang['DateTimeSFormat'] = "%2\$s/%1\$s %3\$02d:%4\$02d";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02d:%02d";
+#
+$lang['DateFormatTitle'] = "%Y年%B%e日 %A";
+$lang['DateFormatStr']   = "%Y/%m/%d";
+$lang['DateFormat']      = "%3\$s/%2\$s/%1\$s";
+$lang['DateShortFormat'] = "%2\$s/%1\$s";
+#
+$lang['Printable']       = "可列印格式";
+$lang['PrintableInfo']   = "展示成可列印格式";
+$lang['managedProd']     = "整理产品和计划";
+$lang['soldProd']        = "已售的产品和计划";
+$lang['Enter']           = "输入";
+$lang['Reset']           = "重置";
+$lang['Remove']          = "除去";
+$lang['Delete']          = "删除";
+$lang['Change']          = "更改";
+$lang['Modify']          = "修正";
+$lang['created']         = "设立";
+$lang['DateTimeFrom']    = "从";
+$lang['DateTimeTill']    = "至";
+$lang['Count']           = "Count";
+$lang['Showing']         = "展示 %s";
+$lang['show']            = "show";
+$lang['lang']['auto']    = "按浏览器的设定自动选择";
+$lang['lang']['en']      = "英文";
+$lang['lang']['en-US']   = "英文 (美式)";
+$lang['lang']['de']      = "德文";
+$lang['lang']['fr']      = "法文";
+$lang['lang']['es']      = "西班牙文";
+$lang['lang']['es-MX']   = "西班牙文 (墨西哥式)";
+$lang['lang']['es-NI']   = "西班牙文 (尼加拉瓜式)";
+$lang['lang']['es-VE']   = "Espa駉l/Venezuela";
+$lang['lang']['it']      = "义大利文";
+$lang['lang']['tw']      = "中文 (繁体)";
+$lang['lang']['zh']      = "中文";
+$lang['lang']['ru']      = "俄文";
+$lang['lang']['pt']      = "萄文";
+$lang['lang']['pl']      = "波兰文";
+$lang['lang']['ko']      = "韩文";
+$lang['lang']['nl']      = "荷兰文";
+$lang['lang']['sv']      = "瑞典文";
+$lang['lang']['el']      = "希腊文";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "确定更改?";
+$lang['InputOk']         = "确定输入?";
+$lang['Day1']            = "星期一";
+$lang['Day2']            = "星期二";
+$lang['Day3']            = "星期三";
+$lang['Day4']            = "星期四";
+$lang['Day5']            = "星期五";
+$lang['Day6']            = "星期六";
+$lang['Day0']            = "星期日";
+$lang['SMonday']         = "一";
+$lang['STuesday']        = "二";
+$lang['SWednesday']      = "三";
+$lang['SThursday']       = "四";
+$lang['SFriday']         = "五";
+$lang['SSaturday']       = "六";
+$lang['SSunday']         = "日";
+$lang['week']            = "星期";
+$lang['weeks']           = "星期";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "日期";
+$lang['NewEntry']        = "新项目";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "寻找";
+$lang['PlsChangeName']   = "请更改名称";
+$lang['SeeAddress']      = "查看地址 %s";
+$lang['NavFirst']        = "最先";
+$lang['NavBack']         = "上一个";
+$lang['NavNext']         = "下一个";
+$lang['NavLast']         = "最后";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "是";
+$lang['no']              = "否";
+$lang['FldsRequired']    = "<FONT SIZE=-1>有<FONT COLOR=red>(*)</FONT> 在旁的必需项填写.</FONT>";
+$lang['any']             = "任何";
+$lang['all']             = "All";
+$lang['extended']        = "延伸";
+$lang['OrderBy']         = "以 %s 排列";
+$lang['RevOrderBy']      = "以 %s 从后排列";
+$lang['Export']          = "Export";
+$lang['ExportInfo']      = "Export data as file";
+$lang['withmarked']      = "with marked %s";
+$lang['SetTo']           = "set %s to %s";
+$lang['pcs']             = "pieces";
+$lang['Money']           = "合共";
+$lang['Currency']        = "货币";
+$lang['ActionNil']       = "do nothing";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "会议";
+$lang['Appointments']    = "会议";
+$lang['NewAppoint']      = "新会议";
+$lang['NewAppointR']     = "新会议 (重覆)";
+$lang['NewAppointInfo']  = "设立新会议";
+$lang['NewAppointInfoR'] = "设立新会议 (重覆)";
+$lang['AppointDetail']   = "会议细节";
+$lang['AppointModify']   = "会议更改";
+$lang['AppointCreate']   = "会议设立";
+$lang['AppointCommit']   = "会议确定";
+$lang['AppointOverview'] = "会议概观";
+$lang['AppDelInfo']      = "删除会议";
+$lang['AppChangeOrDel']  = "谁可更改或删除";
+$lang['VisitAt']         = "目的地";
+$lang['VisitFrom']       = "访客";
+$lang['Visits']          = "到";
+$lang['ModOldAppoint']   = "更改会议";
+$lang['CreateAppoint']   = "设立新会议";
+$lang['AppFirstDate']    = "第一日";
+$lang['AppLastDate']     = "最后一日";
+$lang['AppNoLastDate']   = "没有完结日期";
+$lang['AppRepeatType']   = "重覆";
+$lang['AppRepeatDay']    = "每日";
+$lang['AppRepeatWeek']   = "每周同一日";
+$lang['AppRepeatMonth']  = "每月同一日";
+$lang['AppRepeatYear']   = "每年同一日";
+$lang['AppRepeatInfo1']  = "每一 %s";
+$lang['AppRepeatInfo2']  = "每月在 %d日";
+$lang['AppRepeatInfo3']  = "每年在 %m月 %d日";
+$lang['AppRepeatInfo4']  = "每日";
+$lang['AppSeeEntry']     = "见项目";
+$lang['AppSeeEntryI']    = "见会议";
+$lang['AppEmailRemind']  = "以电邮提示所有参与者";
+$lang['AppRemind'][0]    = "不用";
+$lang['AppRemind'][15]   = "十五分钟前";
+$lang['AppRemind'][60]   = "一小时前";
+$lang['AppRemind'][1440] = "一日前";
+$lang['AppRemind'][10080]= "一星期前";
+$lang['AppAllSee']       = "all you can see";
+$lang['AppAllTeams']     = "members of all your teams";
+$lang['AppEverything']   = "everything";
+$lang['AppGetIcal']      = "Get Ical File";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "在辨公室";
+$lang['AppLoc'][1]       = "外出";
+$lang['AppLoc'][2]       = "放假";
+$lang['AppLoc'][3]       = "生病";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "是";
+$lang['AppState'][2]     = "否";
+$lang['AppPrivate']      = "private";
+$lang['AppVoteInfo']     = "回覆能否参加会议";
+$lang['AppVoteState']    = "current vote";
+$lang['AppVoteHead']     = "Vote for this appointment (%s)";
+$lang['AppVoteSelect']   = "Select your vote";
+$lang['AppsSearch']      = "Calendar Search";
+$lang['SearchForAppExt'] = "Extended Search for an appointment";
+$lang['SearchForApp']    = "Search for an appointment";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(leave empty to see all appointments)";
+$lang['AppTrace']        = "记录参与者能否出席";
+$lang['AppTraceDesc']    = "(i.e. 被邀者可决定是否参与)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "My TUTOS";
+$lang['PersonalPageFor']   = "Personal page of %s";
+$lang['PersonalSettings']  = "User Settings";
+$lang['PersonalSettingsI'] = "Change personal settings of %s";
+
+# User
+$lang['User']            = "使用者";
+$lang['Users']           = "使用者";
+$lang['UserOverview']    = "User Overview";
+$lang['UserCreate']      = "设立使用者";
+$lang['UserModify']      = "更改使用者";
+$lang['UserDel']         = "删除使用者";
+$lang['UserInfo']        = "使用者资料";
+$lang['UserModInfo']     = "更改 %s 资料";
+$lang['UserNewInfo']     = "设定 %s 资料";
+$lang['UserDelInfo']     = "删除 %s 资料";
+$lang['UserUnknown']     = "使用者不明";
+$lang['UserLastSeen']    = "上一次载入";
+$lang['UserLastHost']    = "上次接载电脑";
+$lang['UserAdmin']       = "管理人";
+$lang['UserLanguage']    = "语言";
+$lang['UserTimezone']    = "时区";
+$lang['UserTheme']       = "主题";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Holidays";
+$lang['UserNamedays']    = "Namedays";
+$lang['UserWorkdays']    = "Working Days";
+$lang['UserWeekstart']   = "Start of Week";
+$lang['UserDisabled']    = "disable account";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "产品/计划";
+$lang['ProductPs']       = "产品/计划";
+$lang['Product']         = "产品";
+$lang['Products']        = "产品";
+$lang['Project']         = "计划";
+$lang['Projects']        = "计划";
+$lang['ProductsSearch']  = "搜寻产品/计划";
+$lang['ProductsOverview']= "产品/计划概观";
+$lang['ProductsDetail']  = "产品/计划细节";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "有关会议";
+$lang['ProdName']        = "产品/计划";
+$lang['ProdVersion']     = "版";
+$lang['ProdProd']        = "related Projects";
+$lang['ProdProdNew']     = "new relation";
+$lang['ProdRoles']       = "角色";
+$lang['ProdFunc']        = "功能";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "新角色";
+$lang['ProdRole'][1]     = "管理人";
+$lang['ProdRole'][2]     = "商业管理人";
+$lang['ProdRole'][3]     = "第二管理人"; # FIXME
+$lang['ProdRole'][4]     = "推销员";
+$lang['ProdRole'][5]     = "开发人员";
+$lang['ProdRole'][6]     = "客?";
+$lang['ProdRole'][7]     = "Supplier";
+$lang['ProdRole'][8]     = "Reseller";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Project Base";
+$lang['ProdRole'][11]    = "Ancestor Project";
+$lang['ProdRole'][12]    = "Succesor Project";
+$lang['ProdRole'][13]    = "Sub Project";
+$lang['ProdPath']        = "档案途径";
+$lang['ProdDesc']        = "内容";
+$lang['ProdDesc1']       = "内容一";
+$lang['ProdDesc2']       = "内容二";
+$lang['ProdState']       = "状态";
+$lang['ProdState_']      = "状态不明";
+$lang['ProdStates'][0]   = "争取";
+$lang['ProdStates'][1]   = "正在工作中";
+$lang['ProdStates'][2]   = "已完成";
+$lang['ProdStates'][3]   = "已取消";
+$lang['ProdStates'][4]   = "已报价";
+$lang['ProdStates'][5]   = "报价取消";
+$lang['ProdStates'][-2]  = "any not finished or cancelled";
+$lang['ProdClass1']      = "Classification 1";
+$lang['ProdClasses1'][1] = "Software";
+$lang['ProdClasses1'][2] = "Hardware";
+$lang['ProdClasses1'][3] = "Consulting";
+$lang['ProdClass2']      = "Classification 2";
+$lang['ProdClasses2'][1] = "North Region";
+$lang['ProdClasses2'][2] = "South Region";
+$lang['ProdPrice']       = "价格";
+$lang['ProdCost']        = "成本";
+$lang['SearchForProd']   = "找寻产品/计划";
+$lang['SearchForProdExt']= "深入找寻产品/计划";
+$lang['ProdCreateInfo']  = "设立新产品/计划";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "删除计划%s";
+$lang['ProdModInfo']     = "更改产品/计划 %s";
+$lang['ProdCreator']     = "创作人";
+$lang['ProdCreation']    = "创作人 %s 在 %s";
+$lang['ProdCreationS']   = "设立";
+$lang['ProdStart']       = "est. start";
+$lang['ProdEnd']         = "est. end";
+$lang['ProdProb']        = "机会";
+$lang['ProdModifyT']     = "修改这产品/计划 %s";
+$lang['ProdCreateT']     = "设立新产品/计划";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(如要展示所有产品/计划项目, 无须输入)";
+$lang['ProdLinkInfo']    = "查看产品/计划 %s";
+$lang['ProdBetween']     = "设立于";
+$lang['ProdLinks']       = "连结";
+$lang['ProdStats']       = "Statistics";
+$lang['ProdStatsInfo']   = "Statistics for these Products/Projects";
+$lang['ProdStatsTitle']  = "Product/Project Statistics";
+$lang['ProdFields']      = "Fields";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mailboxes
+$lang['MailboxEmail']    = "电邮";
+$lang['MailSendTo']      = "Send a mail to %s";
+$lang['MailFrom']        = "From";
+$lang['MailTo']          = "To";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "主旨";
+$lang['MailSent']        = "sending mail %s to %s.";
+$lang['MailSentCc']      = "sending mail %s (Cc) to %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Card of %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "日期";
+$lang['MailSize']        = "Size";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "更改权限";
+$lang['AclModifyI']      = "给 %s更改权限";
+$lang['AclDetail']       = "权限细节";
+$lang['AclDetailI']      = "展示 %s权限";
+$lang['permissions']     = "权限";
+$lang['ACLsee']          = "查看权限";
+$lang['ACLmod']          = "更改权限";
+$lang['ACLread']         = "see";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "modify";
+$lang['ACLdelete']       = "delete";
+$lang['ACLreadI']        = "above users/teams will be allowed to see %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "above users/teams will be allowed to modify %s";
+$lang['ACLdelI']         = "above users/teams will be allowed to delete %s";
+$lang['ACLOverview']     = "Permissions Overview";
+$lang['ACLOverviewI']    = "see all permissions";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "feature";
+
+# Tasks
+$lang['Task']            = "工作";
+$lang['Tasks']           = "工作";
+$lang['TaskDetail']      = "工作细节";
+$lang['TaskCreate']      = "设立工作";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "设立新分配工作给 %s";
+$lang['TaskDelete']      = "取消工作 %s";
+$lang['TaskModify']      = "更改工作 %s";
+$lang['TaskOverview']    = "工作大纲";
+$lang['TaskOverviewInfo']= "展示 %s 的工作";
+$lang['TaskName']        = "名称";
+$lang['TaskState']       = "进度";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "要点";
+$lang['TaskWorker']      = "负责人";
+$lang['TaskVolumeFull']  = "工作需要时间";
+$lang['TaskVolumeDone']  = "已完成";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "分配工作之";
+$lang['hours']           = "小时";
+$lang['TaskCreation']    = " %s 设立在 %s";
+$lang['TaskStates'][0]   = "前";
+$lang['TaskStates'][1]   = "正在工作中";
+$lang['TaskStates'][2]   = "已完成";
+$lang['TaskStates'][3]   = "过期";
+$lang['TaskS_Start']     = "预定开始";
+$lang['TaskS_End']       = "预定完成";
+$lang['TaskSched']       = "预定";
+$lang['TaskReal']        = "正确";
+$lang['TaskLinkInfo']    = "查看工作 %s";
+$lang['TaskCompleted']   = "完成 %3.2f 巴仙";
+$lang['Completed']       = "Completed";
+$lang['Reschedule']      = "Reschedule";
+$lang['Reschedule_s']    = "Reschedule start";
+$lang['Reschedule_e']    = "Reschedule end";
+$lang['TaskGantt']       = "Gantt diagram";
+$lang['TaskImport']      = "Task: CSV Import";
+$lang['ImportSrcFile']   = "Source file";
+$lang['ImportColNames']  = "Columns name in CSV file";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Confirm Import";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "See the Gantt";
+$lang['GanttLinkInfo']   = "Gantt diagramm";
+$lang['GanttTitle']      = "GANTT diagramm";
+$lang['GanttStart']      = "Begin date";
+$lang['GanttEnd']        = "End date";
+$lang['GanttVolume']     = "hour volume";
+$lang['GanttCompletion'] = "Completed";
+
+# Company
+$lang['Company']           = "公司";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "找寻公司";
+$lang['CompanyOverview']   = "公司大纲";
+$lang['CompanyDetail']     = "公司细节";
+$lang['CompanyModify']     = "更改公司";
+$lang['CompanyCreate']     = "设立公司";
+$lang['CompanyCreateInfo'] = "设立新公司";
+$lang['CompanyApps']       = "和这公司开会议";
+$lang['CompanyLinks']      = "连结";
+$lang['CompanyChgInfo']    = "更改公司 %s";
+$lang['CompanyDelInfo']    = "删除公司 %s";
+$lang['CompanyMembers']    = "没有部门的员工";
+$lang['CompanyLinkInfo']   = "查看公司 %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "部门";
+$lang['Departments']        = "部门";
+$lang['DepartmentSearch']   = "找寻部门";
+$lang['DepartmentOverview'] = "部门大网";
+$lang['DepartmentDetail']   = "部门细节";
+$lang['DepartmentModify']   = "更改部门";
+$lang['DepartmentCreate']   = "设立部门";
+$lang['DepCreateInfo']      = "设立新部门";
+$lang['DepartmentMembers']  = "部门员工";
+$lang['DepartmentApps']     = "和这部门开会议";
+$lang['DepartmentLinks']    = "连结";
+$lang['DepLinkInfo']        = "查看在%2\$s的部门 %1\$s";
+$lang['DepChgInfo']         = "更改部门%s";
+$lang['DepDelInfo']         = "删除部门%s";
+
+# Team
+$lang['Team']               = "小组";
+$lang['Teams']              = "小组";
+$lang['TeamOverview']       = "小组大纲";
+$lang['TeamDetail']         = "小组细节";
+$lang['TeamModify']         = "更改小组";
+$lang['TeamCreate']         = "设立小组";
+$lang['TeamMember']         = "小组成员";
+$lang['TeamPosMember']      = "可成为成员的员工";
+$lang['TeamMail']           = "向小组发电邮";
+$lang['TeamMailInfo']       = "发电邮给小组 %s";
+$lang['TeamApps']           = "查看小组 %s 的会议";
+$lang['TeamLinkInfo']       = "查看小组 %s";
+$lang['TeamManager']        = "小组的管理人";
+$lang['TeamName']           = "小组名称";
+$lang['TeamCreation']       = "设立于";
+$lang['TeamCount']          = "# 个成员";
+$lang['TeamOverviewInfo']   = "展示所有小组";
+$lang['TeamCreateI']        = "设立新小组";
+$lang['TeamDeleteI']        = "删除小组 %s";
+$lang['TeamModifyI']        = "更改小组 %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "找寻地址";
+$lang['AddressOverview'] = "地址大纲";
+$lang['AddressDetail']   = "地址内容";
+$lang['Address']         = "地址";
+$lang['AddressEntries']  = "地址簿记录";
+$lang['AdrLocChange']    = "更改 %s 的记录";
+$lang['AdrLocCreate']    = "设立 %s 记录";
+$lang['AdrBMod']         = "更改基本记录";
+$lang['AdrBModInfo']     = "更改 %s 的基本记录";
+$lang['AdrBDel']         = "删除基本记录";
+$lang['AdrBDelInfo']     = "删除所有 %s的记录";
+$lang['AdrBNew']         = "新记录";
+$lang['AdrBNewInfo']     = "设立新基本记录";
+$lang['AdrCreateInfo']   = "设立新地址";
+$lang['AdrLNew']         = "新地址";
+$lang['AdrLNewInfo']     = "给 %s设立新地址";
+$lang['AdrName']         = "名称";
+$lang['AdrMailInfo']     = "发电邮给 %s ";
+$lang['AdrGetVcard']     = "下载 Vcard";
+$lang['AdrGetVcardI']    = "Get this address as a Vcard";
+$lang['AdrSeeEntry']     = "See entry";
+$lang['AdrSeeEntryI']    = "See addressbook entry of %s";
+$lang['AdrLocTitle']     = "%s Address";
+$lang['AdrBNewTitle']    = "Enter a new address base entry";
+$lang['AdrBChangeTitle'] = "更改基本记录";
+
+$lang['Location']        = "位置";
+$lang['Location2']       = "位置";
+$lang['AdrTitle']        = "Title";
+$lang['AdrFirstName']    = "名";
+$lang['AdrMiddleName']   = "别名";
+$lang['AdrLastName']     = "姓";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "出生日期";
+$lang['AdrPicture']      = "Picture";
+$lang['AdrCat1']         = "Home";
+$lang['AdrCat2']         = "Office";
+$lang['AdrCpLoc']        = "Copy company's address";
+$lang['ZIP']             = "邮区号码";
+$lang['State']           = "州/省";
+$lang['Country']         = "国家";
+$lang['Street']          = "街道";
+$lang['City']            = "城市";
+$lang['Phone']           = "电话";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "传真";
+$lang['AdrEmail']        = "电邮";
+$lang['acc_info1']       = "Bank Account";
+$lang['acc_info2']       = "Bank Account";
+$lang['acc_nr']          = "Account Nr";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "更改 %s 地址上的 %s";
+$lang['DeleteLocInfo']   = "删除 %s 地址上的 %s";
+$lang['AdrLinks']        = "连结";
+$lang['AdrCategory']     = "类别";
+$lang['AdrDescription']  = "地址名称";
+$lang['ShowCal']         = "查看 %s 的行事表";
+$lang['SearchForAdr']    = "在地址簿里寻找";
+$lang['SearchForAdrExt'] = "在地址簿里详细寻找";
+$lang['SearchForCmp']    = "找寻公司";
+
+# Main Menu
+$lang['Calendar']        = "行事表";
+$lang['Addresses']       = "地址";
+$lang['ProductMenu']     = "产品/计划";
+$lang['Logout']          = "离开";
+$lang['CalendarInfo']    = "今日的行事表";
+$lang['AddressesInfo']   = "找寻地址";
+$lang['ProductInfo']     = "产品/计划";
+$lang['LogoutInfo']      = "离开系统";
+
+# Help
+$lang['Help']            = "说明";
+$lang['HelpInfo']        = "这版说明";
+
+# Resource
+$lang['ResCal']          = "资源用法";
+$lang['ResCalDetail']    = "%s 的资源用法在 %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "选择地图";
+$lang['MapHeader']       = "从 %s 取地图";
+
+# History
+$lang['HistoryDetail']   = "%s 过往记录";
+$lang['HistoryShow']     = "%s %s的过往记录";
+$lang['HistoryFld']      = "资料栏";
+$lang['HistoryOldV']     = "旧有资料";
+$lang['HistoryNewV']     = "新资料";
+$lang['HistoryLink']     = "查看过往记录";
+$lang['HistoryLinkI']    = "查看 %s 的过往记录";
+$lang['HistoryDeleted']  = "在这里删除";
+
+#Timetrack
+$lang['Timetrack']         = "努力";
+$lang['Timetracks']        = "Efforts";
+$lang['TimetrackCreate']   = "预定时间";
+$lang['TimetrackCreateI']  = "预定时间在 %s";
+$lang['TimetrackDelI']     = "取消预定时间在 %s";
+$lang['TimetrackNew']      = "新行情表";
+$lang['TimetrackModify']   = "更改行情表";
+$lang['TimetrackOverview'] = "行情表摘要";
+$lang['TimetrackWorker']   = "员工";
+$lang['TimetrackRef']      = "参考";
+$lang['TimetrackDate']     = "日期";
+$lang['TimetrackSearch']   = "Timetrack Search";
+$lang['SearchForTT']       = "Timetrack Search";
+$lang['SearchForTTExt']    = "Extended Timetrack Search";
+$lang['TimetrackBetween']  = "between";
+$lang['TimetrackBooked']   = "booked time";
+$lang['TimetrackBookedI']  = "booked time for %s";
+$lang['TTStatsTitle']      = "Timetrack Statistics";
+$lang['TTcph']             = "Cost per hour";
+$lang['TTState']           = "State";
+$lang['TTStates'][-1]      = "no state";
+$lang['TTStates'][1]       = "checked";
+$lang['TTStates'][2]       = "billed";
+$lang['TTStates'][3]       = "payed";
+$lang['TTStates'][4]       = "unbillable";
+$lang['TTRecord']          = "Time recording";
+$lang['TTfinish']          = "Finish";
+
+# Fax
+$lang['FaxCreate']         = "FAX New";
+$lang['FaxSendTo']         = "Send a fax to %s";
+$lang['FaxTo']             = "To:";
+$lang['FaxNr']             = "FAX Nr:";
+$lang['FaxNote']           = "Save this fax as a note for %s";
+$lang['FaxSpooledTo']      = "Fax was spooled to %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Send a SMS to %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Remember: Appointment at %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Administration";
+$lang['AdminDBInfo']       = "Database Info";
+$lang['AdminDBTable']      = "Table";
+$lang['AdminDBCount']      = "Entries";
+$lang['AdminDBName']       = "Database Name";
+$lang['AdminDBAlias']      = "Database Alias";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Database User";
+$lang['AdminDBPass']       = "Password";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Port";
+$lang['AdminDBType']       = "Type";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Recent Logins";
+$lang['AdminDBSync']       = "Database Sync";
+$lang['AdminDBSource']     = "Source DB";
+$lang['AdminDBWhat']       = "What/How";
+$lang['AdminDBTarget']     = "Target DB";
+$lang['AdminDBRep']        = "File Repository";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Database";
+$lang['DBInit']            = "Database Initialization";
+$lang['DBModify']          = "Database Modify";
+$lang['DBModifyI']         = "Modify DB %s";
+$lang['DBCreate']          = "Database Create";
+$lang['DBDetail']          = "Database Detail";
+$lang['DBLastDate']        = "LastSync Date";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "LastSync ID";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "use Database";
+$lang['DBreloginI']        = "relogin on %s";
+$lang['DBOverview']        = "Database Overview";
+$lang['DBUpdate']          = "Database Update";
+$lang['DBUpdateI']         = "update database %s";
+$lang['AdminDBSyncM'][1]   = "remove target, then copy all from source to target";
+$lang['AdminDBSyncM'][2]   = "copy all new (since last sync) from target to source, then copy all";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL for LOGO";
+$lang['CfgLogoLink']       = "URL Link from LOGO";
+$lang['CfgBugAutoName']    = "naming schema for bugs";
+$lang['CfgInvAutoName']    = "naming schema for invoices";
+$lang['CfgVATlist']        = "list of VAT rates";
+$lang['CfgVersion']        = "TUTOS Version";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Sales Forecast Report";
+$lang['UndefinedEndDate']   = "Unknown enddate";
+$lang['SalesBalanced']      = "Balanced Sales";
+$lang['AccumulatedRevenue'] = "Accumulated revenue";
+$lang['PeriodRevenue']      = "Revenue per Period";
+$lang['Period']             = "Period";
+$lang['Est_revenue']        = "Estimated revenue";
+$lang['Graph']              = "Graph";
+$lang['GraphInfo']          = "Show in a graph";
+
+# Permissions
+$lang['perm'][usecalendar]       = "use calendar";
+$lang['perm'][usetaskmanagement] = "use tasks";
+$lang['perm'][usemaplink]        = "use maplink";
+$lang['perm'][useprojects]       = "use projects";
+$lang['perm'][usetimetrack]      = "use timetrack";
+$lang['perm'][usefax]            = "use fax";
+$lang['perm'][usesms]            = "use sms";
+$lang['perm'][useoverlib]        = "use popups";
+$lang['perm'][useaddressbook]    = "use addressbook";
+$lang['perm'][usemail]           = "use mail";
+$lang['perm'][usehistory]        = "display history";                                                                              
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff']              = "Feature globally disabled";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "结束后从新开始 !";
+$lang['Err0006']         = "请详细选择";
+$lang['Err0009']         = "请填写 <I>%s</I> ";
+$lang['Err0012']         = "不知明的公司 <I>%s</I> !";
+$lang['Err0014']         = "请选择 <I>%s</I> ";
+$lang['Err0017']         = "请在 <I>%s</I> 输入数字 !";
+$lang['Err0018']         = "<I>%s</I> 不符合 %d的记录";
+$lang['Err0020']         = "你不能?除这个档案 !";
+$lang['Err0021']         = "你不能更改虚拟小组 0";
+$lang['Err0022']         = "对不起, 你并不能查看 %s";
+$lang['Err0023']         = "对不起, 你并不能删除 %s";
+$lang['Err0024']         = "对不起, 你并不能更改 %s";
+$lang['Err0025']         = "Missing Username or Password";
+$lang['Err0026']         = "Login not possible";
+$lang['Err0027']         = "Login failed";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Fax was not spooled !";
+$lang['Err0031']         = "Missing Fax Number !";
+$lang['Err0032']         = "Fax sending is diasabled !";
+$lang['Err0033']         = "mail sending is disabled ! Mail \"%s\" was <U>not</U> sent.";
+$lang['Err0034']         = "mail not sent ! missing senders \"%s\" email.";
+$lang['Err0035']         = "mail not sent ! no recipents.";
+$lang['Err0036']         = "Product/Project already exists here (%s) with given Name and Version !";
+$lang['Err0037']         = "mail %s not sent ! Missing Mail Prototype File (%s) !";
+$lang['Err0038']         = "Invalid Date in field %s!";
+$lang['Err0039']         = "Address entry already exists here (%s) !";
+$lang['Err0040']         = "%s not found !";
+$lang['Err0041']         = "Passwords are not identical !";
+$lang['Err0042']         = "Old Password is incorrect !";
+$lang['Err0043']         = "Email %s is not in a valid (xxx@abc.com) email format !";
+$lang['Err0044']         = "Company already exists here (%s) !";
+$lang['Err0045']         = "Department already exists here (%s) !";
+$lang['Err0046']         = "Team already exists here (%s) !";
+$lang['Err0047']         = "Could not remove the admin right. There must be at least one admin !";
+$lang['Err0048']         = "Nothing found !";
+$lang['Err0049']         = "Account %s is disabled !";
+$lang['Err0050']         = "Could not find CSV contents !";
+$lang['Err0051']         = "Could not find CSV Separator";
+$lang['Err0052']         = "You must provide a classification";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+
+### Local Variables: ***
+### End: ***
+?>

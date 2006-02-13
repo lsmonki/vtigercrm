@@ -1,0 +1,26 @@
+<?php
+# $Id: en-us.p3,v 1.16 2005/05/03 13:18:52 saraj Exp $
+#
+setlocale(LC_TIME,'en_US');
+$tutos['df'] = 1;
+
+$lang['DateTimePHP']     = "m/d/Y h:i a T";
+$lang['DateTimeStr']     = "%m/%d/%Y %I:%M %p %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+
+$lang['DateTimeSPHP']    = "m/d H:i";
+$lang['DateTimeSStr']    = "%m/%d %I:%M %p";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+
+$lang['TimeFormatPHP']   = "h:i a T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%m/%d/%Y";
+$lang['DateFormat']      = "%2\$s/%1\$s/%3\$s";
+$lang['DateShortFormat'] = "%2\$s-%1\$s";
+
+### Local Variables: ***
+### End: ***
+?>

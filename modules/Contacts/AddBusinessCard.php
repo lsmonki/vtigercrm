@@ -14,7 +14,7 @@
 <?php
 	echo get_module_title($_REQUEST["module"],"Add Business Card",true);
 ?>
-<form name="AddBusinessCard" action='index.php' method='post'>
+<form action='index.php' method='post'>
   <input type="hidden" name="module" value="Contacts">
   <input type="hidden" name="action" value="SaveBusinessCard">
   <input type="hidden" name="handle" value="Save">
@@ -29,13 +29,11 @@ function toggleDisplay(id){
     this.document.getElementById(  id).style.display='none'
     this.document.getElementById(id+"link").style.display='none';
   }
-	document.AddBusinessCard.elements[id+"srecord"].value="true";
 }
 </script>
   <script type="text/javascript" src="jscalendar/calendar.js"></script>
   <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
   <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-  <script type="text/javascript" src="include/general.js"></script>
   <table width="70%" cellpadding="0" cellspacing="1" border="0" class="formOuterBorder">
     <tbody>
       <tr> 
@@ -70,7 +68,7 @@ function toggleDisplay(id){
           </table>
           <div id='contactnotelink' style="margin:2px"><a href='javascript:toggleDisplay("contactnote");'>[<?php echo $mod_strings['LBL_NEW_NOTE'] ?>]</a></div>
           <div id="contactnote" style="display:none;"> 
-            <input type="hidden" name="contactnotesrecord" value="">
+            <input type="hidden" name="ContactNotesrecord" value="">
             <input type="hidden" name="ContactNotesparent_type" value="Accounts">
             <table border='0' width='100%' cellpadding="2" cellspacing="0">
               <tr> 
@@ -112,7 +110,7 @@ function toggleDisplay(id){
           </table>
           <div id='accountnotelink' style="margin:2px"><a href='javascript:toggleDisplay("accountnote");'>[<?php echo $mod_strings['LBL_NEW_NOTE'] ?>]</a></div>
           <div id="accountnote" style="display:none"> 
-            <input type="hidden" name="accountnotesrecord" value="">
+            <input type="hidden" name="AccountNotesrecord" value="">
             <input type="hidden" name="AccountNotesparent_type" value="Accounts">
             <table width="100%" cellpadding="0" cellspacing="2" border="0">
               <tr> 
@@ -174,50 +172,10 @@ Calendar.setup ({
       </tr>
   </table>
   <br>
-  <div align="center" style="width:70%"><input title='Save [Alt+S]' accessKey='S' class='button' type='submit' name='button' onclick="return formValidate(AddBusinessCard);" value='<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>'></div>
+  <div align="center" style="width:70%"><input title='Save [Alt+S]' accessKey='S' class='button' type='submit' name='button' value='<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>'></div>
 </form>
 </body>
 </html>
-
-<script>
-function formValidate(form)
-{
-	if(form.lastname.value == '')
-	{
-		alert("Enter Last Name for Contact");
-		return false;
-	}
-	if(form.contactnotesrecord.value == "true" && form.ContactNotesname.value == '')
-	{
-		alert("Enter the Note's Subject related to Contact.");
-		return false;
-	}
-	if(form.account_name.value == '')
-        {
-                alert("Enter Account Name");
-                return false;
-        }
-	if(form.accountnotesrecord.value  == "true" && form.AccountNotesname.value == '')
-	{
-		alert("Enter the Note's Subject related to Account.");
-		return false;
-	}
-	if(form.Appointmentsname.value == '')
-	{
-		alert("Enter the Subject for New Appoinment");
-		return false;
-	}
-	dateflag = dateValidate("Appointmentsdate_start","Start Date","D~M");
-	timeflag = timeValidate("Appointmentstime_start","Start Time","OTH");
-	if (dateflag == "false" || timeflag == "false")
-	{
-		alert("Date or Time may not correct.");
-		return false;
-	}
-
-	return true;
-}
-</script>
 <?
 
 

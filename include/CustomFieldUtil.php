@@ -48,7 +48,7 @@ function getCustomFieldTypeName($uitype)
 	}
 	elseif($uitype == 15)
 	{
-		$fldname = 'PickList';
+		$fldname = 'Pick';
 	}
 	elseif($uitype == 17)
 	{
@@ -57,14 +57,6 @@ function getCustomFieldTypeName($uitype)
 	elseif($uitype == 56)
 	{
 		$fldname = 'Checkbox';
-	}
-	elseif($uitype == 71)
-	{
-		$fldname = 'Currency';
-	}
-	elseif($uitype == 21)
-	{
-		$fldname = 'Text Area';
 	}
 	return $fldname;
 }

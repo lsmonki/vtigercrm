@@ -1,0 +1,47 @@
+<?php
+/*
+ * Copyright 2002 by Gero Kohnert & Jeremy Nicholson <jnicho02 at users.sourceforge.net>
+ *
+ *  CVS Info:  $Id: holiday_en_uk.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+  /* these dates were obtained from http://www.dti.gov.uk/er/bankhol.htm 
+   * and http://www.startinbusiness.co.uk/hols/hols2002/ukhols2002.htm
+   */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "New Years Day (UK)"),
+        array( Date => "06-01",          type => 1,    Desc => "Epiphany (UK)"),
+        array( Date => "25-01",          type => 1,    Desc => "Conversion of St Paul (UK)"),
+        array( Date => "12-02",          type => 1,    Desc => "Shrove Tuesday (UK)"),
+        array( Date => "13-02",          type => 0,    Desc => "Ash Wednesday (UK)"),
+        array( Date => "14-02",          type => 0,    Desc => "St Valentines Day (UK)"),
+        array( Date => "01-03",          type => 1,    Desc => "St Davids Day (UK)"),
+        array( Date => "10-03",          type => 1,    Desc => "Mothering Sunday (UK)"),
+        array( Date => "11-03",          type => 1,    Desc => "Commonwealth Day (UK)"),
+        array( Date => "18-03",          type => 1,    Desc => "St Patricks Day (UK)"),
+        array( Date => "01-04",          type => 1,    Desc => "April Fools Day (UK)"),
+        array( Date => "21-04",          type => 1,    Desc => "Queens Birthday (UK)"),
+        array( Date => "23-04",          type => 1,    Desc => "St Georges Day (UK)"),
+        array( Date => "05-05",          type => 1,    Desc => "May Bank Holiday (UK)"),
+        array( Date => "03-06",          type => 1,    Desc => "Golden Jubilee Bank Holiday (UK)"),
+        array( Date => "04-06",          type => 1,    Desc => "Spring Bank Holiday (UK)"),
+        array( Date => "16-06",          type => 1,    Desc => "Fathers Day (UK)"),
+        array( Date => "26-08",          type => 1,    Desc => "Summer Bank Holiday (UK)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Good Friday (UK)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Easter Sunday (UK)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Easter Monday (UK)"),
+        array( Date => "WHITSUNDAY",     type => 1,    Desc => "Whit Sunday (UK)"),
+        array( Date => "31-10",          type => 1,    Desc => "Halloween (UK)"),
+        array( Date => "01-11",          type => 1,    Desc => "All Saints Day (UK)"),
+        array( Date => "05-11",          type => 1,    Desc => "Guy Fawkes Night (UK)"),
+        array( Date => "10-11",          type => 1,    Desc => "Remembrance Sunday (UK)"),
+        array( Date => "30-11",          type => 1,    Desc => "St Andrews Day (UK)"),
+        array( Date => "25-12",          type => 1,    Desc => "Christmas Day (UK)"),
+        array( Date => "26-12",          type => 1,    Desc => "Boxing Day (UK)")
+        );
+?>

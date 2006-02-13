@@ -1,0 +1,435 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+<script type="text/javascript" src="jscalendar/calendar.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
+<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
+<input type="hidden" name="module" value="CustomView">
+<input type="hidden" name="action" value="Save">
+<input type="hidden" name="cvmodule" value="{CVMODULE}">
+<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+<input type="hidden" name="record" value="{CUSTOMVIEWID}">
+<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+<script language="javascript" type="text/javascript">
+var typeofdata = new Array();
+typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['N'] = ['e','n','l','g','m','h'];
+typeofdata['T'] = ['e','n','l','g','m','h'];
+typeofdata['I'] = ['e','n','l','g','m','h'];
+typeofdata['C'] = ['e','n'];
+typeofdata['DT'] = ['e','n'];
+typeofdata['D'] = ['e','n'];
+var fLabels = new Array();
+fLabels['e'] = 'equals';
+fLabels['n'] = 'not equal to';
+fLabels['s'] = 'starts with';
+fLabels['c'] = 'contains';
+fLabels['k'] = 'does not contain';
+fLabels['l'] = 'less than';
+fLabels['g'] = 'greater than';
+fLabels['m'] = 'less or equal';
+fLabels['h'] = 'greater or equal';
+var noneLabel;
+
+function trimfValues(value)
+{
+    var string_array;
+    string_array = value.split(":");
+    return string_array[4];
+}
+
+function updatefOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	ops = typeofdata[fieldtype];
+	var off = 0;
+	if(ops != null)
+	{
+
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+		selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
+		off = 1;
+		for (var i = 0; i < ops.length; i++)
+		{
+			var label = fLabels[ops[i]];
+			if (label == null) continue;
+			var option = new Option (fLabels[ops[i]], ops[i]);
+			selObj.options[i + off] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+function mandatoryCheck()
+{
+	//return verify_data();
+
+	var mandatorycheck = false;
+	var i,j;
+	var manCheck = new Array({MANDATORYCHECK});
+	var showvalues = "{SHOWVALUES}";
+	//var columnvalue = document.getElementById("column"+1).value;
+	if(manCheck)
+	{
+		var isError = false;
+	        var errorMessage = "";
+        	if (trim(document.CustomView.viewName.value) == "") {
+                	isError = true;
+                	errorMessage += "\nView Name";
+        	}
+        	// Here we decide whether to submit the form.
+        	if (isError == true) {
+                	alert("Missing required fields:" + errorMessage);
+                	return false;
+        	}
+
+		for(i=1;i<=9;i++)
+		{
+			var columnvalue = document.getElementById("column"+i).value;
+			if(columnvalue != null)
+			{
+				for(j=0;j<manCheck.length;j++)
+				{
+					if(columnvalue == manCheck[j])
+					{
+						mandatorycheck = true;
+					}
+				}
+				if(mandatorycheck == true)
+				{
+					return true;
+				}else
+				{
+					mandatorycheck = false;
+				}
+			}
+			//alert(columnvalue);
+		}
+	}
+	if(mandatorycheck == false)
+	{
+		alert("Must have one Required field to be selected\n"+showvalues);
+	}
+
+	return false;
+}
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
+
+function verify_data() {
+	var isError = false;
+	var errorMessage = "";
+	if (trim(document.CustomView.viewName.value) == "") {
+		isError = true;
+		errorMessage += "\nView Name";
+	}
+	// Here we decide whether to submit the form.
+	if (isError == true) {
+		alert("Missing required fields:" + errorMessage);
+		return false;
+	}
+	//return true;
+}
+
+function goto_CustomAction(module)
+{
+        document.location.href = "index.php?module="+module+"&action=CustomAction&record={CUSTOMVIEWID}";
+}
+
+</script>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MODULE}: {MOD.LBL_MODULE_NAME}</td>
+    <!--<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+      ]</td>-->
+  </tr>
+  <tr>
+    <td colspan="3" class="hline"><img height='1' src='include/images/blank.gif'></td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div align="center">
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
+		{CUSTOMACTIONBUTTON}
+            </div></td>
+        </tr>
+</table>
+<!-- BEGIN: error -->
+<font color="red">{ERROR}</font> 
+<!-- END: error -->
+<br>
+
+    <table width="100%" border=0 cellPadding="0" cellSpacing="0">
+      <tr>
+        <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
+      </tr>
+    </table>
+
+    <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
+      <tr>
+        <td class="formSecHeader" colspan="3">{MOD.LBL_STEP_1_TITLE}</td>
+      </tr>
+            <tr>
+                <td class='dataLabel'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_VIEW_NAME}</td>
+                <td>
+                        <input class='textField' type='text' name='viewName' value="{VIEWNAME}" size="40">
+                </td>
+		<td></td>
+            </tr>
+            <tr width="50%">
+                <td class='dataLabel'></td>
+                <td>
+                        <input class='textField' {CHECKED} type='checkbox' name='setDefault' value="">{MOD.LBL_SETDEFAULT}
+                </td>
+                <td width="50%">
+                        <input class='textField' {MCHECKED} type='checkbox' name='setMetrics' value="">{MOD.LBL_LIST_IN_METRICS}
+                </td>
+            </tr>
+    </table>
+    <p></p>
+
+    <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
+      <tr>
+        <td class="formSecHeader" colspan="3"><font class="required">*</font>{MOD.LBL_STEP_2_TITLE}</td>
+      </tr>
+      	
+      <tr>
+	<td>1 <select name="column1" id="column1">
+              <option value="">None</option>
+              {CHOOSECOLUMN1}
+              </select><br></td>
+	<td>2 <select name="column2" id="column2">
+              <option value="">None</option>
+              {CHOOSECOLUMN2}
+              </select><br></td>
+	<td>3 <select name="column3" id="column3">
+              <option value="">None</option>
+              {CHOOSECOLUMN3}
+              </select><br></td>
+      </tr>
+      <tr>
+	<td>4 <select name="column4" id="column4">
+              <option value="">None</option>
+              {CHOOSECOLUMN4}
+              </select><br></td>
+	<td>5 <select name="column5" id="column5">
+              <option value="">None</option>
+              {CHOOSECOLUMN5}
+              </select><br></td>
+	<td>6 <select name="column6" id="column6">
+              <option value="">None</option>
+              {CHOOSECOLUMN6}
+              </select><br></td>
+       </tr>
+       <tr>
+	<td>7 <select name="column7" id="column7">
+              <option value="">None</option>
+              {CHOOSECOLUMN7}
+              </select><br></td>
+	<td>8 <select name="column8" id="column8">
+              <option value="">None</option>
+              {CHOOSECOLUMN8}
+              </select><br></td>
+	<td>9 <select name="column9" id="column9">
+              <option value="">None</option>
+              {CHOOSECOLUMN9}
+              </select><br></td>
+	</tr>
+    </table>
+    <p></p>
+    {STDFILTER_JAVASCRIPT}	
+    <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
+      <tr>
+        <td class="formSecHeader" colspan="2">{MOD.LBL_STEP_3_TITLE}</td>
+      </tr>
+      <tr>
+      	<td>
+	   <table border="0" cellspacing="2" cellpadding="2" style="margin:10 0 10 5">
+ 	       <tr>
+                <td>{MOD.LBL_SF_COLUMNS}:</td>
+                <td>&nbsp;</td>
+                <td>{MOD.LBL_SF_STARTDATE}:</td>
+                <td>{MOD.LBL_SF_ENDDATE}:</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><select name="stdDateFilterField" class="select">
+                    {STDFILTERCOLUMNS}
+                    </select></td>
+
+                <td><select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
+                    {STDFILTERCRITERIA}
+                  </select></td>
+                <td><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{STARTDATE}">
+	            <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"></td><td nowrap>
+                    <input name="enddate" id="jscal_field_date_end" type="text" size="10" class="textField" value="{ENDDATE}">
+                    <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"></td>
+                <td>
+                </td>
+              </tr>
+            </table>
+	 </td>
+      </tr>	
+    </table>
+    <script>
+    var filter = document.CustomView.stdDateFilter.options[document.CustomView.stdDateFilter.selectedIndex].value
+    if( filter != "custom" )
+    {
+        showDateRange( filter );
+    }
+    </script>
+    <p></p>
+
+     <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
+      <tr>
+        <td class="formSecHeader" colspan="2">{MOD.LBL_STEP_4_TITLE}</td>
+      </tr>
+      <tr>
+	<td>
+	<table width="100%" border="0" cellspacing="3" cellpadding="6" class="secContent">
+  	<tr>
+    	<td> <table width="100%" border=0 cellspacing=0 cellpadding=0>
+        <tr>
+          <td height="25">{MOD.LBL_AF_HDR1}</td>
+        </tr>
+        <tr>
+          <td> <ul>
+              <li>{MOD.LBL_AF_HDR2}</li>
+              <li>{MOD.LBL_AF_HDR3}</li>
+              <!--<li>Place quotation marks around data that includes commas. For
+                example, &quot;200,000&quot;,&quot;1,000,000&quot; searches for
+                200,000 or 1,000,000.</li>
+              <li>For fields that can be set on or off, use &quot;0&quot; for
+                no and &quot;1&quot; for yes, e.g., &quot;Active equals 1&quot;
+                or &quot;Converted equals 0.&quot;</li>-->
+            </ul></td>
+        </tr>
+	<tr><td>&nbsp;</td></tr>
+        <tr>
+          <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
+              <option value="">None</option>
+              {BLOCK1}
+              </select> &nbsp; <select name="fop1" id="fop1">
+              <option value="">None</option>
+              {FOPTION1}
+            </select> &nbsp; <input name="fval1" id="fval1" type="text" size=30 maxlength=80 value="{VALUE1}">
+            &nbsp;and</TD>
+        </TR>
+	<TR>
+          <TD><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
+              <option value="">None</option>
+              {BLOCK2}
+              </select> &nbsp;
+              <select name="fop2" id="fop2">
+              <option value="">None</option>
+              {FOPTION2}
+            </select> &nbsp; <input name="fval2" id="fval2" type="text" size=30 maxlength=80 value="{VALUE2}">
+            &nbsp;and</TD>
+        </TR>
+        <TR>
+          <TD><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
+              <option value="">None</option>
+              {BLOCK3}
+              </select> &nbsp;
+              <select name="fop3" id="fop3">
+              <option value="">None</option>
+              {FOPTION3}
+            </select> &nbsp; <input name="fval3" id="fval3" type="text" size=30 maxlength=80 value="{VALUE3}">
+            &nbsp;and</TD>
+        </TR>
+        <TR>
+          <TD> <select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
+              <option value="">None</option>
+              {BLOCK4}
+              </select> &nbsp;
+              <select name="fop4" id="fop4">
+              <option value="">None</option>
+              {FOPTION4}
+            </select> &nbsp; <input name="fval4" id="fval4" type="text" size=30 maxlength=80 value="{VALUE4}">
+            &nbsp;and</TD>
+        </TR>
+	<TR>
+          <TD> <select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
+              <option value="">None</option>
+              {BLOCK5}
+              </select> &nbsp;
+             <select name="fop5" id="fop5">
+              <option value="">None</option>
+              {FOPTION5}
+            </select> &nbsp; <input name="fval5" id="fval5" type="text" size=30 maxlength=80 value="{VALUE5}"></TD>
+        </TR>
+         </table></td>
+  	</tr>
+	</table>
+	</td>
+      </tr>
+    </table>
+    <p></p>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div align="center">
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
+            </div></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+    	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
+	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
+    </script>
+    <br>
+</form>
+{JAVASCRIPT} 
+<!-- END: main -->

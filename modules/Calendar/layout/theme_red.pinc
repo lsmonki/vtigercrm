@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright 2003-2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: theme_red.pinc,v 1.16 2005/05/03 13:18:51 saraj Exp $
+ *  $Author: saraj $
+ */
+global $calpath;
+echo "red" .$calpath;
+require_once $calpath .'theme_base.pinc';
+
+/**
+ *
+ * @package BASE
+ * @module theme_base
+ */
+class theme_red extends theme_base {
+
+  /**
+   * get a image
+   */
+  function getImage($type,$purpose) {
+    global $tutos,$lang;
+
+    if ($purpose == 'menu') {
+      if (($type != logout) && ($type != help)) {
+        $type = 'menu';
+      }
+    } else if ($purpose == 'list') {
+      if (!in_array($type,array(left,right,up,down,modify,delete))) {
+        return;
+      }
+    }
+    return parent::getImage($type,$purpose);
+  }
+}
+?>

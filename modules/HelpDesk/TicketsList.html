@@ -1,0 +1,189 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<script>
+function changeStatus()
+{
+        x = document.massdelete.ticketselection.length;
+        idstring = "";
+        if ( x == undefined)
+        {
+
+                if (document.massdelete.ticketselection.checked)
+                {
+                        document.massdelete.idlist.value=document.massdelete.ticketselection.value;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity ");
+                        return false;
+                }
+       }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.massdelete.ticketselection[i].checked)
+                        {
+                                idstring = document.massdelete.ticketselection[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.massdelete.idlist.value=idstring;
+                        //alert(document.massdelete.idlist.value);
+                }
+               else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        document.massdelete.action="index.php?module=HelpDesk&action=Convert"
+}
+</script>
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tbody><tr>
+<form name="SearchForm" method="post" action="index.php">
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_SUBJECT}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="subject" class=dataField  value="{SUBJECT}" />
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CONTACT}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="contact_name" class=dataField  value='{CONTACT_NAME}' />
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRIORITY}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="priority" class=dataField  value='{PRIORITY}' />
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_STATUS}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="status" class=dataField  value='{STATUS}'/>
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
+			<input type="hidden" name="query" value="true"/>
+			<input type="hidden" name="module" value="HelpDesk" />
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+		<br>
+		</td>
+	</tr><tr>
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CATEGORY}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="category" class=dataField  value='{CATEGORY}'/>	
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CREATED_DATE}&nbsp;<select name='date_crit' tabindex="2">
+                <OPTION selected value='is' {IS}>{MOD.LBL_IS}</OPTION>
+                <OPTION value='isnot' {ISNOT}>{MOD.LBL_IS_NOT}</OPTION>
+                <OPTION value='before' {BEFORE}>{MOD.LBL_IS_BEFORE}</OPTION>
+                <OPTION value='after' {AFTER}>{MOD.LBL_IS_AFTER}</OPTION></select></td>
+		<td class="dataField"><input type=text size="10" name="date" class=dataField  value='{DATE}'/>
+		
+
+		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
+		<td class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+	</tr>
+</form>
+	</table>
+</td></tr>
+</table>
+<script type="text/javascript" language="JavaScript">
+function clear_form(form) {
+	for (j = 0; j < form.elements.length; j++) {
+		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
+			form.elements[j].value = '';
+		}
+	}
+}
+</script>
+<BR>
+<BR>
+{TICKETLISTHEADER}
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+
+	<tr height="20">
+		<td COLSPAN="15" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<form name="massdelete" method="POST">
+				<input name='change_owner' type='hidden'>
+				<input name='change_status' type='hidden'>
+				<input name='idlist' type='hidden' >
+				<input name='action' type='hidden' value='Convert'>
+				<input name='module' type='hidden' value='HelpDesk'>
+			   <td><input class='button' type='submit' value='{MOD.LBL_CHANGE_OWNER}' onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+			       <input class='button' type='submit' value='{MOD.LBL_CHANGE_STATUS}' onclick="this.form.change_status.value='true'; return changeStatus()"/>
+			   </td>
+			
+			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr class="moduleListTitle" height=20>
+                <td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+                <td align='center' class="moduleListTitle">&nbsp;  {MOD.LBL_SELECT_TICKET}</td>
+
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">{MOD.LBL_TICKET_ID}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">{MOD.LBL_SUBJECT}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_CONTACT}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_STATUS}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_GROUP}</td>
+                <td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_CREATED_DATE}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_ASSIGNED_TO}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{APP.LBL_OPERATION}</td>
+                <td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	</tr>
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{TICKETLIST}
+	</form>
+</table>
+<br>
+<br>
+<TABLE width="60%" border=0 cellPadding=0 cellSpacing=1>
+<tr>
+<td>
+<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr>
+  <td colspan="2" class="formSecHeader">{MOD.LBL_FAQ}{MOD.LBL_COLON}</td>
+  </tr>
+  <tr>
+  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=HelpDesk&action=FaqList">{MOD.LBL_VIEW_FAQS}</a></div></TD>
+  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=HelpDesk&action=CreateFaq&return_module=HelpDesk&return_action=FaqInfoView">{MOD.LBL_ADD_FAQS}</a></div></TD>
+  </tr>
+  <tr>
+  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=EditComboField&fld_module=HelpDesk&fld_name=FAQ Category&table_name=faqcategories&column_name=category_name">{MOD.LBL_FAQ_CATEGORIES}</a></div></TD>
+  </tr>
+  </TABLE>
+</td>
+<td>
+        <TABLE width="50%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+          <tr>
+          <td  class="formSecHeader">{MOD.LBL_STATISTICS}{MOD.LBL_COLON}</td>
+          </tr>
+          <tr>
+          <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=HelpDesk&action=CumulStatistics">Cumulative Statistics</a></div></TD>
+           </tr>
+          </TABLE>
+
+</td>
+</tr></form>
+</table>
+<!-- END: main -->
+

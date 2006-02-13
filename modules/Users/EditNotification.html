@@ -1,0 +1,49 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<table width="50%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+<table width="100%" cellpadding="5" cellspacing="1" border="0">
+  <tbody><form action="index.php" method="post" name="index" id="form">
+  <input type="hidden" name="module" value="Users">
+  <input type="hidden" name="action" value="index">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <input type="hidden" name="record" value="{RECORD_ID}">
+  <tr><td colspan="2" class="formSecHeader">{LABEL}</td></tr>
+  <tr> 
+    <td width="20%" nowrap class="dataLabel">{MOD.LBL_SUBJECT}:</td>
+    <td align="left"> <input class="dataInput" type="text" name="notifysubject" value="{SUBNOTIFY}" size="40" /> 
+    </td>
+  </tr>
+  <tr>
+    <td nowrap class="dataLabel" width="20%">{MOD.LBL_MESSAGE}:</td>
+    <td align="left"><textarea name="notifybody" rows="5" cols="40">{BODYNOTIFY}</textarea> 
+    </td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<br>
+<table width="50%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr>
+	         <td align="center">
+			<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveNotification'; return verify_data(EditView)" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+	                <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='listnotificationschedulers'; this.form.module.value='Users'; this.form.return_action.value='listnotificationschedulers'; this.form.return_module.value='Users';" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	</tr>
+	</form>
+</table>
+
+<!-- END: main -->

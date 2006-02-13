@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fck_othercommands.js
  * 	Definition of other commands that are not available internaly in the
  * 	browser (see FCKNamedCommand).
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-01-04 18:39:05
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -24,7 +27,7 @@ var FCKDialogCommand = function( name, title, url, width, height, getStateFuncti
 	this.Url	= url ;
 	this.Width	= width ;
 	this.Height	= height ;
-
+	
 	this.GetStateFunction	= getStateFunction ;
 	this.GetStateParam		= getStateParam ;
 }
@@ -51,7 +54,7 @@ var FCKUndefinedCommand = function()
 FCKUndefinedCommand.prototype.Execute = function()
 {
 	alert( FCKLang.NotImplemented ) ;
-}
+} 
 
 FCKUndefinedCommand.prototype.GetState = function()
 {
@@ -59,7 +62,7 @@ FCKUndefinedCommand.prototype.GetState = function()
 }
 
 // ### FontName
-var FCKFontNameCommand = function()
+var FCKFontNameCommand = function() 
 {
 	this.Name = 'FontName' ;
 }
@@ -80,7 +83,7 @@ FCKFontNameCommand.prototype.GetState = function()
 }
 
 // ### FontSize
-var FCKFontSizeCommand = function()
+var FCKFontSizeCommand = function() 
 {
 	this.Name = 'FontSize' ;
 }
@@ -88,7 +91,7 @@ var FCKFontSizeCommand = function()
 FCKFontSizeCommand.prototype.Execute = function( fontSize )
 {
 	if ( typeof( fontSize ) == 'string' ) fontSize = parseInt(fontSize) ;
-
+	
 	if ( fontSize == null || fontSize == '' )
 	{
 		// TODO: Remove font size attribute (Now it works with size 3. Will it work forever?)
@@ -104,7 +107,7 @@ FCKFontSizeCommand.prototype.GetState = function()
 }
 
 // ### FormatBlock
-var FCKFormatBlockCommand = function()
+var FCKFormatBlockCommand = function() 
 {
 	this.Name = 'FormatBlock' ;
 }
@@ -123,7 +126,7 @@ FCKFormatBlockCommand.prototype.GetState = function()
 }
 
 // ### Preview
-var FCKPreviewCommand = function()
+var FCKPreviewCommand = function() 
 {
 	this.Name = 'Preview' ;
 }
@@ -139,7 +142,7 @@ FCKPreviewCommand.prototype.GetState = function()
 }
 
 // ### Save
-var FCKSaveCommand = function()
+var FCKSaveCommand = function() 
 {
 	this.Name = 'Save' ;
 }
@@ -148,14 +151,7 @@ FCKSaveCommand.prototype.Execute = function()
 {
 	// Get the linked field form.
 	var oForm = FCK.LinkedField.form ;
-
-	if ( typeof( oForm.onsubmit ) == 'function' )
-	{
-		var bRet = oForm.onsubmit() ;
-		if ( bRet != null && bRet === false )
-			return ;
-	}
-
+	
 	// Submit the form.
 	oForm.submit() ;
 }
@@ -166,17 +162,14 @@ FCKSaveCommand.prototype.GetState = function()
 }
 
 // ### NewPage
-var FCKNewPageCommand = function()
+var FCKNewPageCommand = function() 
 {
 	this.Name = 'NewPage' ;
 }
 
 FCKNewPageCommand.prototype.Execute = function()
 {
-	FCKUndo.SaveUndoStep() ;
-	FCK.SetHTML( '' ) ;
-//	FCK.SetHTML( FCKBrowserInfo.IsGecko ? '&nbsp;' : '' ) ;
-//	FCK.SetHTML( FCKBrowserInfo.IsGecko ? '<br _moz_editor_bogus_node="TRUE">' : '' ) ;
+	FCK.SetHTML( FCKBrowserInfo.IsGecko ? '&nbsp;' : '' ) ;
 }
 
 FCKNewPageCommand.prototype.GetState = function()
@@ -192,61 +185,10 @@ var FCKSourceCommand = function()
 
 FCKSourceCommand.prototype.Execute = function()
 {
-	if ( FCKBrowserInfo.IsGecko )
-	{
-		var iWidth	= screen.width * 0.65 ;
-		var iHeight	= screen.height * 0.65 ;
-		FCKDialog.OpenDialog( 'FCKDialog_Source', FCKLang.Source, 'dialog/fck_source.html', iWidth, iHeight, null, null, true ) ;
-	}
-	else
-	    FCK.SwitchEditMode() ;
+     FCK.SwitchEditMode() ;
 }
 
 FCKSourceCommand.prototype.GetState = function()
 {
 	return ( FCK.EditMode == FCK_EDITMODE_WYSIWYG ? FCK_TRISTATE_OFF : FCK_TRISTATE_ON ) ;
-}
-
-// ### Undo
-var FCKUndoCommand = function()
-{
-	this.Name = 'Undo' ;
-}
-
-FCKUndoCommand.prototype.Execute = function()
-{
-	if ( FCKBrowserInfo.IsIE )
-		FCKUndo.Undo() ;
-	else
-		FCK.ExecuteNamedCommand( 'Undo' ) ;
-}
-
-FCKUndoCommand.prototype.GetState = function()
-{
-	if ( FCKBrowserInfo.IsIE )
-		return ( FCKUndo.Typing || FCKUndo.CurrentIndex > 0 ? FCK_TRISTATE_OFF : FCK_TRISTATE_DISABLED ) ;
-	else
-		return FCK.GetNamedCommandState( 'Undo' ) ;
-}
-
-// ### Redo
-var FCKRedoCommand = function()
-{
-	this.Name = 'Redo' ;
-}
-
-FCKRedoCommand.prototype.Execute = function()
-{
-	if ( FCKBrowserInfo.IsIE )
-		FCKUndo.Redo() ;
-	else
-		FCK.ExecuteNamedCommand( 'Redo' ) ;
-}
-
-FCKRedoCommand.prototype.GetState = function()
-{
-	if ( FCKBrowserInfo.IsIE )
-		return ( !FCKUndo.Typing && FCKUndo.CurrentIndex < ( FCKUndo.SavedData.length - 1 ) ? FCK_TRISTATE_OFF : FCK_TRISTATE_DISABLED ) ;
-	else
-		return FCK.GetNamedCommandState( 'Redo' ) ;
 }

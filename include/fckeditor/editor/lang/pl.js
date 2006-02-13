@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,9 +11,11 @@
  * File Name: pl.js
  * 	Polish language file.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
+ * 
  * File Authors:
  * 		Jakub Boesche (jboesche@gazeta.pl)
- * 		Maciej Bochynski (maciej.bochynski@lubman.pl)
  */
 
 var FCKLang =
@@ -39,11 +41,9 @@ RemoveFormat		: "Usuń formatowanie",
 InsertLinkLbl		: "Hiperłącze",
 InsertLink			: "Wstaw/edytuj hiperłącze",
 RemoveLink			: "Usuń hiperłącze",
-Anchor				: "Wstaw/edytuj kotwicę",
+Anchor				: "Insert/Edit Anchor",	//MISSING
 InsertImageLbl		: "Obrazek",
 InsertImage			: "Wstaw/edytuj obrazek",
-InsertFlashLbl		: "Flash",	//MISSING
-InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Tabela",
 InsertTable			: "Wstaw/edytuj tabelę",
 InsertLineLbl		: "Linia pozioma",
@@ -82,18 +82,18 @@ BGColor				: "Kolor tła",
 Source				: "Źródło dokumentu",
 Find				: "Znajdź",
 Replace				: "Zamień",
-SpellCheck			: "Sprawdź pisownię",
-UniversalKeyboard	: "Klawiatura Uniwersalna",
+SpellCheck			: "Check Spell",	//MISSING
+UniversalKeyboard	: "Universal Keyboard",	//MISSING
 
-Form			: "Formularz",
-Checkbox		: "Checkbox",
-RadioButton		: "Pole wyboru",
-TextField		: "Pole tekstowe",
-Textarea		: "Obszar tekstowy",
-HiddenField		: "Pole ukryte",
-Button			: "Przycisk",
-SelectionField	: "Lista wyboru",
-ImageButton		: "Przycisk obrazek",
+Form			: "Form",	//MISSING
+Checkbox		: "Checkbox",	//MISSING
+RadioButton		: "Radio Button",	//MISSING
+TextField		: "Text Field",	//MISSING
+Textarea		: "Textarea",	//MISSING
+HiddenField		: "Hidden Field",	//MISSING
+Button			: "Button",	//MISSING
+SelectionField	: "Selection Field",	//MISSING
+ImageButton		: "Image Button",	//MISSING
 
 // Context Menu
 EditLink			: "Edytuj hiperłącze",
@@ -108,20 +108,19 @@ SplitCell			: "Podziel komórkę",
 CellProperties		: "Właściwości komórki",
 TableProperties		: "Właściwości tabeli",
 ImageProperties		: "Właściwości obrazka",
-FlashProperties		: "Flash Properties",	//MISSING
 
-AnchorProp			: "Właściwości kotwicy",
-ButtonProp			: "Właściwości przycisku",
-CheckboxProp		: "Checkbox - właściwości",
-HiddenFieldProp		: "Właściwości pola ukrytego",
-RadioButtonProp		: "Właściwości pola wyboru",
-ImageButtonProp		: "Właściwości przycisku obrazka",
-TextFieldProp		: "Właściwości pola tekstowego",
-SelectionFieldProp	: "Właściwości listy wyboru",
-TextareaProp		: "Właściwości obszaru tekstowego",
-FormProp			: "Właściwości formularza",
+AnchorProp			: "Anchor Properties",	//MISSING
+ButtonProp			: "Button Properties",	//MISSING
+CheckboxProp		: "Checkbox Properties",	//MISSING
+HiddenFieldProp		: "Hidden Field Properties",	//MISSING
+RadioButtonProp		: "Radio Button Properties",	//MISSING
+ImageButtonProp		: "Image Button Properties",	//MISSING
+TextFieldProp		: "Text Field Properties",	//MISSING
+SelectionFieldProp	: "Selection Field Properties",	//MISSING
+TextareaProp		: "Textarea Properties",	//MISSING
+FormProp			: "Form Properties",	//MISSING
 
-FontFormats			: "Normalny;Tekst sformatowany;Adres;Nagłówek 1;Nagłówek 2;Nagłówek 3;Nagłówek 4;Nagłówek 5;Nagłówek 6",
+FontFormats			: "Normalny;Tekst sformatowany;Adres;Nagłówek 1;Nagłówek 2;Nagłówek 3;Nagłówek 4;Nagłówek 5;Nagłówek 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Przetwarzanie XHTML. Proszę czekać...",
@@ -137,11 +136,9 @@ UnknownToolbarSet	: "Pasek narzędzi \"%1\" nie istnieje",
 DlgBtnOK			: "OK",
 DlgBtnCancel		: "Anuluj",
 DlgBtnClose			: "Zamknij",
-DlgBtnBrowseServer	: "Przeglądaj",
+DlgBtnBrowseServer	: "Browse Server",	//MISSING
 DlgAdvancedTag		: "Zaawansowane",
-DlgOpOther			: "&lt;Inny&gt;",
-DlgInfoTab			: "Info",	//MISSING
-DlgAlertUrl			: "Please insert the URL",	//MISSING
+DlgOpOther			: "&lt;Other&gt;",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;nieustawione&gt;",
@@ -186,17 +183,6 @@ DlgImgAlignTextTop	: "Do góry tekstu",
 DlgImgAlignTop		: "Do góry",
 DlgImgPreview		: "Podgląd",
 DlgImgAlertUrl		: "Podaj adres obrazka.",
-DlgImgLinkTab		: "Link",	//MISSING
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",	//MISSING
-DlgFlashChkPlay		: "Auto Play",	//MISSING
-DlgFlashChkLoop		: "Loop",	//MISSING
-DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
-DlgFlashScale		: "Scale",	//MISSING
-DlgFlashScaleAll	: "Show all",	//MISSING
-DlgFlashScaleNoBorder	: "No Border",	//MISSING
-DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Hiperłącze",
@@ -227,7 +213,7 @@ DlgLnkTargetBlank	: "Nowe okno (_blank)",
 DlgLnkTargetParent	: "Okno nadrzędne (_parent)",
 DlgLnkTargetSelf	: "To samo okno (_self)",
 DlgLnkTargetTop		: "Okno najwyższe w hierarchii (_top)",
-DlgLnkTargetFrameName	: "Nazwa Ramki Docelowej",
+DlgLnkTargetFrameName	: "Target Frame Name",	//MISSING
 DlgLnkPopWinName	: "Nazwa wyskakującego okna",
 DlgLnkPopWinFeat	: "Właściwości wyskakującego okna",
 DlgLnkPopResize		: "Możliwa zmiana rozmiaru",
@@ -326,147 +312,136 @@ PasteErrorCopy	: "Ustawienia bezpieczeństwa Twojej przeglądarki nie pozwalają
 PasteAsText		: "Wklej jako czysty tekst",
 PasteFromWord	: "Wklej z Worda",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
-DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
-DlgPasteCleanBox		: "Clean Up Box",	//MISSING
-
+DlgPasteMsg		: "Automatyczne wklejenie tekstu nie było możliwe z powodu <STRONG>restrykcyjnych</STRONG> ustawień bezpieczeństwa Twojej przeglądarki.<BR>Wklej tekst w poniższe pole używając skrótu klawiszowego (<STRONG>Ctrl+V</STRONG>) i wciśnij <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automatycznie",
 ColorMoreColors	: "Więcej kolorów...",
 
 // Document Properties
-DocProps		: "Właściwości dokumentu",
+DocProps		: "Document Properties",	//MISSING
 
 // Anchor Dialog
-DlgAnchorTitle		: "Właściwości kotwicy",
-DlgAnchorName		: "Nazwa kotwicy",
-DlgAnchorErrorName	: "Wpisz nazwę kotwicy",
+DlgAnchorTitle		: "Anchor Properties",	//MISSING
+DlgAnchorName		: "Anchor Name",	//MISSING
+DlgAnchorErrorName	: "Please type the anchor name",	//MISSING
 
 // Speller Pages Dialog
-DlgSpellNotInDic		: "Słowa nie ma w słowniku",
-DlgSpellChangeTo		: "Zmień na",
-DlgSpellBtnIgnore		: "Ignoruj",
-DlgSpellBtnIgnoreAll	: "Ignoruj wszystkie",
-DlgSpellBtnReplace		: "Zmień",
-DlgSpellBtnReplaceAll	: "Zmień wszystkie",
-DlgSpellBtnUndo			: "Undo",
-DlgSpellNoSuggestions	: "- Brak sugestii -",
-DlgSpellProgress		: "Trwa sprawdzanie ...",
-DlgSpellNoMispell		: "Sprawdzanie zakończone: nie znaleziono błędów",
-DlgSpellNoChanges		: "Sprawdzanie zakończone: nie zmieniono żadnego słowa",
-DlgSpellOneChange		: "Sprawdzanie zakończone: zmieniono jedno słowo",
-DlgSpellManyChanges		: "Sprawdzanie zakończone: zmieniono %l słów",
+DlgSpellNotInDic		: "Not in dictionary",	//MISSING
+DlgSpellChangeTo		: "Change to",	//MISSING
+DlgSpellBtnIgnore		: "Ignore",	//MISSING
+DlgSpellBtnIgnoreAll	: "Ignore All",	//MISSING
+DlgSpellBtnReplace		: "Replace",	//MISSING
+DlgSpellBtnReplaceAll	: "Replace All",	//MISSING
+DlgSpellBtnUndo			: "Undo",	//MISSING
+DlgSpellNoSuggestions	: "- No suggestions -",	//MISSING
+DlgSpellProgress		: "Spell check in progress...",	//MISSING
+DlgSpellNoMispell		: "Spell check complete: No misspellings found",	//MISSING
+DlgSpellNoChanges		: "Spell check complete: No words changed",	//MISSING
+DlgSpellOneChange		: "Spell check complete: One word changed",	//MISSING
+DlgSpellManyChanges		: "Spell check complete: %1 words changed",	//MISSING
 
-IeSpellDownload			: "Słownik nie jest zainstalowany. Chcesz go ściągnąć?",
+IeSpellDownload			: "Spell checker not installed. Do you want to download it now?",	//MISSING
 
 // Button Dialog
-DlgButtonText	: "Tekst (Wartość)",
-DlgButtonType	: "Typ",
+DlgButtonText	: "Text (Value)",	//MISSING
+DlgButtonType	: "Type",	//MISSING
 
 // Checkbox and Radio Button Dialogs
-DlgCheckboxName		: "Nazwa",
-DlgCheckboxValue	: "Wartość",
-DlgCheckboxSelected	: "Zaznaczony",
+DlgCheckboxName		: "Name",	//MISSING
+DlgCheckboxValue	: "Value",	//MISSING
+DlgCheckboxSelected	: "Selected",	//MISSING
 
 // Form Dialog
-DlgFormName		: "Nazwa",
-DlgFormAction	: "Akcja",
-DlgFormMethod	: "Metoda",
+DlgFormName		: "Name",	//MISSING
+DlgFormAction	: "Action",	//MISSING
+DlgFormMethod	: "Method",	//MISSING
 
 // Select Field Dialog
-DlgSelectName		: "Nazwa",
-DlgSelectValue		: "Wartość",
-DlgSelectSize		: "Rozmiar",
-DlgSelectLines		: "linii",
-DlgSelectChkMulti	: "Wielokrotny wybór",
-DlgSelectOpAvail	: "Dostępne opcje",
-DlgSelectOpText		: "Tekst",
-DlgSelectOpValue	: "Wartość",
-DlgSelectBtnAdd		: "Dodaj",
-DlgSelectBtnModify	: "Zmień",
-DlgSelectBtnUp		: "Do góry",
-DlgSelectBtnDown	: "Do dołu",
-DlgSelectBtnSetValue : "Ustaw wartość zaznaczoną",
-DlgSelectBtnDelete	: "Usuń",
+DlgSelectName		: "Name",	//MISSING
+DlgSelectValue		: "Value",	//MISSING
+DlgSelectSize		: "Size",	//MISSING
+DlgSelectLines		: "lines",	//MISSING
+DlgSelectChkMulti	: "Allow multiple selections",	//MISSING
+DlgSelectOpAvail	: "Available Options",	//MISSING
+DlgSelectOpText		: "Text",	//MISSING
+DlgSelectOpValue	: "Value",	//MISSING
+DlgSelectBtnAdd		: "Add",	//MISSING
+DlgSelectBtnModify	: "Modify",	//MISSING
+DlgSelectBtnUp		: "Up",	//MISSING
+DlgSelectBtnDown	: "Down",	//MISSING
+DlgSelectBtnSetValue : "Set as selected value",	//MISSING
+DlgSelectBtnDelete	: "Delete",	//MISSING
 
 // Textarea Dialog
-DlgTextareaName	: "Nazwa",
-DlgTextareaCols	: "Kolumnu",
-DlgTextareaRows	: "Wiersze",
+DlgTextareaName	: "Name",	//MISSING
+DlgTextareaCols	: "Columns",	//MISSING
+DlgTextareaRows	: "Rows",	//MISSING
 
 // Text Field Dialog
-DlgTextName			: "Nazwa",
-DlgTextValue		: "Wartość",
-DlgTextCharWidth	: "Szerokość w znakach",
-DlgTextMaxChars		: "Max. szerokość",
-DlgTextType			: "Typ",
-DlgTextTypeText		: "Tekst",
-DlgTextTypePass		: "Hasło",
+DlgTextName			: "Name",	//MISSING
+DlgTextValue		: "Value",	//MISSING
+DlgTextCharWidth	: "Character Width",	//MISSING
+DlgTextMaxChars		: "Maximum Characters",	//MISSING
+DlgTextType			: "Type",	//MISSING
+DlgTextTypeText		: "Text",	//MISSING
+DlgTextTypePass		: "Password",	//MISSING
 
 // Hidden Field Dialog
-DlgHiddenName	: "Nazwa",
-DlgHiddenValue	: "Wartość",
+DlgHiddenName	: "Name",	//MISSING
+DlgHiddenValue	: "Value",	//MISSING
 
 // Bulleted List Dialog
-BulletedListProp	: "Właściwości listy punktowanej",
-NumberedListProp	: "Właściwości listy numerowanej",
-DlgLstType			: "Typ",
-DlgLstTypeCircle	: "Koło",
-DlgLstTypeDisk		: "Dysk",
-DlgLstTypeSquare	: "Kwadrat",
-DlgLstTypeNumbers	: "Cyfry (1, 2, 3)",
-DlgLstTypeLCase		: "Małe litery (a, b, c)",
-DlgLstTypeUCase		: "Duże litery (A, B, C)",
-DlgLstTypeSRoman	: "Numeracja rzymska (i, ii, iii)",
-DlgLstTypeLRoman	: "Numeracja rzymska (I, II, III)",
+BulletedListProp	: "Bulleted List Properties",	//MISSING
+NumberedListProp	: "Numbered List Properties",	//MISSING
+DlgLstType			: "Type",	//MISSING
+DlgLstTypeCircle	: "Circle",	//MISSING
+DlgLstTypeDisk		: "Disk",	//MISSING
+DlgLstTypeSquare	: "Square",	//MISSING
+DlgLstTypeNumbers	: "Numbers (1, 2, 3)",	//MISSING
+DlgLstTypeLCase		: "Lowercase Letters (a, b, c)",	//MISSING
+DlgLstTypeUCase		: "Uppercase Letters (A, B, C)",	//MISSING
+DlgLstTypeSRoman	: "Small Roman Numerals (i, ii, iii)",	//MISSING
+DlgLstTypeLRoman	: "Large Roman Numerals (I, II, III)",	//MISSING
 
 // Document Properties Dialog
-DlgDocGeneralTab	: "Ogólne",
-DlgDocBackTab		: "Tło",
-DlgDocColorsTab		: "Kolory i marginesy",
-DlgDocMetaTab		: "Meta Dane",
+DlgDocGeneralTab	: "General",	//MISSING
+DlgDocBackTab		: "Background",	//MISSING
+DlgDocColorsTab		: "Colors and Margins",	//MISSING
+DlgDocMetaTab		: "Meta Data",	//MISSING
 
-DlgDocPageTitle		: "Tytuł strony",
-DlgDocLangDir		: "Kierunek pisania",
-DlgDocLangDirLTR	: "Od lewej do prawej (LTR)",
-DlgDocLangDirRTL	: "Od prawej do lewej (RTL)",
-DlgDocLangCode		: "Kod języka",
-DlgDocCharSet		: "Kodowanie znaków",
-DlgDocCharSetOther	: "Inne kodowanie znaków",
+DlgDocPageTitle		: "Page Title",	//MISSING
+DlgDocLangDir		: "Language Direction",	//MISSING
+DlgDocLangDirLTR	: "Left to Right (LTR)",	//MISSING
+DlgDocLangDirRTL	: "Right to Left (RTL)",	//MISSING
+DlgDocLangCode		: "Language Code",	//MISSING
+DlgDocCharSet		: "Character Set Encoding",	//MISSING
+DlgDocCharSetOther	: "Other Character Set Encoding",	//MISSING
 
-DlgDocDocType		: "Nagłowek typu dokumentu",
-DlgDocDocTypeOther	: "Inny typ dokumentu",
-DlgDocIncXHTML		: "Dołącz deklarację XHTML",
-DlgDocBgColor		: "Kolor tła",
-DlgDocBgImage		: "Obrazek tła",
-DlgDocBgNoScroll	: "Tło nieruchome",
-DlgDocCText			: "Tekst",
-DlgDocCLink			: "Hiperłącze",
-DlgDocCVisited		: "Odwiedzane hiperłącze",
-DlgDocCActive		: "Aktywne hiperłącze",
-DlgDocMargins		: "Marginesy strony",
-DlgDocMaTop			: "Górny",
-DlgDocMaLeft		: "Lewy",
-DlgDocMaRight		: "Prawy",
-DlgDocMaBottom		: "Dolny",
-DlgDocMeIndex		: "Słowa kluczowe (oddzielone przecinkami)",
-DlgDocMeDescr		: "Opis dokumentu",
-DlgDocMeAuthor		: "Autor",
-DlgDocMeCopy		: "Copyright",
-DlgDocPreview		: "Podgląd",
-
-// Templates Dialog
-Templates			: "Templates",	//MISSING
-DlgTemplatesTitle	: "Content Templates",	//MISSING
-DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
-DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
-DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
+DlgDocDocType		: "Document Type Heading",	//MISSING
+DlgDocDocTypeOther	: "Other Document Type Heading",	//MISSING
+DlgDocIncXHTML		: "Include XHTML Declarations",	//MISSING
+DlgDocBgColor		: "Background Color",	//MISSING
+DlgDocBgImage		: "Background Image URL",	//MISSING
+DlgDocBgNoScroll	: "Nonscrolling Background",	//MISSING
+DlgDocCText			: "Text",	//MISSING
+DlgDocCLink			: "Link",	//MISSING
+DlgDocCVisited		: "Visited Link",	//MISSING
+DlgDocCActive		: "Active Link",	//MISSING
+DlgDocMargins		: "Page Margins",	//MISSING
+DlgDocMaTop			: "Top",	//MISSING
+DlgDocMaLeft		: "Left",	//MISSING
+DlgDocMaRight		: "Right",	//MISSING
+DlgDocMaBottom		: "Bottom",	//MISSING
+DlgDocMeIndex		: "Document Indexing Keywords (comma separated)",	//MISSING
+DlgDocMeDescr		: "Document Description",	//MISSING
+DlgDocMeAuthor		: "Author",	//MISSING
+DlgDocMeCopy		: "Copyright",	//MISSING
+DlgDocPreview		: "Preview",	//MISSING
 
 // About Dialog
-DlgAboutAboutTab	: "O ...",
-DlgAboutBrowserInfoTab	: "O przeglądarce",
+DlgAboutAboutTab	: "About",	//MISSING
+DlgAboutBrowserInfoTab	: "Browser Info",	//MISSING
 DlgAboutVersion		: "wersja",
 DlgAboutLicense		: "na licencji GNU Lesser General Public License",
 DlgAboutInfo		: "Więcej informacji uzyskasz pod adresem"

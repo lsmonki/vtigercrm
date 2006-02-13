@@ -1,0 +1,26 @@
+<?php
+/*
+ * Copyright 2003 by Gero Kohnert
+ * contributed by Ramiro Vergara (rvergara at users.sourceforge.net)
+ *
+ *  CVS Info:  $Id: holiday_cl.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Año Nuevo (CL)"),
+        array( Date => "01-05",          type => 1,    Desc => "Día del Trabajo (CL)"),
+        array( Date => "21-05",          type => 1,    Desc => "Combate Naval de Iquique (CL)"),
+        array( Date => "18-09",          type => 1,    Desc => "Día de la Independencia (CL)"),
+        array( Date => "19-09",          type => 1,    Desc => "Día de las Glorias del Ejercito (CL)"),
+        array( Date => "12-10",          type => 1,    Desc => "Día de la Raza (CL)"),
+        array( Date => "01-11",          type => 1,    Desc => "Día de todos los Santos (CL)"),
+        array( Date => "08-12",          type => 1,    Desc => "Inmaculada Concepción (CL)"),
+        array( Date => "25-12",          type => 1,    Desc => "Navidad (CL)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Viernes Santo (CL)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Domingo Santo (CL)"),
+        );
+?>

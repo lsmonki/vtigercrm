@@ -138,23 +138,20 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	$contents .= 'Your Customer Portal Login details are given below:';
 //	$contents .= '<br>Customer Portal URL:';
 	$contents .= "<br><br>User Id : ".$_REQUEST['email'];
-	$contents .= '<br>Password : '.$password;
-	$contents .= "<br><br><a href='".$PORTAL_URL."/cp_index.php'>Please Login Here</a>";
+	$contents .= '<br>Password : '.$password.'';
 
 	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
 	$contents .= '<br><br>Support Team';
 
-	$vtlog->logthis("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'",'info');
+	$vtlog->logthis("Customer Portal Informations Updated",'info');	
 
 	if($insert == 'true' || $update == 'true')
 	{
 		SendMailToCustomer('Contacts',$focus->id,$_REQUEST['email'],$current_user->id,$subject,$contents);
 	}
-	$vtlog->logthis("After return from the SendMailToCustomer function. Now control will go to the header.",'info');
 }
 function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
 {
-	global $vtlog;
 	include("modules/Emails/class.phpmailer.php");
 
 	$mail = new PHPMailer();
@@ -170,17 +167,13 @@ function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
 		$result = $adb->query($sql);
 		$from = $adb->query_result($result,0,'email1');
 		$initialfrom = $adb->query_result($result,0,'user_name');
-		$vtlog->logthis("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'",'info');
 	}
 	if($mail_server=='')
         {
 		global $adb;
                 $mailserverresult=$adb->query("select * from systems where server_type='email'");
                 $mail_server=$adb->query_result($mailserverresult,0,'server');
-                $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
                 $_REQUEST['server']=$mail_server;
-		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
         }
 	$mail->Host = $mail_server;
         $mail->SMTPAuth = true;
@@ -190,7 +183,6 @@ function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
 	$mail->FromName = $initialfrom;
 
 	$mail->AddAddress($to);
-	$vtlog->logthis("Mail sending process : To Email id = '".$to."' (set in the mail object)",'info');
 	$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;
 
@@ -200,14 +192,8 @@ function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
 
 	if(!$mail->Send())
 	{
-		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
 		$errormsg = "Mail Could not be sent...";	
 	}
-	else
-	{
-		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
-	}
-	$vtlog->logthis("After executing the mail->Send() function.",'info');
 }
 function makeRandomPassword() 
 {
@@ -224,7 +210,7 @@ function makeRandomPassword()
       return $pass;
 }
 //END -- Code for Create Customer Portal Users password and Send Mail
-$vtlog->logthis("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id,'info');
+
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode");
 //Code to save the custom field info into database
 function save_customfields($entity_id)

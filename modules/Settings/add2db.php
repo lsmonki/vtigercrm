@@ -14,39 +14,38 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 
 
+$vtigerpath = $_SERVER['REQUEST_URI'];
+$vtigerpath = str_replace("/index.php?module=Settings&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/logo/" ;// set this to wherever
 $saveflag="true";
-$nologo_specified="true";
+
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
-	$nologo_specified="false";
 	$binFile = $_FILES['binFile']['name'];
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
-	
+
 	$filetype_array=explode("/",$filetype); 
-
-	$file_type_val=strtolower($filetype_array[1]);
-
 	if($filesize != 0)
 	{
-		if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) ||  ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") ) //Checking whether the file is an image or not
+		if (($filetype_array[1] == "jpeg" ) || ($filetype_array[1] == "png")) //Checking whether the file is an image or not
 		{
-			if(stristr($binFile, '.gif') != FALSE)
-			{
-				$savelogo="false";
-				$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
-			}		
-			else if($result!=false)
+			if($result!=false)
 			{
 				$savelogo="true";
 			}
 		}
+	/*	else if($filetype_array[1] == "gif")
+		{
+			$savelogo="false";
+                        $errormessage = "<font color='red'><B> Logo has to be either jpeg/png file </B></font>";
+		}
+	*/
 		else
 		{
 			$savelogo="false";
-			$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
+			$errormessage = "<font color='red'><B> Logo has to be an Image </B></font>";
 		}
 		
 	}
@@ -63,26 +62,22 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 } 
 else 
 {
-
 	$errorCode =  $_FILES['binFile']['error'];
 	if($errorCode == 4)
 	{
-	    	$savelogo="false";	    	
+	    	$savelogo="true";	    	
 		$errorcode="";
 		$saveflag="true";
-		$nologo_specified="true";
 	}
 	else if($errorCode == 2)
 	{
-	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes</font></B> <br>";
+	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
 	    	$savelogo="false";	    	
-	$nologo_specified="false";
 	}
-	else if($errorCode == 3 )
+	else if($errorCode == 3)
 	{
 		$errormessage = "<b>Problems in file upload. Please try again! </b><br>";
 	  	$savelogo="false";
-	$nologo_specified="false";
 	}
 	  
 }
@@ -105,7 +100,6 @@ if($saveflag=="true")
 	$organization_fax=$_REQUEST['organization_fax'];
 	$organization_website=$_REQUEST['organization_website'];
 	$organization_logo=$_REQUEST['organization_logo'];
-
 	$organization_logoname=$filename;
 	if(!isset($organization_logoname))
 		$organization_logoname="";
@@ -113,7 +107,6 @@ if($saveflag=="true")
 	$sql="select * from organizationdetails where organizationame = '".$org_name."'";
 	$result = $adb->query($sql);
 	$org_name = $adb->query_result($result,0,'organizationame');
-	$org_logo = $adb->query_result($result,0,'logoname'); 
 
 
 	if($org_name=='')
@@ -126,12 +119,7 @@ if($saveflag=="true")
 		{
 			$organization_logoname="";
 		}
-		if($nologo_specified=="true")
-		{
-			$savelogo="true";
-			$organization_logoname=$org_logo;
-		}
-
+	
 		$sql="update organizationdetails set organizationame = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."', logoname = '". $organization_logoname ."' where organizationame = '".$org_name."'";
 	}
 	$adb->query($sql);

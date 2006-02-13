@@ -97,8 +97,6 @@ function DaysArray(n) {
 }
 
 function isDate(dtStr){
-
-//alert("In ISDATEEEEEEEE");
 	var daysInMonth = DaysArray(12)
 	var pos1=dtStr.indexOf(dtCh)
 	var pos2=dtStr.indexOf(dtCh,pos1+1)
@@ -147,7 +145,7 @@ function trim(s) {
 
 	return s;
 }
-/*
+
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
@@ -178,7 +176,7 @@ function verify_data(form) {
 		return false;
 	}
 	return true;
-}*/
+}
 // end hiding contents from old browsers  -->
 </script>
 
@@ -234,20 +232,20 @@ $the_form .= <<<EOQ
 		<script type="text/javascript" src="jscalendar/calendar.js"></script>
 		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="EditView" onSubmit="return formValidate()" method="POST" action="index.php">
+		<form name="EditView" onSubmit="return verify_data(EditView)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Potentials">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
-		<input name='potentialname' id="quick_potentialname" type="text" value=""><br>
+		<input name='potentialname' type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
-		<input name='account_name' type="text" id="account_name"  value="" readonly>
-		<input name="account_id" id="quick_account_id"  type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
+		<input name='account_name' type="text" value="" readonly>
+		<input name="account_id" type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
 		<br>
 
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>($current_user->date_format)</em></font><br>
-		<input name='closingdate'  size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
+		<input name='closingdate' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
 		<select name='sales_stage'>
 EOQ;
@@ -255,24 +253,19 @@ $the_form .= get_select_options_with_id($comboFieldArray['sales_stage_dom'], "")
 $the_form .= <<<EOQ
 		</select><br>
 		$lbl_amount<br>
-		<input name='amount' id='amount' type="text" value=''><br><br>
+		<input name='amount' type="text" value=''><br><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
 		<script type="text/javascript">
 		Calendar.setup ({
 			inputField : "jscal_field", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
 		});
-		
-	var fieldname = new Array('quick_potentialname','quick_account_id','closingdate','sales_stage','amount')
-	var fieldlabel = new Array('Potential Name','Account Name','Expected Close Date','Sales Stage','Amount')
-	var fielddatatype = new Array('V~M','V~M','D~M','V~O','N~O')	
-
 		</script>
 
 EOQ;
 
 $the_form .= get_left_form_footer();
-//$the_form .= get_validate_record_js();
+$the_form .= get_validate_record_js();
 
 return $the_form;
 }

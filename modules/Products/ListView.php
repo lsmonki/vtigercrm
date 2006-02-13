@@ -270,17 +270,17 @@ echo get_form_footer();
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+$cvHTML = '<span class="bodyText disabled">Edit</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Products&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Products&action=CustomView" class="link">Create View</a>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Products&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+$cvHTML = '<a href="index.php?module=Products&action=CustomView&record='.$viewid.'" class="link">Edit</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">Delete</a>
 <span class="sep">|</span>
-<a href="index.php?module=Products&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<a href="index.php?module=Products&action=CustomView" class="link">Create View</a>';
 }
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">

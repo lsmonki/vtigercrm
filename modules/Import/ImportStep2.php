@@ -13,7 +13,7 @@
  *Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/ImportStep2.php,v 1.16 2005/05/03 13:18:55 saraj Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -28,7 +28,6 @@ require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
-require_once('modules/Import/ImportProduct.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -68,11 +67,6 @@ else if ( $_REQUEST['module'] == 'Leads')
 {
 	$focus = new ImportLead();
 }
-else if ( $_REQUEST['module'] == 'Products')
-{
-	$focus = new ImportProduct();
-}
-
 else
 {
  echo "Imports aren't set up for this module type\n";

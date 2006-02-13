@@ -1,0 +1,143 @@
+<?php
+/**
+ * Copyright 2003 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: theme_base.pinc,v 1.16 2005/05/03 13:18:51 saraj Exp $
+ *  $Author: saraj $
+ */
+global $theme;
+global $calpath;
+global $callink;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images";
+
+# Image IDs
+define ('addresses',2);
+define ('teams',5);
+define ('user',6);
+define ('logout',7);
+define ('folder',8);
+define ('paper',9);
+define ('up',10);
+define ('down',11);
+define ('left',12);
+define ('right',13);
+define ('help',14);
+define ('mail',15);
+define ('modify',16);
+define ('delete',17);
+define ('view',18);
+define ('first',19);
+define ('last',20);
+define ('calendar',21);
+
+/**
+ *
+ * @package BASE
+ * @module theme_base
+ */
+class theme_base {
+
+  function theme_base($name = "") {
+    global $tutos;
+
+    if ($name == "") {
+      $this->name = $tutos[themes][0];
+    } else {
+      $this->name = $name;
+    }
+
+    $this->i = array();
+    $this->a = array();
+
+    $this->textbased[left] = "<";
+    $this->textbased[right] = ">";
+    $this->textbased[up] = "+";
+    $this->textbased[down] = "-";
+  }
+  /**
+   * set the default images for the given theme
+   * trying these pathes / extensions
+   * - html / theme / .png
+   * - html / theme / .gif
+   * - html / theme / .jpg
+   * - html / .gif
+   */
+  function findImage($fn) {
+    global $tutos,$image_path;
+    $x = $fn;
+    if ( file_exists(getcwd()."/". $image_path ."/". $fn .".png")  ) {
+      $fn = $image_path ."/". $fn .".png";
+    } else if ( file_exists(getcwd()."/" .$image_path. "/". $fn .".gif")  ) {
+      $fn = $image_path ."/". $fn .".gif";
+    } else if ( file_exists(getcwd()."/". $image_path ."/". $fn .".jpg")  ) {
+      $fn = $image_path ."/". $fn .".jpg";
+    } else if ( file_exists(getcwd()."/". $image_path."/". $fn .".gif")  ) {
+      $fn = $image_path ."/". $fn .".gif";
+    } else {
+      return "";
+    }
+    return $fn;
+  }
+  /**
+   * set the default images for the given theme
+   * preload
+   */
+  function setImages() {
+    $this->i[up]           = $this->findImage('up');
+    $this->i[down]         = $this->findImage('down');
+    $this->i[left]         = $this->findImage('left');
+    $this->i[right]        = $this->findImage('right');
+    $this->i[folder]       = $this->findImage('folder');
+    $this->i[paper]        = $this->findImage('paper');
+    $this->i[help]         = $this->findImage('help');
+    $this->i[logout]       = $this->findImage('logout');
+    $this->i[teams]        = $this->findImage('teams');
+    $this->i[user]         = $this->findImage('user');
+    $this->i[modify]       = $this->findImage('modify');
+    $this->i[delete]       = $this->findImage('delete');
+    $this->i[view]         = $this->findImage('view');
+    $this->i[first]        = $this->findImage('first');
+    $this->i[last]         = $this->findImage('last');
+    $this->i[appointment]  = $this->findImage('appointment');
+    $this->i[reload]       = $this->findImage('reload');
+    $this->i[calendar]     = $this->findImage('calendar');
+
+    $this->a[up]           = "UP";
+    $this->a[down]         = "DOWN";
+   // $this->a[left]       = htmlentities("<");
+   // $this->a[right]      = htmlentities(">");
+  }
+  /**
+   * get a image
+   */
+  function getImage($type,$purpose) {
+    global $tutos,$lang;
+    if ( isset($_SERVER['HTTP_USER_AGENT']) &&  ( ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) ) {
+      if (isset($this->textbased[$type])) {
+        return $this->textbased[$type] ;
+      } else {
+        return "";
+      }
+    }
+
+    if (isset($this->i[$type])) {
+      if (!empty($this->i[$type])) {
+//        return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
+        return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" />";
+
+      } else {
+        return "";
+      }
+    }
+    $x = $this->findImage($type,"");
+    $this->i[$type] = $x;
+    if (! empty($x)) {
+//      return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
+ return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" />";
+    }
+    return "";
+#    return "@ $type @";
+  }
+}
+?>

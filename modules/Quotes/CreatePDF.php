@@ -24,7 +24,7 @@ $iData[] = date('Y-m-d');
 //setting the Customer Data
 $iCustData[] = $account_name;
 
-if($focus->column_fields["validtill"] != '')
+if($focus->column_fields["duedate"] != '')
 {
 	$due_date = $focus->column_fields["validtill"];
 }
@@ -185,6 +185,8 @@ if($num_rows == 1)
 	$logo_name = $adb->query_result($result,0,"logoname");
 }
 //Getting the logo
+
+
 
 //getting the Product Data
 $query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$id;
@@ -392,8 +394,11 @@ function setTotal($price_total="",$conditions="")
 	$this->Cell(0,8,$conditions,0,0,'L',0);
 }
 }
+//$bdata = array("aaaaaaaaa","48/1,Katcherry Street","Rasipuram","Namakkal (D.T)");
+//$sdata = array("bbbbbb","48/9","","mmmm","Don City");
 $iHead = array("Company","Quote No.","Date");
 $iCustHeadDtls = array("Customer Name","Valid Till");
+//$iCustData = array("Nortel Networks","usc-107565","26-05-2005");
 $iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
 
 $pdf = new PDF('P','mm','A4');
@@ -406,6 +411,5 @@ $pdf->setAddress($bdata,$sdata);
 $pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
 $pdf->setProductDetails($iHeadDtls,$iDataDtls);
 $pdf->setTotal($price_total,$conditions);
-$pdf->Output('Quotes.pdf','D');
-exit;
+$pdf->Output();
 ?>

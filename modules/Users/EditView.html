@@ -1,0 +1,183 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Users/EditView.html,v 1.8 2004/07/22 19:43:48 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">User:  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
+    <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr>
+<tr><td colspan="4">{ERROR_STRING}</td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="EditView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="Users">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="mode" value="register">
+			<input type="hidden" name="activity_mode" value="{ACTIVITYMODE}">
+			<input type="hidden" name="action">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">			
+			<input type="hidden" name="tz" value="Europe/Berlin">			
+			<input type="hidden" name="holidays" value="de,en_uk,fr,it,us,">			
+			<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
+			<input type="hidden" name="namedays" value="">			
+			<input type="hidden" name="weekstart" value="1">			
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_FIRST_NAME}</td>
+	<td width="30%"><input name='first_name' {DISABLED} tabindex='1' size='25' maxlength='25' type="text" value="{FIRST_NAME}"></td>
+	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_USER_NAME}</td>
+	<td width="30%"><input name='user_name' type="text" {DISABLED} {USERNAME_READONLY} tabindex='2' size='15' maxlength='25' value='{USER_NAME}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_LAST_NAME}</td>
+	<td width="30%"><input name='last_name' type="text" {DISABLED} tabindex='1' size='25' maxlength='25' value="{LAST_NAME}"></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_YAHOO_ID}</td>
+	<td width="30%"><input name='yahoo_id' type="text" {DISABLED} tabindex='2' size='25' maxlength='75' value='{YAHOO_ID}'></td>
+	</tr><tr>
+	{USER_STATUS_OPTIONS}
+	<td width="20%" class="dataLabel">{MOD.LBL_DATE_FORMAT}</td>
+	<td width="30%">{DATE_FORMAT}</td>
+	</tr><tr>
+	</tr></table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_USER_SETTINGS}</th>
+	</tr>
+
+        <tr><td width="20%" class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_USER_ROLE}</td>
+        <td width="30%">{USER_ROLE} </td>
+
+        <td width="20%" class="dataLabel">{MOD.LBL_GROUP_NAME}</td>
+        <td width="30%">{GROUP_NAME} </td>
+ 
+      </tr>
+        
+     <tr>   
+	<td class="dataLabel">{MOD.LBL_ADMIN}</td>
+	<td><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr></table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_USER_INFORMATION}</th>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_TITLE}</td>
+	<td width="30%"><input name='title' type="text" tabindex='5' size='15' maxlength='25' value='{TITLE}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_OFFICE_PHONE}</td>
+	<td width="30%"><input name='phone_work' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_WORK}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_DEPARTMENT}</td>
+	<td width="30%"><input name='department' type="text" tabindex='5' size='25' maxlength='100' value='{DEPARTMENT}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_MOBILE_PHONE}</td>
+	<td width="30%"><input name='phone_mobile' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_MOBILE}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_REPORTS_TO}</td>
+	<td width="30%"><input readonly name='reports_to_name' type="text" value='{REPORTS_TO_NAME}'><input name='reports_to_id' type="hidden" value='{REPORTS_TO_ID}'>&nbsp;<input title="{APP.LBL_CHANGE_BUTTON_TITLE}" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" type="button" tabindex='5' class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_OTHER_PHONE}</td>
+	<td width="30%"><input name='phone_other' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_OTHER}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">&nbsp;</td>
+	<td width="30%">&nbsp;</td>
+	<td width="20%" class="dataLabel">{MOD.LBL_FAX}</td>
+	<td width="30%"><input name='phone_fax' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_FAX}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel" ><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT> {MOD.LBL_EMAIL}</td>
+	<td width="30%"><input name='email1' type="text" tabindex='5' size='35' maxlength='100' value='{EMAIL1}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_HOME_PHONE}</td>
+	<td width="30%"><input name='phone_home' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_HOME}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_OTHER_EMAIL}</td>
+	<td width="30%"><input name='email2' type="text" tabindex='5' size='35' maxlength='100' value='{EMAIL2}'></td>
+	<td width="20%" class="dataLabel">&nbsp;</td>
+	<td width="30%">&nbsp;</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_SIGNATURE} :</td>
+	<td width="80%" colspan="4"><textarea name='signature' tabindex='7' cols="40" rows="3">{SIGNATURE}</textarea></td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NOTES}</td>
+	<td width="80%" colspan="4"><textarea name='description' tabindex='7' cols="80" rows="4">{DESCRIPTION}</textarea></td>
+	</tr></table>
+</td></tr></table>
+<BR>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_ADDRESS_INFORMATION}</th>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRIMARY_ADDRESS}</td>
+	<td width="30%"><textarea name='address_street' rows="2" tabindex='8' cols="30">{ADDRESS_STREET}</textarea></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_CITY}</td>
+	<td width="30%"><input name='address_city' tabindex='8' size='15' maxlength='100' value='{ADDRESS_CITY}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_STATE}</td>
+	<td width="30%"><input name='address_state' tabindex='8' size='15' maxlength='100' value='{ADDRESS_STATE}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_POSTAL_CODE}</td>
+	<td width="30%"><input name='address_postalcode' tabindex='8' size='10' maxlength='20' value='{ADDRESS_POSTALCODE}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
+	<td width="30%"><input name='address_country' tabindex='8' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
+</tr></table>
+</td></tr></table>
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
+    <td align="left"></td>
+      <td align="left">
+             <table cellpadding="0" cellspacing="5" border="0">
+             <tr>
+                 <td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+               <td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+          </tr></table>
+     </td>
+    <td align="left"></td>
+ </tr></table>
+
+	</form>
+
+{JAVASCRIPT}
+
+<!-- END: main -->

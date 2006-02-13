@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Dashboard/Chart_my_pipeline_by_sales_stage.php,v 1.17 2005/05/03 13:18:54 saraj Exp $
  * Description:  returns HTML for client-side image map.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -128,8 +128,6 @@ echo "<P><font size='1'><em>".$current_module_strings['LBL_PIPELINE_FORM_TITLE_D
 if (isset($_REQUEST['mypbss_edit']) && $_REQUEST['mypbss_edit'] == 'true') {
 	$cal_lang = "en";
 	$cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-	$cal_dateformat = '%Y-%m-%d'; // fix providedd by Jlee for date bug in Dashboard
-	
 
 ?>
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
@@ -149,9 +147,8 @@ if (isset($_REQUEST['mypbss_edit']) && $_REQUEST['mypbss_edit'] == 'true') {
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_END'];?><br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
 <td valign='top' ><input class="text" name="mypbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['mypbss_date_end'])) echo $_SESSION['mypbss_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
 </tr><tr>
-
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
-<td valign='top' ><select name="mypbss_sales_stages[]" multiple size='5'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
+<td valign='top' ><select name="mypbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
 </tr><tr>
 <td align="right"><br /> <input class="button" onclick="return verify_chart_data(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>

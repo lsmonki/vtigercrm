@@ -1,0 +1,304 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: company.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+/**
+ *
+ * @package company
+ */
+class company extends tutos_base {
+  /* ---------------------------------------------------------------------------
+   */
+  function company(&$dbconn) {
+    global $tutos,$current_user;
+
+    $this->init($dbconn);
+    $this->name = "";
+
+    $this->rl1 = false;
+    $this->rl2 = false;
+    $this->tablename = $this->dbconn->prefix  ."companies";
+    $this->invlist = array();
+    $this->member = array();
+    $this->acl[$current_user->id] = $tutos[delok];
+  }
+  /**
+   *
+   */
+  function getFullName () {
+    return ($this->name);
+  }
+  /**
+   *
+   */
+  function read_result ( &$r,$pos ) {
+    if ( ! isset($pos) ) return;
+
+    $this->name        = $r->get($pos, "name");
+    $this->creator     = getObject($this->dbconn,$r->get($pos, "creator"));
+
+    parent::read_result($r,$pos);
+    return;
+  }
+  /**
+   * Read all locations references
+   */
+  function read_locs () {
+    read_locs($this);
+  }
+
+  /**
+   * Read all locations data
+   */
+  function read_locs_data () {
+    read_locs_data($this);
+  }
+  /**
+   *
+   */
+  function read_members () {
+    if ($this->id == -1) return;
+    if (count($this->member) > 0) return;
+
+    $q = "SELECT a.* FROM ". $this->dbconn->prefix ."addresses a, ". $this->dbconn->prefix ."location l, ". $this->dbconn->prefix ."adrloc r WHERE l.c_id =". $this->id ." AND a.id = r.adr_id AND r.loc_id = l.id AND ( l.d_id is null OR l.d_id = -1 ) ORDER BY l_name";
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new tutos_address($this->dbconn);
+      $x->read_result($r,$a);
+      $this->member[$x->id] = &$x;
+      $a++;
+      unset($x);
+    }
+    $r->free();
+  }
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return $this->neighbours;
+
+    parent::getNeighbours();
+
+    # Possible new parents are all related projects
+    $this->read_departments();
+    foreach ($this->list[usedepartment] as $a => $b) {
+      if ($b->use_ok() ) {
+        $this->neighbours[$a] = &$b;
+        unset($b);
+      }
+    }
+
+    return $this->neighbours;
+  }
+  /**
+   *
+   */
+  function read_departments () {
+    department::obj_read($this);
+  }
+  /**
+   * search for a company 
+   * fill a array with possible companies
+   */
+  function search_by_name(&$arr,&$user,$name) {
+    if ( trim($name) == "" ) return;
+
+    $q = "SELECT * from ". $user->dbconn->prefix ."companies WHERE". $user->dbconn->Like("name",$name);
+    $q .= " order by name ";
+    check_dbacl( $q, $user->id);
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new company($user->dbconn);
+      $x->read_result($r,$a);
+      $arr[$x->id] = &$x;
+#     echo $x->getFullName() ."<br>";
+      unset($x);
+      $a++;
+    }
+    $r->free();
+
+    return;
+  }
+  /**
+   * set the name
+   */
+  function setName($value) {
+    return $this->setStrField("name",$value,"Company");
+  }
+  /**
+   * save to DB
+   */
+  function save () {
+    global $table,$current_user,$tutos;
+
+    $msg = "";
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("name",$this->name,"STRING",$table['company']['name'][size]);
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        $this->acl[$current_user->id] = $tutos[delok];
+        acl_default($this,$current_user);
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+
+    $r = $this->dbconn->Exec($query);
+
+    $msg .= parent::save();
+
+    return $msg;
+  }
+  /**
+   * Delete a company from the DB
+   */
+  function delete () {
+    global $current_user;
+
+    $msg = "";
+    $this->read_locs();
+    $msg .= department::obj_delete($current_user,$this);
+
+    $this->dbconn->Exec("DELETE from ". $this->tablename ." WHERE id =" .$this->id);
+    $this->dbconn->Exec("UPDATE ". $this->dbconn->prefix ."location SET c_id = null WHERE c_id =" .$this->id);
+
+    $msg .= product::obj_delete($current_user,$this);
+    $msg .= appointment::obj_delete($current_user,$this);
+
+    @reset($this->loc);
+    while( list ($i,$f) = @each ($this->loc)) {
+      $q1 = "DELETE FROM ". $this->dbconn->prefix ."location WHERE id = ". $i;
+      $this->dbconn->Exec($q1);
+      $q1 = "DELETE FROM ". $this->dbconn->prefix ."adrloc WHERE loc_id =". $i ." AND adr_id = ". $this->id;
+      $this->dbconn->Exec($q1);
+    }
+
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * Return a url to this company
+   */
+  function getURL() {
+    return "company_show.php?id=". $this->id;
+  }
+  /**
+   * Return a url to modify this company
+   */
+  function getModURL() {
+    return "company_new.php?id=". $this->id;
+  }
+  /**
+   * Return a url to delete this company
+   */
+  function getDelURL() {
+    return "company_del.php?id=". $this->id;
+  }
+  /**
+   * Return a link to this company
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ($this->id == -1) return;
+    if ($this->id == "") return;
+
+    if ( empty($text) ) {
+      $text = $this->name;
+    }
+    if ( $this->see_ok() ) {
+      return makelink($this->getURL() , myentities($text), sprintf($lang['CompanyLinkInfo'], $this->name));
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * This is not a user
+   */
+  function isUser () {
+    return 0;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "company";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usecompany;
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body ($only_ids = false) {
+    $this->read_locs_data();
+    $r = parent::exportXML_body();
+    if (!$only_ids) {
+    $r .=  "<name>". utf8_encode(htmlspecialchars($this->name)) ."</name>\n";
+    }  
+    if ( isset($this->location) && (count($this->location) > 0) ) {
+      foreach($this->location as $i => $f) {
+        $r .= $f->exportXML_start();
+        $r .= $f->exportXML_body($only_ids);
+        $r .= $f->exportXML_end();
+      }
+    }
+    return $r;
+  }
+  /**
+   * parse XML import
+   */
+  function parseXML ($fld,$data,$attrs) {
+    parent::parseXML($fld,$data,$attrs);
+#   echo $fld ." = ". $data ."<br>";
+    if ($fld == "name") {
+      $this->setName($data);
+    }
+    return;
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+	$r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#company",$lang["Company"],$lang["Company"]) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=company_show",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "</ul>\n";
+	echo $r;
+  }
+}
+?>

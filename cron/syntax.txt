@@ -1,0 +1,142 @@
+SCHTASKS /parameter [arguments]
+
+Description:
+    Enables an administrator to create, delete, query, change, run and
+    end scheduled tasks on a local or remote system. Replaces AT.exe.
+
+Parameter List:
+    /Create         Creates a new scheduled task.
+
+    /Delete         Deletes the scheduled task(s).
+
+    /Query          Displays all scheduled tasks.
+
+    /Change         Changes the properties of scheduled task.
+
+    /Run            Runs the scheduled task immediately.
+
+    /End            Stops the currently running scheduled task.
+
+    /?              Displays this help/usage.
+
+Examples:
+    SCHTASKS
+    SCHTASKS /?
+    SCHTASKS /Run /?
+    SCHTASKS /End /?
+    SCHTASKS /Create /?
+    SCHTASKS /Delete /?
+    SCHTASKS /Query  /?
+    SCHTASKS /Change /?
+	 
+	 
+SCHTASKS /Create [/S system [/U username [/P password]]]
+    [/RU username [/RP password]] /SC schedule [/MO modifier] [/D day]
+    [/I idletime] /TN taskname /TR taskrun [/ST starttime] [/M months]
+    [/SD startdate] [/ED enddate]
+
+Description:
+    Enables an administrator to create scheduled tasks on a local or
+    remote systems.
+
+Parameter List:
+    /S           system            Specifies the remote system to
+                                   connect to. If omitted the system
+                                   parameter defaults to the local
+                                   system.
+
+    /U           username          Specifies the user context under
+                                   which the command should execute.
+
+    /P           password          Specifies the password for the given
+                                   user context.
+
+    /RU          username          Specifies the user account (user
+                                   context) under which the task runs.
+                                   For the system account, valid values
+                                   are "", "NT AUTHORITY\SYSTEM" or
+                                   "SYSTEM".
+
+    /RP          password          Specifies the password for the user.
+                                   To prompt for the password, the value
+                                   must be either "*" or none.
+                                   Password will not effect for the
+                                   system account.
+
+    /SC          schedule          Specifies the schedule frequency.
+                                   Valid schedule types: MINUTE, HOURLY,
+                                   DAILY, WEEKLY, MONTHLY, ONCE,
+                                   ONSTART, ONLOGON, ONIDLE.
+
+    /MO          modifier          Refines the schedule type to allow
+                                   finer control over schedule
+                                   recurrence. Valid values are listed
+                                   in the "Modifiers" section below.
+
+    /D           days              Specifies the day of the week to run
+                                   the task. Valid values: MON, TUE,
+                                   WED, THU, FRI, SAT, SUN and for
+                                   MONTHLY schedules 1 - 31 (days of the
+                                   month).
+
+    /M           months            Specifies month(s) of the year.
+                                   Defaults to the first day of the
+                                   month. Valid values: JAN, FEB, MAR,
+                                   APR, MAY, JUN, JUL, AUG, SEP, OCT,
+                                   NOV, DEC.
+
+    /I           idletime          Specifies the amount of idle time to
+                                   wait before running a scheduled
+                                   ONIDLE task.
+                                   Valid range: 1 - 999 minutes.
+
+    /TN          taskname          Specifies a name which uniquely
+                                   identifies this scheduled task.
+
+    /TR          taskrun           Specifies the path and file name of
+                                   the program to be run by this
+                                   scheduled task.
+                                   Example: C:\windows\system32\calc.exe
+
+    /ST          starttime         Specifies the time to run the task.
+                                   The time format is HH:MM:SS (24 hour
+                                   time) for example, 14:30:00 for
+                                   2:30 PM.
+
+    /SD          startdate         Specifies the first date on which the
+                                   task runs. The format is
+                                   "mm/dd/yyyy".
+
+    /ED          enddate           Specifies the last date when the task
+                                   should run. The format is
+                                   "mm/dd/yyyy".
+
+    /?                             Displays this help/usage.
+
+Modifiers: Valid values for the /MO switch per schedule type:
+    MINUTE:  1 - 1439 minutes.
+    HOURLY:  1 - 23 hours.
+    DAILY:   1 - 365 days.
+    WEEKLY:  weeks 1 - 52.
+    ONCE:    No modifiers.
+    ONSTART: No modifiers.
+    ONLOGON: No modifiers.
+    ONIDLE:  No modifiers.
+    MONTHLY: 1 - 12, or
+             FIRST, SECOND, THIRD, FOURTH, LAST, LASTDAY.
+
+Examples:
+    SCHTASKS /Create /S system /U user /P password /RU runasuser
+             /RP runaspassword /SC HOURLY /TN rtest1 /TR notepad
+    SCHTASKS /Create /S system /U domain\user /P password /SC MINUTE
+             /MO 5 /TN rtest2 /TR calc.exe /ST 12:00:00
+             /SD 10/20/2001 /ED 10/20/2001 /RU runasuser /RP
+    SCHTASKS /Create /SC MONTHLY /MO first /D SUN /TN game
+             /TR c:\windows\system32\freecell
+    SCHTASKS /Create /S system /U user /P password /RU runasuser
+             /RP runaspassword /SC WEEKLY /TN test1 /TR notepad.exe
+    SCHTASKS /Create /S system /U domain\user /P password /SC MINUTE
+             /MO 5 /TN test2 /TR c:\windows\system32\notepad.exe
+             /ST 18:30:00 /RU runasuser /RP *
+    SCHTASKS /Create /SC MONTHLY /MO first /D SUN /TN cell
+             /TR c:\windows\system32\freecell /RU runasuser

@@ -369,7 +369,7 @@ class Contact extends CRMEntity {
         function get_attachments($id)
         {
 		//$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
 		$query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
                 renderRelatedAttachments($query,$id);
@@ -490,28 +490,26 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
 	   $query =  $this->constructCustomQueryAddendum() .",
-                                contactdetails.*, contactaddress.*,
+                                contactdetails.*,
                                 account.accountname account_name,
                                 users.user_name assigned_user_name
                                 FROM contactdetails
 				inner join crmentity on crmentity.crmid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
-				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
 			        left join contactscf on contactscf.contactid=contactdetails.contactid
 				where crmentity.deleted=0 and users.status='Active' ";
 		}
 		else
 		{
                   	 $query = "SELECT
-                                contactdetails.*, contactaddress.*,
+                                contactdetails.*,
                                 account.accountname account_name,
                                 users.user_name assigned_user_name
                                 FROM contactdetails
                                 inner join crmentity on crmentity.crmid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
-				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
 			        left join contactscf on contactscf.contactid=contactdetails.contactid
 				where crmentity.deleted=0 and users.status='Active' ";
 		}

@@ -321,24 +321,6 @@ function getLongDateString( $stamp ) {
     return( date_intl( $date_format, $stamp ) );
 
 }
-//function added by Richie
-function getVTigerLongDateString( $stamp ) {
-
-    global $hour_format;
-
-    if ($stamp == -1) {
-        return '';
-    }
-
-    if ( $hour_format == SMPREF_TIME_12HR ) {
-        $date_format = _("Y-m-d g:i a");
-    } else {
-        $date_format = _("Y-m-d G:i");
-    }
-
-    return( date_intl( $date_format, $stamp ) );
-
-}
 
 /**
  * Returns a short representation of the date,

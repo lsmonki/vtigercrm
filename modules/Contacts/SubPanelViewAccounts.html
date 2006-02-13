@@ -1,0 +1,63 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_LIST_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/SubPanelView.html,v 1.5 2004/07/01 21:10:01 sugarclint Exp {APP.LBL_LIST_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: contacts -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="2%" class="moduleListTitle"><IMG alt="Yahoo Messenger" SRC="modules/Yahoo/images/ym.gif"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="23%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_CONTACT_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="20%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_ACCOUNT_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="30%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_EMAIL_ADDRESS}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_PHONE}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="10%" class="moduleListTitle"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	  </tr>
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<!-- BEGIN: yahoo_id -->
+		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={CONTACT.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={CONTACT.YAHOO_ID}'&m=g&t=2'></a></td>
+<!-- END: yahoo_id -->
+<!-- BEGIN: no_yahoo_id -->
+		<td>&nbsp;</td>
+<!-- END: no_yahoo_id -->
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={CONTACT.ID}">{CONTACT.FIRST_NAME} {CONTACT.LAST_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{CONTACT.ACCOUNT_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><A HREF="mailto:{CONTACT.EMAIL1}">{CONTACT.EMAIL1}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{CONTACT.PHONE_WORK}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td nowrap align="center" valign=TOP style="padding:0px 3px 0px 3px;">[<a class="listFormLinks" href="{URL_PREFIX}index.php?action=EditView&module=Contacts&record={CONTACT.ID}{RETURN_URL}">{APP.LNK_EDIT}</a>] &nbsp;&nbsp;[<a class="listFormLinks" onclick="return confirm('{MOD.NTC_DELETE_CONFIRMATION}')" href="{URL_PREFIX}index.php?action=Delete&module=Contacts&record={CONTACT.ID}{RETURN_URL}">{APP.LNK_DELETE}</a>]</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
+</table>
+<!-- END: contacts -->

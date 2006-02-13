@@ -1,0 +1,60 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+* 
+ ********************************************************************************/
+-->
+
+
+<!-- BEGIN: main -->
+
+<form method="post" action="index.php" name="etemplatedetailview">  
+<input type="hidden" name="action" >
+<input type="hidden" name="module" value="Users">
+<input type="hidden" name="templatename" value="{TEMPLATENAME}">
+<input type="hidden" name="templateid" value="{TEMPLATEID}">
+<input type="hidden" name="foldername" value="{FOLDERNAME}">
+<TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
+<TR><TD>
+    <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
+
+    <TR>
+    <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP> {MOD.LBL_EMAIL_TEMPLATE_INFORMATION} </TD>
+    </TR>
+    </TABLE>
+</TD></TR>
+</table>
+<br>	
+<TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
+                <TD NOWRAP>&nbsp;<input type="submit" name="cancel" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="this.form.action.value='listemailtemplates'">&nbsp;<input type="submit" name="edit" value="{APP.LBL_EDIT_BUTTON_LABEL}" class="button" onclick="this.form.action.value='editemailtemplate'">&nbsp;<input type="submit" name="delete" value="{APP.LBL_DELETE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='deleteemailtemplate'" ></TD>
+              </TR>
+</TABLE>
+<table width="75%" border=0 cellspacing=1 cellpadding=5 class="formOuterBorder">
+<td class="formSecHeader" colspan=2 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
+<tr><td nowrap class="dataLabel" width="25%">{MOD.LBL_FOLDER}
+</td><td width="75%">{FOLDERNAME}</td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_TEMPLATE_NAME}</td><td>{TEMPLATENAME}</td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_DESCRIPTION}{MOD.LBL_COLON}
+</td><td>{DESCRIPTION} </td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_SUBJECT}{MOD.LBL_COLON}</td><td>{SUBJECT}</td></tr>
+<tr ><td nowrap valign=top class="dataLabel">{MOD.LBL_BODY}{MOD.LBL_COLON}</td><td valign=top>{BODY}</td></tr>
+</table>
+<TABLE WIDTH="50%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
+                <TD NOWRAP>&nbsp;<input type="submit" name="cancel" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="this.form.action.value='listemailtemplates'">&nbsp;<input type="submit" name="edit" value="{APP.LBL_EDIT_BUTTON_LABEL}" class="button" onclick="this.form.action.value='editemailtemplate'">&nbsp;<input type="submit" name="delete" value="{APP.LBL_DELETE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='deleteemailtemplate'" ></TD>
+              </TR>
+        </TABLE>
+</form>
+
+
+<!-- END: main -->
+
+
+
+
+
+
+

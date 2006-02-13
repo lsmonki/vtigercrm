@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckspecialcombo.js
  * 	FCKSpecialCombo Class: represents a special combo.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-23 18:56:39
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -37,26 +40,6 @@ var FCKSpecialCombo = function( caption )
 	this._ItemsHolderEl = this._Panel.PanelDiv.getElementsByTagName('TD')[0] ;
 }
 
-function FCKSpecialCombo_ItemOnMouseOver()
-{
-	this.className += ' SC_ItemOver' ;
-}
-
-function FCKSpecialCombo_ItemOnMouseOut()
-{
-	this.className = this.originalClass ;
-}
-
-function FCKSpecialCombo_ItemOnClick()
-{
-	this.FCKSpecialCombo._Panel.Hide() ;
-
-	this.FCKSpecialCombo.SetLabel( this.FCKItemLabel ) ;
-
-	if ( typeof( this.FCKSpecialCombo.OnSelect ) == 'function' )
-		this.FCKSpecialCombo.OnSelect( this.FCKItemID, this ) ;
-}
-
 FCKSpecialCombo.prototype.AddItem = function( id, html, label )
 {
 	// <div class="SC_Item" onmouseover="this.className='SC_Item SC_ItemOver';" onmouseout="this.className='SC_Item';"><b>Bold 1</b></div>
@@ -68,9 +51,25 @@ FCKSpecialCombo.prototype.AddItem = function( id, html, label )
 	oDiv.FCKSpecialCombo = this ;
 	oDiv.Selected = false ;
 
-	oDiv.onmouseover	= FCKSpecialCombo_ItemOnMouseOver ;
-	oDiv.onmouseout		= FCKSpecialCombo_ItemOnMouseOut ;
-	oDiv.onclick		= FCKSpecialCombo_ItemOnClick ;
+	oDiv.onmouseover = function()
+	{
+		this.className += ' SC_ItemOver' ;
+	}
+
+	oDiv.onmouseout = function()
+	{
+		this.className = this.originalClass ;
+	}
+	
+	oDiv.onclick = function()
+	{
+		this.FCKSpecialCombo._Panel.Hide() ;
+
+		this.FCKSpecialCombo.SetLabel( this.FCKItemLabel ) ;
+
+		if ( typeof( this.FCKSpecialCombo.OnSelect ) == 'function' )
+			this.FCKSpecialCombo.OnSelect( this.FCKItemID, this ) ;
+	}
 	
 	this.Items[ id.toString().toLowerCase() ] = oDiv ;
 	
@@ -100,6 +99,8 @@ FCKSpecialCombo.prototype.DeselectAll = function()
 
 FCKSpecialCombo.prototype.SetLabelById = function( id )
 {
+	FCKDebug.Output( this.Caption + ': ' + id, '#0000FF' ) ;
+	
 	id = id ? id.toString().toLowerCase() : '' ;
 	
 	var oDiv = this.Items[ id ] ;
@@ -150,51 +151,47 @@ FCKSpecialCombo.prototype.Create = function( targetElement )
 
 	oField.SpecialCombo = this ;
 	
-	oField.onmouseover	= FCKSpecialCombo_OnMouseOver ;
-	oField.onmouseout	= FCKSpecialCombo_OnMouseOut ;
-	oField.onclick		= FCKSpecialCombo_OnClick ;
-}
-
-function FCKSpecialCombo_OnMouseOver()
-{
-	if ( this.SpecialCombo.Enabled )
-		this.className = 'SC_Field SC_FieldOver' ;
-}
-	
-function FCKSpecialCombo_OnMouseOut()
-{
-	this.className='SC_Field' ;
-}
-	
-function FCKSpecialCombo_OnClick( e )
-{
-	// For Mozilla we must stop the event propagation to avoid it hiding 
-	// the panel because of a click outside of it.
-	if ( e )
+	oField.onmouseover = function()
 	{
-		e.stopPropagation() ;
-		FCKPanelEventHandlers.OnDocumentClick( e ) ;
+		if ( this.SpecialCombo.Enabled )
+			this.className='SC_Field SC_FieldOver' ;
 	}
-
-	if ( this.SpecialCombo.Enabled )
+	
+	oField.onmouseout = function()
 	{
-		if ( typeof( this.SpecialCombo.OnBeforeClick ) == 'function' )
-			this.SpecialCombo.OnBeforeClick( this.SpecialCombo ) ;
+		this.className='SC_Field' ;
+	}
+	
+	oField.onclick = function( e )
+	{
+		// For Mozilla we must stop the event propagation to avoid it hiding 
+		// the panel because of a click outside of it.
+		if ( e )
+		{
+			e.stopPropagation() ;
+			FCKPanelEventHandlers.OnDocumentClick( e ) ;
+		}
 
-		if ( this.SpecialCombo._ItemsHolderEl.offsetHeight > this.SpecialCombo.PanelMaxHeight )
-			this.SpecialCombo._Panel.PanelDiv.style.height = this.SpecialCombo.PanelMaxHeight + 'px' ;
-		else
-			this.SpecialCombo._Panel.PanelDiv.style.height = this.SpecialCombo._ItemsHolderEl.offsetHeight + 'px' ;
+		if ( this.SpecialCombo.Enabled )
+		{
+			if ( typeof( this.SpecialCombo.OnBeforeClick ) == 'function' )
+				this.SpecialCombo.OnBeforeClick( this.SpecialCombo ) ;
+
+			if ( this.SpecialCombo._ItemsHolderEl.offsetHeight > this.SpecialCombo.PanelMaxHeight )
+				this.SpecialCombo._Panel.PanelDiv.style.height = this.SpecialCombo.PanelMaxHeight + 'px' ;
+			else
+				this.SpecialCombo._Panel.PanelDiv.style.height = this.SpecialCombo._ItemsHolderEl.offsetHeight + 'px' ;
+				
+			this.SpecialCombo._Panel.PanelDiv.style.width = this.SpecialCombo.PanelWidth + 'px' ;
 			
-		this.SpecialCombo._Panel.PanelDiv.style.width = this.SpecialCombo.PanelWidth + 'px' ;
-		
-		if ( FCKBrowserInfo.IsGecko )
-			this.SpecialCombo._Panel.PanelDiv.style.overflow = '-moz-scrollbars-vertical' ;
+			if ( FCKBrowserInfo.IsGecko )
+				this.SpecialCombo._Panel.PanelDiv.style.overflow = '-moz-scrollbars-vertical' ;
 
-		this.SpecialCombo._Panel.Show( 0, this.offsetHeight, this, null, this.SpecialCombo.PanelMaxHeight, true ) ;
+			this.SpecialCombo._Panel.Show( 0, this.offsetHeight, this, null, this.SpecialCombo.PanelMaxHeight, true ) ;
+		}
+
+		return false ;
 	}
-
-	return false ;
 }
 
 /* 

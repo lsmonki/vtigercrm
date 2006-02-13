@@ -1,0 +1,37 @@
+<?php
+/*
+ * Copyright 2002 by Gero Kohnert 
+ *
+ *  CVS Info:  $Id: holiday_hk.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * contrib by SY FUNG <yansfung at hkstar.com>
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+  /* these dates were obtained from http://www.info.gov.hk/info/ph2003.html
+   */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "New Years Day (HK)"),
+        array( Date => "31-01",          type => 1,    Desc => "The second day of Lunar New Year's Day (HK)"),
+        array( Date => "01-02",          type => 1,    Desc => "Lunar New Year (HK)"),
+        array( Date => "03-02",          type => 1,    Desc => "The third day of the Lunar New Year(HK)"),
+        array( Date => "05-04",          type => 1,    Desc => "Ching Ming Festival  (HK)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Good Friday (HK)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Easter Sunday (HK)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Easter Monday (HK)"),
+        array( Date => "01-05",          type => 1,    Desc => "Labour Day (HK)"),
+        array( Date => "08-05",          type => 1,    Desc => "The Buddha's Birthday (HK)"),
+        array( Date => "04-06",          type => 1,    Desc => "Tuen Ng Festival (HK)"),
+        array( Date => "01-07",          type => 1,    Desc => "HK SAR Establishment Day (HK)"),
+        array( Date => "12-09",          type => 1,    Desc => "The day following Chinese Mid-Autumn Festival (HK)"),
+        array( Date => "01-10",          type => 1,    Desc => "National Day (HK)"),
+        array( Date => "14-10",          type => 1,    Desc => "Chung Yeung Festival (HK)"),
+        array( Date => "22-12",          type => 0,    Desc => "Winter Festival (HK)"),
+        array( Date => "25-12",          type => 1,    Desc => "Christmas Day (HK)"),
+        array( Date => "26-12",          type => 1,    Desc => "Boxing Day (HK)")
+        );
+?>

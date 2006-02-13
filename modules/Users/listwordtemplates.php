@@ -18,7 +18,7 @@ require_once('include/database/PearDatabase.php');
 <title>Word Templates List</title>
 <!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
 </head>
-<body><form action="index.php" method="post">
+<body><form action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="upload">
 <?php echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_WORD_TEMPLATES'],false);?>	

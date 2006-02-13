@@ -15,8 +15,7 @@
 
 global $adb;
 
-$idholderaccount=0;
-$idholdercontact=0;
+$idholder=0;
 
 //account info
 
@@ -59,15 +58,14 @@ $contactnotesname = $_POST['ContactNotesname'];
 $contactnotesdescription = $_POST['ContactNotesdescription'];
 
 
-$date_var = date('YmdHis');
 
 if(($acctname != '') && ($lastname != ''))
 {
   //echo 'both acct and contact are not empty';
 
   $account_id = $adb->getUniqueID("crmentity");
-  $idholderaccount = $account_id;
-  $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$account_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Accounts','created from business card','".$date_var."','".$date_var."','".$date_var."',0,0".")";
+  $idholder = $account_id;
+  $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$account_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Accounts','created from business card','','','',0,0".")";
   $adb->query($sql);
  
   $sql_insertacct = "insert into account(accountid,accountname,phone,website) values(".$account_id.",'".$acctname."','".$acctphone."','".$acctwebsite ."')";
@@ -84,7 +82,7 @@ if(($acctname != '') && ($lastname != ''))
   {
    
     $accountnote_id = $adb->getUniqueID("crmentity");
-    $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$accountnote_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'notes','created from business card','".$date_var."','".$date_var."','".$date_var."',0,0".")";
+    $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$accountnote_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'notes','created from business card','','','',0,0".")";
     $adb->query($sql);
  
     $sql_insertnote = "insert into notes(notesid,title,notecontent) values(".$accountnote_id.",'".$acctnotesname."','".$acctnotesdescription ."')";
@@ -101,8 +99,7 @@ if(($acctname != '') && ($lastname != ''))
   //insert into contactdetails now
 
   $contact_id = $adb->getUniqueID("crmentity");
-  $idholdercontact = $contact_id;
-  $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contact_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Contacts','created from business card','".$date_var."','".$date_var."','".$date_var."',0,0".")";
+  $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contact_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Contacts','created from business card','','','',0,0".")";
   $adb->query($sql);
  
  
@@ -121,7 +118,7 @@ if(($acctname != '') && ($lastname != ''))
   {
    
     $contactnote_id = $adb->getUniqueID("crmentity");
-    $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contactnote_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'notes','created from business card','".$date_var."','".$date_var."','".$date_var."',0,0".")";
+    $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contactnote_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'notes','created from business card','','','',0,0".")";
     $adb->query($sql);
  
     $sql_insertnote = "insert into notes(notesid,contact_id,title,notecontent) values(".$contactnote_id.",".$contact_id.",'".$contactnotesname."','".$contactnotesdescription ."')";
@@ -221,6 +218,7 @@ elseif($lastname != '' && $acctname == '')
     $startdate = $_POST['Appointmentsdate_start'];
     $starttime = $_POST['Appointmentstime_start'];
     
+    
     //insert into crmentity
     //insert into activity
     //insert into event
@@ -230,7 +228,7 @@ elseif($lastname != '' && $acctname == '')
     $id = $adb->getUniqueID("crmentity");
     $type = $_POST['appointment'];
     
-    $sql= "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Activities','created from business card','".$date_var."','".$date_var."','".$date_var."',0,0".")";
+    $sql= "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Activities','created from business card','','','',0,0".")";
     
     $adb->query($sql);
 
@@ -252,22 +250,16 @@ elseif($lastname != '' && $acctname == '')
       
     }*/
     
-    //Save the activity relationship with the account
-    if($idholderaccount != 0)
+
+    if($idholder != '')
     {
-      $sql_seactivityrel = "insert into seactivityrel values(".$idholderaccount.",".$id.")";
+      $sql_seactivityrel = "insert into seactivityrel values(".$idholder.",".$id.")";
       $adb->query($sql_seactivityrel);
-    }
-    //Save the activity relationship with the contact
-    if($idholdercontact != 0)
-    {
-	$sql_seactivityrel = "insert into cntactivityrel values(".$idholdercontact.",".$id.")";
-	$adb->query($sql_seactivityrel);
     }
     
     
   }
 
-  header("Location: index.php?action=DetailView&module=Contacts&record=".$idholdercontact);
+  header("Location: index.php?action=index&module=Contacts");
  
 ?>

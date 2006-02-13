@@ -1,0 +1,389 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: department.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+/**
+ *
+ * @package department
+ */
+class department extends tutos_base {
+  /* ---------------------------------------------------------------------------
+   */
+  function department(&$dbconn) {
+    global $tutos,$current_user;
+
+    $this->init($dbconn);
+
+    $this->c_id = -1;
+    $this->company = new company($dbconn);
+    $this->name = "";
+    $this->rl1 = false;
+    $this->rl2 = false;
+    $this->tablename = $this->dbconn->prefix ."departments";
+    $this->invlist = array();
+    $this->member = array();
+    $this->acl[$current_user->id] = $tutos[delok];
+  }
+  /**
+   *
+   */
+  function read_result ( &$r,$pos ) {
+    if ( ! isset($pos) ) return;
+
+    $this->c_id        = $r->get($pos, "c_id");
+    $this->name        = $r->get($pos, "name");
+    if (empty($this->name) ) {
+      $this->name        = "?";
+    }
+    if ( !empty($this->c_id) ) {
+      $this->company = $this->company->read($this->c_id,$this->company);
+    }
+    $this->creator     = getObject($this->dbconn,$r->get($pos, "creator"));
+    parent::read_result($r,$pos);
+    return;
+  }
+  /**
+   * Read all locations references
+   */
+  function read_locs () {
+    read_locs($this);
+  }
+
+  /**
+   * Read all locations data
+   */
+  function read_locs_data () {
+    read_locs_data($this);
+  }
+  /**
+   *
+   */
+  function read_members () {
+    if ($this->id == -1) return;
+    if (count($this->member) > 0) return;
+
+    $q = "SELECT a.* FROM ". $this->dbconn->prefix ."addresses a, ". $this->dbconn->prefix ."location l, ". $this->dbconn->prefix ."adrloc r WHERE l.d_id = ". $this->id ." AND a.id = r.adr_id AND r.loc_id = l.id ORDER BY l_name";
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new tutos_address($this->dbconn);
+      $x->read_result($r,$a);
+      $this->member[$x->id] = &$x;
+      $a++;
+      unset($x);
+    }
+
+    $r->free();
+  }
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return $this->neighbours;
+
+    parent::getNeighbours();
+
+    # Possible new parents are all related projects
+    if ($this->company->use_ok() ) {
+      $this->neighbours[$this->company->id] = &$this->company;
+    }
+
+    return $this->neighbours;
+  }
+  /**
+   * search for a department 
+   * fill a array with possible departments
+   */
+  function search_by_name(&$arr,&$user,$name) {
+    if ( trim($name) == "" ) return;
+
+    $pos = strpos($name," / ");
+    if ( $pos == false ) {
+      $q = "SELECT * from ". $user->dbconn->prefix ."departments WHERE". $user->dbconn->Like("name",$name);
+      $q .= " order by name ";
+    } else {
+      $dname = substr($name,0,$pos);
+      $cname = substr($name,$pos + 3);
+      $q = "SELECT d.* from ". $user->dbconn->prefix ."departments d , ". $user->dbconn->prefix ."companies c WHERE (c.id = d.c_id) AND (". $user->dbconn->Like("d.name",$dname) .") AND (". $user->dbconn->Like("c.name",$cname) .")";
+      $q .= " order by c.name,d.name ";
+    }
+    check_dbacl( $q, $user->id);
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new department($user->dbconn);
+      $x->read_result($r,$a);
+      $arr[$x->id] = &$x;
+#     echo $x->getFullName() ."<br>";
+      unset($x);
+      $a++;
+    }
+    $r->free();
+
+    return;
+  }
+  /**
+   * set the name
+   */
+  function setName($value) {
+    $this->setStrField("name",$value,"Department");
+  }
+  /**
+   * set the company name
+   */
+  function setCompany($name) {
+    if ( $this->company->id != $name ) {
+      $this->modified[] = array ( "field" => "Company" , "old" => $this->company->id , "new" => $name  );
+      $this->company->id = $name;
+      $this->c_id = $name;
+    }
+    return;
+  }
+  /**
+   *
+   */
+  function save () {
+    global $table,$current_user,$tutos;
+
+    $msg = "";
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("c_id",$this->c_id,"");
+    $q->addFV("name",$this->name,"STRING",$table['department']['name'][size]);
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        $this->acl[$current_user->id] = $tutos[delok];
+        acl_default($this,$current_user);
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+
+    $this->dbconn->Exec($query);
+
+    $msg .= parent::save();
+    return $msg;
+  }
+  /**
+   * Delete a department from the DB
+   */
+  function delete () {
+    global $current_user;
+    $msg = "";
+    $this->read_locs();
+
+    $this->dbconn->Lock("location");
+
+    $r = $this->dbconn->Exec("DELETE from ". $this->tablename ." WHERE id =" .$this->id);
+    $r = $this->dbconn->Exec("UPDATE ". $this->dbconn->prefix ."location SET d_id = null WHERE d_id =" .$this->id);
+
+    $msg .= product::obj_delete($current_user,$this);
+    $msg .= appointment::obj_delete($current_user,$this);
+
+    @reset($this->loc);
+    while( list ($i,$f) = @each ($this->loc)) {
+      $q1 = "DELETE FROM ". $this->dbconn->prefix ."location WHERE id = ". $i;
+      $r = $this->dbconn->Exec($q1);
+      $q1 = "DELETE FROM ". $this->dbconn->prefix ."adrloc WHERE loc_id =". $i ." AND adr_id = ". $this->id;
+      $r = $this->dbconn->Exec($q1);
+    }
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * Return a url to this department
+   */
+  function getURL() {
+    return "department_show.php?id=". $this->id;
+  }
+  /**
+   * Return a url to modify this department
+   */
+  function getModURL() {
+    return "department_new.php?id=". $this->id;
+  }
+  /**
+   * Return a url to delete this department
+   */
+  function getDelURL() {
+    return "department_del.php?id=". $this->id;
+  }
+  /**
+   * Return a link to this department
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ($this->id == -1) return;
+
+    if ( empty($text) ) {
+      $text = $this->getFullName();
+    }
+    if ( $this->see_ok() ) {
+      if (is_object($this->company)) {
+        return makelink($this->getURL() , myentities($text), sprintf($lang['DepLinkInfo'],$this->name,$this->company->getFullName()) );
+	  } 
+      return makelink($this->getURL() , myentities($text), sprintf($lang['DepLinkInfo'],$this->name,"") );
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * get the Full Name
+   */
+  function getFullName () {
+    if (is_object($this->company)) {
+      return $this->company->getFullname() ."/". $this->name ;
+	}
+    return $this->name ;
+  }
+  /**
+   * This is not a user
+   */
+  function isUser () {
+    return 0;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "department";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usedepartment;
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * create a list of departments for the given object and given user
+   */
+  function infolist (&$user,&$obj,$cols,$format = "html") {
+    global $lang;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+
+    department::obj_read($obj);
+    if ( count($obj->list[usedepartment]) > 0 ) {
+      echo "<tr>\n";
+      echo $user->layout->showfield($lang['Departments']);
+      echo " <td valign=\"top\" colspan=\"".($cols-1)."\">\n";
+      $pre = "";
+      foreach($obj->list[usedepartment] as $i => $f) {
+        echo $pre . $obj->list[usedepartment][$i]->getLink($obj->list[usedepartment][$i]->name) ."\n";
+        $pre = "<br>\n";
+      }
+      echo " </td>\n";
+      echo "</tr>\n";
+    }
+  }
+  /**
+   * create a link where a departmenty could be added
+   */
+  function getaddlink (&$user,&$obj,$text = "") {
+    global $lang;
+
+    if ( $obj == -1 ) return ""; 
+    if (! is_object($obj) ) return "";
+    if (! $obj->see_ok() ) return "";
+   
+    if ( $obj->gettype() == "department" ) {
+      $x = array( url => "department_new.php?cid=". $obj->company->id,
+                  confirm => false,
+                  text => ($text == "" ? $lang['DepartmentCreate']:$text),
+                  info => sprintf($lang['DepCreateInfo'], (is_object($obj->company) ? $obj->company->getFullName():"")),
+                  category => array("department","new","obj")
+                );
+    } else {
+      $x = array( url => "department_new.php?cid=". $obj->id,
+                  confirm => false,
+                  text => ($text == "" ? $lang['DepartmentCreate']:$text),
+                  info => sprintf($lang['DepCreateInfo'], $obj->getFullName()),
+                  category => array("department","new","module")
+                );
+    }
+    return $x;
+  }
+  /**
+   * Read all departments for given company
+   */
+  function obj_read(&$obj) {
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+    if ( isset($obj->list[usedepartment]) ) return;
+
+    $obj->list[usedepartment] = array();
+
+    $q = "SELECT * FROM ". $this->dbconn->prefix ."departments WHERE c_id = ". $obj->id ." ORDER BY name";
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new department($obj->dbconn);
+      $x->read_result($r,$a);
+      $obj->list[usedepartment][$x->id] = &$x;
+      $a++;
+      unset($x);
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * delete departments of an object
+   */
+  Function obj_delete(&$user,&$obj) {
+    $msg = "";
+    department::obj_read($obj);
+      
+    if ( count($obj->list[usedepartment]) > 0 ) {
+      @reset ($obj->list[usedepartment]);
+      while ( list ($i,$f) = @each ($obj->list[usedepartment]) ) {
+        $msg .= $obj->list[usedepartment][$i]->delete();
+      }
+    }
+    return $msg;
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+	$r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#department",$lang["Department"],$lang["Department"]) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=department_show",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "</ul>\n";
+	echo $r;
+  }
+}
+?>

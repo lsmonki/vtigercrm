@@ -29,7 +29,6 @@ require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
-require_once('modules/Products/Product.php');
 
 global $allow_exports;
 session_start();
@@ -123,11 +122,6 @@ $contact_fields = array(
 
 */
 
-//Function added to convert line breaks to space in description during export 
-function br2nl_vt($str) {
-   $str = preg_replace("/(\r\n)/", " ", $str);
-   return $str;
-}
 
 function export_all($type)
 {
@@ -173,10 +167,6 @@ function export_all($type)
 	{
 		$focus = new Email;
 	}
-	else if ($type == "Products")
-        {
-                $focus = new Product;
-        }
 
 	$log = LoggerManager::getLogger('export_'.$type);
 	$db = new PearDatabase();
@@ -222,18 +212,15 @@ function export_all($type)
 	{
 		$new_arr = array();
 
-		//foreach (array_values($val) as $value)
-		foreach ($val as $key => $value)
+		foreach (array_values($val) as $value)
 		{
-			if($key=="description")
-			{
-				$value=br2nl_vt($value);
-			}
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
+
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;
 		$line .= "\"\r\n";
+
 		$content .= $line;
 	}
 	return $content;

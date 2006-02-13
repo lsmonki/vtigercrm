@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/language/en_us.lang.php,v 1.17 2005/07/11 10:17:13 mickie Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -117,7 +117,6 @@ $mod_strings = Array(
 'LBL_ACCOUNTS_NOTE_1'=>'Account Name must be mapped.',
 'LBL_ACCOUNTS_NOTE_2'=>'Fields ending in Address Street 2 and Address Street 3 are concatenated together with the main Address Street Field when inserted into the database.',
 'LBL_POTENTIALS_NOTE_1'=>'Potential Name, Account Name, Date Closed, and Sales Stage are required fields.',
-'LBL_OPPORTUNITIES_NOTE_1'=>'Opportunity Name, Account Name, Date Closed, and Sales Stage are required fields.',
 'LBL_LEADS_NOTE_1'=>'Last Name must be mapped.',
 'LBL_LEADS_NOTE_2'=>'Company Name must be mapped.',
 'LBL_IMPORT_NOW'=>'Import Now',
@@ -139,9 +138,7 @@ $mod_strings = Array(
 'LBL_FINISHED'=>'Finished',
 'LBL_UNDO_LAST_IMPORT'=>'Undo Last Import',
 
-//Added for patch2 - Products Import Notes
-'LBL_PRODUCTS_NOTE_1'=>'Product Name must be mapped',
-'LBL_PRODUCTS_NOTE_2'=>'Before import please check whether a single column has been mapped twice'
+
 
 );
 
@@ -231,7 +228,7 @@ $mod_list_strings = Array(
 	,"otherzip"=>"Other Address Postalcode"
 	,"othercountry"=>"Other Address Country"
 	,"description"=>"Description"
-	,"assigned_user_id"=>"Assigned To"
+
 	),
 
 'accounts_import_fields' => Array(
@@ -268,8 +265,7 @@ $mod_list_strings = Array(
 	"ship_state"=>"Shipping Address State",
 	"ship_code"=>"Shipping Address Postalcode",
 	"ship_country"=>"Shipping Address Country",
-	"description"=>"Description",
-	"assigned_user_id"=>"Assigned To"
+	"description"=>"Description"
 	),
 
 'potentials_import_fields' => Array(
@@ -284,9 +280,7 @@ $mod_list_strings = Array(
                 , "sales_stage"=>"Sales Stage"
                 , "probability"=>"Probability"
                 , "description"=>"Description"
-		,"assigned_user_id"=>"Assigned To"
-	),
-
+                ),
 
 'leads_import_fields' => Array(
 		"salutationtype"=>"Salutation",
@@ -314,41 +308,7 @@ $mod_list_strings = Array(
 		"country"=>"Country",
 		"state"=>"State",
 		"description"=>"Description"
-		,"assigned_user_id"=>"Assigned To"
-    ),
- 
- 'products_import_fields' => Array(
- 	'productname'=>'Product Name',
- 	'productcode'=>'Product Code',
- 	'productcategory'=>'Product Category',
- 	'manufacturer'=>'Manufacturer',
- 	'product_description'=>'Product Description',
- 	'qty_per_unit'=>'Quantity Per/Unit',
- 	'unit_price'=>'Unit Price',
- 	'weight'=>'Weight',
- 	'pack_size'=>'Pack Size',
- 	'start_date'=>'Start Date',
- 	'expiry_date'=>'Expiration Date',
- 	'cost_factor'=>'Cost Factor',
- 	'commissionmethod'=>'Commission Method',
- 	'discontinued'=>'Discontinued',
- 	'commissionrate'=>'Commission Rate',
-	'sales_start_date'=>'Sales Start Date',
-	'sales_end_date'=>'Sales End Date',
-	'usageunit'=>'Usage Unit',
-	'serialno'=>'Serial No',
-	'currency'=>'currency',
-	'reorderlevel'=>'Reorder Level',
-	'website'=>'Web Site',
-	'taxclass'=>'Tax Class',
-	'mfr_part_no'=>'Manufacture Part No',
-	'vendor_part_no'=>'Vendor Part No',
-	'qtyinstock'=>'Quantity in Stock',
-	'productsheet'=>'Product Sheet',
-	'qtyindemand'=>'Quantity in Demand',
-	'glacct'=>'GL Account',
-	'assigned_user_id'=>'Assigned To'
-	 )
+                )
 
 );
 

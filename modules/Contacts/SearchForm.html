@@ -1,0 +1,296 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/SearchForm.html,v 1.7 2004/07/03 20:24:15 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+
+<!-- BEGIN: main -->
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<tr><td>
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder">
+
+	<tr>
+
+<form>
+
+		<input type="hidden" name="action" value="index"/>
+
+		<input type="hidden" name="query" value="true"/>
+
+		<input type="hidden" name="module" value="Contacts" />
+
+
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_FIRST_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="firstname" value="{FIRST_NAME}">
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_LAST_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="lastname" value="{LAST_NAME}">
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_ACCOUNT_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="accountname" value="{ACCOUNT_NAME}">
+
+
+
+
+
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
+
+			<input type="hidden" name="query" value="true"/>
+
+			<input type="hidden" name="module" value="Contacts" />
+
+			<input type="hidden" name="order_by" value="{ORDER_BY}" />
+
+                	<input type="hidden" name="sorder" value="{SORDER}" />
+			
+			<input type="hidden" name="viewname" value="{VIEWID}"/>
+
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+		<br>
+
+		<font size='1'>[<a href='{ADVANCE_LINK}'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
+
+		</td>
+
+	</tr>
+
+	<tr>
+
+		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
+
+		<td><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+
+	</tr>
+
+</form>
+
+	</table>
+
+</td></tr>
+
+</table>
+
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+
+{ALPHABETICAL}
+
+</tr></table>
+
+{JAVASCRIPT}
+
+<!-- END: main -->
+
+
+
+<!-- BEGIN: advanced -->
+
+<table cellpadding="0" cellspacing="0" border="1" width="100%">
+
+<tr>
+
+<!--form>
+
+	<td width="100%"></td>
+
+	<td align="center" nowrap><input type="hidden" name="action" value="index"/>
+
+		<input type="hidden" name="query" value="true"/>
+
+		<input type="hidden" name="advanced" value="true"/>
+
+		<input type="hidden" name="module" value="Contacts" />
+
+	<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+	<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+	<br>
+
+	<font size='1'>[<a href='index.php?module=Contacts&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+
+	</td-->
+
+</tr>
+
+<tr>
+
+<td>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="0">
+
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_GENERAL_INFORMATION}</th><td><form>
+
+        <td width="100%"></td>
+
+        <td align="center" nowrap><input type="hidden" name="action" value="index"/>
+
+                <input type="hidden" name="query" value="true"/>
+
+                <input type="hidden" name="advanced" value="true"/>
+
+                <input type="hidden" name="module" value="Contacts" />
+
+		<input type="hidden" name="order_by" value="{ORDER_BY}" />
+
+               	<input type="hidden" name="sorder" value="{SORDER}" />
+		
+		<input type="hidden" name="viewname" value="{VIEWID}"/>
+
+        <input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" na
+
+me="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+        <input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);"
+
+class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+        <br>
+
+        <font size='1'>[<a href='{BASIC_LINK}'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+
+        </td>
+
+</td></tr>
+
+	<tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_FIRST_NAME}</td>
+
+	<td width="30%"><input name='firstname' tabindex='1' size='25' maxlength='25' type="text" value="{FIRST_NAME}"></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_ANY_PHONE}</td>
+
+	<td width="30%"><input name='phone' type="text" tabindex='2' size='20' maxlength='25' value='{PHONE}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_LAST_NAME}</td>
+
+	<td width="30%"><input name='lastname' type="text" tabindex='1' size='25' maxlength='25' value="{LAST_NAME}"></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_ANY_EMAIL}</td>
+
+	<td width="30%"><input name='email' type="text" tabindex='2' size='35' maxlength='100' value='{EMAIL}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_ACCOUNT_NAME}</td>
+
+	<td width="30%"><input name='accountname' tabindex='1' type="text" value="{ACCOUNT_NAME}"></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_ASSISTANT}</td>
+
+	<td width="30%"><input name='assistant' type="text" tabindex='2' size='25' maxlength='100' value='{ASSISTANT}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
+
+	<td width="30%"><select name='leadsource' tabindex='1'>{LEAD_SOURCE_OPTIONS}</select></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_YAHOO_ID}</td>
+
+	<td width="30%"><input name='yahooid' type="text" tabindex='2' size='25' maxlength='75' value='{YAHOO_ID}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_DO_NOT_CALL}</td>
+
+	<td width="30%"><input name='donotcall' type="checkbox" tabindex='1' {DO_NOT_CALL}></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_EMAIL_OPT_OUT}</td>
+
+	<td width="30%"><input name='emailoptout' type="checkbox" tabindex='2' {EMAIL_OPT_OUT}></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_ANY_ADDRESS}</td>
+
+	<td width="30%"><input type="text" name='mailingstreet' tabindex='1' value='{ADDRESS_STREET}'></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_CITY}</td>
+
+	<td width="30%"><input type="text"  name='mailingcity' tabindex='2' size='15' maxlength='100' value='{ADDRESS_CITY}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_STATE}</td>
+
+	<td width="30%"><input  type="text" name='mailingstate' tabindex='1' size='15' maxlength='100' value='{ADDRESS_STATE}'></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_POSTAL_CODE}</td>
+
+	<td width="30%"><input  type="text" name='mailingzip' tabindex='2' size='10' maxlength='20' value='{ADDRESS_POSTALCODE}'></td>
+
+	</tr><tr>
+
+	<td width="20%" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
+
+	<td width="30%"><select size="3" name='assigned_user_id[]' tabindex='1' multiple="multiple">{USER_FILTER}</select></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
+
+	<td width="30%"><input  type="text" name='mailingcountry' tabindex='2' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
+
+</tr></table>
+
+
+
+<table><tr><td width="20%">{CUSTOMFIELD}</td></tr></table>
+
+
+
+</tr></table>
+
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+
+{ALPHABETICAL}
+
+</tr></table>
+
+	</form>
+
+{JAVASCRIPT}
+
+<!-- END: advanced -->
+

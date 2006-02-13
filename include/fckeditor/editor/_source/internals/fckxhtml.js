@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckxhtml.js
  * 	Defines the FCKXHtml object, responsible for the XHTML operations.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-02 11:17:23
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -21,7 +24,7 @@ FCKXHtml.CurrentJobNum = 0 ;
 
 FCKXHtml.GetXHTML = function( node, includeNode, format )
 {
-	// Special blocks are blocks of content that remain untouched during the
+	// Special blocks are blocks of content that remain untouched during the 
 	// process. It is used for SCRIPTs and STYLEs.
 	FCKXHtml.SpecialBlocks = new Array() ;
 
@@ -43,16 +46,9 @@ FCKXHtml.GetXHTML = function( node, includeNode, format )
 
 	// Strip the "XHTML" root node.
 	sXHTML = sXHTML.substr( 7, sXHTML.length - 15 ).trim() ;
-	
-	// Remove the trailing <br> added by Gecko.
-	if ( FCKBrowserInfo.IsGecko )
-		sXHTML = sXHTML.replace( /<br\/>$/, '' ) ;
-
-	// Add a space in the tags with no closing tags, like <br/> -> <br />
-	sXHTML = sXHTML.replace( FCKRegexLib.SpaceNoClose, ' />');
 
 	if ( FCKConfig.ForceSimpleAmpersand )
-		sXHTML = sXHTML.replace( FCKRegexLib.ForceSimpleAmpersand, '&' ) ;
+		sXHTML = sXHTML.replace( /___FCKAmp___/g, '&' ) ;
 
 	if ( format )
 		sXHTML = FCKCodeFormatter.Format( sXHTML ) ;
@@ -63,7 +59,7 @@ FCKXHtml.GetXHTML = function( node, includeNode, format )
 		var oRegex = new RegExp( '___FCKsi___' + i ) ;
 		sXHTML = sXHTML.replace( oRegex, FCKXHtml.SpecialBlocks[i] ) ;
 	}
-
+	
 	this.XML = null ;
 
 	return sXHTML
@@ -87,21 +83,15 @@ FCKXHtml._AppendAttribute = function( xmlNode, attributeName, attributeValue )
 
 FCKXHtml._AppendChildNodes = function( xmlNode, htmlNode, isBlockElement )
 {
-	var iCount = 0 ;
-	
 	if ( htmlNode.hasChildNodes() )
 	{
 		// Get all children nodes.
 		var oChildren = htmlNode.childNodes ;
 
 		for ( var i = 0 ; i < oChildren.length ; i++ )
-		{
-			if ( this._AppendNode( xmlNode, oChildren[i] ) )
-				iCount++ ;
-		}
+			this._AppendNode( xmlNode, oChildren[i] ) ;
 	}
-	
-	if ( iCount == 0 )
+	else
 	{
 		if ( isBlockElement && FCKConfig.FillEmptyBlocks )
 		{
@@ -111,7 +101,7 @@ FCKXHtml._AppendChildNodes = function( xmlNode, htmlNode, isBlockElement )
 
 		// We can't use short representation of empty elements that are not marked
 		// as empty in th XHTML DTD.
-		if ( !FCKRegexLib.EmptyElements.test( htmlNode.nodeName ) )
+		if ( ! FCKRegexLib.EmptyElements.test( htmlNode.nodeName ) )
 			xmlNode.appendChild( this.XML.createTextNode('') ) ;
 	}
 }
@@ -122,39 +112,27 @@ FCKXHtml._AppendNode = function( xmlNode, htmlNode )
 	{
 		// Element Node.
 		case 1 :
-			if ( htmlNode.getAttribute('_fckfakelement') )
-				return FCKXHtml._AppendNode( xmlNode, FCK.GetRealElement( htmlNode ) ) ;
-		
 			// Mozilla insert custom nodes in the DOM.
 			if ( FCKBrowserInfo.IsGecko && htmlNode.hasAttribute('_moz_editor_bogus_node') )
-				return false ;
-			
-			if ( htmlNode.getAttribute('_fckdelete') )
-				return false ;
+				return ;
 
 			// Create the Element.
-			var sNodeName = htmlNode.nodeName ;
-
-			// Check if the node name is valid, otherwise ignore this tag.
-			if ( !FCKRegexLib.ElementName.test( sNodeName ) )
-				return false ;
-
-			sNodeName = sNodeName.toLowerCase() ;
+			var sNodeName = htmlNode.nodeName.toLowerCase() ;
 
 			if ( FCKBrowserInfo.IsGecko && sNodeName == 'br' && htmlNode.hasAttribute('type') && htmlNode.getAttribute( 'type', 2 ) == '_moz' )
-				return false ;
+				return ;
 
 			// The already processed nodes must be marked to avoid then to be duplicated (bad formatted HTML).
 			// So here, the "mark" is checked... if the element is Ok, then mark it.
 			if ( htmlNode._fckxhtmljob == FCKXHtml.CurrentJobNum )
-				return false ;
+				return ;
 			else
 				htmlNode._fckxhtmljob = FCKXHtml.CurrentJobNum ;
 
 			// If the nodeName starts with a slash, it is a orphan closing tag.
 			// On some strange cases, the nodeName is empty, even if the node exists.
-//			if ( sNodeName.length == 0 || sNodeName.substr(0,1) == '/' )
-//				break ;
+			if ( sNodeName.length == 0 || sNodeName.substr(0,1) == '/' )
+				break ;
 
 			var oNode = this.XML.createElement( sNodeName ) ;
 
@@ -178,7 +156,31 @@ FCKXHtml._AppendNode = function( xmlNode, htmlNode )
 
 		// Text Node.
 		case 3 :
-			this._AppendTextNode( xmlNode, htmlNode.nodeValue.replaceNewLineChars(' ') ) ;
+			// We can't just replace the special chars with entities and create a
+			// text node with it. We must split the text isolating the special chars
+			// and add each piece a time.
+			var asPieces = htmlNode.nodeValue.replaceNewLineChars(' ').match( FCKXHtmlEntities.EntitiesRegex ) ;
+
+			if ( asPieces )
+			{
+				for ( var i = 0 ; i < asPieces.length ; i++ )
+				{
+					if ( asPieces[i].length == 1 )
+					{
+						var sEntity = FCKXHtmlEntities.Entities[ asPieces[i] ] ;
+						if ( sEntity != null )
+						{
+							this._AppendEntity( xmlNode, sEntity ) ;
+							continue ;
+						}
+					}
+					xmlNode.appendChild( this.XML.createTextNode( asPieces[i] ) ) ;
+				}
+			}
+
+			// This is the original code. It doesn't care about the entities.
+			//xmlNode.appendChild( this.XML.createTextNode( htmlNode.nodeValue ) ) ;
+
 			break ;
 
 		// Comment
@@ -191,48 +193,12 @@ FCKXHtml._AppendNode = function( xmlNode, htmlNode )
 			xmlNode.appendChild( this.XML.createComment( "Element not supported - Type: " + htmlNode.nodeType + " Name: " + htmlNode.nodeName ) ) ;
 			break ;
 	}
-	return true ;
 }
 
 // Append an item to the SpecialBlocks array and returns the tag to be used.
 FCKXHtml._AppendSpecialItem = function( item )
 {
 	return '___FCKsi___' + FCKXHtml.SpecialBlocks.addItem( item ) ;
-}
-
-if ( FCKConfig.ProcessHTMLEntities )
-{
-	FCKXHtml._AppendTextNode = function( targetNode, textValue )
-	{
-		// We can't just replace the special chars with entities and create a
-		// text node with it. We must split the text isolating the special chars
-		// and add each piece a time.
-		var asPieces = textValue.match( FCKXHtmlEntities.EntitiesRegex ) ;
-
-		if ( asPieces )
-		{
-			for ( var i = 0 ; i < asPieces.length ; i++ )
-			{
-				if ( asPieces[i].length == 1 )
-				{
-					var sEntity = FCKXHtmlEntities.Entities[ asPieces[i] ] ;
-					if ( sEntity != null )
-					{
-						this._AppendEntity( targetNode, sEntity ) ;
-						continue ;
-					}
-				}
-				targetNode.appendChild( this.XML.createTextNode( asPieces[i] ) ) ;
-			}
-		}
-	}
-}
-else
-{
-	FCKXHtml._AppendTextNode = function( targetNode, textValue )
-	{
-		targetNode.appendChild( this.XML.createTextNode( textValue ) ) ;
-	}
 }
 
 // An object that hold tag specific operations.
@@ -308,13 +274,13 @@ FCKXHtml.TagProcessors['table'] = function( node, htmlNode )
 {
 	// There is a trick to show table borders when border=0. We add to the
 	// table class the FCK__ShowTableBorders rule. So now we must remove it.
-
+	
 	var oClassAtt = node.attributes.getNamedItem( 'class' ) ;
-
+	
 	if ( oClassAtt && FCKRegexLib.TableBorderClass.test( oClassAtt.nodeValue ) )
 	{
 		var sClass = oClassAtt.nodeValue.replace( FCKRegexLib.TableBorderClass, '' ) ;
-
+		
 		if ( sClass.length == 0 )
 			node.attributes.removeNamedItem( 'class' ) ;
 		else

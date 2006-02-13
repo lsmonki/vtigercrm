@@ -1,0 +1,1550 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ * Give a good interface to send mail
+ *
+ *  CVS Info:  $Id: mail.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+include_once 'i18n.php';
+/**
+ * a mail body part  including a parser
+ */
+class mail_body {
+  function mail_body() {
+    global $lang;
+
+    $this->body ="";
+    $this->bodies = array();
+    $this->contenttype = "text/plain";
+    $this->contentdesc = "";
+    $this->contentdispotype = "";
+    $this->contentdisponame = "";
+    $this->contentencoding = "8bit";
+    $this->contentclass = "";
+    $this->charset =  $lang['content_encoding']; // default
+    $this->eoln = "\r\n";
+    $this->boundary = "-----------END_OF_TUTOS_MAIL_PART_". Date("Ymd") ."------";
+    $this->url = "http://\r\n";
+    $this->part = 1;
+  }
+  /**
+   * Parser: initialize
+   */
+  function parse_init() {
+    $this->in_sub_body = false;
+    $this->got_header = false; 
+    $this->parse_in = "";
+    $this->ct = "";
+    $this->cd = "";
+    $this->references = "";
+  }
+  /**
+   * output the body
+   */
+  function output(&$writer) {
+    $cnt = count($this->bodies);
+    if ( $cnt > 1 ) {
+      $writer->writechannel("MIME-Version: 1.0");
+      $writer->writechannel("Content-Type: multipart/mixed;". $this->eoln ."\tboundary=\"". $this->boundary ."\"");
+    } else {
+      $writer->writechannel("Content-Type: ". $this->contenttype);
+      $writer->writechannel("Content-Description: ". $this->contentdesc);
+      $writer->writechannel("Content-Transfer-Encoding: 8bit");
+    }
+
+    # A empty line starts the MAIN BODY
+    $writer->writechannel("");
+
+    if ( $cnt > 1 ) {
+       $writer->writechannel("This is a multi-part message in MIME format.");
+       $writer->writechannel($this->body);
+    } else {
+      # Send the body line by line
+      if (ereg("text",$this->contenttype) ) {
+        $lines = split("[\n]",$this->body);
+        for ($j = 0; $j < count($lines); $j++) {
+          $writer->writechannel($lines[$j]);
+        }
+      } else {
+        $writer->writechannel(chunk_split(Base64_Encode($this->body)));
+      }
+    }
+
+    foreach($this->bodies as $abody) {
+      if ( $cnt > 1 ) {
+        $writer->writechannel($this->eoln."--". $this->boundary);
+        if (ereg("text",$abody->contenttype) ) {
+          $writer->writechannel("Content-Type: ". $abody->contenttype ."; charset=\"". $abody->charset ."\"");
+        } else {
+          $writer->writechannel("Content-Type: ". $abody->contenttype."; name=". $abody->contentdisponame);
+        }
+         $writer->writechannel("Content-Description: ". $abody->contentdesc);
+        if (ereg("text",$abody->contenttype) ) {
+         $writer->writechannel("Content-Transfer-Encoding: 8bit");
+        } else {
+          $writer->writechannel("Content-Transfer-Encoding: base64");
+        }
+        if ( $abody->contentdisponame != "" ) {
+          $writer->writechannel("Content-Disposition: ". $abody->contentdispotype ." filename=". $abody->contentdisponame);
+        }
+        # A empty line starts the Parts BODY
+        $writer->writechannel("");
+      }
+      # Send the body line by line
+      if (ereg("text",$abody->contenttype) ) {
+        $lines = split("[\n]",$abody->body);
+        for ($j = 0; $j < count($lines); $j++) {
+          $writer->writechannel($lines[$j]);
+        }
+      } else {
+        $writer->writechannel(chunk_split(Base64_Encode($abody->body)));
+      }
+    }
+
+    if ( $cnt > 1 ) {
+      $writer->writechannel($this->eoln."--". $this->boundary ."--");
+    }
+
+  }
+  /**
+   * add a body part
+   * content = the body content
+   * type = mime type of that body part default to text/plain
+   * desc = Description
+   * dispo = Content-Disposition
+   */
+  function addBody($content,$type = "text/plain",$desc = "TUTOS Mail Part" , $dispo = "", $charset = "us-ascii") {
+    $b = new mail_body();
+    if ( $type == "text/plain" ) {
+      $b->body = StripSlashes($content);
+      $b->contenttype = $type;
+    } else {
+      $b->body = $content;
+      $b->contenttype = $type ;
+    }
+    $b->contentdesc = $desc;
+    $b->contentdisponame = $dispo;
+    $b->contentdispotype = "inline";
+    $b->charset = $charset;
+
+    if (eregi("^multipart/",$this->contenttype)) {
+      # this is already a multipart body
+      # add the new body
+      $this->bodies[] = &$b;
+    } else if (eregi("^text/plain",$this->contenttype) && (strlen($this->body) == 0) && (count($this->bodies) == 0) ) {
+      # we are a new mail
+      $this->contenttype = $b->contenttype;
+      $this->contentdesc = $b->contentdesc;
+      $this->contentdisponame = $b->contentdisponame;
+      $this->contentdispotype =  $b->contentdispotype;
+      $this->charset = $b->charset;
+      $this->body = $b->body;
+    } else {
+      # change the existing mailbody to a subbody
+      $b2 = new mail_body();
+      $b2->contenttype = $this->contenttype;
+      $b2->contentdesc = $this->contentdesc;
+      $b2->contentdisponame = $this->contentdisponame;
+      $b2->contentdispotype =  $this->contentdispotype;
+      $b2->charset = $this->charset;
+      $b2->body = $this->body;
+      $this->bodies[] = &$b2;
+      $this->bodies[] = &$b;
+      $this->contenttype = "multipart/mixed";
+      $this->contentdesc = "";
+      $this->contentdisponame = "";
+      $this->contentdispotype =  "";
+      $this->body = "";
+    }
+
+  }
+  /**
+   * show one body
+   */
+  function show_html(&$ly,$mformat,$part) {
+    global $tutos,$lang;
+
+    $skip = false;
+    $show_headline = false;
+    $show_text  = false;
+    $show_raw  = false;
+    $show_as_frame = false;
+    $show_as_img = false;
+    $select_alternative = false;
+
+#echo "PART ".$part ." FORMAT ".$mformat ." this ". $this->part ." ". $this->contenttype ."<br>";
+
+    $r = "";
+#    $r .= "p:". $this->part ."b:".$this->boundary ."e:".$this->contentencoding ."|t:". $this->contenttype ."|b:".count($this->bodies)."|len:".strlen($this->body) ."". $this->part ."<br>";
+
+    if ( ($part != 0) && ($part != $this->part)) {
+#       echo "SKIP".$this->part;
+      $skip = true;
+    }
+
+    if (strtolower($this->contenttype) == "text/plain") {
+      $show_headline = true;
+      $show_text  = true;
+    } elseif (strtolower($this->contenttype) == "text/calendar") {
+      $show_headline = true;
+#      $show_text  = true;
+    } elseif (strtolower($this->contenttype) == "text/x-vcard") {
+      $show_headline = true;
+#      $show_text  = true;
+    } elseif (strtolower($this->contenttype) == "text/html") {
+      $show_headline = true;
+      $show_as_frame = true;
+    } elseif (strtolower($this->contenttype) == "message/rfc822") {
+      $show_html = false;
+    } elseif (strtolower($this->contenttype) == "message/delivery-status") {
+      $show_html = false;
+    } elseif (strtolower($this->contenttype) == "message/disposition-notification") {
+      $show_html = false;
+    } elseif (eregi("^multipart/report",$this->contenttype)) {
+      $skip = true;
+    } elseif (eregi("^multipart/mixed",$this->contenttype)) {
+      $skip = true;
+    } elseif (eregi("^multipart/alternative",$this->contenttype)) {
+      $select_alternative = true;
+    } elseif (eregi("^image/",$this->contenttype)) {
+      $show_headline = true;
+      $show_as_img = true;
+    } elseif (eregi("^application",$this->contenttype)) {
+      $show_headline = true;
+    } elseif (eregi("^audio",$this->contenttype)) {
+      $show_headline = true;
+    } else {
+      $r .= "Unknown|".$this->contenttype."|<br>\n";
+      $show_headline = true;
+    }
+
+    if(!$skip && ($mformat == "download") ) {
+      $show_raw  = true;
+      $show_text  = false;
+      Header("Expires: 0");
+      Header("Pragma: no-cache");
+      Header("Content-type: " . $this->contenttype);
+      Header("Content-Disposition: attachment; filename=\"". $this->contentdisponame ."\"");
+      Header("Content-Description: Upload from TUTOS" );
+    } elseif (!$skip && ($mformat == "show") ) {
+      $show_raw  = true;
+      $show_text  = false;
+      Header("Expires: 0");
+      Header("Pragma: no-cache");
+      Header("Content-type: " . $this->contenttype);
+    } elseif (!$skip && $show_headline) {
+      if ($mformat == 'reply') {
+        $r .= "";
+      } else {
+        $r .= "<tr>\n";
+        $r .= " <th colspan=\"4\">". $this->contentencoding ."|". $this->contenttype ."|";
+        $r .= "</th>\n";
+        $r .= "</tr>\n";
+        $xx  = "[". makelink($this->getShowLink(), $lang['MailAttachmentShow'],$lang['MailAttachmentShow']) ."]";
+        $xx .= "&nbsp;[". makelink($this->getDownloadLink(), $lang['MailAttachmentDownload'],$lang['MailAttachmentDownload']) ."]";
+        if ($this->contentdesc) {
+          $r .= "<tr>\n";
+          $r .= $ly->showfield($lang['Description']);
+          $r.=  $ly->showdata($this->contentdesc,2);
+          $r .= "<td align=\"right\">".$xx."</td>\n";
+          $xx = "";
+          $r .= "</tr>\n";
+        }
+        $r .= "<tr>\n";
+        $r .= $ly->showfield($lang['MailSize']);
+        $r.=  $ly->showdata(strlen($this->body) ." Bytes",2);
+        $r .= "<td align=\"right\">".$xx."</td>\n";
+        $xx = "";
+        $r .= "</tr>\n";
+        if ($this->contentdispotype && !empty($this->contentdisponame)) {
+          $r .= "<tr>\n";
+          $r .= $ly->showfield($lang['MailAttachmentNew']);
+          $r.=  $ly->showdata(decodeheader($this->contentdisponame) ,3);
+          $r .= "</tr>\n";
+        }
+      }
+    }
+
+    if ($show_text && $part > 0) {
+      $show_raw  = true;
+      $show_text  = false;
+    }
+
+    if ($skip) {
+      // show nada
+    } elseif ($show_text) {
+      if ($mformat == 'reply') {
+        $r .= "";
+      } else {
+        $r .= "<tr><td colspan=\"4\" class=\"pre\"><pre>\n";
+      }
+      if ($this->contentencoding == "quoted-printable") {
+        $r .= wordwrap(quoted_printable_decode($this->body),80);
+      } else if ($this->contentencoding == "base64") {
+        $r .= wordwrap(base64_decode($this->body),80);
+      } else if (($this->contentencoding == "8bit") || ($this->contentencoding == "7bit")) {
+        if ($mformat == 'reply') {
+          $r .= wordwrap($this->body,80);
+        } else {
+          $r .= wordwrap(urlreplace(myentities($this->body),80));
+        }
+      }
+      if ($mformat == 'reply') {
+        $r .= "";
+      } else {
+        $r .= "</pre></td></tr>\n";
+      }
+    } elseif ($show_raw) {
+      if ($this->contentencoding == "quoted-printable") {
+        $r .= quoted_printable_decode($this->body);
+      } else if ($this->contentencoding == "base64") {
+        $r .= base64_decode($this->body);
+      } else if (($this->contentencoding == "8bit") || ($this->contentencoding == "7bit")) {
+        if (strtolower($this->contenttype) == "text/html") {
+          $r .= urlreplace($this->body,0);
+        } else {
+          $r .= urlreplace($this->body);
+        }
+      }
+    } elseif ($show_as_frame) {
+      if ($mformat == 'reply') {
+        $r .= "--------\n";
+      } else {
+        $r .= "<tr><td colspan=\"4\" class=\"pre\">\n";
+        $r .= "<iframe width=\"100%\" height=\"500px\" src=\"".$tutos['base'] ."/". $this->getShowLink() ."\"></iframe>\n";
+        $r .= "</td></tr>\n";
+      }
+    } elseif ($show_as_img) {
+      if ($mformat == 'reply') {
+        $r .= "--------\n";
+      } else {
+        $r .= "<tr><td colspan=\"4\" class=\"pre\">\n";
+        $r .= "<img src=\"".$tutos['base'] ."/". $this->getShowLink() ."\"></img>\n";
+        $r .= "</td></tr>\n";
+      }
+    } else {
+      // show only a link for download and for display
+    }
+      
+    if ($select_alternative) {
+      // check for text/plain
+      foreach($this->bodies as $abody) {
+        if (strtolower($abody->contenttype) == "text/plain") {
+          $r .= $abody->show_html($ly,$mformat,$part);
+          break;
+        } else if (strtolower($abody->contenttype) == "text/html") {
+          $r .= $abody->show_html($ly,$mformat,$part);
+          break;
+        }
+        // show all
+        foreach($this->bodies as $abody) {
+          $r .= $abody->show_html($ly,$mformat,$part);
+        }
+      }
+    } else {
+      foreach($this->bodies as $abody) {
+        $r .= $abody->show_html($ly,$mformat,$part);
+      }
+    }
+    return $r;
+  }
+  /** 
+   * set the url where we find this mailpart
+   */
+  function seturl($url) {
+    $this->url = $url;
+  }
+  /** 
+   * get the url where we find this mailpart (or all if main == true)
+   */
+  function geturl($main = false) {
+    if ($main) {
+      $url= addUrlParameter($this->url,"part=0");
+    } else {
+      $url= addUrlParameter($this->url,"part=".$this->part);
+    }
+    return $url;
+  }
+  /** 
+   * get the url where we find this mailpart
+   */
+  function getShowLink() {
+    $url= addUrlParameter($this->geturl(),"mformat=show");
+    return $url;
+  }
+  /** 
+   * get the url where we download this mailpart
+   */
+  function getDownloadLink() {
+    $url= addUrlParameter($this->geturl(),"mformat=download");
+    return $url;
+  }
+  /** 
+   * set the PartNr of this mailbody
+   */
+  function setPart($id) {
+    $this->part = $id;
+  }
+
+
+  /**
+   * Parser: parse a single line of mail
+   */
+  function parse_line($line,$short) {
+
+#        echo "XXX".myentities($line) ."<br>";
+    if (!$this->got_header && (trim($line) == "")) {
+      $this->parse_in = "";
+      $this->got_header = true;  // now we are in the body
+      return;
+    } else if (!$this->got_header) {
+      // analyze
+      if (ereg("^Subject:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->subject = trim($reg[1]);
+      } else if (ereg("^From:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->setFromTxt(trim($reg[1]));
+      } else if (eregi("^From(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (ereg("^To:(.*)",$line,$reg)) {
+        $this->addTo($reg[1]);
+        $this->parse_in = 'To';
+      } else if (eregi("^Cc:(.*)",$line,$reg)) {
+        $this->addCc(trim($reg[1]));
+        $this->parse_in = 'Cc';
+      } else if (eregi("^Date:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->date = trim($reg[1]);
+      } else if (eregi("^Return-Receipt-To:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Reply-To:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Received:(.*)",$line,$reg)) {
+        $this->hdr[] = $line;
+        $this->parse_in = 'Received';
+      } else if (eregi("^Importance:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Content-Id:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^MIME-Version:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Return-Path:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+#       echo "XXXX". $line ."XXXX";
+        $this->hdr[] = $line;
+      } else if (eregi("^in-reply-to:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^references:(.*)",$line,$reg)) {
+        $this->parse_in = "references";
+        $this->references = $reg[1];
+      } else if (eregi("^Message-ID:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Organization:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Sensitivity:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Disposition-Notification-To:(.*)",$line,$reg)) {
+      } else if (eregi("^User-Agent:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Disposition-Notification-To:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Content-Length:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Lines:",$line,$reg)) {
+        $this->parse_in = "";
+        $this->hdr[] = $line;
+      } else if (eregi("^Content-type:(.*)",$line,$reg)) {
+        $this->parse_in = "Content-type";
+        $this->ct = $line;
+#       echo "XXXX". $line ."XXXX";
+      } else if (eregi("^Content-Disposition:(.*)",$line,$reg)) {
+        $this->parse_in = "Content-Disposition";
+        $this->cd = $reg[1];
+      } else if (eregi("^Content-class:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->contentclass = trim($reg[1]);
+      } else if (eregi("^Content-transfer-encoding:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->contentencoding = trim($reg[1]);
+#          echo "enc |". $this->contentencoding  ."<br>\n";
+      } else if (eregi("^Content-Description:(.*)",$line,$reg)) {
+        $this->parse_in = "";
+        $this->contentdesc = trim($reg[1]);
+#          echo "desc |". $this->contentdesc  ."<br>\n";
+      } else if (ereg("^X-.*:(.*)",$line,$reg)) {
+        $this->parse_in = "X";
+        $this->hdr[] = $line;
+      } else if ($this->parse_in == "X") {
+        $this->hdr[] = $line;
+      } else if ($this->parse_in == "To") {
+        $this->addTo($line);
+      } else if ($this->parse_in == "Cc") {
+        $this->addCc($line);
+      } else if ($this->parse_in == "references") {
+        $this->references .= $line;
+      } else if ($this->parse_in == "Content-type") {
+        $this->ct .= $line;
+      } else if ($this->parse_in == "Content-Disposition") {
+        $this->cd .= $line;
+      } else if ($this->parse_in == "Received") {
+        $this->hdr[] = $line;
+      } else {
+        trigger_error("unknown mailheader |   ". $line ."|". $this->parse_in  ."|". strlen($line) ."\n");
+        $this->parse_in = "";
+      }
+    }
+
+    // analyze content type
+    if ($this->ct && ($this->parse_in != "Content-type")) {
+      $x = eregi("boundary=[\"]([-_=0-9A-Za-z/.]*)[\"]",$this->ct,$reg);
+      if ($x) {
+        $this->boundary = $reg[1];
+      }
+      eregi("Content-type:[ ]*([0-9A-Za-z./-]*)",$this->ct,$reg);
+      $this->contenttype = $reg[1];
+#        echo "ct |". $this->contenttype  ."|". $this->ct."<br>\n";
+      $this->ct = "";
+    }
+
+    // analyze content dispo
+    if ($this->cd && ($this->parse_in != "Content-Disposition")) {
+#       $cd = "blabla; filename=\"1231\"";
+       $x = eregi("([a-z]*)[\r\n\t ;]*filename=[\"]?([-_=0-9A-Za-z/?.]*)[\"]?",$this->cd,$reg);
+       if ($x) {
+         $this->contentdispotype = $reg[1];
+         $this->contentdisponame = $reg[2];
+#            echo "dispo |". $this->contentdisponame  ."<br>\n";
+       }
+       $this->cd = "";
+    }
+
+    if ($this->got_header && $short) {
+      return;
+    }
+
+    // Subbody Handling
+#    if (substr(trim($line),0,strlen($this->boundary)+2) == "--".$this->boundary) {
+    if (trim($line) ==  "--".$this->boundary) {
+      // content of a subbody starts
+      $this->in_sub_body = true;
+      $x = new mail_body();
+      $x->setPart($this->part.".". (1+count($this->bodies)));
+      $x->setUrl($this->url);
+      $x->parse_init();
+      $this->bodies[] = &$x;
+      return;
+    }
+    if (trim($line) ==  "--".$this->boundary ."--") {
+      $this->in_sub_body = false;
+    }
+
+    if ($this->in_sub_body) {
+      $this->bodies[count($this->bodies)-1]->parse_line($line,$short);
+    } else if ($this->got_header) {
+      $this->body .= $line;
+#      echo $this->got_header."-".$this->part ."|B|   ". $line ."||<br>\n";
+    }
+  }
+
+}
+
+/**
+ *
+ * @package BASE
+ * @module mail
+ */
+class mail extends mail_body {
+  /**
+   * initialize mail
+   */
+  function mail(&$user) {
+    parent::mail_body();
+    $this->dbconn = $user->dbconn;
+    $this->user = $user;
+    $this->subject = "";
+    $this->resetTo();
+    $this->hdr = array();
+    $this->fd = false;
+    $this->prio = 0;
+    $this->date = "";
+    $this->from_adr = "";
+
+    $this->replyurl= "mail_new.php";
+    // Parser
+    $this->parse_init();
+  }
+  /**
+   * splt name adress string
+   */
+  function split_name_email($str) {
+    $name = "";
+    $em = "";
+    $reg[1] = "";
+    $reg[2] = "";
+    $madr = "[a-zA-Z0-9/.-]*@[a-zA-Z0-9._-]*";
+    if (ereg("(.*)[ ]*<(". $madr .")>",$str,$reg)) {
+      $name = trim($reg[1],"\" ");
+      $em = $reg[2];
+    } else if (ereg("<(". $madr .")>",$str,$reg)) {
+      $em = $reg[1];
+      $r = "&lt;". AsEmail($reg[1],$reg[1]) ."&gt;";
+    } else if (ereg("(".$madr.")",$str,$reg)) {
+      $em = $reg[1];
+      $r = AsEmail($str,$reg[1],$reg[1]);
+    } else {
+      $em = $str;
+    }
+    $name = trim($name,"\"");
+# echo "N:".$name ." E:".$em ."  pre:".myentities($str) ."<br>";
+    return array($name,$em);
+  }
+  /** 
+   * format a from/to/cc for TUTOS
+   */
+  function adr_format($str) {
+    global $lang;
+
+    $r = "";
+    $addlink = "";
+
+    list($name,$em) = mail::split_name_email($str);
+
+    $name = decodeHeader($name);
+    $pre = " WHERE ";
+    $q = "SELECT * from ".  $this->dbconn->prefix ."location ";
+    $q .= " ". $pre . $this->dbconn->Like("email_1",$em);
+    $pre = " or ";
+    $q .= " ". $pre . $this->dbconn->Like("email_2",$em);
+    check_dbacl( $q, $this->user->id);
+    $res = $this->dbconn->Exec($q);
+    if ( 0 != $res->numrows()) {
+      $l = new location($this->dbconn);
+      $l->read_result($res,0);
+      $l->read_ref();
+      if ($name != "") {
+        $name = $l->ref->getLink($name);
+      } else {
+        $name = $l->ref->getLink();
+      }
+    } else {
+      // show a link to allow adding the address to TUTOS
+      $l = "address_new.php";
+      $fn = trim(substr($name,0,strpos($name," ")));
+      $ln = trim(substr($name,strpos($name," ")));
+      $l= addUrlParameter($l,"email_1=".UrlEncode($em),true);
+      $l= addUrlParameter($l,"f_name=".UrlEncode($fn),true);
+      $l= addUrlParameter($l,"l_name=".UrlEncode($ln),true);
+      $addlink = "&nbsp;". makelink($l,"[add]",$lang['AdrCreateInfo']);
+    }
+    $res->free();
+    $r .= " ". $em;
+
+    $r = $name ."&nbsp;&lt;". AsEmail($em,$em,$em) ."&gt;" . $addlink;
+    return $r;
+  }
+
+  /**
+   * initialize with an imap structure  (using the compiled in imap/pop)
+   */
+  function init_by_phpimap($mailbox,$msgno,$short) {
+    $b1 = imap_fetchheader($mailbox->mbox,imap_msgno($mailbox->mbox,$msgno),FT_PEEK);
+    $b2 = imap_body($mailbox->mbox,imap_msgno($mailbox->mbox,$msgno));
+
+    $this->init_by_text($b1."\n".$b2,$short);
+
+    $this->replyurl= addUrlParameter($this->replyurl,"mno=".$msgno);
+    if ($mailbox->addpath) {
+      $this->replyurl= addUrlParameter($this->replyurl,"mpath=".Base64_Encode($mailbox->addpath));
+    }
+    $this->replyurl= addUrlParameter($this->replyurl,"mid=".$mailbox->id);
+  }
+  /**
+   * parse a mail from an eml file
+   */
+  function init_by_text($str,$short) {
+    $this->parse_init();
+    foreach (split("[\n]",$str) as $line) {
+#     echo $this->got_header ."xx ". $line ." <br>\n";
+      $this->parse_line($line."\n",$short);
+    }
+  }
+  /**
+   * parse a mail from an eml file
+   */
+  function init_by_file($filename,$short) {
+    $this->parse_init();
+    $contenttype = "";
+    $fp = fopen($filename,"rb");
+    if (!$fp) {
+      Fatal_Error("NIX");
+    }
+
+    while (!feof($fp)) {
+      $this->parse_line(fgets($fp,4096),$short);
+    }
+    fclose($fp);
+  }
+  /**
+   * parse a mail from an tutos_document
+   */
+  function init_by_file_obj(&$obj,$short) {
+    $this->init_by_file($obj->base ."/". $obj->fileloc,$short);
+    $this->replyurl= addUrlParameter($this->replyurl,"fid=".$obj->id);
+  }
+  /** 
+   * get the url where we can build a reply or forwward of this mail
+   */
+  function getReplyUrl() {
+    return $this->replyurl;
+  }
+  /**
+   * long info (used in docmanagement)
+   */
+  function info($ly,$mformat,$part) {
+    global $lang;
+
+
+    $r = "";
+    if ( ($mformat == "html") && ($part == 0)) {
+      $r .= $ly->DataTableStart();
+      $r .= "<tr>\n";
+      $r .= " <th colspan=\"4\">". $lang['MailboxEmail'] ."</th>\n";
+      $r .= "</tr>\n";
+      $r .= "<tr>\n";
+      $r .= " <td colspan=\"4\" align=\"right\">\n";
+      $url = $this->getReplyUrl();
+
+      $u= addUrlParameter($url,"reply=1");
+      $r .= "[". makelink($u,$lang['MailReply'],$lang['MailReplyI']) ."]";
+      $u= addUrlParameter($url,"reply=2");
+      $r .= "&nbsp;[". makelink($u,$lang['MailReplyAll'],$lang['MailReplyI']) ."]";
+      $u= addUrlParameter($url,"reply=3");
+      $r .= "&nbsp;[". makelink($u,$lang['MailForward'],$lang['MailForwardI']) ."]";
+      $r .= "</th>\n";
+      $r .= "</tr>\n";
+
+      $r .= "<tr>\n";
+      $r .= $ly->showfield($lang['MailFrom']);
+      $r .= $ly->showdata($this->adr_format($this->from_adr),3);
+      $r .= "</tr>\n";
+
+      $r .= "<tr>\n";
+      $r .= $ly->showfield($lang['MailDate']);
+      $r .= $ly->showdata($this->date,3);
+      $r .= "</tr>\n";
+
+      $r .= "<tr>\n";
+      $r .= $ly->showfield($lang['MailTo']);
+      $to = "";
+      $pre = "";
+      foreach ($this->to_adr as $t) {
+        $to .= $pre. $this->adr_format($t);
+        $pre = "<br>\n";
+      }
+      $r .= $ly->showdata($to,3);
+      $r .= "</tr>\n";
+
+      if (count($this->cc_adr)) {
+        $r .= "<tr>\n";
+        $r .= $ly->showfield($lang['MailCc']);
+        $to = "";
+        $pre = "";
+        foreach ($this->cc_adr as $t) {
+          $to .= $pre . $this->adr_format($t);
+          $pre = "<br>\n";
+        }
+        $r .= $ly->showdata($to,3);
+        $r .= "</tr>\n";
+      }
+
+      $r .= "<tr>\n";
+      $r .= $ly->showfield($lang['MailSubject']);
+      $r .= $ly->showdata( decodeHeader($this->subject),3);
+      $r .= "</tr>\n";
+    }
+    $r .= $this->show_html($ly,$mformat,$part);
+
+    if ( ($mformat == "html") && ($part == 0)) {
+      $r .= $ly->DataTableEnd();
+    }
+    return $r;
+  }
+  /**
+   * short info (used in docmanagement / and mailforwarding)
+   */
+  function shortinfo($format = "html") {
+    global $lang;
+
+    $r = "";
+    if ($format == "plain")  {
+      if ($this->from_adr != "") {
+        list($name,$em) = mail::split_name_email(decodeHeader($this->from_adr));
+        $r .= $lang['MailFrom'] .":\t". $name;
+        if ($name) {
+          $r .= " <". $em .">\n";
+        } else {
+          $r .= $em ."\n";
+        }
+      } else if (is_object($this->from)) {
+        $r .= $lang['MailFrom'] .":\t". $this->from->getLink();
+      }
+      $r .= $lang['MailDate'] .":\t". $this->date ."\n";
+      $r .= $lang['MailTo'].":\t" ;
+      $to = "";
+      $pre = "";
+      foreach ($this->to_adr as $t) {
+        list($name,$em) = mail::split_name_email(decodeHeader($t));
+        $to .= $pre. $name;
+        if ($name) {
+          $to .= " <". $em .">\n";
+        } else {
+          $to .= $em ."\n";
+        }
+        $pre = "\t";
+      }
+      if ($to != "") $r .= $to;
+
+      if (count($this->cc_adr)) {
+        $r .= $lang['MailCc'] .":\t";
+        $to = "";
+        $pre = "";
+        foreach ($this->cc_adr as $t) {
+          list($name,$em) = mail::split_name_email(decodeHeader($t));
+          $to .= $pre. $name;
+          if ($name) {
+            $to .= " <". $em .">\n";
+          } else {
+            $to .= $em ."\n";
+          }
+          $pre = "\t";
+        }
+        if ($to != "") $r .= $to ."\n";
+      }
+      $r .= $lang['MailSubject'] .":\t". decodeHeader($this->subject) ."\n";
+    } else {
+      $r .= $lang['MailboxEmail'] ."\n";
+      if ($this->from_adr != "") {
+        $r .= $lang['MailFrom'] .":\t". $this->adr_format($this->from_adr) ."\n";
+      } else if (is_object($this->from)) {
+        $r .= $lang['MailFrom'] .":\t". $this->from->getLink() ."\n";
+      }
+      $r .= $lang['MailTo'].":\t" ;
+      $to = "";
+      $pre = "";
+      foreach ($this->to_adr as $t) {
+        $to .= $pre. $this->adr_format($t) ."\n";
+        $pre = "\t";
+      }
+      $r .= $to ."\n";
+
+      if (count($this->cc_adr)) {
+        $r .= $lang['MailCc'] .":\t";
+        $to = "";
+        foreach ($this->cc_adr as $t) {
+          $to .= $this->adr_format($t) ."\n";
+        }
+        $r .= $to ."\n";
+      }
+      $r .= $lang['MailSubject'] .":\t". decodeHeader($this->subject) ."\n";
+    }
+    return $r;
+  }
+  /**
+   *  start of a html formatted mail
+   * might be required by some outlook stuff
+   */
+  function HtmlStart() {
+    global $tutos,$lang;
+
+    $msg = "";
+    $msg .= "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n";
+    $msg .= "<html>\n";
+    $msg .= "<head>\n";
+    $msg .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=". $lang['content_encoding'] ."\">\n";
+    $msg .= "  <meta name=\"GENERATOR\" content=\"TUTOS ". $tutos[version] ."\">\n";
+    $msg .= "</head>\n";
+    $msg .= "<body>\n";
+    $msg .= "<pre>\n";
+    return $msg;
+  }
+  /**
+   *  end of a html formatted mail
+   */
+  function HtmlEnd() {
+    return "</pre>\n</body></html>\n";
+  }
+  /**
+   * set the senders name
+   * a reply to will also set to the same name (TUTOS can not be addressed directly)
+   */
+  function setFrom(&$obj) {
+    $this->from = &$obj;
+  }
+  function setFromTxt($from) {
+    $this->from_adr = $from;
+  }
+  /**
+   * reset the addresses where to send the mail
+   */
+  function resetTo() {
+    $this->sent = array();
+    $this->cc_adr = array();
+    $this->to_adr = array();
+    $this->cc = array();
+    $this->to = array();
+    $this->bcc_adr = array();
+    $this->bcc = array();    
+  }
+  /**
+   * set the address where to send the mail
+   * if obj is a team , than a mail will be send to every team member
+   */
+  function addTo($obj) {
+    if ( $obj == "" ) {
+      return;
+    }
+    if ( ! is_Object($obj) ) {
+      $x = split(",",$obj);
+      foreach ($x as $y) {
+        if (trim($y)) {
+          $this->to_adr[] = trim($y);
+        }
+      }
+      return;
+    }
+    if ( $obj->id < 1 ) {
+      return;
+    }
+    $obj->fill_maillist($this->to);
+  }
+  /**
+   * get the To List as a string
+   *
+   */
+  function getTo() {
+    $to = "";
+    $pre = "";
+    foreach($this->to as $i => $obj) {
+      if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+        continue;
+      }
+      $t = $obj->default_email();
+      if ( $t == "" ) {
+        continue;
+      }
+      if (isset($this->charset) ) {
+        $x = "=?". $this->charset ."?B?" .  base64_encode( $obj->getFullName() ) . "?=";
+      } else {
+        $x = $obj->getFullName();
+      }
+      $to .= $pre ."\"". $x ."\" <". $t .">";
+      $pre = ",";
+      $this->sent[$obj->id] = 1;
+    }
+    if ( count($this->to_adr) ) {
+      foreach($this->to_adr as $i => $obj) {
+        list($name,$em) = mail::split_name_email($obj);
+        if (isset($this->charset) ) {
+          $name = "=?". $this->charset ."?B?" .  base64_encode( $name ) . "?=";
+        }
+        $to .= $name ." <". $em .">";
+        $pre = ",";
+      }
+    }
+    return $to;
+  }
+  /**
+   * get the To List as a string
+   *
+   */
+  function getToAscii() {
+    $to = "";
+    $pre = "";
+    $x = array();
+    foreach($this->to as $i => $obj) {
+      if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+        continue;
+      }
+      if (!is_object($obj)){
+        continue;
+      }
+      $t = $obj->default_email();
+      if ( $t == "" ) {
+        continue;
+      }
+      if ( isset($x[$t]) ) {
+        continue;
+      }
+      $x[$t] = 1;
+      $to .= $pre . $t ;
+      $pre = ",";
+    }
+    if ( count($this->to_adr) ) {
+      foreach($this->to_adr as $i => $t) {
+        if ( isset($x[$t]) ) {
+          continue;
+        }
+        $x[$t] = 1;
+        $to .= $pre . $t ;
+        $pre = ",";
+      }
+    }
+    return $to;
+  }
+  /**
+   * set the Cc
+   *
+   */
+  function addCc($obj) {
+    if ( $obj == "" ) {
+      return;
+    }
+    if ( ! is_Object($obj) ) {
+      $x = split(",",$obj);
+      foreach ($x as $y) {
+        if (trim($y)) {
+          $this->cc_adr[] = trim($y);
+        }
+      }
+      return;
+    }
+    if ( $obj->id < 1 ) {
+      return;
+    }
+    $obj->fill_maillist($this->cc);
+   
+  }
+  /**
+   * get the cc List as a string
+   *
+   */
+  function getCc() {
+    $cc = "";
+    $pre = "";
+    if ( count($this->cc) ) {
+      foreach($this->cc  as $i => $obj) {
+        if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        if (isset($this->charset) ) {
+          $x = "=?". $this->charset ."?B?" .  base64_encode( $obj->getFullName() ) . "?=";
+        } else {
+          $x = $obj->getFullName();
+        }
+        $cc .= $pre ."\"". $x ."\" <". $t .">";
+        $pre = ",";
+        $this->sent[$obj->id] = 1;
+      }
+    }
+    if ( count($this->cc_adr) ) {
+      foreach($this->cc_adr as $i => $obj ) {
+        list($name,$em) = mail::split_name_email($obj);
+        if (isset($this->charset) ) {
+          $name = "=?". $this->charset ."?B?" .  base64_encode( $name ) . "?=";
+        }
+        $cc .= $name ." <". $em .">";
+        $pre = ",";
+      }
+    }
+    return $cc;
+  }
+  /**
+   * get the cc List as a string
+   *
+   */
+  function getCcAscii() {
+    $cc = "";
+    $pre = "";
+    $x = array();
+    if ( count($this->cc) ) {
+      foreach($this->cc as $i => $obj) {
+        if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+          continue;
+        }
+        if (!is_object($obj)){
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        if ( isset($x[$t]) ) {
+          continue;
+        }
+        $x[$t] = 1;
+        $cc  .= $pre . $t ;
+        $pre = ",";
+      }
+    }
+    if ( count($this->cc_adr) ) {
+      foreach($this->cc_adr  as $i => $t) {
+        if ( isset($x[$t]) ) {
+          continue;
+        }
+        $x[$t] = 1;
+        $cc .= $pre . $t ;
+        $pre = ",";
+      }
+    }
+    return $cc;
+  }
+  /**
+   * set the Bcc
+   *
+   */
+  function addBcc($obj) {
+    if ( $obj == "" ) {
+      return;
+    }
+    if ( ! is_Object($obj) ) {
+      $this->bcc_adr[] = $obj;
+      return;
+    }
+    if ( $obj->id < 1 ) {
+      return;
+    }
+    $obj->fill_maillist($this->bcc);
+  }
+  /**
+   * get the Bcc List as a string
+   *
+   */
+  function getBcc() {
+    $bcc = "";
+    $pre = "";
+    if ( count($this->bcc) ) {
+      foreach($this->bcc  as $i => $obj) {
+        if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        if (isset($this->charset) ) {
+          $x = "=?". $this->charset ."?B?" .  base64_encode( $obj->getFullName() ) . "?=";
+        } else {
+          $x = $obj->getFullName();
+        }
+        $bcc .= $pre ."\"". $x ."\" <". $t .">";
+        $pre = ",";
+        $this->sent[$obj->id] = 1;
+      }
+    }
+    if ( count($this->bcc_adr) ) {
+      foreach($this->bcc_adr as $i => $obj ) {
+        $bcc .=  $pre ." <". $obj .">";
+        $pre = ",";
+      }
+    }
+    return $bcc;
+  }
+  /**
+   * get the Bcc List as a string
+   *
+   */
+  function getBccAscii() {
+    $bcc = "";
+    $pre = "";
+    $x = array();
+    if ( count($this->bcc) ) {
+      foreach($this->bcc as $i => $obj) {
+        if ( isset($this->sent[$obj->id]) && ($this->sent[$obj->id] == 1) ) {
+          continue;
+        }
+        if (!is_object($obj)){
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        if ( isset($x[$t]) ) {
+          continue;
+        }
+        $x[$t] = 1;
+        $bcc  .= $pre . $t ;
+        $pre = ",";
+      }
+    }
+    if ( count($this->bcc_adr) ) {
+      foreach($this->bcc_adr  as $i => $t) {
+        if ( isset($x[$t]) ) {
+          continue;
+        }
+        $x[$t] = 1;
+        $bcc .= $pre . $t ;
+        $pre = ",";
+      }
+    }
+    return $bcc;
+  }
+    
+  
+  /**
+   * add addional header lines
+   *
+   */
+  function addHeader($arg,$val) {
+    $val = rtrim($val);
+    $this->hdr[] = $arg .": ". $val;
+  }
+  /**
+   * set the subject
+   *
+   */
+  function setSubject($s) {
+    $this->subject = $s;
+  }
+  /**
+   * get the subject
+   *
+   */
+  function getSubject() {
+    return $this->subject;
+  }
+  /**
+   * set the address where to send the mail
+   * if obj is a team , than a mail will be send to every team member
+   */
+  function resetBody() {
+    $this->bodies = array();
+  }
+  /**
+   * open a channel to the mailer
+   */
+  function open_channel(&$from,&$rcpt) {
+    global $tutos;
+
+    $msg = "";
+    if ( $tutos[mailmode] == 1 ) {
+      $this->fd = popen($tutos[sendmail]." -t -i","w");
+      if ( $this->fd  == false ) {
+        $msg .= "could not connect to sendmail server<br>\n";
+        return $msg;
+      }
+    } else if ( ($tutos[mailmode] == 2) || ($tutos[mailmode] == 4) ) {
+      $errno = 0;
+      $errstr = "";
+      # POP before SMTP
+      # using the same host as smtp (some code stolen from squirrelmail)
+      if ( $tutos[popbeforesmtp] == 1 ) {
+        $fd = fsockopen($tutos[smtphost],110, $errno, $errstr);
+        if ( $fd  == false ) {
+          $msg .= "could not connect to pop server for popbeforesmtp<br>\n";
+          return $msg . $errno ." ". $errstr;
+        }
+        $tmp = fgets($fd, 1024); /* banner */
+        if (!eregi("^\+OK", $tmp, $regs)) {
+           return $msg . $tmp;
+        }
+        fputs($fd, "USER ". $tutos[popbeforesmtp_user] . $this->eoln);
+        $tmp = fgets($fd, 1024);
+        if (!eregi("^\+OK", $tmp, $regs)) {
+           return $msg . $tmp;
+        }
+        fputs($fd, 'PASS '. $tutos[popbeforesmtp_pass] . $this->eoln);
+        $tmp = fgets($fd, 1024);
+        if (!eregi("^\+OK", $tmp, $regs)) {
+          return $msg . $tmp;
+        }
+        @fputs($fd, "QUIT".$this->eoln); /* log off */
+        fclose ($fd);
+      }
+      $this->fd =  fsockopen($tutos[smtphost],25,$errno,$errstr);
+      if ( $this->fd  == false ) {
+        $msg .= "could not connect to smtp server<br>\n";
+        return $msg . $errno ." ". $errstr;
+      }
+
+      $this->readsmtp($msg); // Read the Greetings
+
+      if ($tutos[mailmode] == 4) {
+        fputs($this->fd,"EHLO ". $_SERVER['SERVER_NAME'] . $this->eoln);   //EHLO is correct
+        if (!$this->readsmtp($msg)) return $msg;
+        fputs($this->fd,"AUTH LOGIN" . $this->eoln);
+        if (!$this->readsmtp($msg)) return $msg;
+        fputs($this->fd,base64_encode($tutos[smtp_username]) . $this->eoln);
+        if (!$this->readsmtp($msg)) return $msg;
+        fputs($this->fd,base64_encode($tutos[smtp_password]) . $this->eoln);
+        if (!$this->readsmtp($msg)) return $msg;
+      } else {
+        $this->writechannel("HELO ". $_SERVER['SERVER_NAME']);   
+        if (!$this->readsmtp($msg)) return $msg;
+      }
+      $this->writechannel("MAIL From: <". $from .">");
+      if (!$this->readsmtp($msg)) {
+        return $msg;
+      };
+      
+      foreach($rcpt as $i => $obj ) {
+        # Parse the name and/or email part
+        list($name,$em) = mail::split_name_email($obj);
+        $this->writechannel("RCPT To: <". $em .">");
+        $this->readsmtp($msg);
+      }
+      $this->writechannel("DATA"); 
+      if (!$this->readsmtp($msg)) {
+        return $msg;
+      };
+#      $this->readsmtp($msg);
+    } else {
+      $msg .= "Unknown Mailmode ". $tutos[mailmode] ." fix config.pinc<br>";
+      return $msg;
+    }
+    return $msg;
+  }
+  /**
+   * close the channel to the mailer
+   */
+  function close_channel() {
+    global $tutos;
+
+    $msg = "";
+    if ( $tutos[mailmode] == 1 ) {
+      pclose($this->fd);
+    } else if ( ($tutos[mailmode] == 2) || ($tutos[mailmode] == 4)  ) {
+      $this->writechannel($this->eoln.".");
+      $this->readsmtp($msg);
+      $this->writechannel("quit");
+      $this->readsmtp($msg);
+      fclose ($this->fd);
+    }
+    $this->fd = false;
+    return $msg;
+  }
+  /**
+   * write to smtp channel
+   */
+  function writechannel($str) {
+    fputs($this->fd,$str.$this->eoln) || die ("Error writing to mail channel");
+  }
+  /**
+   * check for errors
+   */
+  function readsmtp(&$msg) {
+    global $tutos;
+
+    if ( ($tutos[mailmode] != 2) && ($tutos[mailmode] != 4) ) {
+      return true;
+    }
+    $line = fgets($this->fd,1024);
+    if (empty($line)) {
+      return true;
+    }
+    if ( ereg("^220",$line ) ) {
+      return true;
+    }
+    if ( ereg("^221",$line ) ) {
+      return true;
+    }
+    if ( ereg("^235",$line ) ) { // The OK response from AUTH LOGIN
+      return true;
+    }
+    if ( ereg("^250",$line ) ) {
+      return true;
+    }
+    if ( ereg("^354",$line ) ) {
+      return true;
+    }
+    if ( ereg("^334",$line ) ) { // The response from AUTH LOGIN
+      return true;
+    }
+    if ( ereg("^5",$line ) ) {
+      $msg .= $line ."<br>\n";
+      return false;
+    }
+    $msg .= $line ."<br>\n";
+    return false;
+  }
+  /**
+   * send this mail
+   */
+  function send() {
+    global $lang, $tutos;
+
+    $msg = "";
+    if ( $this->from_adr != "" ) {
+      $from = $this->from_adr;
+    } else {
+      $from = $this->from->default_email();
+    }
+
+    if ( $from == "" ) {
+      $msg .= sprintf($lang['Err0034'],$this->from->getLink()) ."<br>\n";
+      return $msg;
+    }
+    if ( (($tutos[mailmode] == 1) && !is_executable($tutos[sendmail]))
+     || (($tutos[mailmode] == 2) && empty($tutos[smtphost]))
+     || ($tutos[mailmode] == 0)
+     || ($tutos[demo] == 1) ) {
+      $msg .= sprintf($lang['Err0033'],$this->subject) ."<br>\n";
+      if ( isset($this->to) ) {
+        foreach($this->to as $i => $obj) {
+          $msg .= "to: ". $obj->getFullname() ."<br>\n";
+        }
+      }
+      if ( isset($this->to_adr) ) {
+        foreach($this->to_adr as $i => $obj) {
+          $msg .= "to: ". $obj ."<br>\n";
+        }
+      }
+      if ( isset($this->cc) ) {
+        foreach($this->cc as $i => $obj) {
+          $msg .= "cc: ". $obj->getFullname() ."<br>\n";
+        }
+      }
+      if ( isset($this->cc_adr) ) {
+        foreach($this->cc_adr as $i => $obj) {
+          $msg .= "cc: ". $obj ."<br>\n";
+        }
+      }
+      if ( isset($this->bcc) ) {
+        foreach($this->bcc as $i => $obj) {
+          $msg .= "bcc: ". $obj->getFullname() ."<br>\n";
+        }
+      }
+      if ( isset($this->bcc_adr) ) {
+        foreach($this->bcc_adr as $i => $obj) {
+          $msg .= "bcc: ". $obj ."<br>\n";
+        }
+      }      
+      return $msg;
+    }
+
+    if ( count($this->to) + count($this->to_adr) == 0 ) {
+      $msg .= $lang['Err0035'] ." (3)<br>\n";
+      return $msg;
+    }
+    if ( strlen($this->body) + count($this->bodies) == 0 ) {
+      return "no text" . $msg;
+    }
+    #
+    # Make a list of all recipents
+    #
+    $to = $this->getTo();
+    $rcpt = array();
+    foreach($this->to as $obj) {
+      $t = $obj->default_email();
+      if ( $t == "" ) {
+        continue;
+      }
+      $rcpt[] = $t;
+      $msg .= sprintf($lang['MailSent'],myentities($this->subject),myentities($obj->getFullname())) ."<br>\n";
+    }
+    if ( count($this->to_adr) ) {
+      foreach($this->to_adr as $obj) {
+        $rcpt[] = $obj;
+        $msg .= sprintf($lang['MailSent'],myentities($this->subject),myentities($obj)) ."<br>\n";
+      }
+    }
+    #
+    # CC
+    #
+    if ( count($this->cc) ) {
+      foreach($this->cc as $obj) {
+        if ( $this->sent[$obj->id] == 1 ) {
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        $rcpt[] = $t;
+        $msg .= sprintf($lang['MailSentCc'],myentities($this->subject),myentities($obj->getFullname($t))) ."<br>\n";
+      }
+    }
+    if ( count($this->cc_adr) ) {
+      foreach($this->cc_adr as $obj) {
+        $rcpt[] = $obj;
+        $msg .= sprintf($lang['MailSentCc'],myentities($this->subject),myentities($obj)) ."<br>\n";
+      }
+    }
+    if ( count($rcpt) == 0 ) {
+      # No recipents
+      $msg .= $lang['Err0035'] ." (2)<br>\n";
+      return $msg;
+    }
+    // get the cc addresses 
+    $cc = $this->getCc();
+    #
+    # BCC
+    #
+    if ( count($this->bcc) ) {
+      foreach($this->bcc as $obj) {
+        if ( $this->sent[$obj->id] == 1 ) {
+          continue;
+        }
+        $t = $obj->default_email();
+        if ( $t == "" ) {
+          continue;
+        }
+        $rcpt[] = $t;
+        $msg .= sprintf($lang['MailSentBcc'],myentities($this->subject),myentities($obj->getFullname($t))) ."<br>\n";
+      }
+    }
+    if ( count($this->bcc_adr) ) {
+      foreach($this->bcc_adr as $obj) {
+        $rcpt[] = $obj;
+        $msg .= sprintf($lang['MailSentBcc'],myentities($this->subject),myentities($obj)) ."<br>\n";
+      }
+    }
+    if ( count($rcpt) == 0 ) {
+      # No recipents
+      $msg .= $lang['Err0035'] ." (1)<br>\n";
+      return $msg;
+    }    
+
+    $omsg = $this->open_channel($from,$rcpt);
+    if ($omsg != "") {
+      return $msg . $omsg;
+    }
+#   die(myentities($to));
+    $x = "=?". $lang['content_encoding'] ."?B?" .  base64_encode($this->from->getFullName()) . "?=";
+    $this->writechannel("From: \"". $x ." (TUTOS)\" <". $from .">");
+    $this->writechannel("Reply-To: \"". $x ."\" <". $from .">");
+    $this->writechannel("Date: ". Date("r"));
+    # encode subject line
+    $subj = "=?". $this->charset ."?B?" .  base64_encode( $this->subject ) . "?=";
+
+    $this->writechannel("Subject: ". $subj);
+    $this->writechannel("To: ". $to);
+    if ( $cc != "" ) {
+      $this->writechannel("Cc: ". $cc);
+    }    
+    foreach ($this->hdr as $i) {
+      $this->writechannel($i);
+    }
+    $this->writechannel("X-Mailer: TUTOS ". $tutos[version] ."/PHP " . phpversion() ." ". PHP_OS);
+
+#    if (!$this->readsmtp($msg)) {
+#      return $msg;
+#    };
+    $this->output($this);
+
+  $msg .= $this->close_channel();
+    return $msg;
+  }
+}
+?>

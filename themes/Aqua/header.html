@@ -26,21 +26,18 @@
 <style type="text/css">@import url("themes/{THEME}/style.css");</style>
 </head>
 <body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" {ONLOAD}>
-
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr class="topBand">
-<td width="99%"><table width="98%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td valign="center">
-<div align="top"><a href="http://www.vtiger.com"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vtigercrm" border="0"></a>
-</div>
-</td>
-<td><div align="right"><font size="1" color="#000000"><strong>{APP.NTC_WELCOME}
-{CURRENT_USER}</strong></font>&nbsp; <font size="1">[{DATE}]</font></div></td> 
-
-<td><div align="right" style="padding-right:10"><a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}"><img src="{IMAGE_PATH}/user.gif" hspace="3" align="absmiddle" border="0">{APP.LBL_MY_ACCOUNT}</a>
+  <tr class="topBand">
+    <td height="75" class="tabOffBorder" valign="bottom">
+      <div align="center"><a href="http://www.vtiger.com"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vigercrm" border="0"></a>
+      </div></td>
+    <td width="99%"><table height="75" width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td><div align="right"><font size="1" color="#000000"><strong>{APP.NTC_WELCOME}
+                    {CURRENT_USER}</strong></font>&nbsp; <font size="1">[{DATE}]</font></div></td>
+                <td><div align="right" style="padding-right:10"><a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}"><img src="{IMAGE_PATH}/user.gif" hspace="3" align="absmiddle" border="0">{APP.LBL_MY_ACCOUNT}</a>
   		{ADMIN_LINK}&nbsp;<a href="http://www.vtiger.com/products/crm/document.html" target="_blank"><img src="{IMAGE_PATH}/help.gif" hspace="3" align="absmiddle" border="0">{APP.LNK_HELP}</a>&nbsp;
 		 <a class="toplink" href="javascript:openwin()"><img src="{IMAGE_PATH}/aboutus.gif" hspace="3" align="absmiddle" border="0">{APP.LNK_WEARE}</a>
 <script>

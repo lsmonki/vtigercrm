@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fi.js
  * 	Finnish language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Marko Korhonen (marko.korhonen@datafisher.com)
@@ -25,7 +28,7 @@ ToolbarExpand		: "Näytä työkalurivi",
 
 // Toolbar Items and Context Menu
 Save				: "Tallenna",
-NewPage				: "Tyhjennä",
+NewPage				: "Uusi sivu",
 Preview				: "Esikatsele",
 Cut					: "Leikkaa",
 Copy				: "Kopioi",
@@ -41,8 +44,6 @@ RemoveLink			: "Poista linkki",
 Anchor				: "Lisää ankkuri/muokkaa ankkuria",
 InsertImageLbl		: "Kuva",
 InsertImage			: "Lisää kuva/muokkaa kuvaa",
-InsertFlashLbl		: "Flash",
-InsertFlash			: "Lisää/muokkaa Flashia",
 InsertTableLbl		: "Taulu",
 InsertTable			: "Lisää taulu/muokkaa taulua",
 InsertLineLbl		: "Murtoviiva",
@@ -107,7 +108,6 @@ SplitCell			: "Jaa solu",
 CellProperties		: "Solun ominaisuudet",
 TableProperties		: "Taulun ominaisuudet",
 ImageProperties		: "Kuvan ominaisuudet",
-FlashProperties		: "Flash ominaisuudet",
 
 AnchorProp			: "Ankkurin ominaisuudet",
 ButtonProp			: "Painikkeen ominaisuudet",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Valintakentän ominaisuudet",
 TextareaProp		: "Tekstilaatikon ominaisuudet",
 FormProp			: "Lomakkeen ominaisuudet",
 
-FontFormats			: "Normaali;Muotoiltu;Osoite;Otsikko 1;Otsikko 2;Otsikko 3;Otsikko 4;Otsikko 5;Otsikko 6",
+FontFormats			: "Normaali;Muotoiltu;Osoite;Otsikko 1;Otsikko 2;Otsikko 3;Otsikko 4;Otsikko 5;Otsikko 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Prosessoidaan XHTML:ää. Odota hetki...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Sulje",
 DlgBtnBrowseServer	: "Selaa palvelinta",
 DlgAdvancedTag		: "Lisäominaisuudet",
 DlgOpOther			: "Muut",
-DlgInfoTab			: "Info",
-DlgAlertUrl			: "Lisää URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;ei asetettu&gt;",
@@ -165,7 +163,7 @@ DlgImgInfoTab		: "Kuvan tiedot",
 DlgImgBtnUpload		: "Lähetä palvelimelle",
 DlgImgURL			: "Osoite",
 DlgImgUpload		: "Lisää kuva",
-DlgImgAlt			: "Vaihtoehtoinen teksti",
+DlgImgAlt			: "Kuvateksti",
 DlgImgWidth			: "Leveys",
 DlgImgHeight		: "Korkeus",
 DlgImgLockRatio		: "Lukitse suhteet",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Ylös (teksti)",
 DlgImgAlignTop		: "Ylös",
 DlgImgPreview		: "Esikatselu",
 DlgImgAlertUrl		: "Kirjoita kuvan osoite (URL)",
-DlgImgLinkTab		: "Linkki",
-
-// Flash Dialog
-DlgFlashTitle		: "Flash ominaisuudet",
-DlgFlashChkPlay		: "Automaattinen käynnistys",
-DlgFlashChkLoop		: "Toisto",
-DlgFlashChkMenu		: "Näytä Flash-valikko",
-DlgFlashScale		: "Levitä",
-DlgFlashScaleAll	: "Näytä kaikki",
-DlgFlashScaleNoBorder	: "Ei rajaa",
-DlgFlashScaleFit	: "Tarkka koko",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Linkki",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "Selaimesi turva-asetukset eivät salli editorin toteuttaa kopi
 PasteAsText		: "Liitä tekstinä",
 PasteFromWord	: "Liitä Wordista",
 
-DlgPasteMsg2	: "Liitä painamalla (<STRONG>Ctrl+V</STRONG>) ja painamalla <STRONG>OK</STRONG>.",
-DlgPasteIgnoreFont		: "Jätä huomioimatta fonttimääritykset",
-DlgPasteRemoveStyles	: "Poista tyylimääritykset",
-DlgPasteCleanBox		: "Tyhjennä",
-
+DlgPasteMsg		: "Editori ei voinut toteuttaa liittämistä selaimesi <STRONG>turva-asetusten</STRONG> takia.<BR>Suorita liittäminen käyttäen näppäimistöä (<STRONG>Ctrl+V</STRONG>) ja valitse <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automaattinen",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Kuvaus",
 DlgDocMeAuthor		: "Tekijä",
 DlgDocMeCopy		: "Tekijänoikeudet",
 DlgDocPreview		: "Esikatselu",
-
-// Templates Dialog
-Templates			: "Pohjat",
-DlgTemplatesTitle	: "Sisältöpohjat",
-DlgTemplatesSelMsg	: "Valitse pohja editoriin<br>(aiempi sisältö menetetään):",
-DlgTemplatesLoading	: "Ladataan listaa pohjista. Hetkinen...",
-DlgTemplatesNoTpl	: "(Ei määriteltyjä pohjia)",
 
 // About Dialog
 DlgAboutAboutTab	: "Editorista",

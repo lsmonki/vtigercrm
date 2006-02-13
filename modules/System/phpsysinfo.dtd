@@ -1,0 +1,58 @@
+<!--
+
+  phpSysInfo - A PHP System Information Script
+  http://phpsysinfo.sourceforge.net/
+
+  $Id: phpsysinfo.dtd,v 1.9 2004/06/09 16:22:47 webbie Exp $
+
+-->
+<!ELEMENT phpsysinfo (Generation, Vitals, Network, Hardware, Memory, Swap, FileSystem)>
+  <!ELEMENT Generation EMPTY>
+    <!ATTLIST Generation version CDATA "2.3">
+    <!ATTLIST Generation timestamp CDATA "000000000">
+
+  <!ELEMENT Vitals (Hostname, IPAddr, Kernel, Distro, Uptime, Users, LoadAvg)>
+    <!ELEMENT Hostname (#PCDATA)>
+    <!ELEMENT IPAddr (#PCDATA)>
+    <!ELEMENT Kernel (#PCDATA)>
+    <!ELEMENT Distro (#PCDATA)>
+    <!ELEMENT Distroicon (#PCDATA)>
+    <!ELEMENT Uptime (#PCDATA)>
+    <!ELEMENT Users (#PCDATA)>
+    <!ELEMENT LoadAvg (#PCDATA)>
+
+  <!ELEMENT Network (NetDevice*)>
+    <!ELEMENT NetDevice (Name, RxBytes, TxBytes, Errors, Drops)>
+      <!ELEMENT Name (#PCDATA)>
+      <!ELEMENT RxBytes (#PCDATA)>
+      <!ELEMENT TxBytes (#PCDATA)>
+      <!ELEMENT Errors (#PCDATA)>
+      <!ELEMENT Drops (#PCDATA)>
+
+  <!ELEMENT Hardware (CPU*, PCI*, IDE*, SCSI*, SBUS*)>
+    <!ELEMENT CPU (Number*, Model*, Mhz*, Cache*, Bogomips*)>
+      <!ELEMENT Number (#PCDATA)>
+      <!ELEMENT Model (#PCDATA)>
+      <!ELEMENT Mhz (#PCDATA)>
+      <!ELEMENT Cache (#PCDATA)>
+      <!ELEMENT Bogomips (#PCDATA)>
+    <!ELEMENT PCI (Device*)>
+      <!ELEMENT Device (#PCDATA)>
+    <!ELEMENT IDE (Device*)>
+    <!ELEMENT SCSI (Device*)>
+    <!ELEMENT USB (Device*)>
+    <!ELEMENT SBUS (Device*)>
+
+  <!ELEMENT Memory (Free, Used, Total, Percent)>
+    <!ELEMENT Free (#PCDATA)>
+    <!ELEMENT Used (#PCDATA)>
+    <!ELEMENT Total (#PCDATA)>
+    <!ELEMENT Percent (#PCDATA)>
+
+  <!ELEMENT Swap (Free, Used, Total, Percent)>
+
+  <!ELEMENT FileSystem (Mount*)>
+    <!ELEMENT Mount (MountPoint, Type, Device, Percent, Free, Used, Size)>
+      <!ELEMENT MountPoint (#PCDATA)>
+      <!ELEMENT Type (#PCDATA)>
+      <!ELEMENT Size (#PCDATA)>

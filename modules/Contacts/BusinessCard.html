@@ -1,0 +1,79 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME} : {MOD.LBL_BUSINESSCARD}</td>
+
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="formBorder"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+
+<!-- BEGIN: error -->
+<font color="red">{ERROR}</font>
+<!-- END: error -->
+
+<!-- BEGIN: startform -->
+<form action='index.php' method='post'>
+<input type="hidden" name="module" value="Contacts">
+<input type="hidden" name="action" value="BusinessCard">
+<input type="hidden" name="handle" value="Save">
+<!-- END: startform -->
+	<script>
+		function toggleDisplay(id){
+		
+			if(this.document.getElementById( id).style.display=='none'){
+				this.document.getElementById( id).style.display='inline'
+				this.document.getElementById(id+"link").style.display='none';
+						
+			}else{
+				this.document.getElementById(  id).style.display='none'
+				this.document.getElementById(id+"link").style.display='none';
+			}
+		}
+	</script>
+	<table cellpadding="0" cellspacing="0" width="500" border="0" >
+
+<!-- BEGIN: row -->
+<tr><td>{ROWVALUE} </td></tr>
+<!-- END: row -->
+	
+<!-- BEGIN: form -->
+	<tr >	<td  valign='top' align='left' colspan='3' border='0'>{FORMHEADER}</td></tr>
+	<tr ><td colspan='1' class='blackline'><img src='{IMAGE_PATH}/blank.gif'></td><td  class='{CLASS}' valign='top' align='left' colspan='1' >{FORMBODY}{FORMFOOTER}{POSTFORM}</td><td colspan='1' class='blackline'><img src='{IMAGE_PATH}/blank.gif'></td></tr>
+	<tr><td colspan='3' class='blackline'></td></tr>
+	<tr ><td  valign='top' align='left' colspan='3' border='0'><td>&nbsp;</td></tr>
+<!-- END: form -->
+<!-- BEGIN: formnoborder -->
+	<tr >	<td  valign='top' align='left' colspan='3' border='0'>{FORMHEADER}</td></tr>
+	<tr ><td  class='{CLASS}' valign='top' align='left' colspan='1' >{FORMBODY}{FORMFOOTER}{POSTFORM}</td></tr>
+	<tr ><td  valign='top' align='left' colspan='3' border='0'><td>&nbsp;</td></tr>
+<!-- END: formnoborder -->
+
+
+	</table>
+	<!-- BEGIN: save -->
+	<input title='{APP.LBL_SAVE_BUTTON_TITLE}' accessKey='{APP.LBL_SAVE_BUTTON_KEY}' class='button' type='submit' name='button' value='  {APP.LBL_SAVE_BUTTON_LABEL}  ' >
+	<!-- END: save -->
+	<!-- BEGIN: endform -->
+	</form>
+	<!-- END: endform -->
+
+<!-- END: main -->

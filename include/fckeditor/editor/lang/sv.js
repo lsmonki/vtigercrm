@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: sv.js
  * 	Swedish language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:18
  * 
  * File Authors:
  * 		Kristoffer Malvefors (kristoffer@intema.ws)
@@ -41,8 +44,6 @@ RemoveLink			: "Radera länk",
 Anchor				: "Infoga/Editera ankarlänk",
 InsertImageLbl		: "Bild",
 InsertImage			: "Infoga/Editera bild",
-InsertFlashLbl		: "Flash",
-InsertFlash			: "Infoga/Editera Flash",
 InsertTableLbl		: "Tabell",
 InsertTable			: "Infoga/Editera tabell",
 InsertLineLbl		: "Linje",
@@ -107,7 +108,6 @@ SplitCell			: "Separera celler",
 CellProperties		: "Cellegenskaper",
 TableProperties		: "Tabellegenskaper",
 ImageProperties		: "Bildegenskaper",
-FlashProperties		: "Flashegenskaper",
 
 AnchorProp			: "Egenskaper för ankarlänk",
 ButtonProp			: "Egenskaper för knapp",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Egenskaper för flervalslista",
 TextareaProp		: "Egenskaper för textruta",
 FormProp			: "Egenskaper för formulär",
 
-FontFormats			: "Normal;Formaterad;Adress;Rubrik 1;Rubrik 2;Rubrik 3;Rubrik 4;Rubrik 5;Rubrik 6",
+FontFormats			: "Normal;Formaterad;Adress;Rubrik 1;Rubrik 2;Rubrik 3;Rubrik 4;Rubrik 5;Rubrik 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Bearbetar XHTML. Var god vänta...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Stäng",
 DlgBtnBrowseServer	: "Bläddra på server",
 DlgAdvancedTag		: "Avancerad",
 DlgOpOther			: "Övrigt",
-DlgInfoTab			: "Information",
-DlgAlertUrl			: "Var god och ange en URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;ej angivet&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Text överkant",
 DlgImgAlignTop		: "Överkant",
 DlgImgPreview		: "Förhandsgranska",
 DlgImgAlertUrl		: "Var god och ange bildens URL",
-DlgImgLinkTab		: "Länk",
-
-// Flash Dialog
-DlgFlashTitle		: "Flashegenskaper",
-DlgFlashChkPlay		: "Automatisk uppspelning",
-DlgFlashChkLoop		: "Upprepa/Loopa",
-DlgFlashChkMenu		: "Aktivera Flashmeny",
-DlgFlashScale		: "Skala",
-DlgFlashScaleAll	: "Visa allt",
-DlgFlashScaleNoBorder	: "Ingen ram",
-DlgFlashScaleFit	: "Exakt passning",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Länk",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "Säkerhetsinställningar i Er webläsare tillåter inte åtgå
 PasteAsText		: "Klistra in som vanlig text",
 PasteFromWord	: "Klistra in från Word",
 
-DlgPasteMsg2	: "Var god och klistra in Er text i rutan nedan genom att använda (<STRONG>Ctrl+V</STRONG>) klicka sen på <STRONG>OK</STRONG>.",
-DlgPasteIgnoreFont		: "Ignorera typsnitts definitioner",
-DlgPasteRemoveStyles	: "Radera Stil definitioner",
-DlgPasteCleanBox		: "Upprensningsruta",
-
+DlgPasteMsg		: "Editorn tilläts ej att Klistra in p.g.a webläsarens <STRONG>säkerhetsinställning</STRONG>.<BR>Var god och Klistra in i fältet nedan genom att använda (<STRONG>Ctrl+V</STRONG>). Klicka sen på <STRONG>OK</STRONG>",
 
 // Color Picker
 ColorAutomatic	: "Automatisk",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Sidans beskrivning",
 DlgDocMeAuthor		: "Författare",
 DlgDocMeCopy		: "Upphovsrätt",
 DlgDocPreview		: "Förhandsgranska",
-
-// Templates Dialog
-Templates			: "Sidmallar",
-DlgTemplatesTitle	: "Sidmallar",
-DlgTemplatesSelMsg	: "Var god välj en mall att använda med editorn<br>(allt nuvarande innehåll raderas):",
-DlgTemplatesLoading	: "Laddar mallar. Var god vänta...",
-DlgTemplatesNoTpl	: "(Ingen mall är vald)",
 
 // About Dialog
 DlgAboutAboutTab	: "Om",

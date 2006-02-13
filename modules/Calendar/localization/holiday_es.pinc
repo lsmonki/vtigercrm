@@ -1,0 +1,26 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_es.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+	 $tutos[cal][] = array(
+		array( Date => "01-01", type => 1,  Desc => "Año Nuevo (ES)"),
+		array( Date => "06-01", type => 1,  Desc => "Reyes (ES)"),
+		array( Date => "29-03", type => 1,  Desc => "Viernes Santo (ES)"),
+		array( Date => "01-04", type => 1,  Desc => "Lunes de Pascua (ES)"),
+		array( Date => "01-05", type => 1,  Desc => "Fiesta del Trabajo (ES)"),
+		array( Date => "24-06", type => 1,  Desc => "San Juan (ES)"),
+		array( Date => "15-08", type => 1,  Desc => "Asuncion (ES)"),
+		array( Date => "12-10", type => 1,  Desc => "Dia de la Hispanidad (ES)"),
+		array( Date => "01-11", type => 1,  Desc => "Todos los Santos (ES)"),
+		array( Date => "06-12", type => 1,  Desc => "Constitución (ES)"),
+		array( Date => "08-12", type => 1,  Desc => "Inmaculada Concepción (ES)"),
+		array( Date => "25-12", type => 1,  Desc => "Navidad (ES)"),
+	);
+?>

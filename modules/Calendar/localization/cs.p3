@@ -1,0 +1,793 @@
+<?php
+/**
+ * $Id: cs.p3,v 1.16 2005/05/03 13:18:51 saraj Exp $
+ *
+ * @modulegroup LANG
+ * @module cz
+ * @package BASE
+ *
+ * ========================= NOTE ========================
+ * Please put site specific extensions and changes
+ * to TUTOS language files in a file called "en_custom.p3"
+ * or "lang_custom.p3" (for all languages)
+ * using the same format like here
+ * =======================================================
+ */
+$lang['content_encoding'] = "iso-8859-2";
+setlocale(LC_TIME,'cs_CZ');
+#
+# Czech Texts
+#
+$lang['PleaseLogin']     = "Pøihla¹te se, prosím";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "Heslo";
+$lang['Username']        = "U¾ivatel";
+$lang['MOTD']            = "Zpráva dne";
+$lang['Login']           = "Pøihlá¹ení";
+$lang['LostPassword']    = "Zapomenuté heslo ?";
+$lang['LoggedIn']        = "Jste pøihlá¹en. Prosím, vyberte si z nabídky po leve stranì.";
+$lang['ReadOnlyAppoint'] = "Zde mù¾ete pouze èíst !";
+$lang['StartDate']       = "Datum poèátku";
+$lang['StartTime']       = "Èas poèátku";
+$lang['AppStart']        = "Start";
+$lang['AppCreatedBy']    = "Vytvoøil";
+$lang['EndDate']         = "Datum konce";
+$lang['EndTime']         = "Èas konce";
+$lang['AppEnd']          = "Konec";
+$lang['Participants']    = "Úèastníci";
+$lang['everybody']       = "Ka¾dý";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "dne";
+$lang['createdby']       = "Vytvoøil";
+$lang['Description']     = "Popis";
+$lang['InfoEmail']       = "Informovat e-mailem";
+$lang['InviteEmail']     = "Pøivítat e-mailem";
+$lang['Invitation']      = "Uvítání";
+$lang['IgnoreTime']      = "Ignorovat èasy vý¹e";
+$lang['IgnoreTime2']     = "(t.j. místo nezabírá dílèí èas<br>harmonogramu dne / dnù)";
+$lang['forphrase']       = "Pro";
+$lang['nextweek']        = "Pøí¹tí týden";
+$lang['lastweek']        = "Minulý týden";
+$lang['plus4weeks']      = "4 týdny dopøedu";
+$lang['minus4weeks']     = "4 týdny nazpìt";
+$lang['only']            = "Pouze";
+$lang['reload']          = "Obnovit";
+$lang['changeapp']       = "Prohlí¾et a mìnit (%s - %s)";
+$lang['seeapp']          = "Prohlí¾et detaily (%s - %s)";
+$lang['AllEntries']      = "Prohlí¾et v¹echny %s polo¾ky";
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d/%m/%Y";
+$lang['DateFormat']      = "%s/%s/%s";
+$lang['DateShortFormat'] = "%s/%s";
+#
+$lang['Printable']       = "Pro tisk";
+$lang['PrintableInfo']   = "Zobrazení stránky pro tisk";
+$lang['managedProd']     = "Øídit produkt/projekt";
+$lang['soldProd']        = "Prodané produkty/projekty";
+$lang['Enter']           = "Vstup";
+$lang['Reset']           = "Vymazat";
+$lang['Remove']          = "Vyjmout";
+$lang['Delete']          = "Odstranit";
+$lang['Change']          = "Zmìnit";
+$lang['Modify']          = "Upravit";
+$lang['created']         = "Vytvoøeno";
+$lang['DateTimeFrom']    = "Od";
+$lang['DateTimeTill']    = "Do";
+$lang['Count']           = "Poèet";
+$lang['Showing']         = "Pøehled pro %s";
+$lang['show']            = "Zobraz";
+$lang['lang']['auto']    = "automaticky (prohlí¾eèem)";
+$lang['lang']['en']      = "anglicky";
+$lang['lang']['en-US']   = "anglicky US";
+$lang['lang']['de']      = "nìmecky";
+$lang['lang']['fr']      = "francouzsky";
+$lang['lang']['es']      = "¹panìlsky";
+$lang['lang']['es-MX']   = "¹panìlsky/Mexiko";
+$lang['lang']['es-NI']   = "¹panìlsky/Nikaragua";
+$lang['lang']['es-VE']   = "Español/Venezuela";
+$lang['lang']['it']      = "italsky";
+$lang['lang']['tw']      = "tradièní èín¹tina";
+$lang['lang']['zh']      = "zjednodu¹ená èín¹tina";
+$lang['lang']['ru']      = "ru¹tina";
+$lang['lang']['pt']      = "portugal¹tina";
+$lang['lang']['pl']      = "pol¹tina";
+$lang['lang']['ko']      = "korej¹tina";
+$lang['lang']['nl']      = "holand¹tina";
+$lang['lang']['sv']      = "¹véd¹tina";
+$lang['lang']['el']      = "øeètina";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "èe¹tina";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "Zmìny OK ?";
+$lang['InputOk']         = "Vstup OK ?";
+$lang['Day1']            = "Pondìlí";
+$lang['Day2']            = "Úterý";
+$lang['Day3']            = "Støeda";
+$lang['Day4']            = "Ètvrtek";
+$lang['Day5']            = "Pátek";
+$lang['Day6']            = "Sobota";
+$lang['Day0']            = "Nedìle";
+$lang['SMonday']         = "Po";
+$lang['STuesday']        = "Út";
+$lang['SWednesday']      = "St";
+$lang['SThursday']       = "Èt";
+$lang['SFriday']         = "Pá";
+$lang['SSaturday']       = "So";
+$lang['SSunday']         = "Ne";
+$lang['week']            = "Týden";
+$lang['weeks']           = "týdny";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Datum";
+$lang['NewEntry']        = "Nový";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "Hledat";
+$lang['PlsChangeName']   = "Prosím, zmìòte jméno";
+$lang['SeeAddress']      = "Zobrazit adresu %s";
+$lang['NavFirst']        = "První";
+$lang['NavBack']         = "Zpìt";
+$lang['NavNext']         = "Dal¹í";
+$lang['NavLast']         = "Poslední";
+$lang['DecPoint']        = ",";
+$lang['ThousandPoint']   = " ";
+$lang['yes']             = "Ano";
+$lang['no']              = "Ne";
+$lang['FldsRequired']    = "<font size=\"-1\">Oznaèená pole <font color=\"red\">(*)</font> musí být vyplnìna.</font>";
+$lang['any']             = "nìjaký";
+$lang['all']             = "V¹e";
+$lang['extended']        = "Roz¹íøené";
+$lang['OrderBy']         = "tøídìno dle %s";
+$lang['RevOrderBy']      = "opaènì tøídìno dle %s";
+$lang['Export']          = "Export";
+$lang['ExportInfo']      = "Export dat do souboru";
+$lang['withmarked']      = "oznaèení %s";
+$lang['SetTo']           = "nastavit %s na %s";
+$lang['pcs']             = "kusù";
+$lang['Money']           = "Souèet";
+$lang['Currency']        = "Peníze";
+$lang['ActionNil']       = "zapomeò";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Schùzka";
+$lang['Appointments']    = "Schùzky";
+$lang['NewAppoint']      = "Nová schùzka";
+$lang['NewAppointR']     = "Nový (opakovanì)";
+$lang['NewAppointInfo']  = "Vytvoøit novou schùzku";
+$lang['NewAppointInfoR'] = "Vytvoøit opakující se novou schùzku";
+$lang['AppointDetail']   = "Podrobnosti schùzky";
+$lang['AppointModify']   = "Zmìnit schùzku";
+$lang['AppointCreate']   = "Vytvoøit schùzku";
+$lang['AppointCommit']   = "Potvrdit schùzku";
+$lang['AppointOverview'] = "Pøehled schùzek";
+$lang['AppDelInfo']      = "Smazat tuto schùzku";
+$lang['AppChangeOrDel']  = "kdo mù¾e mìnit/mazat";
+$lang['VisitAt']         = "Nav¹tívit";
+$lang['VisitFrom']       = "Náv¹tìva";
+$lang['Visits']          = "Náv¹tìvy";
+$lang['ModOldAppoint']   = "Upravit existující schùzku";
+$lang['CreateAppoint']   = "Vlo¾it novou schùzku";
+$lang['AppFirstDate']    = "První datum";
+$lang['AppLastDate']     = "Poslední datum";
+$lang['AppNoLastDate']   = "bez koneèného data";
+$lang['AppRepeatType']   = "Opakovat";
+$lang['AppRepeatDay']    = "Dennì";
+$lang['AppRepeatWeek']   = "Ka¾dý týden v den jako byl den startu";
+$lang['AppRepeatMonth']  = "Ka¾dý mìsíc v den jako byl den startu";
+$lang['AppRepeatYear']   = "Ka¾dý rok v den jako byl den/mìsíc startu";
+$lang['AppRepeatInfo1']  = "ka¾dý %s";
+$lang['AppRepeatInfo2']  = "ka¾dý mìsíc v %d. den";
+$lang['AppRepeatInfo3']  = "ka¾dý rok v %d/%m";
+$lang['AppRepeatInfo4']  = "ka¾dý den";
+$lang['AppSeeEntry']     = "vidìt polo¾ky";
+$lang['AppSeeEntryI']    = "vidìt schùzku";
+$lang['AppEmailRemind']  = "Pøipomenout v¹echny zúèastnìné e-mailem";
+$lang['AppRemind'][0]    = "nikdy";
+$lang['AppRemind'][15]   = "15 minut pøed";
+$lang['AppRemind'][60]   = "1 hodinu pred";
+$lang['AppRemind'][1440] = "1 den pøed";
+$lang['AppRemind'][10080]= "1 týden pøed";
+$lang['AppAllSee']       = "v¹e co mù¾e¹ vidìt";
+$lang['AppAllTeams']     = "èlenové v¹ech tvých týmu";
+$lang['AppEverything']   = "V¹e";
+$lang['AppGetIcal']      = "Získat soubor Ical";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Kanceláø";
+$lang['AppLoc'][1]       = "Mimo";
+$lang['AppLoc'][2]       = "Dovolená";
+$lang['AppLoc'][3]       = "Nemoc";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "ANO";
+$lang['AppState'][2]     = "NE";
+$lang['AppPrivate']      = "Soukromé";
+$lang['AppVoteInfo']     = "Návrh schùzky";
+$lang['AppVoteState']    = "Aktuální schùzka";
+$lang['AppVoteHead']     = "Návrh schùzky (%s)";
+$lang['AppVoteSelect']   = "Vyber svùj návrh";
+$lang['AppsSearch']      = "Hledání v kalendáøi";
+$lang['SearchForAppExt'] = "Roz¹íøené hledání pro schùzku";
+$lang['SearchForApp']    = "Hledání schùzky";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(nech prázdné pro zobrazení v¹ech schùzek)";
+$lang['AppTrace']        = "Sledovat stav potvrzení";
+$lang['AppTraceDesc']    = "(t.j. úèastníci mohou volit)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "Tvé info z TUTOSu";
+$lang['PersonalPageFor']   = "Osobní stránka u¾ivatele %s";
+$lang['PersonalSettings']  = "Nastavení u¾ivatele";
+$lang['PersonalSettingsI'] = "Zmìna nastavení u¾ivatele %s";
+
+# User
+$lang['User']            = "U¾ivatel";
+$lang['Users']           = "U¾ivatelé";
+$lang['UserOverview']    = "Pøehled o u¾ivateli";
+$lang['UserCreate']      = "Vytvoøit u¾ivatele";
+$lang['UserModify']      = "Zmìna v u¾ivateli";
+$lang['UserDel']         = "Odstranit u¾ivatele";
+$lang['UserInfo']        = "Záznam u¾ivatele";
+$lang['UserModInfo']     = "Zmìnit záznam u¾ivatele %s";
+$lang['UserNewInfo']     = "Vytvoøit záznam u¾ivatele %s";
+$lang['UserDelInfo']     = "Odstranit záznam u¾ivatele %s";
+$lang['UserUnknown']     = "Neznámý u¾ivatel";
+$lang['UserLastSeen']    = "Poslední pøihlá¹ení";
+$lang['UserLastHost']    = "Poslední stanice";
+$lang['UserAdmin']       = "Admin";
+$lang['UserLanguage']    = "Jazyk";
+$lang['UserTimezone']    = "Èasová zóna";
+$lang['UserTheme']       = "Téma";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Dovolené";
+$lang['UserNamedays']    = "Svátky";
+$lang['UserWorkdays']    = "Pracovní dny";
+$lang['UserWeekstart']   = "Zaèátek týdne";
+$lang['UserDisabled']    = "Úèet odstaven";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "Produkt/Projekt";
+$lang['ProductPs']       = "Produkty/Projekty";
+$lang['Product']         = "Produkt";
+$lang['Products']        = "Produkty";
+$lang['Project']         = "Projekt";
+$lang['Projects']        = "Projekty";
+$lang['ProductsSearch']  = "Vyhledat produkty/projekty";
+$lang['ProductsOverview']= "Pøehled produktu/projektu";
+$lang['ProductsDetail']  = "Podrobnosti produktu/projektu";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Schùzky";
+$lang['ProdName']        = "Produkt/Projekt";
+$lang['ProdVersion']     = "Verze";
+$lang['ProdProd']        = "Návazné projekty";
+$lang['ProdProdNew']     = "Nová vazba";
+$lang['ProdRoles']       = "Role";
+$lang['ProdFunc']        = "Funkce";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Nová role";
+$lang['ProdRole'][1]     = "Mana¾er";
+$lang['ProdRole'][2]     = "Obchodní mana¾er";
+$lang['ProdRole'][3]     = "2. Mana¾er";
+$lang['ProdRole'][4]     = "Obchodník";
+$lang['ProdRole'][5]     = "Vývojáø";
+$lang['ProdRole'][6]     = "Klient";
+$lang['ProdRole'][7]     = "Dodavatel";
+$lang['ProdRole'][8]     = "Prodejce";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Základní projekt";
+$lang['ProdRole'][11]    = "Pøedcházející projekt";
+$lang['ProdRole'][12]    = "Následující projekt";
+$lang['ProdRole'][13]    = "Podprojekt";
+$lang['ProdPath']        = "Cesta souboru";
+$lang['ProdDesc']        = "Popis";
+$lang['ProdDesc1']       = "Popis 1";
+$lang['ProdDesc2']       = "Popis 2";
+$lang['ProdState']       = "Stav";
+$lang['ProdState_']      = "Stav neznám";
+$lang['ProdStates'][0]   = "Vytvoøeno";
+$lang['ProdStates'][1]   = "Pokraèuje";
+$lang['ProdStates'][2]   = "Ukonèeno";
+$lang['ProdStates'][3]   = "Zru¹eno";
+$lang['ProdStates'][4]   = "Nabídnuto zákazníkovi";
+$lang['ProdStates'][5]   = "Zru¹eno zákazníkem";
+$lang['ProdStates'][-2]  = "nìco neukonèeno nebo zru¹eno";
+$lang['ProdClass1']      = "Klasifikace 1";
+$lang['ProdClasses1'][1] = "Nìco 1";
+$lang['ProdClasses1'][2] = "Nìco 2";
+$lang['ProdClasses1'][3] = "Nìco 3";
+$lang['ProdClass2']      = "Klasifikace 2";
+$lang['ProdClasses2'][1] = "Nìco 1";
+$lang['ProdClasses2'][2] = "Nìco 2";
+$lang['ProdPrice']       = "Cena";
+$lang['ProdCost']        = "Náklady";
+$lang['SearchForProd']   = "Vyhledat produkt nebo projekt";
+$lang['SearchForProdExt']= "Roz¹íøené vyhledání produktu nebo projektu";
+$lang['ProdCreateInfo']  = "Vytvoøit nový produkt nebo projekt";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "Vymazat projekt %s";
+$lang['ProdModInfo']     = "Zmìnit produkt/projekt %s";
+$lang['ProdCreator']     = "vytvoøil";
+$lang['ProdCreation']    = "vytvoøil %s %s";
+$lang['ProdCreationS']   = "vytvoøeno";
+$lang['ProdStart']       = "Odhad. zaèátek";
+$lang['ProdEnd']         = "Odhad. konec";
+$lang['ProdProb']        = "Pravdìpodobnost";
+$lang['ProdModifyT']     = "Upravit produkt/projekt %s";
+$lang['ProdCreateT']     = "Vytvoøit nový produkt/projekt";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(nech prázdné pro zobrazení v¹eho)";
+$lang['ProdLinkInfo']    = "Zobraz produkt/projekt %s";
+$lang['ProdBetween']     = "Vytvoøeno mezi";
+$lang['ProdLinks']       = "Linky";
+$lang['ProdStats']       = "Statistika";
+$lang['ProdStatsInfo']   = "Statistika pro tyto produkty/projekty";
+$lang['ProdStatsTitle']  = "Statistika produktu/projektu";
+$lang['ProdFields']      = "Pole";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mail
+$lang['MailboxEmail']    = "E-mail";
+$lang['MailSendTo']      = "Poslat e-mail pro u¾ivatele %s";
+$lang['MailFrom']        = "Od";
+$lang['MailTo']          = "Pro";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Obsah";
+$lang['MailSent']        = "posílám e-mail %s pro %s.";
+$lang['MailSentCc']      = "posílám e-mail %s (Cc) pro %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Karta %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Datum";
+$lang['MailSize']        = "Velikost";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Zmìna práv";
+$lang['AclModifyI']      = "zmena práv pro %s";
+$lang['AclDetail']       = "Podrobnosti práv";
+$lang['AclDetailI']      = "zobrazení práv pro %s";
+$lang['permissions']     = "práva";
+$lang['ACLsee']          = "zobrazit práva";
+$lang['ACLmod']          = "zmìnit práva";
+$lang['ACLread']         = "zobrazit";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "upravit";
+$lang['ACLdelete']       = "smazat";
+$lang['ACLreadI']        = "u¾ivatelùm/týmùm bude umo¾nìno vidìt %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "u¾ivatelùm/týmùm bude umo¾nìno upravit %s";
+$lang['ACLdelI']         = "u¾ivatelùm/týmùm bude umo¾nìno zru¹it %s";
+$lang['ACLOverview']     = "Pøehled pøístupových práv";
+$lang['ACLOverviewI']    = "Zobrazit v¹echna pøístupová práva";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "vlastnost";
+
+# Tasks
+$lang['Task']            = "Úloha";
+$lang['Tasks']           = "Úlohy";
+$lang['TaskDetail']      = "Podrobnosti úloh";
+$lang['TaskCreate']      = "Vytvoøit úlohu";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "vytvoøit novou podúlohu úlohy %s";
+$lang['TaskDelete']      = "Zru¹it úlohu %s";
+$lang['TaskModify']      = "Zmìnit úlohu %s";
+$lang['TaskOverview']    = "Pøehled úloh";
+$lang['TaskOverviewInfo']= "Zobrazit úlohy pro %s";
+$lang['TaskName']        = "Název";
+$lang['TaskState']       = "Stav";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Co dìlat";
+$lang['TaskWorker']      = "Pøiøazeno k";
+$lang['TaskVolumeFull']  = "Mno¾ství práce";
+$lang['TaskVolumeDone']  = "Mno¾ství hotovo";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Podúloha úlohy";
+$lang['hours']           = "h";
+$lang['TaskCreation']    = "vytvoøil %s %s";
+$lang['TaskStates'][0]   = "Pøed";
+$lang['TaskStates'][1]   = "Pokraèuje";
+$lang['TaskStates'][2]   = "Ukonèeno";
+$lang['TaskStates'][3]   = "Zpo¾dìní";
+$lang['TaskS_Start']     = "Plánovaný start";
+$lang['TaskS_End']       = "Plánovaný konec";
+$lang['TaskSched']       = "Naplánováno";
+$lang['TaskReal']        = "Skuteèný";
+$lang['TaskLinkInfo']    = "Zobrazit úlohu %s";
+$lang['TaskCompleted']   = "Dokonèeno %3.2f %%";
+$lang['Completed']       = "Dokonèeno";
+$lang['Reschedule']      = "Pøeplánováno";
+$lang['Reschedule_s']    = "Pøeplánovaný start";
+$lang['Reschedule_e']    = "Pøeplánovaný konec";
+$lang['TaskGantt']       = "Diagram Gantt";
+$lang['TaskImport']      = "Úloha: CSV Import";
+$lang['ImportSrcFile']   = "Zdrojový sobor";
+$lang['ImportColNames']  = "Název sloupcù v CSV souboru";
+$lang['ImportIndex']     = "WBS index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Potvrdit import";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Zobrazit diagram Gantt";
+$lang['GanttLinkInfo']   = "Diagram Gantt";
+$lang['GanttTitle']      = "Diagram Gantt";
+$lang['GanttStart']      = "Poèáteèní datum";
+$lang['GanttEnd']        = "Koneèné datum";
+$lang['GanttVolume']     = "Rozsah hodin";
+$lang['GanttCompletion'] = "Ukonèeno";
+
+# Company
+$lang['Company']           = "Firma";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Vyhledat firmu";
+$lang['CompanyOverview']   = "Pøehled firem";
+$lang['CompanyDetail']     = "Podrobnosti firmy";
+$lang['CompanyModify']     = "Zmìnit firmu";
+$lang['CompanyCreate']     = "Vytvoøit firmu";
+$lang['CompanyCreateInfo'] = "vytvoøit novou firmu";
+$lang['CompanyApps']       = "Schùzky s touto firmou";
+$lang['CompanyLinks']      = "Linky";
+$lang['CompanyChgInfo']    = "Zmìnit firmu %s";
+$lang['CompanyDelInfo']    = "Zru¹it firmu %s";
+$lang['CompanyMembers']    = "Zamìstnanci bez støediska";
+$lang['CompanyLinkInfo']   = "Zobrazit firmu %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Støedisko";
+$lang['Departments']        = "Støediska";
+$lang['DepartmentSearch']   = "Vyhledat støedisko";
+$lang['DepartmentOverview'] = "Pøehled stredisek";
+$lang['DepartmentDetail']   = "Podrobnosti støediska";
+$lang['DepartmentModify']   = "Zmìny støediska";
+$lang['DepartmentCreate']   = "Vytvoøit støedisko";
+$lang['DepCreateInfo']      = "Vytvoøit nové støedisko";
+$lang['DepartmentMembers']  = "Èlenové støediska";
+$lang['DepartmentApps']     = "Schùzky s tímto støediskem";
+$lang['DepartmentLinks']    = "Linky";
+$lang['DepLinkInfo']        = "Zobrazit støedisko %s %s";
+$lang['DepChgInfo']         = "Zmìnit støedisko %s";
+$lang['DepDelInfo']         = "Zru¹it støedisko %s";
+
+# Team
+$lang['Team']               = "Tým";
+$lang['Teams']              = "Týmy";
+$lang['TeamOverview']       = "Pøehled týmu";
+$lang['TeamDetail']         = "Podrobnosti týmu";
+$lang['TeamModify']         = "Zmìnit tým";
+$lang['TeamCreate']         = "Vytvoøit tým";
+$lang['TeamMember']         = "Èlen týmu";
+$lang['TeamPosMember']      = "Mo¾ný èlen týmu";
+$lang['TeamMail']           = "Dopis pro tým";
+$lang['TeamMailInfo']       = "poslat e-mail týmu %s";
+$lang['TeamApps']           = "Funkce týmu %s";
+$lang['TeamLinkInfo']       = "Zobrazit tým %s";
+$lang['TeamManager']        = "Seznam mana¾erù";
+$lang['TeamName']           = "Název týmu";
+$lang['TeamCreation']       = "vytvoøeno";
+$lang['TeamCount']          = "# Èlenové";
+$lang['TeamOverviewInfo']   = "zobrazit seznam v¹ech týmu";
+$lang['TeamCreateI']        = "vytvoøit nový tým";
+$lang['TeamDeleteI']        = "Zru¹it tým %s";
+$lang['TeamModifyI']        = "Upravit tým %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Vyhledat adresy";
+$lang['AddressOverview'] = "Pøehled adres";
+$lang['AddressDetail']   = "Podrobnosti adres";
+$lang['Address']         = "Adresa";
+$lang['AddressEntries']  = "Záznam knihy adres";
+$lang['AdrLocChange']    = "Zmìnit adresu pro %s";
+$lang['AdrLocCreate']    = "vytvoøit adresu pro %s";
+$lang['AdrBMod']         = "Zmìnit bázi adresy";
+$lang['AdrBModInfo']     = "Zmìnit záznam báze %s";
+$lang['AdrBDel']         = "Zru¹it bázi adresy";
+$lang['AdrBDelInfo']     = "Zru¹it bázi a v¹echny záznamy adres %s";
+$lang['AdrBNew']         = "Nový záznam";
+$lang['AdrBNewInfo']     = "Vytvoøit nový záznam báze adresy";
+$lang['AdrCreateInfo']   = "vytvoøit novou adresu";
+$lang['AdrLNew']         = "Nová adresa";
+$lang['AdrLNewInfo']     = "vytvoøit novou adresu pro %s";
+$lang['AdrName']         = "Jméno";
+$lang['AdrMailInfo']     = "poslat e-mail pro %s";
+$lang['AdrGetVcard']     = "Získat Vcard";
+$lang['AdrGetVcardI']    = "Získat tuto adresu jako Vcard";
+$lang['AdrSeeEntry']     = "Zobrazit záznam";
+$lang['AdrSeeEntryI']    = "Zobrazit záznam knihy adres %s";
+$lang['AdrLocTitle']     = "%s adresa";
+$lang['AdrBNewTitle']    = "Vlo¾ nový záznam báze adres";
+$lang['AdrBChangeTitle'] = "Zmìnit záznam báze adres";
+
+$lang['Location']        = "Umístìní";
+$lang['Location2']       = "Umístìní";
+$lang['AdrTitle']        = "Titul";
+$lang['AdrFirstName']    = "Jméno";
+$lang['AdrMiddleName']   = "Iniciály";
+$lang['AdrLastName']     = "Pøíjmení";
+$lang['AdrFormat1']      = "%3\$s %2\$s %1\$s";
+$lang['AdrFormat2']      = "%2\$s %1\$s";
+$lang['AdrFormatShort1'] = "%2\$s %1\$s";
+$lang['AdrFormatShort2'] = "%2\$s. %1\$s";
+$lang['AdrBirthday']     = "Narozeniny";
+$lang['AdrPicture']      = "Obrázek";
+$lang['AdrCat1']         = "Domù";
+$lang['AdrCat2']         = "Kancelar";
+$lang['AdrCpLoc']        = "Zkopírovat adresu firmy";
+$lang['ZIP']             = "PSÈ";
+$lang['State']           = "Stát";
+$lang['Country']         = "Zemì";
+$lang['Street']          = "Ulice";
+$lang['City']            = "Mìsto";
+$lang['Phone']           = "Tel:";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "Fax:";
+$lang['AdrEmail']        = "E-mail:";
+$lang['acc_info1']       = "Bankovní èíslo úètu";
+$lang['acc_info2']       = "Bankovní èíslo úètu";
+$lang['acc_nr']          = "Úèet c.";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Zmìnit adresu %s pro %s";
+$lang['DeleteLocInfo']   = "Zru¹it adresu %s pro %s";
+$lang['AdrLinks']        = "Linky";
+$lang['AdrCategory']     = "Kategorie";
+$lang['AdrDescription']  = "Název adresy";
+$lang['ShowCal']         = "Zobrazit kalendáø pro %s";
+$lang['SearchForAdr']    = "Hledat v knize adres";
+$lang['SearchForAdrExt'] = "Roz¹íøené hledání v knize adres";
+$lang['SearchForCmp']    = "Vyhledat firmu";
+
+# Main Menu
+$lang['Calendar']        = "Kalendáø";
+$lang['Addresses']       = "Adresy";
+$lang['ProductMenu']     = "Produkty a projekty";
+$lang['Logout']          = "Odhlásit se";
+$lang['CalendarInfo']    = "Dne¹ní kalendáø";
+$lang['AddressesInfo']   = "Vyhledat adresy";
+$lang['ProductInfo']     = "Produkty a projekty";
+$lang['LogoutInfo']      = "Odhlásit se ze systému";
+
+# Help
+$lang['Help']            = "Nápovìda";
+$lang['HelpInfo']        = "Nápovìda pro tuto stránku";
+
+# Resource
+$lang['ResCal']          = "Vyu¾ití zdrojù";
+$lang['ResCalDetail']    = "Vyu¾ití zdrojù pro %s v %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "Vyber mapy";
+$lang['MapHeader']       = "Získat mapu z %s";
+
+# History
+$lang['HistoryDetail']   = "%s historie";
+$lang['HistoryShow']     = "Historie pro %s %s";
+$lang['HistoryFld']      = "Pole";
+$lang['HistoryOldV']     = "Stará hodnota";
+$lang['HistoryNewV']     = "Nová hodnota";
+$lang['HistoryLink']     = "Zobrazit historii";
+$lang['HistoryLinkI']    = "Zobrazit historii pro %s";
+$lang['HistoryDeleted']  = "Interval mazání";
+
+# Timetrack
+$lang['Timetrack']         = "Výkon";
+$lang['Timetracks']        = "Výkony";
+$lang['TimetrackCreate']   = "Záznam èasu";
+$lang['TimetrackCreateI']  = "Záznam èasu pro %s";
+$lang['TimetrackDelI']     = "Smazat zaznamenaný èas pro %s";
+$lang['TimetrackNew']      = "Nový záznam èasu";
+$lang['TimetrackModify']   = "Zmìnit záznam èasu";
+$lang['TimetrackOverview'] = "Souhrn záznamu èasu";
+$lang['TimetrackWorker']   = "Pracovník";
+$lang['TimetrackRef']      = "Reference";
+$lang['TimetrackDate']     = "Datum";
+$lang['TimetrackSearch']   = "Vyhledání záznamu èasu";
+$lang['SearchForTT']       = "Vyhledání záznamu èasu";
+$lang['SearchForTTExt']    = "Roz¹íøené vyhledání záznamu èasu";
+$lang['TimetrackBetween']  = "mezi";
+$lang['TimetrackBooked']   = "Zaznamenaný èas";
+$lang['TimetrackBookedI']  = "Zaznamenaný èas pro %s";
+$lang['TTStatsTitle']      = "Statistika pro záznam èasu";
+$lang['TTcph']             = "Cena za hodinu";
+$lang['TTState']           = "Stav";
+$lang['TTStates'][-1]      = "¾ádný stav";
+$lang['TTStates'][1]       = "zkontrolovaný";
+$lang['TTStates'][2]       = "oznámený";
+$lang['TTStates'][3]       = "zaplacený";
+$lang['TTStates'][4]       = "neoznamovat";
+$lang['TTRecord']          = "Zaznamenávám èas";
+$lang['TTfinish']          = "Ukonèeno";
+
+# Fax
+$lang['FaxCreate']         = "Nový fax";
+$lang['FaxSendTo']         = "Poslat fax pro %s";
+$lang['FaxTo']             = "Pro:";
+$lang['FaxNr']             = "Èíslo faxu:";
+$lang['FaxNote']           = "Ulo¾ tento fax jako poznámku pro %s";
+$lang['FaxSpooledTo']      = "Fax %s byl odeslán";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Poslat SMS zprávu pro %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Pøipomínka : schùzka %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Administrace";
+$lang['AdminDBInfo']       = "Info databáze";
+$lang['AdminDBTable']      = "Tabulka";
+$lang['AdminDBCount']      = "Záznamy";
+$lang['AdminDBName']       = "Název databáze";
+$lang['AdminDBAlias']      = "Alias pro databázi";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "U¾ivatel databáze";
+$lang['AdminDBPass']       = "Heslo";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Port";
+$lang['AdminDBType']       = "Typ";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Poslední pøihlá¹ení";
+$lang['AdminDBSync']       = "Synchronizace databáze";
+$lang['AdminDBSource']     = "Zdrojová databáze";
+$lang['AdminDBWhat']       = "Co/Jak";
+$lang['AdminDBTarget']     = "Cílová databáze";
+$lang['AdminDBRep']        = "Schránka souboru";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Databáze";
+$lang['DBInit']            = "Inicializace";
+$lang['DBModify']          = "Úprava databáze";
+$lang['DBModifyI']         = "Úprava databáze %s";
+$lang['DBCreate']          = "Vytvoøit databázi";
+$lang['DBDetail']          = "Podrobnosti databáze";
+$lang['DBLastDate']        = "Datum poslední synchronizace";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "ID poslední synchronizace";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "U¾ití databáze";
+$lang['DBreloginI']        = "Nové pøihlá¹ení na %s";
+$lang['DBOverview']        = "Pøehled databáze";
+$lang['DBUpdate']          = "Update databáze";
+$lang['DBUpdateI']         = "update databáze %s";
+$lang['AdminDBSyncM'][1]   = "odstranit cíl, potom zkopírovat v¹e ze zdroje do cíle";
+$lang['AdminDBSyncM'][2]   = "zkopírovat v¹e nové (od poslední synchronizace) z cíle do zdroje, potom zkopírovat v¹e";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL pro LOGO";
+$lang['CfgLogoLink']       = "URL Link z LOGO";
+$lang['CfgBugAutoName']    = "pojmenování schema pro chyby";
+$lang['CfgInvAutoName']    = "pojmenování schema pro úèty";
+$lang['CfgVATlist']        = "seznam pro dávky VAT";
+$lang['CfgVersion']        = "TUTOS verze";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Tisková sestava plánu tr¾eb";
+$lang['UndefinedEndDate']   = "Datum konce neznám";
+$lang['SalesBalanced']      = "Vyrovnané tr¾by";
+$lang['AccumulatedRevenue'] = "Akumulované výnosy";
+$lang['PeriodRevenue']      = "Výnosy za periodu";
+$lang['Period']             = "Perioda";
+$lang['Est_revenue']        = "Odhadnuté výnosy";
+$lang['Graph']              = "Graf";
+$lang['GraphInfo']          = "Zobrazit v grafu";
+
+# Permissions
+$lang['perm'][usecalendar]       = "pou¾ít kalendáø";
+$lang['perm'][usetaskmanagement] = "pou¾ít úlohy";
+$lang['perm'][usemaplink]        = "pou¾ít odkazy map";
+$lang['perm'][useprojects]       = "pou¾ít projekty";
+$lang['perm'][usetimetrack]      = "pou¾ít záznam èasu";
+$lang['perm'][usefax]            = "pou¾ít fax";
+$lang['perm'][usesms]            = "pou¾ít sms";
+$lang['perm'][useoverlib]        = "pou¾ít menu";
+$lang['perm'][useaddressbook]    = "pou¾ít knihu adres";
+$lang['perm'][usemail]           = "pou¾ít dopis";
+$lang['perm'][usehistory]        = "display history";
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff']              = "Vlastnost je implicitnì nepøístupná";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "Zaèátek po konci !";
+$lang['Err0006']         = "Prosím, proveï podrobný výbìr";
+$lang['Err0009']         = "Prosím, vyplò pole <i>%s</i>";
+$lang['Err0012']         = "Neznámá firma <i>%s</i> !";
+$lang['Err0014']         = "Prosím, proveï výbìr v poli <i>%s</i>";
+$lang['Err0017']         = "Prosím, vlo¾ èíslo do pole <i>%s</i> !";
+$lang['Err0018']         = "Název záznamu <i>%s</i> %d souhlasí !";
+$lang['Err0020']         = "Nemá¹ právo smazat tento soubor !";
+$lang['Err0021']         = "Nemù¾e¹ zmìnit virtualní tým 0";
+$lang['Err0022']         = "Promiò, ale díky pøístupovým právùm ti %s nemohu zobrazit.";
+$lang['Err0023']         = "Promiò, ale díky pøístupovým právùm nemù¾e¹ %s smazat.";
+$lang['Err0024']         = "Promiò, ale díky pøístupovým právùm nemù¾e¹ %s zmìnit.";
+$lang['Err0025']         = "Chybìjící u¾ivatelské jméno a heslo";
+$lang['Err0026']         = "Pøihlá¹ení není mo¾né";
+$lang['Err0027']         = "Pøihlá¹ení se nezdaøilo";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Fax nebyl odeslán !";
+$lang['Err0031']         = "Chybí faxove èíslo !";
+$lang['Err0032']         = "Neni povoleno odesílání faxu !";
+$lang['Err0033']         = "Neni povoleno odesílání e-mailu ! Mail \"%s\" <u>nebyl</u> poslán.";
+$lang['Err0034']         = "E-mail nebyl odeslán ! Chybí odesílatel dopisu \"%s\".";
+$lang['Err0035']         = "E-mail nebyl odeslán ! Dopis chybí a nebo u¾ byl poslán.";
+$lang['Err0036']         = "Produkt/projekt u¾ s tímto jménem (%s) a verzí existuje !";
+$lang['Err0037']         = "E-mail %s nebyl odeslán ! Chybí prototyp souboru dopisu (%s) !";
+$lang['Err0038']         = "©patné datum v poli %s!";
+$lang['Err0039']         = "Záznam adresy u¾ existuje (%s) !";
+$lang['Err0040']         = "%s nenalezeno !";
+$lang['Err0041']         = "Hesla nejsou shodná !";
+$lang['Err0042']         = "Staré heslo je ¹patné !";
+$lang['Err0043']         = "Adresa pøíjemce dopisu %s není ve správném (xxx@abc.com) formátu !";
+$lang['Err0044']         = "Záznam firmy u¾ existuje (%s) !";
+$lang['Err0045']         = "Záznam støediska u¾ existuje (%s) !";
+$lang['Err0046']         = "Záznam týmu u¾ existuje (%s) !";
+$lang['Err0047']         = "Nemohu odejmout administrátorská práva. Musí být alespoò jeden administrátor !";
+$lang['Err0048']         = "Nenalezeno !";
+$lang['Err0049']         = "Úèet %s je zablokovaný !";
+$lang['Err0050']         = "Nemohu najít cSV obsahy !";
+$lang['Err0051']         = "Nemohu najít CSV oddìlovaèe";
+$lang['Err0052']         = "Musí¹ dodat klasifikaci";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+
+### Local Variables: ***
+#
+### End: ***
+?>

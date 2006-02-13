@@ -1,0 +1,775 @@
+<?php
+/**
+ * Copyright 2002 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: base.pinc,v 1.16 2005/05/03 13:18:42 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Base Class for most TUTOS objects
+ */
+ global $calpath,$callink;
+ $calpath = 'modules/Calendar/';
+ $callink = 'index.php?module=Calendar&action=';
+
+include_once $calpath.'acl.pinc';
+#include_once $calpath .'history.pinc';
+
+/**
+ * Base for TUTOS objects
+ *
+ * this class provides a base for nearly all objects used in TUTOS
+ *
+ * @package BASE
+ */
+class tutos_base {
+  /** the global unique ID of this object in the Database
+   * @var int    $id
+   */
+  var $id;
+  /** the DB Connection where this object is stored/retrieved
+   * @var Object $dbconn
+   */
+  var $dbconn;
+  /** the creator of this object
+   * @var Object $creator
+   */
+  var $creator;
+  /** the creation DateTime of this object
+   * @var Object $creation
+   */
+  var $creation;
+  var $acl;
+  var $modified;
+  var $history;
+  var $tablename;
+  var $neighbours;
+
+  /**
+   * initialize the standard variables
+   *
+   * @param Object a database connection
+   */
+  function tutos_base(&$dbconn) {
+    $this->init($dbconn);
+  }
+
+  /**
+   * initialize the standard variables
+   *
+   * @param Object a database connection
+   */
+  function init(&$dbconn) {
+    global $current_user,$tutos;
+
+    $this->id       = -1;
+    $this->dbconn   = &$dbconn;
+    $this->creator  = $current_user;
+    $this->creation = new DateTime();
+    $this->acl      = array();
+    $this->modified = array();
+    $this->history  = array();
+    $this->neighbours = array();
+
+    $this->tablename = "UNKNOWN";
+
+    $this->tablename_hash = "objectids";
+
+    if (isset($current_user->id)) {
+      $this->acl[$current_user->id] = $tutos[modok];
+    }
+
+    #
+    # initialize custom database fields
+    #
+    $this->init_custom($this->gettype());
+  }
+  /**
+   *  initialize custom database fields
+   */
+  function init_custom ($sector) {
+    global $table;
+
+    if (!isset($table[$sector])) {
+      return;
+    }
+    foreach($table[$sector] as $i => $x) {
+      if (!is_array($x)) continue;
+      if (!isset($x['custom'])) continue;
+      if (!$x['custom']) continue;
+      $fld = "_fld_".$i;
+
+      if ($x[type] == "float") {
+        $this->$fld = 0.0;
+      } else if ($x[type] == "TS_TYPE") {
+        $this->$fld = new DateTime();
+      } else {
+        $this->$fld = "";
+      }
+    }
+  }
+  /**
+   * read the data of the specified object
+   *
+   * @param int $id the object id
+   */
+  function read ($id,&$obj) {
+    global $g_hash,$tutos;
+
+    //print("GS --> base read id=".$id." t=".$tablename);
+    if ( empty($id) ) return -1;
+    if ( -1 == $id ) return -1;
+    //if ( ! is_numeric($id) ) return -1;
+    if ( $obj->tablename == "UNKNOWN" ) return -1;
+
+    /* commented by srini
+    if ( !isset($tutos['nohash']) && isset($g_hash[$id]) ) {
+      # Hashed
+      #$this = $g_hash[$id];
+#      if ($this->id != $id) {
+# PHP 5
+#die ("CACHE failed for ".$id ."(". $g_hash[$id]->getFullName() .") got ". $obj->id ." ". $obj->gettype() ."<br>\n");
+
+#      PHP_ERROR("8888",$_SERVER["REQUEST_URI"] ." > CACHE failed for ".$id ."(". $g_hash[$id]->getFullName() .") got ". $obj->id ." ". $obj->gettype() .":\n",3,$tutos[errlog],"see","backtrace");
+#		  echo $id ." ". $g_hash[$id]->getFullName() ." ###<br>";
+#      } else {
+        $g_hash['hits']++;
+        $obj = &$g_hash[$id];
+        return $obj;
+#      }
+    }
+    if (!isset($obj->dbconn)) {
+      return -1;
+    }
+    */
+
+    $q = "SELECT * from ". $obj->tablename ." WHERE id = '". $id . "'";
+    //print("GS --> base q=".$q);
+    /*$r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();*/
+    $r = $obj->db->query($q);
+    $n = $obj->db->getRowCount($r);
+    //print("GS --> base n=".$n);
+    if ( 1 != $n) {
+      return -1;
+    }
+    $val_array = mysql_fetch_assoc($r);
+    $obj->read_result($val_array);
+    //$r->free();
+	return $obj;
+  }
+  /**
+   * read the custom fields of a resultset 
+   */
+  function read_custom_result (&$r,$pos,$sector ) {
+    global $table;
+    if (!isset($table[$sector])) {
+      return;
+    }
+
+    foreach($table[$sector] as $i => $x) {
+      if (!is_array($x)) continue;
+      if (!isset($x['custom'])) continue;
+      if (!$x['custom']) continue;
+      $fld = "_fld_".$i;
+      if ($x[type] == "TS_TYPE") {
+        $this->$fld = $r->getDateTime($pos, $i);
+      } else {
+        $this->$fld = @$r->get($pos,$i);
+      }
+      if (!isset($this->$fld)) $this->$fld ="";
+    }
+  }
+  /**
+   * read a resultset
+   */
+  /*function read_result (&$r, $pos ) {
+    global $g_hash;
+
+    #$this->id          = $r->get($pos, "id");
+    #$this->creation    = $r->getDateTime($pos, "creation");
+
+    #
+    # read custom database fields
+    #
+    #$this->read_custom_result($r,$pos,$this->gettype());
+
+
+    # we have a real object so we reset the acl
+    $this->acl      = array();
+    #acl_read($this);
+    $g_hash[$this->id] = &$this;
+    return;
+  }*/
+
+  // srini
+
+  function read_result($val_array, $pos=-1)
+  {
+    if($pos!=-1) return;
+	global $g_hash;
+
+    $this->id          = $val_array["id"];
+    $this->creation    = new DateTime($val_array["date_entered"]);
+    #
+    # read custom database fields
+    #
+    #$this->read_custom_result($r,$pos,$this->gettype());
+
+
+    # we have a real object so we reset the acl
+    $this->acl      = array();
+    #acl_read($this);
+    $g_hash[$this->id] = &$this;
+    return;	
+
+  }
+  /**
+   * Return Info about history of this object
+   */
+  function readHistory($adr_id,$sort,$dir,$start) {
+    if ( count($this->history) > 0 ) {
+      return;
+    }
+    readHistory($this,$adr_id,$sort,$dir,$start);
+    return;
+  }
+  /**
+   * Return Info about connected tasks of this object
+   */
+  function readTasks() {
+    if ( ! class_exists ("task") ) {
+      require_once 'task.pinc';
+    }
+    task::obj_read($this);
+    return;
+  }
+  /**
+   * Return Info about the total time spent for this object
+   */
+  function readTimetrackSum() {
+    if ( ! class_exists ("timetrack") ) {
+      require_once 'timetrack.pinc';
+    }
+    readTimetrackSum($this);
+    return;
+  }
+  /**
+   * Return Info about time spent for this object
+   */
+  function readTimetrack() {
+    if ( ! class_exists ("timetrack") ) {
+      require_once 'timetrack.pinc';
+    }
+    timetrack::obj_read($this);
+    return;
+  }
+  /**
+   * parse XML import
+   */
+  function parseXML ($fld,$data,$attrs) {
+    global $tutos;
+
+    if ( $fld == "systemid" ) {
+       $this->force_insert = ($data != $this->dbconn->db->systemid);
+    }    
+    if ($fld == "id") {
+      if ($this->force_insert) {
+        $this->id = -1;
+      } else {  
+	    $tutos['nohash'] =1 ;
+        $xx = $this->read($data,$this);
+	    unset($tutos['nohash']);
+#		echo "X:".$xx->id." ".$this->id." ". $data ."\n";
+        if ( ($this->id != $data) )  {
+		  if ($tutos[debug] != 0) {
+            Fatal_Error($this->gettype() ." with id ". $data. " does not exist");
+		  }
+          die ($this->gettype() ." with id ". $data. " does not exist");
+        }
+      }  
+    }
+    if ($fld == "creation") {
+      $this->creation->setDateTime($data);
+    }
+    return;
+  }
+  /**
+   * Head of XML export
+   */
+  function exportXML_head () {
+    global $tutos;
+    $r =  "<?xml version=\"1.0\" encoding=\"UTF8\" ?>\n";
+    $r .= "<!-- TUTOS Version :". $tutos[version] ." -->\n";
+    $r .= "<!-- Creation time :". date('YmdHis') ."  -->\n";
+    return $r;
+  }
+  /**
+   * Start of XML export
+   */
+  function exportXML_start () {
+    return "<". $this->gettype() .">\n";
+  }
+  /**
+   * End of XML export
+   */
+  function exportXML_end () {
+    return "</". $this->gettype() .">\n";
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body () {
+    global $current_user;
+
+    if (!$this->see_ok()) {
+      return;
+    }
+    $r  = "<systemid>". $this->dbconn->db->systemid ."</systemid>\n";
+    $r .= "<id>". $this->id ."</id>\n";
+    $r .= "<creation>". $this->creation->exportXML_body() ."</creation>\n";
+    # datetime of last modification
+    if ( $current_user->feature_ok(usehistory,PERM_SEE) ) {
+      $d = history_get_lastmod($this);
+      if ($d) {
+        $r .=  "<lastmod>". $d->exportXML_body() ."</lastmod>\n";
+      }
+    }
+    if ( $current_user->feature_ok(useurl,PERM_SEE) ) {
+      url::obj_read($this);
+      if ( isset($this->list[useurl]) && (count($this->list[useurl]) > 0) ) {
+        foreach($this->list[useurl] as $f) {
+          $r .= $f->exportXML_start();
+          $r .= $f->exportXML_body();
+          $r .= $f->exportXML_end();
+        }
+      }
+    } 
+    if ( $current_user->feature_ok(usenotes,PERM_SEE) ) {
+      note::obj_read($this);
+      if ( isset($this->list[usenotes]) && (count($this->list[usenotes]) > 0) ) {
+        foreach($this->list[usenotes] as $f) {
+          $r .= $f->exportXML_start();
+          $r .= $f->exportXML_body();
+          $r .= $f->exportXML_end();
+        }
+      }
+    } 
+    
+    return $r;
+  }
+  /**
+   * Header for Export as XML
+   */
+  function exportXMLHeader ($contentsize = 0) {
+    Header("Expires: 0");
+    Header("Pragma: no-cache");
+    Header("Content-type: text/xml");
+    Header("Content-Disposition: attachment; filename=\"". $this->gettype() .".xml\"");
+    Header("Content-Description: XML Export from TUTOS" );
+    if ($contentsize > 0) {
+      Header("Content-Length: ". $contentsize);
+    }
+    return;
+  }
+  /**
+   * Export as XML
+   */
+  function exportXML($head = true) {
+    $r = "";
+    if ( $head ) {
+      $r .= $this->exportXML_head();
+    }
+    if ( !$this->see_ok() ) {
+        return $r;
+    }
+    $r .=  $this->exportXML_start();
+    $r .=  $this->exportXML_body();
+    $r .=  $this->exportXML_end();
+    return $r;
+  }
+  /**
+   * Checks if the current user is allowed to see this object
+   *
+   * @see  del_ok(), mod_ok()
+   * @return int 0 (NO) or a positive value if seeing is allowed
+   */
+  function see_ok () {
+    global $current_user;
+    //if ( ! $current_user->feature_ok($this->gettypeid(),PERM_SEE) ) {
+    //  return 0;
+    //}
+    return acl_see_ok($this);
+  }
+  /**
+   * Checks if the current user is allowed to use this object
+   * (i.e.) attach things 
+   *
+   * @see  del_ok(), mod_ok() , see_ok()
+   * @return int 0 (NO) or a positive value if seeing is allowed
+   */
+  function use_ok () {
+    global $current_user;
+  //  if ( ! $current_user->feature_ok($this->gettypeid(),PERM_USE) ) {
+  //    return 0;
+  //  }
+    return acl_use_ok($this);
+  }
+  /**
+   * Checks if the current user is allowed to delete this object
+   *
+   * @see  see_ok(), mod_ok()
+   * @return int 0 (NO) or a positive value if deletion is allowed
+   */
+  function del_ok () {
+    global $current_user;
+  //  if ( ! $current_user->feature_ok($this->gettypeid(),PERM_DEL) ) {
+  //    return 0;
+  //  }
+    return acl_del_ok($this);
+  }
+  /**
+   * Checks if the current user is allowed to modify this object
+   *
+   * @see  del_ok(), see_ok()
+   * @return int 0 (NO) or a positive value if modification is allowed
+   */
+  function mod_ok () {
+    global $current_user;
+    //if ( ! $current_user->feature_ok($this->gettypeid(),PERM_MOD) ) {
+    //  return 0;
+    //}
+    //return acl_mod_ok($this);
+	// acl_mod_ok commented by srini temporary
+	return 1;
+  }
+  /**
+   * set a field for this object and maintain the change history
+   *
+   * @param String $fld       the fieldname to change
+   * @param String $value     the new value for $fld
+   * @param String $histfield the label of the field in the history table
+   */
+  function setStrField ($fld,$value,$histfield) {
+    if ( !isset($this->$fld) ) {
+      echo "Internal Error: Unknown field in '". $this->gettype() ."' Object :|". $fld ."| Value:|". $value ."|<br>\n";
+    }
+    if ( $this->$fld != $value ) {
+      $this->modified[] = array ( "field" => $histfield , "old" => $this->$fld , "new" => $value  );
+      $this->$fld = $value;
+      return true;
+    }
+    return false;
+  }
+  /**
+   * set a field for this object and maintain the change history
+   *
+   * @param String $fld       the fieldname to change
+   * @param int    $value     the new value for $fld
+   * @param String $histfield the label of the field in the history table
+   */
+  function setIntField ($fld,$value,$histfield) {
+    if ( $this->$fld != $value ) {
+      $this->modified[] = array ( "field" => $histfield , "old" => $this->$fld , "new" => $value  );
+      $this->$fld = (int)$value;
+      return true;
+    }
+    return false;
+  }
+  /**
+   * set a field for this object and maintain the change history
+   *
+   * @param String $fld       the fieldname to change
+   * @param float  $value     the new value for $fld
+   * @param String $histfield the label of the field in the history table
+   */
+  function setFloatField ($fld,$value,$histfield) {
+    if ( $this->$fld != $value ) {
+      $this->modified[] = array ( "field" => $histfield , "old" => $this->$fld , "new" => $value  );
+      $this->$fld = (float)$value;
+      return true;
+    }
+    return false;
+  }
+  /**
+   * set a Date field for this object and maintain the change history
+   *
+   * @param String $fld       the fieldname to change
+   * @param Object $value     the new value for $fld
+   * @param String $histfield the label of the field in the history table
+   */
+  function setDateField ($fld,&$value,$histfield) {
+    if ( isset($this->$fld) ) {
+      $a = $this->$fld->getYYYYMMDD();
+    } else {
+      $a = "";
+    }
+    $b = $value->getYYYYMMDD();
+
+    if ( $a != $b ) {
+      $this->modified[] = array ( "field" => $histfield , "old" => $a , "new" => $b  );
+      $this->$fld = $value;
+      return true;
+    }
+    return false;
+  }
+  /**
+   * set a DateTime field for this object and maintain the change history
+   *
+   * @param String $fld       the fieldname to change
+   * @param Object $value     the new value for $fld
+   * @param String $histfield the label of the field in the history table
+   */
+  function setDateTimeField ($fld,&$value,$histfield) {
+    if ( isset($this->$fld) ) {
+      $a = $this->$fld->getYYYYMMDDHHMM();
+    } else {
+      $a = "";
+    }
+    $b = $value->getYYYYMMDDHHMM();
+
+    if ( $a != $b ) {
+      $this->modified[] = array ( "field" => $histfield , "old" => $a , "new" => $b  );
+      $this->$fld = $value;
+      return true;
+    }
+    return false;
+  }
+  /**
+   * fill mailing list with address/team objects or mail addresses
+   */
+  function fill_maillist(&$ml) {
+    return;
+  }
+  /**
+   * get a usefull human readable name
+   */
+  function getFullName () {
+    return $this->getType()." (". $this->id .")";
+  }
+
+  function getShortName () {
+    return $this->getFullName();
+  }
+
+  /**
+   * get the info as text
+   */
+  function getAsText (&$lang) {
+    # defaults to fullname
+    $r = "";
+    $r .= $this->getFullName() ."\n";
+    return $r;
+  }
+  /**
+   * get a url to this object
+   */
+  function getURL () {
+    return "mytutos.php";
+  }
+  /**
+   * get a url to the modify page of this object
+   */
+  function getModURL () {
+    return "mytutos.php";
+  }
+  /**
+   * get a url to the delete script of this object
+   */
+  function getDelURL () {
+    return "mytutos.php";
+  }
+  /**
+   * get a link to this object
+   */
+  function getLink ($text = "") {
+    if ( empty($text) ) {
+      $text = $this->getFullname();
+    }
+    return makelink($this->getURL(),myentities($text),sprintf("%s",$this->getFullname()));
+  }
+  /**
+   * get a ulink to the objects history
+   */
+  function getHistoryLink ($cols) {
+    global $current_user,$lang;
+
+    $ret = "";
+    if ( $current_user->feature_ok(usehistory,PERM_SEE) ) {
+      $ret .= "<tr>\n";
+      $ret .= " <td colspan=\"". $cols ."\"><br>". makelink("history_show.php?id=". $this->id,$lang['HistoryLink'],sprintf($lang['HistoryLinkI'],$this->getFullname())) ."</td>\n";
+      $ret .= "</tr>\n";
+    }
+    return $ret;
+  }
+  /**
+   * get the timespan where this object is active
+   * return a array with start, end , description
+   */
+  function getTimespan () {
+    $r = array();
+    $r['start'] = 0;
+    $r['end'] = 0;
+    $r['desc'] = $this->getFullName();
+    return $r;
+  }
+
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS could be reattached
+   */
+  function getNeighbours () {
+    if (count ($this->neighbours) > 0 ) return $this->neighbours;
+
+    $this->neighbours[$this->id] = &$this;
+
+    return $this->neighbours;
+  }
+
+  /**
+   * add the custom fields to the query (called by save methods)
+   */
+  function save_custom_fields(&$q,$section = "0") {
+    global $table;
+
+    if ($section == "0") {
+      $section = $this->gettype();
+    }
+    if (!isset($table[$section])) {
+      return;
+    }
+    foreach($table[$section] as $i => $x) {
+      if (!is_array($x)) continue;
+      if (!isset($x['custom'])) continue;
+      if (!$x['custom']) continue;
+      if (!isset($x['ftype'])) $x['ftype'] = "";
+      $fld = "_fld_".$i;
+
+      if ($x[type] == "TS_TYPE") {
+        $q->addFV($i,$this->$fld,"DATETIME");
+      } else if ($x[type] == "VARCHAR") {
+        $q->addFV($i,$this->$fld,"STRING",$x[size]);
+      } else if ($x[type] == "float") {
+        $q->addFV($i,$this->$fld,"FLOAT");
+      } else if ($x[type] == "TX_TYPE") {
+        $q->addFV($i,$this->$fld,"TEXT");
+      } else if ($x['ftype'] == "Boolean") {
+        if ($this->$fld == "") $this->$fld = 0;
+        $q->addFV($i,$this->$fld);
+      } else {
+        $q->addFV($i,$this->$fld,"");
+      }
+#       echo $x[type] ." ". $fld ." ". $this->$fld ."<br>";
+    }
+  }
+  /**
+   * Save object and references to this object from DB
+   */
+  function save() {
+    global $current_user,$tutos,$g_hash;
+    $msg = "";
+
+    @reset($tutos[activemodules]);
+    while( list ($i,$f) = @each ($tutos[activemodules])) {
+      $x = new $tutos[modules][$f][name]($this->dbconn);
+      $msg .= $x->obj_save($current_user,$this);
+    }
+
+    #$msg .= acl_save($this);
+    #$msg .= history_save($this);
+
+    # all exiting objects are hashed so we do not need to save the id
+    if ( ! isset($g_hash[$this->id]) ) {
+      $msg .= $this->save_obj_id();
+      $g_hash[$this->id] = &$this;
+    }
+    return $msg;
+  }
+  /**
+   * Save the object id (used for faster getObject)
+   */
+  function save_obj_id() {
+    if ( $this->id == -1 ) return;
+    if ( $this->gettypeid() == noobject) return;
+
+    $msg = "";
+    if ( $this->getTypeID() != useuser ) {
+      $x = $this->id;
+    } else {
+      $x = $this->uid;
+    }
+    #$q = "DELETE from ". $this->dbconn->prefix . $this->tablename_hash ." where id =  ". $x ;
+    #$this->dbconn->Exec($q);
+    #$q = "INSERT into ". $this->dbconn->prefix . $this->tablename_hash ." (id,tutostype) values (". $x .",". $this->gettypeid() .")";
+    #$this->dbconn->Exec($q);
+    #return $msg;
+  }
+  /**
+   * delete the object id (used for faster getObject)
+   */
+  function del_obj_id() {
+    $msg = "";
+    #$q = "DELETE FROM ". $this->dbconn->prefix . $this->tablename_hash ." WHERE id = ". $this->id;
+    #$this->dbconn->Exec($q);
+    #return $msg;
+  }
+  /**
+   * Delete object and references to this object from DB
+   */
+  function delete() {
+    global $current_user,$tutos;
+
+    $msg = "";
+    $msg .= acl_delete_obj($this);
+    $msg .= history_delete($this);
+
+    @reset($tutos[activemodules]);
+    while( list ($i,$f) = @each ($tutos[activemodules])) {
+      $x = new $tutos[modules][$f][name]($this->dbconn);
+      $msg .= $x->obj_delete($current_user,$this);
+    }
+
+    $this->modified[] = array ( "field" => "Delete" , "old" => $this->gettype() , "new" => -1 );
+    $msg .= history_save($this);
+    $msg .= $this->del_obj_id();
+
+    return $msg;
+  }
+  /**
+   * Transfer reference ids according to given table
+   */
+  function transfer_ids (&$trans) {
+    global $tutos;
+
+    @reset($tutos[activemodules]);
+    while( list ($i,$f) = @each ($tutos[activemodules])) {
+      $x = new $tutos[modules][$f][name]($this->dbconn);
+      $msg .= $x->obj_transfer_ids($this,$trans);
+    }
+    return;
+  }
+  /**
+   * the type of this TUTOS object
+   */
+  function getType () {
+    return "base";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return noobject;
+  }
+  /**
+   * get the icon as a image html tag
+   */
+  function getHtmlIcon () {
+    return "";
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    return "";
+  }
+}
+?>

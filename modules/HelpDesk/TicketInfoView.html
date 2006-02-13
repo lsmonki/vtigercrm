@@ -1,0 +1,84 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_TICKET}{MOD.LBL_COLON}  {NAME}</td>
+	 <td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="InfoView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="HelpDesk">
+			<input type="hidden" name="action">
+			<input type="hidden" name="id" value="{ID}">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="">						
+		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.action.value='EditTicket'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.action.value='DeleteTicket'; this.form.return_action.value='index'; this.form.return_id.value=''; this.form.return_module.value='HelpDesk'" type="submit" name="button" value="  {APP.LBL_DELETE_BUTTON_LABEL}  "></td>
+		<td><input title="History" accessKey="History" class="button" onclick="this.form.action.value='TicketHistory'" type="submit" name="button" value="  History  " ></td>
+	
+	<td width="30%">&nbsp;</td>
+	<td><h3><b>{MOD.LBL_TICKET_ID}&nbsp;{MOD.LBL_COLON}&nbsp; </b></h3></td>
+	<td><h3><b>&nbsp;{ID} </b></h3></td>
+		</tr></table>
+	</td>
+	<td></td>
+</tr>
+</table> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_GROUP}</td>
+	<td width="30%">{GROUPVALUE}</select></td>
+	<td width="20%" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
+	<td width="30%">{USERNAME}</select></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{ENTITY}</td>
+	<td width="30%">{ENTITYNAME}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_CONTACT_NAME}</td>
+        <td width="30%">{CONTACTNAME}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_PRIORITY}</td>
+	<td width="30%">{PRIORITYOPTIONS}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_STATUS}</td>
+	<td width="30%">{STATUSOPTIONS}</td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}</td>
+	<td width="30%">{CATEGORYOPTIONS}</td>
+        <td width="20%" class="dataLabel">{MOD.LBL_CREATED_DATE}</td>
+        <td width="30%">{CREATEDDATE}</td>
+	</tr><tr>
+        <td width="20%" class="dataLabel">{MOD.LBL_ESTIMATED_FINISHING_TIME}</td>
+        <td width="30%">{EXPECTED_CLOSE_DATE}</td>
+        </tr><tr>
+	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
+	<td colspan="4">{SUBJECT}</td>
+	</tr>
+	{CUSTOMFIELD}
+	<tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DESCRIPTION}</td>
+	<td colspan="4">{DESCRIPTION}</td>
+</tr></table>
+</td></tr></table>
+</form>
+{JAVASCRIPT}
+<!-- END: main -->

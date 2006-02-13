@@ -1,0 +1,111 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * Header: /cvsroot/sugarcrm/sugarcrm/modules/Calls/SubPanelViewInvitees.html,v 1.2 2004/06/29 07:22:13 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: users -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td colspan='9' class="moduleListTitle">{APP.LBL_USER_LIST}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	</tr>
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="25%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="20%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_USER_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="30%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_EMAIL}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="15%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_PHONE}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="10%" class="moduleListTitle"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	  </tr>
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Users&record={USER.ID}">{USER.FIRST_NAME}&nbsp;{USER.LAST_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{USER.USER_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><A HREF="mailto:{USER.EMAIL1}">{USER.EMAIL1}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{USER.PHONE_WORK}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td nowrap align="center" valign=TOP style="padding:0px 3px 0px 3px;">[<a class="listFormLinks" onclick="return confirm('{MOD.NTC_REMOVE_INVITEE}')" href="{URL_PREFIX}index.php?action=DeleteCallUserRelationship&module=Calls&user_id={USER.ID}&call_id={RECORD_ID}{RETURN_URL}">{APP.LNK_REMOVE}</a>]</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
+</table>
+<!-- END: users -->
+<!-- BEGIN: contacts -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td colspan='11' class="moduleListTitle">{APP.LBL_CONTACT_LIST}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	</tr>
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle"><IMG alt="Yahoo Messenger" SRC="modules/Yahoo/images/ym.gif"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="25%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_CONTACT_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="20%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_ACCOUNT_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="30%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_EMAIL}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="15%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_PHONE}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="10%" class="moduleListTitle"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	  </tr>
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<!-- BEGIN: yahoo_id -->
+		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={CONTACT.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={CONTACT.YAHOO_ID}'&m=g&t=2'></a></td>
+<!-- END: yahoo_id -->
+<!-- BEGIN: no_yahoo_id -->
+		<td>&nbsp;</td>
+<!-- END: no_yahoo_id -->
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={CONTACT.ID}">{CONTACT.FIRST_NAME}&nbsp;{CONTACT.LAST_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{CONTACT.ACCOUNT_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><A HREF="mailto:{CONTACT.EMAIL1}">{CONTACT.EMAIL1}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{CONTACT.PHONE_WORK}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td nowrap align="center" valign=TOP style="padding:0px 3px 0px 3px;">[<a class="listFormLinks" href="{URL_PREFIX}index.php?action=EditView&module=Contacts&record={CONTACT.ID}{RETURN_URL}">{APP.LNK_EDIT}</a>] &nbsp;&nbsp;[<a class="listFormLinks" onclick="return confirm('{MOD.NTC_REMOVE_INVITEE}')" href="{URL_PREFIX}index.php?action=DeleteCallContactRelationship&module=Calls&contact_id={CONTACT.ID}&call_id={RECORD_ID}{RETURN_URL}">{APP.LNK_REMOVE}</a>]</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
+</table>
+<!-- END: contacts -->

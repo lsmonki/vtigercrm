@@ -27,17 +27,17 @@
  <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
  <TABLE width="50%" BORDER="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
  <tr>
- 	<td class="formSecHeader"><?php echo $mod_strings['LBL_FILE_INFORMATION']; ?></td>
+ 	<td class="formSecHeader">File Information</td>
 </tr>
  	<td> 
 	<TABLE BORDER="0" cellspacing="1" cellpadding="5">
 	<TR>
 	   <TD class="dataLabel"><?php echo $mod_strings['LBL_MODULENAMES']; ?>:</TD>
 	   <TD><SELECT name="target_module">
-	    <option value="Leads"><?php echo $app_strings['COMBO_LEADS'];?></option>
-	    <option value="Accounts"><?php echo $app_strings['COMBO_ACCOUNTS'];?></option>
-	    <option value="Contacts"><?php echo $app_strings['COMBO_CONTACTS'];?></option>
-         <option value="HelpDesk"><?php echo $app_strings['COMBO_HELPDESK'];?></option>
+	<option><?php echo $app_strings['COMBO_LEADS'];?></option>
+	<option><?php echo $app_strings['COMBO_ACCOUNTS'];?></option>
+	<option><?php echo $app_strings['COMBO_CONTACTS'];?></option>
+        <option><?php echo $app_strings['COMBO_HELPDESK'];?></option>
 	</SELECT>
 	</TD> 
   </TR>

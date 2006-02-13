@@ -1,0 +1,142 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/SearchForm.html,v 1.7 2004/07/03 20:24:15 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="formOuterBorder">
+	<tr>
+<form>
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_LIST_TOPIC}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="topic" class=dataField value="{TOPIC}">
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_LIST_AUTHOR}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="author" class=dataField  value="{AUTHOR}">
+		<!--td class="dataLabel" noWrap>&nbsp;{MOD.LBL_LIST_AGE}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="age" class=dataField  value="{AGE}" -->
+
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="ListView"/>
+			<input type="hidden" name="query" value="true"/>
+			<input type="hidden" name="module" value="MessageBoard" />
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+		<br>
+		<!--font size='1'>[<a href='index.php?module=MessageBoard&action=ListView&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font -->
+		</td>
+	</tr>
+	<!--tr>
+		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
+		<td class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+	</tr -->
+</form>
+	</table>
+	<br>
+<!--table cellpadding="2" cellspacing="2" border="0" align="center"><tr>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=A">A</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=B">B</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=C">C</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=D">D</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=E">E</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=F">F</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=G">G</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=H">H</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=I">I</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=J">J</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=K">K</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=L">L</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=M">M</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=N">N</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=O">O</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=P">P</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=Q">Q</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=R">R</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=S">S</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=T">T</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=U">U</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=V">V</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=W">W</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=X">X</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=Y">Y</a></td><td>|</td>
+<td><a href="index.php?module=MessageBoard&action=ListView&query=true&last_name=Z">Z</a></td>
+</tr></table -->
+<br>
+{JAVASCRIPT}
+<!-- END: main -->
+
+<!-- BEGIN: advanced -->
+<table cellpadding="2" cellspacing="1" border="0" width="100%" class="formOuterBorder">
+<tr>
+<form>
+	<td width="100%"></td>
+	<td align="center" nowrap><input type="hidden" name="action" value="ListView"/>
+		<input type="hidden" name="query" value="true"/>
+		<input type="hidden" name="advanced" value="true"/>
+		<input type="hidden" name="module" value="Leads" />
+	<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+	<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+	<br>
+	<font size='1'>[<a href='index.php?module=MessageBoard&action=ListView'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+	</td>
+</tr>
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_TOPIC}</td>
+	<td width="30%" class="dataField"><input name='topic' tabindex='1' size='25' maxlength='25' type="text" value="{TOPIC}"></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_LIST_AUTHOR}</td>
+	<td width="30%" class="dataField"><input name='author' type="text" tabindex='2' size='20' maxlength='25' value='{AUTHOR}'></td>
+	</tr><tr>
+	<!--td width="20%" class="dataLabel">{MOD.LBL_LIST_AGE}</td>
+	<td width="30%" class="dataField"><input name='age' type="text" tabindex='1' size='25' maxlength='25' value="{AGE}"></td -->
+	<!-- td width="20%" class="dataLabel">{MOD.LBL_EMAIL}</td>
+	<td width="30%" class="dataField"><input name='email' type="text" tabindex='2' size='35' maxlength='100' value='{EMAIL}'></td -->
+	</tr><!--tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_COMPANY}</td>
+	<td width="30%" class="dataField"><input name='company' type="text" tabindex='1' size='25' maxlength='100' value='{COMPANY}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_MOBILE}</td>
+	<td width="30%" class="dataField"><input name='mobile' type="text" tabindex='2' size='25' maxlength='100' value='{MOBILE}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
+	<td width="30%" class="dataField"><select name='lead_source' tabindex='1'>{LEAD_SOURCE_OPTIONS}</select></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_RATING}</td>
+	<td width="30%" class="dataField"><select name='rating' tabindex='1'>{RATING_OPTIONS}</select></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_INDUSTRY}</td>
+	<td width="30%" class="dataField"><select name='industry' tabindex='1'>{INDUSTRY_OPTIONS}</select></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_STATUS}</td>
+	<td width="30%" class="dataField"><select name='lead_status' tabindex='1'>{LEAD_STATUS_OPTIONS}</select></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_STREET}</td>
+	<td width="30%" class="dataField"><input type="text" name='address_street' tabindex='3' value='{ADDRESS_STREET}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_CITY}</td>
+	<td width="30%" class="dataField"><input type="text"  name='address_city' tabindex='4' size='15' maxlength='100' value='{ADDRESS_CITY}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_STATE}</td>
+	<td width="30%" class="dataField"><input  type="text" name='address_state' tabindex='4' size='15' maxlength='100' value='{ADDRESS_STATE}'></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_POSTAL_CODE}</td>
+	<td width="30%" class="dataField"><input  type="text" name='address_postalcode' tabindex='4' size='10' maxlength='20' value='{ADDRESS_POSTALCODE}'></td>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
+	<td width="30%" class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_COUNTRY}</td>
+	<td width="30%" class="dataField"><input  type="text" name='address_country' tabindex='4' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td >
+</tr --></table>
+</td></tr></table>
+	</form>
+{JAVASCRIPT}
+<!-- END: advanced -->

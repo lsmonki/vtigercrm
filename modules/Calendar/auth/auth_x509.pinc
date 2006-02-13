@@ -1,0 +1,84 @@
+<?php
+/*
+ * Copyright 1999 - 2002 by Gero Kohnert
+ *
+ * CVS Info:  $Id: auth_x509.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ * contributed by Markus Leist
+ */
+
+require_once 'auth.pinc';
+/**
+ * Authentification base class
+ *
+ * @modulegroup BASE
+ * @module auth_x509
+ * @package BASE
+ */
+class auth_x509 extends auth {
+  /**
+   * get the password
+   */
+  function getpw() {
+    if ( isset($_POST['pw']) ) {
+      return $_POST['pw'];
+    } elseif ( isset($_GET['pw']) ) {
+      return $_GET['pw'];
+    }
+    return;
+  }
+  /**
+   * get the username
+   */
+  function getuname() {
+    if ( isset($_POST['uname']) ) {
+      return trim($_POST['uname']);
+    } elseif ( isset($_GET['uname']) ) {
+      return trim($_GET['uname']);
+    }
+    return;
+  }
+  /**
+   * Check for permmision
+   * using X.509v3-Certs
+   */
+  Function check() {
+    global $current_user,$lang;
+
+    if ( $_SERVER["SSL_CLIENT_S_DN_CN"] != $this->getuname() ) {
+      ReadLang($lang);
+      $r[0] = "No Result for ". $this->getuname();
+      $r[1] = $lang['Err0026'];
+      return $r;
+    }
+
+    $query =
+      "SELECT p.*, a.* FROM ". $this->dbconn->prefix ."people p, ". $this->dbconn->prefix ."addresses a ".
+      "WHERE  login = ". $this->dbconn->String($this->getuname()).
+      "       AND p.adr_id = a.id";
+
+    $result = $this->dbconn->Exec($query);
+
+    $r = array();
+    if ( ! $result ) {
+      ReadLang($lang);
+      $r[0] = "No Result for ". $this->getuname();
+      $r[1] = $lang['Err0026'];
+      return $r;
+    }
+  
+    /* OK there is a user and a Password so lets check */
+    if ( 1 != $result->numrows()) {
+      ReadLang($lang);
+      $r[0] = "not unique ". $result->numrows() ." Result for ". $this->getuname()  ." (". $_SERVER['REMOTE_ADDR'] .")";
+      $r[1] = $lang['Err0027'];
+      $result->free();
+      return $r;
+    }
+  
+    $current_user= new tutos_user($this->dbconn);
+    $current_user->read_result($result,0);
+    $result->free();
+  }
+}
+?>

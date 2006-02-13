@@ -57,28 +57,128 @@ $the_script  = <<<EOQ
  * Contributor(s): ______________________________________..
  */
 // Declaring valid date character, minimum year and maximum year
+var dtCh= "-";
+var minYear=1900;
+var maxYear=2100;
 
-var fieldname,fieldlabel,fielddatatype;	
-function verify_data(form) 
-{
-	var form_name=form.name;
-	if(form_name=='ActivitySave')
-        {
-                form.due_date.value=form.date_start.value;
-                fieldname = new Array('task_subject','jscal_field_date_start');
-                fieldlabel = new Array('Subject','Start Date & Time');
-                fielddatatype = new Array('V~M','DT~M~task_time_start');
-        }
-        else
-        {
-                form.due_date.value=form.date_start.value;
-		fieldname = new Array('event_subject','jscal_field_event_date_start','duration_hours')
-                fieldlabel = new Array('Subject','Start Date & Time','Duration')
-                fielddatatype = new Array('V~M','DT~M~event_time_start','I~M')
-        }
+function isInteger(s){
+	var i;
+    for (i = 0; i < s.length; i++){
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
+    }
+    // All characters are numbers.
+    return true;
+}
 
-	var ret = formValidate();
-	return ret;
+function stripCharsInBag(s, bag){
+	var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++){
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
+
+function daysInFebruary (year){
+	// February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+}
+function DaysArray(n) {
+	for (var i = 1; i <= n; i++) {
+		this[i] = 31
+		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
+		if (i==2) {this[i] = 29}
+   }
+   return this
+}
+
+function isDate(dtStr){
+	var daysInMonth = DaysArray(12)
+	var pos1=dtStr.indexOf(dtCh)
+	var pos2=dtStr.indexOf(dtCh,pos1+1)
+	var strYear=dtStr.substring(0,pos1)
+	var strMonth=dtStr.substring(pos1+1,pos2)
+	var strDay=dtStr.substring(pos2+1)
+	strYr=strYear
+	if (strDay.charAt(0)=="0" && strDay.length>1) strDay=strDay.substring(1)
+	if (strMonth.charAt(0)=="0" && strMonth.length>1) strMonth=strMonth.substring(1)
+	for (var i = 1; i <= 3; i++) {
+		if (strYr.charAt(0)=="0" && strYr.length>1) strYr=strYr.substring(1)
+	}
+	month=parseInt(strMonth)
+	day=parseInt(strDay)
+	year=parseInt(strYr)
+	if (pos1==-1 || pos2==-1){
+		alert("$err_invalid_date_format")
+		return false
+	}
+	if (strMonth.length<1 || month<1 || month>12){
+		alert("$err_invalid_month")
+		return false
+	}
+	if (strDay.length<1 || day<1 || day>31 || (month==2 && day>daysInFebruary(year)) || day > daysInMonth[month]){
+		alert("$err_invalid_day")
+		return false
+	}
+	if (strYear.length != 4 || year==0 || year<minYear || year>maxYear){
+		alert("$err_invalid_year")
+		return false
+	}
+	if (dtStr.indexOf(dtCh,pos2+1)!=-1 || isInteger(stripCharsInBag(dtStr, dtCh))==false){
+		alert("$err_invalid_date")
+		return false
+	}
+return true
+}
+
+function isTime(timeStr){
+	//time must be in the 24:00 format
+    if (timeStr.length != 5) { thetimeStr = '0'+timeStr }
+	else { thetimeStr = timeStr }
+	var strHour=thetimeStr.substring(0,2)
+	var strMin=thetimeStr.substring(3,5)
+	var strTime=strHour+strMin
+	var delimiter=thetimeStr.substring(2,3)
+	if (strHour>24 || strMin>60  || delimiter!=':' || strTime>2400){
+		alert("$err_invalid_time")
+		return false
+	}
+
+return true
+}
+
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
+
+function verify_data(form) {
+	var isError = false;
+	var errorMessage = "";
+	if (trim(form.subject.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_subject";
+	}
+	//if (trim(form.duedate.value) != '' && isDate(form.duedate.value)==false) return false;
+	//if (trim(form.duetime.value) != '' && isTime(form.duetime.value)==false) return false;
+	// Here we decide whether to submit the form.
+	if (isError == true) {
+		alert("$err_missing_required_fields" + errorMessage);
+		return false;
+	}
+	return true;
 }
 // end hiding contents from old browsers  -->
 </script>
@@ -113,27 +213,23 @@ $value=date('Y-m-d');
 $dis_value=getNewDisplayDate();
 $curr_time = date('H:i');
 
-$the_form = get_left_form_header($app_strings['LBL_NEW_TASK']);
+$the_form = get_left_form_header("New Task");
 $the_form .= <<<EOQ
 
 		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 		<script type="text/javascript" src="jscalendar/calendar.js"></script>
 		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="ActivitySave" onsubmit="return verify_data(this)" method="POST" action="index.php">
+		<form name="ActivitySave" onSubmit="return verify_data(ActivitySave)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Activities">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="activity_mode" value="Task">
 			<input type="hidden" name="assigned_user_id" value="${user_id}">
 			<input type="hidden" name="action" value="Save">
-
-			<input type="hidden" name="due_date" value="">
-
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
-		<input name='subject' id='task_subject' type="text" value=""><br>
+		<input name='subject' type="text" value=""><br>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; 
-		<input name="time_start" id='task_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
+		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
 		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br><br>
 		<input title="${app_strings['LBL_SAVE_BUTTON_TITLE']}" accessKey="${app_strings['LBL_SAVE_BUTTON_KEY']}" class="button" type="submit" name="button" value="${app_strings['LBL_SAVE_BUTTON_LABEL']}" >
 		</form>
@@ -141,7 +237,6 @@ $the_form .= <<<EOQ
 		Calendar.setup ({
 			inputField : "jscal_field_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 		});
-		
 		</script>
 EOQ;
 
@@ -150,25 +245,19 @@ $the_form .= '<br>';
 $comboFieldNames = Array('activitytype'=>'activitytype_dom',
 			 'duration_minutes'=>'duration_minutes_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-$the_form .= get_left_form_header($app_strings['LBL_NEW_EVENT']);
+$the_form .= get_left_form_header("New Event");
 $the_form .= <<<EOQ
 
-		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(this)">
+		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(ActivitySave)">
 			<input type="hidden" name="module" value="Activities">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="activity_mode" value="Events">
 			<input type="hidden" name="assigned_user_id" value="${user_id}">
 			<input type="hidden" name="action" value="Save">
-
-			<input type="hidden" name="due_date" value="">
-
-			
-		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
-		<input name='subject' id='event_subject' type="text" value=""><br>
+		<input name='subject' type="text" value=""><br>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_event_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp; 
-		<input name="time_start" id='event_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
+		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
 		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br>
 		Activity Type<br>
 		<select name='activitytype'>
@@ -178,8 +267,7 @@ $the_form .= get_select_options_with_id($comboFieldArray['activitytype_dom'], ""
 $the_form .= <<<EOQ
                 </select><br>
 		Duration<br>
-		<input name="duration_hours" type="text" size="2" value="1">&nbsp;
-		<select name='duration_minutes'>
+		<input name="duration_hours" type="text" size="2" value="1">&nbsp;<select name='duration_minutes'>
 EOQ;
 
 $the_form .= get_select_options_with_id($comboFieldArray['duration_minutes_dom'], "");
@@ -190,10 +278,8 @@ $the_form .= <<<EOQ
 		</form>
 		<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field_event_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_event_date_start", singleClick : true, step : 1
+			inputField : "jscal_field_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 		});
-
-		
 		</script>
 EOQ;
 $the_form .= get_left_form_footer();

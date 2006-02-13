@@ -1,0 +1,787 @@
+<?php
+# $Id: it.p3,v 1.16 2005/05/03 13:18:52 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "it_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+$lang['content_encoding'] = "iso-8859-1";
+setlocale(LC_TIME,'it_IT');
+#
+# Testi in Italiano
+#
+$lang['PleaseLogin']     = "Effettuate il login, prego";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "Password";
+$lang['Username']        = "Username";
+$lang['MOTD']            = "Messaggio del Giorno";
+$lang['Login']           = "Login";
+$lang['LostPassword']    = "lost password ?";
+$lang['LoggedIn']        = "Siete entrati nel sistema. Scegliete l'operazione dal men&ugrave a sinistra.";
+$lang['ReadOnlyAppoint'] = "Appuntamento in sola lettura";
+$lang['StartDate']       = "Data di Inizio";
+$lang['StartTime']       = "Orario di Inizio";
+$lang['AppStart']        = "Inizio";
+$lang['AppCreatedBy']    = "creato da";
+$lang['EndDate']         = "Data di Fine";
+$lang['EndTime']         = "Orario di Fine";
+$lang['AppEnd']          = "Fine";
+$lang['Participants']    = "Partecipanti";
+$lang['everybody']       = "tutti";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "il";
+$lang['createdby']       = "creato da";
+$lang['Description']     = "Descrizione";
+$lang['InfoEmail']       = "Informa via mail";
+$lang['InviteEmail']     = "Invita via Mail";
+$lang['Invitation']      = "Invitation";
+$lang['IgnoreTime']      = "ignore above times";
+$lang['IgnoreTime2']     = "(i.e. l'appuntamento senza un orario specifico per queso/i giorno/i )";
+$lang['forphrase']       = "per";
+$lang['nextweek']        = "prossima settimana";
+$lang['lastweek']        = "ultima settimana";
+$lang['plus4weeks']      = "4 settimane dopo";
+$lang['minus4weeks']     = "4 settimane prima";
+$lang['only']            = "solo";
+$lang['reload']          = "reload";
+$lang['changeapp']       = "visualizza o modifica questa appuntamento (%s - %s)";
+$lang['seeapp']          = "visualizza questa dettaglio di appuntamento (%s - %s)";
+$lang['AllEntries']      = "visualizza tutti gli elementi di %s";
+#
+$lang['DateTimePHP']     = "d.m.Y H:i T";
+$lang['DateTimeStr']     = "%d.%m.%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s.%s.%s %02d:%02d %s";
+#
+$lang['DateTimeSPHP']    = "d.m H:i";
+$lang['DateTimeSStr']    = "%d.%m %H:%M";
+$lang['DateTimeSFormat'] = "%s.%s %02d:%02d";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02d:%02d";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d.%m.%Y";
+$lang['DateFormat']      = "%s.%s.%s";
+$lang['DateShortFormat'] = "%s.%s";
+#
+$lang['Printable']       = "Stampabile";
+$lang['PrintableInfo']   = "Visualizza come pagina da stampare";
+$lang['managedProd']     = "Progetti & Prodotti gestiti ";
+$lang['soldProd']        = "Progetti & Prodotti venduti";
+$lang['Enter']           = "Enter";
+$lang['Reset']           = "Reset";
+$lang['Remove']          = "Remove";
+$lang['Delete']          = "Elimina";
+$lang['Change']          = "Modifica";
+$lang['Modify']          = "Modifica";
+$lang['created']         = "creato";
+$lang['DateTimeFrom']    = "Da";
+$lang['DateTimeTill']    = "a";
+$lang['Count']           = "Numero";
+$lang['Showing']         = "Visualizzazione %s";
+$lang['show']            = "mostra";
+$lang['lang']['auto']    = "automatica (riconoscimento dal browser)";
+$lang['lang']['en']      = "inglese";
+$lang['lang']['en-US']   = "inglese US";
+$lang['lang']['de']      = "tedesco";
+$lang['lang']['fr']      = "francese";
+$lang['lang']['es']      = "spagnolo";
+$lang['lang']['es-MX']   = "Español/México";
+$lang['lang']['es-NI']   = "Español/Nicaragua";
+$lang['lang']['es-VE']   = "Español/Venezuela";
+$lang['lang']['it']      = "italiano";
+$lang['lang']['tw']      = "Chinese tradizionale";
+$lang['lang']['zh']      = "Chinese semplificato";
+$lang['lang']['ru']      = "russo";
+$lang['lang']['pt']      = "portoghese";
+$lang['lang']['pl']      = "polski";
+$lang['lang']['ko']      = "korean";
+$lang['lang']['nl']      = "dutch";
+$lang['lang']['sv']      = "swedish";
+$lang['lang']['el']      = "greek";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "vietnamese";
+
+# Common
+$lang['ChangesOk']       = "Modifica OK ?";
+$lang['InputOk']         = "Input Corretto ?";
+$lang['Day1']            = "Lunedi";
+$lang['Day2']            = "Martedi";
+$lang['Day3']            = "Mercoledi";
+$lang['Day4']            = "Giovedi";
+$lang['Day5']            = "Venerdi";
+$lang['Day6']            = "Sabato";
+$lang['Day0']            = "Domenica";
+$lang['SMonday']         = "Lu";
+$lang['STuesday']        = "Ma";
+$lang['SWednesday']      = "Me";
+$lang['SThursday']       = "Gi";
+$lang['SFriday']         = "Ve";
+$lang['SSaturday']       = "Sa";
+$lang['SSunday']         = "Do";
+$lang['week']            = "Settimana";
+$lang['weeks']           = "settimanale";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Data";
+$lang['NewEntry']        = "Nuovo";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "Ricerca";
+$lang['PlsChangeName']   = "Modifica il nome";
+$lang['SeeAddress']      = "visualizza l'indirizzo di %s";
+$lang['NavFirst']        = "first";
+$lang['NavBack']         = "precedente";
+$lang['NavNext']         = "successivo";
+$lang['NavLast']         = "ultimo";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "si";
+$lang['no']              = "no";
+$lang['FldsRequired']    = "<font size=\"-1\">Fields marked <font color=\"red\">(*)</font> must be filled.</font>";
+$lang['any']             = "qualsiasi";
+$lang['all']             = "All";
+$lang['extended']        = "esteso";
+$lang['OrderBy']         = "ordina per %s";
+$lang['RevOrderBy']      = "ordine inverso per %s";
+$lang['Export']          = "Esporta";
+$lang['ExportInfo']      = "Esporta i dati come file";
+$lang['withmarked']      = "with marked %s";
+$lang['SetTo']           = "set %s to %s";
+$lang['pcs']             = "pieces";
+$lang['Money']           = "Totale";
+$lang['Currency']        = "Valuta";
+$lang['ActionNil']       = "do nothing";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Appuntamento";
+$lang['Appointments']    = "Appuntamenti";
+$lang['NewAppoint']      = "Nuovo Appuntamento";
+$lang['NewAppointR']     = "Nuovo (repetitivo)";
+$lang['NewAppointInfo']  = "Crea un nuovo appuntamento";
+$lang['NewAppointInfoR'] = "Crea un nuovo appuntamento (repetitivo)";
+$lang['AppointDetail']   = "Dettaglio Appuntamento";
+$lang['AppointModify']   = "Modifica Appuntamento";
+$lang['AppointCreate']   = "Crea Appuntamento";
+$lang['AppointCommit']   = "Invia Appuntamento";
+$lang['AppointOverview'] = "Overview dell'Appuntamento";
+$lang['AppDelInfo']      = "Cancella questo appuntamento";
+$lang['AppChangeOrDel']  = "chi puo' modificare o eliminare l'elemento";
+$lang['VisitAt']         = "Visita al";
+$lang['VisitFrom']       = "Visita da";
+$lang['Visits']          = "Visite";
+$lang['ModOldAppoint']   = "Modifica l'appuntamento attuale";
+$lang['CreateAppoint']   = "Nuovo Appuntamento";
+$lang['AppFirstDate']    = "Prima data";
+$lang['AppLastDate']     = "Ultima data";
+$lang['AppNoLastDate']   = "nessuna data di fine";
+$lang['AppRepeatType']   = "Ripeti";
+$lang['AppRepeatDay']    = "giornalmente";
+$lang['AppRepeatWeek']   = "settimanalmente nello stesso giorno impostato (quello del primo appuntamento)";
+$lang['AppRepeatMonth']  = "ogni mese nello stesso giorno impostato (quello del primo appuntamento)";
+$lang['AppRepeatYear']   = "ogni anno nel mese/giorno impostato";
+$lang['AppRepeatInfo1']  = "ogni %s";
+$lang['AppRepeatInfo2']  = "ogni mese al %d giorno";
+$lang['AppRepeatInfo3']  = "ogni anno il %d/%m";
+$lang['AppRepeatInfo4']  = "ogni giorno";
+$lang['AppSeeEntry']     = "visualizza la voce";
+$lang['AppSeeEntryI']    = "visualizza l'appuntamento";
+$lang['AppEmailRemind']  = "Ricorda a tutti i partecipanti via e-mail";
+$lang['AppRemind'][0]    = "mai";
+$lang['AppRemind'][15]   = "15 minuti prima";
+$lang['AppRemind'][60]   = "1 ora prima";
+$lang['AppRemind'][1440] = "1 giorno prima";
+$lang['AppRemind'][10080]= "1 settimana prima";
+$lang['AppAllSee']       = "tutto quello che puoi visualizzare";
+$lang['AppAllTeams']     = "I membri di tutti i teams di cui fai parte";
+$lang['AppEverything']   = "ogni cosa";
+$lang['AppGetIcal']      = "Scarica l'Ical File";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Ufficio";
+$lang['AppLoc'][1]       = "Fuori";
+$lang['AppLoc'][2]       = "Vacanza";
+$lang['AppLoc'][3]       = "Malato";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "SI";
+$lang['AppState'][2]     = "NO";
+$lang['AppPrivate']      = "privato";
+$lang['AppVoteInfo']     = "vota per questo appuntamento";
+$lang['AppVoteState']    = "Voto corrente";
+$lang['AppVoteHead']     = "Vota per questo appuntamento (%s)";
+$lang['AppVoteSelect']   = "Seleziona il tuo voto";
+$lang['AppsSearch']      = "Ricerca nel calendario";
+$lang['SearchForAppExt'] = "Ricerca estesa di un appuntamento";
+$lang['SearchForApp']    = "Ricerca un appuntamento";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(Lasciare vuoto per visualizzare tutti gli appuntamenti)";
+$lang['AppTrace']        = "controlla lo stato";
+$lang['AppTraceDesc']    = "(i.e. i partecipanti possono votare)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "My TUTOS";
+$lang['PersonalPageFor']   = "Pagina personale di %s";
+$lang['PersonalSettings']  = "Impostazioni degli utenti";
+$lang['PersonalSettingsI'] = "Cambia le impostazioni personali di %s";
+
+# User
+$lang['User']            = "Utente";
+$lang['Users']           = "Users";
+$lang['UserOverview']    = "User Overview";
+$lang['UserCreate']      = "Crea Utente";
+$lang['UserModify']      = "Modifica Utente";
+$lang['UserDel']         = "Elimina Utente";
+$lang['UserInfo']        = "Elemento";
+$lang['UserModInfo']     = "Modifica %s";
+$lang['UserNewInfo']     = "Crea un elemento per %s";
+$lang['UserDelInfo']     = "Elimina l'utente %s dell'elemento";
+$lang['UserUnknown']     = "Utente Sconosciuto";
+$lang['UserLastSeen']    = "Ultima login";
+$lang['UserLastHost']    = "Ultimo host";
+$lang['UserAdmin']       = "Admin";
+$lang['UserLanguage']    = "lingua";
+$lang['UserTimezone']    = "Fuso orario";
+$lang['UserTheme']       = "Tema";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Holidays";
+$lang['UserNamedays']    = "Namedays";
+$lang['UserWorkdays']    = "Working Days";
+$lang['UserWeekstart']   = "Start of Week";
+$lang['UserDisabled']    = "disable account";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "Prodotto/Progetto";
+$lang['ProductPs']       = "Prodotti/Progetti";
+$lang['Product']         = "Prodotto";
+$lang['Products']        = "Prodotti";
+$lang['Project']         = "Progetto";
+$lang['Projects']        = "Progetti";
+$lang['ProductsSearch']  = "Ricerca di Progetto/Prodotto";
+$lang['ProductsOverview']= "Overview del Progetto/Prodotto";
+$lang['ProductsDetail']  = "Dettaglio del Progetto/Prodotto";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Appuntamenti collegati";
+$lang['ProdName']        = "Progetto/Prodotto";
+$lang['ProdVersion']     = "Versione";
+$lang['ProdProd']        = "related Projects";
+$lang['ProdProdNew']     = "new relation";
+$lang['ProdRoles']       = "Ruolo";
+$lang['ProdFunc']        = "Funzione";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Nuovo ruolo";
+$lang['ProdRole'][1]     = "Manager";
+$lang['ProdRole'][2]     = "Manager Commerciale";
+$lang['ProdRole'][3]     = "2. Manager";
+$lang['ProdRole'][4]     = "Vendite";
+$lang['ProdRole'][5]     = "Sviluppo";
+$lang['ProdRole'][6]     = "Cliente";
+$lang['ProdRole'][7]     = "Supplier";
+$lang['ProdRole'][8]     = "Reseller";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Project Base";
+$lang['ProdRole'][11]    = "Ancestor Project";
+$lang['ProdRole'][12]    = "Succesor Project";
+$lang['ProdRole'][13]    = "Sub Project";
+$lang['ProdPath']        = "Percorso del File";
+$lang['ProdDesc']        = "Descrizione";
+$lang['ProdDesc1']       = "Descrizione 1";
+$lang['ProdDesc2']       = "Descrizione 2";
+$lang['ProdState']       = "Stato";
+$lang['ProdState_']      = "Stato non conosciuto";
+$lang['ProdStates'][0]   = "Acquisito";
+$lang['ProdStates'][1]   = "In Esecuzione";
+$lang['ProdStates'][2]   = "Ultimato";
+$lang['ProdStates'][3]   = "Eliminato";
+$lang['ProdStates'][4]   = "Quote ongoing";
+$lang['ProdStates'][5]   = "Quote cancelled";
+$lang['ProdStates'][-2]  = "ogni cosa incompleta o non cancellata";
+$lang['ProdClass1']      = "Classificazione 1";
+$lang['ProdClasses1'][1] = "Software";
+$lang['ProdClasses1'][2] = "Hardware";
+$lang['ProdClasses1'][3] = "Consulenza";
+$lang['ProdClass2']      = "Classificazione 2";
+$lang['ProdClasses2'][1] = "Regione Nord";
+$lang['ProdClasses2'][2] = "Regione Sud";
+$lang['ProdPrice']       = "Prezzo";
+$lang['ProdCost']        = "Costo";
+$lang['SearchForProd']   = "Cerca un prodotto o un progetto";
+$lang['SearchForProdExt']= "Ricerca estesa di un prodotto o un progetto";
+$lang['ProdCreateInfo']  = "Crea un nuovo prodotto o progetto";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "Elimina il progetto %s";
+$lang['ProdModInfo']     = "Modifica il prodotto o progetto %s";
+$lang['ProdCreator']     = "creato da";
+$lang['ProdCreation']    = "creato il %s da %s";
+$lang['ProdCreationS']   = "creato il";
+$lang['ProdStart']       = "inizio stimato ";
+$lang['ProdEnd']         = "fine stimata ";
+$lang['ProdProb']        = "Probabilita'";
+$lang['ProdModifyT']     = "Modifica questo prodotto / Progetto %s";
+$lang['ProdCreateT']     = "Crea un nuovo Prodotto / Progetto";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(lasciare vuoto per visualizzare tutti i prodotti/progetti)";
+$lang['ProdLinkInfo']    = "Visualizza il Prodotto/Progetto %s";
+$lang['ProdBetween']     = "creato tra il";
+$lang['ProdLinks']       = "Collegamenti (URL)";
+$lang['ProdStats']       = "Statistiche";
+$lang['ProdStatsInfo']   = "Statistiche per questi Prodotti/Progetti";
+$lang['ProdStatsTitle']  = "Statistiche del Prodotto/Progetto";
+$lang['ProdFields']      = "Campi";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mailboxes
+$lang['MailboxEmail']    = "Email";
+$lang['MailSendTo']      = "Invia una e-mail a %s";
+$lang['MailFrom']        = "Da";
+$lang['MailTo']          = "A";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Oggetto";
+$lang['MailSent']        = "Sto inviando l'e-mail %s a %s.";
+$lang['MailSentCc']      = "Sto inviando l'e-mail %s (Cc) a %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Cartolina di %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Data";
+$lang['MailSize']        = "Dimensione";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Modifica i Permessi";
+$lang['AclModifyI']      = "Modifica i permessi a %s";
+$lang['AclDetail']       = "Dettagli dei permessi";
+$lang['AclDetailI']      = "sto mostrando i permessi di %s";
+$lang['permissions']     = "permessi";
+$lang['ACLsee']          = "visualizza i permessi";
+$lang['ACLmod']          = "modifica i permessi";
+$lang['ACLread']         = "visualizza";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "modifica";
+$lang['ACLdelete']       = "elimina";
+$lang['ACLreadI']        = "gli utenti/teams elncati sopra potranno visualizzare %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "gli utenti/teams elncati sopra potranno modificare %s";
+$lang['ACLdelI']         = "gli utenti/teams elncati sopra potranno cancellare %s";
+$lang['ACLOverview']     = "Permissions Overview";
+$lang['ACLOverviewI']    = "see all permissions";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "feature";
+
+# Tasks
+$lang['Task']            = "Task";
+$lang['Tasks']           = "Tasks";
+$lang['TaskDetail']      = "Dettaglio di Task";
+$lang['TaskCreate']      = "Crea un Task";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "crea un nuovo subtask di %s";
+$lang['TaskDelete']      = "Elimina Task %s";
+$lang['TaskModify']      = "Modifica Task %s";
+$lang['TaskOverview']    = "Overview del lavoro";
+$lang['TaskOverviewInfo']= "Mostra i tasks per %s";
+$lang['TaskName']        = "Nome";
+$lang['TaskState']       = "Stato";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "ToDo";
+$lang['TaskWorker']      = "eseguito da ";
+$lang['TaskVolumeFull']  = "Volume pieno";
+$lang['TaskVolumeDone']  = "Volume eseguito";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Sottolavoro di ";
+$lang['hours']           = "ore";
+$lang['TaskCreation']    = "creato da %s il %s";
+$lang['TaskStates'][0]   = "Pre";
+$lang['TaskStates'][1]   = "In Lavorazione";
+$lang['TaskStates'][2]   = "Finito";
+$lang['TaskStates'][3]   = "In ritardo";
+$lang['TaskS_Start']     = "inizio scheduling";
+$lang['TaskS_End']       = "fine scheduling";
+$lang['TaskSched']       = "scheduled";
+$lang['TaskReal']        = "reale";
+$lang['TaskLinkInfo']    = "Visualizza il Task %s";
+$lang['TaskCompleted']   = "Completato il %3.2f percento";
+$lang['Completed']       = "Completed";
+$lang['Reschedule']      = "Reschedule";
+$lang['Reschedule_s']    = "Reschedule start";
+$lang['Reschedule_e']    = "Reschedule end";
+$lang['TaskGantt']       = "Gantt diagram";
+$lang['TaskImport']      = "Task: CSV Import";
+$lang['ImportSrcFile']   = "Source file";
+$lang['ImportColNames']  = "Columns name in CSV file";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Confirm Import";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "See the Gantt";
+$lang['GanttLinkInfo']   = "Gantt diagramm";
+$lang['GanttTitle']      = "GANTT diagramm";
+$lang['GanttStart']      = "Begin date";
+$lang['GanttEnd']        = "End date";
+$lang['GanttVolume']     = "hour volume";
+$lang['GanttCompletion'] = "Completed";
+
+# Company
+$lang['Company']           = "Azienda";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Ricerca Azienda";
+$lang['CompanyOverview']   = "Overview dell'Azienda";
+$lang['CompanyDetail']     = "Dettaglio Azienda";
+$lang['CompanyModify']     = "Modifica Azienda";
+$lang['CompanyCreate']     = "Crea Azienda";
+$lang['CompanyCreateInfo'] = "Crea ua nuova azienda";
+$lang['CompanyApps']       = "Appuntamento con l'azienda";
+$lang['CompanyLinks']      = "Collegamenti";
+$lang['CompanyChgInfo']    = "Modifica Azienda %s";
+$lang['CompanyDelInfo']    = "Elimina Azienda %s";
+$lang['CompanyMembers']    = "Staff senza dipartimento";
+$lang['CompanyLinkInfo']   = "Visualizza la societ&aacute %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Dipartimento";
+$lang['Departments']        = "Dipartimenti";
+$lang['DepartmentSearch']   = "Ricerca Dipartimento";
+$lang['DepartmentOverview'] = "Overview del Dipartimento";
+$lang['DepartmentDetail']   = "Modifica Dettaglio";
+$lang['DepartmentModify']   = "Modifica dipartimento";
+$lang['DepartmentCreate']   = "Crea dipartimento";
+$lang['DepCreateInfo']      = "Crea un nuovo dipartimento";
+$lang['DepartmentMembers']  = "Membri del dipartimento";
+$lang['DepartmentApps']     = "Appuntamento con questo dipartimento";
+$lang['DepartmentLinks']    = "Collegamenti";
+$lang['DepLinkInfo']        = "Visualizza il dipartimento %s al %s";
+$lang['DepChgInfo']         = "Modifica dipartimento %s";
+$lang['DepDelInfo']         = "elimina dipartimento %s";
+
+# Team
+$lang['Team']               = "Team";
+$lang['Teams']              = "Team";
+$lang['TeamOverview']       = "Overview del Team";
+$lang['TeamDetail']         = "Dettaglio del team";
+$lang['TeamModify']         = "Modifica un team";
+$lang['TeamCreate']         = "Crea un Team";
+$lang['TeamMember']         = "Membri del team";
+$lang['TeamPosMember']      = "possibile membro del team";
+$lang['TeamMail']           = "mail al team";
+$lang['TeamMailInfo']       = "Invia una mail al team %s";
+$lang['TeamApps']           = "Visualizza gli appuntamenti per %s";
+$lang['TeamLinkInfo']       = "Visualizza il team %s";
+$lang['TeamManager']        = "Capo Progetto";
+$lang['TeamName']           = "Nome del Team";
+$lang['TeamCreation']       = "creato il";
+$lang['TeamCount']          = "# Membro";
+$lang['TeamOverviewInfo']   = "Visualizza un elenco di tutti i Team";
+$lang['TeamCreateI']        = "crea un nuovo Team";
+$lang['TeamDeleteI']        = "Elimina il Team %s";
+$lang['TeamModifyI']        = "modifica team %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Ricerca dell'indirizzo";
+$lang['AddressOverview'] = "Overview dell'indirizzo";
+$lang['AddressDetail']   = "Dettaglio dell'indirizzo";
+$lang['Address']         = "Indirizzo";
+$lang['AddressEntries']  = "Elemento dell'indirizzario";
+$lang['AdrLocChange']    = "Modifica un indirizzo per %s";
+$lang['AdrLocCreate']    = "Crea un indirizzo per %s";
+$lang['AdrBMod']         = "Modifica l'elemento di base";
+$lang['AdrBModInfo']     = "Modifica l'elemento di base per %s";
+$lang['AdrBDel']         = "Elimina l'elemento di base";
+$lang['AdrBDelInfo']     = "elimina l'indirizzo %s e tutti i suoi collegamenti ";
+$lang['AdrBNew']         = "Nuova voce";
+$lang['AdrBNewInfo']     = "Crea una nuova voce di base";
+$lang['AdrCreateInfo']   = "crea una nuova voce";
+$lang['AdrLNew']         = "nuovo indirizzo";
+$lang['AdrLNewInfo']     = "crea un nuovo indirizzo per %s";
+$lang['AdrName']         = "Nome";
+$lang['AdrMailInfo']     = "invia un'e-mail a %s";
+$lang['AdrGetVcard']     = "Scarica la Vcard";
+$lang['AdrGetVcardI']    = "Scarica questo indirizzo come Vcard";
+$lang['AdrSeeEntry']     = "Visualizza la voce";
+$lang['AdrSeeEntryI']    = "Visualizza la voce di rubrica di %s";
+$lang['AdrLocTitle']     = "%s Indirizzo";
+$lang['AdrBNewTitle']    = "Inserisci una nuova voce di base nella rubrica";
+$lang['AdrBChangeTitle'] = "Cambia la voce di base della rubrica";
+
+$lang['Location']        = "Locazione";
+$lang['Location2']       = "Locazione";
+$lang['AdrTitle']        = "Title";
+$lang['AdrFirstName']    = "Nome";
+$lang['AdrMiddleName']   = "2.Nome";
+$lang['AdrLastName']     = "Cognome";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Data di Nascita";
+$lang['AdrPicture']      = "Foto";
+$lang['AdrCat1']         = "Casa";
+$lang['AdrCat2']         = "Ufficio";
+$lang['AdrCpLoc']        = "Copia l'indirizzo della compagnia";
+$lang['ZIP']             = "CAP";
+$lang['State']           = "Provincia";
+$lang['Country']         = "Stato";
+$lang['Street']          = "Via";
+$lang['City']            = "Citt&aacute";
+$lang['Phone']           = "Telefono";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "FAX";
+$lang['AdrEmail']        = "Email";
+$lang['acc_info1']       = "Bank Account";
+$lang['acc_info2']       = "Bank Account";
+$lang['acc_nr']          = "Account Nr";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Elimina %s come indirizzo di %s";
+$lang['DeleteLocInfo']   = "Elimina %s come indirizzo di %s";
+$lang['AdrLinks']        = "Collegamenti";
+$lang['AdrCategory']     = "Categoria";
+$lang['AdrDescription']  = "Nome dell'indirizzo";
+$lang['ShowCal']         = "Guarda nel calendario per %s";
+$lang['SearchForAdr']    = "Ricerca nella rubrica ";
+$lang['SearchForAdrExt'] = "Ricerca estesa nella rubrica";
+$lang['SearchForCmp']    = "Ricerca per le aziende";
+
+# Main Menu
+$lang['Calendar']        = "Calendario";
+$lang['Addresses']       = "Indirizzi";
+$lang['ProductMenu']     = "Prodotti & Progetti";
+$lang['Logout']          = "Chiudi la sessione";
+$lang['CalendarInfo']    = "Calendario giornaliero";
+$lang['AddressesInfo']   = "Ricerca per gli indirizzi";
+$lang['ProductInfo']     = "Prodotti & progetti";
+$lang['LogoutInfo']      = "Esci dal sistema";
+
+# Help
+$lang['Help']            = "Aiuto";
+$lang['HelpInfo']        = "Aiuto per questa pagina";
+
+# Resource
+$lang['ResCal']          = "Utilizzo delle risorse";
+$lang['ResCalDetail']    = "Risorse utilizzate per %s in %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "Selezione Mappa";
+$lang['MapHeader']       = "Ottieni una mappa da %s";
+
+# History
+$lang['HistoryDetail']   = "%s Storico";
+$lang['HistoryShow']     = "Storico di %s %s";
+$lang['HistoryFld']      = "Campo";
+$lang['HistoryOldV']     = "Vecchio valore";
+$lang['HistoryNewV']     = "Nuovo valore";
+$lang['HistoryLink']     = "Visualizza lo storico";
+$lang['HistoryLinkI']    = "Visualizza lo storico di %s";
+$lang['HistoryDeleted']  = "eliminato";
+
+#Timetrack
+$lang['Timetrack']         = "Sforzo";
+$lang['Timetracks']        = "Sforzos";
+$lang['TimetrackCreate']   = "Tempo impegnato";
+$lang['TimetrackCreateI']  = "Tempo impegnato %s";
+$lang['TimetrackDelI']     = "Elimina il tempo impegnato su %s";
+$lang['TimetrackNew']      = "Nuovo Timetrack";
+$lang['TimetrackModify']   = "Cambia Timetrack";
+$lang['TimetrackOverview'] = "Sommario del Timetrack";
+$lang['TimetrackWorker']   = "Lavoratori";
+$lang['TimetrackRef']      = "Riferimenti";
+$lang['TimetrackDate']     = "Data";
+$lang['TimetrackSearch']   = "Ricerca Timetrack";
+$lang['SearchForTT']       = "Ricerca Timetrack";
+$lang['SearchForTTExt']    = "Ricerca estesa di Timetrack";
+$lang['TimetrackBetween']  = "tra";
+$lang['TimetrackBooked']   = "Tempo impegnato";
+$lang['TimetrackBookedI']  = "Tempo impegnato per %s";
+$lang['TTStatsTitle']      = "Statistiche del Timetrack";
+$lang['TTcph']             = "Cost per hour";
+$lang['TTState']           = "State";
+$lang['TTStates'][-1]      = "no state";
+$lang['TTStates'][1]       = "checked";
+$lang['TTStates'][2]       = "billed";
+$lang['TTStates'][3]       = "payed";
+$lang['TTStates'][4]       = "unbillable";
+$lang['TTRecord']          = "Time recording";
+$lang['TTfinish']          = "Finish";
+
+# Fax
+$lang['FaxCreate']         = "Nuovo FAX";
+$lang['FaxSendTo']         = "Invia fax a %s";
+$lang['FaxTo']             = "A:";
+$lang['FaxNr']             = "FAX Nr:";
+$lang['FaxNote']           = "Salva questo fax come nota a %s";
+$lang['FaxSpooledTo']      = "Il Fax &eacute stato accodato a %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Invia un SMS a %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Remember: Appointment at %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Amministrazione";
+$lang['AdminDBInfo']       = "Info del Database";
+$lang['AdminDBTable']      = "Tabelle";
+$lang['AdminDBCount']      = "Voci";
+$lang['AdminDBName']       = "Nome del Database";
+$lang['AdminDBAlias']      = "Database Alias";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Utente del Database";
+$lang['AdminDBPass']       = "Password";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Porta";
+$lang['AdminDBType']       = "Type";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Logins recenti";
+$lang['AdminDBSync']       = "Database Sync";
+$lang['AdminDBSource']     = "Source DB";
+$lang['AdminDBWhat']       = "What/How";
+$lang['AdminDBTarget']     = "Target DB";
+$lang['AdminDBRep']        = "File Repository";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Database";
+$lang['DBInit']            = "Database Initialization";
+$lang['DBModify']          = "Database Modify";
+$lang['DBModifyI']         = "Modify DB %s";
+$lang['DBCreate']          = "Database Create";
+$lang['DBDetail']          = "Database Detail";
+$lang['DBLastDate']        = "LastSync Date";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "LastSync ID";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "use Database";
+$lang['DBreloginI']        = "relogin on %s";
+$lang['DBOverview']        = "Database Overview";
+$lang['DBUpdate']          = "Database Update";
+$lang['DBUpdateI']         = "update database %s";
+$lang['AdminDBSyncM'][1]   = "remove target, then copy all from source to target";
+$lang['AdminDBSyncM'][2]   = "copy all new (since last sync) from target to source, then copy all";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL for LOGO";
+$lang['CfgLogoLink']       = "URL Link from LOGO";
+$lang['CfgBugAutoName']    = "naming schema for bugs";
+$lang['CfgInvAutoName']    = "naming schema for invoices";
+$lang['CfgVATlist']        = "list of VAT rates";
+$lang['CfgVersion']        = "TUTOS Version";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Sales Forecast Report";
+$lang['UndefinedEndDate']   = "Unknown enddate";
+$lang['SalesBalanced']      = "Balanced Sales";
+$lang['AccumulatedRevenue'] = "Accumulated revenue";
+$lang['PeriodRevenue']      = "Revenue per Period";
+$lang['Period']             = "Period";
+$lang['Est_revenue']        = "Estimated revenue";
+$lang['Graph']              = "Graph";
+$lang['GraphInfo']          = "Show in a graph";
+
+# Permissions
+$lang['perm'][usecalendar]       = "Usa agenda";
+$lang['perm'][usetaskmanagement] = "Usa tasks";
+$lang['perm'][usemaplink]        = "Usa maplink";
+$lang['perm'][useprojects]       = "Usa progetti";
+$lang['perm'][usetimetrack]      = "Usa timetrack";
+$lang['perm'][usefax]            = "Usa fax";
+$lang['perm'][usesms]            = "Usa sms";
+$lang['perm'][useoverlib]        = "Usa popups";
+$lang['perm'][useaddressbook]    = "Usa rubrica";
+$lang['perm'][usemail]           = "use mail";
+$lang['perm'][usehistory]        = "display history";                                                                              
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff']              = "Funzione disabilitata globalmente";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "Inizio dopo la fine !";
+$lang['Err0006']         = "Effettuare un selezione piu' dettagliata";
+$lang['Err0009']         = "Riempire il campo <i>%s</i> ";
+$lang['Err0012']         = "Azienda sconosciuta <i>%s</i> !";
+$lang['Err0014']         = "Selezionare il campo <i>%s</i> ";
+$lang['Err0017']         = "Inserire un numero nel campo <i>%s</i> !";
+$lang['Err0018']         = "<i>%s</i> non e' valido per %d";
+$lang['Err0020']         = "Non sei autorizzato ad eliminare il file !";
+$lang['Err0021']         = "Non puoi cambiare il 'virtual team 0'";
+$lang['Err0022']         = "Spiacente, a causa dei permessi, non sei autorizzato a visualizzare questo %s";
+$lang['Err0023']         = "Spiacente, a causa dei permessi, non sei autorizzato a  eliminare questo %s";
+$lang['Err0024']         = "Spiacente, a causa dei permessi, non sei autorizzato a  modificare questo %s";
+$lang['Err0025']         = "Nome utente o password mancanti";
+$lang['Err0026']         = "Login non &egrave possibile";
+$lang['Err0027']         = "Login fallita";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Il Fax non &egrave stato accodato per l'invio!";
+$lang['Err0031']         = "Numero del Fax mancante!";
+$lang['Err0032']         = "L'invio dei Fax &egrave stato disabilitato!";
+$lang['Err0033']         = "Linvio dell'e-mail &egrave stato disabilitato! E-mail \"%s\" <u>non</u> inviata.";
+$lang['Err0034']         = "E-mail non inviata! nessun mittente \"%s\" email.";
+$lang['Err0035']         = "E-mail non inviata! nessun destinatario.";
+$lang['Err0036']         = "Il Prodotto/Progetto (%s) &egrave gi&aacute esistente con il Nome e la Versione data!";
+$lang['Err0037']         = "E-mail %s non inviata! File di prototipo mancante (%s)!";
+$lang['Err0038']         = "Data non valida nel campo %s!";
+$lang['Err0039']         = "La voce della rubrica (%s) &egrave gi&aacute esistente!";
+$lang['Err0040']         = "%s non trovato!";
+$lang['Err0041']         = "Le passwords non sono identiche!";
+$lang['Err0042']         = "La vecchia password non &egrave corretta!";
+$lang['Err0043']         = "L'indirizzo dell'e-mail %s non &egrave in un formato corretto (xxx@abc.com)!";
+$lang['Err0044']         = "La societ&aacute (%s) &egrave gi&aacute esistente!";
+$lang['Err0045']         = "Il dipartimento (%s) &egrave gi&aacute esistente!";
+$lang['Err0046']         = "Il Team (%s) &egrave gi&aacute esistente!";
+$lang['Err0047']         = "Non puoi rimuovere i privilegi di Amministrazione. Deve esserci almeno un 'admin'!";
+$lang['Err0048']         = "Non ho trovato nulla!";
+$lang['Err0049']         = "Account %s is disabled !";
+$lang['Err0050']         = "Could not find CSV contents !";
+$lang['Err0051']         = "Could not find CSV Separator";
+$lang['Err0052']         = "You must provide a classification";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+
+### Local Variables: ***
+### End: ***
+?>

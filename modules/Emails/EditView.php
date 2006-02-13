@@ -38,7 +38,7 @@ global $current_user;
 // global $cal_codes;
 
 
-//echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
+echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
@@ -97,6 +97,8 @@ echo '<br>';
  </table>
  <br>
 <?
+
+
 
 
 $focus = new Email();
@@ -202,8 +204,7 @@ if($focus->mode == 'edit')
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $xtpl->assign("RETURN_MODULE",'Emails');

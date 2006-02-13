@@ -1,0 +1,66 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<link rel="stylesheet" type="text/css" href="{THEME_PATH}style.css"/>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+
+	<tr height="20">
+		<td COLSPAN="18" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<form name="massdelete" method="POST">
+				<input name='action' type='hidden' value='Convert'>
+			   			
+			   <td>&nbsp; {RECORD_COUNTS}</td>
+				{NAVIGATION}
+
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTHEADER}
+		<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTENTITY}
+</table>
+<br>
+<script type='text/javascript' language='JavaScript'>
+function set_return(product_id, product_name) {
+        window.opener.document.EditView.parent_name.value = product_name;
+        window.opener.document.EditView.parent_id.value = product_id;
+}
+function set_return_specific(product_id, product_name) {
+        window.opener.document.EditView.lead_name.value = product_name;
+        window.opener.document.EditView.lead_id.value = product_id;
+}
+function add_data_to_relatedlist(entity_id,recordid) {
+	
+	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=leads&entityid="+entity_id+"&parid="+recordid;
+}
+
+</script>
+<!-- END: main -->
+
+
+<!-- BEGIN: yahoo_id -->
+		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={LEAD.YAHOOID}'><img border=0 src='http://opi.yahoo.com/online?u={LEAD.YAHOOID}'&m=g&t=2'></a></td>
+<!-- END: yahoo_id -->
+<!-- BEGIN: no_yahoo_id -->
+		<td>&nbsp;</td>
+<!-- END: no_yahoo_id -->
+
+</form>
+</table>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/UsersLastImport.php,v 1.17 2005/07/11 10:35:53 mickie Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -383,7 +383,6 @@ class UsersLastImport extends SugarBean
 		$count += $this->undo_accounts($user_id);
 		$count += $this->undo_opportunities($user_id);
 		$count += $this->undo_leads($user_id);
-		$count += $this->undo_products($user_id);
 
 		return $count;
 	}
@@ -587,31 +586,6 @@ class UsersLastImport extends SugarBean
 			$result4 = $this->db->query($query4) 
 				or die("Error undoing last import: ".mysql_error()); */
 
-		}
-		return $count;
-	}
-
-	function undo_products($user_id)
-	{
-		$count = 0;
-		$query1 = "select bean_id from users_last_import where assigned_user_id='$user_id' 
-		AND bean_type='Products' AND deleted=0";
-
-		$this->log->info($query1); 
-
-		$result1 = $this->db->query($query1) 
-			or die("Error getting last import for undo: ".mysql_error()); 
-
-		while ( $row1 = $this->db->fetchByAssoc($result1))
-		{
-			$query2 = "update crmentity set deleted=1 where crmid='{$row1['bean_id']}'";
-
-			$this->log->info($query2); 
-
-			$result2 = $this->db->query($query2) 
-				or die("Error undoing last import: ".mysql_error()); 
-
-			$count++;
 		}
 		return $count;
 	}

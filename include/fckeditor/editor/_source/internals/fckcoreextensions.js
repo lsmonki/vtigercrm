@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckcoreextensions.js
  * 	Some extensions to the Javascript Core.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-20 00:54:00
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -39,21 +42,15 @@ String.prototype.startsWith = function( value )
 }
 
 // Extends the String object, creating a "endsWith" method on it.
-String.prototype.endsWith = function( value, ignoreCase )
+String.prototype.endsWith = function( value )
 {
 	var L1 = this.length ;
 	var L2 = value.length ;
 	
 	if ( L2 > L1 )
 		return false ;
-
-	if ( ignoreCase )
-	{
-		var oRegex = new RegExp( value + '$' , 'i' ) ;
-		return oRegex.test( this ) ;
-	}
-	else
-		return ( L2 == 0 || this.substr( L1 - L2, L2 ) == value ) ;
+		
+	return ( L2 == 0 || this.substr( L1 - L2, L2 ) == value ) ;
 }
 
 String.prototype.remove = function( start, length )

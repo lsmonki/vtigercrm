@@ -1,0 +1,28 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_fr.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ * 
+ * Added by Thomas GIBERT 2001-10-30 
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Nouvel An (F)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Pâques (F)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Lundi de Pâques (F)"),
+        array( Date => "01-05",          type => 1,    Desc => "Fête du Travail (F)"),
+        array( Date => "08-05",          type => 1,    Desc => "Victoire 1945 (F)"),
+        array( Date => "ASCENSIONDAY",   type => 1,    Desc => "Ascension (F)"),
+        array( Date => "WHITSUNDAY",     type => 1,    Desc => "Pentecôte (F)"),
+        array( Date => "WHITMONDAY",     type => 1,    Desc => "Lundi de Pentecôte (F)"),
+        array( Date => "14-07",          type => 1,    Desc => "Fête Nationale (F)"),
+        array( Date => "15-08",          type => 1,    Desc => "Assomption (F)"),
+        array( Date => "01-11",          type => 1,    Desc => "Toussaint (F)"),
+        array( Date => "11-11",          type => 1,    Desc => "Armistice 1918 (F)"),
+        array( Date => "25-12",          type => 1,    Desc => "Noël (F)")
+        );
+?>

@@ -1,0 +1,401 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=0>
+<tr>
+<td width="80%">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">{MOD.LBL_USER_MANAGEMENT}</td>
+  </tr>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/user_mgmt.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+	<tr> 
+          <td><a href="index.php?module=Administration&action=index"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_USERS}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USERS}</span></td>
+        </tr>
+
+        <tr> 
+          <td><a href="index.php?module=Users&action=listroles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ROLES}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USER_ROLES} 
+            </span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=ListProfiles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PROFILES}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=listgroups"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.USERGROUPLIST}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}</span></td>
+        </tr>
+	<tr> 
+          <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a><span class="dim"> 
+            {MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}</span></td>
+        </tr>
+	<tr>
+         <td><a href="javascript:toggleSetting('def_field_access');"><img id="def_field_access_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a><span class="dim">{MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}</span><br> <div id="def_field_access" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                    </a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+		<tr>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
+                </tr>
+		<tr>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Orders"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
+                </tr>
+		<tr>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
+                </tr>	
+		</table>
+            </div></td>
+        </tr>
+        <tr>
+         <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_FIELD_ACCESSIBILITY}</a><span class="dim">{MOD.LBL_SETTING_FIELD_ACCESSIBILITY}</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                    </a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Orders"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
+                </tr>	
+              </table>
+            </div></td>
+        </tr>
+        <!--tr>
+            <td><a href="index.php?module=Users&action=DeleteDemoData"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DELETE_DEMO_DATA}</a></span>
+            {MOD.LBL_DELETE_DEMO_DATA_INFO}</span></td>
+        </tr-->
+      </table></td>
+  </tr>
+</table>
+<br>
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">{MOD.LBL_STUDIO}</td>
+  </tr>
+  <tr>
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/studio.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="javascript:toggleSetting('customfield');"><img id="customfield_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">{MOD.LBL_CUSTOM_FIELD_SETTINGS} 
+            </a> <span class="dim">{MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS} 
+            </span><br> <div id="customfield" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LEADCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.ACCOUNTCUSTOMFIELDS}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.CONTACTCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.OPPORTUNITYCUSTOMFIELDS}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.HELPDESKCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
+                </tr>
+		<tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.VENDORCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRICEBOOKCUSTOMFIELDS}</a></td>
+                </tr>
+		<tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Orders"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.POCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.SOCUSTOMFIELDS}</a></td>
+                </tr>
+		<tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.QUOTESCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVOICECUSTOMFIELDS}</a></td>
+                </tr>
+
+              </table>
+            </div></td>
+        </tr>
+        <tr> 
+          <td><a href="javascript:toggleSetting('picklist');"><img id="picklist_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">{MOD.LBL_PICKLIST_SETTINGS} 
+            </a><span class="dim">{MOD.LBL_EDIT_PICKLIST_VALUES}</span><br> 
+            <div id="picklist" style="display:none;padding:3px 5px 5px 20px;">
+              <table border="0" cellspacing="4" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITLEADPICKLISTVALUES}</a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITACCOUNTPICKLISTVALUES}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITCONTACTPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITOPPORTUNITYPICKLISTVALUES}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITHELPDESKPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPRODUCTPICKLISTVALUES}</a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITEVENTPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITTASKPICKLISTVALUES}</a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITVENDORPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPBPICKLISTVALUES}</a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Orders"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPOPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITSOPICKLISTVALUES}</a></td>
+                </tr>
+		<tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITQUOTEPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITINVOICEPICKLISTVALUES}</a></td>
+                </tr>	
+		<tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Rss"><img src="{IMAGE_PATH}/bul
+let.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITRSSPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+              </table>
+            </div></td>
+        </tr>
+      </table>
+</td>
+  </tr>
+</table>
+<br>
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">{MOD.LBL_COMMUNICATION_TEMPLATES}</td>
+  </tr>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/comm_temp.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="index.php?module=Users&action=listemailtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EMAILTEMPLATES}</a><span class="dim"> 
+            {MOD.LBL_CREATE_EMAIL_TEMPLATES}</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=listwordtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.WORDINTEGRATION}</a><span class="dim"> 
+            {MOD.LBL_UPLOAD_MSWORD_TEMPLATES}</span></td>
+        </tr>
+        <tr> 
+		<td><a href="index.php?module=Users&action=listnotificationschedulers"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
+            {MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}</span></td>
+        </tr>
+	<tr> 
+		<td><a href="index.php?module=Users&action=listinventorynotifications"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVENTORYNOTIFICATION}</a><span class="dim"> 
+            {MOD.LBL_INVENTORY_NOTIFICATIONS}</span></td>
+        </tr>	
+      </table></td>
+  </tr>
+</table>
+<br>
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">{MOD.LBL_CONFIGURATION}</td>
+  </tr>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/config.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+    <tr>
+	    <td><a href="index.php?module=Settings&action=OrganizationConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ORGANIZATION_DETAILS}</a><span class="dim">
+	   {MOD.LBL_SPECIFY_COMPANY_DETAILS}</span></td>
+    </tr>
+		    
+        <tr> 
+          <td><a href="index.php?module=Settings&action=EmailConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_CONFIG}</a><span class="dim"> 
+            {MOD.LBL_CONFIGURE_MAIL_SERVER}</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Settings&action=BackupServerConfig"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a><span class="dim">{MOD.LBL_CONFIGURE_BACKUP_SERVER}</span></td>
+  </tr>
+     <tr>
+       <td><a href="index.php?module=System&action=systemconfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SYSTEM_CONFIG}</a><span class="dim">
+            {MOD.LBL_SYSTEM_CONFIGURATION}</span></td>
+   </tr>
+   <tr>
+       <td><a href="index.php?module=Settings&action=CurrencyInfo"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CURRENCY_CONFIG}</a><span class="dim">
+            {MOD.LBL_CURRENCY_CONFIGURATION}</span></td>
+   </tr>
+    <tr>
+       <!--td><a href="index.php?module=Settings&action=AddMailAccount"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_WEB_MAIL_CONFIG}</a><span class="dim">
+            {MOD.LBL_CONFIGURE_WEB_MAIL}</span></td -->
+   </tr>
+
+      </table></td>
+</tr>
+</table>
+</td>
+<td width="20%">&nbsp;</td>
+</tr>
+</table>
+<br>
+<script language="JavaScript" src="include/general.js"></script>
+<script>
+var imgpath="{IMAGE_PATH}";
+function toggleSetting(id)
+{
+	var div=getObj(id)
+	var img=getObj(id+"_tgimg")
+	
+	if (div.style.display=="none")
+	{
+		div.style.display="block"
+		img.src=imgpath+"minus.gif"
+	}
+	else
+	{
+		div.style.display="none"
+		img.src=imgpath+"plus.gif"
+	}
+	
+	set_cookie(id+"_state",div.style.display)
+}
+
+// Setting cookies
+function set_cookie ( name, value, exp_y, exp_m, exp_d, path, domain, secure )
+{
+  var cookie_string = name + "=" + escape ( value );
+
+  if (exp_y) //delete_cookie(name)
+  {
+    var expires = new Date ( exp_y, exp_m, exp_d );
+    cookie_string += "; expires=" + expires.toGMTString();
+  }
+
+  if (path) cookie_string += "; path=" + escape ( path );
+  if (domain) cookie_string += "; domain=" + escape ( domain );
+  if (secure) cookie_string += "; secure";
+
+  document.cookie = cookie_string;
+}
+
+// Retrieving cookies
+function get_cookie(cookie_name)
+{
+  var results = document.cookie.match(cookie_name + '=(.*?)(;|$)');
+  if (results) return (unescape(results[1]));
+  else return null;
+}
+
+// Delete cookies 
+function delete_cookie( cookie_name )
+{
+  var cookie_date = new Date ( );  // current date & time
+  cookie_date.setTime ( cookie_date.getTime() - 1 );
+  document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+}
+
+function init(id) {
+	if (get_cookie(id+"_state")==null || get_cookie(id+"_state")==false || get_cookie(id+"_state")=="none") {
+		getObj(id).style.display="none"
+		getObj(id+"_tgimg").src=imgpath+"plus.gif"
+	} else {
+		getObj(id).style.display="block"
+		getObj(id+"_tgimg").src=imgpath+"minus.gif"
+	}
+}
+
+init("customfield")
+init("picklist")
+init("fieldaccess")
+</script>
+<!-- END: main -->

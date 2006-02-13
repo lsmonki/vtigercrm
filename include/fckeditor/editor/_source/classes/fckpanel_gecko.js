@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckpanel_gecko.js
  * 	FCKPanel Class: Creates and manages floating panels in Gecko Browsers.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-23 18:56:41
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -25,8 +28,8 @@ var FCKPanel = function( parentWindow )
 
 		while ( this.Window != window.top )
 		{
-			// Try/Catch must be used to avoit an error when using a frameset
-			// on a different domain:
+			// Try/Catch must be used to avoit an error when using a frameset 
+			// on a different domain: 
 			// "Permission denied to get property HTMLDocument.Body".
 			try
 			{
@@ -37,7 +40,7 @@ var FCKPanel = function( parentWindow )
 			{
 				break ;
 			}
-
+				
 			this.Window = this.Window.parent ;
 		}
 	}
@@ -45,7 +48,7 @@ var FCKPanel = function( parentWindow )
 
 FCKPanel.prototype.Create = function()
 {
-	this._IFrame = this.Window.document.body.appendChild( this.Window.document.createElement('iframe') ) ;
+	this._IFrame = this.Window.document.body.appendChild( this.Window.document.createElement('IFRAME') ) ;
 	this._IFrame.src = 'about:blank' ;
     this._IFrame.frameBorder		= '0';
     this._IFrame.scrolling			= 'no' ;
@@ -55,7 +58,7 @@ FCKPanel.prototype.Create = function()
 	this._IFrame.height				= 10 ;
     this._IFrame.style.position		= 'absolute';
 	this._IFrame.style.visibility	= 'hidden' ;
-
+	
 	this._IFrame.IsFCKPanel	= true ;
 	this._IFrame.Panel		= this ;
 
@@ -95,15 +98,15 @@ FCKPanel.prototype.Show = function( panelX, panelY, relElement, width, height, a
 		this.PanelDiv.style.height = height + 'px' ;
 
 	var oPos = this.GetElementPosition( relElement ) ;
-
+	
 	panelX += oPos.X ;
 	panelY += oPos.Y ;
-
+	
 	if ( panelX + this.OuterDiv.offsetWidth > this.Window.innerWidth )
 	{
 		// The following line aligns the panel to the other side of the refElement.
 		// panelX = oPos.X - ( this.PanelDiv.offsetWidth - relElement.offsetWidth ) ;
-
+		
 		panelX -= panelX + this.OuterDiv.offsetWidth - this.Window.innerWidth ;
 	}
 
@@ -114,15 +117,15 @@ FCKPanel.prototype.Show = function( panelX, panelY, relElement, width, height, a
 	// Watch the "OnClick" event for all windows to close the Context Menu.
 	function SetOnClickListener( targetWindow, targetFunction )
 	{
-		// Try/Catch must be used to avoit an error when using a frameset
-		// on a different domain:
+		// Try/Catch must be used to avoit an error when using a frameset 
+		// on a different domain: 
 		// "Permission denied to get property Window.frameElement".
-		try
+		try 
 		{
 			if ( targetWindow == null || ( targetWindow.frameElement && targetWindow.frameElement.IsFCKPanel ) )
 				return ;
 
-			targetWindow.document.addEventListener( 'click', targetFunction, false ) ;
+			targetWindow.document.addEventListener( 'click', targetFunction, false ) ;		
 		}
 		catch (e) {}
 
@@ -130,7 +133,7 @@ FCKPanel.prototype.Show = function( panelX, panelY, relElement, width, height, a
 			SetOnClickListener( targetWindow.frames[i], targetFunction ) ;
 	}
 	SetOnClickListener( window.top, FCKPanelEventHandlers.OnDocumentClick ) ;
-
+	
 	this._IFrame.width	= this.OuterDiv.offsetWidth ;
 	this._IFrame.height = this.OuterDiv.offsetHeight ;
 
@@ -142,19 +145,19 @@ FCKPanel.prototype.GetElementPosition = function( el )
 {
 	// Initializes the Coordinates object that will be returned by the function.
 	var c = { X:0, Y:0 } ;
-
+	
 	// Loop throw the offset chain.
 	while ( el )
 	{
 		c.X += el.offsetLeft ;
 		c.Y += el.offsetTop ;
-
+		
 		if ( el.offsetParent == null && el.ownerDocument.defaultView != this.Window )
 			el = el.ownerDocument.defaultView.frameElement ;
 		else
 			el = el.offsetParent ;
 	}
-
+	
 	// Return the Coordinates object
 	return c ;
 }
@@ -174,7 +177,7 @@ var FCKPanelEventHandlers = new Object() ;
 FCKPanelEventHandlers.OnDocumentClick = function( e )
 {
 	var oWindow = e.target.ownerDocument.defaultView ;
-
+	
 	if ( ! oWindow.IsFCKPanel )
 	{
 		function RemoveOnClickListener( targetWindow )
@@ -182,10 +185,10 @@ FCKPanelEventHandlers.OnDocumentClick = function( e )
 			if ( targetWindow == null )
 				return ;
 
-			// Try/Catch must be used to avoit an error when using a frameset
-			// on a different domain:
+			// Try/Catch must be used to avoit an error when using a frameset 
+			// on a different domain: 
 			// "Permission denied to get property Window.frameElement".
-			try
+			try 
 			{
 				if ( targetWindow.frameElement && targetWindow.frameElement.IsFCKPanel )
 					targetWindow.frameElement.Panel.Hide() ;
@@ -193,9 +196,9 @@ FCKPanelEventHandlers.OnDocumentClick = function( e )
 					targetWindow.document.removeEventListener( 'click', FCKPanelEventHandlers.OnDocumentClick, false ) ;
 			}
 			catch (e) {}
-
+			
 			for ( var i = 0 ; i < targetWindow.frames.length ; i++ )
-				RemoveOnClickListener( targetWindow.frames[i] ) ;
+				RemoveOnClickListener( targetWindow.frames[i] ) ;			
 		}
 		RemoveOnClickListener( window.top ) ;
 	}

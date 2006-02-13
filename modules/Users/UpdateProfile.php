@@ -150,12 +150,6 @@ for($i=0; $i<$num_act_util_per; $i++)
 		{
 			$permission_value = 1;
 		}
-		//Fix for Mail Merge
-		if($action_id == '8')
-		{
-			$permission_value = 0;
-		}
-
 		$update_query = "update profile2utility set permission=".$permission_value." where tabid=".$tab_id." and activityid=".$action_id." and profileid=".$profileid;
 		/*
 		echo $update_query;

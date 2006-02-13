@@ -89,9 +89,9 @@ if($isactive == 1)
 	$bodydetails .= "You can use the following link to view the replies made:<br>";
 
 	//Provide your customer portal url
-	//$PORTAL_URL = "<customerportal-url:port>";//e.g : vtigercrm:90/customerportal
-	//PORTAL_URL is configured in config.php
-	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
+	$PORTAL_URL = "<customerportal-url:port>";//e.g : vtigercrm:90/customerportal
+
+	$bodydetails .= "<a href='http://".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
 	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
 
 	$_REQUEST['description'] = $bodysubject.$bodydetails;

@@ -1,0 +1,22 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert, Sergiusz Paw這wicz
+ *
+ *  CVS Info:  $Id: holiday_pl.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+    $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Nowy Rok (PL)"),
+        array( Date => "01-05",          type => 1,    Desc => "安i皻o Pracy (PL)"),
+        array( Date => "03-05",          type => 1,    Desc => "Konstytucja 3 Maja (PL)"),
+        array( Date => "15-08",          type => 1,    Desc => "Wniebowzi璚ie NMP (PL)"),
+        array( Date => "01-11",          type => 1,    Desc => "Wszystkich 安i皻ych (PL)"),
+        array( Date => "11-11",          type => 1,    Desc => "Narodowe 安i皻o Niepodleg這軼i (PL)"),
+        array( Date => "25-12",          type => 1,    Desc => "Bo瞠 Narodzenie (PL)"),
+        array( Date => "26-12",          type => 1,    Desc => "Bo瞠 Narodzenie (PL)")
+        );
+?>

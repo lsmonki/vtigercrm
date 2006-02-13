@@ -61,16 +61,14 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 }
 $focus = new Quote();
 
-//echo get_form_header($current_module_strings['LBL_MY_TOP_QUOTE'],$other_text, false);
+echo get_form_header($current_module_strings['LBL_MY_TOP_QUOTE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Quotes/ListTopQuotes.html');
 global $theme;
-global $mod_strings;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
-$xtpl->assign("MYTOPQUOTES",$current_module_strings['LBL_MY_TOP_QUOTE']);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>

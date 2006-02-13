@@ -46,19 +46,7 @@
 
 	<tbody><tr>
 
-	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-               <script type="text/javascript" src="jscalendar/calendar.js"></script>
-               <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
-                <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-
 <form>
-
-		<!--begin: Armando LC<scher 16.08.2005 -> B'searchTicketId -> Desc: Inserted input field to input ticket id to search for-->
-		<td class="dataLabel">{APP.LBL_TICKET_ID}</td>
-		<td><input name='ticket_id' type='text' size='10' value={TICKETID}></td>
-		<!--end: Armando LC<scher 16.08.2005 -> B'searchTicketId-->
-
-
 
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_SUBJECT}&nbsp;</td>
 
@@ -73,6 +61,13 @@
                 <td>
 			<select name='priority' tabindex='1'>{PRIORITY}</select>
 			<!--input type=text size="10" name="priority" value='{PRIORITY}' /-->
+		</td>
+
+                <td class="dataLabel" noWrap>&nbsp;{MOD.LBL_STATUS}&nbsp;</td>
+
+                <td>
+			<select name='status' tabindex='1'>{STATUS}</select>
+			<!--input type=text size="10" name="status" value='{STATUS}'/-->
 		</td>
 
 		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
@@ -99,13 +94,6 @@
 
 	</tr><tr>
 
-                <td class="dataLabel" noWrap>&nbsp;{MOD.LBL_STATUS}&nbsp;</td>
-
-                <td>
-			<select name='status' tabindex='1'>{STATUS}</select>
-			<!--input type=text size="10" name="status" value='{STATUS}'/-->
-		</td>
-
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CATEGORY}&nbsp;</td>
 
                 <td>
@@ -123,13 +111,7 @@
 
                 <OPTION value='after' {AFTER}>{MOD.LBL_IS_AFTER}</OPTION></select></td>
 
-                <td nowrap><input name="date" id="jscal_field_date" type="text" size="11" maxlength="10" value="{DATE}"> <img src="{IMAGE_PATH}/calendar.gif" id="jscal_trigger_date">
-		<script type="text/javascript">
-                	Calendar.setup ({
-                                inputField : "jscal_field_date", ifFormat : "{DATEFORMAT}", showsTime : false, button : "jscal_trigger_date", singleClick : true, step : 1
-                                });
-                	</script>
-		</td>
+                <td><input type=text size="10" name="date" value='{DATE}'/></td>
 
 
 
@@ -168,10 +150,6 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 
 	<tbody><tr>
-	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-               <script type="text/javascript" src="jscalendar/calendar.js"></script>
-               <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
-                <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
 <form>
 
@@ -197,7 +175,7 @@
 			<!--input type=text size="10" name="status" value='{STATUS}'/-->
 		</td>
 
-	<td rowspan='2' align="center" nowrap><input type="hidden" name="action" value="index"/>
+	<td align="center" nowrap><input type="hidden" name="action" value="index"/>
 
 		<input type="hidden" name="query" value="true"/>
 
@@ -240,13 +218,8 @@
 
                 <OPTION value='after' {AFTER}>{MOD.LBL_IS_AFTER}</OPTION></select></td>
 
-		<td nowrap><input name="date" id="jscal_field_date" type="text" size="11" maxlength="10" value="{DATE}"> <img src="{IMAGE_PATH}/calendar.gif" id="jscal_trigger_date">
-                <script type="text/javascript">
-                        Calendar.setup ({
-                                inputField : "jscal_field_date", ifFormat : "{DATEFORMAT}", showsTime : false, button : "jscal_trigger_date", singleClick : true, step : 1
-                                });
-                        </script>
-                </td>
+                <td><input type=text size="10" name="date" value='{DATE}'/></td>
+
 
 
 		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>

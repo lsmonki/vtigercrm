@@ -1,0 +1,1006 @@
+<?php
+/*
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: Date.pinc,v 1.16 2005/05/03 13:18:42 saraj Exp $
+ *  $Author: saraj $
+ */
+
+ global $callink;
+ /**
+  * format a floating hour number
+  */
+ function hour_format($hours) {
+   if ( ! is_numeric($hours) ) return;
+   $h = floor($hours);
+   $m = 60.0 * ($hours - $h);
+   return $h .":".sprintf("%02.0f",$m);
+ }
+/**
+  * Return Noon of the next day after t (t is noon)
+  */
+ function NextDay ($t) {
+   /* Add One Day plus one possible DST hour */
+   $t += 90000;
+   $t = MkTime(12,0,0,Date("m",$t),Date("d",$t),Date("Y",$t));
+   return ($t);
+ };
+
+ function dow($d, $m, $y) {
+   $ret = date("w", mktime(0,0,0,$m,$d,$y));
+   return $ret;
+ }
+
+ function ndays($m, $y) {
+   $n = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+   $ret = $n[$m-1];
+   if ($m == 2 && ($y % 4 == 0) && (($y % 100 != 0) || $y % 400 == 0)) {
+     $ret++;
+   }
+   return $ret;
+ }
+
+ function nthday($n, $wd, $m, $y) {
+   if ($n == -1) {
+     # Last
+     $days = ndays($m, $y);
+     $ret = $days - (dow($days, $m, $y) - $wd + 7) % 7;
+   }
+   else {
+     $ret = ($n-1)*7 + 1 + (7 + $wd - dow(($n-1)*7 + 1, $m, $y)) % 7;
+   }
+   return $ret;
+ }
+
+/*
+ * Read and fill the holiday array
+ */
+ function ReadHolidayInfo() {
+   global $current_user,$tutos;
+
+   $tutos[cal] = array();
+
+   # Read Custom Holidays , like company anniversary etc.
+   if ( file_exists(getcwd()."/".$tutos['base']."/localization/holiday_custom.pinc") && is_readable(getcwd()."/".$tutos['base']."/localization/holiday_custom.pinc") ) {
+     include "localization/holiday_custom.pinc";
+   }
+
+   foreach($tutos[holiday] as $i => $f) {
+     $i = strtolower($i);
+     if ( ($f == 1) && ($current_user->holiday[$i] == 1) ) {
+       error_reporting(E_ALL);
+       include "localization/holiday_". $i .".pinc";
+       error_reporting($tutos['error_reporting']);
+     }
+   }
+
+   return;
+ }
+/*
+ * Read and fill the namedays array
+ */
+ function ReadNamedayInfo() {
+   global $current_user,$tutos;
+
+   $tutos['nd'] = array();
+
+   @reset($tutos[nameday]);
+   while( list ($i,$f) = @each ($tutos[nameday])) {
+     $i = strtolower($i);
+     if ( ($f == 1) && ($current_user->nameday[$i] == 1) ) {       
+       include "localization/namedays_". $i .".p3";
+     }
+   }
+
+   return;
+ }
+/*
+ * Check if the given date is a holiday in one of the enabled holidy sets
+ * if user wants to show namedays, then do it
+ * t = Date in timestamp format
+ */
+ function GetExtendedDayInfo($t) {
+   global $tutos, $current_user;
+
+   $desc = "";
+   $mark = 0;
+
+   $today = getdate($t);
+
+   $wd = Date("D",$t);
+   $month = Date("m",$t);
+
+
+   /* Yearly Days */
+   $day = Date("d-m",$t);
+
+   # We need the easter date for some calculation
+   $J = Date("Y",$t);
+   $a = $J % 19;
+   $b = $J % 4;
+   $c = $J % 7;
+   $d = (19 * $a + 24) % 30;
+   $e = (2 * $b + 4 * $c + 6 * $d + 5) % 7;
+   $OT = 22 + $d + $e;
+   $OM = 3;
+   if ( $OT > 31 ) {
+     $OT = $d + $e - 9;
+     $OM = 4;
+   }
+   if ( ($OT == 26) && ($OM == 4) ) {
+     $OT = 19;
+   }
+   if ( ($OT == 25) && ($OM == 4) && ($d == 28) && ($e == 6) && ($a > 10) ) {
+     $OT = 18;
+   }
+
+   $br = "<br />";
+
+   # Walk over namedays
+   $nd = Date("j",$t);
+   $nm = Date("n",$t);
+   for ($ii = 0 ; $ii < count($tutos['nd']); $ii++) {
+     if ( isset($tutos['nd'][$ii][$nm][$nd]) ) {
+       $desc .= $tutos['nd'][$ii][$nm][$nd].$br;
+     }
+   }
+
+   # Walk over claendars
+   for ($ii = 0 ; $ii < count($tutos[cal]); $ii++) {
+
+     $cnt = count($tutos[cal][$ii]);
+
+     for ($ij = 0 ; $ij < $cnt; $ij++) {
+       if ( ! isset($tutos[cal][$ii][$ij][type])) {
+         $tutos[cal][$ii][$ij][type] = 1;
+       }
+       /* Yearly Days */
+       if ($tutos[cal][$ii][$ij][Date] == $day) {
+         $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+         $mark += $tutos[cal][$ii][$ij][type];
+         continue;
+       }
+
+       /* Holidays defined by Weekday */
+       if ( $wd == "Mon" ) {
+         /* Date calculation for Dutch carnaval monday by Robert Brouwer */
+         if ($tutos[cal][$ii][$ij][Date] == "CARNAVALMON") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp -= (7*7) * 86400;
+           $tp += 2*86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+     }
+         elseif ($tutos[cal][$ii][$ij][Date] == "EASTERMONDAY") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp += 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+         elseif ($tutos[cal][$ii][$ij][Date] == "WHITMONDAY") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp += 7 * 7 * 86400;
+           $tp += 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "MARTINLUTHERKING") && ($month == "01") &&
+                 ($today['mday'] == nthday(3, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "WASHINGTON") && ($month == "02") &&
+                 ($today['mday'] == nthday(3, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "MEMORIALDAY") && ($month == "05") &&
+                 ($today['mday'] == nthday(-1, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "LABORDAY") && ($month == "09") &&
+                 ($today['mday'] == nthday(1, 1, $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "COLUMBUSDAY") && ($month == "10") &&
+                 ($today['mday'] == nthday(2, 1, $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+       }
+       elseif ( $wd == "Tue" ) {
+         /* Date calculation for Dutch 'Prinsjesdag' by Robert Brouwer */
+         if ($tutos[cal][$ii][$ij][Date] == "PRINSDAY" && ($month == "09") && 
+        ($today['mday'] == nthday(3, $today['wday'], $today['mon'], $today['year']))) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+     }
+         /* Date calculation for Dutch carnaval tuesday by Robert Brouwer */
+         elseif ($tutos[cal][$ii][$ij][Date] == "CARNAVALTUE") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp -= (7*7) * 86400;
+           $tp += 3* 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+       }
+       elseif ( $wd == "Wed" ) {
+         /* Date calculation for Dutch carnaval wednesday by Robert Brouwer */
+         if ($tutos[cal][$ii][$ij][Date] == "CARNAVALWED") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp -= (7*7) * 86400;
+           $tp += 4 * 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+       }
+       elseif ( $wd == "Thu" ) {
+         # Christ Himmelfahrt
+         if ($tutos[cal][$ii][$ij][Date] == "ASCENSIONDAY") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp +=  (5*7 +4) * 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+         elseif ($tutos[cal][$ii][$ij][Date] == "FRONLEICHNAM") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp +=  (8*7 +4) * 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+         elseif (($tutos[cal][$ii][$ij][Date] == "THANKSGIVING") && ($month == "11") &&
+                 ($today['mday'] == nthday(4, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         }
+       }
+       elseif ( $wd == "Fri" ) {
+         if ($tutos[cal][$ii][$ij][Date] == "GOODFRIDAY") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp -=  2 * 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+       }
+       elseif ( $wd == "Sun" ) {
+         if ($tutos[cal][$ii][$ij][Date] == "EASTERSUNDAY") {
+           if ( $day == sprintf("%02d-%02d",$OT,$OM) ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         /* Date calculation for Dutch 'Moederdag' (Mothersday') by Robert Brouwer */
+         } elseif ($tutos[cal][$ii][$ij][Date] == "MOTHERDAY" && 
+        ($month == "5") && ($today['mday'] == nthday(2, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         /* Date calculation for Dutch 'Vaderdag' (Fathersday') by Robert Brouwer */
+         } elseif ($tutos[cal][$ii][$ij][Date] == "FATHERDAY" && 
+        ($month == "6") && ($today['mday'] == nthday(3, $today['wday'], $today['mon'], $today['year'])) ) {
+           $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+           $mark += $tutos[cal][$ii][$ij][type];
+         } elseif ($tutos[cal][$ii][$ij][Date] == "WHITSUNDAY") {
+           $tp = mktime (0,0,0,$OM,$OT,$J);
+           $tp += 7 * 7 * 86400;
+           $pday = Date("d-m",$tp);
+           if ( $day == $pday ) {
+             $desc .= $tutos[cal][$ii][$ij][Desc].$br;
+             $mark += $tutos[cal][$ii][$ij][type];
+           }
+         }
+       }
+     }
+   }
+
+   if ( $desc == "" ) {
+     return array(color => "appday");
+   } else {
+     if ( $mark > 0 ) {
+       return array(color => "holiday", Desc => "<font size=\"-3\">".substr($desc,0,-1*strlen($br))."</font>");
+     } else {
+       return array(color => "appday", Desc => "<font size=\"-3\">".substr($desc,0,-1*strlen($br))."</font>");
+     }
+   }
+ }
+ /* ---------------------------------------------------------------------------
+  * Evaluate the Color for day t
+  * t = Date in timestamp format
+  *
+  */
+ function GetDaysInfo($t) {
+
+   $dinfo = GetExtendedDayInfo($t);
+
+   if (!empty($dinfo[Desc])) {
+     $dinfo[popinfo]  = '<html><body>';
+     $dinfo[popinfo] .= '<table class="inner" border="0" cellspacing="0" cellpadding="1">';
+     $dinfo[popinfo] .= '<tr><td valign="top"><font size="-1"><strong>';
+     $dinfo[popinfo] .= eregi_replace("'","\'",$dinfo[Desc]);
+     $dinfo[popinfo] .= '</strong></font></td></tr></table></body></html>';
+   }
+
+   # Today
+   if ( Date("d.m.Y",$t) == Date("d.m.Y") ) {
+     $dinfo[color] = "today";
+     return $dinfo;
+   }
+
+   $wd = Date("D",$t);
+   $month = Date("m",$t);
+
+   # Change here for islamic/arabic week scheme
+   # Sundays are free
+   if ( $wd == "Sun" ) {
+     $dinfo[color] = "holiday";
+     return $dinfo;
+   }
+
+   # Saturdays are something special
+   if ( $wd == "Sat" ) {
+     $dinfo[color] = "freeday";
+     return $dinfo;
+   }
+
+   return $dinfo;
+ };
+
+/**
+ * Intern Representation of Date and Time
+ *
+ * @package BASE
+ * @module DateTime
+ */
+class DateTime {
+  /**
+   * str is whatever a database gives us
+   * -1 = now
+   */
+  function DateTime( $str = "-1" ) {
+    global $current_user;
+
+    $this->notime = 0;
+    $this->orig = $str;
+    if ( $str == -1 ) {
+      $this->day = Date("j");
+      $this->month = Date("n");
+      $this->year = Date("Y");
+      $this->hour = Date("H");
+      $this->min = Date("i");
+      $this->sec = Date("s");
+      $this->ts = time();
+      $this->ts_def = $this->ts;
+      //if ( isset($current_user) && ($current_user->offset != 0) ) {
+      //  $this->ts_def -= $current_user->offset;
+      //}
+      $this->tz = Date("T");
+      $this->offset = Date("Z");
+      $this->format = -1;
+    } else {
+      if (($str == "0") || ($str == "")) {
+        $this->setNoTime();
+      } else {
+        $this->setDateTime($str);
+      }
+    }
+  }
+  /**
+   * set datetime to nothing
+   */
+  function setNoTime() {
+    $this->notime = 1;
+    $this->day = -1;
+    $this->month = -1;
+    $this->year = -1;
+    $this->hour = -1;
+    $this->min = -1;
+    $this->sec = 0;
+    $this->ts = -1;
+  }
+  /**
+   * set datetime for a timestamp
+   * ts is assumed in current_users TZ
+   */
+  function setDateTimeTS($ts,$notz = 0) {
+    global $current_user;
+
+    if ( $ts != -1 ) {
+      $this->notime  = 0;
+    }
+    $this->day = (integer)Date("d",$ts);
+    $this->month = (integer)Date("m",$ts);
+    $this->year = (integer)Date("Y",$ts);
+    $this->hour = (integer)Date("H",$ts);
+    $this->min = (integer)Date("i",$ts);
+    $this->sec = (integer)Date("s",$ts);
+    $this->ts = mktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+    $this->orig = "TS";
+    $this->format = "TS";
+    $this->ts_def = $ts;
+    if ( ($current_user->offset != 0) && ($notz == 0) ) {
+      $this->ts_def -= $current_user->offset;
+    }
+  }
+  /**
+   * set DateTime by variables (incoming variables are in the users TZ)
+   * used via form
+   */
+  function setDateTimeF($str,$notz = 0) {
+    global $current_user;
+
+    $this->orig = "fields $str";
+    $this->format = "fields";
+    if ( count($_GET) ) {
+      foreach ($_GET as $i => $f) {
+        $x[$i] = $f;
+      }
+    }
+    if ( count($_POST) ) {
+      foreach ($_POST as $i => $f) {
+        $x[$i] = $f;
+      }
+    }
+
+    $v = sprintf("%s_d",$str);
+    if ( isset($x[$v]) ) {
+      $this->day   = (integer)$x[$v];
+    }
+    $v = sprintf("%s_m",$str);
+    if ( isset($x[$v]) ) {
+      $this->month = (integer)$x[$v];
+    }
+    $v = sprintf("%s_y",$str);
+    if ( isset($x[$v]) ) {
+      $this->year  = (integer)$x[$v];
+    }
+    $v = sprintf("%s_H",$str);
+    if ( isset($x[$v]) ) {
+      $this->hour  = (integer)$x[$v];
+    } else {
+      $this->hour   = 0;
+    }
+    $v = sprintf("%s_M",$str);
+    if ( isset($x[$v]) ) {
+      $this->min   = (integer)$x[$v];
+    } else {
+      $this->min   = 0;
+    }
+    $this->sec   = 0;
+
+    $this->ts = mktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+
+    if ( ($this->day < 1) || ($this->month < 1) || ($this->year < 1) ) {
+      $this->setNoTime();
+    } else {
+      $this->notime  = 0;
+    }
+    if ( $this->checkDMY() == false) {
+      $this->setNoTime();
+    }
+#    settype($this->day,"integer");
+#    settype($this->month,"integer");
+#    settype($this->year,"integer");
+
+    $this->ts_def = $this->ts;
+    if ( ($current_user->offset != 0) && ($notz == 0) ) {
+      $this->ts_def -= $current_user->offset;
+    }
+  }
+  /**
+   * Checks if DMY fields are valid
+   */
+  function checkDMY($notime_allowed = false) {
+    if ( $this->notime  == 1 ) {
+      return $notime_allowed;
+    }
+
+    if ( $this->day < 1 ) { return 0;}
+    if ( $this->day > 31 ) { return 0;}
+    if ( $this->month < 1 ) { return 0;}
+    if ( $this->month > 12 ) { return 0;}
+    if ( $this->hour < 0 ) { return 0;}
+    if ( $this->hour > 23 ) { return 0;}
+    if ( $this->min < 0 ) { return 0;}
+    if ( $this->min > 59 ) { return 0;}
+
+    if ( (Date("n-j",$this->ts) != $this->month ."-". $this->day) && ($this->ts >= 0)  ) {
+      return false;
+    }
+    return true;
+  }
+  /**
+   *
+   * On MySQL the given time is in tutos[defaultTZ] we have to fix the offset
+   * On Postgres it is in the current users TZ
+   *
+   */
+  function setDateTime($str,$notz = 0) {
+    global $current_user , $tutos;
+
+    if ( ! isset ($str) ) return;
+    if ( empty ($str) ) return;
+
+    $this->format = 0;
+    $this->orig = $str;
+    $this->notime  = 0;
+    $regs = array();
+
+    if ( $str == "epoch" ) {
+      $this->setNoTime();
+      return;
+    };
+    if (($str == "0") || ($str == "") || ($str== "--------") || ($str == "------------") ) {
+      $this->setNoTime();
+      return;
+    };
+
+    # check the registered formats
+    foreach($tutos['dateformat'] as $f) {
+      @$f($this,$str);
+      if ($this->format != 0) {
+#        echo $str." ". $f ."<br />";
+        break;
+      }
+    }
+#    if ($this->format == 0) {
+#      echo $str." X<br />";
+#   }
+
+    if ($this->format != 0) {
+    } else
+    if ( ereg( "^([0-9]{1,2}).([0-9]{1,2}).([0-9]{4}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})\.([0-9]+) ([a-z]*)$", $str, $regs ) ) {
+      # Init via DB 06.02.2001 17:39:32.00 CET  Postgres 7.1
+      $this->month = (integer)$regs[1];
+      $this->day   = (integer)$regs[2];
+      $this->year  = (integer)$regs[3];
+      $this->hour  = (integer)$regs[4];
+      $this->min   = (integer)$regs[5];
+      $this->sec   = (integer)$regs[6];
+      $this->format = 10;
+    } else
+    if ( ereg( "^([0-1][0-9])([0-3][0-9])([0-9]{4})$", $str, $regs ) ) {
+      # Init via DB MMDDYYYY
+      $this->month = (integer)$regs[1];
+      $this->day   = (integer)$regs[2];
+      $this->year  = (integer)$regs[3];
+      $this->hour  = 0;
+      $this->min   = 0;
+      $this->sec   = 0;
+      $this->format = 4;
+    } else
+    if ( ereg( "^([0-9]{4})-?([0-1][0-9])-?([0-3][0-9]) ?([0-2][0-9]):?([0-5][0-9]):?([0-5][0-9])$", $str, $regs ) ) {
+      # Init via YYYYMMDDHHMMSS  or YYYY-MM-DD HH:MM:SS used in calendar
+      $this->year  = (integer)$regs[1];
+      $this->month = (integer)$regs[2];
+      $this->day   = (integer)$regs[3];
+      $this->hour  = (integer)$regs[4];
+      $this->min   = (integer)$regs[5];
+      $this->sec   = (integer)$regs[6];
+      $this->format = 5;
+    } else
+    if ( ereg( "([0-9]{4})([0-1][0-9])([0-3][0-9])([0-2][0-9])([0-5][0-9])", $str, $regs ) ) {
+      # Init via YYYYMMDDHHMM
+      $this->year  = (integer)$regs[1];
+      $this->month = (integer)$regs[2];
+      $this->day   = (integer)$regs[3];
+      $this->hour  = (integer)$regs[4];
+      $this->min   = (integer)$regs[5];
+      $this->sec   = 0;
+      $this->format = 6;
+    } else
+    if ( ereg( "^([0-9]{4})([0-1][0-9])([0-3][0-9])$", $str, $regs ) ) {
+      # Init via YYYYMMDD used in calendar
+      $this->year  = (integer)$regs[1];
+      $this->month = (integer)$regs[2];
+      $this->day   = (integer)$regs[3];
+      $this->hour  = 0;
+      $this->min   = 0;
+      $this->sec   = 0;
+      $this->format = 7;
+    } else
+    if ( ereg( "^([0-1][0-9])-([0-3][0-9])-([0-9]{4})$", $str, $regs ) ) {
+      # Init via MM-DD-YYYY
+      $this->month = (integer)$regs[1];
+      $this->day   = (integer)$regs[2];
+      $this->year  = (integer)$regs[3];
+      $this->hour  = 0;
+      $this->min   = 0;
+      $this->sec   = 0;
+      $this->format = 8;
+    } else {
+      echo "<br />DT: Unknown DateTimeFormat <span class=\"warn\">". $str ."</span> fix it in Date.pinc or register a DB specific format<br />";
+      return;
+    }
+
+    $this->ts = mktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+
+    $this->ts_def = $this->ts;
+    if ( ($current_user->offset != 0) && ($notz == 0) ) {
+      $this->ts += $current_user->offset;
+      // Set the fields according to offset
+      $this->setDateTimeTS($this->ts);
+    }
+  }
+  /**
+   * part of a form used to enter a day
+   */
+  function EnterDay($name,$none = 0) {
+    $x = sprintf("%s_d",$name );
+    echo "<select id=\"". $x ."\" name=\"". $x ."\">";
+    $day=0;
+    if ( ($none == 1) || ($this->day == -1) ) {
+      echo "<option value=\"-1\"";
+      if ( $this->day == -1 ) {
+        echo " selected=\"selected\"";
+      }
+      echo ">--</option>\n";
+    }
+    while($day < 31) {
+      $day++;
+      echo "<option value=\"". $day ."\"";
+      if ( $day == $this->day ) {
+        echo " selected=\"selected\" ";
+      }
+      echo ">";
+      printf ("%02d\n",$day);
+      echo "</option>\n";
+    }
+    echo "</select>\n";
+  }
+  /**
+   * parts of a form used to enter a month
+   */
+  function EnterMonth($name,$none = 0) {
+    $x = sprintf("%s_m",$name );
+    echo "<select id=\"". $x ."\" name=\"". $x ."\">";
+    $mon=0;
+    if ( ($none == 1) || ($this->month == -1) ) {
+      echo "<option value=\"-1\"";
+      if ( $this->month == -1 ) {
+        echo " selected=\"selected\"";
+      }
+      echo ">--</option>\n";
+    }
+    while($mon < 12) {
+      $mon++;
+      echo "<option value=\"". $mon ."\"";
+      if ( $mon == $this->month ) {
+        echo " selected=\"selected\" ";
+      }
+      echo ">";
+      printf ("%02d\n",$mon);
+      echo "</option>\n";
+    }
+    echo "</select>\n";
+  }
+  /**
+   * parts of a form used to enter a year
+   * future_only = try to allow only date in the future (i.e. years)
+   */
+  function EnterYear($name,$none = 0,$future_only = false) {
+    $x = sprintf("%s_y",$name );
+    echo "<select id=\"". $x ."\" name=\"". $x ."\">";
+    $year=  Date("Y") + 10;
+    if ( ($none == 1) || ($this->year == -1) ) {
+      echo "<option value=\"-1\"";
+      if ( $this->year == -1 ) {
+        echo " selected=\"selected\"";
+      }
+      echo ">----</option>\n";
+    }
+	if ($future_only) {
+	  $stop =  Date("Y");
+	} else {
+	  $stop =  1900;
+	}
+    while($year >= $stop ) {
+      # yes my grandma was born 1904 (I need this!)
+      echo "<option value=\"". $year ."\"";
+      if ( $year == $this->year ) {
+        echo " selected=\"selected\" ";
+      }
+      echo ">". $year . "</option>\n";
+      $year--;
+    }
+    echo "</select>\n";
+  }
+
+  function ShowMinical($name, $none = 0) {
+    global $tutos,$callink;
+    
+    if ( !isset($_SERVER['HTTP_USER_AGENT']) || ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
+      # Do nothing
+    } else {
+      echo "<a href=\"JavaScript:
+var d = document.forms[0];
+mywindow = window.open('', 'calendar', 'resizable=yes,width=250,height=180,top=100,left=100');
+mywindow.location.href = '". $callink ."minical&f=".$name."&amp;n=".$none."&amp;d=".
+$this->day ."&amp;m=". $this->month ."&amp;y=". $this->year
+."&amp;". SID ."';
+mywindow.focus();
+\" onmouseover=\"self.status='minical' ;return true\">\n";
+      echo "<font size=\"-1\">minical</font>\n";
+      echo "</a>\n";
+    }
+  }
+  
+  /**
+   * ask for date
+   * none = 0  (no date not allowed)
+   * none = 1  (allowed to enter nothing)
+   */
+  function EnterDate($name,$none = 0,$future_only = false) {
+    global $tutos;
+
+    if ( $tutos['df'] == 1 ) {
+      $this->EnterMonth($name,$none);
+    } else {
+      $this->EnterDay($name,$none);
+    }
+    echo "<b>.</b>&nbsp;";
+    if ( $tutos['df'] == 1 ) {
+      $this->EnterDay($name,$none);
+    } else {
+      $this->EnterMonth($name,$none);
+    }
+    echo "<b>.</b>&nbsp;";
+    $this->EnterYear($name,$none,$future_only);
+
+    $this->ShowMinical($name, $none);
+  }
+  /**
+   * enter a time into a form
+   */
+  function EnterTime($name) {
+    $h = sprintf("%s_H",$name );
+    $m = sprintf("%s_M",$name );
+
+    echo "<input id=\"". $h ."\" maxlength=\"2\" size=\"2\" name=\"". $h ."\" value=\"". sprintf("%02d",$this->hour) ."\" />\n";
+    echo "&nbsp;<b>:</b>&nbsp;";
+    echo "<input id=\"". $m ."\" maxlength=\"2\" size=\"2\" name=\"". $m ."\" value=\"". sprintf("%02d",$this->min) ."\" />\n";
+  }
+  /**
+   * ask for date
+   * none = 0  (no date not allowed)
+   * none = 1  (allowed to enter nothing)
+   * future_only = try to allow only date in the future (i.e. years)
+   */
+  function EnterDateTime($name,$none = 0,$future_only = false) {
+    global $tutos;
+
+    if ( $tutos['df'] == 1 ) {
+      $this->EnterMonth($name,$none);
+    } else {
+      $this->EnterDay($name,$none);
+    }
+    echo "<b>.</b>&nbsp;";
+    if ( $tutos['df'] == 1 ) {
+      $this->EnterDay($name,$none);
+    } else {
+      $this->EnterMonth($name,$none);
+    }
+    echo "<b>.</b>&nbsp;";
+    $this->EnterYear($name,$none,$future_only);
+
+    $h = sprintf("%s_H",$name );
+    $m = sprintf("%s_M",$name );
+    
+    echo "<input maxlength=\"2\" size=\"2\" name=\"". $h ."\" value=\"". ($this->hour == -1 ? "--":$this->hour)  ."\" />\n";
+    echo "&nbsp;<b>:</b>&nbsp;";
+    echo "<input maxlength=\"2\" size=\"2\" name=\"". $m ."\" value=\"". ($this->min == -1 ? "--":$this->min) ."\" />\n";
+    
+    $this->ShowMinical($name, $none);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getDateTimeShort() {
+    global $lang;
+
+    if ( $this->notime == 1) {
+      return sprintf ($lang['DateTimeSFormat'],"--","--","--","--");
+    }
+    return strftime($lang['DateTimeSStr'],$this->ts);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getDateTime() {
+    global $lang;
+
+    if ( $this->notime == 1) {
+      return sprintf ($lang['DateTimeFormat'],"--","--","----","--","--","   ");
+    }
+#    return strftime($lang['DateTimeStr'],$this->ts);
+    return Date($lang['DateTimePHP'],$this->ts);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getTime() {
+    global $lang;
+
+    if ( $this->notime == 1) {
+      return sprintf ($lang['TimeFormat'],"--","--");
+    }
+    return strftime($lang['TimeFormatStr'],$this->ts);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getDate() {
+    global $lang,$tutos;
+
+    if ( $this->notime == 1) {
+      return sprintf ($lang['DateFormat'],"--","--","----");
+    }
+    return sprintf ($lang['DateFormat'],$this->day,$this->month,$this->year);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getDateShort() {
+    global $lang,$tutos;
+
+    if ( $this->notime == 1) {
+      return sprintf ($lang['DateShortFormat'],"--","--");
+    }
+    return sprintf ($lang['DateShortFormat'],$this->day,$this->month);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getYYYYMMDD() {
+    if ( $this->notime == 1) {
+      return "--------";
+    }
+    return sprintf ("%04d%02d%02d",$this->year,$this->month,$this->day);
+  }
+  /**
+   * get date formatted as MONTH DAY
+   * used in watchlist
+   */
+  function getMMDD() {
+    if ( $this->notime == 1) {
+      return "----";
+    }
+    return sprintf ("%02d%02d",$this->month,$this->day);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getYYYYMMDDHHMM() {
+    if ( $this->notime == 1) {
+      return "------------";
+    }
+    return sprintf ("%04d%02d%02d%02d%02d",$this->year,$this->month,$this->day,$this->hour,$this->min);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getYYYYMMDDHHMMSS_crm() {
+    if ( $this->notime == 1) {
+      return "------------";
+    }
+    return sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$this->year,$this->month,$this->day,$this->hour,$this->min,$this->sec);
+  }
+  /* ---------------------------------------------------------------------------
+
+   */
+  function getYYYYMMDDHHMMSS() {
+    if ( $this->notime == 1) {
+      return "------------";
+    }
+    return sprintf ("%04d%02d%02d%02d%02d%02d",$this->year,$this->month,$this->day,$this->hour,$this->min,$this->sec);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getLinkDateTime() {
+    global $current_user;
+
+    if ( $this->notime == 1) {
+      return "------";
+    }
+    if ( $current_user->feature_ok(usecalendar,PERM_SEE) ) {
+      return makelink("calendar.php?t=".$this->getYYYYMMDD(),$this->getDateTime(),$this->getDateTime());
+    } else {
+      return $this->getDateTime();
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getLinkDate() {
+    global $current_user;
+
+    if ( $this->notime == 1) {
+      return "------";
+    }
+    if ( $current_user->feature_ok(usecalendar,PERM_SEE) ) {
+      return makelink("calendar.php?t=".$this->getYYYYMMDD(),$this->getDate(),$this->getDate());
+    } else {
+      return $this->getDate();
+    }
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body () {
+    return $this->getYYYYMMDDHHMMSS();
+  }
+  /**
+   * add given number of days to this date
+   */
+  function addDays($val) {
+    if ( $this->notime == 1) {
+      return -1;
+    }
+
+    $ts = mktime($this->hour,$this->min,$this->sec,$this->month,$this->day + $val ,$this->year);
+    $this->setDateTimeTS($ts);
+  }
+  /**
+   * add given number of days to this date
+   */
+  function isWorkday(&$pref) {
+    if ( $this->notime == 1) {
+      return 0;
+    }
+    $wd = Date("w",$this->ts);
+    if ($pref->isWorkDay($wd)) {
+      return 1;
+    }
+    return 0;
+  }
+  /**
+   * get a unix timestamp
+   */
+  function getTimestamp() {
+    if ( $this->notime == 1) {
+      return -1;
+    }
+    return mktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+  }
+  /**
+   * get DateTime formatted for ical
+   */
+  function getIcal() {
+    if ( $this->notime == 1) {
+      return "";
+    }
+    # contrib by Danilo Beuche <danilo at epost.de>
+    # UH HU THIS IS A BAD HACK, BUT iCal Times have to be in UTC  
+    $x = mktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+    $y = gmmktime($this->hour,$this->min,$this->sec,$this->month,$this->day,$this->year);
+    $diff = $y - $x;
+
+    return strftime("%Y%m%dT%H%M%SZ",$x - $diff);
+
+#    return sprintf ("%04d%02d%02dT%02d%02d%02dZ",$this->year,$this->month,$this->day,$this->hour,$this->min,$this->sec);
+  }
+
+  function lessthan( &$DateObj ) {
+    return( $this->ts < $DateObj->ts );
+  }
+
+  /* Ala strcmp : returns <0, 0 or >0... */
+  function datecmp( &$DateObj ) {
+    return $this->ts - $DateObj->ts;
+  }
+}
+?>

@@ -1,0 +1,178 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Activities/EditView.html,v 1.15 2004/07/11 20:08:52 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+<script type="text/javascript" src="jscalendar/calendar.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+<form name="EditView" method="POST" action="index.php">
+  <input type="hidden" name="module" value="Activities">
+  <input type="hidden" name="record" value="{ID}">
+  <input type="hidden" name="mode" value="{MODE}">
+  <input type="hidden" name="action">
+  <input type="hidden" name="activity_mode" value="{ACTIVITY_MODE}">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="ticket_id" value="{TICKETID}">
+  <input type="hidden" name="product_id" value="{PRODUCTID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr> 
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Activities.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_ACTIVITY} 
+      {NAME}</td>
+    <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+      ]</td>
+  </tr>
+  <tr>
+    <td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td>
+  </tr>
+</table>
+<br>
+  <div align="right"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td> <table width="100%" border="0" cellspacing="1" cellpadding="0" class="formOuterBorder">
+	   <tr> 
+            <th align="left" class="formSecHeader" colspan="4">{ACTIVITY_INFORMATION}</th>
+          </tr>
+          {BLOCK1} {BLOCK7} {BLOCK2}</table></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr> 
+      <td><div align="center"> 
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate() " type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+        </div></td>
+    </tr>
+  </table>
+</form>
+<script type="text/javascript" language="JavaScript">
+function set_values(form) {
+
+	if (form.duedate_flag.checked) {
+
+		form.duedate_flag.value='on';
+
+		form.duedate.value="";
+
+		form.duetime.value="";
+
+		form.duedate.readOnly=true;
+
+		form.duetime.readOnly=true;
+
+		document.images.jscal_trigger.width = 0;
+
+		document.images.jscal_trigger.height = 0;
+
+	}
+
+	else {
+
+		form.duedate_flag.value='off';
+
+		form.duedate.readOnly=false;
+
+		form.duetime.readOnly=false;
+
+		if (form.duetime.readonly) alert ("it's readonly");
+
+		document.images.jscal_trigger.width = 16;
+
+		document.images.jscal_trigger.height = 16;
+
+	}
+
+}
+
+</script>
+<script type="text/javascript" language="JavaScript">
+
+ 	if (!document.EditView.duedate_flag.checked) {
+
+ 	        document.images.jscal_trigger.width = 16;
+
+ 	        document.images.jscal_trigger.height = 16;
+
+ 	}
+
+ 	</script>
+{JAVASCRIPT} 
+<script language="javascript" type="text/javascript" src="include/general.js"></script>
+<script language="javascript" type="text/javascript">
+
+function toggleAssignType(currType)
+
+{
+
+        if (currType=="U")
+
+        {
+
+                getObj("assign_user").style.display="block"
+
+                getObj("assign_team").style.display="none"
+
+        }
+
+        else
+
+        {
+
+                getObj("assign_user").style.display="none"
+
+                getObj("assign_team").style.display="block"
+
+        }
+
+}
+
+</script>
+<script>
+
+	
+
+	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
+
+	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
+
+	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
+
+</script>
+<!-- END: main -->

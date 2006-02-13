@@ -191,18 +191,18 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 //*/
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+$cvHTML = '<span class="bodyText disabled">Edit</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Activities&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>';
 }
 else
 {
-$cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+$cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">Edit</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'" class="link">Delete</a>
 <span class="sep">|</span>
-<a href="index.php?module=Activities&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>';
 }
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -212,12 +212,8 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
-		<td>';
-if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
-{
-	$other_text .= '<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
-}
-   	$other_text .='<!--input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
+		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
+   		<!--input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
 		<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">

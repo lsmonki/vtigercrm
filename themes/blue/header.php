@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/themes/blue/header.php,v 1.8 2005/07/11 13:43:54 crouchingtiger Exp $
 
  * Description:  Contains a variety of utility functions used to display UI
 
@@ -379,8 +379,6 @@ if($actionid == 3)
 
 if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
 {
-	if($now_module == 'Faq')
-                $currentModule = $now_module;
 
         require_once("modules/".$currentModule."/Forms.php");
         if (function_exists('get_new_record_form'))

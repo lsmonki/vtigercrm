@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 1999 - 2003 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: admin.pinc,v 1.16 2005/05/03 13:18:43 saraj Exp $
+ *  $Author: saraj $
+ */
+
+class admin extends tutos_module {
+}
+?>

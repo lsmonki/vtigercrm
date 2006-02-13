@@ -45,8 +45,6 @@ class CRMEntity extends SugarBean
   function saveentity($module,$migration='')
   {
     global $current_user;
-    $insertion_mode = $this->mode;
-
     $this->db->println("TRANS saveentity starts");
     $this->db->startTransaction();
 	
@@ -73,11 +71,6 @@ class CRMEntity extends SugarBean
         {
           $this->insertIntoEntityTable($table_name, $module);
         }
-        elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-        {
-                $this->deleteRelation($table_name);
-        }
-
       }
       elseif($table_name ==  "cntactivityrel")
       {
@@ -85,11 +78,6 @@ class CRMEntity extends SugarBean
         {
           $this->insertIntoEntityTable($table_name, $module);
         }
-        elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-        {
-          $this->deleteRelation($table_name);
-        }
-
       }
       elseif($table_name ==  "ticketcomments" && $_REQUEST['comments'] != '')
       {
@@ -180,7 +168,6 @@ $vtlog->logthis("module is ".$module,'info');
     global $current_user;
     global $adb;
     global $root_directory;
-    global $upload_badext;
 
     $ownerid = $this->column_fields['assigned_user_id'];
     $adb->println("insertattach ownerid=".$ownerid." mod=".$module);
@@ -188,26 +175,14 @@ $vtlog->logthis("module is ".$module,'info');
 
 	if(!isset($ownerid) || $ownerid=='')            $ownerid = $current_user->id;
     $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
-    
-    // Arbitrary File Upload Vulnerability fix - Philip
     $binFile = $_FILES['filename']['name'];
-    $ext_pos = strrpos($binFile, ".");
-
-    $ext = substr($binFile, $ext_pos + 1);
-
-    if (in_array($ext, $upload_badext))
-    {
-           $binFile .= ".txt";
-    }
-    // Vulnerability fix ends
-
     $filename = basename($binFile);
     $filetype= $_FILES['filename']['type'];
     $filesize = $_FILES['filename']['size'];
 
     if($binFile != '')
     {
-      if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$binFile))
+      if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$_FILES["filename"]["name"]))
       {
         //                      $binFile = $_FILES['filename']['name'];
         //                      $filename = basename($binFile);
@@ -369,20 +344,14 @@ $vtlog->logthis("module is =".$module,'info');
     $old_priority = $adb->query_result($tktresult,0,"priority");
     $old_severity = $adb->query_result($tktresult,0,"severity");
     $old_category = $adb->query_result($tktresult,0,"category");
-    if($_REQUEST['old_smownerid'] != $old_user_id || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'] || $old_userid == 0)
+    if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'])
     {
       $updatelog .= date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
     }	
-    if($_REQUEST['old_smownerid'] != $old_user_id && $old_user_id != 0)
+    if($old_user_id != $this->column_fields['assigned_user_id'])
     {
       $user_name = getUserName($this->column_fields['assigned_user_id']);
-      $updatelog .= ' Transferred to '.$user_name.'\.';
-    }
-    elseif($old_user_id == 0)
-    {
-	$group_name = getGroupName($ticketid,'HelpDesk');
-	if($group_name != $_REQUEST['assigned_group_name'])
-		$updatelog .= ' Transferred to group '.$_REQUEST['assigned_group_name'].'\.';
+      $updatelog .= ' Transferred to '.$assigned_user_name.'\.';
     }
     if($old_status != $this->column_fields['ticketstatus'])
     {
@@ -451,7 +420,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  {
 			  if($uitype == 56)
 			  {
-				  if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
+				  if($this->column_fields[$fieldname] == 'on')
 				  {
 					  $fldvalue = 1;
 				  }
@@ -503,7 +472,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  }
 			  if($table_name == 'products' && $columname == 'imagename')
 			  {
-			/*	  //Product Image Handling done
+				  //Product Image Handling done
 				  if($_FILES['imagename']['name'] != '')
 				  {
 
@@ -524,7 +493,6 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $fldvalue ="'".getProductImageName($this->id)."'";
 				  }
-		      */		  
 
 			  }
 			  if($table_name != 'ticketcomments')
@@ -546,11 +514,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  {
 				  global $current_user;
 				  $fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-				  if($_REQUEST['assigned_group_name'] != '' && $_REQUEST['assigntype'] == 'T')
-                                  {
-                                        $group_name = $_REQUEST['assigned_group_name'];
-                                  }
-				  elseif($this->column_fields['assigned_user_id'] != '')
+				  if($this->column_fields['assigned_user_id'] != '')
 				  {
 					  $tkt_ownerid = $this->column_fields['assigned_user_id'];
 				  }
@@ -558,10 +522,7 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $tkt_ownerid = $current_user->id;
 				  }
-				  if($group_name != '')
-					  $tkt_ownername = $group_name;
-				  else
-					  $tkt_ownername = getUserName($tkt_ownerid);	
+				  $tkt_ownername = getUserName($tkt_ownerid);	
 				  $fldvalue .= "--//--Ticket created. Assigned to ".$tkt_ownername."--//--";
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 				  //echo ' updatevalue is ............. ' .$fldvalue;
@@ -569,7 +530,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  elseif($table_name == 'products' && $columname == 'imagename')
 			  {
 				  //Product Image Handling done
-			/*	  if($_FILES['imagename']['name'] != '')
+				  if($_FILES['imagename']['name'] != '')
 				  {
 
 					  $prd_img_arr = upload_product_image_file("create",$this->id);
@@ -589,7 +550,6 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $fldvalue ="''";
 				  }
-			*/	  
 
 			  }
 			  //code by shankar ends
@@ -695,20 +655,6 @@ $vtlog->logthis("module is =".$module,'info');
 	  }
 
   }
-function deleteRelation($table_name)
-{
-         global $adb;
-         $check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-         $check_result=$adb->query($check_query);
-         $num_rows = $adb->num_rows($check_result);
-
-         if($num_rows == 1)
-         {
-                $del_query = "DELETE from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-                $adb->query($del_query);
-         }
-
-}
 function getOldFileName($notesid)
 {
 	global $vtlog;
@@ -739,8 +685,7 @@ $vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  
 	else
 		$ownertype = 'customer';
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+	$sql = "insert into ticketcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_user->id."','".$ownertype."','".$current_time."')";
         $adb->query($sql);
 }
 function insertIntoFAQCommentTable($table_name, $module)
@@ -751,8 +696,7 @@ $vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$
 
         $current_time = date('Y-m-d H:i:s');
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+	$sql = "insert into faqcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_time."')";
 	$adb->query($sql);
 }
 function insertIntoReminderTable($table_name,$module,$recurid)

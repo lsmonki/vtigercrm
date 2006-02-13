@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Accounts/ListViewTop.php,v 1.2 2005/06/02 15:04:54 indigoleopard Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -29,7 +29,7 @@ global $current_user;
 $current_module_strings = return_module_language($current_language, "Accounts");
 $log = LoggerManager::getLogger('top accounts_list');
 
-$list_query = 'select account.accountid, account.accountname, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
+$list_query = 'select account.accountid, account.accountname, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
 $list_result=$adb->query($list_query);
 $open_accounts_list = array();
 $noofrows = min($adb->num_rows($list_result),7);
@@ -49,7 +49,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("CURRENCY_SYMBOL", getCurrencySymbol());
 
 // Stick the form header out there.
-//echo get_form_header($current_module_strings['LBL_TOP_ACCOUNTS'], '', false);
+echo get_form_header($current_module_strings['LBL_TOP_ACCOUNTS'], '', false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));

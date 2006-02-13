@@ -19,40 +19,15 @@ global $app_list_strings;
 global $mod_strings;
 global $current_user;
 
-$encode_val=$_REQUEST['encode_val'];
-$decode_val=base64_decode($encode_val);
-
- $saveimage=isset($_REQUEST['saveimage'])?$_REQUEST['saveimage']:"false";
- $errormessage=isset($_REQUEST['error_msg'])?$_REQUEST['error_msg']:"false";
- $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
- 
-
-
-
 $focus = new Product();
 
-if($_REQUEST['record']!="") 
+if(isset($_REQUEST['record'])) 
 {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Products");
     $focus->name=$focus->column_fields['productname'];		
 }
-
-if($image_error=="true")
-{
-	$explode_decode_val=explode("&",$decode_val);
-	for($i=1;$i<count($explode_decode_val);$i++)
-	{
-		$test=$explode_decode_val[$i];
-		$values=explode("=",$test);
-		$field_name_val=$values[0];
-		$field_value=$values[1];
-		$focus->column_fields[$field_name_val]=$field_value;
-	}
-}
-
-
 if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
 {
         $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
@@ -133,8 +108,7 @@ if(isset($cust_fld))
 }
 $xtpl->assign("ID", $focus->id);
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);
@@ -190,35 +164,6 @@ $product_tables = Array('products','productcf','productcollaterals');
    }
  }
 
-if($errormessage==2)
-{
-	$msg =$mod_strings['LBL_MAXIMUM_LIMIT_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
-}
-else if($errormessage==3)
-{
-        $msg = $mod_strings['LBL_UPLOAD_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
-	
-}
-else if($errormessage=="image")
-{
-        $msg = $mod_strings['LBL_IMAGE_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
-}
-else if($errormessage =="invalid")
-{
-        $msg = $mod_strings['LBL_INVALID_IMAGE'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
-}
-else
-{
-	$errormessage="";
-}
-if($errormessage!="")
-{
-	$xtpl->assign("ERROR_MESSAGE",$errormessage);
-}
 
 
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);

@@ -1,0 +1,138 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the 
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+  <input type="hidden" name="module" value="{MODULE}">
+  <input type="hidden" name="action" value="Import">
+  <input type="hidden" name="step" value="4">
+  <input type="hidden" name="has_header" value="{HAS_HEADER}">
+  <input type="hidden" name="source" value="{SOURCE}">
+  <input type="hidden" name="delimiter" value="{DELIMITER}">
+  <input type="hidden" name="tmp_file" value="{TMP_FILE}">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME} 
+      </td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="hline"><img height='2' src='include/images/blank.gif'></td>
+    </tr>
+  </table>
+  <br>
+  <div align="right" style="width:100%"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
+  <table width="100%" border="0" cellspacing="1" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td class="formSecHeader">{MOD.LBL_STEP_3_TITLE} </td>
+    </tr>
+    <tr> 
+      <td style="padding:5px 0px 5px 0px">{MOD.LBL_SELECT_FIELDS_TO_MAP}</td>
+    </tr>
+    <tr> 
+      <td>
+       <!-- BEGIN: table -->
+        <table border="0" cellspacing="0" cellpadding="2" style="margin:15">
+          <!-- BEGIN: toprow -->
+          <tr> 
+            <td class="moduleListTitle" height="20">{MOD.LBL_DATABASE_FIELD}</td>
+            <!-- BEGIN: headercell -->
+            <td class="moduleListTitle">{MOD.LBL_HEADER_ROW}</td>
+            <!-- END: headercell -->
+            <!-- BEGIN: topcell -->
+            <td class="moduleListTitle">{MOD.LBL_ROW} {ROWCOUNT}</td>
+            <!-- END: topcell -->
+          </tr>
+          <!-- END: toprow -->
+          <!-- BEGIN: row -->
+          <tr class="{ROWCLASS}"> 
+            <!-- BEGIN: headcell -->
+            <td align="center" height="22">{SELECTFIELD} 
+            </td>
+            <!-- END: headcell -->
+            <!-- BEGIN: cell -->
+            <td> {CELL} </td>
+            <!-- END: cell -->
+            <!-- BEGIN: cellempty -->
+            <td>&nbsp;</td>
+            <!-- END: cellempty -->
+          </tr>
+          <!-- END: row -->
+        </table>
+        <br> 
+        <!-- END: table -->
+      </td>
+    </tr>
+    <tr> 
+		<td>
+      <table border="0" cellpadding="2" cellspacing="0">
+        <tr> 
+          <td><input type="checkbox" name="save_map" onClick="set_readonly(this.form)"></td>
+          <td>{MOD.LBL_SAVE_AS_CUSTOM}</td>
+          <td><input type="text" readonly name="save_map_as" value=""></td>
+        </tr>
+      </table></td>
+    </tr>
+    <tr> 
+      <td> <table width="100%" cellpadding="2" cellspacing="0" border="0" class="formSecHeader">
+          <tr> 
+            <td align="right">
+				<input title="{MOD.LBL_IMPORT_NOW}" accessKey="" class="button" type="submit" name="button" value="  {MOD.LBL_IMPORT_NOW}  "  onclick="this.form.action.value='Import';this.form.step.value='4'; return verify_data(Import)">
+				<input title="{MOD.LBL_BACK}" accessKey="" class="button" type="submit" name="button" value="  {MOD.LBL_BACK}  "  onclick="this.form.action.value='Import';this.form.step.value='2'; return true;"> 
+			</td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
+  <br>
+  <table width="60%">
+    <tr> 
+      <td> <strong>Note:</strong> </td>
+    <tr> 
+      <td> <ul>
+          <!-- BEGIN: note -->
+          <li>{NOTETEXT}</li>
+          <!-- END: note -->
+        </ul></td>
+    </tr>
+  </table>
+</form>
+{JAVASCRIPT} 
+<!-- END: main -->

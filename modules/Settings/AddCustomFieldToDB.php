@@ -241,12 +241,6 @@ else
                  $type = "C(3)"; //adodb type	 
                  $uichekdata='C~0';	 
         }
-	elseif($fldType == 'TextArea')	 
-        {	 
-                 $uitype = 21;	 
-                 $type = "X"; //adodb type	 
-                 $uichekdata='V~0';	 
-        }
 	// No Decimal Pleaces Handling
 
         

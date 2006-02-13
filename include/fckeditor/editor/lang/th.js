@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,9 +11,11 @@
  * File Name: th.js
  * 	Thai language file.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:18
+ * 
  * File Authors:
  * 		Audy Charin Arsakit (arsakit@gmail.com)
- * 		Joy Piyanoot Promnuan (piyanoot@gmail.com)
  */
 
 var FCKLang =
@@ -21,8 +23,8 @@ var FCKLang =
 // Language direction : "ltr" (left to right) or "rtl" (right to left).
 Dir					: "ltr",
 
-ToolbarCollapse		: "ซ่อนแถบเครื่องมือ",
-ToolbarExpand		: "แสดงแถบเครื่องมือ",
+ToolbarCollapse		: "ย่อแถบเครื่องมือ",
+ToolbarExpand		: "ขยายแถบเครื่องมือ",
 
 // Toolbar Items and Context Menu
 Save				: "บันทึก",
@@ -39,11 +41,9 @@ RemoveFormat		: "ล้างรูปแบบ",
 InsertLinkLbl		: "ลิงค์เชื่อมโยงเว็บ อีเมล์ รูปภาพ หรือไฟล์อื่นๆ",
 InsertLink			: "แทรก/แก้ไข ลิงค์",
 RemoveLink			: "ลบ ลิงค์",
-Anchor				: "แทรก/แก้ไข Anchor",
+Anchor				: "Insert/Edit Anchor",	//MISSING
 InsertImageLbl		: "รูปภาพ",
 InsertImage			: "แทรก/แก้ไข รูปภาพ",
-InsertFlashLbl		: "Flash",	//MISSING
-InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "ตาราง",
 InsertTable			: "แทรก/แก้ไข ตาราง",
 InsertLineLbl		: "เส้นคั่นบรรทัด",
@@ -82,18 +82,18 @@ BGColor				: "สีพื้นหลัง",
 Source				: "ดูรหัส HTML",
 Find				: "ค้นหา",
 Replace				: "ค้นหาและแทนที่",
-SpellCheck			: "ตรวจการสะกดคำ",
-UniversalKeyboard	: "คีย์บอร์ดหลากภาษา",
+SpellCheck			: "Check Spell",	//MISSING
+UniversalKeyboard	: "Universal Keyboard",	//MISSING
 
-Form			: "แบบฟอร์ม",
-Checkbox		: "เช็คบ๊อก",
-RadioButton		: "เรดิโอบัตตอน",
-TextField		: "เท็กซ์ฟิลด์",
-Textarea		: "เท็กซ์แอเรีย",
-HiddenField		: "ฮิดเดนฟิลด์",
-Button			: "ปุ่ม",
-SelectionField	: "แถบตัวเลือก",
-ImageButton		: "ปุ่มแบบรูปภาพ",
+Form			: "Form",	//MISSING
+Checkbox		: "Checkbox",	//MISSING
+RadioButton		: "Radio Button",	//MISSING
+TextField		: "Text Field",	//MISSING
+Textarea		: "Textarea",	//MISSING
+HiddenField		: "Hidden Field",	//MISSING
+Button			: "Button",	//MISSING
+SelectionField	: "Selection Field",	//MISSING
+ImageButton		: "Image Button",	//MISSING
 
 // Context Menu
 EditLink			: "แก้ไข ลิงค์",
@@ -108,20 +108,19 @@ SplitCell			: "แยกช่อง",
 CellProperties		: "คุณสมบัติของช่อง",
 TableProperties		: "คุณสมบัติของตาราง",
 ImageProperties		: "คุณสมบัติของรูปภาพ",
-FlashProperties		: "Flash Properties",	//MISSING
 
-AnchorProp			: "รายละเอียด Anchor",
-ButtonProp			: "รายละเอียดของ ปุ่ม",
-CheckboxProp		: "คุณสมบัติของ เช็คบ๊อก",
-HiddenFieldProp		: "คุณสมบัติของ ฮิดเดนฟิลด์",
-RadioButtonProp		: "คุณสมบัติของ เรดิโอบัตตอน",
-ImageButtonProp		: "คุณสมบัติของ ปุ่มแบบรูปภาพ",
-TextFieldProp		: "คุณสมบัติของ เท็กซ์ฟิลด์",
-SelectionFieldProp	: "คุณสมบัติของ แถบตัวเลือก",
-TextareaProp		: "คุณสมบัติของ เท็กแอเรีย",
-FormProp			: "คุณสมบัติของ แบบฟอร์ม",
+AnchorProp			: "Anchor Properties",	//MISSING
+ButtonProp			: "Button Properties",	//MISSING
+CheckboxProp		: "Checkbox Properties",	//MISSING
+HiddenFieldProp		: "Hidden Field Properties",	//MISSING
+RadioButtonProp		: "Radio Button Properties",	//MISSING
+ImageButtonProp		: "Image Button Properties",	//MISSING
+TextFieldProp		: "Text Field Properties",	//MISSING
+SelectionFieldProp	: "Selection Field Properties",	//MISSING
+TextareaProp		: "Textarea Properties",	//MISSING
+FormProp			: "Form Properties",	//MISSING
 
-FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",
+FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "โปรแกรมกำลังทำงานด้วยเทคโนโลยี XHTML กรุณารอสักครู่...",
@@ -137,11 +136,9 @@ UnknownToolbarSet	: "ไม่มีการติดตั้งชุดค�
 DlgBtnOK			: "ตกลง",
 DlgBtnCancel		: "ยกเลิก",
 DlgBtnClose			: "ปิด",
-DlgBtnBrowseServer	: "เปิดหน้าต่างจัดการไฟล์อัพโหลด",
+DlgBtnBrowseServer	: "Browse Server",	//MISSING
 DlgAdvancedTag		: "ขั้นสูง",
-DlgOpOther			: "&lt;อื่นๆ&gt;",
-DlgInfoTab			: "Info",	//MISSING
-DlgAlertUrl			: "Please insert the URL",	//MISSING
+DlgOpOther			: "&lt;Other&gt;",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;ไม่ระบุ&gt;",
@@ -186,17 +183,6 @@ DlgImgAlignTextTop	: "ใต้ตัวอักษร",
 DlgImgAlignTop		: "บนสุด",
 DlgImgPreview		: "หน้าเอกสารตัวอย่าง",
 DlgImgAlertUrl		: "กรุณาระบุที่อยู่อ้างอิงออนไลน์ของไฟล์รูปภาพ (URL)",
-DlgImgLinkTab		: "Link",	//MISSING
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",	//MISSING
-DlgFlashChkPlay		: "Auto Play",	//MISSING
-DlgFlashChkLoop		: "Loop",	//MISSING
-DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
-DlgFlashScale		: "Scale",	//MISSING
-DlgFlashScaleAll	: "Show all",	//MISSING
-DlgFlashScaleNoBorder	: "No Border",	//MISSING
-DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "ลิงค์เชื่อมโยงเว็บ อีเมล์ รูปภาพ หรือไฟล์อื่นๆ",
@@ -227,7 +213,7 @@ DlgLnkTargetBlank	: "เปิดหน้าจอใหม่ (_blank)",
 DlgLnkTargetParent	: "เปิดในหน้าหลัก (_parent)",
 DlgLnkTargetSelf	: "เปิดในหน้าปัจจุบัน (_self)",
 DlgLnkTargetTop		: "เปิดในหน้าบนสุด (_top)",
-DlgLnkTargetFrameName	: "ชื่อทาร์เก็ตเฟรม",
+DlgLnkTargetFrameName	: "Target Frame Name",	//MISSING
 DlgLnkPopWinName	: "ระบุชื่อหน้าจอเล็ก (Pop-up)",
 DlgLnkPopWinFeat	: "คุณสมบัติของหน้าจอเล็ก (Pop-up)",
 DlgLnkPopResize		: "ปรับขนาดหน้าจอ",
@@ -326,148 +312,137 @@ PasteErrorCopy	: "ไม่สามารถสำเนาข้อควา�
 PasteAsText		: "วางแบบตัวอักษรธรรมดา",
 PasteFromWord	: "วางแบบตัวอักษรจากโปรแกรมเวิร์ด",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
-DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
-DlgPasteCleanBox		: "Clean Up Box",	//MISSING
-
+DlgPasteMsg		: "ไม่สามารถวางข้อความที่สำเนามาได้เนื่องจาก <STRONG>การกำหนดค่าระดับความปลอดภัย</STRONG> ในโปรแกรมท่องเว็บที่ท่านกำลังใช้อยู่.<BR>กรุณาใช้ปุ่มลัดเพื่อวางข้อความแทน (<STRONG>กดปุ่ม Ctrl และตัว V พร้อมกัน</STRONG>) และกดปุ่ม <STRONG>ตกลง</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "สีอัตโนมัติ",
 ColorMoreColors	: "เลือกสีอื่นๆ...",
 
 // Document Properties
-DocProps		: "คุณสมบัติของเอกสาร",
+DocProps		: "Document Properties",	//MISSING
 
 // Anchor Dialog
-DlgAnchorTitle		: "คุณสมบัติของ Anchor",
-DlgAnchorName		: "ชื่อ Anchor",
-DlgAnchorErrorName	: "กรุณาระบุชื่อของ Anchor",
+DlgAnchorTitle		: "Anchor Properties",	//MISSING
+DlgAnchorName		: "Anchor Name",	//MISSING
+DlgAnchorErrorName	: "Please type the anchor name",	//MISSING
 
 // Speller Pages Dialog
-DlgSpellNotInDic		: "ไม่พบในดิกชันนารี",
-DlgSpellChangeTo		: "แก้ไขเป็น",
-DlgSpellBtnIgnore		: "ยกเว้น",
-DlgSpellBtnIgnoreAll	: "ยกเว้นทั้งหมด",
-DlgSpellBtnReplace		: "แทนที่",
-DlgSpellBtnReplaceAll	: "แทนที่ทั้งหมด",
-DlgSpellBtnUndo			: "ยกเลิก",
-DlgSpellNoSuggestions	: "- ไม่มีคำแนะนำใดๆ -",
-DlgSpellProgress		: "กำลังตรวจสอบคำสะกด...",
-DlgSpellNoMispell		: "ตรวจสอบคำสะกดเสร็จสิ้น: ไม่พบคำสะกดผิด",
-DlgSpellNoChanges		: "ตรวจสอบคำสะกดเสร็จสิ้น: ไม่มีการแก้คำใดๆ",
-DlgSpellOneChange		: "ตรวจสอบคำสะกดเสร็จสิ้น: แก้ไข1คำ",
-DlgSpellManyChanges		: "ตรวจสอบคำสะกดเสร็จสิ้น:: แก้ไข %1 คำ",
+DlgSpellNotInDic		: "Not in dictionary",	//MISSING
+DlgSpellChangeTo		: "Change to",	//MISSING
+DlgSpellBtnIgnore		: "Ignore",	//MISSING
+DlgSpellBtnIgnoreAll	: "Ignore All",	//MISSING
+DlgSpellBtnReplace		: "Replace",	//MISSING
+DlgSpellBtnReplaceAll	: "Replace All",	//MISSING
+DlgSpellBtnUndo			: "Undo",	//MISSING
+DlgSpellNoSuggestions	: "- No suggestions -",	//MISSING
+DlgSpellProgress		: "Spell check in progress...",	//MISSING
+DlgSpellNoMispell		: "Spell check complete: No misspellings found",	//MISSING
+DlgSpellNoChanges		: "Spell check complete: No words changed",	//MISSING
+DlgSpellOneChange		: "Spell check complete: One word changed",	//MISSING
+DlgSpellManyChanges		: "Spell check complete: %1 words changed",	//MISSING
 
-IeSpellDownload			: "ไม่ได้ติดตั้งระบบตรวจสอบคำสะกด. ต้องการติดตั้งไหมครับ?",
+IeSpellDownload			: "Spell checker not installed. Do you want to download it now?",	//MISSING
 
 // Button Dialog
-DlgButtonText	: "ข้อความ (ค่าตัวแปร)",
-DlgButtonType	: "ข้อความ",
+DlgButtonText	: "Text (Value)",	//MISSING
+DlgButtonType	: "Type",	//MISSING
 
 // Checkbox and Radio Button Dialogs
-DlgCheckboxName		: "ชื่อ",
-DlgCheckboxValue	: "ค่าตัวแปร",
-DlgCheckboxSelected	: "เลือกเป็นค่าเริ่มต้น",
+DlgCheckboxName		: "Name",	//MISSING
+DlgCheckboxValue	: "Value",	//MISSING
+DlgCheckboxSelected	: "Selected",	//MISSING
 
 // Form Dialog
-DlgFormName		: "ชื่อ",
-DlgFormAction	: "แอคชั่น",
-DlgFormMethod	: "เมธอด",
+DlgFormName		: "Name",	//MISSING
+DlgFormAction	: "Action",	//MISSING
+DlgFormMethod	: "Method",	//MISSING
 
 // Select Field Dialog
-DlgSelectName		: "ชื่อ",
-DlgSelectValue		: "ค่าตัวแปร",
-DlgSelectSize		: "ขนาด",
-DlgSelectLines		: "บรรทัด",
-DlgSelectChkMulti	: "เลือกหลายค่าได้",
-DlgSelectOpAvail	: "รายการตัวเลือก",
-DlgSelectOpText		: "ข้อความ",
-DlgSelectOpValue	: "ค่าตัวแปร",
-DlgSelectBtnAdd		: "เพิ่ม",
-DlgSelectBtnModify	: "แก้ไข",
-DlgSelectBtnUp		: "บน",
-DlgSelectBtnDown	: "ล่าง",
-DlgSelectBtnSetValue : "เลือกเป็นค่าเริ่มต้น",
-DlgSelectBtnDelete	: "ลบ",
+DlgSelectName		: "Name",	//MISSING
+DlgSelectValue		: "Value",	//MISSING
+DlgSelectSize		: "Size",	//MISSING
+DlgSelectLines		: "lines",	//MISSING
+DlgSelectChkMulti	: "Allow multiple selections",	//MISSING
+DlgSelectOpAvail	: "Available Options",	//MISSING
+DlgSelectOpText		: "Text",	//MISSING
+DlgSelectOpValue	: "Value",	//MISSING
+DlgSelectBtnAdd		: "Add",	//MISSING
+DlgSelectBtnModify	: "Modify",	//MISSING
+DlgSelectBtnUp		: "Up",	//MISSING
+DlgSelectBtnDown	: "Down",	//MISSING
+DlgSelectBtnSetValue : "Set as selected value",	//MISSING
+DlgSelectBtnDelete	: "Delete",	//MISSING
 
 // Textarea Dialog
-DlgTextareaName	: "ชื่อ",
-DlgTextareaCols	: "สดมภ์",
-DlgTextareaRows	: "แถว",
+DlgTextareaName	: "Name",	//MISSING
+DlgTextareaCols	: "Columns",	//MISSING
+DlgTextareaRows	: "Rows",	//MISSING
 
 // Text Field Dialog
-DlgTextName			: "ชื่อ",
-DlgTextValue		: "ค่าตัวแปร",
-DlgTextCharWidth	: "ความกว้าง",
-DlgTextMaxChars		: "จำนวนตัวอักษรสูงสุด",
-DlgTextType			: "ชนิด",
-DlgTextTypeText		: "ข้อความ",
-DlgTextTypePass		: "รหัสผ่าน",
+DlgTextName			: "Name",	//MISSING
+DlgTextValue		: "Value",	//MISSING
+DlgTextCharWidth	: "Character Width",	//MISSING
+DlgTextMaxChars		: "Maximum Characters",	//MISSING
+DlgTextType			: "Type",	//MISSING
+DlgTextTypeText		: "Text",	//MISSING
+DlgTextTypePass		: "Password",	//MISSING
 
 // Hidden Field Dialog
-DlgHiddenName	: "ชื่อ",
-DlgHiddenValue	: "ค่าตัวแปร",
+DlgHiddenName	: "Name",	//MISSING
+DlgHiddenValue	: "Value",	//MISSING
 
 // Bulleted List Dialog
-BulletedListProp	: "คุณสมบัติของ บูลเล็ตลิสต์",
-NumberedListProp	: "คุณสมบัติของ นัมเบอร์ลิสต์",
-DlgLstType			: "ชนิด",
-DlgLstTypeCircle	: "รูปวงกลม",
-DlgLstTypeDisk		: "รูปดิสก์",
-DlgLstTypeSquare	: "รูปสี่เหลี่ยม",
-DlgLstTypeNumbers	: "หมายเลข (1, 2, 3)",
-DlgLstTypeLCase		: "ตัวพิมพ์เล็ก (a, b, c)",
-DlgLstTypeUCase		: "ตัวพิมพ์ใหญ่ (A, B, C)",
-DlgLstTypeSRoman	: "เลขโรมันพิมพ์เล็ก (i, ii, iii)",
-DlgLstTypeLRoman	: "เลขโรมันพิมพ์ใหญ่ (I, II, III)",
+BulletedListProp	: "Bulleted List Properties",	//MISSING
+NumberedListProp	: "Numbered List Properties",	//MISSING
+DlgLstType			: "Type",	//MISSING
+DlgLstTypeCircle	: "Circle",	//MISSING
+DlgLstTypeDisk		: "Disk",	//MISSING
+DlgLstTypeSquare	: "Square",	//MISSING
+DlgLstTypeNumbers	: "Numbers (1, 2, 3)",	//MISSING
+DlgLstTypeLCase		: "Lowercase Letters (a, b, c)",	//MISSING
+DlgLstTypeUCase		: "Uppercase Letters (A, B, C)",	//MISSING
+DlgLstTypeSRoman	: "Small Roman Numerals (i, ii, iii)",	//MISSING
+DlgLstTypeLRoman	: "Large Roman Numerals (I, II, III)",	//MISSING
 
 // Document Properties Dialog
-DlgDocGeneralTab	: "ลักษณะทั่วไปของเอกสาร",
-DlgDocBackTab		: "พื้นหลัง",
-DlgDocColorsTab		: "สีและระยะขอบ",
-DlgDocMetaTab		: "ข้อมูลสำหรับเสิร์ชเอนจิ้น",
+DlgDocGeneralTab	: "General",	//MISSING
+DlgDocBackTab		: "Background",	//MISSING
+DlgDocColorsTab		: "Colors and Margins",	//MISSING
+DlgDocMetaTab		: "Meta Data",	//MISSING
 
-DlgDocPageTitle		: "ชื่อไตเติ้ล",
-DlgDocLangDir		: "การอ่านภาษา",
-DlgDocLangDirLTR	: "จากซ้ายไปขวา (LTR)",
-DlgDocLangDirRTL	: "จากขวาไปซ้าย (RTL)",
-DlgDocLangCode		: "รหัสภาษา",
-DlgDocCharSet		: "ชุดตัวอักษร",
-DlgDocCharSetOther	: "ชุดตัวอักษรอื่นๆ",
+DlgDocPageTitle		: "Page Title",	//MISSING
+DlgDocLangDir		: "Language Direction",	//MISSING
+DlgDocLangDirLTR	: "Left to Right (LTR)",	//MISSING
+DlgDocLangDirRTL	: "Right to Left (RTL)",	//MISSING
+DlgDocLangCode		: "Language Code",	//MISSING
+DlgDocCharSet		: "Character Set Encoding",	//MISSING
+DlgDocCharSetOther	: "Other Character Set Encoding",	//MISSING
 
-DlgDocDocType		: "ประเภทของเอกสาร",
-DlgDocDocTypeOther	: "ประเภทเอกสารอื่นๆ",
-DlgDocIncXHTML		: "รวมเอา  XHTML Declarations ไว้ด้วย",
-DlgDocBgColor		: "สีพื้นหลัง",
-DlgDocBgImage		: "ที่อยู่อ้างอิงออนไลน์ของรูปพื้นหลัง (Image URL)",
-DlgDocBgNoScroll	: "พื้นหลังแบบไม่มีแถบเลื่อน",
-DlgDocCText			: "ข้อความ",
-DlgDocCLink			: "ลิงค์",
-DlgDocCVisited		: "ลิงค์ที่เคยคลิ้กแล้ว Visited Link",
-DlgDocCActive		: "ลิงค์ที่กำลังคลิ้ก Active Link",
-DlgDocMargins		: "ระยะขอบของหน้าเอกสาร",
-DlgDocMaTop			: "ด้านบน",
-DlgDocMaLeft		: "ด้านซ้าย",
-DlgDocMaRight		: "ด้านขวา",
-DlgDocMaBottom		: "ด้านล่าง",
-DlgDocMeIndex		: "คำสำคัญอธิบายเอกสาร (คั่นคำด้วย คอมม่า)",
-DlgDocMeDescr		: "ประโยคอธิบายเกี่ยวกับเอกสาร",
-DlgDocMeAuthor		: "ผู้สร้างเอกสาร",
-DlgDocMeCopy		: "สงวนลิขสิทธิ์",
-DlgDocPreview		: "ตัวอย่างหน้าเอกสาร",
-
-// Templates Dialog
-Templates			: "Templates",	//MISSING
-DlgTemplatesTitle	: "Content Templates",	//MISSING
-DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
-DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
-DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
+DlgDocDocType		: "Document Type Heading",	//MISSING
+DlgDocDocTypeOther	: "Other Document Type Heading",	//MISSING
+DlgDocIncXHTML		: "Include XHTML Declarations",	//MISSING
+DlgDocBgColor		: "Background Color",	//MISSING
+DlgDocBgImage		: "Background Image URL",	//MISSING
+DlgDocBgNoScroll	: "Nonscrolling Background",	//MISSING
+DlgDocCText			: "Text",	//MISSING
+DlgDocCLink			: "Link",	//MISSING
+DlgDocCVisited		: "Visited Link",	//MISSING
+DlgDocCActive		: "Active Link",	//MISSING
+DlgDocMargins		: "Page Margins",	//MISSING
+DlgDocMaTop			: "Top",	//MISSING
+DlgDocMaLeft		: "Left",	//MISSING
+DlgDocMaRight		: "Right",	//MISSING
+DlgDocMaBottom		: "Bottom",	//MISSING
+DlgDocMeIndex		: "Document Indexing Keywords (comma separated)",	//MISSING
+DlgDocMeDescr		: "Document Description",	//MISSING
+DlgDocMeAuthor		: "Author",	//MISSING
+DlgDocMeCopy		: "Copyright",	//MISSING
+DlgDocPreview		: "Preview",	//MISSING
 
 // About Dialog
-DlgAboutAboutTab	: "เกี่ยวกับโปรแกรม",
-DlgAboutBrowserInfoTab	: "โปรแกรมท่องเว็บที่ท่านใช้",
+DlgAboutAboutTab	: "About",	//MISSING
+DlgAboutBrowserInfoTab	: "Browser Info",	//MISSING
 DlgAboutVersion		: "รุ่น",
 DlgAboutLicense		: "สงวนลิขสิทธิ์ โดยนโยบายลิขสิทธิ์แบบ GNU Lesser General Public License",
-DlgAboutInfo		: "ข้อมูลเพิ่มเติมภาษาไทยติดต่อ</BR>นาย ชรินทร์ อาษากิจ (อู้ด)</BR><A HREF='mailto:arsakit@gmail.com'>arsakit@gmail.com</A> tel. (+66) 06-9241924</BR>หรือดาวน์โหลดรุ่นภาษาไทยได้ที่เว็บไซต์</BR><A HREF='http://www.thaimall4u.com'>www.Thaimall4u.com</A></BR>ข้อมูลเพิ่มเติมภาษาอังกฤษ กรุณาไปที่นี่"
+DlgAboutInfo		: "ข้อมูลเพิ่มเติมภาษาไทยติดต่อ</BR>นาย ชรินทร์ อาษากิจ</BR><A HREF='mailto:arsakit@gmail.com'>arsakit@gmail.com</A> tel. (+66) 06-9241924</BR></BR>ข้อมูลเพิ่มเติมภาษาอังกฤษ กรุณาไปที่นี่"
 }

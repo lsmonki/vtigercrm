@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: et.js
  * 	Estonian language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Kristjan Kivikangur (kristjan@ttrk.ee)
@@ -41,8 +44,6 @@ RemoveLink			: "Eemalda link",
 Anchor				: "Insert/Edit Anchor",	//MISSING
 InsertImageLbl		: "Pilt",
 InsertImage			: "Sisesta/Muuda pilt",
-InsertFlashLbl		: "Flash",	//MISSING
-InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Tabel",
 InsertTable			: "Sisesta/Muuda tabel",
 InsertLineLbl		: "Joon",
@@ -107,7 +108,6 @@ SplitCell			: "Lahuta lahtrid",
 CellProperties		: "Lahtri atribuudid",
 TableProperties		: "Tabeli atribuudid",
 ImageProperties		: "Pildi  atribuudid",
-FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Anchor Properties",	//MISSING
 ButtonProp			: "Button Properties",	//MISSING
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Selection Field Properties",	//MISSING
 TextareaProp		: "Textarea Properties",	//MISSING
 FormProp			: "Form Properties",	//MISSING
 
-FontFormats			: "Tavaline;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6",
+FontFormats			: "Tavaline;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Töötlen XHTML. Palun oota...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Sule",
 DlgBtnBrowseServer	: "Browse Server",	//MISSING
 DlgAdvancedTag		: "Täpsemalt",
 DlgOpOther			: "&lt;Other&gt;",	//MISSING
-DlgInfoTab			: "Info",	//MISSING
-DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;määramata&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Teksti üles",
 DlgImgAlignTop		: "Üles",
 DlgImgPreview		: "Eelvaade",
 DlgImgAlertUrl		: "Palun kirjuta pildi URL",
-DlgImgLinkTab		: "Link",	//MISSING
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",	//MISSING
-DlgFlashChkPlay		: "Auto Play",	//MISSING
-DlgFlashChkLoop		: "Loop",	//MISSING
-DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
-DlgFlashScale		: "Scale",	//MISSING
-DlgFlashScaleAll	: "Show all",	//MISSING
-DlgFlashScaleNoBorder	: "No Border",	//MISSING
-DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Link",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "Sinu brauseri turvaseaded ei luba redaktoril automaatselt kope
 PasteAsText		: "Kleebi tavalise tekstina",
 PasteFromWord	: "Kleebi Wordist",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
-DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
-DlgPasteCleanBox		: "Clean Up Box",	//MISSING
-
+DlgPasteMsg		: "Redaktor ei saanud sinu brauseri <STRONG>turvaseadete</STRONG> pärast automatselt kleepida.<BR>Palun kleebi järgmisse kasti kasutades klaviatuuri(<STRONG>Ctrl+V</STRONG>) ja vajuta <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automaatne",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Document Description",	//MISSING
 DlgDocMeAuthor		: "Author",	//MISSING
 DlgDocMeCopy		: "Copyright",	//MISSING
 DlgDocPreview		: "Preview",	//MISSING
-
-// Templates Dialog
-Templates			: "Templates",	//MISSING
-DlgTemplatesTitle	: "Content Templates",	//MISSING
-DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
-DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
-DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "About",	//MISSING

@@ -1,0 +1,66 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Tasks/ListView.html,v 1.8 2004/06/18 07:35:41 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+<!-- BEGIN: list_nav_row -->
+	<tr height="20">
+		<td COLSPAN="13" class="listFormHeaderLinks" align="right">
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>{EXPORT_LINK}</td>
+<td align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
+                {NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td></table>
+	</td>
+	</tr>
+<!-- END: list_nav_row -->
+	<tr><td COLSPAN="13" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="3%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}status" class="listFormHeaderLinks">{MOD.LBL_LIST_CLOSE}{status_arrow}</a>&nbsp;</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}name" class="listFormHeaderLinks">{MOD.LBL_LIST_SUBJECT}{name_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="20%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_CONTACT}</span></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="27%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_RELATED_TO}</span></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}date_due" class="listFormHeaderLinks">{MOD.LBL_LIST_DUE_DATE}{date_due_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;{APP.LBL_LIST_ASSIGNED_USER}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	  </tr>
+	<tr><td COLSPAN=13" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td nowrap align=CENTER valign=TOP style="padding:0px 3px 0px 3px;">{TASK.SET_COMPLETE}</td>
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Activities&record={TASK.ID}">{TASK.NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={TASK.CONTACT_ID}">{TASK.CONTACT_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={TASK.PARENT_MODULE}&record={TASK.PARENT_ID}">{TASK.PARENT_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td class="{ROW_COLOR}" nowrap valign=TOP style="padding:0px 3px 0px 3px;">{TASK.DATE_DUE}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{TASK.ASSIGNED_USER_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+<tr><td COLSPAN="7">
+<!-- END: main -->

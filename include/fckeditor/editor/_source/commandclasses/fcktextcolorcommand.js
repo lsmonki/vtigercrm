@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fcktextcolorcommand.js
  * 	FCKTextColorCommand Class: represents the text color comand. It shows the
  * 	color selection panel.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2004-11-19 08:16:00
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -82,39 +85,14 @@ FCKTextColorCommand.prototype.GetState = function()
 	return FCK_TRISTATE_OFF ;
 }
 
-function FCKTextColorCommand_OnMouseOver()	{ this.className='ColorSelected' ; }
-
-function FCKTextColorCommand_OnMouseOut()	{ this.className='ColorDeselected' ; }
-
-function FCKTextColorCommand_OnClick()
-{
-	this.className = 'ColorDeselected' ;
-	this.Command.SetColor( '#' + this.Color ) ;
-	this.Command._Panel.Hide() ;
-}
-
-function FCKTextColorCommand_AutoOnClick()
-{
-	this.className = 'ColorDeselected' ;
-	this.Command.SetColor( '' ) ;
-	this.Command._Panel.Hide() ;
-}
-
-function FCKTextColorCommand_MoreOnClick()
-{
-	this.className = 'ColorDeselected' ;
-	this.Command._Panel.Hide() ;
-	FCKDialog.OpenDialog( 'FCKDialog_Color', FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, this.Command.SetColor ) ;
-}
-
 FCKTextColorCommand.prototype._CreatePanelBody = function( targetDocument, targetDiv )
 {
 	function CreateSelectionDiv()
 	{
 		var oDiv = targetDocument.createElement( "DIV" ) ;
-		oDiv.className		= 'ColorDeselected' ;
-		oDiv.onmouseover	= FCKTextColorCommand_OnMouseOver ;
-		oDiv.onmouseout		= FCKTextColorCommand_OnMouseOut ;
+		oDiv.className = 'ColorDeselected' ;
+		oDiv.onmouseover	= function() { this.className='ColorSelected' ; } ;
+		oDiv.onmouseout		= function() { this.className='ColorDeselected' ; } ;
 		
 		return oDiv ;
 	}
@@ -141,10 +119,15 @@ FCKTextColorCommand.prototype._CreatePanelBody = function( targetDocument, targe
 		</table>' ;
 
 	oDiv.Command = this ;
-	oDiv.onclick = FCKTextColorCommand_AutoOnClick ;
+	oDiv.onclick = function()
+	{
+		this.className = 'ColorDeselected' ;
+		this.Command.SetColor( '' ) ;
+		this.Command._Panel.Hide() ;
+	}
 
 	// Create an array of colors based on the configuration file.
-	var aColors = FCKConfig.FontColors.toString().split(',') ;
+	var aColors = FCKConfig.FontColors.split(',') ;
 
 	// Create the colors table based on the array.
 	var iCounter = 0 ;
@@ -159,7 +142,12 @@ FCKTextColorCommand.prototype._CreatePanelBody = function( targetDocument, targe
 			oDiv.innerHTML = '<div class="ColorBoxBorder"><div class="ColorBox" style="background-color: #' + aColors[iCounter] + '"></div></div>' ;
 
 			oDiv.Command = this ;
-			oDiv.onclick = FCKTextColorCommand_OnClick ;
+			oDiv.onclick = function()
+			{
+				this.className = 'ColorDeselected' ;
+				this.Command.SetColor( '#' + this.Color ) ;
+				this.Command._Panel.Hide() ;
+			}
 		}
 	}
 
@@ -171,5 +159,10 @@ FCKTextColorCommand.prototype._CreatePanelBody = function( targetDocument, targe
 	oDiv.innerHTML = '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td nowrap align="center">' + FCKLang.ColorMoreColors + '</td></tr></table>' ;
 
 	oDiv.Command = this ;
-	oDiv.onclick = FCKTextColorCommand_MoreOnClick ;
+	oDiv.onclick = function()
+	{
+		this.className = 'ColorDeselected' ;
+		this.Command._Panel.Hide() ;
+		FCKDialog.OpenDialog( 'FCKDialog_Color', FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, this.Command.SetColor ) ;
+	}
 }

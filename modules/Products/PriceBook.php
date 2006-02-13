@@ -75,33 +75,6 @@ class PriceBook extends CRMEntity {
          $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
 	 renderPriceBookRelatedProducts($query,$id);                                                                  
 	}
-	function get_pricebook_noproduct($id)
-        {
-		 
-		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";                                                                                                  $result = $this->db->query($query);
-		$no_count = $this->db->num_rows($result);
-		if($no_count !=0)
-		{
-       	 		$pb_query = 'select crmentity.crmid, pricebook.pricebookid,pricebookproductrel.productid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id;
-			$result_pb = $this->db->query($pb_query);
-			if($no_count == $this->db->num_rows($result_pb))
-			{
-				return false;
-			}
-			elseif($this->db->num_rows($result_pb) == 0)
-			{
-				return true;
-			}
-			elseif($this->db->num_rows($result_pb) < $no_count)
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 }
 ?>

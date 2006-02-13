@@ -1,0 +1,414 @@
+<?php
+/**
+ * Copyright 2002 - 2003 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: layout_base.pinc,v 1.16 2005/05/03 13:18:51 saraj Exp $
+ *  $Author: saraj $
+ */
+
+define('category','category');
+define('info','info');
+define('text','text');
+define('url','url');
+define('target','target');
+define('confirm','confirm');
+
+/**
+ * INTERFACE !!
+ * This class is a interface class for TUTOS layout engines
+ * it will implement empty methods for everything we need in
+ * a layout engine
+ *
+ * @package BASE
+ * @module layout_base
+ */
+class layout_base {
+  /**
+   * initialize
+   */
+  function init (&$user) {
+    global $tutos,$msg;
+
+    list($usec,$sec) = explode(" ",microtime());
+    $this->start_ts = (float)$usec + (float)$sec;
+    $this->user = &$user;
+    //$this->dbconn = $user->dbconn;
+    $this->user->layout = &$this;
+
+    if (isset($_GET['format'])) {
+      $this->format = $_GET['format'];
+    } else {
+      $this->format = "html";
+    }
+    if ( isset($_GET['start']) ) {
+      $this->start = $_GET['start'];
+    } else {
+      $this->start = 0;
+    }
+    $this->stop = false;
+    $this->nomenu = false;
+    $this->redirect = "";
+    $this->action = "";
+    $this->content = array();
+    $this->hidden = array();
+    $this->menu = array();
+    if ( ! isset($msg) ) {
+      $msg = "";
+    }
+
+    # load the theme if possible
+    if ( isset($_GET['th']) || isset($_POST['th']) ) {
+      if ( isset($_GET['th']) ) {
+        $user->theme = strtolower($_GET['th']);
+      } else {
+        $user->theme = strtolower($_POST['th']);
+      }
+    }
+    if ( isset($user->theme) &&
+         file_exists(getcwd()."/".$tutos['base'] ."/layout/theme_". $user->theme .".pinc")  ) {
+      require_once 'theme_'. $user->theme .'.pinc';
+      $x = 'theme_'.$user->theme;
+      $this->theme = new $x($user->theme);
+    } else {
+      require_once 'theme_base.pinc';
+      if (isset($user->theme)) {
+        $this->theme = new theme_base($user->theme);
+      } else {
+        $this->theme = new theme_base();
+      }
+    }
+    $this->theme->setImages();
+  }
+  /**
+   * add a menu item
+   * tarr = a menu description  of aray of those descriptions
+   */
+  function addMenu($tarr) {
+    if ( ! is_Array($tarr) ) {
+      return;
+    }
+    # Handle arrays
+    if ( isset($tarr[0][url]) )  {
+      foreach ($tarr as $i => $f) {
+        $this->addMenu($tarr[$i]);
+      }
+      return;
+    }
+
+    $this->menu[] = $tarr;
+    return;
+  }
+  /**
+   * header of a "normal" page
+   */
+  function PageHeader($name = "") {
+    echo "PageHeader not implemented";
+    return false;
+  }
+  /**
+   * header of a printable page
+   */
+  function PrintHeader($name = "") {
+    echo "PrintHeader not implemented";
+    return false;
+  }
+  /**
+   * foot of a printable page
+   */
+  function PrintFooter() {
+    echo "PrintFooter not implemented";
+    return false;
+  }
+  /**
+   * prepare page
+   */
+  function prepare() {
+    echo "prepare not implemented";
+    return false;
+  }
+  /**
+   * display naviagtion
+   */
+  function navigate() {
+    echo "navigate not implemented";
+    return false;
+  }
+  /**
+   * display info
+   */
+  function info() {
+    echo "info not implemented";
+    return false;
+  }
+  /**
+   * display
+   */
+  function display() {
+    echo "display not implemented";
+    return false;
+  }
+  /**
+   * start a data table
+   */
+  function DataTableStart() {
+    echo "DataTableStart not implemented";
+    return false;
+  }
+  /**
+   * end a data table
+   */
+  function DataTableEnd() {
+    echo "DataTableEnd not implemented";
+    return false;
+  }
+  /**
+   * start a data table
+   */
+  function OverviewTableStart() {
+    echo "OverviewTableStart not implemented";
+    return false;
+  }
+  /**
+   * end a data table
+   */
+  function OverviewTableEnd() {
+    echo "OverviewTableEnd not implemented";
+    return false;
+  }
+  /**
+   * start a overview row
+   */
+  function OverviewRowStart($line,$title = "") {
+    return $line;
+  }
+  /**
+   * end a overview row
+   */
+  function OverviewRowEnd($line) {
+    return "\n";
+  }
+  /**
+   * display icons for see, modify, delete...
+   */
+  function showGuiIcons($start, $end, &$myobject, &$myparentobj, $which, $desc = false) {
+    #echo "showGuiIcons not implemented";
+    return false;
+  }
+  function checkGuiIcons() {
+    return false;
+  }
+  /**
+   * start a massupdate row
+   */
+  function UpdateRowStart($cols) {
+    echo "UpdateRowStart not implemented";
+    return false;
+  }
+  /**
+   * end a massupdate row
+   */
+  function UpdateRowEnd($cols) {
+    echo "UpdateRowEnd not implemented";
+    return false;
+  }
+  /**
+   * error output visible to user
+   */
+  function error($str) {
+    return $str;
+  }
+  /**
+   * shows a simple field descriptor (top)
+   */
+  Function showfield($text,$req = 0,$label = "") {
+    return $text;
+  }
+  /**
+   * shows data
+   */
+  Function showdata($text,$cols = 1) {
+    return $text;
+  }
+  /**
+   * shows a simple field descriptor (top)
+   */
+  Function showfieldc($text,$req = 0,$label = "") {
+    return $text;
+  }
+  /**
+   * add additional content to be displayed on some useful place after the info part
+   */
+  function addContent($add) {
+    $this->content[] = $add;
+  }
+  /**
+   * show content
+   */
+  function showContent() {
+    $r = "";
+    foreach ($this->content as $c) {
+      $r .= $c;
+    }
+    return $r;
+  }
+  /**
+   * add a hidden field for a form
+   */
+  Function addHidden($fld,$value) {
+    if (is_array($value)) {
+      foreach ($value as $i) {
+        $this->hidden[] = array($fld ."[]",$i);
+      }
+    } else {
+      $this->hidden[] = array($fld,$value);
+    }
+  }
+  /**
+   * get all hidden fields (plus reset)
+   */
+  Function getHidden() {
+    echo "getHidden not implemented";
+    foreach ($this->hidden as $name => $value ) {
+    }
+    $this->hidden = array();
+    return false;
+  }
+  /**
+   * action function
+   */
+  function action() {
+    // do nothing
+  }
+  /**
+   * action form header 
+   * make the javascript stuff for massupdates
+   */
+  function actionformStart($url) {
+  }
+  /**
+   * action form header 
+   * make the javascript stuff for massupdates
+   */
+  function actionformEnd($url) {
+  }
+  /**
+   * sortable header field in overviews
+   */
+  function orderHeader($oname,$link,$base,$cols = 1) {
+  }
+  /**
+   * navigation for lists
+   * A Tablerow that gives some naviagtion links
+   * link = the base link
+   * cnt  = field count in the table
+   * start = current start position
+   * end   = current end position
+   * max   = number of elements
+   */
+  function list_navigation($link,$cnt,$start,$end,$max,$paraname = 'start') {
+    global $tutos, $lang;
+
+    if ( ( $end == $max ) && ( $start <= 0 ) ) {
+      return "";
+    }
+
+    $r  =  "<tr>\n";
+    $r .= " <th align=\"left\" colspan=\"". $cnt ."\">\n";
+    $r .= "<div align=\"left\">". $max ." ". $lang['AdminDBCount'] ." (". ($start + 1) ."-". $end .")</div><center>";
+    if ( $start > 0 ) {
+      $l = addUrlParameter($link,$paraname ."=0",false);
+      $r .= menulink($l ,$lang['NavFirst'],$lang['NavFirst'],"","rel=\"Start\"");
+    }
+    $r .= "&nbsp;&nbsp;";
+    if ( $start > 0 ) {
+      $l = addUrlParameter($link,$paraname ."=". max($start - $tutos[maxshow],0),false);
+      $r .= menulink($l ,$this->theme->getImage(left,'list') ."&nbsp;".$lang['NavBack'],$lang['NavBack'],"","rel=\"prev\"");
+    }
+    $r .= "&nbsp;&nbsp;&nbsp;";
+    if ( $end < $max ) {
+      $l = addUrlParameter($link,$paraname ."=". $end,false);
+      $r .= menulink($l ,$lang['NavNext'] ."&nbsp;". $this->theme->getImage(right,'list'),$lang['NavNext'],"","rel=\"next\"");
+    }
+    $r .= "&nbsp;&nbsp;";
+    if ( $start < ($max - $tutos[maxshow]) ) {
+      $l = addUrlParameter($link, $paraname ."=-1",false);
+      $r .= menulink($l ,$lang['NavLast'],$lang['NavLast']);
+    }
+    $r .= " </center>\n";
+    $r .= " </th>\n";
+    $r .= "</tr>\n";
+    return $r;
+  }
+  /**
+   * set focus to named field
+   */
+  function setfocus($fld) {
+    return "";
+  }
+  /**
+   * add the currently visible TUTOS object to the session history
+   */
+  function addtohistory() {
+    global $lang;
+
+    if ($this->stop) return;
+    if (!isset($this->obj)) return;
+    if (!is_object($this->obj)) return;
+
+    if (isset($_SESSION['history'])) {
+      foreach($_SESSION['history'] as $i => $x) {
+        if ($x['url'] ==  $this->obj->getUrl()){
+          unset($_SESSION['history'][$i]);
+        }
+      }
+      reset($_SESSION['history']);
+      while(count($_SESSION['history']) > 5) {
+        foreach($_SESSION['history'] as $i => $x) {
+          unset( $_SESSION['history'][$i] );
+          break;
+        }
+      }
+    }
+    $info = eregi_replace("\r\n"," ",$this->obj->getFullName());
+    $x =  $info;
+
+    if ( strlen($x) > 20 ) {
+      $x = substr($x,0,15) ."...". substr($x,-2);
+    }
+
+    $_SESSION['history'][] = array(url => $this->obj->getUrl(),
+                                   text => $lang[$this->obj->getType()] .":".$x,
+                                   info => $lang[$this->obj->getType()] .":".$info
+                                  );
+    return "";
+  }
+  /**
+   * create a textarea with the given size and name
+   */
+  function textarea($name,$colspan,$maxsize,$value) {
+    $r = "";
+    $cols = 70;
+    $rows = 10;
+    if ($maxsize != -1) {
+      $cols = min($cols,$maxsize);
+      $rows = ceil($maxsize / $cols);
+    }
+    $rows = max(2,$rows);
+    $rows = min(10,$rows);
+
+    $r .= " <td colspan=\"". $colspan ."\">\n";
+    $r .= "<textarea id=\"". $name ."\" rows=\"". $rows ."\" cols=\"". $cols ."\" name=\"". $name ."\">". $value ."</textarea>\n";
+    if ($maxsize != -1) {
+      $r .= "<br /><font size=\"-2\">(".$maxsize." characters)</font>";
+    }
+    $r .= " </td>\n";
+    return $r;
+  }
+  /**
+   * type of this class
+   */
+  function gettype() {
+    return "layout";
+  }
+}
+?>

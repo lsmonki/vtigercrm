@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/squirrelmail-1.4.4/language/en_us.lang.php,v 1.4 2005/07/16 13:27:41 mickie Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
 

@@ -1,0 +1,655 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: timetrack.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ *
+ * @modulegroup timetrack
+ * @package timetrack
+ */
+
+define ('TT_STATE_CHECKED',1);
+define ('TT_STATE_BILLED',2);
+define ('TT_STATE_PAYED',3);
+define ('TT_STATE_NOBILL',4);
+
+/**
+ * Read a summary of times for given object
+ */
+function readTimetrackSum (&$obj) {
+  global $table;
+
+  $obj->timetracksum = 0;
+  $q = "SELECT SUM(volume) as XX FROM ". $obj->dbconn->prefix .$table['timetrack'][name];
+  $pre = " WHERE ";
+  if ( $obj->getType() == "address" ) {
+    $q .= $pre . " adr_id =". $obj->id ;
+  } else if ( $obj->getType() == "user" ) {
+    $q .= $pre . " adr_id =". $obj->id ;
+  } else if ( $obj->getType() == "team" ) {
+    $q .= $pre . " adr_id =". $obj->id ;
+  } else {
+    $q .= $pre . " link_id =". $obj->id ;
+  }
+  $r = $obj->dbconn->Exec($q);
+  $n = $r->numrows();
+  if ( $n == 0 ) {
+    return;
+  }
+  $obj->timetracksum = $r->get(0,"XX");
+  $r->free();
+  return;
+}
+
+/**
+ * Compute the amount of work done by $address on $task
+ *
+ * FIXME : add some time schedule restriction
+ */
+function computeWorkedHours(&$address, &$task) {
+  global $table;
+
+  $sum = 0;
+
+  $q =
+     "SELECT SUM(volume) as XX FROM ". $task->dbconn->prefix .$table['timetrack'][name].
+     " WHERE adr_id = ". $address->id. " AND link_id = ". $task->id;
+
+  $r = $task->dbconn->Exec($q);
+  $n = $r->numrows();
+  if ( $n == 0 ) {
+    return $sum;
+  }
+  $sum = $r->get(0,"XX");
+  $r->free();
+
+  return $sum == "" ? 0 : $sum;
+}
+
+/**
+ * A fraction of a timetrack
+ * @package timetrack
+ */
+class timetrack extends tutos_base {
+  /* ---------------------------------------------------------------------------
+   */
+  function timetrack(&$dbconn) {
+    global $tutos,$current_user,$table;
+
+    $this->init($dbconn);
+
+    $this->wid        = $current_user->id;
+    $this->worker      = $current_user;
+    $this->link_id     = -1;
+    $this->ref         = -1;
+    $this->desc        = "";
+    $this->volume      = 0.0;
+    $this->volume_todo = -1;
+    $this->wday        = new DateTime();
+    $this->creation    = new DateTime();
+    $this->t_start     = new DateTime(0);
+    $this->t_end       = new DateTime(0);
+    # number of invoice
+    $this->invoice  = -1;
+    $this->currency = $tutos[currencies][0];
+    # Costs per hour ("" == default)
+    $this->cph = 0.0;
+    # State (-1 == unknown , 1 == checke 2 == billed)
+    $this->state = -1;
+    $this->inv_id = -1;
+
+    $this->tablename = $this->dbconn->prefix .$table['timetrack'][name];
+  }
+  /**
+   * read a resultset
+   */
+  function read_result (&$r, $pos ) {
+    global $g_hash;
+
+    $this->id          = $r->get($pos, "id");
+    $this->wid         = $r->get($pos, "adr_id");
+    $this->worker      = getObject($this->dbconn,$this->wid);
+    $this->link_id     = $r->get($pos, "link_id");
+    $this->ref         = getObject($this->dbconn,$this->link_id);
+    $this->desc        = $r->get($pos, "description");
+    $this->volume      = $r->get($pos, "volume");
+    $this->volume_todo = $r->get($pos, "volume_todo");
+    $this->state       = (integer)$r->get($pos, "state");
+    $this->cph         = $r->get($pos, "cph");
+    $this->currency    = $r->get($pos, "currency");
+    $this->inv_id      = $r->get($pos, "invoice");
+    $this->creation->setDateTime($r->get($pos, "creation"));
+    $this->wday->setDateTime($r->get($pos, "vtime"));
+    $this->t_start->setDateTime($r->get($pos, "t_start"));
+    $this->t_end->setDateTime($r->get($pos, "t_end"));
+
+    if ( $this->inv_id == "" ) {
+      $this->inv_id     = -1;
+      $this->invoice     = -1;
+    }
+    if ( $this->state == "" ) {
+      $this->state     = -1;
+    }
+    if ( $this->cph == "" ) {
+      $this->cph     = 0.00;
+    }
+
+    $this->creator   = getObject($this->dbconn,$r->get($pos, "creator"));
+
+    parent::read_result($r,$pos);
+    return;
+  }
+  /**
+   * get a list of possible new parents
+   */
+  function read_relations ( ) {
+    global $lang,$current_user;
+
+    $this->plist = array();
+    if ($this->ref != -1) {
+      # Read possible new parents
+      $this->plist = $this->ref->getNeighbours();
+    }
+    # a timetrack object could be attached to all projects and tasks where we play a role
+    if ( $current_user->feature_ok(useprojects,PERM_SEE) ) {
+	  $q = "SELECT p.* from ". $this->dbconn->prefix."products p,". $this->dbconn->prefix ."projectroles r ";
+      $pre = " WHERE ";
+      if ($this->worker->id > 0) {
+        $q .= $pre ." r.adr_id in(". $this->worker->id;
+        $q .= " ) ";
+        $pre = " AND ";
+      }
+      $q .= $pre ." r.pro_id = p.id";
+      $q .= " AND  p.state != ".PROD_STATE_CANCEL;
+      $q .= " AND  p.state != ".PROD_STATE_QCANCEL;
+      $q .= " order by p.name";
+      $result = $this->dbconn->Exec($q);
+      $n = $result->numrows();
+      $a = 0;
+#	  echo $n." ".$q;
+      while ( $a < $n ) {
+        $p = new product($this->dbconn);
+        $p->read_result($result,$a);
+        $a++;
+        if ( $p->use_ok()) {
+          $this->plist[$p->id] = &$p;
+        }
+        unset($p);
+      }
+      $result->free();
+	}
+    if ( $current_user->feature_ok(usetaskmanagement,PERM_SEE) ) {
+	  $q = "SELECT t.* from ". $this->dbconn->prefix."tasks t,". $this->dbconn->prefix ."taskworker w ";
+      $pre = " WHERE ";
+      if ($this->worker->id > 0) {
+        $q .= $pre ." w.w_id in(". $this->worker->id;
+        $q .= " ) ";
+        $pre = " AND ";
+      }
+      $q .= $pre ." w.t_id = t.id";
+      $q .= " AND  t.status != ".TASK_FINISH;
+      $q .= " order by t.name";
+      $result = $this->dbconn->Exec($q);
+      $n = $result->numrows();
+      $a = 0;
+#	  echo $n." ".$q;
+      while ( $a < $n ) {
+        $p = new task($this->dbconn);
+        $p->read_result($result,$a);
+        $a++;
+        if ( $p->use_ok()) {
+          $this->plist[$p->id] = &$p;
+        }
+        unset($p);
+      }
+      $result->free();
+	}
+  }
+  /**
+   * set the Description
+   */
+  function setDescription($value) {
+    $this->setStrField("desc",$value,"Description");
+    return;
+  }
+  /**
+   * set the Worker
+   */
+  function setWorker($name) {
+    $i = new tutos_address($this->dbconn);
+    $i = $i->read($name,$i);
+
+    if ( ($this->worker->id != $name) && ($i->id != -1) ) {
+      $this->modified[] = array ( "field" => "TimetrackWorker", "old" => $this->worker->id , "new" => $name );
+      $this->worker = $i;
+    }
+    return;
+  }
+  /**
+   * set the workday
+   */
+  function setWorkday(&$value) {
+    $this->setDateField("wday",$value,"Date");
+    return;
+  }
+  /**
+   * set the Start
+   */
+  function setStart(&$value) {
+    $this->setDateTimeField("t_start",$value,"AppStart");
+    return;
+  }
+  /**
+   * set the End
+   */
+  function setEnd(&$value) {
+    $this->setDateTimeField("t_end",$value,"AppEnd");
+    return;
+  }
+  /**
+   * set the Currency
+   */
+  function setCurrency($value) {
+    $this->setStrField("currency",$value,"Currency");
+    return;
+  }
+  /**
+   * set the costs per hour
+   */
+  function setCph($value) {
+    $this->setFloatField("cph",$value,"TTcph");
+    return;
+  }
+  /**
+   * set the volume
+   */
+  function setVolume($value) {
+    $this->setFloatField("volume",$value,"TaskVolumeDone");
+    return;
+  }
+  /**
+   * set the volume todo
+   */
+  function setVolumeTodo($value) {
+    $this->setFloatField("volume_todo",$value,"TaskVolumeTodo");
+    return;
+  }
+  /**
+   * set the state
+   */
+  function setState($value) {
+    $this->setIntField("state",$value,"TTState");
+    return;
+  }
+  /**
+   * set the Invoice
+   */
+  function setInvoice($value) {
+    $this->setIntField("inv_id",$value,"Invoice");
+    return;
+  }
+  /**
+   * set the Invoice
+   */
+  function setReference($value) {
+    $this->setIntField("link_id",$value,"TimetrackRef");
+    return;
+  }
+  /**
+   * Save Time Fraction to DB
+   *
+   * The norec parameter allows to create a timetrack from task.pink
+   * without re entrance problems that may occur when timetrack tries
+   * to save the ref task...
+   */
+  function save($norec=0) {
+    global $table,$tutos, $lang, $current_user;
+
+    // We may have to compute the volume todo of this timetrack entry
+    // This is the same as the task volume todo
+    if( $this->volume_todo == -1 ) {
+      if (isset($this->ref->volume_todo) && ($this->ref->volume_todo != -1) ) {
+        $ref_todo = $this->ref->volume_todo;
+      } elseif (isset($this->ref->volume) && ($this->ref->volume != -1) ) {
+        // If no volume_todo has been set for the task, we consider
+        // the planned volume as the volume_todo
+        $ref_todo = $this->ref->volume;
+      } else {
+	    // the diff will be zero
+        $ref_todo = $this->volume;
+      }
+      // And the calculated volume_todo is the volume todo before this
+      // timetrack entry, minus this timetrack entry volume...
+      $volume_todo = $ref_todo - $this->volume;
+    } else {
+      // If a volume has been entered, we then just take it
+      $volume_todo = $this->volume_todo;
+    }
+    $msg = "";
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("link_id",$this->link_id,"");
+    $q->addFV("adr_id",$this->worker->id,"");
+    $q->addFV("volume",$this->volume,"FLOAT");
+    $q->addFV("volume_todo",$volume_todo,"FLOAT");
+    $q->addFV("description",$this->desc,"STRING",$table['timetrack']['description'][size]);
+    $q->addFV("vtime",$this->wday,"DATETIME");
+    $q->addFV("state",$this->state,"");
+    $q->addFV("invoice",$this->inv_id,"");
+    $q->addFV("cph",$this->cph,"FLOAT");
+    $q->addFV("currency",$this->currency,"STRING",4);
+    $q->addFV("t_start",$this->t_start,"DATETIME");
+    $q->addFV("t_end",$this->t_end,"DATETIME");
+	$this->save_custom_fields($q);
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        acl_default($this,$current_user);
+        # Prepare the history
+        $this->modified[] = array ( "field" => "TimetrackCreate" ,
+                                    "old" => "" ,
+                                    "new" => $this->volume,
+                                    "obj_id" => $this->link_id
+                                  );
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+      }
+      $q->addFV("creation",$this->creation,"DATETIME");
+      $q->addFV("creator",$this->creator,"OBJ");
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+
+    $this->dbconn->Exec($query);
+    if ( $norec == 0 && 
+         ($this->ref != -1) && 
+         ($this->ref->getType() == "task") ) {
+      if ( $this->ref->r_start->notime == 1 ) {
+        $this->ref->setRStart(new Datetime());
+      }
+
+      // Task has to be considered running
+      if( $this->ref->state == TASK_PRE ) {
+        $this->ref->state = TASK_RUNNING;
+      }
+      // The volume todo has to be set on the task
+      $this->ref->setVolumeTodo($volume_todo);
+
+      $this->ref->save();
+    }
+    $msg .= parent::save();
+
+    return $msg;
+  }
+  /**
+   * delete timetrack entries for a object
+   */
+  Function obj_delete(&$user,&$obj) {
+    global $table;
+
+    $msg = "";
+
+    # FIXME (mybe we should rebook the efforts to the user himself) !!
+    $q = "DELETE FROM ". $obj->dbconn->prefix .$table['timetrack'][name]." WHERE link_id = ". $obj->id;
+    $obj->dbconn->Exec($q);
+    return $msg;
+  }
+  /**
+   * Delete Timetrack fraction from DB
+   */
+  function delete() {
+    $msg = "";
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $this->modified[] = array ( "field" => "TimetrackDel" ,
+                                "old" => $this->volume ,
+                                "new" => "0",
+                                "obj_id" => $this->link_id
+                                );
+    $msg .= parent::delete();
+
+    return $msg;
+  }
+  /**
+   * Checks if the current user is allowed to delete this timetrack
+   */
+  function del_ok () {
+    if ( $this->ref != -1 ) {
+      return $this->ref->del_ok();
+    } else {
+      return 0;
+    }
+  }
+  /**
+   * 
+   */
+  function see_ok() {
+    if ( $this->ref != -1 ) {
+      return $this->ref->see_ok();
+    } else {
+      return 0;
+    }
+  }
+  /**
+   * 
+   */
+  function mod_ok() {
+    if ( $this->ref != -1 ) {
+      return $this->ref->mod_ok();
+    } else {
+      return 0;
+    }
+  }
+  /**
+   * Return a url that displays this timetrack fraction
+   */
+  function getURL() {
+    return "timetrack_overview.php?id=". $this->id;
+  }
+  /**
+   * Return a url that allows modification of this timetrack fraction
+   */
+  function getModURL() {
+    return "timetrack_new.php?id=". $this->id;
+  }
+  /**
+   * Return a url that deletes this timetrack fraction
+   */
+  function getDelURL() {
+    return "timetrack_del.php?id=". $this->id;
+  }
+  /**
+   * Return a url that displays this timetrack fraction
+   */
+  function getFullName() {
+    return $this->volume ."@" . $this->wday->getDate();
+  }
+  /**
+   * Return a link to this timefragement
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ( empty($text) ) {
+      $text = $this->getFullName();
+    }
+    if ( $this->see_ok() ) {
+      return makelink($this->getURL() , myentities($text) ,sprintf($lang['timetrack'] ." %s",$this->getFullName()));
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body () {
+    $r = parent::exportXML_body();
+    $r .=  "<worker>". utf8_encode(htmlspecialchars($this->worker->id)) ."</worker>\n";
+    if ( $this->worker->id != null ) {
+      $r .=  "<workername>". utf8_encode(htmlspecialchars($this->worker->getFullName())) ."</workername>\n";
+    }
+    $r .=  "<reference>". utf8_encode(htmlspecialchars($this->ref->id)) ."</reference>\n";
+    if ( $this->ref->id != null ) {
+      $r .=  "<referencename>". utf8_encode(htmlspecialchars($this->ref->getFullName())) ."</referencename>\n";
+    }
+    $r .=  "<volume>". utf8_encode(htmlspecialchars($this->volume)) ."</volume>\n";
+    $r .=  "<volume_todo>". utf8_encode(htmlspecialchars($this->volume_todo)) ."</volume_todo>\n";
+    if ( $this->t_start->notime != 1 ) {
+      $r .=  "<t_start>". $this->t_start->exportXML_body() ."</t_start>\n";
+    }
+    if ( $this->t_end->notime != 1 ) {
+      $r .=  "<t_end>". $this->t_end->exportXML_body() ."</t_end>\n";
+    }
+    $r .=  "<description>". utf8_encode(htmlspecialchars($this->desc)) ."</description>\n";
+    $r .=  "<invoice>". utf8_encode(htmlspecialchars($this->invoice)) ."</invoice>\n";
+    $r .=  "<state>". utf8_encode(htmlspecialchars($this->state)) ."</state>\n";
+    $r .=  "<cph>". utf8_encode(htmlspecialchars($this->cph)) ."</cph>\n";
+    $r .=  "<cost>". utf8_encode(htmlspecialchars($this->cph * $this->volume)) ."</cost>\n";
+    $r .=  "<currency>". utf8_encode(htmlspecialchars($this->currency)) ."</currency>\n";
+    if ( $this->wday->notime != 1 ) {
+      $r .=  "<vtime>". $this->wday->exportXML_body() ."</vtime>\n";
+    }
+    return $r;
+  }
+  /**
+   * Return a data  as comma seperated values string
+   */
+  function exportCSV() {
+    global $lang;
+
+    if ( $this->ref->id > 0 ) {
+      $r =  $this->ref->getFullName();
+    } else {
+      $r = $lang['HistoryDeleted'];
+    }
+    if ( $this->worker->id > 0 ) {
+      $w =  $this->worker->getFullName();
+    } else {
+      $w = $lang['HistoryDeleted'];
+    }
+    return $this->id .",\"". $w ."\",\"". $r ."\",\"". $this->desc ."\",". $this->volume .",". $this->cph .",\"". $this->currency ."\",". $this->state .",". $this->wday->getYYYYMMDD() ."\n";
+  }
+  /**
+   * Transfer reference ids according to given table
+   */
+  function transfer_ids (&$trans) {
+    if (isset($trans[$this->worker->id])) {
+      $this->worker->id = $trans[$this->worker->id];
+    }
+    if (isset($trans[$this->inv_id])) {
+      $this->inv_id = $trans[$this->inv_id];
+    }
+    if (isset($trans[$this->link_id])) {
+      $this->link_id = $trans[$this->link_id];
+    }
+    return;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "timetrack";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usetimetrack;
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * Read a list of all timetrack elements
+   */
+  function obj_read (&$obj) {
+    global $table;
+
+    if ( ! isset($obj->id) )  return;
+
+    $obj->ttlist = array();
+    $q = "SELECT * from ". $obj->dbconn->prefix .$table['timetrack'][name]." where link_id = ". $obj->id ." order by vtime desc";
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $tt = new timetrack($obj->dbconn);
+      $tt->read_result($r,$a);
+      if ( $tt->see_ok() ) {
+        $obj->ttlist[$tt->id] = &$tt;
+      }
+      $a++;
+      unset($tt);
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * create a link where a timetrack for work on the given object could be added
+   */
+  function getaddlink (&$user,&$obj,$text = "") {
+    global $lang;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+    if ( $obj->id == -1 ) return;
+    if (! $user->feature_ok(usetimetrack,PERM_NEW) ) return "";
+    if (! $obj->use_ok() ) return "";
+
+	if ($obj->gettype() == "product") {
+      if ($obj->state == PROD_STATE_CANCEL) return "";
+      if ($obj->state == PROD_STATE_QCANCEL) return "";
+	}
+	if ($obj->gettype() == "task") {
+      if ($obj->state == TASK_FINISH) return "";
+	}
+
+    if ($user->id == $obj->id ) {
+      $x = array( url => "timetrack_new.php?mode=1&amp;lid=". $obj->id,
+                  confirm => false,
+                  text => ($text == "" ? $lang['TTRecord']:$text),
+                  info => $lang['TTRecord'],
+                  category => array("timetrack","new","module")
+               );
+    } else {
+      $x = array( url => "timetrack_new.php?lid=". $obj->id,
+                  confirm => false,
+                  text => ($text == "" ? $lang['TimetrackCreate']:$text),
+                  info => sprintf($lang['TimetrackCreateI'], $obj->getFullName()),
+                  category => array("timetrack","new","module")
+               );
+    }
+    return $x;
+  }
+  /**
+   * create a link to a overview page
+   */
+  function getSelectLink (&$user,$text = "") {
+    global $lang,$tutos;
+    if ( ! $user->feature_ok(usetimetrack,PERM_SEL) ) {
+      return;
+    }
+    return array( url => "timetrack_select.php",
+                  image => timetrack::getHtmlIcon(),
+                  text => ($text == "" ?  $lang['Search']: $text),
+                  info => $lang['SearchForTT'],
+                  category => array("search","timetrack","obj")
+                );
+  }
+}
+?>

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fcklanguagemanager.js
  * 	This file list all available languages in the editor.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:32:11
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -26,18 +29,15 @@ FCKLanguageManager.AvailableLanguages =
 	'cs'		: 'Czech',
 	'da'		: 'Danish',
 	'de'		: 'German',
-	'el'		: 'Greek',
 	'en'		: 'English',
-	'en-au'		: 'English (Australia)',
-	'en-uk'		: 'English (United Kingdom)',
 	'eo'		: 'Esperanto',
 	'es'		: 'Spanish',
 	'et'		: 'Estonian',
-	'eu'		: 'Basque',
 	'fa'		: 'Persian',
 	'fi'		: 'Finnish',
 	'fr'		: 'French',
 	'gl'		: 'Galician',
+	'gr'		: 'Greek',
 	'he'		: 'Hebrew',
 	'hr'		: 'Croatian',
 	'hu'		: 'Hungarian',
@@ -59,7 +59,6 @@ FCKLanguageManager.AvailableLanguages =
 	'sv'		: 'Swedish',
 	'th'		: 'Thai',
 	'tr'		: 'Turkish',
-	'uk'		: 'Ukrainian',
 	'zh'		: 'Chinese Traditional',
 	'zh-cn'		: 'Chinese Simplified'
 }

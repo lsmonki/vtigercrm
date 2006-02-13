@@ -1,6 +1,6 @@
-﻿/*
+/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fcktoolbaritems.js
  * 	Toolbar items definitions.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-16 19:59:20
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -34,7 +37,6 @@ FCKToolbarItems.GetItem = function( itemName )
 	{
 		case 'Source'			: oItem = new FCKToolbarButton( 'Source'	, FCKLang.Source, null, FCK_TOOLBARITEM_ICONTEXT, true, true ) ; break ;
 		case 'DocProps'			: oItem = new FCKToolbarButton( 'DocProps'	, FCKLang.DocProps ) ; break ;
-		case 'Templates'		: oItem = new FCKToolbarButton( 'Templates'	, FCKLang.Templates ) ; break ;
 		case 'Save'				: oItem = new FCKToolbarButton( 'Save'		, FCKLang.Save, null, null, true ) ; break ;
 		case 'NewPage'			: oItem = new FCKToolbarButton( 'NewPage'	, FCKLang.NewPage, null, null, true  ) ; break ;
 		case 'Preview'			: oItem = new FCKToolbarButton( 'Preview'	, FCKLang.Preview, null, null, true  ) ; break ;
@@ -45,7 +47,7 @@ FCKToolbarItems.GetItem = function( itemName )
 		case 'Paste'			: oItem = new FCKToolbarButton( 'Paste'		, FCKLang.Paste, null, null, false, true ) ; break ;
 		case 'PasteText'		: oItem = new FCKToolbarButton( 'PasteText'	, FCKLang.PasteText, null, null, false, true ) ; break ;
 		case 'PasteWord'		: oItem = new FCKToolbarButton( 'PasteWord'	, FCKLang.PasteWord, null, null, false, true ) ; break ;
-		case 'Print'			: oItem = new FCKToolbarButton( 'Print'		, FCKLang.Print, null, null, false, true ) ; break ;
+		case 'Print'			: oItem = new FCKToolbarButton( 'Print'		, FCKLang.Print ) ; break ;
 		case 'SpellCheck'		: oItem = new FCKToolbarButton( 'SpellCheck', FCKLang.SpellCheck ) ; break ;
 		case 'Undo'				: oItem = new FCKToolbarButton( 'Undo'		, FCKLang.Undo, null, null, false, true ) ; break ;
 		case 'Redo'				: oItem = new FCKToolbarButton( 'Redo'		, FCKLang.Redo, null, null, false, true ) ; break ;
@@ -69,13 +71,12 @@ FCKToolbarItems.GetItem = function( itemName )
 		case 'Anchor'			: oItem = new FCKToolbarButton( 'Anchor'	, FCKLang.Anchor ) ; break ;
 
 		case 'Image'			: oItem = new FCKToolbarButton( 'Image'			, FCKLang.InsertImageLbl, FCKLang.InsertImage ) ; break ;
-		case 'Flash'			: oItem = new FCKToolbarButton( 'Flash'			, FCKLang.InsertFlashLbl, FCKLang.InsertFlash ) ; break ;
 		case 'Table'			: oItem = new FCKToolbarButton( 'Table'			, FCKLang.InsertTableLbl, FCKLang.InsertTable ) ; break ;
 		case 'SpecialChar'		: oItem = new FCKToolbarButton( 'SpecialChar'	, FCKLang.InsertSpecialCharLbl, FCKLang.InsertSpecialChar ) ; break ;
 		case 'Smiley'			: oItem = new FCKToolbarButton( 'Smiley'		, FCKLang.InsertSmileyLbl, FCKLang.InsertSmiley ) ; break ;
 		case 'UniversalKey'		: oItem = new FCKToolbarButton( 'UniversalKey'	, FCKLang.UniversalKeyboard ) ; break ;
 
-		case 'Rule'				: oItem = new FCKToolbarButton( 'InsertHorizontalRule', FCKLang.InsertLineLbl, FCKLang.InsertLine, null, false, true ) ; break ;
+		case 'Rule'				: oItem = new FCKToolbarButton( 'InsertHorizontalRule', FCKLang.InsertLineLbl, FCKLang.InsertLine ) ; break ;
 
 		case 'JustifyLeft'		: oItem = new FCKToolbarButton( 'JustifyLeft'	, FCKLang.LeftJustify, null, null, false, true ) ; break ;
 		case 'JustifyCenter'	: oItem = new FCKToolbarButton( 'JustifyCenter'	, FCKLang.CenterJustify, null, null, false, true ) ; break ;

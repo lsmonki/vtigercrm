@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/themes/Aqua/loginheader.php,v 1.2 2005/06/15 09:28:18 saraj Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.

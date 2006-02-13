@@ -1,0 +1,31 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_de.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Neujahr (D)"),
+        array( Date => "06-01",          type => 1,    Desc => "Heilige drei Könige (D*)"),
+        array( Date => "01-05",          type => 1,    Desc => "Tag der Arbeit (D)"),
+        array( Date => "15-08",          type => 1,    Desc => "Maria Himmelfahrt (D*)"),
+        array( Date => "03-10",          type => 1,    Desc => "Tag der deutschen Einheit (D)"),
+        array( Date => "31-10",          type => 1,    Desc => "Reformationstag (D*)"),
+        array( Date => "01-11",          type => 1,    Desc => "Allerheiligen (D*)"),
+        array( Date => "25-12",          type => 1,    Desc => "Weihnachten (D)"),
+        array( Date => "26-12",          type => 1,    Desc => "Weihnachten (D)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Karfreitag (D)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Ostersonntag (D)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Ostermontag (D)"),
+        array( Date => "ASCENSIONDAY",   type => 1,    Desc => "Christi Himmelfahrt (D)"),
+        array( Date => "WHITSUNDAY",     type => 1,    Desc => "Pfingstsonntag (D)"),
+        array( Date => "WHITMONDAY",     type => 1,    Desc => "Pfingstmontag (D)"),
+        array( Date => "FRONLEICHNAM",   type => 1,    Desc => "Fronleichnam (D*)")
+        );
+?>

@@ -130,7 +130,7 @@ $xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]
         $tempVal = $adb->fetch_array($wordTemplateResult);
         for($templateCount=0;$templateCount<$tempCount;$templateCount++)
         {
-                $optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
+                $optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
                 $tempVal = $adb->fetch_array($wordTemplateResult);
         }
 $xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");

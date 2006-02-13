@@ -88,8 +88,7 @@ if(isset($cust_fld))
 
 $xtpl->assign("ID", $focus->id);
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);

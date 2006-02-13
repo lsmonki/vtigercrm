@@ -33,7 +33,6 @@ $noofelements= sizeof($splitval);
 $outHistory='';
 for($i=0;$i<$noofelements;$i++)
 {
-	
 	$outHistory .= '<tr>';
 	$outHistory .= '<TD  class="dataLabel" width="50%" noWrap ><div align="left">'.$splitval[$i].'</div></TD></tr>';
 	$i++;
@@ -43,12 +42,6 @@ for($i=0;$i<$noofelements;$i++)
 
 
 $xtpl=new XTemplate ('modules/HelpDesk/TicketHistory.html');
-if ($noofelements > 15)
-{
-	$xtpl->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
-	$xtpl->assign('SCROLLSTOP','</div>');
-}
-
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 

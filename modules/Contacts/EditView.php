@@ -51,26 +51,9 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
     $focus->lastname=$focus->column_fields['lastname'];
 
 }
-if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']=='')
+if(isset($_REQUEST['account_id']))
 {
-        require_once('modules/Accounts/Account.php');
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
-        $acct_focus = new Account();
-        $acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
-        $focus->column_fields['fax']=$acct_focus->column_fields['fax'];
-        $focus->column_fields['otherphone']=$acct_focus->column_fields['phone'];
-        $focus->column_fields['mailingcity']=$acct_focus->column_fields['bill_city'];
-        $focus->column_fields['othercity']=$acct_focus->column_fields['ship_city'];
-        $focus->column_fields['mailingstreet']=$acct_focus->column_fields['bill_street'];
-        $focus->column_fields['otherstreet']=$acct_focus->column_fields['ship_street'];
-        $focus->column_fields['mailingstate']=$acct_focus->column_fields['bill_state'];
-        $focus->column_fields['otherstate']=$acct_focus->column_fields['ship_state'];
-        $focus->column_fields['mailingzip']=$acct_focus->column_fields['bill_code'];
-        $focus->column_fields['otherzip']=$acct_focus->column_fields['ship_code'];
-        $focus->column_fields['mailingcountry']=$acct_focus->column_fields['bill_country'];
-        $focus->column_fields['othercountry']=$acct_focus->column_fields['ship_country'];
-        $vtlog->logthis("Accountid Id from the request is ".$_REQUEST['account_id'],'debug');
-
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
@@ -162,8 +145,7 @@ if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] !='')
 
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);

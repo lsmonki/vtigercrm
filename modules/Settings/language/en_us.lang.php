@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.36 2005/07/15 15:09:45 indigoleopard Exp $
 
  * Description:  Defines the English language pack
 
@@ -498,9 +498,6 @@ t, contact, or potential fields. These mappings will be used when you convert le
 'LBL_CONTACT_FIELD'=>'Contact Field',
 'LBL_POTENTIAL_FIELD'=>'Potential Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
-
-//After 4.2 GA
-'LBL_TEXT_AREA'=>'Text Area',
 
 );
 

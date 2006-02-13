@@ -1,0 +1,794 @@
+<?php
+/**
+ * $Id: vi.p3,v 1.16 2005/05/03 13:18:53 saraj Exp $
+ *
+ * @modulegroup LANG
+ * @module vi
+ * @package BASE
+ *
+ * ========================= NOTE ========================
+ * Please put site specific extensions and changes
+ * to TUTOS language files in a file called "vi_custom.p3"
+ * or "lang_custom.p3" (for all languages)
+ * using the same format like here
+ * =======================================================
+ */
+$lang['content_encoding'] = "UTF-8";
+setlocale(LC_TIME,'vi_VN.UTF-8');
+#
+#Vietnamese text
+#
+$lang['PleaseLogin']	 = "Vui lòng đăng nhập";
+$lang['Welcome_1']       = "Welcome %s";
+$lang['Welcome_2']       = "last login was %s from %s";
+$lang['Password']        = "Mật khẩu";
+$lang['Username']        = "Tên đăng nhập";
+$lang['MOTD']            = "THÔNG TIN HÔM NAY";
+$lang['Login']           = "Đăng nhập";
+$lang['LostPassword']    = "Quên mật khẩu ?";
+$lang['LoggedIn']        = "Qúi vị đã đăng nhập. Vui lòng chọn menu phía bên trái.";
+$lang['ReadOnlyAppoint'] = "Qúi vị chỉ được xem cuộc hẹn này mà thôi !";
+$lang['StartDate']       = "Ngày bắt đầu";
+$lang['StartTime']       = "giờ bắt đầu";
+$lang['AppStart']        = "Bắt đầu";
+$lang['AppCreatedBy']    = "Được tạo bởi";
+$lang['EndDate']         = "Ngày kết thúc";
+$lang['EndTime']         = "Giờ kết thúc";
+$lang['AppEnd']          = "Kết thúc";
+$lang['Participants']    = "Những người tham gia";
+$lang['everybody']       = "Tất cả mọi người";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "vào lúc";
+$lang['createdby']       = "Được tạo bởi";
+$lang['Description']     = "Mô tả";
+$lang['InfoEmail']       = "Thông báo bằng Email";
+$lang['InviteEmail']     = "Mời bằng Email";
+$lang['Invitation']      = "Thư mời";
+$lang['IgnoreTime']      = "Không quan tâm đến thời gian ở trên";
+$lang['IgnoreTime2']     = "(vd. Cuộc hẹn<BR>vào lúc nào đó trong ngày)";
+$lang['forphrase']       = "cho";
+$lang['nextweek']        = "Tuần tới";
+$lang['lastweek']        = "Tuần trước";
+$lang['plus4weeks']      = "Tới 4 tuần";
+$lang['minus4weeks']     = "Lui 4 tuần";
+$lang['only']            = "chỉ";
+$lang['reload']          = "nạp lại";
+$lang['changeapp']       = "Xem hoặc thay đổi cuộc hẹn này (%s - %s)";
+$lang['seeapp']          = "Xem chi tiết các cuộc hẹn (%s - %s)";
+$lang['AllEntries']      = "Xem tất cả %s nội dung";
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %e. %B %Y";
+$lang['DateFormatStr']   = "%d/%m/%Y";
+$lang['DateFormat']      = "%s/%s/%s";
+$lang['DateShortFormat'] = "%s/%s";
+#
+$lang['Printable']       = "In được";
+$lang['PrintableInfo']   = "Trình bày như là 1 trang in";
+$lang['managedProd']     = "Quản lý Công Trình";
+$lang['soldProd']        = "Công trình đã hoàn tất";
+$lang['Enter']           = "Đồng ý";
+$lang['Reset']           = "Reset";
+$lang['Remove']          = "Chuyển đi";
+$lang['Delete']          = "Xoá";
+$lang['Change']          = "Đổi";
+$lang['Modify']          = "Hiệu chỉnh";
+$lang['created']         = "Được tạo";
+$lang['DateTimeFrom']    = "từ";
+$lang['DateTimeTill']    = "đến";
+$lang['Count']           = "Count";
+$lang['Showing']         = "Trình bày %s";
+$lang['show']            = "Trình bày";
+
+$lang['lang']['auto']    = "automatic (by browser)";
+$lang['lang']['en']      = "Anh";
+$lang['lang']['en-US']   = "english US";
+$lang['lang']['de']      = "german";
+$lang['lang']['fr']      = "french";
+$lang['lang']['es']      = "spanish";
+$lang['lang']['es-MX']   = "Espa�ol/M�xico";
+$lang['lang']['es-NI']   = "Espa�ol/Nicaragua";
+$lang['lang']['es-VE']   = "Espa�ol/Venezuela";
+$lang['lang']['it']      = "italian";
+$lang['lang']['tw']      = "Traditional chinese";
+$lang['lang']['zh']      = "Simplify chinese";
+$lang['lang']['ru']      = "russian";
+$lang['lang']['pt']      = "portugu�s";
+$lang['lang']['pl']      = "polski";
+$lang['lang']['ko']      = "korean";
+$lang['lang']['nl']      = "dutch";
+$lang['lang']['sv']      = "swedish";
+$lang['lang']['el']      = "greek";
+$lang['lang']['ca']      = "catalan";
+$lang['lang']['ja']      = "japanese";
+$lang['lang']['hu']      = "hungarian";
+$lang['lang']['cs']      = "czech";
+$lang['lang']['pt']      = "portuguese";
+$lang['lang']['vi']      = "Việt";
+
+# Common
+$lang['ChangesOk']       = "Đồng ý thay đổi?";
+$lang['InputOk']         = "Đồng ý nội dung?";
+$lang['Day1']            = "Thứ Hai";
+$lang['Day2']            = "Thứ Ba";
+$lang['Day3']            = "Thứ Tư";
+$lang['Day4']            = "Thứ Năm";
+$lang['Day5']            = "Thứ Sáu";
+$lang['Day6']            = "Thứ Bảy";
+$lang['Day0']            = "Chủ Nhật";
+$lang['SMonday']         = "T2";
+$lang['STuesday']        = "T3";
+$lang['SWednesday']      = "T4";
+$lang['SThursday']       = "T5";
+$lang['SFriday']         = "T6";
+$lang['SSaturday']       = "T7";
+$lang['SSunday']         = "CN";
+$lang['week']            = "Tuần";
+$lang['weeks']           = "Tuần";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Ngày";
+$lang['NewEntry']        = "Mới";
+$lang['CloneEntry']      = "Clone";
+$lang['Search']          = "Truy lục";
+$lang['PlsChangeName']   = "đổi tên thành tên qúi vị muốn";
+$lang['SeeAddress']      = "Xem địa chỉ của %s";
+$lang['NavFirst']        = "Đầu tiên";
+$lang['NavBack']         = "Lui";
+$lang['NavNext']         = "Tới";
+$lang['NavLast']         = "Cuối cùng";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "có";
+$lang['no']              = "không";
+$lang['FldsRequired']    = "<font size=\"-1\">những mục được đánh dấu <font color=\"red\">(*)</font> phải được điền đầy đủ.</font>";
+$lang['any']             = "bất kỳ";
+$lang['all']             = "Tất cả";
+$lang['extended']        = "mở rộng";
+$lang['OrderBy']         = "Được yêu cầu bởi %s";
+$lang['RevOrderBy']      = "Yêu cầu được rút lại bởi %s";
+$lang['Export']          = "Kết xuất";
+$lang['ExportInfo']      = "Kết xuất dữ liệu như 1 file";
+$lang['withmarked']      = "%s được đánh dấu";
+$lang['SetTo']           = "chuyển %s thành %s";
+$lang['pcs']             = "chiếc";
+$lang['Money']           = "Sum";
+$lang['Currency']        = "Currency";
+$lang['ActionNil']       = "Chọn hành động";
+$lang['Reference']       = "Reference";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Icons BEFORE rows";
+$lang['RowIconsAfter']   = "Icons AFTER rows";
+
+# Appointments
+$lang['Appointment']     = "Cuộc Hẹn";
+$lang['Appointments']    = "Các Cuộc Hẹn";
+$lang['NewAppoint']      = "Cuộc hẹn mới";
+$lang['NewAppointR']     = "Mới (lặp lại)";
+$lang['NewAppointInfo']  = "Tạo cuộc hẹn mới";
+$lang['NewAppointInfoR'] = "Tạo cuộc hẹn mới bằng cách lặp lại cuộc hẹn cũ";
+$lang['AppointDetail']   = "Chi tiết cuộc hẹn";
+$lang['AppointModify']   = "Đổi cuộc hẹn";
+$lang['AppointCreate']   = "Tạo cuộc hẹn";
+$lang['AppointCommit']   = "Đồng ý hẹn";
+$lang['AppointOverview'] = "Cuộc hẹn (Tổng quát)";
+$lang['AppDelInfo']      = "Xoá cuộc hẹn này";
+$lang['AppChangeOrDel']  = "người có thể đổi hoặc xoá";
+$lang['VisitAt']         = "Gặp tại";
+$lang['VisitFrom']       = "Họp tại";
+$lang['Visits']          = "Gặp";
+$lang['ModOldAppoint']   = "Thay đổi các cuộc hẹn hiện tại";
+$lang['CreateAppoint']   = "Nhập vào cuộc hẹn mới";
+$lang['AppFirstDate']    = "Ngày đầu tiên";
+$lang['AppLastDate']     = "Ngày cuối cùng";
+$lang['AppNoLastDate']   = "không có ngày kết thúc";
+$lang['AppRepeatType']   = "lặp lại";
+$lang['AppRepeatDay']    = "hàng ngày";
+$lang['AppRepeatWeek']   = "hàng tuần vào cùng ngày bắt đầu";
+$lang['AppRepeatMonth']  = "hàng tháng vào cùng ngày bắt đầu";
+$lang['AppRepeatYear']   = "hàng năm vào cùng ngày tháng bắt đầu";
+$lang['AppRepeatInfo1']  = "mỗi %s";
+$lang['AppRepeatInfo2']  = "mỗi tháng vào ngày %d ";
+$lang['AppRepeatInfo3']  = "hàng năm vào ngày %d/%m";
+$lang['AppRepeatInfo4']  = "hàng ngày";
+$lang['AppSeeEntry']     = "xem nội dung";
+$lang['AppSeeEntryI']    = "xem cuộc hẹn";
+$lang['AppEmailRemind']  = "Nhắc nhở những người tham gia bằng email";
+$lang['AppRemind'][0]    = "Không bao giờ";
+$lang['AppRemind'][15]   = "Trước 15 phút";
+$lang['AppRemind'][60]   = "Trước 1 giờ";
+$lang['AppRemind'][1440] = "Trước 1 ngày";
+$lang['AppRemind'][10080]= "Trước 1 tuần";
+$lang['AppAllSee']       = "Tất cả những gì qúi vị có thể xem";
+$lang['AppAllTeams']     = "Các thành viên của tất cả các nhóm mà qúi vị tham gia";
+$lang['AppEverything']   = "Tất cả mọi thứ";
+$lang['AppGetIcal']      = "Get Ical File";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Văn phòng";
+$lang['AppLoc'][1]       = "Ra ngoài";
+$lang['AppLoc'][2]       = "Nghỉ phép";
+$lang['AppLoc'][3]       = "Nghỉ ốm";
+$lang['AppLoc'][4]       = "Postponed";
+$lang['AppLoc'][5]       = "Option";
+$lang['AppLoc'][6]       = "Private";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "Đúng";
+$lang['AppState'][2]     = "Không";
+$lang['AppPrivate']      = "Nghỉ việc riêng";
+$lang['AppVoteInfo']     = "Biểu quyết cho cuộc hẹn này";
+$lang['AppVoteState']    = "Biểu quyết hiện tại";
+$lang['AppVoteHead']     = "Biểu quyết cho cuộc hẹn (%s)";
+$lang['AppVoteSelect']   = "Chọn biểu quyết";
+$lang['AppsSearch']      = "Truy lục lịch làm việc";
+$lang['SearchForAppExt'] = "Truy lục mở rông cuộc hẹn";
+$lang['SearchForApp']    = "Truy lục cuộc hẹn";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(Bỏ trống để xem tất cả các cuộc hẹn)";
+$lang['AppTrace']        = "trace agree state";
+$lang['AppTraceDesc']    = "(vd. những người tham gia có thể biểu quyết)";
+$lang['AppCheck']        = "check participants";
+$lang['AppCheckDesc']    = "(do not create on conflict)";
+$lang['AppConflict']     = "conflict for %s with %s";
+
+# Personal Page
+$lang['PersonalPage']      = "Hệ Quản Lý Dự Án - TUTOS";
+$lang['PersonalPageFor']   = "Trang làm việc của %s";
+$lang['PersonalSettings']  = "Thông số cá nhân";
+$lang['PersonalSettingsI'] = "Hiệu chỉnh các thông số cá nhân của %s";
+
+# User
+$lang['User']            = "Tên đăng nhập";
+$lang['Users']           = "Users";
+$lang['UserOverview']    = "Tổng Quan về Nhân Viên";
+$lang['UserCreate']      = "Tạo tên đăng nhập";
+$lang['UserModify']      = "Hiệu chỉnh nhân viên";
+$lang['UserDel']         = "Xoá nhân viên";
+$lang['UserInfo']        = "Nội dung";
+$lang['UserModInfo']     = "Hiệu chỉnh nội dung của %s";
+$lang['UserNewInfo']     = "Tạo nội dung cho %s";
+$lang['UserDelInfo']     = "Xoá nội dung của %s";
+$lang['UserUnknown']     = "Nhân viên chưa biết";
+$lang['UserLastSeen']    = "Đăng nhập lần cuối";
+$lang['UserLastHost']    = "Host lần cuối tại";
+$lang['UserAdmin']       = "Chức năng quản trị";
+$lang['UserLanguage']    = "Ngôn ngữ";
+$lang['UserTimezone']    = "Múi giờ";
+$lang['UserTheme']       = "Bộ màu";
+$lang['UserLayout']      = "Layout";
+$lang['UserHoliday']     = "Nghỉ theo lich của";
+$lang['UserNamedays']    = "Namedays";
+$lang['UserWorkdays']    = "Những ngày làm viêc";
+$lang['UserWeekstart']   = "Ngày bắt đầu trong tuần";
+$lang['UserDisabled']    = "khoá tài khoản";
+$lang['UserDefaultGrp']  = "defaultgroups for new objects";
+
+# Product/Projects
+$lang['ProductP']        = "Công trình";
+$lang['ProductPs']       = "Công trình";
+$lang['Product']         = "Công trình";
+$lang['Products']        = "Các công trình ";
+$lang['Project']         = "Công trình";
+$lang['Projects']        = "Các công trình";
+$lang['ProductsSearch']  = "Truy lục công trình";
+$lang['ProductsOverview']= "Tổng Quan Công Trình";
+$lang['ProductsDetail']  = "Chi tiết công trình";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "các cuộc hẹn liên quan";
+$lang['ProdName']        = "Công trình";
+$lang['ProdVersion']     = "Mã số";
+$lang['ProdProd']        = "Cong trình liên quan";
+$lang['ProdProdNew']     = "Quan hệ";
+$lang['ProdRoles']       = "Vai trò";
+$lang['ProdFunc']        = "Chức năng";
+$lang['ProdRoleDesc']    = "Description";
+$lang['ProdRolesNew']    = "Tên cán bộ";
+$lang['ProdRole'][1]     = "Trưởng dự án";
+$lang['ProdRole'][2]     = "Phó dự án";
+$lang['ProdRole'][3]     = "Quản lý tài chính";
+$lang['ProdRole'][4]     = "Quản lý kỹ thuật";
+$lang['ProdRole'][5]     = "Kiểm soát viên";
+$lang['ProdRole'][6]     = "Khách hàng";
+$lang['ProdRole'][7]     = "Nhà cung cấp";
+$lang['ProdRole'][8]     = "Nhà phân phối";
+$lang['ProdRole'][9]     = "Bạn hàng";
+$lang['ProdRole'][10]    = "Công trình chính";
+$lang['ProdRole'][11]    = "Công trình trước";
+$lang['ProdRole'][12]    = "Công trình ngang hàng";
+$lang['ProdRole'][13]    = "Công trình cùng đối tác";
+$lang['ProdPath']        = "Đường dẫn file";
+$lang['ProdDesc']        = "Mô tả";
+$lang['ProdDesc1']       = "Mô tả 1";
+$lang['ProdDesc2']       = "Mô tả 2";
+$lang['ProdState']       = "Tình trạng";
+$lang['ProdState_']      = "Tình trạng chưa xác định";
+$lang['ProdStates'][0]   = "Đang báo giá";
+$lang['ProdStates'][1]   = "Chuẩn bị";
+$lang['ProdStates'][2]   = "Đang thực hiện";
+$lang['ProdStates'][3]   = "Đã giao hàng";
+$lang['ProdStates'][4]   = "Đã nghiệm thu";
+$lang['ProdStates'][5]   = "Bị trả lại";
+$lang['ProdStates'][-2]  = "Những công trình chưa hoàn tất hoặc đã huỷ";
+$lang['ProdClass1']      = "Phân loại theo tính chất sản phẩm";
+$lang['ProdClasses1'][1] = "Đồ gỗ văn phòng";
+$lang['ProdClasses1'][2] = "Đồ gỗ gia đình";
+$lang['ProdClasses1'][3] = "Ghế";
+$lang['ProdClass2']      = "Phân loại theo vị trí địa lý";
+$lang['ProdClasses2'][1] = "Các tỉnh phía Bắc";
+$lang['ProdClasses2'][2] = "Các tỉnh phía Nam";
+$lang['ProdPrice']       = "Giá bán";
+$lang['ProdCost']        = "Giá vốn";
+$lang['SearchForProd']   = "Truy lục hồ sơ công trình";
+$lang['SearchForProdExt']= "Truy lục mở rộng hồ sơ công trình";
+$lang['ProdCreateInfo']  = "tạo mới 1 công trình";
+$lang['ProdCloneInfo']   = "Clone this project";
+$lang['ProdDelInfo']     = "Xoá công trình %s";
+$lang['ProdModInfo']     = "Thay đổi công trình %s";
+$lang['ProdCreator']     = "được tạo bởi";
+$lang['ProdCreation']    = "được tạo bởi %s vào ngày %s";
+$lang['ProdCreationS']   = "được tạo vào";
+$lang['ProdStart']       = "dự kiến bắt đầu";
+$lang['ProdEnd']         = "dự kiến kết thúc";
+$lang['ProdProb']        = "Khả năng thành công";
+$lang['ProdModifyT']     = "Hiệu chỉnh công trình %s";
+$lang['ProdCreateT']     = "Tạo 1 công trình mới";
+$lang['ProdCloneT']      = "Create a new Product / Project using %s";
+$lang['ProdSelInfo']     = "(Bỏ trống để xem tất cả các công trình)";
+$lang['ProdLinkInfo']    = "Xem công trình %s";
+$lang['ProdBetween']     = "đựợc tạo ra giữa";
+$lang['ProdLinks']       = "các liên kết Internet";
+$lang['ProdStats']       = "Thống kê";
+$lang['ProdStatsInfo']   = "Thông tin thống kê cho các công trình này";
+$lang['ProdStatsTitle']  = "Thống kê công trình";
+$lang['ProdFields']      = "Mục";
+$lang['ProdRoleAddT']    = "Add a role in %s";
+
+# Mail
+$lang['MailboxEmail']    = "Email";
+$lang['MailSendTo']      = "Gửi 1 thư cho %s";
+$lang['MailFrom']        = "Từ";
+$lang['MailTo']          = "Đến";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Về việc";
+$lang['MailSent']        = "Đang gửi thư '%s' đến %s.";
+$lang['MailSentCc']      = "đang gửi thư '%s' (Cc) đến %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Card của %s";
+$lang['MailAttachmentNew']  = "Attachment";
+$lang['MailDate']        = "Ngày";
+$lang['MailSize']        = "Kích thước thư";
+$lang['MailAttachmentShow']     = "show Attachment";
+$lang['MailAttachmentDownload'] = "download Attachment";
+$lang['MailAttachmentName']     = "Attachment";
+$lang['MailForward']     = "Forward";
+$lang['MailForwardI']    = "Forward this mail";
+$lang['MailReply']       = "Reply";
+$lang['MailReplyAll']    = "Reply All";
+$lang['MailReplyI']      = "Sent a reply on this mail";
+$lang['MailQuoteHead']   = "On %s , %s wrote:";
+
+# ACL
+$lang['AclModify']       = "Hiệu chỉnh phân quyền";
+$lang['AclModifyI']      = "Hiệu chỉnh phân quyền của %s";
+$lang['AclDetail']       = "Chi tiết phân quyền";
+$lang['AclDetailI']      = "Chi tiết ohân quyền của %s";
+$lang['permissions']     = "Phân quyền";
+$lang['ACLsee']          = "Xem phân quyền";
+$lang['ACLmod']          = "Hiệu chỉnh phân quyền";
+$lang['ACLread']         = "Xem";
+$lang['ACLuse']          = "use";
+$lang['ACLmodify']       = "Hiệu chỉnh";
+$lang['ACLdelete']       = "Xoá";
+$lang['ACLreadI']        = "Người/nhóm trên được phép xem %s";
+$lang['ACLuseI']         = "above users/teams will be allowed to use '%s'";
+$lang['ACLmodI']         = "Người/nhóm trên được phép thay đổi %s";
+$lang['ACLdelI']         = "người/nhóm trên được phép xoá %s";
+$lang['ACLOverview']     = "Tổng quan phân quyền";
+$lang['ACLOverviewI']    = "Xem tất cả các phân quyền";
+$lang['ACLKeepOld']      = "Only raise permissions. Keep existing permissions";
+$lang['ACLRecursive']    = "Change permissions for all sub-objects, recursively";
+$lang['Feature']         = "chức năng";
+
+# Tasks
+$lang['Task']            = "Hạng mục";
+$lang['Tasks']           = "Hạng mục";
+$lang['TaskDetail']      = "Chi tiết hạng mục";
+$lang['TaskCreate']      = "Lập hạng mục";
+$lang['TaskNewSubtask']  = "New subtask";
+$lang['TaskCreateInfo']  = "Lập mới 1 hạng mục của %s";
+$lang['TaskDelete']      = "Xoá hạng mục %s";
+$lang['TaskModify']      = "Hiệu chỉnh hạng mục %s";
+$lang['TaskOverview']    = "Các hạng mục";
+$lang['TaskOverviewInfo']= "Tổng quan hạng mục thuộc trách nhiệm của %s";
+$lang['TaskName']        = "Tên hạng mục";
+$lang['TaskState']       = "Tình trạng";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Cần làm";
+$lang['TaskWorker']      = "cần làm bởi";
+$lang['TaskVolumeFull']  = "Khối lượng công việc";
+$lang['TaskVolumeDone']  = "Khối lượng hoàn thành";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Hạng mục của";
+$lang['hours']           = "ngày công";
+$lang['TaskCreation']    = "được lập bởi %s vào ngày %s";
+$lang['TaskStates'][0]   = "Chuẩn bị";
+$lang['TaskStates'][1]   = "Đang thực hiện";
+$lang['TaskStates'][2]   = "Hoàn tất";
+$lang['TaskStates'][3]   = "Quá hạn";
+$lang['TaskS_Start']     = "Dự kiến bắt đầu";
+$lang['TaskS_End']       = "Dự kiến hoàn tất";
+$lang['TaskSched']       = "Dự kiến";
+$lang['TaskReal']        = "Thực tế";
+$lang['TaskLinkInfo']    = "Xem hạng mục %s";
+$lang['TaskCompleted']   = "Hoàn tất %3.2f phần trăm";
+$lang['Completed']       = "Hoàn tất";
+$lang['Reschedule']      = "Tái lịch trình";
+$lang['Reschedule_s']    = "Tái lịch trình bắt đầu";
+$lang['Reschedule_e']    = "Tái lịch trình chấm dứt";
+$lang['TaskGantt']       = "Biểu đồ Gantt";
+$lang['TaskImport']      = "Thực hiện: CSV Import";
+$lang['ImportSrcFile']   = "File nguồn";
+$lang['ImportColNames']  = "Tên các cột trong file CSV";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Xác nhận Import";
+$lang['TaskSearch']        = "Task Search";
+$lang['SearchForTask']     = "Task Search";
+$lang['SearchForTaskExt']  = "Extended Task Search";
+$lang['TaskBetween']       = "Time between";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Xem biểu đồ Gantt";
+$lang['GanttLinkInfo']   = "Biểu đồ Gantt";
+$lang['GanttTitle']      = "biểu đồ GANTT";
+$lang['GanttStart']      = "Ngày bắt đầu";
+$lang['GanttEnd']        = "Ngày hoàn tất";
+$lang['GanttVolume']     = "Khối lượng ngày công";
+$lang['GanttCompletion'] = "Hoàn tất";
+
+# Company
+$lang['Company']           = "Công ty";
+$lang['Companies']         = "Companies";
+$lang['CompanySearch']     = "Tìm công ty";
+$lang['CompanyOverview']   = "Tổng quan về công ty";
+$lang['CompanyDetail']     = "Chi tiết công ty";
+$lang['CompanyModify']     = "Hiệu chỉnh công ty";
+$lang['CompanyCreate']     = "Tạo mới công ty";
+$lang['CompanyCreateInfo'] = "tạo 1 công ty mới";
+$lang['CompanyApps']       = "Họp với công ty này";
+$lang['CompanyLinks']      = "Các liên kết Internet";
+$lang['CompanyChgInfo']    = "Thay đổi công ty %s";
+$lang['CompanyDelInfo']    = "Xoá công ty %s";
+$lang['CompanyMembers']    = "Những nhân viên không thuộc phòng ban nào";
+$lang['CompanyLinkInfo']   = "Xem công ty %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Phòng ban";
+$lang['Departments']        = "Phòng ban";
+$lang['DepartmentSearch']   = "Tìm phòng ban";
+$lang['DepartmentOverview'] = "tổng quan các phòng ban";
+$lang['DepartmentDetail']   = "Chi tiết phòng ban";
+$lang['DepartmentModify']   = "Thay đổi phòng ban";
+$lang['DepartmentCreate']   = "Tạo phòng ban";
+$lang['DepCreateInfo']      = "Tạo mới 1 phòng ban";
+$lang['DepartmentMembers']  = "Các thành viên của phòng ban";
+$lang['DepartmentApps']     = "Meetings with this department";
+$lang['DepartmentLinks']    = "Các kiên kết Internet";
+$lang['DepLinkInfo']        = "Xem phòng %s ở %s";
+$lang['DepChgInfo']         = "Thay đổi phòng ban %s";
+$lang['DepDelInfo']         = "Xoá phòng ban %s";
+
+# Team
+$lang['Team']               = "Nhóm";
+$lang['Teams']              = "Nhóm";
+$lang['TeamOverview']       = "Nhóm công tác";
+$lang['TeamDetail']         = "Chi tiết nhóm";
+$lang['TeamModify']         = "Hiệu chỉnh nhóm";
+$lang['TeamCreate']         = "Tạo nhóm";
+$lang['TeamMember']         = "Thành viên nhóm";
+$lang['TeamPosMember']      = "Những thành viên có thể tham gia nhóm";
+$lang['TeamMail']           = "Gửi thư cho nhóm";
+$lang['TeamMailInfo']       = "Gửi 1 thư đến nhóm %s";
+$lang['TeamApps']           = "Xem các cuộc hẹn của nhóm %s";
+$lang['TeamLinkInfo']       = "Xem nhóm %s";
+$lang['TeamManager']        = "Trưởng nhóm";
+$lang['TeamName']           = "Tên nhóm";
+$lang['TeamCreation']       = "Đăng ký ngày: ";
+$lang['TeamCount']          = "# thành viên";
+$lang['TeamOverviewInfo']   = "Xem danh sách các nhóm";
+$lang['TeamCreateI']        = "Tạo 1 nhóm mới";
+$lang['TeamDeleteI']        = "Xoá nhóm %s";
+$lang['TeamModifyI']        = "Hiệu chỉnh nhóm %s";
+$lang['TeamSearch']         = "Team Search";
+$lang['SearchForTeam']      = "Search for teams";
+
+# Address
+$lang['AddressSearch']   = "Tìm địa chỉ";
+$lang['AddressOverview'] = "Tổng quan về địa chỉ";
+$lang['AddressDetail']   = "Chi tiết địa chỉ";
+$lang['Address']         = "Địa chỉ";
+$lang['AddressEntries']  = "Nội dung sổ địa chỉ";
+$lang['AdrLocChange']    = "Đổi địa chỉ của %s";
+$lang['AdrLocCreate']    = "Tạo địa chỉ cho %s";
+$lang['AdrBMod']         = "Đổi tên cơ bản";
+$lang['AdrBModInfo']     = "Hiệu chỉnh nội dung cơ bản của %s";
+$lang['AdrBDel']         = "Xoá tên cơ bản";
+$lang['AdrBDelInfo']     = "Xoá tên cơ bản và tất cả các địa chỉ của %s";
+$lang['AdrBNew']         = "Nhập mới";
+$lang['AdrBNewInfo']     = "Tạo 1 tên cơ bản mới";
+$lang['AdrCreateInfo']   = "Tạo 1 địa chỉ mới";
+$lang['AdrLNew']         = "Địa chỉ mới";
+$lang['AdrLNewInfo']     = "Tạo 1 địa chỉ mới cho %s";
+$lang['AdrName']         = "Tên";
+$lang['AdrMailInfo']     = "Gửi 1 thư đến %s";
+$lang['AdrGetVcard']     = "Lập Vcard";
+$lang['AdrGetVcardI']    = "Lập địa chỉ này như là 1  Vcard";
+$lang['AdrSeeEntry']     = "Xem nội dung";
+$lang['AdrSeeEntryI']    = "Xem nội dung sổ địa chỉ của %s";
+$lang['AdrLocTitle']     = "Địa chỉ %s";
+$lang['AdrBNewTitle']    = "Nạp 1 địa chỉ mới cho tên cơ bản";
+$lang['AdrBChangeTitle'] = "Đổi địa chỉ của tên cơ bản";
+
+$lang['Location']        = "Tại";
+$lang['Location2']       = "Tại";
+$lang['AdrTitle']        = "Danh xưng";
+$lang['AdrFirstName']    = "Tên";
+$lang['AdrMiddleName']   = "Tên lót";
+$lang['AdrLastName']     = "Họ";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Ngày sinh";
+$lang['AdrPicture']      = "Ảnh";
+$lang['AdrCat1']         = "Tư gia";
+$lang['AdrCat2']         = "Văn phòng";
+$lang['AdrCpLoc']        = "giống địa chỉ công ty";
+$lang['ZIP']             = "Mã số ZIP";
+$lang['State']           = "Tỉnh";
+$lang['Country']         = "Quốc gia";
+$lang['Street']          = "Đường";
+$lang['City']            = "Thành phố";
+$lang['Phone']           = "Địện thoại";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "FAX";
+$lang['AdrEmail']        = "Email";
+$lang['acc_info1']       = "Tài khỏn ngân hàng";
+$lang['acc_info2']       = "Tài khoản ngân hàng";
+$lang['acc_nr']          = "Số tài khoản";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Hiệu chỉnh '%s' địa chỉ của %s";
+$lang['DeleteLocInfo']   = "Xoá '%s' địa chỉ của %s";
+$lang['AdrLinks']        = "Các kết nối Internet";
+$lang['AdrCategory']     = "Phân loại";
+$lang['AdrDescription']  = "Địa chỉ";
+$lang['ShowCal']         = "Xem trang làm việc của '%s'";
+$lang['SearchForAdr']    = "Truy lục trong sổ địa chỉ";
+$lang['SearchForAdrExt'] = "Truy lục mở rộng trong sổ địa chỉ";
+$lang['SearchForCmp']    = "Tìm công ty";
+
+# Main Menu
+$lang['Calendar']        = "Lịch làm việc";
+$lang['Addresses']       = "Sổ địa chỉ";
+$lang['ProductMenu']     = "Công trình";
+$lang['Logout']          = "Thoát ra";
+$lang['CalendarInfo']    = "Lịch làm việc hôm nay";
+$lang['AddressesInfo']   = "Tìm địa chỉ";
+$lang['ProductInfo']     = "Các công trình";
+$lang['LogoutInfo']      = "Ra khỏi hệ thống";
+
+# Help
+$lang['Help']            = "Giúp đỡ";
+$lang['HelpInfo']        = "Giúp đỡ cho trang này";
+
+# Resource
+$lang['ResCal']          = "Sử dụng thời gian";
+$lang['ResCalDetail']    = "Việc sử dụng thời gian làm việc của %s trong %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certificate";
+
+# MAP
+$lang['MapSearch']       = "Chọn bản đồ";
+$lang['MapHeader']       = "Lấy bản đồ của  %s";
+
+# History
+$lang['HistoryDetail']   = "Quá trình của %s";
+$lang['HistoryShow']     = "Quá trình của %s %s";
+$lang['HistoryFld']      = "Mục";
+$lang['HistoryOldV']     = "Giá trị cũ";
+$lang['HistoryNewV']     = "Giá trị mới";
+$lang['HistoryLink']     = "Xem quá trình";
+$lang['HistoryLinkI']    = "Xem quá trình của %s";
+$lang['HistoryDeleted']  = "đã xoá";
+
+# Timetrack
+$lang['Timetrack']         = "Tiến độ công trình";
+$lang['Timetracks']        = "Theo dõi tiến độ";
+$lang['TimetrackCreate']   = "Báo cáo tiến độ";
+$lang['TimetrackCreateI']  = "Báo cáo tiến độ %s";
+$lang['TimetrackDelI']     = "Huỷ tiến độ %s";
+$lang['TimetrackNew']      = "Thực thi tiến độ";
+$lang['TimetrackModify']   = "Hiệu chỉnh tiến độ";
+$lang['TimetrackOverview'] = "Tóm tắt tiến độ";
+$lang['TimetrackWorker']   = "Nhân viên";
+$lang['TimetrackRef']      = "Tham chiếu";
+$lang['TimetrackDate']     = "Ngày";
+$lang['TimetrackSearch']   = "Truy lục hồ sơ tiến độ";
+$lang['SearchForTT']       = "Tìm hồ sơ tiến độ dự án";
+$lang['SearchForTTExt']    = "Truy lục mở rộng hồ sơ tiến độ";
+$lang['TimetrackBetween']  = "giữa";
+$lang['TimetrackBooked']   = "Báo cáo tiến độ";
+$lang['TimetrackBookedI']  = "Báo cáo tiến độ dự án %s";
+$lang['TTStatsTitle']      = "Thống kê tiến độ";
+$lang['TTcph']             = "Chi phí cho 1 ngày công";
+$lang['TTState']           = "Tình trạng";
+$lang['TTStates'][-1]      = "chưa kiểm tra";
+$lang['TTStates'][1]       = "đang kiểm tra";
+$lang['TTStates'][2]       = "phải sửa lại";
+$lang['TTStates'][3]       = "phải làm lại";
+$lang['TTStates'][4]       = "Đã kiểm tra";
+$lang['TTRecord']          = "Chấm công";
+$lang['TTfinish']          = "Kết thúc";
+
+# Fax
+$lang['FaxCreate']         = "FAX Mới";
+$lang['FaxSendTo']         = "Gửi fax đến %s";
+$lang['FaxTo']             = "Đến:";
+$lang['FaxNr']             = "Số FAX:";
+$lang['FaxNote']           = "Lưu fax này như là 1 báo cáo cho %s";
+$lang['FaxSpooledTo']      = "Fax đã được gửi vào spool để chuyển đến %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Gửi 1 SMS đến %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Nhắc nhở: có cuộc họp lúc %s";
+$lang['EmailFax']          = "FAX";
+
+
+# Admin Pages
+$lang['AdminShow']         = "Quản trị";
+$lang['AdminDBInfo']       = "Thông tin cơ sở dữ liệu";
+$lang['AdminDBTable']      = "Table";
+$lang['AdminDBCount']      = "Entries";
+$lang['AdminDBName']       = "Tên table";
+$lang['AdminDBAlias']      = "Database Alias";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Database User";
+$lang['AdminDBPass']       = "Mật khẩu";
+$lang['AdminDBHost']       = "Host";
+$lang['AdminDBPort']       = "Cổng";
+$lang['AdminDBType']       = "Loại";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Lần đăng nhập cuối cùng";
+$lang['AdminDBSync']       = "Database Sync";
+$lang['AdminDBSource']     = "Source DB";
+$lang['AdminDBWhat']       = "What/How";
+$lang['AdminDBTarget']     = "Target DB";
+$lang['AdminDBRep']        = "File Repository";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Database";
+$lang['DBInit']            = "Database Initialization";
+$lang['DBModify']          = "Database Modify";
+$lang['DBModifyI']         = "Modify DB %s";
+$lang['DBCreate']          = "Database Create";
+$lang['DBDetail']          = "Database Detail";
+$lang['DBLastDate']        = "LastSync Date";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "LastSync ID";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "use Database";
+$lang['DBreloginI']        = "relogin on %s";
+$lang['DBOverview']        = "Database Overview";
+$lang['DBUpdate']          = "Database Update";
+$lang['DBUpdateI']         = "update database %s";
+$lang['AdminDBSyncM'][1]   = "remove target, then copy all from source to target";
+$lang['AdminDBSyncM'][2]   = "copy all new (since last sync) from target to source, then copy all";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL for LOGO";
+$lang['CfgLogoLink']       = "URL Link from LOGO";
+$lang['CfgBugAutoName']    = "naming schema for bugs";
+$lang['CfgInvAutoName']    = "naming schema for invoices";
+$lang['CfgVATlist']        = "list of VAT rates";
+$lang['CfgVersion']        = "TUTOS Version";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Báo cáo dự đoán doanh thu";
+$lang['UndefinedEndDate']   = "Không xác định ngày kết thúc";
+$lang['SalesBalanced']      = "Cân đối doanh thu";
+$lang['AccumulatedRevenue'] = "Doanh thu cộng dồn";
+$lang['PeriodRevenue']      = "Doanh thu cho 1 giai đoạn";
+$lang['Period']             = "Giai đoạn";
+$lang['Est_revenue']        = "Ước tính doanh thu";
+$lang['Graph']              = "Đồ thị";
+$lang['GraphInfo']          = "Trình bày dưới dạng đồ thị";
+
+# Permissions
+$lang['perm'][usecalendar]       = "Trang làm việc";
+$lang['perm'][usetaskmanagement] = "Hạng mục";
+$lang['perm'][usemaplink]        = "Maplink";
+$lang['perm'][useprojects]       = "Dự án";
+$lang['perm'][usetimetrack]      = "Theo dõi thực thi";
+$lang['perm'][usefax]            = "Fax";
+$lang['perm'][usesms]            = "SMS";
+$lang['perm'][useoverlib]        = "Popups";
+$lang['perm'][useaddressbook]    = "Sổ địa chỉ";
+$lang['perm'][usemail]           = "Sử dụng thư";
+$lang['perm'][usehistory]        = "display history";
+$lang['perm'][useteams]          = "use teams";
+$lang['FeatureOff'] = "Các chức năng bị khoá ";
+
+# Error Messages
+$lang['Err0001']         = "You are not allowed to use the %s: %s";
+$lang['Err0002']         = "Khởi động sau khi kết thúc !";
+$lang['Err0006']         = "Vui lòng chọn chi tiết";
+$lang['Err0009']         = "Vui lòng điền vào mục <I>%s</I>";
+$lang['Err0012']         = "Công ty này chưa biết <I>%s</I> !";
+$lang['Err0014']         = "Vui lòng chọn trong mục <I>%s</I>";
+$lang['Err0017']         = "Vui lòng nạp 1 số vào mục <I>%s</I> !";
+$lang['Err0018']         = "tên <I>%s</I> có giá trị cho %d ";
+$lang['Err0020']         = "Qúi vị không được phép xóa file này !";
+$lang['Err0021']         = "Qúi vị không thể thay đổi nhóm ảo 0";
+$lang['Err0022']         = "Xin lỗi, vì lý do quyền hạn, qúi vị không thể xem %s này";
+$lang['Err0023']         = "Xin lỗi, vì lý do quyền hạn, qúi vị không thể xóa %s này";
+$lang['Err0024']         = "Xin lỗi, vì lý do quyền hạn, qúi vị không thể thay đổi %s này";
+$lang['Err0025']         = "Không tìm thấy tên hoặc mật khẩu";
+$lang['Err0026']         = "Không thể đăng nhập";
+$lang['Err0027']         = "Đăng nhập thất bại";
+$lang['Err0028']         = "Account deleted";
+$lang['Err0029']         = "Missing senders email address";
+$lang['Err0030']         = "Fax chưa gửi được vào spool !";
+$lang['Err0031']         = "Thiếu số Fax !";
+$lang['Err0032']         = "Chức năng gửi Fax chưa được kích hoạt !";
+$lang['Err0033']         = "Chức năng gửi mail chưa được kích hoạt ! Mail \"%s\" <U>không</U>gửi được.";
+$lang['Err0034']         = "Không gửi được mail ! thiếu người gửi \"%s\" email.";
+$lang['Err0035']         = "Không gửi được mail ! thiếu mục người nhận hoặc là mail đã gửi đi rồi !.";
+$lang['Err0036']         = "Dự án đã có ở đây rồi (%s) !";
+$lang['Err0037']         = "mail '%s' không gửi được ! Missing Mail Prototype File (%s) !";
+$lang['Err0038']         = "Sai Ngày trong mục %s!";
+$lang['Err0039']         = "Địa chỉ đã có ở đây rồi (%s) !";
+$lang['Err0040']         = "Không thấy %s !";
+$lang['Err0041']         = "Các mật khẩu không trùng nhau !";
+$lang['Err0042']         = "Mật khẩu cũ sai rồi !";
+$lang['Err0043']         = "Email %s không hợp lệ (xxx@domainname.type)!";
+$lang['Err0044']         = "Công ty đã có ở đây rồi (%s) !";
+$lang['Err0045']         = "Phòng này đã có ở đây rồi (%s) !";
+$lang['Err0046']         = "Nhóm này đã có ở đây rồi (%s) !";
+$lang['Err0047']         = "Không thể xóa quyền của quản trị viên (admin). Phải ít nhất có 1 quản trị viên !";
+$lang['Err0048']         = "Không tìm thấy gì !";
+$lang['Err0049']         = "Tài khoản %s bị khoá !";
+$lang['Err0050']         = "Không tìm thấy nội dung CSV!";
+$lang['Err0051']         = "Không tìm thấy  CSV Separator";
+$lang['Err0052']         = "Cần phải có phân loại";
+$lang['Err0053']         = "You cannot delete your own user entry";
+$lang['Err0054']         = "Sorry, due to permissions, you are not allowed to create a %s";
+### Local Variables: ***
+#
+### End: ***
+?>

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -12,51 +12,68 @@
  * 	FCKXml Class: class to load and manipulate XML files.
  * 	(IE specific implementation)
  * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-27 22:15:31
+ * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
 
-var FCKXml ;
+var FCKXml = function()
+{}
 
-if ( !( FCKXml = NS.FCKXml ) )
+FCKXml.prototype.LoadUrl = function( urlToCall, asyncFunctionPointer )
 {
-	FCKXml = NS.FCKXml = function()
-	{}
+	var oFCKXml = this ;
 
-	FCKXml.prototype.LoadUrl = function( urlToCall )
-	{
-		var oXmlHttp = FCKTools.CreateXmlObject( 'XmlHttp' ) ;
+	var bAsync = ( typeof(asyncFunctionPointer) == 'function' ) ;
 
-		oXmlHttp.open( "GET", urlToCall, false ) ;
-		
-		oXmlHttp.send( null ) ;
-		
+	var oXmlHttp = FCKTools.CreateXmlObject( 'XmlHttp' ) ;
+
+	oXmlHttp.open( "GET", urlToCall, bAsync ) ;
+	
+	if ( bAsync )
+	{	
+		oXmlHttp.onreadystatechange = function() 
+		{
+			if ( oXmlHttp.readyState == 4 )
+			{
+				oFCKXml.DOMDocument = oXmlHttp.responseXML ;
+				asyncFunctionPointer( oFCKXml ) ;
+			}
+		}
+	}
+	
+	oXmlHttp.send( null ) ;
+	
+	if ( ! bAsync )
+	{ 
 		if ( oXmlHttp.status == 200 )
 			this.DOMDocument = oXmlHttp.responseXML ;
 		else if ( oXmlHttp.status == 0 && oXmlHttp.readyState == 4 )
 		{
-			this.DOMDocument = FCKTools.CreateXmlObject( 'DOMDocument' ) ;
-			this.DOMDocument.async = false ;
-			this.DOMDocument.resolveExternals = false ;
-			this.DOMDocument.loadXML( oXmlHttp.responseText ) ;
+			oFCKXml.DOMDocument = FCKTools.CreateXmlObject( 'DOMDocument' ) ;
+			oFCKXml.DOMDocument.async = false ;
+			oFCKXml.DOMDocument.resolveExternals = false ;
+			oFCKXml.DOMDocument.loadXML( oXmlHttp.responseText ) ;
 		}
 		else
 			alert( 'Error loading "' + urlToCall + '"' ) ;
 	}
+}
 
-	FCKXml.prototype.SelectNodes = function( xpath, contextNode )
-	{
-		if ( contextNode )
-			return contextNode.selectNodes( xpath ) ;
-		else
-			return this.DOMDocument.selectNodes( xpath ) ;
-	}
+FCKXml.prototype.SelectNodes = function( xpath, contextNode )
+{
+	if ( contextNode )
+		return contextNode.selectNodes( xpath ) ;
+	else
+		return this.DOMDocument.selectNodes( xpath ) ;
+}
 
-	FCKXml.prototype.SelectSingleNode = function( xpath, contextNode ) 
-	{
-		if ( contextNode )
-			return contextNode.selectSingleNode( xpath ) ;
-		else
-			return this.DOMDocument.selectSingleNode( xpath ) ;
-	}
+FCKXml.prototype.SelectSingleNode = function( xpath, contextNode ) 
+{
+	if ( contextNode )
+		return contextNode.selectSingleNode( xpath ) ;
+	else
+		return this.DOMDocument.selectSingleNode( xpath ) ;
 }

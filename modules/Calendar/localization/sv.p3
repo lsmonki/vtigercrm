@@ -1,0 +1,782 @@
+<?php
+# $Id: sv.p3,v 1.16 2005/05/03 13:18:53 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "sv_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+# Translation contributed by Lindqvist Jonas <Jonas.Lindqvist at sweco.se>
+# Maintained by Thomas Svenson <edde at users.sourceforge.net>
+#
+$lang['content_encoding'] = "iso-8859-1";
+setlocale(LC_TIME,'sv_SE');
+#
+# Swedish Text
+#
+$lang['PleaseLogin']     = "Logga in";
+$lang['Welcome_1']       = "Välkommen %s";
+$lang['Welcome_2']       = "Sista inloggning %s från %s";
+$lang['Password']        = "Lösenord";
+$lang['Username']        = "Användarnamn";
+$lang['MOTD']            = "Dagens meddelande";
+$lang['Login']           = "Logga in";
+$lang['LostPassword']    = "Glömt lösenord?";
+$lang['LoggedIn']        = "Du är inloggad. Gör ditt val på vänster sida";
+$lang['ReadOnlyAppoint'] = "Du kan bara se denna \"bokning\"!";
+$lang['StartDate']       = "Start datum";
+$lang['StartTime']       = "Start tid";
+$lang['AppStart']        = "Start";
+$lang['AppCreatedBy']    = "Skapad av";
+$lang['EndDate']         = "Slut datum";
+$lang['EndTime']         = "Slut tid";
+$lang['AppEnd']          = "Slut";
+$lang['Participants']    = "Deltagare";
+$lang['everybody']       = "Alla";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "den";
+$lang['createdby']       = "Skapad av";
+$lang['Description']     = "Beskrivning";
+$lang['InfoEmail']       = "Meddela via E-post";
+$lang['InviteEmail']     = "Inbjud via E-post";
+$lang['Invitation']      = "Inbjudan";
+$lang['IgnoreTime']      = "Ignorera ovan tider";
+$lang['IgnoreTime2']     = "Mötet har ingen speciell starttid )";
+$lang['forphrase']       = "för";
+$lang['nextweek']        = "Nästa vecka ";
+$lang['lastweek']        = " Föregående vecka";
+$lang['plus4weeks']      = "4 veckor ";
+$lang['minus4weeks']     = " 4 veckor";
+$lang['only']            = "endast";
+$lang['reload']          = "Ladda om";
+$lang['changeapp']       = "Visa/Ändra denna \"bokning\" (%s - %s)";
+$lang['seeapp']          = "Visa bokningsdetaljer (%s - %s)";
+$lang['AllEntries']      = "Visa alla %s inmatningar";
+$lang['DateTimePHP']     = "Y-m-d H:i T";
+$lang['DateTimeStr']     = "%Y-%m-%d %H:%M %Z";
+$lang['DateTimeFormat']  = "%s-%s-%s %02s:%02s %s";
+$lang['DateTimeSPHP']    = "m-d H:i";
+$lang['DateTimeSStr']    = "%m-%d %H:%M";
+$lang['DateTimeSFormat'] = "%s-%s %02s:%02s";
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%Y-%m-%d";
+$lang['DateFormat']      = "%s-%s-%s";
+$lang['DateShortFormat'] = "%s-%s";
+$lang['Printable']       = "Utskrivningsbar";
+$lang['PrintableInfo']   = "Visa som utskrivbar sida";
+$lang['managedProd']     = "Hanterade Produkter & Projekt";
+$lang['soldProd']        = "Sålda Produkter & Projekt";
+$lang['Enter']           = "Verkställ";
+$lang['Reset']           = "Återställ";
+$lang['Remove']          = "Avlägsna";
+$lang['Delete']          = "Ta bort";
+$lang['Change']          = "Ändra";
+$lang['Modify']          = "Modifiera";
+$lang['created']         = "skapade";
+$lang['DateTimeFrom']    = "från";
+$lang['DateTimeTill']    = "till";
+$lang['Count']           = "Antal";
+$lang['Showing']         = "Visar %s";
+$lang['show']            = "Visa";
+$lang['lang']['auto']    = "Automatiskt (från webb-läsare)";
+$lang['lang']['en']      = "engelska UK";
+$lang['lang']['en-US']   = "engelska USA";
+$lang['lang']['de']      = "tyska";
+$lang['lang']['fr']      = "franska";
+$lang['lang']['es']      = "spanska";
+$lang['lang']['es-MX']   = "spanska/Méxiko";
+$lang['lang']['es-NI']   = "spanish/Nicaragua";
+$lang['lang']['es-VE']   = "Español/Venezuela";
+$lang['lang']['it']      = "italienska";
+$lang['lang']['tw']      = "traditionell kinesiska";
+$lang['lang']['zh']      = "förenklad kinesiska";
+$lang['lang']['ru']      = "ryska";
+$lang['lang']['pt']      = "portugisiska";
+$lang['lang']['pl']      = "polska";
+$lang['lang']['ko']      = "koreanska";
+$lang['lang']['nl']      = "holländska";
+$lang['lang']['sv']      = "svenska";
+$lang['lang']['el']      = "grekiska";
+$lang['lang']['ca']      = "catalanska";
+$lang['lang']['ja']      = "japanska";
+$lang['lang']['hu']      = "ungerska";
+$lang['lang']['cs']      = "tjeckiska";
+$lang['lang']['vi']      = "vietnamesiska";
+
+# Common
+$lang['ChangesOk']       = "Är allt rätt?";
+$lang['InputOk']         = "Är allt rätt?";
+$lang['Day1']            = "Måndag";
+$lang['Day2']            = "Tisdag";
+$lang['Day3']            = "Onsdag";
+$lang['Day4']            = "Torsdag";
+$lang['Day5']            = "Fredag";
+$lang['Day6']            = "Lördag";
+$lang['Day0']            = "Söndag";
+$lang['SMonday']         = "Må";
+$lang['STuesday']        = "Ti";
+$lang['SWednesday']      = "On";
+$lang['SThursday']       = "To";
+$lang['SFriday']         = "Fr";
+$lang['SSaturday']       = "Lö";
+$lang['SSunday']         = "Sö";
+$lang['week']            = "Vecka";
+$lang['weeks']           = "veckor";
+$lang['days']            = "days";
+$lang['minutes']         = "minutes";
+$lang['seconds']         = "seconds";
+$lang['Date']            = "Datum";
+$lang['NewEntry']        = "Ny";
+$lang['CloneEntry']      = "Klona";
+$lang['Search']          = "Sök";
+$lang['PlsChangeName']   = "Du måste ändra namn";
+$lang['SeeAddress']      = "Visa adress för %s";
+$lang['NavFirst']        = "Första";
+$lang['NavBack']         = "Tillbaka";
+$lang['NavNext']         = "Nästa";
+$lang['NavLast']         = "Föregående";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = " ";
+$lang['yes']             = "Ja";
+$lang['no']              = "Nej";
+$lang['FldsRequired']    = "<FONT SIZE=-1>Fält märkta med <FONT COLOR=red>(*)</FONT> måste fyllas i.</FONT>";
+$lang['any']             = "vilken som helst";
+$lang['all']             = "Alla";
+$lang['extended']        = "Avancerad";
+$lang['OrderBy']         = "Sortera efter %s";
+$lang['RevOrderBy']      = "Omvänd ordning efter %s";
+$lang['Export']          = "Exportera";
+$lang['ExportInfo']      = "Exportera data som fil";
+$lang['withmarked']      = "med markerade %s";
+$lang['SetTo']           = "sätt %s till %s";
+$lang['pcs']             = "antal";
+$lang['Money']           = "Summa";
+$lang['Currency']        = "Valuta";
+$lang['ActionNil']       = "gör inget";
+$lang['Reference']       = "Referens";
+$lang['pageof']          = "Sida %s av %s";
+$lang['RowIconsBefore']  = "Iconer FÖRE rader";
+$lang['RowIconsAfter']   = "Icons Efter rader";
+
+# Appointments
+$lang['Appointment']     = "Bokning";
+$lang['Appointments']    = "Bokningar";
+$lang['NewAppoint']      = "Ny bokning";
+$lang['NewAppointR']     = "Ny (återkommande)";
+$lang['NewAppointInfo']  = "Skapa ny bokning";
+$lang['NewAppointInfoR'] = "Skapa återkommande bokning";
+$lang['AppointDetail']   = "Detaljer Bokning";
+$lang['AppointModify']   = "Ändra Bokning";
+$lang['AppointCreate']   = "Skapa Bokning";
+$lang['AppointCommit']   = "Genomför Bokning";
+$lang['AppointOverview'] = "Översikt Bokning";
+$lang['AppDelInfo']      = "Ta bort bokningen";
+$lang['AppChangeOrDel']  = "Rätt att ändra eller ta bort";
+$lang['VisitAt']         = "Besöka";
+$lang['VisitFrom']       = "Besök av";
+$lang['Visits']          = "Besök";
+$lang['ModOldAppoint']   = "Ändra existerande bokning";
+$lang['CreateAppoint']   = "Skapa ny bokning";
+$lang['AppFirstDate']    = "Första datum";
+$lang['AppLastDate']     = "Sista datum";
+$lang['AppNoLastDate']   = "Inget slutdatum";
+$lang['AppRepeatType']   = "Repetera";
+$lang['AppRepeatDay']    = "Dagligen";
+$lang['AppRepeatWeek']   = "Veckovis - Samma dag som startdag";
+$lang['AppRepeatMonth']  = "Månadsvis - Given startdag";
+$lang['AppRepeatYear']   = "Årsvis - Given startdag/månad";
+$lang['AppRepeatInfo1']  = "varje %s";
+$lang['AppRepeatInfo2']  = "månadsvis, dag %d";
+$lang['AppRepeatInfo3']  = "Årsvis dag/månad %d/%m";
+$lang['AppRepeatInfo4']  = "dagligen";
+$lang['AppSeeEntry']     = "visa inlägg";
+$lang['AppSeeEntryI']    = "visa bokningen";
+$lang['AppEmailRemind']  = "Påminn alla deltagare via E-post";
+$lang['AppRemind'][0]    = "Aldrig";
+$lang['AppRemind'][15]   = "15 minuter före";
+$lang['AppRemind'][60]   = "1 timme före";
+$lang['AppRemind'][1440] = "1 dag före";
+$lang['AppRemind'][10080]= "1 vecka före";
+$lang['AppAllSee']       = "allt du kan se";
+$lang['AppAllTeams']     = "medlemmar i alla dina grupper";
+$lang['AppEverything']   = "allt";
+$lang['AppGetIcal']      = "Hämta Ical-filen";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "kontor";
+$lang['AppLoc'][1]       = "ute";
+$lang['AppLoc'][2]       = "semester";
+$lang['AppLoc'][3]       = "sjuk";
+$lang['AppLoc'][4]       = "uppskjuten";
+$lang['AppLoc'][5]       = "option";
+$lang['AppLoc'][6]       = "privat";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "JA";
+$lang['AppState'][2]     = "NEJ";
+$lang['AppPrivate']      = "Privat";
+$lang['AppVoteInfo']     = "rösta på denna bokning";
+$lang['AppVoteState']    = "nuvarande röst";
+$lang['AppVoteHead']     = "Rösta på denna bokning (%s)";
+$lang['AppVoteSelect']   = "Lägg din röst";
+$lang['AppsSearch']      = "Sök kalender";
+$lang['SearchForAppExt'] = "Utökad sökning efter bokning";
+$lang['SearchForApp']    = "Sök bokning";
+$lang['AppUserSearch']   = "VIsa endast mina bokningar";
+$lang['AppSelInfo']      = "(lämna tom för visning av alla bokningar)";
+$lang['AppTrace']        = "spårning tillåten";
+$lang['AppTraceDesc']    = "(deltagare kan rösta)";
+$lang['AppCheck']        = "kontrollera deltagare";
+$lang['AppCheckDesc']    = "(dubbelboka inte)";
+$lang['AppConflict']     = "konflikt mellan %s och %s";
+
+# Personal Page
+$lang['PersonalPage']      = "Min TUTOS";
+$lang['PersonalPageFor']   = "Personlig sida: %s";
+$lang['PersonalSettings']  = "Mina inställningar";
+$lang['PersonalSettingsI'] = "Ändra personliga inställningar för %s";
+
+# User
+$lang['User']            = "Användare";
+$lang['Users']           = "Användare";
+$lang['UserOverview']    = "Överblick användare";
+$lang['UserCreate']      = "Skapa användare";
+$lang['UserModify']      = "Ändra användare";
+$lang['UserDel']         = "Ta bort användare";
+$lang['UserInfo']        = "Användarkonto";
+$lang['UserModInfo']     = "Ändra %s konto";
+$lang['UserNewInfo']     = "Skapa konto för %s";
+$lang['UserDelInfo']     = "ta bort konto för %s";
+$lang['UserUnknown']     = "Okänd användare";
+$lang['UserLastSeen']    = "Senaste inloggning";
+$lang['UserLastHost']    = "Senaste \"dator\"";
+$lang['UserAdmin']       = "Administratör";
+$lang['UserLanguage']    = "Språk";
+$lang['UserTimezone']    = "Tidszon";
+$lang['UserTheme']       = "Tema";
+$lang['UserLayout']      = "Utseende";
+$lang['UserHoliday']     = "Helgdagar";
+$lang['UserNamedays']    = "Namnsdagar";
+$lang['UserWorkdays']    = "Arbetsdagar";
+$lang['UserWeekstart']   = "Veckan startar";
+$lang['UserDisabled']    = "Stäng av konto";
+$lang['UserDefaultGrp']  = "Standardgrupp för nya objekt";
+
+# Product/Projects
+$lang['ProductP']        = "Produkt/Projekt";
+$lang['ProductPs']       = "Produkter/Projekt";
+$lang['Product']         = "Produkt";
+$lang['Products']        = "Produkter";
+$lang['Project']         = "Projekt";
+$lang['Projects']        = "Projekt";
+$lang['ProductsSearch']  = "Sök Produkter/Projekt";
+$lang['ProductsOverview']= "Överblick Produkter/Projekt";
+$lang['ProductsDetail']  = "Detaljer Produkter/Projekt";
+$lang['ProductsContacts']= "Product/Project Contacts";
+$lang['ProductsContactI']= "see list of all members and roles for %s";
+$lang['ProdApps']        = "Tillhörande bokningar";
+$lang['ProdName']        = "Namn";
+$lang['ProdVersion']     = "Version";
+$lang['ProdProd']        = "Kopplade projekt";
+$lang['ProdProdNew']     = "Ny relation";
+$lang['ProdRoles']       = "Roller";
+$lang['ProdFunc']        = "Funktion";
+$lang['ProdRoleDesc']    = "Beskrivning";
+$lang['ProdRolesNew']    = "Ny Roll";
+$lang['ProdRole'][1]     = "Ägare";
+$lang['ProdRole'][2]     = "Kommerciell ägare";
+$lang['ProdRole'][3]     = "2. Ägare";
+$lang['ProdRole'][4]     = "Försäljning";
+$lang['ProdRole'][5]     = "Utveckling";
+$lang['ProdRole'][6]     = "Kund";
+$lang['ProdRole'][7]     = "Leverantör";
+$lang['ProdRole'][8]     = "Återförsäljare";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Projektbas";
+$lang['ProdRole'][11]    = "Förälderprojekt";
+$lang['ProdRole'][12]    = "Underprojekt";
+$lang['ProdRole'][13]    = "Delprojekt";
+$lang['ProdPath']        = "Filsökväg";
+$lang['ProdDesc']        = "Beskrivning";
+$lang['ProdDesc1']       = "Beskrivning 1";
+$lang['ProdDesc2']       = "Beskrivning 2";
+$lang['ProdState']       = "Status";
+$lang['ProdState_']      = "Okänt Tillstånd";
+$lang['ProdStates'][0]   = "Förvärvning";
+$lang['ProdStates'][1]   = "Pågående";
+$lang['ProdStates'][2]   = "Avslutat";
+$lang['ProdStates'][3]   = "Avbrutet";
+$lang['ProdStates'][4]   = "Under offert";
+$lang['ProdStates'][5]   = "Pågående \"offert\"";
+$lang['ProdStates'][-2]  = "vilken som helst inte färdig eller avbryten";
+$lang['ProdClass1']      = "Klassification 1";
+$lang['ProdClasses1'][1] = "Mjukvara";
+$lang['ProdClasses1'][2] = "Hårdvara";
+$lang['ProdClasses1'][3] = "Konsultering";
+$lang['ProdClass2']      = "Klassification 2";
+$lang['ProdClasses2'][1] = "Norra Regionen";
+$lang['ProdClasses2'][2] = "Södra Regionen";
+$lang['ProdPrice']       = "Pris";
+$lang['ProdCost']        = "Kostnad";
+$lang['SearchForProd']   = "Sök efter produkt/projekt";
+$lang['SearchForProdExt']= "Utökad sökning efter produkt/projekt";
+$lang['ProdCreateInfo']  = "Skapa en ny produkt/projekt";
+$lang['ProdCloneInfo']   = "Klona detta projekt";
+$lang['ProdDelInfo']     = "Ta bort projekt %s";
+$lang['ProdModInfo']     = "Ändra Produkt/Projekt %s";
+$lang['ProdCreator']     = "skapad av";
+$lang['ProdCreation']    = "skapad av %s den %s";
+$lang['ProdCreationS']   = "skapad den";
+$lang['ProdStart']       = "beräknad start";
+$lang['ProdEnd']         = "beräknat stopp";
+$lang['ProdProb']        = "Sannorlikhet";
+$lang['ProdModifyT']     = "Förändra Produkt/Projekt %s";
+$lang['ProdCreateT']     = "Skapa ny Produkt/Projekt";
+$lang['ProdCloneT']      = "Skapa ny Produkt/Projekt baserat på %s";
+$lang['ProdSelInfo']     = "(lämna tomt för att visa alla)";
+$lang['ProdLinkInfo']    = "Visa Produkt/Projekt %s";
+$lang['ProdBetween']     = "Skapat mellan";
+$lang['ProdLinks']       = "Länkar";
+$lang['ProdStats']       = "Statistik";
+$lang['ProdStatsInfo']   = "Statistik för dessa Produkter/Projekt";
+$lang['ProdStatsTitle']  = "Statistik Produkt/Projekt";
+$lang['ProdFields']      = "Fält";
+$lang['ProdRoleAddT']    = "Lägg till en roll till %s";
+
+# Mail
+$lang['MailboxEmail']    = "E-post";
+$lang['MailSendTo']      = "Skicka E-brev till %s";
+$lang['MailFrom']        = "Från";
+$lang['MailTo']          = "Till";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Ärende";
+$lang['MailSent']        = "skickar E-post %s till %s.";
+$lang['MailSentCc']      = "skickar E-post(Cc) %s till %s.";
+$lang['MailSentBcc']     = "Skickar E-post(Bcc) %s till %s.";
+$lang['MailCard']        = "Kort från %s";
+$lang['MailAttachmentNew']  = "Bilaga";
+$lang['MailDate']        = "Datum";
+$lang['MailSize']        = "Storlek";
+$lang['MailAttachmentShow']     = "Visa bilaga";
+$lang['MailAttachmentDownload'] = "Ladda ner bilaga";
+$lang['MailAttachmentName']     = "Bilaga";
+$lang['MailForward']     = "Vidaresänd";
+$lang['MailForwardI']    = "Vidaresänd e-post";
+$lang['MailReply']       = "Svara";
+$lang['MailReplyAll']    = "Svara till alla";
+$lang['MailReplyI']      = "Skicka ett svar på denna e-post";
+$lang['MailQuoteHead']   = "Den %s , skrev %s:";
+
+# ACL
+$lang['AclModify']       = "Ändra Rättigheter";
+$lang['AclModifyI']      = "ändra rättigheter för %s";
+$lang['AclDetail']       = "Rättighetsdetaljer";
+$lang['AclDetailI']      = "visar rättigheter för %s";
+$lang['permissions']     = "rättigheter";
+$lang['ACLsee']          = "visa rättigheter";
+$lang['ACLmod']          = "ändra rättigheter";
+$lang['ACLread']         = "Visa";
+$lang['ACLuse']          = "Använda";
+$lang['ACLmodify']       = "Ändra";
+$lang['ACLdelete']       = "Ta bort";
+$lang['ACLreadI']        = "ovan användare/grupper tillåts se %s";
+$lang['ACLuseI']         = "ovan användare/grupper tillåts anväda '%s'";
+$lang['ACLmodI']         = "ovan användare/grupper tillåts ändra %s";
+$lang['ACLdelI']         = "ovan användare/grupper tillåts ta bort %s";
+$lang['ACLOverview']     = "Överblick rättigheter";
+$lang['ACLOverviewI']    = "visa alla rättigheter";
+$lang['ACLKeepOld']      = "Höj endast rättigheten och behåll befintliga";
+$lang['ACLRecursive']    = "Ända rättigheterna för underobjekt rekursivt";
+$lang['Feature']         = "Funktioner";
+
+# Tasks
+$lang['Task']            = "Uppgift";
+$lang['Tasks']           = "Uppgifter";
+$lang['TaskDetail']      = "Detaljer uppgifter";
+$lang['TaskCreate']      = "Skapa uppgift";
+$lang['TaskNewSubtask']  = "Ny underuppgift";
+$lang['TaskCreateInfo']  = "Skapa ny underuppgift av %s";
+$lang['TaskDelete']      = "Ta bort uppgift %s";
+$lang['TaskModify']      = "Ändra uppgift %s";
+$lang['TaskOverview']    = "Överblick uppgift";
+$lang['TaskOverviewInfo']= "visa uppgifter för %s";
+$lang['TaskName']        = "Namn";
+$lang['TaskState']       = "Status";
+$lang['TaskMilestone']   = "Milstolpe";
+$lang['TaskDesc']        = "Att göra";
+$lang['TaskWorker']      = "att göra med";
+$lang['TaskVolumeFull']  = "Arbetsvolym";
+$lang['TaskVolumeDone']  = "Volym klar";
+$lang['TaskVolumeTodo']  = "Volume to do";
+$lang['TaskSubTask']     = "Basuppgift av";
+$lang['hours']           = "timmar";
+$lang['TaskCreation']    = "skapad av %s den %s";
+$lang['TaskStates'][0]   = "Förberedelse";
+$lang['TaskStates'][1]   = "Pågående";
+$lang['TaskStates'][2]   = "Avslutad";
+$lang['TaskStates'][3]   = "Försenat";
+$lang['TaskS_Start']     = "Planerad start";
+$lang['TaskS_End']       = "Planerad stop";
+$lang['TaskSched']       = "Tidsplanering";
+$lang['TaskReal']        = "\"äkta\"";
+$lang['TaskLinkInfo']    = "Visa uppgift %s";
+$lang['TaskCompleted']   = "Färdigställt %3.2f procent";
+$lang['Completed']       = "Färdig";
+$lang['Reschedule']      = "Planera om";
+$lang['Reschedule_s']    = "Planera om start";
+$lang['Reschedule_e']    = "Planera om slut";
+$lang['TaskGantt']       = "Gantt diagram";
+$lang['TaskImport']      = "Uppgift: Importera CSV";
+$lang['ImportSrcFile']   = "Källfil";
+$lang['ImportColNames']  = "Kolumnnamn i CSV-fil";
+$lang['ImportIndex']     = "WBS Index";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Bekräfta Import";
+$lang['TaskSearch']        = "Sök uppgift";
+$lang['SearchForTask']     = "Sök uppgift";
+$lang['SearchForTaskExt']  = "Utäkad sökning";
+$lang['TaskBetween']       = "Tid mellan";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Visa Gantt";
+$lang['GanttLinkInfo']   = "Gantt diagram";
+$lang['GanttTitle']      = "GANTT diagram";
+$lang['GanttStart']      = "Startdatum";
+$lang['GanttEnd']        = "Slutdatum";
+$lang['GanttVolume']     = "Timmar";
+$lang['GanttCompletion'] = "Avslutad";
+
+# Company
+$lang['Company']           = "Företag";
+$lang['Companies']         = "Företag";
+$lang['CompanySearch']     = "Sök företag";
+$lang['CompanyOverview']   = "Överblick företag";
+$lang['CompanyDetail']     = "Detaljer företag";
+$lang['CompanyModify']     = "Ändra företag";
+$lang['CompanyCreate']     = "Skapa företag";
+$lang['CompanyCreateInfo'] = "skapa nytt företag";
+$lang['CompanyApps']       = "Möten med detta företag";
+$lang['CompanyLinks']      = "Länkar";
+$lang['CompanyChgInfo']    = "Ändra företag %s";
+$lang['CompanyDelInfo']    = "Ta bort företag %s";
+$lang['CompanyMembers']    = "Anställda utan avdelning";
+$lang['CompanyLinkInfo']   = "Visa företaget %s";
+$lang['CompanyNewMember']  = "add staff";
+
+# Department
+$lang['Department']         = "Avdelning";
+$lang['Departments']        = "Avdelningar";
+$lang['DepartmentSearch']   = "Sök avdelning";
+$lang['DepartmentOverview'] = "Överblick avdelning";
+$lang['DepartmentDetail']   = "Detaljer avdelning";
+$lang['DepartmentModify']   = "Ändra avdelning";
+$lang['DepartmentCreate']   = "Skapa avdelning";
+$lang['DepCreateInfo']      = "skapa ny avdelning";
+$lang['DepartmentMembers']  = "Medlemmar i avdelningen";
+$lang['DepartmentApps']     = "Möten med denna avdelning";
+$lang['DepartmentLinks']    = "Länkar";
+$lang['DepLinkInfo']        = "Visa avdelning %s hos %s";
+$lang['DepChgInfo']         = "Ändra avdelning %s";
+$lang['DepDelInfo']         = "Ta bort avdelning %s";
+
+# Team
+$lang['Team']               = "Grupp";
+$lang['Teams']              = "Grupper";
+$lang['TeamOverview']       = "Överblick grupp";
+$lang['TeamDetail']         = "Detlajer grupp";
+$lang['TeamModify']         = "Ändra grupp";
+$lang['TeamCreate']         = "Skapa grupp";
+$lang['TeamMember']         = "Medlemar i gruppen";
+$lang['TeamPosMember']      = "möjlig gruppmedlem";
+$lang['TeamMail']           = "E-posta till grupp";
+$lang['TeamMailInfo']       = "skicka E-brev till grupp %s";
+$lang['TeamApps']           = "Visa möten för grupp %s";
+$lang['TeamLinkInfo']       = "Visa grupp %s";
+$lang['TeamManager']        = "Lista ansvarig";
+$lang['TeamName']           = "Gruppnamn";
+$lang['TeamCreation']       = "skapat den";
+$lang['TeamCount']          = "# Medlem";
+$lang['TeamOverviewInfo']   = "Visa lista över alla grupper";
+$lang['TeamCreateI']        = "Skapa ny grupp";
+$lang['TeamDeleteI']        = "Ta bort grupp %s";
+$lang['TeamModifyI']        = "Ändra grupp %s";
+$lang['TeamSearch']         = "Sök grupp";
+$lang['SearchForTeam']      = "Sök efter grupp";
+
+# Address
+$lang['AddressSearch']   = "Sök adresser";
+$lang['AddressOverview'] = "Överblick adresser";
+$lang['AddressDetail']   = "Adressdetaljer";
+$lang['Address']         = "Adress";
+$lang['AddressEntries']  = "Adressdetaljer";
+$lang['AdrLocChange']    = "Ändra adress för %s";
+$lang['AdrLocCreate']    = "Skapa adress för %s";
+$lang['AdrBMod']         = "Ändra basadress";
+$lang['AdrBModInfo']     = "ändra basadress för %s";
+$lang['AdrBDel']         = "Ta bort basadress";
+$lang['AdrBDelInfo']     = "ta bort basadress och E-postinlägg för %s";
+$lang['AdrBNew']         = "Ny adress";
+$lang['AdrBNewInfo']     = "Skapa ny adress";
+$lang['AdrCreateInfo']   = "Skapa ny adress";
+$lang['AdrLNew']         = "Ny Adress";
+$lang['AdrLNewInfo']     = "skapa ny adress för %s";
+$lang['AdrName']         = "Namn";
+$lang['AdrMailInfo']     = "skicka E-brev till %s";
+$lang['AdrGetVcard']     = "Hämta Vcard";
+$lang['AdrGetVcardI']    = "Hämta adress som Vcard";
+$lang['AdrSeeEntry']     = "Visa post";
+$lang['AdrSeeEntryI']    = "Visa adresspost för %s";
+$lang['AdrLocTitle']     = "%s adress";
+$lang['AdrBNewTitle']    = "Mata in ny basadess";
+$lang['AdrBChangeTitle'] = "Ändra basadress";
+
+$lang['Location']        = "Plats";
+$lang['Location2']       = "Plats";
+$lang['AdrTitle']        = "Titel";
+$lang['AdrFirstName']    = "Förnamn";
+$lang['AdrMiddleName']   = "Initialer";
+$lang['AdrLastName']     = "Efternamn";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Födelsedag";
+$lang['AdrPicture']      = "Foto";
+$lang['AdrCat1']         = "Hem";
+$lang['AdrCat2']         = "Kontor";
+$lang['AdrCpLoc']        = "Hämta företagsadress";
+$lang['ZIP']             = "Postnr";
+$lang['State']           = "Län";
+$lang['Country']         = "Land";
+$lang['Street']          = "Gata";
+$lang['City']            = "Stad";
+$lang['Phone']           = "Telefon";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "FAX";
+$lang['AdrEmail']        = "E-post";
+$lang['acc_info1']       = "Bankkonto";
+$lang['acc_info2']       = "Bankkonto";
+$lang['acc_nr']          = "Kontonummer";
+$lang['AdrCustumerID']   = "Kundnummer";
+$lang['ChangeLocInfo']   = "Ändra %s adress för %s";
+$lang['DeleteLocInfo']   = "Ta bort %s adress för %s";
+$lang['AdrLinks']        = "Länkar";
+$lang['AdrCategory']     = "Kategori";
+$lang['AdrDescription']  = "Adress";
+$lang['ShowCal']         = "Visa kalender för %s";
+$lang['SearchForAdr']    = "Sök i adressboken";
+$lang['SearchForAdrExt'] = "Utökad sökning av adressboken";
+$lang['SearchForCmp']    = "Sök efter företag";
+
+# Main Menu
+$lang['Calendar']        = "Kalender";
+$lang['Addresses']       = "Adresser";
+$lang['ProductMenu']     = "Produkter & Projekt";
+$lang['Logout']          = "Logga ut";
+$lang['CalendarInfo']    = "Dagens kalender";
+$lang['AddressesInfo']   = "Sök adresser";
+$lang['ProductInfo']     = "Produkter & Projekt";
+$lang['LogoutInfo']      = "Logga ut från TUTOS";
+
+# Help
+$lang['Help']            = "Hjälp";
+$lang['HelpInfo']        = "Hjälp för denna sida";
+
+# Resource
+$lang['ResCal']          = "Resursnyttjande";
+$lang['ResCalDetail']    = "Resursnyttjande för %s i %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certifikat";
+
+# MAP
+$lang['MapSearch']       = "Kartval";
+$lang['MapHeader']       = "Hämta karta från %s";
+
+# History
+$lang['HistoryDetail']   = "%s Historik";
+$lang['HistoryShow']     = "Historik för %s %s";
+$lang['HistoryFld']      = "Fält";
+$lang['HistoryOldV']     = "Gammalt värde";
+$lang['HistoryNewV']     = "Nytt värde";
+$lang['HistoryLink']     = "Visa historik";
+$lang['HistoryLinkI']    = "Visa historik för %s";
+$lang['HistoryDeleted']  = "Tillsvidare borttagen";
+
+# Timetrack
+$lang['Timetrack']         = "Insats";
+$lang['Timetracks']        = "Insats";
+$lang['TimetrackCreate']   = "Tidrapport";
+$lang['TimetrackCreateI']  = "Tidrapport den %s";
+$lang['TimetrackDelI']     = "ta bort denna tid bokad den %s";
+$lang['TimetrackNew']      = "Ny tidrapport";
+$lang['TimetrackModify']   = "Ändra tidrapport";
+$lang['TimetrackOverview'] = "Överblick tidrapport";
+$lang['TimetrackWorker']   = "Person";
+$lang['TimetrackRef']      = "Referens";
+$lang['TimetrackDate']     = "Datum";
+$lang['TimetrackSearch']   = "Sök tidrapport";
+$lang['SearchForTT']       = "Sök tidsrapport";
+$lang['SearchForTTExt']    = "Utökad sökning på tidrapporter";
+$lang['TimetrackBetween']  = "mellan";
+$lang['TimetrackBooked']   = "Bokad tid";
+$lang['TimetrackBookedI']  = "bokad tid för %s";
+$lang['TTStatsTitle']      = "Statistik tidrapport";
+$lang['TTcph']             = "Timkostnad";
+$lang['TTState']           = "Status";
+$lang['TTStates'][-1]      = "Ingen status";
+$lang['TTStates'][1]       = "Kontrollerad";
+$lang['TTStates'][2]       = "Fakturerad";
+$lang['TTStates'][3]       = "Betald";
+$lang['TTStates'][4]       = "Ej debiterbar";
+$lang['TTRecord']          = "Tidrapportering";
+$lang['TTfinish']          = "Avsluta";
+
+# Fax
+$lang['FaxCreate']         = "Nytt fax";
+$lang['FaxSendTo']         = "Skicka fax till %s";
+$lang['FaxTo']             = "Till:";
+$lang['FaxNr']             = "Faxnummer:";
+$lang['FaxNote']           = "Spara fax som notering för %s";
+$lang['FaxSpooledTo']      = "Faxen skickades till %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Skicka ett SMS till %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Kom ihåg: Mötet %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Administration";
+$lang['AdminDBInfo']       = "Information";
+$lang['AdminDBTable']      = "Tabell";
+$lang['AdminDBCount']      = "Poster";
+$lang['AdminDBName']       = "Namn";
+$lang['AdminDBAlias']      = "Alias";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "Användare";
+$lang['AdminDBPass']       = "Lösenord";
+$lang['AdminDBHost']       = "Värddator";
+$lang['AdminDBPort']       = "Port";
+$lang['AdminDBType']       = "Typ";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Senast Inloggade";
+$lang['AdminDBSync']       = "Synkroisera databas";
+$lang['AdminDBSource']     = "Käll DB";
+$lang['AdminDBWhat']       = "Vad/Hur";
+$lang['AdminDBTarget']     = "Mål";
+$lang['AdminDBRep']        = "Fillagringsplats";
+$lang['AdminModOverview']  = "TUTOS Modules";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Databas";
+$lang['DBInit']            = "Initialisering databas";
+$lang['DBModify']          = "Ändra databas";
+$lang['DBModifyI']         = "Ändra DB %s";
+$lang['DBCreate']          = "Skapa databas";
+$lang['DBDetail']          = "Databasdetaljer";
+$lang['DBLastDate']        = "Senaste Synkdatum";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "Senaste Synk-ID";
+$lang['DBLastAnalyze']     = "Senaste Analys";
+$lang['DBrelogin']         = "Använd databas";
+$lang['DBreloginI']        = "Logga in igen på %s";
+$lang['DBOverview']        = "Överblick databas";
+$lang['DBUpdate']          = "Uppdatera databas";
+$lang['DBUpdateI']         = "Uppdatera databasen %s";
+$lang['AdminDBSyncM'][1]   = "Ta bort existerande mål. Kopiera allt från källa till mål";
+$lang['AdminDBSyncM'][2]   = "Kopiera nytt (sedan senaste synk) från mål till källa, därefter kopiera allt";
+$lang['DBSystemID']        = "System-ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL för LOGO";
+$lang['CfgLogoLink']       = "URL-länk från LOGO";
+$lang['CfgBugAutoName']    = "Format för bugs";
+$lang['CfgInvAutoName']    = "Format för fakturor";
+$lang['CfgVATlist']        = "MOMS-nivåer";
+$lang['CfgVersion']        = "TUTOS Version";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Försäljningsprognos";
+$lang['UndefinedEndDate']   = "Ökänt slutdatum";
+$lang['SalesBalanced']      = "Balanserad försäljning";
+$lang['AccumulatedRevenue'] = "Ackumulerade intäkter";
+$lang['PeriodRevenue']      = "Periodintäkter";
+$lang['Period']             = "Period";
+$lang['Est_revenue']        = "Uppskattad intäkt";
+$lang['Graph']              = "Diagram";
+$lang['GraphInfo']          = "Visa i diagram";
+
+# Permissions
+$lang['perm'][usecalendar]       = "använd kalender";
+$lang['perm'][usetaskmanagement] = "använd uppgifter";
+$lang['perm'][usemaplink]        = "använd kartlänk";
+$lang['perm'][useprojects]       = "använd projekt";
+$lang['perm'][usetimetrack]      = "använd tidrapporter";
+$lang['perm'][usefax]            = "använd fax";
+$lang['perm'][usesms]            = "använd sms";
+$lang['perm'][useoverlib]        = "använd popupfönster";
+$lang['perm'][useaddressbook]    = "använd addressbok";
+$lang['perm'][usemail]           = "använd e-post";
+$lang['perm'][usehistory]        = "visa historik";                                                                              
+$lang['perm'][useteams]          = "använd team";
+$lang['FeatureOff']              = "Funktion globalt avstängd";
+
+# Error Messages
+$lang['Err0001']         = "Du har inte rättighet att använda %s: %s";
+$lang['Err0002']         = "Starta efter avslut!";
+$lang['Err0006']         = "Vänligen gör ett detaljerat val";
+$lang['Err0009']         = "Vänligen fyll i <I>%s</I> fältet";
+$lang['Err0012']         = "Okänt företag <I>%s</I> !";
+$lang['Err0014']         = "Vänligen välj i <I>%s</I> fältet";
+$lang['Err0017']         = "Vänligen mata in ett nummer i <I>%s</I> fältet !";
+$lang['Err0018']         = "Namn <I>%s</I> är tillåtet för %d inlägg";
+$lang['Err0020']         = "Du har inte rättighet att ta bort filen!";
+$lang['Err0021']         = "Du kan inte ändra den virtuella gruppen 0";
+$lang['Err0022']         = "Tyvärr, på grund av rättigheter, är du inte tillåten att se denna %s";
+$lang['Err0023']         = "Tyvärr, på grund av rättigheter, är du inte tillåten att ta bort denna %s";
+$lang['Err0024']         = "Tyvärr, på grund av rättigheter, är du inte tillåten att ändra denna %s";
+$lang['Err0025']         = "Saknar Användarnamn eller Lösenord";
+$lang['Err0026']         = "Inloggning ej möjlig";
+$lang['Err0027']         = "Misslyckad inloggning";
+$lang['Err0028']         = "Kontot är raderat";
+$lang['Err0029']         = "Saknar avsändarens E-postadress";
+$lang['Err0030']         = "Fax inte skickad";
+$lang['Err0031']         = "Saknar faxnummer!";
+$lang['Err0032']         = "Fax avaktiverad!";
+$lang['Err0033']         = "E-post är avaktiverad! E-brevet \"%s\" skickades <U>inte</U>.";
+$lang['Err0034']         = "E-post ej skickat! saknar avsändare \"%s\" E-brev.";
+$lang['Err0035']         = "e-post ej skickat! inga mottagare eller redan skickat.";
+$lang['Err0036']         = "Produkt/Projekt existerar redan (%s) med givet namn och version !";
+$lang['Err0037']         = "E-brev %s ej skickat! Saknar E-brev prototypfil (%s) !";
+$lang['Err0038']         = "Felaktigt datum i fält %s!";
+$lang['Err0039']         = "Adressinmatning existerar redan (%s)!";
+$lang['Err0040']         = "%s ej funnet!";
+$lang['Err0041']         = "Lösenord är ej identiska!";
+$lang['Err0042']         = "Gammalt Lösenord är felaktigt!";
+$lang['Err0043']         = "E-post %s är ej i godkänt (xxx@abc.com) format !";
+$lang['Err0044']         = "Företag finns redan här (%s) !";
+$lang['Err0045']         = "Avdelning finns redan (%s) !";
+$lang['Err0046']         = "Grupp finns redan (%s) !";
+$lang['Err0047']         = "Kunde inte ta bort administratörs rättigheter. Det måste finnas minst en administratör !";
+$lang['Err0048']         = "Fann inget !";
+$lang['Err0049']         = "Kontot %s är avstängt!";
+$lang['Err0050']         = "Kan ej hitta CSV-innehåll!";
+$lang['Err0051']         = "Kan ej hitta CSV-separator";
+$lang['Err0052']         = "Du måste ange en klassifiering!";
+$lang['Err0053']         = "Du kan inte radera ditt eget konto";
+$lang['Err0054']         = "Tyvärr får du inte skapa en/ett %s";
+
+?>

@@ -1,0 +1,60 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_ko.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *  Updated by : Kim,Myun soo jamaica@nurapt.kaist.ac.kr
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+     $tutos[cal][] = array(
+
+	/*4대국경일*/
+	/*Four important day of remeberance*/
+        array( Date => "01-03",          type => 1,    Desc => "삼일절"),
+	// the day when the movement of restoring independance to korea started
+        array( Date => "17-07",          type => 1,    Desc => "제헌절"),
+	// the day when constitutional law created 
+        array( Date => "15-08",          type => 1,    Desc => "광복절"),
+	// the day when korea regained its independance
+        array( Date => "03-10",          type => 1,    Desc => "개천절"),
+	// the Foundation day of Korea
+
+	/*법정공휴일*/
+	/*holidays by law*/
+        array( Date => "01-01",          type => 1,    Desc => "신정"),
+	// Western New Years Day
+        array( Date => "05-04",          type => 1,    Desc => "식목일"),
+	// the day for planting Trees
+        array( Date => "05-19",          type => 1,    Desc => "석탄일"),
+	// buddha's birthday
+	/*음력이다!*/
+	/*above entry is calculated by lunar calendar! every year it
+          changes in julian calendar. for 2002, its 05-19*/
+	/*this is continuous problem for all far east countries.
+          there are luna calendar in php,
+	  may have to try adding it */
+        array( Date => "05-05",          type => 1,    Desc => "어린이날"),
+	// children's day
+        array( Date => "06-06",          type => 1,    Desc => "현충일"),
+	// memorial day
+        array( Date => "25-12",          type => 1,    Desc => "성탄절"),
+	// christmas
+
+	/*명절*/
+	/*festival day*/
+	/*all festival days are in lunar calendar!*/
+        array( Date => "11-02",          type => 1,    Desc => "설날"),
+        array( Date => "12-02",          type => 1,    Desc => "설날"),
+        array( Date => "13-02",          type => 1,    Desc => "설날"),
+	// seol, new year festival
+        array( Date => "20-09",          type => 1,    Desc => "추석"),
+        array( Date => "21-09",          type => 1,    Desc => "추석"),
+        array( Date => "22-09",          type => 1,    Desc => "추석"),
+	// chusuk, thanks giving festival
+
+        );
+?>

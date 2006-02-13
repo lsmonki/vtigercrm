@@ -1,0 +1,121 @@
+<?php
+/*
+ * Copyright 1999 - 2003 by Gero Kohnert
+ *
+ * List of base modules for TUTOS
+ * (additional modules will be announced in config.[pinc|php]
+ *
+ *  CVS Info:  $Id: modules.pinc,v 1.16 2005/05/03 13:18:43 saraj Exp $
+ *  $Author: saraj $
+ */
+
+#
+# Modules for TUTOS could be found here:
+#
+# http://sourceforge.net/project/showfiles.php?group_id=8047
+
+#
+# The document management module
+# allows you to attach documents to objects
+# Author: Gero Kohnert
+#
+@include_once("file/mconfig.pinc");
+#
+# The bugtracking module
+# Author: Gero Kohnert
+#
+@include_once("bugtracking/mconfig.pinc");
+#
+# The installations module
+# allows you to define installations of a product/project
+# Author: Gero Kohnert
+#
+@include_once("installation/mconfig.pinc");
+#
+# The group module
+# allows you to define groups where you can add addresses/companies and departments
+# classical CRM support
+# Author: Gero Kohnert
+#
+@include_once("group/mconfig.pinc");
+#
+# The invoice module
+# Author: Gero Kohnert
+#
+@include_once("invoice/mconfig.pinc");
+#
+# The notes module
+# allows you to define attach notes to nbearly everything
+# Author: Gero Kohnert
+#
+@include_once("note/mconfig.pinc");
+#
+# The rates module
+# allows you to define attach rates (default cph) to nearly everything
+# Author: Gero Kohnert & Andreas Metz
+#
+@include_once("rate/mconfig.pinc");
+#
+# The reminder module
+# allows you to define reminders for all types of objects
+# Author: Gero Kohnert
+#
+@include_once("reminder/mconfig.pinc");
+#
+# The resource module
+# allows you to define resources and use thiese resources
+# Author: Gero Kohnert
+#
+@include_once("resource/mconfig.pinc");
+#
+# The mailbox module
+# allows you to use imap/pop mailboxes
+# Author: Gero Kohnert
+#
+@include_once("mailbox/mconfig.pinc");
+#
+# The watchlist module
+# allows you to add objects to a watchlist
+# if that object is modified a email is sent out
+# Author: Gero Kohnert
+#
+@include_once("watchlist/mconfig.pinc");
+#
+# The url module
+# allows you to add links to objects
+# Author: Gero Kohnert
+#
+@include_once("url/mconfig.pinc");
+#
+# The merge module (98)
+# Author: Gero Kohnert & Jeroen Baten
+#
+#@include("merge/mconfig.pinc");
+#
+# The newsticker module (97)
+# allows you to see newsticker items from various sources
+# Author:  Boris Wesslowski
+# Modul by Gero Kohnert
+#
+#@include("ticker/mconfig.pinc");
+#
+# The checklist module
+# allows you to create and edit checklists for some purpose
+# Modul by Markus Leist
+#
+#@include("checklist/mconfig.pinc");
+#
+# The palm export module
+# allows you to export TUTOS data to palms
+# Modul by Gero Kohnert
+#
+#@include("palm/mconfig.pinc");
+#
+# The ldap support
+# requires LDAP extension of php
+# Modul by Gero Kohnert
+#
+#@include("ldap/mconfig.pinc");
+#
+#
+?>

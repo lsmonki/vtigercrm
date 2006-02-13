@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: en.js
  * 	English language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 16:50:48
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -41,8 +44,6 @@ RemoveLink			: "Remove Link",
 Anchor				: "Insert/Edit Anchor",
 InsertImageLbl		: "Image",
 InsertImage			: "Insert/Edit Image",
-InsertFlashLbl		: "Flash",
-InsertFlash			: "Insert/Edit Flash",
 InsertTableLbl		: "Table",
 InsertTable			: "Insert/Edit Table",
 InsertLineLbl		: "Line",
@@ -107,7 +108,6 @@ SplitCell			: "Split Cell",
 CellProperties		: "Cell Properties",
 TableProperties		: "Table Properties",
 ImageProperties		: "Image Properties",
-FlashProperties		: "Flash Properties",
 
 AnchorProp			: "Anchor Properties",
 ButtonProp			: "Button Properties",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Selection Field Properties",
 TextareaProp		: "Textarea Properties",
 FormProp			: "Form Properties",
 
-FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",
+FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Processing XHTML. Please wait...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Close",
 DlgBtnBrowseServer	: "Browse Server",
 DlgAdvancedTag		: "Advanced",
 DlgOpOther			: "&lt;Other&gt;",
-DlgInfoTab			: "Info",
-DlgAlertUrl			: "Please insert the URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;not set&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Text Top",
 DlgImgAlignTop		: "Top",
 DlgImgPreview		: "Preview",
 DlgImgAlertUrl		: "Please type the image URL",
-DlgImgLinkTab		: "Link",
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",
-DlgFlashChkPlay		: "Auto Play",
-DlgFlashChkLoop		: "Loop",
-DlgFlashChkMenu		: "Enable Flash Menu",
-DlgFlashScale		: "Scale",
-DlgFlashScaleAll	: "Show all",
-DlgFlashScaleNoBorder	: "No Border",
-DlgFlashScaleFit	: "Exact Fit",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Link",
@@ -318,18 +305,14 @@ DlgReplaceReplAllBtn	: "Replace All",
 DlgReplaceWordChk		: "Match whole word",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "Your browser security settings don't permit the editor to automatically execute pasting operations. Please use the keyboard for that (Ctrl+V).",
-PasteErrorCut	: "Your browser security settings don't permit the editor to automatically execute cutting operations. Please use the keyboard for that (Ctrl+X).",
-PasteErrorCopy	: "Your browser security settings don't permit the editor to automatically execute copying operations. Please use the keyboard for that (Ctrl+C).",
+PasteErrorPaste	: "Your browser security settings don't permit the editor to automaticaly execute pasting operations. Please use the keyboard for that (Ctrl+V).",
+PasteErrorCut	: "Your browser security settings don't permit the editor to automaticaly execute cutting operations. Please use the keyboard for that (Ctrl+X).",
+PasteErrorCopy	: "Your browser security settings don't permit the editor to automaticaly execute copying operations. Please use the keyboard for that (Ctrl+C).",
 
 PasteAsText		: "Paste as Plain Text",
 PasteFromWord	: "Paste from Word",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",
-DlgPasteRemoveStyles	: "Remove Styles definitions",
-DlgPasteCleanBox		: "Clean Up Box",
-
+DlgPasteMsg		: "The editor was not able to automaticaly execute pasting because of the <STRONG>security settings</STRONG> of your browser.<BR>Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automatic",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Document Description",
 DlgDocMeAuthor		: "Author",
 DlgDocMeCopy		: "Copyright",
 DlgDocPreview		: "Preview",
-
-// Templates Dialog
-Templates			: "Templates",
-DlgTemplatesTitle	: "Content Templates",
-DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",
-DlgTemplatesLoading	: "Loading templates list. Please wait...",
-DlgTemplatesNoTpl	: "(No templates defined)",
 
 // About Dialog
 DlgAboutAboutTab	: "About",

@@ -20,20 +20,6 @@ require_once('include/utils.php');
 //$uploaddir = $root_directory .$vtigerpath ."/test/upload/" ;// set this to wherever
 #Comment ends
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
-
-// Arbitrary File Upload Vulnerability fix - Philip
-$binFile = $_FILES['binFile']['name'];
-    $ext_pos = strrpos($binFile, ".");
-
-        $ext = substr($binFile, $ext_pos + 1);
-
-        if (in_array($ext, $upload_badext))
-        {
-                $binFile .= ".txt";
-        }
-$_FILES["binFile"]["name"] = $binFile;
-// Vulnerability fix ends
-
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
@@ -43,65 +29,59 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
     $filesize = $_FILES['binFile']['size'];
     if($filesize != 0)	
     {
-         $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-         //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-         $textDesc = $_REQUEST['txtDescription'];	
-         $strDescription = addslashes($textDesc);
-     //    $fileid = create_guid();
-         $date_entered = date('YmdHis');
-         //Retreiving the return module and setting the parent type
-         $ret_module = $_REQUEST['return_module'];
-         $parent_type;		
-         if($_REQUEST['return_module'] == 'Leads')
-         {
-     	    $parent_type = 'Lead';
-         }
-         elseif($_REQUEST['return_module'] == 'Accounts')
-         {
-     	    $parent_type = 'Account';
-         }
-         elseif($_REQUEST['return_module'] == 'Contacts')
-         {
-     	    $parent_type = 'Contact';
-         }
-         elseif($_REQUEST['return_module'] == 'Potentials')
-         {
-     	    $parent_type = 'Potential';
-         }
-     	 
-        //$parent_id = $_REQUEST['return_id'];	 			
-         $genQueryId = $adb->getUniqueID("wordtemplates");
-         if($genQueryId != '')
-         {
-              $module = $_REQUEST['target_module'];
-              $sql = "INSERT INTO wordtemplates ";
-              $sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
-              $sql .= "VALUES(".$genQueryId.",'$module',".$adb->formatString('wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
-              $sql .= "'$filename', '$filesize', '$filetype')";
-              //echo $sql;
-              //die;
-              $result = $adb->query($sql);
-              if($result!=false)	    
-              {
-                    $result = $adb->updateBlob('wordtemplates','data'," filename='".$filename."'",$data);
-                    
-                    //mysql_close();
-                    deleteFile($uploaddir,$filename);
-                    header("Location: index.php?action=listwordtemplates&module=Users");	
-              }
-              else
-              {
-                    include('themes/'.$theme.'/header.php');
-                    $errormessage = "<font color='red'><B>Error Message<ul>
-                    <li><font color='red'>Invalid file OR</font>
-                    <li><font color='red'>File has no data</font>
-                    </ul></B></font> <br>" ;
-                    echo $errormessage;
-                    deleteFile($uploaddir,$filename);
-                    include "upload.php";
-              }			
-        }
-   }
+    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+    //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+   $textDesc = $_REQUEST['txtDescription'];	
+    $strDescription = addslashes($textDesc);
+//    $fileid = create_guid();
+    $date_entered = date('YmdHis');
+    //Retreiving the return module and setting the parent type
+    $ret_module = $_REQUEST['return_module'];
+    $parent_type;		
+    if($_REQUEST['return_module'] == 'Leads')
+    {
+	    $parent_type = 'Lead';
+    }
+    elseif($_REQUEST['return_module'] == 'Accounts')
+    {
+	    $parent_type = 'Account';
+    }
+    elseif($_REQUEST['return_module'] == 'Contacts')
+    {
+	    $parent_type = 'Contact';
+    }
+    elseif($_REQUEST['return_module'] == 'Potentials')
+    {
+	    $parent_type = 'Potential';
+    }
+	 
+   //$parent_id = $_REQUEST['return_id'];	 			
+	$module = $_REQUEST['target_module'];
+    $sql = "INSERT INTO wordtemplates ";
+    $sql .= "(module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
+    $sql .= "VALUES ('$module',".$adb->formatString('wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
+    $sql .= "'$filename', '$filesize', '$filetype')";
+    //echo $sql;
+    $result = $adb->query($sql);
+    if($result!=false)	    
+	   $result = $adb->updateBlob('wordtemplates','data'," filename='".$filename."'",$data);
+
+       //mysql_close();
+       deleteFile($uploaddir,$filename);
+       header("Location: index.php?action=listwordtemplates&module=Users");	
+      }
+    else
+      {
+    include('themes/'.$theme.'/header.php');
+   $errormessage = "<font color='red'><B>Error Message<ul>
+			<li><font color='red'>Invalid file OR</font>
+			<li><font color='red'>File has no data</font>
+			</ul></B></font> <br>" ;
+   echo $errormessage;
+       deleteFile($uploaddir,$filename);
+   include "upload.php";
+     }			
+   
 } 
 else 
 {

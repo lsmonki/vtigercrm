@@ -1,0 +1,216 @@
+<!--*********************************************************************************
+
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+
+ * ("License"); You may not use this file except in compliance with the License
+
+ * The Original Code is:  vtiger CRM Open Source
+
+ * The Initial Developer of the Original Code is vtiger.
+
+ * Portions created by vtiger are Copyright (C) vtiger.
+
+ * All Rights Reserved.
+
+*
+
+ ********************************************************************************/
+
+-->
+
+<!-- BEGIN: main -->
+
+{AA}
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="formOuterBorder">
+
+<tr><td>
+
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+	<tbody><tr>
+
+<form>
+
+	<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="productname"  value="{PRODUCT_NAME}" />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_CODE}&nbsp;</td>
+
+		<td><input type=text size="10" name="productcode"  value='{PRODUCT_CODE}' />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_UNIT_PRICE}&nbsp;</td>
+
+		<td><input type=text size="10" name="unitprice"  value='{UNITPRICE}'/>
+
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
+
+			<input type="hidden" name="query" value="true"/>
+
+			<input type="hidden" name="module" value="Products" />
+
+                	<input type="hidden" name="order_by" value="{ORDER_BY}" />
+
+	                <input type="hidden" name="sorder" value="{SORDER}" />
+
+			<input type="hidden" name="viewname" value="{VIEWID}" />
+
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+		<br>
+
+       <font size='1'>[<a href='{ADVANCE_LINK}'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
+
+		</td>
+
+	</tr><tr>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_MANUFACTURER}&nbsp;</td>
+
+                <td><select name='manufacturer' tabindex='1'>{MANUFACTURER}</select></td>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCTCATEGORY}&nbsp;</td>
+
+                <td><select name='productcategory' tabindex='1'>{PRODUCTCATEGORY}</select></td>
+
+	</tr>
+
+</form>
+
+	</table>
+
+</td></tr>
+
+</table>
+
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+
+{ALPHABETICAL}
+
+</tr></table>
+
+{JAVASCRIPT}
+
+<!-- END: main -->
+
+
+
+<!-- BEGIN: advanced -->
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="formOuterBorder">
+
+<tr><td>
+
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+	<tbody><tr>
+
+<form>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="productname"  value="{PRODUCT_NAME}" />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_CODE}&nbsp;</td>
+
+		<td><input type=text size="10" name="productcode"  value='{PRODUCT_CODE}' />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_COMMISSION_RATE}&nbsp;</td>
+
+		<td><input type=text size="10" name="commissionrate"  value='{COMMISSION_RATE}' />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_QTY_PER_UNIT}&nbsp;</td>
+
+		<td><input type=text size="10" name="qtyperunit"  value='{QTYPERUNIT}'/>
+
+
+
+<td align="center" nowrap><input type="hidden" name="action" value="index"/>
+
+		<input type="hidden" name="query" value="true"/>
+
+		<input type="hidden" name="advanced" value="true"/>
+
+		<input type="hidden" name="module" value="Products" />
+
+                <input type="hidden" name="order_by" value="{ORDER_BY}" />
+
+                <input type="hidden" name="sorder" value="{SORDER}" />
+		
+		<input type="hidden" name="viewname" value="{VIEWID}" />
+
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+<br>
+
+       <font size='1'>[<a href='{BASIC_LINK}'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+
+		</td>
+
+
+
+	</tr><tr>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_UNIT_PRICE}&nbsp;</td>
+
+		<td><input type=text size="10" name="unitprice"  value='{UNITPRICE}'/>
+
+	
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_MANUFACTURER}&nbsp;</td>
+
+                <td width="30%"><select name='manufacturer' tabindex='1'>{MANUFACTURER}</select></td>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCTCATEGORY}&nbsp;</td>
+
+                <td width="30%"><select name='productcategory' tabindex='1'>{PRODUCTCATEGORY}</select></td>
+
+	</tr>
+
+<tr>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_SUPPORT_START_DATE}</td>
+
+        <td width="30%"><input name='start_date' type="text" tabindex='2' size='10' maxlength='10' value='{SUPPORT_START_DATE}'>&nbsp;<font size=1><em old="{APP.NTC_DATE_FORMAT}">{DATE_FORMAT}</em></font></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_SUPPORT_EXPIRY_DATE}</td>
+
+        <td width="30%"><input name='expiry_date' type="text" tabindex='2' size='10' maxlength='10' value='{SUPPORT_EXPIRY_DATE}'>&nbsp;<font size=1><em old="{APP.NTC_DATE_FORMAT}">{DATE_FORMAT}</em></font></td>
+
+	<td width="20%" class="dataLabel">{MOD.LBL_PURCHASE_DATE}</td>
+
+        <td width="30%"><input name='purchase_date' type="text" tabindex='2' size='10' maxlength='10' value='{PURCHASE_DATE}'>&nbsp;<font size=1><em old="{APP.NTC_DATE_FORMAT}">{DATE_FORMAT}</em></font></td>
+
+</tr>
+
+
+
+	</tr><tr>
+
+	</tr>
+
+</td></tr></table>
+
+<table><tr><td width="20%">{CUSTOMFIELD}</td></tr></table>
+
+</table>
+
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+
+{ALPHABETICAL}
+
+</tr></table>
+
+</form>
+
+
+
+{JAVASCRIPT}
+
+<!-- END: advanced -->
+

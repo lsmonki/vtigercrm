@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -12,6 +12,9 @@
  * 	This is the second part of the "FCK" object creation. This is the main
  * 	object that represents an editor instance.
  * 	(IE specific implementations)
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-01-11 15:45:01
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -48,7 +51,7 @@ FCK.Paste = function()
 		FCK.PasteAsPlainText() ;	
 		return false ;
 	}
-	else if ( FCKConfig.AutoDetectPasteFromWord )
+	else if ( FCKConfig.AutoDetectPasteFromWord && FCKBrowserInfo.IsIE55OrMore )
 	{
 		var sHTML = FCK.GetClipboardHTML() ;
 		var re = /<\w[^>]* class="?MsoNormal"?/gi ;
@@ -56,7 +59,7 @@ FCK.Paste = function()
 		{
 			if ( confirm( FCKLang["PasteWordConfirm"] ) )
 			{
-				FCK.PasteFromWord() ;
+				FCK.CleanAndPaste( sHTML ) ;
 				return false ;
 			}
 		}
@@ -76,12 +79,12 @@ FCK.PasteAsPlainText = function()
 	// Insert the resulting data in the editor.
 	this.InsertHtml( sText ) ;	
 }
-/*
+
 FCK.PasteFromWord = function()
 {
 	FCK.CleanAndPaste( FCK.GetClipboardHTML() ) ;
 }
-*/
+
 FCK.InsertElement = function( element )
 {
 	FCK.InsertHtml( element.outerHTML ) ;
@@ -153,3 +156,4 @@ FCK.CreateLink = function( url )
 		}
 	}
 }
+

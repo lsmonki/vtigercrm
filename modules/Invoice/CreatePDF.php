@@ -208,6 +208,7 @@ if($num_rows == 1)
 //Getting the logo
 
 
+
 //getting the Product Data
 $query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$id;
 
@@ -414,8 +415,11 @@ function setTotal($price_total="",$conditions="")
 	$this->Cell(0,8,$conditions,0,0,'L',0);
 }
 }
+//$bdata = array("aaaaaaaaa","48/1,Katcherry Street","Rasipuram","Namakkal (D.T)");
+//$sdata = array("bbbbbb","48/9","","mmmm","Don City");
 $iHead = array("Company","Invoice No.","Date","Sales Order No.");
 $iCustHeadDtls = array("Customer Name","Purchase Order","Due Date");
+//$iCustData = array("Nortel Networks","usc-107565","26-05-2005");
 $iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
 
 $pdf = new PDF('P','mm','A4');
@@ -428,6 +432,5 @@ $pdf->setAddress($bdata,$sdata);
 $pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
 $pdf->setProductDetails($iHeadDtls,$iDataDtls);
 $pdf->setTotal($price_total,$conditions);
-$pdf->Output('Invoice.pdf','D');
-exit;
+$pdf->Output();
 ?>

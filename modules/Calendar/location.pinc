@@ -1,0 +1,608 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: location.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+include_once 'company.pinc';
+include_once 'department.pinc';
+
+/* ---------------------------------------------------------------------------
+ * Read all locations references of an object
+ */
+function read_locs (&$obj) {
+  global $table;
+
+  if (empty($obj->id))  return;
+  if ( $obj == -1 ) return; 
+  if (! is_object($obj) ) return;
+  if (-1 == $obj->id)   return;
+  if ( $obj->rl1 == true ) return;
+  
+
+  if ( isset($obj->loc) && (count($obj->loc) > 0) ) {
+    return;
+  }
+
+  $obj->loc = array();
+
+  $q = "SELECT * FROM ". $obj->dbconn->prefix .$table['address1'][name]." WHERE adr_id = ". $obj->id;
+  $r = $obj->dbconn->Exec($q);
+
+  $n = $r->numrows();
+  $a = 0;
+  while ( $a < $n ) {
+    $l_id   = $r->get($a, "loc_id");
+    $obj->loc[$l_id]  = $r->get($a, "name");
+
+    $a++;
+  }
+
+  $r->free();
+  $obj->rl1 = true;
+
+  return;
+}
+
+/**
+ * Read all locations data
+ */
+function read_locs_data (&$obj) {
+  if (empty($obj->id))  return;
+  if ( $obj == -1 ) return; 
+  if (! is_object($obj) ) return;
+  if (-1 == $obj->id)   return;
+
+  if ( $obj->rl2 == true ) {
+    return;
+  };
+  if ( $obj->rl1 == false ) {
+    read_locs($obj);
+  };
+
+  if ( isset($obj->location) && (count($obj->location) > 0) ) {
+    return;
+  }
+
+
+  $obj->location = array();
+  $obj->locall   = array();
+
+  $x = $obj->loc;
+  if ( isset($x) && (count($x) > 0) ) {
+    foreach($x as $i => $f) {
+      $l = new location($obj->dbconn);
+      $l = $l->read($i,$l);
+      $l->lname = $f;
+      $l->adr_id = $obj->id;
+      $l->ref = &$obj;
+      if ( count($l->acl) < 1 ) {
+        $l->acl = $obj->acl;
+      }
+      if ( $l->see_ok() ) {
+        $obj->location[$i] = &$l;
+      } else {
+        unset($obj->loc[$i]);
+      }
+      # we need the hidden locations for watchlist-emails
+      $obj->locall[$i] = &$l;
+      unset($l);
+    }
+  }
+  $obj->rl2 = true;
+  return;
+}
+
+/**
+ * a location part of an address
+ *
+ * @package address
+ * @module location
+ */
+class location extends tutos_base {
+
+  /* ---------------------------------------------------------------------------
+   */
+  function location(&$dbconn) {
+    global $table;
+
+    $this->init($dbconn);
+
+    $this->larray = array();
+    $this->larray[] = "desc1";
+    $this->larray[] = "city";
+    $this->larray[] = "zip";
+    $this->larray[] = "state";
+    $this->larray[] = "country";
+    $this->larray[] = "street1";
+    $this->larray[] = "street2";
+    $this->larray[] = "email_1";
+    $this->larray[] = "email_2";
+    $this->larray[] = "phone_1";
+    $this->larray[] = "phone_2";
+    $this->larray[] = "fax_1";
+    $this->larray[] = "acc_info1";
+    $this->larray[] = "acc_info2";
+    $this->larray[] = "acc_nr";
+    $this->larray[] = "customer_id";
+    $this->department = new department($dbconn);
+    $this->company    = new company($dbconn);
+    $this->desc1   = "";
+    $this->city    = "";
+    $this->zip     = "";
+    $this->state   = "";
+    $this->country = "";
+    $this->street1 = "";
+    $this->street2 = "";
+    $this->email_1 = "";
+    $this->email_2 = "";
+    $this->phone_1 = "";
+    $this->phone_2 = "";
+    $this->fax_1   = "";
+    $this->lname   = "";
+    $this->acc_info1   = "";
+    $this->acc_info2   = "";
+    $this->acc_nr      = "";
+    $this->customer_id = "";
+    $this->category = 2;
+    $this->adr_id = -1;
+    $this->ref = -1;
+
+    $this->tablename  = $this->dbconn->prefix .$table['location'][name];
+    $this->tablename2 = $this->dbconn->prefix .$table['address1'][name];
+  }
+  /**
+   * read the refernced object
+   */
+  function read_ref() {
+    if ($this->adr_id != -1) {
+      return;
+    }
+    if ($this->ref != -1) {
+      return;
+    }
+
+    $q = "select * from ". $this->tablename2 ." where loc_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    if ($r->numrows() == 1) {
+      $this->adr_id = $r->get(0, "adr_id");
+      $this->lname  = $r->get(0, "name");
+      $this->ref = getObject($this->dbconn,$this->adr_id);
+    }
+    $r->free();
+  }
+  /**
+   * Return a link to this address
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if (empty($this->id)) return;
+    if ( empty($text) ) {
+      $text = $this->getFullName();
+    }
+
+    $this->read_ref();
+    if ( $this->see_ok() && ($this->ref != -1)) {
+      return makelink($this->ref->getURL() , myentities($text) ,sprintf($lang['location'] ." %s",$this->getFullName()));
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * fill the object data with a given resultset
+   *
+   * @param Object $r    a result set object 
+   * @param int    $pos  a index in the resultset
+   */
+  function read_result(&$r,$pos) {
+    global $g_hash;
+
+    foreach($this->larray as $f) {
+      $this->$f = $r->get($pos, $f);
+      if (!isset($this->$f)) {
+        $this->$f = "";
+      }
+    }
+    $this->c_id          = $r->get($pos, "c_id");
+    $this->d_id          = $r->get($pos, "d_id");
+
+    if ( !empty($this->d_id) ) {
+      $this->department = $this->department->read($this->d_id,$this->department);
+      $this->company = &$this->department->company;
+    }
+    if ( !empty($this->c_id) && ($this->c_id != -1) ) {
+      $this->company = $this->company->read($this->c_id,$this->company);
+    }
+
+    $this->category    = $r->get($pos, "category");
+    $this->creator     = getObject($this->dbconn,$r->get($pos, "creator"));
+
+    parent::read_result($r,$pos);
+  }
+
+  /**
+   * set the category
+   */
+  function setCategory($value) {
+    $this->setStrField("category",$value,"AdrCategory");
+  }
+  /**
+   * set the lname
+   */
+  function setLname($value) {
+    $this->setStrField("lname",$value,"AdrDescription");
+  }
+  /**
+   * set a field
+   */
+  function setField($field,$value) {
+    $this->setStrField($field,$value,$field);
+  }
+  /**
+   * Return a URL to this location
+   */
+  function getURL() {
+    $this->read_ref();
+    if ( $this->ref != -1 ) {
+      return $this->ref->getUrl();
+    }
+    return "address_select.php";
+  }
+  /**
+   * Return the Long Name
+   */
+  function getFullname() {
+    global $lang;
+
+    $this->read_ref();
+    if ($this->ref != -1) {
+      return sprintf($this->ref->getFullName()." ".$lang['AdrLocTitle'],$this->lname);
+    } else {
+      return sprintf("??? ".$lang['AdrLocTitle'],$this->lname);
+    }
+  }
+  /**
+   * save to DB
+   */
+  function save () {
+    global $current_user, $tutos,$table;
+
+    $msg = "";
+
+    $q1 = new query($this->dbconn);
+    $q1->setTable($this->tablename);
+    $q2 = new query($this->dbconn);
+    $q2->setTable($this->tablename2);
+
+    $i=0;
+    while($i < count($this->larray)) {
+      $f = $this->larray[$i];
+      $q1->addFV($f,$this->$f,"STRING",$table['location'][$f][size]);
+      $i++;
+    }
+    if ( is_object($this->company) && ($this->company->id != -1) ) {
+      $q1->addFV("c_id",$this->company,"OBJ");
+    } else {
+      $q1->addFV("c_id","null","");
+    }
+    if ( is_object($this->department) ) {
+      $q1->addFV("d_id",$this->department,"OBJ");
+    } else {
+      $q1->addFV("d_id","null","");
+    }
+    $q1->addFV("category",$this->category,"");
+    $q2->addFV("category",$this->category,"");
+
+    $q2->addFV("name",$this->lname,"STRING",$table['address1']['name'][size]);
+    $q2->addFV("adr_id",$this->adr_id,"");
+
+	$this->save_custom_fields($q1);
+
+    if ( $this->id < 0 ) {
+      #
+      # INSERT
+      #
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+      } else {
+        /* Get an new ID */
+        $this->id = $q1->addFV("id",-1,"NEXTID");
+
+        # Defaut Access Control inheritet from parent
+        $this->acl = $this->ref->acl;
+        acl_default($this,$current_user);
+
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+        $this->modified[] = array ( "field" => "AdrLNew" ,
+                                    "old" => "-1",
+                                    "new" => $this->id,
+                                    "obj_id" => $this->adr_id
+                                  );
+      }
+      $q2->addFV("loc_id",$this->id,"");
+      $q1->addFV("creator",$this->creator,"OBJ");
+      $q1->addFV("creation",$this->creation,"DATETIME");
+      $query1 = $q1->getInsert();
+      $query2 = $q2->getInsert();
+    } else {
+      #
+      # UPDATE
+      #
+      $q1->addWC("id",$this->id,"");
+      $q2->addWC("loc_id",$this->id,"");
+      $query1 = $q1->getUpdate();
+      $query2 = $q2->getUpdate();
+    }
+    $this->dbconn->Exec($query1);
+    $this->dbconn->Exec($query2);
+
+    $msg .= parent::save();
+    return $msg;
+  }
+  /**
+   * Delete a location from the DB
+   */
+  function delete () {
+    $msg = "";
+
+    $this->dbconn->Lock($this->tablename);
+    $this->dbconn->Lock($this->tablename2);
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE loc_id = ". $this->id ;
+    $r = $this->dbconn->Exec($q);
+
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * parse XML import
+   */
+  function parseXML ($fld,$data,$attrs) {
+    parent::parseXML($fld,$data,$attrs);
+
+    if ($fld == "id") {
+      $this->read_ref();
+    } else if ($fld == "lname") {
+      $this->setLName($data);
+    } else if ($fld == "category") {
+      $this->setCategory($data);
+    } else if ($fld == "company_id") {
+      $this->company = $this->company->read($data,$this->company);
+    }
+    foreach($this->larray as $f) {
+      if ($fld == $f) {
+        $this->setField($f,$data);
+      }
+    }
+    return;
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body ($only_ids = false) {
+    $r = parent::exportXML_body();
+    if (!$only_ids) {
+    $r .=  "<lname>". utf8_encode(htmlspecialchars($this->lname)) ."</lname>\n";
+    $r .=  "<category>". $this->category ."</category>\n";
+    if ( is_object($this->company) && ($this->company->id != -1) ) {
+      $r .=  "<company_id>". $this->company->id ."</company_id>\n";
+      $r .=  "<company_name>".utf8_encode(htmlspecialchars($this->company->getFullName()))."</company_name>\n";
+    }
+    $i=0;
+    while($i < count($this->larray)) {
+      $f = $this->larray[$i];
+      $r .=  "<".$f.">". utf8_encode(htmlspecialchars($this->$f)) ."</".$f.">\n";
+      $i++;
+    }
+    }  
+    return $r;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "location";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return uselocation;
+  }
+
+  /**
+   * parse the input delivered by a form
+   */
+  function parseform() {
+    global $lang,$gotourl;
+
+    $this->used = false;
+    $msg = "";
+    if ( !isset($_POST['category']) || empty($_POST['category']) ) {
+      $msg .= sprintf($lang['Err0009'],$lang['AdrCategory']) ."<br>";
+    } else {
+      $this->setCategory($_POST['category']);
+      $gotourl= addUrlParameter($gotourl,"category=". $this->category,true);
+#      $this->used = true;
+    }
+
+    if ( !isset($_POST['lname']) ||  empty($_POST['lname']) ) {
+      $msg .= sprintf($lang['Err0009'],$lang['AdrDescription']) ."<br>";
+    } else {
+      $this->setLname(StripSlashes($_POST['lname']));
+      $gotourl= addUrlParameter($gotourl,"lname=". UrlEncode(StripSlashes($this->lname)),true);
+      if (!empty($this->lname)) {
+        $this->used = true;
+      }
+    }
+
+    # Check Company
+    if ( !isset($_POST['c_id']) ) {
+      if ($this->company->getFullName() == $_POST['company']) {
+        $gotourl= addUrlParameter($gotourl,"cl[]=". $this->company->id,true);
+      } else {
+        $this->company = check_field(StripSlashes($_POST['company']),"company","cl","c");
+      }  
+	  if (isset($_POST['company']) && !empty($_POST['company'])) {
+        $this->used = true;
+	  }
+    } else {
+      if ( $_POST['c_id'] != -1 ) {
+        $this->company = $this->company->read($_POST['c_id'],$this->company);
+        $gotourl= addUrlParameter($gotourl,"cl[]=". $this->company->id,true);
+        $this->used = true;
+      }
+    }
+
+    # Check Department
+    if ( !isset($_POST['d_id']) ) {
+      $dep_tmp=StripSlashes($_POST['department']);
+      if ( strlen($dep_tmp) && strstr($dep_tmp," / ") == FALSE ) {
+        $dep_tmp=$dep_tmp." / ".StripSlashes($_POST['company']);
+      }
+      $this->department = check_field($dep_tmp,"department","dl","d");
+#      $this->department = check_field(StripSlashes($_POST['department']),"department","dl","d");
+    } else {
+      if ( $_POST['d_id'] != -1 ) {
+        $this->department = $this->department->read($_POST['d_id'],$this->department);
+        $gotourl= addUrlParameter($gotourl,"dl[]=". $this->department->id,true);
+      }
+#      $this->used = true;
+    }
+    if ( is_object($this->department) ) {
+      $this->company = &$this->department->company;
+    }
+
+    foreach($this->larray as $f) {
+      if ( isset($_POST[$f]) ) {
+        $this->setField($f,StripSlashes($_POST[$f]));
+        $gotourl= addUrlParameter($gotourl,$f ."=". UrlEncode($this->$f),true);
+        if (!empty($this->$f)) {
+          $this->used = true;
+        }
+      }
+    }
+
+    if ( isset($_POST['cploc']) && ($_POST['cploc'] == 1) ) {
+      # Copy the location data from the companies location if possible
+      $gotourl= addUrlParameter($gotourl,"cploc=1",true);
+      if ( isset ($this->company->id) ) {
+        $this->company->read_locs_data();
+        if ( count($this->company->location) > 0 ) {
+          reset ($this->company->location);
+          $x = current($this->company->location);
+          $this->city = $x->city;
+          $this->state = $x->state;
+          $this->country = $x->country;
+          $this->zip = $x->zip;
+          $this->street1 = $x->street1;
+          $this->street2 = $x->street2;
+        }
+      }
+    }
+
+    #
+    # Email Verification was fetched from http://www.phpbuilder.com/snippet/detail.php?type=snippet&id=107
+    # (this will produce a warning only , the values are set above)
+    $regex = '^([._a-z0-9-]+[._a-z0-9-]*)@(([a-z0-9-]+\.)*([a-z0-9-]+)(\.[a-z]{2,4}))$';
+    if ( isset($_POST['email_1']) ) {
+      $email_1 = trim(StripSlashes($_POST['email_1']));
+      if ( ($email_1 != "") && !eregi($regex,$email_1)) {
+        $msg .= sprintf($lang['Err0043'],myentities($email_1));
+      }
+    }
+    if ( isset($_POST['email_2']) ) {
+      $email_2 = trim(StripSlashes($_POST['email_2']));
+      if ( ($email_2 != "") && ! eregi($regex,$email_2)) {
+        $msg .= sprintf($lang['Err0043'],myentities($email_2));
+      }
+    }
+    return $msg;
+  }
+  /**
+   * a input form (used in comapny_new
+   */
+  function inputform (&$layout) {
+    global $lang;
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['AdrDescription'],1,"lname");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"30\" id=\"lname\" name=\"lname\" value=\"". myentities($this->lname) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['Phone'],0,"phone_1");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"30\" id=\"phone_1\" name=\"phone_1\" value=\"". myentities($this->phone_1) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['AdrFax'],0,"fax_1");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"30\" id=\"fax_1\" name=\"fax_1\" value=\"". myentities($this->fax_1) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['AdrEmail'],0,"email_1");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"60\" id=\"email_1\" name=\"email_1\" value=\"". myentities($this->email_1) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['Street'],0,"street1");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"30\" id=\"street1\" name=\"street1\" value=\"". myentities($this->street1) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['Street'],0,"street2");
+    echo " <td colspan=\"4\"><input size=\"30\" maxlength=\"30\" id=\"street2\" name=\"street2\" value=\"". myentities($this->street2) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['City'],0,"city");
+    echo " <td colspan=\"1\"><input size=\"30\" maxlength=\"30\" id=\"city\" name=\"city\" value=\"". myentities($this->city) ."\" /></td>\n";
+    echo $layout->showfieldc($lang['ZIP'],0,"zip");
+    echo " <td colspan=\"2\"><input size=\"10\" maxlength=\"10\" id=\"zip\" name=\"zip\" value=\"". myentities($this->zip) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['State'],0,"state");
+    echo " <td colspan=\"1\"><input size=\"30\" maxlength=\"30\" id=\"state\" name=\"state\" value=\"". myentities($this->state) ."\" /></td>\n";
+    echo "</tr>\n";
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['Country'],0,"country");
+    echo " <td colspan=\"4\">\n";
+    SelectCntryCde("country",$this->country);
+    echo " </td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['acc_info1'],0,"acc_info1");
+    echo "<td colspan=\"4\"><input size=\"50\" maxlength=\"60\" id=\"acc_info1\" name=\"acc_info1\" value=\"". myentities($this->acc_info1) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['acc_info2'],0,"acc_info2");
+    echo "<td colspan=\"4\"><input size=\"50\" maxlength=\"60\" id=\"acc_info2\"name=\"acc_info2\" value=\"". myentities($this->acc_info2) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['acc_nr'],0,"acc_nr");
+    echo "<td colspan=\"4\"><input size=\"50\" maxlength=\"60\" id=\"acc_nr\" name=\"acc_nr\" value=\"". myentities($this->acc_nr) ."\" /></td>\n";
+    echo "</tr>\n";
+
+    echo "<tr>\n";
+    echo $layout->showfieldc($lang['AdrCustumerID'],0,"customer_id");
+    echo "<td colspan=\"4\"><input size=\"50\" maxlength=\"60\" id=\"customer_id\"name=\"customer_id\" value=\"". myentities($this->customer_id) ."\" /></td>\n";
+    echo "</tr>\n";
+  }
+
+}
+?>

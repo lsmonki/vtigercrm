@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: nl.js
  * 	Dutch language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Bram Crins (bcrins@realdesign.nl)
@@ -41,8 +44,6 @@ RemoveLink			: "Verwijderen link",
 Anchor				: "Interne link",
 InsertImageLbl		: "Afbeelding",
 InsertImage			: "Invoegen/Wijzigen afbeelding",
-InsertFlashLbl		: "Flash",
-InsertFlash			: "Invoegen/Wijzigen Flash",
 InsertTableLbl		: "Tabel",
 InsertTable			: "Invoegen/Wijzigen tabel",
 InsertLineLbl		: "Lijn",
@@ -107,7 +108,6 @@ SplitCell			: "Cellen splitsen",
 CellProperties		: "Eigenschappen cel",
 TableProperties		: "Eigenschappen tabel",
 ImageProperties		: "Eigenschappen afbeelding",
-FlashProperties		: "Eigenschappen Flash",
 
 AnchorProp			: "Eigenschappen interne link",
 ButtonProp			: "Eigenschappen knop",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Eigenschappen selectieveld",
 TextareaProp		: "Eigenschappen tekstveld (groot)",
 FormProp			: "Eigenschappen formulier",
 
-FontFormats			: "Normaal;Met opmaak;Adres;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6",
+FontFormats			: "Normaal;Met opmaak;Adres;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Verwerken XHTML. Even geduld aub...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Afsluiten",
 DlgBtnBrowseServer	: "Bladeren op server",
 DlgAdvancedTag		: "Geavanceerd",
 DlgOpOther			: "&lt;Anders&gt;",
-DlgInfoTab			: "Informatie",
-DlgAlertUrl			: "Geef URL op",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;niet ingevuld&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Tekst boven",
 DlgImgAlignTop		: "Boven",
 DlgImgPreview		: "Voorbeeld",
 DlgImgAlertUrl		: "Geeft de URL van de afbeelding",
-DlgImgLinkTab		: "Link",
-
-// Flash Dialog
-DlgFlashTitle		: "Eigenschappen Flash",
-DlgFlashChkPlay		: "Automatisch afspelen",
-DlgFlashChkLoop		: "Herhalen",
-DlgFlashChkMenu		: "Flaschmenu\'s inschakelen",
-DlgFlashScale		: "Verschalen",
-DlgFlashScaleAll	: "Alles tonen",
-DlgFlashScaleNoBorder	: "Geen rand",
-DlgFlashScaleFit	: "Precies passen",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Link",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "De beveiligingsinstelling van de browser verhinderen het autom
 PasteAsText		: "Plakken als platte tekst",
 PasteFromWord	: "Plakken van Word-gegevens",
 
-DlgPasteMsg2	: "Plak de tekst in de volgende box gebruikmakend van je toetstenbord (<STRONG>Ctrl+V</STRONG>) en kies <STRONG>OK</STRONG>.",
-DlgPasteIgnoreFont		: "Negeer Font Face definities",
-DlgPasteRemoveStyles	: "Verwijder Styles definities",
-DlgPasteCleanBox		: "Box opschonen",
-
+DlgPasteMsg		: "De <STRONG>beveiligingsinstelling</STRONG> van de browser verhinderen het automatisch plakken. <BR>Plak de data in de volgende pagina door gebruik te maken van toetsenbord(<STRONG>Ctrl+V</STRONG>).  Klik hierna op <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automatisch",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Beschrijving document",
 DlgDocMeAuthor		: "Auteur",
 DlgDocMeCopy		: "Copyright",
 DlgDocPreview		: "Voorbeeld",
-
-// Templates Dialog
-Templates			: "Sjablonen",
-DlgTemplatesTitle	: "Inhoud sjabonen",
-DlgTemplatesSelMsg	: "Selecteer een sjabloon die in de editor geopend moet worden. (De actuele inhoud gaat verloren.):",
-DlgTemplatesLoading	: "Bezig met laden sjabonen. Even geduld aub...",
-DlgTemplatesNoTpl	: "(Geen sjablonen gedefiniëerd)",
 
 // About Dialog
 DlgAboutAboutTab	: "Over",

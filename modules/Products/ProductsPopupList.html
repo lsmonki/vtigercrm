@@ -1,0 +1,43 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+* ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<link rel="stylesheet" type="text/css" href="{THEME_PATH}style.css"/>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20">
+		<td colspan="3" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			<td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+	<tr><td height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr class="moduleListTitle" height=20>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">{MOD.LBL_PRODUCT_NAME}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>	
+	</tr>
+	<tr><td colspan="3" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{PRODUCTLIST}
+	</form>
+</table>
+<script type='text/javascript' language='JavaScript'>
+function set_return(product_id, product_name) {
+	window.opener.document.EditView.parent_name.value = product_name;
+	window.opener.document.EditView.parent_id.value = product_id;
+}
+function set_return_product(product_id, product_name) {
+	window.opener.document.EditView.product_name.value = product_name;
+	window.opener.document.EditView.product_id.value = product_id;
+}
+</script>
+<!-- END: main -->

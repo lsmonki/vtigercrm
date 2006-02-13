@@ -1,0 +1,509 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: acl.pinc,v 1.16 2005/05/03 13:18:42 saraj Exp $
+ *  $Author: saraj $
+ *
+ * @modulegroup TUTOS
+ * @module acl
+ */
+
+define ('EVERYBODY',0);
+define ('MYTEAMS',-2);
+
+/**
+ * set the default rights
+ * adr =  current_user or so
+ * obj =  the object that will get the default rights
+ */
+Function acl_default(&$obj,&$adr) {
+  global $tutos;
+
+  $obj->acl[EVERYBODY]  = 0;
+  acl_raise($obj,$adr->id,$tutos[delok]);
+
+  # 0 = everybody can see it
+  if ( $tutos[defaultacl] == 0 ) {
+    $obj->acl[EVERYBODY]  = $tutos[seeok];
+    return;
+  }
+  if ( ($adr->getType() != "address") &&  ($adr->getType() != "user") ) {
+    return;
+  }
+
+  team::obj_read($adr);
+  # 1 = teams can see it
+  if ( $tutos[defaultacl] == 1 ) {
+    # When no teams are defined everybody may see
+    foreach($adr->teamlist as $i => $f) {
+      acl_raise($obj,$i,$tutos[seeok]);
+    }
+    return;
+  }
+  # 2 = defaultgroups can see it
+  if ( $tutos[defaultacl] == 2 ) {
+    if ( $adr->getType() == "user" ) {
+      # When no defaultgroups are defined everybody may see
+      if ( count($adr->acldefault) == 0 ) {
+        $obj->acl[EVERYBODY]  = $tutos[seeok];
+      } else {
+        foreach($adr->acldefault as $i => $f) {
+		  if ($i == MYTEAMS) {
+            # expand a -2(MYTEAMS) to all the teams of that user
+            foreach($adr->teamlist as $i2 => $f2) {
+              acl_raise($obj,$i2,$f);
+            }
+		  } else {
+            acl_raise($obj,$i,$f);
+		  }
+        }
+      }
+    }
+    return;
+  }
+}
+/**
+ * read acl entries for an object
+ */
+Function acl_read(&$obj) {
+  global $tutos;
+
+  if ( $obj->gettype() == "user" ) {
+    $id = $obj->uid;
+  } else {
+    $id = $obj->id;
+  }
+  if ( $id == "" ) {
+    # Something went wrong everybody may see it
+    $obj->acl[EVERYBODY] = $tutos[seeok];
+    return;
+  }
+#  echo $obj->gettype();
+  $q = "SELECT adr_id,perm FROM ". $obj->dbconn->prefix ."acl WHERE obj_id = ". $id;
+  $r = $obj->dbconn->Exec($q);
+
+  $n = $r->numrows();
+# ????
+  if ( $n > 0 ) {
+    $obj->acl = array();
+  }
+  $a = 0;
+  while ($a < $n) {
+    $perm =  (int)$r->get($a, "perm");
+    if ( $perm > 0 ) {
+      $obj->acl[(int)$r->get($a, "adr_id")] = $perm;
+    }
+    $a++;
+  }
+  # Defaults to seeok
+  if ( $n == 0 ) {
+    $obj->acl[EVERYBODY] = $tutos[seeok];
+  }
+  $r->free();
+  return;
+}
+/**
+ * save acl entries for an object
+ */
+Function acl_save(&$obj) {
+  if ( $obj->gettype() == "user" ) {
+    $id = $obj->uid;
+  } else {
+    $id = $obj->id;
+  }
+  if ( $id < 0 ) return;
+
+  $q = "DELETE FROM ". $obj->dbconn->prefix ."acl WHERE obj_id = ". $id;
+  $r = $obj->dbconn->Exec($q);
+
+  if ( isset($obj->acl) && (count($obj->acl) > 0) ) {
+    @reset($obj->acl);
+    while ( list ($i,$f) = @each ($obj->acl) ) {
+      if ( ($i > -1) && (gettype($i) == "integer") && ($f > 0) ) {
+        $q = "INSERT INTO ". $obj->dbconn->prefix ."acl (obj_id,adr_id,perm) VALUES (". $id .",". $i .",". $f .")";
+        $r = $obj->dbconn->Exec($q);
+      }
+    }
+  }
+}
+/**
+ * delete acl entries for a object to be deleted
+ */
+Function acl_delete_obj(&$obj) {
+  if ( $obj->id < 0 ) return;
+
+  $msg = "";
+
+  $q = "DELETE FROM ". $obj->dbconn->prefix ."acl WHERE obj_id = ". $obj->id ." OR adr_id = ". $obj->id;
+  $r = $obj->dbconn->Exec($q);
+  $q = "DELETE FROM ". $obj->dbconn->prefix ."acldefault WHERE obj_id = ". $obj->id ." OR adr_id = ". $obj->id;
+  $r = $obj->dbconn->Exec($q);
+
+  return $msg;
+}
+/**
+ * read defaultacl entries for an object
+ * to be used with $tutos[defaultacl] = 2 
+ */
+Function acl_readdefault(&$obj) {
+  global $tutos;
+  if ( $obj->gettype() != "user" ) return;
+
+  $id = $obj->uid;
+
+  if ( $id == "" ) {
+    # Something went wrong everybody may see it
+    $obj->acl[EVERYBODY] = $tutos[seeok];
+    return;
+  }
+  $q = "SELECT adr_id,perm FROM ". $obj->dbconn->prefix ."acldefault WHERE obj_id = ". $id;
+  $r = $obj->dbconn->Exec($q);
+
+  $n = $r->numrows();
+  if ( $n > 0 ) {
+    $obj->acldefault = array();
+  }
+  $a = 0;
+  while ($a < $n) {
+    $obj->acldefault[$r->get($a, "adr_id")] = $r->get($a, "perm");
+    $a++;
+  }
+  $r->free();
+  return;
+}
+/**
+ * save acldefault entries for an object
+ * to be used with $tutos[defaultacl] = 2 
+ */
+Function acl_savedefault(&$obj) {   
+  if ( $obj->gettype() != "user" ) return;
+
+  $id = $obj->uid;
+
+  $q = "DELETE FROM ". $obj->dbconn->prefix ."acldefault WHERE obj_id = ". $id;
+  $r = $obj->dbconn->Exec($q);
+
+  if ( isset($obj->acldefault) && (count($obj->acldefault) > 0) ) {
+    foreach($obj->acldefault as $i => $f) {
+      if ( ($i == MYTEAMS) || ( ($i > -1) && (gettype($i) == "integer") && ($f > 0) ) ) {
+        $q = "INSERT INTO ". $obj->dbconn->prefix ."acldefault (obj_id,adr_id,perm) VALUES (". $id .",". $i .",". $f .")";
+        $r = $obj->dbconn->Exec($q);
+      }
+    }  
+  }  
+}
+/**
+ * delete acldefault entries for a object to be deleted
+ * to be used with $tutos[defaultacl] = 2 
+ */
+Function acl_deletedefault(&$obj) {
+  $msg = "";
+  $q = "DELETE FROM ". $obj->dbconn->prefix ."acldefault WHERE obj_id = ". $obj->id;
+  $r = $obj->dbconn->Exec($q);
+
+  return $msg;
+}
+/**
+ * check access level ( > $level ) to an object
+ */
+Function acl_ok(&$obj,$level) {
+  global $tutos,$current_user;
+
+  if ( ($tutos[useacl] != 1) || is_admin($current_user)) {
+    return 99;
+  }
+  if (! isset($obj->acl) ) return 0;
+  if (count($obj->acl) < 1) return 0;
+
+  team::obj_read($current_user);
+
+  foreach($obj->acl as $i => $f) {
+    # Rights granted explicit for current_user
+    if ( ($i > 0) && ($current_user->id == $i) && ($f > $level) ) {
+      return $f;
+    }
+    # Rights we got via team membership
+    if ( count($current_user->teamlist) > 0 ) {
+      foreach($current_user->teamlist as $i2 => $f2) {
+        if ( ($i == $i2) && ($f > $level) ) {
+          return $f;
+        }
+      }
+    }
+    # Everybody
+    if ( ($i == EVERYBODY) && ($f > $level) ) {
+      return $f;
+    }
+  }
+  return 0;
+}
+/**
+ * check show access ( > 0 ) to an object
+ */
+Function acl_see_ok(&$obj) {
+  global $tutos;
+  # if no permissions are defined the see is ok
+  if (isset($obj->acl) && (count($obj->acl)  > 0) ) {
+    return acl_ok($obj,$tutos[seeok] -1);
+  } else {
+    return $tutos[seeok];
+  }
+}
+/**
+ * check use access to an object
+ */
+Function acl_use_ok(&$obj) {
+  global $tutos;
+
+  # if no permissions are defined the use is ok
+  if (isset($obj->acl) && (count($obj->acl)  > 0) ) {
+    return acl_ok($obj,$tutos[useok] -1);
+  } else {
+    return $tutos[useok];
+  }
+}
+/**
+ * check modification access ( > 9 ) to an object
+ */
+Function acl_mod_ok(&$obj) {
+  global $tutos;
+
+  return acl_ok($obj,$tutos[modok] -1);
+}
+/**
+ * check deletion access ( > 19 ) to an object
+ */
+Function acl_del_ok(&$obj) {
+  global $tutos;
+
+  return acl_ok($obj,$tutos[delok] -1);
+}
+/**
+ * raise the permissions to given level if below
+ */
+Function acl_raise(&$obj,$adr_id,$level) {
+  if (! isset ($obj->acl[$adr_id]) || ($obj->acl[$adr_id] < $level) ) {
+    $obj->acl[$adr_id] = $level;
+  }
+}
+/**
+ * lower the permissions to given level if above
+ */
+Function acl_lower(&$obj,$adr_id,$level) {
+  if (! isset ($obj->acl[$adr_id]) || ($obj->acl[$adr_id] > $level) ) {
+    $obj->acl[$adr_id] = $level;
+  }
+}
+/**
+ * lower the permissions to given level if above
+ */
+Function acl_set(&$obj,$adr_id,$level) {
+  $obj->acl[$adr_id] = $level;
+}
+/**
+ * give a link to change/see acls
+ */
+Function acl_link(&$obj,$text = "") {
+  global $tutos,$lang,$current_user;
+
+  if ( $tutos[useacl] != 1 ) {
+    return;
+  }
+  if ( $obj->gettype() == "user" ) {
+    $id = $obj->uid;
+  } else {
+    $id = $obj->id;
+  }
+  if ( $id == -1 ) {
+    return;
+  }
+  if ( $text == "" ) {
+    $text = "<font size=\"-1\">(". $lang['permissions'] .")</FONT>";
+  }
+  if ( $current_user->isadmin() || $obj->del_ok() ) {
+    return makelink("acl_new.php?id=". $id ,$text,$lang['ACLmod']);
+  }
+  return makelink("acl_show.php?id=". $id ,$text,$lang['ACLsee']);
+}
+
+/**
+ * parse the permissions form provided by the function permission_form
+ */
+function parse_permission_form(&$obj) {
+  global $gotourl;
+
+  $msg = "";
+
+  for ( $i1 = -1 ; $i1 > -100 ; $i1-- ) {
+     $x = "f".$i1;
+     if ( isset($_POST[$x]) ) {
+       $obj->p[(integer)$i1] = 0;
+       foreach($_POST[$x] as $i2 => $f2) {
+         $obj->p[(integer)$i1] = (integer)$obj->p[(integer)$i1] | (integer)$f2; 
+         $gotourl= addUrlParameter($gotourl,$x."[]=". UrlEncode($f2),true);
+       }
+     }
+   }
+  return $msg;
+}
+/**
+ * HTML form to enter feature permissions
+ */
+function permission_form(&$layout,&$user,&$obj) {
+  global $lang,$tutos,$permskip;
+
+  # skip data table
+  # entries tha are not useful will be skipped
+  $permskip[usemaplink][PERM_NEW] = 1;
+  $permskip[usemaplink][PERM_MOD] = 1;
+  $permskip[usemaplink][PERM_DEL] = 1;
+  $permskip[usemaplink][PERM_SEL] = 1;
+  $permskip[usemaplink][PERM_USE] = 1;
+
+  $permskip[usefax][PERM_SEE] = 1;
+  $permskip[usefax][PERM_MOD] = 1;
+  $permskip[usefax][PERM_DEL] = 1;
+  $permskip[usefax][PERM_SEL] = 1;
+  $permskip[usefax][PERM_USE] = 1;
+
+  $permskip[usesms][PERM_NEW] = 1;
+  $permskip[usesms][PERM_MOD] = 1;
+  $permskip[usesms][PERM_DEL] = 1;
+  $permskip[usesms][PERM_SEL] = 1;
+  $permskip[usesms][PERM_USE] = 1;
+
+  $permskip[useoverlib][PERM_NEW] = 1;
+  $permskip[useoverlib][PERM_MOD] = 1;
+  $permskip[useoverlib][PERM_DEL] = 1;
+  $permskip[useoverlib][PERM_SEL] = 1;
+  $permskip[useoverlib][PERM_USE] = 1;
+
+  $permskip[usemail][PERM_SEE] = 1;
+  $permskip[usemail][PERM_MOD] = 1;
+  $permskip[usemail][PERM_DEL] = 1;
+  $permskip[usemail][PERM_SEL] = 1;
+  $permskip[usemail][PERM_USE] = 1;
+
+  $permskip[usehistory][PERM_NEW] = 1;
+  $permskip[usehistory][PERM_MOD] = 1;
+  $permskip[usehistory][PERM_DEL] = 1;
+  $permskip[usehistory][PERM_SEL] = 1;
+  $permskip[usehistory][PERM_USE] = 1;
+
+  # extend lang perm with the module permissions
+  # read the language files of modules
+  foreach ($tutos[modules] as $r => $x) {
+  	loadmodule($r);
+	if (!isset($lang['perm'][$x['perm']]) ) {
+      	$lang['perm'][$x['perm']] = $r;
+    	}
+    	$lang['perm'][$x['perm']] .=  " (MODULE)";
+  }
+
+  echo "<script language=\"JavaScript\">\n";
+  echo "<!--\n";
+  echo "function CheckAll(obj,name) {\n";
+  echo "  for (var i=0; i < obj.form.elements.length; i++) {\n";
+  echo "   var e = obj.form.elements[i];\n";
+  echo "   if (e.name == name) {\n";
+  echo "     e.checked = obj.checked;\n";
+  echo "   }\n";
+  echo "  }\n";
+  echo "}\n";
+  echo "function CheckAllAll(obj,name) {\n";
+  echo "  for (var i=0; i < obj.form.elements.length; i++) {\n";
+  echo "   var e = obj.form.elements[i];\n";
+  echo "   if (e.name.substring(0,name.length) == name) {\n";
+  echo "     e.checked = obj.checked;\n";
+  echo "   }\n";
+  echo "  }\n";
+  echo "}\n";
+  echo "//-->\n";
+  echo "</script>\n";
+  echo "<tr>\n";
+  echo "<th class=\"viewhead\" nowrap>". $lang['Feature']."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['NewEntry'] ."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['ACLread'] ."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['ACLuse'] ."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['ACLmodify'] ."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['ACLdelete'] ."</th>\n";
+  echo "<th class=\"viewhead\">". $lang['Search'] ."</th>\n";
+  echo "<th class=\"viewhead\" colspan=\"2\">&#9733;<input type=\"checkbox\" name=\"checkitall\" onClick=\"CheckAllAll(this,'f-')\">&#9733;</th>\n";
+#  echo "<th>&nbsp;</th>\n";
+  echo "</tr>\n";
+  $line = 0;
+  $perms = array (PERM_NEW,PERM_SEE,PERM_USE,PERM_MOD,PERM_DEL,PERM_SEL);
+  foreach($lang['perm'] as $i => $f) {
+   if($f == "use calendar")
+   {
+    if ( $i < -1000 ) {
+      continue;
+    }
+    echo $layout->OverviewRowStart($line);
+    if ( $obj->p[$i] == 1 ) {
+      $obj->p[$i] = 2047;
+    }
+    echo $layout->showfieldc($f ,0,"f". $i ."[]");
+    if (  ($tutos[$i] == 1 ) 
+         &&  (    ( ($obj->gettype() == "user") && ($user->isadmin()  || ( $i == useoverlib )))
+               || ( ($obj->gettype() == "team") && $user->isadmin() ) ) ) {
+      $layout->addHidden("f".$i."[]",0);
+
+      foreach ($perms as $p) {
+        echo "<td align=\"center\" valign=\"top\" width=\"15%\">";
+        if ( isset($permskip[$i][$p]) ) {
+          echo "&nbsp;";
+        } else {
+          echo "<input type=\"checkbox\" name=\"f". $i ."[]\" VALUE=\"". $p ."\"". ($obj->p[$i] & $p ? " checked":"") .">\n";
+            if ( $obj->getType() == "user") {
+              foreach($obj->teams as $f) {
+                if ( ($f->p[$i] & $p )) {
+                  echo "<br>X ". $f->getLink();
+                }      
+              }
+            }
+         }
+         echo "</td>\n";
+      }
+      echo "<td colspan=\"2\" align=\"center\" valign=\"top\" width=\"15%\">*<input type=\"checkbox\" name=\"f-checkit". $i ."\" onClick=\"CheckAll(this,'f". $i ."[]')\" ". ($obj->p[$i] > 61 ? " checked":"") .">*</td>\n";
+#      echo "<td>&nbsp;</td>\n";
+    } else if ( $tutos[$i] == 0 ) {
+      echo "<td align=\"center\" colspan=\"8\">". $lang['FeatureOff'] ."</td>\n";
+    } else {
+      foreach ($perms as $p) {
+        echo "<td align=\"center\" valign=\"top\" width=\"15%\">";
+        if ( isset($permskip[$i][$p]) ) {
+          echo "&nbsp;";
+        } else {
+          echo ($obj->p[$i] & 2 ? "X":"O");
+          if ( $obj->getType() == "user") {
+            foreach($obj->teams as $f) {
+              if ( ($f->p[$i] & $p )) {
+                echo "<br>X ". $f->getLink();
+              }
+            }
+          }
+        }
+        echo "</td>\n";
+      }
+      echo "<td>&nbsp;</td>\n";
+#      echo "<td>&nbsp;</td>\n";
+    }
+    echo $layout->OverviewRowEnd($line++);
+  }
+ }
+}
+
+/**
+ * build a massupdate acl link
+ */
+function acl_action() {
+  # edit permissions in another dialog
+  $url = "acl_new.php";
+  foreach ($_GET['mark'] as $key => $val) {
+    $url = addUrlParameter($url,"id[]=". $val,true);
+  }
+  return $url;
+}
+?>

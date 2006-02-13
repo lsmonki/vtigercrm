@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -12,6 +12,9 @@
  * 	Defines the FCKXHtml object, responsible for the XHTML operations.
  * 	Gecko specific.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-24 00:20:55
+ * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
@@ -21,15 +24,10 @@ FCKXHtml._GetMainXmlString = function()
 	// Create the XMLSerializer.
 	var oSerializer = new XMLSerializer() ;
 
-	if ( FCKConfig.ProcessHTMLEntities )
-	{
-		// Return the serialized XML as a string.
-		// Due to a BUG on Gecko, the special chars sequence "#?-:" must be replaced with "&"
-		// for the XHTML entities.
-		return oSerializer.serializeToString( this.MainNode ).replace( FCKXHtmlEntities.GeckoEntitiesMarkerRegex, '&' ) ;
-	}
-	else
-		return oSerializer.serializeToString( this.MainNode ) ;
+	// Return the serialized XML as a string.
+	// Due to a BUG on Gecko, the special chars sequence "#?-:" must be replaced with "&"
+	// for the XHTML entities.
+	return oSerializer.serializeToString( this.MainNode ).replace( FCKXHtmlEntities.GeckoEntitiesMarkerRegex, '&' ) ;
 }
 
 // There is a BUG on Gecko... createEntityReference returns null.

@@ -1,0 +1,111 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+<script language="javascript">
+function CancelForm()
+{
+var cvmodule = document.templatecreate.cvmodule.value;
+var viewid = document.templatecreate.cvid.value;
+document.location.href = "index.php?module="+cvmodule+"&action=index&viewname="+viewid;
+}
+</script>
+<body>
+<form action="index.php" method="post" name="templatecreate" onsubmit="return check4null(templatecreate);">  
+<input type="hidden" name="action" value="SaveAction.php">
+<input type="hidden" name="mode" value="{MODE}">
+<input type="hidden" name="module" value="CustomView">
+<input type="hidden" name="cvmodule" value="{CVMODULE}">
+<input type="hidden" name="cvid" value="{CVID}">
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME}:Custom Action</td>
+  </tr>
+  <tr>
+    <td colspan="3" class="hline"><img height='1' src='include/images/blank.gif'></td>
+  </tr>
+</table>
+<br>
+<table width="90%" border=0 cellPadding="0" cellSpacing="0">
+ <tr>
+   <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
+ </tr>
+</table>
+<table width="90%" border=0 cellspacing=1 cellpadding=0 class="formOuterBorder">
+<td class="formSecHeader" colspan=5 nowrap>Email Information</td>
+<tr ><td nowrap class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>Subject{MOD.LBL_COLON}
+</td><td colspan=4><input name="subject"  type="text" size=65 maxlength=100 tabindex="6" value="{SUBJECT}"></td></tr>
+<tr ><td nowrap valign=top class="dataLabel">Email Body{MOD.LBL_COLON}
+</td><td valign=top colspan=4><TEXTAREA wrap="SOFT" NAME="body" ROWS="10" COLS="70" tabindex="7">{BODY}</TEXTAREA></td></tr>
+</table>
+<br>
+  <TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
+    <TD NOWRAP><div align="center">
+        <input type="submit" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='SaveAction'">
+		<input type="button" name="cancel" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="CancelForm();">
+      </div></TD>
+    </TR>
+  </TABLE>
+</form>
+</body>
+</html>
+
+<script>
+function trim(s)
+{
+        while (s.substring(0,1) == " ") {
+                s = s.substring(1, s.length);
+        }
+        while (s.substring(s.length-1, s.length) == ' ') {
+                s = s.substring(0,s.length-1);
+        }
+
+        return s;
+}
+
+
+function check4null(form)
+{
+        var isError = false;
+        var errorMessage = "";
+        // Here we decide whether to submit the form.
+        if (trim(form.subject.value) =='') {
+                isError = true;
+                errorMessage += "\n subject";
+                form.subject.focus();
+        }
+
+        // Here we decide whether to submit the form.
+        if (isError == true) {
+                alert("Missing required fields: " + errorMessage);
+                return false;
+        }
+ return true;
+}
+
+
+</script>
+<script type="text/javascript" defer="1">
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "body" ) ;
+oFCKeditor.BasePath   = "include/fckeditor/" ;
+oFCKeditor.ReplaceTextarea() ;
+</script>
+
+<!-- END: main -->
+
+
+
+
+
+
+

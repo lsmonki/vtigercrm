@@ -1,0 +1,145 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the 
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+<input type="hidden" name="module" value="{MODULE}">
+<input type="hidden" name="step" value="2">
+<input type="hidden" name="action" value="Import">
+<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+<input type="hidden" name="return_id" value="{RETURN_ID}">
+<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr> 
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME}</td>
+    <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+      ]</td>
+  </tr>
+  <tr>
+    <td colspan="3" class="hline"><img height='1' src='include/images/blank.gif'></td>
+  </tr>
+</table>
+<!-- BEGIN: error -->
+<font color="red">{ERROR}</font> 
+<!-- END: error -->
+<br>
+<table width="80%" border="0" cellspacing="1" cellpadding="0" class="formOuterBorder">
+<tr>
+	<td class="formSecHeader">{MOD.LBL_STEP_1_TITLE}</td>
+</tr>
+<tr> 
+  <td><table border="0" cellspacing="2" cellpadding="2">
+	  <tr> 
+		<td>{MOD.LBL_WHAT_IS}</td>
+	  </tr>
+	  </table>
+	  <table border="0" cellspacing="2" cellpadding="2">
+	  <!-- BEGIN: show_salesforce -->
+	  <tr> 
+		<td width="10"><input type="radio" name="source" value="salesforce" CHECKED="true"/></td>
+		<td colspan="2">{MOD.LBL_SALESFORCE}</td>
+	  </tr>
+	  <!-- END: show_salesforce -->
+	  <!-- BEGIN: show_outlook -->
+	  <tr> 
+		<td><input type="radio" name="source" value="outlook"/></td>
+		<td colspan="2">{MOD.LBL_MICROSOFT_OUTLOOK}</td>
+	  </tr>
+	  <!-- END: show_outlook -->
+	  <!-- BEGIN: show_act -->
+	  <tr> 
+		<td><input type="radio" name="source" value="act"/></td>
+		<td colspan="2">{MOD.LBL_ACT}</td>
+	  </tr>
+	  <!-- END: show_act -->
+	  <tr> 
+		<td><input type="radio" name="source" value="other"/></td>
+		<td colspan="2">{MOD.LBL_CUSTOM}</td>
+	  </tr>
+	  <!-- BEGIN: saved -->
+	  <tr> 
+		<td colspan="4"><b>{MOD.LBL_MY_SAVED}</b></td>
+	  </tr>
+	  <!-- BEGIN: saved_elem -->
+	  <tr> 
+		<td><input type="radio" name="source" value="custom:{IMPORT_ID}"/></td>
+		<td>{IMPORT_NAME}</td>
+		<!-- BEGIN: is_admin -->
+		<td> [<a href="index.php?publish=yes&module={MODULE}&action=Import&step=1&import_map_id={IMPORT_ID}&return_action={RETURN_ACTION}&return_module={RETURN_MODULE}">{MOD.LBL_PUBLISH}</a>] 
+		</td>
+		<!-- END: is_admin -->
+		<td>[<a href="index.php?module={MODULE}&action=Import&step=1&delete_map_id={IMPORT_ID}&return_action={RETURN_ACTION}&return_module={RETURN_MODULE}">{MOD.LBL_DELETE}</a>]</td>
+	  </tr>
+	  <!-- END: saved_elem -->
+	  <!-- END: saved -->
+	  <!-- BEGIN: published -->
+	  <tr> 
+		<td colspan="4"><br>
+		  <b>{MOD.LBL_PUBLISHED_SOURCES}</b></td>
+	  </tr>
+	  <!-- BEGIN: published_elem -->
+	  <tr> 
+		<td><input type="radio" name="source" value="custom:{IMPORT_ID}"/></td>
+		<td>{IMPORT_NAME}</td>
+		<!-- BEGIN: is_admin -->
+		<td>[<a href="index.php?publish=no&module={MODULE}&action=Import&step=1&import_map_id={IMPORT_ID}&return_action={RETURN_ACTION}&return_module={RETURN_MODULE}">{MOD.LBL_UNPUBLISH}</a>] 
+		</td>
+		<td>[<a href="index.php?module={MODULE}&action=Import&step=1&delete_map_id={IMPORT_ID}&return_action={RETURN_ACTION}&return_module={RETURN_MODULE}">{MOD.LBL_DELETE}</a>]</td>
+		<!-- END: is_admin -->
+		<!-- BEGIN: not_admin -->
+		<td></td>
+		<td></td>
+		<!-- END: not_admin -->
+	  </tr>
+	  <!-- END: published_elem -->
+	  <!-- END: published -->
+	</table></td>
+</tr>
+<tr>
+	<td>
+		<table width="100%" cellpadding="2" cellspacing="0" border="0" class="formSecHeader">
+<tr> 
+  <td></td>
+  <td align="right"> <input title="{MOD.LBL_NEXT}" accessKey="" class="button" type="submit" name="button" value="  {MOD.LBL_NEXT}  "  onclick="this.form.action.value='Import'; return verify_data(Import)"></td>
+</tr>
+</table>
+	</td>
+</tr>
+</table>
+
+</form>
+{JAVASCRIPT} 
+<!-- END: main -->

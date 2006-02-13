@@ -1,0 +1,137 @@
+<?php
+/*
+ * Copyright 1999 - 2002 by Gero Kohnert
+ *
+ * CVS Info:  $Id: auth_http.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ */
+
+require_once 'auth.pinc';
+/**
+ * Authentification base class
+ *
+ * @modulegroup BASE
+ * @module auth_db
+ * @package BASE
+ */
+class auth_http extends auth{
+  /**
+   * logout
+   * return the next page for the redirect
+   */
+  Function logout () {
+    global $tutos,$msg;
+
+    unset ($_COOKIE[session_name()]);
+
+    parent::logout();
+	unset($_SERVER['PHP_AUTH_USER']);
+	unset($_SESSION);
+    session_write_close();
+  }
+  /**
+   * init
+   */
+  function auth_http() {
+    global $tutos,$msg;
+
+    $x = "----\n";
+    $x .= "DateTime:\t". Date("d.M.Y H:i:s T") ."\n";
+    $x .= "Request:\t". $_SERVER["REQUEST_URI"] ."\n";
+    foreach ($_SESSION as $i1 => $f1) {
+      $x .= "\t\t_SESSION[". $i1 ."]\t--> ". $f1 ."\n";
+    }
+    foreach ($_COOKIE as $i1 => $f1) {
+      $x .= "\t\t_COOKIE[". $i1 ."]\t--> ". $f1 ."\n";
+    }
+    foreach ($_POST as $i1 => $f1) {
+      $x .= "\t\t_POST[". $i1 ."]\t--> ". $f1 ."\n";
+    }
+    foreach ($_GET as $i1 => $f1) {
+      $x .= "\t\t_GET[". $i1 ."]\t--> ". $f1 ."\n";
+    }
+    if (isset($tutos['SESSID'])) {
+    #  $x .= "sessid \t--> ". $tutos['SESSID'] ."\n";
+    }
+    if (isset($_SERVER['PHP_AUTH_USER'])) {
+      $x .= "_SERVER[PHP_AUTH_USER]\t--> ". $_SERVER['PHP_AUTH_USER'] ."\n";
+    }
+    $x .= "----\n";
+
+    error_log($x,3,$tutos[errlog]);
+
+    $this->nouname = false;
+    if ( ! isset($_SESSION['userid']) ) {
+      $this->nouname = true;
+      $_SESSION['userid'] = -1;
+      error_log("\nNO NAME\n",3,$tutos[errlog]);
+    }
+  }
+  /**
+   * get the password
+   */
+  function getpw() {
+    if ( isset($_SERVER['PHP_AUTH_PW']) ) {
+      return trim($_SERVER['PHP_AUTH_PW']);
+    }
+    return;
+  }
+  /**
+   * get the username
+   */
+  function getuname() {
+    if (true == $this->nouname) {
+      return "";
+    }
+    if ( isset($_SERVER['PHP_AUTH_USER']) ) {
+      return trim($_SERVER['PHP_AUTH_USER']);
+    }
+    return;
+  }
+  /**
+   * Check for permmision
+   * using a DB query
+   */
+  function check() {
+    global $current_user,$lang;
+
+    $q = "SELECT a.* ,p.*,p.id as u_id FROM ". $this->dbconn->prefix ."addresses a, ". $this->dbconn->prefix ."people p ";
+    $q .= " WHERE p.login = ". $this->dbconn->String($this->getuname());
+    $q .= " AND p.pw = ". $this->dbconn->Password($this->getpw()) ." AND p.adr_id = a.id";
+    $result = $this->dbconn->Exec($q);
+
+    $r = array();
+    if ( ! $result ) {
+      ReadLang($lang);
+      $r[0] = "No Result for ". $this->getuname() ." / ". $this->getpw();
+      $r[1] = $lang['Err0026'];
+      return $r;
+    }
+
+    /* OK there is a user and a Password so lets check */
+    if ( 1 != $result->numrows()) {
+      ReadLang($lang);
+      $r[0] = "not unique ". $result->numrows() ." Result for ". $this->getuname() ." / ". $this->getpw() ." (". $_SERVER['REMOTE_ADDR'] .")";
+      $r[1] = $lang['Err0027'];
+      $result->free();
+      return $r;
+    }
+
+    $current_user= new tutos_user($this->dbconn);
+    $current_user->read_result($result,0);
+    $result->free();
+  }
+  /**
+   * login form
+   */
+  Function login_form ($gotourl,$msg) {
+    global $tutos;
+
+    error_log("auth http LOGIN\n",3,$tutos[errlog]);
+    header('WWW-Authenticate: Basic realm="'. session_name() .'"');
+    header('HTTP/1.0 401 Unauthorized');
+	echo "Login failed";
+    exit;
+  }
+}
+?>

@@ -1,0 +1,118 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<html>
+<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script type="text/javascript" language="JavaScript"> 
+function getOpenerObj(n) {
+
+   return getObj(n,opener.document)
+
+}
+    function saveReport( dlgType )
+    {
+       if( !emptyCheck( "reportName", "Report Name" ) )
+       return false;    
+                
+        var repNameObj = getOpenerObj( "reportName" );
+        var repDescObj = getOpenerObj( "reportDesc" );
+        var folderObj = getOpenerObj( "folder" );
+        var actionObj = getOpenerObj( "actionItem" );
+        var formObj = getOpenerObj( "NewReport" );
+        if( dlgType == "save" )
+        {
+           formObj = getOpenerObj( "NewReport" );
+            if( getOpenerObj( 'reportId' ) != null )
+            {
+                formObj.removeChild( getOpenerObj( 'reportId' ) );
+            }
+        }
+        else
+        {
+//            formObj = getOpenerObj( "SaveAsForm" );
+            actionObj.value = "saveAs";
+        }
+        
+        repNameObj.value = document.NewReport.reportName.value;
+        repDescObj.value = document.NewReport.reportDesc.value;
+        folderObj.value = document.NewReport.folder.value;        
+        formObj.submit();
+        
+        window.self.close();
+        return false;
+    }   
+ function trim(s) {
+        while (s.substring(0,1) == " ") {
+                s = s.substring(1, s.length);
+        }
+        while (s.substring(s.length-1, s.length) == ' ') {
+                s = s.substring(0,s.length-1);
+        }
+        return s;
+}
+function verify_data(form) {
+        var isError = false;
+        var errorMessage = "";
+        if (trim(form.reportName.value) == "") {
+                isError = true;
+                errorMessage += "\nReport Name";
+        }
+        // Here we decide whether to submit the form.
+        if (isError == true) {
+                alert("Missing required fields:" + errorMessage);
+                return false;
+        }
+        return true;
+}
+
+</script>
+<head>
+<title></title>
+<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+
+<link href="themes/{THEME_PATH}/style.css" rel="stylesheet" type="text/css">
+</head>
+<form name="NewReport">
+<body>
+<table width="80%" border=0  cellPadding=2 cellSpacing=2 class="formOuterBorder">
+<tr>
+  <td colspan="3" class="formSecHeader" height=20>Save Report:</td>
+  <tr> 
+    <td width ="20%" nowrap="nowrap" class="dataLabel">Report Name:</td>
+    <td nowrap><input type="text" name="reportName" class="textField" style="width:100%"/></td>
+  </tr>
+  <tr> 
+    <td width ="20%" nowrap="nowrap" class="dataLabel">Description:</td>
+    <td nowrap><input type="text" name="reportDesc" class="textField" style="width:100%"/> 
+    </td>
+  </tr>
+  <tr> 
+    <td width="20%" nowrap="nowrap" valign="top" class="dataLabel">Report Folder:</td>
+    <td nowrap>
+    <select name="folder" class="select">
+        {REPORT_FOLDER}
+    </select>
+    </td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="1" cellspacing="2" class="buttonLayer">
+  <tr> 
+    <td align=center> 
+      <input type="button" name="Button" value="Save" onClick="return saveReport( 'save' )" class="button" tabindex="5"> 
+      <input type='button' value="Cancel" class="button" onClick="window.close()"/> 
+    </td>
+  </tr>
+</table>
+<p></p>
+</body>
+</form>
+</html>
+<!-- END: main -->

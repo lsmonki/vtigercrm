@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fck_dialog_common.js
  * 	Useful functions used by almost all dialog window pages.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-09 13:52:45
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -43,10 +46,7 @@ function GetAttribute( element, attName, valueIfNull )
 	if ( oAtt == null || !oAtt.specified )
 		return valueIfNull ? valueIfNull : '' ;
 
-	var oValue ;
-	
-	if ( !( oValue = element.getAttribute( attName, 2 ) ) )
-		oValue = oAtt.nodeValue ;
+	var oValue = element.getAttribute( attName, 2 ) ;
 
 	return ( oValue == null ? valueIfNull : oValue ) ;
 }
@@ -66,11 +66,6 @@ function IsDigit( e )
 		) ;
 
 	return event.returnValue ;
-}
-
-String.prototype.trim = function()
-{
-	return this.replace( /(^\s*)|(\s*$)/g, '' ) ;
 }
 
 String.prototype.startsWith = function( value )

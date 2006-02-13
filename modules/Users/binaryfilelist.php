@@ -20,7 +20,7 @@ function getAttachmentsList()
 	global $app_strings;
 	global $mod_strings;
 
-	$dbQuery = "SELECT templateid,filename,filesize,filetype,description,module ";
+	$dbQuery = "SELECT filename,filesize,filetype,description,module ";
 
 	$dbQuery .= "FROM wordtemplates" ;
 
@@ -64,7 +64,7 @@ if ($i%2==0)
 $trowclass = 'evenListRow';
 else
 $trowclass = 'oddListRow';
-	$list .= '<tr class="'. $trowclass.'"><td style="padding:0px 3px 0px 3px;" align="center"><a href="index.php?module=Users&action=deletewordtemplate&record='.$row["templateid"].'"> Del </a> </td><td height="21" style="padding:0px 3px 0px 3px;">';
+	$list .= '<tr class="'. $trowclass.'"><td style="padding:0px 3px 0px 3px;" align="center"><a href="index.php?module=Users&action=deletewordtemplate&filename='.$row["filename"].'"> Del </a> </td><td height="21" style="padding:0px 3px 0px 3px;">';
 
 	 $list .= $row["filename"]; 
 
@@ -85,7 +85,7 @@ $trowclass = 'oddListRow';
 
 	$list .= '<td height="21" style="padding:0px 3px 0px 3px;">';
 
-	$list .= '<a href="index.php?module=Users&action=downloadfile&record='.$row['templateid'] .'">';
+	$list .= '<a href="index.php?module=Users&action=downloadfile&filename='.$row['filename'] .'">';
 
 	$list .= $app_strings['LBL_DOWNLOAD'];
 

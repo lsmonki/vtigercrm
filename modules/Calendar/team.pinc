@@ -1,0 +1,675 @@
+<?php
+/**
+ * Copyright 1999 - 2003 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: team.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+/**
+ * a team (group of TUTOS users)
+ * @modulegroup team
+ * @module team
+ * @package team
+ */
+class team extends tutos_base {
+  /**
+   * initialize
+   */
+  function team(&$dbconn) {
+    global $current_user,$tutos;
+
+    $this->init($dbconn);
+
+    $this->name     = "Unknown Team";
+    $this->member   = array();
+    $this->ids      = array();
+    $this->p        = array();
+    for ( $i = -1 ; $i > -100 ; $i-- ) {
+      if ( isset($tutos[$i]) ) {
+        $this->p[$i]  = 0;
+      }
+    }
+    $this->email    = "";
+    $this->owner    = $current_user;
+    $this->teamlist = array();
+
+    $this->tablename  = $this->dbconn->prefix ."teams";
+    $this->tablename2 = $this->dbconn->prefix ."adrteam";
+  }
+  /**
+   * Read all a result
+   */
+  function read($id,&$obj) {
+    global $g_hash,$lang,$current_user;
+
+    if ( -1 == $id ) return;
+
+
+    # Extra handling of virtual team 0
+    if ( $id == 0 ) {
+      $query = "SELECT adr_id FROM ". $obj->dbconn->prefix ."people";
+      $result = $obj->dbconn->Exec($query);
+      $n = $result->numrows();
+      if ( 0 == $n) {
+        $this->ids[$current_user->id] = 1 ;
+      }
+      $a = 0;
+      $obj->id       =  $id;
+      $obj->name     =  $lang['everybody'];
+      $obj->owner    =  $current_user;
+      $obj->creation =  new DateTime();
+
+      while ( $a < $n ) {
+        $obj->ids[$result->get($a, "adr_id")] = 1 ;
+        $a++;
+      }
+      $g_hash[$obj->id] = &$obj;
+      return $obj;
+    }
+    $obj = parent::read($id,$obj);
+	return $obj;
+  }
+  /**
+   * Read all a result
+   */
+  function read_result(&$r,$pos) {
+    $this->name     =  $r->get($pos, "name");
+    $this->email    =  $r->get($pos, "email");
+    $cid = $r->get($pos, "owner");
+
+    $this->owner       = getObject($this->dbconn,$cid);
+    $this->creator     = getObject($this->dbconn,$r->get($pos, "creator"));
+
+    $this->ids[$cid] = 1;
+
+    parent::read_result($r,$pos);
+
+    # Teammember IDS
+    $q = "SELECT adr_id FROM ". $this->tablename2 ." WHERE team_id =". $this->id;
+    $r2 = $this->dbconn->Exec($q);
+    $n = $r2->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $this->ids[$r2->get($a, "adr_id")] = 1;
+      $a++;
+    }
+    $r2->free();
+
+    return;
+  }
+  /**
+   * create address object for all teammembers
+   */
+  function read_member() {
+    if ( count($this->member) > 0 ) {
+      return;
+    }
+    $this->member = array();
+
+    if ( $this->id == 0 ) {
+      $q = "SELECT a.id as id FROM ". $this->dbconn->prefix ."addresses a,". $this->dbconn->prefix ."people p WHERE a.id = p.adr_id ";
+      $q .= " ORDER by a.l_name";
+    } else {
+      $q = "SELECT t.adr_id as id FROM ".  $this->tablename2 ." t WHERE t.team_id =". $this->id;
+    }
+    $result = $this->dbconn->Exec($q);
+    $n = $result->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $aid = $result->get($a, "id");
+      $x = new tutos_address($this->dbconn);
+      $x = $x->read($aid,$x);
+      if (is_Object($x) && ($x->id == $aid) ) {
+        $this->member[$x->id] = &$x;
+      } else {
+        # try recursion
+        $x = new team($this->dbconn);
+        $x = $x->read($aid,$x);
+        if ($x->id == $aid) {
+          $this->member[$x->id] = &$x;
+        }
+      }
+      $a++;
+      unset($x);
+    }
+    $result->free();
+  }
+
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return $this->neighbours;
+
+    parent::getNeighbours();
+
+    # Possible new parents are all teams below or above
+    $this->read_member();
+    foreach ($this->member as $a => $b) {
+      if ( ($b->getType() == 'team') && $b->use_ok() ) {
+        $this->neighbours[$a] = &$b;
+        unset($b);
+      }
+    }
+    team::obj_read($this);
+    foreach ($this->teamlist as $a => $b) {
+      $b = new team($this->dbconn);
+      $b = $b->read($a,$b);
+      $this->neighbours[$a] = &$b;
+      unset($b);
+    }
+
+    return $this->neighbours;
+  }
+
+  /**
+   * search for a team 
+   * filling a array with possible teams
+   */
+  function search_by_name(&$arr,&$user,$name) {
+    if ( trim($name) == "" ) return;
+
+    $q = "SELECT * from ". $user->dbconn->prefix ."teams WHERE". $user->dbconn->Like ("name",$name);
+    $q .= " order by name ";
+    check_dbacl( $q, $user->id);
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new team($user->dbconn);
+      $x->read_result($r,$a);
+      $arr[$x->id] = &$x;
+#     echo $x->getFullName() ."<br>";
+      unset($x);
+      $a++;
+    }
+    $r->free();
+
+    return;
+  }
+
+  /**
+   * check if the given address is a teammember
+   */
+  function is_member(&$adr) {
+    @reset($this->member);
+    while( list ($i,$f) = @each ($this->member)) {
+      if ( $f->id == $adr->id ) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+  /**
+   * Return the Short Name
+   */
+  function getShortname() {
+    return $this->name;
+  }
+  /**
+   * get the full visible team name
+   */
+  function getFullName() {
+    return $this->name;
+  }
+  /**
+   * fill mailing list with address/team objects or mail addresses
+   * this will work recursive and add all members
+   * and subteam members to the given mailing list
+   */
+  function fill_maillist(&$ml) {
+    $this->read_member();
+
+    foreach($this->member as $i => $obj) {
+      if ($obj->gettype() == "team") {
+        if (!isset($ml[$obj->id])) {
+          $ml[$obj->id] = &$obj;
+          $obj->fill_maillist($ml);
+        }
+      } else {
+        $ml[$obj->id] = &$obj;
+      }
+      unset($obj);
+    }
+    return;
+  }
+  /**
+   * get a email_address
+   */
+  function default_email() {
+    return $this->email;
+  }
+  /**
+   * Return a Mail link for all team members
+   */
+  function getMailUrl() {
+    global $current_user,$lang,$tutos;
+
+    if ( $current_user->feature_ok(usemail,PERM_NEW) && ($tutos[mailmode] != 0) ) {
+      return "mail_new.php?toid=".$this->id ."&subject=". UrlEncode($lang['Team']." ".$this->getFullName() );
+    }
+    $x = "";
+    $sep = "";
+    foreach($this->member as $i => $f) {
+      $e = $f->default_email();
+      if ( !empty($e) ) {
+        $fn = $f->getFullname();
+        $x .= " ". $sep . $fn ."<". trim($e) .">";
+        $sep = ",";
+      }
+    }
+    $x .= "?subject=". $lang['Team'] ." ". $this->getFullName();
+    return "mailto:".$x;
+  }
+  /**
+   * Return a Mail link for all team members
+   */
+  function getMailLink(&$user,$text = "") {
+    global $lang;
+
+    if ($this->id < 0) {
+      return;
+    }
+    if ( 0 == count($this->member) ) {
+      return;
+    }
+    return array( url => $this->getMailUrl(),
+                  text => ($text == "" ? $lang['TeamMail'] : $text),
+                  info => sprintf($lang['TeamMailInfo'], $this->name),
+                  category => array("mail","module","team")
+                );
+
+    return $x;
+  }
+  /**
+   * Return a Calendar link for all team members
+   */
+  function getCalLink(&$user,$text = "") {
+    global $lang;
+
+    if ($this->id < 0) {
+      return;
+    }
+    if ( 0 == count($this->member) ) {
+      return;
+    }
+    if ( ! $user->feature_ok(usecalendar,PERM_SEE) ) {
+      return;
+    }
+
+    return array( url => "calendar.php?team=". $this->id,
+#                  image => $user->layout->theme->getImage(appointment::getHtmlIcon(),'list'),
+                  text => ($text == "" ? $lang['Calendar'] : $text),
+                  info => sprintf($lang['TeamApps'], $this->name),
+                  category => array("app","module","team")
+                );
+
+  }
+  /**
+   * Return a url to this team
+   */
+  function getURL() {
+    return "team_show.php?id=". $this->id;
+  }
+  /**
+   * Return a url to modify this team
+   */
+  function getModURL() {
+    return "team_new.php?id=". $this->id;
+  }
+  /**
+   * Return a url to delete this team
+   */
+  function getDelURL() {
+    return "team_del.php?id=". $this->id;
+  }
+  /**
+   * Return a link to this team
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if (empty($this->id)) return;
+
+    if ( empty($text) ) {
+      $text = $this->name;
+    }
+    if ( $this->see_ok() ) {
+      return makelink($this->getUrl() ,myentities($text),sprintf($lang['TeamLinkInfo'], $this->name));
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * set the team name
+   */
+  function setName($value) {
+    return $this->setStrField("name",trim($value),"Team");
+  }
+  /**
+   * set the teams email
+   */
+  function setEmail($value) {
+    return $this->setStrField("email",trim($value),"AdrEmail");
+  }
+  /**
+   * set the team manager
+   */
+  function setOwner(&$value) {
+    if ( $this->owner->id != $value->id ) {
+      $this->modified[] = array ( "field" => "TeamManager", "old" => $this->owner->id , "new" => $value->id );
+      $this->owner = $value;
+      return 1;
+    }
+    return 0;
+  }
+  /**
+   * Save the tema info
+   *
+   * add =  array of userids to add to the team
+   * del =  array of userids to delete from the team
+   */
+  function save($add,$del) {
+    global $tutos,$current_user,$table;
+
+    $msg = "";
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("name",$this->name,"STRING",$table['team']['name'][size]);
+    $q->addFV("owner",$this->owner,"OBJ");
+    $q->addFV("email",$this->email,"STRING",$table['team']['email'][size]);
+    $q->addFV("creator",$this->creator,"OBJ");
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        acl_default($this,$current_user);
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+        acl_raise($this,$this->owner->id,$tutos[delok]);
+      }
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+
+    $this->dbconn->Exec($query);
+
+    if ( count($add) > 0 ) {
+      foreach($add as $i => $f) {
+        if ( $f == "" ) {
+          continue;
+        }
+        $q = "DELETE FROM ". $this->tablename2 ." WHERE adr_id = ". $f ." AND team_id = ". $this->id;
+        $this->dbconn->Exec($q);
+        $q = "INSERT INTO ". $this->tablename2 ." (adr_id,team_id ) VALUES (". $f .",". $this->id .")";
+        $this->dbconn->Exec($q);
+        $x = new tutos_user($this->dbconn);
+        $x = $x->read($f,$x);
+        acl_raise($this,$f,$tutos[seeok]);
+        acl_raise($x,$this->id,$tutos[seeok]);
+        #acl_save($x);
+        $this->modified[] = array ( "field" => "TeamAdd" ,
+                                    "old" => "-1",
+                                    "new" => $f,
+                                    "obj_id" => $this->id
+                                  );
+        unset($x);
+      }
+    }
+    # Remove team where we are member
+    team::obj_read($this);
+    foreach ($this->teamlist as $aid => $f) {
+      $del[] = $aid;
+    }
+    if ( count($del) > 0 ) {
+      foreach($del as $i => $f) {
+        if ( $f == "" ) {
+          continue;
+        }
+        $q = "DELETE FROM ". $this->tablename2 ." WHERE adr_id = ". $f ." AND team_id = ". $this->id;
+        $this->dbconn->Exec($q);
+        acl_set($this,$f,0);
+        $x = new tutos_user($this->dbconn);
+        $x = $x->read($f,$x);
+        acl_set($x,$this->id,0);
+        acl_save($x);
+        $this->modified[] = array ( "field" => "TeamDel" ,
+                                    "old" => $f,
+                                    "new" => "-1",
+                                    "obj_id" => $this->id
+                                  );
+        unset($x);
+      }
+    }
+
+    acl_raise($this,$this->id,$tutos[seeok]);
+
+    $msg .= parent::save();
+    return $msg;
+  }
+  /**
+   * delete the team from the database
+   */
+  function delete() {
+    global $current_user;
+    $msg = "";
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE team_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $msg .= product::obj_delete($current_user,$this);
+    $msg .= appointment::obj_delete($current_user,$this);
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * This is not a user
+   */
+  function isUser () {
+    return 0;
+  }
+  /**
+   * Read and set the feature permissions which this team has
+   * feature permissions have an ID < 0
+   */
+  function read_permissions() {
+    global $lang,$tutos;
+
+    for ( $i1 = -1 ; $i1 > -100 ; $i1-- ) {
+      $this->p[$i1] = 0;
+    }
+    $q = "SELECT * FROM ". $this->dbconn->prefix ."acl where obj_id < 0 AND adr_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $p = $r->get($a, "perm");
+      $obj_id = (integer)$r->get($a, "obj_id");
+      $a++;
+      if ( ! isset ($tutos[$obj_id]) ) {
+        continue;
+      }
+      if ($tutos[$obj_id] == 1) {
+        $this->p[$obj_id] = $p;
+      } else {
+        $this->p[$obj_id] = $tutos[$obj_id];
+      }
+    }
+    $r->free();
+
+    if (isset($tutos[useaddressbook])) {
+      $this->p[uselocation] = $this->p[useaddressbook];
+      $this->p[usecompany] = $this->p[useaddressbook];
+      $this->p[usedepartment] = $this->p[useaddressbook];
+    }
+  }
+  /**
+   * Save the permissions of this team
+   * feature permissions have an ID < 0
+   */
+  function save_permissions() {
+    $msg = "";
+    $q = "DELETE FROM ". $this->dbconn->prefix ."acl where obj_id < 0 AND adr_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    @reset ($this->p);
+    while( list ($i,$f) = @each ($this->p)) {
+      $q = "INSERT INTO ". $this->dbconn->prefix ."acl (obj_id,adr_id,perm) VALUES (". $i .",". $this->id .",". $f .")";
+      $this->dbconn->Exec($q);
+    }
+    return $msg;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "team";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return useteams;
+  }
+  /**
+   * get the type id of object
+   */
+  function getHtmlIcon () {
+    return 'teams';
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * a object that uses this team is deleted
+   */
+  Function obj_delete(&$user,&$obj) {
+    $msg = "";
+    $obj->dbconn->Exec("DELETE FROM ". $obj->dbconn->prefix ."adrteam WHERE adr_id =" .$obj->id);
+    return $msg;
+  }
+  /**
+   * show a list of teams attached to the given object
+   */
+  function infolist (&$user,&$obj,$cols,$format = "html") {
+    global $lang;
+
+    team::obj_read($obj);
+
+    if ( ! $user->feature_ok(useteams,PERM_SEE) ) {
+      return;
+    }
+    if ( count($obj->teamlist) > 0 ) {
+      echo "<tr>\n";
+      echo $user->layout->showfield($lang['Teams']);
+      echo " <td valign=\"top\" colspan=\"".($cols-1)."\">\n";
+      $pre = "";
+      foreach ($obj->teamlist as $i => $t) {
+        echo $pre. makelink("team_show.php?id=".$i,myentities($t),$t);
+        $pre = "<br>\n";
+      }
+      echo " </td>\n";
+      echo "</tr>\n";
+    }
+  }
+
+  /**
+   * read teams via int id
+   */
+  function obj_read_int(&$obj,$id,$level = 0) {
+    $q = "SELECT DISTINCT id,name from ". $obj->dbconn->prefix ."adrteam a, ". $obj->dbconn->prefix ."teams t WHERE a.team_id = t.id AND a.adr_id = ". $id;
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+#   echo $obj->id .":".$id." N:". $n." L:".$level." Q:".$q."<br>";
+    $a = 0;
+    while ( $a < $n ) {
+      $tid = $r->get($a, "id");
+      if (!isset($obj->teamlist[$tid])) {
+        $obj->teamlist[$tid] = $r->get($a, "name");
+        team::obj_read_int($obj,$tid,($level +1));
+      }
+      $a++;
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * Return Info about connected teams to a object (address/user/team)
+   */
+  function obj_read(&$obj) {
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+    if ( ! isset($obj->id) )  return;
+
+    if ( isset($obj->teamlist) && count($obj->teamlist) > 0 ) {
+      return;
+    }
+    $obj->teamlist = array();
+   # team::obj_read_int($obj,$obj->id);
+  }
+  /**
+   * create a link to a overview page
+   */
+  function getOverviewLink (&$user,$text = "") {
+    global $lang,$tutos;
+
+    if ( ! $user->feature_ok(useteams,PERM_SEE) ) {
+      return;
+    }
+    return array( url => "team_overview.php",
+                  image => $user->layout->theme->getImage(team::getHtmlIcon(),'menu'),
+                  text => ($text == "" ? $lang['TeamOverview'] : $text),
+                  info => $lang['TeamOverviewInfo'],
+                  category => array("overview","team")
+                );
+  }
+  /**
+   * create a link to a overview page
+   */
+  function getSelectLink (&$user,$text = "") {
+    global $lang,$tutos;
+
+    if ( ! $user->feature_ok(useteams,PERM_SEL) ) {
+      return;
+    }
+    return array( url => "team_select.php",
+                  image => $user->layout->theme->getImage(team::getHtmlIcon(),'menu'),
+                  text => ($text == "" ? $lang['Teams'] : $text),
+                  info => $lang['SearchForTeam'],
+                  category => array("search","team")
+                );
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+	$r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#team",$lang["Teams"],$lang["Teams"]) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=team_show",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=team_new",$lang['NewEntry']."/". $lang['Modify'],$lang['NewEntry']."/". $lang['Modify']) ."</li>\n";
+    $r .= "</ul>\n";
+	echo $r;
+  }
+}
+?>

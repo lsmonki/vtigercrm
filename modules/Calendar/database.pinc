@@ -1,0 +1,573 @@
+<?php
+/*
+ * Copyright 2001 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: database.pinc,v 1.16 2005/05/03 13:18:43 saraj Exp $
+ *  $Author: saraj $
+ */
+
+define ('DB_TYPE_POSTGRES',1);
+define ('DB_TYPE_MYSQL',2);
+define ('DB_TYPE_ORACLE',3);
+define ('DB_TYPE_MSSQL',5);
+define ('DB_TYPE_INTERBASE',7);
+define ('DB_TYPE_OCI',8);
+
+function CreateGUID(){
+ srand((double)microtime()*1000000);
+ $r = rand() ;
+ $u = uniqid(getmypid() . $r . (double)microtime()*1000000,1);
+ $m = md5 ($u);
+ return($m);
+}
+
+/* ---------------------------------------------------------------------------
+ * Return Info about all databases
+ */
+function readDB(&$dbconn) {
+  global $tutos;
+
+  $dblist = array();
+
+  $q = "SELECT * from ". $dbconn->prefix ."tutos_dbs order by name";
+  $r = $dbconn->Exec($q);
+  $n = $r->numrows();
+  $a = 0;
+  while ($a < $n) {
+    $d = new database($dbconn);
+    $d->read_result($r,$a);
+    if ( $d->see_ok() && ($d->is_supported()) ) {
+      $dblist[$d->id] = &$d;
+    }
+    $a++;
+    unset($d);
+  }
+  foreach($tutos[dbname] as $i => $f) {
+    $d = new database();
+    $d = $d->read($i,$d);
+    if ( $d->is_supported() ) {
+      $dblist[$d->id] = &$d;
+    }
+    unset($d);
+  }
+  $r->free();
+  return $dblist;
+}
+/**
+ * database description class for remote databases
+ * @package database
+ */
+class database extends tutos_base {
+  /* ---------------------------------------------------------------------------
+   */
+  function database($dbconn = -1) {
+    global $tutos;
+
+    $this->init($dbconn);
+
+    $this->name   = "";
+    $this->alias  = "";
+    $this->host   = "";
+    $this->port   = "";
+    $this->user   = "";
+    $this->pass   = "";
+    $this->home   = "";
+    $this->type   = -1;
+    $this->prefix = "";
+    $this->repository   = "undefined";
+    $this->logo = $tutos[logo];
+    $this->logolink = $tutos[logolink];
+    $this->bugautoname = $tutos[bugautoname];
+    #$this->invautoname = $tutos[invautoname];
+    $this->vatlist = "";
+    $this->version = "";
+    $this->crypt = 0;
+
+    $this->lastsync = new Datetime(0);
+    $this->lastanalyze = new DateTime(0);
+    $this->lastid   = -1;
+    $this->conn     = -1;
+    $this->systemid = "";
+
+    # Possible Types
+    $this->tlist[DB_TYPE_POSTGRES]  = "PostgreSQL"; 
+    $this->tlist[DB_TYPE_MYSQL]     = "MySQL"; 
+    $this->tlist[DB_TYPE_ORACLE]    = "Oracle"; 
+    $this->tlist[4] = "PostgreSQL 7.1"; 
+    $this->tlist[DB_TYPE_MSSQL]     = "MS SQL"; 
+    $this->tlist[6] = "Sybase"; 
+    $this->tlist[DB_TYPE_INTERBASE] = "Interbase"; 
+    $this->tlist[DB_TYPE_OCI]       = "OracleOCI"; 
+
+    $this->dbentryexist = false;
+	if (isset($dbconn->prefix)) {
+      $this->tablename = $this->dbconn->prefix . "tutos_dbs";
+	}
+  }
+  /**
+   * read a database result set
+   */
+  function read_result (&$r, $pos ) {
+    global $g_hash;
+
+    $this->name        = $r->get($pos, "name");
+    $this->alias       = $r->get($pos, "dbalias");
+    $this->host        = $r->get($pos, "dbhost");
+    $this->port        = $r->get($pos, "dbport");
+    $this->user        = $r->get($pos, "dbuser");
+    $this->pass        = $r->get($pos, "dbpass");
+    $this->home        = $r->get($pos, "dbhome");
+    $this->type        = $r->get($pos, "dbtype");
+    $this->repository  = $r->get($pos, "repository");
+    $this->lastsync    = $r->getDateTime($pos, "last_date");
+    $this->lastanalyze = $r->getDateTime($pos, "lastanalyze");
+    $this->lastid      = $r->get($pos, "last_id");
+    $this->version     = $r->get($pos, "version");
+    $this->crypt       = $r->get($pos, "cryptpw");
+    $this->prefix      = $r->get($pos, "prefix");
+    $this->systemid    = $r->get($pos, "systemid");
+	if ($this->systemid == "") {
+	  $this->systemid = CreateGUID();
+	}
+    $this->creator = new tutos_user($this->dbconn);
+    $this->creator = $this->creator->read($r->get($pos, "creator"),$this->creator);
+
+    $this->logo        = @$r->get($pos, "logo");
+    $this->logolink    = @$r->get($pos, "logolink");
+    $this->bugautoname = @$r->get($pos, "bugautoname");
+    $this->invautoname = @$r->get($pos, "invautoname");
+    $this->vatlist     = @$r->get($pos, "vatlist");
+
+    parent::read_result($r,$pos);
+    return;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function read($id,&$obj) {
+    global $tutos, $current_user, $g_hash;
+
+
+    if ( -1 == $id ) return;
+
+    if ( ( -2 == $id) && ($obj->dbconn != -1) ) {
+#      $this = $this->dbconn->db;
+      return 1;
+    }  
+
+    # First get all info from a connected database if available
+
+    if ( $obj->dbconn != -1 ) {
+      $q = "SELECT * from ". $obj->tablename ." WHERE id = ". $id;
+      $r = $obj->dbconn->Exec($q,0);
+      if ( ($r != -1) && ($r->numrows() > 0) ) {
+        $obj->read_result($r,0);
+        $r->free();
+        $obj->dbentryexist = true;
+      }
+    }
+    
+    # For all DB ids between 0 and 1000 the connection part of the description is 
+    # maintained in config.pinc
+    if ( ($id < 1000) && ($id > -1) ) {
+      if ( !isset($tutos[dbname][$id])) {
+        return 0;
+      }
+      # Stored in config.pinc
+      $obj->name = $tutos[dbname][$id];
+      if ( isset($tutos[dbalias][$id]) ) {
+        $obj->alias = $tutos[dbalias][$id];
+      }
+      if ( isset($tutos[dbhome][$id]) ) {
+        $objdthis->home = $tutos[dbhome][$id];
+      }
+      $obj->host = $tutos[dbhost][$id];
+      $obj->port = $tutos[dbport][$id];
+      $obj->user = $tutos[dbuser][$id];
+      $obj->pass = $tutos[dbpasswd][$id];
+      $obj->type = $tutos[dbtype][$id];
+      $obj->crypt = $tutos[cryptpw][$id];
+      $obj->repository = $tutos[repository][$id];
+      if ( isset($tutos[dbprefix][$id]) ) {
+        $obj->prefix = $tutos[dbprefix][$id];
+      }
+      $obj->id = $id;
+    }
+# wont work with database_ins
+    $obj->tablename = $obj->prefix . "tutos_dbs";
+
+    return $obj;
+  }
+  /**
+   * set te time of last analyze
+   */
+  function setLastAnalyze($value) {
+    return $this->setDateTimeField("lastanalyze",$value,"DBLastAnalyze");
+  }
+  /**
+   * set the name
+   */
+  function setName($value) {
+    return  $this->setStrField("name",$value,"AdminDBName");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setAlias($value) {
+	return $this->setStrField("alias",$value,"AdminDBAlias");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setHost($value) {
+    return $this->setStrField("host",$value,"AdminDBHost");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setPort($value) {
+    return $this->setIntField("port",$value,"AdminDBPort");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setUser($value) {
+    return $this->setStrField("user",$value,"AdminDBUser");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setPass($value) {
+    return $this->setStrField("pass",$value,"AdminDBPass");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setHome($value) {
+    return $this->setStrField("home",$value,"AdminDBHome");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setRepository($value) {
+    return $this->setStrField("repository",$value,"AdminDBRep");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setType($value) {
+    return $this->setIntField("type",$value,"AdminDBType");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setLogo($value) {
+    return $this->setStrField("logo",$value,"CfgLogo");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setLogoLink($value) {
+    return $this->setStrField("logolink",$value,"CfgLogoLink");
+  }
+  /**
+   * set the bug auto name string
+   */
+  function setBugAutoname($value) {
+    return $this->setStrField("bugautoname",$value,"CfgBugAutoName");
+  }
+  /**
+   * set the invoice auto name string
+   */
+  function setInvAutoname($value) {
+    return $this->setStrField("invautoname",$value,"CfgInvAutoName");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setVATlist($value) {
+    return $this->setStrField("vatlist",$value,"CfgVATlist");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setVersion($value) {
+    return $this->setStrField("version",$value,"CfgVersion");
+  }
+  /**
+   * set the database tablename prefix
+   */
+  function setPrefix($value) {
+    return $this->setStrField("prefix",$value,"AdminDBPrefix");
+  }
+  /**
+   * Checks if the current user is allowed to modify this database
+   */
+  function mod_ok () {
+    global $tutos,$current_user;
+
+    if ($current_user->isAdmin() && ($_SESSION['dbnr'] == $this->id)) {
+      return $tutos[modok];
+    }
+    return acl_mod_ok($this);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function save() {
+    global $tutos,$current_user,$table;
+
+    $msg = "";
+    if ( $this->dbconn == -1 ) {
+      return "NO Connection to save ". $this->getFullname() ."<br>\n";
+    }
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("name",$this->name,"STRING",$table['database']["name"][size]);
+    $q->addFV("dbalias",$this->alias,"STRING",$table['database']["dbalias"][size]);
+    $q->addFV("dbhost",$this->host,"STRING",$table['database']["dbhost"][size]);
+    $q->addFV("dbuser",$this->user,"STRING",$table['database']["dbuser"][size]);
+    $q->addFV("dbpass",$this->pass,"STRING",$table['database']["dbpass"][size]);
+    $q->addFV("dbhome",$this->home,"STRING",$table['database']["dbhome"][size]);
+    $q->addFV("dbport",$this->port,"INT");
+    $q->addFV("dbtype",$this->type,"INT");
+    $q->addFV("lastanalyze",$this->lastanalyze,"DATETIME");
+    $q->addFV("prefix",$this->prefix,"STRING",$table['database']["prefix"][size]);
+    $q->addFV("repository",$this->repository,"STRING",$table['database']["repository"][size]);
+    $q->addFV("last_date",$this->lastsync,"DATETIME");
+    $q->addFV("last_id",$this->lastid,"INT");
+    $q->addFV("version",$this->version,"STRING",$table['database']["version"][size]);
+    $q->addFV("cryptpw",$this->crypt,"INT");
+
+    $q->addFV("vatlist",$this->vatlist,"STRING",$table['database']["vatlist"][size]);
+    $q->addFV("bugautoname",$this->bugautoname,"STRING",$table['database']["bugautoname"][size]);
+    $q->addFV("invautoname",$this->invautoname,"STRING",$table['database']["invautoname"][size]);
+    $q->addFV("logo",$this->logo,"STRING",$table['database']["logo"][size]);
+    $q->addFV("logolink",$this->logolink,"STRING",$table['database']["logolink"][size]);
+    $q->addFV("systemid",$this->systemid,"STRING",$table['database']["systemid"][size]);
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        /* Get an new product ID */
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        acl_default($this,$current_user);
+        # Prepare the history
+        $this->modified[] = array ( "field" => "created" ,
+                                  "old" => $this->getType() ,
+                                  "new" => $this->id,
+                                  "obj_id" => $this->id
+                                );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      #$query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      #$query = $q->getUpdate();
+    }
+
+    #$this->dbconn->Exec($query);
+    $msg .= parent::save();
+
+    #return $msg;
+  }
+  /* ---------------------------------------------------------------------------
+   * checks if the database type is supported in this PHP environment
+   */
+  function is_supported() {
+    switch ($this->type) {
+      case DB_TYPE_POSTGRES:
+      case 4:
+        # Postgres
+        if ( function_exists('pg_connect') ) {
+          return 1;
+        }
+        break;
+      case DB_TYPE_MYSQL:
+        # MySQL
+        if ( function_exists('mysql_connect') ) {
+          return 1;
+        }
+        break;
+      case DB_TYPE_ORACLE:
+        # Oracle
+        if ( function_exists('Ora_Logon') ) {
+          return 1;
+        }
+        break;
+      case DB_TYPE_INTERBASE:
+        # Interbase
+        if ( function_exists('ibase_connect') ) {
+          return 1;
+        }
+        break;
+      case DB_TYPE_OCI:
+        # Oracle OCI
+        if ( function_exists('OCILogon') ) {
+          return 1;
+        }
+        break;
+      case DB_TYPE_MSSQL:
+        # MS SQL Server
+        if ( function_exists('mssql_connect') ) {
+          return 1;
+        }
+        break;
+    }
+    return 0;
+  }
+
+  /**
+   * make a connection to the database
+   */
+  function getconnection() {
+    global $tutos;
+
+    if ( $this->type == DB_TYPE_POSTGRES ) {
+      # Postgres
+      require_once 'db/db_pg.pinc';
+      $dbconn = new db_pg($this);
+      $dbconn->version = 1;
+    } else if ( $this->type == 4 ) {
+      # Postgres 7.1
+      require_once 'db/db_pg.pinc';
+      $dbconn = new db_pg($this);
+      $dbconn->version = 2;
+    } else if ( $this->type == DB_TYPE_MYSQL ) {
+      # MySQL
+      require_once 'db/db_mysql.pinc';
+      $dbconn = new db_mysql($this);
+    } else if ( $this->type == DB_TYPE_ORACLE ) {
+      # Oracle
+      require_once 'db/db_ora.pinc';
+      $dbconn = new db_ora($this);
+      $dbconn->home = $this->home;
+    } else if ( $this->type == DB_TYPE_OCI ) {
+      # Oracle OCI
+      require_once 'db/db_oci.pinc';
+      $dbconn = new db_oci($this);
+      $dbconn->home = $this->home;
+    } else if ( $this->type == DB_TYPE_MSSQL ) {
+      # MS SQL
+      require_once 'db/db_mssql.pinc';
+      $dbconn = new db_mssql($this);
+    } else if ( $this->type == 6 ) {
+      # Sybase
+      require_once 'db/db_sybase.pinc';
+      $dbconn = new db_sybase($this);
+    } else if ( $this->type == DB_TYPE_INTERBASE ) {
+      # Interbase
+      require_once 'db/db_interbase.pinc';
+      $dbconn = new db_interbase($this);
+    } else {
+      Fatal_Error("Unknown Database type for '".$this->id ."'", "Type is '". $this->type ."'");
+    }
+    if ( ! $this->is_supported() ) {
+      Fatal_Error("Database type not supported by this PHP ", "Type is '". $dbconn->gettype() ."'");
+    }
+    if ( ($tutos[usedocmanagement] != 0) && ! file_exists(getcwd()."/". $tutos['base'] ."/". $this->repository)) {
+      $msg = "<br>\nDocument Management:<br>missing repository directory<br>\n";
+      $msg .= "Please change repository path in your config file<br>or create the missing path<br>or disable docmanagement \$tutos[usedocmanagement] = 0; in your config file (file/mconfig.pinc)<br>\n";
+      Fatal_Error($msg,getcwd()."/". $tutos['base'] ."/".$this->repository);
+    }
+
+    $dbconn->open();
+    $dbconn->timezone("");
+
+    $this->conn = &$dbconn;
+    return $this->conn;
+  }
+  /**
+   * read and update thee current database if neccessary
+   */
+  function read_update() {
+    global $tutos;
+
+    if ( $this->dbconn == -1 ) {
+      Fatal_Error("no db connection","");
+    }
+    $x = $this->read($this->id,$this);
+    if ( $this->logo != "" ) {
+      $tutos[logo]     = $this->logo;
+    }
+    if ( $this->logolink != "" ) {
+      $tutos[logolink] = $this->logolink;
+    }
+    if ( $this->bugautoname != "" ) {
+      $tutos[bugautoname] = $this->bugautoname;
+    }
+    if ( $this->invautoname != "" ) {
+      $tutos[invautoname] = $this->invautoname;
+    }
+    if ( $this->vatlist != "" ) {
+      $tutos[vatlist] = $this->vatlist;
+    } else {
+      $tutos[vatlist] = "0.0";
+    }
+    if ( $this->dbentryexist == false ) {
+      $this->newid = $this->id;
+      $this->id = -1;
+      $this->save();
+    }
+  }
+  /**
+   * Delete database entry from DB
+   */
+  function delete() {
+    $msg = "";
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * get the full name for this database
+   */
+  function getFullname() {
+    if ( $this->alias != "" ) {
+      return $this->alias;
+    } else {
+      return $this->name ."@". $this->host .":". $this->port;
+    }
+  }
+  /**
+   * get a url of this database
+   */
+  function getURL() {
+    return "database_show.php?id=". $this->id;
+  }
+  /**
+   * Return a link to this appointment
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ( empty($text) ) {
+      $text = $this->getFullName();
+    }
+    if ( $this->see_ok() ) {
+      return makelink($this->getURL() , $text ,$lang['DBDetail']);
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * get the type of object
+   */
+  function gettype() {
+    return "database";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usedbs;
+  }
+  /**
+   * create a link to a select page
+   */
+  function getOverviewLink (&$user, $text = "") {
+    global $lang,$tutos;
+
+    return array( url => "database_overview.php",
+                  image => $user->layout->theme->getImage(database::getHtmlIcon(),'menu'),
+                  text => ($text == "" ? 'DB Overview' : $text),
+                  info => 'Database Overview',
+                  category => array("database","overview")
+                );
+  }
+}
+?>

@@ -1,0 +1,116 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<form name="NewReport" method="POST" action="index.php"> 
+    {NEWRPT_BUTTON}
+    {NEWRPT_FLDR_BUTTON}
+</form>
+{REPT_FLDR_BLK}
+<script language="javascript">
+// Setting cookies
+function set_cookie ( name, value, exp_y, exp_m, exp_d, path, domain, secure )
+{
+  var cookie_string = name + "=" + escape ( value );
+
+  if ( exp_y )
+  {
+    var expires = new Date ( exp_y, exp_m, exp_d );
+    cookie_string += "; expires=" + expires.toGMTString();
+  }
+
+  if ( path )
+        cookie_string += "; path=" + escape ( path );
+
+  if ( domain )
+        cookie_string += "; domain=" + escape ( domain );
+  
+  if ( secure )
+        cookie_string += "; secure";
+  
+  document.cookie = cookie_string;
+}
+
+// Retrieving cookies
+function get_cookie ( cookie_name )
+{
+  var results = document.cookie.match ( cookie_name + '=(.*?)(;|$)' );
+
+  if ( results )
+    return ( unescape ( results[1] ) );
+  else
+    return null;
+}
+
+// Delete cookies 
+function delete_cookie ( cookie_name )
+{
+  var cookie_date = new Date ( );  // current date & time
+  cookie_date.setTime ( cookie_date.getTime() - 1 );
+  document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+}
+
+function toggleReports(id) {
+
+	var listTableObj=getObj(id)
+	var tgImageObj=getObj(id+"img")
+
+	if (listTableObj.style.display=="block") {
+		listTableObj.style.display="none"
+		tgImageObj.src="{IMAGE_PATH}expand.gif"
+	} else {
+		listTableObj.style.display="block"
+		tgImageObj.src="{IMAGE_PATH}collapse.gif"
+	}
+	set_cookie(id,listTableObj.style.display)
+}
+
+function setExpandCollapse()
+{
+	var x = ReportListArray.length;
+	for (i = 0 ; i < x ; i++)
+	{
+		var listObj=getObj(ReportListArray[i])
+		var tgImageObj=getObj(ReportListArray[i]+"img")
+		var status = get_cookie(ReportListArray[i])
+
+		if (status == "block") {
+			listObj.style.display="block"
+			tgImageObj.src="{IMAGE_PATH}collapse.gif"
+		} else {
+			listObj.style.display="none"
+			tgImageObj.src="{IMAGE_PATH}expand.gif"
+		}
+	}
+}
+
+function goToURL( url )
+{
+    document.location.href = url;
+}
+    
+function invokeAction( actionName )
+{
+    if( actionName == "newReport" )
+    {
+        goToURL( "?module=Reports&action=NewReport0&return_module=Reports&return_action=index" );
+        return;
+    }    
+    if( actionName == "newReportFolder" )
+    {
+        goToURL( "?module=Reports&action=NewReportFolder&return_module=Reports&return_action=index" );
+        return;
+    }    
+    goToURL( "/crm/ScheduleReport.do?step=showAllSchedules" );
+} 
+</script>
+{JAVASCRIPT}
+<br>
+<!-- END: main -->

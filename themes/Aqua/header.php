@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/themes/Aqua/header.php,v 1.26 2005/07/11 13:36:24 crouchingtiger Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -242,8 +242,6 @@ if($actionid == 3)
 
 if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
 {
-	if($now_module == 'Faq')
-                $currentModule = $now_module;
 
 	require_once("modules/".$currentModule."/Forms.php");
 	if (function_exists('get_new_record_form'))

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,8 +11,11 @@
  * File Name: fr.js
  * 	French language file.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
+ * 
  * File Authors:
- * 		Hubert Garrido (liane@users.sourceforge.net)
+ * 		Hubert Garrido (webmaster@liane.net)
  */
 
 var FCKLang =
@@ -41,8 +44,6 @@ RemoveLink			: "Supprimer Lien",
 Anchor				: "Insérer/Modifier Ancre",
 InsertImageLbl		: "Image",
 InsertImage			: "Insérer/Modifier Image",
-InsertFlashLbl		: "Animation Flash",
-InsertFlash			: "Insérer/Modifier Animation Flash",
 InsertTableLbl		: "Tableau",
 InsertTable			: "Insérer/Modifier Tableau",
 InsertLineLbl		: "Séparateur",
@@ -107,7 +108,6 @@ SplitCell			: "Scinder les Cellules",
 CellProperties		: "Propriétés de Cellule",
 TableProperties		: "Propriétés de Tableau",
 ImageProperties		: "Propriétés d'Image",
-FlashProperties		: "Propriétés d'Animation Flash",
 
 AnchorProp			: "Propriétés d'Ancre",
 ButtonProp			: "Propriétés de Bouton",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Propriétés de Liste/Menu",
 TextareaProp		: "Propriétés de Zone Texte",
 FormProp			: "Propriétés de Formulaire",
 
-FontFormats			: "Normal;Formatted;Address;Titre 1;Titre 2;Titre 3;Titre 4;Titre 5;Titre 6",
+FontFormats			: "Normal;Formatted;Address;Titre 1;Titre 2;Titre 3;Titre 4;Titre 5;Titre 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Calcul XHTML. Veuillez patienter...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Fermer",
 DlgBtnBrowseServer	: "Parcourir le Serveur",
 DlgAdvancedTag		: "Avancé",
 DlgOpOther			: "&lt;Autre&gt;",
-DlgInfoTab			: "Info",
-DlgAlertUrl			: "Veuillez saisir l'URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;Par Défaut&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Haut du texte",
 DlgImgAlignTop		: "Haut",
 DlgImgPreview		: "Prévisualisation",
 DlgImgAlertUrl		: "Veuillez saisir l'URL de l'image",
-DlgImgLinkTab		: "Lien",
-
-// Flash Dialog
-DlgFlashTitle		: "Propriétés d'animation Flash",
-DlgFlashChkPlay		: "Lecture automatique",
-DlgFlashChkLoop		: "Boucle",
-DlgFlashChkMenu		: "Activer menu Flash",
-DlgFlashScale		: "Affichage",
-DlgFlashScaleAll	: "Par défault (tout montrer)",
-DlgFlashScaleNoBorder	: "Sans Bordure",
-DlgFlashScaleFit	: "Ajuster aux Dimensions",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Propriétés de Lien",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "Les paramètres de sécurité de votre navigateur empêchent l
 PasteAsText		: "Coller comme texte",
 PasteFromWord	: "Coller à partir de Word",
 
-DlgPasteMsg2	: "Veuillez coller dans la zone ci-dessous en utilisant le clavier (<STRONG>Ctrl+V</STRONG>) et cliquez sur <STRONG>OK</STRONG>.",
-DlgPasteIgnoreFont		: "Ignorer les Polices de Caractères",
-DlgPasteRemoveStyles	: "Supprimer les Styles",
-DlgPasteCleanBox		: "Effacer le contenu",
-
+DlgPasteMsg		: "L'éditeur n'a pu coller automatiquement vos données à cause des <STRONG>paramètres de sécurité</STRONG> de votre navigateur.<BR>Veuillez coller dans la zone suivante en utilisant le clavier (<STRONG>Ctrl+V</STRONG>) et cliquez sur <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automatique",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Description",
 DlgDocMeAuthor		: "Auteur",
 DlgDocMeCopy		: "Copyright",
 DlgDocPreview		: "Prévisualisation",
-
-// Templates Dialog
-Templates			: "Modèles",
-DlgTemplatesTitle	: "Modèles de Contenu",
-DlgTemplatesSelMsg	: "Veuillez sélectionner le modèle à ouvrir dans l'éditeur<br>(le contenu actuel sera remplacé):",
-DlgTemplatesLoading	: "Chargement de la liste des modèles. Veuillez patienter...",
-DlgTemplatesNoTpl	: "(Aucun modèle disponible)",
 
 // About Dialog
 DlgAboutAboutTab	: "A propos de",

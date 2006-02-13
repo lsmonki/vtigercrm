@@ -1423,7 +1423,7 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
 }
 
 
-function create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,$other_phone,$fax,$department,$birthdate,$assistant_name,$assistant_phone,$description='')
+function create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,$other_phone,$fax,$department,$birthdate,$assistant_name,$assistant_phone,$description)
 {
 	global $adb;
 	global $current_user;
@@ -1621,8 +1621,6 @@ function send_mail_for_password($mailid)
 
         $mailserverresult=$adb->query("select * from systems where server_type='email'");
         $mail_server=$adb->query_result($mailserverresult,0,'server');
-        $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-        $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
 
         $mail->Host = $mail_server;
         $mail->SMTPAuth = true;

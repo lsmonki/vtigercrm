@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckpastewordcommand.js
  * 	FCKPasteWordCommand Class: represents the "Paste from Word" command.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2004-08-30 23:20:46
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -27,8 +30,5 @@ FCKPasteWordCommand.prototype.Execute = function()
 
 FCKPasteWordCommand.prototype.GetState = function()
 {
-	if ( FCKConfig.ForcePasteAsPlainText )
-		return FCK_TRISTATE_DISABLED ;
-	else
-		return FCK.GetNamedCommandState( 'Paste' ) ;
+	return FCK.GetNamedCommandState( 'Paste' ) ;
 }

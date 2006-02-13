@@ -1,0 +1,54 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Cases/SubPanelView.html,v 1.3 2004/07/03 22:08:34 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="5%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_NUMBER}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="50%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_SUBJECT}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="30%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_ACCOUNT_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="10%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_STATUS}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="5%" class="moduleListTitle">&nbsp</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	  </tr>
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
+
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{CASE.NUMBER}</td>
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Cases&record={CASE.ID}">{CASE.NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={CASE.ACCOUNT_ID}">{CASE.ACCOUNT_NAME}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{CASE.STATUS}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td nowrap align="center" valign=TOP style="padding:0px 3px 0px 3px;">[<a class="listFormLinks" href="{URL_PREFIX}index.php?action=EditView&module=Cases&record={CASE.ID}{RETURN_URL}">{APP.LNK_EDIT}</a>]</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
+</table>
+<!-- END: main -->

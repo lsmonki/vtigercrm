@@ -1,0 +1,80 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+<input type="hidden" name="idlist">
+<form name="massdelete"  method="post">
+ 
+<!-- BEGIN: list_nav_row -->
+	<tr><td COLSPAN="16">
+	{MASS_DELETE_CHANGESTATUS}
+<!--input class='button' type='submit' value='Mass Delete' onclick="return massDelete()"/>
+<input class='button' type='submit' value='Change Status' onclick="return changeStatus()"/-->
+	</td></tr>
+
+	<tr height="20">
+		<td COLSPAN="16" class="listFormHeaderLinks" align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
+		{NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td>
+	</tr>
+<!-- END: list_nav_row -->
+	<tr><td width="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+       	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+       	
+       	
+       	
+       <td align='center' class="moduleListTitle">&nbsp;Select Topic</td>
+          	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<!--td align='center' class="moduleListTitle"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td -->
+		<td width="20%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_TOPIC}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_CATEGORY}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	   <td width="20%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_AUTHOR}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_REPLIES}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_LAST_POST}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	
+	
+	  </tr>
+	<tr><td COLSPAN="16" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="messageselection" value={MESSAGEBOARD.TOPIC_ID}></td>
+<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td align='center'><a href='index.php?module=MessageBoard&action=viewtopic&p={MESSAGEBOARD.POST_ID}#{MESSAGEBOARD.POST_ID}'>{MESSAGEBOARD.TOPIC_TITLE}</a></td>
+<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;" ><a href="#">{MESSAGEBOARD.FORUM_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;" >{MESSAGEBOARD.USERNAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{MESSAGEBOARD.TOPIC_REPLIES}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{MESSAGEBOARD.POST_TIME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    	
+    	
+</tr>
+<!-- END: row -->
+<tr><td COLSPAN="16">
+<!-- END: main -->
+</form>
+</table>

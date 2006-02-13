@@ -1,0 +1,24 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_es_ve.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+	 $tutos[cal][] = array(
+		array( Date => "01-01", type => 1,  Desc => "Año Nuevo (VE)"),
+		array( Date => "06-01", type => 1,  Desc => "Reyes (VE)"),
+		array( Date => "19-04", type => 1,  Desc => "Declaración de Independencia (VE)"),
+		array( Date => "01-05", type => 1,  Desc => "Dia del Trabajo (VE)"),
+		array( Date => "24-06", type => 1,  Desc => "Batalla de Carabobo (VE)"),
+		array( Date => "05-07", type => 1,  Desc => "Dia de la Independencia (VE)"),
+		array( Date => "24-07", type => 1,  Desc => "Natalicio del Libertador (VE)"),
+		array( Date => "12-10", type => 1,  Desc => "Descubrimiento de América (VE)"),
+		array( Date => "17-12", type => 1,  Desc => "Muerte del Libertador (VE)"),
+		array( Date => "25-12", type => 1,  Desc => "Navidad (VE)"),
+	);
+?>

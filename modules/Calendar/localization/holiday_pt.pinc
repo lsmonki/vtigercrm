@@ -1,0 +1,32 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_pt.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ *
+ *  Translation to portuguese by: pedro.bernardo@tutosportugal.com
+ *
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+	 $tutos[cal][] = array(
+		array( Date => "01-01", type => 1,  Desc => "Ano Novo (PT)"),
+		array( Date => "04-03", type => 1,  Desc => "Carnaval (PT)"),
+		array( Date => "18-04", type => 1,  Desc => "Sexta-feira Santa (PT)"),
+		array( Date => "20-04", type => 1,  Desc => "Dia de Páscoa (PT)"),
+       	array( Date => "25-04", type => 1,  Desc => "25 de Abril (PT)"),
+        array( Date => "01-05", type => 1,  Desc => "Dia do Trabalhador (PT)"),
+		array( Date => "10-06", type => 1,  Desc => "Dia de Portugal (PT)"),
+  		array( Date => "13-06", type => 1,  Desc => "Santo António de Lisboa (PT)"),
+		array( Date => "15-08", type => 1,  Desc => "Assunção de Nº Senhora (PT)"),
+		array( Date => "05-10", type => 1,  Desc => "Implantação da República (PT)"),
+		array( Date => "01-11", type => 1,  Desc => "Todos os Santos (PT)"),
+		array( Date => "01-12", type => 1,  Desc => "Restauração da Independência (PT)"),
+		array( Date => "08-12", type => 1,  Desc => "Imaculada Conceição (PT)"),
+		array( Date => "25-12", type => 1,  Desc => "Natal (PT)"),
+	);
+?>

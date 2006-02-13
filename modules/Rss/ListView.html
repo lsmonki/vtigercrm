@@ -1,0 +1,163 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<style>
+.rssFolder {
+	font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
+	text-decoration: none;	
+}
+.rssFolder:hover {
+	text-decoration: underline;	
+}
+.rssSelectedTitle {
+	background-color: #CCCCCC;
+}
+.rssNews {
+	font: 12px Arial, Helvetica, Sans-serif bold;
+}
+</style>
+<script language="JavaScript" type="text/javascript" src="general.js"></script>
+<script language="JavaScript" type="text/javascript">
+/*function toggleRSSFolder(id) {
+	if (getObj(id+"_feeds").style.display=="none") {
+		getObj(id+"_feeds").style.display="block"
+		getObj(id+"_folder").src="{IMAGEPATH}rss_folder_opn.gif"
+		getObj(id+"_toggle").src="{IMAGEPATH}minus.gif"
+	} else {
+		getObj(id+"_feeds").style.display="none"
+		getObj(id+"_folder").src="{IMAGEPATH}rss_folder_cls.gif"
+		getObj(id+"_toggle").src="{IMAGEPATH}plus.gif"
+	}
+}*/
+function star(id, starred)
+{
+    location.href = "index.php?module=Rss&action=Star&record="+id+"&starred="+starred;
+    //var mailUrl = "index.php?module=Rss&action=Star&record="+id+"&starred="+starred;
+    //alert(makeRequest(mailUrl));
+
+    var elem = document.getElementById("star-"+id);
+    if(elem.src.indexOf("onstar.gif") != -1) {
+        elem.src = "{IMAGEPATH}offstar.gif";
+    }else {
+        elem.src = "{IMAGEPATH}onstar.gif";
+    }
+}
+
+    var httpRequest = false;
+    function getRequest() {
+        if ( !httpRequest ) {
+            httpRequest = new XMLHttpRequest();    
+        }
+        return httpRequest;
+    }
+    function makeRequest(targetUrl) {
+        var httpRequest = getRequest();
+        httpRequest.open("GET", targetUrl, false, false, false);
+        httpRequest.send("");
+        switch ( httpRequest.status ) {
+            case 200:
+                return httpRequest.responseText;
+            break;
+            default:
+                alert("Problem accessing url: "+targetUrl+" Code: "+httpRequest.status);
+                return null;
+            break;
+        }       
+    }
+</script>
+
+<form action="index.php" method="POST">
+<input type="hidden" name="action" value="Save">
+<input type="hidden" name="module" value="Rss">
+<input type="hidden" name="return_action" value="index">
+<input type="hidden" name="return_module" value="Rss">
+<!--table width="100%" height="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr> 
+    <td valign="top" class="rssFrameBorder"--> 
+     
+      <!--<table width="100%" border="0" cellspacing="2" cellpadding="0">
+        <tr> 
+          <td colspan="2">{MOD.LBL_SEARCH_RSS}</td>
+        </tr>
+        <tr> 
+          <td width="25"><input size="25"></td>
+          <td><input type="image" align="absmiddle" value="Search" src="{IMAGEPATH}search.gif"></td>
+        </tr>
+      </table>-->
+      <!--<table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-top:10px">
+        <tr> 
+          <td width="15"><div align="center"><a href="#" onClick="toggleRSSFolder('S')"><img id="S_toggle" src="{IMAGEPATH}plus.gif" border="0"></a></div></td>
+          <td width="20"><div align="center"><img id="S_folder" src="{IMAGEPATH}rss_folder_cls.gif"></div></td>
+          <td nowrap><a href="#" onClick="toggleRSSFolder('S')" class="rssFolder">{MOD.LBL_STARRED_RSS}</a></td>
+        </tr>
+        <tr> 
+          <td colspan="3"><div id="S_feeds" style="display:none"><table width="100%" border="0" cellspacing="2" cellpadding="2" style="margin:5 0 0 35">{STAREDFEEDS}</table></div></td>
+        </tr>
+
+        <tr> 
+          <td width="15"><div align="center"><a href="#" onClick="toggleRSSFolder('P')"><img id="P_toggle" src="{IMAGEPATH}plus.gif" border="0"></a></div></td>
+          <td width="20"><div align="center"><img id="P_folder" src="{IMAGEPATH}rss_folder_cls.gif"></div></td>
+          <td nowrap><a href="#" onClick="toggleRSSFolder('P')" class="rssFolder">{MOD.LBL_POP_CRM_RSS}</a></td>
+        </tr>
+        <tr> 
+          <td colspan="3"><div id="P_feeds" style="display:none"><table width="100%" border="0" cellspacing="2" cellpadding="2" style="margin:5 0 0 35">{CRMRSSFEEDS}</table></div></td>
+        </tr>
+	{CATEGORYFEEDS}
+        <tr> 
+          <td width="15"><div align="center"><a href="#" onClick="toggleRSSFolder('A')"><img id="A_toggle" src="{IMAGEPATH}minus.gif" border="0"></a></div></td>
+          <td width="20"><div align="center"><img id="A_folder" src="{IMAGEPATH}rss_folder_opn.gif"></div></td>
+          <td nowrap><a href="#" onClick="toggleRSSFolder('A')" class="rssFolder">{MOD.LBL_ALL_RSS_FEEDS}</a></td>
+        </tr>
+        <tr> 
+          <td colspan="3"><div id="A_feeds" style="display:block"><table width="100%" border="0" cellspacing="2" cellpadding="2" style="margin:5 0 0 35">
+ <tr>
+    <td width="15"><img src="{IMAGEPATH}starred.gif" align="absmiddle"></td>
+                  <td class="rssTitleSel"><a href="#" class="rssTitle">ABC News : Business</a></td>
+  </tr>
+  <tr>
+    <td width="15"><img src="{IMAGEPATH}unstarred.gif" align="absmiddle"></td>
+    <td><a href="#" class="rssTitle">ABC News : Entertainment</a></td>
+  </tr>
+  <tr>
+    <td width="15"><img src="{IMAGEPATH}unstarred.gif" align="absmiddle"></td>
+    <td><a href="#" class="rssTitle">ABC News : Health</a></td>
+  </tr>
+ <tr>
+    <td width="15"><img src="{IMAGEPATH}starred.gif" align="absmiddle"></td>
+    <td><a href="#" class="rssTitle">ABC News : Technology</a></td>
+  </tr>
+  <tr>
+    <td width="15"><img src="{IMAGEPATH}unstarred.gif" align="absmiddle"></td>
+    <td><a href="#" class="rssTitle">ABC News : Sports</a></td>
+  </tr>
+  {ALLRSSFEEDS}
+</table>
+<table width="100%" border="0" cellspacing="2" cellpadding="2" style="margin-top:5">
+<tr>
+	<td class="rssNav"></td>
+</tr>
+</table>
+</div></td>
+        </tr>
+      </table></td>
+    <td valign="top">-->
+
+<!--table width="100%" border="0" cellspacing="2" cellpadding="0">
+        <tr><td-->
+		{RSSDETAILS} 
+        <!--td></tr>
+      </table-->
+	<!--/td>
+  </tr>
+</table-->
+<br>
+</form>
+<!-- END: main -->

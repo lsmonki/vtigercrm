@@ -1,0 +1,399 @@
+<?php
+/**
+ * Copyright 2004 by Gero Kohnert
+ *
+ * Filling in demodata
+ * this file is simply "sourced" when creating a database and filling in demodata
+ * @modulegroup ADMIN
+ * @module demodata
+ * @package BASE
+ */
+
+ # Demo happens with team permissions
+
+ $tutos[defaultacl] = 1;
+ $cnt = 0;
+ $u[0] = new tutos_user($this->obj);
+ $u[1] = new tutos_user($this->obj);
+ $u[2] = new tutos_user($this->obj);
+
+ $ucnt = 3;
+ $acnt = 3;
+
+ # User & Addresses
+ $a[0] = new tutos_address($this->obj);
+ $a[0]->f_name = "Jerry";
+ $a[0]->m_name = "K";
+ $a[0]->l_name = "Thomas";
+ $a[0]->creator = &$this->user;
+ $msg .= $a[0]->save();
+ echo $lang[$a[0]->getType()].":". $a[0]->getFullName() ."<br>\n";
+ $demodata[] = &$a[0];
+ flush();
+
+ $u[0]->updatepw = 1;
+ $u[0]->login = "jerry";
+ $u[0]->pw = "jerry";
+ $u[0]->id = $a[0]->id;
+ $msg .= $u[0]->save();
+ echo $lang[$u[0]->getType()].":". $u[0]->login ."<br>\n";
+ $demodata[] = &$u[0];
+ flush();
+
+ # all the coming stuff will happen as linus
+ $current_user = &$u[0];
+ 
+ $a[1] = new tutos_address($this->obj);
+ $a[1]->f_name = "Philip";
+ $a[1]->l_name = "Christo";
+ $a[1]->creator = &$u[0];
+ $msg .= $a[1]->save();
+ echo $lang[$a[1]->getType()].":". $a[1]->getFullName() ."<br>\n";
+ $demodata[] = &$a[1];
+ flush();
+
+ $u[1]->updatepw = 1;
+ $u[1]->login = "philip";
+ $u[1]->pw = "philip";
+ $u[1]->id = $a[1]->id;
+ $msg .= $u[1]->save();
+ echo $lang[$u[1]->getType()].":". $u[1]->login ."<br>\n";
+ $demodata[] = &$u[1];
+ flush();
+
+ $a[2] = new tutos_address($this->obj);
+ $a[2]->f_name = "Rakee";
+ $a[2]->l_name = "Kohnert";
+ $a[2]->creator = &$u[0];
+ $msg .= $a[2]->save();
+ echo $lang[$a[2]->getType()].":". $a[2]->getFullName() ."<br>\n";
+ $demodata[] = &$a[2];
+ flush();
+
+ $u[2]->updatepw = 1;
+ $u[2]->login = "rakee";
+ $u[2]->pw = "rakee";
+ $u[2]->id = $a[2]->id;
+ $msg .= $u[2]->save();
+ echo $lang[$u[2]->getType()].":". $u[2]->login ."<br>\n";
+ $demodata[] = &$u[2];
+ flush();
+
+ # Team
+ $x1 = new team($this->obj);
+ $add = array();
+ $del = array();
+ $add[0] = $a[0]->id;
+ $add[0] = $a[2]->id;
+ $x1->name = "TUTOS Development";
+ $x1->owner = $a[2];
+ $x1->creator = $u[2];
+ $msg .= $x1->save($add,$del);
+ echo $lang[$x1->getType()].":". $x1->getFullName() ."<br>\n";
+ $demodata[] = &$x1;
+ flush();
+
+ $x2 = new team($this->obj);
+ $add = array();
+ $del = array();
+ $add[0] = $a[1]->id;
+ $x2->name = "The Others";
+ $x2->creator = $u[2];
+ $x2->owner = $a[2];
+ $msg .= $x2->save($add,$del);
+ echo $lang[$x2->getType()].":". $x2->getFullName() ."<br>\n";
+ $demodata[] = &$x2;
+ flush();
+
+ $x3 = new team($this->obj);
+ $add = array();
+ $del = array();
+ $add[0] = $a[0]->id;
+ $add[1] = $a[1]->id;
+ $add[2] = $a[2]->id;
+ $add[3] = 1001; # hardcoded superuser
+ $x3->name = "all";
+ $x3->creator = $u[2];
+ $x3->owner = $a[2];
+ $msg .= $x3->save($add,$del);
+ echo $lang[$x3->getType()].":". $x3->getFullName() ."<br>\n";
+ $demodata[] = &$x3;
+ flush();
+
+ for ($i = 0 ; $i < 30; $i++) {
+   $x = new tutos_address($this->obj);
+   if (($i % 2) == 0) {
+     $x->title =  "Mr.";
+     $x->f_name = "John ".$i;
+     $x->m_name =  $i;
+   } else {
+     $x->title =  "Ms.";
+     $x->f_name = "Johanna ".$i;
+     $x->m_name =  $i;
+   }
+   $x->l_name = "Doe";
+   $x->creator = &$u[$cnt % $ucnt];
+   $msg .= $x->save();
+   echo $lang[$x->getType()].":". $x->getFullName() ."<br>\n";
+   $demodata[] = &$x;
+   $a[] = &$x;
+   flush();
+   unset($x);
+ }
+
+ # Companies
+ $f1 = new company($this->obj);
+ $f1->name = "Linux Consulting";
+ $msg .= $f1->save();
+ echo $lang[$f1->getType()].":". $f1->getFullName() ."<br>\n";
+ $demodata[] = &$f1;
+
+ $f2 = new company($this->obj);
+ $f2->name = "S.u.S.E";
+ $msg .= $f2->save();
+ echo $lang[$f2->getType()].":". $f2->getFullName() ."<br>\n";
+ $demodata[] = &$f2;
+
+
+ # Locations
+ $l1 = new location($this->obj);
+ $l1->company = &$f1;
+ $l1->lname = "Home";
+ $l1->phone_1 = "+49 9131 xxxxxx";
+ $l1->email_1 = "nospam@tutos.xx";
+ $l1->city = "Erlangen";
+ $l1->zip  = "91058";
+ $l1->country  = "DE";
+ $l1->adr_id  = $a[2]->id;
+ $msg .= $l1->save();
+ echo $lang[$l1->getType()].":". $l1->lname ."<br>\n";
+ $demodata[] = &$l1;
+ flush();
+   
+ $l2 = new location($this->obj);
+ $l2->company = &$f1;
+ $l2->lname = "Headquarter";
+ $l2->city = "Erlangen";
+ $l2->zip  = "91058";
+ $l2->email_1 = "hq@tutos.xx";
+ $l2->country  = "DE";
+ $l2->adr_id  = $f1->id;
+ $msg .= $l2->save();
+ echo $lang[$l2->getType()].":". $l2->lname ."<br>\n";
+ $demodata[] = &$l2;
+ flush();
+
+
+   
+ # No mails here !!
+ $tutos[demo] = 1;
+
+ # Products
+ $p1 = new product($this->obj);
+ $p1->name = "TUTOS";
+ $p1->version = $tutos[version];
+ $p1->creator = &$u[2];
+ $p1->setRole($a[2],PROD_ROLE_MANAGER,"managing");
+ $p1->setRole($f1,PROD_ROLE_PARTNER,"find the customers");
+ $p1->cl[1][] = 1;
+ $p1->cl[2][] = 1;
+ $p1->description = "This is TUTOS in TUTOS";
+ $p1->desc1 = "A Groupware and Projectmanagementsoftware";
+ $p1->desc2 = "demodata demodata";
+ $p1->state = PROD_STATE_FINISH;
+ $msg .= $p1->save();
+ echo $lang[$p1->getType()].":". $p1->getFullName() ."<br>\n";
+ $demodata[] = &$p1;
+
+ $p2 = new product($this->obj);
+ $p2->name = "Linux";
+ $p2->version = "2.2";
+ $p2->creator = &$u[0];
+ $p2->setRole($a[0],PROD_ROLE_MANAGER,"lead the bunch");
+ $p2->cl[1][] = 1;
+ $p2->cl[2][] = 1;
+ $p2->state = PROD_STATE_FINISH;
+ $msg .= $p2->save();
+ echo $lang[$p2->getType()].":". $p2->getFullName() ."<br>\n";
+ $demodata[] = &$p2;
+
+ $p3 = new product($this->obj);
+ $p3->name = "Linux";
+ $p3->version = "2.4";
+ $p3->creator = &$u[0];
+ $p2->state = PROD_STATE_RUN;
+ $p3->setRole($a[0],PROD_ROLE_MANAGER,"lead the bunch");
+ $p3->setRole($a[1],PROD_ROLE_PARTNER,"LEARN");
+ $p3->setRole($p2,PROD_ROLE_ANCESTOR,"the previous version");
+ $msg .= $p3->save();
+ echo $lang[$p3->getType()].":". $p3->getFullName() ."<br>\n";
+ $demodata[] = &$p3;
+
+ # Appointment
+ $c1 = new appointment($this->obj);
+ $c1->creator = &$u[0];
+ $c1->mod_allow = 0;
+ $c1->descr = "Meeting";
+ $c1->outside = 1;
+ $c1->t_ignore = 1;
+ $c1->a_start = new DateTime();
+ $c1->a_end   = new DateTime();
+ $c1->visitor = &$a[1];
+ $c1->product = &$p1;
+ $c1->participant[$a[0]->id] = &$a[0];
+ $c1->participant[$a[2]->id] = &$a[2];
+ $msg .= $c1->save();
+ echo $lang[$c1->getType()].":". $c1->getFullName() ."<br>\n";
+ $demodata[] = &$c1;
+
+ $c2 = new appointment($this->obj);
+ $c2->creator = &$u[0];
+ $c2->mod_allow = 0;
+ $c2->descr = "Count my money";
+ $c2->t_ignore = 1;
+ $c2->outside = 0;
+ $c2->a_start = new DateTime();
+ $c2->a_end   = new DateTime();
+ $c2->a_end->addDays(2);
+ $c2->participant[$a[1]->id] = &$a[1];
+ $msg .= $c2->save();
+ echo $lang[$c2->getType()].":". $c2->getFullName() ."<br>\n";
+
+ # adding some more departments
+ foreach ($demodata as $i => $f) {
+   if ($f->gettype() == "company") {
+     # Departments
+     $x = new department($this->obj);
+     $x->name = "Sales";
+     $x->setCompany($f->id);
+     $msg .= $x->save();
+     echo $lang[$x->getType()].":". $x->getFullName() ."<br>\n";
+     $demodata[] = &$x;
+     unset($x);
+
+     $x = new department($this->obj);
+     $x->name = "Development";
+     $x->setCompany($f->id);
+     $msg .= $x->save();
+     echo $lang[$x->getType()].":". $x->getFullName() ."<br>\n";
+     $demodata[] = &$x;
+     unset($x);
+   }
+ }
+
+ # adding some more locations
+ foreach ($demodata as $i => $f) {
+   if ( ($f->gettype() == "address")
+     || ($f->gettype() == "company")
+     || ($f->gettype() == "department")
+      ) {
+     $x = new location($this->obj);
+     if ($f->gettype() == "company") {
+       $x->company = &$f;
+       $x->email_1 = $f->name."@tutos.xx";
+     } else if ($f->gettype() == "address") {
+       $x->company = &$f1;
+       $x->email_1 = $f->l_name."@tutos.xx";
+     }
+     $x->lname = "Location";
+     $x->city = "somewhere";
+     $x->phone_1 = "+1 555 234762";
+     $x->zip  = 91000+ $cnt;
+     $x->country  = "DE";
+     $x->adr_id  = $f->id;
+     $msg .= $x->save();
+     echo $lang[$x->getType()].":". $x->lname ."<br>\n";
+     $demodata[] = &$x;
+     flush();
+     unset($x);
+     $cnt++;
+   }
+ }
+
+ foreach ($demodata as $i => $f) {
+   if ( ($f->gettype() == "product")
+      ) {
+     # Task
+     $t1 = new task($this->obj);
+     $t1->name = "Demo Task 1 /". $f->getFullName();
+     $t1->description = "This is a task";
+     $t1->creator = &$u[$cnt % $ucnt];
+     $x = new DateTime();
+     $t1->setSStart($x);
+     $x->addDays(3);
+     $t1->setSEnd($x);
+     $t1->volume = 12.5;
+     $t1->state = 1;
+     $t1->p_id = $f->id;
+     $t1->worker[$u[$cnt % $ucnt]->id] = $u[$cnt % $ucnt];
+     $msg .= $t1->save();
+     echo $lang[$t1->getType()].":". $t1->getFullName() ."<br>\n";
+     $demodata[] = &$t1;
+
+     $t2 = new task($this->obj);
+     $t2->name = "Demo Task 2";
+     $t2->description = "This is another task";
+     $t2->creator = &$u[$cnt % $ucnt];
+     $t2->volume = 2.5;
+     $t2->state = 0;
+     $t2->p_id = $f->id;
+     $t2->worker[$a[1]->id] = $a[1];
+     $x = new DateTime();
+     $x->addDays(1);
+     $t2->setSStart($x);
+     $x->addDays(2);
+     $t2->setSEnd($x);
+     $msg .= $t2->save();
+     echo $lang[$t2->getType()].":". $t2->getFullName() ."<br>\n";
+     $demodata[] = &$t2;
+
+     $t3 = new task($this->obj);
+     $t3->name = "Demo Task 3";
+     $t3->creator = &$u[$cnt % $ucnt];
+     $t3->description = "a lot to do eh ?";
+     $t3->volume = 14.5;
+     $t3->state = 2;
+     $t3->p_id = $t2->id;
+     $t3->worker[$a[0]->id] = $a[0];
+     $t3->worker[$a[1]->id] = $a[1];
+     $x = new DateTime();
+     $x->addDays(2);
+     $t3->setSStart($x);
+     $x->addDays(2);
+     $t3->setSEnd($x);
+     $msg .= $t3->save();
+     echo $lang[$t3->getType()].":". $t3->getFullName() ."<br>\n";
+     $demodata[] = &$t3;
+
+     unset($t1);
+     unset($t2);
+     unset($t3);
+   }
+ }
+ # timetrack
+ foreach ($demodata as $i => $f) {
+   if ( ($f->gettype() == "product")
+     || ($f->gettype() == "task")
+      ) {
+     # Timetrack
+     $x = new timetrack($this->obj);
+     $x->link_id = $f->id;
+     $x->ref = $f;
+     $x->worker= $a[$cnt % $acnt];
+     $x->volume = 2 + ($cnt %7) * 0.25;
+     $x->desc = "Working on ". $f->getFullName();
+     $x->wday = new DateTime();
+     $x->state = ($cnt %4) + 1;
+     $x->invoice = -1;
+     $x->cph = 110.5 ;
+     $x->currency = "EUR";
+     $x->creator = $u[1];
+     $msg .= $x->save();
+     echo $lang[$x->getType()].":". $x->getFullName() ."<br>\n";
+     $demodata[] = &$x;
+     unset($x);
+     $cnt++;
+     flush();
+   }
+ }
+?>

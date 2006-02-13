@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -12,16 +12,14 @@
  * 	Create the FCKeditorAPI object that is available as a global object in
  * 	the page where the editor is placed in.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2004-05-31 23:07:48
+ * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
 
 var FCKeditorAPI ;
-
-function FCKeditorAPI_GetInstance( instanceName )
-{
-	return this.__Instances[ instanceName ] ;
-}
 
 if ( !window.parent.FCKeditorAPI )
 {
@@ -30,11 +28,14 @@ if ( !window.parent.FCKeditorAPI )
 	FCKeditorAPI.__Instances = new Object() ;
 
 	// Set the current version.
-	FCKeditorAPI.Version = '2.0' ;
+	FCKeditorAPI.Version = '2.0 RC3' ;
 
 	// Function used to get a instance of an existing editor present in the 
 	// page.
-	FCKeditorAPI.GetInstance = FCKeditorAPI_GetInstance ;
+	FCKeditorAPI.GetInstance = function( instanceName )
+	{
+		return this.__Instances[ instanceName ] ;
+	}
 }
 else
 	FCKeditorAPI = window.parent.FCKeditorAPI ;

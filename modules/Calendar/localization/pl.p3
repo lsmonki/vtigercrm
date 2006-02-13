@@ -1,0 +1,795 @@
+<?php
+# $Id: pl.p3,v 1.16 2005/05/03 13:18:52 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "pl_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+#
+# Translated by Sergiusz Paw³owicz <ser@it-zone.org>
+# (C) Max Weber http://maxweber.net/.
+# (C) IT ZONE http://it-zone.org/
+# (C) AKF IT Ltd http://a-k-f.com/   <- Current development
+# Released under GPL: http://www.gnu.org/copyleft/gpl.html
+# All Rights Reserved.
+#
+$lang['content_encoding'] = "iso-8859-2";
+setlocale(LC_TIME,'pl_PL');
+#
+# Polish Texts
+#
+$lang['PleaseLogin']     = "Zaloguj siê";
+$lang['Welcome_1']       = "Witaj %s";
+$lang['Welcome_2']       = "ostatnie logowanie nast±pi³o %s z %s";
+$lang['Password']        = "Has³o";
+$lang['Username']        = "Nazwa u¿ytkownika";
+$lang['MOTD']            = "Wiadomo¶æ dnia";
+$lang['Login']           = "Login";
+$lang['LostPassword']    = "zgubi³e¶ has³o ?";
+$lang['LoggedIn']        = "Jeste¶ zalogowany. Dokonaj wyboru w menu z lewej strony ekranu.";
+$lang['ReadOnlyAppoint'] = "Nie masz praw do zmian parametrów tego spotkania!";
+$lang['StartDate']       = "Data rozpoczêcia";
+$lang['StartTime']       = "Godzina rozpoczêcia";
+$lang['AppStart']        = "Rozpoczêcie";
+$lang['AppCreatedBy']    = "Utworzone przez";
+$lang['EndDate']         = "Data zakoñczenia";
+$lang['EndTime']         = "Godzina zakoñczenia";
+$lang['AppEnd']          = "Koniec";
+$lang['Participants']    = "Uczestnicy";
+$lang['everybody']       = "wszyscy";
+$lang['allmyteams']      = "all my teams";
+$lang['atDateTime']      = "w";
+$lang['createdby']       = "utworzone przez";
+$lang['Description']     = "Opis";
+$lang['InfoEmail']       = "Informuj przez pocztê";
+$lang['InviteEmail']     = "Zawiadom przez e-mail";
+$lang['Invitation']      = "Zaproszenie";
+$lang['IgnoreTime']      = "zignoruj powy¿sze terminy";
+$lang['IgnoreTime2']     = "(je¶li np. spotkanie ma siê odbyæ w nieokre¶lonych godzinach tego dnia)";
+$lang['forphrase']       = "dla";
+$lang['nextweek']        = "nastêpny tydzieñ";
+$lang['lastweek']        = "poprzedni tydzieñ";
+$lang['plus4weeks']      = "plus cztery tygodnie";
+$lang['minus4weeks']     = "cztery tygodnie w ty³";
+$lang['only']            = "tylko";
+$lang['reload']          = "od¶wie¿";
+$lang['changeapp']       = "sprawd¼ lub zmieñ niniejsze spotkanie (%s - %s)";
+$lang['seeapp']          = "sprawd¼ szczegó³y spotkania (%s - %s)";
+$lang['AllEntries']      = "przejrzyj wszystkie %s wpisów";
+
+#
+$lang['DateTimePHP']     = "d/m/Y H:i T";
+$lang['DateTimeStr']     = "%d/%m/%Y %H:%M %Z";
+$lang['DateTimeFormat']  = "%s/%s/%s %02s:%02s %s";
+#
+$lang['DateTimeSPHP']    = "d/m H:i";
+$lang['DateTimeSStr']    = "%d/%m %H:%M";
+$lang['DateTimeSFormat'] = "%s/%s %02s:%02s";
+#
+$lang['TimeFormatPHP']   = "H:i T";
+$lang['TimeFormatStr']   = "%H:%M";
+$lang['TimeFormat']      = "%02s:%02s";
+#
+$lang['DateFormatTitle'] = "%A, %d. %B %Y";
+$lang['DateFormatStr']   = "%d/%m/%Y";
+$lang['DateFormat']      = "%s/%s/%s";
+$lang['DateShortFormat'] = "%s/%s";
+#
+$lang['Printable']       = "Do wydruku";
+$lang['PrintableInfo']   = "Poka¿ w formie ³atwej do wydruku";
+$lang['managedProd']     = "Zarz±dzane produkty i projekty";
+$lang['soldProd']        = "Sprzedane produkty i projekty";
+$lang['Enter']           = "Wprowad¼";
+$lang['Reset']           = "Wyzeruj";
+$lang['Remove']          = "Usuñ";
+$lang['Delete']          = "Usuñ";
+$lang['Change']          = "Zmieñ";
+$lang['Modify']          = "Modyfikuj";
+$lang['created']         = "utworzone";
+$lang['DateTimeFrom']    = "od";
+$lang['DateTimeTill']    = "do";
+$lang['Count']           = "Zlicz";
+$lang['Showing']         = "Pokazujê %s";
+$lang['show']            = "poka¿";
+$lang['lang']['auto']    = "automatycznie (przez przegl±darkê)";
+$lang['lang']['en']      = "angielski";
+$lang['lang']['en-US']   = "amerykañski angielski";
+$lang['lang']['de']      = "niemiecki";
+$lang['lang']['fr']      = "francuski";
+$lang['lang']['es']      = "hiszpañski";
+$lang['lang']['es-MX']   = "hiszpañski/Meksyk";
+$lang['lang']['es-NI']   = "hiszpañski/Nikaragua";
+$lang['lang']['es-VE']   = "hiszpañski/Venezuela";
+$lang['lang']['it']      = "w³oski";
+$lang['lang']['tw']      = "chiñski tradycyjny";
+$lang['lang']['zh']      = "chiñski uproszczony";
+$lang['lang']['ru']      = "rosyjski";
+$lang['lang']['pt']      = "portugalski";
+$lang['lang']['pl']      = "polski";
+$lang['lang']['ko']      = "koreañski";
+$lang['lang']['nl']      = "holenderski";
+$lang['lang']['sv']      = "szwedzki";
+$lang['lang']['el']      = "grecki";
+$lang['lang']['ca']      = "kataloñski";
+$lang['lang']['ja']      = "japoñski";
+$lang['lang']['hu']      = "wêgierski";
+$lang['lang']['cs']      = "czeski";
+$lang['lang']['pt']      = "portugalski";
+$lang['lang']['vi']      = "wietnamski";
+
+# Common
+$lang['ChangesOk']       = "Potwierdzasz zmiany?";
+$lang['InputOk']         = "Wprowadzone poprawnie?";
+$lang['Day1']            = "Poniedzia³ek";
+$lang['Day2']            = "Wtorek";
+$lang['Day3']            = "¦roda";
+$lang['Day4']            = "Czwartek";
+$lang['Day5']            = "Pi±tek";
+$lang['Day6']            = "Sobota";
+$lang['Day0']            = "Niedziela";
+$lang['SMonday']         = "Po";
+$lang['STuesday']        = "Wt";
+$lang['SWednesday']      = "¦r";
+$lang['SThursday']       = "Cz";
+$lang['SFriday']         = "Pi";
+$lang['SSaturday']       = "So";
+$lang['SSunday']         = "Ni";
+$lang['week']            = "tydzieñ";
+$lang['weeks']           = "tygodnie";
+$lang['days']            = "dni";
+$lang['minutes']         = "minut";
+$lang['seconds']         = "sekund";
+$lang['Date']            = "Data";
+$lang['NewEntry']        = "Nowy";
+$lang['CloneEntry']      = "Klonuj";
+$lang['Search']          = "Szukaj";
+$lang['PlsChangeName']   = "Zmieñ nazwê";
+$lang['SeeAddress']      = "zobacz kontakt %s";
+$lang['NavFirst']        = "pierwszy";
+$lang['NavBack']         = "ty³";
+$lang['NavNext']         = "nastêpny";
+$lang['NavLast']         = "ostatni";
+$lang['DecPoint']        = ".";
+$lang['ThousandPoint']   = ",";
+$lang['yes']             = "tak";
+$lang['no']              = "nie";
+$lang['FldsRequired']    = "<font size=\"-1\">Pola zaznaczone <font color=\"red\">(*)</font> musz± zostaæ wype³nione.</font>";
+$lang['any']             = "ka¿dy";
+$lang['all']             = "wszystko";
+$lang['extended']        = "rozszerzone";
+$lang['OrderBy']         = "w kolejno¶ci %s";
+$lang['RevOrderBy']      = "w odwrotnej kolejno¶ci %s";
+$lang['Export']          = "Eksportuj";
+$lang['ExportInfo']      = "Eksportuj dane jako plik";
+$lang['withmarked']      = "z zaznaczonym %s";
+$lang['SetTo']           = "ustaw %s na %s";
+$lang['pcs']             = "sztuk";
+$lang['Money']           = "Suma";
+$lang['Currency']        = "Waluta";
+$lang['ActionNil']       = "nic nie rób";
+$lang['Reference']       = "Powi±zanie";
+$lang['pageof']          = "Page %s/%s";
+$lang['RowIconsBefore']  = "Ikon PRZED wierszami";
+$lang['RowIconsAfter']   = "Ikon PO wierszach";
+
+# Appointments
+$lang['Appointment']     = "Spotkanie";
+$lang['Appointments']    = "Spotkania";
+$lang['NewAppoint']      = "Nowe spotkanie";
+$lang['NewAppointR']     = "Nowe (powtórka)";
+$lang['NewAppointInfo']  = "Utwórz nowe spotkanie";
+$lang['NewAppointInfoR'] = "Utwórz nowe spotkanie powtórkowe";
+$lang['AppointDetail']   = "Szczegó³y spotkania";
+$lang['AppointModify']   = "Zmiana spotkania";
+$lang['AppointCreate']   = "Utworzenie spotkania";
+$lang['AppointCommit']   = "Zapis spotkania";
+$lang['AppointOverview'] = "Przegl±d spotkañ";
+$lang['AppDelInfo']      = "Usuñ niniejsze spotkanie";
+$lang['AppChangeOrDel']  = "kto mo¿e zmieniaæ lub kasowaæ spotkanie";
+$lang['VisitAt']         = "Wizyta w";
+$lang['VisitFrom']       = "Wizyta z";
+$lang['Visits']          = "Wizyty";
+$lang['ModOldAppoint']   = "Zmieñ istniej±ce spotkanie";
+$lang['CreateAppoint']   = "Wprowad¼ nowe spotkanie";
+$lang['AppFirstDate']    = "Pierwsza data";
+$lang['AppLastDate']     = "Ostatnia data";
+$lang['AppNoLastDate']   = "bez ustalania koñca";
+$lang['AppRepeatType']   = "Powtarzane";
+$lang['AppRepeatDay']    = "codziennie";
+$lang['AppRepeatWeek']   = "co tydzieñ tego samego dnia co za pierwszym razem";
+$lang['AppRepeatMonth']  = "ka¿dego miesi±ca";
+$lang['AppRepeatYear']   = "ka¿dego roku ustalonego dnia/miesi±ca";
+$lang['AppRepeatInfo1']  = "ka¿dy(±) %s";
+$lang['AppRepeatInfo2']  = "ka¿dego miesi±ca w dniu %d";
+$lang['AppRepeatInfo3']  = "ka¿dego roku dnia %d/%m";
+$lang['AppRepeatInfo4']  = "ka¿dego dnia";
+$lang['AppSeeEntry']     = "zobacz wpis";
+$lang['AppSeeEntryI']    = "zobacz spotkanie";
+$lang['AppEmailRemind']  = "Przypomnij uczestnikom poczt± elektroniczn±";
+$lang['AppRemind'][0]    = "nigdy";
+$lang['AppRemind'][15]   = "15 minut wcze¶niej";
+$lang['AppRemind'][60]   = "godzinê wcze¶niej";
+$lang['AppRemind'][1440] = "dzieñ wcze¶niej";
+$lang['AppRemind'][10080]= "tydzieñ wcze¶niej";
+$lang['AppAllSee']       = "wszystko co mo¿esz obejrzeæ";
+$lang['AppAllTeams']     = "cz³onkowie wszystkich zespo³ów";
+$lang['AppEverything']   = "wszyscy";
+$lang['AppGetIcal']      = "Pobierz plik typu Ical";
+# You can expand this as you like
+# see also config.pinc AppLocDesc
+# colors depend on style sheets
+$lang['AppLoc'][0]       = "Biuro";
+$lang['AppLoc'][1]       = "Poza biurem";
+$lang['AppLoc'][2]       = "Wakacje";
+$lang['AppLoc'][3]       = "Choroba";
+$lang['AppLoc'][4]       = "Od³o¿one";
+$lang['AppLoc'][5]       = "Opcja";
+$lang['AppLoc'][6]       = "Prywatne";
+$lang['AppState'][0]     = "???";
+$lang['AppState'][1]     = "TAK";
+$lang['AppState'][2]     = "NIE";
+$lang['AppPrivate']      = "prywatne";
+$lang['AppVoteInfo']     = "g³osuj za tym spotkaniem";
+$lang['AppVoteState']    = "obecny g³osowanie";
+$lang['AppVoteHead']     = "G³osuj za tym spotkaniem (%s)";
+$lang['AppVoteSelect']   = "Oddaj g³os";
+$lang['AppsSearch']      = "Przeszukiwanie kalendarza";
+$lang['SearchForAppExt'] = "Rozszerzone poszukiwanie spotkania";
+$lang['SearchForApp']    = "Szukaj spotkania";
+$lang['AppUserSearch']   = "Show only my appointments";
+$lang['AppSelInfo']      = "(pozostaw puste, aby zobaczyæ wszystkie)";
+$lang['AppTrace']        = "sprawd¼ zgodê uczestników";
+$lang['AppTraceDesc']    = "(uczestnicy bêd± g³osowaæ)";
+$lang['AppCheck']        = "sprawd¼ wspó³uczestników";
+$lang['AppCheckDesc']    = "(nie twórz w przypadku konfliktu)";
+$lang['AppConflict']     = "%s jest w konflikcie z %s";
+
+# Personal Page
+$lang['PersonalPage']      = "Mój TUTOS";
+$lang['PersonalPageFor']   = "Strona osobista %s";
+$lang['PersonalSettings']  = "Ustawienia u¿ytkownika";
+$lang['PersonalSettingsI'] = "Zmieñ ustawienia osobiste dla %s";
+
+# User
+$lang['User']            = "U¿ytkownik";
+$lang['Users']           = "U¿ytkownicy";
+$lang['UserOverview']    = "Przegl±d u¿ytkowników";
+$lang['UserCreate']      = "Utwórz u¿ytkownika";
+$lang['UserModify']      = "Zmieñ dane u¿ytkownika";
+$lang['UserDel']         = "Usuñ u¿ytkownika";
+$lang['UserInfo']        = "Wpis u¿ytkownika";
+$lang['UserModInfo']     = "Zmieñ wpis u¿ytkownika %s";
+$lang['UserNewInfo']     = "Utwórz wpis dla %s";
+$lang['UserDelInfo']     = "Usuñ u¿ytkownika %s";
+$lang['UserUnknown']     = "Nieznany u¿ytkownik";
+$lang['UserLastSeen']    = "Ostatnie logowanie";
+$lang['UserLastHost']    = "Ostatni adres internetowy";
+$lang['UserAdmin']       = "Admin";
+$lang['UserLanguage']    = "Jêzyk";
+$lang['UserTimezone']    = "Strefa czasowa";
+$lang['UserTheme']       = "Temat";
+$lang['UserLayout']      = "uk³ad graficzny";
+$lang['UserHoliday']     = "Urlop";
+$lang['UserNamedays']    = "Imieniny";
+$lang['UserWorkdays']    = "Dni robocze";
+$lang['UserWeekstart']   = "Pocz±tek tygodnia";
+$lang['UserDisabled']    = "wy³±cz konto";
+$lang['UserDefaultGrp']  = "domy¶lna grupa dla nowych obiektów";
+
+# Product/Projects
+$lang['ProductP']        = "Produkt/projekt";
+$lang['ProductPs']       = "Produkty/projekty";
+$lang['Product']         = "Produkt";
+$lang['Products']        = "Produkty";
+$lang['Project']         = "Projekt";
+$lang['Projects']        = "Projekty";
+$lang['ProductsSearch']  = "Przeszukiwanie produktów/projektów";
+$lang['ProductsOverview']= "Przegl±d produktów/projektów";
+$lang['ProductsDetail']  = "Produkty/projekty - szczegó³y";
+$lang['ProductsContacts']= "Produkty/projekty - kontakty";
+$lang['ProductsContactI']= "poka¿ listê wszystkich cz³onków i ról dla %s";
+$lang['ProdApps']        = "Zwi±zane spotkania";
+$lang['ProdName']        = "Produkty/projekty";
+$lang['ProdVersion']     = "Wersja";
+$lang['ProdProd']        = "powi±zane projekty";
+$lang['ProdProdNew']     = "nowe powi±zanie";
+$lang['ProdRoles']       = "Rola";
+$lang['ProdFunc']        = "Funkcja";
+$lang['ProdRoleDesc']    = "Opis";
+$lang['ProdRolesNew']    = "Nowa rola";
+$lang['ProdRole'][1]     = "Kierownik";
+$lang['ProdRole'][2]     = "Kierownik handlowy";
+$lang['ProdRole'][3]     = "2. kierownik";
+$lang['ProdRole'][4]     = "Sprzeda¿";
+$lang['ProdRole'][5]     = "Rozwój";
+$lang['ProdRole'][6]     = "Klient";
+$lang['ProdRole'][7]     = "Dostawca";
+$lang['ProdRole'][8]     = "Sprzedawca";
+$lang['ProdRole'][9]     = "Partner";
+$lang['ProdRole'][10]    = "Projekt podstawowy";
+$lang['ProdRole'][11]    = "Projekt nadrzêdny";
+$lang['ProdRole'][12]    = "Projekt potomny";
+$lang['ProdRole'][13]    = "Podprojekt";
+$lang['ProdPath']        = "¦cie¿ka pliku";
+$lang['ProdDesc']        = "Opis";
+$lang['ProdDesc1']       = "Opis 1";
+$lang['ProdDesc2']       = "Opis 2";
+$lang['ProdState']       = "Stan";
+$lang['ProdState_']      = "Nieznany stan";
+$lang['ProdStates'][0]   = "Nabytek";
+$lang['ProdStates'][1]   = "W toku";
+$lang['ProdStates'][2]   = "Zakoñczone";
+$lang['ProdStates'][3]   = "Odwo³ane";
+$lang['ProdStates'][4]   = "Ilo¶æ w trakcie";
+$lang['ProdStates'][5]   = "Ilo¶æ anulowana";
+$lang['ProdStates'][-2]  = "ka¿dy niezakoñczony lub nieodwo³any";
+$lang['ProdClass1']      = "Klasyfikacja 1";
+$lang['ProdClasses1'][1] = "Oprogramowanie";
+$lang['ProdClasses1'][2] = "Sprzêt";
+$lang['ProdClasses1'][3] = "Konsulting";
+$lang['ProdClass2']      = "Klasyfikacja 2";
+$lang['ProdClasses2'][1] = "Region pó³nocny";
+$lang['ProdClasses2'][2] = "Region po³udniowy";
+$lang['ProdPrice']       = "Cena";
+$lang['ProdCost']        = "Koszt";
+$lang['SearchForProd']   = "Szukaj produktu lub projektu";
+$lang['SearchForProdExt']= "Rozszerzone przeszukiwanie produktów i projektów";
+$lang['ProdCreateInfo']  = "Utwórz nowy produkt lub projekt";
+$lang['ProdCloneInfo']   = "Klonuj ten projekt";
+$lang['ProdDelInfo']     = "Usuñ projekt %s";
+$lang['ProdModInfo']     = "Zmieñ produkt/projekt %s";
+$lang['ProdCreator']     = "utworzony przez";
+$lang['ProdCreation']    = "utworzony przez %s na %s";
+$lang['ProdCreationS']   = "utworzony w";
+$lang['ProdStart']       = "przew. start";
+$lang['ProdEnd']         = "przew. koniec";
+$lang['ProdProb']        = "Prawdopodobieñstwo";
+$lang['ProdModifyT']     = "Zmieñ niniejszy produkt/projekt %s";
+$lang['ProdCreateT']     = "Utwórz nowy produkt/projekt";
+$lang['ProdCloneT']      = "Utwórz nowy produkt/projekt bazuj±c na %s";
+$lang['ProdSelInfo']     = "(pozostaw puste, aby zobaczyæ wszystkie produkty i projekty)";
+$lang['ProdLinkInfo']    = "Obejrzyj produkt/projekt %s";
+$lang['ProdBetween']     = "utworzone pomiêdzy";
+$lang['ProdLinks']       = "Odno¶niki";
+$lang['ProdStats']       = "Statystyki";
+$lang['ProdStatsInfo']   = "Statystyki dla niniejszych produktów/projektów";
+$lang['ProdStatsTitle']  = "Statystyki produktu/projektu";
+$lang['ProdFields']      = "Pola";
+$lang['ProdRoleAddT']    = "Dodaj rolê w %s";
+
+# Mail
+$lang['MailboxEmail']    = "E-mail";
+$lang['MailSendTo']      = "Wy¶lij pocztê do %s";
+$lang['MailFrom']        = "Od";
+$lang['MailTo']          = "Do";
+$lang['MailCc']          = "Cc";
+$lang['MailBcc']         = "Bcc";
+$lang['MailSubject']     = "Temat";
+$lang['MailSent']        = "wysy³anie poczty %s do %s.";
+$lang['MailSentCc']      = "wysy³anie poczty %s (Cc) do %s.";
+$lang['MailSentBcc']     = "sending mail %s (Bcc) to %s.";
+$lang['MailCard']        = "Karta %s";
+$lang['MailAttachmentNew']  = "Za³±cznik";
+$lang['MailDate']        = "Data";
+$lang['MailSize']        = "Rozmiar";
+$lang['MailAttachmentShow']     = "poka¿ za³±cznik";
+$lang['MailAttachmentDownload'] = "¶ci±gnij za³±cznik";
+$lang['MailAttachmentName']     = "za³±cznik";
+$lang['MailForward']     = "Przeka¿ dalej";
+$lang['MailForwardI']    = "Przeka¿ dalej tê pocztê";
+$lang['MailReply']       = "Odpowiedz";
+$lang['MailReplyAll']    = "Odpowiedz wszystkim";
+$lang['MailReplyI']      = "Wy¶lij odpowied¼ na ten list";
+$lang['MailQuoteHead']   = "%s , %s napisa³:";
+
+# ACL
+$lang['AclModify']       = "Zmieñ uprawnienia";
+$lang['AclModifyI']      = "zmieñ uprawnienia dla %s";
+$lang['AclDetail']       = "Szczegó³y uprawnieñ";
+$lang['AclDetailI']      = "wy¶wietlam uprawnienia dla %s";
+$lang['permissions']     = "uprawnienia";
+$lang['ACLsee']          = "zobacz uprawnienia";
+$lang['ACLmod']          = "zmieñ uprawnienia";
+$lang['ACLread']         = "zobacz";
+$lang['ACLuse']          = "u¿yj";
+$lang['ACLmodify']       = "modyfikuj";
+$lang['ACLdelete']       = "skasuj";
+$lang['ACLreadI']        = "powy¿si u¿ytkownicy/grupy bêd± mogli zobaczyæ %s";
+$lang['ACLuseI']         = "powy¿si u¿ytkownicy/grupy bêd± mogli u¿yæ '%s'";
+$lang['ACLmodI']         = "powy¿si u¿ytkownicy/grupy bêd± mogli modyfikowaæ %s";
+$lang['ACLdelI']         = "powy¿si u¿ytkownicy/grupy bêd± mogli kasowaæ %s";
+$lang['ACLOverview']     = "Przegl±d uprawnieñ";
+$lang['ACLOverviewI']    = "zobacz wszystkie uprawnienia";
+$lang['ACLKeepOld']      = "Tylko podnie¶ uprawnienia. Zachowaj wszelkie obecne";
+$lang['ACLRecursive']    = "Rekursywnie zmieñ prawa obiektów podrzêdnych";
+$lang['Feature']         = "cecha";
+
+# Tasks
+$lang['Task']            = "Zadanie";
+$lang['Tasks']           = "Zadania";
+$lang['TaskDetail']      = "Szczegó³y zadania";
+$lang['TaskCreate']      = "Utwórz zadanie";
+$lang['TaskNewSubtask']  = "Nowe podzadanie";
+$lang['TaskCreateInfo']  = "utwórz nowe podzadanie w %s";
+$lang['TaskDelete']      = "Usuñ zadanie %s";
+$lang['TaskModify']      = "Zmieñ zadanie %s";
+$lang['TaskOverview']    = "Przegl±d zadañ";
+$lang['TaskOverviewInfo']= "poka¿ zadania dla %s";
+$lang['TaskName']        = "Nazwa";
+$lang['TaskState']       = "Stan";
+$lang['TaskMilestone']   = "Milestone";
+$lang['TaskDesc']        = "Do zrobienia";
+$lang['TaskWorker']      = "Do zrobienia przez";
+$lang['TaskVolumeFull']  = "Nak³ad pracy";
+$lang['TaskVolumeDone']  = "Wykonanie";
+$lang['TaskVolumeTodo']  = "Jeszcze do zrobienia";
+$lang['TaskSubTask']     = "Podzadanie";
+$lang['hours']           = "godzin";
+$lang['TaskCreation']    = "utworzone przez %s na %s";
+$lang['TaskStates'][0]   = "Przed";
+$lang['TaskStates'][1]   = "W trakcie";
+$lang['TaskStates'][2]   = "Zakoñczone";
+$lang['TaskStates'][3]   = "Zaleg³e";
+$lang['TaskS_Start']     = "zaplanowane rozpoczêcie";
+$lang['TaskS_End']       = "zaplanowane zakoñczenie";
+$lang['TaskSched']       = "zaplanowane";
+$lang['TaskReal']        = "realne";
+$lang['TaskLinkInfo']    = "Zobacz zadanie %s";
+$lang['TaskCompleted']   = "Ukoñczone w %3.2f procentach";
+$lang['Completed']       = "Ukoñczone";
+$lang['Reschedule']      = "Przesuniête";
+$lang['Reschedule_s']    = "Przesuniête od";
+$lang['Reschedule_e']    = "Przesuniête do";
+$lang['TaskGantt']       = "Wykres Ganta";
+$lang['TaskImport']      = "Zadanie: import z CSV";
+$lang['ImportSrcFile']   = "Plik ¼ród³owy";
+$lang['ImportColNames']  = "Nazwy kolumn w pliku CSV";
+$lang['ImportIndex']     = "Indeks WBS";
+$lang['ImportValid']     = "Import";
+$lang['ImportConfirm']   = "Potwierd¼ import";
+$lang['TaskSearch']        = "Przeszukiwanie zadañ";
+$lang['SearchForTask']     = "Przeszukiwanie zadañ";
+$lang['SearchForTaskExt']  = "Rozszerzone przeszukiwanie zadañ";
+$lang['TaskBetween']       = "Czas pomiêdzy";
+$lang['EmailNewTask']      = "New task: %s (%s)";
+$lang['EmailChangesTask']  = "Changes in task: %s (%s)";
+
+# Gantt Diagramm
+$lang['GanttLink']       = "Zobacz wykres Ganta";
+$lang['GanttLinkInfo']   = "Wykres Ganta";
+$lang['GanttTitle']      = "Wykres Ganta";
+$lang['GanttStart']      = "Czas rozpoczêcia";
+$lang['GanttEnd']        = "Czas zakoñczenia";
+$lang['GanttVolume']     = "Czas realizacji";
+$lang['GanttCompletion'] = "Zakoñczenie";
+
+# Company
+$lang['Company']           = "Firma";
+$lang['Companies']         = "Firmy";
+$lang['CompanySearch']     = "Poszukiwanie firmy";
+$lang['CompanyOverview']   = "Przegl±d firm";
+$lang['CompanyDetail']     = "Szczegó³y firm";
+$lang['CompanyModify']     = "Zmiana firmy";
+$lang['CompanyCreate']     = "Utworzenie firmy";
+$lang['CompanyCreateInfo'] = "Utworzenie nowej firmy";
+$lang['CompanyApps']       = "Spotkania z t± firm±";
+$lang['CompanyLinks']      = "Odno¶niki";
+$lang['CompanyChgInfo']    = "Zmieñ firmê %s";
+$lang['CompanyDelInfo']    = "Skasuj firmê %s";
+$lang['CompanyMembers']    = "Pracownicy bez departamentu";
+$lang['CompanyLinkInfo']   = "Zobacz firmê %s";
+$lang['CompanyNewMember']  = "dodaj personel";
+
+# Department
+$lang['Department']         = "Departament";
+$lang['Departments']        = "Departamenty";
+$lang['DepartmentSearch']   = "Poszukiwanie departamentu";
+$lang['DepartmentOverview'] = "Przegl±d departamentów";
+$lang['DepartmentDetail']   = "Szczegó³y departamantu";
+$lang['DepartmentModify']   = "Zmiana departamentu";
+$lang['DepartmentCreate']   = "Utworzenie departamantu";
+$lang['DepCreateInfo']      = "utworzenie nowego departamentu";
+$lang['DepartmentMembers']  = "Cz³onkowie departamentu";
+$lang['DepartmentApps']     = "Spotkania z tym departamantem";
+$lang['DepartmentLinks']    = "Odno¶niki";
+$lang['DepLinkInfo']        = "Zobacz departament %s w %s";
+$lang['DepChgInfo']         = "Zmieñ departament %s";
+$lang['DepDelInfo']         = "Usuñ departament %s";
+
+# Team
+$lang['Team']               = "Zespó³";
+$lang['Teams']              = "Zespo³y";
+$lang['TeamOverview']       = "Przegl±d zespo³ów";
+$lang['TeamDetail']         = "Szczegó³y zespo³u";
+$lang['TeamModify']         = "Zmiana zespo³u";
+$lang['TeamCreate']         = "Utworzenie zespo³u";
+$lang['TeamMember']         = "Cz³onek zespo³u";
+$lang['TeamPosMember']      = "mo¿liwy cz³onek zespo³u";
+$lang['TeamMail']           = "Napisz do zespo³u";
+$lang['TeamMailInfo']       = "wy¶lij pocztê do zespo³u %s";
+$lang['TeamApps']           = "Zobacz spotkania zespo³u %s";
+$lang['TeamLinkInfo']       = "Zobacz zespó³ %s";
+$lang['TeamManager']        = "Kierownik listy";
+$lang['TeamName']           = "Nazwa zespo³u";
+$lang['TeamCreation']       = "utworzony";
+$lang['TeamCount']          = "# cz³onków";
+$lang['TeamOverviewInfo']   = "zobacz listê wszystkich zespo³ów";
+$lang['TeamCreateI']        = "utwórz nowy zespó³";
+$lang['TeamDeleteI']        = "Usuñ zespó³ %s";
+$lang['TeamModifyI']        = "modyfikuj zespó³ %s";
+$lang['TeamSearch']         = "Poszukiwanie grupy";
+$lang['SearchForTeam']      = "Szukaj grupy";
+
+# Address
+$lang['AddressSearch']   = "Poszukiwanie kontaktu";
+$lang['AddressOverview'] = "Przegl±d kontaktów";
+$lang['AddressDetail']   = "Szczegó³y kontaktu";
+$lang['Address']         = "Kontakty";
+$lang['AddressEntries']  = "Ksi±¿ka kontaktów";
+$lang['AdrLocChange']    = "zmieñ kontakt %s";
+$lang['AdrLocCreate']    = "utwórz kontakt dla %s";
+$lang['AdrBMod']         = "Zmieñ podstawowy wpis";
+$lang['AdrBModInfo']     = "zmieñ podstawowy wpis %s";
+$lang['AdrBDel']         = "Usuñ podstawowy wpis";
+$lang['AdrBDelInfo']     = "usuñ wpis podstawowy i wszystkie kontakty dla %s";
+$lang['AdrBNew']         = "Nowy wpis";
+$lang['AdrBNewInfo']     = "Utwórz nowy wpis podstawowy";
+$lang['AdrCreateInfo']   = "utwórz nowy kontakt";
+$lang['AdrLNew']         = "Nowy kontakt";
+$lang['AdrLNewInfo']     = "utwórz nowy kontakt dla %s";
+$lang['AdrName']         = "Nazwa";
+$lang['AdrMailInfo']     = "wy¶lij pocztê do %s";
+$lang['AdrGetVcard']     = "Pobierz Vcard";
+$lang['AdrGetVcardI']    = "Pobierz niniejszy kontakt jako Vcard";
+$lang['AdrSeeEntry']     = "Zobacz wpis";
+$lang['AdrSeeEntryI']    = "Zobacz wpis w ksi±¿ce kontaktów dla %s";
+$lang['AdrLocTitle']     = "Kontakt %s";
+$lang['AdrBNewTitle']    = "Wprowad¼ nowy wpis podstawowy";
+$lang['AdrBChangeTitle'] = "Zmieñ podstawowy wpis kontaktu";
+
+$lang['Location']        = "Miejsce";
+$lang['Location2']       = "Miejsce";
+$lang['AdrTitle']        = "Tytu³";
+$lang['AdrFirstName']    = "Imiê";
+$lang['AdrMiddleName']   = "Inicja³ drugiego imienia";
+$lang['AdrLastName']     = "Nazwisko";
+$lang['AdrFormat1']      = "%1\$s %2\$s %3\$s";
+$lang['AdrFormat2']      = "%1\$s %2\$s";
+$lang['AdrFormatShort1'] = "%1\$s %2\$s";
+$lang['AdrFormatShort2'] = "%1\$s. %2\$s";
+$lang['AdrBirthday']     = "Urodziny";
+$lang['AdrPicture']      = "Fotka";
+$lang['AdrCat1']         = "Dom";
+$lang['AdrCat2']         = "Biuro";
+$lang['AdrCpLoc']        = "Powiel adres firmy";
+$lang['ZIP']             = "Kod pocztowy";
+$lang['State']           = "Stan";
+$lang['Country']         = "Kraj";
+$lang['Street']          = "Ulica";
+$lang['City']            = "Miasto";
+$lang['Phone']           = "Telefon";
+$lang['MobilePhone']     = "Mobile Phone";
+$lang['AdrFax']          = "FAX";
+$lang['AdrEmail']        = "E-mail";
+$lang['acc_info1']       = "Bank";
+$lang['acc_info2']       = "Bank";
+$lang['acc_nr']          = "Numer konta bankowego";
+$lang['AdrCustumerID']   = "Customer ID";
+$lang['ChangeLocInfo']   = "Zmieñ %s adres dla %s";
+$lang['DeleteLocInfo']   = "Usuñ %s adres dla %s";
+$lang['AdrLinks']        = "Odno¶niki";
+$lang['AdrCategory']     = "Kategoria";
+$lang['AdrDescription']  = "Lokalizacja";
+$lang['ShowCal']         = "Zobacz kalendarz %s";
+$lang['SearchForAdr']    = "Szukaj w ksi±¿ce kontaktów";
+$lang['SearchForAdrExt'] = "Rozszerzone przeszukiwanie ksi±¿ki kontaktów";
+$lang['SearchForCmp']    = "Szukaj firmy";
+
+# Main Menu
+$lang['Calendar']        = "Kalendarz";
+$lang['Addresses']       = "Kontakty";
+$lang['ProductMenu']     = "Produkty i projekty";
+$lang['Logout']          = "Wylogowanie";
+$lang['CalendarInfo']    = "Kalendarz na dzi¶";
+$lang['AddressesInfo']   = "Szukaj kontaktu";
+$lang['ProductInfo']     = "Produkty i projekty";
+$lang['LogoutInfo']      = "Wylogowanie z systemu";
+
+# Help
+$lang['Help']            = "Pomoc";
+$lang['HelpInfo']        = "Pomoc dotycz±ca niniejszej strony";
+
+# Resource
+$lang['ResCal']          = "U¿ycie zasobów";
+$lang['ResCalDetail']    = "U¿ycie zasobów %s dla %s";
+
+# X.509v3-Certs
+$lang['Certificate']     = "Certyfikat";
+
+# MAP
+$lang['MapSearch']       = "Wybór mapy";
+$lang['MapHeader']       = "Poka¿ mapê dla %s";
+
+# History
+$lang['HistoryDetail']   = "Historia %s";
+$lang['HistoryShow']     = "Historia %s %s";
+$lang['HistoryFld']      = "Pole";
+$lang['HistoryOldV']     = "Poprzednia warto¶æ";
+$lang['HistoryNewV']     = "Nowa warto¶æ";
+$lang['HistoryLink']     = "zobacz historiê";
+$lang['HistoryLinkI']    = "zobacz historiê dla %s";
+$lang['HistoryDeleted']  = "w miêdzyczasie usuniête";
+
+# Timetrack
+$lang['Timetrack']         = "Wysi³ek";
+$lang['Timetracks']        = "Wysi³ek";
+$lang['TimetrackCreate']   = "Ustal czas";
+$lang['TimetrackCreateI']  = "ustal czas dla %s";
+$lang['TimetrackDelI']     = "usuñ ustalony czas %s";
+$lang['TimetrackNew']      = "Nowe ¶ledzenie czasu";
+$lang['TimetrackModify']   = "Zmiana ¶ledzenia czasu";
+$lang['TimetrackOverview'] = "Przegl±d czasu";
+$lang['TimetrackWorker']   = "Pracownik";
+$lang['TimetrackRef']      = "Odniesienia";
+$lang['TimetrackDate']     = "Data";
+$lang['TimetrackSearch']   = "Przeszukiwanie czasu";
+$lang['SearchForTT']       = "Przeszukiwanie czasu";
+$lang['SearchForTTExt']    = "Rozszerzone przeszukiwanie czasu";
+$lang['TimetrackBetween']  = "pomiêdzy";
+$lang['TimetrackBooked']   = "Ustalony czas";
+$lang['TimetrackBookedI']  = "ustalony czas dla %s";
+$lang['TTStatsTitle']      = "Statystyka czasu";
+$lang['TTcph']             = "Koszt godzinny";
+$lang['TTState']           = "Stan";
+$lang['TTStates'][-1]      = "bez stanu";
+$lang['TTStates'][1]       = "sprawdzone";
+$lang['TTStates'][2]       = "wystawiona faktura";
+$lang['TTStates'][3]       = "zap³acone";
+$lang['TTStates'][4]       = "niesp³acalne";
+$lang['TTRecord']          = "Zapis czasu";
+$lang['TTfinish']          = "Koniec";
+
+# Fax
+$lang['FaxCreate']         = "Nowy FAX";
+$lang['FaxSendTo']         = "Wy¶lij fax do %s";
+$lang['FaxTo']             = "Do:";
+$lang['FaxNr']             = "Nr FAXu:";
+$lang['FaxNote']           = "Zapisz niniejszy fax jako notkê dla %s";
+$lang['FaxSpooledTo']      = "Fax zosta³ zakolejkowany do %s";
+
+# SMS
+$lang['SMSCreate']         = "SMS";
+$lang['SMSSendTo']         = "Wy¶lij SMSa do %s";
+
+#Email Subject Lines
+$lang['EmailRememberApp']  = "Pamiêtaj: spotkanie o %s";
+$lang['EmailFax']          = "FAX";
+
+# Admin Pages
+$lang['AdminShow']         = "Administracja";
+$lang['AdminDBInfo']       = "Informacje o bazie danych";
+$lang['AdminDBTable']      = "Tabela";
+$lang['AdminDBCount']      = "Wpisy";
+$lang['AdminDBName']       = "Nazwa bazy";
+$lang['AdminDBAlias']      = "Synonim bazy";
+$lang['AdminDBPrefix']     = "Prefix";
+$lang['AdminDBUser']       = "U¿ytkownik bazy";
+$lang['AdminDBPass']       = "Has³o";
+$lang['AdminDBHost']       = "Serwer";
+$lang['AdminDBPort']       = "Port";
+$lang['AdminDBType']       = "Typ";
+$lang['AdminDBHome']       = "ORA_HOME";
+$lang['AdminLoginInfo']    = "Ostatnie logowania";
+$lang['AdminDBSync']       = "Synchronizacja bazy danych";
+$lang['AdminDBSource']     = "¬ród³owa baza danych";
+$lang['AdminDBWhat']       = "Co/Jak";
+$lang['AdminDBTarget']     = "Docelowa baza danych";
+$lang['AdminDBRep']        = "Repozytorium plików";
+$lang['AdminModOverview']  = "modu³y TUTOSa";
+$lang['ClientBrowser']     = "Client Browser";
+$lang['AdminKillSession']  = "Kill Session";
+
+# Database
+$lang['DB']                = "Baza danych";
+$lang['DBInit']            = "Inicjalizacja";
+$lang['DBModify']          = "Modyfkacja bazdy danych";
+$lang['DBModifyI']         = "Modyfikuj bazê danych %s";
+$lang['DBCreate']          = "Utwórz bazê danych";
+$lang['DBDetail']          = "Szczegó³y bazy danych";
+$lang['DBLastDate']        = "Data ostatniej synchronizacji";
+$lang['DBCurrID']          = "ID";
+$lang['DBLastID']          = "ID ostatniej synchronizacji";
+$lang['DBLastAnalyze']     = "Last Analyze";
+$lang['DBrelogin']         = "u¿yj bazy danych";
+$lang['DBreloginI']        = "ponownie zaloguj w %s";
+$lang['DBOverview']        = "Przegl±d bazy danych";
+$lang['DBUpdate']          = "Uaktualnienie bazy";
+$lang['DBUpdateI']         = "uaktualnij bazê %s";
+$lang['AdminDBSyncM'][1]   = "usuñ cel, a potem kopiuj wszystko ze ¼ród³a do celu";
+$lang['AdminDBSyncM'][2]   = "kopiuj wszystko co nowe (od ostatniej synchronizacji) ze ¼ród³a do celo, a potem kopiuj wszystko";
+$lang['DBSystemID']        = "System ID";
+
+# config values in the Database
+$lang['CfgLogo']           = "URL do LOGO";
+$lang['CfgLogoLink']       = "URL z LOGO";
+$lang['CfgBugAutoName']    = "schemat nazewnictwa dla b³êdów";
+$lang['CfgInvAutoName']    = "schemat nazewnictwa dla faktur";
+$lang['CfgVATlist']        = "lista warto¶ci podatku VAT";
+$lang['CfgVersion']        = "Wersja programu TUTOS";
+
+# sales forecast report
+$lang['SalesForecastRep']   = "Prognozowany raport sprzeda¿y";
+$lang['UndefinedEndDate']   = "Nieznana data zakoñczenia";
+$lang['SalesBalanced']      = "Bilans sprzeda¿y";
+$lang['AccumulatedRevenue'] = "Zgromadzony dochód";
+$lang['PeriodRevenue']      = "Dochód na okres";
+$lang['Period']             = "Okres";
+$lang['Est_revenue']        = "Dochód szacunkowy";
+$lang['Graph']              = "Wykres";
+$lang['GraphInfo']          = "Prezentuj na wykresie";
+
+# Permissions
+$lang['perm'][usecalendar]       = "u¿ywanie kalendarza";
+$lang['perm'][usetaskmanagement] = "u¿ywanie zadañ";
+$lang['perm'][usemaplink]        = "u¿ywanie map";
+$lang['perm'][useprojects]       = "u¿ywanie projektów";
+$lang['perm'][usetimetrack]      = "u¿ywanie ¶ledzenia czasu";
+$lang['perm'][usefax]            = "u¿ywanie faxu";
+$lang['perm'][usesms]            = "u¿ywanie sms-ów";
+$lang['perm'][useoverlib]        = "u¿ywanie zg³oszeñ";
+$lang['perm'][useaddressbook]    = "u¿ywanie ksi±¿ki kontaktów";
+$lang['perm'][usemail]           = "u¿ywanie poczty";
+$lang['perm'][usehistory]        = "wy¶wietlanie historii";                                                                              
+$lang['perm'][useteams]          = "u¿ywanie zespo³ów";
+$lang['FeatureOff']              = "Cecha w ogóle wy³±czona";
+
+# Error Messages
+$lang['Err0001']         = "Nie masz uprawnieñ do u¿ywania %s: %s";
+$lang['Err0002']         = "pocz±tek po koñcu!";
+$lang['Err0006']         = "Dokonaj szczegó³owego wyboru";
+$lang['Err0009']         = "Wype³nij pole <i>%s</i>";
+$lang['Err0012']         = "Nieznana firma<i>%s</i>!";
+$lang['Err0014']         = "Dokonaj wyboru pola <i>%s</i>";
+$lang['Err0017']         = "Wprowad¼ numer w polu <i>%s</i>!";
+$lang['Err0018']         = "Nazwa <i>%s</i> jest wa¿na dla %d wpisów";
+$lang['Err0020']         = "Nie masz uprawnieñ do zmiany tego pliku!";
+$lang['Err0021']         = "Nie masz uprawnieñ do zmiany zespo³u 0";
+$lang['Err0022']         = "Z powodu niewystarczaj±cych uprawnieñ nie mo¿esz obejrzeæ  %s";
+$lang['Err0023']         = "Z powodu niewystarczaj±cych uprawnieñ nie mo¿esz usun±æ %s";
+$lang['Err0024']         = "Z powodu niewystarczaj±cych uprawnieñ nie mo¿esz modyfikowaæ %s";
+$lang['Err0025']         = "Nie wprowadzono loginu i/lub has³a";
+$lang['Err0026']         = "Zalogowanie niemo¿liwe";
+$lang['Err0027']         = "Nieudane logowanie";
+$lang['Err0028']         = "Konto skasowane";
+$lang['Err0029']         = "Nie podano adresu nadawcy";
+$lang['Err0030']         = "Nie ma ¿adnego faksu w kolejce!";
+$lang['Err0031']         = "Brak numeru faxu!";
+$lang['Err0032']         = "Wysy³anie faxów wy³±czone!";
+$lang['Err0033']         = "wysy³anie poczty wy³±czone! Poczta \"%s\" <u>nie</u> zosta³a wys³ana.";
+$lang['Err0034']         = "poczta nie zosta³a wys³ana! nie wpisano nadawcy \"%s\" listu.";
+$lang['Err0035']         = "poczta nie zosta³a wys³ana! nie wpisano odbiorców albo ju¿ ten list nadano.";
+$lang['Err0036']         = "Produkt/projekt ju¿ istnieje (%s) z podan± nazw± i wersj±!";
+$lang['Err0037']         = "poczta %s nie zosta³a wys³ana! Brakuje prototypu pliku pocztowego (%s)!";
+$lang['Err0038']         = "Niew³a¶ciwa data w polu %s!";
+$lang['Err0039']         = "Adres (%s) ju¿ istnieje!";
+$lang['Err0040']         = "nie znaleziono %s!";
+$lang['Err0041']         = "Has³a nie s± identyczne!";
+$lang['Err0042']         = "Niepoprawne poprzednie has³o!";
+$lang['Err0043']         = "List %s nie jest w poprawnym (xxx@abc.com) formacie poczty!";
+$lang['Err0044']         = "Firma ju¿ istnieje (%s)!";
+$lang['Err0045']         = "Departament ju¿ istnieje (%s)!";
+$lang['Err0046']         = "Zespó³ ju¿ istnieje (%s)!";
+$lang['Err0047']         = "Nie mogê usun±æ praw administratora. Musi istnieæ przynajmniej jeden administrator systemu!";
+$lang['Err0048']         = "Nic nie znaleziono!";
+$lang['Err0049']         = "Konto %s jest wy³±czone!";
+$lang['Err0050']         = "Nie potrafiê odnale¼æ zawarto¶ci CSV !";
+$lang['Err0051']         = "Nie potrafiê odnale¼æ separatora CSV";
+$lang['Err0052']         = "Musisz podaæ klasyfikacjê";
+$lang['Err0053']         = "Nie mo¿esz usun±æ samego siebie";
+$lang['Err0054']         = "Ojejku, wed³ug serwera nie masz prawa do utworzenia %s";
+
+### Local Variables: ***
+### End: ***
+?>

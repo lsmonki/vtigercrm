@@ -1,0 +1,73 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+
+  
+<table width="65%" border="0" cellspacing="0" cellpadding="0" >
+	<tr>
+		<form action="index.php" method="post" name="company">	
+			<input type="hidden" name="module" value="Settings">
+			<input type="hidden" name="action">	
+			{EDITCOMPANYDETAILS}
+			{CANCELCOMPANYDETAILS}
+		</form>
+	</tr>
+	
+</table>
+<br>
+<table width="65%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	<table width="100%" cellpadding="5" cellspacing="1" border="0">
+	<tbody>		
+			
+		<tr><th align=left class="formSecHeader" colspan="2">{MOD.LBL_LBL_COMPANY_INFO}</th></tr>
+		<tr><td nowrap class="dataLabel" width="50%">{MOD.LBL_ORGANIZATION_NAME}:</td>
+	    <td nowrap class="dataField"> {ORGANIZATIONNAME}</td></tr>
+	<tr><td nowrap class="dataLabel" width="50%">{MOD.LBL_ORGANIZATION_ADDRESS}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONADDRESS}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_CITY}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONCITY}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_STATE}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONSTATE}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_CODE}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONCODE}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_COUNTRY}:</td>
+	    <td nowrap class="dataField"> {ORGANIZATIONCOUNTRY}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_PHONE}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONPHONE}</td></tr>
+	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_FAX}: </td>
+	    <td nowrap class="dataField"> {ORGANIZATIONFAX}</td></tr>
+ 	<tr><td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_WEBSITE}: </td>
+	    <td nowrap class="dataField"><a href="http://{ORGANIZATIONWEBSITE}">{ORGANIZATIONWEBSITE}</a></td>	      </tr>
+	<tr>
+	    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_LOGO}: </td>
+	    <td nowrap class="dataField"><a href="javascript:popitup('{ORGANIZATIONLOGOPATH}/{ORGANIZATIONLOGONAME}');">{ORGANIZATIONLOGONAME}</a></td></tr>
+	</tr>
+	
+</table>
+</td></tr>
+</table>
+
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!--
+var win = null;
+function popitup(url)
+{
+        newwindow=window.open(url,'name','height=300,width=450,left=550,top=20');
+
+}
+
+// -->
+</SCRIPT>
+
+<!-- END: main -->

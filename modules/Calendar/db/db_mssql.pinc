@@ -1,0 +1,567 @@
+<?php
+/*
+ * Copyright 2001 - 2002 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: db_mssql.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ *  $Author: saraj $
+ */
+
+require_once 'db.pinc';
+#
+# Register parse functions for datetime
+#
+$tutos['dateformat'][] = 'mssqlformat1';
+
+$tutos['mssql']['Jan'] = 1;
+$tutos['mssql']['Feb'] = 2;
+$tutos['mssql']['Mar'] = 3;
+$tutos['mssql']['Apr'] = 4;
+$tutos['mssql']['May'] = 5;
+$tutos['mssql']['Jun'] = 6;
+$tutos['mssql']['Jul'] = 7;
+$tutos['mssql']['Aug'] = 8;
+$tutos['mssql']['Sep'] = 9;
+$tutos['mssql']['Oct'] = 10;
+$tutos['mssql']['Nov'] = 11;
+$tutos['mssql']['Dec'] = 12;
+
+/**
+ * check for string delivered in postgres format
+ */
+function mssqlformat1(&$d,$str) {
+  global $tutos;
+
+  $regs = array();
+  if ( ereg( "^([A-Za-z]{3}) ([0-9]*) ([ 0-9]*) ([ 0-9]*):([0-9]*)([A-Z]{2})$", $str, $regs ) ) {
+    # Init via DB    Apr 14  2004 8:23AM
+
+    $d->month = $tutos['mssql'][$regs[1]];
+
+    $d->day   = (integer)$regs[2];
+    $d->year  = (integer)$regs[3];
+
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = 0;
+
+    if ($regs[6] == "PM") {
+      $d->hour  += 12;
+    }
+
+    $d->format = 22;
+#    echo "QQQ:".$str."<br>";
+  }
+  return;
+}
+
+/** ---------------------------------------------------------------------------
+ * MS SQL database connection class (old style)
+ *
+ * @package DB
+ */
+class db_mssql extends tutos_db {
+  /* ---------------------------------------------------------------------------
+   */
+  function db_mssql(&$db) {
+    global $tutos;
+
+    parent::init($db);
+
+    $tutos[use_check_dbacl] = 0;
+    $this->txtlen = 4000;
+    $this->openfunc = 'mssql_connect';
+  }
+  /**
+   * open the DB connection
+   */
+  function open() {
+    global $tutos;
+
+
+    $of = $this->openfunc;
+    $c = @$of($this->db->host,$this->db->user,$this->db->pass);
+    if ($c == false) {
+      Fatal_Error("Opening the MS SQL database ".$this->getFullname() ,mssql_get_last_message() );
+    }
+    mssql_select_db($this->db->name, $c);
+    $this->conn = &$c;
+  }
+  /**
+   * close the DB connection
+   */
+  function close() {
+    $this->timezone("");
+    mssql_close($this->conn);
+    $this->conn = -1;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function notime() {
+    #return ("'1970-1-1 00:00:00'");
+    return "null";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function now() {
+    return "getdate()";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function exec($query,$showerror = 1) {
+    if ( $this->conn == -1 ) {
+      $msg = "No Connection";
+      return -1;
+    }
+
+#echo "X: ".$query ."<br>";
+#return;
+
+    $result = new result_mssql($this);
+
+    $x = mssql_query($query);
+    if (!$x) {
+      if ($showerror == 1) {
+        Fatal_Error("Using the MS SQL database ".$this->getFullname() ,$query."\n<br> ".mssql_get_last_message() );
+      }
+      $this->lasterror = mssql_get_last_message() ;
+      return -1;
+    }
+
+    $this->lastquery = $query;
+    if ($x == 1) {
+      return ;
+    }
+
+    $this->lasterror = "";
+
+    $numrows = mssql_num_rows($x);
+    $numcols = mssql_num_fields($x);
+
+#echo "X: ". $numrows." ".$numcols."<br>";
+    if ( $numcols == 0 ) {
+      return $result;
+    }
+
+   
+    $result->result = &$x;
+
+    return $result;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function nextid($name = "id") {
+    $query = "INSERT into ".$this->prefix."SEQ_".$name ;
+    $query .= " (dummy) values ('')";
+    $r = $this->exec($query);
+    $query = "SELECT IDENT_CURRENT ('". $this->prefix ."SEQ_". $name ."') as s_id";
+    $r = $this->exec($query);
+    if ( 1 != $r->numrows()) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0, "s_id");
+#echo "XXX:".$id;
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setSeqID($id,$name = "id") {
+    $query = "DROP SEQUENCE ". $this->prefix . $name;
+    $this->exec($query);
+
+    $query = "CREATE SEQUENCE ". $this->prefix . $name ." start with ". $id;
+    $this->exec($query);
+
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getSeqID($name = "id") {
+    $query = "SELECT ". $this->prefix . $name .".currval FROM dual";
+    $r = $this->exec($query);
+    if ( 1 != $r->numrows()) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0, "currval");
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function string($t) {
+    $t = str_replace("'","''",$t);
+    return "'". $t ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function text($t) {
+    if ( $this->txtlen > 0 ) {
+      $t = str_replace("'","''",substr($t,0,$this->txtlen));
+    }
+    return "'". $t ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datetimestring for d
+   */
+  function datetime(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+    $t = new DateTime();
+    $t->setDateTimeTS($d->ts_def);  // set the fields in default TZ
+    $t->ts_def = $t->ts;
+    $x = sprintf("'%04d-%02d-%02d %02d:%02d:%02d'",$t->year,$t->month,$t->day,$t->hour,$t->min,$t->sec);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datestring for d
+   */
+  function date(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+ 
+    $t = new DateTime();
+    $t->setDateTimeTS($d->ts_def);  // set the fields in default TZ
+    $t->ts_def = $t->ts;
+    $x = sprintf("'%04d-%02d-%02d'",$t->year,$t->month,$t->day);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * case sensitive strict string compare
+   */
+  function like($fld1,$name,$fld2 = "",$fld3 = "") {
+    $fld = $fld1;
+    if ( $fld2 != "" ) {
+      $fld .= "|| ' ' ||". $fld2;
+    }
+    if ( $fld3 != "" ) {
+      $fld .= "|| ' ' ||". $fld3;
+    }
+    $name = eregi_replace(" ","%",$name);
+    $name = eregi_replace("'","?",$name);
+    return (" UPPER(". $fld .") like UPPER('%". $name ."%') ");
+  }
+  /* ---------------------------------------------------------------------------
+   * case sensitive strict string compare
+   */
+  function like2($fld,$name) {
+    #$name = eregi_replace(" ","%",$name);
+    $name = eregi_replace("'","''",$name);
+    return (" ". $fld ." = '". $name ."' ");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function password($pw) {
+    if ( $this->db->crypt != 1 ) {
+      return "'". $pw ."'";
+    }
+    return "'". crypt($pw,"271166") ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function begin($t) {
+    $r = $this->Exec("BEGIN TRANSACTION ". $t );
+#    $r = $this->Exec("BEGIN");
+    return "X";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function commit($t) {
+    $r = $this->Exec("COMMIT TRANSACTION ". $t);
+#    $r = $this->Exec("COMMIT");
+#    $r = $this->Exec("END ");
+    return "Y";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function abort($t) {
+    $r = $this->Exec("ROLLBACK TRANSACTION ". $t);
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function lock($t) {
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function timezone($tz) {
+    global $tutos;
+
+    if ( !empty($tz)) {
+      putenv ("TZ=".$tz);
+      strftime("%H:%M %Z");
+    } else {
+      putenv ("TZ=". $tutos[defaultTZ]);
+      strftime("%H:%M %Z");
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getFullname() {
+    return "MS SQL:". $this->db->user ."@" .$this->db->host ." ". $this->db->name;
+  }
+  /* ---------------------------------------------------------------------------
+   * set persistent mode
+   * 0 = no
+   * 1 = yes
+   */
+  function setPersistent($mode) {
+    if ( $mode == 1 ) {
+      $this->openfunc = 'mssql_connect';
+    } else {
+      $this->openfunc = 'mssql_pconnect';
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function error($r = "") {
+    return "DBerror: ". $this->getFullName() ." |". mssql_get_last_message()."|";
+  }
+  /**
+   * Clear a table
+   * tbl = name of table
+   * truncate a table
+   */
+  function truncatetable($tbl) {
+    $q = "TRUNCATE ". $this->prefix . $tbl;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function droptable(&$tbl) {
+    if (is_array($tbl)) {
+      $q = "DROP TABLE ". $this->prefix . $tbl[name] ;
+    } else {
+      $q = "DROP TABLE ". $this->prefix . $tbl ;
+    }
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createtable(&$tbl) {
+    $comment = array();
+    $q = "CREATE TABLE ". $this->prefix . $tbl[name] ;
+    $pre = " (";
+    foreach ($tbl as $i => $f) {
+      if (! is_array($f) ) {
+        continue;
+      }
+      if ($f[type] == "ID_TYPE") {
+        $t = "int";
+      } else if ($f[type] == "date") {
+        $t = "datetime";
+      } else if ($f[type] == "TS_TYPE") {
+        $t = "datetime";
+      } else if ($f[type] == "TX_TYPE") {
+        $t = "varchar(". $this->txtlen .")";
+      } else if ($f[type] == "VARCHAR") {
+        $t = "varchar(". $f[size] .")";
+      } else {
+        $t = eregi_replace("varchar","varchar2",$f[type]);
+      }
+      $c = $f[constraints];
+      $c = ereg_replace("PK","NN primary key",$c);
+      $c = ereg_replace("PK","",$c);
+      $c = ereg_replace("U","unique",$c);
+      $c = ereg_replace("NN","not null",$c);
+if (!strstr($c,"not null")) {
+$c .= "null";
+}
+      $q .= $pre. $this->colname($i) ." ". $t ." ". $c;
+#      $q .= $pre. $this->colname($i) ." ". $t ." ";
+      $pre = ",";
+      $comment[] = "COMMENT ON COLUMN ". $this->prefix . $tbl[name] .".".$this->colname($i) ." IS '". $f[Desc] ."'";
+    }
+    $q .= ")";
+
+    $r = $this->exec($q,0);
+    if ($r != -1 ) {
+      $q = " COMMENT ON TABLE ". $this->prefix . $tbl[name] ." IS '". $tbl[Desc] ."'";
+      $this->exec($q,0);
+      foreach ($comment as $f ) {
+        $this->exec($f,0);
+      }
+    }
+    return $r;
+  }
+  /**
+   * rename a table
+   * oldtbl = current table descriptopn
+   * newname = new table name
+   */
+  function renametable(&$oldtbl,$newname) {
+    $q = "ALTER TABLE ". $this->prefix . $oldtbl[name] ." RENAME TO " . $this->prefix . $newname;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with index description
+   */
+  function dropindex(&$idx) {
+    $q = "DROP INDEX ". $this->prefix . $idx[name] ;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createindex(&$idx) {
+    if ( ! isset($idx[type]) ) {
+      $idx[type] = "";
+    }
+    $q = "CREATE ".$idx[type] ." INDEX ". $this->prefix . $idx[name] ." ON ". $this->prefix . $idx[table];
+
+    $pre = "(";
+    @reset($idx[column]);
+    while ( list ($i,$f) = @each ($idx[column]) ) {
+     $q .= $pre . $this->colname($f);
+     $pre = ",";
+    }
+    $q .= ")";
+    return $this->exec($q,0);
+  }
+  /**
+   * col = array with column description
+   */
+  function createcolumn($tblname,$colname,&$col) {
+    $q = "ALTER TABLE ". $this->prefix . $tblname ." ADD (";
+
+    if ($col[type] == "ID_TYPE") {
+      $t = "int";
+    } else if ($col[type] == "TS_TYPE") {
+      $t = "datetime";
+    } else if ($col[type] == "TX_TYPE") {
+      $t = "varchar(". $this->txtlen .")";
+    } else if ($col[type] == "VARCHAR") {
+      $t = "varchar(". $col[size] .")";
+    } else {
+      $t = eregi_replace("varchar","varchar2",$col[type]);
+    }
+    $c = $col[constraints];
+    $c = ereg_replace("PK","primary key",$c);
+    $c = ereg_replace("U","unique",$c);
+    $c = ereg_replace("NN","not null",$c);
+    $q .= $this->colname($colname) ." ". $t ." ". $c;
+    $q .= ")";
+    $r = $this->exec($q,0);
+
+    $q = " COMMENT ON COLUMN ". $this->prefix .  $tblname .".". $this->colname($colname) ." IS '". $col[Desc] ."'";
+    $this->exec($q,0);
+    return $r;
+  }
+  /**
+   * name = name of sequencer
+   */
+  function dropsequence(&$seq) {
+     $q = "drop table ". $this->prefix ."SEQ_". $seq[name];
+     return $this->Exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function createsequence(&$seq) {
+     $q = "create table ". $this->prefix ."SEQ_". $seq[name] ."(";
+     $q .= " s_id int identity(". $seq['start'] .",1) , dummy int)";
+     $r = $this->Exec($q,0);
+     return $r;
+  }
+  /**
+   * get the phrase to limit a selection to a specific range
+   */
+  function getRange($q,$start,$cnt) {
+    return "
+      select outer.* from (
+         select inner.*,rownum as tutos_rn from (". $q .") inner
+        where rownum <= ". ($start + $cnt) ."
+      ) outer
+      where tutos_rn > ".$start;
+  }
+  /**
+   * do we need a count(*) to get the number of possible results in a select
+   */
+  function needCount() {
+    return true;   
+  }
+  /**
+   * method to call from check service
+   */
+  function checkservice() {
+    global $table,$sequence,$tableidx,$tutos;
+
+    $now = new DateTime();
+    $diff = $now->getTimestamp() - $this->db->lastanalyze->getTimeStamp();
+
+    # only once a day
+    if ( $diff < 86400 ) return;
+
+    # read the table definitions of modules
+    @include_once $tutos['base'] ."/db/table.pinc";
+    foreach ($tutos[modules] as $r => $x) {
+      if (isset($tutos[modules][$r][file]) && file_exists(dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/mtable.pinc") ) {
+        @include_once dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/mtable.pinc";
+      }
+    }
+
+#    foreach ($table as $i => $f) {
+#      $q = "optimize ". $f[name];
+#      $this->Exec($q,0);
+#   }
+    # see http://otn.oracle.com/docs/products/oracle9i/doc_library/release2/server.920/a96533/stats.htm#26713
+#    $cur = Ora_Do ($this->conn,"call DBMS_STATS.GATHER_SCHEMA_STATS('". $this->db->user ."')");
+#    Ora_Close($cur);
+
+    $this->db->setLastAnalyze($now);
+    $msg = $this->db->save();
+    return $msg;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function gettype() {
+    return "MSSQL";
+  }
+}
+/*
+ * MSSQL Resultset
+ */
+class result_mssql extends result {
+
+  /* ---------------------------------------------------------------------------
+   */
+  function get($pos,$fld) {
+    # Copy the whole thing
+#echo "GET $pos,$fld <br>";flush();
+    return mssql_result($this->result,$pos,$fld);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numrows() {
+#echo "NUMROWS" . $this->result ."|<br>";
+    return mssql_num_rows($this->result);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numfields() {
+    return count($this->result[0]);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldname($nr) {
+    return mssql_fieldName($this->result,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldtype($nr) {
+    return mssql_fieldType($this->result,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function free() {
+    mssql_free_result($this->result);
+    unset($this->result);
+    return;
+  }
+
+}
+?>

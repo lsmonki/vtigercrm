@@ -1,0 +1,31 @@
+<?php
+/*
+ * Copyright 2001 - 2002 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_ni.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ *  contributed by Ing. Antonio Gallardo, AG Software, S. A
+ * Tipo = 0   day is presentado, pero no marcado
+ * Tipo = 1   se marca el día en rojo en el calendario
+ */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Año Nuevo (NI)"),
+        array( Date => "14-02",          type => 0,    Desc => "Día de Sn Valentín (NI)"),
+        array( Date => "01-05",          type => 1,    Desc => "Día del Trabajo (NI)"),
+        array( Date => "30-05",          type => 0,    Desc => "Día de la Madre (NI)"),
+        array( Date => "13-06",          type => 0,    Desc => "Día del Padre (NI)"),
+        array( Date => "19-07",          type => 1,    Desc => "Aniv. de la Revolución (NI)"),
+        array( Date => "01-08",          type => 0,    Desc => "Bajada de Sto Domingo (NI)"),
+        array( Date => "10-08",          type => 0,    Desc => "Subida de Sto Domingo (NI)"),
+        array( Date => "14-09",          type => 1,    Desc => "Aniv. Batalla de Sn Jacinto (NI)"),
+        array( Date => "15-09",          type => 1,    Desc => "Día de la Indenpencia (NI)"),
+        array( Date => "12-10",          type => 0,    Desc => "Día del Descubrimiento de America (NI)"),
+        array( Date => "08-12",          type => 0,    Desc => "Día de la Virgen María (NI)"),
+        array( Date => "25-12",          type => 1,    Desc => "Navidad (NI)"),
+        array( Date => "31-12",          type => 0,    Desc => "Fin de Año (NI)"),
+        array( Date => "GOODFRIDAY",     type => 1,    Desc => "Viernes Santo (NI)"),
+        array( Date => "GOODTHURSDAY",   type => 1,    Desc => "Jueves Santo (NI)"),
+        );
+?>

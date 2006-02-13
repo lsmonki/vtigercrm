@@ -1,0 +1,80 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<form name="NewReportFolderForm" method="post" onsubmit="return verify_data(NewReportFolderForm)" action="index.php">
+	<input name="module" type="hidden" value="Reports">
+	<input type="hidden" name="record" value="{ID}">
+	<input type="hidden" name="mode" value="{MODE}">
+	<input type="hidden" name="action" value="SaveReportFolder">
+	<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+	<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+    <table width="50%" border=0 cellPadding="0" cellSpacing="0">
+      <tr>
+        <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
+      </tr>
+    </table>
+    <table width="50%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
+      <tr>
+        <td class="formSecHeader" colspan="2">{MOD.LBL_REP_FOLDER_DTLS}</td>
+      </tr>
+            <tr>
+                <td class='dataLabel'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {MOD.LBL_REP_FOLDER_NAME}</td>
+                <td>
+		<input class='textField' type='text' name='folderName' value="{FOLDERNAME}" size="25">
+                </td>
+            </tr>
+            <tr>
+                <td class='dataLabel'>{MOD.LBL_REP_FOLDER_DESC}</td>
+                <td>
+			<input class='textField' type='text' name='folderDesc' value="{FOLDERDESC}" size="40">
+                </td>
+            </tr>
+    </table>
+    <p></p>
+    <table width="50%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div align="center">
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
+            </div></td>
+        </tr>
+    </table>
+<br><br>    
+</body>
+<script language="javascript">
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
+
+function verify_data(form) {
+	var isError = false;
+	var errorMessage = "";
+	if (trim(form.folderName.value) == "") {
+		isError = true;
+		errorMessage += "\nFolder Name";
+	}
+	// Here we decide whether to submit the form.
+	if (isError == true) {
+		alert("Missing required fields:" + errorMessage);
+		return false;
+	}
+	return true;
+}
+</script>
+</form>
+<!-- END: main -->

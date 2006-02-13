@@ -1,0 +1,125 @@
+<?php
+#
+# $Id: table_custom_example.pinc,v 1.16 2005/05/03 13:18:50 saraj Exp $
+#
+#
+# This is just an example file.
+# The real file should be named tutos/db/table_custom.pinc
+#
+# You can extend the fileds taht are diplayed and used within TUTOS
+#
+#
+#
+
+#
+# Info:
+#   currently support is possible for product,timetrack and task.
+# Install:
+#   you have to run tutos/admin/update.php (to make changes happen)
+#
+#   $table['tableid'][fieldname] = array(........
+#              Desc     => some comment (only visible on database level)
+#              'lang'   => a language key (if not available defaults to itself)
+#              'custom' => true      only fields with this flag are handeld
+#              'ftype'  => 'Date'     (needs type == TS_TYPE)
+#                          'DateTime' (needs type == TS_TYPE)
+#                          'Boolean'  (needs type == ID_TYPE)
+#                            or
+#               type     => TS_TYPE (== DateTime)
+#                           TX_TYPE (== long text)
+#                           VARCHAR (== text with given size)
+
+# Add a additional text field called desc3  to the project table
+#
+$table['product']['desc3'] = array('custom' => true,
+                                   type => "TX_TYPE",
+                                   constraints => "",
+                                   Desc => "description 3",
+                                   'lang' => "DESC3");
+#
+# In order to get a useful label for that field you should add a line
+# $lang['DESC3'] = "Label three";
+# to the tutos/localization/lang_custom.p3 file
+#
+
+#
+# A additional Date field for a project
+#
+$table['product']['ende']  = array('custom'     => true,
+                                   'ftype'      => 'Date', 
+                                   type        => "TS_TYPE",
+                                   constraints => "", 
+                                   Desc        => "end date",
+                                   'lang'      => "DATE3");
+#
+# A float field (required)
+#
+$table['product']['fl']    = array('custom'     => true,
+                                   type         => "float",
+                                   constraints  => "",
+                                   Desc         => "floater",
+                                   'lang'       => "FLOAT3",
+                                   'required'   => true);
+#
+# A boolean field
+#
+$table['product']['bo']    = array('custom'     => true,
+                                   'ftype'      => 'Boolean', 
+                                   type         => "ID_TYPE",
+                                   constraints  => "",
+                                   Desc         => "yes/no",
+                                   'lang'       => "YES/NO",
+                                   'required'   => true);
+#
+# A list selection
+#
+$table['product']['sel']   = array('custom'     => true,
+                                   'ftype'      => 'SelectOne',
+                                   type         => "ID_TYPE",
+                                   constraints  => "",
+                                   Desc         => "optionlist",
+                                   'lang'       => "OPTIONLIST",
+                                   'required'   => true);
+
+$lang['OPTIONLIST'] = "optionlist <b>example</b>";
+$lang['OPTIONLIST_'][1] = "111 <a>a</a>";
+$lang['OPTIONLIST_'][4] = "444";
+
+#
+# Some more field in the tasks table
+#
+$table['task']['desc3']    = array('custom'     => true,
+                                   type         => "TX_TYPE",
+                                   constraints  => "",
+                                   Desc         => "description 3",
+                                   'lang'       => "DESC3");
+
+#
+# Some more field in the timetrack table
+#
+$table['timetrack']['desc3'] = array('custom'   => true,
+                                   type         => "VARCHAR",
+                                   size         => 42,
+                                   constraints  => "",
+                                   Desc         => "description 3",
+                                   'lang'       => "Timetrack ++",
+                                   'required'   => true);
+
+#
+# A additional field in a user record
+#
+$table['people']['ctiserver']   = array('custom'     => true,
+                                   'ftype'      => 'SelectOne',
+                                   type         => "ID_TYPE",
+                                   constraints  => "",
+                                   Desc         => "CTI Server",
+                                   'lang'       => "CTISERVERLIST",
+                                   'required'   => false);
+
+$lang['CTISERVERLIST'] = "CTI Server";
+$lang['CTISERVERLIST_'][1] = "Server 1";
+$lang['CTISERVERLIST_'][4] = "Server 2";
+
+
+#
+?>

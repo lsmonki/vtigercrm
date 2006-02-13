@@ -415,8 +415,11 @@ function setTotal($price_total="",$conditions="")
 	$this->Cell(0,8,$conditions,0,0,'L',0);
 }
 }
+//$bdata = array("aaaaaaaaa","48/1,Katcherry Street","Rasipuram","Namakkal (D.T)");
+//$sdata = array("bbbbbb","48/9","","mmmm","Don City");
 $iHead = array("Company","Purchase Order No.","Date","Requisition No.");
 $iCustHeadDtls = array("Customer Name","Tracking No","Due Date");
+//$iCustData = array("Nortel Networks","usc-107565","26-05-2005");
 $iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
 
 $pdf = new PDF('P','mm','A4');
@@ -429,6 +432,5 @@ $pdf->setAddress($bdata,$sdata);
 $pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
 $pdf->setProductDetails($iHeadDtls,$iDataDtls);
 $pdf->setTotal($price_total,$conditions);
-$pdf->Output('POOrder.pdf','D');
-exit;
+$pdf->Output();
 ?>

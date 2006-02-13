@@ -1,0 +1,999 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: user.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+ global $calpth,$callink;
+ $callink = "index.php?module=Calendar&action=";
+ $calpath = "modules/Calendar/";
+ include_once $calpath .'address.pinc';
+ include_once $calpath .'team.pinc';
+/*
+ * a user of this system
+ */
+class tutos_user extends tutos_address {
+
+  /**
+   */
+  function tutos_user(&$dbconn) {
+    global $current_user,$tutos,$lang;
+
+    parent::tutos_address($dbconn);
+
+    $this->larray = array();
+    $this->larray[] = "l_name";
+    $this->larray[] = "f_name";
+    $this->larray[] = "m_name";
+    $this->larray[] = "login";
+    $this->larray[] = "pw";
+
+    $this->login     = "";
+    $this->pw        = " ";
+    $this->uid       = -1;
+    $this->admin     = 0;
+    $this->last_seen = new DateTime(0);
+    $this->last_host = "unknown";
+    $this->prefteam  = 1;
+    $this->theme     = $tutos[themes][0];
+    $this->ly        = $tutos[layouts][0];
+    $this->lang      = "auto";
+    $this->tz        = $tutos[defaultTZ];
+    $this->offset    = 0;
+    $this->disabled  = 0;
+    $this->updatepw  = 0;
+    $this->acldefault= array();
+
+    # see same checks in login.pinc
+    if ( defined('useldap') && ! function_exists('ldap_connect')) {
+      $tutos[useldap] = 0;
+    }
+    if ( ! function_exists('imap_open')) {
+      $tutos[usemailboxes] = 0;
+    }
+    if ( ($tutos[usedocmanagement] != 0) &&  (("Off" == ini_get("file_uploads")) || ("1" != ini_get("file_uploads"))) ) {
+      $tutos[usedocmanagement] = 0;
+    }
+
+    # Allowed Features are defaulted by config.pinc
+    $this->p = array();
+    for ( $i = -1 ; $i > -100 ; $i-- ) {
+      if ( isset($tutos[$i]) ) {
+        $this->p[$i]  = $tutos[$i];
+      }
+    }
+    # Allowed Features via team memberships
+    $this->teams = array();
+
+
+    # Start of week
+    $this->weekstart = $tutos[weekstart];
+    $this->workday = array(0,1,2,3,4,5,6);
+
+    # Default all  holidays
+    foreach ($tutos[holiday] as $i => $f) {
+      $this->holiday[strtolower($i)] = $f;
+    }
+    # Default all iconsets
+    foreach ($tutos[rowiconsbefore] as $f) {
+      $this->rowiconsbefore[strtolower($f)] = 0;
+    }
+    foreach ($tutos[rowiconsafter] as $f) {
+      $this->rowiconsafter[strtolower($f)] = 0;
+    }
+    # Disable all namedays
+    foreach ($tutos[nameday] as $i => $f) {
+      $this->nameday[strtolower($i)] = 0;
+    }
+    
+    if (isset($dbconn)) {
+      $this->tablename = $this->dbconn->prefix . "people";
+    }
+    #
+    # initialize custom database fields
+    #
+    $this->init_custom("people");
+  }
+  /**
+   * Read in a user
+   * mode = 0    id is address id   (default)
+   * mode = 1    id is user id
+   * mode = 2    use in user_overview
+   */
+  function read($id,&$obj,$mode = 0) {
+    global $g_hash;
+
+    if ( empty($id) ) return;
+    if ( -1 == $id ) return;
+
+#    if ( isset($g_hash[$id]) ) {
+#      # Hashed
+#      $this = $g_hash[$id];
+#      return;
+#    }
+
+    if ( $mode == 0 ) {
+      $query = "SELECT a.* ,p.*,p.id as u_id FROM ". $obj->dbconn->prefix ."addresses a,". $obj->tablename ." p WHERE a.id = ". $id ." AND a.id = p.adr_id";
+    } else if ( $mode == 1 ) {
+      $query = "SELECT a.* ,p.*,p.id as u_id FROM ". $obj->dbconn->prefix ."addresses a,". $obj->tablename ." p WHERE p.id = ". $id ." AND a.id = p.adr_id";
+    } else if ( $mode == 2 ) {
+      $query = "SELECT p.*,a.f_name,a.m_name,a.l_name,a.birthday, p.id as u_id FROM ". $obj->dbconn->prefix ."addresses a,". $obj->tablename ." p WHERE p.id = ". $id ." AND a.id = p.adr_id";
+    }
+    $result = $obj->dbconn->Exec($query);
+    if ( 0 != $result->numrows() ) {
+      $obj->read_result($result,0);
+    } else if ($mode == 0 ) {
+      $a = new tutos_address($obj->dbconn);
+      $a = $a->read($id,$a);
+      if ( ($a->id == $id) && ($a->gettype() ==  "address") ) {
+        $obj->f_name   = $a->f_name;
+        $obj->l_name   = $a->l_name;
+        $obj->id   = $a->id;
+      }
+      unset($a);
+      team::obj_read($obj);
+    }
+    $result->free();
+    return $obj;
+  }
+  /**
+   * Read all a result
+   */
+  function read_result(&$r,$pos) {
+    global $g_hash,$tutos;
+
+    $i=0;
+    while($i < count($this->larray)) {
+      $f = $this->larray[$i];
+      $this->$f = StripSlashes($r->get($pos, "$f"));
+      $i++;
+    }
+
+    $this->id       = $r->get($pos, "adr_id");
+
+    $this->birthday  = $r->getDateTime($pos, "birthday");
+    $this->last_seen = $r->getDateTime($pos, "last_seen");
+    $this->last_host = StripSlashes($r->get($pos, "last_host"));
+    $this->uid      = $r->get($pos,"u_id");
+    $this->admin    = $r->get($pos,"admin");
+    $this->disabled = $r->get($pos,"disabled");
+    $this->prefteam = $r->get($pos,"prefteam");
+    $this->lang     = strtolower(StripSlashes($r->get($pos, "lang")));
+    $this->tz       = StripSlashes($r->get($pos, "tz"));
+    $this->theme    = StripSlashes($r->get($pos, "theme"));
+    $this->ly       = StripSlashes($r->get($pos, "layout"));
+    $holidays   = StripSlashes($r->get($pos, "holidays"));
+    foreach($tutos[holiday] as $i => $f) {
+      $this->holiday[strtolower($i)] = 0;
+    }
+    if ( strlen($holidays) > 0 ) {
+      $h = split(",",$holidays);
+      while( list ($i,$f) = @each ($h) ) {
+        $this->holiday[strtolower($f)] = 1;
+      }
+    }
+    $rowiconsbefore = StripSlashes($r->get($pos, "rowiconsbefore"));
+    foreach($tutos[rowiconsbefore] as $i => $f) {
+      $this->rowiconsbefore[strtolower($i)] = 0;
+    }
+    if ( strlen($rowiconsbefore) > 0 ) {
+      $h = split(",",$rowiconsbefore);
+      while( list ($i,$f) = @each ($h) ) {
+        if ( $f != "" )
+          $this->rowiconsbefore[strtolower($f)] = 1;
+      }
+    }
+    $rowiconsafter = StripSlashes($r->get($pos, "rowiconsafter"));
+    foreach($tutos[rowiconsafter] as $i => $f) {
+      $this->rowiconsafter[strtolower($i)] = 0;
+    }
+    if ( strlen($rowiconsafter) > 0 ) {
+      $h = split(",",$rowiconsafter);
+      while( list ($i,$f) = @each ($h) ) {
+        if ( $f != "" )
+          $this->rowiconsafter[strtolower($f)] = 1;
+      }
+    }
+    $namedays = StripSlashes($r->get($pos, "namedays"));
+    if ( strlen($namedays) > 0 ) {
+      $h = split(",",$namedays);
+      while( list ($i,$f) = @each ($h) ) {
+        if ( $f != "" )
+          $this->nameday[strtolower($f)] = 1;
+      }
+    } else {
+      foreach ($tutos[nameday] as $i => $f) {
+        $this->nameday[strtolower($i)] = 0;
+      }
+    }
+
+ 
+    $wd = StripSlashes($r->get($pos, "workdays"));
+    if ( strlen($wd) > 0 ) {
+      $this->workday = array();
+      $h = split(",",$wd);
+      while( list ($i,$f) = @each ($h) ) {
+        if ( is_numeric($f) ) {
+          $this->workday[] = $f;
+        }
+      }
+    }
+    $this->weekstart  = (integer)($r->get($pos, "weekstart"));
+    if ( !is_int($this->weekstart) ) {
+      $this->weekstart  = $tutos[weekstart];
+    }
+
+    if ( !is_numeric($this->disabled) ) {
+      $this->disabled = 0;
+    }
+
+    if ( $this->lang == "" ) {
+      $this->lang     = "auto";
+    }
+
+
+    #
+    # read custom database fields
+    #
+    $this->read_custom_result($r,$pos,"people");
+
+    acl_read($this);
+    acl_readdefault($this);
+#    acl_raise($this,$this->id,$tutos[modok]);
+    $g_hash[$this->uid] = &$this;
+#    $g_hash[$this->id] = &$this;
+    team::obj_read($this);
+  }
+  /**
+   * Read and set the permissions this user has
+   * feature permissions have an ID < 0
+   */
+  function read_permissions() {
+    global $tutos;
+    $q = "SELECT * FROM ". $this->dbconn->prefix ."acl WHERE obj_id < 0 AND adr_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $p = $r->get($a, "perm");
+      $obj_id = (integer)$r->get($a, "obj_id");
+      $a++;
+      if ( ! isset ($tutos[$obj_id]) ) {
+        continue;
+      }
+      if ($tutos[$obj_id] == 1) {
+        $this->p[$obj_id] = $p;
+      } else {
+        $this->p[$obj_id] = $tutos[$obj_id];
+      }
+    }
+    $r->free();
+
+    # read team permissions
+    foreach ( $this->teamlist as $i => $f ) {
+      $t = new team($this->dbconn);
+      $t = $t->read($i,$t);
+      $t->read_permissions();
+      $this->teams[$t->id] = &$t;
+      unset($t);
+    }
+
+    # hardcoded (CHANGE THIS !!!)
+    if ($this->isadmin()) {
+      $this->p[usedbs] = PERM_ALL;
+      $this->p[useuser] = PERM_ALL;
+      $this->p[useteams] = PERM_ALL;
+    } else {
+      $this->p[usedbs] = PERM_SEE;
+      $this->p[useuser] = PERM_SEE | PERM_USE| PERM_MOD;
+    }
+    if (isset($tutos[useaddressbook])) {
+      $this->p[uselocation] = $this->p[useaddressbook];
+      $this->p[usecompany] = $this->p[useaddressbook];
+      $this->p[usedepartment] = $this->p[useaddressbook];
+    }
+    return;
+  }
+  /**
+   * Save the permissions of this user
+   * feature permissions have an ID < 0
+   */
+  function save_permissions() {
+    $msg = "";
+    $q = "DELETE FROM ". $this->dbconn->prefix ."acl where obj_id < 0 AND adr_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    @reset ($this->p);
+    while( list ($i,$f) = @each ($this->p)) {
+      $q = "INSERT INTO ". $this->dbconn->prefix ."acl (obj_id,adr_id,perm) VALUES (". $i .",". $this->id .",". $f .")";
+      #error_log($q,3,$tutos[errlog]);
+      $this->dbconn->Exec($q);
+    }
+    return $msg;
+  }
+  /**
+   * return a list of all known users and teams
+   * parties   == combined list
+   * t_parties == teams
+   * a_parties == users
+   * indexed by the Adr-ID
+   */
+  function readKnownParties() {
+    global $tutos,$lang;
+
+    if ( isset($this->parties) ) {
+      return $this->parties ;
+    }
+    $this->parties = array();
+    $this->t_parties = array();
+    $this->a_parties = array();
+
+    $t1 = "( (a.id = ". $this->id .")";
+    $t2 = " a.adr_id in (0,". $this->id ;
+
+    $sep = "";
+    $tids = "";
+
+    if ( count($this->teamlist) > 0 ) {
+      $t1 .= " OR t.team_id in (";
+      foreach ( $this->teamlist as $i => $f ) {
+        $this->parties[$i] = $lang['Team'] ." ".$f;
+        $this->t_parties[$i] = $lang['Team'] ." ".$f;
+        $tids .=  $sep . $i;
+        $sep = ",";
+      }
+      $t1 .= $tids .")";
+    }
+    $t2 .= $sep . $tids .")";
+
+    $t1 .= ")";
+
+
+    #
+    # users we may see by special (ACL) allowance
+    #
+    $q = "SELECT distinct u.adr_id ,d.f_name , d.l_name FROM ". $this->tablename ." u,". $this->dbconn->prefix ."addresses d , ". $this->dbconn->prefix ."acl a WHERE (u.id = a.obj_id) AND (u.adr_id = d.id) AND (a.perm >= ".$tutos[useok].") AND ". $t2 ." ORDER by l_name";
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $id    = $r->get($a, "adr_id");
+      $l_name = $r->get($a, "l_name");
+      $f_name = $r->get($a, "f_name");
+      $this->parties[$id] = sprintf($lang['AdrFormat2'],$f_name, $l_name);
+      $this->a_parties[$id] = sprintf($lang['AdrFormat2'],$f_name ,$l_name);
+      $a++;
+    }
+    $r->free();
+    #
+    # teams we may see by special (ACL) allowance
+    #
+    $q = "SELECT distinct t.id ,t.name from ". $this->dbconn->prefix ."teams t , ". $this->dbconn->prefix ."acl a WHERE (t.id = a.obj_id) AND (a.perm >= ". $tutos[useok].") AND ".$t2." ORDER by t.name";
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $id    = $r->get($a, "id");
+      $name = $r->get($a, "name");
+      $this->parties[$id] = $lang['team'] ." ". $name;
+      $this->t_parties[$id] = $lang['team'] ." ".$name;
+      $a++;
+    }
+    $r->free();
+    #
+    # Members of our teams
+    #
+    $q = "SELECT distinct a.id ,a.l_name ,a.f_name FROM ". $this->dbconn->prefix ."addresses a, ". $this->dbconn->prefix ."adrteam t WHERE t.adr_id = a.id AND ".$t1." ORDER by a.l_name";
+    $r = $this->dbconn->exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $id    = $r->get($a, "id");
+      $l_name = $r->get($a, "l_name");
+      $f_name = $r->get($a, "f_name");
+      $this->parties[$id] = sprintf($lang['AdrFormat2'],$f_name, $l_name);
+      $this->a_parties[$id] = sprintf($lang['AdrFormat2'],$f_name ,$l_name);
+      $a++;
+    }
+    $r->free();
+    # Self
+    $this->parties[$this->id] = $this->getFullName();
+    $this->a_parties[$this->id] = $this->getFullName();
+
+    return;
+  }
+
+  /**
+   * Add option to array
+   */
+  function addOption(&$array,&$show,$pre,$id, $f, $multi, $exclude = -1) {
+    if( $exclude != -1 && array_key_exists($f, $exclude) )
+      return;
+    if (isset($show[$id]) && ($show[$id] == 1) ) {
+      return;
+    }
+    $x = "<option value=\"".$id ."\"";
+    if ( ($pre == $id) && ($multi == 0) ) {
+      $x .= " selected=\"selected\"";
+    }
+    else if (  ($multi == 1) && isset($pre[$id]) && ($pre[$id] != 0) ) {
+      $x .= " selected=\"selected\"";
+    }
+    $show[$id] = 1;
+    $x .= "> ". myentities($f) ."</option>\n";
+
+    $array[$f] = $x;
+  }
+
+  /**
+   * Modify an option in an array, selecting it
+   *
+   * If we have a user, we first look in $parts pproduct participant
+   * array, then in $users.
+   */
+  function selectOption($pre, &$parts, &$people, &$teams) {
+    $o = getObject($this->dbconn,$pre);
+    if ( $o == -1 ) {
+    }
+    else if ( $o->getType() == "address" ) {
+      $n = $o->getFullName();
+
+      $x = "<option value=\"". $pre ."\" selected=\"selected\">" . myentities($n) ."</option>\n";
+
+      if( array_key_exists($n, $parts) )
+        $parts[$n] = $x;
+      else
+        $people[$n] = $x;
+    }
+    else if ( $o->getType() == "team" ) {
+      $n = $lang['Team'] ." ". $o->name;
+      $x = "<option value=\"". $pre ."\" label=\"" . myentities($o->name) ."\" selected=\"selected\">". myentities($n) ."</option>\n";
+
+      $tlist[$n] = $x;
+    }
+  }
+
+  /**
+   * Ask for People (list all people teams  the user can see)
+   */
+  function askPeople($name,$pre,$multi,$project=-1,$any = false) {
+    global $lang;
+
+    $this->readKnownParties();
+    $rlist = array();
+    $plist = array();
+    $tlist = array();
+    $show = array();
+    /**
+     * If a project is given, we first show the users having a role in
+     * this project. This will be used from task_new...
+     */
+    if( $project != -1 ) {
+      $project->readroles();
+      @reset($project->role);
+      while( list($role, $xf) = each($project->role) ) {
+        if( isset($project->role[$role]) && is_array($project->role[$role]) ) {
+          @reset($project->role[$role]);
+          while( list($i, $o) = each($project->role[$role]) ) {
+            $this->addOption($rlist,$show,$pre, $o->id, $o->getFullName(),$multi);
+          }
+        }
+      }
+    }
+
+    $r = "<select id=\"people\" name=\"". $name ."\" ";
+    if ( $multi > 0 ) {
+      $min = 4;
+      $max = 8;
+      $count = count($this->parties);
+      $size  = max($min, min($count, $max));
+      $r .= " multiple=\"multiple\" size=\"". $size ."\"";
+    }
+    $r .=">\n";
+	if ($any) {
+      $r .= "<option value=\"-1\">" .$lang['any'] ."</option>\n";
+	}
+    $r .= "\n<!-- PRE: ". $pre ." -->\n";
+    $r .= "\n<!-- SIZE: ". count($this->parties) ." -->\n";
+
+    /* Insert Teams and users */
+    @reset($this->t_parties);
+    while ( list ($id,$f) = @each ($this->t_parties) ) {
+      $this->addOption($tlist,$show,$pre, $id, $f, $multi, $rlist);
+    }
+
+    @reset($this->a_parties);
+    while ( list ($id,$f) = @each ($this->a_parties) ) {
+      $this->addOption($plist,$show,$pre ,$id, $f, $multi, $rlist);
+    }
+
+    /* Insert missing preselected people */
+    if ( $multi == 0 ) {
+      if ( ($pre != -1) && ($show[$pre] != 1) ) {
+        $this->selectOption($pre, $rlist, $plist, $tlist);
+      }
+    }
+    else {
+      foreach($pre as $i => $f) {
+        if ( (isset($show[$i]) && ($show[$i] == 1)) || ($i == -1) ) {
+          continue;
+        }
+        $this->selectOption($i, $rlist, $plist, $tlist);
+      }
+    }
+
+    # Get the list sorted
+    $useOPTGROUP = true;
+    if (!isset ($_SERVER['HTTP_USER_AGENT'])) {
+      $useOPTGROUP = false;
+    }
+    if ($useOPTGROUP && ereg("Opera",$_SERVER['HTTP_USER_AGENT'])) {
+      $useOPTGROUP = false;
+    }
+    if ($useOPTGROUP && ereg ("MSIE.*Mac",$_SERVER['HTTP_USER_AGENT'])) {
+      $useOPTGROUP = false;
+    }
+
+    if (count($rlist)) {
+      if ($useOPTGROUP) {
+        $r .= "<optgroup label=\"". $lang['Participants'] ."\">\n";
+      }
+      foreach ($rlist as $f) {
+        $r .= $f;
+      }
+      if ($useOPTGROUP) {
+        $r .= "</optgroup>\n";
+      }
+    }
+    if ($useOPTGROUP) {
+      $r .= "<optgroup label=\"". $lang['User'] ."\">\n";
+    }
+    @ksort($plist);
+    foreach($plist as $f) {
+      $r .= $f;
+    }
+    if ($useOPTGROUP) {
+      $r .= "</optgroup>\n";
+      $r .= "<optgroup label=\"". $lang['Teams'] ."\">\n";
+    }
+    @ksort($tlist);
+    foreach($tlist as $f) {
+      $r .= $f;
+    }
+    if ($useOPTGROUP) {
+      $r .= "</optgroup>\n";
+    }
+    $r .= "\n</select>";
+
+    return $r;
+  }
+
+  /**
+   * Checks if this user is allowed to use a feature
+   */
+  function feature_ok ($feature,$level) {
+    global $tutos;
+
+    if ( !isset($tutos[$feature])) {
+#      echo "NO1 |". $this->p[$feature]."| ".$feature;
+      return false;
+    }
+    if ( $tutos[$feature] != 1 ) {
+#      echo "NO2 |". $this->p[$feature]."| ".$feature;
+      return false;
+    }
+
+    if ($tutos[useacl] != 1) {
+      return true;
+    }
+    #internal feature of a module
+    if ( $feature < -1000 ) {
+      return true;
+    }
+    # check users permissions
+    if ( ($this->p[$feature] & $level) ) {
+      return true;
+    }
+    if ( ($this->p[$feature] & PERM_ALL) ) {
+      return true;
+    }
+
+    # Check team permissions
+    foreach($this->teams as $f) {
+      if ( ($f->p[$feature] & $level) ) {
+        return true;
+      }
+      if ( ($f->p[$feature] & PERM_ALL) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * set the login name
+   */
+  function setLogin($value) {
+    return $this->setStrField("login",$value,"Username");
+  }
+  /**
+   * set the language
+   */
+  function setLanguage($value) {
+    return $this->setStrField("lang",$value,"UserLanguage");
+  }
+  /**
+   * set the theme
+   */
+  function setTheme($value) {
+    return $this->setStrField("theme",$value,"UserTheme");
+  }
+  /**
+   * set the layout
+   */
+  function setLayout($value) {
+    return $this->setStrField("ly",$value,"UserLayout");
+  }
+  /**
+   * set the timezone
+   */
+  function setTimezone($value) {
+    return $this->setStrField("tz",$value,"UserTimezone");
+  }
+  /**
+   * set the Password
+   */
+  function setPassword($name) {
+    if ( $this->pw != $name ) {
+      $this->modified[] = array ( "field" => "Password" , "old" => "*", "new" => "*"  );
+      $this->pw = $name;
+      return 1;
+    }
+    return 0;
+  }
+  /**
+   * datetime of last login
+   */
+  function setLastSeen($value) {
+    $x = $this->setDateTimeField("last_seen",$value,"UserLastSeen");
+    if ($x) {
+      // search for modified data and patch it
+      foreach ($this->modified as $i => $f) {
+        if ($f['field'] == "UserLastSeen") {
+          $this->modified[$i]['obj_id'] = $this->uid;
+          break;
+        }
+      }
+    }
+    return $x;
+  }
+  /**
+   * host of last login
+   */
+  function setLastHost($value) {
+    $x = $this->setStrField("last_host",$value,"UserLastHost");
+    if ($x) {
+      // search for modified data and patch it
+      foreach ($this->modified as $i => $f) {
+        if ($f['field'] == "UserLastHost") {
+          $this->modified[$i]['obj_id'] = $this->uid;
+          break;
+        }
+      }
+    }
+    return $x;
+  }
+  /**
+   * set the disabled flag
+   */
+  function setDisabled($value) {
+    return $this->setIntField("disabled",$value,"UserDisabled");
+  }
+  /**
+   * set the admin flag
+   */
+  function setAdmin($value) {
+    return $this->setIntField("admin",$value,"UserAdmin");
+  }
+  /**
+   * set preferred team (not set via user_new , but when using the calendars)
+   */
+  function set_prefteam($team) {
+    if (is_array($team) ) {
+      $team = $team[0];
+    }
+    $x = $this->setIntField("prefteam",$team,"forphrase");
+    if ($x == 1) {
+      $this->update(false);
+    }
+    return $x;
+  }
+  /**
+   * get the admin flag
+   */
+  function isAdmin() {
+    return ($this->admin == 1);
+  }
+  /**
+   * Save entry
+   */
+  function save() {
+    global $current_user,$tutos;
+
+    $msg = "";
+    if ( $tutos[demo] == 1 ) {
+      return "Sorry Demo does not allow change of UserEntry<br>";
+    }
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("login",$this->login,"STRING",20);
+    if ( $this->updatepw == 1 ) {
+      $q->addFV("pw",$this->pw,"PASSWORD");
+    }
+    $q->addFV("admin",$this->admin,"INT");
+    $q->addFV("disabled",$this->disabled,"INT");
+    $q->addFV("lang",$this->lang,"STRING",5);
+    $q->addFV("tz",$this->tz,"STRING",30);
+    $q->addFV("theme",$this->theme,"STRING",10);
+    $q->addFV("layout",$this->ly,"STRING",30);
+    $q->addFV("weekstart",$this->weekstart,"INT");
+    
+    @reset($this->workday);
+    $h = "";
+    while( list ($i,$f) = @each ($this->workday)) {
+      $h .= $f .",";
+    }
+    $q->addFV("workdays",$h,"STRING",60);
+
+    @reset($this->nameday);
+    $h = "";
+    while( list ($i,$f) = @each ($this->nameday)) {
+      if($f == 1) {
+        $h .= $i .",";
+      }
+    }
+    $q->addFV("namedays",$h,"STRING",60);
+
+    @reset($this->holiday);
+    $h = "";
+    while( list ($i,$f) = @each ($this->holiday)) {
+      if($f == 1) {
+        $h .= $i .",";
+      }
+    }
+    $q->addFV("holidays",$h,"STRING",60);
+    
+    @reset($this->rowiconsbefore);
+    $h = "";
+    while( list ($i,$f) = @each ($this->rowiconsbefore)) {
+      if($f == 1) {
+        $h .= $i .",";
+      }
+    }
+    $q->addFV("rowiconsbefore",$h,"STRING",30);
+    
+    @reset($this->rowiconsafter);
+    $h = "";
+    while( list ($i,$f) = @each ($this->rowiconsafter)) {
+      if($f == 1) {
+        $h .= $i .",";
+      }
+    }
+    $q->addFV("rowiconsafter",$h,"STRING",30);
+
+    $this->save_custom_fields($q,"people");
+    
+    if ( $this->uid < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->uid = $this->newid;
+        $q->addFV("id",$this->uid,"");
+      } else {
+        $this->uid = $q->addFV("id",-1,"NEXTID");
+        $this->modified[] = array ( "field" => "UserCreate" ,
+                                    "old" => "-1" ,
+                                    "new" => $this->uid,
+                                    "obj_id" => $this->id
+                                  );
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => "-1",
+                                    "new" => $this->uid,
+                                    "obj_id" => $this->uid
+                                  );
+        $this->acl = array();
+        acl_default($this,$current_user);
+        acl_raise($this,$this->id,$tutos[modok]);
+        acl_raise($this,$current_user->id,$tutos[delok]);
+      }
+      $q->addFV("adr_id",$this->id,"");
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("adr_id",$this->id,"");
+      $q->addWC("id",$this->uid,"");
+
+      $query = $q->getUpdate();
+    }
+    $this->dbconn->Exec($query);
+    #$msg .= acl_save($this);
+    #$msg .= acl_savedefault($this);
+    #$msg .= history_save($this);
+    return $msg;
+  }
+  
+  /**
+  * Update Password function added for vtigerCRM
+  */
+  function update_password($new_passwd,$uname)
+  {
+    $this->pw = $new_passwd;
+    $this->login = $uname;
+    $pq = new query($this->dbconn);
+    $pq->setTable($this->tablename);
+    $pq->addFV("login",$this->login,"STRING",20);
+    $pq->addFV("pw",$this->pw,"PASSWORD");
+    $pq->addWC("login",$this->login,"STRING");
+
+      $query1 = $pq->getUpdate();
+    return $query1;
+     #$db->query($query1,true);
+    #$this->dbconn->Exec($query1);
+
+	
+  }
+  /**
+   * Delete entry (that is easy as long as the address still exists !)
+   */
+  function delete() {
+    global $current_user;
+
+    $msg = "";
+    unset ($this->modified);
+
+    $msg .= acl_deletedefault($this);
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE adr_id =". $this->id ." AND id = ". $this->uid;
+    $this->dbconn->Exec($q);
+
+    $this->modified[] = array ( "field" => "UserDel" ,
+                                "old" => $this->uid,
+                                "new" => "-1",
+                                "obj_id" => $this->id
+                              );
+    $this->modified[] = array ( "field" => "Delete" ,
+                                "old" => "user",
+                                "new" => $this->uid,
+                                "obj_id" => $this->uid
+                              );
+
+    $this->modified[] = array ( "obj_id" => $this->uid , "field" => "Delete" , "old" => $this->gettype() , "new" => -1 );
+
+    $msg .= team::obj_delete($current_user,$this);
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * get preferred team for calendar selection
+   */
+  function get_prefteam() {
+    if ( strlen($this->prefteam) == 0 ) {
+      $this->prefteam = 1;
+    }
+    return $this->prefteam;
+  }
+  /**
+   * get preferred number of displayed weeks for calendar display
+   */
+  function get_prefweeks() {
+    if ( !isset($this->prefweeks) || ($this->prefweeks == "") ) {
+      $this->prefweeks = 4;
+    }
+    return $this->prefweeks;
+  }
+  /**
+   * get preferred icons
+   * $mode = 1 --> icons before grid
+   * $mode = 2 --> icons after grid
+   */
+  function get_preficons($mode = 1) {
+    
+    $ico = array();
+    
+    if ( $mode == 1 ) {
+      /*foreach($tutos[rowicons] as $i => $f) {
+        $this->rowicons[strtolower($i)] = 0; 
+      }
+      if ( strlen($rowicons) > 0 ) {
+        $h = split(",",$rowicons);
+        while( list ($i,$f) = @each ($h) ) {
+          $this->rowicons[strtolower($f)] = 1;
+        }
+      }*/
+      if ( $this->rowiconsbefore["see"] == 1 ) {
+        array_push($ico,"see");
+      }
+      if ( $this->rowiconsbefore["mod"] == 1 ) {
+        array_push($ico,"mod");
+      }
+      if ( $this->rowiconsbefore["del"] == 1 ) {
+        array_push($ico,"del");
+      }
+    } else if ( $mode == 2 ) {
+      if ( $this->rowiconsafter["see"] == 1 ) {
+        array_push($ico,"see");
+      }
+      if ( $this->rowiconsafter["mod"] == 1 ) {
+        array_push($ico,"mod");
+      }
+      if ( $this->rowiconsafter["del"] == 1 ) {
+        array_push($ico,"del");
+      }
+    }
+    
+    return $ico;
+  }
+  /**
+   * per page update
+   */
+  function update($initial = false) {
+
+    if ( isset($_SERVER['REMOTE_ADDR']) ) {
+      $lh = $_SERVER['REMOTE_ADDR'];
+    } else {
+      $lh = "not set";
+    }
+    if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+      $lh =  $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    $this->setLastSeen(new DateTime());
+    $this->setLastHost($lh);
+
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("last_seen",$this->last_seen,"DATETIME");
+    $q->addFV("prefteam",$this->get_prefteam(),"");
+    $q->addFV("last_host",$this->last_host,"STRING",20);
+    $q->addFV("creator",$this->creator,"OBJ");
+    $q->addFV("creation",$this->creation,"DATETIME");
+    $q->addWC("login",$this->login,"STRING");
+    $query = $q->getUpdate();
+    $this->dbconn->Begin("WORK");
+    $this->dbconn->Exec($query);
+    if ($initial == true) {
+      history_save($this);
+    }
+    $this->dbconn->Commit("WORK");
+  }
+  /**
+   * checks if the given day is a workday for this user
+   */
+  function isWorkDay ($wd) {
+    return in_array($wd,$this->workday);
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "user";
+  }
+  /**
+   * get the type of object
+   */
+  function gettypeid () {
+    return useuser;
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+    $r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#user",$lang["User"],$lang["User"]) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=user_new",$lang['NewEntry']."/". $lang['Modify'],$lang['NewEntry']."/". $lang['Modify']) ."</li>\n";
+    $r .= "</ul>\n";
+    echo $r;
+  }
+}
+?>

@@ -1,0 +1,556 @@
+<?php
+/*
+ * Copyright 2001 - 2002  by Gero Kohnert
+ *
+ *  CVS Info:  $Id: db_interbase.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ *  $Author: saraj $
+ */
+
+require_once 'db.pinc';
+#
+# Register parse functions for datetime
+#
+$tutos['dateformat'][] = 'ibformat1';
+$tutos['dateformat'][] = 'ibformat2';
+
+/**
+ * check for string delivered in postgres format
+ */
+function ibformat1(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})([-+][0-9]{1,2}[:0-9]{0,3})$", $str, $regs ) ) {
+    # Init via DB    1999-11-27 12:34:56+02  Postgres
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = (integer)$regs[6];
+    $d->tz    = $regs[7];
+    $d->format = 1;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function ibformat2(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-1][0-9])/([0-3][0-9])/([0-9]{4})$", $str, $regs ) ) {
+    # Init via MM/DD/YYYY
+    $d->month = (integer)$regs[1];
+    $d->day   = (integer)$regs[2];
+    $d->year  = (integer)$regs[3];
+    $d->hour  = 0;
+    $d->min   = 0;
+    $d->sec   = 0;
+    $d->format = 8;
+  }
+  return;
+}
+/** ---------------------------------------------------------------------------
+ * interbase database connection class
+ *
+ * @package DB
+ */
+class db_interbase extends tutos_db {
+  /* ---------------------------------------------------------------------------
+   */
+  function db_interbase(&$db) {
+    global $tutos;
+
+    parent::init($db);
+
+    $tutos[use_check_dbacl] = 0;
+    $this->openfunc = 'ibase_connect';
+
+    $this->col["MESSAGE"] = "T_MESSAGE";
+    $this->col["TYPE"] = "T_TYPE";
+    $this->col["ADMIN"] = "T_ADMIN";
+
+    $this->colR = array_flip($this->col);
+    $this->transid = -1;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function open() {
+    global $phperrmsg;
+
+	$of = $this->openfunc;
+
+    $c = @$of($this->db->host.":".$this->db->name,$this->db->user,$this->db->pass);
+    if ($c == false) {
+      Fatal_Error("Opening the Interbase database ".$this->getFullName() ,ibase_errmsg() );
+    }
+	ibase_timefmt("%Y-%m-%d %H:%M:%S%z");
+    $this->conn = $c;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function close() {
+    $this->timezone("");
+    if ( $this->conn != -1 ) {
+      ibase_close($this->conn);
+      unset($this->conn);
+      $this->conn = -1;
+	}
+  }
+  /**
+   * return more info about server client etc
+   */
+  function moreinfo() {
+    return "no additional info available";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function notime() {
+    if ( $this->version == 1 ) {
+      # Postgres 7.0
+      return ("'epoch'");
+	} else {
+      return ("null");
+	}
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function now() {
+    return ("current_timestamp");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function exec($query,$showerror = 1) {
+    if ( $this->conn == -1 ) {
+      $msg = "No Connection";
+      return;
+    }
+    $x = new result_interbase($this);
+    $query = eregi_replace(" =null"," is null",$query);
+
+    $result = array();
+	if ($this->transid != -1) {
+      $r = @ibase_query($this->transid,$query);
+	} else {
+      $r = @ibase_query($this->conn,$query);
+	}
+    $this->lastquery = $query;
+    if ( $r == false) {
+      if ($showerror == 1) {
+        Fatal_Error("Exec ". $this->conn ."|". $this->error(),$query);
+      } else {
+        $this->lasterror =  $this->error();
+        return -1;
+      }
+    }
+    if ( gettype($r) != "resource" ) {
+      return $x;
+	}
+    $y = 0;
+    $nf = ibase_num_fields($r);
+    while ($row = ibase_fetch_row ($r)) {
+      for ($c = 0 ; $c < $nf; $c++) {
+        $fn = ibase_field_info($r,$c);
+        $cn = $this->colnameREV(strtoupper($fn['alias']));
+		if ( isset( $row[$c] ) ) {
+          $result[$y][$cn] = $row[$c];
+		} else {
+          $result[$y][$cn] = null;
+		}
+	  }
+      $y++;
+    }
+
+    $x->dbconn = $this;
+    $x->rs = &$r;
+    $x->result = &$result;
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function nextID($name = "id") {
+    $query = "select id from ". $this->prefix . $name;
+    $r = $this->exec($query);
+    if ( ($r == "") || (1 != $r->numrows()) ) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0,"id");
+    $r->free();
+
+    $query = "update ". $this->prefix . $name ." set id = 0";
+    $this->exec($query);
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setSeqID($id,$name = "id") {
+    $query = "set generator ". $this->prefix . $name ." to ". $id;
+    $this->exec($query);
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getSeqID($name = "id") {
+    $query = "select id from ". $this->prefix . $name;
+    $r = $this->exec($query);
+    if ( ($r == "") || (1 != $r->numrows()) ) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0,"id");
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function string($t) {
+    $t = str_replace("'","''",$t);
+    return "'". $t ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datetimestring for d
+   */
+  function datetime(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+#	ibase_timefmt("%Y-%m-%d %H:%M:%S%z");
+    $x = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$d->year,$d->month,$d->day,$d->hour,$d->min,$d->sec);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * give Database formatted datestring for d
+   */
+  function date(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+
+    $x = sprintf ("'%04d-%02d-%02d'",$d->year,$d->month,$d->day);
+    return $x;
+  }
+  /* ---------------------------------------------------------------------------
+   * case insensitive string compare
+   */
+  function like($fld1,$name,$fld2 = "",$fld3 = "") {
+    $fld = $fld1;
+    if ( $fld2 != "" ) {
+      $fld .= "|| ' ' ||". $fld2;
+    }
+    if ( $fld3 != "" ) {
+      $fld .= "|| ' ' ||". $fld3;
+    }
+    $name = eregi_replace(" ","%",$name);
+    $name = eregi_replace("'","?",$name);
+    return (" UPPER(". $fld .") like '%". strtoupper($name) ."%' ");
+  }
+  /* ---------------------------------------------------------------------------
+   * case sensitive strict string compare
+   */
+  function like2($fld,$name) {
+    $name = eregi_replace("'","''",$name);
+    return (" ". $fld ." =  '". $name ."' ");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function password($pw) {
+    if ( $this->db->crypt != 1 ) {
+      return "'". $pw ."'";
+    }
+    return "'". crypt($pw,"271166") ."'";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function begin($t) {
+    $this->transid = ibase_trans(IBASE_NOWAIT,$this->conn);
+    return $this->transid;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function commit($t) {
+    ibase_commit($this->transid);
+    $this->transid = -1;
+    return;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function abort($t) {
+    $r = ibase_rollback($this->transid);
+    $this->transid = -1;
+    return $t;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function lock($t) {
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function timezone($tz) {
+    global $tutos;
+
+    if ( !empty($tz)) {
+      putenv ("TZ=".$tz);
+      strftime("%H:%M %Z");
+#      $this->exec("SET TIME ZONE  '". $tz ."'");
+    } else {
+      putenv ("TZ=". $tutos[defaultTZ]);
+      strftime("%H:%M %Z");
+#      $this->exec("SET TIME ZONE '". $tutos[defaultTZ] ."'");
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getFullname() {
+    return "Interbase: ". $this->db->host .":". $this->db->name ;
+  }
+  /* ---------------------------------------------------------------------------
+   * set persistent mode
+   * 0 = no
+   * 1 = yes
+   */
+  function setPersistent($mode) {
+	if ( $mode == 1 ) {
+      $this->openfunc = 'ibase_pconnect';
+	} else {
+      $this->openfunc = 'ibase_connect';
+	}
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function error() {
+    return "DBerror: ". $this->getFullname() ." E:". ibase_errmsg();
+  }
+  /**
+   * Clear a table
+   * tbl = name of table
+   * truncate a table
+   */
+  function truncatetable($tbl) {
+    $q = "DELETE FROM  ". $this->prefix . $tbl;
+    return $this->exec($q,0);	 
+  }
+  /**
+   * tbl = array with table description
+   */
+  function droptable(&$tbl) {
+    if (is_array($tbl)) {
+      $q = "DROP TABLE ". $this->prefix . $tbl[name] ;
+	} else {
+      $q = "DROP TABLE ". $this->prefix . $tbl ;
+	}
+    return $this->exec($q,0);	 
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createtable(&$tbl) {
+    $q = "CREATE TABLE ". $this->prefix . $tbl[name] ;
+    $pre = " (";
+    foreach ($tbl as $i => $f) {
+      if (! is_array($f) ) {
+        continue;
+	  }
+      if ($f[type] == "ID_TYPE") {
+        $t = "int";
+      } else if ($f[type] == "TS_TYPE") {
+        $t = "timestamp";
+      } else if ($f[type] == "TX_TYPE") {
+        $t = "varchar(20000)";
+      } else if ($f[type] == "VARCHAR") {
+        $t = "varchar(". $f[size] .")";
+      } else {
+        $t = $f[type];
+      }
+      $c = $f[constraints];
+      $c = ereg_replace("PK","NN primary key",$c);
+      $c = ereg_replace("U","unique",$c);
+      $c = ereg_replace("NN","not null",$c);
+      $q .= $pre. $this->colname($i) ." ". $t ." ". $c;
+      $pre = ",";
+    }
+    $q .= ")";
+    return $this->exec($q,0);
+  }
+  /**
+   * rename a table
+   * oldtbl = current table desc
+   * newname = new table name
+   */
+  function renametable(&$oldtbl,$newname) {
+    $tbl = $oldtbl;
+    $tbl[name] = $newname;
+    $this->createtable($tbl);
+	$q = "insert into ". $this->prefix . $tbl[name] ." select * from ". $this->prefix . $oldtbl[name];
+    $this->exec($q,0);
+    $this->droptable($oldtbl);
+  }
+  /**
+   * tbl = array with table description
+   */
+  function dropindex(&$idx) {
+    $q = "DROP INDEX ". $this->prefix . $idx[name] ;
+    return $this->exec($q,0);	 
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createindex(&$idx) {
+    if ( ! isset($idx[type]) ) {
+      $idx[type] = "";
+    }
+    $q = "CREATE ".$idx[type] ." INDEX ". $this->prefix . $idx[name] ." ON ". $this->prefix . $idx[table];
+
+    $pre = "(";
+    @reset($idx[column]);
+    while ( list ($i,$f) = @each ($idx[column]) ) {
+     $q .= $pre . $this->colname($f);
+     $pre = ",";
+    }
+    $q .= ")";
+    return $this->exec($q,0);
+  }
+  /**
+   * col = array with column description
+   */
+  function createcolumn($tblname,$colname,&$col) {
+    $q = "ALTER TABLE ". $this->prefix .  $tblname ." ADD ";
+
+    if ($col[type] == "ID_TYPE") {
+      $t = "int";
+    } else if ($col[type] == "TS_TYPE") {
+      $t = "timestamp";
+    } else if ($col[type] == "TX_TYPE") {
+      $t = "varchar(20000)";
+    } else if ($f[type] == "VARCHAR") {
+      $t = "varchar(". $f[size] .")";
+    } else {
+      $t = $col[type];
+    }
+    $c = $col[constraints];
+    $c = ereg_replace("PK","NN primary key",$c);
+    $c = ereg_replace("U","unique",$c);
+    $c = ereg_replace("NN","not null",$c);
+    $q .= $this->colname($colname) ." ". $t ." ". $c;
+    $q .= "";
+    return $this->exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function dropsequence(&$seq) {
+    $q = "drop table ". $this->prefix . $seq[name];
+    return $this->Exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function createsequence(&$seq) {
+    $t = array(
+      name => $seq[name],
+      Desc => $seq[Desc],
+      "id" => array(type => "ID_TYPE",   constraints => "",  Desc => "sequence"),
+    );
+
+    if ( $this->createtable($t) == -1 ) {
+      return -1;
+    }
+
+    $q = "create trigger ". $this->prefix . $seq[name] ."_ins1 for ". $this->prefix . $seq[name] ." before insert position 0 as 
+begin
+ NEW.ID = GEN_ID(".  $this->prefix . $seq[name] .", 1);
+end";
+    $r = $this->Exec($q,1);
+
+    $q = "create trigger ". $this->prefix . $seq[name] ."_ins2 for ". $this->prefix . $seq[name] ." before update position 0 as 
+begin
+ NEW.ID = GEN_ID(". $this->prefix . $seq[name] .", 1);
+end";
+    $r = $this->Exec($q,1);
+
+    $this->Begin("WORK");
+    $q = "DELETE FROM RDB\$GENERATORS WHERE RDB\$GENERATOR_NAME = '". $this->prefix . $seq[name] ."';";
+    $r = $this->Exec($q,0);
+    $q = "create generator ". $this->prefix . $seq[name];
+    $r = $this->Exec($q,0);
+    $q = "set generator ". $this->prefix . $seq[name] ." to ". $seq['start'];
+    $r = $this->Exec($q,0);
+    ibase_commit();
+    $q = "insert into ". $this->prefix . $seq[name] ." (id) values (0)";
+    $r = $this->Exec($q,1);
+    $this->Commit("WORK");
+	return 0;
+  }
+  /**
+   * get the phrase to limit a selection to a specific range
+   */
+  function getRange($q,$start,$cnt) {
+#    return $q ." ROWS ". $start ." TO ". ($start+$cnt);
+    return $q;
+  }
+  /**
+   * do we need a count(*) to get the number of possible results in a select
+   */
+  function needCount() {
+    return false;   
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function gettype() {
+    return "Interbase";
+  }
+}
+/*
+ * Postgres Resultset
+ */
+class result_interbase extends result {
+  var $rs;
+  var $dbconn;
+
+  /**
+   * set the offset of rows
+   */
+  function setoffset($cnt) {
+    # disabled
+    $this->offset = 0;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function get($pos,$fld) {
+    $fld = strtoupper($fld);
+    if ( isset($this->result[$pos-$this->offset][$fld]) || (0 == $this->result[$pos-$this->offset][$fld]) ) {
+      return $this->result[$pos-$this->offset][$fld];
+    } else {
+#      echo "<br>POS:".$pos ." | FLD:". $fld ." | * <br>\n";
+      return;
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numrows() {
+    if ($this->rowcnt != -1) return $this->rowcnt;
+    return count($this->result);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numfields() {
+    return ibase_num_fields($this->rs);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldname($nr) {
+    $fn = ibase_field_info($this->rs,$nr);
+    return $this->dbconn->colnameREV($fn['alias']);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldtype($nr) {
+    $fn = ibase_field_info($this->rs,$nr);
+    return $fn['type'];
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function free() {
+    unset($this->result);
+    return ibase_free_result($this->rs);
+  }
+
+}
+?>

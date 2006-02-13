@@ -1,0 +1,1459 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: task.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ *
+ */
+
+# include_once 'file/file.pinc'; // never load modules directly
+ 
+define ('TASK_PRE',0);
+define ('TASK_RUNNING',1);
+define ('TASK_FINISH',2);
+define ('TASK_OVERDUE',3);
+
+function gantt_get_bar(&$task, $n, $depth) {
+  global $tutos,$font;
+
+  $over = false;
+  $name    = $task->name;
+  $start   = $task->s_start->getYYYYMMDD();
+  $end     = $task->s_end->getYYYYMMDD();
+  $vol     = $task->volume_done;  #not used in coding, I guess...
+  $planned = $task->volume;
+  $todo    = $task->volume_todo;
+  $comp    = $task->getcompletion();
+  $worker  = $task->worker;
+
+  for ($i = 1; $i < $depth; $i++) {
+    $name = "  ". $name;
+  }
+  $name .= " [";
+  $sep = "";
+  foreach ( $worker as $w => $f) {
+    $name .= $sep . $f->GetFullname();
+    $sep = ", ";
+  }
+  $name .= "]";
+  
+  #----workaround for presentation
+  #if ( $todo == -1 ) {
+  #  $todo = "100 %";
+  #} else {
+  #  $todo = hour_format($todo,2);
+  #}
+  #-------------------------------
+  
+  if ($tutos[jpgraph_old] == 0) {
+    $xx = array($name, hour_format($planned,2), $task->s_start->getDate(), $task->s_end->getDate());
+  } else {
+    $xx = $name;
+  }
+  if ( $comp > 100.0 ) {
+	$over = true;
+  }
+  if ($task->milestone == 1) {
+    $bar = new MileStone($n, $xx, $end,sprintf("[%.0f %%]", $comp), 0.5);
+  } else {
+    $bar = new GanttBar($n, $xx, $start, $end,sprintf("[%.0f %%]", $comp), 0.5);
+    if ( $over ) {
+      $bar->progress->Set(1);
+      $bar->SetColor("red");
+      $bar->SetPattern(BAND_RDIAG, "red");
+      $bar->progress->SetPattern(BAND_RDIAG, "red"); 
+	}
+  }
+  if ($tutos[jpgraph_old] == 0) {
+    $bar->SetCSIMTarget(addSessionKey($task->getUrl()),myentities($task->getFullName()));
+  }
+  /* Outline first level tasks */
+  $bar->title->SetFont($font, FS_NORMAL, 8); 
+  if( $depth == 1 ) {
+    $bar->title->SetFont($font, FS_BOLD, 8);
+  }
+  return $bar;
+}
+
+/* Recursive adding of project tasks */
+function gantt_addTasks(&$parent, &$graph, &$count, $depth) {
+  if ( $parent->getType() == "task" ) {
+    $graph->Add(gantt_get_bar($parent, $count++, $depth));
+  }
+
+  $parent->readTasks();
+  foreach($parent->tasklist as $i => $f) {
+    $graph = gantt_addTasks($f, $graph, $count, $depth+1);
+  }
+  return $graph;
+}
+
+Function gantt_draw(&$parent) {
+  global $lang , $font, $tutos;
+
+  #
+  # If we use a non western laguage encoding force the use of truetype fonts
+  #
+  if ($lang['content_encoding'] != "iso-8859-1") {
+    $font = FF_ARIAL;
+  } else {
+    $font = FF_FONT1;
+  }
+
+  task_calc($parent);
+
+  // Standard calls to create a new graph
+  $graph = new GanttGraph();
+  //$graph->SetShadow();
+  $graph->SetBox();
+  // Titles for chart
+  $graph->title->Set($lang['TaskGantt']." ". $lang['forphrase'] ." " .
+             html_entity_decode($parent->getFullName()) );
+
+  $graph->title->SetFont($font,FS_BOLD,12);
+
+  // For illustration we enable all headers. 
+  $graph->ShowHeaders(GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
+
+  $graph->scale->week->SetStyle(WEEKSTYLE_FIRSTDAY);
+  $graph->scale->month->SetStyle(MONTHSTYLE_LONGNAMEYEAR4);
+  if (isset($graph->scale->actinfo)) {
+    $graph->scale->actinfo->SetColTitles(array($lang['Task'] ." [". $lang['TaskWorker'] ."]",$lang['TaskVolumeFull'],$lang['TaskS_Start'],$lang['TaskS_End']));
+  }
+  /* TODO: we could use locale */
+  // $graph->scale->SetDateLocale("fr_FR");
+
+  // Change the scale font 
+  $graph->scale->week->SetFont(FF_FONT0);
+  $graph->scale->year->SetFont(FF_ARIAL,FS_BOLD,12);
+
+  $count = 0;
+  
+  $graph = gantt_addTasks($parent, $graph, $count, 0);
+  
+  // Add a vertical line for the current day
+#  $vline = new GanttVLine(strftime("%Y-%m-%d", time()));
+#  $vline->SetDayOffset(0.5);
+#  $graph->Add($vline);
+  if ($tutos[jpgraph_old] == 0) {
+    $graph->StrokeCSIM('gantt_png.php');
+  } else {
+    $graph->Stroke();
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * get the latest and earliest datetimes
+ */
+function task_calc (&$obj) {
+  task::obj_read($obj);
+
+  if ( ($obj->getType() == "address")||($obj->getType() == "team") ) {
+    $recursive = false;
+  } else {
+    $recursive = true;
+  }
+
+  $obj->max_end     = new DateTime(0);
+  $obj->min_start   = new DateTime(0);
+  $obj->sum['volume'] = 0.0;
+  $obj->sum['volume_done'] = 0.0;
+  if ( $obj->getType() == "task") {
+    $obj->max_end->setDateTimeTS($obj->s_end->ts);
+    $obj->min_start->setDateTimeTS($obj->s_start->ts);
+    $obj->sum['volume'] = $obj->volume;
+    $obj->sum['volume_done'] = $obj->volume_done;
+  }
+
+  if ( count($obj->tasklist) > 0 ) {
+    foreach ($obj->tasklist as $i => $f) {
+      if ( $recursive ) {
+        task_calc($f);
+        $min = $f->min_start->ts;
+        $max = $f->max_end->ts;
+      } else {
+        $min = $f->s_start->ts;
+        $max = $f->s_end->ts;
+        $f->sum['volume'] = $f->volume;
+        $f->sum['volume_done'] = $f->volume_done;
+      }
+
+      // For address, we have to only count the work done by $obj...
+      if( $obj->getType() == "address" ) {
+        if( $obj->creator->id == $obj->id
+            || array_key_exists((int)$obj->id, $f->worker) ) {
+          $obj->sum['volume'] += $f->sum['volume'];
+          $obj->sum['volume_done'] += computeWorkedHours($obj, $f);
+        }
+      } else {
+        $obj->sum['volume'] += $f->sum['volume'];
+        $obj->sum['volume_done'] += $f->sum['volume_done'];
+      }
+      if ( ($min != -1) ) {
+        if ( ($obj->min_start->ts != -1) ) {
+          $obj->min_start->setDateTimeTS(min($min,$obj->min_start->ts));
+        } else {
+          $obj->min_start->setDateTimeTS($min);
+        }
+      }
+      if ( ($max != -1) ) {
+        if ( ($obj->max_end->ts != -1) ) {
+          $obj->max_end->setDateTimeTS(max($max,$obj->max_end->ts));
+        } else {
+          $obj->max_end->setDateTimeTS($max);
+        }
+      }
+    }
+  }
+}
+
+function tasks_clone_recursive( $tasklist, $newpid, $owner, $diff ) {
+  global $tutos;
+  foreach ($tasklist as $t) {
+    $oldid  = $t->id;
+    $oldacl = $t->acl;
+    $t->readTasks();
+    $t->id = -1;
+    $t->p_id = $newpid;
+
+    # add time diff to make dates relative to project's beginning
+    $t->s_start->addDays($diff);
+    $t->s_end->addDays($diff);
+
+    # real dates are not welcome
+    $t->r_start->setNoTime();
+    $t->r_end->setNoTime();
+    
+    $t->save();
+    # set previous permissions and raise for current user
+    $t->acl = $oldacl;
+    acl_save($t);
+
+    $t->modified = array ();
+    $t->modified[] = array ( "field" => "CloneEntry" ,
+                              "old" => $oldid ,
+                              "new" => $t->id,
+                              "obj_id" => $nf->id
+                            );
+    history_save($t);
+
+    if (function_exists('files_clone')) {
+      files_clone( $t->dbconn, $oldid, $t->id, $owner );
+    }
+    tasks_clone_recursive( $t->tasklist, $t->id, $owner, $diff );
+  }
+}
+
+/**
+ * a task (something ToDo)
+ *
+ * @modulegroup task
+ * @module task
+ * @package task
+ */
+class task extends tutos_base {
+  /* ---------------------------------------------------------------------------
+   */
+  function task(&$dbconn) {
+    global $current_user,$table;
+
+    $this->init($dbconn);
+
+    $this->p_id        = -1;
+    $this->parent      = -1;
+    $this->plist       = array();
+    $this->name        = "";
+    $this->desc        = "";
+    $this->volume      = 0;
+    $this->volume_done = 0;
+    $this->volume_todo = -1;
+    $this->worker      = array();
+    $this->s_start     = new DateTime();
+    $this->s_end       = new DateTime();
+    $this->r_start     = new DateTime(0);
+    $this->r_end       = new DateTime(0);
+    $this->state       = TASK_PRE;
+    $this->diff        = 0;
+    $this->milestone   = 0;
+    $this->email       = 0;
+
+    $this->tablename   = $this->dbconn->prefix .$table['task'][name];
+    $this->tablename2  = $this->dbconn->prefix .$table['taskworker'][name];
+  }
+    
+  function exportXML_body ($only_ids = false) {
+    global $lang;
+    
+    $r = parent::exportXML_body();
+    if (!$only_ids) {
+    $r .=  "<name>". utf8_encode(htmlspecialchars($this->name)) ."</name>\n";
+    $r .=  "<desc>". utf8_encode(htmlspecialchars($this->desc)) ."</desc>\n";
+    $r .=  "<p_id>". $this->p_id ."</p_id>\n";
+    $r .=  "<volume>". $this->volume ."</volume>\n";
+    $r .=  "<volume_done>". $this->volume_done ."</volume_done>\n";
+    $r .=  "<volume_todo>". $this->volume_todo ."</volume_todo>\n";
+    $r .=  "<state_id>". $this->state ."</state_id>\n";
+    $r .=  "<state>". utf8_encode(htmlspecialchars($lang['TaskStates'][$this->state])) ."</state>\n";
+    $r .=  "<milestone>". $this->milestone ."</milestone>\n";
+    $r .=  "<email>". $this->email ."</email>\n";
+    if ( $this->s_start->notime != 1 ) {
+      $r .=  "<s_start>". $this->s_start->exportXML_body() ."</s_start>\n";
+    } else {
+      $r .= "<s_start/>";
+    }  
+    if ( $this->s_end->notime != 1 ) {
+      $r .=  "<s_end>". $this->s_end->exportXML_body() ."</s_end>\n";
+    } else {
+      $r .= "<s_end/>";
+    }  
+    if ( $this->r_start->notime != 1 ) {
+      $r .=  "<r_start>". $this->r_start->exportXML_body() ."</r_start>\n";
+    } else {
+      $r .= "<r_start/>";
+    }  
+    if ( $this->r_end->notime != 1 ) {
+      $r .=  "<r_end>". $this->r_end->exportXML_body() ."</r_end>\n";
+    } else {
+      $r .= "<r_end/>";
+    }  
+    foreach ( $this->worker as $i => $f) {
+        $r .= "<worker>";
+        $r .= "<id>". $f->id ."</id>";
+        $r .= "<name>". utf8_encode(htmlspecialchars($f->GetFullname())) ."</name>";
+        $r .= "<type>". utf8_encode(htmlspecialchars($f->GetType())) ."</type>";
+        $r.= "</worker>";
+    }
+    }
+    return $r;
+  }
+  /**
+   * read a resultset
+   */
+  function read_result (&$r, $pos ) {
+    global $current_user, $tutos;
+
+    $this->p_id        = $r->get($pos, "p_id");
+    $this->parent      = getObject($this->dbconn,$this->p_id);
+    $this->state       = $r->get($pos, "status");
+    $this->volume      = $r->get($pos, "volume");
+    $this->volume_done = $r->get($pos, "volume_done");
+    $this->volume_todo = $r->get($pos, "volume_todo");
+    $this->name        = $r->get($pos, "name");
+    $this->desc        = $r->get($pos, "description");
+    $this->milestone   = $r->get($pos, "milestone");
+
+    $this->r_start     = $r->getDateTime($pos, "r_start");
+    $this->r_end       = $r->getDateTime($pos, "r_end");
+    $this->s_start     = $r->getDateTime($pos, "s_start");
+    $this->s_end       = $r->getDateTime($pos, "s_end");
+
+    parent::read_result($r,$pos);
+
+    $wid = $r->get($pos, "worker");
+    $w = GetObject($this->dbconn,$wid);
+    if ( $w != -1 ) {
+      $this->worker[$wid] = &$w;
+    }
+    $this->readWorker();
+
+    $cid = $r->get($pos, "creator");
+    $this->creator = getObject($this->dbconn,$cid);
+    if ( $this->parent == -1 ) {
+      # Project not found
+      $this->parent = $this->worker[$wid];
+    }
+    if ( $this->parent == -1 ) {
+      # Project and worker  not found
+      $this->parent = $this->creator;
+    }
+    if ( $this->parent == -1 ) {
+      # Project, worker and creator not found
+      $this->parent = $current_user;
+    }
+    $this->p_id = $this->parent->id;
+
+    if ( ($this->volume == "") ) {
+      $this->volume = 0;
+    }
+    if ( ($this->volume_done == "") ) {
+      $this->volume_done = 0;
+    }
+    if ( ($this->volume_todo == "") ) {
+      $this->volume_todo = -1;
+    }
+
+    # If timetrack is used then the volume_done is read as the sum of all connected tt entries
+    if ( ($tutos[usetimetrack] == 1) ) {
+      $this->readTimetrackSum();
+      $this->volume_done = $this->timetracksum;
+      if ( ($this->volume_done == "") ) {
+        $this->volume_done = 0;
+      }
+    }
+
+    # Tasks with used volume are not longer in prestate
+    if ( ($this->volume_done > 0) && ($this->state == TASK_PRE) ) {
+      $this->state = TASK_RUNNING;
+    }
+
+    return;
+  }
+  /**
+   * get a list of possible new parents
+   */
+  function read_relations ( ) {
+    global $lang;
+
+    $this->plist = array();
+    if ($this->parent != -1) {
+      # Read possible new parents
+      $this->plist = $this->parent->getNeighbours();
+    }
+    # !!! FIX ME Remove own subtasks from list
+    unset ($this->plist[$this->id]);
+    task::obj_read($this);
+    foreach ($this->fulltasklist as $a => $b) {
+      unset ($this->plist[$a]);
+    }
+  }
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS task  could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return $this->neighbours;
+
+    parent::getNeighbours();
+
+    # Possible new parents are all parent tasks
+    $x = $this;
+    while ($x->getType() == "task") {
+      if ($x->see_ok() ) {
+        $this->neighbours[$x->id] = $x;
+      }
+      $x = $x->parent;
+    }
+    if ($x->getType() == "product") {
+      $n =  $x->getNeighbours() ;
+      foreach($n as $i) {
+        $this->neighbours[$i->id] = &$i;
+        unset($i);
+      }
+    }
+    return $this->neighbours;
+  }
+  /**
+   * read worker
+   */
+  function readWorker() {
+    if ( empty($this->id) ) return;
+    if ( -1 == $this->id ) return;
+
+    $query = "SELECT w_id FROM ". $this->tablename2 ." WHERE t_id = ". $this->id;
+    $result = $this->dbconn->Exec($query);
+
+    $n = $result->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $xx = $result->get($a, "w_id");
+      $p = getObject($this->dbconn,$xx);
+      $this->worker[$xx] = &$p;
+      $a++;
+      unset($p);
+    }
+    $result->free();
+  }
+  /**
+   * save worker
+   */
+  function saveWorker() {
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE t_id = ". $this->id;
+    $this->dbconn->Exec($q);
+    foreach ($this->worker as $i => $f) {
+      $q = "INSERT INTO ". $this->tablename2 ." (t_id,w_id) VALUES (". $this->id .",". $i .")";
+      $this->dbconn->Exec($q);
+    }
+  }
+  /**
+   * search for a task
+   * fill a array with possible tasks
+   */
+  function search_by_name(&$arr,&$user,$name) {
+    if ( trim($name) == "" ) return;
+
+    $q = "SELECT * from ". $user->dbconn->prefix ."tasks WHERE". $user->dbconn->Like("name",$name);
+    $q .= " order name ";
+    check_dbacl( $q, $user->id);
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new task($user->dbconn);
+      $x->read_result($r,$a);
+      $arr[$x->id] = &$x;
+#     echo $x->getFullName() ."<br />";
+      unset($x);
+      $a++;
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * set the Name
+   */
+  function setName($value) {
+    return $this->setStrField("name",$value,"TaskName");
+  }
+  /**
+   * set the Description
+   */
+  function setDescription($value) {
+    return $this->setStrField("desc",$value,"TaskDesc");
+  }
+  /**
+   * set the State
+   */
+  function setState($value) {
+    return $this->setIntField("state",$value,"TaskState");
+  }
+  /**
+   * set the Mielstone flag
+   */
+  function setMilestone($value) {
+    return $this->setIntField("milestone",$value,"TaskMilestone");
+  }
+  /**
+   * set the Start
+   */
+  function setRStart($value) {
+    return $this->setDateField("r_start",$value,"TaskR_Start");
+  }
+  /**
+   * set the End
+   */
+  function setREnd($value) {
+    return $this->setDateField("r_end",$value,"TaskR_End");
+  }
+  /**
+   * set the scheduled Start
+   */
+  function setSStart($value) {
+    return $this->setDateField("s_start",$value,"TaskS_Start");
+  }
+  /**
+   * set the scheduled end
+   */
+  function setSEnd($value) {
+    return $this->setDateField("s_end",$value,"TaskS_End");
+  }
+  /**
+   * set the Volume
+   */
+  function setVolume($value) {
+    return $this->setFloatField("volume",$value,"TaskVolumeFull");
+  }
+  /**
+   * set the VolumeDone
+   */
+  function setVolumeDone($value) {
+    # Book the time to the task and users
+    # timetrack
+    $this->diff = $value - $this->volume_done;
+
+    return $this->setFloatField("volume_done",$value,"TaskVolumeDone");
+  }
+  /**
+   * set the Volume Todo
+   */
+  function setVolumeTodo($value) {
+    return $this->setFloatField("volume_todo",$value,"TaskVolumeTodo");
+  }
+  /**
+   * set the parent
+   */
+  function setParent($pid) {
+    if ( $this->p_id != $pid ) {
+      $this->modified[] = array ( "field" => "TaskSubTask" , "old" => $this->p_id , "new" => $pid);
+      $this->p_id = $pid;
+    }
+    return;
+  }
+  /**
+   * Replaces the strings in the mail body
+   */
+  function make_mail_body(&$body,&$to) {
+    global $lang;
+
+    $url = getBaseURL(true). $this->getURL();
+    
+    $body = eregi_replace("@CREATOR@",$this->creator->getFullName(),$body);
+    $body = eregi_replace("@SHORT@",$this->name,$body);
+    $body = eregi_replace("@DESC@",$this->desc,$body);
+    $body = eregi_replace("@STATE@",$to->lg['TaskStates'][$this->state],$body);
+    $body = eregi_replace("@VOLUME@",$this->volume,$body);
+    
+    $worker = "";
+    if (count($this->worker) > 1) {
+      foreach ($this->worker as $i => $f) {
+        $worker .= $f->GetFullname()."\n";
+      }
+      $body = eregi_replace("@WORKERS@",$worker,$body);
+      $body = eregi_replace("<WORKERS>","",$body);
+      $body = eregi_replace("</WORKERS>","",$body);
+    } else {
+      $body = eregi_replace("<WORKERS>.*</WORKERS>","",$body);
+    }
+    
+    $body = eregi_replace("@URL@",$url,$body);
+
+    if ( $to->gettype() == "team" ) {
+      $body = eregi_replace("@TO@",$lang[$to->gettype()] ." ".$to->getFullName(),$body);
+      $body = eregi_replace("<TEAM>","",$body);
+      $body = eregi_replace("</TEAM>","",$body);
+    } else  {
+      $body = eregi_replace("@TO@",$to->getFullName(),$body);
+      # Remove the TEAM part
+      $body = eregi_replace("<TEAM>.*</TEAM>","",$body);
+    }
+    
+    $body = eregi_replace("@START@",$this->s_start->getDateTime(),$body);
+    $body = eregi_replace("@END@",$this->s_end->getDateTime(),$body);
+  }
+  /**
+   * Save Task to DB
+   */
+  function save() {
+    global $tutos,$table,$current_user;
+
+    $msg = "";
+
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+
+    @reset($this->worker);    
+    $q->addFV("worker",current($this->worker),"OBJ");
+
+    $q->addFV("p_id",$this->p_id,"INT");
+    $q->addFV("status",$this->state,"INT");
+    $q->addFV("milestone",$this->milestone,"INT");
+    $q->addFV("volume",$this->volume,"FLOAT");
+    $q->addFV("volume_todo",$this->volume_todo,"FLOAT");
+    $q->addFV("name",$this->name,"STRING",$table['task']['name'][size]);
+    $q->addFV("description",$this->desc,"TEXT");
+    $q->addFV("r_start",$this->r_start,"DATETIME");
+    $q->addFV("r_end",$this->r_end,"DATETIME");
+    $q->addFV("s_start",$this->s_start,"DATETIME");
+    $q->addFV("s_end",$this->s_end,"DATETIME");
+    $this->save_custom_fields($q);
+
+    if ( $this->id < 0 ) {
+      $task_is_new = true;
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        $this->id = $q->addFV("id",-1,"NEXTID");
+        # Defaut Access Control (get parents acl as default)
+        $this->acl  = $this->parent->acl;
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+        # to not trigger watchlist if parent is a address
+        $this->modified[] = array ( "field" => "TaskCreate" ,
+                                    "old" => "-1" ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->parent->id
+                                  );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      $query = $q->getInsert();
+    } else {
+      $task_is_new = false;
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+    foreach ($this->worker as $i => $f) {
+      acl_raise($this,$f->id,$tutos[modok]);
+      // fix the fact that user that changes task are in solvers list
+      if ($f->getType() == "address" && $f->id == $current_user->id) {
+        $cw = $f;
+      }
+    }
+    acl_raise($this,$this->creator->id,$tutos[delok]);
+
+    $this->dbconn->Exec($query);
+    $this->saveWorker();
+
+    $msg .= parent::save();
+
+    # If the volume_done has been changed, we add a timetrack entry
+    if ( ($this->diff != 0) ) {
+      $tt = new timetrack($this->dbconn);
+      if( isset($cw) ) {
+        // A worker has made the change
+        $tt->worker      = $cw;
+      } else {
+        // The task creator or a mod_ok tutos user made the change...
+       $tt->worker      = $current_user;
+      }
+      $tt->link_id     = $this->id;
+      $tt->ref         = $this;
+      $tt->volume      = $this->diff;
+      $tt->volume_todo = $this->volume_todo;
+      $tt->desc        = $this->name;
+      $msg .= $tt->save($norec=1);
+    }
+    
+    # Mail stuff
+    if ( $this->email == 1 ) {
+      $m = new mail($current_user);
+      $m->setFrom($this->creator);
+
+      foreach ($this->worker as $i => $f) {
+        $m->addTo($f);
+        $body = "";
+
+        if ( $task_is_new ) {
+          if ( ! findMailTemplate("task_new.proto",$f,$body) ) {
+            $msg .= sprintf($lang['Err0037'],$m->subject,$body) ."<br />\n";
+            continue;
+          }
+          $m->setSubject(sprintf($f->lg['EmailNewTask'],$this->getFullName(),sprintf($f->lg['TaskStates'][$this->state])));
+          $m->addHeader("X-PRIORITY","1");
+          $m->addHeader("priority","urgent");
+        } else {
+          if ( ! findMailTemplate("task_mod.proto",$f,$body) ) {
+            $msg .= sprintf($lang['Err0037'],$m->subject,$body) ."<br />\n";
+            continue;
+          }
+          $m->setSubject(sprintf($f->lg['EmailChangesTask'],$this->getFullName(),sprintf($f->lg['TaskStates'][$this->state])));
+        }
+
+        $this->make_mail_body($body,$f);
+        
+        $m->addBody($body,"text/plain",$f->lg['TaskDetail'],"",$f->lg['content_encoding']);
+                
+        $msg .= $m->send();
+        $m->resetBody();
+        $m->resetTo();
+      }
+    }
+    
+    return $msg;
+  }
+  /**
+   * Delete tasks from DB
+   */
+  function delete() {
+    global $current_user;
+
+    $msg = "";
+
+
+    $q = "UPDATE ". $this->tablename ." SET p_id = ". $this->p_id ." WHERE p_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE t_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+
+    $msg .= timetrack::obj_delete($current_user,$this);
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * Popup for overlib
+   */
+  function getPopInfo() {
+    global $lang;
+
+    $n =str_replace("\n","<br />",myentities(wordwrap($this->desc,80)));
+    $n =str_replace("\r","",$n);
+    $n =str_replace("'","\'",$n);
+
+    $t =myentities($this->name);
+    $t =str_replace("'","\'",$t);
+
+    $info = "";
+    $info .= "<html>";
+    $info .= "<body>";
+    $info .= "<table class=\"inner\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">";
+
+    $x = $this->parent;
+    if( $x == -1 ) unset($x);
+    $pre = "";
+    $name = "";
+    while ( isset ( $x ) ) {
+      $name = myentities($x->getFullName()) . $pre . $name;
+      if (isset($x->parent) && $x->parent != -1) {
+        $x = $x->parent;
+      } else {
+        unset($x);
+      }
+      $pre = "  &#8594; ";
+    }
+    $name .= $pre . "&nbsp;" . $t;
+    
+    $info .= "<tr><th>". $name ."</th></tr>";
+    if ( ($this->s_start->notime != 1) || ($this->s_end->notime != 1) ) {
+      $info .= "<tr><td><font size=\"-2\">";
+      $info .= $this->s_start->getDate() ." - ". $this->s_end->getDate();
+      $info .= "</font></td></tr>";
+    }
+    if ( $this->volume != 0 ) {
+      $info .= "<tr><td><font size=\"-2\">";
+      $info .= hour_format($this->volume) ." / ". hour_format($this->volume_done) ." ". $lang['hours'] . sprintf(" (%3.2f %%)", $this->getcompletion());
+      $info .= "</font></td></tr>";
+    }
+    $info .= "<tr><td><font size=\"-2\"><pre>";
+    $info .= $n;
+    $info .= "</pre></font></td></tr>";
+    $info .= "</table></body></html>";
+    return $info;
+  }
+  /**
+   * Return a link to this task
+   */
+  function getURL() {
+    return "task_show.php?id=".$this->id;
+  }
+  /**
+   * Return a link to modify this task
+   */
+  function getModURL() {
+    return "task_new.php?id=".$this->id;
+  }
+  /**
+   * Return a link to delete this task
+   */
+  function getDelURL() {
+    return "task_del.php?id=".$this->id;
+  }
+  /**
+   * Return a link to this task
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ( $text == "" ) {
+      $text = $this->getFullName();
+    }
+    if ( $this->see_ok() ) {
+      return makelink($this->getURL() , myentities($text) ,sprintf($lang['TaskLinkInfo'], $this->getFullName()),$this->getPopInfo());
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * Return a fullname i.e name
+   */
+  function getFullname() {
+    global $lang;
+
+    if ($this->milestone == 1) {
+      return $lang['TaskMilestone']." ".$this->name;
+    } 
+    return $this->name;
+  }
+  /**
+   * get the info as text
+   */
+  function getAsText (&$lang) {
+    $r = "";
+    $r .= format_asText($lang['TaskName'],$this->name);
+    $r .= format_asText($lang['TaskState'],$lang['TaskStates'][$this->state]);
+    $r .= format_asText($lang['TaskDesc'],$this->desc);
+    $r .= format_asText($lang['TaskSched']." / ". $lang['DateTimeFrom'],$this->s_start->getDate());
+    $r .= format_asText($lang['TaskSched']." / ". $lang['DateTimeTill'],$this->s_end->getDate());
+    return $r;
+  }
+  /**
+   * get the timespan
+   */
+  function getTimespan () {
+    $r = array();
+    $r['start'] =  $this->s_start->getYYYYMMDD() ."0000";
+    $r['end'] =  $this->s_end->getYYYYMMDD() ."2359";
+    $r['desc'] = $this->s_start->getDate() ." - " . $this->s_end->getDate() ;
+    return $r;
+  }
+  /**
+   * Return Info about bugs in this task
+   */
+  function bugSum() {
+    return bugSummary($this);
+  }
+
+
+  /**
+   * Add in the given array entries $task_id => $project_id
+   * Returns the project
+   */
+  function getProject(&$projects_tasks) {
+    $project = -1;
+    $obj     = $this;
+    $ptasks  = array();
+
+    // Walk through parents to find project 
+    while( $project == -1 ) {
+      if( array_key_exists($obj->p_id, $projects_tasks) ) {
+        $ptasks[] = $obj->id;
+        $project = getObject($this->dbconn, $projects_tasks[$obj->p_id]);
+      } else {
+        $t = getObject($this->dbconn, $obj->p_id);
+        if( $t == -1 ) {
+          // Parent no longer exists ?
+          break;
+        }
+        $ptasks[] = $obj->id;
+        if( $t->getType() != "task" ) {
+          // found first node
+          $project = &$t;
+        } else {
+          $obj = getObject($this->dbconn, $obj->p_id);
+        }
+        unset($t);
+      }
+    }
+    foreach( $ptasks as $pid ) {
+      $projects_tasks[$pid] = $project->id;
+    }
+
+    return $project;
+  }
+
+  /**
+   * get the type of object
+   */
+
+  function printRow (&$layout,$depth, &$parent, $fld = "", $slimit=0, $elimit=0) {
+     global $lang, $tutos, $projects_tasks,$table;
+
+     if( !isset($projects_tasks) ) $projects_tasks = array();
+
+     // I sometimes get -1 as $this->id
+     if( $this->id == -1 )
+       return;
+
+     if ( ($parent->getType() == "address")||($parent->getType() == "team")||($parent->getType() == "base") ) {
+       $recursive = false;
+       # print only unfinished tasks
+       if ( $this->state == TASK_FINISH ) {
+         return 1;
+       }
+     } else {
+       $recursive = true;
+     }
+
+     /* we limit the date range of printed tasks */
+     if( $slimit == 0 && $elimit == 0
+     || ($slimit != 0 && $elimit != 0
+         && $slimit->datecmp($this->s_start) <= 0
+         && ($elimit->datecmp($slimit) == 0
+         || $elimit->datecmp($this->s_end) >= 0) )) {
+
+       $c = $this->getcompletion();
+
+       echo $layout->OverviewRowStart($layout->line);
+
+       switch( $parent->getType() ) {
+       case "address": {
+         /* We show the project name and the task name
+          * As we already know the person name, we should not have the need
+          * to display it (see Person Task Overview)
+          *
+          * That can take some times to complete... even with the
+          * $projects_tasks static var, keeping projects associations in
+          * memory, in order not to make too much data base access...
+          */
+         $project = $this->getProject($projects_tasks);
+
+         if( $this->getLink() != "" ) {
+           echo "  <td class=\"task". $this->state . "\" valign=\"top\" colspan=\"2\" nowrap=\"nowrap\">&nbsp;".  ($project != -1 ? $project->getLink() : "DTC") ."&nbsp; &#8594; ".  $this->getLink()."&nbsp;</td>\n";
+         }
+         break;
+       }
+       case "team": {
+         echo "  <td class=\"task". $this->state ."\" valign=\"top\" colspan=\"2\" nowrap=\"nowrap\">&nbsp;".
+         $parent->getLink() ."&nbsp;&8594; ".
+         $this->getLink()."&nbsp;</td>\n";
+         break;
+       }
+       default: {
+         echo "  <td class=\"task". $this->state ."\" align=\"right\" valign=\"top\">&nbsp;". $depth ."&nbsp;</td>\n";
+         echo "  <td valign=\"top\" nowrap=\"nowrap\"><p>&nbsp;";
+         for ($i = 0; $i <= $depth; $i++) {
+           echo "&nbsp;&nbsp;";
+         }
+         echo $this->getLink()."&nbsp;";
+
+         switch( $fld ) {
+         case "worker":
+           echo "<p align=\"right\">".$lang['TaskWorker'];
+           $w = 0;
+           foreach ($this->worker as $i => $x) {
+             echo ($w %2 ? "<br />":"&nbsp;").($w >0 ? ",":"").
+                  $this->worker[$i]->getLink();
+            $w++;
+           }
+           break;
+
+        case "product":
+           $project = $this->getProject($projects_tasks);
+           echo "<p align=\"right\">".$lang['Product']." ".$project->getLink();
+           break;
+
+           default:
+              break;
+           }
+
+           echo "</td>\n";
+         }
+       } // end of switch $parent->getType()
+
+       // I have some strange bug where I reach non existing entities.
+       if( $this->getLink() == "" )
+         return 0;
+
+       // When displaying an address time overview, we have to compute
+       // the volume done by the $parent address !
+       if( $parent->getType() == "address" ) {
+         $volume = $this->volume;
+         $volume_done = computeWorkedHours($parent, $this);
+       } else {
+         $volume = $this->volume;
+         $volume_done = $this->volume_done;
+       }     
+
+       echo "  <td align=\"right\" valign=\"top\" nowrap=\"nowrap\">"
+     .sprintf("%3.2f %%",$c )
+     ."&nbsp;<br />&nbsp;"
+     .hour_format($volume_done,2) ." / ". hour_format($volume,2)
+     ." ". $lang['hours'] ."&nbsp;</td>\n";
+       
+       echo "  <td valign=\"top\" align=\"right\">"
+     .$this->s_start->getDate() ."&nbsp;</td>\n";
+
+       $w = 200;
+       $h  = 32; // height
+       // seconds per pixel
+       $t = time();
+       $max_end = max($parent->max_end->ts,$t);
+       $min_start = min($parent->min_start->ts,$t);
+       $p = ( ($max_end - $min_start) / $w);
+       if ( $p == 0 ) {
+#       $p = 1;
+       }
+
+       // from earliest to start
+       $x1 = round(($this->s_start->ts - $min_start)/$p);
+       $x1a = round( ($t - $min_start)/$p);
+       $x1b = round(( $this->s_start->ts - $t )/$p);
+
+       $x2 = round(($this->s_end->ts - $this->s_start->ts)/$p);
+
+       $x3 = round(($max_end - $this->s_end->ts)/$p);
+       $x3a = round(( $t - $this->s_end->ts)/$p);
+       $x3b = round( ($max_end - $t )/$p);
+
+       echo "  <td align=\"left\" colspan=\"2\" width=\"".($w +1)."\" nowrap=\"nowrap\">";
+
+       if ( $x1a + $x1b > 0 ) {
+         if ( $x1b < 0 ) {
+           echo "<img border=\"0\" height=\"". $h ."\" width=\"".( $x1a + $x1b) ."\" src=\"". $tutos['base'] ."/html/gray.png\" alt=\"\">";
+         } else {
+           if ( $x1a > 0 ) {
+             echo "<img border=\"0\" height=\"". $h ."\" width=\"". $x1a  ."\" src=\"". $tutos['base'] ."/html/gray.png\" alt=\"\">";
+           }
+         }
+         if ( $x1b > 0 ) {
+           echo "<img border=\"0\" height=\"". $h ."\" width=\"".$x1b."\" src=\"". $tutos['base'] ."/html/white.png\" alt=\"\">";
+         }
+       }
+       if ( $x2 == 0 ) {
+         $x2=1;
+       }
+       $x2a = Round($x2 * $c/100.0);
+       $x2b = Round($x2 * (100 - $c)/100.0);
+       if ( $x2a != 0 ) {
+         echo "<img border=\"0\" height=\"". $h ."\" width=\"". $x2a."\" src=\"". $tutos['base'] ."/html/green.png\" alt=\"". myentities($this->getFullName()) ."\">";
+       }
+       if ( $x2b > 0 ) {
+         echo "<img border=\"0\" height=\"". $h ."\" width=\"". $x2b."\" src=\"". $tutos['base'] ."/html/red.png\"  alt=\"". myentities($this->getFullName()) ."\">";
+       }
+
+       if ( $x3a + $x3b > 0 ) {
+         if ( $x3a > 0 ) {
+           echo "<img border=\"0\" height=\"". $h ."\" width=\"".$x3a."\" src=\"". $tutos['base'] ."/html/gray.png\" alt=\"\">";
+           if ( $x3b > 0 ) {
+             echo "<img border=\"0\" height=\"". $h ."\" width=\"". ($x3b - 1) ."\" src=\"". $tutos['base'] ."/html/white.png\" alt=\"\">";
+           }
+         } else {
+           if ( ($x3b + $x3a) > 0 ) {
+             echo "<img border=\"0\" height=\"". $h ."\" width=\"".($x3b + $x3a)."\" src=\"". $tutos['base'] ."/html/white.png\" alt=\"\">";
+           }
+         }
+       }
+       echo "</td>\n";
+       echo "  <td valign=\"bottom\">&nbsp;". $this->s_end->getDate() ."&nbsp;</td>\n";
+       echo "  <td>&nbsp;";
+       echo makelink("task_new.php?pid=".$this->id,$lang['NewEntry'],sprintf($lang['TaskCreateInfo'],$this->name));
+       echo "  </td>\n";
+
+
+       echo "  <td align=\"center\">&nbsp;";
+       if ( $tutos[massupdate] == 1 ) {
+         # Checkbox column for massupdate
+         if ( $this->mod_ok() ) {
+           echo "<input name=\"mark[]\" type=\"checkbox\" value=\"". $this->id ."\">";
+         } else {
+           echo "-";
+         }
+       } else {
+         if ( $this->del_ok() ) {
+           echo confirmlink("task_del.php?id=".$this->id,$lang['Delete'],sprintf($lang['TaskDelete'],$this->name));
+         } else {
+           echo $lang['Delete'];
+         }
+       }
+       echo "&nbsp;</td>\n";
+       echo $layout->OverviewRowEnd($layout->line++);
+     }
+
+     if ( $recursive ) {
+       task::obj_read($this);
+       foreach($this->tasklist as $i => $f) {
+         $f->printRow($layout,$depth +1,$parent, $fld, $slimit, $elimit);
+       }
+     }
+     return 0;
+  }
+  /**
+   * get the percentage of completion
+   */
+  function getcompletion () {
+    if( $this->state == TASK_FINISH )
+      return 100.0;
+
+    if ( $this->volume <= 0 ) {
+      return 0.0;
+    }
+    if( $this->volume_todo > -1 ) {
+      if ( ($this->volume_todo + $this->volume_done) == 0 ) {
+        return 0.0;
+      }
+      return (100.0*($this->volume_done/
+             ($this->volume_todo + $this->volume_done)));
+    }
+    return ( 100.0 * ( $this->volume_done / $this->volume ));
+  }
+  /**
+   * output the formatted task in one table row
+   */
+  function formatted () {
+    global $lang,$tutos,$current_user;
+
+    $class = "task". $this->state;
+
+    echo "  <tr>\n";
+    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\">". $this->getLink() ."</td>\n";
+    echo "  </tr>\n";
+    echo "  <tr>\n";
+    if ( $this->parent->getType() == "address" ) {
+      if ( $this->parent->id == $current_user->id ) {
+        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\" align=\"right\">".$lang['TaskStates'][$this->state] ."</td>\n";
+      } else {
+        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\" align=\"right\">".$lang['TaskStates'][$this->state]."&nbsp;(". $this->parent->getLink() .")</td>\n";
+      }
+    } else {
+      echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\" align=\"right\">".$lang['TaskStates'][$this->state]."&nbsp;&#8594;&nbsp;". $this->parent->getLink() ."</td>\n";
+    }
+    echo "  </tr>\n";
+
+    return;
+  }
+  /**
+   * checks if the task is planned that day
+   * Date d   true if taks work should happen that day
+   */
+  function inside (&$d) {
+    $d->setDateTime($d->getYYYYMMDD() . "000000");
+    $x = $d->getYYYYMMDD();
+
+    if ( $x < $this->s_start->getYYYYMMDD()  ) return false;
+    if ( $x > $this->s_end->getYYYYMMDD()  ) return false;
+
+    return true;
+  }
+  /**
+   * Transfer reference ids according to given table
+   */
+  function transfer_ids (&$trans) {
+    parent::transfer_ids ($trans);
+
+    if (isset($trans[$this->p_id])) {
+      $this->p_id = $trans[$this->p_id];
+    }
+    foreach ($this->worker as $i => $f) {
+      if (isset($trans[$i])) {
+        $this->worker[$trans[$i]] = $this->worker[$i] ;
+        $this->worker[$trans[$i]]->id = $trans[$i] ;
+        unset($this->worker[$i]);
+      }
+    }
+    if (isset($trans[$this->creator->id])) {
+      $this->creator->id = $trans[$this->creator->id];
+    }
+    return;
+  }
+  /**
+   * get the type of object
+   */
+  function getType () {
+    return "task";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usetaskmanagement;
+  }
+  /**
+   * get name of icons
+   */
+  function getHtmlIcon () {
+    return 'task';
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * create a link to a overview page
+   */
+  function getOverviewLink (&$user,$text = "") {
+    global $lang,$tutos;
+    if ( ! $user->feature_ok(usetaskmanagement,PERM_NEW) ) {
+      return;
+    }
+  }
+  /**
+   * create a link where a note to for the given object could be added
+   */
+  function getaddlink (&$user,&$obj,$text = "") {
+    global $lang;
+
+    if ( $obj == -1 ) return ""; 
+    if (! is_object($obj) ) return "";
+    if (! $user->feature_ok(usetaskmanagement,PERM_NEW) ) return "";
+    if (! $obj->mod_ok() ) return "";
+
+    $x = array( url => "task_new.php?pid=". $obj->id,
+                confirm => false,
+                text => ($text == "" ? $lang['TaskCreate']:$text),
+                info => sprintf($lang['TaskCreateInfo'], $obj->getFullName())
+              );
+    if ( $obj->gettype() == "task" ) {
+      $x[category] = array("task","new","obj");
+    } else {
+      $x[category] = array("task","new","module");
+    }
+
+    return $x;
+  }
+
+  /**
+   * Return Info about connected tasks for given object
+   */
+  function obj_read(&$obj) {
+    global $table;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+
+    if ( isset($obj->tasklist) ) return;
+
+    $obj->tasklist = array();
+    $obj->fulltasklist = array();
+
+    $obj->tsum['Tasks'] = 0;
+    $readall = false;
+    if ( ($obj->getType() == "address") || ($obj->getType() == "user") ) {
+      $q = "SELECT distinct t_id from ". $obj->dbconn->prefix .$table['taskworker'][name] ." WHERE ";
+       # Select the workers and all his teams tasks
+      team::obj_read($obj);
+      $q .= " w_id in ( ". $obj->id;
+      foreach ( $obj->teamlist as $i => $f) {
+        $q .= ",". $i;
+      }
+      $q .= ")";
+      $readall = true;
+    } else if ( $obj->getType() == "team" ) {
+      $q = "SELECT distinct t_id from ". $obj->dbconn->prefix .$table['taskworker'][name] ." WHERE ";
+      $q .= "w_id = ". $obj->id;
+      $readall = true;
+    } else {
+      $q = "SELECT * from ". $obj->dbconn->prefix .$table['task'][name]." WHERE ";
+      $q .= "p_id = ". $obj->id;
+      $q .= " ORDER by s_start";
+    }
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $t = new task($obj->dbconn);
+      if ( $readall ) {
+        $id =$r->get($a,"t_id"); 
+        $t = $t->read($id,$t);
+      } else {
+        $t->read_result($r,$a);
+      }
+      task::obj_read($t);
+      if ( class_exists('bug') ) {
+        bug::obj_read($t);
+      } else {
+        $t->tsum['Bugs'] = 0;
+      }
+      $t->readTimetrackSum();
+      $obj->tsum['Tasks'] += $t->timetracksum;
+      # Add Subtask-Sum
+      $obj->tsum['Tasks'] += $t->tsum['Tasks'];
+      $obj->tsum['Tasks'] += $t->tsum['Bugs'];
+      $obj->tasklist[$t->id] = &$t;
+
+      $obj->fulltasklist[$t->id] = &$t;
+      foreach ($t->fulltasklist as $i => $f) {
+        $obj->fulltasklist[$i] = &$f;
+        unset($f);
+      }
+      $a++;
+      unset($t);
+    }
+
+    $r->free();
+    return;
+  }
+  /**
+   * a object that may hold tasks is deleted
+   */
+  Function obj_delete(&$user,&$obj) {
+    global $table;
+
+    $msg = "";
+
+    $q = "DELETE FROM ". $obj->dbconn->prefix .$table['taskworker'][name] ." WHERE w_id = ". $obj->id;
+    $obj->dbconn->Exec($q);
+
+    if ( $obj->getType() != "address" ) {
+      task::obj_read($obj);
+      if ( count($obj->tasklist) > 0 ) {
+        foreach ($obj->tasklist as $i => $f) {
+          $msg .= $f->delete();
+        }
+      }
+    }
+    return $msg;
+  }
+  /**
+   * Read a list of tasks for a timerange and make it a array in the
+   * given object (compare readAppsCal in appointment.pinc)
+   * start    is a  TUTOS DateTime object
+   */
+  function readCal(&$obj, &$from, &$to) {
+    global $current_user,$table;
+
+    //if ( ! $current_user->feature_ok(usetaskmanagement,PERM_SEE) ) {
+    //  return;
+    //}
+
+    $from->setDateTime($from->getYYYYMMDD() . "000000");
+    $to->setDateTime($to->getYYYYMMDD() . "000000");
+
+    $x1 =  $obj->dbconn->DateTime($from);
+    $x2 =  $obj->dbconn->DateTime($to);
+	echo $x1;
+    #
+    #
+    #
+    $q = "SELECT c.* FROM ". $obj->dbconn->prefix ."tasks c ";
+    $pre = " WHERE";
+    if ( ($obj->getType() == "address") || ($obj->getType() == "user") ) {
+      # Select the workers and all his teams tasks
+      $q .= $pre. "( c.worker in ( ". $obj->id;
+      foreach ($obj->teamlist as $i => $f) {
+        $q .= ",". $i;
+      }
+      $q .= ")";
+#
+      $qq = "SELECT DISTINCT t_id FROM ". $obj->dbconn->prefix .$table['taskworker'][name]. " WHERE w_id in (".$obj->id;
+      foreach ($obj->teamlist as $i => $f) {
+        $qq .= "," . $i;
+      }
+      $qq .= ")";
+      $r = $obj->dbconn->Exec($qq);
+      $n = $r->numrows();
+      $a = 0;
+      if ( $n > 0 ) {
+        $q .= " OR ( c.id in (";
+        $xpre = "";
+        while ( $a < $n ) {
+          $x = $r->get($a,"t_id");
+          $q .= $xpre . $x;
+          $xpre = ",";
+          $a++;
+        }
+        $r->free();
+        $q .= ") )";
+      }
+#
+      $q .= ")";
+      $pre = " AND";
+    }
+    $q .= $pre. "(";
+    $q .= "   ( c.s_start < ". $x2 ." and c.s_start >= ". $x1 .")";
+    $q .= "or ( c.s_end <   ". $x2 ." and c.s_end >=   ". $x1 .")";
+    $q .= "or ( c.s_start < ". $x1 ." and c.s_end >=   ". $x1 .")";
+    $q .= ")";
+    $q .= " ORDER by c.s_start";
+
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $o = new task($obj->dbconn);
+      $o->read_result($r,$a);
+      $a++;
+      if ( $o->see_ok() ) {
+        $obj->callist[$o->id] = &$o;
+      }
+      unset($o);
+    }
+    $r->free();
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+    $r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#tasks",$lang['Tasks'],$lang['Tasks']) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=task_new",$lang["NewEntry"]."/". $lang["Modify"],$lang["NewEntry"]."/". $lang["Modify"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=task_show",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=res_cal",$lang['ResCal'],$lang['ResCal'])."</li>\n";
+    $r .= "</ul>\n";
+    return $r;
+  }
+}
+?>

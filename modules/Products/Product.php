@@ -31,16 +31,6 @@ class Product extends CRMEntity {
 	var $vendorid;
 	var $contactname;
 	var $contactid;
-	
-	 // Josh added for importing and exporting -added in patch2
-        var $unit_price;
-        var $table_name = "products";
-        var $object_name = "Product";
-        var $entity_table = "crmentity";
-        var $required_fields = Array(
-                'productname'=>1
-        );
-
 
 	var $tab_name = Array('crmentity','products','productcf','seproductsrel');
 	var $tab_name_index = Array('crmentity'=>'crmid','products'=>'productid','productcf'=>'productid','seproductsrel'=>'productid');
@@ -99,10 +89,9 @@ class Product extends CRMEntity {
 	function get_attachments($id)
         {
 	
-		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
                 $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;	
-
 		renderRelatedAttachments($query,$id);
         }
 
@@ -139,7 +128,7 @@ class Product extends CRMEntity {
 	function get_purchase_orders($id)
 	{
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid where crmentity.deleted=0 and products.productid=".$id;
-	      	renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id'],$this->column_fields['contact_id']);
+	      	renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id']);
         }
 	function get_salesorder($id)
 	{
@@ -162,156 +151,6 @@ class Product extends CRMEntity {
 		$result=$this->db->query($query);
 		return $this->db->num_rows($result);
 	}
-	
- //method added to construct the query to fetch the custom fields
-	function constructCustomQueryAddendum()
-	{
-		global $adb;
-		//get all the custom fields created
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=14";
-		$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-			if($i == 0)
-			{
-				$sql3 .= "productcf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{
-				$sql3 .= ", productcf.".$columnName. " '" .$fieldlable."'";
-			}
-
-		}
-		return $sql3;
-
-	}
-
-
-	//check if the custom table exists or not in the first place
-	function checkIfCustomTableExists()
-	{
-		//$result = mysql_query("select * from accountcf");
-		//$testrow = mysql_num_fields($result);
-		$result = $this->db->query("select * from productcf");
-		$testrow = $this->db->num_fields($result);
-		if($testrow > 1)
-		{
-			$exists=true;
-		}
-		else
-		{
-			$exists=false;
-		}
-		return $exists;
-	}
-
-
-	
-	function create_export_query(&$order_by, &$where)
-	{
-		if($this->checkIfCustomTableExists())
-		{
-
-			$query = $this->constructCustomQueryAddendum() . 
-				",    
-				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
-			products.sales_start_date AS sales_start_date,
-			products.sales_end_date AS sales_end_date,
-			products.usageunit AS usageunit,
-			products.serialno AS serialno,
-			products.currency AS currency,
-			products.reorderlevel AS reorderlevel,
-			products.website AS website,
-			products.taxclass AS taxclass,
-			products.mfr_part_no AS mfr_part_no,
-			products.vendor_part_no AS vendor_part_no,
-			products.qtyinstock AS qtyinstock,
-			products.productsheet AS productsheet,
-			products.qtyindemand AS qtyindemand
-				FROM ".$this->entity_table."
-				INNER JOIN products ON
-				crmentity.crmid = products.productid
-				INNER JOIN users on users.id=crmentity.smownerid 
-				LEFT JOIN productcf ON
-				productcf.productid = products.productid";
-
-		}
-		else
-		{
-			$query = "SELECT
-				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
-			products.sales_start_date AS sales_start_date,
-			products.sales_end_date AS sales_end_date,
-			products.usageunit AS usageunit,
-			products.serialno AS serialno,
-			products.currency AS currency,
-			products.reorderlevel AS reorderlevel,
-			products.website AS website,
-			products.taxclass AS taxclass,
-			products.mfr_part_no AS mfr_part_no,
-			products.vendor_part_no AS vendor_part_no,
-			products.qtyinstock AS qtyinstock,
-			products.productsheet AS productsheet,
-			products.qtyindemand AS qtyindemand
-			FROM ".$this->table_name ." INNER JOIN crmentity on 
-			crmentity.crmid = products.productid 
-			INNER JOIN users on users.id=crmentity.smownerid ";
-
-		}
-	
-		  $where_auto = " users.status='Active'
-                        AND crmentity.deleted=0 ";
-
-
-
-		 if($where != "")
-                        $query .= " where ($where) AND ".$where_auto;
-                else
-                        $query .= " where ".$where_auto;
-
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
-
-                return $query;
-
-	}
-
 
 }
 ?>

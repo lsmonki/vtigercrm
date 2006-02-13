@@ -91,13 +91,7 @@ if(isset($_REQUEST["record"]))
     
         function saveAndRunReport()
         {
-            if(selectedColumnsObj.options.length == 0)
-            {
-                alert("Selected Columns cannot be empty");
-                return false;
-            }
-
-	    formSelectColumnString();
+            formSelectColumnString();
             if( trim(getObj( 'record' ).value) == "" )
             {
                 showSaveDialog();
@@ -105,6 +99,7 @@ if(isset($_REQUEST["record"]))
             }
             else
             {
+                    document.NewReport.action = "index.php?action=Save&module=Reports";
 		    document.NewReport.submit();
             }
         }       

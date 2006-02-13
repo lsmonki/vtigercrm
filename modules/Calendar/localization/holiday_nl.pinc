@@ -1,0 +1,38 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_nl.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+    $tutos[cal][] = array(
+       array( Date => "01-01",           type => 1,    Desc => "Nieuwjaardsdag (NL)"),
+       array( Date => "06-01",           type => 0,    Desc => "Driekoningen (NL)"),
+       array( Date => "14-02",           type => 0,    Desc => "Valentijnsdag (NL)"),
+       array( Date => "CARNAVALMON",     type => 0,    Desc => "Carnaval (NL)"),
+       array( Date => "CARNAVALTUE",     type => 0,    Desc => "Carnaval (NL)"),
+       array( Date => "CARNAVALWED",     type => 0,    Desc => "Aswoensdag (NL)"),
+       array( Date => "GOODFRIDAY",      type => 0,    Desc => "Goede Vrijdag (NL)"),
+       array( Date => "EASTERSUNDAY",    type => 1,    Desc => "Eerste paasdag (NL)"),
+       array( Date => "EASTERMONDAY",    type => 1,    Desc => "Tweede paasdag (NL)"),
+       array( Date => "1-04",            type => 0,    Desc => "1 april!! (NL)"),
+       array( Date => "30-04",           type => 1,    Desc => "Koninginnedag (NL)"),
+       array( Date => "01-05",           type => 0,    Desc => "Dag van de Arbeid (NL)"),
+       array( Date => "04-05",           type => 0,    Desc => "Dodenherdenking (NL)"),
+       array( Date => "05-05",           type => 1,    Desc => "Nationale Bevrijdingsdag (NL)"),
+       array( Date => "MOTHERDAY",       type => 0,    Desc => "Moederdag (NL)"),
+       array( Date => "FATHERDAY",       type => 0,    Desc => "Vaderdag (NL)"),
+       array( Date => "ASCENSIONDAY",    type => 1,    Desc => "Hemelvaartsdag (NL)"),
+       array( Date => "WHITSUNDAY",      type => 1,    Desc => "Eerste Pinksterdag (NL)"),
+       array( Date => "WHITMONDAY",      type => 1,    Desc => "Tweede Pinksterdag (NL)"),
+       array( Date => "PRINSDAY",        type => 0,    Desc => "Prinsjesdag (NL)"),
+       array( Date => "5-12",            type => 0,    Desc => "Sinterklaas (NL)"),
+       array( Date => "25-12",           type => 1,    Desc => "Eerste Kerstdag (NL)"),
+       array( Date => "26-12",           type => 1,    Desc => "Tweede Kerstdag (NL)"),
+       array( Date => "31-12",           type => 0,    Desc => "Oudejaar (NL)"),
+    );
+?>

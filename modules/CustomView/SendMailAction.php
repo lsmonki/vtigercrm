@@ -52,13 +52,9 @@ if(isset($storearray) && $camodule != "")
 				}elseif(trim($otheremailid) != "")
 				{
 					SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
-				}elseif(trim($yahooid) != "")
+				}elseif($trim($yahooid) != "")
 				{
 					SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
-				}
-				else
-				{
-					$adb->println("There is no email id for this Contact. Please give any email id.");
 				}
 			}
 
@@ -81,10 +77,6 @@ if(isset($storearray) && $camodule != "")
                                 {
                                         SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
                                 }
-				else
-				{
-					$adb->println("There is no email id for this Lead. Please give any email id.");
-				}
                         }
 		}elseif($camodule == "Accounts")
 		{
@@ -103,10 +95,6 @@ if(isset($storearray) && $camodule != "")
 				elseif(trim($otheremailid) != "")
                                 {
                                      SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
-				}
-				else
-				{
-					$adb->println("There is no email id for this Account. Please give any email id.");
 				}
                         }	
 		}
@@ -138,9 +126,6 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
                 global $adb;
                 $mailserverresult=$adb->query("select * from systems where server_type='email'");
                 $mail_server=$adb->query_result($mailserverresult,0,'server');
-                $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
-		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
                 $_REQUEST['server']=$mail_server;
         }
         $mail->Host = $mail_server;
@@ -157,16 +142,10 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
         $mail->IsHTML(true);
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
-	$adb->println("Mail sending process : To => '".$to."', From => '".$from."'");
         if(!$mail->Send())
         {
-		$adb->println("(CustomView/SendMailAction.php) Error in Mail Sending : ".$mail->ErrorInfo);
                 $errormsg = "Mail Could not be sent...";
         }
-	else
-	{
-		$adb->println("(CustomView/SendMailAction.php) Mail has been Sent to => ".$to);
-	}
 	
 }
 header("Location: index.php?action=index&module=$camodule&viewname=$viewid");

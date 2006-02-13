@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fckcontextmenu.js
  * 	Defines the FCKContextMenu object that is responsible for all
  * 	Context Menu operations.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-02-16 20:34:58
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -108,9 +111,6 @@ FCKContextMenu._GetGroup = function( groupName )
 		case 'Image' :
 			return new FCKContextMenuGroup( true, this, 'Image', FCKLang.ImageProperties, true ) ;
 
-		case 'Flash' :
-			return new FCKContextMenuGroup( true, this, 'Flash', FCKLang.FlashProperties, true ) ;
-
 		case 'Form' :
 			return new FCKContextMenuGroup( true, this, 'Form', FCKLang.FormProp, true ) ;
 
@@ -164,16 +164,14 @@ FCKContextMenu.RefreshState = function()
 
 	// Set items visibility.
 
-//	var bIsAnchor = ( sTagName == 'A' && oTag.name.length > 0 && oTag.href.length == 0 ) ;
+	var bIsAnchor = ( sTagName == 'A' && oTag.name.length > 0 && oTag.href.length == 0 ) ;
 
-	if ( this.Groups['Link'] )			this.Groups['Link'].SetVisible( /*!bIsAnchor &&*/ FCK.GetNamedCommandState( 'Unlink' ) != FCK_TRISTATE_DISABLED ) ;
+	if ( this.Groups['Anchor'] )		this.Groups['Anchor'].SetVisible( bIsAnchor ) ;
+	if ( this.Groups['Link'] )			this.Groups['Link'].SetVisible( !bIsAnchor && FCK.GetNamedCommandState( 'Unlink' ) != FCK_TRISTATE_DISABLED ) ;
 
 	if ( this.Groups['TableCell'] )		this.Groups['TableCell'].SetVisible( sTagName != 'TABLE' && FCKSelection.HasAncestorNode('TABLE') ) ;
 	if ( this.Groups['Table'] )			this.Groups['Table'].SetVisible( sTagName == 'TABLE' ) ;
-	
-	if ( this.Groups['Image'] )			this.Groups['Image'].SetVisible( sTagName == 'IMG' && !oTag.getAttribute('_fckflash') && !oTag.getAttribute('_fckanchor') ) ;
-	if ( this.Groups['Flash'] )			this.Groups['Flash'].SetVisible( sTagName == 'IMG' && oTag.getAttribute('_fckflash') ) ;
-	if ( this.Groups['Anchor'] )		this.Groups['Anchor'].SetVisible( sTagName == 'IMG' && oTag.getAttribute('_fckanchor') ) ;
+	if ( this.Groups['Image'] )			this.Groups['Image'].SetVisible( sTagName == 'IMG' ) ;
 
 	if ( this.Groups['BulletedList'] )	this.Groups['BulletedList'].SetVisible( FCKSelection.HasAncestorNode('UL') ) ;
 	if ( this.Groups['NumberedList'] )	this.Groups['NumberedList'].SetVisible( FCKSelection.HasAncestorNode('OL') ) ;

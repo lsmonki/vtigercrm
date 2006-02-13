@@ -1,0 +1,476 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ * CVS Info:  $Id: permission.p3,v 1.17 2005/05/03 13:18:43 saraj Exp $
+ * $Author: saraj $
+ *
+ * @modulegroup BASE
+ * @module permission
+ * @package BASE
+ */
+global $calpath;
+if ( ! isset($tutos['base']) ) {
+  //$tutos['base'] = "modules/Calendar";
+  #ini_set("include_path",".");
+}
+# Files noted here are included everywhere
+include_once $calpath .'base.pinc';
+include_once $calpath .'module_base.pinc';
+#include_once $calpath .'handler.pinc';
+include_once $calpath .'db.p3';
+include_once $calpath .'Date.pinc';
+#include_once $calpath .'user.pinc';
+
+
+# use files to save session data
+#@ini_set("session.save_handler","files");
+# We do that ourself
+@ini_set("session.use_trans_sid","0");
+#
+# On Server Clusters (LoadBalancing) you should
+# change savepath to some path all your servers share
+#
+session_save_path($tutos[sessionpath]);
+session_name('TUTOS');
+
+# Cookie lifetime is double lifetime of login seesion
+ini_set("session.cookie_lifetime",(2 * 60 * $tutos[timetolive]));
+ini_set("session.gc_maxlifetime",(2 * 60 * $tutos[timetolive]));
+ini_set("session.gc_probability",50);
+
+# Problem with IE5 and download under https (markusleist@users.sourceforge.net)
+@session_cache_limiter('public');
+#session_cache_limiter('private, must-revalidate');
+#session_cache_limiter('private_no_expire');
+#@session_start();
+
+# this will register some session variables
+#include_once $calpath .'mail.pinc';
+
+#ini_set("output_handler","");
+#ini_set("zlib.output_compression_level","5");
+#ini_set("zlib.output_compression","On");
+
+
+#
+# IIS NT Hack
+#
+if(!isset($_SERVER['QUERY_STRING'])) {
+  $_SERVER['QUERY_STRING']='';
+}
+if(!isset($_SERVER['REQUEST_URI'])||empty($_SERVER['REQUEST_URI'])) {
+  $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '/' . $_SERVER['QUERY_STRING'];
+}
+
+if (isset($_SERVER['REQUEST_URI'])) {
+  $xxxx = split("/",$_SERVER['REQUEST_URI']);
+  ini_set("session.cookie_path","/". $xxxx[1]);
+} else {
+  ini_set("session.cookie_path","/");
+}
+#ini_set("file_uploads","On");
+ini_set("register_globals","Off");
+ini_set("register_argc_argv","Off");
+ini_set("short_open_tag","On");
+ini_set("magic_quotes_runtime","Off");
+ini_set("magic_quotes_qpc","On");
+ini_set("max_execution_time","120");
+ini_set("memory_limit","128M");
+ini_set("user_agent","TUTOS");
+
+set_magic_quotes_runtime(0);
+
+define ('minimumversion',"4.2.0");
+
+/**
+ * check php version
+ * code copied from http://www.php.net/manual/en/function.version-compare.php
+ */
+function minimum_version( $vercheck ) {
+  $minver = explode(".", $vercheck);
+  $curver = explode(".", phpversion());
+  if (($curver[0] < $minver[0])
+      || (($curver[0] == $minver[0])
+         && ($curver[1] < $minver[1]))
+      || (($curver[0] == $minver[0]) && ($curver[1] == $minver[1])
+         && ($curver[2][0] < $minver[2][0])))
+    return false;
+  else
+    return true;
+}     
+
+/** ---------------------------------------------------------------------------
+ * allow a pseudo login for free pages like help
+ */
+Function free_login (&$dbconn) {
+  global $current_user, $tutos, $lang;
+
+  $x = strpos($_SERVER['PHP_SELF'],"help.php");
+  if ( $x == "" ) {
+    return 0;
+  }
+
+  $current_user= new tutos_user($dbconn);
+  ReadLang($lang);
+
+  return 1;
+}
+/** ---------------------------------------------------------------------------
+ * log a debug/info message to the DB
+ */
+Function logmessage ($msg) {
+  global $dbconn, $tutos;
+
+  if ( $tutos[debug] == 0 ) {
+    return;
+  }
+
+  $now =  new DateTime();
+  $query = "INSERT into ". $dbconn->prefix ."messages (ts,". $dbconn->colname("message") .") values (". $dbconn->DateTime($now) .",". $dbconn->String($msg) .")";
+
+  $dbconn->Exec($query);
+}
+
+/** ---------------------------------------------------------------------------
+ * send a lost password or generate a new one
+ */
+Function password_lost(&$dbconn,$uname) {
+  global $tutos,$lang,$current_user;
+
+  $query = "SELECT a.* ,p.*,p.id as u_id FROM ". $dbconn->prefix ."addresses a, ". $dbconn->prefix ."people p WHERE p.login = ". $dbconn->String(trim($uname)) ." AND p.adr_id = a.id";
+  $result = $dbconn->Exec($query);
+
+  $r = array();
+  $r[0] = "";
+  if ( ! $result ) {
+    $r[0] .= "unknown user '". $uname ."'";
+    $r[0] .= "<br />you have to enter a valid username ";
+    $r[1] = $r[0];
+    return $r;
+  }
+  if ( 1 != $result->numrows()) {
+    $r[0] .= "unknown user '". $uname ."'";
+    $r[0] .= "<br />you have to enter a valid username ";
+    $r[1] = $r[0];
+    return $r;
+  }
+
+  $current_user = new tutos_user($dbconn);
+  $current_user->read_result($result,0);
+  $result->free();
+  $m = $current_user->default_email();
+
+  if ( empty($m) ) {
+    $r[0] .= "no email found ";
+    $r[1] = $r[0];
+    return $r;
+  }
+
+  $mail = new mail();
+  $mail->setFrom($current_user);
+  $mail->addHeader("Sensitivity","Company-Confidential");
+  $mail->setSubject("TUTOS: your account");
+  $mail->addTo($current_user);
+  $body = "";
+  if ( ! findMailTemplate("password.proto",$current_user,$body) ) {
+    $r[0] = sprintf($lang['Err0037'],$mail->subject,$body);
+    $r[1] = $r[0];
+    return $r;
+  }
+
+  if ( ($tutos[pwlostsupport] == 2) || ($dbconn->db->crypt == 1)) {
+    $current_user->setPassword(substr(session_id(),0,8));
+    $current_user->updatepw = 1;
+    if ($tutos[demo] != 1 ) {
+      $current_user->save();
+    } else {
+      $r[0] .= "Sorry this feature is disabled in demo mode<br />";
+    }
+    $body = eregi_replace("@PW@",$current_user->pw,$body);
+    $body = eregi_replace("<CHANGED>","",$body);
+    $body = eregi_replace("</CHANGED>","",$body);
+  } else {
+    $body = eregi_replace("@PW@",$current_user->pw,$body);
+    $body = eregi_replace("<CHANGED>.*</CHANGED>","",$body);
+  }
+  $body = eregi_replace("@TO@",$current_user->getFullName(),$body);
+  if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+    $body = eregi_replace("@IP@",$_SERVER['REMOTE_ADDR']." ".$_SERVER['HTTP_X_FORWARDED_FOR'],$body);
+  } else {
+    $body = eregi_replace("@IP@",$_SERVER['REMOTE_ADDR'],$body);
+  }
+  $mail->addBody($body,"text/plain","","",$current_user->lg['content_encoding']);
+  $r[0] .= $mail->send();
+  $r[1] = $r[0];
+
+  return $r;
+}
+/** ---------------------------------------------------------------------------
+ * Check for permmision
+ */
+Function check_user() {
+  global $lang ,$dbconn , $current_user,$tutos, $confmsg, $msg, $calpath;
+
+  $current_user= new tutos_user($dbconn);
+
+  # determine if this is a intial session opener
+  $initial_auth = true;
+  # Take a possible transfered message to global namespace
+  # Stuff that is delivered in an unsecure way (GET/POST) will be
+  # handeld with HtmlEntities
+  $msg = "";
+  if ( isset($_POST['msg']) ) {
+    $msg .= HtmlEntities(UrlDecode($_POST['msg']));
+  } elseif ( isset($_GET['msg']) ) {
+    $msg .= HtmlEntities(UrlDecode($_GET['msg']));
+  } elseif ( isset($_POST['msgid']) ) {
+    if (isset($_SESSION[$_POST['msgid']])) {
+      $msg .= UrlDecode($_SESSION[$_POST['msgid']]);
+      unset($_SESSION[$_POST['msgid']]);
+    } else {
+      $msg = "?";
+    }
+  } elseif ( isset($_GET['msgid']) ) {
+    if (isset($_SESSION[$_GET['msgid']])) {
+      $msg .= UrlDecode($_SESSION[$_GET['msgid']]);
+      unset($_SESSION[$_GET['msgid']]);
+    } else {
+      $msg = "?";
+    }
+  }
+
+  if (isset($confmsg)) {
+    $msg .= $confmsg;
+  }
+
+  if ( isset($_COOKIE['TUTOS']) ) {
+    $tutos['SESSID'] = $_COOKIE['TUTOS'];
+  } elseif ( isset($_POST['TUTOS']) ) {
+    $tutos['SESSID'] = $_POST['TUTOS'];
+  } elseif ( isset($_GET['TUTOS']) ) {
+    $tutos['SESSID'] = $_GET['TUTOS'];
+  }
+
+  if ( $tutos[mailmode] == 0 )  {
+    $tutos[pwlostsupport] = 0;
+  }
+
+
+  $auth = array();
+  $al = split(" ",$tutos[authtype]);
+  $cnt = 0;
+  foreach ( $al as $a ) {
+    require_once $calpath .'auth/auth_'. $a .'.pinc';
+    $x = "auth_".$tutos[authtype];
+    if ( class_exists ($x) ) {
+      $auth[$cnt++] = new $x();
+    } else {
+      die("Missing Authentification: ".$x ."\n(see \$tutos[authtype] parameter)\n");
+    }
+  }
+
+  if ( isset($_POST['dbnr']) ) {
+    $db = $_POST['dbnr'];
+  } elseif ( isset($_GET['dbnr']) ) {
+    $db = $_GET['dbnr'];
+  } else {
+    $db = 0;
+  }
+
+  if ( isset($_POST['login']) ) {
+    $action = $_POST['login'];
+  } elseif ( isset($_GET['login']) ) {
+    $action = $_GET['login'];
+  } else {
+    $action = "";
+  }
+  if ( isset($tutos['SESSID']) && (isset($_SESSION['userid']) && $_SESSION['userid'] != -1) ) {
+    // there is a session
+    session_id($tutos['SESSID']);
+    if ( isset ($_SESSION['userid']) ) {
+      $userid = $_SESSION['userid'];
+    } else {
+      $userid = -1;
+    }
+    if ( isset ($_SESSION['dbnr']) ) {
+      $dbnr = $_SESSION['dbnr'];
+    } else {
+      $dbnr = -1;
+    }
+    if ( ($dbnr == -1) || ($userid == -1) ) {
+      $userid = -1;
+    }
+    error_log("check_user: old session ". $tutos['SESSID'] ." :". $_SERVER['PHP_SELF'] .": userid=". $userid ."\n",3,$tutos[errlog]);
+  } else {
+    $tutos['SESSID'] = session_id();
+    $userid = -1;
+
+   error_log("check_user: new session ". $tutos['SESSID'] ." :". $_SERVER['PHP_SELF'] .": userid=". $userid ."\n",3,$tutos[errlog]);
+
+    # For login we use default language (via browser settings)
+    if ( free_login($dbconn) == 1 ) {
+      ReadLang($lang);
+      return $current_user;
+    }
+    if ($auth[0]->getuname() == "") {
+      ReadLang($lang);
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$msg);
+    }
+  }
+
+  # update the TTL
+  if (isset($_SERVER['REQUEST_URI'])) {
+    $xxxx = split("/",$_SERVER['REQUEST_URI']);
+  } else {
+    $xxxx[1] = "";
+  }
+  setcookie(session_name(),$tutos['SESSID'],time() + 60 * $tutos[timetolive],"/". $xxxx[1]);
+
+  if ( ($userid < 1) OR !is_numeric($userid) ) {
+    # NOT LOGGED IN
+
+    # For login we use default language (via browser settings)
+    ReadLang($lang);
+
+    if ( ($tutos[pwlostsupport] > 0) && ($action == $lang['LostPassword']) ) {
+      $dbconn = DB_Open($db);
+      # find the entry
+      $r = password_lost($dbconn,$auth[0]->getuname());
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$r[0]);
+    }
+
+
+    if ( $auth[0]->getuname() == "" || $auth[0]->getpw() == "" ) {
+      /* No Username or no password supplied */
+      if ( free_login($dbconn) == 1 ) {
+        return $current_user;
+      }
+      # logmessage("missing uname or pw ");
+      $msg .= "<br />". $lang['Err0025'];
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$msg);
+    }
+    $dbconn = DB_Open($db);
+    $auth[0]->init($dbconn);
+    $r = $auth[0]->check();
+    if ( is_array($r) ) {
+      error_log($r[0]."\n", 3, $tutos[errlog]);
+      error_log($r[1]."\n", 3, $tutos[errlog]);
+      logmessage($r[0]);
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$r[1]);
+    }
+
+
+    $_SESSION['userid'] = $current_user->id;
+    $_SESSION['dbnr'] = $db;
+    ReadLang($lang);
+    $msg .= sprintf($lang['Welcome_1'],$current_user->getFullname())."\n";
+    $msg .= "<br />".sprintf($lang['Welcome_2'], $current_user->last_seen->getDateTime(),$current_user->last_host) ."<br />\n";
+
+    logmessage("check_user: Logged in ". $current_user->id .":". $current_user->login .":". $current_user->getFullname());
+    $initial_auth = true;
+  } else {
+    $initial_auth = false;
+#  echo "UID:" .$userid ."<br />\n";
+    $dbconn = DB_Open($dbnr);
+    $current_user= new tutos_user($dbconn);
+    $current_user = $current_user->read($userid,$current_user);
+    ReadLang($lang);
+    if ( $current_user->id == -1 ) {
+      $msg .= "<br />". $lang['Err0028']; // account deleted
+      logmessage($msg);
+      $auth[0]->logout();
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$msg);
+    }
+
+    $n = new DateTime();
+    $diff = $n->getTimestamp() - $current_user->last_seen->getTimestamp();
+#    logmessage("check_user: still logged in ". $current_user->admin ." $userid:". $current_user->getFullname() . " idle for  ". $diff );
+#    logmessage("check_user:  ". $current_user->last_seen->getDateTime() ." " . $n->getDateTime() );
+#    logmessage("check_user: |". $current_user->last_seen->format ."|" . $n->format );
+#    logmessage("check_user: |". $current_user->last_seen->orig ."|" . $n->orig );
+#    logmessage("check_user: |". $current_user->last_seen->ts ."|" . $n->ts );
+
+    if ( $diff > (60 * $tutos[timetolive]) ) {
+      $msg .= "<br />automated logout after ". $tutos[timetolive] ." minutes ";
+      logmessage($msg ." ". $current_user->getFullname());
+      $auth[0]->logout();
+      $auth[0]->login_form($_SERVER['PHP_SELF'],$msg);
+    }
+  }
+
+  if ( $current_user->disabled == 1 ) {
+    $msg .= "<br />".sprintf($lang['Err0049'],$current_user->login);
+    $auth[0]->logout();
+    logmessage($msg);
+    $auth[0]->login_form($_SERVER['PHP_SELF'],$msg);
+  }
+  $current_user->update($initial_auth);
+
+  $n = new DateTime();
+  $_SESSION['username'] = $current_user->getFullName();
+  $_SESSION['lastseen'] = $current_user->last_seen->getTimeStamp();
+  $_SESSION['lasthost'] = $current_user->last_host;
+  $_SESSION['path']     = ini_get("session.cookie_path");
+  if (isset($_SERVER["HTTP_HOST"])) {
+    $_SESSION['server']   = $_SERVER["HTTP_HOST"];
+  } else {
+    $_SESSION['server']   = "?";
+  }
+  if (isset($_SERVER["HTTP_USER_AGENT"])) {
+    $_SESSION['client']   = $_SERVER["HTTP_USER_AGENT"];
+  } else {
+    $_SESSION['client']   = "?";
+  }
+
+#  logmessage($current_user->tz ." ". getenv("TZ"));
+
+  $x = Date("Z");       # this happens in Default TZ
+  $dbconn->TimeZone($current_user->tz);
+  $y = Date("Z");
+
+  if ( ($dbconn->gettype() == "MySQL") || ($dbconn->gettype() == "Oracle") ) {
+    $current_user->offset = ($y - $x);
+  } else {
+    $current_user->offset = 0;
+  }
+
+#  logmessage($y ." - ". $x ." ". $current_user->tz ." ". getenv("TZ"));
+
+  if ( session_id() == "" ) {
+    $auth[0]->login_form($_SERVER['PHP_SELF'],"No Session");
+  }
+
+  # Do this only once !!
+  if ( isset($_GET['th']) || isset($_POST['th']) ) {
+    if ( isset($_GET['th']) ) {
+      $current_user->themename = basename(strtolower($_GET['th']));
+    } else {
+      $current_user->themename = basename(strtolower($_POST['th']));
+    }
+  }
+  $current_user->read_permissions();
+  ReadISOCntryCde();
+  ReadHolidayInfo();
+  ReadNamedayInfo();
+
+  return $current_user;
+};
+
+/** ---------------------------------------------------------------------------
+ * modifies select-query for checking acl
+ * uses SQL92 subselect
+ * for mysql-user: "Subselects are currently being implemented in the 4.1 development tree."
+ * maybe redesign with two select-statements
+ * DOES THIS WORK with TEAMS in TEAMS ??
+ */
+Function check_dbacl( &$query, $user_id, $id_name="id") {
+  global $tutos,$current_user; 
+
+  if ( ($tutos[use_check_dbacl] == 1) && ! is_admin($current_user) ) {
+    $query =  "SELECT DISTINCT i.* FROM (".$query.") AS i, adrteam t , acl a "
+            . "WHERE i.".$id_name."=a.obj_id AND a.perm>=".$tutos[seeok]." AND ((a.adr_id=".$user_id
+            . ") OR (a.adr_id=0) OR ((t.adr_id=".$user_id.") AND (a.adr_id=t.team_id)))";
+  }
+}
+?>

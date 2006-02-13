@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fcktoolbar.js
  * 	FCKToolbar Class: represents a toolbar. A toolbar is not the complete
  * 	toolbar set visible, but just a strip on it... a group of items.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2004-05-31 23:07:47
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -60,3 +63,4 @@ FCKToolbar.prototype.AddTerminator = function()
 	oCell.className = 'TB_End' ;
 	oCell.innerHTML = '<img src="' + FCKConfig.SkinPath + 'images/toolbar.end.gif" width="12" height="21" style="VISIBILITY: hidden" onload="this.style.visibility = \'\';" unselectable="on">' ;
 }
+

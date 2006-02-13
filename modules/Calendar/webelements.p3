@@ -1,0 +1,2060 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ * CVS Info:  $Id: webelements.p3,v 1.17 2005/05/03 13:18:43 saraj Exp $
+ * $Author: saraj $
+ *
+ * @modulegroup BASE
+ * @module webelements
+ * @package BASE
+ */
+global $calpath;
+$calpath = "modules/Calendar/";
+if ( ! isset($tutos['base']) ) {
+  $tutos['base'] = "modules/Calendar";
+  #ini_set("include_path",".");
+}
+#@include $calpath .'webelements_special.p3';
+
+if (! function_exists('html_entity_decode')) {
+# prior to PHP 4.3
+function html_entity_decode ($string)
+{
+    $trans_tbl = get_html_translation_table (HTML_ENTITIES);
+    $trans_tbl = array_flip ($trans_tbl);
+    return strtr ($string, $trans_tbl);
+}
+}
+
+/**
+ * load the layout engine
+ */
+Function loadlayout() {
+  global $current_user,$tutos,$calpath;
+
+  $ly = "classic_layout";
+  if ( isset($current_user->ly) && !empty($current_user->ly) ) {
+    $ly = $current_user->ly;
+  }
+  if ( isset($_GET['ly']) || isset($_POST['ly']) ) {
+    if ( isset($_GET['ly']) ) {
+      $ly = basename($_GET['ly']);
+    } else {
+      $ly = basename($_POST['ly']);
+    }
+  }
+  if ( file_exists(getcwd()."/".$tutos['base'].'/layout/'. $ly .'.pinc') ) {
+    require_once $calpath .'layout/'. $ly .'.pinc';
+  } else {
+    require_once $calpath .'layout/classic_layout.pinc';
+  }
+}
+/**
+ * Read ISO Country Codes.  * HC *
+ */
+Function ReadISOCntryCde() {
+  global $tutos,$lang ,$current_user;
+
+  if ( file_exists(getcwd()."/". $tutos['base'] ."/iso_cntrycodes.p3") && is_readable(getcwd()."/".$tutos['base'] ."/iso_cntrycodes.p3") ) {
+    include_once $calpath .'iso_cntrycodes.p3';
+  }
+  return;
+}
+
+/**
+ * Select a country code
+ */
+Function SelectCntryCde($field,$default) {
+  global $lang ,$current_user;
+
+  echo "  <select id=\"country\" name=\"". $field ."\">\n";
+
+  $found = false;
+  $sel = "";
+  @reset($lang['countrycde']);
+  while ( list ($cntry,$x) = @each ($lang['countrycde']) ) {
+    if ( $cntry == "" ) {
+      continue;
+    }
+    if ( $cntry == $default ) {
+      $found = true;
+      $sel = " selected=\"selected\"";
+    } else {
+      $sel = "";
+    }
+    echo "   <option value=\"". $cntry ."\"". $sel .">". myentities($lang['countrycde'][$cntry]) ." (". $cntry .")</option>\n";
+  }
+  if ( ($found == false)  ) {
+    $sel = " selected=\"selected\"";
+    echo "   <option value=\"". $default ."\"". $sel ." selected=\"selected\">". $default ."</option>\n";
+  }
+  echo "  </select>\n";
+  return;
+ }
+/**
+ * Read a custom language file.
+ */
+Function ReadCustomLang(&$lang,$key,$path) {
+  global $tutos;
+  # error_log($_SERVER["REQUEST_URI"] .">ReadCustomLang:".count($lang)." ". $key ." ". $path  ."<br />\n",3,$tutos[errlog]);
+
+  if ($key == "en-us") {
+	ReadCustomLang($lang,"en",$path);
+  }
+
+  if ( file_exists(getcwd()."/".$path ."/lang_custom.p3") && is_readable(getcwd()."/".$path ."/lang_custom.p3") ) {
+    include_once $path ."/lang_custom.p3";
+  }
+  if ( file_exists(getcwd()."/".$path ."/". $key ."_custom.p3") && is_readable(getcwd()."/".$path ."/". $key."_custom.p3") ) {
+    include_once $path ."/". $key."_custom.p3";
+  }
+  return;
+}
+
+/**
+ * some standard procedures after reading
+ */
+Function ReadLangFinish(&$lang,$type) {
+#  echo ">ReadFinish:".count($lang). " ". $type ."<br />\n";
+  # Set the common fields
+  # Object Types
+  $lang['team']        = $lang['Team'];
+  $lang['product']     = $lang['ProductP'];
+  $lang['address']     = $lang['Address'];
+  $lang['user']        = $lang['User'];
+  $lang['appointment'] = $lang['Appointment'];
+  $lang['department']  = $lang['Department'];
+  $lang['company']     = $lang['Company'];
+  $lang['task']        = $lang['Task'];
+  $lang['timetrack']   = $lang['Timetrack'];
+  $lang['database']    = $lang['DB'];
+  $lang['location']    = $lang['Location'];
+
+  # Aliases
+  if (isset($lang['ProdRole'])) {
+    foreach ($lang['ProdRole'] as $r => $x) {
+      $lang['ProdRole'.$r]   = &$lang['ProdRole'][$r];
+    }
+  }
+
+  return($type);
+}
+
+/** ---------------------------------------------------------------------------
+ * Read the language files.
+ * Language is determined by looking at HTTP_ACCEPT_LANGUAGE in automatic mode
+ */
+Function ReadLang1(&$lang,$path,&$user) {
+  global $tutos,$current_language;
+
+  # error_log($_SERVER["REQUEST_URI"] ." > ReadLang1:".count($lang)." ". $path ." ". $user->f_name ." ". $user->l_name ." ". $user->lang ."<br />\n",3,$tutos[errlog]);
+
+ /* if (! isset($user) ) {
+    $user = new tutos_user($dbconn);
+  }
+  if ($user->getType() != "user") {
+      echo "User Object required:".$user->getType() ." ". $user->getFullName() ."<br />\n";
+  }
+*/
+  if ( isset($_GET['lg']) || isset($_POST['lg']) ) {
+    if ( isset($_GET['lg']) ) {
+      $lg = strtolower($_GET['lg']);
+    } else {
+      $lg = strtolower($_POST['lg']);
+    }
+  } else if ($current_language != "auto" ) {
+    $lg = $current_language;
+  }
+
+  if (isset($lg)) {
+    $ok = false;
+    if ( ("en-us" ==  $lg) &&  file_exists(getcwd()."/".$path ."/en.p3") && is_readable(getcwd()."/".$path ."/en.p3") ) {
+      include_once $path ."/". "en.p3";
+      $ok = true;
+    }
+    if ( file_exists(getcwd()."/".$path ."/". $lg .".p3") && is_readable(getcwd()."/".$path ."/". $lg .".p3") ) {
+      include_once  $path ."/". $lg .".p3";
+      $ok = true;
+    }
+    if ($ok) {
+      ReadCustomLang($lang,$lg,$path);
+      return ReadLangFinish($lang,$lg);
+    }
+  }
+
+  $langs = "";
+  if ( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) {
+    $langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+  }
+  $tok = trim(strtok($langs,","));
+  $l = 0;
+
+  while($tok && ($l == 0)) {
+    if ( strpos($tok,";") > 0) {
+      $tok = substr($tok,0,strpos($tok,";"));
+    }
+    $tok = strtolower($tok);
+    if ( file_exists(getcwd()."/".$path ."/". $tok .".p3") && is_readable(getcwd()."/".$path ."/". $tok .".p3") ) {
+      if ( "en-us" == $tok ) {
+        include_once $path ."/en.p3";
+        include_once $path ."/en-us.p3";
+      } else {
+        include_once $path ."/". $tok. ".p3";
+      }
+      ReadCustomLang($lang,$tok,$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^en", $tok ) && file_exists(getcwd()."/".$path ."/en.p3") ) {
+      include_once $path ."/en.p3";
+      if ( ereg("^en-us", $tok ) && file_exists(getcwd()."/".$path ."/en-us.p3") ) {
+        include_once $path ."/en-us.p3";
+      }
+      ReadCustomLang($lang,"en",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^it", $tok ) && file_exists(getcwd()."/".$path ."/it.p3") ) {
+      include_once $path ."/it.p3";
+      ReadCustomLang($lang,"it",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^de", $tok ) && file_exists(getcwd()."/".$path ."/de.p3") ) {
+      include_once $path ."/de.p3";
+      ReadCustomLang($lang,"de",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^es-mx", $tok ) && file_exists(getcwd()."/".$path ."/es-mx.p3") ) {
+      include_once $path ."/es-mx.p3";
+      ReadCustomLang($lang,"es-mx",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^es-ni", $tok ) && file_exists(getcwd()."/".$path ."/es-ni.p3") ) {
+      include_once $path ."/es-ni.p3";
+      ReadCustomLang($lang,"es-mx",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^es", $tok ) && file_exists(getcwd()."/".$path ."/es.p3") ) {
+      include_once $path ."/es.p3";
+      ReadCustomLang($lang,"es",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^fr", $tok ) && file_exists(getcwd()."/".$path ."/fr.p3") ) {
+      include_once $path ."/fr.p3";
+      ReadCustomLang($lang,"fr",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^ru", $tok ) && file_exists(getcwd()."/".$path ."/ru.p3") ) {
+      include_once$path ."/ru.p3";
+      ReadCustomLang($lang,"ru",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^pt", $tok ) && file_exists(getcwd()."/".$path ."/pt-br.p3") ) {
+      include_once $path ."/pt-br.p3";
+      ReadCustomLang($lang,"pt",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^pt-br", $tok ) && file_exists(getcwd()."/".$path ."/pt-br.p3") ) {
+      include_once $path ."/pt-br.p3";
+      ReadCustomLang($lang,"pt-br",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( (ereg("^zh-tw", $tok ) || ereg("^zh-hk", $tok )) && file_exists(getcwd()."/".$path ."/tw.p3")) {
+      include_once $path ."/tw.p3";
+      ReadCustomLang($lang,"tw",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( (ereg("^zh-cn", $tok ) || ereg("^zh-sg", $tok )) && file_exists(getcwd()."/".$path ."/zh.p3") ) {
+      include_once $path ."/zh.p3";
+      ReadCustomLang($lang,"zh",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^zh", $tok ) && file_exists(getcwd()."/".$path ."/zh.p3") ) {
+      include_once $path ."/zh.p3";
+      ReadCustomLang($lang,"zh",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^tw", $tok ) && file_exists(getcwd()."/".$path ."/tw.p3") ) {
+      include_once $path ."/tw.p3";
+      ReadCustomLang($lang,"tw",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^ko", $tok ) && file_exists(getcwd()."/".$path ."/ko.p3") ) {
+      include_once $path ."/ko.p3";
+      ReadCustomLang($lang,"ko",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^pl", $tok ) && file_exists(getcwd()."/".$path ."/pl.p3") ) {
+      include_once $path ."/pl.p3";
+      ReadCustomLang($lang,"pl",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^nl", $tok )  && file_exists(getcwd()."/".$path ."/nl.p3")) {
+      include_once $path ."/nl.p3";
+      ReadCustomLang($lang,"nl",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^sv", $tok ) && file_exists(getcwd()."/".$path ."/sv.p3") ) {
+      include_once $path ."/sv.p3";
+      ReadCustomLang($lang,"sv",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    if ( ereg("^el", $tok )  && file_exists(getcwd()."/".$path ."/el.p3")) {
+      include_once $path ."/el.p3";
+      ReadCustomLang($lang,"el",$path);
+      return ReadLangFinish($lang,$tok);
+    }
+    $tok = trim(strtok(","));
+  }
+
+  if (file_exists(getcwd()."/".$path ."/en.p3")) {
+    include_once $path ."/en.p3";
+    ReadCustomLang($lang,"en",$path);
+  }
+  return ReadLangFinish($lang,$tok);
+};
+/**
+ * Read the preffered language
+ */
+Function ReadLang(&$lang) {
+  global $tutos , $current_user;
+
+  $tutos['df'] = 0;
+  if (!isset($lang))  $lang = array();
+  # define twodimensional part of languages
+
+  $tutos[lang] = ReadLang1($lang,$tutos['base'] ."/localization",$current_user);
+}
+/** ---------------------------------------------------------------------------
+ * A Fatal Error has occured and we stop via exit giving some useful info
+ */
+Function PHP_Error ($errno,$errstr,$errfile, $errline) {
+  global $dbconn  , $HTTP_POST_FILES, $tutos;
+
+  if ($errno == 2048) return;  # deprecated an other stuff
+#  switch ($errno) {
+#  case 2:
+#  case 8:
+#    return;
+#  }
+#  Fatal_Error($errno,$errstr ."<br />File: ". $errfile ."<br />Line:". $errline);
+  $msg = "--------------------------\n";
+  $msg .= "DateTime:\t". Date("d.M.Y H:i:s T") ."\n";
+  $msg .= "Errno:\t\t". $errno ."\n";
+  $msg .= "\t\t". $errstr ."\n";
+  if (isset($dbconn->lastquery)) {
+    $msg .= "LastQuery:\t".  $dbconn->lastquery . "\n";
+  }
+  $msg .= "File:\t\t".  $errfile ." +". $errline ."\n";
+  if ( isset($_SERVER["HTTP_USER_AGENT"]) ) {
+    $msg .= "Browser:\t". $_SERVER["HTTP_USER_AGENT"] ."\n";
+  }
+  if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]) ) {
+    $msg .= "Language:\t". $_SERVER["HTTP_ACCEPT_LANGUAGE"] ."\n";
+  }
+  $msg .= "URL:\t\t". $_SERVER["PHP_SELF"] ."\n";
+  if (isset($_SERVER["REQUEST_URI"])) {
+    $msg .= "Request:\t". $_SERVER["REQUEST_URI"] ."\n";
+  }
+  foreach($tutos[activemodules] as $i => $f) {
+    $msg.= "activemodule:\t".$f."\n";
+  }
+  if ( count($_POST) ) {
+    foreach($_POST as $i => $f) {
+      if ( is_Array($f) ) {
+        foreach ($f as $i1 => $f1) {
+          if (''.$i1 == 'pw') {
+            $f1 = "xxx";
+          }
+          $msg .= "POST:\t\t". $i ."[". $i1 ."]\t--> ". $f1 ."\n";
+        }
+      } else {
+        if (''.$i == 'pw') {
+          $f = "xxx";
+        }
+        $msg .= "POST:\t\t". $i . "\t--> ". $f ."\n";
+      }
+    }
+  }
+  if ( count($HTTP_POST_FILES) ) {
+    @reset($HTTP_POST_FILES);
+    while ( list ($i,$f) = @each ($HTTP_POST_FILES) ) {
+      if ( is_Array($f) ) {
+        foreach ($f as $i1 => $f1) {
+          $msg .= "FILES:\t\t". $i ."[". $i1 ."]\t--> ". $f1 ."\n";
+        }
+      } else {
+        $msg .= "FILES:\t\t". $i . "\t--> ". $f ."\n";
+      }
+    }
+  }
+  if (isset($_SERVER['REMOTE_ADDR'])) {
+    $msg .= "RemoteAddr:\t". $_SERVER['REMOTE_ADDR'] ."\n";
+  }
+  if ( isset($_SERVER['HTTP_REFERER']) ) {
+    $msg .= "Referer:\t". $_SERVER['HTTP_REFERER'] ."\n";
+  }
+  $msg .= "TUTOS Version:\t". $tutos[version] ."\n";
+  if ( isset($dbconn) ) {
+    $msg .= "Database:\t". $dbconn->getfullname() ."\n";
+    if ( $dbconn->db->alias != "" ) {
+      $msg .= "DB Alias :\t". $dbconn->db->alias ."\n";
+    }
+  }
+  $msg .= "PHP Version:\t". phpversion() ." ". PHP_OS ."\n";
+  $msg .= "PHP Config:\t". get_cfg_var('cfg_file_path') ."\n";
+  if ( isset($_SERVER['SERVER_SOFTWARE']) ) {
+    $msg .= "APACHE Version:\t". $_SERVER['SERVER_SOFTWARE'] ."\n";
+  }
+  # Backtrace 
+  if (function_exists('debug_backtrace')) {
+    $x = debug_backtrace();
+    $msg .=  "STACKTRACE:\n";
+    foreach( $x as $s) {
+      if (isset($s["function"])) {
+        $msg .=  "  ". $s["function"];
+      }
+      if (isset($s["args"])) {
+        $msg .= " (";
+        $sep = "";
+        foreach( $s["args"] as $a) {
+          $t =  gettype($a);
+          if ( $t == "object" && method_exists($a,"gettype")) {
+            $t = $a->getType();
+          }
+          $msg .= $sep ."<". $t .">".$a;
+          $sep = ",";
+        }
+        $msg .= ")";
+      }
+      if (isset($s["type"])) {
+        $msg .=  "\t". $s["type"];
+      }
+      if (isset($s["file"])) {
+        $msg .=  "\t\t". $s["file"] ." +". $s["line"];
+      }
+      $msg .= "\n";
+    }
+  }
+  error_log($msg,3,$tutos[errlog]);
+  return;
+}
+/* ---------------------------------------------------------------------------
+ * A Fatal Error has occured and we stop via exit giving some useful info
+ */
+Function Fatal_Error ($text1,$text2 = "") {
+  global $current_user,$lang,$tutos,$dbconn,$HTTP_POST_FILES;
+
+  if ( ! headers_sent() ) {
+#    @ob_end_clean();
+    loadlayout();
+    $l = new layout($current_user);
+    echo $l->PrintHeader("FATAL ERROR");
+  } else {
+    /* End possible Tables ... 
+    echo "</table>";
+    echo "</table>";
+    echo "</table>";
+    echo "</center>";
+    echo "</font>";
+    echo "</pre>";
+    echo "</a>"; */
+  }
+  echo "\n<span class=\"pre\">";
+  echo "<b>Error:</b><br />&nbsp;<i>". $text1 ."</i><br />\n";
+  echo "<b>Detail:</b><br />&nbsp;". $text2 ."<br />\n";
+  echo "<p>\n";
+  echo "<b>TUTOS Version:</b>&nbsp;". $tutos[version] ."<br />\n";
+  echo "<b>PHP Version:</b>&nbsp;". phpversion() ." ". PHP_OS ."<br />\n";
+  echo "<b>PHP Config:</b>&nbsp;". get_cfg_var('cfg_file_path') ."<br />\n";
+  if ( isset($_SERVER['SERVER_SOFTWARE']) ) {
+    echo "<b>APACHE Version:</b>&nbsp;". $_SERVER['SERVER_SOFTWARE'] ."<br />\n";
+  }
+  if ( isset($_SERVER["HTTP_USER_AGENT"]) ) {
+    echo "<b>Browser:</b>&nbsp;". $_SERVER["HTTP_USER_AGENT"] ."<br />\n";
+  }
+  if ( isset($dbconn) && is_object($dbconn) ) {
+    echo "<b>Database:</b>&nbsp;". makelink ("admin/update.php?id=".$dbconn->db->id,$dbconn->getFullname()) ." (". $dbconn->gettype() .") ". $dbconn->conn ."<br />\n";
+    echo "<b>DB User :</b>&nbsp;". $dbconn->db->user ."<br />\n";
+    if ( $dbconn->db->alias != "" ) {
+      echo "<b>DB Alias :</b>&nbsp;". $dbconn->db->alias ."<br />\n";
+    }
+  }
+  echo "<b>URL:</b>&nbsp;". $_SERVER["PHP_SELF"] ."<br />\n";
+  foreach($tutos[activemodules] as $i => $f) {
+    echo "<b>activemodule:</b>&nbsp;".$f."<br />\n";
+  }
+  if (isset($_SERVER["REQUEST_URI"])) {
+    echo "<b>Request:</b>&nbsp;". $_SERVER["REQUEST_URI"] ."<br />\n";
+  }
+  if ( isset($_SERVER['HTTP_REFERER']) ) {
+    echo "<b>Called from:</b>&nbsp;<a href=\"". $_SERVER['HTTP_REFERER'] ."\">". $_SERVER['HTTP_REFERER'] ."</a><br />\n";
+  }
+  if ( count($_POST) ) {
+    foreach($_POST as $i => $f) {
+      if ( is_Array($f) ) {
+        foreach ($f as $i1 => $f1) {
+          if (''.$i1 == 'pw') {
+            $f1 = "xxx";
+          }
+          echo "<b>POST:</b>&nbsp;". $i ."[". $i1 ."]&nbsp = ". $f1 ."<br />\n";
+        }
+      } else {
+        if (''.$i == 'pw') {
+          $f = "xxx";
+        }
+        echo "<b>POST:</b>&nbsp;". $i . "&nbsp; = ". $f ."<br />\n";
+      }
+    }
+  }
+  if ( count($HTTP_POST_FILES) ) {
+    @reset($HTTP_POST_FILES);
+    while ( list ($i,$f) = @each ($HTTP_POST_FILES) ) {
+      if ( is_Array($f) ) {
+        foreach ($f as $i1 => $f1) {
+          echo "<b>FILES:</b>\t\t". $i ."[". $i1 ."]\t--> ". $f1 ."<br />\n";
+        }
+      } else {
+        echo "<b>FILES:</b>\t\t". $i . "\t--> ". $f ."<br />\n";
+      }
+    }
+  }
+  if (isset($_SERVER['REMOTE_ADDR'])) {
+    echo "<b>Called by:</b>&nbsp;". $_SERVER['REMOTE_ADDR'] ."<br />\n";
+  }
+  echo "<a href=\"phpinfo.php\">PHP Info Page</a><br />\n";
+
+  echo "<b>Included Files:<br />\n";
+  $included_files = get_included_files();
+  foreach($included_files as $filename) {
+    echo $filename ."<br />\n";
+  }
+  # Stop recursion
+  if ( ! isset($tutos[errlevel]) ) {
+    $tutos[errlevel] = 0;
+  }
+  if ( $tutos[errlevel] < 1 ) {
+    $tutos[errlevel]++;
+    if ( isset($dbconn) && is_object($dbconn) ) {
+      $dbconn->Abort("WORK");
+    }
+  }
+  if(!is_object($dbconn))
+  if ( isset($dbconn) && is_object($dbconn) ) {
+    $dbconn->Close();
+  }
+  echo "</span>";
+  // show it in the debug
+  trigger_error("FATAL Error:\n\t".$text1."\n\t".$text2);
+  exit;
+}
+/**
+ * Print the parts of header neccessary for overlib
+ */
+Function Overlib_Header () {
+  global $tutos;
+
+  if ( !isset($_SERVER['HTTP_USER_AGENT']) ||  ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
+    $tutos[useoverlib] = 0;
+    return;
+  }
+  if ( ($tutos[useoverlib] == 1) && file_exists(getcwd()."/".$tutos['base']. "/". $tutos[overlib]) && is_readable(getcwd()."/".$tutos['base']."/".$tutos[overlib]) ) {
+    $tutos[useoverlib] = 1;
+    echo " <div id=\"overDiv\" style=\"position:absolute; visibility:hide; z-index:1;\"></div>\n";
+    echo " <script language=\"JavaScript\" src=\"". $tutos['base'] ."/". $tutos[overlib] ."\" type=\"text/javascript\"></script>\n";
+#   $d = dirname(getcwd()."/".$tutos['base']. "/". $tutos[overlib]);
+#   if (file_exists($d."/overlib_shadow.js")) {
+#      echo " <script language=\"JavaScript\" src=\"". dirname($tutos['base'] ."/". $tutos[overlib]) ."/overlib_shadow.js\" type=\"text/javascript\"></script>\n";
+#   } else {
+#   }
+  } else {
+    $tutos[useoverlib] = 0;
+    #echo "\n\n<!-- NO OVERLIB FILE ". getcwd()."/". $tutos['base'] ."/". $tutos[overlib] ."-->\n\n";
+  }
+}
+/**
+ * The start of a double table
+ */
+Function DoubleTableStart($innersp = 0, $innerpad = 2) {
+  echo "<table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td class=\"warn\">\n";
+  echo "<table class=\"inner\" border=\"0\" cellpadding=\"". $innerpad ."\" cellspacing=\"". $innersp ."\">\n";
+}
+/*
+ * The start of a double table
+ */
+Function DoubleTableEnd() {
+  echo "</table>\n";
+  echo "</td></tr></table>\n";
+}
+/**
+ * return the baseurl
+ * useconfig = true will use the $tutos[baseurl] config variable to determine the baseurl
+ *             this will be used for urls in mails and other output
+ * the string will end with a /
+ */
+Function getBaseURL($useconfig = false) {
+  global $tutos;
+
+
+  if ($useconfig && isset($tutos[baseurl][$_SESSION['dbnr']])) {
+    # the given variable must include the tutos part of the url
+    $d = explode('/',dirname($_SERVER['PHP_SELF']));
+
+    foreach($d as $i => $f) {
+      if ($f == 'php' ) break;
+      unset($d[$i]);
+    }
+    $dir = implode($d,'/');
+    if ( $dir == "/" ) {
+      $dir = "";
+    }
+    $r = sprintf("%s/%s/",$tutos[baseurl][$_SESSION['dbnr']],$dir);
+    return $r;
+  } else if ( function_exists('getBaseURL_special')) {
+    // You may change generation of BaseURL in function 'getBaseURL_special' in 
+    // file 'webelements_special.p3'.
+    return( getBaseURL_special());
+  } else {
+    //  Base URL generation.  Jim Lieb
+    //  Calculate a base url that will work for port translating firewalls
+    //  and sites that are strictly SSL (port 443) based.
+    //  We use HTTP_HOST to let the virtual host and client header tell us
+    //  what they want. Uncomment the following line and comment the if stmt
+    //  to return to original functionality.
+    //  $tutos[baseurl] = sprintf("http://%s:%s%s/",
+    //                             $SERVER_NAME, $SERVER_PORT, dirname($PHP_SELF);
+    $dir = dirname($_SERVER['PHP_SELF']);
+    if ( $dir == "/" ) {
+      $dir = "";
+    }
+    if($_SERVER['SERVER_PORT'] == 443) {
+      $r = sprintf("https://%s%s/",$_SERVER['HTTP_HOST'],$dir);
+    } else if(isset($_SERVER['HTTPS'])) {
+      $r = sprintf("http".($_SERVER['HTTPS']=="on"?"s":"")."://%s%s/",$_SERVER['HTTP_HOST'], $dir);
+    } else {
+      $r = sprintf("http://%s%s/",$_SERVER['HTTP_HOST'], $dir);
+    }
+    return $r;
+  }
+}
+/*
+ * substitute urls in the given text
+ */
+Function urlReplace($b,$mode = 1) {
+  if ( $mode == 1 ) {
+    $b = myentities($b);
+  }
+  $b = eregi_replace("(&amp;)","&",$b);
+  $b = eregi_replace("(&lt;BR /&gt;)","<br />",$b);
+  $b = eregi_replace("(&lt;BR&gt;)","<br />",$b);
+  $b = eregi_replace("&lt;([BIU])&gt;","<\\1>",$b);
+  $b = eregi_replace("&lt;/([BIU])&gt;","</\\1>",$b);
+  $b = eregi_replace("(ftp://[a-z,0-9:/?&=_.+-]*)","<a href=\"\\1\" target=\"_blank\">\\1</a>",$b);
+  $b = eregi_replace("(file:/[a-z,0-9:/?&=_.+-]*)","<a href=\"\\1\" target=\"_blank\">\\1</a>",$b);
+  $b = eregi_replace("(http://[a-z,0-9:/?&=_.+-]*)","<a href=\"\\1\" target=\"_blank\">\\1</a>",$b);
+  $b = eregi_replace("(https://[a-z,0-9:/?&=_.+-]*)","<a href=\"\\1\" target=\"_blank\">\\1</a>",$b);
+  $b = eregi_replace("(mailto:[a-z,0-9:/?&=_.@-]*)","<a href=\"\\1\">\\1</a>",$b);
+  return $b;
+}
+
+/**
+ * A function to make a mailto reference
+ * $adr     =  addressobject or string   displayed in link
+ * $email   =  email address
+ * $name    =  fullname of the email address owner (not displayed, used for mailto link)
+ * $subject =  email default subject
+ */
+Function asEmail($adr,$email,$name,$subject = "TUTOS") {
+  global $lang, $tutos, $current_user;
+
+  if ( ! isset($email) ) { return; }
+  if ( $email=='' ) { return; }
+
+  if ( is_Object($adr) ) {
+    $fn = $adr->getFullname() ;
+  } else {
+    $fn = $adr;
+  }
+  if ( $current_user->feature_ok(usemail,PERM_NEW) && ($tutos[usemail] == 1) ) {
+    return makelink("mail_new.php?to[]=". UrlEncode($email)."&amp;subject=".UrlEncode($subject) ,$fn,sprintf($lang['MailSendTo'],$email));
+  } else if ( $tutos[usemail] == 2 ) {
+    return makelink($tutos[squirrelurl]."src/compose.php?send_to=". UrlEncode(trim($email))."&amp;subject=".UrlEncode($subject) ,$fn,sprintf($lang['MailSendTo'],$email), '', '_blank');
+  } else {
+    return makelink("mailto:". $name ."<". trim($email) .">?subject=".$subject ,$fn,sprintf($lang['MailSendTo'],$email) );
+  }
+}
+
+
+/**
+ * remove a key from a url
+ *
+ */
+ Function delUrlParameter($href,$key) {
+
+   $href = ereg_replace("[&]". $key ."=[^&]*","",$href);
+   $href = ereg_replace("[?]". $key ."=[^&]*[&]","?",$href);
+   return $href;
+ }
+/**
+ * add keys to a url
+ * $http   true = http protocol (used for redirect links)
+ * $html   false (default) = html format  (used in links)
+ */
+ Function addUrlParameter($href,$key,$http = false) {
+   if ( ! strstr($href,"?") ) {
+     $pre = "?";
+   } else {
+     if ($http == false) {
+       $pre = htmlentities("&");
+     } else {
+       $pre = "&";
+     }
+   }
+   $href .= $pre . $key;
+   return $href;
+ }
+/**
+ * store message for display on next page
+ *
+ */
+ Function addMessage($gotourl,$msg,$http = false) {
+   if ($msg != "") {
+     $_SESSION['MSGID'.strlen($msg)] = UrlEncode($msg);
+     return addUrlParameter($gotourl,"msgid=MSGID". strlen($msg),$http);
+   }
+   return $gotourl;
+ }
+/**
+ * add keys to a url
+ *
+ */
+ Function addSessionKey($href,$http = false) {
+   global $tutos;
+
+   if ( strstr($href,"mailto:") ) {
+     return $href;
+   }
+   if ( strstr($href,"file:") ) {
+     return $href;
+   }
+   if ( strstr($href,"ftp:") ) {
+     return $href;
+   }
+   if ( eregi("^javascript:",$href) ) {
+     return $href;
+   }
+
+   if ($http == false) {
+     $pre2 = htmlentities("&");
+   } else {
+     $pre2 = "&";
+   }
+
+   if ( ! strstr($href,"?") ) {
+     $pre = "?";
+   } else {
+     $pre = $pre2;
+   }
+   if ( strpos($href,"#") ) {
+     $add = substr($href,strpos($href,"#"));
+     $href = substr($href,0,strpos($href,"#"));
+   } else {
+     $add = "";
+   }
+   if ( isset($_GET['lg']) &&  ($_GET['lg'] != "") ) {
+     $href = $href . $pre . "lg=".$_GET['lg'];
+     $pre = "&";
+   } else if ( isset($_POST['lg']) &&  ($_POST['lg'] != "") ) {
+     $href .= $pre . "lg=".$_POST['lg'];
+     $pre = $pre2;
+   }
+   if ( isset($_GET['ly']) &&  ($_GET['ly'] != "") ) {
+     $href .= $pre . "ly=".$_GET['ly'];
+     $pre = $pre2;
+   } else if ( isset($_POST['ly']) &&  ($_POST['ly'] != "") ) {
+     $href .= $pre . "ly=".$_POST['ly'];
+     $pre = $pre2;
+   }
+   if ( isset($_GET['th']) &&  ($_GET['th'] != "") ) {
+     $href .= $pre . "th=".$_GET['th'];
+     $pre = $pre2;
+   } else if ( isset($_POST['th']) &&  ($_POST['th'] != "") ) {
+     $href .= $pre . "th=".$_POST['th'];
+     $pre = $pre2;
+   }
+
+   if ( (isset($tutos['SESSID'])) && (!isset($_COOKIE['TUTOS'])) ) {
+     if ( session_id() != "" ) {
+       $href .= $pre . session_name() ."=". session_id();
+       $pre = $pre2;
+     }
+   }
+   return $href . $add;
+ }
+/**
+ * print the hidden Form Elements
+ *
+ */
+ Function hiddenFormElements() {
+   global $tutos;
+
+   if ( isset($_GET['lg']) && ($_GET['lg'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"lg\" value=\"". $_GET['lg'] ."\" />\n";
+   } else if ( isset($_POST['lg']) && ($_POST['lg'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"lg\" value=\"". $_POST['lg'] ."\" />\n";
+   }
+   if ( isset($_GET['ly']) && ($_GET['ly'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"ly\" value=\"". $_GET['ly'] ."\" />\n";
+   } else if ( isset($_POST['ly']) && ($_POST['ly'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"ly\" value=\"". $_POST['ly'] ."\" />\n";
+   }
+   if ( isset($_GET['th']) && ($_GET['th'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"th\" value=\"". $_GET['th'] ."\" />\n";
+   } else if ( isset($_POST['th']) && ($_POST['th'] != "") ) {
+     echo "  <input type=\"hidden\" name=\"th\" value=\"". $_POST['th'] ."\" />\n";
+   }
+
+   if ( (isset($tutos['SESSID'])) && (!isset($_COOKIE['TUTOS'])) ) {
+     if ( SID != "" ) {
+       echo "  <input type=\"hidden\" name=\"". session_name() ."\" value=\"". session_id()  ."\" />\n";
+     }
+   }
+ }
+/**
+ * create a link in navigation menu
+ */
+ Function menulink ( $href , $text , $info = "" ,$plus = "", $attr = "") {
+   global $tutos, $current_user;
+
+   if ( $href == "" ) {
+     return $text;
+   }
+   $href = addSessionKey($href,false);
+   if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
+   }
+
+   #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
+     return sprintf ("<a class=\"nodeco\" href=\"%s\" %s  onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML)\" onmouseout=\"nd()\">%s</a>",$href,$attr,myentities($plus,1),myentities($info,1),$text);
+   #} else {
+   #  return sprintf ("<a class=\"nodeco\" href=\"%s\" %s onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,$attr,myentities($info,1),myentities($info),$text);
+   #}
+ }
+/**
+ * create a link
+ */
+ Function makelink ( $href , $text , $info = "" ,$plus = "", $target = "") {
+   global $tutos, $current_user;
+
+   if (empty($text)) {
+     return;
+   }
+   if (empty($href)) {
+     return $text;
+   }
+   if ((!empty($target)) && (!eregi("^target=",$target))) {
+     $target = 'target="'.$target.'"';
+   }
+   $href = addSessionKey($href,false);
+   if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
+   }
+   #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
+   #  return sprintf ("<a href=\"%s\" $target onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML,VAUTO)\" onmouseout=\"nd()\">%s</a>",$href,myentities($plus,1),myentities($info,1),$text);
+   #} else {
+     return sprintf ("<a href=\"%s\" $target onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,myentities($info,1),myentities($info),$text);
+   #}
+ }
+/**
+ * create a link with confirmation
+ *
+ */
+ Function confirmlink ( $href , $text , $info = "" ,$plus = "") {
+   global $tutos, $current_user;
+
+   $href = addSessionKey($href,false);
+   if ( ! ereg("^(http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
+     $href = $tutos['base'] ."/". $href;
+   }
+
+   if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
+     return sprintf ("<a class=\"nodeco\" href=\"%s\" onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML)\" onmouseout=\"nd()\" title=\"%s\">%s</a>",$href,myentities($plus),myentities($info),myentities($info),$text);
+   } else {
+     return sprintf ("<a class=\"nodeco\" href=\"%s\" onclick=\"if (! confirm('%s ?')) { return false };\" onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,myentities($info,1),myentities($info,1),myentities($info),$text);
+   }
+ }
+/**
+ * check a field for a float
+ * the reformated float is stored in the given variable
+ */
+ function checkfloat(&$value,$allowempty = true) {
+   global $lang;
+
+   if ($allowempty && empty($value)) {
+     return true;
+   }
+   if ($lang['ThousandPoint'] == ".") {
+     $p = "\.";
+   } else {
+     $p = $lang['ThousandPoint'];
+   }
+   $x = eregi_replace($p,"",$value);
+
+   # Set a decimal point that sscanf understand
+   if ($lang['DecPoint'] != ".") {
+     $x = eregi_replace($lang['DecPoint'],".",$x);
+   }
+
+   $f = 0.0;
+   list($f) = sscanf($x,"%f");
+#   echo $value ." => ". $x ."=". $f ." using " .$lang['ThousandPoint'] ."<br />";
+   if (!is_double($f)) {
+     return false;
+   }
+   $value = $f;
+   return true;
+ }
+/* ---------------------------------------------------------------------------
+ * check a given name
+ * field  = name in url
+ * field2 = arrayname for selections url
+ * mode   = where to search
+ *          a = addresses
+ *          t = teams
+ *          c = companies
+ *          d = departments
+ *          p = products
+ *          i = installations
+ */
+ Function check_field($name,$field,$field2,$mode = "at") {
+   global $tutos,$dbconn,$msg,$gotourl,$lang,$current_user;
+
+   $gotourl= addUrlParameter($gotourl,$field."=".UrlEncode($name),true);
+   if ( empty($name) ) {
+     return 0;
+   }
+   $n = 0;
+   $n1 = 0;
+   $n2 = 0;
+   $n3 = 0;
+   $n4 = 0;
+   $n5 = 0;
+   $n6 = 0;
+   if ( strstr($mode,"a") != FALSE ) {
+     $q1 = "SELECT * from ". $dbconn->prefix ."addresses WHERE". $dbconn->Like ("f_name",$name,"m_name","l_name");
+     $q1 .= " OR ". $dbconn->Like ("l_name",$name,"f_name","m_name");
+     check_dbacl( $q1, $current_user->id);
+     $r1 = $dbconn->Exec($q1);
+     $n1 = $r1->numrows();
+     $n += $n1;
+   }
+   if ( strstr($mode,"t") != FALSE ) {
+     $q2 = "SELECT * from ". $dbconn->prefix ."teams WHERE". $dbconn->Like ("name",$name);
+     check_dbacl( $q2, $current_user->id);
+     $r2 = $dbconn->Exec($q2);
+     $n2 = $r2->numrows();
+     $n += $n2;
+   }
+   if ( strstr($mode,"d") != FALSE ) {
+     # in order to find equally named departement within companies we try
+     # to use the second word as a company search string
+     $pos = strpos($name," / ");
+     if ( $pos == false ) {
+       $q3 = "SELECT * from ". $dbconn->prefix ."departments WHERE". $dbconn->Like("name",$name);
+       check_dbacl( $q3, $current_user->id);
+     } else {
+       $dname = substr($name,0,$pos);
+       $cname = substr($name,$pos + 3);
+       $q3 = "SELECT d.* from ". $dbconn->prefix ."departments d , ". $dbconn->prefix ."companies c WHERE (c.id = d.c_id) AND (". $dbconn->Like("d.name",$dname) .") AND (". $dbconn->Like("c.name",$cname) .")";
+#      echo $dname . " |  ". $cname ."<br />".$q3;
+     }
+     $r3 = $dbconn->Exec($q3);
+     $n3 = $r3->numrows();
+     $n += $n3;
+   }
+   if ( strstr($mode,"c") != FALSE ) {
+     $q4 = "SELECT * from ". $dbconn->prefix ."companies WHERE". $dbconn->Like("name",$name);
+     check_dbacl( $q4, $current_user->id);
+     $r4 = $dbconn->Exec($q4);
+     $n4 = $r4->numrows();
+     $n += $n4;
+   }
+   if ( strstr($mode,"p") != FALSE ) {
+     $q5 = "SELECT * from ". $dbconn->prefix ."products WHERE". $dbconn->Like("name",$name,"version");
+     check_dbacl( $q5, $current_user->id);
+     $r5 = $dbconn->Exec($q5);
+     $n5 = $r5->numrows();
+     $n += $n5;
+   }
+   if ( class_exists( 'installation') && (strstr($mode,"i") != FALSE) ) {
+     $q6 = "SELECT * from ". $dbconn->prefix ."installations WHERE". $dbconn->Like("id",$name);
+     check_dbacl( $q6, $current_user->id);
+     $r6 = $dbconn->Exec($q6);
+     $n6 = $r6->numrows();
+     $n += $n6;
+   }
+
+   if ( 0 == $n) {
+     if ( strstr($mode,"c") != FALSE ) {
+       $msg .= sprintf($lang['Err0012'],$lang['Company'],$name) ."<br />";
+       $r4->free();
+     }
+     if ( strstr($mode,"d") != FALSE ) {
+       $msg .= sprintf($lang['Err0012'],$lang['Department'],$name) ."<br />";
+       $r3->free();
+     }
+     if ( strstr($mode,"t") != FALSE ) {
+       $msg .= sprintf($lang['Err0012'],$lang['Team'],$name) ."<br />";
+       $r2->free();
+     }
+     if ( strstr($mode,"a") != FALSE ) {
+       $msg .= sprintf($lang['Err0012'],$lang['Address'],$name) ."<br />";
+       $r1->free();
+     }
+     if ( strstr($mode,"p") != FALSE ) {
+       $msg .= sprintf($lang['Err0012'],$lang['ProductP'],$name) ."<br />";
+       $r5->free();
+     }
+     if ( class_exists( 'installation') && (strstr($mode,"i") != FALSE) ) {
+       $msg .= sprintf($lang['Err0012'],$lang['Installation'],$name) ."<br />";
+       $r6->free();
+     }
+     return 0;
+   }
+   if ( $n > $tutos[maxselect] ) {
+     # Valid for xx entries
+     $msg .= sprintf($lang['Err0018'],$name,$n) ."<br />";
+     # Ask for detailed selection
+     $msg .= $lang['Err0006'] ."<br />";
+     return 0;
+   }
+
+   if ( $n > 1) {
+     $msg .= sprintf($lang['Err0018'],$name,$n) ."<br />";
+     # Ask for detailed selection
+     $msg .= $lang['Err0006'] ."<br />";
+     if ( strstr($mode,"a") != FALSE ) {
+       $a = 0;
+       while ( $a < $n1 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r1->get($a, "id"),true);
+         $a++;
+       }
+       $r1->free();
+     }
+     if ( strstr($mode,"t") != FALSE ) {
+       $a = 0;
+       while ( $a < $n2 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r2->get($a, "id"),true);
+         $a++;
+       }
+       $r2->free();
+     }
+     if ( strstr($mode,"d") != FALSE ) {
+       $a = 0;
+       while ( $a < $n3 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r3->get($a, "id"),true);
+         $a++;
+       }
+       $r3->free();
+     }
+     if ( strstr($mode,"c") != FALSE ) {
+       $a = 0;
+       while ( $a < $n4 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r4->get($a, "id"),true);
+         $a++;
+       }
+       $r4->free();
+     }
+     if ( strstr($mode,"p") != FALSE ) {
+       $a = 0;
+       while ( $a < $n5 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r5->get($a, "id"),true);
+         $a++;
+       }
+       $r5->free();
+     }
+     if ( class_exists( 'installation') && (strstr($mode,"i") != FALSE) ) {
+       $a = 0;
+       while ( $a < $n6 ) {
+         $gotourl = addUrlParameter($gotourl,$field2."[]=".$r6->get($a, "id"),true);
+         $a++;
+       }
+       $r6->free();
+     }
+     return 0;
+   }
+   if ( $n1 == 1 ) {
+     $a = new tutos_address($dbconn);
+     $a->read_result($r1,0);
+   } else
+   if ( $n2 == 1 ) {
+     $a = new team($dbconn);
+     $a->read_result($r2,0);
+   } else
+   if ( $n3 == 1 ) {
+     $a = new department($dbconn);
+     $a->read_result($r3,0);
+   } else
+   if ( $n4 == 1 ) {
+     $a = new company($dbconn);
+     $a->read_result($r4,0);
+   } else
+   if ( $n5 == 1 ) {
+     $a = new product($dbconn);
+     $a->read_result($r5,0);
+   } else
+   if ( class_exists( 'installation') && ($n6 == 1) ) {
+     $a = new installation($dbconn);
+     $a->read_result($r6,0);
+   }
+
+   if ( strstr($mode,"a") != FALSE ) {
+     $r1->free();
+   }
+   if ( strstr($mode,"t") != FALSE ) {
+     $r2->free();
+   }
+   if ( strstr($mode,"d") != FALSE ) {
+     $r3->free();
+   }
+   if ( strstr($mode,"c") != FALSE ) {
+     $r4->free();
+   }
+   if ( strstr($mode,"p") != FALSE ) {
+     $r5->free();
+   }
+   if ( class_exists( 'installation') && (strstr($mode,"i") != FALSE) ) {
+     $r6->free();
+   }
+   if (! $a->see_ok()) {
+     $msg .= sprintf($lang['Err0012'],$lang[$a->getType()],$name) ."<br />";
+     return 0;
+   }
+   if (! $a->use_ok()) {
+     $msg .= sprintf($lang['Err0001'],$lang[$a->getType()],$a->getFullname()) ."<br />";
+     return 0;
+   }
+   return $a;
+ }
+/* ---------------------------------------------------------------------------
+ * enter a tax rate
+ *
+ */
+ Function TAX_Select($name,$def) {
+   global $tutos;
+
+   $t = split(" ",$tutos[vatlist]);
+   if ( count($t) > 0 ) {
+     $found = 0;
+     echo "<select name=\"". $name ."\">\n";
+     foreach ( $t as $f ) {
+       $f = number_format($f,2);
+       echo "<option value=\"". $f ."\"";
+       if ( $f == $def ) {
+         echo " selected=\"selected\"";
+         $found = 1;
+       }
+       echo ">". $f ."</option>";
+     }
+     if ( $found == 0 ) {
+       echo "<option value=\"". $def ."\" selected=\"selected\">". $def ."</option>";
+     }
+     echo "</select>\n";
+   } else {
+     echo "<input name=\"". $name ."\" type=\"text\" size=\"4\" value=\"". $def ."\" />";
+   }
+ }
+/* ---------------------------------------------------------------------------
+ * enter a currency
+ *
+ */
+ Function Currency_Select($name,$def) {
+   global $lang , $tutos;
+
+   $found = 0;
+   echo "<select id=\"". $name ."\" name=\"". $name ."\">\n";
+
+   foreach ($tutos[currencies] as $c) {
+     echo "<option value=\"". $c ."\"";
+     if ( $c == $def ) {
+       echo " selected=\"selected\"";
+       $found = 1;
+     }
+     echo ">". myentities($c) ."</option>\n";
+   }
+   if ( $found == 0 ) {
+     echo "<option value=\"". $c ."\">". myentities($c) ."</option>\n";
+   }
+   echo "</select>\n";
+ }
+
+ /**
+  * compare objects for sorting
+  */
+ function obj_cmp(&$a,&$b) {
+   if (!is_object($a)) return 0;
+   if (!is_object($b)) return 0;
+
+   return strcasecmp($a->getFullName(),$b->getFullName());
+ }
+/* ---------------------------------------------------------------------------
+ * find the object from a given id by scanning the tables
+ *
+ */
+ Function scanObject(&$dbconn,$id) {
+   $type = noobject;
+   $tutos[tables]['calendar'] = usecalendar;
+   $tutos[tables]['products'] = useprojects;
+   $tutos[tables]['addresses'] = useaddressbook;
+   $tutos[tables]['companies'] = usecompany;
+   $tutos[tables]['departments'] = usedepartment;
+   $tutos[tables]['teams'] = useteams;
+   $tutos[tables]['tasks'] = usetaskmanagement;
+   $tutos[tables]['people'] = useuser;
+   $tutos[tables]['location'] = uselocation;
+   $tutos[tables]['timetrack'] = usetimetrack;
+   $tutos[tables]['tutos_dbs'] = usedbs;
+
+   $found = false;
+   reset($tutos[tables]);
+   while( list ($i,$type) = @each ($tutos[tables])) {
+     $q = "SELECT id from ". $dbconn->prefix . $i ." where id =". $id;
+     $r = $dbconn->Exec($q,1);
+     $n = $r->numrows();
+#    echo $q ."  ". $n ."<br />";
+     $r->free();
+     if ( 0 != $n) {
+       $found = true;
+       break;
+     }
+   }
+   if ( $found == false ) {
+     $type = noobject;
+   }
+   return $type;
+ }
+/* ---------------------------------------------------------------------------
+ * find the object from a given id
+ *
+ */
+ Function getObject(&$dbconn,$id, $usecache = 1) {
+   global $g_hash,$tutos,$calpath;
+
+   $id = (int)$id;
+   if ( $id == -1 ) return -1;
+   if ( $id == 0 )  return -1;
+   if ( empty($id) ) return -1;
+
+   if ( $usecache == 1 ) {
+     if ( isset($g_hash[$id]) ) {
+       $g_hash['hits']++;
+       return $g_hash[$id];
+     }
+   }
+
+   $found = false;
+   $found_by_hash = false;
+
+   $q = "select tutostype from ". $dbconn->prefix . $dbconn->db->tablename_hash ." where id = ". $id;
+   $r = $dbconn->Exec($q,1);
+   if ($r->numrows() == 1 ) {
+     $found = true;
+     $found_by_hash = true;
+     $g_hash['hits2']++;
+     $type = $r->get(0,"tutostype");
+   }
+   $r->free();
+
+   if ( ! $found ) {
+     $type = scanObject($dbconn,$id);
+   }
+
+   switch ($type) {
+     case noobject:
+       # search modules (scan failed)
+       foreach ($tutos[modules] as $r => $x) {
+         loadmodule($r);
+         $ref = &new $x[name]($dbconn);
+         if ( ! method_exists($ref,"read") ) {
+             echo "missing read method .". $id ." ". $r ."<br />";
+         }
+         $ref = $ref->read($id,$ref);
+         if ( isset($ref->id)  && ($ref->id == $id) ) {
+           break;
+         }
+         $ref = -1;
+       }
+       break;
+     case usecalendar:
+       if ( ! class_exists ("appointment") ) {
+         require($calpath ."appointment.pinc");
+       }
+       $ref = &new appointment($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case useprojects:
+       if ( ! class_exists ("product") ) {
+         require($calpath ."product.pinc");
+       }
+       $ref = &new product($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case useaddressbook:
+       $ref = &new tutos_address($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case usecompany:
+       if ( ! class_exists ("company") ) {
+         require($calpath ."company.pinc");
+       }
+       $ref = &new company($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case usedepartment:
+       if ( ! class_exists ("department") ) {
+         require($calpath ."department.pinc");
+       }
+       $ref = &new department($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case useteams:
+       $ref = &new team($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case usetaskmanagement:
+       if ( ! class_exists ("task") ) {
+         require($calpath ."task.pinc");
+       }
+       $ref = &new task($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case useuser:
+       $ref = &new tutos_user($dbconn);
+       $ref = $ref->read($id,$ref,1);
+       break;
+     case uselocation:
+       if ( ! class_exists ("location") ) {
+         require($calpath ."location.pinc");
+       }
+       $ref = &new location($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case usetimetrack:
+       if ( ! class_exists ("timetrack") ) {
+         require($calpath ."timetrack.pinc");
+       }
+       $ref = &new timetrack($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     case usedbs:
+       $ref = &new database($dbconn);
+       $ref = $ref->read($id,$ref);
+       break;
+     default:
+       # Check module
+       $ref = -1;
+       foreach ($tutos[modules] as $r => $x) {
+         if ( $x['perm'] == $type ) {
+           loadmodule($r);
+           $ref = &new $x[name]($dbconn);
+           if ( ! method_exists($ref,"read") ) {
+             echo "missing read method ". $id ." ". $r ."<br />";
+           }
+           $ref = $ref->read($id,$ref);
+           if ( $ref->id == $id ) {
+             break;
+           }
+           $ref = -1;
+         }
+       }
+       break;
+   }
+
+   # if we are here we have found something that has no entry in 
+   # the hashtable
+   if( ($ref != -1) && ! $found_by_hash ) {
+     $ref->save_obj_id();
+   }
+   if ( $ref == -1 ) {
+     $g_hash[$id] = -1;
+   }
+   return $ref;
+ }
+ /**
+  * preset a object from check_field results
+  */
+ Function preset_from_array_or_input(&$obj,$field,$name) {
+   if ( isset($_GET[$name .'fn']) ) {
+     $obj->xfn[$name] = StripSlashes($_GET[$name .'fn']);
+   }
+   if ( isset($_GET[$name .'id']) ) {
+     $a = getObject($obj->dbconn,$_GET[$name .'id']);
+     if ( ($a != -1) && $a->use_ok()) {
+       $obj->$field = &$a;
+     } else {
+       $obj->$field = -1;
+     }
+   }
+
+   # Last call provided a list of possible selections
+   if ( isset($_GET[$name .'l']) ) {
+     @reset($_GET[$name .'l']);
+     while ( list ($x,$f) = @each ($_GET[$name .'l']) ) {
+       $a = getObject($obj->dbconn,$f);
+       if ( ($a != -1) && $a->use_ok()) {
+         $obj->xl[$name][$f] = &$a;
+         unset($a);
+       }
+     }
+   }
+ }
+ /**
+  * make a selection list by given array of form [id] = $obj
+  * obj == Object holding the lists
+  * sobj == Object giving default name
+  */
+ Function select_from_array_or_input(&$obj,$name,&$sobj,$none = 0) {
+   global $lang;
+
+   if ( isset($obj->xl[$name]) && (count($obj->xl[$name]) > 0) ) {
+     echo "<select id=\"". $name ."\" name=\"". $name ."id\">\n";
+     @reset($obj->xl[$name]);
+     while ( list ($x,$f) = @each ($obj->xl[$name]) ) {
+       if (! $f->use_ok()) continue;
+
+       if ( $f->getType() == "department" ) {
+         $fn = $lang[$f->getType()] ." ". $f->getFullname() ." / ". $f->company->getFullName();
+       } else if ( $f->getType() == "company" ) {
+         $fn = $lang[$f->getType()] ." ". $f->getFullname();
+       } else if ( $f->getType() == "team" ) {
+         $fn = $lang[$f->getType()] ." ". $f->getFullname();
+       } else {
+         $fn =  $f->getFullname();
+       }
+       echo "  <option value=\"". $x ."\">". myentities($fn) ."</option>\n";
+     }
+     if ( $none != 0 ) {
+       echo "  <option value=\"-1\"> ---- </option>\n";
+     }
+     echo "</select>\n";
+   } else {
+     if ( isset($sobj->id) && ($sobj->id > 0) ) {
+       if ( $sobj->gettype() == "department" ) {
+         echo "<input id=\"". $name ."\" size=\"20\" maxlength=\"40\" name=\"". $name ."fn\" value=\"".  myentities($sobj->getFullname() ." / ". $sobj->company->getFullName()) ."\" />";
+       } else {
+         echo "<input id=\"". $name ."\" size=\"20\" maxlength=\"40\" name=\"". $name ."fn\" value=\"". myentities($sobj->getFullname()) ."\" />";
+       }
+     } else {
+       if ( ! isset($obj->xfn[$name]) ) {
+         $obj->xfn[$name] = "";
+       }
+       echo "<input id=\"". $name ."\" size=\"20\" maxlength=\"40\" name=\"". $name ."fn\" value=\"". myentities($obj->xfn[$name]) ."\" />";
+     }
+   }
+ }
+ /**
+  * make a help link if possible
+  *
+  */
+ Function make_helplink($fn = "") {
+   global $lang , $tutos;
+
+   if ( $fn == "" ) {
+     $fn = basename($_SERVER['PHP_SELF']);
+     $p = strpos($fn,".");
+     $fn = substr($fn,0,$p);
+   }
+   $l =  addSessionKey($tutos['base'] ."/help.php?p=".$fn,false);
+
+   if ( !isset($_SERVER['HTTP_USER_AGENT']) ||  ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
+     $x = $l;
+   } else {
+     $x = "JavaScript: mywindow = window.open('". $l ."', 'help', 'width=600,height=500,top=100,left=100,scrollbars=1'); mywindow.location.href = '". $l ."'; mywindow.focus();";
+   }
+   return $x;
+ }
+
+ /**
+  * show custom database fields (called by the show scripts)
+  * layout = the current layout
+  * section = section $table array
+  * obj = the TUTOS object where the data is stored
+  * cols = number of columns
+  */
+ function show_custom_fields(&$layout,$section,&$obj,$cols) {
+   global $table,$lang;
+
+   if (!isset($table[$section])) return;
+
+   foreach($table[$section] as $i => $x) {
+     if (!is_array($x)) continue;
+     if (!isset($x['custom'])) continue;
+     if (!$x['custom']) continue;
+     if (!isset($x['ftype'])) $x['ftype'] = "";
+
+     $fld = "_fld_".$i;
+
+     echo "<tr>\n";
+     echo $layout->showfield(myentities(isset($lang[$x['lang']]) ? $lang[$x['lang']]:$x['lang']));
+     echo "  <td colspan=\"".($cols-1)."\">\n";
+     if ($x['ftype'] == "Date") {
+       $xx = &$obj->$fld;
+       echo $xx->getDate();
+     } else if ($x['ftype'] == "DateTime") {
+       $xx = &$obj->$fld;
+       echo $xx->getDateTime();
+     } else if ($x['ftype'] == "Boolean") {
+       echo ($obj->$fld > 0 ? $lang['yes'] : $lang['no']);
+     } else if ($x['ftype'] == "SelectOne") {
+       echo myentities(isset($lang[$x['lang'].'_'][$obj->$fld]) ? $lang[$x['lang'].'_'][$obj->$fld]: "??". $x['lang'] ."??");
+     } else if ($x[type] == "TS_TYPE") {
+       $xx = &$obj->$fld;
+       echo $xx->getDate();
+     } else if ($x[type] == "float") {
+       echo number_format($obj->$fld,2,$lang['DecPoint'],$lang['ThousandPoint']);
+     } else {
+       echo myentities($obj->$fld) ."&nbsp;";
+     }
+     echo "  </td>\n";
+     echo "</tr>\n";
+   }
+ }
+ /**
+  * edit custom database fields (called by the new scripts)
+  * layout = the current layout
+  * section = section $table array
+  * obj = the TUTOS object where the data is stored
+  * cols = number of columns
+  */
+ function edit_custom_fields(&$layout,$section,&$obj,$cols) {
+   global $table,$lang;
+
+   if (!isset($table[$section])) return;
+
+   foreach($table[$section] as $i => $x) {
+     if (!is_array($x)) continue;
+     if (!isset($x['custom'])) continue;
+     if (!$x['custom']) continue;
+     if (!isset($x['required'])) $x['required'] = false;
+     if (!isset($x['ftype'])) $x['ftype'] = "";
+
+     $fld = "_fld_".$i;
+     $parsename = $section ."_". $i;
+
+     echo "<tr>\n";
+     echo $layout->showfield(myentities(isset($lang[$x['lang']]) ? $lang[$x['lang']]:$x['lang']),$x['required'],$parsename);
+     if ($x['ftype'] == "Date") {
+       echo " <td colspan=\"".($cols-1)."\">\n";
+       $xx = &$obj->$fld;
+       $xx->EnterDate($parsename,1);
+       echo " </td>\n";
+     } else if ($x['ftype'] == "DateTime") {
+       echo " <td colspan=\"".($cols-1)."\">\n";
+       $xx = &$obj->$fld;
+       $xx->EnterDateTime($parsename,1);
+       echo " </td>\n";
+     } else if ($x['ftype'] == "Boolean") {
+       echo "  <td colspan=\"".($cols-1)."\">\n";
+       echo "   <input type=\"checkbox\" id=\"".$parsename."\" name=\"".$parsename."\" value=\"1\"". ($obj->$fld == 1 ? " checked=\"checked\"":"") ." />\n";
+       echo "  </td>\n";
+     } else if ($x['ftype'] == "SelectOne") {
+       echo "  <td colspan=\"".($cols-1)."\">\n";
+       echo "   <select id=\"".$parsename."\" name=\"".$parsename."\">\n";
+       foreach($lang[$x['lang'].'_'] as $xx => $f) {
+         echo "    <option value=\"".myentities($xx)."\"";
+         echo ($obj->$fld == $xx ? " selected=\"selected\"":"");
+         echo ">". myentities($f) ."</option>\n";
+       }
+       echo "   </select>\n";
+       echo " </td>\n";
+     } else if ($x[type] == "VARCHAR") {
+       echo "  <td colspan=\"".($cols-1)."\">\n";
+       echo "   <input id=\"".$parsename."\" name=\"".$parsename."\" value=\"". myentities($obj->$fld) ."\" size=\"". min($x[size],40) ."\" maxlength=\"".$x[size]."\" />\n";
+       echo "&nbsp;</td>\n";
+     } else if ($x[type] == "float") {
+       $x[size] = 15;
+       echo "  <td colspan=\"".($cols-1)."\">\n";
+       echo "  <input id=\"".$parsename."\" name=\"".$parsename."\" value=\"". myentities($obj->$fld) ."\" size=\"". min($x[size],10) ."\" maxlength=\"".$x[size]."\" />\n";
+       echo "&nbsp;</td>\n";
+     } else if ($x[type] == "TX_TYPE") {
+       echo $layout->textarea($parsename,($cols-1),$obj->dbconn->txtlen,$obj->$fld);
+     } else if ($x[type] == "TS_TYPE") {
+       echo " <td colspan=\"".($cols-1)."\">\n";
+       $xx = &$obj->$fld;
+       $xx->EnterDate($parsename,1);
+       echo " </td>\n";
+     }
+     echo "</tr>\n";
+   }
+ }
+
+ /**
+  * parse and set custom database fields (called by the ins scripts)
+  * section = section $table array
+  * obj = the TUTOS object where the data is stored
+  */
+ function parse_custom_fields($section,&$obj) {
+   global $gotourl,$table,$lang;
+
+   $r = "";
+
+   if (!isset($table[$section])) return $r;
+
+   foreach($table[$section] as $i => $x) {
+     if (!is_array($x)) continue;
+     if (!isset($x['custom'])) continue;
+     if (!$x['custom']) continue;
+     if (!isset($x['ftype'])) $x['ftype'] = "";
+     if (!isset($x['required'])) $x['required'] = false;
+
+     $parsename = $section ."_". $i;
+
+     $fld = "_fld_".$i;
+
+     if ($x['ftype'] == "Date") {
+       $xx = new DateTime(0);
+       $xx->setDateTimeF($parsename);
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $xx->getYYYYMMDD(),true);
+       $obj->setDateField($fld,$xx,$x['lang']);
+     } else if ($x['ftype'] == "DateTime") {
+       $xx = new DateTime(0);
+       $xx->setDateTimeF($parsename);
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $xx->getYYYYMMDDHHMM(),true);
+       $obj->setDateTimeField($fld,$xx,$x['lang']);
+     } else if ($x['ftype'] == "Boolean") {
+       if (!isset($_POST[$parsename])) $_POST[$parsename] = 0;
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $_POST[$parsename],true);
+       $obj->setIntField($fld,$_POST[$parsename],$x['lang']);
+       $x['required'] = false;
+     } else if ($x['ftype'] == "SelectOne") {
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $_POST[$parsename],true);
+       $obj->setIntField($fld,$_POST[$parsename],$x['lang']);
+     } else if ($x[type] == "TS_TYPE") {
+       $xx = new DateTime(0);
+       $xx->setDateTimeF($parsename);
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $xx->getYYYYMMDD(),true);
+       $obj->setDateTimeField($fld,$xx,$x['lang']);
+     } else if ($x[type] == "float") {
+       if (!isset($_POST[$parsename])) continue;
+       if ( !checkfloat($_POST[$parsename]) ) {
+         $r .= sprintf($lang['Err0017'],isset($lang[$x['lang']]) ? $lang[$x['lang']]:$x['lang']) ."<br />";
+       }
+       $gotourl= addUrlParameter($gotourl,$parsename ."=". $_POST[$parsename],true);
+       $obj->setFloatField($fld,$_POST[$parsename],$x['lang']);
+     } else {
+       if (!isset($_POST[$parsename])) continue;
+       $gotourl= addUrlParameter($gotourl,$parsename."=". UrlEncode(StripSlashes($_POST[$parsename])),true);
+       $obj->setStrField($fld,$_POST[$parsename],$x['lang']);
+     }
+     if ($x['required'] && (!isset($obj->$fld) || (trim($obj->$fld) == "")) ) {
+       $r .= sprintf($lang['Err0009'],myentities(isset($lang[$x['lang']]) ? $lang[$x['lang']]:$x['lang'])) ."<br />";
+     }
+   }
+   return $r;
+ }
+ /**
+  * preset custom database fields (called by the new scripts)
+  * section = section $table array
+  * obj = the TUTOS object where the data is stored
+  */
+ function preset_custom_fields($section,&$obj) {
+   global $table,$lang;
+
+   foreach($table[$section] as $i => $x) {
+     if (!is_array($x)) continue;
+     if (!isset($x['custom'])) continue;
+     if (!$x['custom']) continue;
+
+     $parsename = $section ."_". $i;
+     if (!isset($_GET[$parsename])) continue;
+
+     $fld = "_fld_".$i;
+
+     if ($x[type] == "TS_TYPE") {
+       $xx = &$obj->$fld;
+       $xx->setDateTime($_GET[$parsename]);
+     } else {
+       $obj->$fld = $_GET[$parsename];
+     }
+
+   }
+ }
+
+ /**
+  * Make some submit reset table entries
+  *
+  */
+ Function submit_reset($pre,$t1,$f1,$t2,$f2,$f3,$post) {
+   global $lang,$mod_strings,$app_strings;
+
+   if ( $pre > 0 ) {
+     echo " <td colspan=\"".$pre."\">&nbsp;</td>\n";
+   }
+   if ( $t1 > 0 ) {
+     echo " <td class=\"desc\" colspan=\"".$t1."\"><label for=\"OK\">". $lang['ChangesOk'] ."</label>&nbsp;</td>\n";
+   }
+   if ( $t1 < 0 ) {
+     echo " <td class=\"desc\" colspan=\"". abs($t1) ."\"><label for=\"OK\">". $lang['InputOk'] ."</label>&nbsp;</td>\n";
+   }
+   if ( $f1 > 0 ) {
+     echo " <td colspan=\"".$f1."\">&nbsp;<input id=\"OK\" name=\"OK\" class=\"button\" type=\"submit\" value=\"". $mod_strings['LBL_SAVE'] ."\" onclick=\"this.form.action.value='Save'\" name=\"button\" title=\"". $mod_strings['LBL_SAVE'] ."\" /></td>\n";
+   }
+   if ( $t2 > 0 ) {
+     echo " <td class=\"desc\" colspan=\"".$t2."\" align=\"right\">&nbsp;<label for=\"RESET\">". $lang['Reset'] ."</label>&nbsp;</td>\n";
+   }
+   if ( $f2 > 0 ) {
+     echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $mod_strings['LBL_RESET'] ."\" onclick=\"this.form.module.value='Calendar'; this.form.action.value='calendar'\" title=\"". $mod_strings['LBL_RESET']."\" /></td>\n";
+   }
+   if ( $f3 > 0 ) {
+     echo " <td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Calendar'; this.form.return_action.value='calendar'; this.form.action.value='Delete'; return confirm('$mod_strings[DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>\n";
+   }
+
+   if ( $post > 0 ) {
+     echo " <td colspan=\"".$post."\">&nbsp;</td>\n";
+   }
+ }
+ /**
+  * parse and use the values form the order-header function (see below)
+  */
+ Function order_parse(&$query,&$link1,&$link2,&$hidden,$def) {
+
+   if ( isset($_GET['xf']) && isset($_GET['xo']) ) {
+     $query .=" ORDER by " . $_GET['xf'];
+     if ( $_GET['xo'] == 1 ) {
+       $query .= " ASC ";
+     } else {
+       $query .= " DESC ";
+     }
+     $link1 = addUrlParameter($link1,"xf=".UrlEncode($_GET['xf']),false);
+     $link1 = addUrlParameter($link1,"xo=". $_GET['xo'],false);
+     $link2 = addUrlParameter($link2,"xf=".UrlEncode($_GET['xf']),false);
+     $link2 = addUrlParameter($link2,"xo=".$_GET['xo'],false);
+
+     $hidden .= "<input type=\"hidden\" name=\"xo\" value=\"". $_GET['xo'] ."\">\n";
+     $hidden .= "<input type=\"hidden\" name=\"xf\" value=\"". UrlEncode($_GET['xf']) ."\">\n";
+   } else {
+     $query .= " ORDER by ". $def;
+   }
+ }
+ /**
+  * add task ids of an object to a list
+  */
+ Function add_task_ids(&$ref,&$q,&$sep) {
+   # Read the tasks
+   $ref->readTasks();
+   if ( count($ref->fulltasklist) > 0 ) {
+     foreach($ref->fulltasklist as $i => $f) {
+       $q .= $sep . $i;
+       $sep = ",";
+#      echo "[". $f->id ."]";
+       add_bugs_ids($f,$q,$sep);
+     }
+   }
+ }
+ /**
+  * add bug ids of an object to a list
+  */
+ Function add_bugs_ids(&$ref,&$q,&$sep) {
+   # Read the bugs
+   if (! class_exists('bug')) {
+     return;
+   }
+   bug::obj_read($ref);
+   if ( count($ref->list[usebugtracking]) > 0 ) {
+     foreach($ref->list[usebugtracking] as $i => $f) {
+       $q .= $sep . $i;
+       $sep = ",";
+     }
+   }
+ }
+ /**
+  * add installation ids of an object to a list
+  */
+ Function add_inst_ids(&$ref,&$q,&$sep) {
+   # Read the insts
+   if (! class_exists('installation')) {
+     return;
+   }
+   installation::obj_read($ref);
+   if ( count($ref->list[useinstmanagement]) > 0 ) {
+     foreach($ref->list[useinstmanagement] as $i => $f) {
+       $q .= $sep . $i;
+       $sep = ",";
+#      echo "[". $f->id ."]";
+       add_bugs_ids($f,$q,$sep);
+     }
+   }
+ }
+
+ /**
+  * format a text line
+  */
+ function format_asText($label,$info) {
+   return substr($label.str_repeat(" ",20),0,20) .": ". $info ."\n";
+ }
+ /* ---------------------------------------------------------------------------
+  * Find a suitable mail template file for user $to
+  */
+ function findMailTemplate($name,&$to,&$body,$path = "/html") {
+   global $current_user,$lang,$tutos,$g_hash;
+
+   $p = $tutos['base'] .$path;
+   if ( $to->getType() == "address" ) {
+     # get the user data
+     unset($g_hash[$to->id]);
+     $u = new tutos_user($to->dbconn);
+	 $to->lg = $lang;
+     $u = $u->read($to->id,$u);
+     ReadLang1($to->lg,$tutos['base'] ."/localization",$u);
+     load_module_langfiles($u,$to->lg);
+#     $to->lg = &$lang;
+     $fn = $p ."/". $name .".". $u->lang;
+   } else if ( $to->getType() == "user" ) {
+	 $to->lg = $lang;
+     ReadLang1($to->lg,$tutos['base'] ."/localization",$to);
+     load_module_langfiles($to,$to->lg);
+     $fn = $p ."/". $name .".". $to->lang;
+   } else {
+     $to->lg = &$lang;
+     $fn = $p ."/". $name .".". $current_user->lang;
+   }
+   if ( ! file_exists(getcwd()."/".$fn) ) {
+     $fn = $p ."/". $name .".en";
+   }
+   if ( ! file_exists(getcwd()."/".$fn) ) {
+     $body = $fn;
+     return false;
+   }
+   $body = join ('', file ($fn));
+   return true;
+ }
+ /**
+  * 
+  */
+ function myentities($text , $escapequotes = 0) {
+   if ( $escapequotes == 1 ) {
+     return addslashes(htmlspecialchars($text));
+   }
+   $text = htmlspecialchars($text);
+   $text = eregi_replace("&amp;#([0-9]{3,5});","&#\\1;",$text);
+   return $text;
+ }
+/**
+ * prepare a search pattern for reg expressions
+ * i.e. escape everything that might be misinterpreted
+ */
+function prepare_regpattern($pattern) {
+  $pattern = eregi_replace("\[","\[",$pattern);
+  $pattern = eregi_replace("\]","\]",$pattern);
+  $pattern = eregi_replace("\)","\)",$pattern);
+  $pattern = eregi_replace("\(","\(",$pattern);
+
+  return $pattern;
+}
+/**
+ * Print the parts of header neccessary for debug-outputs
+ */
+Function DebugWindow_Header () {
+  global $tutos;
+
+  if ( $tutos[debugConsole] == 1 ) {
+    $debug = true;
+  } else {
+    return;
+  }
+
+  if ( !isset($_SERVER['HTTP_USER_AGENT']) ||
+       ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || 
+       ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || 
+       ereg("Konqueror",$_SERVER['HTTP_USER_AGENT']) ) {
+    $debug = false;
+    return;
+  }
+  if ( $debug ) {
+    echo " <script language=\"JavaScript\" type=\"text/javascript\">delete DbgTS; if ( TutosDebugW) { TutosDebugW.close } var TutosDebugW = window.open(\"about:blank\",\"TutosDebugW\",\"width=310,height=400,left=0,top=0\"); var DbgTS = new Date();</script>\n";
+  }
+}
+/**
+ * Output Text to debug-window
+ */
+Function DebugWindow_Out ( $out_text) {
+  global $tutos;
+
+  if ( $tutos[debugConsole] == 1 ) {
+    $debug = true;
+  } else {
+    return;
+  }
+
+  if ( !isset($_SERVER['HTTP_USER_AGENT']) ||  ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
+    $debug = false;
+    return;
+  }
+  if ( $debug ) {
+    echo " <script language=\"JavaScript\" type=\"text/javascript\">TmpTS = new Date();TutosDebugW.document.writeln((TmpTS-DbgTS).toPrecision(4)+\"ms :".$out_text."<br />\"); delete TmpTS;</script>\n";
+  }
+}
+
+/**
+ * return n-1 url in stack
+ */
+function web_StackPop($back)
+{
+  if (!isset($_SESSION['web_stack']))
+    return "";
+        
+  $arWebStack = $_SESSION['web_stack'];
+  $web_local = end($arWebStack);
+    
+  for ($i = 0; $i<$back; $i++)
+    $web_local = array_pop($arWebStack);
+        
+  if ($web_local)       
+    return $web_local['url'];
+  else 
+    return $_SESSION['web_stack']['url'];
+    
+}
+/**
+ * page stack start
+ */
+function web_StackStart ($id, $url, $briefname="", $name="")
+{
+  if (!isset($_SESSION['web_stack']))
+    $_SESSION['web_stack'] = array();
+
+  $arWebStack = &$_SESSION['web_stack'];
+
+  // check is this the same page, do nothing
+  $wend = end($arWebStack);
+
+  if ($wend && $wend['id'] == $id)
+    {
+      $web_local = array_pop($arWebStack);
+      $web_local['url'] = $url;                 
+      array_push($arWebStack, $web_local);          
+      return true;
+    }
+    
+  // check if page already in stack, and find its firts occurence to
+  // restore settings
+    
+  $bFound = false;  
+  foreach ($arWebStack as $web_local)
+    {
+      if ($web_local['id'] == $id) {
+    $bFound = true;
+    break;
+      }
+    }
+    
+  if ($bFound)
+    {
+      // need to return back to this page
+      while ($web_local = array_pop($arWebStack))
+    {
+      if ($web_local['id'] == $id)
+        {
+          $_SESSION['web_local'] = $web_local['data'];
+          $web_local['url'] = $url;
+          array_push($arWebStack, $web_local);
+          return true;
+        }
+    }
+    }
+        
+  // the page is not found, add it to the stack
+  // but store previous page settings
+  if (count($arWebStack))
+    {
+      $web_local = array_pop($arWebStack);
+      $web_local['data'] = $_SESSION['web_local'];
+      array_push($arWebStack, $web_local);      
+    }
+            
+  // prepare new
+  $stackitem = Array('id'   => $id,
+             'url'  => $url,
+             'text' => $briefname,
+             'info' => $name,
+             'data' => array());
+
+  array_push ($arWebStack,$stackitem);
+
+  $_SESSION['web_local'] = array ();
+}
+
+function web_StackStartLayout($layout, $id, $url )
+{
+  global $lang;
+
+  if ($layout->stop) return;
+
+  $x = $layout->name;
+  $url .= "?". $_SERVER['QUERY_STRING'];
+
+  if ( strlen($x) > 20 ) {
+    $x = substr($x,0,15) ."...". substr($x,-2);
+  }
+  web_StackStart($id, htmlentities($url),$x, $layout->name);
+}
+    
+function web_StackStartLayoutObj($layout)
+{
+  global $lang;
+
+  if ($layout->stop) return;
+  if (!isset($layout->obj)) return;
+  if (!is_object($layout->obj)) return;
+
+  $x = $layout->obj->getFullName();
+
+  if ( strlen($x) > 20 ) {
+    $x = substr($x,0,15) ."...". substr($x,-2);
+  }
+  web_StackStart($layout->obj->getUrl(), $layout->obj->getUrl(),$x, $layout->obj->getFullName());
+}
+
+function load_jpgraph($arr) {
+  global $tutos,$msg;
+
+  $r = 1.11;
+
+  if ($tutos[usejpgraph] == 0) {
+    return false;
+  }
+  # we try both places
+  if (file_exists (getcwd()."/".$tutos['base']."/". $tutos[jpgraph]."/jpgraph.php") ) {
+    require_once $tutos[jpgraph]."/jpgraph.php";
+    foreach($arr as $i) {
+      require_once $tutos[jpgraph]."/". $i;
+    }
+    if (!defined('JPG_VERSION') ) {
+      $tutos[jpgraph_old] = 1;
+    }
+	if (!defined('JPG_VERSION') || substr(JPG_VERSION,0,strlen($r)) >= $r) {
+      return true;
+	}
+	$msg .= "JPraph Version " . JPG_VERSION ."<br>";
+  } else if (file_exists (getcwd()."/".$tutos['base']."/". $tutos[jpgraph]."/src/jpgraph.php") ) {
+    require_once $tutos[jpgraph]."/src/jpgraph.php";
+    foreach($arr as $i) {
+      require_once $tutos[jpgraph]."/src/". $i;
+    }
+    if (!defined('JPG_VERSION') ) {
+      $tutos[jpgraph_old] = 1;
+    }
+	if (!defined('JPG_VERSION') || substr(JPG_VERSION,0,strlen($r)) >= $r) {
+      return true;
+	}
+	$msg .= "JPraph Version " . JPG_VERSION ."<br>";
+  }
+  $msg .= "No or incorrect Jpgraph in '". $tutos[jpgraph] ."'<br>";
+  $msg .= "TUTOS needs $r or newer!<br>";
+  $msg .= "See: http://www.aditus.nu/jpgraph/";
+  $tutos[usejpgraph] = 0;
+  return false;
+}
+
+?>

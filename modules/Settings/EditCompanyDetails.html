@@ -20,8 +20,8 @@
   <input type="hidden" name="return_action" value="{RETURN_ACTION}">
   <tr> 
 	  <th colspan="2" align=left class="formSecHeader">{MOD.LBL_LBL_COMPANY_INFO}</th></tr>	   
-    <td width="40%" nowrap class="dataLabel"><font color="red">*</font>{MOD.LBL_ORGANIZATION_NAME}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_name" value="{ORGANIZATIONNAME}" size="40"/> 
+    <td width="40%" nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_NAME}: </td>
+    <td align="left"> <input class="dataInput" type="text" name="organization_name" value="{ORGANIZATIONNAME}" size="40"/> 
     <input type="hidden" name="org_name" value="{ORGANIZATIONNAME}"> </td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_ADDRESS}: </td>
@@ -31,26 +31,26 @@
     <td align="left"><input class="dataInput" type="text" name="organization_city" value="{ORGANIZATIONCITY}" size="40"/> </td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_STATE}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_state" value="{ORGANIZATIONSTATE}" size="40"/></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_state" value="{ORGANIZATIONSTATE}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel"> {MOD.LBL_ORGANIZATION_CODE}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_code" value="{ORGANIZATIONCODE}" size="40"></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_code" value="{ORGANIZATIONCODE}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_COUNTRY}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_country" value="{ORGANIZATIONCOUNTRY}" size="40"></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_country" value="{ORGANIZATIONCOUNTRY}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel"> {MOD.LBL_ORGANIZATION_PHONE}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_phone" value="{ORGANIZATIONPHONE}" size="40"></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_phone" value="{ORGANIZATIONPHONE}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_FAX}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_fax" value="{ORGANIZATIONFAX}" size="40"></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_fax" value="{ORGANIZATIONPHONE}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_WEBSITE}: </td>
-    <td align="left"><input class="dataInput" type="text" name="organization_website" value="{ORGANIZATIONWEBSITE}" size="40"></td></tr>
+    <td align="left"><input class="dataInput" type="text" name="organization_website" value="{ORGANIZATIONWEBSITE}" size="40"</td></tr>
   <tr>
     <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_LOGO}: </td>	  
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000"> 
-	<td><input type="file" name="binFile" value="{FILE_NAME}">[{ORGANIZATIONLOGONAME}] </td>
+	<td><input type="file" name="binFile" value="{FILE_NAME}" </td>
   </tr>
 </table>
 </td>
@@ -60,33 +60,11 @@
 <table width="65%" cellpadding="0" cellspacing="0" border="0"><tbody>
  <tr>
    <td align="center">
-	   <input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" onclick="return verify_data(form,'{MOD.LBL_ORGANIZATION_NAME}');" >
+	   <input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
 
-	<input title="{APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	<input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
  </tr>
 </form>
 </table>
-<script>
-function verify_data(form,company_name) 
-{
-	if (form.organization_name.value == "" ) 
-	{
-		alert(company_name +" cannot be none");
-		return false
-
-	}
-	else if (form.organization_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
-	{
-		alert(company_name +" cannot be empty");
-		form.organization_name.focus();
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-</script>
-
 
 <!-- END: main -->

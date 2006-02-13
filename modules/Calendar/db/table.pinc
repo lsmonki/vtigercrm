@@ -1,0 +1,499 @@
+<?php
+/*
+ * Copyright 2002 by Gero Kohnert
+ *
+ * Information about all tables indices etc for TUTOS
+ *
+ *  CVS Info:  $Id: table.pinc,v 1.16 2005/05/03 13:18:50 saraj Exp $
+ *  $Author: saraj $
+ */
+/*
+$table['objectids'] = array(
+  name => "objectids",
+  Desc => "TUTOS object id - type referece",
+  "id"        => array(type => "ID_TYPE",     constraints => "PK",  Desc => "object ID"),
+  "tutostype" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "tutos type (see db.p3)"),
+);
+
+$table['people'] = array(
+  name => "people",
+  Desc => "TUTOS users",
+  "id"        => array(type => "ID_TYPE",             constraints => "PK",  Desc => "object ID"),
+  "adr_id"    => array(type => "ID_TYPE",             constraints => "NN",  Desc => "address ID"),
+  "login"     => array(type => "VARCHAR", size => 20, constraints => "NN",  Desc => "login name"),
+  "last_seen" => array(type => "TS_TYPE",             constraints => "",    Desc => "last login time"),
+  "last_host" => array(type => "VARCHAR", size => 20, constraints => "",    Desc => "last login host"),
+  "admin"     => array(type => "ID_TYPE",             constraints => "",    Desc => "admin or not"),
+  "pw"        => array(type => "VARCHAR", size => 50, constraints => "",    Desc => "users password"),
+  "prefteam"  => array(type => "ID_TYPE",             constraints => "default 1",  Desc => "last seen team in calendar"),
+  "lang"      => array(type => "VARCHAR", size => 5 , constraints => "",    Desc => "users language"),
+  "tz"        => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "users timezone"),
+  "holidays"  => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "users holiday sets"),
+  "namedays"  => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "nameday sets"),
+  "workdays"  => array(type => "VARCHAR", size => 20, constraints => "",    Desc => "working days in a week"),
+  "weekstart" => array(type => "ID_TYPE",             constraints => "",    Desc => "first day in a week"),
+  "theme"     => array(type => "VARCHAR", size => 10, constraints => "default 'tutos'",  Desc => "users theme"),
+  "layout"    => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "users layout engine"),
+  "rowiconsbefore" => array(type => "VARCHAR", size => 20, constraints => "",    Desc => "users rowicon engine"),
+  "rowiconsafter"  => array(type => "VARCHAR", size => 20, constraints => "",    Desc => "users rowicon engine"),
+  "disabled"  => array(type => "ID_TYPE",             constraints => "",    Desc => "1 == currently disabled account"),
+  "creator"   => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation"  => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date"),
+);
+
+$table['acl'] = array(
+  name => "acl",
+  Desc => "TUTOS acl",
+  "obj_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "object ID"),
+  "adr_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "user/team ID"),
+  "perm"   => array(type => "ID_TYPE",     constraints => "NN",  Desc => "permission")
+);
+$tableidx['acl1'] = array(
+  name  => "acl_idx1",
+  table => "acl",
+  column => array("obj_id"),
+  Desc  => "ref acl - obj",
+);
+$tableidx['acl2'] = array(
+  name  => "acl_idx2",
+  table => "acl",
+  column => array("adr_id"),
+  Desc  => "ref acl - user",
+);
+
+$table['acldefault'] = array(
+  name => "acldefault",
+  Desc => "TUTOS acl defaults",
+  "obj_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "object ID"),
+  "adr_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "user/team ID"),
+  "perm"   => array(type => "ID_TYPE",     constraints => "NN",  Desc => "permission")
+);
+$tableidx['acldef1'] = array(
+  name  => "acldefault_idx1",
+  table => "acldefault",
+  column => array("obj_id"),
+  Desc  => "ref acldef - obj",
+);
+$tableidx['acldef2'] = array(
+  name  => "acldefault_idx2",
+  table => "acldefault",
+  column => array("adr_id"),
+  Desc  => "ref acldef - adr",
+);
+
+$table['address'] = array(
+  name => "addresses",
+  Desc => "TUTOS addresses",
+  "id"       => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "title"    => array(type => "VARCHAR", size => 10, constraints => "",    Desc => "title"),
+  "f_name"   => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "first name"),
+  "m_name"   => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "middle name"),
+  "l_name"   => array(type => "VARCHAR", size => 30, constraints => "NN",  Desc => "last name"),
+  "birthday" => array(type => "date",                constraints => "",    Desc => "birthday"),
+  "pic_id"   => array(type => "ID_TYPE",             constraints => "",    Desc => "file id of picture"),
+  "category" => array(type => "ID_TYPE",             constraints => "default 1",  Desc => "category"),
+  "creator"  => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation" => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date")
+);
+
+$table['address1'] = array(
+  name => "adrloc",
+  Desc => "TUTOS adrloc",
+  "adr_id"   => array(type => "ID_TYPE",             constraints => "NN",  Desc => "address ID"),
+  "loc_id"   => array(type => "ID_TYPE",             constraints => "NN",  Desc => "loc ID"),
+  "name"     => array(type => "VARCHAR", size => 30, constraints => "NN",  Desc => "owner ID"),
+  "category" => array(type => "ID_TYPE",             constraints => "",    Desc => "type of location")
+);
+$tableidx['address11'] = array(
+  name  => "adrloc_u",
+  table => "adrloc",
+  column => array("adr_id","loc_id"),
+  type => "unique",
+  Desc  => "ref adr - location",
+);
+$tableidx['address12'] = array(
+  name  => "adrloc_a",
+  table => "adrloc",
+  column => array("adr_id"),
+  Desc  => "ref adr - location",
+);
+
+$table['location'] = array(
+  name => "location",
+  Desc => "TUTOS locations",
+  "id"          => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "category"    => array(type => "ID_TYPE",             constraints => "NN",  Desc => "category home or buissnes"),
+  "c_id"        => array(type => "ID_TYPE",             constraints => "",    Desc => "company ID"),
+  "d_id"        => array(type => "ID_TYPE",             constraints => "",    Desc => "department ID"),
+  "desc1"       => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "description"),
+  "phone_1"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "phone number"),
+  "phone_2"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "phone number"),
+  "fax_1"       => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "fax number"),
+  "email_1"     => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "email address"),
+  "email_2"     => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "email address"),
+  "street1"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "street address"),
+  "street2"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "street address"),
+  "city"        => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "city"),
+  "zip"         => array(type => "VARCHAR", size => 10, constraints => "",    Desc => "zip code"),
+  "state"       => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "state in country"),
+  "country"     => array(type => "VARCHAR", size =>  3, constraints => "",    Desc => "ISO Country code"),
+  "coords"      => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "Coordinates (not yet used)"),
+  "acc_info1"   => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "bank account info line 1"),
+  "acc_info2"   => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "bank account info line 2"),
+  "acc_nr"      => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "bank account info nr"),
+  "customer_id" => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "customer id"),
+  "creator"     => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date")
+);
+
+$table['team'] = array(
+  name => "teams",
+  Desc => "TUTOS teams",
+  "id"       => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "name"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "name"),
+  "owner"    => array(type => "ID_TYPE",             constraints => "NN",  Desc => "owner ID"),
+  "email"    => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "email to reach the team"),
+  "creator"  => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation" => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date")
+);
+$table['team1'] = array(
+  name => "adrteam",
+  Desc => "TUTOS adrteam",
+  "adr_id"  => array(type => "ID_TYPE",     constraints => "NN",  Desc => "member ID"),
+  "team_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "team ID")
+);
+$tableidx['team1'] = array(
+  name  => "adrteam_u",
+  table => "adrteam",
+  column => array("adr_id","team_id"),
+  type => "unique",
+  Desc  => "ref user - team",
+);
+$tableidx['team2'] = array(
+  name  => "adrteam_t",
+  table => "adrteam",
+  column => array("team_id"),
+  Desc  => "ref user - team",
+);
+$tableidx['team3'] = array(
+  name  => "adrteam_a",
+  table => "adrteam",
+  column => array("adr_id"),
+  Desc  => "ref user - team",
+);
+
+*/
+$table['appointment1'] = array(
+  name => "calendar",
+  Desc => "TUTOS calendar",
+  "id"          => array(type => "ID_TYPE",      constraints => "PK",  Desc => "Object ID"),
+  "a_start"     => array(type => "TS_TYPE",      constraints => "NN",  Desc => "start date"),
+  "a_end"       => array(type => "TS_TYPE",      constraints => "NN",  Desc => "end date"),
+  "t_ignore"    => array(type => "ID_TYPE",      constraints => "",    Desc => "ignore start and end time"),
+  "description" => array(type => "VARCHAR", size => 100, constraints => "",    Desc => "description"),
+  "trace"       => array(type => "ID_TYPE",      constraints => "NN",  Desc => "trace participants"),
+  "mod_allow"   => array(type => "ID_TYPE",      constraints => "NN",  Desc => "allow modification (deprecated)"),
+  "outside"     => array(type => "ID_TYPE",      constraints => "",    Desc => "where does it happen"),
+  "remember"    => array(type => "ID_TYPE",      constraints => "",    Desc => "seconds before start"),
+  "remembered"  => array(type => "ID_TYPE",      constraints => "",    Desc => "remember happend"),
+  "visitor"     => array(type => "ID_TYPE",      constraints => "",    Desc => "visitor ID"),
+  "product"     => array(type => "ID_TYPE",      constraints => "",    Desc => "product ID"),
+  "repeat"      => array(type => "ID_TYPE",      constraints => "NN",  Desc => "type of repeat"),
+  "r_arg"       => array(type => "VARCHAR", size => 5,   constraints => "",    Desc => "detail of repeat"),
+  "r_ignore"    => array(type => "ID_TYPE",      constraints => "NN",  Desc => "ignore end when repeating"),
+  "creator"     => array(type => "ID_TYPE",      constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",      constraints => "",    Desc => "creation date")
+);
+/*
+$table['crmcalendar'] = array(
+  name => "crm_calendar",
+  Desc => "TUTOS CRM calendar",
+  "id"          => array(type => "ID_TYPE",      constraints => "PK",  Desc => "Object ID"),
+  "subject"     => array(type => "VARCHAR", size => 255, constraints => "NN",  Desc => "subject of the appointment"),
+  "account_name"=> array(type => "VARCHAR", size => 100, constraints => "",  Desc => "company account name"),
+  "contact_name"=> array(type => "VARCHAR", size => 100, constraints => "NN",  Desc => "contact person name")
+);
+$tableidx['appointment11'] = array(
+  name  => "cal_rep_idx1",
+  table => "calendar",
+  column => array("repeat"),
+  Desc  => "ref cal - repeat",
+);
+$tableidx['appointment12'] = array(
+  name  => "cal_rep_idx2",
+  table => "calendar",
+  column => array("r_ignore"),
+  Desc  => "ref cal - r_ignore",
+);
+$tableidx['appointment13'] = array(
+  name  => "cal_idx3",
+  table => "calendar",
+  column => array("a_start"),
+  Desc  => "idx cal - start",
+);
+$tableidx['appointment14'] = array(
+  name  => "cal_idx4",
+  table => "calendar",
+  column => array("a_end"),
+  Desc  => "idx cal - end",
+);
+
+$table['appointment2'] = array(
+  name => "participants",
+  Desc => "TUTOS participants",
+  "adr_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Participant ID"),
+  "app_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Appointment ID"),
+  "state"  => array(type => "ID_TYPE",     constraints => "default 0",  Desc => "State ID")
+);
+$tableidx['appointment21'] = array(
+  name  => "part_uap_id",
+  table => "participants",
+  column => array("adr_id","app_id"),
+  type => "unique",
+  Desc  => "ref app - user",
+);
+$tableidx['appointment22'] = array(
+  name  => "part_a_id",
+  table => "participants",
+  column => array("app_id"),
+  Desc  => "ref app - part",
+);
+
+$table['product'] = array(
+  name => "products",
+  Desc => "TUTOS products",
+  "id"          => array(type => "ID_TYPE",              constraints => "PK",  Desc => "Object ID"),
+  "name"        => array(type => "VARCHAR", size => 40,  constraints => "",    Desc => "name"),
+  "version"     => array(type => "VARCHAR", size => 20,  constraints => "",    Desc => "version"),
+  "description" => array(type => "TX_TYPE",              constraints => "",    Desc => "description"),
+  "desc1"       => array(type => "TX_TYPE",              constraints => "",    Desc => "description 1"),
+  "desc2"       => array(type => "TX_TYPE",              constraints => "",    Desc => "description 2"),
+  "state"       => array(type => "ID_TYPE",              constraints => "",    Desc => "state of product"),
+  "path"        => array(type => "VARCHAR", size => 100, constraints => "",    Desc => "path to info"),
+  "price"       => array(type => "float",                constraints => "",    Desc => "price of product"),
+  "cost"        => array(type => "float",                constraints => "",    Desc => "cost of product"),
+  "currency"    => array(type => "VARCHAR", size => 4,   constraints => "",    Desc => "currency for price and cost"),
+  "probability" => array(type => "float",       constraints => "",    Desc => "probability"),
+  "p_start"     => array(type => "TS_TYPE",     constraints => "",    Desc => "start date"),
+  "p_end"       => array(type => "TS_TYPE",     constraints => "",    Desc => "end date"),
+  "creator"     => array(type => "ID_TYPE",     constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",     constraints => "",    Desc => "creation date")
+);
+
+$table['product2'] = array(
+  name => "projectroles",
+  Desc => "TUTOS projectroles",
+  "pro_id"       => array(type => "ID_TYPE",              constraints => "NN",  Desc => "Project ID"),
+  "adr_id"       => array(type => "ID_TYPE",              constraints => "NN",  Desc => "Object ID"),
+  "role_id"      => array(type => "ID_TYPE",              constraints => "",    Desc => "role ID (from languagefile)"),
+  "description"  => array(type => "VARCHAR", size => 40,  constraints => "",    Desc => "additional role description"),
+);
+$tableidx['product21'] = array(
+  name  => "prole_pro_id",
+  table => "projectroles",
+  column => array("pro_id"),
+  Desc  => "ref to project",
+);
+$tableidx['product22'] = array(
+  name  => "projectroles_idx2",
+  table => "projectroles",
+  column => array("adr_id"),
+  Desc  => "ref to object with role",
+);
+
+$table['product3'] = array(
+  name => "projectclass1",
+  Desc => "TUTOS projectclass1",
+  "pro_id"   => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Project ID"),
+  "class_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Class ID (from languagefile)"),
+);
+$tableidx['product3'] = array(
+  name  => "pclass1_pro_id",
+  table => "projectclass1",
+  column => array("pro_id"),
+  Desc  => "ref to project",
+);
+
+$table['product4'] = array(
+  name => "projectclass2",
+  Desc => "TUTOS projectclass2",
+  "pro_id"   => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Project ID"),
+  "class_id" => array(type => "ID_TYPE",     constraints => "NN",  Desc => "Class ID (from languagefile)"),
+);
+$tableidx['product4'] = array(
+  name  => "pclass2_pro_id",
+  table => "projectclass2",
+  column => array("pro_id"),
+  Desc  => "ref to project",
+);
+
+
+$table['task'] = array(
+  name => "tasks",
+  Desc => "TUTOS tasks",
+  "id"          => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "p_id"        => array(type => "ID_TYPE",             constraints => "NN",  Desc => "linked object"),
+  "worker"      => array(type => "ID_TYPE",             constraints => "",    Desc => "user object"),
+  "name"        => array(type => "VARCHAR", size => 40, constraints => "",    Desc => "short description"),
+  "r_start"     => array(type => "TS_TYPE",     constraints => "",    Desc => "real start date"),
+  "r_end"       => array(type => "TS_TYPE",     constraints => "",    Desc => "real end date"),
+  "s_start"     => array(type => "TS_TYPE",     constraints => "NN",  Desc => "scheduled start date"),
+  "s_end"       => array(type => "TS_TYPE",     constraints => "NN",  Desc => "scheduled end date"),
+  "volume"      => array(type => "float",       constraints => "",    Desc => "hours of work"),
+  "volume_done" => array(type => "float",       constraints => "",    Desc => "hours worked"),
+  "volume_todo" => array(type => "float",       constraints => "",    Desc => "hours of work to do"),
+  "status"      => array(type => "ID_TYPE",     constraints => "",    Desc => "state of task"),
+  "milestone"   => array(type => "ID_TYPE",     constraints => "",    Desc => "milestone flag"),
+  "description" => array(type => "TX_TYPE",     constraints => "",    Desc => "description"),
+  "creator"     => array(type => "ID_TYPE",     constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",     constraints => "",    Desc => "creation date")
+);
+$tableidx['task1'] = array(
+  name  => "task_idx1",
+  table => "tasks",
+  column => array("p_id"),
+  Desc  => "objects with tasks",
+);
+$tableidx['task2'] = array(
+  name  => "task_idx2",
+  table => "tasks",
+  column => array("worker"),
+  Desc  => "users with tasks",
+);
+$table['taskworker'] = array(
+  name => "taskworker",
+  Desc => "TUTOS task workers",
+  "t_id"        => array(type => "ID_TYPE",             constraints => "NN",  Desc => "Task ID"),
+  "w_id"        => array(type => "ID_TYPE",             constraints => "NN",  Desc => "Worker ID"),
+);
+$tableidx['taskworker1'] = array(
+  name  => "taskw_idx1",
+  table => "taskworker",
+  column => array("t_id"),
+  Desc  => "workers in taskworkers",
+);
+$tableidx['taskworker2'] = array(
+  name  => "taskw_idx2",
+  table => "taskworker",
+  column => array("w_id"),
+  Desc  => "tasks in taskworkers",
+);
+
+$table['company'] = array(
+  name => "companies",
+  Desc => "TUTOS companies",
+  "id"       => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "name"     => array(type => "VARCHAR", size => 60, constraints => "NN U",Desc => "name of company"),
+  "creator"  => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation" => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date")
+);
+
+$table['department'] = array(
+  name => "departments",
+  Desc => "TUTOS departments",
+  "id"       => array(type => "ID_TYPE",             constraints => "PK",  Desc => "Object ID"),
+  "c_id"     => array(type => "ID_TYPE",             constraints => "NN",  Desc => "id of company"),
+  "name"     => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "name of department"),
+  "creator"  => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation" => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date")
+);
+$tableidx['department1'] = array(
+  name  => "department_idx1",
+  table => "departments",
+  column => array("c_id"),
+  Desc  => "companies with departments",
+);
+
+$table['history'] = array(
+  name => "history",
+  Desc => "TUTOS history",
+  "obj_id"  => array(type => "ID_TYPE",             constraints => "NN",  Desc => "id of history object"),
+  "adr_id"  => array(type => "ID_TYPE",             constraints => "NN",  Desc => "id of changer"),
+  "m_time"  => array(type => "TS_TYPE",             constraints => "NN",  Desc => "change date"),
+  "m_field" => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "changed field"),
+  "val_old" => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "old value"),
+  "val_new" => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "new value")
+);
+$tableidx['history1'] = array(
+  name  => "history_idx1",
+  table => "history",
+  column => array("obj_id"),
+  Desc  => "history objects",
+);
+
+$table['timetrack'] = array(
+  name => "timetrack",
+  Desc => "TUTOS timetrack",
+  "id"          => array(type => "ID_TYPE",     constraints => "PK",  Desc => "Object ID"),
+  "adr_id"      => array(type => "ID_TYPE",     constraints => "NN",  Desc => "id of worker"),
+  "link_id"     => array(type => "ID_TYPE",     constraints => "NN",  Desc => "id of worked object"),
+  "volume"      => array(type => "float",       constraints => "",    Desc => "work volume in hours"),
+  "volume_todo" => array(type => "float",       constraints => "",    Desc => "work volume still to do in hours"),
+  "t_start"     => array(type => "TS_TYPE",     constraints => "",    Desc => "start of work"),
+  "t_end"       => array(type => "TS_TYPE",     constraints => "",    Desc => "end of work"),
+  "description" => array(type => "VARCHAR", size => 120, constraints => "",    Desc => "description"),
+  "invoice"     => array(type => "ID_TYPE",     constraints => "",    Desc => "id of invoice"),
+  "state"       => array(type => "ID_TYPE",     constraints => "",    Desc => "state of this object"),
+  "cph"         => array(type => "float",       constraints => "",    Desc => "cost per hour for this work"),
+  "currency"    => array(type => "VARCHAR", size => 4,  constraints => "",    Desc => "currency for cph"),
+  "vtime"       => array(type => "TS_TYPE",     constraints => "",    Desc => "work date"),
+  "creator"     => array(type => "ID_TYPE",     constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",     constraints => "",    Desc => "creation date"),
+);
+$tableidx['timetrack1'] = array(
+  name  => "timetrack_idx1",
+  table => "timetrack",
+  column => array("adr_id"),
+  Desc  => "timetrack workers",
+);
+$tableidx['timetrack2'] = array(
+  name  => "timetrack_idx2",
+  table => "timetrack",
+  column => array("link_id"),
+  Desc  => "timetrack links",
+);
+
+$table['message'] = array(
+  name => "messages",
+  Desc => "TUTOS messages",
+  "ts"      => array(type => "TS_TYPE",              constraints => "",  Desc => "Date"),
+  "message" => array(type => "VARCHAR", size => 200, constraints => "",  Desc => "Info"),
+);
+
+$table['database'] = array(
+  name => "tutos_dbs",
+  Desc => "TUTOS databases",
+  "id"          => array(type => "ID_TYPE",     constraints => "PK",  Desc => "Object ID"),
+  "name"        => array(type => "VARCHAR", size => 30, constraints => "NN",  Desc => "db name"),
+  "dbalias"     => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "db alias"),
+  "dbhost"      => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "db host or IP"),
+  "dbuser"      => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "db username"),
+  "dbpass"      => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "db password"),
+  "dbhome"      => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "db home (ORACLE)"),
+  "dbtype"      => array(type => "ID_TYPE",             constraints => "",    Desc => "db type (=vendor id)"),
+  "dbport"      => array(type => "ID_TYPE",             constraints => "",    Desc => "db port"),
+  "lastanalyze" => array(type => "TS_TYPE",             constraints => "",    Desc => "time of last analyze or cleanup run"),
+  "repository"  => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "file repository"),
+  "last_date"   => array(type => "TS_TYPE",             constraints => "",    Desc => "date of last sync"),
+  "last_id"     => array(type => "ID_TYPE",             constraints => "",    Desc => "id when last synced"),
+  "version"     => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "version of table layout"),
+  "cryptpw"     => array(type => "ID_TYPE",             constraints => "",    Desc => "encrypt pw (0=no)"),
+  "prefix"      => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "prefix for all tables"),
+  "creator"     => array(type => "ID_TYPE",             constraints => "",    Desc => "creator ID"),
+  "creation"    => array(type => "TS_TYPE",             constraints => "",    Desc => "creation date"),
+  "logo"        => array(type => "VARCHAR", size => 90, constraints => "",    Desc => "logo URL"),
+  "logolink"    => array(type => "VARCHAR", size => 90, constraints => "",    Desc => "logo link URL"),
+  "bugautoname" => array(type => "VARCHAR", size => 30, constraints => "",    Desc => "name schema for bugs in this DB"),
+  "invautoname" => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "name schema for invoices in this DB"),
+  "vatlist"     => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "list of possible VAT rates"),
+  "systemid"    => array(type => "VARCHAR", size => 60, constraints => "",    Desc => "a unique system id")
+);
+
+
+$sequence['main'] = array(
+  name  => "id",
+  'start' => 1000,
+  Desc  => "main TUTOS sequencer",
+);
+*/
+?>

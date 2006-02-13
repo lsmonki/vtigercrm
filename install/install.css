@@ -1,0 +1,91 @@
+/*********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is: SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/install.css,v 1.5 2004/08/26 11:44:30 sarajkumar Exp $
+ * Description:  Defines the stylesheet used for the application installation.
+ ********************************************************************************/
+
+body         { 
+	font-size: 10pt;
+	background-color:#CCC;
+	color:#000000;
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+form,h1,h2,h3,h4{margin:0;padding:0;}
+
+hr{border: 1px solid #CCCCCC; height:1px; background: #CCCCCC; color: #CCCCCC; }
+
+h3{
+        font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+        font-size: 16px;
+
+}
+
+h4{
+        font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+        font-size: 13px;
+
+}
+
+table{background-color:#FFF;}
+td,tr,p,div {
+        font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+        font-size: 10pt;
+        color: #333333;
+	
+        }
+
+a:link       { 
+	color: #336699; 
+	text-decoration: none 
+}
+a:active     { color: #336699; 
+	text-decoration: none 
+}
+a:visited    { 
+	color: #336699; 
+	text-decoration: none 
+}
+a:hover      { color: #336699; text-decoration: underline 
+}
+INPUT { FONT-SIZE: 9pt; }
+INPUT.button { FONT-WEIGHT: bold; FONT-SIZE: 14px; width: 75; height:25 }
+SELECT { FONT-SIZE: 9pt; }
+.moduleTitle {
+	FONT-WEIGHT: bold;
+	FONT-SIZE: 11pt;
+	COLOR: #000000;
+	TEXT-DECORATION: none;
+}
+.formHeader {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 10pt;
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none;
+	background-color: #005AA0;
+}
+.dataInput {
+	font-family: "Courier New", Courier, mono;
+ 	color: #CC0000;
+	font-size : 10pt;
+	font-weight : normal;
+	z-index : -3;
+}
+.bodyBold { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; TEXT-DECORATION: none }
+A.bodyBold:link { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; TEXT-DECORATION: none }
+.bodySmall { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
+A.bodySmall:link { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
+.bodySmallBold { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
+A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }

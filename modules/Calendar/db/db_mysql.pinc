@@ -1,0 +1,526 @@
+<?php
+/*
+ * Copyright 2001 - 2002 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: db_mysql.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ *  $Author: saraj $
+ */
+
+require_once 'db.pinc';
+#
+# Register parse functions for datetime
+#
+$tutos['dateformat'][] = 'mysqlformat1';
+$tutos['dateformat'][] = 'mysqlformat2';
+
+/**
+ * check for string delivered in postgres format
+ */
+function mysqlformat1(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-1][0-9])-([0-9]{2}) ([0-2][0-9]):([0-5][0-9]):([0-5][0-9])$", $str, $regs ) ) {
+    # Init via DB 2000-09-16 19:39:00 MySQL
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = (integer)$regs[4];
+    $d->min   = (integer)$regs[5];
+    $d->sec   = (integer)$regs[6];
+    $d->format = 2;
+  }
+  return;
+}
+/**
+ * check for string delivered in postgres format
+ */
+function mysqlformat2(&$d,$str) {
+  $regs = array();
+  if ( ereg( "^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$", $str, $regs ) ) {
+    # Init via DB YYYY-MM-DD
+    $d->year  = (integer)$regs[1];
+    $d->month = (integer)$regs[2];
+    $d->day   = (integer)$regs[3];
+    $d->hour  = 0;
+    $d->min   = 0;
+    $d->sec   = 0;
+    $d->format = 3;
+  }
+  return;
+}
+
+/**
+ * mysql database connection class
+ *
+ * @package DB
+ * @module db_mysql
+ */
+class db_mysql extends tutos_db {
+  /* ---------------------------------------------------------------------------
+   */
+  function db_mysql(&$db) {
+    global $tutos;
+    parent::init($db);
+    $tutos[use_check_dbacl] = 0;
+    $this->openfunc = 'mysql_pconnect';
+  }
+  /**
+   * open a db connection to an mysql server
+   */
+  function open() {
+    global $phperrmsg;
+
+    $of = $this->openfunc;
+    if ( $this->db->port > 0 ) {
+      $c = $of($this->db->host.":".$this->db->port ,$this->db->user,$this->db->pass);
+    } else {
+      $c = $of($this->db->host,$this->db->user,$this->db->pass);
+    }
+    if ($c == "") {
+      Fatal_Error("Opening the MYSQL database ". $this->getFullName(),mysql_errno().": ".mysql_error());
+    }
+
+    if (@mysql_select_db($this->db->name) == false) {
+      Fatal_Error("Selecting the database (check sql.safe_mode = Off in php.ini !)",mysql_errno().": ".mysql_error());
+    }
+    $this->conn = &$c;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function close() {
+    $this->timezone("");
+    if ( $this->conn != -1 ) {
+      mysql_close($this->conn);
+      $this->conn = -1;
+    }
+  }
+  /**
+   * return more info about server client etcc
+   */
+  function moreinfo() {
+    return "Server:". mysql_get_server_info($this->conn)." Client:". mysql_get_client_info()." Hostinfo:".mysql_get_host_info($this->conn);
+# " ClientEncoding:". mysql_client_encoding();
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function notime() {
+    return ("-1");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function now() {
+    return "now()";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function exec($query,$showerror = 1) {
+    if ( $this->conn == -1 ) {
+      $msg = "No Connection";
+    }
+    $r = new result_mysql($this);
+
+    $result = @mysql_query($query,$this->conn);
+    $this->lastquery = $query;
+    if ( ! $result) {
+      if ($showerror == 1) {
+        Fatal_Error("Exec ". $this->conn ."|". $this->error(),$query);
+      } else {
+        $this->lasterror =  $this->error();
+        return -1;
+      }
+    }
+    $this->lasterror = "";
+    $r->rs = &$result;
+    return $r;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function nextid($name = "id") {
+    #$q = "UPDATE ". $this->prefix . $name ." set nextval=last_insert_id(nextval+1)";
+    #$this->exec($q);
+    #$q = "SELECT last_insert_id()";
+    #$r = $this->exec($q);
+
+    #if ( 1 != $r->numrows()) {
+    #  Fatal_Error("got no id",$q);
+    #}
+    #$id = $r->get(0,0);
+    #$r->free();
+    #return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function setSeqID($id,$name = "id") {
+    $query = "UPDATE ". $this->prefix . $name ." set nextval = ".$id;
+    $this->exec($query);
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getSeqID($name = "id") {
+    $query = "SELECT nextval from ". $this->prefix . $name;
+    $r = $this->exec($query);
+    if ( ($r == "") || (1 != $r->numrows()) ) {
+      Fatal_Error("got no id",$query);
+    }
+    $id = $r->get(0,0);
+    $r->free();
+    return $id;
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function string($t) {
+    return "'". AddSlashes($t) ."'";
+  }
+  /**
+   * return Database formatted datetimestring for d
+   */
+  function datetime(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+    $t = new DateTime();
+    $t->setDateTimeTS($d->ts_def);  // set the fields in default TZ
+    $t->ts_def = $t->ts;
+    $x = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$t->year,$t->month,$t->day,$t->hour,$t->min,$t->sec);
+    return $x;
+  }
+  /**
+   * return Database formatted datestring for d
+   */
+  function date(&$d) {
+    if ( $d->notime == 1) {
+      return "null";
+    }
+ 
+    $t = new DateTime();
+    $t->setDateTimeTS($d->ts_def);  // set the fields in default TZ
+    $t->ts_def = $t->ts;
+    $x = sprintf ("'%04d-%02d-%02d'",$t->year,$t->month,$t->day);
+    return $x;
+  }
+  /**
+   * case insensitive string compare
+   */
+  function like($fld1,$name,$fld2 = "",$fld3 = "") {
+    $fld = $fld1;
+    if ( $fld2 != "" ) {
+      $fld = "CONCAT(". $fld ." ,' '," .$fld2;
+      if ( $fld3 != "" ) {
+        $fld .= ",' ',". $fld3;
+      }
+      $fld .= ")";
+    }
+    $name = eregi_replace(" ","%",$name);
+    $name = eregi_replace("[\]","\\\\",$name);
+    $name = eregi_replace("'","\'",$name);
+    return (" UPPER(". $fld .") like '%". strtoupper($name) ."%' ");
+  }
+  /**
+   * case sensitive strict string compare
+   */
+  function like2($fld,$name) {
+    $name = eregi_replace("[\]","\\\\",$name);
+    $name = eregi_replace("'","\'",$name);
+    return (" ". $fld ." = BINARY '". $name ."' ");
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function password($pw) {
+    if ( $this->db->crypt != 1 ) {
+      return "'". $pw ."'";
+    }
+    # MYSQL has its own mechanism
+    return "PASSWORD('".$pw."')";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function begin($t) {
+    return "X";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function commit($t) {
+    return "Y";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function abort($t) {
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function lock($t) {
+    return "";
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function timezone($tz) {
+    global $tutos;
+
+    if ( !empty($tz)) {
+      putenv ("TZ=".$tz);
+      strftime("%H:%M %Z");
+    } else {
+      putenv ("TZ=". $tutos[defaultTZ]);
+      strftime("%H:%M %Z");
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function getFullname() {
+    return "MYSQL:". $this->db->user ."@". $this->db->name ." on ". $this->db->host;
+  }
+  /* ---------------------------------------------------------------------------
+   * set persistent mode
+   * 0 = no
+   * 1 = yes
+   */
+  function setPersistent($mode) {
+    if ( $mode == 1 ) {
+      $this->openfunc = 'mysql_pconnect';
+    } else {
+      $this->openfunc = 'mysql_connect';
+    }
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function error() {
+    return "DBerror: ". $this->getFullName() ." ". mysql_errno() .": ". mysql_error();
+  }
+  /**
+   * Clear a table
+   * tbl = name of table
+   * truncate a table
+   */
+  function truncatetable($tbl) {
+    $q = "TRUNCATE ". $this->prefix . $tbl;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function droptable(&$tbl) {
+    if (is_array($tbl)) {
+      $q = "DROP TABLE ". $this->prefix . $tbl[name] ;
+    } else {
+      $q = "DROP TABLE ". $this->prefix . $tbl ;
+    }
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createtable(&$tbl) {
+    $q = "CREATE TABLE ". $this->prefix . $tbl[name] ;
+    $pre = " (";
+    @reset($tbl);
+    foreach ($tbl as $i => $f) {
+      if ( !is_array($f) ) {
+        continue;
+      }
+      if ($f[type] == "ID_TYPE") {
+        $t = "int4";
+      } else if ($f[type] == "TS_TYPE") {
+        $t = "datetime";
+      } else if ($f[type] == "TX_TYPE") {
+        $t = "text";
+      } else if ($f[type] == "VARCHAR") {
+        $t = "varchar(". $f[size] .")";
+      } else {
+        $t = $f[type];
+      }
+      $c = $f[constraints];
+      $c = ereg_replace("PK","primary key",$c);
+      $c = ereg_replace("NN","not null",$c);
+      if ( ereg("U",$c) ) {
+        $c = ereg_replace("U","",$c);
+        $c .= ", unique " . $this->colname($i) . " (" . $this->colname($i) . ")";
+      }
+      $q .= $pre. $this->colname($i) ." ". $t ." ". $c;
+      $pre = ",";
+    }
+    $q .= ")";
+    $q .= " COMMENT='". $tbl[Desc] ."'";
+    return $this->exec($q,0);
+  }
+  /**
+   * rename a table
+   * oldname = current table description
+   * newname = new table name
+   */
+  function renametable(&$oldtbl,$newname) {
+    $q = "ALTER TABLE ". $this->prefix . $oldtbl[name] ." RENAME TO " . $this->prefix . $newname;
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function dropindex(&$idx) {
+#    $q = "DROP INDEX ". $this->prefix  . $idx[name];
+    $q = "ALTER TABLE ".  $this->prefix  . $idx[table] ." DROP INDEX ". $this->prefix  . $idx[name];
+    return $this->exec($q,0);    
+  }
+  /**
+   * tbl = array with table description
+   */
+  function createindex(&$idx) {
+    if ( ! isset($idx[type]) ) {
+#      $idx[type] = "";
+      $idx[type] = " INDEX ";
+    }
+#    $q = "CREATE ".$idx[type] ." INDEX ". $this->prefix . $idx[name] ." ON ". $this->prefix . $idx[table];
+    $q = "ALTER TABLE ". $this->prefix  . $idx[table] . " ADD  ".$idx[type] ."  ". $this->prefix . $idx[name] ." ";
+
+    $pre = "(";
+    @reset($idx[column]);
+    while ( list ($i,$f) = @each ($idx[column]) ) {
+     $q .= $pre . $this->colname($f);
+     $pre = ",";
+    }
+    $q .= ")";
+    return $this->exec($q,0);
+  }
+  /**
+   * col = array with column description
+   */
+  function createcolumn($tblname,$colname,&$col) {
+    $q = "ALTER TABLE ". $this->prefix . $tblname ." ADD (";
+
+    if ($col[type] == "ID_TYPE") {
+      $t = "int4";
+    } else if ($col[type] == "TS_TYPE") {
+      $t = "datetime";
+    } else if ($col[type] == "TX_TYPE") {
+      $t = "text";
+    } else if ($col[type] == "VARCHAR") {
+      $t = "varchar(". $col[size] .")";
+    } else {
+      $t = $col[type];
+    }
+    $c = $col[constraints];
+    $c = ereg_replace("PK","primary key",$c);
+    $c = ereg_replace("U","unique",$c);
+    $c = ereg_replace("NN","not null",$c);
+    $q .= $this->colname($colname) ." ". $t ." ". $c;
+    $q .= ")";
+    return $this->exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function dropsequence(&$seq) {
+     $q = "drop table ". $this->prefix . $seq[name];
+     return $this->Exec($q,0);
+  }
+  /**
+   * name = name of sequencer
+   */
+  function createsequence(&$seq) {
+     $q = "create table ". $this->prefix . $seq[name] ." (nextval int not null);";
+     if ( -1 == $this->Exec($q,0) ) {
+       return -1;
+     }
+     $q = "insert into ". $this->prefix . $seq[name] ." values (". $seq['start'] .");";
+     return $this->Exec($q,0);
+  }
+  /**
+   * get the phrase to limit a selection to a specific range
+   */
+  function getRange($q,$start,$cnt) {
+    return $q. " LIMIT ". $start .", ". $cnt;   
+  }
+  /**
+   * do we need a count(*) to get the number of possible results in a select
+   */
+  function needCount() {
+    return true;   
+  }
+  /**
+   * method to call from check service
+   */
+  function checkservice() {
+    global $table,$sequence,$tableidx,$tutos;
+
+    $now = new DateTime();
+    $diff = $now->getTimestamp() - $this->db->lastanalyze->getTimeStamp();
+
+    # only once a day
+    if ( $diff < 86400 ) return;
+
+    # read the table definitions of modules
+    @include_once $tutos['base'] ."/db/table.pinc";
+    foreach ($tutos[modules] as $r => $x) {
+      if (isset($tutos[modules][$r][file]) && file_exists(dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/mtable.pinc") ) {
+        @include_once dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/mtable.pinc";
+      }
+    }
+
+    foreach ($table as $i => $f) {
+      $q = "analyze table ". $this->prefix . $f[name];
+      $this->Exec($q,0);
+      $q = "optimize table ". $this->prefix. $f[name];
+      $this->Exec($q,0);
+    }
+    $this->db->setLastAnalyze($now);
+    $msg = $this->db->save();
+    return $msg;
+  }
+  /**
+   */
+  function gettype() {
+    return "MySQL";
+  }
+}
+
+/**
+ * mysql database result class
+ *
+ * @package DB
+ * @module result_mysql
+ */
+class result_mysql extends result {
+
+  function result_mysql(&$dbconn) {
+    $this->rs = "";
+    parent::result($dbconn);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function get($pos,$fld) {
+    if ( empty($this->rs) ) return -1;
+    return mysql_Result($this->rs, $pos-$this->offset, $fld);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numrows() {
+    if ($this->rowcnt != -1) return $this->rowcnt;
+    if ( empty($this->rs) ) return -1;
+    return mysql_num_rows($this->rs);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function numfields() {
+    if ( empty($this->rs) ) return -1;
+    return mysql_Num_Fields($this->rs);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldname($nr) {
+    if ( empty($this->rs) ) return -1;
+    return mysql_field_name($this->rs,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function fieldtype($nr) {
+    if ( empty($this->rs) ) return -1;
+    return mysql_field_type($this->rs,$nr);
+  }
+  /* ---------------------------------------------------------------------------
+   */
+  function free() {
+    if ( empty($this->rs) ) return -1;
+    return mysql_free_result($this->rs);
+  }
+
+}
+?>

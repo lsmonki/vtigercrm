@@ -46,8 +46,8 @@ session_start();
 
 // vtiger CRM version number; do not edit!
 
-$vtiger_version = "4.2.3";
-$release_date = "23 December 2005";
+$vtiger_version = "4.2 GA";
+$release_date = "18 July 2005";
 
 
 if (isset($_REQUEST['db_host_name'])) 	$db_host_name = 	$_REQUEST['db_host_name'];
@@ -198,13 +198,6 @@ $config .= "\$release_date = '".$release_date."';\n\n";
 $config .= "//World clock & Calculator will be displayed if these variables are 'true' otherwise will not be displayed.\n";
 $config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
 $config .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
-
-$config .= "//This is the URL for customer portal.(Ex. http://vtiger.com/portal)\n";
-$config .= "\$PORTAL_URL = 'http://your-domain.com/customerportal';\n\n";
-
-$config .= "//These two are the HelpDesk support email id and the support name. (Ex. 'support@vtiger.com' and 'vtiger Support')\n";
-$config .= "\$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';\n";
-$config .= "\$HELPDESK_SUPPORT_NAME = 'your-domain Name';\n";
 
 $config .= "/* Database configuration\n";
 

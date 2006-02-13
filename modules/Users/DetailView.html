@@ -1,0 +1,142 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Users/DetailView.html,v 1.6 2004/07/11 20:08:53 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_USER}  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table cellpadding="8" cellspacing="0" border="0" align="center">
+<form action="index.php" method="post" name="DetailView" id="form">
+<tr>
+	<td>
+		<table cellpadding="0" cellspacing="0" border="0">
+			<input type="hidden" name="module" value="Users">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="isDuplicate" value=false>
+			<input type="hidden" name="action">
+			<input type="hidden" name="user_name" value="{USER_NAME}">
+			<input type="hidden" name="old_password">
+			<input type="hidden" name="new_password">
+			<input type="hidden" name="return_module">
+			<input type="hidden" name="return_action">
+			<input type="hidden" name="return_id">
+			<input type="hidden" name="forumDisplay">			
+		<tr>
+		{BUTTONS}
+		</tr></table>
+	</td>
+	</form>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NAME}</td>
+	<td width="30%" valign="top" class="dataField">{FIRST_NAME} {LAST_NAME}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_USER_NAME}</td>
+	<td width="30%" valign="top" class="dataField">{USER_NAME}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_STATUS}</td>
+	<td width="30%" valign="top" class="dataField">{STATUS}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_YAHOO_ID}</td>
+	<td width="30%" valign="top"  class="dataField">{YAHOO_ID} {YAHOO_MESSENGER}</td>
+</tr></table>
+</td></tr></table>
+<!-- END: main -->
+
+<!-- BEGIN: user_settings -->
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<th colspan='4' align="left" class="formSecHeader" width="100%" valign="top">{MOD.LBL_USER_SETTINGS}</th>
+	</tr><tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_ADMIN}</td>
+	<td width="30%"><input type="checkbox" disabled {IS_ADMIN}></td>
+	<td class="dataLabel">&nbsp;</td>
+	<td class="dataLabel">&nbsp;</td>
+		</tr></table>
+</td></tr></table>
+<!-- END: user_settings -->
+
+<!-- BEGIN: user_info -->
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<th colspan='4' align="left" class="formSecHeader" width="100%" valign="top">{MOD.LBL_USER_INFORMATION}</th>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_TITLE}</td>
+	<td width="30%" valign="top" class="dataField">{TITLE}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OFFICE_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_WORK}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DEPARTMENT}</td>
+	<td width="30%" valign="top" class="dataField">{DEPARTMENT}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_MOBILE_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_MOBILE}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_REPORTS_TO}</td>
+	<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record={REPORTS_TO_ID}">{REPORTS_TO_NAME}</a></td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_OTHER}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DATE_FORMAT}</td>
+	<td width="30%" valign="top" class="dataField">{DATE_FORMAT}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_FAX}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_FAX}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMAIL}</td>
+	<td width="30%" valign="top" class="dataField">{EMAIL1}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_HOME_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_HOME}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER_EMAIL}</td>
+	<td width="30%" valign="top" class="dataField">{EMAIL2}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_USER_ROLE} :</td>
+	<td width="30%" valign="top" class="dataField">{ROLEASSIGNED}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ADDRESS}</td>
+	<td width="30%" valign="top"  class="dataField">{ADDRESS_STREET}<br>
+	{ADDRESS_CITY} {ADDRESS_STATE}&nbsp;&nbsp;{ADDRESS_POSTALCODE}<br>
+	{ADDRESS_COUNTRY}</td>
+	<td class="dataLabel" valign="top">{MOD.LBL_SIGNATURE}:</td>
+        <td class="dataField">{SIGNATURE}</td>
+	</tr><tr>
+<tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_GROUP_NAME}:</td>
+	<td width="30%" valign="top" class="dataField">{GROUPASSIGNED}</td>
+	</tr>
+
+	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_NOTES}:</td>
+	<td colspan="3" class="dataField">{DESCRIPTION}</td>
+</tr></table>
+</td></tr></table>
+<!-- END: user_info -->

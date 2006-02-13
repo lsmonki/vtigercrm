@@ -19,15 +19,13 @@ $idlist= $_POST['idlist'];
 $leadstatusval = $_POST['leadval'];
 $idval=$_REQUEST['user_id'];
 
-global $adb;
 $storearray = explode(";",$idlist);
 
-$date_var = date('YmdHis');
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 {
 	foreach($storearray as $id)
 	{
-		$sql = "update crmentity set smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
+		$sql = "update crmentity set smownerid='" .$idval ."'where crmid='" .$id."'";
 		$result = $adb->query($sql);
 	}
 }
@@ -35,10 +33,8 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 {
 	foreach($storearray as $id)
 	{
-		$sql = "update leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
+		$sql = "update leaddetails set leadstatus='" .$leadstatusval ."'where leadid='" .$id."'";
 		$result = $adb->query($sql);
-		$query = "update crmentity set modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
-		$result1 = $adb->query($query);
 	}
 }
 header("Location: index.php?module=Leads&action=index");

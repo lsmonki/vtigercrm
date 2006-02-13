@@ -1,0 +1,35 @@
+<?php
+/*
+ * Copyright 2002 by Ludwig Raffler
+ *
+ *  CVS Info:  $Id: holiday_ch.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+    $tutos[cal][] = array(
+       array( Date => "01-01",          type => 1,    Desc => "Neujahr (CH)"),
+       array( Date => "02-01",          type => 1,    Desc => "Bechtoldstag (CH-59%)"),
+       array( Date => "06-01",          type => 0,    Desc => "Heilige drei Könige (CH-7%)"),
+       array( Date => "GOODFRIDAY",     type => 1,    Desc => "Karfreitag (CH-96%)"),
+       array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Ostersonntag (CH)"),
+       array( Date => "EASTERMONDAY",   type => 1,    Desc => "Ostermontag (CH)"),
+       array( Date => "19-04",          type => 0,    Desc => "Sechseläuten (CH-ZH*)"),
+       array( Date => "01-05",          type => 0,    Desc => "Tag der Arbeit (CH-36%)"),
+       array( Date => "ASCENSIONDAY",   type => 1,    Desc => "Auffahrt (CH)"),
+       array( Date => "WHITSUNDAY",     type => 1,    Desc => "Pfingstsonntag (CH)"),
+       array( Date => "WHITMONDAY",     type => 1,    Desc => "Pfingstmontag (CH)"),
+       array( Date => "FRONLEICHNAM",   type => 0,    Desc => "Fronleichnam (CH-29%)"),
+       array( Date => "01-08",          type => 1,    Desc => "Nationalfeiertag (CH)"),
+       array( Date => "15-08",          type => 0,    Desc => "Maria Himmelfahrt (CH-34%)"),
+       array( Date => "04-09",          type => 0,    Desc => "Knabenschiessen (CH-ZH*)"),
+       array( Date => "01-11",          type => 0,    Desc => "Allerheiligen (CH-42%)"),
+       array( Date => "08-12",          type => 0,    Desc => "Maria Empfängnis (CH-35%)"),
+       array( Date => "24-12",          type => 1,    Desc => "Heilig Abend (CH-pm)"),
+       array( Date => "25-12",          type => 1,    Desc => "Weihnachten (CH)"),
+       array( Date => "26-12",          type => 1,    Desc => "Stephanstag (CH-98%)"),
+       array( Date => "31-12",          type => 1,    Desc => "Silvester (CH-pm)")
+       );
+?>

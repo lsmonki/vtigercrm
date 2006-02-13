@@ -1,0 +1,340 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ * CVS Info:  $Id: db.p3,v 1.17 2005/05/03 13:18:43 saraj Exp $
+ * $Author: saraj $
+ */
+
+#
+# Tutos Array
+# these are constans used in config files ans elsewhere
+# DO NOT CHNAGE
+#
+global $calpath;
+
+define ('dbtype',0);
+define ('dbname',1);
+define ('dbhost',2);
+define ('dbuser',3);
+define ('dbpasswd',4);
+define ('debug',5);
+define ('maxshort',6);
+define ('timetolive',7);
+define ('currencies',8);
+define ('prodfields',9);
+define ('seeok',10);
+define ('modok',11);
+define ('delok',12);
+define ('dbnr',13);
+define ('dbalias',14);
+define ('sessionpath',15);
+define ('layouts',16);
+define ('dbprefix',17);
+define ('useok',18);
+
+define ('tables',30);
+define ('lang',31);
+define ('maxshow',32);
+define ('overlib',33);
+define ('repository',34);
+define ('ci',35);
+define ('wvSummary',36);
+define ('size',37);
+define ('adrsearch',38);
+define ('timezones',39);
+define ('themes',40);
+define ('defaultTZ',41);
+define ('maxselect',42);
+define ('errlevel',43);
+define ('dbport',44);
+define ('sendmail',45);
+define ('prodsearchfrom',46);
+define ('prodsearchto',47);
+define ('mailmode',48);
+define ('smtphost',49);
+define ('faxmode',50);
+define ('faxmail',51);
+define ('faxspool',52);
+define ('demo',53);
+define ('cryptpw',54);
+define ('faxmail_user',55);
+define ('faxmail_pass',56);
+define ('version',57);
+define ('dbhome',58);
+define ('bugremember',59);
+define ('errlog',60);
+define ('defaultacl',61);
+define ('wvHtml',62);
+define ('image',63);
+define ('smsmail',64);
+define ('holiday',65);
+define ('bugdelete',66);
+define ('ldapserver',67);
+define ('ldapport',68);
+define ('logo',69);
+define ('logolink',70);
+# Calendar Handling
+define ('cal',71);
+define ('Date',72);
+define ('Desc',73);
+define ('color',74);
+define ('popinfo',75);
+define ('weekstart',76);
+define ('fig2dev',77);
+define ('applocdesc',78);
+define ('rolecheck',79);
+
+define ('defaultrole', 80);
+define ('massupdate',81);
+define ('column',82);
+define ('constraints',83);
+define ('table',84);
+define ('name',85);
+define ('type',86);
+define ('bugautoname',87);
+define ('invautoname',88);
+define ('vatlist',89);
+
+define ('ldapbasedn',90);
+define ('authtype',91);
+define ('ldapauth_anonymous',92);
+define ('ldapauth_pw_enc',93);
+define ('ldapauthserver',94);
+define ('fpdfpath',95);
+define ('pamservice',96);
+define ('nameday',97);
+define ('pwlostsupport',98);
+define ('jpgraph',99);
+
+define ('modules',100);
+define ('modulesinc',101);
+define ('activemodules',102);
+define ('file',103);
+define ('classify_products',104);
+define ('ldapauth_user',105);
+define ('use_check_dbacl',106);
+define ('paperformat',107);
+define ('tiffConvert',108);
+define ('tiffSummary',109);
+
+define ('debugConsole',110);
+define ('tasksincalendar',111);
+define ('handler',112);
+# Proxy Definition
+define ('proxyhost',113);
+define ('proxyport',114);
+define ('baseurl',115);
+# POP auth before smtp (in mailmode 2 only)
+define ('popbeforesmtp',116);
+define ('popbeforesmtp_user',117);
+define ('popbeforesmtp_pass',118);
+define ('smtp_username',119);
+define ('smtp_password',120);
+define ('loadedmodules',121);
+define ('rowiconsbefore',122);
+define ('rowiconsafter',123);
+define ('squirrelurl', 124);
+define ('jpgraph_old', 125);
+define ('freemind', 126);
+# Permissions and Object IDS (see also user.pinc) NO CHANGES HERE !
+# These are distinct IDS for the different Objcts in TUTOS
+# never ! change or reuse a ID
+define ('usecalendar',-1);
+#define ('useprojects',-2);
+define ('usebugtracking',-3);
+define ('usetimetrack',-4);
+# ID 5 is docmanagement module
+# ID 6 is instmanagement module
+define ('usetaskmanagement',-7);
+# ID 8 is note module
+define ('usemaplink',-9);
+define ('usefax',-10);
+define ('usesms',-11);
+define ('useoverlib',-12);
+# ID 13 is watchlist module
+define ('useaddressbook',-14);
+# ID 15 is mailbox module
+define ('usemail',-16);
+# ID 17 is ldap module
+# ID 18 is resource module
+define ('usevcard',-19);
+# ID 20 is url module
+define ('useical',-21);
+# ID 22 invoice module
+define ('usejpgraph',-23);
+define ('usehistory',-24);
+# ID 25 is checklist module
+# ID 26 is palm module
+define ('usecompany',-27);
+define ('usedepartment',-28);
+define ('useteams',-29);
+define ('useuser',-30);
+define ('usedbs',-31);
+# ID 32 is checklist module (checkfields)
+define ('uselocation',-33);
+define ('usesync',-34);
+define ('useacl',-35);
+
+# ID 50 is riskmanagement module (non GPL by Gero Kohnert www.tutos.de)
+# ID 51 is requirements module   (non GPL by Gero Kohnert www.tutos.de)
+# ID 52 is global search module  (non GPL by Gero Kohnert www.tutos.de)
+
+# ID 92 is reminder module
+# ID 93 is stuff module
+# ID 94 is rate module
+# ID 95 is xml module
+# ID 96 is admin module
+# ID 97 is ticker module
+# ID 98 is merge module
+# ID 99 is group module
+define ('noobject',-999);
+
+
+
+define ('PERM_NEW',2);
+define ('PERM_SEE',4);
+define ('PERM_MOD',8);
+define ('PERM_DEL',16);
+define ('PERM_SEL',32);
+define ('PERM_USE',64);
+
+# old permission handling
+define ('PERM_ALL',1);
+
+$tutos[modules] = array();
+$tutos[modulesinc] = array();
+
+#
+# This is the only place where we include config.php
+#
+
+# enable full checking while reading user modified files
+error_reporting(E_ALL);
+ini_set('display_errors','On');
+require_once  $calpath .'config_default.pinc';
+$x = $tutos[version];
+# the onsite config (overwriting the defaults)
+if (file_exists($tutos['base']. '/config.php')) {
+  # NEW Name
+  include_once $calpath . 'config.php';
+} else
+if (file_exists($tutos['base'] .'/config.pinc')) {
+  # OLD Name
+  include_once $calpath .'config.pinc';
+} else {
+    die("<b>missing ". $tutos['base'] ."/config.pinc or ". $tutos['base'] ."/config.php</b><br>\n".
+"<p>You can try to create one with this script. <a href=".$tutos['base']."/admin/create_config.php>create_config.php</a>\n"
+);
+}
+# set again the value from config_default
+# some uses simply copy the whole config_default
+# and thus we dont get real version numbers in bug reports
+$tutos[version] = $x;
+unset($x);
+
+include_once $calpath .'db/table.pinc';
+#include_once $calpath .'modules.pinc';
+if ( file_exists($tutos['base'] .'/db/table_custom.pinc') && is_readable($tutos['base'] .'/db/table_custom.pinc') ) {
+  include_once $calpath .'db/table_custom.pinc';
+}
+
+# There was some output (= errors)
+/*if (!isset($tutos['nocheck']) && headers_sent()) {
+  $included_files = get_included_files();
+  $files = "<table>";
+  $files .= "<tr><th>Filename</th><th>Modification Date</th></tr>";
+  foreach($included_files as $filename) {
+    $files .= "<tr>";
+    $files .= "<td>". $filename ."</td><td>". Date("Y-m-d H:i:s", filemtime($filename)) ."</td>\n";
+    $files .= "</tr>";
+  }  
+  $files .= "</table>";
+  die("there was unwanted output (characters or whitespace outside of the '&lt;?php' .... '?&gt;' brackets or some syntax error)<br>check which of the following files was modified<br>". $files ."<br>\n ===> Please FIX ERRORS !<br>\n\n");
+}*/
+error_reporting(0);
+
+
+# disable debug == error_log in safe_mode
+if ( (ini_get("safe_mode") == "On") || (ini_get("safe_mode") == "1") ) {
+  $tutos[debug] = 0;
+}
+//disable error log
+$tutos[debug] = 0;
+#set_error_handler('PHP_Error');
+
+if ( $tutos[debug] != 0 ) {
+#  $tutos['error_reporting'] = E_ERROR|E_WARNING|E_PARSE;
+  $tutos['error_reporting'] = E_ERROR|E_WARNING|E_PARSE|E_NOTICE|E_ALL;
+  @error_log(Date("d.m.Y H:i:s T") ."\t". $_SERVER['REMOTE_ADDR']." \t". $_SERVER['REQUEST_METHOD'] ." ". $_SERVER['REQUEST_URI'] ."\n" ,3,$tutos[errlog].".log");
+  @chmod ($tutos[errlog].".log",0666);
+  if ( @filesize($tutos[errlog].".log") > 1024000) {
+    @rename($tutos[errlog].".log",$tutos[errlog].".log.". Date("YmdHi"));
+  }
+  @chmod ($tutos[errlog],0666);
+  if ( @filesize($tutos[errlog]) > 1024000) {
+    $fd = fopen($tutos[errlog],"w+");
+	if ($fd) {
+      fwrite($fd,"--- END ---\r\n");
+      fclose($fd);
+	}
+    @rename($tutos[errlog],$tutos[errlog] .".". Date("YmdHi") );
+	@unlink($tutos[errlog]);
+  }
+  ini_set('display_errors','On');
+} else {
+  $tutos['error_reporting'] = 0;
+  $tutos[debugConsole] = 0;
+  ini_set('display_errors','Off');
+}
+error_reporting($tutos['error_reporting']);
+set_error_handler('PHP_Error');
+
+define('FPDF_FONTPATH',$tutos['base'] ."/". $tutos[fpdfpath].'/font/');
+
+include_once $calpath .'database.pinc';
+# (this was moved from config to static)
+# Permission levels (do not change this !)
+#
+$tutos[seeok] = 1;
+$tutos[useok] = 5;
+$tutos[modok] = 10;
+$tutos[delok] = 20;
+
+if ($tutos[useacl] != 1) {
+  $tutos[use_check_dbacl] = 0;
+}
+# a software called tutos should do this
+$tutos[useteams] = 1;
+$tutos[useuser] = 1;
+$tutos[usedbs] = 1;
+$tutos[usecompany] = 1;
+$tutos[usedepartment] = 1;
+$tutos[uselocation] = 1;
+# 
+
+$tutos[activemodules] = array();
+$g_hash['hits'] = 0;
+$g_hash['hits2'] = 0;
+
+$tutos['dateformat'] = array();
+
+/* ---------------------------------------------------------------------------
+ * Open the Database
+ */
+Function DB_Open ($id,$update = true) {
+
+  if ( ! isset($id) ) {
+    Fatal_Error("Missing DB ID","DB_OPEN needs an non empty argument");
+  }
+  $db = new database();
+  $db = $db->read($id,$db);
+  $dbc =  $db->getConnection();
+  $db->dbconn = &$dbc;
+  if ( $update == true ) {
+    $db->read_update();
+  }
+  return $dbc;
+}
+
+?>

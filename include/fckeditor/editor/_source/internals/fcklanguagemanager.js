@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fcklanguagemanager.js
  * 	Defines the FCKLanguageManager object that is used for language 
  * 	operations.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-02 10:25:49
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -32,6 +35,8 @@ FCKLanguageManager.GetActiveLanguage = function()
 			// Firefox 1.0 PR has a bug: it doens't support the "language" property.
 			return FCKConfig.DefaultLanguage ;
 		}
+
+		FCKDebug.Output( 'Navigator Language = ' + sUserLang ) ;
 		
 		// Some language codes are set in 5 characters, 
 		// like "pt-br" for Brasilian Portuguese.
@@ -88,6 +93,7 @@ FCKLanguageManager.ActiveLanguage.Code = FCKLanguageManager.GetActiveLanguage() 
 FCKLanguageManager.ActiveLanguage.Name = FCKLanguageManager.AvailableLanguages[ FCKLanguageManager.ActiveLanguage.Code ] ;
 
 FCK.Language = FCKLanguageManager ;
+
 
 // Load the language file and start the editor.
 LoadLanguageFile() ;

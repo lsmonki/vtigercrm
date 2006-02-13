@@ -1,0 +1,34 @@
+<?php
+# $Id: sv.p3,v 1.16 2005/05/03 13:18:49 saraj Exp $
+#
+# ========================= NOTE ========================
+# Please put site specific extensions and changes
+# to TUTOS language files in a file called "sv_custom.p3"
+# or "lang_custom.p3" (for all languages)
+# using the same format like here
+# =======================================================
+
+
+ $lang['AdminCCHelp']['dbname']  = "Namnet på databasen som TUTOS skall installeras på";
+ $lang['AdminCCHelp']['dbtype']  = "Typ/tillverkare av databasen";
+ $lang['AdminCCHelp']['dbalias'] = "alias för databasen (visas vid inloggning om multipla system är definerade)";
+ $lang['AdminCCHelp']['dbhost']  = "nätverksnamet eller IP-nummer för datorn databasen körs på";
+ $lang['AdminCCHelp']['dbport']  = "Portnummer för databasen på värddatorn<br>(normalt 5432 för Postgres och 3306 för MySQL).";
+ $lang['AdminCCHelp']['dbuser']  = "användarnamnet för att koppla upp mot databasen";
+ $lang['AdminCCHelp']['dbpasswd'] = "lösenordet för databasanvändaren";
+ $lang['AdminCCHelp']['repository'] = "sökväg till var filer sparas. Relative till sökvägen för [tutoshome] = ". realpath(getcwd() ."/". $tutos['base']);
+ $lang['AdminCCHelp']['dbprefix']   = "prefix före tabellerna i databasen<br>(lämna empty om du inte är säker)";
+
+
+ $lang['AdminCCHelp']['mailmode'] = "";
+ $lang['AdminCCHelp']['sendmail'] = "sökvägen till var TUTOS hittar sendmail-kommandot";
+ $lang['AdminCCHelp']['smtphost'] = "";
+
+ $lang['AdminCCHelp']['demo'] = "i demoläge kommer TUTOS inte att införa ändringar i databasen.<br>Ej heller skicka E-brev";
+ $lang['AdminCCHelp']['debug'] = "sökvägen till var debug-info kommer att skrivas";
+ $lang['AdminCCHelp']['errlog'] = "filnamnet för filen där debug-info sparas";
+ $lang['AdminCCHelp']['jpgraph'] = "sökväg till var <a target=\"_blank\" href=\"http://www.aditus.nu/jpgraph/\">jpgraph</a> är installerat. Relativt till ".getcwd() ."/". $tutos['base'] ."/php\n";
+ $lang['AdminCCHelp']['sessionpath'] = "sökväg där sessionsfiler sparas på datorn";
+
+
+?>

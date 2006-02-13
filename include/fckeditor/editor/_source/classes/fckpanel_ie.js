@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,6 +11,9 @@
  * File Name: fckpanel_ie.js
  * 	FCKPanel Class: Creates and manages floating panels in IE Browsers.
  * 
+ * Version:  2.0 RC3
+ * Modified: 2004-11-10 13:20:42
+ * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
@@ -20,8 +23,6 @@ var FCKPanel = function( parentWindow )
 	this.Window = parentWindow ? parentWindow : window ;
 }
 
-function FCKPanel_OnContextMenu() { return false ; }
-
 FCKPanel.prototype.Create = function()
 {
 	// Create the Popup that will hold the panel.
@@ -29,9 +30,7 @@ FCKPanel.prototype.Create = function()
 	
 	this.Document = this._Popup.document ;
 	
-	aCleanupDocs[ aCleanupDocs.length ] = this.Document ;
-	
-	this.Document.oncontextmenu = FCKPanel_OnContextMenu ;
+	this.Document.oncontextmenu = function() { return false ; }
 
 	if ( this.StyleSheet )
 		FCKTools.AppendStyleSheet( this.Document, this.StyleSheet ) ;

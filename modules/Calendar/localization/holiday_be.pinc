@@ -1,0 +1,40 @@
+<?php
+/*
+* Copyright 2003 contributed by Puuter
+*
+* CVS Info: $Id: holiday_be.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+* $Author: saraj $
+* see (https://sourceforge.net/forum/forum.php?thread_id=801872&forum_id=25073) 
+* Type = 0 day is displayed but not marked
+* Type = 1 marks the day red in the calendar
+*/
+
+	 $tutos[cal][] = array(
+        array( Date => "01-01",        type => 1, Desc => "Nieuwjaar (B)"),
+        array( Date => "06-01",        type => 0, Desc => "Driekoningen (B)"),
+        array( Date => "14-02",        type => 0, Desc => "St.Valentijn (B)"),
+        array( Date => "CARNAVALMON",  type => 0, Desc => "Carnaval (B)"),
+        array( Date => "CARNAVALTUE",  type => 0, Desc => "Carnaval (B)"),
+        array( Date => "CARNAVALWED",  type => 0, Desc => "Aswoensdag (B)"),
+        array( Date => "GOODFRIDAY",   type => 0, Desc => "Goede Vrijdag (B)"),
+        array( Date => "EASTERSUNDAY", type => 1, Desc => "Pasen (B)"),
+        array( Date => "EASTERMONDAY", type => 1, Desc => "Paasmaandag (B)"),
+        array( Date => "1-04",         type => 0, Desc => "1 april!! (B)"),
+        array( Date => "01-05",        type => 1, Desc => "Dag van de Arbeid (B)"),
+        array( Date => "MOTHERDAY",    type => 0, Desc => "Moederkesdag (B)"),
+        array( Date => "FATHERDAY",    type => 0, Desc => "Vaderdag (B)"),
+        array( Date => "11-07",        type => 0, Desc => "Vlaamse Gemeenschap (B)"),
+        array( Date => "21-07",        type => 1, Desc => "Nationale Feestdag (B)"),
+        array( Date => "ASCENSIONDAY", type => 1, Desc => "Hemelvaartsdag (B)"),
+        array( Date => "WHITSUNDAY",   type => 1, Desc => "Pinksteren (B)"),
+        array( Date => "WHITMONDAY",   type => 1, Desc => "Pinkstermaandag (B)"),
+        array( Date => "27-09",        type => 0, Desc => "Franse Gemeenschap (B)"),
+        array( Date => "1-11",         type => 1, Desc => "Allerheiligen (B)"),
+        array( Date => "2-11",         type => 0, Desc => "Allerzielen (B)"),
+        array( Date => "11-11",        type => 1, Desc => "Wapenstilstand 1918 (B)"),
+        array( Date => "6-12",         type => 0, Desc => "Sinterklaas (B)"),
+        array( Date => "25-12",        type => 1, Desc => "Kerstmis (B)"),
+        array( Date => "26-12",        type => 1, Desc => "Tweede Kerstdag (B)"),
+        array( Date => "31-12",        type => 0, Desc => "Oudejaarsavond (B)"),
+     );
+?>

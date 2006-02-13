@@ -1,0 +1,329 @@
+<?php
+/**
+ * Copyright 2002 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: module_base.pinc,v 1.16 2005/05/03 13:18:43 saraj Exp $
+ *  $Author: saraj $
+ */
+
+/**
+ * check if  module is loaded
+ */
+Function moduleloaded($key) {
+  return isset($tutos[activemodules][$key]);
+}
+/**
+ * load modules that want to work here
+ */
+Function loadmodule($key) {
+  global $tutos,$lang,$current_user,$table,$tableidx,$sequence;
+
+  if (! isset($tutos[modules][$key]) ) {
+    return;
+  }
+  if (! isset($tutos[modules][$key][file]) ) {
+#     echo "Internal SubModule";
+    return;
+  }
+  if (!file_exists($tutos['base'] ."/". $tutos[modules][$key][file]) ) {
+    die("NO module class file for '". $key ."' :".$tutos['base'] ."/". $tutos[modules][$key][file]);
+    return;
+  }
+  require_once  $tutos['base'] ."/". $tutos[modules][$key][file];
+  ReadLang1($lang,dirname($tutos['base'] ."/". $tutos[modules][$key][file]),$current_user);
+
+  if (file_exists(dirname($tutos['base'] ."/". $tutos[modules][$key][file]) ."/mtable.pinc") ) {
+    @include_once dirname($tutos['base'] ."/". $tutos[modules][$key][file]) ."/mtable.pinc";
+  }
+  $tutos[loadedmodules][$key] = $key;
+}
+/**
+ * load modules that want to work here
+ */
+Function loadmodules($key,$subkey) {
+  global $tutos,$lang;
+
+  $tutos['pageclass'] = $key;
+  $tutos['pagetype']  = $subkey;
+  foreach  ($tutos[modulesinc] as $r => $x ) {
+    if (! is_array($x) ) {
+       die ("\$tutos[modulesinc][".$r ."] = ". $x ." will not work");
+    }
+    foreach ($tutos[modulesinc][$r] as $x2 ) {
+      if (isset($tutos[activemodules][$r])) {
+        continue;
+      }
+      if ( $x2 == $key ) {
+        loadmodule($r);
+        $tutos[activemodules][$r] = $r;
+      } else if ($x2 == "all") {
+        loadmodule($r);
+        $tutos[activemodules][$r] = $r;
+      }
+    }
+  }
+}
+/**
+ * add the addlinks of attached modules within the given object
+ */
+Function load_module_langfiles(&$user,&$lg) {
+  global $tutos;
+
+  foreach($tutos[loadedmodules] as $i => $f) {
+    ReadLang1($lg,dirname($tutos['base'] ."/". $tutos[modules][$f][file]),$user);
+  }
+}
+/**
+ * show the infolists of attached modules within the given object
+ */
+Function show_module_infolists(&$user,&$obj,$cols,$format = "html") {
+  global $tutos;
+
+  foreach($tutos[activemodules] as $i => $f) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $x->infolist($user,$obj,$cols,$format);
+  }
+}
+
+/**
+ * add the addlinks of attached modules within the given object
+ */
+Function add_module_addlinks(&$layout,&$obj) {
+  global $tutos;
+
+  foreach($tutos[activemodules] as $i => $f) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $layout->addMenu($x->getaddlink($layout->user,$obj));
+  }
+}
+
+/**
+ * show the newlinks of attached modules within the given object
+ */
+Function add_module_NewLinks(&$layout,&$obj) {
+  global $tutos;
+
+  foreach($tutos[activemodules] as $i => $f) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $layout->addMenu($x->getNewLink($layout->user,$obj));
+  }
+}
+
+/**
+ * show the overview data  of attached modules within the given object
+ */
+Function show_module_overviewdata(&$user,&$obj) {
+  global $tutos;
+
+  @reset($tutos[activemodules]);
+  while( list ($i,$f) = @each ($tutos[activemodules])) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    echo $x->getoverviewdata($user,$obj);
+  }
+}
+
+/**
+ * show the overview data  of attached modules within the given object
+ */
+Function show_module_overviewheader(&$user,$objtype) {
+  global $tutos;
+
+  $cols = 0;
+  @reset($tutos[activemodules]);
+  while( list ($i,$f) = @each ($tutos[activemodules])) {
+    $x = new $tutos[modules][$f][name]($user->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $cols += $x->getoverviewheader($user,$objtype);
+  }
+  return $cols;
+}
+
+/**
+ * call parseform for all modules
+ */
+Function module_parseforms(&$user,&$obj,&$gotourl) {
+  global $tutos;
+
+  $msg = "";
+  @reset($tutos[activemodules]);
+  while( list ($i,$f) = @each ($tutos[activemodules])) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $msg .= $x->parseform($user,$obj,$gotourl);
+  }
+  return $msg;
+}
+/**
+ * call addform for all modules
+ */
+Function module_addforms(&$user,&$obj,$cols) {
+  global $tutos;
+
+  @reset($tutos[activemodules]);
+  while( list ($i,$f) = @each ($tutos[activemodules])) {
+    $x = new $tutos[modules][$f][name]($obj->dbconn);
+    if ( ! is_subclass_of($x,'tutos_module') ) {
+       Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+    }
+    $x->addform($user,$obj,$cols);
+  }
+}
+
+
+/**
+ * add links to overview and select pages of the layout
+ */
+Function build_module_links(&$ly) {
+  global $tutos;
+
+  if ( isset($tutos[activemodules]) ) {
+    if ( count($tutos[activemodules]) > 0 ) {
+      foreach($tutos[activemodules] as $f) {
+        $x = new $tutos[modules][$f][name]($ly->dbconn);
+        if ( ! is_subclass_of($x,'tutos_module') ) {
+          Fatal_Error("Wrong module class: ".$tutos[modules][$f][name]);
+        }
+        $s = $x->getSelectLink($ly->user);
+        if ($s == "") {
+          $s = $x->getOverviewLink($ly->user);
+        }
+        if ($s != "") {
+          $ly->addMenu($s);
+        }
+      }
+    }
+  }
+}
+/**
+ * INTERFACE !!
+ * This class extends tutos_base with those
+ * methods that make a module
+ * @package BASE
+ * @module tutos_module
+ */
+class tutos_module extends tutos_base {
+
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * the referenced obj is deleted
+   */
+  function obj_delete (&$user,&$obj) {
+    return "";
+  }
+  /**
+   * the referenced obj is saved
+   */
+  function obj_save (&$user,&$obj) {
+    return "";
+  }
+  /**
+   * a obj form is submitted 
+   * parse the values
+   */
+  function parseform (&$user,&$obj,&$gotourl) {
+    return;
+  }
+  /**
+   * a form to attach some module stuff to an obj is displayed 
+   */
+  function addform (&$user,&$obj,$cols) {
+    return;
+  }
+  /**
+   * create a list of things for the given object and given user
+   */
+  function infolist (&$user,&$obj,$cols,$format) {
+    return;
+  }
+  /**
+   * create a small list of things attached to the given object
+   * used in calendar subtables etc.
+   */
+  function small_infolist (&$user,&$obj,$cols,$class) {
+  }
+  /**
+   * create a link to a page where a new object could be created
+   */
+  function getNewLink (&$user,$text = "") {
+    return;
+  }
+  /**
+   * create a link to a select page
+   */
+  function getSelectLink (&$user,$text = "") {
+    return;
+  }
+  /**
+   * create a link to a select page
+   */
+  function getOverviewLink (&$user, $text = "") {
+    return;
+  }
+  /**
+   * create a link to a page where a new object with
+   * reference to the given object or id could be created
+   * typically this is used on ..._show.php pages to link
+   * (module)_new.php pages
+   */
+  function getAddLink (&$user, &$obj , $text = "") {
+    return;
+  }
+  /**
+   * get an header for overview tables that shows objects of type objtype
+   * returns numeber of columns used
+   */
+  function getOverviewHeader (&$user,$objtype) {
+    return 0;
+  }
+  /**
+   * get an data for overview tables that shows a line with obj info
+   */
+  function getOverviewData (&$user,&$obj) {
+    return;
+  }
+  /**
+   * method to call from check service
+   */
+  function checkservice (&$user) {
+    return;
+  }
+  /**
+   * create output info for a mytutos info block
+   */
+  function mytutos (&$user) {
+    return "";
+  }
+  /**
+   * Read a list of objects for a timerange and make it a array in the
+   * given object (used mainly for calendars
+   * from and to are TUTOS DateTime objects
+   */
+  function readCal(&$obj, &$from, &$to) {
+    return;
+  }
+  /**
+   * a linked obj has to tramsfer its ids according to the given list
+   */
+  function obj_transfer_ids (&$obj,&$transfer) {
+  }
+}
+?>

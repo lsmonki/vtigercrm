@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: fckcontextmenu_gecko.js
  * 	Context Menu operations. (Gecko specific implementations)
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2004-08-27 16:58:07
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)

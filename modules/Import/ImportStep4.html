@@ -1,0 +1,82 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the 
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+  <input type="hidden" name="module" value="{MODULE}">
+  <input type="hidden" name="action" value="Import">
+  <input type="hidden" name="step" value="1">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME}</td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="hline"><img height='2' src='include/images/blank.gif'></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" border="1" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td class="formSecHeader">{MOD.LBL_RESULTS}</td>
+    </tr>
+    <tr> 
+      <td> <table width="100%" border="0" cellspacing="2" cellpadding="2">
+          <tr> 
+            <td>{APP.LBL_IMPORT_MODULE_RESULTS}</td>
+          </tr>
+          <tr> 
+            <td>{RESULT_MESSAGE}</td>
+          </tr>
+        </table></td>
+    </tr>
+    <tr> 
+      <td> <table width="100%" cellpadding="2" cellspacing="0" border="0" class="formSecHeader">
+          <tr> 
+            <td align="right"> <input title="{MOD.LBL_FINISHED}" accessKey="" class="button" type="submit" name="button" value="{MOD.LBL_FINISHED}"  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;"> 
+              <input title="{MOD.LBL_IMPORT_MORE}" accessKey="" class="button" type="submit" name="button" value="{MOD.LBL_IMPORT_MORE}"  onclick="return true;"> 
+            </td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
+</form>
+<!-- END: main -->

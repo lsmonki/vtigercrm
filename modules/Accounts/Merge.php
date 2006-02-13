@@ -35,10 +35,10 @@ require_once('config.php');
 
 //echo 'merge file name is ...' .$_REQUEST['mergefile'];
 
-$templateid = $_REQUEST['mergefile'];
+$mergeFileName = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from wordtemplates where templateid=".$templateid;
+$sql = "select filename,data,filesize from wordtemplates where filename='".$mergeFileName."'";
 
 //$result = mysql_query($sql);
 //$temparray = mysql_fetch_array($result);
@@ -51,9 +51,9 @@ $filename=$temparray['filename'];
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
-if($templateid == "")
+if($mergeFileName == "")
 {
-     die("Select Mail Merge Template");
+die("Select Mail Merge Template");
 }
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
 //chmod("/home/rajeshkannan/test/".$fileContent,0755);

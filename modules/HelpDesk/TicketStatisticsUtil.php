@@ -65,7 +65,7 @@ function showPriorities($image_path, $singleUnit)
 
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$priority_val = $adb->query_result($prresult,$i,"ticketpriorities");
+		$priority_val = $adb->query_result($prresult,$i,"priority");
 		$prOut .= '<tr>';
 		if($i == 0)
 		{
@@ -104,7 +104,7 @@ function showCategories($image_path, $singleUnit)
 
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$priority_val = $adb->query_result($prresult,$i,"ticketcategories");
+		$priority_val = $adb->query_result($prresult,$i,"category");
 		$prOut .= '<tr>';
 		if($i == 0)
 		{

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: pt-br.js
  * 	Brazilian Portuguese language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:18
  * 
  * File Authors:
  * 		Carlos Alberto Tomatis Loth (carlos.loth@conectait.com.br)
@@ -41,8 +44,6 @@ RemoveLink			: "Remover Hiperlink",
 Anchor				: "Inserir/Editar Âncora",
 InsertImageLbl		: "Figura",
 InsertImage			: "Inserir/Editar Figura",
-InsertFlashLbl		: "Flash",	//MISSING
-InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Tabela",
 InsertTable			: "Inserir/Editar Tabela",
 InsertLineLbl		: "Linha",
@@ -107,7 +108,6 @@ SplitCell			: "Dividir Célular",
 CellProperties		: "Formatar Célula",
 TableProperties		: "Formatar Tabela",
 ImageProperties		: "Formatar Figura",
-FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Formatar Âncora",
 ButtonProp			: "Formatar Botão",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Formatar Caixa de Listagem",
 TextareaProp		: "Formatar Área de Texto",
 FormProp			: "Formatar Formulário",
 
-FontFormats			: "Normal;Formatado;Endereço;Título 1;Título 2;Título 3;Título 4;Título 5;Título 6",
+FontFormats			: "Normal;Formatado;Endereço;Título 1;Título 2;Título 3;Título 4;Título 5;Título 6",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "Processando XHTML. Por favor, aguarde...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Fechar",
 DlgBtnBrowseServer	: "Localizar no Servidor",
 DlgAdvancedTag		: "Avançado",
 DlgOpOther			: "&lt;Outros&gt;",
-DlgInfoTab			: "Info",	//MISSING
-DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;não ajustado&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Superior Absoluto",
 DlgImgAlignTop		: "Superior",
 DlgImgPreview		: "Visualização",
 DlgImgAlertUrl		: "Por favor, digite o URL da figura.",
-DlgImgLinkTab		: "Hiperlink",
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",	//MISSING
-DlgFlashChkPlay		: "Auto Play",	//MISSING
-DlgFlashChkLoop		: "Loop",	//MISSING
-DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
-DlgFlashScale		: "Scale",	//MISSING
-DlgFlashScaleAll	: "Show all",	//MISSING
-DlgFlashScaleNoBorder	: "No Border",	//MISSING
-DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Hiperlink",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "As configurações de segurança do seu navegador não permite
 PasteAsText		: "Colar como Texto sem Formatação",
 PasteFromWord	: "Colar do Word",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
-DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
-DlgPasteCleanBox		: "Clean Up Box",	//MISSING
-
+DlgPasteMsg		: "Não foi possível execurar o comando colar automaticamente devido às <STRONG>configurações de segurança</STRONG> seu navegador.<BR>Cole o conteúdo desejado dentro da seguinte caixa texto utilizando a tecla de atalho (<STRONG>Ctrl+V</STRONG>) e clique em <STRONG>OK</STRONG>.",
 
 // Color Picker
 ColorAutomatic	: "Automático",
@@ -344,7 +327,7 @@ DlgAnchorName		: "Nome da Âncora",
 DlgAnchorErrorName	: "Por favor, digite o nome da âncora",
 
 // Speller Pages Dialog
-DlgSpellNotInDic		: "Não encontrada",
+DlgSpellNotInDic		: "Not in dictionary",	//MISSING
 DlgSpellChangeTo		: "Alterar para",
 DlgSpellBtnIgnore		: "Ignorar uma vez",
 DlgSpellBtnIgnoreAll	: "Ignorar Todas",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Descrição do Documento",
 DlgDocMeAuthor		: "Autor",
 DlgDocMeCopy		: "Direitos Autorais",
 DlgDocPreview		: "Visualizar",
-
-// Templates Dialog
-Templates			: "Modelos de layout",
-DlgTemplatesTitle	: "Modelo de layout do conteúdo",
-DlgTemplatesSelMsg	: "Selecione um modelo de layout para ser aberto no editor<br>(o conteúdo atual será perdido):",
-DlgTemplatesLoading	: "Carregando a lista de modelos de layout. Aguarde...",
-DlgTemplatesNoTpl	: "(Não foram definidos modelos de layout)",
 
 // About Dialog
 DlgAboutAboutTab	: "Sobre",

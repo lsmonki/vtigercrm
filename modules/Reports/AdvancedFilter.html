@@ -1,0 +1,163 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<link href="styles/elegant.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javaScript" src="include/general.js"></script>
+<script type="text/javascript" language="javaScript" src="include/cal.js"></script>
+<script language="javascript" type="text/javascript">
+var typeofdata = new Array();
+typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['N'] = ['e','n','l','g','m','h'];
+typeofdata['T'] = ['e','n','l','g','m','h'];
+typeofdata['I'] = ['e','n','l','g','m','h'];
+typeofdata['C'] = ['e','n'];
+typeofdata['D'] = ['e','n','l','g','m','h'];
+
+var fLabels = new Array();
+fLabels['e'] = 'equals';
+fLabels['n'] = 'not equal to';
+fLabels['s'] = 'starts with';
+fLabels['c'] = 'contains';
+fLabels['k'] = 'does not contain';
+fLabels['l'] = 'less than';
+fLabels['g'] = 'greater than';
+fLabels['m'] = 'less or equal';
+fLabels['h'] = 'greater or equal';
+var noneLabel;
+
+function trimfValues(value)
+{
+    var string_array;
+    string_array = value.split(":");
+    return string_array[4];
+}
+
+function updatefOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	ops = typeofdata[fieldtype];
+	var off = 0;
+	if(ops != null)
+	{
+
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+		selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
+		off = 1;
+		for (var i = 0; i < ops.length; i++)
+		{
+			var label = fLabels[ops[i]];
+			if (label == null) continue;
+			var option = new Option (fLabels[ops[i]], ops[i]);
+			selObj.options[i + off] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+</script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="secContent">
+  <!--<tr>
+    <td> <table width="100%" border=0 cellspacing=0 cellpadding=0>-->
+        <tr>
+          <td height="25">{MOD.LBL_AF_HDR1}</td>
+        </tr>
+        <tr>
+          <td><ul>
+              <li>{MOD.LBL_AF_HDR2}</li>
+              <li>{MOD.LBL_AF_HDR3}</li>
+            </ul>
+	    </td>
+        </tr>
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+          <td width="100%" ><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {BLOCK1}
+              </select> &nbsp;
+	      <select name="fop1" id="fop1">
+              		<option value="">{MOD.LBL_NONE}</option>
+			{FOPTION1}
+            </select> &nbsp; <input name="fval1" id="fval1" type="text" size=20 maxlength=80 value="{VALUE1}">
+            &nbsp;and</TD>
+        </TR>
+        <TR>
+          <TD><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {BLOCK2}
+              </select> &nbsp;
+	      <select name="fop2" id="fop2">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {FOPTION2}
+            </select> &nbsp; <input name="fval2" id="fval2" type="text" size=20 maxlength=80 value="{VALUE2}">
+            &nbsp;and</TD>
+        </TR>
+        <TR>
+          <TD><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {BLOCK3} 
+              </select> &nbsp; 
+              <select name="fop3" id="fop3">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {FOPTION3} 
+            </select> &nbsp; <input name="fval3" id="fval3" type="text" size=20 maxlength=80 value="{VALUE3}"> 
+            &nbsp;and</TD>
+        </TR>
+        <TR> 
+          <TD> <select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {BLOCK4}
+	      </select> &nbsp; 
+	      <select name="fop4" id="fop4">
+              <option value="">{MOD.LBL_NONE}</option>
+	      {FOPTION4} 
+            </select> &nbsp; <input name="fval4" id="fval4" type="text" size=20 maxlength=80 value="{VALUE4}"> 
+            &nbsp;and</TD>
+        </TR>
+        <TR>
+          <TD><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
+              <option value="">{MOD.LBL_NONE}</option>{BLOCK5}</select> &nbsp;
+	      <select name="fop5" id="fop5"><option value="">{MOD.LBL_NONE}</option>{FOPTION5}</select> &nbsp;
+	      <input name="fval5" id="fval5" type="text" size=20 maxlength=80 value="{VALUE5}">
+	  </TD>
+        </TR>
+      <!--</table></td>
+  </tr>-->
+</table>
+<!-- END: main -->

@@ -1,0 +1,28 @@
+<?php
+/*
+ * Copyright 2003 by Gero Kohnert
+ *
+ * Module specific configuration
+ *
+ *  CVS Info:  $Id: mconfig.pinc,v 1.16 2005/05/03 13:18:48 saraj Exp $
+ *  $Author: saraj $
+ */
+
+#
+# This is just a pseudo module for first time installation
+#
+define('useadmin',-96);
+$tutos[modules]['admin'] = array( 
+	name => "admin", 
+	Desc => "configure TUTOS", 
+	file => "admin/admin.pinc",
+	'overview' => "admin/admin_show.php",
+	'perm' => useadmin
+);
+#
+# List of objects/modules where we do something with this module
+# and need to include this module
+#
+$tutos[modulesinc]['admin'] = array();
+
+?>

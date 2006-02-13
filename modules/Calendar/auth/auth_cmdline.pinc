@@ -1,0 +1,104 @@
+<?php
+/*
+ * Copyright 2004 by Gero Kohnert
+ *
+ * authentification when called by commandline php
+ *
+ * CVS Info:  $Id: auth_cmdline.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ */
+
+require_once 'auth.pinc';
+/**
+ * Authentification base class
+ *
+ * @modulegroup BASE
+ * @module auth_db
+ * @package BASE
+ */
+class auth_cmdline extends auth {
+  /**
+   * init
+   */
+  function auth_cmdline() {
+	$this->uname = $this->getParameter("u");
+	$this->pw = $this->getParameter("p");
+	$this->dbnr = $this->getParameter("d");
+  }
+  function getParameter($x) {
+    for ($i = 0 ; $i < $_SERVER['argc']; $i++ ) {
+	  if ($_SERVER['argv'][$i] == "-".$x) {
+        $r = $_SERVER['argv'][$i+1];
+#        echo $i ." = ". $_SERVER['argv'][$i] ." = ". $r ."\n";
+		return $r;
+	  }
+    }
+	return "";
+  }
+  /**
+   * get the password
+   */
+  function getpw() {
+    return $this->pw;
+  }
+  /**
+   * get the username
+   */
+  function getuname() {
+    return $this->uname;
+  }
+  /**
+   * Check for permmision
+   * using a DB query
+   */
+  function check() {
+    global $current_user,$lang;
+
+    $q = "SELECT a.* ,p.*,p.id as u_id FROM ". $this->dbconn->prefix ."addresses a, ". $this->dbconn->prefix ."people p ";
+    $q .= " WHERE p.login = ". $this->dbconn->String($this->getuname());
+    $q .= " AND p.pw = ". $this->dbconn->Password($this->getpw()) ." AND p.adr_id = a.id";
+    $result = $this->dbconn->Exec($q);
+
+    $r = array();
+    if ( ! $result ) {
+      ReadLang($lang);
+      $r[0] = "No Result for ". $this->getuname() ." / ". $this->getpw();
+      $r[1] = $lang['Err0026'];
+      return $r;
+    }
+
+    /* OK there is a user and a Password so lets check */
+    if ( 1 != $result->numrows()) {
+      ReadLang($lang);
+      $r[0] = "not unique ". $result->numrows() ." Result for ". $this->getuname() ." / ". $this->getpw() ." (". $_SERVER['REMOTE_ADDR'] .")";
+      $r[1] = $lang['Err0027'];
+      $result->free();
+      return $r;
+    }
+
+    $current_user= new tutos_user($this->dbconn);
+    $current_user->read_result($result,0);
+    $result->free();
+  }
+  /**
+   * login form
+   */
+  Function login_form ($gotourl,$msg) {
+    global $tutos;
+
+	echo "Login failed \r\n";
+	echo "add a \r\n";
+    echo "-u username -p password -d database  \r\n";
+    echo "Parameter to the cmdline \r\n";
+	flush();
+    exit;
+  }
+  /**
+   * logout
+   * return the next page for the redirect
+   */
+  Function logout () {
+    exit;
+  }
+}
+?>

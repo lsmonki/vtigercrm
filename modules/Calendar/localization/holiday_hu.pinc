@@ -1,0 +1,31 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_hu.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+ /*
+    Modified by Ferenc Raffael <raffaelf@interware.hu>
+ */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "Újév (H)"),
+        array( Date => "08-03",          type => 0,    Desc => "Nõnap (H)"),
+        array( Date => "15-03",          type => 1,    Desc => "Nemzeti ünnep 1848 (H)"),
+        array( Date => "01-05",          type => 1,    Desc => "Munka ünnepe (H)"),
+        array( Date => "20-08",          type => 1,    Desc => "Szt. István és az államalapítás ünnepe (H)"),
+        array( Date => "23-10",          type => 1,    Desc => "Nemzeti ünnep 1956 (H)"),
+        array( Date => "01-11",          type => 1,    Desc => "Mindenszentek (H)"),
+        array( Date => "24-12",          type => 0,    Desc => "Szenteste (H)"),
+        array( Date => "25-12",          type => 1,    Desc => "Karácsony (H)"),
+        array( Date => "26-12",          type => 1,    Desc => "Karácsony (H)"),
+        array( Date => "EASTERSUNDAY",   type => 1,    Desc => "Húsvét (H)"),
+        array( Date => "EASTERMONDAY",   type => 1,    Desc => "Húsvéthétfõ (H)"),
+        array( Date => "WHITSUNDAY",     type => 1,    Desc => "Pünkösd (H)"),
+        array( Date => "WHITMONDAY",     type => 1,    Desc => "Pünkösdhétfõ (H)")
+        );
+?>

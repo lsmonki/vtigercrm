@@ -1,0 +1,374 @@
+<?php
+/**
+ * Copyright 2002 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: test_layout.pinc,v 1.16 2005/05/03 13:18:51 saraj Exp $
+ *  $Author: saraj $
+ */
+
+ require_once 'layout/classic_base.pinc';
+/**
+ * This class implements the classic TUTOS layout
+ * a headline in an table together with a another table
+ * which has a left side navigation element an a big area on the right side
+ *
+ * @package BASE
+ * @module classic_layout
+ */
+class layout extends classic_base {
+  /**
+   * initialize
+   */
+  function init (&$user) {
+    $this->stylename = "test_layout";
+    parent::init($user);
+  }
+  /**
+   * header of a "normal" page
+   */
+  function PageHeader($name = "") {
+    global $tutos,$lang;
+
+    $this->PrintHeader($name);
+
+    echo "<table id=\"maintable\" cellspacing=\"0\" cellpadding=\"1\" width=\"100%\" border=\"0\"><tr>\n";
+    #
+    # Please do not remove the link to the Copyright note !!
+    # Honour my work
+    #
+    if ( ! isset($tutos[logo]) ) {
+      echo "  <td class=\"headline\" height=\"30px\" width=\"16%\" colspan=\"2\" valign=\"middle\" align=\"left\">&nbsp;<a class=\"nodeco\" rel=\"copyright\" href=\"". $tutos['base'] ."/html/copyright.html\">TUTOS</a></td>\n";
+    } else {
+      echo "  <td class=\"headline\" width=\"8%\" valign=\"top\" align=\"left\">";
+      if ( isset($tutos[logolink]) ) {
+        echo "<a target=\"url\" href=\"". (ereg("^http",$tutos[logolink]) ? "":$tutos['base']."/" ) . $tutos[logolink] ."\">";
+      } 
+      echo "<img id=\"logo\" border=\"0\" src=\"". (ereg("^http",$tutos[logo]) ? "":$tutos['base']."/" ). $tutos[logo] ."\" alt=\"LOGO\" align=\"middle\">";
+      if ( isset($tutos[logolink]) ) {
+        echo "</a>";
+      }
+      echo "</td>\n";
+      echo "  <td class=\"headline\" height=\"30px\" width=\"8%\" valign=\"middle\" align=\"left\">&nbsp;<a id=\"tutosversion\" class=\"nodeco\" href=\"". $tutos['base'] ."/html/copyright.html\" title=\"TUTOS ". $tutos[version] ."\">TUTOS</a></td>\n";
+    }
+    echo "  <td class=\"headline\" width=\"50%\" align=\"center\"><span class=\"pagetitle\">". ($name == "" ? $this->name:$name) ."</span></td>\n";
+    echo "  <td id=\"datetime\" class=\"headline\" width=\"10%\" valign=\"middle\" align=\"right\">";
+    if ( isset($lang['DateFormatTitle']) ) {
+      echo strftime($lang['DateFormatTitle']);
+    } else {
+      echo Date("l d. M Y");
+    }
+    echo "&nbsp;<br>";
+    if ( isset($lang['TimeFormatPHP']) ) {
+      echo Date($lang['TimeFormatPHP']);
+    } else {
+      echo Date("H:i");
+    }
+    echo "&nbsp;</td></tr>\n";
+  }
+  /**
+   * start a data table
+   */
+  function DataTableStart() {
+    return "<table class=\"single\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\">\n";
+  }
+  /**
+   * header of a printable page
+   */
+  function PrintHeader($name) {
+    $this->inithtml();
+    #echo "<body marginwidth=\"0\" marginheight=\"0\">\n";
+    DebugWindow_Header();
+    Overlib_Header();
+    DebugWindow_Out( "START: function PrintHeader()");
+  }
+  /**
+   * layout part
+   */
+  function HTML_one($msg) {
+    echo "<tr>\n";
+    if ( $this->nomenu == false ) {
+      echo "<td id=\"datafield\" colspan=\"3\" width=\"90%\" valign=\"top\">\n";
+    } else {
+      echo "<td id=\"datafield\" colspan=\"4\" width=\"100%\" valign=\"top\">\n";
+    }
+    if ($msg != "") {
+      echo "<div class=\"message\">". $this->error(StripSlashes($msg)) ."</div>";
+    }
+    echo $this->action;
+  }
+  /**
+   * layout part
+   */
+  function HTML_two() {
+    echo "</td>\n";
+    echo "<td align=\"right\" colspan=\"1\" width=\"10%\" class=\"navigate\">\n";
+  }
+  /**
+   * Close a Page
+   */
+  Function HTML_Close () {
+    global $tutos,$g_hash;
+
+    list($usec,$sec) = explode(" ",microtime());
+    $end = (float)$usec + (float)$sec;
+    if ( $this->format != "paper" ) {
+      echo "<tr id=\"footline\" valign=\"bottom\">\n";
+      echo "<td colspan=\"4\" class=\"headline\">\n";
+      if ( ($this->format == "html") && ($tutos[debug] != 0) ) {
+        echo "layout demo took about ". sprintf("%.3f",($end - $this->start_ts)) ." seconds\n";
+#        echo " hits = ". $g_hash['hits'];
+#        echo " hits2 = ". $g_hash['hits2'];
+        /*********
+        echo " hash size = ". (count($g_hash) -1);
+        foreach( $g_hash as $i => $f ) {
+          echo "<br>". $i ;
+          if ( gettype($f) == "object" ) {
+            echo  " ". $f->getType() ;
+            echo  " ". $f->getFullName() ;
+          }
+        }
+        *********/
+      }
+      echo "&nbsp;</td>\n";
+      echo "</tr>\n";
+      echo "</table>";
+    }
+    echo "</body>\n";
+    echo "</html>\n";
+    ob_end_flush();
+  }
+  /**
+   * return a menu part
+   */
+  function getMenuPart($part,$ruler,$headline = "") {
+    $r = "";
+    if ( isset($this->menu[$part]) && count($this->menu[$part]) ) {
+      if ($headline != "") {
+        echo "<tr><th>". $headline ."</th></tr>\n";
+      }
+      if ($ruler) {
+        $r .= "<tr><td><hr noshade size=\"1\"></td></tr>\n";
+      }
+      $r .= "<tr><td nowrap>\n";
+      foreach ($this->menu[$part] as $i => $m) {
+        $r .= $this->menulink($m);
+        $this->removeMenu($this->menu[$part][$i]);
+      }
+      $r .= "</td></tr>\n";
+    }
+    return $r;
+  }
+  /**
+   * display the screen
+   */
+  function display () {
+    global $msg;
+
+    if ( isset($_GET['mark']) && isset($_GET['action']) && ($_GET['action'] != -1) ) {
+      $this->action = $this->action();
+    }
+    $this->prepare();
+    if ( $this->redirect != "" ) {
+      Header("Status: 302 Moved Temporarily");
+      Header("Location: ". getBaseUrl(). addSessionKey($this->redirect,true));
+      return;
+    }
+    $this->buildmenu();
+
+#    if ( $msg != "" ) {
+#      $this->format = "html";
+#    }
+    if ( ($this->format == "html") || ($this->format == "stat") || ($this->format == "checklist")) {
+      $this->PageHeader();
+      $this->HTML_one($msg);
+      if ($this->stop == false ) {
+        $this->info();
+      }
+      echo $this->showContent();
+      if ( $this->nomenu == false ) {
+        $this->HTML_two();
+        echo "<table width=\"100%\" border=\"0\">";
+
+        echo $this->getMenuPart("search",false,"SEARCH");
+        echo $this->getMenuPart("overview",false,"OVERVIEW");
+        echo $this->getMenuPart("obj",false,"&nbsp;");
+        echo $this->getMenuPart("view",false,"");
+
+        $this->navigate();
+
+        echo $this->getMenuPart("support",false,"useful");
+        echo $this->getMenuPart("module",false,"MODULE");
+        echo $this->getMenuPart("help",false,"&nbsp;");
+        echo $this->getMenuPart("admin",false,"");
+
+        if ( isset($this->menu["url"]) && count($this->menu["url"]) ) {
+          echo "<tr><th>URL</th></tr>\n";
+          echo "<tr><td nowrap>\n";
+          foreach ($this->menu["url"] as $i => $m) {
+            echo menulink($m[url],"<li>".$m[text],$m[info]) ."</li>\n";
+            $this->removeMenu($this->menu["url"][$i]);
+          }
+          echo "</td></tr>\n";
+        }
+
+        echo "<tr><td nowrap>\n";
+        #the remaining stuff
+        foreach ($this->menu as $i => $m) {
+          if ( is_array($this->menu[$i]) ) {
+            foreach ($this->menu[$i] as $i2 => $m2) {
+              echo $this->menulink($this->menu[$i][$i2]);
+              $this->removeMenu($this->menu[$i][$i2]);
+            }
+          }
+        }
+        echo "</td></tr>\n";
+
+        if ( "help.php" != basename($_SERVER['PHP_SELF']) ) {
+          if (isset($_SESSION['history'])) {
+            echo "<tr><th>HISTORY</th></tr>\n";
+            echo "<tr><td nowrap>\n";
+            foreach($_SESSION['history'] as $x) {
+              echo $this->menulink($x);
+            }
+            echo "</td></tr>\n";
+          }
+        }
+        echo "</table>\n";
+      }
+      echo "</td>\n";
+      echo "</tr>\n";
+      $this->HTML_Close();
+      DebugWindow_Out( "END: function display()");
+    } else if ( $this->format == "paper" ) {
+      $this->PrintHeader($this->name);
+      $this->info();
+      $this->HTML_Close();
+    } else {
+      $this->info();
+    }
+  }
+  /**
+   * start a massupdate row
+   */
+  function UpdateRowStart($cols) {
+    $r = "<tr>\n";
+    $r .= "<th align=\"right\" colspan=\"". $cols ."\">\n";
+    return $r;
+  }
+  /**
+   * end a massupdate row
+   */
+  function UpdateRowEnd($cols) {
+    global $lang;
+    $r = "";
+    $r .= "</th>\n";
+    $r .= "<th colspan=\"". $cols ."\" align=\"left\">\n";
+    $r .= "<input type=\"submit\" value=\"". $lang['Enter'] ."\"></th>\n";
+    $r .= "</tr>\n";
+    return $r;
+  }
+  /**
+   * sortable header field in overviews
+   */
+  function orderheader($oname,$link,$base,$cols = 1) {
+    global $tutos, $lang;
+
+    $base =  addUrlParameter($base,"xf=".$oname);
+    if ( $oname == "" ) {
+      $r = "<th nowrap colspan=\"". $cols ."\">\n";
+      $r .= $link;
+    } else {
+      if (isset ($_GET['xf']) && ($_GET['xf'] == $oname) )  {
+        $r = "<th nowrap class=\"state2\" colspan=\"". $cols ."\">\n";
+      } else {
+        $r = "<th nowrap colspan=\"". $cols ."\">\n";
+      }
+      $l =  addUrlParameter($base,"xo=1");
+      if ( isset ($_GET['xo']) && $_GET['xo'] == 1 &&  ($_GET['xf'] == $oname) ) {
+        $r .= "[". makelink($l ,$this->theme->getImage(up,'list'),sprintf($lang['OrderBy'], $link)) ."]";
+      } else {
+        $r .= makelink($l ,$this->theme->getImage(up,'list'),sprintf($lang['OrderBy'], $link));
+      }
+      $r .= $link;
+      $l =  addUrlParameter($base,"xo=2");
+      if ( isset ($_GET['xo']) && $_GET['xo'] == 2  &&  ($_GET['xf'] == $oname) ) {
+        $r .= "[". makelink($l ,$this->theme->getImage(down,'list'),sprintf($lang['RevOrderBy'],$link)) ."]";
+      } else {
+        $r .= makelink($l ,$this->theme->getImage(down,'list'),sprintf($lang['RevOrderBy'],$link));
+      }
+    }
+    $r .= "</th>\n";
+    return $r;
+  }
+  /**
+   * create a link in the menu area
+   * $m = array
+   */
+/*  function menulink (&$m) {
+    if ( isset($m[image]) ) {
+      $m[text] = $m[image].$m[text];
+    }
+    if ( !isset($m[text]) ) {
+      return;
+    }
+    if ( isset($m[confirm]) && ($m[confirm] == true) ) {
+      return confirmlink($m[url],$m[text],$m[info]) ."<br>\n";
+    } else {
+      return menulink($m[url],$m[text],$m[info]) ."<br>\n";
+    }
+  }
+*/
+  /**
+   * remove a menu item in all categories
+   */
+  function removeMenu(&$rm) {
+    unset($rm[text]);
+    unset($rm[info]);
+    unset($rm[category]);
+    unset($rm[image]);
+    unset($rm[target]);
+
+    foreach ($this->menu as $i => $m) {
+      if ( is_array($m) ) {
+        foreach ($m as $i2 => $m2) {
+          if ( $rm[url] == $m2[url] ) {
+            unset($this->menu[$i][$i2]);
+#             echo $this->menu[$i][$i2][url] ."<br>";
+          }
+        }
+      } else {
+        unset($this->menu[$i]);
+      }
+    }
+  }
+  /**
+   * add a menu item
+   * tarr = a fully defined link including
+   */
+  function addMenu($tarr) {
+    if ( ! is_Array($tarr) ) {
+      return;
+    }
+    if ( isset($tarr[0][url]) )  {
+      foreach ($tarr as $i => $f) {
+        $this->addMenu($tarr[$i]);
+      }
+      return;
+    }
+    foreach ($tarr[category] as $t ) {
+      if (isset($this->menu[$t])) {
+        foreach ($this->menu[$t] as $x ) {
+          if ($x[url] == $tarr[url]) {
+            return;
+          }
+        } 
+      }
+    }
+    # do not add duplicate entries
+    foreach ($tarr[category] as $t ) {
+      $this->menu[$t][] = &$tarr;
+    }
+    return;
+  }
+}
+?>

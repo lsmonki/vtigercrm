@@ -38,7 +38,7 @@
 		<field name="email2" type="C" size="100"></field>
 		<field name="yahoo_id" type="C" size="100"></field>
 		<field name="status" type="C" size="25"></field>
-		<field name="signature" type="C" size="250"></field>
+		<field name="signature" type="C" size="50"></field>
 		<field name="address_street" type="C" size="150"></field>
 		<field name="address_city" type="C" size="100"></field>
 		<field name="address_state" type="C" size="100"></field>
@@ -121,14 +121,6 @@
                      <index name="crmentity_IDX2">
 			<col>modifiedby</col>
 		</index>
-		<index name="deleted">
-			<col>deleted</col>
-			<col>smownerid</col>
-		</index>
-		<index name="smownerid">
-			<col>smownerid</col>
-			<col>deleted</col>
-		</index>
 		<data>
 
 		</data>
@@ -159,9 +151,6 @@
 		</index>
 		<opt>Type=InnoDB</opt> <index name="Tab_IDX0">
 			<col>modifiedby</col>
-		</index>
-		<index name="tabid">
-			<col>tabid</col>
 		</index>
 		<data>
 
@@ -219,17 +208,9 @@
 
 		<field name="typeofdata" type="C" size="100">
 		</field>
-		<index name="Field_IDX0">
+		 <index name="Field_IDX0">
 			<col>tabid</col>
-		</index>
-		<index name="fieldname">
-			<col>fieldname</col>
-		</index>
-		<index name="tabid">
-			<col>tabid</col>
-			<col>block</col>
-			<col>displaytype</col>
-		</index>
+			</index>
                 <opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -280,9 +261,6 @@
 		<field name="employees" type="I" size="10">
 			<DEFAULT value="0"/>
 		</field>
-		<index name="account_type">
-			<col>account_type</col>
-		</index>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -610,16 +588,12 @@
 		<field name="assignleadchk" type="I" size="1">
 			<DEFAULT value="0"/>
 		</field>
-		<index name="converted">
-			<col>converted</col>
-			<col>leadstatus</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 	<table name="leaddetails" alter="true">
-
+		
 		<constraint>ADD CONSTRAINT fk_LeadDetails FOREIGN KEY (leadid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
@@ -637,7 +611,7 @@
 		<field name="currency" type="C" size="20">
 			<DEFAULT value="Dollars"/>
 		</field>
-		<field name="website" type="C" size="255"></field>
+		<field name="website" type="C" size="30"></field>
 		<field name="callornot" type="I" size="1">
 			<DEFAULT value="0"/>
 		</field>
@@ -782,7 +756,7 @@
 		<field name="private" type="I" size="1">
 			<DEFAULT value="0"/>
 		</field>
-		<field name="probability" type="N" size="7.3">
+		<field name="probability" type="N" size="2.3">
 			<DEFAULT value="0"/>
 		</field>
 		<field name="sales_stage" type="C" size="50"></field>
@@ -807,12 +781,6 @@
 		</field>
 			<opt>Type=InnoDB</opt> <index name="Potential_IDX0">
 			<col>accountid</col>
-		</index>
-		<index name="potentialid">
-			<col>potentialid</col>
-		</index>
-		<index name="sales_stage">
-			<col>sales_stage</col>
 		</index>
 		<opt>Type=InnoDB</opt>
 		<data>
@@ -940,29 +908,9 @@
                 <field name="location" type="C" size="150"></field>     
 
                 
-			<opt>Type=InnoDB</opt> 
-		<index name="Activity_IDX0">
+			<opt>Type=InnoDB</opt> <index name="Activity_IDX0">
 			<col>activityid</col>
 			<col>subject</col>
-		</index>
-		<index name="activitytype">
-			<col>activitytype</col>
-			<col>date_start</col>
-		</index>
-		<index name="date_start">
-			<col>date_start</col>
-			<col>due_date</col>
-		</index>
-		<index name="date_start2">
-			<col>date_start</col>
-			<col>time_start</col>
-		</index>
-		<index name="eventstatus">
-			<col>eventstatus</col>
-		</index>
-		<index name="status">
-			<col>status</col>
-			<col>eventstatus</col>
 		</index>
 		<data>
 		</data>
@@ -1003,15 +951,6 @@
 		</field>
 
 		<opt>Type=InnoDB</opt> 
-		<index name="attachmentsid">
-			<col>attachmentsid</col>
-		</index>
-		<index name="description">
-			<col>description</col>
-			<col>name</col>
-			<col>type</col>
-			<col>attachmentsid</col>
-		</index>
 		<data>
 		</data>
 	</table>
@@ -1044,11 +983,6 @@
 		<opt>Type=InnoDB</opt> <index name="SeAttachmentsRel_IDX1">
 			<col>crmid</col>
 		</index>
-		<index name="attachmentsid">
-			<col>attachmentsid</col>
-			<col>crmid</col>
-		</index>
-
 		<data>
 		</data>
 	</table>
@@ -1756,9 +1690,6 @@
 		<opt>Type=InnoDB</opt>
 	 		<index name="troubletickets_IDX0">
                                 <col>ticketid</col>
-                        </index>	
-			<index name="status">
-                                <col>status</col>
                         </index>	
 
 		<data>
@@ -2647,11 +2578,8 @@
 
 
 	<table name="wordtemplates">
-	     <field name="templateid" type="I" size="19">
-	         <KEY/>
-	     </field>
 		<field name="filename" type="C" size="100">
-			<NOTNULL/>
+			<KEY/>
 		</field>
 		<field name="module" type="C" size="30">
 			<NOTNULL/>
@@ -2673,6 +2601,7 @@
 		<field name="filetype" type="C" size="20">
 			<NOTNULL/>
 		</field>
+		
 		<field name="deleted" type="I" size="1">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
@@ -3614,18 +3543,10 @@
                 	<field name="fieldid" type="I" size="19"></field>
 	                <field name="visible" type="I" size="19"></field>
         	        <field name="readonly" type="I" size="19"></field>
-		<index name="idx_prof2fileid">
+			<index name="idx_prof2fileid">
 			<col>profileid</col>
 			<col>tabid</col>
 			<col>fieldname</col>
-		</index>
-		<index name="tabid">
-			<col>tabid</col>
-			<col>profileid</col>
-		</index>
-		<index name="visible">
-			<col>visible</col>
-			<col>profileid</col>
 		</index>
 		<data>
 		</data>
@@ -3666,16 +3587,9 @@
 	                <field name="visible" type="I" size="19"></field>
         	        <field name="readonly" type="I" size="19"></field>
 			<index name="idx_def_org_field">
-				<col>tabid</col>
-				<col>fieldid</col>
-			</index>
-			<index name="tabid">
-				<col>tabid</col>
-			</index>
-			<index name="visible">
-				<col>visible</col>
-				<col>fieldid</col>
-			</index>	
+			<col>tabid</col>
+			<col>fieldid</col>
+		</index>
 		<data>
 		</data>
 	</table>
@@ -4052,10 +3966,8 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
-		<index name="quotestage">
-			<col>quotestage</col>
-		</index>
-
+		
+                  
 <opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -4752,9 +4664,6 @@
                 <field name="entitytype" type="C" size="100">
                         <NOTNULL/>
                 </field>
-		<index name="customview">
-                        <col>cvid</col>
-                </index>
                 <data>
                 </data>
         </table>
@@ -4771,9 +4680,6 @@
 		</field>
 		<index name="cvcolumnlist_IDX0">
 			<col>cvid</col>
-		</index>
-		<index name="columnindex">
-			<col>columnindex</col>
 		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>

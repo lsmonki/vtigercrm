@@ -1,0 +1,60 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<div align="left"><font class="required">*</font>Indicates required field</div>
+<table width="35%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+<table width="100%" cellpadding="5" cellspacing="1" border="0">
+        <tbody><form action="index.php" method="post"  name="index" id="form">
+        <input type="hidden" name="module" value="Settings">
+        <input type="hidden" name="action" value="index">
+        <input type="hidden" name="server_type" value="backup">
+        <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+        <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+		<tr><td colspan="2" class="formSecHeader">{MOD.LBL_BACKUP_SERVER_INFO}</td></tr>
+        <tr> 
+          <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_FTP_SERVER_NAME}:</td>
+          <td align="left"> <input class="dataInput" type="text" name="server" value="{FTPSERVER}" size="25" /> 
+          </td>
+        </tr>
+        <tr> 
+          <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_FTP_USER_NAME}:</td>
+          <td align="left"> <input class="dataInput" type="text" name="server_username" value="{FTPUSER}" size="25" /> 
+          </td>
+        </tr>
+        <tr> 
+          <td nowrap class="dataLabel">{MOD.LBL_FTP_PASSWORD}:</td>
+          <td align="left"><input class="dataInput" type="password" name="server_password" value="{FTPPASSWORD}" size="25" /> 
+          </td>
+        </tr>
+      </table>
+</td>
+</tr>
+</table>
+<table width="50%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr><br>
+	         <td align="center">
+			<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return validate()" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+	                <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='index'; this.form.module.value='Settings'; this.form.return_action.value='index'; this.form.return_module.value='Settings';" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	</tr>
+</table>
+</form>
+<script>
+        function validate() {
+                if (!emptyCheck("server","ftp Server Name","text")) return false
+                        if (!emptyCheck("server_username","ftp User Name","text")) return false
+                                        return true;
+
+        }
+</script>
+<!-- END: main -->

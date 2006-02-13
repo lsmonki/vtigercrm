@@ -1,0 +1,1043 @@
+<?php
+/**
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: product.pinc,v 1.12 2005/01/17 05:11:26 saraj Exp $
+ *  $Author: saraj $
+ */
+
+define ('PROD_STATE_AQ',0);
+define ('PROD_STATE_RUN',1);
+define ('PROD_STATE_FINISH',2);
+define ('PROD_STATE_CANCEL',3);
+define ('PROD_STATE_QRUN',4);
+define ('PROD_STATE_QCANCEL',5);
+
+define ('PROD_ROLE_MANAGER',1);
+define ('PROD_ROLE_MANAGER2',3);
+define ('PROD_ROLE_SALES',4);
+define ('PROD_ROLE_DEVEL',5);
+define ('PROD_ROLE_PARTNER',9);
+define ('PROD_ROLE_ANCESTOR',11);
+
+# Mailling list for "new" bugs
+$tutos['bugnew_prod_mail'] = array(PROD_ROLE_MANAGER,PROD_ROLE_MANAGER2,PROD_ROLE_DEVEL);
+$tutos['bugmod_prod_mail'] = array();
+
+/* ---------------------------------------------------------------------------
+ * Selection of States
+ */
+function ProdAskState ($default,$any) {
+  global $lang;
+
+  $r = "<select id=\"state\" name=\"state\">\n";
+  @reset($lang['ProdStates']);
+  while ( list ($i,$f) = @each ($lang['ProdStates']) ) {
+    $r .= "  <option value=\"". $i ."\"";
+    if ( $i == $default ) {
+      $r .= " selected";
+    }
+    $r .= ">". myentities($f) ."</option>\n";
+  }
+  if ( $any == 1 ) {
+    $r .= "  <option value=\"-1\"";
+    if ( -1 == $default ) {
+      $r .= " selected";
+    }
+    $r .= ">". $lang['any'] ."</option>\n";
+  }
+
+  $r .= "</select>\n";
+  return $r;
+}
+/** ---------------------------------------------------------------------------
+ * Selection of Poduct Classification
+ */
+function ProdAskClass ($c,$default,$any) {
+  global $lang;
+
+  $r = "<select id=\"class".$c."\" name=\"cl".$c."\">\n";
+  @reset($lang['ProdClasses'.$c]);
+  while ( list ($i,$f) = @each ($lang['ProdClasses'.$c]) ) {
+    $r .= "  <option value=\"". $i ."\"";
+    if ( $i == $default ) {
+      $r .= " selected";
+    }
+    $r .= ">". myentities($f) ."</option>\n";
+  }
+  if ( $any == 1 ) {
+    $r .= "  <option value=\"-1\"";
+    if ( -1 == $default ) {
+      $r .= " selected";
+    }
+    $r .= ">". $lang['any'] ."</option>\n";
+  }
+  $r .= "</select>\n";
+  return $r;
+}
+
+/**
+ * A product or project
+ * @modulegroup product
+ * @module product
+ * @package product
+ */
+class product extends tutos_base {
+  /**
+   * initialization
+   */
+  function product(&$dbconn) {
+    global $tutos,$current_user,$lang,$table;
+
+    $this->init($dbconn);
+    $this->name = "";
+    $this->version = "";
+    $this->description = "";
+    $this->desc1 = "";
+    $this->desc2 = "";
+    $this->price = "";
+    $this->cost = "";
+    $this->currency = $tutos[currencies][0];
+    $this->state = PROD_STATE_AQ;
+    $this->path = "";
+    $this->probability = 100;
+    $this->role = array();
+    $this->roledesc = array();
+
+    foreach ( $lang['ProdRole'] as $i => $f) {
+      $this->role[$i] = array();
+      $this->roledesc[$i] = array();
+    }
+
+    $this->classes = 2;
+
+    for ( $cl = 1;$cl <= $this->classes; $cl++) {
+      $this->cl[$cl] = array();
+    }
+    $this->p_start     = new DateTime(0);  # Estimated Start/Order
+    $this->p_end       = new DateTime(0);  # Estimated End
+
+    $this->tsum = array();
+    $this->invlist = array();
+    $this->tablename = $this->dbconn->prefix .$table['product'][name];
+    $this->tablename2 = $this->dbconn->prefix .$table['product2'][name];
+    $this->acl[$current_user->id] = $tutos[delok];
+  }
+
+  /**
+   * Data of XML export
+   */
+  function exportXML_body ($only_ids = false) {
+    global $lang;
+    
+    $this->readroles();
+    $r = parent::exportXML_body();
+    if (!$only_ids) {
+    $r .=  "<name>". utf8_encode(htmlspecialchars($this->name)) ."</name>\n";
+    $r .=  "<version>". utf8_encode(htmlspecialchars($this->version)) ."</version>\n";
+    $r .=  "<description>". utf8_encode(htmlspecialchars($this->description)) ."</description>\n";
+    $r .=  "<desc1>". utf8_encode(htmlspecialchars($this->desc1)) ."</desc1>\n";
+    $r .=  "<desc2>". utf8_encode(htmlspecialchars($this->desc2)) ."</desc2>\n";
+    $r .=  "<price>". $this->price ."</price>\n";
+    $r .=  "<cost>". $this->cost ."</cost>\n";
+    $r .=  "<currency>". utf8_encode(htmlspecialchars($this->currency)) ."</currency>\n";
+    $r .=  "<state_id>". $this->state ."</state_id>\n";
+    $r .=  "<state>". utf8_encode(htmlspecialchars($lang['ProdStates'][$this->state])) ."</state>\n";
+    $r .=  "<path>". utf8_encode(htmlspecialchars($this->path)) ."</path>\n";
+    $r .=  "<probability>". $this->probability ."</probability>\n";
+    if ( $this->p_start->notime != 1 ) {
+      $r .=  "<p_start>". $this->p_start->exportXML_body() ."</p_start>\n";
+    }
+    if ( $this->p_end->notime != 1 ) {
+      $r .=  "<p_end>". $this->p_end->exportXML_body() ."</p_end>\n";
+    }
+    foreach ( $lang['ProdRole'] as $i => $f) {
+      foreach ( $this->role[$i] as $j => $x) {
+        $r .= "<reference>";
+        $r .= "<ref_type_id>". $i ."</ref_type_id>";
+        $r .= "<ref_type>". utf8_encode(htmlspecialchars($f)) ."</ref_type>";
+        $r .= "<ref_obj_id>". $x->id ."</ref_obj_id>";
+        $r .= "<ref_obj_name>". utf8_encode(htmlspecialchars($x->GetFullname())) ."</ref_obj_name>";
+        $r .= "<ref_obj_type>". utf8_encode(htmlspecialchars($x->GetType())) ."</ref_obj_type>";
+        if (isset($this->roledesc[$i][$j])) {
+          $r .= "<description>". utf8_encode(htmlspecialchars($this->roledesc[$i][$j])) ."</description>";
+        } 
+        $r.= "</reference>";
+      }
+    }
+    unset($this->role);
+    unset($this->roledesc);
+
+    }
+    return $r;
+  }
+
+  /**
+   * fill the object data with a given resultset
+   *
+   * @param Object $r    a result set object 
+   * @param int    $pos  a index in the resultset
+   */
+  function read_result (&$r, $pos ) {
+    $this->name        = $r->get($pos, "name");
+    $this->version     = $r->get($pos, "version");
+    $this->description = $r->get($pos, "description");
+    $this->desc1       = $r->get($pos, "desc1");
+    $this->desc2       = $r->get($pos, "desc2");
+    $this->path        = $r->get($pos, "path");
+    $this->price       = $r->get($pos, "price");
+    $this->cost        = $r->get($pos, "cost");
+    $this->currency    = $r->get($pos, "currency");
+    $this->probability = $r->get($pos, "probability");
+    $this->state       = $r->get($pos, "state");
+    $this->creator     = getObject($this->dbconn,$r->get($pos, "creator"));
+    $this->p_start     = $r->getDateTime($pos, "p_start");
+    $this->p_end       = $r->getDateTime($pos, "p_end");
+
+    parent::read_result($r,$pos);
+    #
+    # Classification
+    #
+    for ( $cl = 1;$cl <= $this->classes; $cl++) {
+      $this->readclassification($cl);
+    }
+    return;
+  }
+  /**
+   * read the classification of this project
+   */
+  function readclassification ($c) {
+    $this->cl[$c] = array();
+    $q = "SELECT * FROM ". $this->dbconn->prefix ."projectclass".$c." WHERE pro_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $class  = $r->get($a, "class_id");
+      $this->cl[$c][$class] = $class;
+      $a++;
+    }
+    $r->free();
+  }
+  /**
+   * read the different roles in this project
+   */
+  function readroles () {
+    $q = "SELECT * FROM ". $this->tablename2 ." WHERE pro_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $role   = $r->get($a, "role_id");
+      $adr_id = $r->get($a, "adr_id");
+      $desc   = $r->get($a, "description");
+      $obj = getObject($this->dbconn,$adr_id);
+      if ( $obj != -1 ) {
+        $this->role[$role][$obj->id] = &$obj;
+        $this->roledesc[$role][$obj->id] = $desc;
+      }
+      $a++;
+      unset($obj);
+    }
+    $r->free();
+
+    foreach(array_unique(array_keys($this->role)) as $i) {
+      $x = $this->role[$i];
+      usort($x,'obj_cmp');
+      $this->role[$i] = array();
+      foreach($x as $i2 => $f2) {
+        $this->role[$i][$f2->id] = &$f2;
+        unset($f2);
+      }
+    }
+  }
+  /**
+   * save the different roles in this project
+   */
+  function saveroles () {
+    global $tutos,$lang;
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE pro_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+
+    foreach ($lang['ProdRole'] as $role => $f) {
+      if ( isset ($this->role[$role] ) && is_array ($this->role[$role]) ) {
+        foreach ($this->role[$role] as $i => $o) {
+          if ( $o->id > 0 ) {
+            $q = "INSERT INTO ". $this->tablename2 ." (pro_id,adr_id,role_id,description) VALUES (". $this->id .",". $i .",". $role .",". $this->dbconn->String($this->roledesc[$role][$o->id]).")";
+            $r = $this->dbconn->Exec($q);
+            if ( ($o->getType() == "address") || ($o->getType() == "team") ) {
+              acl_raise($this,$o->id,$tutos[modok]);
+            }
+          }
+        }
+      }
+    }
+  }
+  /**
+   * save the classification
+   */
+  function saveclassification ($c) {
+    global $tutos;
+
+    $q = "DELETE FROM ". $this->dbconn->prefix ."projectclass". $c ." WHERE pro_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+
+    @reset ($this->cl[$c]) ;
+    while ( list ($i,$o) = @each ($this->cl[$c]) ) {
+      $q = "INSERT INTO ". $this->dbconn->prefix ."projectclass".$c." (pro_id,class_id) VALUES (". $this->id .",". $o .")";
+      $r = $this->dbconn->Exec($q);
+    }
+  }
+  /**
+   * search for a product/project 
+   * fill a array with possible projects
+   */
+  function search_by_name(&$arr,&$user,$name) {
+    global $table;
+
+    if ( trim($name) == "" ) return;
+
+    $q = "SELECT * from ". $user->dbconn->prefix .$table['product'][name] ." WHERE". $user->dbconn->Like("name",$name,"version");
+    $q .= " order by name,version ";
+    check_dbacl( $q, $user->id);
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $x = new product($user->dbconn);
+      $x->read_result($r,$a);
+      $arr[$x->id] = &$x;
+#     echo $x->getFullName() ."<br />";
+      unset($x);
+      $a++;
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * Return a fullname i.e name + version
+   */
+  function getFullname() {
+    return trim(sprintf("%s %s",$this->name, $this->version));
+  }
+  /**
+   * get the info as text
+   */
+  function getAsText (&$lang) {
+    $r = "";
+    $r .= format_asText($lang['ProdName'],$this->name);
+    $r .= format_asText($lang['ProdVersion'],$this->version);
+    $r .= format_asText($lang['ProdState'],$lang['ProdStates'][$this->state]);
+    $r .= format_asText($lang['ProdDesc'],$this->description);
+    $r .= format_asText($lang['ProdDesc1'],$this->desc1);
+    $r .= format_asText($lang['ProdDesc2'],$this->desc2);
+    return $r;
+  }
+  /**
+   * Return a url that displays this product
+   */
+  function getURL() {
+    return "product_show.php?id=". $this->id;
+  }
+  /**
+   * Return a url to the mod page
+   */
+  function getModURL() {
+    return "product_new.php?id=". $this->id;
+  }
+  /**
+   * Return a url to the clone page
+   */
+  function getCloneURL() {
+    return "product_new.php?tplid=". $this->id;
+  }
+  /**
+   * Return a url to the mod page
+   */
+  function getDelURL() {
+    return "product_del.php?id=". $this->id;
+  }
+  /**
+   * Return a link to thisproduct
+   */
+  function getLink($text = "") {
+    global $lang;
+
+    if ( empty($text) ) {
+      $text = $this->getFullname();
+    }
+
+    if ( $this->see_ok() ) {
+      return makelink($this->getURL(),myentities($text),sprintf($lang['ProdLinkInfo'],$this->getFullName()) );
+    } else {
+      return myentities($text);
+    }
+  }
+  /**
+   * Return a Mail link for all team members
+   */
+  function getMailLink($text = "") {
+    global $current_user,$lang,$tutos;
+
+    $m = array(text => $text == "" ? $lang['TeamMail'] : $text,
+               info => sprintf($lang['TeamMailInfo'], $this->name),
+               category => array("mail","module","product"),
+              );
+
+    if ( $current_user->feature_ok(usemail,PERM_NEW) && ($tutos[mailmode] != 0) ) {
+      $m[url] = "mail_new.php?toid=".$this->id ."&amp;subject=". UrlEncode($lang['Project']." ".$this->getFullName());
+      return $m;
+    }
+
+    $x = "";
+    $sep = "";
+    # ROLES
+    $this->readroles();
+    foreach ($this->role as $role => $f) {
+      if ( isset ($this->role[$role] ) && is_array ($this->role[$role]) ) {
+        foreach($this->role[$role] as $i => $o) {
+          if ($o->getType() == "address") {
+            $x .= $sep. myentities($o->getFullName()  ." ". $lang['ProdRole'][$role] ." <". trim($o->Default_Email()) .">");
+            $sep = ",";
+          } else if ($o->getType() == "team") {
+            $o->read_member();
+            foreach($o->member as $xx) {
+              $e = $xx->default_email();
+              if ( !empty($e) ) {
+                $x .= " ". myentities($sep . $xx->getFullName() ." ". $lang['ProdRole'][$role] ." <". trim($e) .">");
+                $sep = ",";
+              }
+            }
+          }
+        }
+      }
+    }
+
+    $x .= "?subject=". myentities($lang['Project'] ." ". $this->getFullName());
+    $m[url] = "mailto:". $x;
+    return $m;
+  }
+  /**
+   * get the timespan
+   */
+  function getTimespan () {
+    $r = array();
+    $r['start'] = 0;
+    $r['end'] = 0;
+    $r['desc'] = "";
+    if ( $this->p_start->notime != 1 ) {
+      $r['start'] = $this->p_start->getYYYYMMDD()."0000";
+      $r['desc'] .= $this->p_start->getDate();
+    } else {
+      $r['start'] = -1;
+    }
+    $r['desc'] .= " - ";
+    if ( $this->p_end->notime != 1 ) {
+      $r['end'] = $this->p_end->getYYYYMMDD()."0000";
+      $r['desc'] .= $this->p_end->getDate();
+    } else {
+      $r['end'] = -1;
+    }
+    return $r;
+  }
+
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referncing to THIS could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return;
+
+    parent::getNeighbours();
+
+    # Possible new parents are all related projects
+    $this->readRoles();
+    foreach ($lang['ProdRole'] as $role => $z ) {
+      foreach ($this->role[$role] as $a => $b) {
+        if ($b->use_ok() && ($b->getType() == "product") ) {
+          $this->neighbours[$b->id] = &$b;
+          unset($b);
+        }
+      }
+    }
+    # Possible new parents are all tasks in this project
+    if ( ! class_exists ("task") ) {
+      require("task.pinc");
+    }
+    task::obj_read($this);
+    foreach ($this->fulltasklist as $a => $b) {
+      if ($b->use_ok() ) {
+        $this->neighbours[$a] = &$b;
+        unset($b);
+      }
+    }
+
+    return $this->neighbours;
+  }
+
+  /**
+   * Return true if project is running in some way
+   */
+  function isalive() {
+    if (  ($this->state == PROD_STATE_FINISH) || ($this->state == PROD_STATE_CANCEL) || ($this->state == PROD_STATE_QCANCEL) ) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+  /**
+   * Return Info about bugs in this product
+   */
+  function bugSum() {
+    global $lang;
+
+    return bugSummary($this);
+  }
+  /**
+   * set the name
+   */
+  function setName($value) {
+    return $this->setStrField("name",$value,"ProdName");
+  }
+  /**
+   * set the version
+   */
+  function setVersion($value) {
+    return $this->setStrField("version",$value,"ProdVersion");
+  }
+  /**
+   * set the Description
+   */
+  function setDescription($value) {
+    $this->setStrField("description",$value,"ProdDesc");
+  }
+  /**
+   * set the Description 1
+   */
+  function setDesc1($value) {
+    $this->setStrField("desc1",$value,"ProdDesc1");
+  }
+  /**
+   * set the Description 2
+   */
+  function setDesc2($value) {
+    return $this->setStrField("desc2",$value,"ProdDesc2");
+  }
+  /**
+   * set the Price
+   */
+  function setPrice($value) {
+    return $this->setFloatField("price",$value,"ProdPrice");
+  }
+  /**
+   * set the Costs
+   */
+  function setCost($value) {
+    return $this->setFloatField("cost",$value,"ProdCost");
+  }
+  /**
+   * set the Currency
+   */
+  function setCurrency($value) {
+    return $this->setStrField("currency",$value,"Currency");
+  }
+  /**
+   * set the State
+   */
+  function setState($value) {
+    return $this->setIntField("state",$value,"ProdState");
+  }
+  /**
+   * set the Probability
+   */
+  function setProbability($value) {
+    return $this->setFloatField("probability",$value,"ProdProb");
+  }
+  /**
+   * set the Path
+   */
+  function setPath($value) {
+    return $this->setStrField("path",$value,"ProdPath");
+  }
+  /**
+   * set the estimated StartTime
+   */
+  function setPStart(&$value) {
+    return $this->setDateField("p_start",$value,"ProdStart");
+  }
+  /**
+   * set the estimated EndTime
+   */
+  function setPEnd(&$value) {
+    return $this->setDateField("p_end",$value,"ProdEnd");
+  }
+  /**
+   * set a Role
+   */
+  function setRole(&$obj,$role,$desc) {
+    $this->setRoleIntern( $obj, $role,$desc);
+    return;
+  }
+  /**
+   * delete a Role
+   */
+  function delRole(&$obj,$role) {
+    $this->delRoleIntern($obj,$role);
+    return;
+  }
+  /**
+   * set a Role (intern)
+   */
+  function setRoleIntern(&$obj,$role,$desc) {
+    # Check if the role is already occupied by this object
+    if ( isset($this->role[$role]) && is_array($this->role[$role]) ) {
+      foreach ( $this->role[$role] as $i => $o) {
+        if ( $o->id == $obj->id ) {
+          # Role already there !
+          return;
+        }
+      }
+    }
+    $this->modified[] = array ( "field" => "ProdRole".$role, "old" => "" , "new" => $obj->id );
+    $this->role[$role][$obj->id] = $obj;
+    $this->roledesc[$role][$obj->id] = $desc;
+
+    return;
+  }
+  /**
+   * delete a Role (intern)
+   */
+  function delRoleIntern(&$obj,$role) {
+    # Check if the role is occupied by this object
+    if ( isset($this->role[$role]) && is_array($this->role[$role]) ) {
+      @reset ($this->role[$role]) ;
+      while ( list ($i,$o) = @each ($this->role[$role]) ) {
+        if ( $o->id == $obj->id ) {
+          # Role already there !
+          $this->modified[] = array ( "field" => "ProdRole".$role, "old" => $o->id , "new" => -1 );
+          unset ($this->role[$role][$i]);
+          # Permission Handling
+          acl_lower($this,$o->id,0);
+          return;
+        }
+      }
+    }
+    return;
+  }
+  /**
+   * get a propabiltied price
+   */
+  function getBalanced() {
+    return $this->price * ($this->probability/100);
+  }
+  /**
+   * Save product/Project to DB
+   */
+  function save() {
+    global $current_user,$tutos,$table;
+
+    $msg = "";
+
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+
+    $q->addFV("name",$this->name,"STRING",$table['product']['name'][size]);
+    $q->addFV("version",$this->version,"STRING",$table['product']['version'][size]);
+    $q->addFV("description",$this->description,"TEXT");
+    $q->addFV("desc1",$this->desc1,"TEXT");
+    $q->addFV("desc2",$this->desc2,"TEXT");
+    $q->addFV("path",$this->path,"STRING",$table['product']['path'][size]);
+    $q->addFV("currency",$this->currency,"STRING",4);
+    $q->addFV("p_start",$this->p_start,"DATETIME");
+    $q->addFV("p_end",$this->p_end,"DATETIME");
+    $q->addFV("state",$this->state,"");
+    if ( ! empty ($this->probability) ) {
+      $q->addFV("probability",$this->probability,"FLOAT");
+    } else {
+      $q->addFV("probability","null","");
+    }
+    if ( ! empty ($this->price) ) {
+      $q->addFV("price",$this->price,"FLOAT");
+    } else {
+      $q->addFV("price","null","");
+    }
+    if ( ! empty ($this->cost) ) {
+      $q->addFV("cost",$this->cost,"FLOAT");
+    } else {
+      $q->addFV("cost","null","");
+    }
+	$this->save_custom_fields($q);
+
+    if ( $this->id < 0 ) {
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        /* Get an new product ID */
+        $this->id = $q->addFV("id",-1,"NEXTID");
+
+        acl_default($this,$current_user);
+        acl_raise($this,$this->creator->id,$tutos[delok]);
+
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => "product" ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      $query = $q->getInsert();
+    } else {
+      $q->addWC("id",$this->id,"");
+      $query = $q->getUpdate();
+    }
+
+    $this->dbconn->Exec($query);
+#   echo $this->dbconn->getFullname() ." ".$query;
+    $this->saveroles();
+    for ( $cl = 1;$cl <= $this->classes; $cl++) {
+      $this->saveclassification($cl);
+    }
+
+    $msg .= parent::save();
+    return $msg;
+  }
+  /**
+   * Delete product/Project from DB
+   */
+  function delete() {
+    global $lang, $tutos, $current_user;
+
+    $msg = "";
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE pro_id = ". $this->id ." OR adr_id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+
+    for ( $cl = 1;$cl <= $this->classes; $cl++) {
+      $q = "DELETE FROM ". $this->dbconn->prefix ."projectclass". $cl ." WHERE pro_id = ". $this->id;
+      $r = $this->dbconn->Exec($q);
+    }
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $r = $this->dbconn->Exec($q);
+    $msg .= appointment::obj_delete($current_user,$this);
+    $msg .= task::obj_delete($current_user,$this);
+    $msg .= timetrack::obj_delete($current_user,$this);
+
+    $msg .= parent::delete();
+
+    return $msg;
+  }
+  /**
+   * get a selection of classification
+   */
+  function class_select($c) {
+    global $lang;
+    echo "  <select id=\"cl".$c."\" multiple=\"multiple\" size=\"". count($lang['ProdClasses'.$c])."\" name=\"cl". $c ."[]\">\n";
+    @reset ($lang['ProdClasses'.$c]);
+    while ( list ($i,$f) = @each ($lang['ProdClasses'.$c]) ) {
+      echo "   <option value=\"". $i ."\"";
+      if ( isset($this->cl[$c][$i]) ) {
+        echo "selected";
+      }
+      echo ">". myentities($lang['ProdClasses'.$c][$i]) ."</option>\n";
+    }
+    echo "  </select>\n";
+  }
+  /**
+   * Transfer reference ids according to given table
+   */
+  function transfer_ids (&$trans) {
+    parent::transfer_ids ($trans);
+
+    $this->readroles();
+
+    @reset ($this->role) ;
+    while ( list ($role,$f) = @each ($this->role) ) {
+      if ( isset ($this->role[$role] ) && is_array ($this->role[$role]) ) {
+        @reset ($this->role[$role]) ;
+        while ( list($i,$o) = @each ($this->role[$role]) ) {
+          if (isset($trans[$o->id])) {
+            $this->role[$role][$i]->id = $trans[$o->id];
+          }
+        }
+      }
+    }
+    if (isset($trans[$this->creator->id])) {
+      $this->creator->id = $trans[$this->creator->id];
+    }
+    return;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "product";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return useprojects;
+  }
+  /**
+   * get name of icons
+   */
+  function getHtmlIcon () {
+    return 'projects';
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * Return Info about conected products to given obj
+   */
+  function obj_read(&$obj) {
+    global $lang,$table;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+    if ( $obj->id == -1 )  return;
+
+    if ( isset($obj->prolist) ) {
+      return;
+    }
+    $obj->prolist = array();
+    $q  = "SELECT * from ". $obj->dbconn->prefix .$table['product'][name];
+    $q1 = "SELECT pro_id FROM ". $obj->dbconn->prefix .$table['product2'][name];
+
+    $pre  = " where";
+    $pre1 = " where";
+
+    if ( ($obj->gettype() == "address") || ($obj->gettype() == "user") ) {
+      $q1 .= $pre1 ." adr_id = ". $obj->id;
+    } else if ( $obj->gettype() == "company" ) {
+      $q1 .= $pre1 ." adr_id = ". $obj->id;
+    } else if ( $obj->gettype() == "department" ) {
+      $q1 .= $pre1 ." adr_id = ". $obj->id;
+    } else if ( $obj->gettype() == "team" ) {
+      $l = $obj->id;
+      if ( count($obj->member) ) {
+        @reset($obj->member);
+        while( list ($i,$f) = @each ($obj->member)) {
+          $l .= "," . $i;
+        }
+      }
+      $q1 .= $pre1 ." adr_id IN (". $l .")";
+    } else if ( $obj->gettype() == "product" ) {
+      $q1 .= $pre1 ." adr_id = ". $obj->id;
+    }
+
+    $r = $obj->dbconn->Exec($q1);
+    $n = $r->numrows();
+    if ( $n == 0 ) {
+      return;
+    }
+    $a = 0;
+    $pre1 = "";
+    $x = "";
+    while ($a < $n) {
+      $x .= $pre1 . $r->get($a, "pro_id");
+      $pre1 = ",";
+      $a++;
+    }
+    if ( $x != "" ) {
+      $q .= $pre ." id in (". $x .")";
+    }
+
+    $q .= " ORDER BY creation DESC";
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+
+    foreach ( $lang['ProdRole'] as $i => $f) {
+      $obj->prolist[$i] = array();
+    }
+
+    while ($a < $n) {
+      $p = new product($obj->dbconn);
+      $p->read_result($r,$a);
+      $p->readroles();
+      $a++;
+      if ( $p->see_ok() ) {
+        foreach($p->role as $x => $y) {
+          foreach ($p->role[$x] as $x1 => $y1) {
+            if ($obj->id == $y1->id ) {
+              $obj->prolist[$x][$p->id] = &$p;
+            }
+          }
+        }
+      }
+      unset($p);
+    }
+    return;
+  }
+  /**
+   * create a list of projects for the given object and given user
+   */
+  function infolist (&$user,&$obj,$cols,$format = "html") {
+    global $lang,$tutos;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+
+    if ( ! $user->feature_ok(useprojects,PERM_SEE) ) {
+      return;
+    }
+    product::obj_read($obj);
+    foreach ($obj->prolist as $role => $y) {
+      if ( count($obj->prolist[$role]) > 0 ) {
+        echo "<tr>\n";
+        echo $user->layout->showfield($lang['Product'] .": ".$lang['ProdRole'][$role]);
+        echo " <td valign=\"top\" colspan=\"".($cols-1)."\">\n";
+        $pre = "";
+        $x = count ($obj->prolist[$role]);
+        $n = 0;
+        foreach ($obj->prolist[$role] as $x1 => $y1) {
+          if ( ($n >= $tutos[maxshort]) && ($x != $tutos[maxshort]) && ($this->format != "paper") ) {
+            $l = "product_overview.php?role=". $role ."&rid[]=". $obj->id;
+            echo  $pre.$user->layout->theme->getImage(folder,'list') ." ". makelink($l,sprintf($lang['AllEntries'], count($obj->prolist[$role])));
+            break;
+          }
+          $l = $obj->prolist[$role][$x1]->roledesc[$role][$obj->id];
+          echo $pre. $obj->prolist[$role][$x1]->getLink() . ($l == "" ? "":" ( ". myentities($l) ." )");
+          $pre = "<br />\n";
+          $n++;
+        }
+        echo " </td>\n";
+        echo "</tr>\n";
+      }
+    }
+  }
+  /**
+   * a object that has to do with projects is deleted
+   */
+  Function obj_delete(&$user,&$obj) {
+    global $table;
+
+    $msg = "";
+    $q = "DELETE FROM ". $obj->dbconn->prefix .$table['product2'][name]." WHERE adr_id = ". $obj->id;
+    $r = $obj->dbconn->Exec($q);
+
+    return $msg;
+  }
+  /**
+   * create a smalllist of products related to the given object
+   */
+  function small_infolist (&$user,&$obj,$cols,$class) {
+    global $lang;
+
+    if ( ! $user->feature_ok(useprojects,PERM_SEE) ) {
+      return;
+    }
+
+    if ( $obj->product != -1 ) {
+      echo "<tr><td class=\"". $class ."\" colspan=\"". $cols ."\" align=\"right\">";
+      echo "&#8594;&nbsp;". $obj->product->getLink();
+      echo "</td></tr>\n";
+    }
+  }
+  /**
+   * create a link to a search page
+   */
+  function getSelectLink (&$user,$text = "") {
+    global $lang,$tutos;
+    if ( ! $user->feature_ok(useprojects,PERM_SEL) ) {
+      return;
+    }
+    return array( url => "product_select.php",
+                  image => $user->layout->theme->getImage(product::getHtmlIcon(),'menu'),
+                  text => ($text == "" ? $lang['Products'] : $text),
+                  info => $lang['SearchForProd'],
+                  category => array("search","product")
+                );
+  }
+  /**
+   * show the mytutos info about products
+   */
+  function mytutos (&$user) {
+    global $tutos,$lang,$current_user,$table;
+
+    if ( ! $user->feature_ok(useprojects,PERM_SEE) ) {
+      return "";
+    }
+
+    $s = array();
+    $q = "SELECT * from ". $user->dbconn->prefix .$table['product'][name]." p,". $user->dbconn->prefix .$table['product2'][name]." r where ";
+    # show only activ projects
+    $q .= " (p.state in (".PROD_STATE_AQ.",".PROD_STATE_RUN.",".PROD_STATE_QRUN.")) and ";
+    $q .= "(p.id = r.pro_id) and (";
+    $q .= " (r.adr_id in(". $user->id;
+    # teams
+    foreach($user->teamlist as $i => $f) {
+      $q .= ",".$i;
+    }
+    $q .= ") )";
+    $q .= ")  order by creation DESC";
+    $res = $user->dbconn->Exec($q);
+    $n = $res->numrows();
+
+    if ($n == 0) {
+      $res->free();
+      return "";
+    }
+
+
+    $a = 0;
+
+    $r = info_table_start();
+    $r .= " <tr>\n";
+    $m = product::getSelectLink($current_user);
+    $r .= " <th colspan=\"3\">". $current_user->layout->theme->getImage(product::getHtmlIcon(),'list') ." ". menulink($m[url],$m[text],$m[info]) ."</th>\n";
+    $r .= " </tr>\n";
+    $r .= " <tr>\n";
+    $r .= "  <th>". $lang['ProdName'] ."</th>\n";
+    $r .= "  <th>". $lang['ProdFunc'] ."</th>\n";
+    $r .= "  <th>". $lang['created'] ."</th>\n";
+    $r .= " </tr>\n";
+    while ( ($a < $n) and (count($s) < 2* $tutos[maxshort]) ) {
+      $f = new product($user->dbconn);
+      $f->read_result($res,$a);
+      if ( isset($s[$f->id]) && ($s[$f->id] == 1) ) {
+        # Duplicate
+        $a++;
+        unset($f);
+        continue;
+      }
+      $r .= " <tr>\n";
+      $r .= "  <td>" . $f->getLink() ."</td>\n";
+      $role = $res->get($a, "role_id");
+      $r .= "  <td>" . $lang['ProdRole'][$role] ."</td>\n";
+      $r .= "  <td align=\"right\">" . $f->creation->getDateTime() ."</td>\n";
+      $r .= " </tr>\n";
+      $s[$f->id] = 1;
+      $a++;
+      unset($f);
+    }
+    $r .= info_table_end();
+    $res->free();
+    return $r;
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+    $r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#product",$lang['ProductP'],$lang['ProductP']) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=product_new",$lang["NewEntry"]."/". $lang["Modify"],$lang["NewEntry"]."/". $lang["Modify"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=product_show",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=product_overview",$lang['ProductsOverview'],$lang['ProductsOverview'])."</li>\n";
+    $r .= "</ul>\n";
+    echo $r;
+  }
+}
+?>

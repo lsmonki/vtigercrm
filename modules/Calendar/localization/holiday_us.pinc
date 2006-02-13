@@ -1,0 +1,25 @@
+<?php
+/*
+ * Copyright 2001 by Gero Kohnert
+ *
+ *  CVS Info:  $Id: holiday_us.pinc,v 1.16 2005/05/03 13:18:52 saraj Exp $
+ *  $Author: saraj $
+ *
+ * Type = 0   day is displayed but not marked
+ * Type = 1   marks the day red in the calendar
+ */
+
+     $tutos[cal][] = array(
+        array( Date => "01-01",          type => 1,    Desc => "New Year (US)"),
+        array( Date => "04-07",          type => 1,    Desc => "Independence Day (US)"),
+        array( Date => "31-10",          type => 1,    Desc => "Nevada Admissions Day (US)"),
+        array( Date => "11-11",          type => 1,    Desc => "Veterans Day (US)"),
+        array( Date => "25-12",          type => 1,    Desc => "Christmas (US)"),
+        array( Date => "MARTINLUTHERKING", type => 1,  Desc => "Martin Luther King (US)"),
+        array( Date => "WASHINGTON",     type => 1,    Desc => "Washington's Birthday (US)"),
+        array( Date => "MEMORIALDAY",    type => 1,    Desc => "Memorial Day (US)"),
+        array( Date => "LABORDAY",       type => 1,    Desc => "Labor Day (US)"),
+        array( Date => "COLUMBUSDAY",    type => 1,    Desc => "Columbus Day (US)"),
+        array( Date => "THANKSGIVING",   type => 1,    Desc => "Thanksgiving Day (US)"),
+        );
+?>

@@ -1,0 +1,92 @@
+<?php
+/*
+ * Copyright 1999 - 2003 by Gero Kohnert
+ *
+ * CVS Info:  $Id: auth.pinc,v 1.16 2005/05/03 13:18:49 saraj Exp $
+ * $Author: saraj $
+ */
+
+/**
+ * Authentification base class
+ *
+ * @modulegroup BASE
+ * @module auth
+ * @package BASE
+ */
+global $calpath;
+class auth {
+  /**
+   * initialize the standard variables
+   *
+   * @param Object a database connection
+   */
+  function auth() {
+    $this->pwlostsupport = true;
+    $this->pwchangesupport = true;
+  }
+  /**
+   * get the password
+   */
+  function getpw() {
+    return;
+  }
+  /**
+   * get the username
+   */
+  function getuname() {
+    return;
+  }
+  /**
+   * initialize the standard variables
+   *
+   * @param Object a database connection
+   */
+  function init(&$dbconn) {
+    $this->dbconn = &$dbconn;
+  }
+  /**
+   * Check for permmision
+   */
+  Function check($uname,$pw) {
+  }
+  /**
+   * logout
+   * return the next page for the redirect
+   */
+  Function logout () {
+    global $current_user;
+
+    logmessage("logout: ". $_SESSION['userid'] ." ".$_SESSION['username']);
+    $_SESSION['userid'] = -1;
+    $_SESSION['dbnr']   = -1;
+    unset($_SESSION['username']);
+    unset($_SESSION['lastseen']);
+    unset($_SESSION['lasthost']);
+    @session_destroy();
+    unset($_COOKIE);
+    $current_user->id = -1;
+
+    return "mytutos.php";
+  }
+  /**
+   * login form
+   */
+  Function login_form ($gotourl,$m) {
+    global $msg,$current_user,$calpath;
+
+	if (isset($_GET['format']) && $_GET['format'] == "xml" ) {
+	  die("login required to fetch data\n");
+	}
+	$msg = $m;
+    require_once $calpath .'login.pinc';
+    $l = new login($current_user);
+    $l->gotourl = $gotourl;
+    $l->display();
+    if (isset($this->dbconn)) {
+      $this->dbconn->Close();
+    }
+    exit;
+  }
+
+}
+?>

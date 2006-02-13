@@ -112,15 +112,14 @@ function renderRelatedProducts($query,$id)
 	{
 		global $adb,$image_path,$vtlog;
 		$avail_flag="false";
-		$avail_date=getDBInsertDateValue($avail_date);
 		if( $owner != $userid)
 		{
 			
-			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id."  and crmentity.deleted=0 group by crmid;";
+			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." group by crmid;";
 		}
 		else
 		{
-			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0 group by crmid;";
+			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." group by crmid;";
 		}
 		$result_cal=$adb->query($usr_query);   
 		$noofrows_cal = $adb->num_rows($result_cal);
@@ -147,37 +146,6 @@ function renderRelatedProducts($query,$id)
 				}
 			}
 		}
-		if($avail_flag!="true")
-		{
-			$recur_query="SELECT activity.activityid, activity.time_start, activity.duration_hours, activity.duration_minutes , crmentity.smownerid, recurringevents.recurringid, recurringevents.recurringdate as date_start from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid where ('".$avail_date."' like recurringevents.recurringdate) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0 group by crmid";
-			
-			$result_cal=$adb->query($recur_query);   
-			$noofrows_cal = $adb->num_rows($result_cal);
-			$avail_flag="false";
-
-			if($noofrows_cal!=0)
-			{
-				while($row_cal = $adb->fetch_array($result_cal)) 
-				{
-					$usr_date_start=$row_cal['date_start'];
-					$usr_time_start=$row_cal['time_start'];
-					$usr_hour_dur=$row_cal['duration_hours'];
-					$usr_mins_dur=$row_cal['duration_minutes'];
-					$user_start_time=time_to_number($usr_time_start);	
-					$user_end_time=get_duration($usr_time_start,$usr_hour_dur,$usr_mins_dur);
-
-					if( ( ($user_start_time > $activity_start_time) && ( $user_start_time < $activity_end_time) ) || ( ( $user_end_time > $activity_start_time) && ( $user_end_time < $activity_end_time) ) || ( ( $activity_start_time == $user_start_time ) || ($activity_end_time == $user_end_time) ) )
-					{
-						$availability= 'busy';
-						$avail_flag="true";
-						$vtlog->logthis("Recurring Events:: user start time-- ".$user_start_time."user end time".$user_end_time,'info');
-						$vtlog->logthis("Recurring Events:: Availability ".$availability,'info');
-					}
-				}
-			}
-
-			
-		}	
 	 	if($avail_flag == "true")
                 {
                         $availability=' <IMG SRC="'.$image_path.'/busy.gif">';
@@ -225,11 +193,6 @@ function renderRelatedUsers($query,$id)
   $list .= '<table border="0" cellpadding="0" cellspacing="0" class="formHeaderULine" width="100%">';
   $list .= '<tr height=1><td height=1></td></tr></table>';
 
-  $noofrows = $adb->num_rows($result);
-  if ($noofrows > 15)
-  {
-	$list .= '<div style="overflow:auto;height:315px;width:100%;">';
-  }
   $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
   $list .= '<tr class="ModuleListTitle" height=20>';
 
@@ -404,7 +367,7 @@ function renderRelatedUsers($query,$id)
 		$avail_table.="<tr>";
 		while($row_recur = $adb->fetch_array($recur_result))
 		{
-			$recur_dates=getDBInsertDateValue($row_recur['recurringdate']);
+			$recur_dates=$row_recur['recurringdate'];
 			$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
 			$vtlog->logthis("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates,'info');
 			$avail_table.="<td>$availability</td>";
@@ -433,10 +396,6 @@ function renderRelatedUsers($query,$id)
 
   $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
   $list .= '</table>';
-  if ($noofrows > 15)
-  {
-	  $list .='</div>';
-  }
   $list .= '</td></tr></table>';
 
   echo $list;

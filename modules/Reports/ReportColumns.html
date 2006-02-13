@@ -1,0 +1,239 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<html>
+<head>
+    <title></title>
+    <!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+    <script language="JavaScript" type="text/JavaScript" src="include/general.js"></script>
+    <script language="JavaScript" type="text/JavaScript">    
+        var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
+        function setObjects() 
+        {
+            availListObj=getObj("availList")
+            selectedColumnsObj=getObj("selectedColumns")
+
+            moveupLinkObj=getObj("moveup_link")
+            moveupDisabledObj=getObj("moveup_disabled")
+            movedownLinkObj=getObj("movedown_link")
+            movedownDisabledObj=getObj("movedown_disabled")
+        }
+
+        function addColumn() 
+        {
+            for (i=0;i<selectedColumnsObj.length;i++) 
+            {
+                selectedColumnsObj.options[i].selected=false
+            }
+
+            for (i=0;i<availListObj.length;i++) 
+            {
+                if (availListObj.options[i].selected==true) 
+                {
+                    for (j=0;j<selectedColumnsObj.length;j++) 
+                    {
+                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+                        {
+                            var rowFound=true
+                            var existingObj=selectedColumnsObj.options[j]
+                            break
+                        }
+                    }
+
+                    if (rowFound!=true) 
+                    {
+                        var newColObj=document.createElement("OPTION")
+                        newColObj.value=availListObj.options[i].value
+                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+                        selectedColumnsObj.appendChild(newColObj)
+                        availListObj.options[i].selected=false
+                        newColObj.selected=true
+                        rowFound=false
+                    } 
+                    else 
+                    {
+                        existingObj.selected=true
+                    }
+                }
+            }
+        }
+
+        function delColumn() 
+        {
+            for (i=0;i<=selectedColumnsObj.options.length;i++) 
+            {
+                if (selectedColumnsObj.options.selectedIndex>=0)
+                selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+            }
+        }
+                        
+        function formSelectColumnString()
+        {
+            var selectedColStr = "";
+            for (i=0;i<selectedColumnsObj.options.length;i++) 
+            {
+                selectedColStr += selectedColumnsObj.options[i].value + ";";
+            }
+            document.NewReport.selectedColumnsString.value = selectedColStr;
+        }
+        
+        function moveUp() 
+        {
+            var currpos=selectedColumnsObj.options.selectedIndex
+            if (currpos>0) 
+            {
+                var prevpos=selectedColumnsObj.options.selectedIndex-1
+		
+                if (browser_ie) 
+                {
+                    temp=selectedColumnsObj.options[prevpos].innerText
+                    selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
+                    selectedColumnsObj.options[currpos].innerText=temp     
+                } 
+                else if (browser_nn4 || browser_nn6) 
+                {
+                    temp=selectedColumnsObj.options[prevpos].text
+                    selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+                    selectedColumnsObj.options[currpos].text=temp
+                }
+                temp=selectedColumnsObj.options[prevpos].value
+                selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
+                selectedColumnsObj.options[currpos].value=temp
+	
+            selectedColumnsObj.options[prevpos].selected=true
+            selectedColumnsObj.options[currpos].selected=false
+            }
+        }
+
+        function moveDown() 
+        {
+            var currpos=selectedColumnsObj.options.selectedIndex
+            if (currpos<selectedColumnsObj.options.length-1)	
+            {
+                var nextpos=selectedColumnsObj.options.selectedIndex+1
+
+                if (browser_ie) 
+                {	
+                    temp=selectedColumnsObj.options[nextpos].innerText
+                    selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+                    selectedColumnsObj.options[currpos].innerText=temp
+                }
+                else if (browser_nn4 || browser_nn6) 
+                {
+                    temp=selectedColumnsObj.options[nextpos].text
+                    selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+                    selectedColumnsObj.options[currpos].text=temp
+                }
+                temp=selectedColumnsObj.options[nextpos].value
+                selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
+                selectedColumnsObj.options[currpos].value=temp
+                    
+                selectedColumnsObj.options[nextpos].selected=true
+                selectedColumnsObj.options[currpos].selected=false
+            }
+        }
+
+        function disableMove() 
+        {
+            var cnt=0
+            for (i=0;i<selectedColumnsObj.options.length;i++) 
+            {
+                if (selectedColumnsObj.options[i].selected==true)
+                cnt++
+            }
+
+            if (cnt>1) 
+            {
+                moveupLinkObj.style.display=movedownLinkObj.style.display="none"
+                moveupDisabledObj.style.display=movedownDisabledObj.style.display="block"
+            }
+            else 
+            {
+                moveupLinkObj.style.display=movedownLinkObj.style.display="block"
+                moveupDisabledObj.style.display=movedownDisabledObj.style.display="none"
+            }
+        }        
+        
+        function selectAction( url )
+        {
+            formSelectColumnString();
+            document.NewReport.action = url;
+            document.NewReport.submit();
+        }
+    </script>
+</head>
+
+<body>
+
+
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr> 
+    <td>
+    <br> <table border="0" align="center" cellpadding="0" cellspacing="2">
+        <tr> 
+            <td><strong>{MOD.LBL_AVAILABLE_COLUMNS}</strong></td>
+            <td>&nbsp;</td>
+            <td><strong>{MOD.LBL_SELECTED_COLUMNS}</strong></td>
+
+            <td>&nbsp;</td>
+        </tr>
+        <tr> 
+        <td> 
+        <select id="availList" name="availList" multiple class="select" style="width:200;height:300">                    
+        {BLOCK1}
+        </select>            
+    
+        </td>
+        <td><table border="0" align="center" cellpadding="0" cellspacing="5">
+            <tr> 
+                <td><div align="center"> 
+                    <input type="button" name="Button" value="{MOD.LBL_ADD_BUTTON}" class="button" onClick="addColumn()">
+
+                </div></td>
+            </tr>
+        </table></td>
+
+        <input type="hidden" name="selectedColumnsString"/>
+        
+        <td>
+            <select id="selectedColumns" name="selectedColumns" multiple class="select" style="width:200;height:300" onchange="disableMove()">
+	    {BLOCK2}
+            </select>
+        </td>
+
+        <td width="40%"><table border="0" cellspacing="0" cellpadding="0">
+            <tr> 
+                <td> <a id="moveup_link" href="javascript:;" title="Move Up"><IMG src="{IMAGE_PATH}movecol_up.gif" alt="Move Up" name="Image3" border=0 align="absmiddle" onMouseOver="this.src='{IMAGE_PATH}movecol_up_over.gif'" onMouseOut="this.src='{IMAGE_PATH}movecol_up.gif'" onclick="moveUp()" onMouseDown="this.src='{IMAGE_PATH}movecol_up_down.gif'"></a> 
+                    <img id="moveup_disabled" src="{IMAGE_PATH}movecol_up_disabled.gif" style="display:none"> 
+                </td>
+            </tr>
+            <tr> 
+                <td> <a id="movedown_link" href="javascript:;" title="Move Down"><IMG src="{IMAGE_PATH}movecol_down.gif" alt="Move Up" name="Image4" border=0 align="absMiddle" onMouseOver="this.src='{IMAGE_PATH}movecol_down_over.gif'" onMouseOut="this.src='{IMAGE_PATH}movecol_down.gif'" onclick="moveDown()" onMouseDown="this.src='{IMAGE_PATH}movecol_down_down.gif'"></a> 
+                    <img id="movedown_disabled" src="{IMAGE_PATH}movecol_down_disabled.gif" style="display:none"> 
+                </td>
+            </tr>
+
+            <tr style="height:5"> 
+                <td></td>
+            </tr>
+            <tr> 
+                <td><a href="javascript:;" title="Delete"><IMG src="{IMAGE_PATH}movecol_del.gif" alt="Delete" name="Image2" border=0 align="absMiddle" onMouseOver="this.src='{IMAGE_PATH}movecol_del_over.gif'" onMouseOut="this.src='{IMAGE_PATH}movecol_del.gif'" onclick="delColumn()" onMouseDown="this.src='{IMAGE_PATH}movecol_del_down.gif'"></a></td>
+            </tr>
+        </table></td>
+        </tr>
+    </table>
+    <br></td>
+    </tr>
+</table>
+</body>
+</html>
+<!-- END: main -->

@@ -1,0 +1,57 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN:main -->
+<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+<script type="text/javascript" src="jscalendar/calendar.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
+{BLOCKJS}
+<table border="0" cellspacing="2" cellpadding="2" style="margin:10 0 10 5">
+       <tr> 
+                <td>{MOD.LBL_SF_COLUMNS}:</td>
+                <td>&nbsp;</td>
+				<td>{MOD.LBL_SF_STARTDATE}:</td>
+				<td>{MOD.LBL_SF_ENDDATE}:</td>
+				<td>&nbsp;</td>
+              </tr>
+              <tr> 
+                <td><select name="stdDateFilterField" class="select">
+                    			{BLOCK1}
+                    </select></td>
+                  
+                <td><select name="stdDateFilter" class="select" onchange='showDateRange( this.options[ this.selectedIndex ].value )'>
+                    {BLOCKCRITERIA}
+                  </select></td>
+                <td>
+                    <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{STARTDATE}">
+	            <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start">
+		</td>
+                <td>
+		<input name="enddate" id="jscal_field_date_end" type="text" size="10" class="textField" value="{ENDDATE}">
+                    <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end">
+                </td>
+		<td>&nbsp;</td>
+              </tr>
+            </table>
+<script>    
+    var filter = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value
+    if( filter != "custom" )
+    {
+        showDateRange( filter );
+    }
+</script>
+<script type="text/javascript">
+    	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
+	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
+</script>
+<!-- END:main -->

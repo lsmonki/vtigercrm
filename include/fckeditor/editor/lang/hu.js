@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2005 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2004 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,6 +10,9 @@
  * 
  * File Name: hu.js
  * 	Hungarian language file.
+ * 
+ * Version:  2.0 RC3
+ * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Varga Zsolt (meridian@netteszt.hu)
@@ -41,8 +44,6 @@ RemoveLink			: "Hivatkozás törlése",
 Anchor				: "Horgony beillesztése/szerkesztése",
 InsertImageLbl		: "Kép",
 InsertImage			: "Kép beillesztése/módosítása",
-InsertFlashLbl		: "Flash",	//MISSING
-InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Táblázat",
 InsertTable			: "Táblázat beillesztése/módosítása",
 InsertLineLbl		: "Vonal",
@@ -107,7 +108,6 @@ SplitCell			: "Cellák szétválasztása",
 CellProperties		: "Cellák tulajdonsága",
 TableProperties		: "Táblázat tulajdonsága",
 ImageProperties		: "Kép tulajdonsága",
-FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Horgony(ok) tulajdonsága(i)",
 ButtonProp			: "Gomb(ok) tulajdonsága(i) ",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Választómező(k) tulajdonsága(i)",
 TextareaProp		: "Szövegterület(ek) tulajdonsága(i)",
 FormProp			: "Űrlap(ok) tulajdonsága(i)",
 
-FontFormats			: "Normál;Formázott;Címsor;Fejléc 1;Fejléc 2;Fejléc 3;Fejléc 4;Fejléc 5;Fejléc 6;Bekezdés (DIV)",
+FontFormats			: "Normál;Formázott;Címsor;Fejléc 1;Fejléc 2;Fejléc 3;Fejléc 4;Fejléc 5;Fejléc 6;Bekezdés (DIV)",	// 2.0: The last entry has been added.
 
 // Alerts and Messages
 ProcessingXHTML		: "XHTML feldolgozása. Kérem várjon...",
@@ -139,8 +139,6 @@ DlgBtnClose			: "Bezárás",
 DlgBtnBrowseServer	: "Szerver tallózása",
 DlgAdvancedTag		: "Haladó",
 DlgOpOther			: "Egyéb",
-DlgInfoTab			: "Info",	//MISSING
-DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;nincs beállítva&gt;",
@@ -185,17 +183,6 @@ DlgImgAlignTextTop	: "Szöveg tetjére",
 DlgImgAlignTop		: "Tetejére",
 DlgImgPreview		: "Elõnézet",
 DlgImgAlertUrl		: "Töltse ki a kép URL-ét",
-DlgImgLinkTab		: "Link",	//MISSING
-
-// Flash Dialog
-DlgFlashTitle		: "Flash Properties",	//MISSING
-DlgFlashChkPlay		: "Auto Play",	//MISSING
-DlgFlashChkLoop		: "Loop",	//MISSING
-DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
-DlgFlashScale		: "Scale",	//MISSING
-DlgFlashScaleAll	: "Show all",	//MISSING
-DlgFlashScaleNoBorder	: "No Border",	//MISSING
-DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Hivatkozás",
@@ -325,11 +312,7 @@ PasteErrorCopy	: "A böngészõ biztonsági beállításai nem engedélyezik a s
 PasteAsText		: "Beillesztés formázatlan szövegként",
 PasteFromWord	: "Beillesztés Wordbõl",
 
-DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
-DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
-DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
-DlgPasteCleanBox		: "Clean Up Box",	//MISSING
-
+DlgPasteMsg		: "A szerkesztõ nem képes végrehajtani a beillesztési mûveletet a bõngészõ <STRONG>biztonsági beállításai</STRONG> miatt.<BR>Másolja be az alábbi mezõbe a (<STRONG>Ctrl+V</STRONG>) billentyûzetkombinációval és kattintson <STRONG>OK</STRONG> gombra.",
 
 // Color Picker
 ColorAutomatic	: "Automatikus",
@@ -455,13 +438,6 @@ DlgDocMeDescr		: "Dokumentum leírás",
 DlgDocMeAuthor		: "Szerző",
 DlgDocMeCopy		: "Szerzői jog",
 DlgDocPreview		: "Előnézet",
-
-// Templates Dialog
-Templates			: "Templates",	//MISSING
-DlgTemplatesTitle	: "Content Templates",	//MISSING
-DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
-DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
-DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "About",
