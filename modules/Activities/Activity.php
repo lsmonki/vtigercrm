@@ -326,52 +326,6 @@ class Activity extends CRMEntity {
     if (isset($list)) return $list;
     else return null;
   }
- /* 
-	function create_list_query(&$order_by, &$where)
-	{
-		$contact_required = ereg("contacts", $where);
-                
-		if($contact_required)
-		{
-			$query = "SELECT task.taskid, tasks.assigned_user_id, task.status, task.name, task.parent_type, tasks.parent_id, tasks.contact_id, tasks.datedue, contactdetails.firstname, contactdetails.lastname ,task.priority,task.description FROM contactdetails, task ";
-			$where_auto = "task.contact_id = contactdetails.contactid AND task.deleted=0 AND contact.deleted=0";
-		}
-		else
-		{
-			$query = 'SELECT taskid, smcreatorid, task.status, duedate ,priority FROM task inner join crmentity on crmentity.crmid=task.taskid ';
-			$where_auto = " AND deleted=0";
-		}
-
-		if($where != "")
-                  $query .= "where $where ".$where_auto;
-		else
-			$query .= "where ".$where_auto;
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-		else
-                  //$query .= " ORDER BY name";
-		return $query;
-
-	}
-*/
-        function create_export_query(&$order_by, &$where)
-        {
-                $contact_required = ereg("contacts", $where);
-
-                if($contact_required)
-                {
-                      $query = "SELECT task.*, contactdetailss.firstname, contactdetails.lastname FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0";
-                }
-                else
-                {
-                      $query = 'SELECT * FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0';
-                }
-                return $query;
-
-        }
-
-
 
 	function fill_in_additional_list_fields()
 	{
@@ -422,24 +376,6 @@ class Activity extends CRMEntity {
 				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
 			}
 		}
-		if ($this->parent_type == "Cases") {
-			require_once("modules/Cases/Case.php");
-			$parent = new aCase();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-
-			$result =$this->db->query($query,true,$app_strings['ERR_CREATING_FIELDS']);
-
-
-			// Get the id and the name.
-
-			$row = $this->db->fetchByAssoc($result);
-
-
-			if($row != null)
-			{
-				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
-			}
-		}
 		if ($this->parent_type == "Accounts") {
 			require_once("modules/Accounts/Account.php");
 			$parent = new Account();
@@ -460,11 +396,6 @@ class Activity extends CRMEntity {
 		}
 	}
 
-   function delete($id)
-        {
-		
-          $this->db->query("update tasks set deleted=1 where id = '" . $id . "'");
-        }
 		  
 //calendarsync
     function getCount_Meeting($user_name) 
@@ -550,24 +481,6 @@ class Activity extends CRMEntity {
 
 	
 
-function save_relationship_changes($is_update)
-    {
-
-		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to task relationship: ");
-
-     //  echo "\n Quwry is " .$query; 
-      // echo "\ncontact_id is " .$this->contact_id; 
-
-    	
-    	if($this->contact_id != "")
-    	{
-          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
-          //echo $query;  
-	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
-    	}
-
-    }
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
 		$today = date("Y-m-d", time());

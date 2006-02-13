@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Potentials/Import.php,v 1.13 2005/05/03 13:18:56 saraj Exp $
 
  * Description:  TODO: To be written.
 

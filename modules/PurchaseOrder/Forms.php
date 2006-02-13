@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/PurchaseOrder/Forms.php,v 1.1 2005/12/16 04:40:26 mangai Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 

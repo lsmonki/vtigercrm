@@ -9,6 +9,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fck_find.html
  * 	"Find" dialog window.
  * 
@@ -80,8 +82,6 @@ function GetCase()
 	return ( document.getElementById('chkCase').checked ? '' : 'i' ) ;
 }
 
-var oRange = oEditor.FCK.EditorDocument.body.createTextRange() ;
-
 function Ok()
 {
 	if ( document.getElementById('txtFind').value.length == 0 )
@@ -92,6 +92,11 @@ function Ok()
 	else
 		FindGecko() ;
 }
+
+var oRange ;
+
+if ( oEditor.FCKBrowserInfo.IsIE )
+	oRange = oEditor.FCK.EditorDocument.body.createTextRange() ;
 
 function FindIE()
 {

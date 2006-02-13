@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: en.js
  * 	English language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Find",
 Replace				: "Replace",
 SpellCheck			: "Check Spell",
 UniversalKeyboard	: "Universal Keyboard",
+PageBreakLbl		: "Page Break",
+PageBreak			: "Insert Page Break",
 
 Form			: "Form",
 Checkbox		: "Checkbox",
@@ -104,6 +108,7 @@ InsertCell			: "Insert Cell",
 DeleteCells			: "Delete Cells",
 MergeCells			: "Merge Cells",
 SplitCell			: "Split Cell",
+TableDelete			: "Delete Table",
 CellProperties		: "Cell Properties",
 TableProperties		: "Table Properties",
 ImageProperties		: "Image Properties",
@@ -120,7 +125,7 @@ SelectionFieldProp	: "Selection Field Properties",
 TextareaProp		: "Textarea Properties",
 FormProp			: "Form Properties",
 
-FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",
+FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Normal (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "Processing XHTML. Please wait...",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Unknown toolbar item \"%1\"",
 UnknownCommand		: "Unknown command name \"%1\"",
 NotImplemented		: "Command not implemented",
 UnknownToolbarSet	: "Toolbar set \"%1\" doesn't exist",
+NoActiveX			: "You browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",
+BrowseServerBlocked : "The resources browser could not be opened. Make sure that all popup blockers are disabled.",
+DialogBlocked		: "It was not possible to open the dialog window. Make sure all popup blockers are disabled.",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Height",
 DlgTableCellSpace	: "Cell spacing",
 DlgTableCellPad		: "Cell padding",
 DlgTableCaption		: "Caption",
+DlgTableSummary		: "Summary",
 
 // Table Cell Dialog
 DlgCellTitle		: "Cell Properties",
@@ -413,7 +422,7 @@ BulletedListProp	: "Bulleted List Properties",
 NumberedListProp	: "Numbered List Properties",
 DlgLstType			: "Type",
 DlgLstTypeCircle	: "Circle",
-DlgLstTypeDisk		: "Disk",
+DlgLstTypeDisc		: "Disc",
 DlgLstTypeSquare	: "Square",
 DlgLstTypeNumbers	: "Numbers (1, 2, 3)",
 DlgLstTypeLCase		: "Lowercase Letters (a, b, c)",

@@ -1,6 +1,6 @@
 <?php
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/include/utils/GetUserGroups.php,v 1.3 2005/12/29 08:56:59 crouchingtiger Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.

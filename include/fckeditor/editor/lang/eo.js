@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: eo.js
  * 	Esperanto language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Serĉi",
 Replace				: "Anstataŭigi",
 SpellCheck			: "Literumada Kontrolilo",
 UniversalKeyboard	: "Universala Klavaro",
+PageBreakLbl		: "Page Break",	//MISSING
+PageBreak			: "Insert Page Break",	//MISSING
 
 Form			: "Formularo",
 Checkbox		: "Markobutono",
@@ -104,6 +108,7 @@ InsertCell			: "Enmeti Ĉelon",
 DeleteCells			: "Forigi Ĉelojn",
 MergeCells			: "Kunfandi Ĉelojn",
 SplitCell			: "Dividi Ĉelojn",
+TableDelete			: "Delete Table",	//MISSING
 CellProperties		: "Atributoj de Ĉelo",
 TableProperties		: "Atributoj de Tabelo",
 ImageProperties		: "Atributoj de Bildo",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Ilobretero nekonata \"%1\"",
 UnknownCommand		: "Komandonomo nekonata \"%1\"",
 NotImplemented		: "Komando ne ankoraŭ realigita",
 UnknownToolbarSet	: "La ilobreto \"%1\" ne ekzistas",
+NoActiveX			: "You browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",	//MISSING
+BrowseServerBlocked : "The resources browser could not be opened. Make sure that all popup blockers are disabled.",	//MISSING
+DialogBlocked		: "It was not possible to open the dialog window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "Akcepti",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Alto",
 DlgTableCellSpace	: "Interspacigo de Ĉeloj",
 DlgTableCellPad		: "Ĉirkaŭenhava Plenigado",
 DlgTableCaption		: "Titolo",
+DlgTableSummary		: "Summary",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Atributoj de Celo",
@@ -413,7 +422,7 @@ BulletedListProp	: "Atributoj de Bula Listo",
 NumberedListProp	: "Atributoj de Numera Listo",
 DlgLstType			: "Tipo",
 DlgLstTypeCircle	: "Cirklo",
-DlgLstTypeDisk		: "Disko",
+DlgLstTypeDisc		: "Disc",	//MISSING
 DlgLstTypeSquare	: "Kvadrato",
 DlgLstTypeNumbers	: "Ciferoj (1, 2, 3)",
 DlgLstTypeLCase		: "Minusklaj Literoj (a, b, c)",

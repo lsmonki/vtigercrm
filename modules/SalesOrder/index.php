@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/SalesOrder/index.php,v 1.2 2005/12/28 08:20:16 jerrydgeorge Exp $
 
  * Description:  TODO To be written.
 

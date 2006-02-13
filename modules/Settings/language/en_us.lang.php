@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.45 2006/02/03 05:19:44 mangai Exp $
 
  * Description:  Defines the English language pack
 

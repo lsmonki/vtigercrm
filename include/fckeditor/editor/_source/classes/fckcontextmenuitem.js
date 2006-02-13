@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fckcontextmenuitem.js
  * 	FCKContextMenuItem Class: represents a item in the context menu.
  * 
@@ -59,11 +61,10 @@ FCKContextMenuItem.prototype.CreateTableRow = function( targetTable )
 	var oCell = this._Row.insertCell(-1) ;
 	oCell.className = 'CM_Icon' ;
 	
-	if ( this.HasIcon ) oCell.innerHTML = '<img alt="" src="' + FCKConfig.SkinPath + 'toolbar/' + this.Command.Name.toLowerCase() + '.gif" width="21" height="20" unselectable="on">' ;
+	if ( this.HasIcon ) oCell.innerHTML = '<img alt="" src="' + FCKConfig.SkinPath + 'toolbar/' + this.Command.Name.toLowerCase() + '.gif" width="21" height="20">' ;
 	
 	oCell = this._Row.insertCell(-1) ;
 	oCell.className		= 'CM_Label' ;
-	oCell.unselectable	= 'on' ;
 	oCell.noWrap		= true ;
 	oCell.innerHTML		= this.Label ;
 }
@@ -91,8 +92,8 @@ FCKContextMenuItem.prototype.RefreshState = function()
 Sample output.
 -----------------------------------------
 <tr class="CM_Disabled">
-	<td class="CM_Icon"><img alt="" src="icons/cut.gif" width="21" height="20" unselectable="on"></td>
-	<td class="CM_Label" unselectable="on">Cut</td>
+	<td class="CM_Icon"><img alt="" src="icons/cut.gif" width="21" height="20"></td>
+	<td class="CM_Label">Cut</td>
 </tr>
 -----------------------------------------
 <tr class="CM_Option" onmouseover="OnOver(this);" onmouseout="OnOut(this);">

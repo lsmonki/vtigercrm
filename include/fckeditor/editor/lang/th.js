@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: th.js
  * 	Thai language file.
  * 
@@ -84,6 +86,8 @@ Find				: "ค้นหา",
 Replace				: "ค้นหาและแทนที่",
 SpellCheck			: "ตรวจการสะกดคำ",
 UniversalKeyboard	: "คีย์บอร์ดหลากภาษา",
+PageBreakLbl		: "Page Break",	//MISSING
+PageBreak			: "Insert Page Break",	//MISSING
 
 Form			: "แบบฟอร์ม",
 Checkbox		: "เช็คบ๊อก",
@@ -105,6 +109,7 @@ InsertCell			: "แทรกช่อง",
 DeleteCells			: "ลบช่อง",
 MergeCells			: "ผสานช่อง",
 SplitCell			: "แยกช่อง",
+TableDelete			: "Delete Table",	//MISSING
 CellProperties		: "คุณสมบัติของช่อง",
 TableProperties		: "คุณสมบัติของตาราง",
 ImageProperties		: "คุณสมบัติของรูปภาพ",
@@ -132,6 +137,9 @@ UnknownToolbarItem	: "ไม่สามารถระบุปุ่มเค�
 UnknownCommand		: "ไม่สามารถระบุชื่อคำสั่งได้ \"%1\"",
 NotImplemented		: "ไม่สามารถใช้งานคำสั่งได้",
 UnknownToolbarSet	: "ไม่มีการติดตั้งชุดคำสั่งในแถบเครื่องมือ \"%1\" กรุณาติดต่อผู้ดูแลระบบ",
+NoActiveX			: "You browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",	//MISSING
+BrowseServerBlocked : "The resources browser could not be opened. Make sure that all popup blockers are disabled.",	//MISSING
+DialogBlocked		: "It was not possible to open the dialog window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "ตกลง",
@@ -276,6 +284,7 @@ DlgTableHeight		: "สูง",
 DlgTableCellSpace	: "ระยะแนวนอนน",
 DlgTableCellPad		: "ระยะแนวตั้ง",
 DlgTableCaption		: "หัวเรื่องของตาราง",
+DlgTableSummary		: "Summary",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "คุณสมบัติของ ช่อง",
@@ -414,7 +423,7 @@ BulletedListProp	: "คุณสมบัติของ บูลเล็ต�
 NumberedListProp	: "คุณสมบัติของ นัมเบอร์ลิสต์",
 DlgLstType			: "ชนิด",
 DlgLstTypeCircle	: "รูปวงกลม",
-DlgLstTypeDisk		: "รูปดิสก์",
+DlgLstTypeDisc		: "Disc",	//MISSING
 DlgLstTypeSquare	: "รูปสี่เหลี่ยม",
 DlgLstTypeNumbers	: "หมายเลข (1, 2, 3)",
 DlgLstTypeLCase		: "ตัวพิมพ์เล็ก (a, b, c)",

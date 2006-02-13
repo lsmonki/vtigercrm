@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: ja.js
  * 	Japanese language file.
  * 
@@ -83,6 +85,8 @@ Find				: "検索",
 Replace				: "置き換え",
 SpellCheck			: "スペルチェック",
 UniversalKeyboard	: "ユニバーサル・キーボード",
+PageBreakLbl		: "改ページ",
+PageBreak			: "改ページ挿入",
 
 Form			: "フォーム",
 Checkbox		: "チェックボックス",
@@ -104,6 +108,7 @@ InsertCell			: "セル挿入",
 DeleteCells			: "セル削除",
 MergeCells			: "セル結合",
 SplitCell			: "セル分割",
+TableDelete			: "テーブル削除",
 CellProperties		: "セル プロパティ",
 TableProperties		: "テーブル プロパティ",
 ImageProperties		: "イメージ プロパティ",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "未知のツールバー項目 \"%1\"",
 UnknownCommand		: "未知のコマンド名 \"%1\"",
 NotImplemented		: "コマンドはインプリメントされませんでした。",
 UnknownToolbarSet	: "ツールバー設定 \"%1\" 存在しません。",
+NoActiveX			: "エラー、警告メッセージなどが発生した場合、ブラウザーのセキュリティ設定によりエディタのいくつかの機能が制限されている可能性があります。セキュリティ設定のオプションで\"ActiveXコントロールとプラグインの実行\"を有効にするにしてください。",
+BrowseServerBlocked : "サーバーブラウザーを開くことができませんでした。ポップアップ・ブロック機能が無効になっているか確認してください。",
+DialogBlocked		: "ダイアログウィンドウを開くことができませんでした。ポップアップ・ブロック機能が無効になっているか確認してください。",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -275,6 +283,7 @@ DlgTableHeight		: "テーブル高さ",
 DlgTableCellSpace	: "セル内余白",
 DlgTableCellPad		: "セル内間隔",
 DlgTableCaption		: "ｷｬﾌﾟｼｮﾝ",
+DlgTableSummary		: "テーブル目的/構造",
 
 // Table Cell Dialog
 DlgCellTitle		: "セル プロパティ",
@@ -413,7 +422,7 @@ BulletedListProp	: "箇条書き プロパティ",
 NumberedListProp	: "段落番号 プロパティ",
 DlgLstType			: "タイプ",
 DlgLstTypeCircle	: "白丸",
-DlgLstTypeDisk		: "黒丸",
+DlgLstTypeDisc		: "黒丸",
 DlgLstTypeSquare	: "四角",
 DlgLstTypeNumbers	: "アラビア数字 (1, 2, 3)",
 DlgLstTypeLCase		: "英字小文字 (a, b, c)",

@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: nl.js
  * 	Dutch language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Zoeken",
 Replace				: "Vervangen",
 SpellCheck			: "Spellings controle",
 UniversalKeyboard	: "Universeel toetsenbord",
+PageBreakLbl		: "Pagina einde",
+PageBreak			: "Pagina einde invoegen",
 
 Form			: "Formulier",
 Checkbox		: "Aanvink vakje",
@@ -104,6 +108,7 @@ InsertCell			: "Cel",
 DeleteCells			: "Cellen verwijderen",
 MergeCells			: "Cellen samenvoegen",
 SplitCell			: "Cellen splitsen",
+TableDelete			: "Tabel verwijderen",
 CellProperties		: "Eigenschappen cel",
 TableProperties		: "Eigenschappen tabel",
 ImageProperties		: "Eigenschappen afbeelding",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Onbekende item op menubalk \"%1\"",
 UnknownCommand		: "Onbekende opdracht naam \"%1\"",
 NotImplemented		: "Opdracht niet geïmplementeerd.",
 UnknownToolbarSet	: "Menubalk \"%1\" bestaat niet.",
+NoActiveX			: "You browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",	//MISSING
+BrowseServerBlocked : "De bron-browser kon niet geopend worden. Zorg ervoor dat popup blokkers uit staan.",
+DialogBlocked		: "Kan het dialoog-venster niet weergeven. Zorg ervoor dat popup blokkers uit staan.",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Hoogte",
 DlgTableCellSpace	: "Afstand tussen cellen",
 DlgTableCellPad		: "Afstand vanaf rand cel",
 DlgTableCaption		: "Naam",
+DlgTableSummary		: "Samenvatting",
 
 // Table Cell Dialog
 DlgCellTitle		: "Eigenschappen cel",
@@ -413,7 +422,7 @@ BulletedListProp	: "Eigenschappen opsommingslijst",
 NumberedListProp	: "Eigenschappen genummerde opsommingslijst",
 DlgLstType			: "Soort",
 DlgLstTypeCircle	: "Cirkel",
-DlgLstTypeDisk		: "Schijf",
+DlgLstTypeDisc		: "Schijf",
 DlgLstTypeSquare	: "Vierkant",
 DlgLstTypeNumbers	: "Nummerks (1, 2, 3)",
 DlgLstTypeLCase		: "Kleine letters (a, b, c)",

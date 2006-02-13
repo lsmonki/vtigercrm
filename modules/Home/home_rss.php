@@ -22,7 +22,7 @@ echo ("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
 echo ("  <rss version=\"2.0\">\n");
 echo ("	<channel>\n");
 echo ("	  <title>vtigerCRM Tickets</title>\n");
-echo ("	  <link>".$site_URL."/index.php?module=Home&action=home_rss</link>\n");
+echo ("	  <link>".$site_URL."/index.php?module=Home&amp;action=home_rss</link>\n");
 echo ("	  <description>test</description>\n");
 echo ("	  <managingEditor></managingEditor>\n");
 echo ("	  <webMaster>".$current_user->user_name."</webMaster>\n");

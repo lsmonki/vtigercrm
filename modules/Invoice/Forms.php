@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Invoice/Forms.php,v 1.4 2005/07/16 09:19:55 crouchingtiger Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 

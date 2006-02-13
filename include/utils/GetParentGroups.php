@@ -1,6 +1,6 @@
 <?php
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/include/utils/GetParentGroups.php,v 1.1 2005/12/14 09:42:36 crouchingtiger Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.

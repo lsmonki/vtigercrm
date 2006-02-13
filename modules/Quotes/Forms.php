@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Quotes/Forms.php,v 1.4 2005/12/16 18:52:21 jerrydgeorge Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 

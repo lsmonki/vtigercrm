@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/themes/blue/header.php,v 1.16 2006/01/03 05:48:06 jerrydgeorge Exp $
 
  * Description:  Contains a variety of utility functions used to display UI
 

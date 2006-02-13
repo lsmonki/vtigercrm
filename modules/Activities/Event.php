@@ -95,52 +95,6 @@ class Event extends SugarBean {
 		return "$this->name";
 	}
 
-	function create_list_query(&$order_by, &$where)
-	{
-		$contact_required = ereg("contacts", $where);
-
-		if($contact_required)
-		{
-			$query = "SELECT task.taskid, tasks.assigned_user_id, task.status, task.name, task.parent_type, tasks.parent_id, tasks.contact_id, tasks.datedue, contactdetails.firstname, contactdetails.lastname ,task.priority,task.description FROM contactdetails, task ";
-			$where_auto = "task.contact_id = contactdetails.contactid AND task.deleted=0 AND contact.deleted=0";
-		}
-		else
-		{
-			$query = 'SELECT taskid, smcreatorid, task.status, duedate ,priority FROM task inner join crmentity on crmentity.crmid=task.taskid ';
-			$where_auto = " AND deleted=0";
-		}
-
-		if($where != "")
-			$query .= "where $where ".$where_auto;
-		else
-			$query .= "where ".$where_auto;
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-		else
-                  //$query .= " ORDER BY name";
-		return $query;
-
-	}
-
-        function create_export_query(&$order_by, &$where)
-        {
-                $contact_required = ereg("contacts", $where);
-
-                if($contact_required)
-                {
-                      $query = "SELECT task.*, contactdetailss.firstname, contactdetails.lastname FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0";
-                }
-                else
-                {
-                      $query = 'SELECT * FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0';
-                }
-                return $query;
-
-        }
-
-
-
 	function fill_in_additional_list_fields()
 	{
 		$this->fill_in_additional_detail_fields();
@@ -228,34 +182,6 @@ class Event extends SugarBean {
 		}
 	}
 
-   function delete($id)
-        {
-		
-          $this->db->query("update tasks set deleted=1 where id = '" . $id . "'");
-        }
-
-    function getCount($user_name) 
-    {
-        $query = "select count(*) from tasks inner join users on users.id=tasks.assigned_user_id where user_name='" .$user_name ."' and tasks.deleted=0";
-
-//       echo "\n Query is " .$query ."\n";
-        $result = $this->db->query($query,true,"Error retrieving contacts count");
-        $rows_found =  $this->db->getRowCount($result);
-        $row = $this->db->fetchByAssoc($result, 0);
-
-    
-        return $row["count(*)"];
-    }       
-
-    function get_tasks($user_name,$from_index,$offset)
-    {   
-         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
-
-    return $this->process_list_query1($query);
-    
-    }
-
-
     function process_list_query1($query)
     {
         $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
@@ -301,28 +227,6 @@ class Event extends SugarBean {
         return $response;
     }
 	
-
-function save_relationship_changes($is_update)
-    {
-
-		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to task relationship: ");
-
-     //  echo "\n Quwry is " .$query; 
-      // echo "\ncontact_id is " .$this->contact_id; 
-
-    	
-    	if($this->contact_id != "")
-    	{
-          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
-          //echo $query;  
-	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
-    	}
-
-    }
-    
-
-
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
 		$today = date("Y-m-d", time());
