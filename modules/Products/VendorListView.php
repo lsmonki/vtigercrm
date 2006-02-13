@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -57,7 +57,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 {
 	$url_string .="&query=true";
 	if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
-        if (isset($_REQUEST['companyname'])) $companyname = $_REQUEST['companyname'];
+	if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
         if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
 	
 	$where_clauses = Array();
@@ -94,11 +94,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$url_string .= "&vendorname=".$vendorname;
 	}
 
-	if (isset($companyname) && $companyname !='')
+	if (isset($email) && $email !='')
 	{
-		array_push($where_clauses, "company_name like ".PearDatabase::quote($companyname.'%'));
+		array_push($where_clauses, "email =".PearDatabase::quote($email));
 		//$search_query .= " and productcode like '".$productcode."%'";
-		$url_string .= "&companyname=".$companyname;
+		$url_string .= "&email=".$email;
 	}
 	
 	if (isset($category) && $category !='')
@@ -217,7 +217,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 
 	if ($vendorname !='') $search_form->assign("VENDOR_NAME", $vendorname);
-	if ($companyname !='') $search_form->assign("COMPANY_NAME", $companyname);
+	if ($email !='') $search_form->assign("EMAIL", $email);
 	if ($category !='') $search_form->assign("CATEGORY", $category);
 /*	if ($qtyperunit !='') $search_form->assign("QTYPERUNIT", $qtyperunit);
 	if ($unitprice !='') $search_form->assign("UNITPRICE", $unitprice);
