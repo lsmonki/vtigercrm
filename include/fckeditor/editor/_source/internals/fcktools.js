@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fcktools.js
  * 	Utility functions.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-02-19 15:27:16
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -68,10 +65,10 @@ FCKTools.AttachToLinkedFieldFormSubmit = function( functionPointer )
 	
 	// Creates a Array in the form object that will hold all Attached function call
 	// (in the case there are more than one editor in the same page)
-	if (! oForm.updateFCKEditor) oForm.updateFCKEditor = new Array() ;
+	if (! oForm.updateFCKeditor) oForm.updateFCKeditor = new Array() ;
 	
 	// Adds the function pointer to the array of functions to call when "submit" is called
-	oForm.updateFCKEditor[oForm.updateFCKEditor.length] = functionPointer ;
+	oForm.updateFCKeditor[oForm.updateFCKeditor.length] = functionPointer ;
 
 	// Switches the original submit method with a new one that first call all functions
 	// on the above array and the call the original submit
@@ -82,19 +79,21 @@ FCKTools.AttachToLinkedFieldFormSubmit = function( functionPointer )
 		oForm.originalSubmit = oForm.submit ;
 		
 		// Creates our replacement for the submit
-		oForm.submit = function()
-		{
-			if (this.updateFCKEditor)
-			{
-				// Calls all functions in the functions array
-				for (var i = 0 ; i < this.updateFCKEditor.length ; i++)
-					this.updateFCKEditor[i]() ;
-			}
-			// Calls the original "submit"
-			this.originalSubmit() ;
-		}
+		oForm.submit = FCKTools_SubmitReplacer ;
 	}
 	// END --
+}
+
+function FCKTools_SubmitReplacer()
+{
+	if (this.updateFCKeditor)
+	{
+		// Calls all functions in the functions array
+		for (var i = 0 ; i < this.updateFCKeditor.length ; i++)
+			this.updateFCKeditor[i]() ;
+	}
+	// Calls the original "submit"
+	this.originalSubmit() ;
 }
 
 //**
@@ -137,6 +136,9 @@ FCKTools.SelectNoCase = function( selectElement, value, defaultValue )
 
 FCKTools.HTMLEncode = function( text )
 {
+	if ( !text )
+		return '' ;
+
 	text = text.replace( /&/g, "&amp;" ) ;
 	text = text.replace( /"/g, "&quot;" ) ;
 	text = text.replace( /</g, "&lt;" ) ;
@@ -206,3 +208,12 @@ FCKTools.Pause = function( miliseconds )
 	}
 }
 
+FCKTools.ConvertStyleSizeToHtml = function( size )
+{
+	return size.endsWith( '%' ) ? size : parseInt( size ) ;
+}
+
+FCKTools.ConvertHtmlSizeToStyle = function( size )
+{
+	return size.endsWith( '%' ) ? size : ( size + 'px' ) ;
+}

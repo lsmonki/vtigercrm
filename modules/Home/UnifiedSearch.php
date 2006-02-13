@@ -22,10 +22,10 @@
 
 require_once('include/logging.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Contacts/language/en_us.lang.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Potentials/Opportunity.php');
 //require_once('modules/Cases/Case.php');
+require_once('modules/Home/language/en_us.lang.php');
 global $mod_strings;
 
 function build_account_where_clause ($the_query_string) {

@@ -67,7 +67,6 @@ function attachSelectedMessages($msg, $imapConnection) {
         if (isset($msg[$i])) {
             $id = $msg[$i];
             $body_a = sqimap_run_command($imapConnection, "FETCH $id RFC822",true, $response, $readmessage, $uid_support);
-
             if ($response == 'OK') {
 
                 // fetch the subject for the message with $id from msgs.
@@ -205,95 +204,123 @@ elseif(isset($undeleteButton))
 }
 elseif (!isset($moveButton) )
 {
+	//id is an array, so taking each id and storing it in a comma separated string
 	if (count($id)) 
 	{
 		$cnt = count($id);
 		if(isset($addToVtigerCRMButton))
 		{
-			$msgsubject =  array();
-			$msgfromemail = array();
-			sqgetGlobalVar('mailbox',       $mailbox);
-			for($k=0;$k< count($id);$k++)
-			{
-				$message = sqimap_get_message($imapConnection, $id[$k], $mailbox);
-				$header = $message->rfc822_header;
-				/*
-				$from = $message->rfc822_header->getAddr_s('from');
-				$date = getLongDateString($message->rfc822_header->date);
-				
+                  $msgsubject =  array();
+                  $msgfromemail = array();
+                  $mbodies = array();
+                  sqgetGlobalVar('mailbox',       $mailbox);
+                 
+                  for($k=0;$k< count($id);$k++)
+                  {
+
+                    $message = sqimap_get_message($imapConnection, $id[$k], $mailbox);
+                    $header = $message->rfc822_header;
+                    
+                    //from read_body.php
+                    
+                    $ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
+                    $cnt = count($ent_ar);
+                    for ($u = 0; $u < $cnt; $u++)
+                    {
+                      $messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u], $id[$k], $mailbox);
+                      $msgData = $messagebody;
+                      /*
+                      if ($i != $cnt-1)
+                      {
+                        $messagebody .= '<hr noshade size=1>';
+                      }
+                      */
+                    }
+                    $explodedmessage= explode("\n",$messagebody);
+                    $implodedmessage = implode(":",$explodedmessage);
+                    $from = $message->rfc822_header->getAddr_s('from');
+                    
+                    //$date = getLongDateString($message->rfc822_header->date);
+                    //Richie : Changed the format to suit the Email part
+                    $date = getVTigerLongDateString($message->rfc822_header->date);
+                    /* 
 				$subject = trim($rfc822_header->subject);
 				$cc = $message->rfc822_header->getAddr_s('cc');
 				$to = $message->rfc822_header->getAddr_s('to');
-
+                                
+                                echo 'date is ' .$date;
 				echo 'cc is '.$cc;
 				echo 'to is '.$to;
-				
+				echo 'subject is ' .$header->subject;
 				print_r($header);
 				exit;
-				*/
-				$fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
-				$subject  = $header->subject ;
-				$msgsubject[$k]=$subject;
-				$msgfromemail[$k]=$fromemail;
-			}
-		      	$tempidlist = implode(",", $id); 
-			$fromemail = implode(",",$msgfromemail);
-			$subject = implode(",",$msgsubject);
-			header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist);      
-			return;
-		}
+                    */
+                    $fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
+                    $subject  = $header->subject ;
+                    $msgsubject[$k]=$subject;
+                    $msgfromemail[$k]=$fromemail;
+                    $mbodies[$k] = $implodedmessage;
+                  }
+                  $tempidlist = implode(",", $id); 
+                  $fromemail = implode(",",$msgfromemail);
+                  $subject = implode(",",$msgsubject);
+                  $detail = implode(",",$mbodies);
+                  
+                  header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist."&adddate=".$date."&detail=".$detail);      
+                  return;
+                }
     
-    if (!isset($attache))
-    {
-      if (isset($markRead))
-      {
-        sqimap_toggle_flag($imapConnection, $id, '\\Seen',true,true);
-      }
-      else if (isset($markUnread))
-      {
-        sqimap_toggle_flag($imapConnection, $id, '\\Seen',false,true);
-      }
-      else
-      {
-        sqimap_msgs_list_delete($imapConnection, $mailbox, $id);
+                    if (!isset($attache))
+                    {
+                      if (isset($markRead))
+                      {
+                        sqimap_toggle_flag($imapConnection, $id, '\\Seen',true,true);
+                      }
+                      else if (isset($markUnread))
+                      {
+                        sqimap_toggle_flag($imapConnection, $id, '\\Seen',false,true);
+                      }
+                      else
+                      {
+                        sqimap_msgs_list_delete($imapConnection, $mailbox, $id);
                 
-        if ($auto_expunge)
-        {
-          $cnt = sqimap_mailbox_expunge($imapConnection, $mailbox, true);
-        }
-        if (($startMessage+$cnt-1) >= $mbx_response['EXISTS'])
-        {
-          if ($startMessage > $show_num)
-          {
-            $location = set_url_var($location,'startMessage',$startMessage-$show_num, false);
-          }
-          else
-          {
-            $location = set_url_var($location,'startMessage',1, false);
-          }
-        }
-      }
-    }
-    else
-    {
-      $composesession = attachSelectedMessages($id, $imapConnection);
-      $location = set_url_var($location, 'session', $composesession, false);
-      if ($compose_new_win)
-      {
-        $location = set_url_var($location, 'composenew', 1, false);
-      }
-      else
-      {
-        $location = str_replace('index.php/module=squirrelmail-1.4.4&action=search','index.php/module=squirrelmail-1.4.4&action=compose',$location);
-        $location = str_replace('index.php/module=squirrelmail-1.4.4&action=right_main','index.php/module=squirrelmail-1.4.4&action=compose',$location);
-      }
-    }
-  }
-  else
-  {
-    $exception = true;
-  }
-}
+                        if ($auto_expunge)
+                        {
+                          $cnt = sqimap_mailbox_expunge($imapConnection, $mailbox, true);
+                        }
+                        if (($startMessage+$cnt-1) >= $mbx_response['EXISTS'])
+                        {
+                          if ($startMessage > $show_num)
+                          {
+                            $location = set_url_var($location,'startMessage',$startMessage-$show_num, false);
+                          }
+                          else
+                          {
+                            $location = set_url_var($location,'startMessage',1, false);
+                          }
+                        }
+                      }
+                    }
+                    else
+                    {
+                      $composesession = attachSelectedMessages($id, $imapConnection);
+                      $location = set_url_var($location, 'session', $composesession, false);
+                      if ($compose_new_win)
+                      {
+                        $location = set_url_var($location, 'composenew', 1, false);
+                      }
+                      else
+                      {
+                        $location = str_replace('index.php/module=squirrelmail-1.4.4&action=search','index.php/module=squirrelmail-1.4.4&action=compose',$location);
+                        $location = str_replace('index.php/module=squirrelmail-1.4.4&action=right_main','index.php/module=squirrelmail-1.4.4&action=compose',$location);
+                      }
+                    }
+                  }
+                  else
+                  {
+                    $exception = true;
+                  }
+                }
 else
 {    // Move messages
   if (count($id))

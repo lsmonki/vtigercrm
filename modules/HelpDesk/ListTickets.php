@@ -74,10 +74,13 @@ $search_query="select troubletickets.ticketid,parent_id,priority,troubletickets.
 
 $resultcount = $adb->num_rows($adb->query($search_query));
 $tktresult = $adb->limitquery($search_query,0,5);
-$ticketListheader = get_form_header($current_module_strings['LBL_MY_TICKETS'], "", false );
+//$ticketListheader = get_form_header($current_module_strings['LBL_MY_TICKETS'], "", false );
 echo "<br>";
 
-$list.=$ticketListheader;
+$list .='<table border=0 cellspacing=0 cellpadding=0 width=100%><tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont(\'home_mytkt\');"><td nowrap><img src="'.$image_path.'myTickets.gif" style="padding:5px"></td><td width=100%><b>'.$current_module_strings['LBL_MY_TICKETS'].'</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mytkt" border=0></td></tr>';
+$list .= '<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>';
+$list .= '<tr><td colspan=3>';
+$list .= '<div id="home_mytkt" style="display:block;">';
 $list.='<table width=100% cellpadding="0" cellspacing="0" border="0">';
 
 //$list.='<!-- BEGIN: list_nav_row -->';
@@ -141,6 +144,10 @@ if($resultcount > 5)
         $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td></tr>';
 
 $list.='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
+$list .= '</div></td></tr></table>';
+$list .= '<script language=\'Javascript\'>
+        var leftpanelistarray=new Array(\'home_mytkt\');
+  setExpandCollapse_gen()</script>';
 echo $list;
 
 function getParentLink($parent_id)

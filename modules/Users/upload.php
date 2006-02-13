@@ -27,7 +27,7 @@
  <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
  <TABLE width="50%" BORDER="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
  <tr>
- 	<td class="formSecHeader">File Information</td>
+ 	<td class="formSecHeader"><?php echo $mod_strings['LBL_FILE_INFORMATION']; ?></td>
 </tr>
  	<td> 
 	<TABLE BORDER="0" cellspacing="1" cellpadding="5">

@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Products/index.php,v 1.9 2005/06/20 12:16:43 crouchingtiger Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Products/index.php,v 1.9.2.2 2005/09/12 10:05:33 saraj Exp $
 
  * Description:  TODO To be written.
 
@@ -49,6 +49,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 require_once ($theme_path."layout_utils.php");
+require_once('include/ComboUtil.php');
 
 global $mod_strings;
 
@@ -113,6 +114,21 @@ echo "\n<BR>\n";
    </td>
  </tr>
 </table>
+
+<?
+if($_REQUEST['smodule']=='' || $_REQUEST['smodule']=="PRODUCTS")
+{
+        echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
+        echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);
+        echo "</td></tr>";
+        echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
+        echo "<ul>";
+        include('modules/Import/ImportButton.php');
+        echo "</ul>";
+        echo "</td></tr></table>";
+}
+?>
+
 
 <!--script>
 function toggleTab(id) {

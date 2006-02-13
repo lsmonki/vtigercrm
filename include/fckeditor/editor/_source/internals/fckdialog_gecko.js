@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,19 +11,17 @@
  * File Name: fckdialog_gecko.js
  * 	Dialog windows operations. (Gecko specific implementations)
  * 
- * Version:  2.0 RC3
- * Modified: 2004-12-28 00:42:29
- * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
 
-FCKDialog.Show = function( dialogInfo, dialogName, pageUrl, dialogWidth, dialogHeight, parentWindow )
+FCKDialog.Show = function( dialogInfo, dialogName, pageUrl, dialogWidth, dialogHeight, parentWindow, resizable )
 {
 	var iTop  = (screen.height - dialogHeight) / 2 ;
 	var iLeft = (screen.width  - dialogWidth)  / 2 ;
 
-	var sOption  = "location=no,menubar=no,resizable=no,toolbar=no,dependent=yes,dialog=yes,minimizable=no,modal=yes,alwaysRaised=yes" +
+	var sOption  = "location=no,menubar=no,toolbar=no,dependent=yes,dialog=yes,minimizable=no,modal=yes,alwaysRaised=yes" +
+		",resizable="  + ( resizable ? 'yes' : 'no' ) +
 		",width="  + dialogWidth +
 		",height=" + dialogHeight +
 		",top="  + iTop +
@@ -32,7 +30,7 @@ FCKDialog.Show = function( dialogInfo, dialogName, pageUrl, dialogWidth, dialogH
 	if ( !parentWindow )
 		parentWindow = window ;
 	
-	var oWindow = parentWindow.open( '', 'FCKEditorDialog_' + dialogName, sOption, true ) ;
+	var oWindow = parentWindow.open( '', 'FCKeditorDialog_' + dialogName, sOption, true ) ;
 	oWindow.moveTo( iLeft, iTop ) ;
 	oWindow.resizeTo( dialogWidth, dialogHeight ) ;
 	oWindow.focus() ;
@@ -91,4 +89,3 @@ FCKDialog.CheckFocus = function()
 		{}
 	}
 }
-

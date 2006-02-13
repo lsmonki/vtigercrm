@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: sl.js
  * 	Slovenian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:18
  * 
  * File Authors:
  * 		Boris Volarič (vol@rutka.net)
@@ -44,6 +41,8 @@ RemoveLink			: "Odstrani povezavo",
 Anchor				: "Vstavi/uredi zaznamek",
 InsertImageLbl		: "Slika",
 InsertImage			: "Vstavi/uredi sliko",
+InsertFlashLbl		: "Flash",
+InsertFlash			: "Vstavi/Uredi Flash",
 InsertTableLbl		: "Tabela",
 InsertTable			: "Vstavi/uredi tabelo",
 InsertLineLbl		: "Črta",
@@ -108,6 +107,7 @@ SplitCell			: "Razdeli celico",
 CellProperties		: "Lastnosti celice",
 TableProperties		: "Lastnosti tabele",
 ImageProperties		: "Lastnosti slike",
+FlashProperties		: "Lastnosti Flash",
 
 AnchorProp			: "Lastnosti zaznamka",
 ButtonProp			: "Lastnosti gumba",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Lastnosti spustnega seznama",
 TextareaProp		: "Lastnosti vnosnega območja",
 FormProp			: "Lastnosti obrazca",
 
-FontFormats			: "Navaden;Oblikovan;Napis;Naslov 1;Naslov 2;Naslov 3;Naslov 4;Naslov 5;Naslov 6",	// 2.0: The last entry has been added.
+FontFormats			: "Navaden;Oblikovan;Napis;Naslov 1;Naslov 2;Naslov 3;Naslov 4;Naslov 5;Naslov 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "Obdelujem XHTML. Prosim počakajte...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Zapri",
 DlgBtnBrowseServer	: "Prebrskaj na strežniku",
 DlgAdvancedTag		: "Napredno",
 DlgOpOther			: "&lt;Ostalo&gt;",
+DlgInfoTab			: "Podatki",
+DlgAlertUrl			: "Prosim vpiši spletni naslov",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;ni postavljen&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Besedilo na vrh",
 DlgImgAlignTop		: "Na vrh",
 DlgImgPreview		: "Predogled",
 DlgImgAlertUrl		: "Vnesite URL slike",
+DlgImgLinkTab		: "Povezava",
+
+// Flash Dialog
+DlgFlashTitle		: "Lastnosti Flash",
+DlgFlashChkPlay		: "Samodejno predvajaj",
+DlgFlashChkLoop		: "Ponavljanje",
+DlgFlashChkMenu		: "Omogoči Flash Meni",
+DlgFlashScale		: "Povečava",
+DlgFlashScaleAll	: "Pokaži vse",
+DlgFlashScaleNoBorder	: "Brez obrobe",
+DlgFlashScaleFit	: "Natančno prileganje",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Povezava",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "Varnostne nastavitve brskalnika ne dopuščajo samodejnega kop
 PasteAsText		: "Prilepi kot golo besedilo",
 PasteFromWord	: "Prilepi iz Worda",
 
-DlgPasteMsg		: "Ni bilo mogoče izvesti lepljenja zaradi <STRONG>varnostnih nastavitev</STRONG> vašega brskalnika.<BR>Prilepite v sledeče okno s kombinacijo tipk na tipkovnici (<STRONG>Ctrl+V</STRONG>) in pritisnite <STRONG>V redu</STRONG>.",
+DlgPasteMsg2	: "Prosim prilepite v sleči okvir s pomočjo tipkovnice (<STRONG>Ctrl+V</STRONG>) in pritisnite <STRONG>V redu</STRONG>.",
+DlgPasteIgnoreFont		: "Prezri obliko pisave",
+DlgPasteRemoveStyles	: "Odstrani nastavitve stila",
+DlgPasteCleanBox		: "Počisti okvir",
+
 
 // Color Picker
 ColorAutomatic	: "Samodejno",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Opis strani",
 DlgDocMeAuthor		: "Avtor",
 DlgDocMeCopy		: "Avtorske pravice",
 DlgDocPreview		: "Predogled",
+
+// Templates Dialog
+Templates			: "Predloge",
+DlgTemplatesTitle	: "Vsebinske predloge",
+DlgTemplatesSelMsg	: "Izberite predlogo, ki jo želite odpreti v urejevalniku<br>(trenutna vsebina bo izgubljena):",
+DlgTemplatesLoading	: "Nalagam seznam predlog. Prosim počakajte...",
+DlgTemplatesNoTpl	: "(Ni pripravljenih predlog)",
 
 // About Dialog
 DlgAboutAboutTab	: "Vizitka",

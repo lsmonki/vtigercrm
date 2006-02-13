@@ -183,7 +183,7 @@ tCol='#000000'; //select/form text colour.
 
 //Alter nothing below! Alignments will be lost!
 y=87;
-x=60;
+xpos=60;
 h=4;
 m=5;
 s=6;
@@ -220,14 +220,14 @@ for (i=0; i < n; i++){
 //	document.write('<div id="theFace'+i+'" class="facestyle" style="color:'+fCol+'"><\/div>');
  cf[i]=document.getElementById("theFace"+i).style;
  cf[i].top=y-6+30*1.4*Math.sin(i*e*Math.PI/180)+"px";
- cf[i].left=x-6+30*1.4*Math.cos(i*e*Math.PI/180)+"px";
+ cf[i].left=xpos-6+30*1.4*Math.cos(i*e*Math.PI/180)+"px";
 }
 for (i=0; i < n; i++){
 /*
  document.write('<div id="theDots'+i+'" class="handsanddotsstyle" style="background-color:'+dCol+'"><\/div>');
  cd[i]=document.getElementById("theDots"+i).style;
  cd[i].top=y+30*Math.sin(i*e*Math.PI/180)+"px";
- cd[i].left=x+30*Math.cos(i*e*Math.PI/180)+"px";
+ cd[i].left=xpos+30*Math.cos(i*e*Math.PI/180)+"px";
 */
 }
 for (i=0; i < h; i++){
@@ -249,11 +249,11 @@ var dsp3=document.getElementById("theDate").style;
 //var dsp4=document.getElementById("city").style;
 var dsp5=document.getElementById("theClockLayer").style;
 dsp1.top=y+"px";
-dsp1.left=x-8+"px";
+dsp1.left=xpos-8+"px";
 dsp2.top=y-80+"px";
-dsp2.left=x-55+"px";
+dsp2.left=xpos-55+"px";
 dsp3.top=y+55+"px";
-dsp3.left=x-60+"px";
+dsp3.left=xpos-60+"px";
 //dsp4.backgroundColor=bCol;
 //dsp4.color=tCol;
 //var currSkin="<%=skintype%>"
@@ -375,22 +375,29 @@ function ClockAndAssign(){
 	
 	for (i=0;i<s;i++){
 	 cs[i].top=y+(i*hDims)*Math.sin(sec)+"px";
-	 cs[i].left=x+(i*hDims)*Math.cos(sec)+"px";
+	 cs[i].left=xpos+(i*hDims)*Math.cos(sec)+"px";
 	}
 	for (i=0;i<m;i++){
 	 cm[i].top=y+(i*hDims)*Math.sin(min)+"px";
-	 cm[i].left=x+(i*hDims)*Math.cos(min)+"px";
+	 cm[i].left=xpos+(i*hDims)*Math.cos(min)+"px";
 	}
 	for (i=0;i<h;i++){
 	 ch[i].top=y+(i*hDims)*Math.sin(hrs)+"px";
-	 ch[i].left=x+(i*hDims)*Math.cos(hrs)+"px";
+	 ch[i].left=xpos+(i*hDims)*Math.cos(hrs)+"px";
 	}
 	
 	document.getElementById("amOrPm").firstChild.data=ampm;
 	
 //	if (hr.toString().length==1) hr="0"+hr
-	if (hr==0) hr=12
-	else if (hr>11) hr-=12;
+	if (hr==0)
+	{
+		 hr=12
+	}
+	else if (hr>12)
+	{
+		 hr-=12;
+	}
+
 	
 	if (mins.toString().length==1) mins="0"+mins;
 	

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fckcontextmenuitem.js
  * 	FCKContextMenuItem Class: represents a item in the context menu.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-02-23 23:44:49
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -26,6 +23,28 @@ var FCKContextMenuItem = function( contextMenu, commandName, label, hasIcon )
 	this.HasIcon		= hasIcon ? true : false ;
 }
 
+function FCKContextMenuItem_OnMouseOver()
+{
+	if ( this.className != 'CM_Disabled' )
+		this.className = 'CM_Over' ;
+}
+	
+function FCKContextMenuItem_OnMouseOut()
+{
+	if ( this.className != 'CM_Disabled' )
+		this.className = 'CM_Option' ;
+}
+	
+function FCKContextMenuItem_OnClick()
+{
+	if ( this.className != 'CM_Disabled' )
+	{
+		this.FCKContextMenuItem.ContextMenu.Hide() ;
+		this.FCKContextMenuItem.Command.Execute() ;
+	}
+	return false ;
+}
+
 FCKContextMenuItem.prototype.CreateTableRow = function( targetTable )
 {
 	// Creates the <TR> element.
@@ -33,29 +52,9 @@ FCKContextMenuItem.prototype.CreateTableRow = function( targetTable )
 	this._Row.className = 'CM_Disabled' ;
 	this._Row.FCKContextMenuItem = this ;
 	
-	// Sets the mouse over event.
-	this._Row.onmouseover = function()
-	{
-		if ( this.className != 'CM_Disabled' )
-			this.className = 'CM_Over' ;
-	}
-	
-	// Sets the mouse out event.
-	this._Row.onmouseout = function()
-	{
-		if ( this.className != 'CM_Disabled' )
-			this.className = 'CM_Option' ;
-	}
-	
-	this._Row.onclick = function()
-	{
-		if ( this.className != 'CM_Disabled' )
-		{
-			this.FCKContextMenuItem.ContextMenu.Hide() ;
-			this.FCKContextMenuItem.Command.Execute() ;
-		}
-		return false ;
-	}
+	this._Row.onmouseover	= FCKContextMenuItem_OnMouseOver ;
+	this._Row.onmouseout	= FCKContextMenuItem_OnMouseOut ;
+	this._Row.onclick		= FCKContextMenuItem_OnClick ;
 	
 	var oCell = this._Row.insertCell(-1) ;
 	oCell.className = 'CM_Icon' ;

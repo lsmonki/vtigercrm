@@ -57,7 +57,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("CURRENCY_SYMBOL", getCurrencySymbol());
 
 // Stick the form header out there.
-echo get_form_header($current_module_strings['LBL_TOP_OPPORTUNITIES'], '', false);
+//echo get_form_header($current_module_strings['LBL_TOP_OPPORTUNITIES'], '', false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));

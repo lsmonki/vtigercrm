@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/ImportStep3.php,v 1.18 2005/07/11 10:21:06 mickie Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Import/ImportStep3.php,v 1.18.2.1 2005/09/02 11:11:26 cooljaguar Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -31,6 +31,7 @@ require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
+require_once('modules/Import/ImportProduct.php');
 
 @session_unregister('column_position_to_field');
 @session_unregister('totalrows');
@@ -175,6 +176,11 @@ else if ( $_REQUEST['module'] == 'Leads')
 {
 	$focus = new ImportLead();
 }
+else if ( $_REQUEST['module'] == 'Products')
+{
+	$focus = new ImportProduct();
+}
+
 
 
 //if ($has_header)
@@ -341,6 +347,12 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 		$tablename='potential';
 		$focus1=new Potential();
 	}
+	if($_REQUEST['module']=='Products')
+ 	{
+ 		$tablename='products';
+ 		$focus1=new Product();
+ 	}
+
 	
 //echo 'xxxxxxxxxxxxxxxxxxxx';
 //print_r($focus->importable_fields);

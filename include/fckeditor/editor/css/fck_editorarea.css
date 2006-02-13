@@ -1,6 +1,6 @@
 /*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -16,9 +16,6 @@
  * 	the value of the FCKConfig.EditorAreaCSS key in the configuration
  * 	file.
  * 
- * Version:  2.0 RC3
- * Modified: 2005-02-10 11:46:11
- * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
@@ -32,6 +29,18 @@ body
 	border-style: none;
 	background-color: #ffffff;
 }
+
+/* 
+	Just uncomment the following block if you want to avoid spaces between 
+	paragraphs. Remember to apply the same style in your output front end page.
+*/
+/*
+P, UL, LI
+{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+*/
 
 .Bold
 {

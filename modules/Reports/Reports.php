@@ -99,7 +99,7 @@ class Reports extends CRMEntity{
 				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
 				 "Notes"=>Array("Information"=>1,"Description"=>3),
 				 "Emails"=>Array("Information"=>1,"Description"=>2),
-				 "HelpDesk"=>Array("Information"=>'1,2',"Custom Information"=>5,"Description"=>6),
+				 "HelpDesk"=>Array("Information"=>'1,2',"Custom Information"=>5,"Description"=>3,"Solution"=>4),//patch2
 				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)

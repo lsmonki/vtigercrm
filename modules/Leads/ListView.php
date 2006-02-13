@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Leads/ListView.php,v 1.29 2005/07/16 11:48:50 venkatraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Leads/ListView.php,v 1.29.2.1 2005/09/09 09:15:18 mickie Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -331,17 +331,17 @@ if(isset($CActionDtls))
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">Edit</span>
+$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">Delete</span><span class="sep">|</span>
-<a href="index.php?module=Leads&action=CustomView" class="link">Create View</a>';
+<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+<a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+$cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Leads&record='.$viewid.'" class="link">Delete</a>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Leads&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=Leads&action=CustomView" class="link">Create View</a>';
+<a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">

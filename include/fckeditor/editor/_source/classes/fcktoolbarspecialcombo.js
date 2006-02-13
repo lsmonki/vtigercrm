@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -18,9 +18,6 @@
  * 		- Method:	GetLabel()							[ Returns the label ]
  * 		-			CreateItems( targetSpecialCombo )	[ Add all items in the special combo ]
  * 
- * Version:  2.0 RC3
- * Modified: 2005-01-04 18:41:03
- * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
@@ -29,6 +26,11 @@ var FCKToolbarSpecialCombo = function()
 {
 	this.SourceView			= false ;
 	this.ContextSensitive	= true ;
+}
+
+function FCKToolbarSpecialCombo_OnSelect( itemId, item )
+{
+	this.Command.Execute( itemId, item ) ;
 }
 
 FCKToolbarSpecialCombo.prototype.CreateInstance = function( parentToolbar )
@@ -44,10 +46,14 @@ FCKToolbarSpecialCombo.prototype.CreateInstance = function( parentToolbar )
 
 	this._Combo.Command = this.Command ;
 	
-	this._Combo.OnSelect = function( itemId, item )
-	{
-		this.Command.Execute( itemId, item ) ;
-	}
+	this._Combo.OnSelect = FCKToolbarSpecialCombo_OnSelect ;
+}
+
+function FCKToolbarSpecialCombo_RefreshActiveItems( combo, value )
+{
+	combo.DeselectAll() ;
+	combo.SelectItem( value ) ;
+	combo.SetLabelById( value ) ;
 }
 
 FCKToolbarSpecialCombo.prototype.RefreshState = function()
@@ -65,16 +71,10 @@ FCKToolbarSpecialCombo.prototype.RefreshState = function()
 		{
 			eState = FCK_TRISTATE_ON ;
 			
-			if ( !this.RefreshActiveItems )
-			{
-				this.RefreshActiveItems = function( combo, value )
-				{
-					this._Combo.DeselectAll() ;
-					this._Combo.SelectItem( value ) ;
-					this._Combo.SetLabelById( value ) ;
-				}
-			}
-			this.RefreshActiveItems( this._Combo, sValue ) ;
+			if ( this.RefreshActiveItems )
+				this.RefreshActiveItems( this._Combo, sValue ) ;
+			else
+				FCKToolbarSpecialCombo_RefreshActiveItems( this._Combo, sValue ) ;
 		}
 		else
 			eState = FCK_TRISTATE_DISABLED ;

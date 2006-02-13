@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Accounts/ListViewTop.php,v 1.2.2.1 2005/08/05 13:01:50 indigoleopard Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Accounts/ListViewTop.php,v 1.2.2.2 2005/09/09 10:21:51 crouchingtiger Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -49,7 +49,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("CURRENCY_SYMBOL", getCurrencySymbol());
 
 // Stick the form header out there.
-echo get_form_header($current_module_strings['LBL_TOP_ACCOUNTS'], '', false);
+//echo get_form_header($current_module_strings['LBL_TOP_ACCOUNTS'], '', false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));

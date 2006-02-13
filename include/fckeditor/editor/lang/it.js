@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: it.js
  * 	Italian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Simone Chiaretta (simone@piyosailing.com)
@@ -44,6 +41,8 @@ RemoveLink			: "Elimina collegamento",
 Anchor				: "Inserisci/Modifica Ancora",
 InsertImageLbl		: "Immagine",
 InsertImage			: "Inserisci/Modifica immagine",
+InsertFlashLbl		: "Oggetto Flash",
+InsertFlash			: "Inserisci/Modifica Oggetto Flash",
 InsertTableLbl		: "Tabella",
 InsertTable			: "Inserisci/Modifica tabella",
 InsertLineLbl		: "Riga orizzontale",
@@ -79,7 +78,7 @@ Font				: "Font",
 FontSize			: "Dimensione",
 TextColor			: "Colore testo",
 BGColor				: "Colore sfondo",
-Source				: "Codice",
+Source				: "Codice Sorgente",
 Find				: "Trova",
 Replace				: "Sostituisci",
 SpellCheck			: "Correttore ortografico",
@@ -105,28 +104,29 @@ InsertCell			: "Inserisci cella",
 DeleteCells			: "Elimina celle",
 MergeCells			: "Unisce celle",
 SplitCell			: "Dividi celle",
-CellProperties		: "Proprietà cella",
-TableProperties		: "Proprietà tabella",
-ImageProperties		: "Proprietà immagine",
+CellProperties		: "Propriet cella",
+TableProperties		: "Propriet tabella",
+ImageProperties		: "Propriet immagine",
+FlashProperties		: "Propriet Oggetto Flash",
 
-AnchorProp			: "Proprietà ancora",
-ButtonProp			: "Proprietà bottone",
-CheckboxProp		: "Proprietà checkbox",
-HiddenFieldProp		: "Proprietà campo nascosto",
-RadioButtonProp		: "Proprietà radio button",
-ImageButtonProp		: "Proprietà bottone immagine",
-TextFieldProp		: "Proprietà campo di testo",
-SelectionFieldProp	: "Proprietà menu di selezione",
-TextareaProp		: "Proprietà area di testo",
-FormProp			: "Proprietà modulo",
+AnchorProp			: "Propriet ancora",
+ButtonProp			: "Propriet bottone",
+CheckboxProp		: "Propriet checkbox",
+HiddenFieldProp		: "Propriet campo nascosto",
+RadioButtonProp		: "Propriet radio button",
+ImageButtonProp		: "Propriet bottone immagine",
+TextFieldProp		: "Propriet campo di testo",
+SelectionFieldProp	: "Propriet menu di selezione",
+TextareaProp		: "Propriet area di testo",
+FormProp			: "Propriet modulo",
 
-FontFormats			: "Normale;Formattato;Indirizzo;Titolo 1;Titolo 2;Titolo 3;Titolo 4;Titolo 5;Titolo 6;Paragrafo (DIV)",	// 2.0: The last entry has been added.
+FontFormats			: "Normale;Formattato;Indirizzo;Titolo 1;Titolo 2;Titolo 3;Titolo 4;Titolo 5;Titolo 6;Paragrafo (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "Elaborazione XHTML in corso. Attendere prego...",
 Done				: "Completato",
 PasteWordConfirm	: "Il testo da incollare sembra provenire da Word. Desideri pulirlo prima di incollare?",
-NotCompatiblePaste	: "Questa funzione è disponibile solo per Internet Explorer 5.5 o superiore. Desideri incollare il testo senza pulirlo?",
+NotCompatiblePaste	: "Questa funzione  disponibile solo per Internet Explorer 5.5 o superiore. Desideri incollare il testo senza pulirlo?",
 UnknownToolbarItem	: "Elemento della barra strumenti sconosciuto \"%1\"",
 UnknownCommand		: "Comando sconosciuto \"%1\"",
 NotImplemented		: "Commando non implementato",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Chiudi",
 DlgBtnBrowseServer	: "Cerca sul server",
 DlgAdvancedTag		: "Avanzate",
 DlgOpOther			: "&lt;Altro&gt;",
+DlgInfoTab			: "Info",
+DlgAlertUrl			: "Devi inserire l'URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;non impostato&gt;",
@@ -158,7 +160,7 @@ DlgGenLinkCharset	: "Set di caretteri della risorsa collegata",
 DlgGenStyle			: "Stile",
 
 // Image Dialog
-DlgImgTitle			: "Proprietà immagine",
+DlgImgTitle			: "Propriet immagine",
 DlgImgInfoTab		: "Informazioni immagine",
 DlgImgBtnUpload		: "Invia al server",
 DlgImgURL			: "URL",
@@ -182,7 +184,18 @@ DlgImgAlignRight	: "Destra",
 DlgImgAlignTextTop	: "In alto al testo",
 DlgImgAlignTop		: "In Alto",
 DlgImgPreview		: "Anteprima",
-DlgImgAlertUrl		: "Inserisci il tipo di URL per l'immagine",
+DlgImgAlertUrl		: "Devi inserire l'URL per l'immagine",
+DlgImgLinkTab		: "Collegamento",
+
+// Flash Dialog
+DlgFlashTitle		: "Propriet Oggetto Flash",
+DlgFlashChkPlay		: "Avvio Automatico",
+DlgFlashChkLoop		: "Cicla",
+DlgFlashChkMenu		: "Abilita Menu di Flash",
+DlgFlashScale		: "Ridimensiona",
+DlgFlashScaleAll	: "Mostra Tutto",
+DlgFlashScaleNoBorder	: "Senza Bordo",
+DlgFlashScaleFit	: "Dimensione Esatta",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Collegamento",
@@ -246,7 +259,7 @@ DlgSmileyTitle		: "Inserisci emoticon",
 DlgSpecialCharTitle	: "Seleziona carattere speciale",
 
 // Table Dialog
-DlgTableTitle		: "Proprietà tabella",
+DlgTableTitle		: "Propriet tabella",
 DlgTableRows		: "Righe",
 DlgTableColumns		: "Colonne",
 DlgTableBorder		: "Dimensione bordo",
@@ -264,7 +277,7 @@ DlgTableCellPad		: "Padding celle",
 DlgTableCaption		: "Intestazione",
 
 // Table Cell Dialog
-DlgCellTitle		: "Proprietà cella",
+DlgCellTitle		: "Propriet cella",
 DlgCellWidth		: "Larghezza",
 DlgCellWidthPx		: "pixel",
 DlgCellWidthPc		: "percento",
@@ -293,7 +306,7 @@ DlgCellBtnSelect	: "Scegli...",
 // Find Dialog
 DlgFindTitle		: "Trova",
 DlgFindFindBtn		: "Trova",
-DlgFindNotFoundMsg	: "L'elemento cercato non è stato trovato.",
+DlgFindNotFoundMsg	: "L'elemento cercato non  stato trovato.",
 
 // Replace Dialog
 DlgReplaceTitle			: "Sostituisci",
@@ -312,17 +325,21 @@ PasteErrorCopy	: "Le impostazioni di sicurezza del browser non permettono di cop
 PasteAsText		: "Incolla come testo semplice",
 PasteFromWord	: "Incolla da Word",
 
-DlgPasteMsg		: "Impossibile incollare automaticamente a causa delle <STRONG>impostazioni di sicurezza</STRONG> del browser.<BR>Incolla nel riquadro sottostante (<STRONG>Ctrl+V</STRONG>) e premi <STRONG>OK</STRONG>.",
+DlgPasteMsg2	: "Incolla il testo all'interno dell'area sottostante usando la scorciatoia di tastiere (<STRONG>Ctrl+V</STRONG>) e premi <STRONG>OK</STRONG>.",
+DlgPasteIgnoreFont		: "Ignora le definizioni di Font",
+DlgPasteRemoveStyles	: "Rimuovi le definizioni di Stile",
+DlgPasteCleanBox		: "Svuota area di testo",
+
 
 // Color Picker
 ColorAutomatic	: "Automatico",
 ColorMoreColors	: "Altri colori...",
 
 // Document Properties
-DocProps		: "Proprietà del Documento",
+DocProps		: "Propriet del Documento",
 
 // Anchor Dialog
-DlgAnchorTitle		: "Proprietà ancora",
+DlgAnchorTitle		: "Propriet ancora",
 DlgAnchorName		: "Nome ancora",
 DlgAnchorErrorName	: "Inserici il nome dell'ancora",
 
@@ -369,7 +386,7 @@ DlgSelectOpValue	: "Valore",
 DlgSelectBtnAdd		: "Aggiungi",
 DlgSelectBtnModify	: "Modifica",
 DlgSelectBtnUp		: "Su",
-DlgSelectBtnDown	: "Giù",
+DlgSelectBtnDown	: "Gi",
 DlgSelectBtnSetValue : "Imposta come predefinito",
 DlgSelectBtnDelete	: "Rimuovi",
 
@@ -392,8 +409,8 @@ DlgHiddenName	: "Nome",
 DlgHiddenValue	: "Valore",
 
 // Bulleted List Dialog
-BulletedListProp	: "Proprietà lista puntata",
-NumberedListProp	: "Proprietà lista numerata",
+BulletedListProp	: "Propriet lista puntata",
+NumberedListProp	: "Propriet lista numerata",
 DlgLstType			: "Tipo",
 DlgLstTypeCircle	: "Tondo",
 DlgLstTypeDisk		: "Disco",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Descrizione documento",
 DlgDocMeAuthor		: "Autore",
 DlgDocMeCopy		: "Copyright",
 DlgDocPreview		: "Anteprima",
+
+// Templates Dialog
+Templates			: "Modelli",
+DlgTemplatesTitle	: "Contenuto dei modelli",
+DlgTemplatesSelMsg	: "Seleziona il modello da aprire nell'editor<br>(il contenuto attuale verr eliminato):",
+DlgTemplatesLoading	: "Caricamento modelli in corso. Attendere prego...",
+DlgTemplatesNoTpl	: "(Nessun modello definito)",
 
 // About Dialog
 DlgAboutAboutTab	: "Informazioni",
