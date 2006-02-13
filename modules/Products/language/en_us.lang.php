@@ -141,6 +141,9 @@ $mod_strings = Array(
 'Country'=>'Country',
 'Description'=>'Description',
 
+// Mapping for email search lablel
+'LBL_EMAIL'=>'Email',
+
 //Mapping for price book
 'Price Book Name'=>'Price Book Name',
 'Product Name'=>'Product Name',
