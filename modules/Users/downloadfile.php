@@ -14,10 +14,10 @@ require_once('include/database/PearDatabase.php');
 
 global $fileId;
 
-$filename = $_REQUEST['filename'];
+$templateid = $_REQUEST['record'];
 $dbQuery = "SELECT filename,filetype, data ";
 $dbQuery .= "FROM wordtemplates ";
-$dbQuery .= "WHERE filename = '" .$filename ."'";
+$dbQuery .= "WHERE templateid=".$templateid;
 
 $result = $adb->query($dbQuery) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)

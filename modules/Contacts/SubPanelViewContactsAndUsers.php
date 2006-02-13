@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Contacts/SubPanelViewContactsAndUsers.php,v 1.16 2005/05/03 13:18:53 saraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Contacts/Attic/SubPanelViewContactsAndUsers.php,v 1.16 2005/05/03 13:18:53 saraj Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

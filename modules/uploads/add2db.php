@@ -16,6 +16,18 @@ require_once('include/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
+// Arbitrary File Upload Vulnerability fix - Philip
+$binFile = $_FILES['binFile']['name'];
+    $ext_pos = strrpos($binFile, ".");
+
+        $ext = substr($binFile, $ext_pos + 1);
+
+        if (in_array($ext, $upload_badext))
+        {
+                $binFile .= ".txt";
+        }
+$_FILES["binFile"]["name"] = $binFile;
+// Vulnerability fix ends
 
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {

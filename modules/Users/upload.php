@@ -34,10 +34,10 @@
 	<TR>
 	   <TD class="dataLabel"><?php echo $mod_strings['LBL_MODULENAMES']; ?>:</TD>
 	   <TD><SELECT name="target_module">
-	<option><?php echo $app_strings['COMBO_LEADS'];?></option>
-	<option><?php echo $app_strings['COMBO_ACCOUNTS'];?></option>
-	<option><?php echo $app_strings['COMBO_CONTACTS'];?></option>
-        <option><?php echo $app_strings['COMBO_HELPDESK'];?></option>
+	    <option value="Leads"><?php echo $app_strings['COMBO_LEADS'];?></option>
+	    <option value="Accounts"><?php echo $app_strings['COMBO_ACCOUNTS'];?></option>
+	    <option value="Contacts"><?php echo $app_strings['COMBO_CONTACTS'];?></option>
+         <option value="HelpDesk"><?php echo $app_strings['COMBO_HELPDESK'];?></option>
 	</SELECT>
 	</TD> 
   </TR>

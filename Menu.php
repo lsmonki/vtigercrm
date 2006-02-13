@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/Menu.php,v 1.17 2005/06/21 16:37:27 crouchingtiger Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/Attic/Menu.php,v 1.17 2005/06/21 16:37:27 crouchingtiger Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

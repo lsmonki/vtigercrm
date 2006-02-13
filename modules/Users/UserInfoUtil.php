@@ -465,7 +465,7 @@ if(isset($_REQUEST['actiontype']))
 function fetchWordTemplateList($module)
 {
   global $adb;
-  $sql_word = "select filename from wordtemplates where module ='".$module."'" ; 
+  $sql_word = "select templateid,filename from wordtemplates where module ='".$module."'" ; 
   $result=$adb->query($sql_word);
   return $result;
 }

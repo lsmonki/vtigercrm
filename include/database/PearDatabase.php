@@ -434,7 +434,7 @@ global $vtlog;
 		$result->Move($row);
 		$rowdata = $this->change_key_case($result->FetchRow());
 		//$this->println($rowdata);
-		$coldata = $rowdata[$col];
+		$coldata = to_html($rowdata[$col]);
 		//$this->println("ADODB query_result ". $coldata);
 		return $coldata;
 	}

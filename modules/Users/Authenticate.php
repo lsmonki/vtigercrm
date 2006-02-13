@@ -31,7 +31,7 @@ $local_log =& LoggerManager::getLogger('authenticate');
 $focus = new User();
 
 // Add in defensive code here.
-$focus->user_name = $_REQUEST['user_name'];
+$focus->user_name = to_html($_REQUEST['user_name']);
 $user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);

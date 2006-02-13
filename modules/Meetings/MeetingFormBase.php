@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Meetings/MeetingFormBase.php,v 1.10 2005/01/17 05:11:30 saraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Meetings/Attic/MeetingFormBase.php,v 1.10 2005/01/17 05:11:30 saraj Exp $
  * Description:  Base Form For Meetings
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
