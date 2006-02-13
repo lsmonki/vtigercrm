@@ -51,7 +51,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	}
 
 	if(!@$sign = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")){}
-        $contents .= '<br><br><font color=darkgrey>'.nl2br($sign).'</font>';
+        $contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
 	$vtlog->logthis("Current logged in users signature is added with body of the email => ".$sign,'info');
 
 	$mail->Subject = $subject;
