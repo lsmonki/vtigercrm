@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fcktools.js
  * 	Utility functions.
  * 
@@ -25,19 +27,6 @@ var FCKTools = new Object() ;
 FCKTools.GetLinkedFieldValue = function()
 {
 	return FCK.LinkedField.value ;
-}
-
-//**
-// FCKTools.SetLinkedFieldValue: Sets the value of the hidden INPUT element
-// that is associated to the editor. This element has its ID set to the 
-// editor's instance name so the user reffers to the instance name when getting
-// the posted data.
-FCKTools.SetLinkedFieldValue = function( value )
-{
-	if ( FCKConfig.FormatOutput )
-		FCK.LinkedField.value = FCKCodeFormatter.Format( value ) ;
-	else
-		FCK.LinkedField.value = value ;
 }
 
 //**
@@ -109,7 +98,7 @@ FCKTools.AddSelectOption = function( targetDocument, selectElement, optionText, 
 
 	return oOption ;
 }
-
+/*
 FCKTools.RemoveAllSelectOptions = function( selectElement )
 {
 	for ( var i = selectElement.options.length - 1 ; i >= 0 ; i-- )
@@ -133,7 +122,7 @@ FCKTools.SelectNoCase = function( selectElement, value, defaultValue )
 	
 	if ( defaultValue != null ) FCKTools.SelectNoCase( selectElement, defaultValue ) ;
 }
-
+*/
 FCKTools.HTMLEncode = function( text )
 {
 	if ( !text )
@@ -147,7 +136,7 @@ FCKTools.HTMLEncode = function( text )
 
 	return text ;
 }
-
+/*
 //**
 // FCKTools.GetResultingArray: Gets a array from a string (where the elements 
 // are separated by a character), a fuction (that returns a array) or a array.
@@ -164,37 +153,56 @@ FCKTools.GetResultingArray = function( arraySource, separator )
 			else return new Array() ;
 	}
 }
-
-FCKTools.GetElementPosition = function( el )
+*/
+FCKTools.GetElementPosition = function( el, relativeWindow )
 {
-	// Initializes the Coordinates object that will be returned by the function.
+// Initializes the Coordinates object that will be returned by the function.
 	var c = { X:0, Y:0 } ;
 	
+	var oWindow = relativeWindow || window ;
+
 	// Loop throw the offset chain.
 	while ( el )
 	{
 		c.X += el.offsetLeft ;
 		c.Y += el.offsetTop ;
-		
-		el = el.offsetParent ;
+
+		if ( el.offsetParent == null )
+		{
+			var oOwnerWindow = FCKTools.GetElementWindow( el ) ;
+			
+			if ( oOwnerWindow != oWindow )
+				el = oOwnerWindow.frameElement ;
+			else
+				break ;
+		}
+		else
+			el = el.offsetParent ;
 	}
-	
+
 	// Return the Coordinates object
 	return c ;
 }
 
-FCKTools.GetElementAscensor = function( element, ascensorTagName )
+// START iCM MODIFICATIONS
+// Amended to accept a list of one or more ascensor tag names
+// Amended to check the element itself before working back up through the parent hierarchy
+FCKTools.GetElementAscensor = function( element, ascensorTagNames )
 {
-	var e = element.parentNode ;
+//	var e = element.parentNode ;
+	var e = element ;
+	var lstTags = "," + ascensorTagNames.toUpperCase() + "," ;
 
 	while ( e )
 	{
-		if ( e.nodeName == ascensorTagName )
+		if ( lstTags.indexOf( "," + e.nodeName.toUpperCase() + "," ) != -1 )
 			return e ;
 
 		e = e.parentNode ;
 	}
+	return null ;
 }
+// END iCM MODIFICATIONS
 
 FCKTools.Pause = function( miliseconds )
 {
@@ -217,3 +225,104 @@ FCKTools.ConvertHtmlSizeToStyle = function( size )
 {
 	return size.endsWith( '%' ) ? size : ( size + 'px' ) ;
 }
+
+// Get the window object where the element is placed in.
+FCKTools.GetElementWindow = function( element )
+{
+	var oDocument = element.ownerDocument || element.document ;
+	
+	// With Safari, there is not way to retrieve the window from the document, so we must fix it.
+	if ( FCKBrowserInfo.IsSafari && !oDocument.parentWindow )
+		FCKTools._FixDocumentParentWindow( window.top ) ;
+	
+	return oDocument.parentWindow || oDocument.defaultView ;
+}
+
+/*
+	This is a Safari specific function that fix the reference to the parent 
+	window from the document object.
+*/
+FCKTools._FixDocumentParentWindow = function( targetWindow )
+{
+	targetWindow.document.parentWindow = targetWindow ; 
+	
+	for ( var i = 0 ; i < targetWindow.frames.length ; i++ )
+		FCKTools._FixDocumentParentWindow( targetWindow.frames[i] ) ;
+}
+
+FCKTools.CancelEvent = function( e )
+{
+	return false ;
+}
+
+// START iCM MODIFICATIONS
+/*
+// Transfers the supplied attributes to the supplied node
+FCKTools.SetElementAttributes = function( oElement, oAttributes ) 
+{
+	for ( var i = 0; i < oAttributes.length; i++ ) 
+	{
+		if ( oAttributes[i].specified ) // Needed for IE which always returns all attributes whether set or not
+			oElement.setAttribute( oAttributes[i].nodeName, oAttributes[i].nodeValue, 0 ) ;
+	}
+}
+
+// Get immediate block node (P, H1, for example) for the supplied node - the supplied node may itself be a block node in which
+// case it will be returned. If no block node found, returns null.
+FCKTools.GetParentBlockNode = function( oNode )
+{
+	if ( oNode.nodeName.toUpperCase() == "BODY" )
+		return null ;
+	else if ( oNode.nodeType == 1 && FCKRegexLib.BlockElements.test(oNode.tagName) )
+		return oNode ;
+	else
+		return FCKTools.GetParentBlockNode( oNode.parentNode ) ;
+}
+
+// Run through any children of the supplied node. If there are none, or they only comprise 
+// empty text nodes and BR nodes, then the node is effectively empty.
+// Sometimes (on Gecko) a seemingly empty node is coming back with several children that are solely
+// empty text nodes and BRs e.g. the first item in an OL list, for example, when 
+// UseBROnCarriageReturn is set to false. 
+// Seems to be due to the use of the <br _moz_editor_bogus_node="TRUE"> (GECKO_BOGUS) as fillers both
+// in fck_gecko_1.js when html is empty and in ENTER key handler ? If normal BR tags are
+// used instead this doesn't seem to happen....
+FCKTools.NodeIsEmpty = function( oNode )
+{
+	var oSibling = oNode.childNodes[0] ;
+	while ( oSibling )
+	{
+		if ( ( oSibling.nodeType != 1 && oSibling.nodeType != 3 ) || ( oSibling.nodeType == 1 && oSibling.nodeName.toUpperCase() != "BR" ) || ( oSibling.nodeType == 3 && oSibling.nodeValue && oSibling.nodeValue.trim() != '' ) )
+			return false ;
+		
+		oSibling = oSibling.nextSibling ;
+	}
+
+	return true ;
+}
+
+// Returns a document fragment that contains a copy of the specified range of nodes
+FCKTools.GetDocumentFragment = function( oParentNode, oFromNode, oToNode, bIncludeFromNode, bIncludeToNode, bClone )
+{	
+	if ( typeof bIncludeFromNode == "undefined" )  bIncludeFromNode = true ;
+	if ( typeof bIncludeToNode == "undefined" )  bIncludeToNode = true ;
+	if ( typeof bClone == "undefined" )  bClone = true ;
+
+	var oFragment = FCK.EditorDocument.createDocumentFragment() ;
+	
+	var oNode = oFromNode ;
+	while ( oNode && oNode != oToNode )
+	{
+		if ( oNode != oFromNode || bIncludeFromNode )
+			oFragment.appendChild( bClone ? oNode.cloneNode( true ) : oNode ) ;
+			
+		oNode = oNode.nextSibling ;
+	}
+
+	if ( oNode && (oFromNode != oToNode && bIncludeToNode) )
+		oFragment.appendChild( bClone ? oNode.cloneNode( true ) : oNode ) ; // Include To Node
+
+	return oFragment ;
+}
+*/
+// END iCM MODIFICATIONS

@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: es.js
  * 	Spanish language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Buscar",
 Replace				: "Reemplazar",
 SpellCheck			: "Ortografía",
 UniversalKeyboard	: "Teclado Universal",
+PageBreakLbl		: "Salto de Página",
+PageBreak			: "Insertar Salto de Página",
 
 Form			: "Formulario",
 Checkbox		: "Casilla de Verificación",
@@ -104,6 +108,7 @@ InsertCell			: "Insertar Celda",
 DeleteCells			: "Eliminar Celdas",
 MergeCells			: "Combinar Celdas",
 SplitCell			: "Dividir Celda",
+TableDelete			: "Eliminar Tabla",
 CellProperties		: "Propiedades de Celda",
 TableProperties		: "Propiedades de Tabla",
 ImageProperties		: "Propiedades de Imagen",
@@ -120,7 +125,7 @@ SelectionFieldProp	: "Propiedades de Campo de Selección",
 TextareaProp		: "Propiedades de Area de Texto",
 FormProp			: "Propiedades de Formulario",
 
-FontFormats			: "Normal;Formateado;Direccion;Encabezado 1;Encabezado 2;Encabezado 3;Encabezado 4;Encabezado 5;Encabezado 6",
+FontFormats			: "Normal;Con formato;Dirección;Encabezado 1;Encabezado 2;Encabezado 3;Encabezado 4;Encabezado 5;Encabezado 6;Normal (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "Procesando XHTML. Por favor, espere...",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Item de barra desconocido \"%1\"",
 UnknownCommand		: "Nombre de comando desconocido \"%1\"",
 NotImplemented		: "Comando no implementado",
 UnknownToolbarSet	: "Nombre de barra \"%1\" no definido",
+NoActiveX			: "La configuración de las opciones de seguridad de su navegador puede estar limitando algunas características del editor. Por favor active la opción \"Ejecutar controles y complementos de ActiveX \", de lo contrario puede experimentar errores o ausencia de funcionalidades.",
+BrowseServerBlocked : "La ventana de visualización del servidor no pudo ser abierta. Verifique que su navegador no esté bloqueando las ventanas emergentes (pop up).",
+DialogBlocked		: "No se ha podido abrir la ventana de diálogo. Verifique que su navegador no esté bloqueando las ventanas emergentes (pop up).",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Altura",
 DlgTableCellSpace	: "Esp. e/celdas",
 DlgTableCellPad		: "Esp. interior",
 DlgTableCaption		: "Título",
+DlgTableSummary		: "Síntesis",
 
 // Table Cell Dialog
 DlgCellTitle		: "Propiedades de Celda",
@@ -413,7 +422,7 @@ BulletedListProp	: "Propiedades de Viñetas",
 NumberedListProp	: "Propiedades de Numeraciones",
 DlgLstType			: "Tipo",
 DlgLstTypeCircle	: "Círculo",
-DlgLstTypeDisk		: "Disco",
+DlgLstTypeDisc		: "Disco",
 DlgLstTypeSquare	: "Cuadrado",
 DlgLstTypeNumbers	: "Números (1, 2, 3)",
 DlgLstTypeLCase		: "letras en minúsculas (a, b, c)",

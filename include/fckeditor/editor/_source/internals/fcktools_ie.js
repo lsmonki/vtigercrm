@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fcktools_ie.js
  * 	Utility functions. (IE version).
  * 
@@ -63,6 +65,34 @@ FCKTools.CreateXmlObject = function( object )
 	for ( var i = 0 ; i < 2 ; i++ )
 	{
 		try { return new ActiveXObject( aObjs[i] ) ; }
-		catch (e) {}
+		catch (e) 
+		{}
+	}
+	
+	if ( FCKLang.NoActiveX )
+	{
+		alert( FCKLang.NoActiveX ) ;
+		FCKLang.NoActiveX = null ;
+	}
+}
+
+FCKTools.DisableSelection = function( element )
+{
+	element.unselectable = 'on' ;
+
+	var e, i = 0 ;
+	while ( e = element.all[ i++ ] )
+	{
+		switch ( e.tagName )
+		{
+			case 'IFRAME' :
+			case 'TEXTAREA' :
+			case 'INPUT' :
+			case 'SELECT' :
+				/* Ignore the above tags */
+				break ;
+			default :
+				e.unselectable = 'on' ;
+		}
 	}
 }

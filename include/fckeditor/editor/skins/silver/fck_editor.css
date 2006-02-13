@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fck_editor.css
  * 	Styles used by the editor IFRAME and Toolbar.
  * 
@@ -78,6 +80,11 @@ body
 	font-family: 'Microsoft Sans Serif' , Tahoma, Arial, Verdana, Sans-Serif;
 }
 
+.TB_SideBorder
+{
+	background-color: #696969;
+}
+
 .TB_Expand, .TB_Collapse
 {
 	padding: 2px 2px 2px 2px;
@@ -122,14 +129,16 @@ body
 
 .TB_Button_Off, .TB_Combo_Off
 {
-	filter: alpha(opacity=70);
-	-moz-opacity: 0.70;
+	opacity: 0.70; /* Safari, Opera and Mozilla */
+	filter: alpha(opacity=70); /* IE */
+	/* -moz-opacity: 0.70; Mozilla (Old) */
 }
 
 .TB_Button_Disabled, .TB_Combo_Disabled
 {
-	filter: gray() alpha(opacity=30);
-	-moz-opacity: 0.30;
+	opacity: 0.30; /* Safari, Opera and Mozilla */
+	filter: gray() alpha(opacity=30); /* IE */
+	/* -moz-opacity: 0.30; Mozilla (Old) */
 }
 
 .TB_Icon DIV
@@ -148,5 +157,5 @@ body
 
 .TB_Break
 {
-	height: 23px;
+	height: 27px;
 }

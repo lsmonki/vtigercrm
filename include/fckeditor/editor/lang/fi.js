@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fi.js
  * 	Finnish language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Etsi",
 Replace				: "Korvaa",
 SpellCheck			: "Tarkista oikeinkirjoitus",
 UniversalKeyboard	: "Universaali näppäimistö",
+PageBreakLbl		: "Sivun vaihto",
+PageBreak			: "Lisää sivun vaihto",
 
 Form			: "Lomake",
 Checkbox		: "Valintaruutu",
@@ -104,6 +108,7 @@ InsertCell			: "Lisää solu",
 DeleteCells			: "Poista solut",
 MergeCells			: "Yhdistä solut",
 SplitCell			: "Jaa solu",
+TableDelete			: "Poista taulu",
 CellProperties		: "Solun ominaisuudet",
 TableProperties		: "Taulun ominaisuudet",
 ImageProperties		: "Kuvan ominaisuudet",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Tuntemanton työkalu \"%1\"",
 UnknownCommand		: "Tuntematon komento \"%1\"",
 NotImplemented		: "Komentoa ei ole liitetty sovellukseen",
 UnknownToolbarSet	: "Työkalukokonaisuus \"%1\" ei ole olemassa",
+NoActiveX			: "Selaimesi turvallisuusasetukset voivat rajoittaa joitain editorin ominaisuuksia. Sinun pitää ottaa käyttöön asetuksista \"Suorita ActiveX komponentit ja -plugin-laajennukset\". Saatat kohdata virheitä ja huomata puuttuvia ominaisuuksia.",
+BrowseServerBlocked : "Resurssiselainta ei voitu avata. Varmista, että ponnahdusikkunoiden estäjät eivät ole päällä.",
+DialogBlocked		: "Apuikkunaa ei voitu avaata. Varmista, että ponnahdusikkunoiden estäjät eivät ole päällä.",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Korkeus",
 DlgTableCellSpace	: "Solujen väli",
 DlgTableCellPad		: "Solujen sisennys",
 DlgTableCaption		: "Otsikko",
+DlgTableSummary		: "Yhteenveto",
 
 // Table Cell Dialog
 DlgCellTitle		: "Solun ominaisuudet",
@@ -413,7 +422,7 @@ BulletedListProp	: "Luettelon ominaisuudet",
 NumberedListProp	: "Numeroinnin ominaisuudet",
 DlgLstType			: "Tyyppi",
 DlgLstTypeCircle	: "Kehä",
-DlgLstTypeDisk		: "Ympyrä",
+DlgLstTypeDisc		: "Ympyrä",
 DlgLstTypeSquare	: "Neliö",
 DlgLstTypeNumbers	: "Numerot (1, 2, 3)",
 DlgLstTypeLCase		: "Pienet kirjaimet (a, b, c)",

@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: sl.js
  * 	Slovenian language file.
  * 
@@ -83,6 +85,8 @@ Find				: "Najdi",
 Replace				: "Zamenjaj",
 SpellCheck			: "Preveri črkovanje",
 UniversalKeyboard	: "Večjezična tipkovnica",
+PageBreakLbl		: "Page Break",	//MISSING
+PageBreak			: "Insert Page Break",	//MISSING
 
 Form			: "Obrazec",
 Checkbox		: "Potrditveno polje",
@@ -104,6 +108,7 @@ InsertCell			: "Vstavi celico",
 DeleteCells			: "Izbriši celice",
 MergeCells			: "Združi celice",
 SplitCell			: "Razdeli celico",
+TableDelete			: "Delete Table",	//MISSING
 CellProperties		: "Lastnosti celice",
 TableProperties		: "Lastnosti tabele",
 ImageProperties		: "Lastnosti slike",
@@ -131,6 +136,9 @@ UnknownToolbarItem	: "Neznan element orodne vrstice \"%1\"",
 UnknownCommand		: "Neznano ime ukaza \"%1\"",
 NotImplemented		: "Ukaz ni izdelan",
 UnknownToolbarSet	: "Skupina orodnih vrstic \"%1\" ne obstoja",
+NoActiveX			: "You browser's security settings could limit some features of the editor. You must enable the option \"Run ActiveX controls and plug-ins\". You may experience errors and notice missing features.",	//MISSING
+BrowseServerBlocked : "The resources browser could not be opened. Make sure that all popup blockers are disabled.",	//MISSING
+DialogBlocked		: "It was not possible to open the dialog window. Make sure all popup blockers are disabled.",	//MISSING
 
 // Dialogs
 DlgBtnOK			: "V redu",
@@ -275,6 +283,7 @@ DlgTableHeight		: "Višina",
 DlgTableCellSpace	: "Razmik med celicami",
 DlgTableCellPad		: "Polnilo med celicami",
 DlgTableCaption		: "Naslov",
+DlgTableSummary		: "Summary",	//MISSING
 
 // Table Cell Dialog
 DlgCellTitle		: "Lastnosti celice",
@@ -413,7 +422,7 @@ BulletedListProp	: "Lastnosti označenega seznama",
 NumberedListProp	: "Lastnosti oštevilčenega seznama",
 DlgLstType			: "Tip",
 DlgLstTypeCircle	: "Pikica",
-DlgLstTypeDisk		: "Krožec",
+DlgLstTypeDisc		: "Disc",	//MISSING
 DlgLstTypeSquare	: "Kvadratek",
 DlgLstTypeNumbers	: "Številke (1, 2, 3)",
 DlgLstTypeLCase		: "Male črke (a, b, c)",

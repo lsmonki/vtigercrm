@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fck_link.js
  * 	Scripts related to the Link dialog window (see fck_link.html).
  * 
@@ -53,7 +55,8 @@ oRegex.UrlOnChangeProtocol = new RegExp('') ;
 oRegex.UrlOnChangeProtocol.compile( '^(http|https|ftp|news)://(?=.)', 'gi' ) ;
 
 oRegex.UrlOnChangeTestOther = new RegExp('') ;
-oRegex.UrlOnChangeTestOther.compile( '^(javascript:|#|/)', 'gi' ) ;
+//oRegex.UrlOnChangeTestOther.compile( '^(javascript:|#|/)', 'gi' ) ;
+oRegex.UrlOnChangeTestOther.compile( '^((javascript:)|[#/\.])', 'gi' ) ; 
 
 oRegex.ReserveTarget = new RegExp('') ;
 oRegex.ReserveTarget.compile( '^_(blank|self|top|parent)$', 'i' ) ;
@@ -153,8 +156,18 @@ var bHasAnchors ;
 
 function LoadAnchorNamesAndIds()
 {
-	var aAnchors	= oEditor.FCK.EditorDocument.anchors ;
-	var aIds		= oEditor.FCKTools.GetAllChildrenIds( oEditor.FCK.EditorDocument.body ) ;
+	// Since version 2.0, the anchors are replaced in the DOM by IMGs so the user see the icon 
+	// to edit them. So, we must look for that images now.
+	var aAnchors = new Array() ;
+	
+	var oImages = oEditor.FCK.EditorDocument.getElementsByTagName( 'IMG' ) ;
+	for( var i = 0 ; i < oImages.length ; i++ )
+	{
+		if ( oImages[i].getAttribute('_fckanchor') )
+			aAnchors[ aAnchors.length ] = oEditor.FCK.GetRealElement( oImages[i] ) ;
+	}
+	
+	var aIds = oEditor.FCKTools.GetAllChildrenIds( oEditor.FCK.EditorDocument.body ) ;
 
 	bHasAnchors = ( aAnchors.length > 0 || aIds.length > 0 ) ;
 
@@ -181,8 +194,10 @@ function LoadSelection()
 	var sType = 'url' ;
 
 	// Get the actual Link href.
-	var sHRef = oLink.getAttribute('href',2) + '' ;
-
+	var sHRef = oLink.getAttribute( '_fcksavedurl' ) ;
+	if ( !sHRef || sHRef.length == 0 )
+		sHRef = oLink.getAttribute( 'href' , 2 ) + '' ;
+	
 	// TODO: Wait stable version and remove the following commented lines.
 //	if ( sHRef.startsWith( FCK.BaseUrl ) )
 //		sHRef = sHRef.remove( 0, FCK.BaseUrl.length ) ;
@@ -223,7 +238,7 @@ function LoadSelection()
 			GetE('txtUrl').value = sUrl ;
 		}
 	}
-	else if ( sHRef.substr(0,1) == '#' && sHRef.length > 2 )	// It is an anchor link.
+	else if ( sHRef.substr(0,1) == '#' && sHRef.length > 1 )	// It is an anchor link.
 	{
 		sType = 'anchor' ;
 		GetE('cmbAnchorName').value = GetE('cmbAnchorId').value = sHRef.substr(1) ;
@@ -472,6 +487,8 @@ function Ok()
 		if ( ! oLink )
 			return true ;
 	}
+	
+	SetAttribute( oLink, '_fcksavedurl', sUri ) ;
 
 	// Target
 	if( GetE('cmbTarget').value != 'popup' )
@@ -487,35 +504,26 @@ function Ok()
 	SetAttribute( oLink, 'accesskey', GetE('txtAttAccessKey').value ) ;
 	SetAttribute( oLink, 'tabindex'	, ( GetE('txtAttTabIndex').value > 0 ? GetE('txtAttTabIndex').value : null ) ) ;
 	SetAttribute( oLink, 'title'	, GetE('txtAttTitle').value ) ;
-	SetAttribute( oLink, 'class'	, GetE('txtAttClasses').value ) ;
 	SetAttribute( oLink, 'type'		, GetE('txtAttContentType').value ) ;
 	SetAttribute( oLink, 'charset'	, GetE('txtAttCharSet').value ) ;
 
 	if ( oEditor.FCKBrowserInfo.IsIE )
+	{
+		SetAttribute( oLink, 'className', GetE('txtAttClasses').value ) ;
 		oLink.style.cssText = GetE('txtAttStyle').value ;
+	}
 	else
+	{
+		SetAttribute( oLink, 'class', GetE('txtAttClasses').value ) ;
 		SetAttribute( oLink, 'style', GetE('txtAttStyle').value ) ;
+	}
 
 	return true ;
 }
 
 function BrowseServer()
 {
-	// Set the browser window feature.
-	var iWidth	= FCKConfig.LinkBrowserWindowWidth ;
-	var iHeight	= FCKConfig.LinkBrowserWindowHeight ;
-
-	var iLeft = (screen.width  - iWidth) / 2 ;
-	var iTop  = (screen.height - iHeight) / 2 ;
-
-	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes" ;
-	sOptions += ",width=" + iWidth ;
-	sOptions += ",height=" + iHeight ;
-	sOptions += ",left=" + iLeft ;
-	sOptions += ",top=" + iTop ;
-
-	// Open the browser window.
-	var oWindow = window.open( FCKConfig.LinkBrowserURL, "FCKBrowseWindow", sOptions ) ;
+	OpenFileBrowser( FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function SetUrl( url )

@@ -8,6 +8,8 @@
  * For further information visit:
  * 		http://www.fckeditor.net/
  * 
+ * "Support Open Source software. What about a donation today?"
+ * 
  * File Name: fck_1.js
  * 	This is the first part of the "FCK" object creation. This is the main
  * 	object that represents an editor instance.
@@ -15,6 +17,8 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+
+var FCK_StartupValue ;
 
 FCK.Events	= new FCKEvents( FCK ) ;
 FCK.Toolbar	= null ;
@@ -31,11 +35,14 @@ FCK.StartEditor = function()
 	// The Base Path of the editor is saved to rebuild relative URL (IE issue).
 //	this.BaseUrl = this.EditorDocument.location.protocol + '//' + this.EditorDocument.location.host ;
 
-	if ( FCKBrowserInfo.IsGecko )
-		this.MakeEditable() ;
+//	if ( FCKBrowserInfo.IsGecko )
+//		this.MakeEditable() ;
 
 	// Set the editor's startup contents
 	this.SetHTML( FCKTools.GetLinkedFieldValue() ) ;
+	
+	// Save the startup value for the "IsDirty()" check.
+	this.ResetIsDirty() ;
 
 	// Attach the editor to the form onsubmit event
 	FCKTools.AttachToLinkedFieldFormSubmit( this.UpdateLinkedField ) ;
@@ -48,6 +55,13 @@ FCK.StartEditor = function()
 function Window_OnFocus()
 {
 	FCK.Focus() ;
+	FCK.Events.FireEvent( "OnFocus" ) ;
+}
+
+function Window_OnBlur()
+{
+	if ( !FCKDialog.IsOpened )
+		return FCK.Events.FireEvent( "OnBlur" ) ;
 }
 
 FCK.SetStatus = function( newStatus )
@@ -57,7 +71,8 @@ FCK.SetStatus = function( newStatus )
 	if ( newStatus == FCK_STATUS_ACTIVE )
 	{
 		// Force the focus in the window to go to the editor.
-		window.onfocus = window.document.body.onfocus = Window_OnFocus ;
+		window.frameElement.onfocus	= window.document.body.onfocus = Window_OnFocus ;
+		window.frameElement.onblur	= Window_OnBlur ;
 
 		// Force the focus in the editor.
 		if ( FCKConfig.StartupFocus )
@@ -106,7 +121,7 @@ FCK.SetStatus = function( newStatus )
 		FCKScriptLoader.AddScript( '_source/classes/fckcontextmenuseparator.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fckcontextmenugroup.js' ) ;
 		FCKScriptLoader.AddScript( '_source/internals/fckcontextmenu.js' ) ;
-		FCKScriptLoader.AddScript( '_source/internals/fckcontextmenu_' + sBrowserSuffix + '.js' ) ;
+//		FCKScriptLoader.AddScript( '_source/internals/fckcontextmenu_' + sBrowserSuffix + '.js' ) ;
 		FCKScriptLoader.AddScript( '_source/classes/fckplugin.js' ) ;
 		FCKScriptLoader.AddScript( '_source/internals/fckplugins.js' ) ;
 		FCKScriptLoader.AddScript( '_source/internals/fck_last.js' ) ;
@@ -125,8 +140,11 @@ FCK.SetStatus = function( newStatus )
 	this.Events.FireEvent( 'OnStatusChange', newStatus ) ;
 }
 
+// Deprecated : returns the same value as GetXHTML.
 FCK.GetHTML = function( format )
 {
+	FCK.GetXHTML( format ) ;
+/*	
 	var sHTML ;
 
 	if ( FCK.EditMode == FCK_EDITMODE_WYSIWYG )
@@ -147,6 +165,7 @@ FCK.GetHTML = function( format )
 		return FCKCodeFormatter.Format( sHTML ) ;
 	else
 		return sHTML ;
+*/
 }
 
 FCK.GetXHTML = function( format )
@@ -156,18 +175,16 @@ FCK.GetXHTML = function( format )
 	if ( bSource )
 		this.SwitchEditMode() ;
 
-	// TODO: Wait stable version and remove the following commented lines.
-//	if ( FCKBrowserInfo.IsIE )
-//		FCK.CheckRelativeLinks() ;
-
+	var sXHTML ;
+	
 	if ( FCKConfig.FullPage )
-		var sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.getElementsByTagName( 'html' )[0], true, format ) ;
+		sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.getElementsByTagName( 'html' )[0], true, format ) ;
 	else
 	{
 		if ( FCKConfig.IgnoreEmptyParagraphValue && this.EditorDocument.body.innerHTML == '<P>&nbsp;</P>' )
-			var sXHTML = '' ;
+			sXHTML = '' ;
 		else
-			var sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.body, false, format ) ;
+			sXHTML = FCKXHtml.GetXHTML( this.EditorDocument.body, false, format ) ;
 	}
 
 	if ( bSource )
@@ -182,15 +199,18 @@ FCK.GetXHTML = function( format )
 	if ( FCK.XmlDeclaration && FCK.XmlDeclaration.length > 0 )
 		sXHTML = FCK.XmlDeclaration + '\n' + sXHTML ;
 
-	return sXHTML ;
+	return FCKConfig.ProtectedSource.Revert( sXHTML ) ;
 }
 
 FCK.UpdateLinkedField = function()
 {
-	if ( FCKConfig.EnableXHTML )
-		FCKTools.SetLinkedFieldValue( FCK.GetXHTML( FCKConfig.FormatOutput ) ) ;
-	else
-		FCKTools.SetLinkedFieldValue( FCK.GetHTML( FCKConfig.FormatOutput ) ) ;
+	// EnableXHTML has been deprecated
+//	if ( FCKConfig.EnableXHTML )
+		FCK.LinkedField.value = FCK.GetXHTML( FCKConfig.FormatOutput ) ;
+//	else
+//		FCK.LinkedField.value = FCK.GetHTML( FCKConfig.FormatOutput ) ;
+		
+	FCK.Events.FireEvent( 'OnAfterLinkedFieldUpdate' ) ;
 }
 
 FCK.ShowContextMenu = function( x, y )
@@ -220,10 +240,36 @@ FCK.RegisterDoubleClickHandler = function( handlerFunction, tag )
 FCK.OnAfterSetHTML = function()
 {
 	var oProcessor, i = 0 ;
-	while( oProcessor = FCKDocumentProcessors[i++] )
+	while( ( oProcessor = FCKDocumentProcessors[i++] ) )
 		oProcessor.ProcessDocument( FCK.EditorDocument ) ;
 
 	this.Events.FireEvent( 'OnAfterSetHTML' ) ;
+}
+
+// Saves URLs on links and images on special attributes, so they don't change when 
+// moving around.
+FCK.ProtectUrls = function( html )
+{
+	// <A> href
+	html = html.replace( FCKRegexLib.ProtectUrlsAApo	, '$1$2$3$2 _fcksavedurl=$2$3$2' ) ;
+	html = html.replace( FCKRegexLib.ProtectUrlsANoApo	, '$1$2 _fcksavedurl="$2"' ) ;
+
+	// <IMG> src
+	html = html.replace( FCKRegexLib.ProtectUrlsImgApo	, '$1$2$3$2 _fcksavedurl=$2$3$2' ) ;
+	html = html.replace( FCKRegexLib.ProtectUrlsImgNoApo, '$1$2 _fcksavedurl="$2"' ) ;
+	
+	return html ;
+}
+
+FCK.IsDirty = function()
+{
+	return ( FCK_StartupValue != FCK.EditorDocument.body.innerHTML ) ;
+}
+
+FCK.ResetIsDirty = function()
+{
+	if ( FCK.EditorDocument.body )
+		FCK_StartupValue = FCK.EditorDocument.body.innerHTML ;
 }
 
 // Advanced document processors.
@@ -264,6 +310,44 @@ FCKAnchorsProcessor.ProcessDocument = function( document )
 
 FCKDocumentProcessors.addItem( FCKAnchorsProcessor ) ;
 
+// Page Breaks
+var FCKPageBreaksProcessor = new Object() ;
+FCKPageBreaksProcessor.ProcessDocument = function( document )
+{
+	var aDIVs = document.getElementsByTagName( 'DIV' ) ;
+
+	var eDIV ;
+	var i = aDIVs.length - 1 ;
+	while ( i >= 0 && ( eDIV = aDIVs[i--] ) )
+	{
+		if ( eDIV.style.pageBreakAfter == 'always' && eDIV.childNodes.length == 1 && eDIV.childNodes[0].style && eDIV.childNodes[0].style.display == 'none' )
+		{
+			var oFakeImage = FCKDocumentProcessors_CreateFakeImage( 'FCK__PageBreak', eDIV.cloneNode(true) ) ;
+			
+			eDIV.parentNode.insertBefore( oFakeImage, eDIV ) ;
+			eDIV.parentNode.removeChild( eDIV ) ;
+		}
+	}
+/*
+	var aCenters = document.getElementsByTagName( 'CENTER' ) ;
+
+	var oCenter ;
+	var i = aCenters.length - 1 ;
+	while ( i >= 0 && ( oCenter = aCenters[i--] ) )
+	{
+		if ( oCenter.style.pageBreakAfter == 'always' && oCenter.innerHTML.trim().length == 0 )
+		{
+			var oFakeImage = FCKDocumentProcessors_CreateFakeImage( 'FCK__PageBreak', oCenter.cloneNode(true) ) ;
+			
+			oCenter.parentNode.insertBefore( oFakeImage, oCenter ) ;
+			oCenter.parentNode.removeChild( oCenter ) ;
+		}
+	}
+*/
+}
+
+FCKDocumentProcessors.addItem( FCKPageBreaksProcessor ) ;
+
 // Flash Embeds.
 var FCKFlashProcessor = new Object() ;
 FCKFlashProcessor.ProcessDocument = function( document )
@@ -281,7 +365,19 @@ FCKFlashProcessor.ProcessDocument = function( document )
 	{
 		if ( oEmbed.src.endsWith( '.swf', true ) )
 		{
-			var oImg = FCKDocumentProcessors_CreateFakeImage( 'FCK__Flash', oEmbed.cloneNode(true) ) ;
+			var oCloned = oEmbed.cloneNode( true ) ;
+			
+			// On IE, some properties are not getting clonned properly, so we 
+			// must fix it. Thanks to Alfonso Martinez.
+			if ( FCKBrowserInfo.IsIE )
+			{
+				oCloned.setAttribute( 'scale', oEmbed.getAttribute( 'scale' ) );
+				oCloned.setAttribute( 'play', oEmbed.getAttribute( 'play' ) );
+				oCloned.setAttribute( 'loop', oEmbed.getAttribute( 'loop' ) );
+				oCloned.setAttribute( 'menu', oEmbed.getAttribute( 'menu' ) );
+			}
+		
+			var oImg = FCKDocumentProcessors_CreateFakeImage( 'FCK__Flash', oCloned ) ;
 			oImg.setAttribute( '_fckflash', 'true', 0 ) ;
 			
 			FCKFlashProcessor.RefreshView( oImg, oEmbed ) ;
@@ -322,3 +418,60 @@ FCK.GetRealElement = function( fakeElement )
 	
 	return e ;
 }
+
+// START iCM MODIFICATIONS
+/*
+var FCKTablesProcessor = new Object() ;
+FCKTablesProcessor.ProcessDocument = function( document )
+{
+	FCKTablesProcessor.CheckTablesNesting( document ) ;
+}
+
+// Ensure that tables are not incorrectly nested within P, H1, H2, etc tags
+FCKTablesProcessor.CheckTablesNesting = function( document )
+{
+	var aTables = document.getElementsByTagName( "TABLE" ) ;
+	var oParentNode ;
+	
+	for ( var i=0; i<aTables.length; i++ )
+	{
+		FCKTablesProcessor.CheckTableNesting( aTables[i] ) ;
+	}
+}
+
+// Corrects nesting of the supplied table as necessary.
+// Also called by fck_table.html to check that a newly inserted table is correctly nested.
+FCKTablesProcessor.CheckTableNesting = function( oTableNode )
+{
+	var oParentBlockNode = FCKTools.GetParentBlockNode( oTableNode.parentNode ) ;
+	
+	if ( oParentBlockNode && !FCKRegexLib.TableBlockElements.test( oParentBlockNode.nodeName ) )
+	{
+		// Create a new tag which holds the content of the child nodes located before the table
+		var oNode1 = FCK.EditorDocument.createElement( oParentBlockNode.tagName ) ;
+		var oFragment1 = FCKTools.GetDocumentFragment( oParentBlockNode, oParentBlockNode.firstChild, oTableNode, true, false, true ) ;
+		oNode1.appendChild( oFragment1 ) ;
+		FCKTools.SetElementAttributes( oNode1, oParentBlockNode.attributes ) ; 	// Transfer across any class attributes, etc
+	
+		// Create a new tag which holds the content of the child nodes located after the table
+		var oNode2 = FCK.EditorDocument.createElement( oParentBlockNode.tagName );
+		var oFragment2 = FCKTools.GetDocumentFragment( oParentBlockNode, oTableNode, oParentBlockNode.lastChild, false, true, true ) ;
+		oNode2.appendChild( oFragment2 ) ;
+		FCKTools.SetElementAttributes( oNode2, oParentBlockNode.attributes ) ; 	// Transfer across any class attributes, etc
+		
+		// Create a document fragment that contains the two new elements with the table element inbetween
+		var oNewNode = FCK.EditorDocument.createDocumentFragment() ;
+		if ( !FCKTools.NodeIsEmpty( oNode1 ) )
+			oNewNode.appendChild( oNode1 ) ;
+		oNewNode.appendChild( oTableNode ) ;
+		if ( !FCKTools.NodeIsEmpty( oNode2 ) )
+			oNewNode.appendChild( oNode2 ) ; 
+		
+		// Replace the existing parent node with the nodes in the fragment
+		oParentBlockNode.parentNode.replaceChild( oNewNode, oParentBlockNode ) ;
+	}
+}		
+
+FCKDocumentProcessors.addItem( FCKTablesProcessor ) ;
+*/
+// END iCM MODIFICATIONS
