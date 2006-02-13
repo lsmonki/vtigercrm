@@ -18,7 +18,7 @@
 
 body         { 
 	font-size: 10pt;
-	background-color:#FFF;
+	background-color:#CCC;
 	color:#000000;
 	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -89,11 +89,3 @@ A.bodyBold:link { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; TEXT-DECORA
 A.bodySmall:link { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
 .bodySmallBold { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
 A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; TEXT-DECORATION: none }
-
-.small {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	line-height: 14px;
-	color: #000000;
-}
-

@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-//require_once("connection.php");
+require_once("connection.php");
 
 $web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
 $web_root = str_replace("/install.php", "", $web_root);
@@ -99,7 +99,7 @@ if (is_file("config.php")) {
 		$db_name = $dbconfig['db_name'];
 	}
 	else {
-		$db_name = 'dev3';
+		$db_name = 'vtigercrm4_2';
 	}
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 
@@ -120,7 +120,7 @@ else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
 	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "dev3" : $db_name = $_REQUEST['db_name'];
+	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_2" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
@@ -141,7 +141,6 @@ else {
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vtiger CRM 4.2 Installer: Step 2</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
-
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
@@ -241,85 +240,70 @@ function verify_data(form) {
 </script>
 
 
-<!-- Master table -->
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-	<br><br>
-	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
-	<tr>
-		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v4.2" title="v4.2"></td>
-	</tr>
-	</table>
-	
-	
-	
-	<!-- 1 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
-	<tr>	
-		<td valign=top><img src="install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
-		<td width=98% valign=top>
-			<table border=0 cellspacing=0 cellpadding=0 width=100%>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 2 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
+</tbody></table>
+
+<table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
+   <tr>
+      <td width="100%">
+		<table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
+			  <td>
+			   <table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
+
+				<td nowrap><h3>System Configuration</h3></td>
+				<td width="80%"><hr width="100%"></td>
+
+				</tr></tbody></table>
+			  </td>
+			   </tr>
+		</tbody></table>
+	  </td>
+          </tr>
+          <tr>
+            <td>
+          <P><b>Please enter your database configuration information below...</b> <P>
+
+		  If you do not have root access to your database (for example you are installing in a virtual
+		  hosting environment), you will need to have your database created for you before you proceed.
+		  However, this installer will still be able to create the necessary database tables.<P>
+
+		  <p>If you unsure of your database host, username or password, we suggest that you use the default
+		  values below. </P>
+		  </td>
+          </tr>
+		  <tr>
+		    <td align="center">
+			<form action="install.php" method="post" onsubmit="return verify_data(setConfig);" name="setConfig" id="form">
+			<input type="hidden" name="file" value="3confirmConfig.php">
+			<div align="left" width="70%"><font color=red>* Required field</font></div>
+			<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+              <tr>
+			<td bgcolor="#EEEEEE"><h4>Database Configuration</h4></td>
+              </tr>
+              </table>
+			<table width="80%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
 			<tr>
-				<td><img src="install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="install/images/cwStep2of5.gif" alt="Step 2 of 5" title="Step 2 of 5"></td>
-			</tr>
-			<tr>
-				<td colspan=2><img src="install/images/cwHdrSysConf.gif" alt="System Check" title="System Check"></td>
-			</tr>
-			</table>
-			<hr noshade size=1>
-		</td>
-
-	</tr>
-	<tr>
-		<td></td>
-		<td valign="top" align=center>
-		<!-- System Configuration-->
-
-
-			<table width="100%" cellpadding="5"  cellspacing="1" border="0" class=small><tbody>
-			<tr>
-				<td >
-		          <b>Please enter your database configuration information below...</b><br>
-
-					  If you do not have root access to your database (for example you are installing in a virtual
-					  hosting environment), you will need to have your database created for you before you proceed.
-					  However, this installer will still be able to create the necessary database tables. <br><br>
-			
-					  If you unsure of your database host, username or password, we suggest that you use the default
-					  values below. <br><br>
-					  
-					  *- required information
-					  
-
-				</td>
-			</tr>
-			</table>
-			
-			<br>
-			
-			<table width="90%" cellpadding="5"  cellspacing="1" border="0" class=small style="background-color:#cccccc"><tbody>
-			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
-			<tr>
-               <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
+               <td nowrap bgcolor="#F5F5F5" width="40%"><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
+               <td align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_user_name" readonly value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_user_name" readonly value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="db_password" readonly value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
+               <td align="left"><input type="password" class="dataInput" name="db_password" readonly value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
-			<input type="hidden" name="dbtype" value="<?php
+		<input type="hidden" name="dbtype" value="<?php
                 if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
                 {
                         echo $dbconfig['db_type'];
@@ -331,125 +315,58 @@ function verify_data(form) {
                 } ?>">
               </tr>
               </table>
-			
-			<br><br>
-			
-			<!-- URL Configuration -->
-			<table width="90%" cellpadding="5" cellspacing="1" border="0" class="small" style="background-color:#cccccc">
-			<tr>
-				<td colspan=2><strong>URL Configuration</strong></td>
-			</tr>
+              <!-- tr>
+               <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>
+               <td align="left"><input type="checkbox" name="db_drop_tables"
+			   <?php if (isset($db_drop_tables) && $db_drop_tables==true) echo "checked "; ?> value="$db_drop_tables"/></td>
+              </tr -->
+			<br><table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+			              <tr>
+						<td bgcolor="#EEEEEE"><h4>Site Configuration</h4></td>
+			              </tr>
+              </table>
+            <table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
             <tr>
-				<td width="25%" bgcolor="#F5F5F5" ><strong>URL</strong> <sup><font color=red>*</font></sup></td>
-				<td width="75%" align="left" bgcolor="white"><input class="dataInput" type="text" name="site_URL" value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />		  	</td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
-				<td align="left" bgcolor="White"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
-			</tr>
-			<tr valign="top">
-				<td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
-				<td align="left" bgcolor="White"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
+			<td bgcolor="#F5F5F5" width="40%"><strong>URL</strong> <sup><font color=red>*</font></sup></td>
+            <td align="left"><input class="dataInput" type="text" name="site_URL"
+			value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
+		  	</td>
+          </tr><tr>
+            <td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
+            <td align="left"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
+	  </tr><tr valign="top">
+            <td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
+            <td align="left"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
           </tr>
-          </table>
-		  <br><br>
-		  
-		  <!-- Web site configuration -->
-		<table width="90%" cellpadding="5" border="0" style="background-color:#cccccc" cellspacing="1" class="small"><tbody>
-            <tr>
-				<td ><strong>Site Configuration</strong></td>
-            </tr>
-			<tr>
-				<td width="25%" bgcolor="#F5F5F5" ><strong>URL</strong> <sup><font color=red>*</font></sup></td>
-				<td width="75%" bgcolor=white align="left"><input class="dataInput" type="text" name="site_URL"
-				value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
-				</td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
-				<td align="left" bgcolor="white"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
-			</tr>
-			<tr valign="top">
-				<td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
-				<td align="left" bgcolor="white"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
+          </table><br>
+            <table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+		<tr>
+			<td bgcolor="#EEEEEE"><h4>Admin Configuration</h4></td>
+              </tr>
+              </table>
+	<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+	<tr>
+
+            <td nowrap bgcolor="#F5F5F5" width="40%"><strong>username</strong></td>
+            <td align="left">admin</td>
           </tr>
-          </table>
-			<br><br>
-			
-			<!-- Admin Configuration -->
-            <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
-			<tr>
-				<td colspan=2><strong>Admin Configuration</strong></td>
-            </tr>
-			<tr>
-				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>User name</strong></td>
-				<td width=75% bgcolor="white" align="left">admin</td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Password</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
-			</tr>
-			<tr>
-				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>
-			</tr>
-			</table>
 
-		<!-- System Configuration -->
-			
-		</td>
-	</tr>
-	</table>
-	
-	<br><br>
-
-	
-<!-- -->
-	<table border=0 cellspacing=0 cellpadding=0 width=70% class=small>
+	<tr><td bgcolor="#F5F5F5" nowrap><strong>password</strong><sup><font color=red>*</font></sup></td>
+        <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
+          </tr>
 	<tr>
-		<td><img src="install/images/cwURL.gif"></td>
-		<td align=right>
-			<form action="install.php" method="post" name="form" id="form" name="setConfig" id="form">
-		<!-- <form action="install.php" method="post" onsubmit="return verify_data(setConfig);" name="setConfig" id="form"> -->
-			<input type="hidden" name="file" value="3confirmConfig.php" />
+	<td colspan="2"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>
 
-			<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
-			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
-			<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
-			<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
-			<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin";?>" />
-			<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
-			<input type="hidden" name="dbtype" value="<?php 
-									if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
-									{
-										echo $dbconfig['db_type'];
-									}
-									elseif(isset($databasetype) && $databasetype != '')
-									{
-										echo $databasetype;
-									} ?>"> 
-
-			<input type="image" src="install/images/cwBtnNext.gif" border="0" onclick="return verify_data(this.form); window.location=('install.php')">
-		</td>
-	</tr>
-	</table>
-	<br><br>
-	<!-- Horizontal Shade -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
-	<tr>
-		<td><img src="install/images/cwShadeLeft.gif"></td>
-		<td align=right><img src="install/images/cwShadeRight.gif"></td>
-	</tr>
-	</table>
+        </tr>
+		</table>
 
 
-</td>
-</tr>
-</table>
-<!-- Master table closes -->
 
-<br><br><br>
+<table width="70%" cellpadding="5" border="0">
+          <tr>
+			<td align="right"><br /> <input class="button" type="submit" name="next" value="Next >" /></td>
+          </tr>
+	</tbody></table>
 
 </form>
 </body>
