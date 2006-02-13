@@ -38,8 +38,11 @@ $header->set_color('blue');
 
 $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
+$filtercolumn = $stdDateFilterField;
+$filter = $stdDateFilter;
 
 $oReportRun = new ReportRun($reportid);
+$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 $arr_val = $oReportRun->GenerateReport("PDF",$filterlist);
 
 if(isset($arr_val))

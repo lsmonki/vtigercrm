@@ -374,6 +374,11 @@ class Reports extends CRMEntity{
 				$fieldtablename = "contactdetails".$module;
 				$fieldcolname = "lastname";
 			}
+			if($fieldname == "parent_id")
+			{
+  				$fieldtablename = "crmentityRel".$module;
+					$fieldcolname = "setype";
+			}
 			if($fieldname == "vendor_id")
 	                {
                         	$fieldtablename = "vendorRel";
@@ -1056,7 +1061,7 @@ class Reports extends CRMEntity{
 
 		$tabid = getTabid($module);
 		global $profile_id;
-		
+		$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 		$ssql = "select * from field inner join tab on tab.tabid = field.tabid inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
 		
 		$result = $adb->query($ssql);
@@ -1085,8 +1090,9 @@ class Reports extends CRMEntity{
 					for($i=0;$i < count($this->columnssummary) ;$i++)
 					{
 						$selectedcolumnarray = explode(":",$this->columnssummary[$i]);
-						$selectedcolumn = $selectedcolumnarray[1].":".$selectedcolumnarray[2].":".$selectedcolumnarray[3];
-					
+						$selectedcolumn = $selectedcolumnarray[1].":".$selectedcolumnarray[2].":".
+							str_replace($escapedchars,"",$selectedcolumnarray[3]);
+
 						if ($selectedcolumn != $columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.str_replace(" ","_",$columntototalrow['fieldlabel']))
 						{
 							$selectedcolumn = "";
@@ -1096,46 +1102,47 @@ class Reports extends CRMEntity{
 						}
 						
       				          }
-					  //print_r($selectedcolumn1);
 					  //print_r("cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].":2");
+
 $columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
 					$shtml .= '<td nowrap height="21" style="padding:0px 3px 0px 3px;">'.$columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'].'</td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">';
-					    if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].":2")
+
+						if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
 					    {
 						//echo "here";   
-					    $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':2" type="checkbox" value="">';					    }else
+					    $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':2" type="checkbox" value="">';
+						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
 					    }
 					    $shtml .=  '</div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">'; 
-					    if($selectedcolumn1[3] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].":3")
+					    if($selectedcolumn1[3] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_AVG:3")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':3" type="checkbox" value="">';
+						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':3" type="checkbox" value="">';
+						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
 					    }
 
 					    $shtml .=  '</div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">';  
-					    if($selectedcolumn1[4] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].":4")
+					    if($selectedcolumn1[4] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_MIN:4")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':4" type="checkbox" value="">';
+						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':4" type="checkbox" value="">';
+						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
 					    }
 
 					    $shtml .=  '</div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">'; 
-					    if($selectedcolumn1[5] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].":5")
+					    if($selectedcolumn1[5] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_MAX:5")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':5" type="checkbox" value="">';
+						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':5" type="checkbox" value="">';
+						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
 					    }
 	
 					    $shtml .=  '</div></td>
@@ -1146,16 +1153,16 @@ $columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldla
 				{
 					$shtml .= '<td nowrap height="21" style="padding:0px 3px 0px 3px;">'.$columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'].'</td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':2" type="checkbox" value="">
+						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">
 					    </div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						     <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':3" type="checkbox" value="" >
+						     <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="" >
 					    </div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">  
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':4"type="checkbox" value="" >
+						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4"type="checkbox" value="" >
 					    </div></td>
 					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].':5" type="checkbox" value="" >	
+						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="" >	
 					    </div></td>
 					</tr>';
 					$n = $n + 1;

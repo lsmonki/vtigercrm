@@ -30,23 +30,10 @@ class ReportRun extends CRMEntity
 
 	var $selectcolumns;
 	var $groupbylist;
-        var $reporttype;
-	
-	var $reportsql = Array("Leads"=>"from crmentity as crmentityLeads inner join leaddetails on crmentityLeads.crmid=leaddetails.leadid left join leadsubdetails on leadsubscriptionid = leaddetails.leadid left join leadaddress on leadaddress.leadaddressid = leaddetails.leadid left join leadscf on leadscf.leadid = leaddetails.leadid",
+    var $reporttype;
+	var $reportname;
+	var $totallist;
 
-			       "Contacts"=>"from crmentity as crmentityContacts inner join contactdetails on crmentityContacts.crmid = contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid left join contactscf on contactscf.contactid = contactdetails.contactid",
-
-			       "Accounts"=>"from crmentity as crmentityAccounts inner join account on account.accountid = crmentityAccounts.crmid left join accountbillads on accountbillads.accountaddressid = account.accountid left join accountshipads on accountshipads.accountaddressid = account.accountid left join accountscf on accountscf.accountid = account.accountid",
-
-			       "Potentials"=>"from crmentity as crmentityPotentials inner join potential on potential.potentialid = crmentity.crmid left join potentialscf on potentialscf.potentialid = potential.potentialid",
-
-			       "Notes"=>"from crmentity as crmentityNotes inner join notes on notes.notesid = crmentityNotes.crmid left join senotesrel on senotesrel.notesid = notes.notesid",
-				
-			       "Emails"=>"from crmentity as crmentityEmails inner join emails on emails.emailid = crmentityEmails.crmid left join activity on activity.activityid = seactivityrel.activityid left join seactivityrel on seactivityrel.crmid = emails.emailid"
-
-			       );
-
-	
 	function ReportRun($reportid)
 	{
 		$oReport = new Reports($reportid);
@@ -54,6 +41,7 @@ class ReportRun extends CRMEntity
 		$this->primarymodule = $oReport->primodule;
 		$this->secondarymodule = $oReport->secmodule; 
 		$this->reporttype = $oReport->reporttype;
+		$this->reportname = $oReport->reportname;
 	}
 	
 	function getQueryColumnsList($reportid)
@@ -101,8 +89,18 @@ class ReportRun extends CRMEntity
 		}*/
 		if($fieldname == "parent_id")
 		{
-			$querycolumn = "crmentityRel.setype Entity_type";
-			//$querycolumn = "case crmentityRel.setype when 'Accounts' then accountRel.accountname when 'Leads' then leaddetailsRel.lastname when 'Potentials' then potentialRel.potentialname End"." ".$selectedfields[2].", crmentityRel.setype Entity_type";
+			if($this->primarymodule == "HelpDesk")
+			{
+				$querycolumn = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', crmentityRelHelpDesk.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
+			{
+				$querycolumn = "case crmentityRelProducts.setype when 'Accounts' then accountRelProducts.accountname when 'Leads' then leaddetailsRelProducts.lastname when 'Potentials' then potentialRelProducts.potentialname End"." '".$selectedfields[2]."', crmentityRelProducts.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Activities" || $this->secondarymodule == "Activities")
+			{
+				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'Orders' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
+			}
 		}
 		/*if($fieldname == "contact_id")
 		{
@@ -214,7 +212,7 @@ class ReportRun extends CRMEntity
                         $rtvalue = " < ".PearDatabase::quote($value);
                 }
                 if($comparator == "g")
-		{
+								{
                         $rtvalue = " > ".PearDatabase::quote($value);
                 }
                 if($comparator == "m")
@@ -677,23 +675,6 @@ class ReportRun extends CRMEntity
 		return $sSQL;
 	}
 
-	function getSQLforPrimaryModule($module)
-	{
-	   global $vtlog;
-
-	   if($module != "")
-	   {
-		foreach($this->reportsql as $reportmodule=>$reportquery)
-		{
-			if($reportmodule == $module)
-			{
-				$sql = $reportquery;
-			}
-		}
-	   }
-	   $vtlog->logthis("ReportRun :: Successfully returned getSQLforPrimaryModule".$module,"info");
-	   return $sql;
-	}
 	function getRelatedModulesQuery($module,$secmodule)
 	{
 		global $vtlog;
@@ -953,13 +934,13 @@ class ReportRun extends CRMEntity
                                 left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
                                 left join productcf on products.productid = productcf.productid
                                 left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
-				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
+																left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
                                 left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
                                 left join seproductsrel on seproductsrel.productid = products.productid
-                                left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid
-                                left join account as accountRel on accountRel.accountid=crmentityRel.crmid
-                                left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
-                                left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid ";
+                                left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid
+                                left join account as accountRelProducts on accountRelProducts.accountid=seproductsrel.crmid
+                                left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = seproductsrel.crmid
+                                left join potential as potentialRelProducts on potentialRelProducts.potentialid = seproductsrel.crmid ";
 			}
 		}
 		if($module == "Activities")
@@ -1041,10 +1022,10 @@ class ReportRun extends CRMEntity
 				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
 				left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id  
 				left join seproductsrel on seproductsrel.productid = products.productid 
-				left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid 
-				left join account as accountRel on accountRel.accountid=crmentityRel.crmid 
-				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid 
-				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid 
+				left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid 
+				left join account as accountRelProducts on accountRelProducts.accountid=crmentityRelProducts.crmid 
+				left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = crmentityRelProducts.crmid 
+				left join potential as potentialRelProducts on potentialRelProducts.potentialid = crmentityRelProducts.crmid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityProducts.deleted=0 ";
 		}
@@ -1055,9 +1036,10 @@ class ReportRun extends CRMEntity
 				inner join crmentity as crmentityHelpDesk 
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id ".
-//				left join ticketcomments on ticketcomments.ticketid = troubletickets.ticketid -- for patch2
-				"left join products as productsRel on productsRel.productid = troubletickets.product_id
+        left join crmentity as crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = troubletickets.parent_id
+				left join account as accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid 
+				left join contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
+				left join products as productsRel on productsRel.productid = crmentityRelHelpDesk.crmid
 				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityHelpDesk.deleted=0 ";
@@ -1071,10 +1053,13 @@ class ReportRun extends CRMEntity
 				left join contactdetails as contactdetailsActivities on contactdetailsActivities.contactid= cntactivityrel.contactid
 				left join users as usersActivities on usersActivities.id = crmentityActivities.smownerid
 				left join seactivityrel on seactivityrel.activityid = activity.activityid
-				left join crmentity as crmentityRel on crmentityRel.crmid = seactivityrel.crmid
-				left join account as accountRel on accountRel.accountid=crmentityRel.crmid
-				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
-				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid
+				left join crmentity as crmentityRelActivities on crmentityRelActivities.crmid = seactivityrel.crmid
+				left join account as accountRelActivities on accountRelActivities.accountid=crmentityRelActivities.crmid
+				left join leaddetails as leaddetailsRelActivities on leaddetailsRelActivities.leadid = crmentityRelActivities.crmid
+				left join potential as potentialRelActivities on potentialRelActivities.potentialid = crmentityRelActivities.crmid
+				left join quotes as quotesRelActivities on quotesRelActivities.quoteid = crmentityRelActivities.crmid
+				left join purchaseorder as purchaseorderRelActivities on purchaseorderRelActivities.purchaseorderid = crmentityRelActivities.crmid
+				left join invoice as invoiceRelActivities on invoiceRelActivities.invoiceid = crmentityRelActivities.crmid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				WHERE crmentityActivities.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')";
 		}
@@ -1123,7 +1108,7 @@ class ReportRun extends CRMEntity
 		return $query;
 	}
 
-	function sGetSQLforReport($reportid,$filterlist)
+	function sGetSQLforReport($reportid,$filterlist,$type='')
 	{
 		global $vtlog;
 
@@ -1132,6 +1117,7 @@ class ReportRun extends CRMEntity
 		$stdfilterlist = $this->getStdFilterList($reportid);
 		$columnstotallist = $this->getColumnsTotal($reportid);
 		$advfilterlist = $this->getAdvFilterList($reportid);
+		$this->totallist = $columnstotallist;
 
 		if($this->reporttype == "summary")
 		{
@@ -1172,31 +1158,48 @@ class ReportRun extends CRMEntity
 		//columns to total list
 		if(isset($columnstotallist))
 		{
-			//      print_r($columnstotal);
+	       $columnstotalsql = implode(", ",$columnstotallist);
 		}
 		//advanced filterlist
 		if(isset($advfilterlist))
 		{
 			$advfiltersql = implode(" and ",$advfilterlist);
 		}
-
 		if($stdfiltersql != "")
 		{
 			$wheresql = " and ".$stdfiltersql;
 		}
-
 		if($advfiltersql != "")
-	        {
-                	$wheresql .= " and ".$advfiltersql;
-        	}
+		{
+				$wheresql .= " and ".$advfiltersql;
+		}
+		
 		$reportquery = $this->getReportsQuery($this->primarymodule);
 
-		if(trim($groupsquery) != "")
+		if($type == 'COLUMNSTOTOTAL')
 		{
-			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+			if(trim($groupsquery) != "")
+			{
+				if($columnstotalsql != '')
+				{
+					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+				}
+			}else
+			{
+				if($columnstotalsql != '')
+				{
+					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql;
+				}
+			}
 		}else
 		{
-			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+			if(trim($groupsquery) != "")
+			{
+				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+			}else
+			{
+				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+			}
 		}
 		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
@@ -1319,7 +1322,7 @@ class ReportRun extends CRMEntity
 				<body>
 				 <table cellpadding="0" cellspacing="0" border="0" class="rptTable">
 				 <tr>
-				 	<td class="rptTitle" colspan="'.$y.'">'.$mod_strings['LBL_GENERATED_REPORT'].'</td>
+				 	<td class="rptTitle" colspan="'.$y.'">'.$this->reportname.'</td>
 				 </tr>
 				  <tr>'. 
 				   $header
@@ -1369,27 +1372,77 @@ class ReportRun extends CRMEntity
 			}
 		}elseif($outputformat == "TOTALHTML")
 		{
-			
-			global $adb;
-			
-			$sSQL = $this->sGetSQLforReport("TOTAL",$filterlist);
-			if($sSQL != "")
+			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+			if(isset($this->totallist))
 			{
-				//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
-				$result = $adb->query($sSQL);
-				$y=$adb->num_fields($result);
-				$custom_field_values = $adb->fetch_array($result);
-				$coltotalhtml .= "<table border=1><tr><td>Totals</td><td>SUM</td></tr>";
-				for($i =0 ;$i<$y;$i++)
+				//print_r($this->totallist);
+				if($sSQL != "")
 				{
-					$fld = $adb->field_name($result, $i);
-					$coltotalhtml .= '<tr valign=top><td>'.$fld->name.'</td>
-						<td>'.$custom_field_values[$i].'</td>
-					</tr>';
+					$result = $adb->query($sSQL);
+					$y=$adb->num_fields($result);
+					$custom_field_values = $adb->fetch_array($result);
+
+					$coltotalhtml .= "<table width='60%' cellpadding='0' cellspacing='0' border='0' class='formOuterBorder'><tr><td class='rptHead'>Totals</td><td class='rptHead'>SUM</td><td class='rptHead'>AVG</td><td class='rptHead'>MIN</td><td class='rptHead'>MAX</td></tr>";
+
+					foreach($this->totallist as $key=>$value)
+					{
+						$fieldlist = explode(":",$key);
+						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = str_replace($escapedchars," ",$fieldlist[3]);
+					}
+
+					for($i =0;$i<$y;$i++)
+					{
+						$fld = $adb->field_name($result, $i);
+						$keyhdr[$fld->name] = $custom_field_values[$i];
+					}
+					foreach($totclmnflds as $key=>$value)
+					{
+						
+						$coltotalhtml .= '<tr class="rptGrpHead" valign=top><td class="rptData">'.str_replace($modules," ",$value).'</td>';
+						$arraykey = trim($value).'_SUM';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_AVG';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MIN';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MAX';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$coltotalhtml .= '<tr>';
+					}
+
+//					print_r($keyhdr);
+					$coltotalhtml .= "</table>";
 				}
-				$coltotalhtml .= "</table>";
-			}
-			
+			}			
 			return $coltotalhtml;
 		}
 	}
@@ -1402,37 +1455,36 @@ class ReportRun extends CRMEntity
 		global $vtlog;
 
 		$coltotalsql = "select reportsummary.* from report";
-                $coltotalsql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid";
-                $coltotalsql .= " where report.reportid =".$reportid;
+        $coltotalsql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid";
+        $coltotalsql .= " where report.reportid =".$reportid;
 
-                $result = $adb->query($coltotalsql);
+        $result = $adb->query($coltotalsql);
 		
 		while($coltotalrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $coltotalrow["columnname"];
 			
 			if($fieldcolname != "none")
-                        {
-                                $fieldlist = explode(":",$fieldcolname);
-                                if($fieldlist[4] == 2)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 3)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 4)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 5)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                        }
+			{
+					$fieldlist = explode(":",$fieldcolname);
+					if($fieldlist[4] == 2)
+					{
+					  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 3)
+					{
+					  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 4)
+					{
+					  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 5)
+					{
+					  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+			}
 		}
-
 		$vtlog->logthis("ReportRun :: Successfully returned getColumnsTotal".$reportid,"info");
 		return $stdfilterlist;
 	}

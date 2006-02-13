@@ -289,8 +289,12 @@ function PutLink($URL,$txt)
 
 $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
-
+//Code given by C‚sar Rodr¡guez for Rwport Filter
+$filtercolumn = $_REQUEST["stdDateFilterField"];
+$filter = $_REQUEST["stdDateFilter"];
 $oReportRun = new ReportRun($reportid);
+$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$_REQUEST["startdate"],$_REQUEST["enddate"]);
+
 $arr_val = $oReportRun->GenerateReport("PDF",$filterlist);
 
 if(isset($arr_val))
