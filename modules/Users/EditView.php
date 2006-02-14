@@ -231,7 +231,9 @@ if (is_admin($current_user)) {
         $xtpl->assign("CURRENCY_NAME", $CURRENCY_SELECT_OPTION);
 
 }
+
 $xtpl->assign("ACTIVITY_VIEW", getActivityVIew($focus->activity_view));
+$xtpl->assign("CLOUD_TAG", $focus->tagcloud);
 
 $xtpl->assign("LEAD_VIEW", getLeadVIew($focus->lead_view));
 

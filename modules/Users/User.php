@@ -88,6 +88,7 @@ class User extends SugarBean {
 	var $user_preferences;
 	var $activity_view;
 	var $lead_view;
+	var $tagcloud;
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -126,6 +127,7 @@ class User extends SugarBean {
 		,"date_format"
 		,"activity_view"
 		,"lead_view"
+		,"tagcloud"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");
