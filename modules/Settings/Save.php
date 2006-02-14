@@ -15,6 +15,10 @@ $server=$_REQUEST['server'];
 $server_username=$_REQUEST['server_username'];
 $server_password=$_REQUEST['server_password'];
 $server_type = $_REQUEST['server_type'];
+if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
+	$smtp_auth = 'true';
+else
+	$smtp_auth = 'false';
 
 $sql="select * from systems where server_type = '".$server_type."'";
 $id=$adb->query_result($adb->query($sql),0,"id");
@@ -23,10 +27,10 @@ $id=$adb->query_result($adb->query($sql),0,"id");
 if($id=='')
 {
 	$id = $adb->getUniqueID("systems");
-	$sql="insert into systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."')";
+	$sql="insert into systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
 }
 else
-	$sql="update systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', server_type = '".$server_type."' where id = ".$id;
+	$sql="update systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."' where id = ".$id;
 
 $adb->query($sql);
 

@@ -41,6 +41,7 @@ $result = $adb->query($sql);
 $mail_server = $adb->query_result($result,0,'server');
 $mail_server_username = $adb->query_result($result,0,'server_username');
 $mail_server_password = $adb->query_result($result,0,'server_password');
+$smtp_auth = $adb->query_result($result,0,'smtp_auth');
 
 $xtpl->assign("RETURN_MODULE","Settings");
 $xtpl->assign("RETURN_ACTION","index");
@@ -49,8 +50,13 @@ if (isset($mail_server))
 	$xtpl->assign("MAILSERVER",$mail_server);
 if (isset($mail_server_username))
 	$xtpl->assign("USERNAME",$mail_server_username);
-if (isset($mail_server_password))
-	$xtpl->assign("PASSWORD",$mail_server_password);
+if (isset($smtp_auth))
+{
+	if($smtp_auth == 'true')
+		$xtpl->assign("SMTP_AUTH",'checked');
+	else
+		$xtpl->assign("SMTP_AUTH",'');
+}
 
 $xtpl->parse("main");
 $xtpl->out("main");
