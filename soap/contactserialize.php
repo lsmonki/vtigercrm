@@ -1789,12 +1789,13 @@ function send_mail_for_password($mailid)
         $mail->IsSMTP();
 
         $mailserverresult=$adb->query("select * from systems where server_type='email'");
-        $mail_server=$adb->query_result($mailserverresult,0,'server');
-        $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-        $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
+        $mail_server = $adb->query_result($mailserverresult,0,'server');
+        $mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
+        $mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
+        $smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
         $mail->Host = $mail_server;
-        $mail->SMTPAuth = true;
+        $mail->SMTPAuth = $smtp_auth;
         $mail->Username = $mail_server_username;
         $mail->Password = $mail_server_password;
         $mail->From = $from;
