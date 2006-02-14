@@ -124,6 +124,7 @@
 		<br>	
 		</td>
 		<td align=left valign=top width=30%>
+		<script language="JavaScript" type="text/javascript" src="{$TAGCLOUD}"></script>
 		Pipeline chart comes here..
 		</td>
 		</tr>
@@ -133,3 +134,16 @@
 	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 	</tr>
 </table>
+<div id="HTMLContent" style="display:none">
+<table border="1" cellpadding="3">
+<tr><td></td><td></td><td></td></tr>
+	{foreach key=label item=entries from=$LOGINHISTORY}
+	<tr>
+	<td class="tblPro1DataCell">{$entries.setype}</td>
+	<td class="tblPro1DataCell">{$entries.modifiedby}</td>
+	<td class="tblPro1DataCell">{$entries.modifiedtime}</td>
+	<td class="tblPro1DataCell">{$entries.crmid}</td>
+	</tr>
+	{/foreach}
+</table>
+</div>
