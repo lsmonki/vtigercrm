@@ -147,7 +147,6 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
 	setMailServerProperties(&$mail);	
-	$mail->SMTPAuth = true;     // turn on SMTP authentication
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
@@ -189,12 +188,14 @@ function setMailServerProperties($mail)
 	$adb->println("Inside the function setMailServerProperties");
 
 	$res = $adb->query("select * from systems where server_type='email'");
-	$server=$adb->query_result($res,0,'server');
-        $username=$adb->query_result($res,0,'server_username');
-        $password=$adb->query_result($res,0,'server_password');
+	$server = $adb->query_result($res,0,'server');
+        $username = $adb->query_result($res,0,'server_username');
+        $password = $adb->query_result($res,0,'server_password');
+	$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
 
+	$mail->SMTPAuth = $smtp_auth;	// turn on SMTP authentication
 	$mail->Host = $server;		// specify main and backup server
 	$mail->Username = $username ;	// SMTP username
         $mail->Password = $password ;	// SMTP password
