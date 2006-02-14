@@ -173,7 +173,12 @@ function getActivityType($id)
 	return $acti_type;
 
 }
-
+$query="select tagcloud from users where id=".$current_user->id;
+$result=$adb->query($query);
+$tagcloud=$adb->query_result($result,0,'tagcloud');
+$smarty->assign("TAGCLOUD",$tagcloud);
+$smarty->assign("LOGINHISTORY",getLoginHistory());
+echo '<pre>';print_r(getLoginHistory());echo '</pre>';
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
@@ -182,7 +187,31 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->display("HomePage.tpl");
 
-
+function getLoginHistory()
+{
+	global $current_user;
+	global $adb;
+	global $app_strings;
+	$userid= $current_user->id;
+	$query="select * from loginhistory inner join users on loginhistory.user_name=users.user_name where users.id=".$userid;
+	$result=$adb->query($query);
+	$count=$adb->num_rows($result);
+	$logout_time=$adb->query_result($result,$count-2,'logout_time');
+	$query ="select * from crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
+	$result=$adb->query($query);
+	$entry_list=array();
+	for($i = 0;$i < $adb->num_rows($result);$i++)
+	{
+		$entries=array();
+		$entries['setype'] =$adb->query_result($result,$i,'setype');	
+		$entries['modifiedby'] = getUserName($adb->query_result($result,$i,'modifiedby'));
+		$entries['modifiedtime'] = $adb->query_result($result,$i,'modifiedtime');
+		$entries['crmid'] = $adb->query_result($result,$i,'crmid');
+		$entry_list[]=$entries;	
+	}
+	return $entry_list;
+}
+	
 function getGroupTaskLists()
 {
 	//get all the group relation tasks
