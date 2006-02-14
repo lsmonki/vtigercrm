@@ -137,14 +137,16 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
         {
                 global $adb;
                 $mailserverresult=$adb->query("select * from systems where server_type='email'");
-                $mail_server=$adb->query_result($mailserverresult,0,'server');
-                $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
+                $mail_server = $adb->query_result($mailserverresult,0,'server');
+                $mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
+                $mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
+                $smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
+
 		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
                 $_REQUEST['server']=$mail_server;
         }
         $mail->Host = $mail_server;
-        $mail->SMTPAuth = true;
+        $mail->SMTPAuth = $smtp_auth;
         $mail->Username = $mail_server_username;
         $mail->Password = $mail_server_password;
         $mail->From = $from;
