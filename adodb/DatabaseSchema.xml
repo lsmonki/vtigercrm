@@ -1270,7 +1270,7 @@
 		<field name="qtyindemand" type="I" size="11"></field>
 		<field name="glacct" type="C" size="200"></field>
 		<field name="vendor_id" type="I" size="11"></field>	
-		<field name="imagename" type="C" size="350"></field>
+		<field name="imagename" type="X"></field>
 	
 		<opt>Type=InnoDB</opt>
 		
@@ -2755,6 +2755,7 @@
                 <field name="server_username" type="C" size="30"> </field>
                 <field name="server_password" type="C" size="30"> </field>
                 <field name="server_type" type="C" size="20"> </field>
+                <field name="smtp_auth" type="C" size="5"> </field>
                 <data>
                 </data>
         </table>
@@ -6956,6 +6957,20 @@ E</constraint>
 		</data>
 	</table>
 
+	<table name="portal">
+		<field name="portalid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="portalname" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="portalurl" type="C" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="sequence" type="I" size="3">
+			<NOTNULL/>
+		</field>
+	</table>
 
 
 
