@@ -143,14 +143,17 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	if($mail_server=='')
 	{
 		$mailserverresult=$adb->query("select * from systems where server_type='email'");
-		$mail_server=$adb->query_result($mailserverresult,0,'server');
+		$mail_server = $adb->query_result($mailserverresult,0,'server');
+		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
+		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
+		$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 		$_REQUEST['server']=$mail_server;
 	}	
 
-	$mail->Host = $mail_server;  // specify main and backup server
-	$mail->SMTPAuth = true;     // turn on SMTP authentication
-	$mail->Username = $mail_server_username ;//$smtp_username;  // SMTP username
-	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
+	$mail->Host = $mail_server;  			// specify main and backup server
+	$mail->SMTPAuth = $smtp_auth;			// turn on SMTP authentication
+	$mail->Username = $mail_server_username;	// SMTP username
+	$mail->Password = $mail_server_password;	// SMTP password
 	$mail->From = $from;
 	$mail->FromName = $initialfrom;
 	
