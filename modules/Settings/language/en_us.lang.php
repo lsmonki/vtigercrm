@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Settings/language/en_us.lang.php,v 1.45 2006/02/03 05:19:44 mangai Exp $
 
  * Description:  Defines the English language pack
 
@@ -532,7 +532,10 @@ $mod_strings = Array(
 'LBL_MODULE'=>'Module',
 'LBL_OWNER'=>'Owner',
 'LBL_MIGRATION'=>'Migrate from Previous Version',
-'LBL_MIGRATION_INFO'=>' - Migration from previous Version of vTiger'
+'LBL_MIGRATION_INFO'=>' - Migration from previous Version of vTiger',
+
+//Added fields after 5.0 Alpha
+'LBL_REQUIRE_SMTP_AUTHENTICATION'=>'Require SMTP Authentication?',
 
 );
 
