@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Orders/SaveSalesOrder.php,v 1.8 2005/12/08 05:31:52 mangai Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -192,8 +192,8 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
 		$body = str_replace('{SOQUANTITY}',$qty,$body);	
 		$body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);	
 
-		SendMailToCustomer($to_address,$current_user->id,$subject,$body);
-		
+		include("modules/Emails/mail.php");
+		$mail_status = send_mail("Orders",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
 	}
 }
 
@@ -226,53 +226,10 @@ function getPrdHandler($product_id)
 	
 }
 
-function SendMailToCustomer($to,$current_user_id,$subject,$contents)
-{
-	require_once("modules/Emails/class.phpmailer.php");
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-	$mail = new PHPMailer();
-	
-	$mail->Subject = $subject;
-	$mail->Body    = nl2br($contents);	
-	$mail->IsSMTP();
-
-	if($current_user_id != '')
-	{
-		global $adb;
-		$sql = "select * from users where id= ".$current_user_id;
-		$result = $adb->query($sql);
-		$from = $adb->query_result($result,0,'email1');
-		$initialfrom = $adb->query_result($result,0,'user_name');
-	}
-	if($mail_server=='')
-        {
-		global $adb;
-                $mailserverresult=$adb->query("select * from systems where server_type='email'");
-                $mail_server=$adb->query_result($mailserverresult,0,'server');
-                $_REQUEST['server']=$mail_server;
-        }
-	$mail->Host = $mail_server;
-        $mail->SMTPAuth = true;
-        $mail->Username = $mail_server_username;
-        $mail->Password = $mail_server_password;
-	$mail->From = $from;
-	$mail->FromName = $initialfrom;
-
-	$mail->AddAddress($to);
-	$mail->AddReplyTo($from);
-	$mail->WordWrap = 50;
-
-	$mail->IsHTML(true);
-
-	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
-
-	if(!$mail->Send())
-	{
-		$errormsg = "Mail Could not be sent...";	
-	}
-}
- //code added for returning back to the current view after edit from list view
- if($_REQUEST['return_viewname'] == '') $return_viewname='0';
- if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname&smodule=SO");
+
 ?>
