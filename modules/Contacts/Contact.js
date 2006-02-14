@@ -117,7 +117,9 @@ function SelectAll()
 {
 
         x = document.selectall.selected_id.length;
-	//var viewid = document.selectall.viewname.value;
+	var entity_id = window.opener.document.getElementById('parent_id').value
+	var module = window.opener.document.getElementById('return_module').value
+	document.selectall.action.value='updateRelations'
         idstring = "";
 
         if ( x == undefined)
@@ -154,9 +156,10 @@ function SelectAll()
                         return false;
                 }
 	}
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		if(confirm("Are you sure you want to add the selected "+xx+" records ?"))
 		{
-        document.selectall.action="index.php?module=Users&action=selectall&return_module=Contacts&return_action=ListView";
+		opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&return_module=Potentials&return_action=CallRelatedList&idlist="+idstring;
+		self.close();
 		}
 		else
 		{
@@ -173,7 +176,6 @@ function massDelete()
 
         if ( x == undefined)
         {
-
                 if (document.massdelete.selected_id.checked)
                 {
                         document.massdelete.idlist.value=document.massdelete.selected_id.value;
