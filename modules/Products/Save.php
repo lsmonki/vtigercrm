@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Products/Save.php,v 1.12 2006/02/07 07:27:23 jerrydgeorge Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -203,39 +203,35 @@ if($saveimage=="true")
 //Saving the product
 if($image_error=="false")
 {
-
 	$focus->save("Products");
 	$return_id = $focus->id;
 
-//Checking and Sending Mail from reorder level
-global $current_user;
-$productname = $focus->column_fields['productname'];
-$qty_stk = $focus->column_fields['qtyinstock'];
-$reord = $focus->column_fields['reorderlevel'];
-$handler = $focus->column_fields['assigned_user_id'];
-if($qty_stk != '' && $reord != '')
-{
-
-	if($qty_stk < $reord)
+	//Checking and Sending Mail from reorder level
+	global $current_user;
+	$productname = $focus->column_fields['productname'];
+	$qty_stk = $focus->column_fields['qtyinstock'];
+	$reord = $focus->column_fields['reorderlevel'];
+	$handler = $focus->column_fields['assigned_user_id'];
+	if($qty_stk != '' && $reord != '')
 	{
-	
-		$handler_name = getUserName($handler);
-		$sender_name = getUserName($current_user->id);
-		$to_address= getUserEmail($handler);
-		$subject =  $productname.' Stock Level is Low';
-		$body = 'Dear '.$handler_name.',
+		if($qty_stk < $reord)
+		{
+			$handler_name = getUserName($handler);
+			$sender_name = getUserName($current_user->id);
+			$to_address= getUserEmail($handler);
+			$subject =  $productname.' Stock Level is Low';
+			$body = 'Dear '.$handler_name.',
 
-The current stock of '.$productname.' in our warehouse is '.$qty_stk.'. Kindly procure required number of units as the stock level is below reorder level '.$reord.'.
+					The current stock of '.$productname.' in our warehouse is '.$qty_stk.'. Kindly procure required number of units as the stock level is below reorder level '.$reord.'.
 
-Severity: Major 
+					Severity: Major 
+				Thanks,
+				'.$sender_name; 
 
-Thanks,
-'.$sender_name; 
-		SendMailToCustomer($to_address,$current_user->id,$subject,$body);	
-			
-	}	
-	
-}
+			include("modules/Emails/mail.php");
+			$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
+		}
+	}
 
 	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 	else $return_module = "Products";
@@ -245,68 +241,8 @@ Thanks,
 	if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
 
 	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
-
 }
 
-function SendMailToCustomer($to,$current_user_id,$subject,$contents)
-{
-        global $log;
-        $log->debug("Inside SendMailToCustomer function(Products/Save.php).");
-	require_once("modules/Emails/class.phpmailer.php");
-
-        $mail = new PHPMailer();
-
-        $mail->Subject = $subject;
-        $mail->Body    = nl2br($contents);
-        $mail->IsSMTP();
-
-        if($current_user_id != '')
-        {
-                global $adb;
-                $sql = "select * from users where id= ".$current_user_id;
-                $result = $adb->query($sql);
-                $from = $adb->query_result($result,0,'email1');
-                $initialfrom = $adb->query_result($result,0,'user_name');
-        	 $log->info("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'");
-	}
-        if($mail_server=='')
-        {
-                global $adb;
-                $mailserverresult=$adb->query("select * from systems where server_type='email'");
-                $mail_server=$adb->query_result($mailserverresult,0,'server');
-		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
-                $_REQUEST['server']=$mail_server;
-		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
-
-        }
-        $mail->Host = $mail_server;
-        $mail->SMTPAuth = true;
-        $mail->Username = $mail_server_username;
-        $mail->Password = $mail_server_password;
-	$mail->From = $from;
-        $mail->FromName = $initialfrom;
-
-        $mail->AddAddress($to);
-	$log->info("Mail sending process : To Email id = '".$to."' (set in the mail object)");
-        $mail->AddReplyTo($from);
-        $mail->WordWrap = 50;
-
-        $mail->IsHTML(true);
-
-        $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
-
-        if(!$mail->Send())
-        {
-                 $log->info("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
-		$errormsg = "Mail Could not be sent...";
-        }
-	else
-	{
-		$log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
-	}
-	$log->info("After executing the mail->Send() function.");
-}
 
 //function to check whether same product name exists 
 function file_exist_fn($filename,$exist)
