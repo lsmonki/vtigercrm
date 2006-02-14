@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/include/utils/ListViewUtils.php,v 1.32 2006/02/03 06:53:08 mangai Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -706,7 +706,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			}
 		}	
 		//$list_header .= '</tr>';
-		$list_block[]=$list_header;
+		$list_block[$entity_id]=$list_header;
 	}
 	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_block;
@@ -1095,25 +1095,25 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
                                 }
-				//added by rdhital/Raju for better emails 
-				elseif($popuptype == "set_return_emails")
-				{
-					if ($module=='Accounts')
+//added by rdhital/Raju for better emails 
+					elseif($popuptype == "set_return_emails")
 					{
-						$accid =$adb->query_result($list_result,$list_result_count,'accountid');
-						$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
-					}
-					elseif ($module=='Contacts' || $module=='Leads')
-					{
-						$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
-						$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
-						$name=$lastname.' '.$firstname;
-
-						$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
-					}
+						if ($module=='Accounts')
+						{
+							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
+							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
+						}
+						elseif ($module=='Contacts' || $module=='Leads')
+						{
+							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
+							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
+							$name=$lastname.' '.$firstname;
+	
+							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
+						}
 			
-				}
-				//code added by raju ends
+					}
+//code added by raju ends
 				elseif($popuptype == "specific_vendor_address")
 				{
 					require_once('modules/Vendors/Vendor.php');
