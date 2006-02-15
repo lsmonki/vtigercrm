@@ -208,6 +208,9 @@ class Reports extends CRMEntity{
 		$srptdetails="";
 		global $adb;
 		global $log;
+		global $mod_strings;
+		
+		require_once('include/utils/UserInfoUtil.php');
 		
 		$sql = "select report.*, reportmodules.* from report inner join reportfolder on reportfolder.folderid = report.folderid";
 		$sql .= " inner join reportmodules on reportmodules.reportmodulesid = report.reportid where reportfolder.folderid=".$rpt_fldr_id;
@@ -227,14 +230,18 @@ class Reports extends CRMEntity{
 						<td width="55%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Description</td>
 					  </tr>';
 					  $rowcnt = 1;
+					  $count_flag = 0;
 					  do
 					  {
-					  	if ($rowcnt%2 == 0)
+						if(isPermitted($report['primarymodule'],'index') == "yes" && (isPermitted($report['secondarymodules'],'index')== "yes" || $report['secondarymodules'] == ''))
+						{
+							$count_flag = 1;
+							if ($rowcnt%2 == 0)
 							$srptdetails .= '<tr class="evenListRow">';
-						else
+							else
 							$srptdetails .= '<tr class="oddListRow">';
 
-						$srptdetails .= '<td height="21" style="padding:0px 3px 0px 3px;">
+							$srptdetails .= '<td height="21" style="padding:0px 3px 0px 3px;">
 							<div align="center">';
 							if($report["customizable"]==1)
 							{
@@ -246,12 +253,18 @@ class Reports extends CRMEntity{
 								$srptdetails .=  "&nbsp;<span class=\"sep\">|</span>&nbsp;<a class=\"link\" onclick=\"return window.confirm('Are you sure?');\" href=\"index.php?module=Reports&action=Delete&record=".$report["reportid"]."\">Del</a>";
 							}
 							$srptdetails .='</div>
-								</td>
-								<td  height="21" style="padding:0px 3px 0px 3px;" nowrap><a class="link" href="index.php?module=Reports&action=SaveAndRun&record='.$report["reportid"].'">'.$report["reportname"].'</a></td>
-								<td  height="21" style="padding:0px 3px 0px 3px;">'.$report["description"].'</td>
+							</td>
+							<td  height="21" style="padding:0px 3px 0px 3px;" nowrap><a class="link" href="index.php?module=Reports&action=SaveAndRun&record='.$report["reportid"].'">'.$report["reportname"].'</a></td>
+							<td  height="21" style="padding:0px 3px 0px 3px;">'.$report["description"].'</td>
 							</tr>';
 							$rowcnt++;
-						}while($report = $adb->fetch_array($result));
+						}
+					  }while($report = $adb->fetch_array($result));
+					  if($count_flag == 0)	
+					  {
+						$srptdetails .= "<tr><td colspan=3 align='center'>".$mod_strings['LBL_NO_PERMISSION']."</td></tr>";	
+					   }
+
 				    	$srptdetails .= '</table>
 				    		</td>
 				  			</tr>
