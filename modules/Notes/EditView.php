@@ -110,6 +110,8 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Note");
+//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
+$smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
 if (isset($focus->name))
 $smarty->assign("NAME", $focus->name);

@@ -150,6 +150,8 @@ $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Email");
+//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
+$smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
 
 if($_REQUEST['reply'])
