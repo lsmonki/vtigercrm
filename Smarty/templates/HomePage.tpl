@@ -129,8 +129,9 @@
 		<td align=left valign=top width=30%>
 		Pipeline chart comes here..<br><br>
 		<table border="0" cellpadding="0" cellspacing="0">
-     			<tr><b>Your SHOUT!!</b>
+     			<tr>
           			<td valign="top">
+	<p><b>Your SHOUT!!</b></p>
       	  				<iframe name="iframetag" marginwidth="0" marginheight="0" src="smiletag/view.php" width="190" height="300">
 						Your Browser must support IFRAME to view this page correctly
 					</iframe>
@@ -149,19 +150,19 @@
 		<div id="smiley_box_content" style="padding: 0px;">
 			<table width="80%" border="0" cellspacing="5" cellpadding="0">
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="{$IMAGE_PATH}smile.gif" alt=":)" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="{$IMAGE_PATH}laugh.gif" alt=":D" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="{$IMAGE_PATH}sad.gif" alt=":(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="themes/images/smile.gif" alt=":)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="themes/images/laugh.gif" alt=":D" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="themes/images/sad.gif" alt=":(" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="{$IMAGE_PATH}shock.gif" alt=":o" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="{$IMAGE_PATH}tongue.gif" alt=":p" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="{$IMAGE_PATH}wink.gif" alt=";)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="themes/images/shock.gif" alt=":o" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="themes/images/tongue.gif" alt=":p" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="themes/images/wink.gif" alt=";)" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="{$IMAGE_PATH}blah.gif" alt=":|" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="{$IMAGE_PATH}mad.gif" alt="x(" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="{$IMAGE_PATH}drool.gif" alt=":~" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="themes/images/blah.gif" alt=":|" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="themes/images/mad.gif" alt="x(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="themes/images/drool.gif" alt=":~" /></a></td>
 			  </tr>
 </table>
 		</div>
@@ -177,7 +178,10 @@
 		  				<input type="reset"  name="reset" value="Reset" /><br />
             				</form>
 			       </td>
-        		</tr>
+        		</tr><tr>
+<link href="{$TAGCLOUD}" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/javascript" src="{$TAGCLOUD}"></script>
+	</tr>
 		</table>
 		</td>
 		</tr>
