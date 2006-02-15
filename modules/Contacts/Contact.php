@@ -311,7 +311,7 @@ class Contact extends CRMEntity {
 		$log->info("Potential Related List for Contact Displayed");
 
 		// First, get the list of IDs.
-		$query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
+		$query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
 		if($this->column_fields['account_id'] != 0)
 		return GetRelatedList('Contacts','Potentials',$focus,$query,$button,$returnset);
 	}
@@ -357,6 +357,8 @@ class Contact extends CRMEntity {
 				inner join contactdetails on contactdetails.contactid= cntactivityrel.contactid
 				inner join crmentity on crmentity.crmid=activity.activityid
 				left join seactivityrel on seactivityrel.activityid=activity.activityid
+				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+                                left join groups on groups.groupname=activitygrouprelation.groupname
 				inner join users on crmentity.smcreatorid= users.id
 				where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
@@ -423,7 +425,7 @@ class Contact extends CRMEntity {
 		$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
 		}
 		$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
-		$query = "select crmentity.*, quotes.*,potential.potentialname,contactdetails.lastname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join contactdetails on contactdetails.contactid=quotes.contactid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and contactdetails.contactid=".$id;
+		$query = "select crmentity.*, quotes.*,potential.potentialname,contactdetails.lastname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join contactdetails on contactdetails.contactid=quotes.contactid left outer join potential on potential.potentialid=quotes.potentialid  left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and contactdetails.contactid=".$id;
 		return GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
 	  }
 	 
@@ -441,7 +443,7 @@ class Contact extends CRMEntity {
 		 }
 		 $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-		 $query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, contactdetails.lastname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join contactdetails on contactdetails.contactid=salesorder.contactid where crmentity.deleted=0 and salesorder.contactid = ".$id;
+		 $query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, contactdetails.lastname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join contactdetails on contactdetails.contactid=salesorder.contactid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and salesorder.contactid = ".$id;
 		 return GetRelatedList('Contacts','SalesOrder',$focus,$query,$button,$returnset);
 	 }
 	 
@@ -479,7 +481,7 @@ class Contact extends CRMEntity {
 		 }
 		 $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-		 $query = "select crmentity.*, purchaseorder.*,vendor.vendorname,contactdetails.lastname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left outer join contactdetails on contactdetails.contactid=purchaseorder.contactid where crmentity.deleted=0 and purchaseorder.contactid=".$id;
+		 $query = "select crmentity.*, purchaseorder.*,vendor.vendorname,contactdetails.lastname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left outer join contactdetails on contactdetails.contactid=purchaseorder.contactid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and purchaseorder.contactid=".$id;
 		 return GetRelatedList('Contacts','PurchaseOrder',$focus,$query,$button,$returnset);
 	 }
 
@@ -505,7 +507,7 @@ class Contact extends CRMEntity {
 
 		$log->info("Email Related List for Contact Displayed");
 
-		$query = 'select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = '.$id.'  and activity.activitytype="Emails" and crmentity.deleted = 0';
+		$query = 'select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = '.$id.'  and activity.activitytype="Emails" and crmentity.deleted = 0';
 		return GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
 	}
 
@@ -567,7 +569,7 @@ class Contact extends CRMEntity {
 	         }
 		 $log->info("Custom Query successfully Constructed in constructCustomQueryAddendum()");
 		return $sql3;
-        	}
+        }
 
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
