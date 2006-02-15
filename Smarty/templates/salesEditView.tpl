@@ -542,6 +542,26 @@ function sensex_info()
 </tr>
 </table>
 </form>
+
+{if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
+	<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+	<script type="text/javascript" defer="1">
+
+	var oFCKeditor = null;
+
+	{if $MODULE eq 'Emails'}
+		oFCKeditor = new FCKeditor( "description" ) ;
+	{/if}
+	{if $MODULE eq 'Notes'}
+		oFCKeditor = new FCKeditor( "notecontent" ) ;
+	{/if}
+
+	oFCKeditor.BasePath   = "include/fckeditor/" ;
+	oFCKeditor.ReplaceTextarea() ;
+
+	</script>
+{/if}
+
 <script>
 
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
