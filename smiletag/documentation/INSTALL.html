@@ -1,0 +1,274 @@
+<html xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>How to install</title>
+<style>
+<!--
+p
+	{font-size:12.0pt;
+	font-family:"Times New Roman";}
+span.contenttitle1
+	{font-weight:bold;}
+span.blue1
+p.blue11, li.blue11, div.blue11
+	{font-size:12.0pt;
+	font-family:"Times New Roman";}
+span.SpellE
+span.GramE
+.blue1 {	color: #000099;
+	font-weight: bold;
+}
+.style1 {color: #000099}
+.style2 {
+	color: #000099;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+<body bgcolor="#FFFFFF" lang=EN-US>
+<div class=Section1>
+  <p><span
+class=contenttitle1><span style='font-size:13.5pt;font-family:Tahoma;
+color:#4B4B4B'>How to install</span></span></p>
+  <p><span style="font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B">Version 2.3</span><br/>
+  <span style="font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B">Copyright (C) 2005 Yuniar Setiawan </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'>Installing smiletag is very easy, in simple word, you just need to unzip and change some file permission  into writable (chmod 666), and smiletag is ready.						     </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>However, I will try to explain you how to install <span
+class=SpellE>smiletag</span> in a step by step way as shown below: </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1025"> </span><strong><span style='font-size:
+8.5pt;font-family:Tahoma;color:#4B4B4B'>1. Uncompressing the file </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>If you are using windows, simply unzip the <span class=SpellE style1><strong><span
+style='font-family:Tahoma'>smiletag-latest.zip</span></strong></span> using
+    tool such as WinZip or <span class=SpellE>WinRAR</span>. If you are using Linux
+    and downloaded the <span class=SpellE>smiletag-latest.tar.gz</span>, then you
+    can uncompress it by typing this command in the console: tar <span
+class=SpellE>xzvf</span> <span class=SpellE>smiletag-latest.tar.gz</span> </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1026"> </span><strong><span style='font-size:
+8.5pt;font-family:Tahoma;color:#4B4B4B'>2. Uploading the files </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>After you uncompress the file, you will find a directory called <span
+class=SpellE style1><strong><span style='font-family:Tahoma'>smiletag</span></strong></span>,
+    with files inside of it. Upload this directory and all files inside of it into
+    your site root directory. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>So now you will have a new directory called <span class=SpellE style1><strong><span
+style='font-family:Tahoma'>smiletag</span></strong></span> with file structure
+    similar to the one shown below:</span></p>
+  <table border=0 cellspacing=0 cellpadding=0 width="80%">
+    <tr>
+      <td width="40%" valign=top><p align=right style='text-align:right;line-height:9.75pt'><span
+  style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>http://www.example.com</span></p></td>
+      <td width="60%" valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag</span>/</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag/view.php</span></span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag/post.php</span></span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag/config</span>/*</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><span style="font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B">/<span class=SpellE>smiletag</span>/admin/*</span></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag</span>/data/*</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag</span>/images/*</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/<span class=SpellE>smiletag</span>/lib/*</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span style='font-size:8.5pt;
+  font-family:Tahoma;color:#4B4B4B'>/smiletag/sample.html</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top>&nbsp;</td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top><p style='line-height:9.75pt'><span class=GramE><span
+  style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>etc</span></span><span
+  style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>...etc.</span></p></td>
+    </tr>
+    <tr>
+      <td valign=top>&nbsp;</td>
+      <td valign=top>&nbsp;</td>
+    </tr>
+  </table>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1027"> </span><strong><span style='font-size:
+8.5pt;font-family:Tahoma;color:#4B4B4B'>3. Changing file permission </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Since  world writable files are needed for smiletag, you MUST change the   permission for all </span><span class="style1" style='font-size:8.5pt;font-family:Tahoma'><strong class="blue1 ">*.xml</strong></span><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'> files under </span><span class="style1" style='font-size:8.5pt;font-family:Tahoma'><strong class="blue1 ">data</strong></span><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'> folder. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>If you are using a windows client to upload the files, such as <span
+class=SpellE>SmartFTP</span> or <span class=SpellE>CuteFTP</span> or WS_FTP Pro
+    you can simply right click to the file and choose the <span class=SpellE style1><strong><span
+style='font-family:Tahoma'>chmod</span></strong></span> command. Make sure that
+    the file has write permission. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>If you are using Linux, use the <span class=SpellE style1><strong><span
+style='font-family:Tahoma'>chmod</span></strong></span> command. For example:</span></p>
+  <p align=center class=blue11 style1 style='text-align:center;line-height:9.75pt'><span
+class=SpellE><span class=GramE><strong><span style='font-size:8.5pt;font-family: Tahoma'>chmod</span></strong></span></span><strong><span
+style='font-size:8.5pt;font-family:Tahoma'> 666 <span
+class=SpellE>messages.xml</span> </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1028"> </span></p>
+  <p style='line-height:9.75pt'><strong><span style='font-size:
+8.5pt;font-family:Tahoma;color:#4B4B4B'>4. Embedding <span class=SpellE>smiletag</span> to your page </span></strong></p>
+  <p style='line-height:9.75pt'><span class=GramE><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'>If you already done the previous steps, then <span
+class=SpellE>smiletag</span> is up and running.</span></span><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'> You can see it by
+    opening your browser and point it to the <span class="style1"><strong><span style='font-family:Tahoma'>sample.html</span></strong></span> file. For example:</span></p>
+  <p align=center class=blue11 style1 style='text-align:center;line-height:9.75pt'><strong><span
+style='font-size:8.5pt;font-family:Tahoma'>http://www.example.com/smiletag/sample.html </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>You will see <span class=SpellE>smiletag</span> with empty
+    messages. Give it a try ;) But auto-refresh feature is not working yet in this sample mode.</span> </p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Now, after you have fun with it. It's time to embed <span
+class=SpellE>smiletag</span> into your desired page. In this tutorial, I will
+    embed <span class=SpellE>smiletag</span> into<span class="style2"> <span
+style='font-family:Tahoma'>index.ph</span></span><span class=SpellE style1><strong><span
+style='font-family:Tahoma'>p</span></strong></span> in the root
+    directory.</span></p>
+  <p align=center class=blue11 style1 style='text-align:center;line-height:9.75pt'><strong><span
+style='font-size:8.5pt;font-family:Tahoma'>http://www.example.com/index.php </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>To embed <span class=SpellE>smiletag</span> into <span
+class=SpellE>index.php</span> you need to copy two html <span class=GramE>section</span> from sample.html. Open sample.html file and you will find code similar as
+    below: </span></p>
+  <p class=blue11 align=center style='text-align:center;line-height:9.75pt'><span
+class=GramE><span style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;!--</span></span><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'> <span class=SpellE>X.Start</span> copy here --&gt;<br>
+    .....<span class=GramE>content</span>.......<br>
+    &lt;!-- <span class=SpellE>X.End</span> copy here --&gt; </span></p>
+  <p style='line-height:9.75pt'><strong><span style='font-size:8.5pt;font-family:
+Tahoma;color:#4B4B4B'>X</span></strong><span style='font-size:8.5pt;font-family:
+Tahoma;color:#4B4B4B'> is a number from 1 until 2. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>You must copy all two of those html sections into your page.
+    Put it anywhere you like. But for the first section (number 1), I suggest you
+    put it inside <span class=blue1>&lt;head&gt;&lt;/head&gt;</span> tag, as it
+    will speed up your page load time better. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Now you need to modify the path inside those three sections, so
+    the form and <span class=SpellE>iframe</span> have the right action/source.
+    Find four lines <span class=GramE>below :</span></span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1029"> </span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>var smiletagURL = &quot;http://<strong><span class="style1">WWW.EXAMPLE.COM/smiletag</span>/</strong></span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;script
+    type=&quot;text/<span class=SpellE>javascript</span>&quot;
+    language=&quot;JavaScript&quot; <span class=SpellE>src</span>=&quot;<span
+class=SpellE style1><strong><span style='font-family:Tahoma'>smiletag-script.js</span></strong></span>&quot;&gt;&lt;/script&gt; </span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;<span
+class=SpellE>iframe</span> name=&quot;<span class=SpellE>iframetag</span>&quot; <span class=SpellE>marginwidth</span>=&quot;0&quot; <span class=SpellE>marginheight</span>=&quot;0&quot; <span class=SpellE>src</span>=&quot;<span class=SpellE style1><strong><span
+style='font-family:Tahoma'>view.php</span></strong></span>&quot;
+    width=&quot;190&quot; height=&quot;300&quot;&gt;</span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;form name=&quot;<span
+class=SpellE>smiletagform</span>&quot; method=&quot;post&quot; action=&quot;<span
+class=SpellE style1><strong><span style='font-family:Tahoma'>post.php</span></strong></span>&quot;
+    target=&quot;<span class=SpellE>iframetag</span>&quot;&gt;</span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1030"> </span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span class=GramE><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>and</span></span><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'> change its path to:</span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1031"> </span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>var smiletagURL = &quot;http://<span class="style1"><strong>www.yourdomain.com/smiletag</strong></span>/&quot;;</span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;script
+    type=&quot;text/<span class=SpellE>javascript</span>&quot;
+    language=&quot;JavaScript&quot; <span class=SpellE>src</span>=&quot;<span
+class=SpellE><span class=blue1 style1><strong>smiletag/</strong></span><span class="style1"><strong><span style='font-family:
+Tahoma'>smiletag-script.j</span></strong></span><strong><span style='font-family:
+Tahoma'>s</span></strong></span>&quot;&gt;&lt;/script&gt; </span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;<span
+class=SpellE>iframe</span> name=&quot;<span class=SpellE>iframetag</span>&quot; <span class=SpellE>marginwidth</span>=&quot;0&quot; <span class=SpellE>marginheight</span>=&quot;0&quot; <span class=SpellE>src</span>=&quot;<span class=SpellE style1><strong>smiletag/</strong><strong><span
+style='font-family:Tahoma'>view.php</span></strong></span>&quot;
+    width=&quot;190&quot; height=&quot;300&quot;&gt;</span></p>
+  <p align=center style='text-align:center;line-height:9.75pt'><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>&lt;form name=&quot;<span
+class=SpellE>smiletagform</span>&quot; method=&quot;post&quot; action=&quot;<span
+class=SpellE><span class=blue1 style1><strong>smiletag/</strong></span><span class="style1"><strong><span style='font-family:
+Tahoma'>post.php</span></strong></span></span>&quot; target=&quot;<span class=SpellE>iframetag</span>&quot;&gt;</span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1032"> </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'><img width=1 height=1
+src="INSTALL_files/image001.gif" v:shapes="_x0000_i1033"> </span><strong><span style='font-size:
+8.5pt;font-family:Tahoma;color:#4B4B4B'>5. Configuration</span></strong><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'> </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Well, right now your smiletag should be up and running with the default configuration. There are lots of smiletag features which can be set from the Admin Panel. To open your admin panel go to.</span></p>
+  <p class="style1" style='line-height:9.75pt'><strong><span style='font-size:8.5pt;font-family:Tahoma'>http://www.yourdomain.com/smiletag/admin/ </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Login with the default username &amp; password</span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>user: <span class="style2">admin </span><br />
+  password: <span class="style1"><strong>admin</strong></span></span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>You can (<strong>MUST!</strong>) change this default password by editing the <span class="blue1 style1"><strong>password.php</strong></span> file which placed inside smiletag folder. </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>If you have any question or comment, please mailto: </span></p>
+  <p style='line-height:9.75pt'><strong><span
+style='font-size:8.5pt;font-family:Tahoma;color:#4B4B4B'>yuniarsetiawan [at] <span
+class=SpellE>smiletag</span> [dot] com </span></strong></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Hope you enjoy this script ;) </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;font-family:Tahoma;
+color:#4B4B4B'>Visit our site at <a href="http://www.smiletag.com">http://www.smiletag.com</a> </span></p>
+  <p style='line-height:9.75pt'><span style='font-size:8.5pt;
+font-family:Tahoma;color:#4B4B4B'></span></p>
+</div>
+</body>
+</html>

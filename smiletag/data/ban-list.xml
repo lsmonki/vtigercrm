@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<ban_list>
+    <banned_ipaddress>
+        <ipaddress>0.0.0.0</ipaddress>
+    </banned_ipaddress>
+    <banned_nickname>
+        <name>smiletag_default</name>
+    </banned_nickname>
+</ban_list>

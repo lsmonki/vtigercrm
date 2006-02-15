@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<smiletag_config>
+    <enable_board><![CDATA[true]]></enable_board>
+    <message_file><![CDATA[messages.xml]]></message_file>
+    <storage_type><![CDATA[file]]></storage_type>
+    <time_zone><![CDATA[GMT+7]]></time_zone>
+    <date_format><![CDATA[M-d-Y]]></date_format>
+    <time_format><![CDATA[H:i:s]]></time_format>
+    <enable_smiley><![CDATA[true]]></enable_smiley>
+    <enable_formatting><![CDATA[true]]></enable_formatting>
+    <smiley_config_file><![CDATA[smiley-config.xml]]></smiley_config_file>
+    <max_message_number><![CDATA[20]]></max_message_number>
+    <max_message_length><![CDATA[200]]></max_message_length>
+    <max_message_rotation><![CDATA[20]]></max_message_rotation>
+    <max_nickname><![CDATA[20]]></max_nickname>
+    <max_url><![CDATA[100]]></max_url>
+    <parse_url_inside_message><![CDATA[true]]></parse_url_inside_message>
+    <url_text><![CDATA[[link]]]></url_text>
+    <flood_interval><![CDATA[0]]></flood_interval>
+    <enable_ban><![CDATA[true]]></enable_ban>
+    <auto_ban><![CDATA[false]]></auto_ban>
+    <auto_ban_trigger><![CDATA[5]]></auto_ban_trigger>
+    <ban_file><![CDATA[ban-list.xml]]></ban_file>
+    <enable_badword_filter><![CDATA[true]]></enable_badword_filter>
+    <badword_file><![CDATA[badword.xml]]></badword_file>
+    <enable_custom_text><![CDATA[true]]></enable_custom_text>
+    <text_first><![CDATA[avatar2.gif]]></text_first>
+    <text_second><![CDATA[avatar.gif]]></text_second>
+    <enable_moderation><![CDATA[false]]></enable_moderation>
+    <moderation_message_file><![CDATA[messages-moderated.xml]]></moderation_message_file>
+</smiletag_config>

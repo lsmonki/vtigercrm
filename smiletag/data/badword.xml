@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<badword_config>
+    <replacement>*beep*</replacement>
+    <badwords>
+        <word><![CDATA[shit]]></word>
+        <word><![CDATA[piss]]></word>
+        <word><![CDATA[fuck]]></word>
+        <word><![CDATA[cock]]></word>
+        <word><![CDATA[damn]]></word>
+        <word><![CDATA[bitch]]></word>
+        <word><![CDATA[faggot]]></word>
+        <word><![CDATA[whore]]></word>
+    </badwords>
+</badword_config>
