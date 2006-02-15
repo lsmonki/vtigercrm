@@ -172,9 +172,10 @@ $config .= " * Contributor(s): ______________________________________.\n";
 $config .= "********************************************************************************/\n\n";
 $config .= "\$vtiger_version = '".$vtiger_version."';\n\n";
 $config .= "\$release_date = '".$release_date."';\n\n";
-$config .= "//World clock & Calculator will be displayed if these variables are 'true' otherwise will not be displayed.\n";
+$config .= "//World clock & Calculator & FCKEditor will be displayed if these variables are 'true' otherwise will not be displayed.\n";
 $config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
-$config .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
+$config .= "\$CALCULATOR_DISPLAY = 'true';\n";
+$config .= "\$FCKEDITOR_DISPLAY = 'true';\n\n";
 
 $config .= "//This is the URL for customer portal. (Ex. http://vtiger.com/portal)\n";
 $config .= "\$PORTAL_URL = 'http://yourdomain.com/customerportal';\n\n";
