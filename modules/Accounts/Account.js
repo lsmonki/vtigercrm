@@ -320,22 +320,63 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = getObj("Billing Address").value+' '
-                           +getObj("Billing Po Box").value+' '
-                           +getObj("Billing City").value+' '
-                           +getObj("Billing State").value+' '
-                           +getObj("Billing Country").value+' '
-                           +getObj("Billing Code").value
+                mapParameter = document.getElementById('Billing Address').innerHTML+' '
+                           +document.getElementById("Billing Po Box").innerHTML+' '
+                           +document.getElementById("Billing City").innerHTML+' '
+                           +document.getElementById("Billing State").innerHTML+' '
+                           +document.getElementById("Billing Country").innerHTML+' '
+                           +document.getElementById("Billing Code").innerHTML
         }
         else if (addressType == 'Other')
         {
-                mapParameter = getObj("Shipping Address").value+' '
-                           +getObj("Shipping Po Box").value+' '
-                           +getObj("Shipping City").value+' '
-                           +getObj("Shipping State").value+' '
-                           +getObj("Shipping Country").value+' '
-                           +getObj("Shipping Code").value
+                mapParameter = document.getElementById("Shipping Address").innerHTML+' '
+                           +document.getElementById("Shipping Po Box").innerHTML+' '
+                           +document.getElementById("Shipping City").innerHTML+' '
+                           +document.getElementById("Shipping State").innerHTML+' '
+                           +document.getElementById("Shipping Country").innerHTML+' '
+                           +document.getElementById("Shipping Code").innerHTML
         }
 	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
+//javascript function will open new window to display traffic details for particular url using alexa.com
+function getRelatedLink()
+{
+	var param='';
+	param = getObj("website").value;
+	window.open('http://www.alexa.com/data/details/traffic_details?q=&url='+param,'relatedlink','height=400,width=700,resizable=no,titlebar,location,top=250,left=250');
+}
+
+/*
+* javascript function to populate fieldvalue in account editview
+* @param id1 :: div tag ID
+* @param id2 :: div tag ID
+*/
+function populateData(id1,id2)
+{
+	document.EditView.description.value = document.getElementById('summary').innerHTML;
+	document.EditView.employees.value = getObj('emp').value;
+	document.EditView.website.value = getObj('site').value;
+	document.EditView.phone.value = getObj('Phone').value;
+	document.EditView.fax.value = getObj('Fax').value;
+	document.EditView.bill_street.value = getObj('address').value;
+	
+	showhide(id1,id2);
+}
+/*
+* javascript function to show/hide the div tag
+* @param argg1 :: div tag ID
+* @param argg2 :: div tag ID
+*/
+function showhide(argg1,argg2)
+{
+        var x=document.getElementById(argg1).style;
+	var y=document.getElementById(argg2).style;
+        if (y.display=="none")
+        {
+                y.display="block"
+		x.display="none"
+
+        }
+}
+
 
