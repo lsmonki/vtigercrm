@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header:  
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -78,6 +78,8 @@ $mod_strings = Array(
 //Added for 4.2 Patch I
 'LBL_EXPORTXL_BUTTON'=>'Export To Excel',
 
+//Added for 5 Beta
+'LBL_NO_PERMISSION'=>'You are not permitted to view reports for this module',
 
 );
 
