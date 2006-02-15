@@ -753,7 +753,7 @@ else
         $theme = $default_theme;
 }
 
-if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail'))
+if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action != 'Tickerdetail')
 {
 	// Under the SPL you do not have the right to remove this copyright statement.	
 	$copyrightstatement="<style>
