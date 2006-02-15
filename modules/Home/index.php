@@ -178,7 +178,6 @@ $result=$adb->query($query);
 $tagcloud=$adb->query_result($result,0,'tagcloud');
 $smarty->assign("TAGCLOUD",$tagcloud);
 $smarty->assign("LOGINHISTORY",getLoginHistory());
-echo '<pre>';print_r(getLoginHistory());echo '</pre>';
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
