@@ -342,23 +342,21 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = getObj("Mailing Street").value+' '
-                           +getObj("Mailing Po Box").value+' '
-                           +getObj("Mailing City").value+' '
-                           +getObj("Mailing State").value+' '
-                           +getObj("Mailing Country").value+' '
-                           +getObj("Mailing Zip").value
+                mapParameter = document.getElementById("Mailing Street").innerHTML+' '
+                           +document.getElementById("Mailing Po Box").innerHTML+' '
+                           +document.getElementById("Mailing City").innerHTML+' '
+                           +document.getElementById("Mailing State").innerHTML+' '
+                           +document.getElementById("Mailing Country").innerHTML+' '
+                           +document.getElementById("Mailing Zip").innerHTML
         }
         else if (addressType == 'Other')
         {
-                mapParameter = getObj("Other Street").value+' '
-                           +getObj("Other Po Box").value+' '
-                           +getObj("Other City").value+' '
-                           +getObj("Other State").value+' '
-                           +getObj("Other Country").value+' '
-                           +getObj("Other Zip").value
+                mapParameter = document.getElementById("Other Street").innerHTML+' '
+                           +document.getElementById("Other Po Box").innerHTML+' '
+                           +document.getElementById("Other City").innerHTML+' '
+                           +document.getElementById("Other State").innerHTML+' '
+                           +document.getElementById("Other Country").innerHTML+' '
+                           +document.getElementById("Other Zip").innerHTML
         }
-	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
+         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
-
-
