@@ -11,26 +11,34 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
+$idlist = $_REQUEST['idlist'];
 
-//if($_REQUEST['module']=='Users')
-if($_REQUEST['destination_module']=='Vendors')
+if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
-		#include('modules/Products/SaveVendor.php');
-		$sql = "update products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
-		$adb->query($sql);
+	//split the string and store in an array
+	$storearray = explode (";",$idlist);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$sql = "insert into vendorcontactrel values (".$_REQUEST["parentid"].",".$id.")";
+			$adb->query($sql);
+			$sql = "insert into seproductsrel values (". $_REQUEST["parentid"] .",".$id.")";
+			$adb->query($sql);
+		}
+	}
+ 		header("Location: index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parentid"]);
 }
-if($_REQUEST['destination_module']=='Contacts')
+
+elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 
 		$sql = "insert into vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
 		$adb->query($sql);
+		$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
+		$adb->query($sql);
+ 		header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
 }
-
-
-	$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
-	$adb->query($sql);
- header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
-
 
 
 
