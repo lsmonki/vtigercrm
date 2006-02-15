@@ -220,7 +220,11 @@
 								{foreach key=value item=uitype from=$data}
 								{if $label ne ''}
 									<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+									 {if $header eq 'Address Information'}
                                                         		<td class="dvtCellInfo" align=left id="{$label}">{$value}</td>
+									 {else}
+									<td class="dvtCellInfo" align=left>{$value}</td>
+									 {/if}
 								{else}
 									<td class="dvtCellLabel" align=right></td>
                                                         		<td class="dvtCellInfo" align=left ></td>
