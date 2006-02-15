@@ -19,7 +19,29 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/searchajax.js"></script>
+<script type="text/javascript">
 
+function ajaxResponse(response)
+{ldelim}
+        document.getElementById('autocom').innerHTML = response.responseText;
+        document.getElementById('autocom').style.display="block";
+        hide('vtbusy_info');
+{rdelim}
+
+function sensex_info()
+{ldelim}
+        var Ticker = document.getElementById('tickersymbol').value;
+        if(Ticker!='')
+        {ldelim}
+                show('vtbusy_info');
+                var ajaxObj = new Ajax(ajaxResponse);
+                //var Ticker = document.getElementById('tickersymbol').value;
+                var urlstring = "module={$MODULE}&action=Tickerdetail&tickersymbol="+Ticker;
+                ajaxObj.process("index.php?",urlstring);
+        {rdelim}
+{rdelim}
+</script>
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 
 <tr><td style="height:2px"></td></tr>
@@ -102,7 +124,7 @@
                                         <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
                                         <td class="dvtTabCache" style="width:10px">&nbsp;</td>
                                         {if $OP_MODE neq 'create_view'}
-                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">More Information</a></td>
+                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}" onclick="getRelatedLink()">More Information</a></td>
                                         {/if}
 
                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -155,7 +177,12 @@
 							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 							{elseif $uitype eq 11 || $uitype eq 1 || $uitype eq 13 || $uitype eq 7 || $uitype eq 9}
 							<td width=20% class="dvtCellLabel" align=right>{$fldlabel}</td>
-                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}"  value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'"></td>
+							{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}
+                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn';" onBlur="this.className='detailedViewTextBox';{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}sensex_info(){/if}"><span id="vtbusy_info" style="display:none;"><img src="themes/blue/images/vtbusy.gif" border="0"></span></td>
+                                                        <div name="autocom"  align="center" id="autocom" style="border:1px solid black;display:none;position:abayer;overflow:auto;"></div>
+                                                        {else}
+                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
+                                                        {/if}
 							{elseif $uitype eq 19 || $uitype eq 20}
 							 <td width=20% class="dvtCellLabel" align=right>
 							    {if $uitype eq 20}<font color="red">*</font>{/if}
@@ -164,12 +191,12 @@
                                                          </td>
 							{elseif $uitype eq 21 || $uitype eq 24}
 							  <td width=20% class="dvtCellLabel" align=right>
-							     {if $header== 'Address Information' && ($fldname=='otherstreet' || $fldname == 'ship_street')  && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+							     {*if $header== 'Address Information' && ($fldname=='otherstreet' || $fldname == 'ship_street')  && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
         	                                                 <div style="position:absolute;height=100px">
 	                                                         <input title='Copy billing address to shipping address'  class='small' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
 								 <input title='Copy shipping address to billing address'  class='small' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='&laquo;' style='padding:0px 2px 0px 2px;font-size:12px'>
 								</div>
-                                	                     {/if}
+                                	                     {/if*}
 							     {if $uitype eq 24}
 								<font color="red">*</font>
 							     {/if}
