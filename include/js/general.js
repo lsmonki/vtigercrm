@@ -1089,4 +1089,31 @@ function hideLocateMapMenu(ev)
                     if (getObj("dropDownMenu").style.display=="block")
                             getObj("dropDownMenu").style.display="none"
     }
+/*
+* javascript function to display the div tag
+* @param divId :: div tag ID
+*/
+function show(divId)
 
+{
+
+    var id = document.getElementById(divId);
+
+    id.style.display = 'inline';
+
+}
+
+
+/*
+* javascript function to hide the div tag
+* @param divId :: div tag ID
+*/
+function hide(divId)
+
+{
+
+    var id = document.getElementById(divId);
+
+    id.style.display = 'none';
+
+}
