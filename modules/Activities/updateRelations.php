@@ -11,21 +11,44 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
+$idlist = $_REQUEST['idlist'];
 
-//if($_REQUEST['module']=='Users')
+if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+{
+	//split the string and store in an array
+	$storearray = explode (";",$idlist);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$record = $_REQUEST['parentid'];
+			$sql = "insert into seactivityrel values (".$id.",".$_REQUEST["parentid"].")";
+			$adb->query($sql);
+		}
+	}
+		header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
+	
+}
+elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+{
+	$record = $_REQUEST["parid"];
+	$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
+	$adb->query($sql);
+	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
+}
+
+
+
+ 
+//This if for adding the users 
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
 	$sql = "insert into salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
-}
-else
-{
-	$record = $_REQUEST["parid"];
-	$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-}
+	$adb->query($sql);
+	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 
-$adb->query($sql);
- header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
+}
 
 
 ?>
