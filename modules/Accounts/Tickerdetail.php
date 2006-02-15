@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 include("modules/Accounts/Account.php");
-include("msn_test.php");
+include("getCompanyProfile.php");
 $variable = $_REQUEST['tickersymbol'];
 $url = "http://moneycentral.msn.com/investor/research/profile.asp?Symbol=".trim($variable);
 $data = getComdata($url,trim($variable));
