@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 -->*}
-
+<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
 <tr><td>&nbsp;</td>
@@ -220,7 +220,7 @@
 								{foreach key=value item=uitype from=$data}
 								{if $label ne ''}
 									<td class="dvtCellLabel" align=right width=25%>{$label}</td>
-                                                        		<td class="dvtCellInfo" align=left >{$value}</td>
+                                                        		<td class="dvtCellInfo" align=left id="{$label}">{$value}</td>
 								{else}
 									<td class="dvtCellLabel" align=right></td>
                                                         		<td class="dvtCellInfo" align=left ></td>
