@@ -333,12 +333,12 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = getObj("Street").value+' '
-                           +getObj("Po Box").value+' '
-                           +getObj("City").value+' '
-                           +getObj("State").value+' '
-                           +getObj("Country").value+' '
-                           +getObj("Postal Code").value
+                mapParameter = document.getElementById("Street").innerHTML+' '
+                           +document.getElementById("Po Box").innerHTML+' '
+                           +document.getElementById("City").innerHTML+' '
+                           +document.getElementById("State").innerHTML+' '
+                           +document.getElementById("Country").innerHTML+' '
+                           +document.getElementById("Postal Code").innerHTML
         }
         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
