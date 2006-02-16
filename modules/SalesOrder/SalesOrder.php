@@ -175,6 +175,8 @@ class SalesOrder extends CRMEntity {
 				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 				left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
 				inner join users on crmentity.smcreatorid=users.id
+				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+                                left join groups on groups.groupname=activitygrouprelation.groupname
 			where (activitytype='Task' or activitytype='Call' or activitytype='Meeting')
 				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus !='Planned' and activity.eventstatus != ''))
 				and seactivityrel.crmid=".$id;
@@ -237,7 +239,7 @@ class SalesOrder extends CRMEntity {
 		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and salesorder.salesorderid=".$id;
+		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 and salesorder.salesorderid=".$id;
 		return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
 	
 	}
