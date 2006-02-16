@@ -99,6 +99,7 @@ function constructGroupMemberArray($member_array)
 			$groupId=createGroup($groupName,$groupMemberArray,$description);
 			//Inserting into role Table
 			//$roleId = createRole($rolename,$parentRoleId,$profile_array);
+			 $loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId; 	 
 		}
 		else
 		{
