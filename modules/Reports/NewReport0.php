@@ -42,18 +42,26 @@ function getPrimaryModuleList()
 	global $app_list_strings;
 	global $report_modules;	
 
+	$count_flag = 0;
 	foreach($app_list_strings['moduleList'] as $key=>$value)
 	{
-		
 		for($i=0;$i<count($report_modules);$i++)
 		{
 			if($key == $report_modules[$i])
 			{
-				$shtml .= "<option value=\"$key\">$value</option>";
+				if(isPermitted($key,'index') == "yes")
+				{
+					$count_flag = 1;
+					$shtml .= "<option value=\"$key\">$value</option>";
+				}
 			}
 		}
+		
 	}
-	
+	if($count_flag == 0)
+	{
+			$shtml .= "<option value=\"\">--None--</option>";
+	}
 	return $shtml;
 }
 
@@ -69,17 +77,24 @@ function getRelatedModuleList()
 
 	foreach($related_modules as $key_module=>$rel_modules)
 	{
-		$shtml .= "<select id='".$key_module."relatedmodule' name='".$key_module."relatedmodule[]' class='select' style='width:150;'>";
-		$shtml .= "<option value=''>--None--</option>";
+		if(isPermitted($key_module,'index') == "yes")
+		{
+			$shtml .= "<select id='".$key_module."relatedmodule' name='".$key_module."relatedmodule[]' class='select' style='width:150;'>";
+			$shtml .= "<option value=''>--None--</option>";
+		
 		$optionhtml = "";
 		foreach($rel_modules as $rep_key=>$rep_value)
 		{
 			if($rep_value != '')
 			{
-			$optionhtml .= "<option value='".$rep_value."'>".$app_list_strings['moduleList'][$rep_value]."</option>";			
+				if(isPermitted($rep_value,'index') == "yes")
+				{
+					$optionhtml .= "<option value='".$rep_value."'>".$app_list_strings['moduleList'][$rep_value]."</option>";		
+				}	
 			}
 		}
 		$shtml .= $optionhtml."</select>";
+		}
 	}
 	
 	return $shtml;
