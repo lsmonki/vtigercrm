@@ -58,12 +58,43 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	if($uitype == 13)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] = '<a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
+		$label_fld[] = $col_fields[$fieldname];
+		//$label_fld[] = '<a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
+	}
+	elseif($uitype == 15 || $uitype == 16)
+	{
+	     $label_fld[] = $mod_strings[$fieldlabel];
+	     $label_fld[] = $col_fields[$fieldname];
+	     
+		$pick_query="select * from ".$fieldname;
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		//Mikecrowe fix to correctly default for custom pick lists
+		$options = array();
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
+
+			if($col_fields[$fieldname] == $pickListValue)
+			{
+				$chk_val = "selected";	
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$options[] = array($pickListValue=>$chk_val );	
+		}
+		$label_fld ["options"] = $options;
 	}
 	elseif($uitype == 17)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] = '<a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a>';
+		$label_fld[] = $col_fields[$fieldname];
+		//$label_fld[] = '<a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a>';
 	}
 	elseif($uitype == 19)
 	{
@@ -85,10 +116,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$account_name = getAccountName($account_id);
 		}
 		//Account Name View	
+		//$label_fld[] = $mod_strings[$fieldlabel];
+		//$label_fld[] ='<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] ='<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-		
-
+		$label_fld[] = $account_name;
+		$label_fld["secid"] = $account_id;
+		$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
 	}
 	elseif($uitype == 52 || $uitype == 77)
 	{
@@ -143,29 +176,31 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 55)
         {
 		if($tabid == 4)
-                {
-                        $query="select contactdetails.imagename from contactdetails where contactid=".$col_fields['record_id'];
-                        $result = $adb->query($query);
-                        $imagename=$adb->query_result($result,0,'imagename');
-                        if($imagename != '')
-                        {
-                                $imgpath = "test/contact/".$imagename;
-                                $label_fld[] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="80" height="75" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
-                        }
-                        else
-                                $label_fld[] =$mod_strings[$fieldlabel];
-                }
-                else
-                {
-                        $label_fld[] =$mod_strings[$fieldlabel];
-                }
-                $value = $col_fields[$fieldname];
-                $sal_value = $col_fields["salutationtype"];
-                if($sal_value == '--None--')
-                {
-                        $sal_value='';
-                }
-		$label_fld[] =$sal_value.' '.$value;
+           {
+                   $query="select contactdetails.imagename from contactdetails where contactid=".$col_fields['record_id'];
+                   $result = $adb->query($query);
+                   $imagename=$adb->query_result($result,0,'imagename');
+                   if($imagename != '')
+                   {
+                           $imgpath = "test/contact/".$imagename;
+                           $label_fld[] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="80" height="75" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
+                   }
+                   else
+                           $label_fld[] =$mod_strings[$fieldlabel];
+           }
+           else
+           {
+                   $label_fld[] =$mod_strings[$fieldlabel];
+           }
+           $value = $col_fields[$fieldname];
+           $sal_value = $col_fields["salutationtype"];
+           if($sal_value == '--None--')
+           {
+                   $sal_value='';
+           }
+          $label_fld["salut"] = $sal_value;
+          $label_fld[] = $value;
+		//$label_fld[] =$sal_value.' '.$value;
         }
 	elseif($uitype == 56)
 	{
@@ -183,14 +218,16 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 57)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $contact_id = $col_fields[$fieldname];
-                if($contact_id != '')
-                {
-                        $contact_name = getContactName($contact_id);
-                }
-
-		$label_fld[] ='<a href="index.php?module=Contacts&action=DetailView&record='.$contact_id.'">'.$contact_name.'</a>';
+		 $label_fld[] =$mod_strings[$fieldlabel];
+           $contact_id = $col_fields[$fieldname];
+           if($contact_id != '')
+           {
+                   $contact_name = getContactName($contact_id);
+           }
+          $label_fld[] = $contact_name;
+		$label_fld["secid"] = $contact_id;
+		$label_fld["link"] = "index.php?module=Contacts&action=DetailView&record=".$contact_id; 
+		//$label_fld[] ='<a href="index.php?module=Contacts&action=DetailView&record='.$contact_id.'">'.$contact_name.'</a>';
         }
 	elseif($uitype == 59)
 	{
@@ -200,8 +237,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$product_name = getProductName($product_id);
 		}
 		//Account Name View	
-		$label_fld[] =$mod_strings[$fieldlabel];
-		$label_fld[] ='<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+		$label_fld[] = $product_name;
+		$label_fld["secid"] = $product_id;
+		$label_fld["link"] = "index.php?module=Products&action=DetailView&record=".$product_id; 
+		//$label_fld[] ='<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 		
 	}
         elseif($uitype == 61)
@@ -590,68 +629,80 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$display_val = '';
 		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{
-			$currencyid=fetchCurrency($current_user->id);
-                        $curr_symbol=getCurrencySymbol($currencyid);
-                        $rate = getConversionRate($currencyid,$curr_symbol);
-                        $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
-                        $display_val = $curr_symbol.' '.$amount_user_specific;	
+		    $currencyid=fetchCurrency($current_user->id);
+              $curr_symbol=getCurrencySymbol($currencyid);
+              $rate = getConversionRate($currencyid,$curr_symbol);
+              $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
+              $display_val = $curr_symbol.' '.$amount_user_specific;	
 		}
-		$label_fld[] = $display_val;
+		//$label_fld[] = $display_val;
+		$label_fld["cursymb"] = $curr_symbol;
+          $label_fld[] = $display_val;
 	}
 	elseif($uitype == 75 || $uitype == 81)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $vendor_id = $col_fields[$fieldname];
-                if($vendor_id != '')
-                {
-                        $vendor_name = getVendorName($vendor_id);
-                }
-
-		$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
+		 $label_fld[] =$mod_strings[$fieldlabel];
+           $vendor_id = $col_fields[$fieldname];
+           if($vendor_id != '')
+           {
+                   $vendor_name = getVendorName($vendor_id);
+           }
+          $label_fld[] = $vendor_name;
+		$label_fld["secid"] = $vendor_id;
+		$label_fld["link"] = "index.php?module=Products&action=VendorDetailView&record=".$vendor_id; 
+		//$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
         }
 	elseif($uitype == 76)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $potential_id = $col_fields[$fieldname];
-                if($potential_id != '')
-                {
-                        $potential_name = getPotentialName($potential_id);
-                }
-
-		$label_fld[] = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+		 $label_fld[] =$mod_strings[$fieldlabel];
+           $potential_id = $col_fields[$fieldname];
+           if($potential_id != '')
+           {
+                   $potential_name = getPotentialName($potential_id);
+           }
+          $label_fld[] = $potential_name;
+		$label_fld["secid"] = $potential_id;
+		$label_fld["link"] = "index.php?module=Potentials&action=DetailView&record=".$potential_id; 
+		//$label_fld[] = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
         }
 	elseif($uitype == 78)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $quote_id = $col_fields[$fieldname];
-                if($quote_id != '')
-                {
-                        $quote_name = getQuoteName($quote_id);
-                }
-
-		$label_fld[] = '<a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a>';
+		 $label_fld[] =$mod_strings[$fieldlabel];
+           $quote_id = $col_fields[$fieldname];
+           if($quote_id != '')
+           {
+                   $quote_name = getQuoteName($quote_id);
+           }
+          $label_fld[] = $quote_name;
+		$label_fld["secid"] = $quote_id;
+		$label_fld["link"] = "index.php?module=Quotes&action=DetailView&record=".$quote_id; 
+		//$label_fld[] = '<a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a>';
         }
 	elseif($uitype == 79)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $purchaseorder_id = $col_fields[$fieldname];
-                if($purchaseorder_id != '')
-                {
-                        $purchaseorder_name = getPoName($purchaseorder_id);
-                }
-
-		$label_fld[] = '<a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
+ 		 $label_fld[] =$mod_strings[$fieldlabel];
+           $purchaseorder_id = $col_fields[$fieldname];
+           if($purchaseorder_id != '')
+           {
+                   $purchaseorder_name = getPoName($purchaseorder_id);
+           }
+           $label_fld[] = $purchaseorder_name;
+		 $label_fld["secid"] = $purchaseorder_id;
+		 $label_fld["link"] = "index.php?module=PurchaseOrder&action=DetailView&record=".$purchaseorder_id; 
+		//$label_fld[] = '<a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
         }
 	elseif($uitype == 80)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
-                $salesorder_id = $col_fields[$fieldname];
-                if($salesorder_id != '')
-                {
-                        $salesorder_name = getSoName($salesorder_id);
-                }
-
-		$label_fld[] = '<a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
+		 $label_fld[] =$mod_strings[$fieldlabel];
+           $salesorder_id = $col_fields[$fieldname];
+           if($salesorder_id != '')
+           {
+                   $salesorder_name = getSoName($salesorder_id);
+           }
+          $label_fld[] = $salesorder_name;
+		$label_fld["secid"] = $salesorder_id;
+		$label_fld["link"] = "index.php?module=SalesOrder&action=DetailView&record=".$salesorder_id; 
+		//$label_fld[] = '<a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
         }
 	elseif($uitype == 30)
 	{
@@ -879,7 +930,7 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$output .= '<tr>';
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-		$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));
+		$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		$i++;
 		if($i<$noofrows)
 		{
@@ -893,7 +944,7 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 			$tabid = $adb->query_result($result,$i,"tabid");
 
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-			$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));	
+			$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		}
 
 	}
