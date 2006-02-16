@@ -323,8 +323,13 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.contact_name.value = product_name;
-        window.opener.document.EditView.contact_id.value = product_id;
+        //Used for DetailView, Removed 'EditView' formname hardcoding
+        var fldName = getOpenerObj("contact_name");
+        var fldId = getOpenerObj("contact_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+	//window.opener.document.EditView.contact_name.value = product_name;
+        //window.opener.document.EditView.contact_id.value = product_id;
 }
 //added by rdhital for better emails
 function set_return_emails(entity_id,email_id,parentname,emailadd){
