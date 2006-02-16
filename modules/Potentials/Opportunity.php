@@ -495,7 +495,8 @@ function get_contacts($id)
 	}
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$query = 'select contactdetails.accountid, potential.potentialid, potential.potentialname, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, contactdetails.title, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from potential inner join contpotentialrel on contpotentialrel.potentialid = potential.potentialid inner join contactdetails on contpotentialrel.contactid = contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where potential.potentialid = '.$id.' and crmentity.deleted=0';
+	$query = 'select contactdetails.accountid, potential.potentialid, potential.potentialname, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, contactdetails.title, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from potential inner join contpotentialrel on contpotentialrel.potentialid = potential.potentialid inner join contactdetails on contpotentialrel.contactid = contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where potential.potentialid = '.$id.' and crmentity.deleted=0';
+	echo $query;
 	return GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
 }
 
@@ -673,6 +674,8 @@ function get_history($id)
 			inner join crmentity on crmentity.crmid=activity.activityid
 			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
+			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+                        left join groups on groups.groupname=activitygrouprelation.groupname
 			inner join users on crmentity.smcreatorid= users.id
 			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
@@ -735,7 +738,7 @@ function get_quotes($id)
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 
-	$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and potential.potentialid=".$id;
+	$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and potential.potentialid=".$id;
 	return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 }
 function get_salesorder($id)
@@ -755,7 +758,7 @@ function get_salesorder($id)
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 
-	$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, potential.potentialname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join potential on potential.potentialid=salesorder.potentialid where crmentity.deleted=0 and potential.potentialid = ".$id;
+	$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, potential.potentialname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join potential on potential.potentialid=salesorder.potentialid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and potential.potentialid = ".$id;
 	return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 
 }
