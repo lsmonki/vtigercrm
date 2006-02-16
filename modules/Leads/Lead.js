@@ -315,8 +315,13 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.lead_name.value = product_name;
-        window.opener.document.EditView.lead_id.value = product_id;
+        //Used for DetailView, Removed 'EditView' formname hardcoding
+        var fldName = getOpenerObj("lead_name");
+        var fldId = getOpenerObj("lead_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+        //window.opener.document.EditView.lead_name.value = product_name;
+        //window.opener.document.EditView.lead_id.value = product_id;
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 	
