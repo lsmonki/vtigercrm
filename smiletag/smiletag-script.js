@@ -3,7 +3,7 @@
 	var pingInterval = windowFocused; 
 	var isWorking = false;
 	
-	if((smiletagURL == "http://localhost:90/Builds/vtiger_feb01_1/vtiger_crm/modules/smiletag/") || (smiletagURL == null)){
+	if((smiletagURL == "http://localhost:90/smiletag/") || (smiletagURL == null)){
 		var smiletagURL = "smiletag/";
 	}
 	
@@ -120,4 +120,4 @@ function insertSmiley(code){
 	document.smiletagform.message_box.value += code;
 	hideSmileyWindow();
 }
-	 
+ 
