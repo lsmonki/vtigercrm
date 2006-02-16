@@ -738,7 +738,7 @@ else
 	include($currentModuleFile);
 }
 
-	if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss' && $action != $module."Ajax") ))
+	if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss' && $action != $module."Ajax"))
 	{
 		echo "<!-- stopscrmprint -->";
 	}
