@@ -441,7 +441,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $contact_name;
 		$fieldvalue[] = $value;
 	}
-	elseif($uitype == 61)
+	elseif($uitype == 61 || $uitype == 69)
 	{
 		global $current_user;
 		if($value != '')
@@ -458,21 +458,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $filename;
 		$fieldvalue[] = $value;
 	}
-	elseif($uitype == 69)
-	{
-		$editview_label[]=$mod_strings[$fieldlabel];
-		$image_lists=explode("###",$value);
-		if(count($image_lists) > 1)
-		{
-			foreach($image_lists as $image)
-			{
-				$fieldvalue[] = $image;
-			}
-		}else
-		{
-			$fieldvalue[] = $value;
-		}
-	}	
 	elseif($uitype == 62)
 	{
 		if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
@@ -504,7 +489,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$sql = "select * from  potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$parent_name = $adb->query_result($result,0,"potentialname");
-				$contact_selected = "selected";
+				$potential_selected = "selected";
 
 			}
 			elseif($parent_module == "Products")
@@ -552,6 +537,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                          );
                 $editview_label[] = array($lead_selected,
                                           $account_selected,
+					  $potential_selected,
                                           $product_selected,
                                           $invoice_selected,
                                           $porder_selected,
@@ -827,14 +813,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$currencyid=fetchCurrency($current_user->id);
-                $currency=getCurrencySymbol($currencyid);
-                $rate = getConversionRate($currencyid,$currency);
-                $editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';
-                if($value!='')
-                        $fieldvalue[] = convertFromDollar($value,$rate);
-                else
-                        $fieldvalue[] = $value;
+		$disp_currency = getDisplayCurrency();
+		$editview_label[]=$mod_strings[$fieldlabel].': ('.$disp_currency.')';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
