@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header$
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/SalesOrder/EditView.php,v 1.5 2006/01/27 18:18:09 jerrydgeorge Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -50,7 +50,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$quote_focus->id = $quoteid;
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 	$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
-			
+	$focus->id = $quoteid;
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_quote_val')
     {
