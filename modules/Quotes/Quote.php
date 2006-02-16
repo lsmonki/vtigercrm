@@ -134,7 +134,7 @@ class Quote extends CRMEntity {
 
 		$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
-		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.quoteid = ".$id;
+		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and salesorder.quoteid = ".$id;
 		return GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	
@@ -167,6 +167,8 @@ class Quote extends CRMEntity {
 				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 				left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
 				inner join users on crmentity.smcreatorid= users.id
+				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+                                left join groups on groups.groupname=activitygrouprelation.groupname
 			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
   				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus !='Planned' and activity.eventstatus != ''))
 	 	        	and seactivityrel.crmid=".$id;
