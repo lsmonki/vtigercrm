@@ -11,6 +11,7 @@
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+	<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
 		<td><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
