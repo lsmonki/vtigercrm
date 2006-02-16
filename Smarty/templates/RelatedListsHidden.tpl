@@ -26,10 +26,12 @@
 	<input type="hidden" name="record" value="{$ID}">
 {elseif $MODULE eq 'Accounts'}
         <input type="hidden" name="account_id" value="{$id}">
+	{$HIDDEN_PARENTS_LIST}
 {elseif $MODULE eq 'Contacts'}
         <input type="hidden" name="contact_id" value="{$id}">
         <input type="hidden" name="account_id" value="{$accountid}">
 	<input type="hidden" name="campaignid" value="{$campaignid}">
+	{$HIDDEN_PARENTS_LIST}
 {elseif $MODULE eq 'Campaigns'}
         <input type="hidden" name="campaignid" value="{$id}">
 {elseif $MODULE eq 'Leads'}
