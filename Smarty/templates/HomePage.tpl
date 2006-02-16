@@ -1,6 +1,7 @@
 
 <script type="text/javascript" language="JavaScript" src="smiletag/smiletag-script.js"></script>
 
+
 {*<!--Home Page Entries  -->*}
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
@@ -129,68 +130,58 @@
 		<td align=left valign=top width=30%>
 		Pipeline chart comes here..<br><br>
 		<table border="0" cellpadding="0" cellspacing="0">
-     			<tr>
-          			<td valign="top">
-	<p><b>Your SHOUT!!</b></p>
-      	  				<iframe name="iframetag" marginwidth="0" marginheight="0" src="smiletag/view.php" width="190" height="300">
-						Your Browser must support IFRAME to view this page correctly
-					</iframe>
-	 			</td>
-     			</tr>
-     			<tr>
-          			<td>
- 					<form name="smiletagform" method="post" action="smiletag/post.php" target="iframetag"><br />
-              					Name<br /><input type="text" name="name"/><br />
-              					URL or Email<br /><input type="text" name="mail_or_url" value="http://" /><br />
-              					Message
-
+     		<tr><b>YOUR SHOUT!!!</b>
+          		<td valign="top" >
+      	  			<iframe name="iframetag" marginwidth="0" marginheight="0" src="smiletag/view.php" width="190" height="300">
+			Your Browser must support IFRAME to view this page correctly
+		  </iframe>
+		  </td>
+     		</tr>
+     	<tr>
+          <td>
+  			<form name="smiletagform" method="post" action="smiletag/post.php" target="iframetag"><br />
+        		      Name<br /><input type="text" name="name"/><br />
+              			URL or Email<br /><input type="text" name="mail_or_url" value="http://" /><br />
+              Message  
 <div id="smiley_box">
-	<div class="smiley_top"><br /><a href="javascript:hideSmileyWindow();"><img src="{$IMAGE_PATH}delete_icon.gif" alt="Close" /></a></div>
+	<div class="smiley_top"><br /><a href="javascript:hideSmileyWindow();"><img src="smiletag/images/delete_icon.gif" alt="Close" /></a></div>
 	<div class="smiley_middle">
 		<div id="smiley_box_content" style="padding: 0px;">
 			<table width="80%" border="0" cellspacing="5" cellpadding="0">
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="themes/images/smile.gif" alt=":)" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="themes/images/laugh.gif" alt=":D" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="themes/images/sad.gif" alt=":(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="smiletag/images/smile.gif" alt=":)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="smiletag/images/laugh.gif" alt=":D" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="smiletag/images/sad.gif" alt=":(" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="themes/images/shock.gif" alt=":o" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="themes/images/tongue.gif" alt=":p" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="themes/images/wink.gif" alt=";)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="smiletag/images/shock.gif" alt=":o" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="smiletag/images/tongue.gif" alt=":p" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="smiletag/images/wink.gif" alt=";)" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="themes/images/blah.gif" alt=":|" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="themes/images/mad.gif" alt="x(" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="themes/images/drool.gif" alt=":~" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="smiletag/images/blah.gif" alt=":|" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="smiletag/images/mad.gif" alt="x(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="smiletag/images/drool.gif" alt=":~" /></a></td>
 			  </tr>
 </table>
 		</div>
 	</div>
 	<div class="smiley_bottom"></div>
 </div>
-  <a href="http://www.vtiger.com/" onclick="showSmileyWindow(event);return false">(Smilies)</a>
-						
-
-<br /><textarea name="message_box" rows="3" cols="20"></textarea><br />
-              					<input type="hidden" name="message" value="" />
-              					<input type="submit" name="submit" value="Tag!" onclick="clearMessage()" /> 
-		  				<input type="reset"  name="reset" value="Reset" /><br />
-            				</form>
-			       </td>
-        		</tr><tr>
-<link href="{$TAGCLOUD}" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="{$TAGCLOUD}"></script>
-	</tr>
-		</table>
+  <a href="http://www.smiletag.com/" onclick="showSmileyWindow(event);return false">(Smilies)</a>
+			<br /><textarea name="message_box" rows="3" cols="20"></textarea><br />
+              <input type="hidden" name="message" value="" />
+              <input type="submit" name="submit" value="Post!!" onclick="clearMessage()" /> 
+			  <input type="reset"  name="reset" value="Reset" /><br />
+            </form>
+	       </td>
+        </tr>
+</table>
 		</td>
 		</tr>
 		</table>
 		</div>
 	</td>
-	
-
-
 	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 	</tr>
 </table>
