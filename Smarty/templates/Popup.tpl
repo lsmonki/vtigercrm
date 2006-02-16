@@ -34,6 +34,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
                         		<td >
 						<table border=0 cellspacing=0 cellpadding=2 width=100%>
 		                                 <tr>
+						  <script type="text/javascript" src="include/js/general.js"></script>
 						  <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
                   		                  <input name="module" type="hidden" value="{$RETURN_MODULE}">
 		                                  <input name="action" type="hidden" value="{$RETURN_ACTION}">
