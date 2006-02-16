@@ -146,6 +146,8 @@ class Invoice extends CRMEntity {
 				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 				left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
 				inner join users on crmentity.smcreatorid= users.id
+				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+                                left join groups on groups.groupname=activitygrouprelation.groupname	
 			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
 				and seactivityrel.crmid=".$id;
