@@ -31,6 +31,17 @@ elseif (!isset($_POST['record']) && !is_admin($current_user)) echo ("Unauthorize
 
 $focus = new User();
 $focus->retrieve($_POST['record']);
+if(isset($focus->id) && $focus->id != '')
+    $mode='edit';
+else
+    $mode='';
+//save user Image
+$image_upload_array=SaveImage($_FILES,'user',$focus->id,$mode);
+$focus->imagename = $image_upload_array['imagename'];
+$image_error = $image_upload_array['imageerror'];
+$errormessage = $image_upload_array['errormessage'];
+$saveimage = $image_upload_array['saveimage'];
+	
 if(strtolower($current_user->is_admin) == 'off'  && $current_user->id != $focus->id){
 		$log->fatal("SECURITY:Non-Admin ". $current_user->id . " attempted to change settings for user:". $focus->id);
 		header("Location: index.php?module=Users&action=Logout");
