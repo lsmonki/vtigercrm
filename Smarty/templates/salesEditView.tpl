@@ -19,7 +19,29 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/searchajax.js"></script>
+<script type="text/javascript">
 
+function ajaxResponse(response)
+{ldelim}
+        document.getElementById('com').innerHTML = response.responseText;
+        document.getElementById('com').style.display="block";
+        hide('vtbusy_info');
+{rdelim}
+
+function sensex_info()
+{ldelim}
+        var Ticker = document.getElementById('tickersymbol').value;
+        if(Ticker!='')
+        {ldelim}
+                show('vtbusy_info');
+                var ajaxObj = new Ajax(ajaxResponse);
+                //var Ticker = document.getElementById('tickersymbol').value;
+                var urlstring = "module={$MODULE}&action=Tickerdetail&tickersymbol="+Ticker;
+                ajaxObj.process("index.php?",urlstring);
+        {rdelim}
+{rdelim}
+</script>
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 
 <tr><td style="height:2px"></td></tr>
@@ -102,7 +124,7 @@
                                         <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
                                         <td class="dvtTabCache" style="width:10px">&nbsp;</td>
                                         {if $OP_MODE neq 'create_view'}
-                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">More Information</a></td>
+                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}" onclick="getRelatedLink()">More Information</a></td>
                                         {/if}
 
                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -155,7 +177,12 @@
 							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 							{elseif $uitype eq 11 || $uitype eq 1 || $uitype eq 13 || $uitype eq 7 || $uitype eq 9}
 							<td width=20% class="dvtCellLabel" align=right>{$fldlabel}</td>
-                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}"  value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'"></td>
+							{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}
+                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn';" onBlur="this.className='detailedViewTextBox';{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}sensex_info(){/if}"><span id="vtbusy_info" style="display:none;"><img src="themes/blue/images/vtbusy.gif" border="0"></span></td>
+						        <span name="com"  align="center" id="com"></span>
+                                                        {else}
+                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
+                                                        {/if}
 							{elseif $uitype eq 19 || $uitype eq 20}
 							 <td width=20% class="dvtCellLabel" align=right>
 							    {if $uitype eq 20}<font color="red">*</font>{/if}
