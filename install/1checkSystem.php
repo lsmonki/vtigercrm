@@ -28,6 +28,17 @@
 <?
 
 
+ob_start();
+eval("phpinfo();");
+$info = ob_get_contents();
+ob_end_clean();
+
+ foreach(explode("\n", $info) as $line) {
+           if(strpos($line, "Client API version")!==false)
+               $mysql_version = trim(str_replace("Client API version", "", strip_tags($line)));
+ }
+
+
 
 
 
@@ -194,7 +205,27 @@ $array = Array(
 			<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
     	</tr>
 		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>MySQL Database Connection Availability</strong></td>
+
+			<td valign=top ><strong>MySQL Database Connection Availability
+            <li>
+            MySQL Version Check &nbsp;
+            <?php
+            
+            if($mysql_version<'4.1')
+             {
+            ?>
+          <strong><font color=\"#0066CC\">Failed</font>The product
+             will not function at all. Please upgrade your mysql version!!</strong>
+            <?php
+             }
+            else
+             {
+            ?>
+<strong><font color=\"#FF0000\"> Compatible</font></strong>
+   <?php
+   }
+       ?>
+            </li>
         	<td valign=top bgcolor=white><?php echo function_exists('mysql_connect')?"<strong><font color=\"#0066CC\">Passed</strong><br>Database available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
 	    </tr>
 	<tr bgcolor="#fafafa">
