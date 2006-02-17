@@ -79,7 +79,7 @@ foreach($pieces as $val)
 	style="text-alignment:justify">
 
 Welcome!<br><br>
-Thank you for trying out vtigerCRM and for making it a part of your experience.<br>
+Thank you for trying out vtigerCRM 5 Beta  and for making it a part of your experience.<br>
 Every developer and contributor has added value to vtiger either in the
 form of bug reports, bug fixes, feature contributions or for that
 matter, providing the hosting machine or maintenance of the forge. This
@@ -107,7 +107,8 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 <br>
 <br>
-
+<br>
+<br>
 
 
 
@@ -121,8 +122,8 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
-				- Support for PHP5 will be added in future<br></span>
+				<span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions<br>
+				<br></span>
 <br>
 		</td>
 	</tr>
@@ -2672,7 +2673,7 @@ This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables a
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 5.0 Beta is tested on mysql 4.0.x and PHP 4.3.8 and Apache 2.0.40 . Support for PHP 5 will be provided in future releases </b> </font>
+ <font color=red> <b>Kindly note vtiger CRM 5.0 Beta is tested on mysql 4.1.x and PHP 4.3.8 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions</b> </font>
 
 			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
