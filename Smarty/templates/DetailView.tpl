@@ -202,10 +202,10 @@
                                                                 <input id="locateMap" name="locateMap" value="Locate Map" class="small" type="button" onClick="javascript:showLocateMapMenu()" title="Locate Map">
                                                         <div id="dropDownMenu" style="position:absolute;display:none;z-index:60">
 							<table border="0" cellspacing="0" cellpadding="4">
-                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" onClick="searchMapLocation( 'Main' )">
+                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'" onClick="searchMapLocation( 'Main' )">
                                                 <td>{$address1} Address</td>
                                                 </tr>
-                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  onClick="searchMapLocation( 'Other' )">
+                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'"  onClick="searchMapLocation( 'Other' )">
                                                 <td>{$address2} Address</td>
                                                 </tr>
                                                 </table>
