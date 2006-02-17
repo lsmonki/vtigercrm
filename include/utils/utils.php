@@ -1927,6 +1927,17 @@ function getImageCount($id)
 	return count($image_lists);
 
 }
+function getUserImageName($id)
+{
+	global $adb;
+	global $log;
+	$query = "select imagename from users where id=".$id;
+	$result = $adb->query($query);
+	$image_name = $adb->query_result($result,0,"imagename");
+	$log->debug("Inside getUserImageName. The image_name is ".$image_name);
+	return $image_name;
+
+}
 
 
 ?>
