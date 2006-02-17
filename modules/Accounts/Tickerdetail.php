@@ -13,7 +13,9 @@ include("getCompanyProfile.php");
 $variable = $_REQUEST['tickersymbol'];
 $url = "http://moneycentral.msn.com/investor/research/profile.asp?Symbol=".trim($variable);
 $data = getComdata($url,trim($variable));
-$summary = array_shift($data);
+if(is_array($data))
+{
+	$summary = array_shift($data);
         list($comp, $address, $phone, $fax, $site, $industry, $emp,$desc1,$desc2) = explode(":", $summary);
         $address = str_replace("Company Report","",$address);
         $address = str_replace("Phone","",$address);
@@ -25,76 +27,80 @@ $summary = array_shift($data);
         $emp = str_replace("Exchange","",$emp);
         $first_array =array_slice($data,0, 8);
         $second_array = array_slice($data,8);
-$output='';
-	$output .= "<div id='quote' style='display:block' class='divEventToDo'>
-		    <input type='hidden' name='address' value='".trim($address)."'>
-		    <input type='hidden' name='Phone' value='".trim($phone)."'>
-		    <input type='hidden' name='Fax' value='".trim($fax)."'>
-		    <input type='hidden' name='site' value='".trim($site)."'>
-		    <input type='hidden' name='emp' value='".trim($emp)."'>
-		    <table><tbody>";
-	//echo '<pre>';print_r($data);echo '</pre>';
-	//$output .= "<tr><td>&nbsp;</td><td valign='top' width='24'><img src='themes/blue/images/tblPro1BtnHide.gif' alt='Minimize / Maximize' border='0' onclick=\"javascript:expandCont('quote');\"></td></tr>";
-	$output .="<tr><td><table><tr><td><table width='185'>";
-	foreach($first_array as $arr => $val)
-	{
-		$output .= "<tr>";
-		for($j=0;$j<count($val);$j+=2)
-		{
-			$output .= "<td align=left width='48%' class='dvtCellLabel' >".$val[$j]."</td>
-				    <td align=left class='dvtCellInfo'>".$val[$j+1]."</td>";
-		}
-		$output .= "</tr>";
-	}
-	$output .="</table></td>";
-	$output .="<td><table width='185'>";
-	array_shift($second_array[0]);
-	array_shift($second_array[0]);
-        foreach($second_array as $arr => $val)
-        {
-                $output .= "<tr>";
-                for($j=0;$j<count($val);$j+=2)
-                {
-                        	$output .= "<td align=left width='48%' class='dvtCellLabel' >".$val[$j]."</td>
-                                	    <td align=left class='dvtCellInfo'>".$val[$j+1]."</td>";
-                }
-                $output .= "</tr>";
-        }
-        $output .="</table></td><td align=left><a href='http://finance.yahoo.com/q/bc?s=WIT&amp;t=1d' target='_blank'><img src='http://ichart.finance.yahoo.com/t?s=".trim($variable)."' width='192' height='96' alt='[Chart]' border='0'></a></td></tr></table></td>
-		</tr>";
-	$output .= "<tr><table><tr><td align=left width='20%' id='label' class='dvtCellLabel'>BUSINESS SUMMARY:</td><td width='60%' align=left class='dvtCellInfo' id='summary'>".$desc1." ".$desc2."</td></tr>";
-        $output .= "<tr><td><b>Is this information correct?</b></td><td><input title='OK' class='small' language='javascript'  onclick=\"populateData('quote' ,'subquote');\" type='button' name='button' value='Yes' style='width:70px'>
-                   <input title='' class='small' onclick='' type='button' name='button' value='No' style='width:70px'></td></tr></table></tr></tbody></table>
-		</div>";
-        $output .= "<script language='Javascript'>
-                        var leftpanelistarray=new Array('datahide');
-                                  setExpandCollapse_gen()</script><div id='subquote' style='display:none' class='divEventToDo'><table><tbody>";
-	$output .= "<tr><td>&nbsp;</td><td valign='top' width='24'><img src='themes/blue/images/tblPro1BtnHide.gif' alt='Minimize / Maximize' border='0' onclick=\"javascript:expandCont('datahide');\"></td></tr>";
-        $output .="<tr><td><div id='datahide' style='display:block'><table><tr><td><table width='185'>";
+	$output='';
+	 $output .= '<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                     <tr><td class="detailedViewHeader" onclick="just();"><b>Company Report</b></td></tr>
+                     <tr><td>
+	                    <div id="company">
+	                         <div id="innerLayer">
+	                         <input type="hidden" name="address" value="'.trim($address).'">
+	                         <input type="hidden" name="Phone" value="'.trim($phone).'">
+	                         <input type="hidden" name="Fax" value="'.trim($fax).'">
+	                         <input type="hidden" name="site" value="'.trim($site).'">
+	                         <input type="hidden" name="emp" value="'.trim($emp).'">
+	                         <table class="small" border="0" cellpadding="0" cellspacing="0" width="60%" align="center">
+	        <tr>
+	             <td colspan="2" class="detailedViewHeader"><b>'.$comp.'</b></td>
+	        </tr>';
+        $output .='<tr><td><table><tr><td><table width="185">';
         foreach($first_array as $arr => $val)
         {
-                $output .= "<tr>";
+                $output .= '<tr>';
                 for($j=0;$j<count($val);$j+=2)
                 {
-                        $output .= "<td align=left width='48%' class='dvtCellLabel' >".$val[$j]."</td>
-                                    <td align=left class='dvtCellInfo'>".$val[$j+1]."</td>";
+                        $output .= '<td class="dvtCellLabel" align="right" width="20%">'.$val[$j].'</td>
+                                    <td width="30%" align="left" class="dvtCellInfo">'.$val[$j+1].'</td>';
                 }
-                $output .= "</tr>";
+                $output .= '</tr>';
         }
-        $output .="</table></td>";
-        $output .="<td><table width='185'>";
+        $output .='</table></td>';
+        $output .='<td><table width="185">';
+        array_shift($second_array[0]);
+        array_shift($second_array[0]);
         foreach($second_array as $arr => $val)
         {
-                $output .= "<tr>";
-                for($j=0;$j<count($val);$j+=2)
-                {
-                                $output .= "<td align=left width='48%' class='dvtCellLabel' >".$val[$j]."</td>
-                                            <td align=left class='dvtCellInfo'>".$val[$j+1]."</td>";
-                }
-                $output .= "</tr>";
+                $output .= '<tr>';
+	        for($j=0;$j<count($val);$j+=2)
+	        {
+	                $output .= '<td lass="dvtCellLabel" align="right" width="20%">'.$val[$j].'</td>
+	                            <td width="30%" align="left" class="dvtCellInfo">'.$val[$j+1].'</td>';
+	        }
+	        $output .= '</tr>';
         }
-        $output .="</table></td><td align=left><a href='http://finance.yahoo.com/q/bc?s=WIT&amp;t=1d' target='_blank'><img src='http://ichart.finance.yahoo.com/t?s=".trim($variable)."' width='192' height='96' alt='[Chart]' border='0'></a></td></tr></table></div></td>
-                </tr>";
-	$output .="</tbody></table></div>";
-	echo $output;
+        $output .='</table></td><td align=left><a href="http://finance.yahoo.com/q/bc?s='.trim($variable).'&amp;t=1d" target="_blank"><img src="http://ichart.finance.yahoo.com/t?s='.trim($variable).'" width="192" height="96" alt="[Chart]" border="0"></a></td></tr></table></td></tr>';
+        $output .= '<tr style="height: 25px;">
+       				      <td colspan="2" style="border-top:1px solid #eaeaea;">&nbsp;</td>
+                                    </tr></table>';
+        $output .= '<table class="small" border="0" cellpadding="0" cellspacing="0" width="60%" align="center" id="conf">
+       		   <tr>
+		    <td colspan="2" class="detailedViewHeader"><b>BUSINESS SUMMARY</b></td>
+        	   </tr>		 
+ 		    <td width="30%" align="left" class="dvtCellInfo" id="summary"><textarea cols=80 rows=5 readonly>'.$desc1.' '.$desc2.'</textarea></td>
+		    </tr>
+		    <tr>
+		     <td colspan="2" style="padding: 5px;border-top:1px solid #eaeaea;">
+		        <div align="center">
+		             <input title="Save [Alt+S]" accesskey="S" class="small"  name="button" value="Yes" style="width: 70px;" type="button" onclick=\'fnDown("conf");\' />
+			     <input title="Cancel [Alt+X]" accesskey="X" class="small" name="button" value="No" style="width: 70px;" type="button" />
+		        </div>
+		     </td> 
+		    </tr>
+		  </table>
+                </div></div>
+        </td></tr></table>';
+        $output .= '<script>
+        ScrollEffect.limit = 221;
+        ScrollEffect.closelimit= 220;
+        </script>';
+
+echo $output;
+}
+else
+{
+        $output = '';
+        $output .= "<div style='display:block'>";
+        $output .= "<b><font color='red'>".$data."</font>";
+        $output .= "</div>";
+        echo $output;
+}
 ?>
