@@ -101,6 +101,7 @@ $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("SIGNATURE", $focus->signature);
 $xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("USERIMAGE", $focus->imagename);
 
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
 		
