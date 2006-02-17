@@ -28,11 +28,10 @@ if(is_array($data))
         $first_array =array_slice($data,0, 8);
         $second_array = array_slice($data,8);
 	$output='';
-	 $output .= '<table border="0" cellpadding="0" cellspacing="0" width="100%">
-                     <tr><td class="detailedViewHeader" onclick="just();"><b>Company Report</b></td></tr>
+	 $output .= '<table border="0" cellpadding="0" cellspacing="0" width="80%" align=center>
+                     <tr><td class="detailedViewHeader" style="cursor:pointer;" onclick=\'fnDown("company");\'><b>Company Report</b></td></tr>
                      <tr><td>
 	                    <div id="company">
-	                         <div id="innerLayer">
 	                         <input type="hidden" name="address" value="'.trim($address).'">
 	                         <input type="hidden" name="Phone" value="'.trim($phone).'">
 	                         <input type="hidden" name="Fax" value="'.trim($fax).'">
@@ -75,7 +74,7 @@ if(is_array($data))
        		   <tr>
 		    <td colspan="2" class="detailedViewHeader"><b>BUSINESS SUMMARY</b></td>
         	   </tr>		 
- 		    <td width="30%" align="left" class="dvtCellInfo" id="summary"><textarea cols=80 rows=5 readonly>'.$desc1.' '.$desc2.'</textarea></td>
+ 		    <td width="30%" align="left" class="dvtCellInfo"><textarea id="summary" cols=80 rows=5 readonly>'.$desc1.' '.$desc2.'</textarea></td>
 		    </tr>
 		    <tr>
 		     <td colspan="2" style="padding: 5px;border-top:1px solid #eaeaea;">
@@ -86,7 +85,7 @@ if(is_array($data))
 		     </td> 
 		    </tr>
 		  </table>
-                </div></div>
+                </div>
         </td></tr></table>';
         $output .= '<script>
         ScrollEffect.limit = 221;
