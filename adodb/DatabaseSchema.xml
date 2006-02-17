@@ -67,7 +67,9 @@
 		<field name="lead_view" type="C" size="25">
 			<DEFAULT value="Today"/>
 		</field>
-		<field name="tagcloud" type="X"></field>
+		<field name="tagcloud" type="C" size="250" ></field>
+		<field name="imagename" type="C" size="250">
+	        </field>
 		<field name="deleted" type="I" size="1">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
