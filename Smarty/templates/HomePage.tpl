@@ -129,6 +129,11 @@
 		</td>
 		<td align=left valign=top width=30%>
 		Pipeline chart comes here..<br><br>
+		{if $TAGCLOUD_JS ne ''}
+	            <link href="{$TAGCLOUD_CSS}" rel="stylesheet" type="text/css">
+        	    <script language="JavaScript"  type="text/javascript" src="{$TAGCLOUD_JS}"></script>
+        	{/if}
+        	<br>
 		<table border="0" cellpadding="0" cellspacing="0">
      		<tr><b>YOUR SHOUT!!!</b>
           		<td valign="top" >
