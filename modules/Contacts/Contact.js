@@ -347,21 +347,21 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById("Mailing Street").innerHTML+' '
-                           +document.getElementById("Mailing Po Box").innerHTML+' '
-                           +document.getElementById("Mailing City").innerHTML+' '
-                           +document.getElementById("Mailing State").innerHTML+' '
-                           +document.getElementById("Mailing Country").innerHTML+' '
-                           +document.getElementById("Mailing Zip").innerHTML
+                mapParameter = document.getElementById("dtlview_Mailing Street").innerHTML+' '
+                           +document.getElementById("dtlview_Mailing Po Box").innerHTML+' '
+                           +document.getElementById("dtlview_Mailing City").innerHTML+' '
+                           +document.getElementById("dtlview_Mailing State").innerHTML+' '
+                           +document.getElementById("dtlview_Mailing Country").innerHTML+' '
+                           +document.getElementById("dtlview_Mailing Zip").innerHTML
         }
         else if (addressType == 'Other')
         {
-                mapParameter = document.getElementById("Other Street").innerHTML+' '
-                           +document.getElementById("Other Po Box").innerHTML+' '
-                           +document.getElementById("Other City").innerHTML+' '
-                           +document.getElementById("Other State").innerHTML+' '
-                           +document.getElementById("Other Country").innerHTML+' '
-                           +document.getElementById("Other Zip").innerHTML
+                mapParameter = document.getElementById("dtlview_Other Street").innerHTML+' '
+                           +document.getElementById("dtlview_Other Po Box").innerHTML+' '
+                           +document.getElementById("dtlview_Other City").innerHTML+' '
+                           +document.getElementById("dtlview_Other State").innerHTML+' '
+                           +document.getElementById("dtlview_Other Country").innerHTML+' '
+                           +document.getElementById("dtlview_Other Zip").innerHTML
         }
          window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
