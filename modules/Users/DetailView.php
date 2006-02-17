@@ -110,6 +110,16 @@ $xtpl->assign("LAST_NAME", $focus->last_name);
 $xtpl->assign("STATUS", $focus->status);
 $xtpl->assign("YAHOO_ID", $focus->yahoo_id);
 $xtpl->assign("DATE_FORMAT", $focus->date_format);
+if(isset($focus->imagename))
+{
+	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(/themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
+	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;'><img src='themes/images/scaler_slider.gif'></div>
+	</div>
+	<div class='scale-image' style='padding: 10px; float: left; width: 153.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
+	<p><script type='text/javascript' src='include/js/scale_demo.js'></script></p>";
+	$xtpl->assign("USER_IMAGE",$imagestring);
+}
+				
 if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
 if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& isset($default_user_name)
