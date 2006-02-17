@@ -2754,8 +2754,8 @@
                 <field name="id" type="I" size="19">
                         <KEY/>
                 </field>
-                <field name="server" type="C" size="30"> </field>
-                <field name="server_username" type="C" size="30"> </field>
+                <field name="server" type="C" size="80"> </field>
+                <field name="server_username" type="C" size="80"> </field>
                 <field name="server_password" type="C" size="30"> </field>
                 <field name="server_type" type="C" size="20"> </field>
                 <field name="smtp_auth" type="C" size="5"> </field>
