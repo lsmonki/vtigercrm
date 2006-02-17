@@ -342,6 +342,7 @@ $mod_strings = Array(
 'LBL_GROUP_NAME_ERROR'=>'Group Name already exists!',
 'MNL'=>'My New Leads',
 'LBL_LEAD_VIEW'=>'Default Lead View',
+'LBL_TAG_CLOUD'=>'Tag Cloud',
 );
 
 ?>
