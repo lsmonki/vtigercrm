@@ -95,7 +95,7 @@ function set_focus() {
 		<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
 		<tr>
 			<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha" title="Alpha"></td>
+			<td align=right><img src="include/images/loginAlpha.gif" alt="Beta" title="Beta"></td>
 		</tr>
 		</table>
 		
@@ -109,7 +109,7 @@ function set_focus() {
 		<tr>
 			<td valign=top width=60% height="250" class="loginBillBoard">
 				<div align=left style="padding:20px">
-				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha</span><br><br>
+				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Beta</span><br><br>
 				
 				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications. <br><br>
 				
