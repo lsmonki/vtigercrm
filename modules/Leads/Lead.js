@@ -338,12 +338,12 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById("Street").innerHTML+' '
-                           +document.getElementById("Po Box").innerHTML+' '
-                           +document.getElementById("City").innerHTML+' '
-                           +document.getElementById("State").innerHTML+' '
-                           +document.getElementById("Country").innerHTML+' '
-                           +document.getElementById("Postal Code").innerHTML
+                mapParameter = document.getElementById("dtlview_Street").innerHTML+' '
+                           +document.getElementById("dtlview_Po Box").innerHTML+' '
+                           +document.getElementById("dtlview_City").innerHTML+' '
+                           +document.getElementById("dtlview_State").innerHTML+' '
+                           +document.getElementById("dtlview_Country").innerHTML+' '
+                           +document.getElementById("dtlview_Postal Code").innerHTML
         }
         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
