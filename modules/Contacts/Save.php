@@ -72,97 +72,13 @@ foreach($focus->column_fields as $fieldname => $val)
 
 //Checking If image is given or not
 
-$uploaddir = $root_directory."test/contact/" ;//set this to which location you need to give the contact image
-$log->info("The Location to Save the Contact Image is ".$uploaddir);
-$file_path_name = $_FILES['imagename']['name'];
-$image_error="false";
-$saveimage="true";
+//Checking If image is given or not
+$image_upload_array=SaveImage($_FILES,'contact',$id,$focus->mode);
+$image_name_val=$image_upload_array['imagename'];
+$image_error=$image_upload_array['imageerror'];
+$errormessage=$image_upload_array['errormessage'];
+$saveimage=$image_upload_array['saveimage'];
 
-$file_name = basename($file_path_name);
-//if the image is given
-if($file_name!="")
-{
-         $log->debug("Contact Image is given for uploading");
-        $image_name_val=file_exist_fn($file_name,0);
-
-        $encode_field_values="";
-        $errormessage="";
-
-        $move_upload_status=move_uploaded_file($_FILES["imagename"]["tmp_name"],$uploaddir.$image_name_val);
-        $image_error="false";
-
-        //if there is an error in the uploading of image
-
-        $filetype= $_FILES['imagename']['type'];
-        $filesize = $_FILES['imagename']['size'];
-
-        $filetype_array=explode("/",$filetype);
-
-        $file_type_val_image=strtolower($filetype_array[0]);
-        $file_type_val=strtolower($filetype_array[1]);
-          $log->info("The File type of the Contact Image is :: ".$file_type_val);
-          //checking the uploaded image is if an image type or not
-	if(!$move_upload_status) //if any error during file uploading
-        {
-                $log->debug("Error is present in uploading Contact Image.");
-                $errorCode =  $_FILES['imagename']['error'];
-                        if($errorCode == 4)
-                        {
-                                $errorcode="no-image";
-                                $saveimage="false";
-                                $image_error="true";
-                        }
-                        else if($errorCode == 2)
-                        {
-                                $errormessage = 2;
-                                $saveimage="false";
-                                $image_error="true";
-                        }
-                        else if($errorCode == 3 )
-                        {
-                                $errormessage = 3;
-                                $saveimage="false";
-                                $image_error="true";
-                        }
-        }
-        else
-        {
-                 $log->debug("Successfully uploaded the Contact Image.");
-                if($filesize != 0)
-                {
-                        if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
-                        {
-                                        $saveimage="true";
-                                        $image_error="false";
-                        }
-                        else
-                        {
-                                $savelogo="false";
-                                $image_error="true";
-                                $errormessage = "image";
-                        }
-	        }
-                else
-                {       $savelogo="false";
-                        $image_error="true";
-                        $errormessage = "invalid";
-                }
-
-        }
-}
-else //if image is not given
-{
-        $log->debug("Contact Image is not given for uploading.");
-        if($mode=="edit" && $image_error=="false" )
-        {
-                $image_name_val=getContactImageName($focus->id);
-                $saveimage="true";
-        }
-        else
-        {
-                $focus->column_fields['imagename']="";
-        }
-}
 
  //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
@@ -217,10 +133,8 @@ if($saveimage=="true")
 //Saving the contact
 if($image_error=="false")
 {
-	//$focus->saveentity("Contacts");
 	$focus->save("Contacts");
 	$return_id = $focus->id;
-	//save_customfields($focus->id);
 
 	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 	else $return_module = "Contacts";
@@ -283,7 +197,6 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	$subject = "Customer Portal Login Details";
 	$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
 	$contents .= 'Your Customer Portal Login details are given below:';
-//	$contents .= '<br>Customer Portal URL:';
 	$contents .= "<br><br>User Id : ".$_REQUEST['email'];
 	$contents .= '<br>Password : '.$password;
 	$contents .= "<br><br><a href='".$PORTAL_URL."/cp_index.php'>Please Login Here</a>";
@@ -321,139 +234,6 @@ if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
 }
-//Code to save the custom field info into database
-function save_customfields($entity_id)
-{
-	global $adb;
-	$dbquery="select * from customfields where module='Contacts'";
-	$result = $adb->query($dbquery);
-	$custquery = "select * from contactscf where contactid='".$entity_id."'";
-        $cust_result = $adb->query($custquery);
-	if($adb->num_rows($result) != 0)
-	{
-		
-		$columns='';
-		$values='';
-		$update='';
-		$noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$fldName=$adb->query_result($result,$i,"fieldlabel");
-			$colName=$adb->query_result($result,$i,"column_name");
-			if(isset($_REQUEST[$colName]))
-			{
-				$fldvalue=$_REQUEST[$colName];
-				if(get_magic_quotes_gpc() == 1)
-                		{
-                        		$fldvalue = stripslashes($fldvalue);
-                		}
-			}
-			else
-			{
-				$fldvalue = '';
-			}
-			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-			{
-				//Update Block
-				if($i == 0)
-				{
-					$update = $colName.'="'.$fldvalue.'"';
-				}
-				else
-				{
-					$update .= ', '.$colName.'="'.$fldvalue.'"';
-				}
-			}
-			else
-			{
-				//Insert Block
-				if($i == 0)
-				{
-					$columns='contactid, '.$colName;
-					$values='"'.$entity_id.'", "'.$fldvalue.'"';
-				}
-				else
-				{
-					$columns .= ', '.$colName;
-					$values .= ', "'.$fldvalue.'"';
-				}
-			}
-			
-				
-		}
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-			$query = 'update contactcf SET '.$update.' where contactid="'.$entity_id.'"'; 
-			$adb->query($query);
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into contactcf ('.$columns.') values('.$values.')';
-			$adb->query($query);
-		}
-		
-	}
-	/* srini patch
-	else
-	{
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into contactcf ('.$columns.') values('.$values.')';
-			$adb->query($query);
-		}
-	}*/
-	
-}
-function file_exist_fn($filename,$exist)
-{
-        global $uploaddir;
 
-        if(!isset($exist))
-        {
-                $exist=0;
-        }
-        $filename_path=$uploaddir.$filename;
-        if (file_exists($filename_path)) //Checking if the file name already exists in the directory
-        {
-                if($exist!=0)
-                {
-                        $previous=$exist-1;
-                        $next=$exist+1;
-                        $explode_name=explode("_",$filename);
-                        $implode_array=array();
-                        for($j=0;$j<count($explode_name); $j++)
-                        {
-                                if($j!=0)
-                                {
-                                        $implode_array[]=$explode_name[$j];
-                                }
-                        }
-                        $implode_name=implode("_", $implode_array);
-                        $test_name=$implode_name;
-                }
-                else
-                {
-                        $implode_name=$filename;
-                }
-                $exist++;
-                $filename_val=$exist."_".$implode_name;
-                $testfilename = file_exist_fn($filename_val,$exist);
-                if($testfilename!="")
-                {
-                        return $testfilename;
-                }
-        }
-	else
-        {
-                return $filename;
-        }
-}
 
 ?>
