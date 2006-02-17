@@ -27,11 +27,18 @@ function getComdata($url,$variable)
 	  exit();
 	} 
 	$msft_stats = http::table_into_array($h->body, 'Find Symbol', 0, null);
-	$desc=$msft_stats[0];
-	$data=getQuoteData($variable);
-	foreach($data as $key=>$value)
-		array_push($desc,$value);
-	return $desc;
+	//echo '<pre>';print_r($msft_stats);echo '</pre>';
+        //die;
+        if($msft_stats != '')
+        {
+		$desc=$msft_stats[0];
+		$data=getQuoteData($variable);
+		foreach($data as $key=>$value)
+			array_push($desc,$value);
+		return $desc;
+	}
+	else
+	        return "Information on ".$variable." is not available or '".$variable."' is not a valid ticker symbol.";
 }
 
 /** Function to get company quotes from external site
@@ -52,16 +59,20 @@ function getQuoteData($var)
         }
 	$res_arr=array();
 	$quote_data = http::table_into_array($h->body, 'Delayed quote data', 0, null);
-	if($quote_data[0][0] == '')
+	//echo '<pre>';print_r($quote_data);echo '</pre>';
+        //die;
+        if($quote_data[0][0] == '')
         {
                 array_shift($quote_data);
                 array_shift($quote_data);
+                if($quote_data[0][0]!= 'Last Trade:')
+                        array_shift($quote_data);
         }
-	for($i=0;$i<16;$i++)
-	{
-		if($quote_data !='')
-			$res_arr[]=$quote_data[$i];
-	}
+        for($i=0;$i<16;$i++)
+        {
+                if($quote_data !='')
+ 	                $res_arr[]=$quote_data[$i];
+        }
 	//array_shift($res_arr);
 	//array_shift($res_arr);	
 	//echo '<pre>';print_r($quote_data);echo '</pre>';
