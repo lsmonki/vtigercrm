@@ -326,21 +326,21 @@ function searchMapLocation(addressType)
         var mapParameter = '';
         if (addressType == 'Main')
         {
-                mapParameter = document.getElementById('Billing Address').innerHTML+' '
-                           +document.getElementById("Billing Po Box").innerHTML+' '
-                           +document.getElementById("Billing City").innerHTML+' '
-                           +document.getElementById("Billing State").innerHTML+' '
-                           +document.getElementById("Billing Country").innerHTML+' '
-                           +document.getElementById("Billing Code").innerHTML
+                mapParameter = document.getElementById('dtlview_Billing Address').innerHTML+' '
+                           +document.getElementById("dtlview_Billing Po Box").innerHTML+' '
+                           +document.getElementById("dtlview_Billing City").innerHTML+' '
+                           +document.getElementById("dtlview_Billing State").innerHTML+' '
+                           +document.getElementById("dtlview_Billing Country").innerHTML+' '
+                           +document.getElementById("dtlview_Billing Code").innerHTML
         }
         else if (addressType == 'Other')
         {
-                mapParameter = document.getElementById("Shipping Address").innerHTML+' '
-                           +document.getElementById("Shipping Po Box").innerHTML+' '
-                           +document.getElementById("Shipping City").innerHTML+' '
-                           +document.getElementById("Shipping State").innerHTML+' '
-                           +document.getElementById("Shipping Country").innerHTML+' '
-                           +document.getElementById("Shipping Code").innerHTML
+                mapParameter = document.getElementById("dtlview_Shipping Address").innerHTML+' '
+                           +document.getElementById("dtlview_Shipping Po Box").innerHTML+' '
+                           +document.getElementById("dtlview_Shipping City").innerHTML+' '
+                           +document.getElementById("dtlview_Shipping State").innerHTML+' '
+                           +document.getElementById("dtlview_Shipping Country").innerHTML+' '
+                           +document.getElementById("dtlview_Shipping Code").innerHTML
         }
 	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
@@ -385,4 +385,122 @@ function showhide(argg1,argg2)
         }
 }
 
+// JavaScript Document
+
+if (document.all) var browser_ie=true
+else if (document.layers) var browser_nn4=true
+else if (document.layers || (!document.all && document.getElementById)) var browser_nn6=true
+
+function getObj(n,d) {
+  var p,i,x;
+  if(!d)d=document;
+  if((p=n.indexOf("?"))>0&&parent.frames.length) {d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all)x=d.all[n];
+  for(i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++)  x=getObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n);
+  return x;
+}
+
+
+function findPosX(obj) {
+        var curleft = 0;
+        if (document.getElementById || document.all) {
+                while (obj.offsetParent) { curleft += obj.offsetLeft; obj = obj.offsetParent;}
+        }
+        else if (document.layers) { curleft += obj.x; }
+        return curleft;
+}
+
+
+function findPosY(obj) {
+        var curtop = 0;
+        if (document.getElementById || document.all) {
+                while (obj.offsetParent) { curtop += obj.offsetTop; obj = obj.offsetParent; }
+        }
+        else if (document.layers) {curtop += obj.y;}
+        return curtop;
+}
+
+function openPopUp(winInst,currObj,baseURL,winName,width,height,features) {
+        var left=parseInt(findPosX(currObj))
+        var top=parseInt(findPosY(currObj))
+
+        if (window.navigator.appName!="Opera") top+=parseInt(currObj.offsetHeight)
+        else top+=(parseInt(currObj.offsetHeight)*2)+10
+        if (browser_ie) {
+                top+=window.screenTop-document.body.scrollTop
+                left-=document.body.scrollLeft
+                if (top+height+30>window.screen.height)
+                        top=findPosY(currObj)+window.screenTop-height-30
+                if (left+width>window.screen.width)
+                        left=findPosX(currObj)+window.screenLeft-width
+        } else if (browser_nn4 || browser_nn6) {
+                top+=(scrY-pgeY)
+                left+=(scrX-pgeX)
+                if (top+height+30>window.screen.height)
+                        top=findPosY(currObj)+(scrY-pgeY)-height-30
+                if (left+width>window.screen.width)
+                        left=findPosX(currObj)+(scrX-pgeX)-width
+        }
+
+        features="width="+width+",height="+height+",top="+top+",left="+left+";"+features
+        eval(winInst+'=window.open("'+baseURL+'","'+winName+'","'+features+'")')
+}
+
+var scrX=0,scrY=0,pgeX=0,pgeY=0;
+
+if (browser_nn4 || browser_nn6) {
+        document.addEventListener("click",popUpListener,true)
+}
+
+function popUpListener(ev) {
+        if (browser_nn4 || browser_nn6) {
+                scrX=ev.screenX
+                scrY=ev.screenY
+                pgeX=ev.pageX
+                pgeY=ev.pageY
+        }
+}
+
+
+ScrollEffect = function(){ };
+ScrollEffect.lengthcount=202;
+ScrollEffect.closelimit=0;
+ScrollEffect.limit=0;
+
+
+function just(){
+        ig=getObj("company");
+        if(ScrollEffect.lengthcount > ScrollEffect.closelimit ){closet();return;}
+        ig.style.display="block";
+        ig.style.height=ScrollEffect.lengthcount+'px';
+        ScrollEffect.lengthcount=ScrollEffect.lengthcount+10;
+        if(ScrollEffect.lengthcount < ScrollEffect.limit){setTimeout("just()",25);}
+        else{ getObj("innerLayer").style.display="block";return;}
+}
+
+function closet(){
+        ig=getObj("company");
+        getObj("innerLayer").style.display="none";
+        ScrollEffect.lengthcount=ScrollEffect.lengthcount-10;
+        ig.style.height=ScrollEffect.lengthcount+'px';
+        if(ScrollEffect.lengthcount<20){ig.style.display="none";return;}
+        else{setTimeout("closet()", 25);}
+}
+
+
+function fnDown(obj){
+        var tagName = document.getElementById(obj);
+        document.EditView.description.value = document.getElementById('summary').innerHTML;
+        document.EditView.employees.value = getObj('emp').value;
+        document.EditView.website.value = getObj('site').value;
+        document.EditView.phone.value = getObj('Phone').value;
+        document.EditView.fax.value = getObj('Fax').value;
+        document.EditView.bill_street.value = getObj('address').value;
+        if(tagName.style.display == 'none')
+                tagName.style.display = 'block';
+        else
+                tagName.style.display = 'none';
+}
 
