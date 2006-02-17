@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 
-include_once('config.php');
+//include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
