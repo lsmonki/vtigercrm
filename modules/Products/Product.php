@@ -137,7 +137,7 @@ class Product extends CRMEntity {
 
 	function get_opportunities($id)
         {
-		$query = 'select potential.potentialid, potential.potentialname, potential.potentialtype,  products.productid, products.productname, products.qty_per_unit, products.unit_price, products.expiry_date from potential inner join products on potential.productid = products.productid where products.productid='.$id;
+		$query = 'select potential.potentialid, potential.potentialname, potential.potentialtype,  products.productid, products.productname, products.qty_per_unit, products.unit_price, products.expiry_date from potential inner join products on potential.productid = products.productid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 and products.productid='.$id;
           renderRelatedPotentials($query);
         }
 
@@ -195,7 +195,7 @@ class Product extends CRMEntity {
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and quotesproductrel.productid=".$id;
+		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and quotesproductrel.productid=".$id;
 		return GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_purchase_orders($id)
@@ -208,13 +208,11 @@ class Product extends CRMEntity {
 
 		if(isPermitted("PurchaseOrder",1,"") == 'yes')
 		{
-
 			$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
 		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-
-		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid where crmentity.deleted=0 and products.productid=".$id;
+		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
 		return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
@@ -225,13 +223,12 @@ class Product extends CRMEntity {
  
 		$button = '';
 		if(isPermitted("SalesOrder",1,"") == 'yes')
-        {
-		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+        	{
+			$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
 		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-
-		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and products.productid = ".$id;
+		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and products.productid = ".$id;
 		return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
@@ -248,7 +245,7 @@ class Product extends CRMEntity {
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
+		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
 		return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_product_pricebooks($id)
