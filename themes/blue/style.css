@@ -549,14 +549,14 @@ border:1px solid #dadada;
 
 .thumbnail{
     background-color:#ffffff;
-padding: 7px;
+padding: 5px;
 border: 1px solid #ddd;
 float: left;
-	   margin-right: 10px;
-	   margin-bottom: 15px;
+	   margin-right: 5px;
+	   margin-bottom: 10px;
 }
 .thumbnailcaption
-{ font-size: 0.9em; padding-top: 0.2em ;	}
+{ font-size: 0.9em; padding-top: 0.1em ;	}
 
 /* For Settings */
 
