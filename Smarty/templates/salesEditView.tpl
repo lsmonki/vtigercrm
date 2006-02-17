@@ -24,8 +24,8 @@
 
 function ajaxResponse(response)
 {ldelim}
-        document.getElementById('com').innerHTML = response.responseText;
-        document.getElementById('com').style.display="block";
+        document.getElementById('autocom').innerHTML = response.responseText;
+        document.getElementById('autocom').style.display="block";
         hide('vtbusy_info');
 {rdelim}
 
@@ -142,6 +142,7 @@ function sensex_info()
 					{*<!-- content cache -->*}
 					
 					<table border=0 cellspacing=0 cellpadding=0 width=100%>
+					<tr><td id ="autocom"></td></tr>
 					<tr>
 						<td style="padding:10px">
 							<!-- General details -->
@@ -179,7 +180,6 @@ function sensex_info()
 							<td width=20% class="dvtCellLabel" align=right>{$fldlabel}</td>
 							{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}
                                                         <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn';" onBlur="this.className='detailedViewTextBox';{if $fldname eq 'tickersymbol' && $MODULE eq 'Accounts'}sensex_info(){/if}"><span id="vtbusy_info" style="display:none;"><img src="themes/blue/images/vtbusy.gif" border="0"></span></td>
-						        <span name="com"  align="center" id="com"></span>
                                                         {else}
                                                         <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
                                                         {/if}
