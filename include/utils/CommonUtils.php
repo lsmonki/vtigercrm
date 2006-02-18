@@ -992,7 +992,7 @@ function getContactImages($parenttab)
 		$contactname=$adb->query_result($result,$j,'firstname').' '.$adb->query_result($result,$j,'lastname');
 		if($imagename != '')
 		{
-			$imagelists .= 'leftrightslide['.$imagecount.']= \'<div class=thumbnail><a href='.$imgpath.' onMouseover=modifyimage("dynloadarea",'.$imagecount.') onMouseOut=document.getElementById("dynloadarea").style.display="none"; target="_blank"><img src="'.$imgpath.'" border=1 height=35 width=50></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
+			$imagelists .= 'leftrightslide['.$imagecount.']= \'<div class=thumbnail><a href='.$imgpath.' onMouseover=modifyimage("dynloadarea",'.$imagecount.') onMouseOut=document.getElementById("dynloadarea").style.display="none"; target="_blank"><img src="'.$imgpath.'" border=1 height=50 width=75></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
 			$imagenamelists .='dynimages['.$imagecount.']=["'.$imgpath.'","index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'"];';
 			$imagecount++;
 		}
