@@ -630,24 +630,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{
 		    $currencyid=fetchCurrency($current_user->id);
-              $curr_symbol=getCurrencySymbol($currencyid);
-              $rate = getConversionRate($currencyid,$curr_symbol);
-              $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
-              $display_val = $curr_symbol.' '.$amount_user_specific;	
+ 	            $curr_symbol=getCurrencySymbol($currencyid);
+              	    $rate = getConversionRate($currencyid,$curr_symbol);
+	 	    $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
+                    $display_val = $amount_user_specific;	
 		}
-		//$label_fld[] = $display_val;
 		$label_fld["cursymb"] = $curr_symbol;
-          $label_fld[] = $display_val;
+          	$label_fld[] = $display_val;
 	}
 	elseif($uitype == 75 || $uitype == 81)
         {
 		 $label_fld[] =$mod_strings[$fieldlabel];
-           $vendor_id = $col_fields[$fieldname];
-           if($vendor_id != '')
-           {
+           	$vendor_id = $col_fields[$fieldname];
+           	if($vendor_id != '')
+           	{
                    $vendor_name = getVendorName($vendor_id);
-           }
-          $label_fld[] = $vendor_name;
+           	}
+          	$label_fld[] = $vendor_name;
 		$label_fld["secid"] = $vendor_id;
 		$label_fld["link"] = "index.php?module=Products&action=VendorDetailView&record=".$vendor_id; 
 		//$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
