@@ -29,9 +29,10 @@ if(is_array($data))
         $second_array = array_slice($data,8);
 	$output='';
 	 $output .= '<table border="0" cellpadding="0" cellspacing="0" width="80%" align=center>
-                     <tr><td class="detailedViewHeader" style="cursor:pointer;" onclick=\'fnDown("company");\'><b>Company Report</b></td></tr>
+                     <tr><td class="detailedViewHeader" style="cursor:pointer;" onclick=\'just();\'><b>Company Report</b></td></tr>
                      <tr><td>
 	                    <div id="company">
+				<div id="innerLayer">
 	                         <input type="hidden" name="address" value="'.trim($address).'">
 	                         <input type="hidden" name="Phone" value="'.trim($phone).'">
 	                         <input type="hidden" name="Fax" value="'.trim($fax).'">
@@ -85,13 +86,8 @@ if(is_array($data))
 		     </td> 
 		    </tr>
 		  </table>
-                </div>
+                </div></div>
         </td></tr></table>';
-        $output .= '<script>
-        ScrollEffect.limit = 221;
-        ScrollEffect.closelimit= 220;
-        </script>';
-
 echo $output;
 }
 else
