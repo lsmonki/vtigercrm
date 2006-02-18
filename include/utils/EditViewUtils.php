@@ -813,9 +813,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$disp_currency = getDisplayCurrency();
-		$editview_label[]=$mod_strings[$fieldlabel].': ('.$disp_currency.')';
-		$fieldvalue[] = $value;
+		$currencyid=fetchCurrency($current_user->id);
+                $curr_symbol=getCurrencySymbol($currencyid);
+		$rate = getConversionRate($currencyid,$curr_symbol);
+		$editview_label[]=$mod_strings[$fieldlabel].': ('.$curr_symbol.')';
+		$fieldvalue[] = convertFromDollar($value,$rate);
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
