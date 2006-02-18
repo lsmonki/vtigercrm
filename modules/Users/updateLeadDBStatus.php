@@ -18,7 +18,7 @@ require_once('include/database/PearDatabase.php');
 $idlist= $_POST['idlist'];
 $leadstatusval = $_POST['leadval'];
 $idval=$_REQUEST['user_id'];
-
+global $current_user;
 global $adb;
 $storearray = explode(";",$idlist);
 
@@ -27,7 +27,7 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 {
 	foreach($storearray as $id)
 	{
-		$sql = "update crmentity set smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
+		$sql = "update crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 		$result = $adb->query($sql);
 	}
 }
@@ -37,7 +37,7 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 	{
 		$sql = "update leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
 		$result = $adb->query($sql);
-		$query = "update crmentity set modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
+		$query = "update crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
 		$result1 = $adb->query($query);
 	}
 }
