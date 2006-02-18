@@ -622,6 +622,11 @@ function getNewDisplayDate()
 	return $display_date;
 }
 
+
+/**
+ * Function to get Currency Name and Currency Symbol
+ * returns the Currency information in an array format.
+ */
 function getDisplayCurrency()
 {
         global $adb;
@@ -639,15 +644,36 @@ function getDisplayCurrency()
         return $curr_array;
 }
 
+
+/**
+ * Function to convert currency amount into Dollar
+ * @param $amount - amount::Type Integer
+ * @param $crate - crate::Type Float
+ * returns amount in dollar.
+ */
 function convertToDollar($amount,$crate){
                 return $amount / $crate;
 
         }
 
+
+/**
+ * Function to convert currency amount from Dollar to user specific currency
+ * @param $amount - amount::Type Integer
+ * @param $crate - crate::Type Float
+ * returns amount in user specific currency.
+ */
 function convertFromDollar($amount,$crate){
                 return $amount * $crate;
         }
 
+
+/**
+ * Function to get currency conversion rate
+ * @param $id - id::Type Integer
+ * @param $symbol - symbol::Type varchar
+ * returns conversion rate::Type Float.
+ */
 function getConversionRate($id,$symbol)
 {
         global $adb;
@@ -657,6 +683,12 @@ function getConversionRate($id,$symbol)
         return $rate;
 }
 
+
+/**
+ * Function to get currency symbol
+ * @param $id - id::Type Integer
+ * returns conversion symbol:Type varchar.
+ */
 function getCurrencySymbol($id)
 {
         global $adb;
@@ -666,6 +698,11 @@ function getCurrencySymbol($id)
         return $curr_symbol;
 }
 
+
+/**
+ * Function to get Terms and Conditions
+ * returns Terms and Conditions::Type String.
+ */
 function getTermsandConditions()
 {
         global $adb;
