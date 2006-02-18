@@ -3,13 +3,12 @@
 
 
 {*<!--Home Page Entries  -->*}
-{if $LOGINHISTORY ne ''}
-    <div id="loginhistory" style="float:left;position:absolute;left:300px;top:150px;height:100px:width:200px;overflow:auto;
-">
+{if isset($LOGINHISTORY.0)}
+    <div id="loginhistory" style="float:left;position:absolute;left:300px;top:150px;height:100px:width:200px;overflow:auto;border:1px solid #dadada;">
     <table border="0" cellpadding="4" cellspacing="0" width="100%">
         <tr><td class=tblPro1ColHeader>ID</td><td class=tblPro1ColHeader>Type</td><td class=tblPro1ColHeader>Modified By</t
-d><td class=tblPro1ColHeader><img src="{$IMAGE_PATH}tblPro1BtnHide.gif" alt="Close" align="right" border="0" onClick="docum
-ent.getElementById('loginhistory').style.display='none';">Modified Time</td></tr>
+d><td class=tblPro1ColHeader nowrap><img src="{$IMAGE_PATH}tblPro1BtnHide.gif" alt="Close" align="right" border="0" onClick
+="document.getElementById('loginhistory').style.display='none';">Modified Time</td></tr>
         {foreach key=label item=detail from=$LOGINHISTORY}
             <tr><td class=tblPro1DataCell>{$detail.crmid}</td><td class=tblPro1DataCell>{$detail.setype}</td><td class=tblP
 ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modifiedtime}</td></tr>

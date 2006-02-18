@@ -192,25 +192,29 @@ function getLoginHistory()
 	global $current_user;
 	global $adb;
 	global $app_strings;
+	$i=0;
 	$userid= $current_user->id;
 	$query="select * from loginhistory inner join users on loginhistory.user_name=users.user_name where users.id=".$userid;
 	$result=$adb->query($query);
 	$count=$adb->num_rows($result);
 	$logout_time=$adb->query_result($result,$count-2,'logout_time');
-	$query ="select * from crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
-	$result=$adb->query($query);
-	$entry_list=array();
-	for($i = 0;$i < $adb->num_rows($result);$i++)
+	if($logout_time !='' && $logout_time != '0000-00-00 00:00:00' && $count >= 2)
 	{
-		$entries=array();
-		$entries['setype'] =$adb->query_result($result,$i,'setype');	
-		$entries['modifiedby'] = getUserName($adb->query_result($result,$i,'modifiedby'));
-		$entries['modifiedtime'] = $adb->query_result($result,$i,'modifiedtime');
-		$entries['crmid'] = $adb->query_result($result,$i,'crmid');
-		$entry_list[]=$entries;	
+		$query ="select * from crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
+		$result=$adb->query($query);
+		$entry_list=array();
+		for($i < $adb->num_rows($result);$i++)
+		{
+			$entries=array();
+			$entries['setype'] =$adb->query_result($result,$i,'setype');	
+			$entries['modifiedby'] = getUserName($adb->query_result($result,$i,'modifiedby'));
+			$entries['modifiedtime'] = $adb->query_result($result,$i,'modifiedtime');
+			$entries['crmid'] = $adb->query_result($result,$i,'crmid');
+			$entry_list[]=$entries;	
+		}
+		if($i >0)
+			return $entry_list;
 	}
-	if($i >0)
-	 	return $entry_list;
 }
 	
 function getGroupTaskLists()
