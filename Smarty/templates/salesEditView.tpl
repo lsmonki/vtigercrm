@@ -510,7 +510,10 @@ function sensex_info()
 </table>
 </form>
 <script>
-
+	
+	ScrollEffect.limit = 201;
+	ScrollEffect.closelimit= 200;
+	
 
 
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
