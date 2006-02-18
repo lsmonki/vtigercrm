@@ -209,7 +209,8 @@ function getLoginHistory()
 		$entries['crmid'] = $adb->query_result($result,$i,'crmid');
 		$entry_list[]=$entries;	
 	}
-	return $entry_list;
+	if($i >0)
+	 	return $entry_list;
 }
 	
 function getGroupTaskLists()
