@@ -203,7 +203,7 @@ function getLoginHistory()
 		$query ="select * from crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
 		$result=$adb->query($query);
 		$entry_list=array();
-		for($i < $adb->num_rows($result);$i++)
+		for(;$i < $adb->num_rows($result);$i++)
 		{
 			$entries=array();
 			$entries['setype'] =$adb->query_result($result,$i,'setype');	
@@ -212,7 +212,7 @@ function getLoginHistory()
 			$entries['crmid'] = $adb->query_result($result,$i,'crmid');
 			$entry_list[]=$entries;	
 		}
-		if($i >0)
+		if($i > 0)
 			return $entry_list;
 	}
 }
