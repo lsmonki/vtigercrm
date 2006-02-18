@@ -70,97 +70,76 @@ foreach ( explode(",",$home_section_order) as $section )
 	switch( $section )
 	{
 		case 'OLV':
-if($tab_per_Data[9] == 0)
-{
-	if($permissionData[9][3] == 0)
+	if(isPermitted('Activities','index') == "yes")
 	{
 		include("modules/Activities/OpenListView.php") ;
 		$home_values[]= getPendingActivities();
 	}
-}
             break;
         case 'ALVT':
 
 
 	//Added to support the inclusion of the Top Accounts in the Home Page. 
 	//Fix given by Mike Crowe
-   if($tab_per_Data[2] == 0)
-           {
-                    if($permissionData[2][3] == 0)
-                    {
-                      include("modules/Accounts/ListViewTop.php");
-					  $home_values[]=getTopAccounts();
-                    }
-	   }   
+        if(isPermitted('Accounts','index') == "yes")
+        {
+                include("modules/Accounts/ListViewTop.php");
+		$home_values[]=getTopAccounts();
+        }
             break;
         case 'PLVT':
-if($tab_per_Data[2] == 0)
-{
-	if($permissionData[2][3] == 0)
+	if(isPermitted('Potentials','index') == "yes")
         {
 		 include("modules/Potentials/ListViewTop.php");
 		 $home_values[]=getTopPotentials();
 	}
-}
             break;
 
         case 'MNL':
-if($tab_per_Data[7] == 0)
-{
-	if($permissionData[7][3] == 0)
+	if(isPermitted('Leads','index') == "yes")
         {
 		 include("modules/Leads/ListViewTop.php");
 		 $home_values[]=getNewLeads();
 	}
-}
             break;
 
 	case 'GRT':
+	if(isPermitted('Activities','index') == "yes")
+	{
 		$home_values[]=getGroupTaskLists();	   
+	}
    			break;
         case 'HLT':
-if($tab_per_Data[13] == 0)
-{
-        if($permissionData[13][3] == 0)
+        if(isPermitted('HelpDesk','index') == "yes")
         {
 		require_once('modules/HelpDesk/ListTickets.php');
 		$home_values[]=getMyTickets();
 	}
-}
         	break;
         case 'CVLVT':
-include("modules/CustomView/ListViewTop.php");
-$home_values[] = getKeyMetrics();
+	include("modules/CustomView/ListViewTop.php");
+	$home_values[] = getKeyMetrics();
         	break;
         case 'QLTQ':
-if($tab_per_Data[20] == 0)
-{
-        if($permissionData[20][3] == 0)
+        if(isPermitted('Quotes','index') == "yes")
         {
 		require_once('modules/Quotes/ListTopQuotes.php');
 		$home_values[]=getTopQuotes();
 	}
-}
         	break;
         case 'OLTSO':
-if($tab_per_Data[22] == 0)
-{
-        if($permissionData[22][3] == 0)
+        if(isPermitted('SalesOrder','index') == "yes")
         {
 		require_once('modules/SalesOrder/ListTopSalesOrder.php');
 		$home_values[]=getTopSalesOrder();
 	}
-}
         	break;
         case 'ILTI':
-if($tab_per_Data[23] == 0)
-{
-        if($permissionData[23][3] == 0)
+        if(isPermitted('Invoice','index') == "yes")
         {
 		require_once('modules/Invoice/ListTopInvoice.php');
 		$home_values[]=getTopInvoice();
 	}
-}
         	break;
     }
 }
