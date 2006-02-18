@@ -277,7 +277,7 @@ class Account extends CRMEntity {
 				and (activity.status='Completed' or activity.status = 'Deferred'  or (activity.eventstatus != 'Planned' and activity.eventstatus !=''))
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
-		echo $query;
+		//echo $query;
 		return getHistory('Accounts',$query,$id);
 	}
 
