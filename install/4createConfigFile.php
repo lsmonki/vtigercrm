@@ -195,6 +195,9 @@ $config .= "********************************************************************
 $config .= "\$vtiger_version = '".$vtiger_version."';\n\n";
 $config .= "\$release_date = '".$release_date."';\n\n";
 
+$config .= "#More than 8MB memory needed for graphs\n";
+$config .= "ini_set('memory_limit','16M');\n\n";
+
 $config .= "//World clock & Calculator will be displayed if these variables are 'true' otherwise will not be displayed.\n";
 $config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
 $config .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
