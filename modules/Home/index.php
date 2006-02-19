@@ -156,6 +156,7 @@ while($row = $adb->fetch_array($result))
   $list .= '<td height="21"  style="padding:0px 3px 0px 3px">';
   $list .= $row["type"];
   $list .= '</td>';
+  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
   $list .= '</tr>';
   $i++;
 }
