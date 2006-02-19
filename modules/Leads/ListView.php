@@ -66,6 +66,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['leadsource'])) $leadsource = $_REQUEST['leadsource'];
 	if (isset($_REQUEST['industry'])) $industry = $_REQUEST['industry'];
 	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
+	if (isset($_REQUEST['fax'])) $fax = $_REQUEST['fax'];
 	if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
 	if (isset($_REQUEST['mobile'])) $mobile = $_REQUEST['mobile'];
 	if (isset($_REQUEST['lead_status'])) $leadstatus = $_REQUEST['lead_status'];
@@ -127,6 +128,10 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	if(isset($phone) && $phone != ""){
 		array_push($where_clauses, "leadaddress.phone like '%$phone%'");
 		$url_string .= "&phone=".$phone;
+	}
+	if(isset($fax) && $fax != ""){
+		array_push($where_clauses, "leadaddress.fax like '%$fax%'");
+		$url_string .= "&fax=".$fax;
 	}
 	if(isset($email) && $email != ""){
 		array_push($where_clauses, "leaddetails.email like '$email%'");
@@ -242,6 +247,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		//if(isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
 		//if(isset($do_not_call)) $search_form->assign("DO_NOT_CALL", $do_not_call);
 		if(isset($phone)) $search_form->assign("PHONE", $phone);
+		if(isset($fax)) $search_form->assign("FAX", $fax);
 		if(isset($email)) $search_form->assign("EMAIL", $email);
 		if(isset($mobile)) $search_form->assign("MOBILE", $mobile);
 		if(isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
