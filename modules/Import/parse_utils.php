@@ -20,6 +20,7 @@
 
 function parse_import($file_name,$delimiter,$max_lines,$has_header)
 {
+	ini_set('auto_detect_line_endings',1);
 	$line_count = 0;
 
 	$field_count = 0;
