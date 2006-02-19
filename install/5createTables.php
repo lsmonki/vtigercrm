@@ -269,7 +269,7 @@ $focus = 0;
 // temporary
 require_once('config.php');
 
-$success = $db->createTables("adodb/DatabaseSchema.xml");
+$success = $db->createTables("schema/DatabaseSchema.xml");
 
 // TODO HTML
 if($success==0)
