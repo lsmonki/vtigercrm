@@ -92,7 +92,7 @@ class Lead extends CRMEntity {
 	//construct this from database;	
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('lastname','email','phone');		  
+        var $sortby_fields = Array('lastname','email','phone','fax','company','leadstatus','modifiedtime','createdtime');
        
 	var $combofieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'salutation'=>'salutation_dom'
