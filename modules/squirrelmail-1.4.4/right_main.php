@@ -51,7 +51,7 @@ echo '<br>';
 			if(stristr($label,"EMAILS"))
 			{
 
-				echo '<td class="tabOff" nowrap><a href="index.php?module=Emails&action=ListView&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+				echo '<td class="tabOff" nowrap><a href="index.php?module=Emails&action=ListView" class="tabLink">'.$mod_strings[$label].'</a></td>';
 
 				$listView = $filename;
 				$classname = "tabOff";
