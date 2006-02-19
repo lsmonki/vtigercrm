@@ -1,6 +1,7 @@
 <?php
+
 /**
-  V4.55 3 Jan 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.71 24 Jan 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -60,6 +61,7 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 	$tokens[$stmtno] = array();
 	$max = strlen($args);
 	$quoted = false;
+	$tokarr = array();
 	
 	while ($pos < $max) {
 		$ch = substr($args,$pos,1);
@@ -170,6 +172,7 @@ class ADODB_DataDict {
 	var $dropCol = ' DROP COLUMN';
 	var $renameColumn = 'ALTER TABLE %s RENAME COLUMN %s TO %s';	// table, old-column, new-column, column-definitions (not used by default)
 	var $nameRegex = '\w';
+	var $nameRegexBrackets = 'a-zA-Z0-9_\(\)';
 	var $schema = false;
 	var $serverInfo = array();
 	var $autoIncrement = false;
@@ -188,25 +191,25 @@ class ADODB_DataDict {
 		return false;
 	}
 	
-	function &MetaTables()
+	function MetaTables()
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaTables();
 	}
 	
-	function &MetaColumns($tab, $upper=true, $schema=false)
+	function MetaColumns($tab, $upper=true, $schema=false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaColumns($this->TableName($tab), $upper, $schema);
 	}
 	
-	function &MetaPrimaryKeys($tab,$owner=false,$intkey=false)
+	function MetaPrimaryKeys($tab,$owner=false,$intkey=false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaPrimaryKeys($this->TableName($tab), $owner, $intkey);
 	}
 	
-	function &MetaIndexes($table, $primary = false, $owner = false)
+	function MetaIndexes($table, $primary = false, $owner = false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaIndexes($this->TableName($table), $primary, $owner);
@@ -217,7 +220,7 @@ class ADODB_DataDict {
 		return ADORecordSet::MetaType($t,$len,$fieldobj);
 	}
 	
-	function NameQuote($name = NULL)
+	function NameQuote($name = NULL,$allowBrackets=false)
 	{
 		if (!is_string($name)) {
 			return FALSE;
@@ -237,7 +240,9 @@ class ADODB_DataDict {
 		}
 		
 		// if name contains special characters, quote it
-		if ( !preg_match('/^[' . $this->nameRegex . ']+$/', $name) ) {
+		$regex = ($allowBrackets) ? $this->nameRegexBrackets : $this->nameRegex;
+		
+		if ( !preg_match('/^[' . $regex . ']+$/', $name) ) {
 			return $quote . $name . $quote;
 		}
 		
@@ -251,27 +256,6 @@ class ADODB_DataDict {
 		}
 		return $this->NameQuote($name);
 	}
-
-	// temporary for debuging vtiger - GS
-
-	function println($msg)
-        {
-                require_once('include/logging.php');
-                $log1 =& LoggerManager::getLogger('VT');
-                if(is_array($msg))
-                {
-                        $log1->fatal("Install ->".print_r($msg,true));
-                }
-                else
-                {
-                        $log1->fatal("Install ->".$msg);
-                }
-                return $msg;
-        }
-
-
-//----------------
-
 	
 	// Executes the sql array returned by GetTableSQL and GetIndexSQL
 	function ExecuteSQLArray($sql, $continueOnError = true)
@@ -282,18 +266,10 @@ class ADODB_DataDict {
 		foreach($sql as $line) {
 			
 			if ($this->debug) $conn->debug = true;
-			$this->println($line);
 			$ok = $conn->Execute($line);
 			$conn->debug = $saved;
 			if (!$ok) {
-				$this->println("Table Creation Error: Query Failed");
-				$this->println(" ");
-				if ($this->debug)
-				{
-
-					$this->println("InstallError: ".$conn->ErrorMsg());
-					ADOConnection::outp($conn->ErrorMsg());
-				}
+				if ($this->debug) ADOConnection::outp($conn->ErrorMsg());
 				if (!$continueOnError) return 0;
 				$rez = 1;
 			}
@@ -347,7 +323,8 @@ class ADODB_DataDict {
 		}
 		
 		foreach($flds as $key => $fld) {
-			$flds[$key] = $this->NameQuote($fld);
+			# some indexes can use partial fields, eg. index first 32 chars of "name" with NAME(32)
+			$flds[$key] = $this->NameQuote($fld,$allowBrackets=true);
 		}
 		
 		return $this->_IndexSQL($this->NameQuote($idxname), $this->TableName($tabname), $flds, $this->_Options($idxoptions));
@@ -593,7 +570,7 @@ class ADODB_DataDict {
 				} else {
 					$fdefault = $this->connection->sysDate;
 				}
-			} else if (strlen($fdefault) && !$fnoquote)
+			} else if ($fdefault !== false && !$fnoquote)
 				if ($ty == 'C' or $ty == 'X' or 
 					( substr($fdefault,0,1) != "'" && !is_numeric($fdefault)))
 					if (strlen($fdefault) != 1 && substr($fdefault,0,1) == ' ' && substr($fdefault,strlen($fdefault)-1) == ' ') 
@@ -732,21 +709,24 @@ class ADODB_DataDict {
 	This function changes/adds new fields to your table. You don't
 	have to know if the col is new or not. It will check on its own.
 	*/
-	function ChangeTableSQL($tablename, $flds, $tableoptions = false, $forceAlter = false) // GS Fix for constraint impl - forceAlter
+	function ChangeTableSQL($tablename, $flds, $tableoptions = false)
 	{
 	global $ADODB_FETCH_MODE;
-		
+	
 		$save = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 		if ($this->connection->fetchMode !== false) $savem = $this->connection->SetFetchMode(false);
 		
 		// check table exists
-		$cols = &$this->MetaColumns($tablename);
+		$save_handler = $this->connection->raiseErrorFn;
+		$this->connection->raiseErrorFn = '';
+		$cols = $this->MetaColumns($tablename);
+		$this->connection->raiseErrorFn = $save_handler;
 		
 		if (isset($savem)) $this->connection->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
 		
-		if ( $forceAlter == false && empty($cols)) { // GS Fix for constraint impl
+		if ( empty($cols)) { 
 			return $this->CreateTableSQL($tablename, $flds, $tableoptions);
 		}
 		
@@ -758,9 +738,14 @@ class ADODB_DataDict {
 			$holdflds = array();
 			foreach($flds as $k=>$v) {
 				if ( isset($cols[$k]) && is_object($cols[$k]) ) {
+					// If already not allowing nulls, then don't change
+					$obj = $cols[$k];
+					if (isset($obj->not_null) && $obj->not_null)
+						$v = str_replace('NOT NULL','',$v);
+
 					$c = $cols[$k];
 					$ml = $c->max_length;
-					$mt = &$this->MetaType($c->type,$ml);
+					$mt = $this->MetaType($c->type,$ml);
 					if ($ml == -1) $ml = '';
 					if ($mt == 'X') $ml = $v['SIZE'];
 					if (($mt != $v['TYPE']) ||  $ml != $v['SIZE']) {
@@ -776,10 +761,8 @@ class ADODB_DataDict {
 
 		// already exists, alter table instead
 		list($lines,$pkey) = $this->_GenFields($flds);
-		//$alter = 'ALTER TABLE ' . $this->TableName($tablename);
-		$alter = 'ALTER TABLE ' . $this->TableName($tablename);		
+		$alter = 'ALTER TABLE ' . $this->TableName($tablename);
 		$sql = array();
-		
 
 		foreach ( $lines as $id => $v ) {
 			if ( isset($cols[$id]) && is_object($cols[$id]) ) {
@@ -794,34 +777,8 @@ class ADODB_DataDict {
 				$sql[] = $alter . $this->addCol . ' ' . $v;
 			}
 		}
-
-		// GS Fix for constraint impl -- start
-		if($forceAlter == false) return $sql;
-		$sqlarray = array();
-
-		$alter .= implode(",\n", $sql);
-		if (sizeof($pkey)>0) {
-			$alter .= ",\n PRIMARY KEY (";
-			$alter .= implode(", ",$pkey).")";
-		}
 		
-		if (isset($tableoptions['CONSTRAINTS'])) 
-			$alter .= "\n".$tableoptions['CONSTRAINTS'];
-
-		if (isset($tableoptions[$this->upperName.'_CONSTRAINTS'])) 
-			$alter .= "\n".$tableoptions[$this->upperName.'_CONSTRAINTS'];
-
-		if (isset($tableoptions[$this->upperName])) $alter .= $tableoptions[$this->upperName];
-			$sqlarray[] = $alter;
-
-		
-		$taboptions = $this->_Options($tableoptions);
-		$tsql = $this->_Triggers($this->TableName($tablename),$taboptions);
-		foreach($tsql as $s) $sqlarray[] = $s;
-
-		// GS Fix for constraint impl -- end
-		
-		return $sqlarray;
+		return $sql;
 	}
 } // class
 ?>
