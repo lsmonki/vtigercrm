@@ -39,11 +39,40 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $today = date("Y-m-d", time());
+#Keep this to a minimum of 3 days to show monday's activities when today is friday
 $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
 //change made as requested by community by shaw
- $list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' ) AND (((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND salesmanactivityrel.smid ='{$current_user->id}'";
+ $list_query = "SELECT 
+		 crmentity.crmid,
+		 crmentity.smownerid,
+		 crmentity.setype, 
+		 activity.*, 
+		 contactdetails.lastname, 
+		 contactdetails.firstname, 
+		 contactdetails.contactid, 
+		 account.accountid, 
+		 account.accountname, 
+		 recurringevents.recurringtype,
+		 recurringevents.recurringdate, 
+		 GREATEST(recurringevents.recurringdate,activity.date_start) as sort_date
+		 FROM activity 
+		 INNER JOIN crmentity ON crmentity.crmid = activity.activityid 
+		 LEFT JOIN cntactivityrel ON cntactivityrel.activityid = activity.activityid 
+		 LEFT JOIN contactdetails ON contactdetails.contactid = cntactivityrel.contactid 
+		 LEFT JOIN seactivityrel ON seactivityrel.activityid = activity.activityid 
+		 LEFT OUTER JOIN account ON account.accountid = contactdetails.accountid 
+		 LEFT OUTER JOIN recurringevents ON recurringevents.activityid = activity.activityid 
+		 INNER JOIN salesmanactivityrel ON salesmanactivityrel.activityid = activity.activityid 
+		 WHERE crmentity.deleted=0 
+		 AND ( activity.status is NULL || activity.status != 'Completed' ) 
+		 AND ( activity.eventstatus is NULL ||  activity.eventstatus != 'Held') 
+		 AND ( activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' )
+		 AND ( date_start <= '$later' OR recurringevents.recurringdate <= '$later' )
+		 AND salesmanactivityrel.smid ='{$current_user->id}'
+		 HAVING sort_date <= '$later'
+		 ORDER BY sort_date, activity.time_start";
 
 //$list_query = getListQuery("Activities",$where);
 //echo $list_query."<h3>END</h3>";
@@ -64,7 +93,8 @@ for($i=0;$i<$noofrows;$i++)
  				     'accountname' => $adb->query_result($list_result,$i,'accountname'),
 				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
-                                     'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
+				     'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
+				     'time_start' => $adb->query_result($list_result,$i,'time_start'),
 				     'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
 				     'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
 				     'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
@@ -78,7 +108,7 @@ $xtpl->assign("MOD", $current_module_strings);
 $xtpl->assign("APP", $app_strings);
 
 // Stick the form header out there.
-$later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
+$later_day = getDisplayDate(date("Y-m-d", strtotime($later)));
 //echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
 
 $xtpl->assign("ENDDATE", $later_day);
@@ -113,6 +143,7 @@ foreach($open_activity_list as $event)
 	);
 	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
 	$start_date=$event['date_start'];
+	$time_start=$event['time_start'];
 
 	switch ($event['type']) {
 		case 'Call':
@@ -148,10 +179,12 @@ foreach($open_activity_list as $event)
 	{
 		$end=explode("-",$end_date);
 	}
+	$end_time=explode(":",$time_start);
 	
-	$current_date=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
+	$current_date=date("Y-m-d-H-i",mktime(date("H"),date("i"),0,date("m"),date("d"),date("Y")));
 	$curr=explode("-",$current_date);
-	$date_diff= mktime(0,0,0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]")) - mktime(0,0,0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
+	$date_diff= mktime(date("$curr[3]"),date("$curr[4]"),0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]"))
+		- mktime(date("$end_time[0]"),date("$end_time[1]"),0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
 	
 	if($date_diff>0)
 	{
