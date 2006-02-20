@@ -18,8 +18,7 @@
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
 
-
-//file modified by shankar
+// file modified by shankar
 
 require("modules/Emails/class.phpmailer.php");
 require("include/database/PearDatabase.php");
@@ -31,7 +30,7 @@ global $adb;
 require_once('vtigerlogger.php');
 $vtlog = new vtigerLogger();
 
-$vtlog->logthis(" invoked SendReminder ",'debug');
+$vtlog->logthis(" invoked sendreminder ",'debug');
 
 //modified query for recurring events -Jag
  	$query="select crmentity.crmid,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid ;";
@@ -129,17 +128,16 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 {
 	global $adb;
 	global $vtlog;
-	$vtlog->logthis("This is send_mail function in SendReminder.php(vtiger home).","info");
+	$vtlog->logthis("This is send_mail function in sendreminder.php(vtiger home).","info");
 	global $root_directory;
 
 	$mail = new PHPMailer();
 
-
 	$mail->Subject = $subject;
-	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
+	$mail->Body = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
 
-
-	$mail->IsSMTP();                                      // set mailer to use SMTP
+	// set mailer to use SMTP
+	$mail->IsSMTP();
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
 	if($mail_server=='')

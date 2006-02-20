@@ -1,3 +1,3 @@
 @echo off
 cd ..\..\
-..\..\..\php\php.exe SendReminder.php
+..\..\..\php\php.exe sendreminder.php

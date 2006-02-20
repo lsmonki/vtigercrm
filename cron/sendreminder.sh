@@ -1,1 +1,1 @@
-wget http://localhost:APACHEPORT/SendReminder.php -O intimatelog.txt
+wget http://localhost:APACHEPORT/sendreminder.php -O intimatelog.txt
