@@ -28,8 +28,8 @@ require("config.php");
 // Get the list of activity for which reminder needs to be sent
 
 global $adb;
-require_once('vtiger_logger.php');
-$vtlog = new vtiger_logger();
+require_once('vtigerlogger.php');
+$vtlog = new vtigerLogger();
 
 $vtlog->logthis(" invoked SendReminder ",'debug');
 

@@ -19,6 +19,7 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -31,8 +32,8 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 
-require_once('vtiger_logger.php');
-$vtlog = new vtiger_logger();
+require_once('vtigerlogger.php');
+$vtlog = new vtigerLogger();
 
 // Contact is used to store customer information.
 class Contact extends CRMEntity {

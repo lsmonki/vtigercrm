@@ -16,10 +16,10 @@
 require_once('include/logging.php');
 include('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
-	
-		require_once('vtiger_logger.php');
-		global $vtlog;
-		$vtlog = new vtiger_logger();
+
+require_once('vtigerlogger.php');
+global $vtlog;
+$vtlog = new vtigerLogger();
 
 class PearDatabase{
 	var $database = null;

@@ -9,33 +9,27 @@
 *
  ********************************************************************************/
 
-
-class vtiger_logger{
-
+class vtigerLogger {
 	var $debug_status; 
 
-	function logthis($msg,$loglevel)
-        {
-		if($this->debug_status)
-		{
+	function logthis($msg,$loglevel) {
+		if($this->debug_status)	{
                 	require_once('include/logging.php');
+
                 	$log1 =& LoggerManager::getLogger('VT');
+
                 	if(is_array($msg))
-                	{
                         	$log1->$loglevel("Message".print_r($msg,true));
-                	}
                 	else
-                	{
                         	$log1->$loglevel("Message ->".$msg);
-                	}
+
                 	return $msg;
 		}
         }
-	function vtiger_logger()
-	{
+	
+	function vtiger_logger() {
 		$this->debug_status= true;
 	}
-
 }
 
 ?>
