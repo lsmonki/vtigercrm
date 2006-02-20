@@ -22,6 +22,7 @@
 <a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
 <a href="#" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
 <a href="#" class="lftSubMnu">{$MOD.LBL_FIELD_ACCESSIBILITY}</a>
+<a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
 </div></div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just1();">
@@ -110,7 +111,9 @@
 <a href="#" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
 
 <td><a href="#"><img src="{$IMAGE_PATH}shar.jpg" alt="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" title="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" border="0" /></a><br>
-<a href="#" alt="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" title="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}">{$MOD.LBL_FIELD_ACCESSIBILITY}</a></td>
+<a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" title="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}">{$MOD.LBL_FIELD_ACCESSIBILITY}</a></td>
+<td><a href=""><img src="{$IMAGE_PATH}groupss.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
+<a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}">{$MOD.LBL_ANNOUNCEMENT}</a></td>
 <td>&nbsp;</td>
 
 </tr>
@@ -230,13 +233,13 @@
 </tr>
 </table>
 <script>
-ScrollEffect.limit = 171;
-ScrollEffect.closelimit= 170;
+ScrollEffect.limit = 191;
+ScrollEffect.closelimit= 190;
 ScrollEffect1.limit1 = 81;
 ScrollEffect1.closelimit1= 80;
 ScrollEffect2.limit2 = 121;
 ScrollEffect2.closelimit2= 120;
-ScrollEffect3.limit3 = 151;
-ScrollEffect3.closelimit3= 150;
+ScrollEffect3.limit3 = 161;
+ScrollEffect3.closelimit3= 160;
 
 </script>

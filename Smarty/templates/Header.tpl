@@ -18,7 +18,9 @@
 		<td width=100% align=center>
 		<table border=0 cellspacing=0 cellpadding=2 width=90% class="rssDisplay">
 		 <tr>
-		 <td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>
+		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="s
+		 croll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();"></td>
+		 {*<td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>*}
 		 </tr>
 		</table>
 		</td>
@@ -100,4 +102,19 @@
 		</table>
 	</td>
 </tr>
-</TABLE>			
+</TABLE>		
+<script>
+function Announcement_rss()
+{ldelim}
+	var ajaxObj = new Ajax(ajaxResponse);
+	var urlstring = "module=Users&action=UsersAjax&announce_rss=yes";
+		ajaxObj.process("index.php?",urlstring);
+
+{rdelim}
+function ajaxResponse(response)
+{ldelim}
+	if(document.getElementById("rss").innerHTML != response.responseText)
+		document.getElementById("rss").innerHTML=response.responseText;
+{rdelim}
+setInterval("Announcement_rss()",1000)
+</script>
