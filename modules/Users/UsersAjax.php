@@ -30,7 +30,7 @@ if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 			$query="update announcement set announcement='".$announcement."',time='".$adb->formatString("announcement","time",$date_var)."',title='".$title."' where creatorid=".$current_user->id;
 	}
 	else
-		$query="insert into announcement values ('".$announcement."',".$current_user->id.",'".$date_var."','".$title."')";
+		$query="insert into announcement values (".$current_user->id.",'".$announcement."','".$title."','".$date_var."')";
 	$result=$adb->query($query);	
 	echo $announcement; 
 }
