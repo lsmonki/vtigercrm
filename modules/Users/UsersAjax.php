@@ -13,9 +13,10 @@ global $current_user;
 global $adb;
 if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 {
+	$announcement='';
 	$sql="select * from announcement order by time";
 	$result=$adb->query($sql);
-	$announcement=$adb->query_result($result,$adb->num_rows($result)-1,'announcement');
+		$announcement.=getUserName($adb->query_result($result,$i,'creatorid')).' :  '.$adb->query_result($result,$i,'announcement').'   ';
 	echo $announcement; 
 		
 }elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
