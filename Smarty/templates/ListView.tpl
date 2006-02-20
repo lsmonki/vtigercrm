@@ -167,41 +167,7 @@ rBox">
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
 
                                         <tr>
-                                                <td align=center class="searchAlph"><a href="#">A</a></td>
-                                                <td align=center class="searchAlph"><a href="#">B</a></td>
-                                                <td align=center class="searchAlph"><a href="#">C</a></td>
-                                                <td align=center class="searchAlph"><a href="#">D</a></td>
-                                                <td align=center class="searchAlph"><a href="#">E</a></td>
-
-
-                                                <td align=center class="searchAlph"><a href="#">F</a></td>
-                                                <td align=center class="searchAlph"><a href="#">G</a></td>
-                                                <td align=center class="searchAlph"><a href="#">H</a></td>
-                                                <td align=center class="searchAlph"><a href="#">I</a></td>
-                                                <td align=center class="searchAlph"><a href="#">J</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">K</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">L</a></td>
-                                                <td align=center class="searchAlph"><a href="#">M</a></td>
-                                                <td align=center class="searchAlph"><a href="#">N</a></td>
-                                                <td align=center class="searchAlph"><a href="#">O</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">P</a></td>
-						<td align=center class="searchAlph"><a href="#">Q</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">R</a></td>
-                                                <td align=center class="searchAlph"><a href="#">S</a></td>
-                                                <td align=center class="searchAlph"><a href="#">T</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">U</a></td>
-                                                <td align=center class="searchAlph"><a href="#">V</a></td>
-                                                <td align=center class="searchAlph"><a href="#">W</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">X</a></td>
-                                                <td align=center class="searchAlph"><a href="#">Y</a></td>
-
-                                                <td align=center class="searchAlph"><a href="#">Z</a></td>
+						{$ALPHABETICAL}
                                         </tr>
                                         </table>
 
