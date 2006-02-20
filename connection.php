@@ -8,6 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+
 $mysql_dir = 'MYSQLINSTALLDIR';
 $mysql_username = 'MYSQLUSERNAME';
 $mysql_password = 'MYSQLPASSWORD';
@@ -18,4 +19,5 @@ $apache_bin = 'APACHEBIN';
 $apache_conf = 'APACHECONF';
 $apache_port = 'APACHEPORT';
 $apache_bundled = 'APACHEBUNDLED';
+
 ?>
