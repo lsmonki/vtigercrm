@@ -1,27 +1,7 @@
 vtigerCRM v4.2.3 (Dec 23, 2005)
 -------------------------------
 
-We are pleased to announce the vtigerCRM 4.2.3 release.
-This release was consolidated with earlier patches and multiple vulnerablity fixes.
-
-Note: first time vtigerCRM users can directly install the source in their vtiger supported version of LAMP / WAMP. 
-
-IMPORTANT NOTICE
-----------------
-
-The vtigerCRM 4.2.3 is ONLY for fresh installations.
-Users using previous release are recommended to upgrade
-their existing system by applying v4.2 patch 2 and vulnerability fixes.
-You can download the patches from the following urls :
- * http://forums.vtiger.com/viewtopic.php?t=2903
- * http://forums.vtiger.com/viewtopic.php?t=4166
-
-software requirements
----------------------
-PHP 4.x, MySQL 4.x, Apache 1.x or 2.x
-
-For more details please refer:
-http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4.2.3_-_Installation_Guide
+NOTE: first time vtigerCRM users can directly install the source in their vtiger supported version of LAMP / WAMP. 
 
 vulnerability fixes
 -------------------
@@ -43,9 +23,6 @@ d) Arbitrary code execution
 
 vtigerCRM v4.2 Patch 2 (Sep 15, 2005)
 -------------------------------------
-
-We are pleased to announce the consolidated patch for vtigerCRM v4.2.
-This release includes many code contributions from vtiger community and bug fixes.
 
 code contributions by vtiger community
 --------------------------------------
@@ -222,9 +199,6 @@ bug fixes
 
 vtigerCRM v4.2 GA (July 18, 2005)
 ---------------------------------
-
-We are pleased to announce the latest version of vtigerCRM.
-This release includes many new features and few bug fixes.
 
 new features
 ------------
@@ -408,13 +382,6 @@ http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4_2_Release_Notes
 vtigerCRM v4.2 Alpha (May 31, 2005)
 -----------------------------------
 
-We are pleased to announce the latest version of vtigerCRM.
-This release includes many new features and few bug fixes.
-
-NOTE: vtigerCRM v4.2 Alpha is only for testing and can not be used for production purpose.
-Please post Bugs at the following URL:
-vtiger Discussions: http://www.vtiger.com/discussions/viewforum.php?f=12
-
 new features
 ------------
 
@@ -433,9 +400,6 @@ new features
 
 vtigerCRM v4.0.1 (April 29, 2005)
 ---------------------------------
-
-We are pleased to announce the latest version of vtigerCRM.
-This release includes some new features and numerous bug fixes.
 
 new features
 ------------
@@ -504,9 +468,6 @@ Manufacturer & category -- Moved from Advanced to Basic.
 
 vtigerCRM v4.0 (March 29, 2005)
 --------------------------------
-
-We are pleased to announce the latest version of vtigerCRM.
-This release includes several new features and numerous bug fixes.
 
 new features
 ------------
@@ -724,8 +685,6 @@ known issues
 vtigerCRM v4.0 Beta (January 10, 2005)
 -------------------------------------
 
-We are pleased to announce the latest version of vtigerCRM.
-
 new features
 ------------
 
@@ -768,8 +727,6 @@ We have fixed the following issues reported in Sourceforge.net:
 vtigerCRM v3.2.1 (December 21, 2004)
 ------------------------------------
 
-We are pleased to announce the latest version of vtigerCRM.
-
 new features
 ------------
 
@@ -791,8 +748,6 @@ h) vtiger Outlook Plug-in in server side fixes related to performance improvemen
 vtigerCRM v3.2 (December 13, 2004)
 ----------------------------------
 
-We are pleased to announce the latest version of vtigerCRM.
-
 new features
 ------------
 
@@ -803,8 +758,6 @@ c) Migration from 3.0 to 3.2
 
 vtigerCRM v3.0 (November 8, 2004)
 ------------------------------
-
-We are pleased to announce the latest version of vtigerCRM.
 
 new features
 ------------
@@ -817,8 +770,6 @@ c) Integrated Message Boards with vtigerCRM, which can be used to share customer
 vtigerCRM v3.0 Beta (October 7, 2004)
 -------------------------------------
 
-We are pleased to announce the latest version of vtigerCRM.
-
 new features
 ------------
 
@@ -827,8 +778,6 @@ It is an open source project covered under vtiger Public License 1.0 based on Mo
 
 vtigerCRM v2.0 (September 6, 2004)
 ----------------------------------
-
-We are pleased to announce the latest version of vtigerCRM.
 
 new features
 ------------
@@ -861,27 +810,6 @@ Send your feedback, which is vital for our understanding your needs.
 
 vtigerCRM v1.0 (August 26, 2004)
 --------------------------------
-
-After several months of working on our CRM solution, based on Apache, MySQL and other open source components,
-we came across a SourceForge open source project initiated by SugarCRM, having the same vision, and doing something very similar to what we were doing.
-They started out with the same promise we did, namely that CRM software is needlessly expensive, and hosted offerings only pretend to be affordable.
-While we were getting ready with our offering, the open source project had already launched it;
-the underlying infrastructure of Apache and MySQL was similar to what we were doing, and most importantly, the SugarCRM Public License
-allowed us to create distributions based on this code (SPL - a copy of Version 1.1.2 is found here,
-and the URL is at http://www.sugarcrm.com/home/content/view/35/86/)
-we decided it would be even faster to adopt that as our core and add value on top, an example of open source based collaboration.
-
-We gratefully acknowledge the contribution made by SugarCRM, and we intend to actively participate and lead in bringing
-this vision of affordable enterprise applications, but we make it clear that vtiger is not affiliated with nor is endorsed by SugarCRM.
-
-The team at vtigerCRM is pleased to announce v1.0, the first release of vtigerCRM Open Source project.
-
-This first release of vtiger.Sales is best suited for small sales forces. If you're looking to manage the basics of sales deals where every user can see
-all of the data in the system, then vtiger.Sales v1.0 is right for you.  Over the next few months, we will be building out vtiger.Sales to meet the needs
-of larger, multi-national sales forces that need features like forecasting, data access permissions and internationalization.
-
-Please feel free to send your valuable comments to contact@vtiger.com so that we can have a better CRM product at free of cost.
-Check out our website at http://www.vtiger.com for support forums, detailed product information, our future plan and much more.
 
 features
 --------
