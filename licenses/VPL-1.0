@@ -1,5 +1,5 @@
-vtiger CRM Public Licensing 1.0
----------------------------
+vtiger Public License Version 1.0
+---------------------------------
 
 Copyright (c) 2003-2004 vtiger.com All rights reserved.
 
@@ -175,26 +175,6 @@ PLEASE READ THE FOLLOWING LICENSE AGREEMENT CAREFULLY. ANY USE OF SOFTWARE DOWNL
 
       Initial Developer may designate portions of the Covered Code as “Multiple-Licensed”.  “Multiple-Licensed” means that the Initial Developer permits you to utilize portions of the Covered Code under Your choice of the SPL or the alternative licenses, if any, specified by the Initial Developer in the file described in Exhibit A.This software is Copyright vtiger  and Contributors. All rights reserved. This license has been certified as open source.
 
-vtiger CRM Public License 1.0 - Exhibit A
-
-
-
-vtiger CRM is based on the following open source components. The licenses for these components are given below. 
-
-1. Apache web server software, under the Apache License available at <vtiger CRM Home>/vtigerCRM/apache/LICENSE.txt
-2. MySQL database software, used under the GPL License available at <vtiger CRM Home>/vtigerCRM/mysql/README.txt 
-3. PHP software, under the PHP License, version 3.0 available at <vtiger CRM Home>/vtigerCRM/php/license.txt  
-4. SugarCRM software used under the SugarCRM Public License SPL 1.1.2 available at <vtiger CRM Home>/vtigerCRM/LICENSE_windows.txt
-5. gdwin32 software used under the GPL available at gdwin32 <vtiger CRM Home>/vtigerCRM/gdwin32/gd-license.txt
-6. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
-7. GNU LGPL License for usage of nusoap downloaded from http://sourceforge.net/projects/nusoap
-8. GNU GPL License for usage of phpBB software downloaded from http://www.phpbb.com/support/license.php available at <vtiger CRM Home>/vtigerCRM/modules/MessageBoard/phpBB_LICENSE_AGREEMENT.txt 
-9. PHPMailer software used under the LGPL available at <vtiger CRM Home>/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt
-6. GNU LGPL License for usage of nusoap downloaded from http://sourceforge.net/projects/nusoap
-7. GNU GPL License for usage of phpBB software downloaded from http://www.phpbb.com/support/license.php available at <vtiger CRM Home>/vtigerCRM/modules/MessageBoard/phpBB_LICENSE_AGREEMENT.txt 
-8. GNU GPL License for usage of TUTOS software downloaded from http://www.tutos.org/html/copyright.html available at <vtiger CRM Home>/vtigerCRM/modules/Calendar/TUTOS_Copyright.pdf
-9. PHPMailer software used under the LGPL available at <vtiger CRM Home>/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt
-10. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
-11. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+vtiger Public License 1.0 - Exhibit A
  
 This software is a Larger Work under the SPL 1.1.2. vtiger's modifications to the SugarCRM code ('original code') are under Mozilla Public License (MPL). Additional components written by vtiger, not coming under the purview of the SPL are provided under MPL as well. 
