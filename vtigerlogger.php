@@ -27,7 +27,7 @@ class vtigerLogger {
 		}
         }
 	
-	function vtiger_logger() {
+	function vtigerLogger() {
 		$this->debug_status= true;
 	}
 }
