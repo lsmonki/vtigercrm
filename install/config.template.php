@@ -16,7 +16,7 @@
 $vtiger_version = '4.2.3';
 $release_date = '23 December 2005';
 
-// more than 8MB memory needed for graphs
+// more than 8MB memory needed for graphics
 // memory limit default value = 16M
 ini_set('memory_limit','16M');
 
