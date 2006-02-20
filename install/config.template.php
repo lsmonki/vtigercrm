@@ -34,10 +34,10 @@ $HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';
 $HELPDESK_SUPPORT_NAME = 'your-domain name';
 
 /* database configuration
-      db_host_name:MySQL Database Hostname
-      db_user_name:MySQL Username
-      db_password:MySQL Password
-      db_name:MySQL Database Name
+      db_host_name: MySQL Database Hostname
+      db_user_name: MySQL Username
+      db_password: MySQL Password
+      db_name: MySQL Database Name
 */
 $dbconfig['db_host_name'] = 'localhost:80';
 $dbconfig['db_user_name'] = 'root';
