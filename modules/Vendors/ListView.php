@@ -181,6 +181,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("CUSTOMVIEW",$customviewstrings);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendors","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','vendorname','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("BUTTONS", $other_text);

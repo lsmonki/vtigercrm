@@ -175,6 +175,8 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigation_array,'','&return_module=PriceBooks&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','bookname','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("CUSTOMVIEW",$customviewstrings);
 $smarty->assign("RECORD_COUNTS", $record_string);

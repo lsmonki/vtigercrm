@@ -63,7 +63,6 @@ $_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	$where=Search($currentModule);
-	
 	$url_string .="&query=true";
 
 	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
@@ -142,7 +141,6 @@ if(isset($where) && $where != '')
 {
 	$list_query .= ' and '.$where;
 }
-
 $view_script = "<script language='javascript'>
 			function set_selected()
 			{
@@ -245,6 +243,8 @@ $listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigatio
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','ticket_title','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 

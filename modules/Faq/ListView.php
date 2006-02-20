@@ -147,6 +147,8 @@ $listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_arr
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq");
+$alphabetical = AlphabeticalSearch($currentModule,'index','question','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("SINGLE_MOD" ,'Faq');

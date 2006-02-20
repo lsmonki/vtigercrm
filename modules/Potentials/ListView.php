@@ -240,6 +240,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','potentialname','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("SELECT_SCRIPT", $view_script);

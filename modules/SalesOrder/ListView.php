@@ -89,25 +89,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	}
 	//upto this added for Custom Field
 
-	if (isset($subject) && $subject !='')
-	{
-		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
-		$url_string .= "&subject=".$subject;
-	}
-	
-	if (isset($accountname) && $accountname !='')
-	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
-		$url_string .= "&accountname=".$accountname;
-	}
-
-	if (isset($quotename) && $quotename !='')
-	{
-		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
-		 $url_string .= "&quotename=".$quotename;
-	}
-	
-	$where = "";
 	foreach($where_clauses as $clause)
 	{
 		if($where != "")
@@ -245,6 +226,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"SalesOrder",'index',$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("CUSTOMVIEW", $customstrings);
