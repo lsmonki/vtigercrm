@@ -293,15 +293,15 @@ function verify_data(form) {
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="text" class="dataInput" name="db_user_name" readonly value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="password" class="dataInput" name="db_password" readonly value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
+               <td align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
 		<input type="hidden" name="dbtype" value="<?php
                 if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
