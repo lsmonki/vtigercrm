@@ -135,7 +135,7 @@ $config .= " * Contributor(s): ______________________________________.\n";
 $config .= "********************************************************************************/\n";
 $config .= "\n";
 $config .= "\$vtiger_version = '".$vtiger_version."';\n";
-$config .= "\$release_date = '".$release_date."';\n;
+$config .= "\$release_date = '".$release_date."';\n";
 $config .= "\n";
 $config .= "// more than 8MB memory needed for graphs\n";
 $config .= "// memory limit default value = 16M\n";
@@ -158,7 +158,7 @@ $config .= "/* database configuration\n";
 $config .= "      db_host_name:	MySQL Database Hostname\n";
 $config .= "      db_user_name: MySQL Username\n";
 $config .= "      db_password:	MySQL Password\n";
-$config .= "      db_name:	MySQL Database Name\n
+$config .= "      db_name:	MySQL Database Name\n";
 $config .= "*/\n";
 $config .= "\$dbconfig['db_host_name'] = '".$db_host_name."';\n";
 $config .= "\$dbconfig['db_user_name'] = '".$db_user_name."';\n";
