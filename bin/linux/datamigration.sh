@@ -11,9 +11,9 @@
 setVariables()
 {
 	wdir=`pwd`
-	echo 'copying the migrator_backup_connection file to the migrator_connection file'
-	cp -f ../apache/htdocs/vtigerCRM/migrator_backup_connection.php ../apache/htdocs/vtigerCRM/migrator_connection.php
-        chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
+	echo 'copying the migratorbackupconnection file to the migratorconnection file'
+	cp -f ../apache/htdocs/vtigerCRM/migratorbackupconnection.php ../apache/htdocs/vtigerCRM/migratorconnection.php
+        chmod 777 ../apache/htdocs/vtigerCRM/migratorconnection.php
 	export diffmac=0
 }
 
@@ -172,11 +172,11 @@ getvtiger4_0_1_data()
 	mysql_dir_4_0_1=`grep "mysql_dir=" ${src_file_4_0_1} | cut -d "=" -f2 | cut -d "'" -f2`
 	echo $mysql_dir_4_0_1
 
-	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLHOSTNAME ${mysql_host_name_4_0}
-        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLUSERNAME ${mysql_username}
-        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPASSWORD ${mysql_password}
-        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPORT ${mysql_port}
-        chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
+	finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLHOSTNAME ${mysql_host_name_4_0}
+        finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLUSERNAME ${mysql_username}
+        finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLPASSWORD ${mysql_password}
+        finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLPORT ${mysql_port}
+        chmod 777 ../apache/htdocs/vtigerCRM/migratorconnection.php
 }
 
 finAndReplace()
@@ -254,17 +254,17 @@ echo ''
 echo ''
 echo '###########################################################'
 echo '###########################################################'
-echo 'replacing the values in the migrator_connection.php file '
+echo 'replacing the values in the migratorconnection.php file '
 echo '###########################################################'
 echo '###########################################################'
 echo ''
 echo ''
 
-finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLHOSTNAME ${machine_name}
-finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLUSERNAME ${m_uname}
-finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPASSWORD ${m_passwd}
-finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPORT ${m_port}
-chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
+finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLHOSTNAME ${machine_name}
+finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLUSERNAME ${m_uname}
+finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLPASSWORD ${m_passwd}
+finAndReplace ../apache/htdocs/vtigerCRM/migratorconnection.php MYSQLPORT ${m_port}
+chmod 777 ../apache/htdocs/vtigerCRM/migratorconnection.php
 
 scrfile=./startvTiger.sh
 mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`

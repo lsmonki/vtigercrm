@@ -8,6 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+
 $mysql_host_name_old = 'MYSQLHOSTNAME';
 $mysql_username_old = 'MYSQLUSERNAME';
 $mysql_password_old = 'MYSQLPASSWORD';
@@ -18,4 +19,5 @@ $apache_bin_old = 'APACHEBIN';
 $apache_conf_old = 'APACHECONF';
 $apache_port_old = 'APACHEPORT';
 $apache_bundled_old = 'APACHEBUNDLED';
+
 ?>

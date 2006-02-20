@@ -67,15 +67,15 @@ echo
 echo
 call mysql_params.bat
 echo present directory is %cd%
-echo about to print the data into the migrator_connection.php file
+echo about to print the data into the migratorconnection.php file
 rem set /P hi=bye
 echo
-	echo ^<?php > ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_host_name_old = '%diffmac_hostname%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_username_old = '%diffmac_uname%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_password_old = '%diffmac_password%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_port_old = '%diffmac_port%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo ?^> >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo ^<?php > ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_host_name_old = '%diffmac_hostname%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_username_old = '%diffmac_uname%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_password_old = '%diffmac_password%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_port_old = '%diffmac_port%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo ?^> >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
 rem set /P hi=bye
 call :echodumpstatus4diffmac
 goto set4_2version
@@ -137,12 +137,12 @@ rem set /P hi=bye
 if %version% == "4.0.1" (
 	set /p mysql_host_name_4_0_1="Specify the host name of the vtiger CRM 4.0.1 mysql server:  "
 
-	echo ^<?php > ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_host_name_old = '%mysql_host_name_4_0_1%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_username_old = '%mysql_username%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_password_old = '%mysql_password%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo $mysql_port_old = '%mysql_port%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
-	echo ?^> >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo ^<?php > ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_host_name_old = '%mysql_host_name_4_0_1%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_username_old = '%mysql_username%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_password_old = '%mysql_password%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo $mysql_port_old = '%mysql_port%'; >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
+	echo ?^> >> ..\apache\htdocs\vtigerCRM\migratorconnection.php
 
 echo about to invoke isMySQLRunning
 goto isMySQLRunning
