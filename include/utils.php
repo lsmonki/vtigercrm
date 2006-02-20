@@ -891,6 +891,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         //$value = htmlentities($col_fields[$fieldname]);
         $value = $col_fields[$fieldname];
 	$custfld = '';
+	$fieldlabel = from_html($fieldlabel);
 
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
