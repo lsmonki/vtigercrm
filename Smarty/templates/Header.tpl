@@ -18,7 +18,7 @@
 		<td width=100% align=center>
 		<table border=0 cellspacing=0 cellpadding=2 width=90% class="rssDisplay">
 		 <tr>
-		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">RSS is not configured. <a href="#">Click here</a> to configure</marquee></td>
+		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">                                                 .</marquee></td>
 		 {*<td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>*}
 		 </tr>
 		</table>
