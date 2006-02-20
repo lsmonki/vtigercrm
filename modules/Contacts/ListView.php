@@ -270,7 +270,9 @@ $smarty->assign("SELECT_SCRIPT", $view_script);
 
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("SINGLE_MOD", 'Contact');
