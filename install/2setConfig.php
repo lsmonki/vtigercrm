@@ -147,7 +147,7 @@ else {
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.x Installer: Step 2</title>
+<title>vtigerCRM 4.x Installer: Step 2</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -249,9 +249,9 @@ function verify_data(form) {
 
 <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
-      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtigerCRM"><IMG alt="vtigerCRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
       <td align="right"><h2>Step 2 of 5</h2></td>
-      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+      <td align="right"><IMG alt="vtigerCRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
     </tr>
 </tbody></table>
 
@@ -362,7 +362,7 @@ function verify_data(form) {
         <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
           </tr>
 	<tr>
-	<td colspan="2"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>
+	<td colspan="2"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtigerCRM </font></td>
 
         </tr>
 		</table>

@@ -48,15 +48,15 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.x Installer: Step 1</title>
+<title>vtigerCRM 4.x Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
-      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtigerCRM"><IMG alt="vtigerCRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
       <td align="right"><h2>Step 1 of 5</h2></td>
-      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+      <td align="right"><IMG alt="vtigerCRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
     </tr>
 </tbody></table>
 <table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
@@ -74,16 +74,16 @@ foreach($pieces as $val)
 		</tbody></table>
 	  </td>
     </tr>
-	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 4.x database tables and sets the configuration variables that you need to start.
+	<tr><td><h4>Welcome to the vtigerCRM installation</h4><P>
+  			This installer creates the vtigerCRM 4.x database tables and sets the configuration variables that you need to start.
 			The entire process should take few minutes.
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 4.x is tested on Mysql 4.x, PHP 4.x and Apache 2.x. Support for PHP 5.x will be provided in future releases </b> </font>
+ <font color=red> <b>Kindly note vtigerCRM 4.x is tested on Mysql 4.x, PHP 4.x and Apache 2.x. Support for PHP 5.x will be provided in future releases </b> </font>
 
 			
-			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
+			<P>For installation help, please visit the vtigerCRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
 	</tr>
 
 	<tr>
@@ -91,8 +91,8 @@ foreach($pieces as $val)
 		<td><hr></td>
 	</tr>
 	<tr>
-		<td valign='top'><h4>vtiger CRM Registration</h4><br>
-Please take a moment and register with vtiger CRM. Your name and email address are the only required fields for registration. All other fields are optional, but very helpful. We do not sell, rent, share, or otherwise distribute the information collected here to third parties.
+		<td valign='top'><h4>vtigerCRM Registration</h4><br>
+Please take a moment and register with vtigerCRM. Your name and email address are the only required fields for registration. All other fields are optional, but very helpful. We do not sell, rent, share, or otherwise distribute the information collected here to third parties.
 <P>
 Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigercrm.com</a> for information on additional functionality, support requests…
 </td></tr>

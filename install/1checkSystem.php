@@ -128,15 +128,15 @@ $gd_info_alternate = 'function gd_info() {
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.x Installer: Step 1</title>
+<title>vtigerCRM 4.x Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0" class="">
 <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
-      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtigerCRM"><IMG alt="vtigerCRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
       <td align="right"><h2>Step 1 of 5</h2></td>
-      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+      <td align="right"><IMG alt="vtigerCRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
     </tr>
 </tbody></table>
 <table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
@@ -205,7 +205,7 @@ $gd_info_alternate = 'function gd_info() {
 
 			<td align="right"><?php
 								if (!extension_loaded('gd')) {
-									echo "<strong><font size=-1 color=\"#FF0000\">GD Library not configured in your PHP installation.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font></strong>";
+									echo "<strong><font size=-1 color=\"#FF0000\">GD Library not configured in your PHP installation.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtigerCRM installation, however the chart images simply won't work.</font></strong>";
 								}
 								else {
 									if (!function_exists('gd_info'))
@@ -227,7 +227,7 @@ $gd_info_alternate = 'function gd_info() {
 										}
 									}
 									else {
-										echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation.<br>You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font></strong>";
+										echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation.<br>You can ignore this error and continue your vtigerCRM installation, however the chart images simply won't work.</font></strong>";
 									}
 								}
 								?>
