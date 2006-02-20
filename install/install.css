@@ -16,88 +16,88 @@
  * Description:  Defines the stylesheet used for the application installation.
  ********************************************************************************/
 
-body{ 
+body { 
 	font-size: 10pt;
 	background-color:#CCC;
 	color:#000000;
 	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 
-form,h1,h2,h3,h4{
+form,h1,h2,h3,h4 {
 	margin:0;
 	padding:0;
 }
 
-hr{
+hr {
 	border: 1px solid #CCCCCC;
 	height:1px;
 	background: #CCCCCC;
 	color: #CCCCCC;
 }
 
-h3{
+h3 {
         font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
         font-size: 16px;
 }
 
-h4{
+h4 {
         font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
         font-size: 13px;
 }
 
-table{
+table {
 	background-color:#FFF;
 }
 
-td,tr,p,div{
+td,tr,p,div {
         font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
         font-size: 10pt;
         color: #333333;
 }
 
-a:link{ 
+a:link {
 	color: #336699; 
 	text-decoration: none
 }
 
-a:active{
+a:active {
 	color: #336699; 
 	text-decoration: none
 }
 
-a:visited{ 
+a:visited { 
 	color: #336699;
 	text-decoration: none
 }
 
-a:hover{
+a:hover {
 	color: #336699;
 	text-decoration: underline
 }
 
-INPUT{
+INPUT {
 	FONT-SIZE: 9pt;
 }
 
-INPUT.button{
+INPUT.button {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 14px;
 	width: 75;
 	height:25
 }
 
-SELECT{
+SELECT {
 	FONT-SIZE: 9pt;
 }
 
-.moduleTitle{
+.moduleTitle {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 11pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none;
 }
 
-.formHeader{
+.formHeader {
 	FONT-WEIGHT: normal;
 	FONT-SIZE: 10pt;
 	COLOR: #FFFFFF;
@@ -105,7 +105,7 @@ SELECT{
 	background-color: #005AA0;
 }
 
-.dataInput{
+.dataInput {
 	font-family: "Courier New", Courier, mono;
  	color: #CC0000;
 	font-size : 10pt;
@@ -113,42 +113,42 @@ SELECT{
 	z-index : -3;
 }
 
-.bodyBold{
+.bodyBold {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 9pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none
 }
 
-A.bodyBold:link{
+A.bodyBold:link {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 9pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none
 }
 
-.bodySmall{
+.bodySmall {
 	FONT-WEIGHT: normal;
 	FONT-SIZE: 8pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none
 }
 
-A.bodySmall:link{
+A.bodySmall:link {
 	FONT-WEIGHT: normal;
 	FONT-SIZE: 8pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none
 }
 
-.bodySmallBold{
+.bodySmallBold {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 8pt;
 	COLOR: #000000;
 	TEXT-DECORATION: none
 }
 
-A.bodySmallBold:link{
+A.bodySmallBold:link {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 8pt;
 	COLOR: #000000;
