@@ -284,18 +284,7 @@ ${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --p
 #dump the 4.0.1 dump into the bkup database
 ${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port vtigercrm_4_0_1_bkp < vtiger4_0_1_dump.txt
 
-
-
-
-
-
-
-
-
-
-
-
-wget http://localhost:${apache_port_4_2}/Migrate.php
+wget http://localhost:${apache_port_4_2}/migrate.php
 
 echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_2_dump.txt
 
@@ -372,7 +361,7 @@ getdump4_0_1_db()
 		
 	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database vtigercrm_4_0_1_bkp" 
 	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_1_bkp < vtiger_4_0_1_dump.txt
-	wget http://localhost:${apache_port_4_0_1}/Migrate.php
+	wget http://localhost:${apache_port_4_0_1}/migrate.php
 	#${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp < migrate_4_0to4_0_1.sql
 	echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_2_dump.txt
 	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_1_bkp >> migrated_vtiger_4_2_dump.txt

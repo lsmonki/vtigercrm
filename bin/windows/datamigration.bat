@@ -217,7 +217,7 @@ rem set /P hi=bye
 echo 'about to start the input from the DataMigration.php file '
 echo
 echo
-..\php\php.exe -f ..\apache\htdocs\vtigerCRM\Migrate.php
+..\php\php.exe -f ..\apache\htdocs\vtigerCRM\migrate.php
 echo 'exporting the migrated data to the dump file migrated_vtiger_4_0_1_dump file'
 
 echo set FOREIGN_KEY_CHECKS=0; > migrated_vtiger_4_0_1_dump.txt
@@ -358,7 +358,7 @@ echo
 echo present working directory is %cd%
 echo
 echo
-..\php\php.exe -f ..\apache\htdocs\vtigerCRM\Migrate.php
+..\php\php.exe -f ..\apache\htdocs\vtigerCRM\migrate.php
 
 echo set FOREIGN_KEY_CHECKS=0; > migrated_vtiger_4_0_1_dump.txt
 
