@@ -7,7 +7,7 @@
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
-	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small>
+	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small onLoad="Announcement_rss()">
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
@@ -18,7 +18,7 @@
 		<td width=100% align=center>
 		<table border=0 cellspacing=0 cellpadding=2 width=90% class="rssDisplay">
 		 <tr>
-		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();"></td>
+		 <td class=rssDisplayPanel align=center><marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">RSS is not configured. <a href="#">Click here</a> to configure</marquee></td>
 		 {*<td class=rssDisplayPanel align=center> RSS is not configured. <a href="#">Click here</a> to configure</td>*}
 		 </tr>
 		</table>
