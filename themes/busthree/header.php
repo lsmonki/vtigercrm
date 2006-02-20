@@ -32,7 +32,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $module_path="modules/".$currentModule."/";
-require_once($module_path.'Menu.php');
+require_once($module_path.'menu.php');
 global $module_menu;
 
 $xtpl=new XTemplate ($theme_path."header.html");

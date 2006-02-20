@@ -35,7 +35,7 @@ require_once($theme_path.'layout_utils.php');
 global $app_strings;
 
 $module_path="modules/".$currentModule."/";
-require_once("Menu.php");
+require_once("menu.php");
 global $module_menu;
 
 require_once("include/Clock.php");
