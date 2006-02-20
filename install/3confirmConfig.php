@@ -350,7 +350,7 @@ if($mysql_status == 'false')
               </tr>
               <tr>
                <td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
               </tr>
 
 			</table>
