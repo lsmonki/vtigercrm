@@ -53,33 +53,6 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 		exit;
 	}
 	
-if (isset($_POST['user_name']) && isset($_POST['old_password']) && isset($_POST['new_password'])) {
-	/*	
-		//changing fourm password	
-		define('IN_PHPBB', 1);
-		
-		$phpbb_root_path = "modules/MessageBoard/";
-		require($phpbb_root_path . 'extension.inc');
-		include($phpbb_root_path . 'common.php');
-	*/	
-		$new_pass = $_POST['new_password'];
-		$new_passwd = $_POST['new_password'];
-		$new_pass = md5($new_pass);
-		$uname = $_POST['user_name'];
-		//$sql = "UPDATE " . USERS_TABLE . " SET user_password = '$new_pass' WHERE username = '$uname'";
-	/*
-		if (!($result = $db->sql_query($sql)) )
-		{
-			message_die(GENERAL_ERROR, 'Could not update user password', '', __LINE__, __FILE__, $sql);
-		}
-	*/
-		if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
-		
-			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
-		exit;
-	}
-}  
-else {
 	foreach($focus->column_fields as $field)
 	{
 		if(isset($_POST[$field]))
@@ -115,7 +88,33 @@ else {
 //		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
 	}
-}
+if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
+	/*	
+		//changing fourm password	
+		define('IN_PHPBB', 1);
+		
+		$phpbb_root_path = "modules/MessageBoard/";
+		require($phpbb_root_path . 'extension.inc');
+		include($phpbb_root_path . 'common.php');
+	*/	
+		$new_pass = $_POST['new_password'];
+		$new_passwd = $_POST['new_password'];
+		$new_pass = md5($new_pass);
+		$uname = $_POST['user_name'];
+		//$sql = "UPDATE " . USERS_TABLE . " SET user_password = '$new_pass' WHERE username = '$uname'";
+	/*
+		if (!($result = $db->sql_query($sql)) )
+		{
+			message_die(GENERAL_ERROR, 'Could not update user password', '', __LINE__, __FILE__, $sql);
+		}
+	*/
+		if (!$focus->change_password($_POST['confirm_new_password'], $_POST['new_password'])) {
+		
+			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
+		exit;
+	}
+}  
+
 if(isset($focus->id) && $focus->id != '')
 {
 

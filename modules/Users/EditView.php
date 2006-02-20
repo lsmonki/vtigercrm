@@ -38,7 +38,16 @@ $focus = new User();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
     $focus->retrieve($_REQUEST['record']);
+}else
+{
+	$password='<tr>
+	   		   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Password</td>
+		       <td width="30%"><input name="new_password" type="password" tabindex="1" size="25" maxlength="25"></td>
+			   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Confirm Password</td>
+			   <td width="30%"><input name="confirm_new_password" type="password" tabindex="2" size="25" maxlength="75"></td>
+			  </tr>';
 }
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 	$focus->user_name = "";
@@ -102,6 +111,7 @@ $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("SIGNATURE", $focus->signature);
 $xtpl->assign("DESCRIPTION", $focus->description);
 $xtpl->assign("USERIMAGE", $focus->imagename);
+$xtpl->assign("PASSWORD", $password);
 
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
 		

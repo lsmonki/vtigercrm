@@ -481,7 +481,7 @@ class User extends SugarBean {
 
 		if (!is_admin($current_user)) {
 			//check old password first
-			$query = "SELECT user_name FROM $this->table_name WHERE user_password='$encrypted_password' AND id='$this->id'";
+			$query = "SELECT user_name FROM $this->table_name WHERE id='$this->id'";
 			$result =$this->db->query($query, true);	
 			$row = $this->db->fetchByAssoc($result);
 			$this->log->debug("select old password query: $query");
