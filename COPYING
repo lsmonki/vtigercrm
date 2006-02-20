@@ -1,9 +1,3 @@
-vtigerCRM copyright Holder: (c) 2003-2006 vtiger.com
-
-vtigerCRM is dual licensed under:
-   * Mozilla Public License version 1.1 (MPL 1.1)
-   * GNU Public license (GPL)
-
 vtigerCRM consists of the following components, each one
 copyrighted under their respective licenses:
    * ADOdb (dual licensed BSD and LGPL)
@@ -26,6 +20,17 @@ copyrighted under their respective licenses:
    * TUTOS (GPL)
    * XTemplate (dual licensed BSD and LGPL)
 
+In addition to the above mentioned open source components,
+vtigerCRM provides additional functionalities,
+which are dual-licensed under:
+   * Mozilla Public License version 1.1 (MPL 1.1)
+   * GNU Public license (GPL)
+
 The complete text concerning the licenses can be found within
 the package under licenses directory.
+
+We are grateful to the creators of the respective products for providing such tools.
+vtiger.com is not affiliated with nor endorsed by any of the above providers.
+
+vtigerCRM copyright Holder: (c) 2003-2006 vtiger.com
 
