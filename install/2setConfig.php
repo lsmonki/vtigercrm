@@ -16,6 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+
 require_once("connection.php");
 
 $web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
@@ -27,32 +28,36 @@ $cache_dir = "cache/";
 
 // To make MySQL run in desired port
 $sock_path=":" .$mysql_port;
-
 $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
+
 if (is_file("config.php")) {
 	require_once("config.php");
-
 	session_start();
+
 	if(isset($upload_maxsize))
-                 $_SESSION['upload_maxsize'] = $upload_maxsize;
-         if(isset($allow_exports))
-                 $_SESSION['allow_exports'] = $allow_exports;
+		$_SESSION['upload_maxsize'] = $upload_maxsize;
+
+	if(isset($allow_exports))
+		$_SESSION['allow_exports'] = $allow_exports;
+
 	if(isset($disable_persistent_connections))
 		$_SESSION['disable_persistent_connections'] = $disable_persistent_connections;
+
 	if(isset($default_language))
 		$_SESSION['default_language'] = $default_language;
+
 	if(isset($translation_string_prefix))
 		$_SESSION['translation_string_prefix'] = $translation_string_prefix;
+
 	if(isset($default_charset))
 		$_SESSION['default_charset'] = $default_charset;
-	if(isset($languages))
-	{
-		// We need to encode the languages in a way that can be retrieved later.
+
+	if(isset($languages)) {
+		// We need to encode the languages in a way that can be retrieved later
 		$language_keys = Array();
 		$language_values = Array();
 
-		foreach($languages as $key=>$value)
-		{
+		foreach($languages as $key=>$value) {
 			$language_keys[] = $key;
 			$language_values[] = $value;
 		}
@@ -62,71 +67,74 @@ if (is_file("config.php")) {
 	}
 
 	global $dbconfig;
-	if (isset($_REQUEST['db_host_name'])) {
+
+	if (isset($_REQUEST['db_host_name']))
 		$db_host_name = $_REQUEST['db_host_name'];
-	}
-	elseif (isset($dbconfig['db_host_name'])) {
+	elseif (isset($dbconfig['db_host_name']))
 		$db_host_name = $dbconfig['db_host_name'];
-	}
-	else {
+	else
 		$db_host_name = $H_NAME.$sock_path;
-	}
 
-	if (isset($_REQUEST['db_user_name'])) {
+	if (isset($_REQUEST['db_user_name']))
 		$db_user_name = $_REQUEST['db_user_name'];
-	}
-	elseif (isset($dbconfig['db_user_name'])) {
+	elseif (isset($dbconfig['db_user_name']))
 		$db_user_name = $dbconfig['db_user_name'];
-	}
-	else {
+	else
 		$db_user_name = $mysql_username;
-	}
 
-	if (isset($_REQUEST['db_password'])) {
+	if (isset($_REQUEST['db_password']))
 		$db_password = $_REQUEST['db_password'];
-	}
-	elseif (isset($dbconfig['db_password'])) {
+	elseif (isset($dbconfig['db_password']))
 		$db_password = $dbconfig['db_password'];
-	}
-	else {
+	else
 		$db_password = $mysql_password;
-	}
 
-	if (isset($_REQUEST['db_name'])){
+	if (isset($_REQUEST['db_name']))
 		$db_name = $_REQUEST['db_name'];
-	}
-	elseif (isset($dbconfig['db_name'])) {
+	elseif (isset($dbconfig['db_name']))
 		$db_name = $dbconfig['db_name'];
-	}
-	else {
-		$db_name = 'vtigercrm4_2';
-	}
+	else
+		$db_name = 'vtigercrm';
+
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
-	else $host_name = $_SERVER['SERVER_NAME'];
+		else $host_name = $_SERVER['SERVER_NAME'];
+
 	if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
-	else $site_URL = $web_root;
+		else $site_URL = $web_root;
+
 	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
-	else $root_directory = $current_dir;
-	if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
-	if (isset($_REQUEST['mail_server'])) $mail_server= $_REQUEST['mail_server'];
-	if (isset($_REQUEST['mail_server_username'])) $mail_server_username= $_REQUEST['mail_server_username'];
-	if (isset($_REQUEST['mail_server_password'])) $mail_server_password= $_REQUEST['mail_server_password'];
-	if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
-	if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
+		else $root_directory = $current_dir;
+
+	if (isset($_REQUEST['cache_dir']))
+		$cache_dir= $_REQUEST['cache_dir'];
+
+	if (isset($_REQUEST['mail_server']))
+		$mail_server= $_REQUEST['mail_server'];
+
+	if (isset($_REQUEST['mail_server_username']))
+		$mail_server_username= $_REQUEST['mail_server_username'];
+
+	if (isset($_REQUEST['mail_server_password']))
+		$mail_server_password= $_REQUEST['mail_server_password'];
+
+	if (isset($_REQUEST['admin_email']))
+		$admin_email = $_REQUEST['admin_email'];
+
+	if (isset($_REQUEST['admin_password']))
+		$admin_password = $_REQUEST['admin_password'];
 }
 else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
 	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_2" : $db_name = $_REQUEST['db_name'];
+	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
 	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
 	!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
-
 	!isset($_REQUEST['mail_server']) ? $mail_server = $mail_server : $mail_server = stripslashes($_REQUEST['mail_server']);
 	!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
 	!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
@@ -139,7 +147,7 @@ else {
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.2 Installer: Step 2</title>
+<title>vtiger CRM 4.x Installer: Step 2</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -147,40 +155,45 @@ else {
 <script type="text/javascript" language="Javascript">
 <!--  to hide script contents from old browsers
 function trim(s) {
-        while (s.substring(0,1) == " ") {
-                s = s.substring(1, s.length);
-        }
-        while (s.substring(s.length-1, s.length) == ' ') {
-                s = s.substring(0,s.length-1);
-        }
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
 
-        return s;
+	return s;
 }
 
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
+
 	// Here we decide whether to submit the form.
 	if (trim(form.db_host_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database host name";
 		form.db_host_name.focus();
 	}
+
 	if (trim(form.db_user_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database user name";
 		form.db_user_name.focus();
 	}
+
 	if (trim(form.db_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database name";
 		form.db_name.focus();
 	}
+
 	if (trim(form.site_URL.value) =='') {
 		isError = true;
 		errorMessage += "\n site url";
 		form.site_URL.focus();
 	}
+
 	if (trim(form.root_directory.value) =='') {
 		isError = true;
 		errorMessage += "\n path";
@@ -188,9 +201,9 @@ function verify_data(form) {
 	}
 /*
 	 if (trim(form.admin_email.value) =='') {
-                isError = true;
-                errorMessage += "\n admin email";
-                form.admin_email.focus();
+		isError = true;
+		errorMessage += "\n admin email";
+		form.admin_email.focus();
         }
 */
 	if (trim(form.admin_password.value) =='') {
@@ -198,36 +211,31 @@ function verify_data(form) {
 		errorMessage += "\n admin password";
 		form.admin_password.focus();
 	}
+
 	if (trim(form.cache_dir.value) =='') {
-                isError = true;
-                errorMessage += "\n temp directory path";
-                form.root_directory.focus();
+		isError = true;
+		errorMessage += "\n temp directory path";
+		form.root_directory.focus();
         }
 /*
 	if (trim(form.mail_server.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server name";
-                form.mail_server.focus();
-        }
+		isError = true;
+		errorMessage += "\n mail server name";
+		form.mail_server.focus();
+	}
 
- if (trim(form.mail_server_username.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server username";
-                form.mail_server_username.focus();
-        }
+	if (trim(form.mail_server_username.value) =='') {
+		isError = true;
+		errorMessage += "\n mail server username";
+		form.mail_server_username.focus();
+	}
 
-
- if (trim(form.mail_server_password.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server password";
-                form.mail_server_password.focus();
-        }
-
+	if (trim(form.mail_server_password.value) =='') {
+		isError = true;
+		errorMessage += "\n mail server password";
+		form.mail_server_password.focus();
+	}
 */
-
-
-
-
 	// Here we decide whether to submit the form.
 	if (isError == true) {
 		alert("Missing required fields: " + errorMessage);
@@ -238,7 +246,6 @@ function verify_data(form) {
 }
 // end hiding contents from old browsers  -->
 </script>
-
 
 <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
@@ -359,8 +366,6 @@ function verify_data(form) {
 
         </tr>
 		</table>
-
-
 
 <table width="70%" cellpadding="5" border="0">
           <tr>

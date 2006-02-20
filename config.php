@@ -15,17 +15,17 @@
 
 require_once("connection.php");
 
-// To make MySQL run in desired port  
+// make MySQL run in desired port  
 $sock_path=":" .$mysql_port;
 $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 
-/* Database configuration
+/* database configuration
       db_host_name:     MySQL Database Hostname
       db_user_name:    	MySQL Username
       db_password:     	MySQL Password
       db_name:     	MySQL Database Name
 */
-//All of these commented out values get populated by install.php
+// all of these commented values get populated by install.php
 //$dbconfig['db_host_name'] = 	'$H_NAME.$sock_path';
 //$dbconfig['db_user_name'] = 	'vtigercrm';
 //$dbconfig['db_password'] = 	'';
@@ -35,35 +35,37 @@ $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 //$site_URL = '';
 //$root_directory = '';
 
-// This is the full path to the include directory including the trailing slash
+// full path to the include directory including the trailing slash
 //$includeDirectory = $root_directory.'include/';
 
-$list_max_entries_per_page = '10';
-$history_max_viewed = '10';
+$list_max_entries_per_page = '20';
+$history_max_viewed = '5';
 
-//define list of menu tabs
+// define list of menu tabs
 //$moduleList = Array('Home', 'Dashboard', 'Leads', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');
 
 $default_module = 'Home';
 $default_action = 'index';
 
-//set default theme
-$default_theme = 'orange';
+// set default theme
+$default_theme = 'blue';
 $databasetype = 'mysql';
 
-// If true, the time to compose each page is placed in the browser.
+// show or hide time to compose each page
 $calculate_response_time = true;
 
-// Default Username - The default text that is placed initially in the login form for user name.
+// default text that is placed initially in the login form for user name
 $default_user_name = '';
 
-// Default Password - The default text that is placed initially in the login form for password.
+// default text that is placed initially in the login form for password
 $default_password = '';
 
-// Create default user - If true, a user with the default username and password is created.
+// create user with default username and password
 $create_default_user = false;
 
-// Login Message - If a message is provided, it will be placed on the login screen.  This is for site specific special instructions
+// login message
+// if a message is provided, it will be placed on the login screen
+// this is for site specific special instructions
 $login_message = 'Please login to the application.';
 
 ?>

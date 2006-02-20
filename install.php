@@ -21,19 +21,19 @@ if (substr(phpversion(), 0, 1) == "5") {
 	ini_set("zend.ze1_compatibility_mode", "1");
 }
 
- function stripslashes_checkstrings($value){
- 	if(is_string($value)){
+function stripslashes_checkstrings($value) {
+	if(is_string($value)) {
  		return stripslashes($value);
  	}
  	return $value;
+}
 
- }
- if(get_magic_quotes_gpc() == 1){
+if(get_magic_quotes_gpc() == 1) {
  	$_REQUEST = array_map("stripslashes_checkstrings", $_REQUEST);
 	$_POST = array_map("stripslashes_checkstrings", $_POST);
 	$_GET = array_map("stripslashes_checkstrings", $_GET);
-
 }
+
 if (isset($_POST['file'])) $the_file = $_POST['file'];
 else $the_file = "0welcome.php";
 

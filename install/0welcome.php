@@ -17,7 +17,7 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
-//get php configuration settings.  requires elaborate parsing of phpinfo() output
+//get php configuration settings. requires elaborate parsing of phpinfo() output
 ob_start();
 phpinfo(INFO_GENERAL);
 $string = ob_get_contents();
@@ -27,28 +27,28 @@ $pieces = explode("<h2", $string);
 $settings = array();
 foreach($pieces as $val)
 {
-   preg_match("/<a name=\"module_([^<>]*)\">/", $val, $sub_key);
-   preg_match_all("/<tr[^>]*>
+	preg_match("/<a name=\"module_([^<>]*)\">/", $val, $sub_key);
+	preg_match_all("/<tr[^>]*>
 									   <td[^>]*>(.*)<\/td>
 									   <td[^>]*>(.*)<\/td>/Ux", $val, $sub);
-   preg_match_all("/<tr[^>]*>
+	preg_match_all("/<tr[^>]*>
 									   <td[^>]*>(.*)<\/td>
 									   <td[^>]*>(.*)<\/td>
 									   <td[^>]*>(.*)<\/td>/Ux", $val, $sub_ext);
-   foreach($sub[0] as $key => $val) {
+	foreach($sub[0] as $key => $val) {
 		if (preg_match("/Configuration File \(php.ini\) Path /", $val)) {
 	   		$val = preg_replace("/Configuration File \(php.ini\) Path /", '', $val);
 			$phpini = strip_tags($val);
 	   	}
    }
-
 }
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.2 Installer: Step 1</title>
+<title>vtiger CRM 4.x Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -75,12 +75,12 @@ foreach($pieces as $val)
 	  </td>
     </tr>
 	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 4.2 database tables and sets the configuration variables that you need to start.
-			The entire process should take about four minutes.
+  			This installer creates the vtiger CRM 4.x database tables and sets the configuration variables that you need to start.
+			The entire process should take few minutes.
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 4.2 is tested on mysql 4.0.x and PHP 4.3.8 and Apache 2.0.40 . Support for PHP 5 will be provided in future releases </b> </font>
+ <font color=red> <b>Kindly note vtiger CRM 4.x is tested on Mysql 4.x, PHP 4.x and Apache 2.x. Support for PHP 5.x will be provided in future releases </b> </font>
 
 			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
