@@ -29,8 +29,8 @@ class jpgraph {
 	 * to display in the y-axis
 	 */
 	function pipeline ($datax=array('foo','bar'),$datay=array(1,2), $title='the title', $subtitle='the subtitle') {
-		include ("jpgraph/src/jpgraph.php");
-		include ("jpgraph/src/jpgraph_bar.php");
+		include ("jpgraph/jpgraph.php");
+		include ("jpgraph/jpgraph_bar.php");
 	
 		$log =& LoggerManager::getLogger('case charts');
 		$log->debug("starting pipeline chart");
@@ -139,9 +139,9 @@ class jpgraph {
 	 * to display in the y-axis
 	 */
 	function pipeline_by_lead_source ($legends=array('foo', 'bar'), $data=array(1,2), $title='the title', $subtitle='the subtitle') {
-		include ("jpgraph/src/jpgraph.php");
-		include ("jpgraph/src/jpgraph_pie.php");
-		include ("jpgraph/src/jpgraph_pie3d.php");
+		include ("jpgraph/jpgraph.php");
+		include ("jpgraph/jpgraph_pie.php");
+		include ("jpgraph/jpgraph_pie3d.php");
 		
 		// Create the Pie Graph.
 		$graph = new PieGraph(440,200,"auto");

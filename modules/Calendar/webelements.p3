@@ -2037,10 +2037,10 @@ function load_jpgraph($arr) {
       return true;
 	}
 	$msg .= "JPraph Version " . JPG_VERSION ."<br>";
-  } else if (file_exists (getcwd()."/".$tutos['base']."/". $tutos[jpgraph]."/src/jpgraph.php") ) {
-    require_once $tutos[jpgraph]."/src/jpgraph.php";
+  } else if (file_exists (getcwd()."/".$tutos['base']."/". $tutos[jpgraph]."/jpgraph.php") ) {
+    require_once $tutos[jpgraph]."/jpgraph.php";
     foreach($arr as $i) {
-      require_once $tutos[jpgraph]."/src/". $i;
+      require_once $tutos[jpgraph]."/". $i;
     }
     if (!defined('JPG_VERSION') ) {
       $tutos[jpgraph_old] = 1;

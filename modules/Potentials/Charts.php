@@ -20,7 +20,7 @@
 require_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once("jpgraph/src/jpgraph.php");
+require_once("jpgraph/jpgraph.php");
 require_once('include/utils.php');
 require_once('include/logging.php');
 
@@ -76,7 +76,7 @@ class jpgraph {
 	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
-		include_once ("jpgraph/src/jpgraph_bar.php");
+		include_once ("jpgraph/jpgraph_bar.php");
 
 		// Size of graph
 		$width=600;
@@ -348,7 +348,7 @@ class jpgraph {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
 
-		include_once ("jpgraph/src/jpgraph_bar.php");
+		include_once ("jpgraph/jpgraph_bar.php");
 
 		// Size of graph
 		$width=300;
@@ -631,7 +631,7 @@ class jpgraph {
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
-		include_once ("jpgraph/src/jpgraph_bar.php");
+		include_once ("jpgraph/jpgraph_bar.php");
 
 		// Size of graph
 		$width=300;
@@ -905,8 +905,8 @@ class jpgraph {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
 
-		include_once ("jpgraph/src/jpgraph_pie.php");
-		include_once ("jpgraph/src/jpgraph_pie3d.php");
+		include_once ("jpgraph/jpgraph_pie.php");
+		include_once ("jpgraph/jpgraph_pie3d.php");
 
 		$font = calculate_font_family($lang_crm);
 
