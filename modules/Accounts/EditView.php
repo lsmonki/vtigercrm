@@ -49,7 +49,14 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 }
 $disp_view = getView($focus->mode);
-$smarty->assign("BLOCKS",getBlocks("Accounts",$disp_view,$mode,$focus->column_fields));
+if($disp_view == 'edit_view')
+	$smarty->assign("BLOCKS",getBlocks("Accounts",$disp_view,$mode,$focus->column_fields));
+else	
+{
+	$smarty->assign("BASBLOCKS",getBlocks("Accounts",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("ADVBLOCKS",getBlocks("Accounts",$disp_view,$mode,$focus->column_fields,'ADV'));
+}
+
 $smarty->assign("OP_MODE",$disp_view);
  
 
@@ -143,7 +150,10 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
+if ($focus->mode == 'edit')
 $smarty->display('salesEditView.tpl');
+else
+$smarty->display('CreateView.tpl');
 
 ?>
 
