@@ -622,11 +622,6 @@ function getNewDisplayDate()
 	return $display_date;
 }
 
-
-/**
- * Function to get Currency Name and Currency Symbol
- * returns the Currency information in an array format.
- */
 function getDisplayCurrency()
 {
         global $adb;
@@ -644,36 +639,15 @@ function getDisplayCurrency()
         return $curr_array;
 }
 
-
-/**
- * Function to convert currency amount into Dollar
- * @param $amount - amount::Type Integer
- * @param $crate - crate::Type Float
- * returns amount in dollar.
- */
 function convertToDollar($amount,$crate){
                 return $amount / $crate;
 
         }
 
-
-/**
- * Function to convert currency amount from Dollar to user specific currency
- * @param $amount - amount::Type Integer
- * @param $crate - crate::Type Float
- * returns amount in user specific currency.
- */
 function convertFromDollar($amount,$crate){
                 return $amount * $crate;
         }
 
-
-/**
- * Function to get currency conversion rate
- * @param $id - id::Type Integer
- * @param $symbol - symbol::Type varchar
- * returns conversion rate::Type Float.
- */
 function getConversionRate($id,$symbol)
 {
         global $adb;
@@ -683,12 +657,6 @@ function getConversionRate($id,$symbol)
         return $rate;
 }
 
-
-/**
- * Function to get currency symbol
- * @param $id - id::Type Integer
- * returns conversion symbol:Type varchar.
- */
 function getCurrencySymbol($id)
 {
         global $adb;
@@ -698,11 +666,6 @@ function getCurrencySymbol($id)
         return $curr_symbol;
 }
 
-
-/**
- * Function to get Terms and Conditions
- * returns Terms and Conditions::Type String.
- */
 function getTermsandConditions()
 {
         global $adb;
@@ -798,7 +761,7 @@ function make_clickable($text)
  * This function returns an array
  */
 
-function getBlocks($module,$disp_view,$mode,$col_fields='')
+function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 {
         global $adb;
         global $mod_strings;
@@ -807,6 +770,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='')
         $block_detail = Array();
         $getBlockinfo = "";
         $query="select blockid,blocklabel,show_title from blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
+	//echo $query;
 
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
@@ -831,7 +795,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='')
                         }
                         else
                         {
-                                $getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                                $getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
                         }
 
                         if(is_array($getBlockInfo))
@@ -855,7 +819,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='')
                         else
                         {
                                 $k=sizeof($block_detail[$prev_header]);
-                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
                                 foreach($temp_headerless_arr as $td_val=>$tr_val)
 				{
                                         $block_detail[$prev_header][$k]=$tr_val;
@@ -1011,36 +975,27 @@ function updateInfo($id)
     return $update_info;
 }
 
-
 function getContactImages($parenttab)
 {
-	global $adb;
+    global $adb;
 	$imagelists = '<script>var leftrightslide=new Array();';
-	$imagenamelists='<script>var dynimages=new Array();';
-	$imagecount=0;
-	$query='select imagename,firstname,lastname,contactid from contactdetails inner join crmentity on contactdetails.contactid=crmentity.crmid where deleted = 0 ';
-	$result = $adb->query($query);
-	$noofimages = $adb->num_rows($result);
+   	$i=0;
+    $query='select imagename,firstname,lastname,contactid from contactdetails inner join crmentity on contactdetails.contactid=crmentity.crmid where deleted = 0 ';
+    $result = $adb->query($query);
+    $noofimages = $adb->num_rows($result);
 	for($j=0; $j<$noofimages; $j++)
-	{
+    {
 		$imagename=$adb->query_result($result,$j,'imagename');
 		$imgpath = 'test/contact/'.$imagename;
 		$id = $adb->query_result($result,$j,'contactid');
 		$contactname=$adb->query_result($result,$j,'firstname').' '.$adb->query_result($result,$j,'lastname');
 		if($imagename != '')
-		{
-			$imagelists .= 'leftrightslide['.$imagecount.']= \'<div class=thumbnail><a href='.$imgpath.' onMouseover=modifyimage("dynloadarea",'.$imagecount.') onMouseOut=document.getElementById("dynloadarea").style.display="none"; target="_blank"><img src="'.$imgpath.'" border=1 height=50 width=75></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
-			$imagenamelists .='dynimages['.$imagecount.']=["'.$imgpath.'","index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'"];';
-			$imagecount++;
-		}
+			$imagelists .= 'leftrightslide['.$i++.']= \'<div class=thumbnail><a href='.$imgpath.' target="_blank"><img src="'.$imgpath.'" border=1 height=50 width=80></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
 	}
 	$imagelists.= '</script>';
-	$imagenamelists.='</script>';
-	$imagelists = $imagelists.$imagenamelists;
-	if($imagecount>0)
+	if($i>0)	
 		return $imagelists;
 }
-
 
 function getProductImages($id)
 {
@@ -1061,156 +1016,4 @@ function getProductImages($id)
 	if($imagename != '')
 		return $script;
 }	
-function SaveImage($_FILES,$module,$id,$mode)
-{
-	global $adb;
-	global $log;
-	$uploaddir = $root_directory."test/".$module."/" ;//set this to which location you need to give the contact image
-	$log->info("The Location to Save the Contact Image is ".$uploaddir);
-	$file_path_name = $_FILES['imagename']['name'];
-	$image_error="false";
-	$saveimage="true";
-	$file_name = basename($file_path_name);
-	if($file_name!="")
-	{
-
-		$log->debug("Contact Image is given for uploading");
-		$image_name_val=file_exist_fn($file_name,0);
-
-		$encode_field_values="";
-		$errormessage="";
-
-		$move_upload_status=move_uploaded_file($_FILES["imagename"]["tmp_name"],$uploaddir.$image_name_val);
-		$image_error="false";
-
-		//if there is an error in the uploading of image
-
-		$filetype= $_FILES['imagename']['type'];
-		$filesize = $_FILES['imagename']['size'];
-
-		$filetype_array=explode("/",$filetype);
-
-		$file_type_val_image=strtolower($filetype_array[0]);
-		$file_type_val=strtolower($filetype_array[1]);
-		$log->info("The File type of the Contact Image is :: ".$file_type_val);
-		//checking the uploaded image is if an image type or not
-		if(!$move_upload_status) //if any error during file uploading
-		{
-			$log->debug("Error is present in uploading Contact Image.");
-			$errorCode =  $_FILES['imagename']['error'];
-			if($errorCode == 4)
-			{
-				$errorcode="no-image";
-				$saveimage="false";
-				$image_error="true";
-			}
-			else if($errorCode == 2)
-			{
-				$errormessage = 2;
-				$saveimage="false";
-				$image_error="true";
-			}
-			else if($errorCode == 3 )
-			{
-				$errormessage = 3;
-				$saveimage="false";
-				$image_error="true";
-			}
-		}
-		else
-		{
-			$log->debug("Successfully uploaded the Contact Image.");
-			if($filesize != 0)
-			{
-				if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
-				{
-					$saveimage="true";
-					$image_error="false";
-				}
-				else
-				{
-					$savelogo="false";
-					$image_error="true";
-					$errormessage = "image";
-				}
-			}
-			else
-			{       
-				$savelogo="false";
-				$image_error="true";
-				$errormessage = "invalid";
-			}
-
-		}
-	}
-	else //if image is not given
-	{
-		$log->debug("Contact Image is not given for uploading.");
-		if($mode=="edit" && $image_error=="false" )
-		{
-			if($module='contact')
-			$image_name_val=getContactImageName($id);
-			elseif($module='user')
-			$image_name_val=getUserImageName($id);
-			$saveimage="true";
-		}
-		else
-		{
-			$image_name_val="";
-		}
-	}
-	$return_value=array('imagename'=>$image_name_val,
-	'imageerror'=>$image_error,
-	'errormessage'=>$errormessage,
-	'saveimage'=>$saveimage,
-	'mode'=>$mode);
-	return $return_value;
-}
-//function to check whether same product name exists
-function file_exist_fn($filename,$exist)
-{
-	global $uploaddir;
-
-	if(!isset($exist))
-	{
-		$exist=0;
-	}
-	$filename_path=$uploaddir.$filename;
-	if (file_exists($filename_path)) //Checking if the file name already exists in the directory
-	{
-		if($exist!=0)
-		{
-			$previous=$exist-1;
-			$next=$exist+1;
-			$explode_name=explode("_",$filename);
-			$implode_array=array();
-			for($j=0;$j<count($explode_name); $j++)
-			{
-				if($j!=0)
-				{
-					$implode_array[]=$explode_name[$j];
-				}
-			}
-			$implode_name=implode("_", $implode_array);
-			$test_name=$implode_name;
-		}
-		else
-		{
-			$implode_name=$filename;
-		}
-		$exist++;
-		$filename_val=$exist."_".$implode_name;
-		$testfilename = file_exist_fn($filename_val,$exist);
-		if($testfilename!="")
-		{
-			return $testfilename;
-		}
-	}	
-	else
-	{
-		return $filename;
-	}
-}
-
-
 ?>
