@@ -85,8 +85,12 @@ $comboFieldNames = Array('accounttype'=>'account_type_dom'
 $comboFieldArray = getComboArray($comboFieldNames);
 
 $disp_view = getView($focus->mode);
-$smarty->assign("BLOCKS",getBlocks("PurchaseOrder",$disp_view,$mode,$focus->column_fields));
-//echo '<pre>';print_r(getBlocks("PurchaseOrder",$disp_view,$mode,$focus->column_fields));echo '</pre>';
+if($disp_view == 'edit_view')
+	$smarty->assign("BLOCKS",getBlocks("PurchaseOrder",$disp_view,$mode,$focus->column_fields));
+else	
+{
+	$smarty->assign("BASBLOCKS",getBlocks("PurchaseOrder",$disp_view,$mode,$focus->column_fields,'BAS'));
+}	
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
@@ -238,5 +242,8 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
+if($focus->mode == 'edit')
 $smarty->display('salesEditView.tpl');
+else
+$smarty->display('CreateView.tpl');
 ?>
