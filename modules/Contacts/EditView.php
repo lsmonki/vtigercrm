@@ -100,7 +100,15 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 }
 
 $disp_view = getView($focus->mode);
-$smarty->assign("BLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields));
+if($disp_view == 'edit_view')
+	$smarty->assign("BLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields));
+else
+{
+	//echo "<pre>";print_r(getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'BAS'));echo "</pre>";
+	$smarty->assign("BASBLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("ADVBLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'ADV'));
+}
+
 $smarty->assign("OP_MODE",$disp_view);
 
 //needed when creating a new contact with a default account value passed in
@@ -243,7 +251,10 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
+if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
+else
+$smarty->display('CreateView.tpl');
 
 
 ?>
