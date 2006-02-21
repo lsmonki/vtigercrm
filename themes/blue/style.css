@@ -71,8 +71,6 @@
 
 .tabSeperator {
 	background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
-
-
 }
 
 .level2text {
@@ -99,25 +97,20 @@
 
 }
 
-
-
 .level2Bg {
 	background:#bbbbbb url(images/level2Bg.gif) repeat-x;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-
 }
 
 .tabLiner {
 	background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
 	padding:0px;
-
-
 }
+
 .sep1 {
 	background:#999999;
 }
-
 
 .showPanelBg {
 	background:url(images/showPanelTopBg.gif) repeat-x;
@@ -128,7 +121,6 @@ a {
 	font-size: 11px;
 	text-decoration:none;
 	color:#333366;
-
 }
 
 a:hover {
@@ -136,7 +128,6 @@ a:hover {
 	font-size: 11px;
 	text-decoration:underline;
 	color:#333333;
-
 }
 
 .hdrLink {
@@ -147,7 +138,6 @@ a:hover {
 	font-weight:bold;
 }
 
-
 .hdrLink:hover {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
@@ -156,7 +146,6 @@ a:hover {
 	font-weight:bold;
 }
 
-
 .searchBox {
 	border: 0px solid #999999;
 	font-family: Arial, Helvetica, sans-serif;
@@ -164,8 +153,8 @@ a:hover {
 	padding-left:2px;
 	width:100px;
 	background-color:#ffffef;
-
 }
+
 .searchBtn {
 	border : 1px #cccccc solid;
 	font-family: Arial, Helvetica, sans-serif;
@@ -179,11 +168,13 @@ a:hover {
 	background-color:#cccccc;
 
 }
+
 .lvtHeaderText {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	font-weight:bold;
 }
+
 .lvtCol {
 	border-top:1px solid #eeeeee;
 	border-left:1px solid #eeeeee;
@@ -211,6 +202,7 @@ a:hover {
 	background-color:white;
 	font-weight:bold;
 }
+
 .dvtUnSelectedCell {
 	border-left:1px solid #cacaca;
 	border-top:1px solid #cacaca;
@@ -219,7 +211,9 @@ a:hover {
 	padding-left:20px;
 	padding-right:20px;
 	background-color:#efefef;
+	cursor:pointer;
 }
+
 .dvtTabCache {
 	border-bottom:1px solid #cacaca;
 }
@@ -230,6 +224,7 @@ a:hover {
 	border-bottom:1px solid #cacaca;
 	padding-left:0px;
 }
+
 .rightAddInfo {
 	border-left:1px solid #a2a2a2;
 	border-right:1px solid #dddddd;
@@ -238,6 +233,7 @@ a:hover {
 	background-color:#fafafa;
 	padding:5px;
 }
+
 .dvtCellLabel {
 	background-color:#f6f6f6;
 	padding-right:10px;
@@ -286,6 +282,7 @@ a:hover {
 	background-color:#e5e5e5;
 
 }
+
 .detailedViewTextBox {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -295,6 +292,7 @@ a:hover {
 	width:90%;
 	background-color:#ffffff;
 }
+
 .detailedViewTextBoxOn {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -304,6 +302,7 @@ a:hover {
 	width:90%;
 	background-color:#ffffdd;
 }
+
 .detailedViewTextArea {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -321,6 +320,7 @@ a:hover {
 	background-color:#ffffef;
 
 }
+
 .searchHdrBox {
 
 	border-bottom:1px dashed #dddddd;
@@ -337,6 +337,7 @@ a:hover {
 	background-color:#ffffef;
 
 }
+
 .searchAlph {
 	border:1px solid #dadada;
 	background-color:#ffffff;
@@ -352,7 +353,6 @@ a:hover {
 	color: #ff0000;
 	height:50px;
 	width:640px;
-
 }
 
 .hiliteBtn4Search {
@@ -384,9 +384,11 @@ a:hover {
 	padding:2px;
 
 }
+
 .loginBottomBg {
 	background:url(images/loginBottomBg.gif) repeat-x;
 }
+
 .loginSignin {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
@@ -426,8 +428,6 @@ a:hover {
 	overflow:auto; width:95%;height:320px;padding:0px;background-color:#fefefe;
 	border-top: 1px solid #bababa;
 	border-bottom: 1px solid #bababa;
-
-
 }
 
 .calHourOccupied {
@@ -464,7 +464,6 @@ a:hover {
 .cellScheduled {
 	background-color:#ffffef;
 	color:#7a7a7a;
-
 }
 
 .cellSchHover {
@@ -475,12 +474,12 @@ a:hover {
 	background-color:#ffffef;	
 	color:#7a7a7a;	
 }
+
 .cellSch{
 	border:0px;
 	background-color:#ffffef;
 	color:#7a7a7a;
 }
-
 
 .cellNormalHover {
 	border-bottom:1px solid #999999;
@@ -511,8 +510,8 @@ a:hover {
 border:2px solid #dadada;
        background-color:white;
 
-
 }
+
 .tblPro1IconCell {
     border-right:1px solid #dadada;
 }
@@ -530,6 +529,7 @@ color:#4a4a4a;
     line-height: 14px;
     background-image:url(images/tblPro1ColBg.gif);
 }
+
 .tblPro1DataCell {
     border-bottom:1px solid #f5f5f5;
     color:#5a5a5a;
@@ -537,26 +537,29 @@ color:#4a4a4a;
     line-height: 14px;
 
 }
+
 .divEventToDo {
 overflow:auto;
 height:150px;
 border:1px solid #dadada;
 
 }
+
 .EventToDo{
 
 }
 
 .thumbnail{
     background-color:#ffffff;
-padding: 5px;
+padding: 7px;
 border: 1px solid #ddd;
 float: left;
-	   margin-right: 5px;
-	   margin-bottom: 10px;
+	   margin-right: 10px;
+	   margin-bottom: 15px;
 }
+
 .thumbnailcaption
-{ font-size: 0.9em; padding-top: 0.1em ;	}
+{ font-size: 0.9em; padding-top: 0.2em ;	}
 
 /* For Settings */
 
@@ -717,3 +720,29 @@ border:0px;
 #studioTab{position:relative;left:0px;top:0px;width:100%;display:none;}
 
 /* End of Settings */
+
+.bggray{
+	background-color: #dfdfdf;
+}
+.bgwhite{
+	background-color: #FFFFFF;
+}
+.copy{
+	font-size:9px;
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+}
+
+#basicTab{
+	position:relative;
+	overflow:auto;
+	width:100%;
+	display:block;
+}
+
+#moreTab{
+	position:relative;
+	overflow:auto;
+	width:100%;
+	display:none;
+}
+
