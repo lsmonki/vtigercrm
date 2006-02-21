@@ -282,7 +282,10 @@
 		</field>
 		
 		<field name="quickcreatesequence" type="I" size="19">
-			</field>
+		</field>
+		
+		<field name="info_type" type="C" size="20">
+		</field>
 	         
 		 <index name="Field_IDX0">
 			<col>tabid</col>
@@ -2754,8 +2757,8 @@
                 <field name="id" type="I" size="19">
                         <KEY/>
                 </field>
-                <field name="server" type="C" size="80"> </field>
-                <field name="server_username" type="C" size="80"> </field>
+                <field name="server" type="C" size="30"> </field>
+                <field name="server_username" type="C" size="30"> </field>
                 <field name="server_password" type="C" size="30"> </field>
                 <field name="server_type" type="C" size="20"> </field>
                 <field name="smtp_auth" type="C" size="5"> </field>
@@ -6976,18 +6979,6 @@ E</constraint>
 	</table>
 
 
-	<table name="announcement">
-		<field name="creatorid" type="I" size="19">
-			<KEY/>
-		</field>
-		<field name="announcement" type="X">
-		</field>
-		<field name="title" type="C" size="255">
-		</field>
-		<field name="time" type="T">
-			<DEFTIMESTAMP/>
-		</field>
-	</table>
 
 
 </schema>
