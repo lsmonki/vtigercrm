@@ -35,11 +35,8 @@ class PearDatabase{
 	var $lastmysqlrow = -1;
 	var $enableSQLlog = false;
 
-
 	function isMySQL() { return dbType=='mysql'; }
-
 	function isOracle() { return dbType=='oci8'; }
-
 	
 	function println($msg)
 	{
@@ -678,9 +675,9 @@ global $vtlog;
 		global $dbconfig, $dbconfigoption;
 		$this->disconnect();
 		$this->setDatabaseType($dbconfig['db_type']);
-		$this->setUserName($dbconfig['db_user_name']);
+		$this->setUserName($dbconfig['db_username']);
 		$this->setUserPassword($dbconfig['db_password']);
-		$this->setDatabaseHost( $dbconfig['db_host_name']);
+		$this->setDatabaseHost( $dbconfig['db_hostname']);
 		$this->setDatabaseName($dbconfig['db_name']);
 		$this->dbOptions = $dbconfigoption;
 		$this->enableSQLlog = ($dbconfig['log_sql'] == true);
@@ -711,9 +708,9 @@ global $vtlog;
         {
             $this->disconnect();
             $this->setDatabaseType($dbconfig['db_type']);
-            $this->setUserName($dbconfig['db_user_name']);
+            $this->setUserName($dbconfig['db_username']);
             $this->setUserPassword($dbconfig['db_password']);
-            $this->setDatabaseHost( $dbconfig['db_host_name']);
+            $this->setDatabaseHost( $dbconfig['db_hostname']);
             $this->setDatabaseName($dbconfig['db_name']);
             $this->dbOptions = $dbconfigoption;
 	    if($dbconfig['log_sql'])

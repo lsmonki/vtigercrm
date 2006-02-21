@@ -6,9 +6,9 @@
 require_once 'config.php';
 $tutos[demo]=0;
 $tutos[dbname][0]   = $dbconfig['db_name'];
-$tutos[dbhost][0]   = $dbconfig['db_host_name'];
+$tutos[dbhost][0]   = $dbconfig['db_hostname'];
 $tutos[dbport][0]   = 5000;
-$tutos[dbuser][0]   = $dbconfig['db_user_name'];
+$tutos[dbuser][0]   = $dbconfig['db_username'];
 $tutos[dbpasswd][0] = $dbconfig['db_password'];
 $tutos[dbtype][0]   = 2;
 $tutos[dbalias][0]  = "MYSQL TEST database";

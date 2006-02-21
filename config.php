@@ -20,16 +20,16 @@ $sock_path=":" .$mysql_port;
 $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 
 /* database configuration
-      db_host_name:     MySQL Database Hostname
-      db_user_name:    	MySQL Username
-      db_password:     	MySQL Password
-      db_name:     	MySQL Database Name
+      db_hostname
+      db_username
+      db_password
+      db_name
 */
 // all of these commented values get populated by install.php
-//$dbconfig['db_host_name'] = 	'$H_NAME.$sock_path';
-//$dbconfig['db_user_name'] = 	'vtigercrm';
-//$dbconfig['db_password'] = 	'';
-//$dbconfig['db_name'] = 	'vtigercrm';
+//$dbconfig['db_hostname'] = '$H_NAME.$sock_path';
+//$dbconfig['db_username'] = 'vtigercrm';
+//$dbconfig['db_password'] = '';
+//$dbconfig['db_name'] = 'vtigercrm';
 
 //$host_name = '';
 //$site_URL = '';

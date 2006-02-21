@@ -11,8 +11,9 @@
 
 require_once("config.php");
 require_once("include/database/PearDatabase.php");
-define("dbserver", $dbconfig['db_host_name']);
-define("dbuser", $dbconfig['db_user_name']);
+
+define("dbserver", $dbconfig['db_hostname']);
+define("dbuser", $dbconfig['db_username']);
 define("dbpass", $dbconfig['db_password']);
 define("dbname", $dbconfig['db_name']);
 

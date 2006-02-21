@@ -17,11 +17,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
-if (isset($_REQUEST['db_host_name']))
-	$db_host_name = $_REQUEST['db_host_name'];
+if (isset($_REQUEST['db_hostname']))
+	$db_hostname = $_REQUEST['db_hostname'];
 
-if (isset($_REQUEST['db_user_name']))
-	$db_user_name = $_REQUEST['db_user_name'];
+if (isset($_REQUEST['db_username']))
+	$db_username = $_REQUEST['db_username'];
 
 if (isset($_REQUEST['db_password']))
 	$db_password = $_REQUEST['db_password'];
@@ -76,7 +76,7 @@ if($dbtype != 'mysql' || $dbtype =='') {
 	$mysql_db_status = 'true';
 }
 else {
-	$conn = @mysql_pconnect($db_host_name,$db_user_name,$db_password);
+	$conn = @mysql_pconnect($db_hostname,$db_username,$db_password);
 	if(!$conn)
 		$mysql_status = 'false';
 	else {
@@ -142,11 +142,11 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 <table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 			  <tr>
                <td bgcolor="#F5F5F5" width="40%">Host Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_hostname)) echo "$db_hostname"; ?></font></td>
               </tr>
               <tr>
                <td bgcolor="#F5F5F5" width="40%">User Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_user_name)) echo "$db_user_name"; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_username)) echo "$db_username"; ?></font></td>
               </tr>
               <tr>
                <td bgcolor="#F5F5F5" width="40%" noWrap>Password</td>
@@ -194,8 +194,8 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
            <td align="left" valign="bottom">
 	       		 <form action="install.php" method="post" name="form" id="form">
 			       <input type="hidden" name="file" value="2setConfig.php">
-             <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-             <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+             <input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+             <input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
              <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
              <input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
@@ -227,8 +227,8 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 		  		 			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
 		  		 			 
 		  		 			 
-			<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
@@ -251,8 +251,8 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 	<!-- td align="right">
 	<form action="install.php" method="post" name="form" id="form">
 	<input type="hidden" name="file" value="4createConfigFile.php">
-			<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
@@ -338,11 +338,11 @@ if($mysql_status == 'false')
 	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 			  <tr>
                <td bgcolor="#F5F5F5" width="40%">Host Name</td>
-               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_hostname)) echo "$db_hostname"; ?></font></td>
               </tr>
               <tr>
                <td bgcolor="#F5F5F5" width="40%">User Name</td>
-               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_user_name)) echo "$db_user_name"; ?></font></td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_username)) echo "$db_username"; ?></font></td>
               </tr>
               <tr>
                <td noWrap bgcolor="#F5F5F5" width="40%">Password</td>
@@ -359,8 +359,8 @@ if($mysql_status == 'false')
       <td align="right">
         <form action="install.php" method="post" name="form" id="form">
 		<input type="hidden" name="file" value="2setConfig.php">
-		<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-		<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+		<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+		<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 		<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 		<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
 		<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
@@ -429,8 +429,8 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
       <td height="40" align="right">
         <form action="install.php" method="post" name="form" id="form">
 			<input type="hidden" name="file" value="2setConfig.php">
-			<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />

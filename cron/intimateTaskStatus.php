@@ -2,9 +2,10 @@
 require('send_mail.php');
 require_once('../config.php');
 
-$dbhost = $dbconfig['db_host_name'];
-$dbuser =$dbconfig['db_user_name']; 
+$dbhost = $dbconfig['db_hostname'];
+$dbuser = $dbconfig['db_username']; 
 $dbpass = $dbconfig['db_password'];
+
 $db = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql');
 if (!$db) {
   die('Could not connect: ' . mysql_error());

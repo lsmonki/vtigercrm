@@ -68,19 +68,19 @@ if (is_file("config.php")) {
 
 	global $dbconfig;
 
-	if (isset($_REQUEST['db_host_name']))
-		$db_host_name = $_REQUEST['db_host_name'];
-	elseif (isset($dbconfig['db_host_name']))
-		$db_host_name = $dbconfig['db_host_name'];
+	if (isset($_REQUEST['db_hostname']))
+		$db_hostname = $_REQUEST['db_hostname'];
+	elseif (isset($dbconfig['db_hostname']))
+		$db_hostname = $dbconfig['db_hostname'];
 	else
-		$db_host_name = $H_NAME.$sock_path;
+		$db_hostname = $H_NAME.$sock_path;
 
-	if (isset($_REQUEST['db_user_name']))
-		$db_user_name = $_REQUEST['db_user_name'];
-	elseif (isset($dbconfig['db_user_name']))
-		$db_user_name = $dbconfig['db_user_name'];
+	if (isset($_REQUEST['db_username']))
+		$db_username = $_REQUEST['db_username'];
+	elseif (isset($dbconfig['db_username']))
+		$db_username = $dbconfig['db_username'];
 	else
-		$db_user_name = $mysql_username;
+		$db_username = $mysql_username;
 
 	if (isset($_REQUEST['db_password']))
 		$db_password = $_REQUEST['db_password'];
@@ -126,8 +126,8 @@ if (is_file("config.php")) {
 		$admin_password = $_REQUEST['admin_password'];
 }
 else {
-	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
-	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
+	!isset($_REQUEST['db_hostname']) ? $db_hostname = $H_NAME.$sock_path : $db_hostname = $_REQUEST['db_hostname'];
+	!isset($_REQUEST['db_username']) ? $db_username = $mysql_username : $db_username = $_REQUEST['db_username'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
 	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
@@ -170,16 +170,16 @@ function verify_data(form) {
 	var errorMessage = "";
 
 	// Here we decide whether to submit the form.
-	if (trim(form.db_host_name.value) =='') {
+	if (trim(form.db_hostname.value) =='') {
 		isError = true;
 		errorMessage += "\n database host name";
-		form.db_host_name.focus();
+		form.db_hostname.focus();
 	}
 
-	if (trim(form.db_user_name.value) =='') {
+	if (trim(form.db_username.value) =='') {
 		isError = true;
 		errorMessage += "\n database user name";
-		form.db_user_name.focus();
+		form.db_username.focus();
 	}
 
 	if (trim(form.db_name.value) =='') {
@@ -296,11 +296,11 @@ function verify_data(form) {
 			<table width="80%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
 			<tr>
                <td nowrap bgcolor="#F5F5F5" width="40%"><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="text" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
+               <td align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>

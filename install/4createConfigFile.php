@@ -27,11 +27,11 @@ session_start();
 $vtiger_version = "4.2.3";
 $release_date = "23 December 2005";
 
-if (isset($_REQUEST['db_host_name']))
-	$db_host_name =	$_REQUEST['db_host_name'];
+if (isset($_REQUEST['db_hostname']))
+	$db_hostname =	$_REQUEST['db_hostname'];
 
-if (isset($_REQUEST['db_user_name']))
-	$db_user_name =	$_REQUEST['db_user_name'];
+if (isset($_REQUEST['db_username']))
+	$db_username =	$_REQUEST['db_username'];
 
 if (isset($_REQUEST['db_password']))
 	$db_password = $_REQUEST['db_password'];
@@ -155,13 +155,13 @@ $config .= "\$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';\n";
 $config .= "\$HELPDESK_SUPPORT_NAME = 'your-domain name';\n";
 $config .= "\n";
 $config .= "/* database configuration\n";
-$config .= "      db_host_name:MySQL Database Hostname\n";
-$config .= "      db_user_name:MySQL Username\n";
+$config .= "      db_hostname:MySQL Database Hostname\n";
+$config .= "      db_username:MySQL Username\n";
 $config .= "      db_password:MySQL Password\n";
 $config .= "      db_name:MySQL Database Name\n";
 $config .= "*/\n";
-$config .= "\$dbconfig['db_host_name'] = '".$db_host_name."';\n";
-$config .= "\$dbconfig['db_user_name'] = '".$db_user_name."';\n";
+$config .= "\$dbconfig['db_hostname'] = '".$db_hostname."';\n";
+$config .= "\$dbconfig['db_username'] = '".$db_username."';\n";
 $config .= "\$dbconfig['db_password'] =	'".$db_password."';\n";
 $config .= "\$dbconfig['db_name'] = '".$db_name."';\n";
 $config .= "\n";
@@ -189,7 +189,7 @@ $config .= "\n";
 $config .= "// ssl default value = false\n";
 $config .= "\$dbconfigoption['ssl'] = false;\n";
 $config .= "\n";
-$config .= "\$host_name = '".$db_host_name."';\n";
+$config .= "\$host_name = '".$db_hostname."';\n";
 $config .= "\$site_URL = '".$site_URL."';\n";
 $config .= "\$root_directory = '".$root_directory."';\n";
 $config .= "\$cache_dir = '$cache_dir';\n";
@@ -306,8 +306,8 @@ $config .= "\$translation_string_prefix = ".return_session_value_or_default('tra
 $config .= "\n";
 //$config .= "// forum configurations\n";
 //$config .= "\$dbms = 'mysql';\n";
-//$config .= "\$dbhost = '".$db_host_name."';\n\n";
-//$config .= "\$dbuser = '".$db_user_name."';\n\n";
+//$config .= "\$dbhost = '".$db_hostname."';\n\n";
+//$config .= "\$dbuser = '".$db_username."';\n\n";
 //$config .= "\$dbpasswd = '".$db_password."';\n\n";
 //$config .= "\$dbname= '".$db_name."';\n\n";
 //$config .= "\$table_prefix = 'phpbb_';\n";
@@ -337,8 +337,8 @@ else {
 	<form action="install.php" method="post" name="form" id="form">
 	<input type="hidden" name="file" value="5createTables.php">
 
-	<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-	<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+	<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+	<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 	<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 	<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
 	<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />

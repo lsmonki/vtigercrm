@@ -34,18 +34,24 @@ $HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';
 $HELPDESK_SUPPORT_NAME = 'your-domain name';
 
 /* database configuration
-      db_host_name: MySQL Database Hostname
-      db_user_name: MySQL Username
-      db_password: MySQL Password
-      db_name: MySQL Database Name
+      db_server
+      db_port
+      db_hostname
+      db_username
+      db_password
+      db_name
 */
-$dbconfig['db_host_name'] = 'localhost:80';
-$dbconfig['db_user_name'] = 'root';
-$dbconfig['db_password'] =	'';
-$dbconfig['db_name'] = 'vtigercrm';
+
+$dbconfig['db_server'] = '_DBC_SERVER_';
+// TODO test if port is empty
+$dbconfig['db_port'] = ':_DBC_PORT_';
+$dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
+$dbconfig['db_username'] = '_DBC_USER_';
+$dbconfig['db_password'] = '_DBC_PASS_';
+$dbconfig['db_name'] = '_DBC_NAME_';
 
 // db_type default value = mysql
-$dbconfig['db_type'] = 'mysql';
+$dbconfig['db_type'] = '_DBC_TYPE';
 
 // log_sql default value = false
 $dbconfig['log_sql'] = false;
@@ -68,9 +74,9 @@ $dbconfigoption['portability'] = 0;
 // ssl default value = false
 $dbconfigoption['ssl'] = false;
 
-$host_name = 'localhost:80';
-$site_URL = 'http://127.0.0.1:80/vtigercrm-4.2';
-$root_directory = '/var/www/vtigercrm-4.2/';
+$host_name = $dbconfig['db_hostname'];
+$site_URL = 'http://'.$dbconfig['db_server'].'/vtigercrm';
+$root_directory = '/var/www/vtigercrm';
 $cache_dir = 'cache/';
 $mail_server = '';
 $mail_server_username = '';
@@ -101,7 +107,7 @@ $allow_exports = 'all';
 $upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm');
 
 // full path to include directory including the trailing slash
-// includeDirectory default value = /var/www/vtigercrm-4.2/.'include/
+// includeDirectory default value = /var/www/vtigercrm/.'include/
 $includeDirectory = $root_directory.'include/';
 
 // list_max_entries_per_page default value = 20

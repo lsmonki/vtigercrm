@@ -29,7 +29,7 @@ class DatabaseConnection {
 		
 		if(!isset($disable_persistent_connections) || $disable_persistent_connections == false)
 		{
-			$this->connection = @mysql_pconnect($dbconfig['db_host_name'], $dbconfig['db_user_name'], 
+			$this->connection = @mysql_pconnect($dbconfig['db_hostname'], $dbconfig['db_username'], 
 				$dbconfig['db_password']);
 				
 		}
@@ -37,10 +37,11 @@ class DatabaseConnection {
 		if($this->connection == false)
 		{
 			// We were unable to connect with pconnect.  Try connect	
-			$this->connection = mysql_connect($dbconfig['db_host_name'], 
-				$dbconfig['db_user_name'], 
+			$this->connection = mysql_connect(
+				$dbconfig['db_hostname'], 
+				$dbconfig['db_username'], 
 				$dbconfig['db_password']) 
-				or die("Could not connect to server ".$dbconfig['db_host_name']." as ".$dbconfig['db_user_name'].".".mysql_error());
+				or die("Could not connect to server ".$dbconfig['db_hostname']." as ".$dbconfig['db_username'].".".mysql_error());
 
 			if($this->connection == false && !isset($disable_persistent_connections) || $disable_persistent_connections == false)
 			{
