@@ -98,7 +98,12 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
-$smarty->assign("BLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields));
+if($disp_view == 'edit_view')
+	$smarty->assign("BLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields));
+else	
+{
+	$smarty->assign("BASBLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields,'BAS'));
+}	
 $smarty->assign("OP_MODE",$disp_view);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -173,7 +178,9 @@ if (isset($focus->parent_type) && $focus->parent_type != "") {
 }
 if ($focus->parent_type == "Account") $smarty->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
 
-
-$smarty->display("salesEditView.tpl");
+if($focus->mode == 'edit')
+	$smarty->display("salesEditView.tpl");
+else
+	$smarty->display("CreateView.tpl");
 
 ?>
