@@ -1117,3 +1117,80 @@ function hide(divId)
     id.style.display = 'none';
 
 }
+
+function fnLoadValues(obj1,obj2,SelTab,unSelTab){
+
+   var tabName1 = document.getElementById(obj1);
+
+   var tabName2 = document.getElementById(obj2);
+
+   var tagName1 = document.getElementById(SelTab);
+
+   var tagName2 = document.getElementById(unSelTab);
+
+   if(tabName1.className == "dvtUnSelectedCell")
+
+       tabName1.className = "dvtSelectedCell";
+
+   if(tabName2.className == "dvtSelectedCell")
+
+       tabName2.className = "dvtUnSelectedCell";   
+   tagName1.style.display='block';
+
+   tagName2.style.display='none';
+
+}
+
+function fnCopy(source,design){
+
+   document.getElementById(source).value=document.getElementById(design).value;
+
+   document.getElementById(source).disabled=true;
+
+}
+
+function fnClear(source){
+
+   document.getElementById(source).value=" ";
+
+   document.getElementById(source).disabled=false;
+
+}
+
+function fnCpy(){
+
+   var tagName=document.getElementById("cpy");
+
+   if(tagName.checked==true){   
+       fnCopy("shipaddress","address");
+
+       fnCopy("shippobox","pobox");
+
+       fnCopy("shipcity","city");
+
+       fnCopy("shipcode","code");
+
+       fnCopy("shipstate","state");
+
+       fnCopy("shipcountry","country");
+
+   }
+
+   else{
+
+       fnClear("shipaddress");
+
+       fnClear("shippobox");
+
+       fnClear("shipcity");
+
+       fnClear("shipcode");
+
+       fnClear("shipstate");
+
+       fnClear("shipcountry");
+
+   }
+
+}
+
