@@ -3,17 +3,6 @@
 
 
 {*<!--Home Page Entries  -->*}
-{if isset($LOGINHISTORY.0)}
-    <div id="loginhistory" style="float:left;position:absolute;left:300px;top:150px;height:100px:width:200px;overflow:auto;border:1px solid #dadada;">
-    <table border="0" cellpadding="4" cellspacing="0" width="100%">
-        <tr><td class=tblPro1ColHeader>ID</td><td class=tblPro1ColHeader>Type</td><td class=tblPro1ColHeader>Modified By</td><td class=tblPro1ColHeader nowrap><img src="smiletag/images/delete_icon.gif" alt="Close" align="right" border="0" onClick="document.getElementById('loginhistory').style.display='none';">Modified Time</td></tr>
-        {foreach key=label item=detail from=$LOGINHISTORY}
-            <tr><td class=tblPro1DataCell>{$detail.crmid}</td><td class=tblPro1DataCell>{$detail.setype}</td><td class=tblP
-ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modifiedtime}</td></tr>
-        {/foreach}
-    </table>
-    </div>
-{/if}
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
  	<tr><td style="height:2px"></td></tr>
@@ -140,11 +129,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		</td>
 		<td align=left valign=top width=30%>
 		Pipeline chart comes here..<br><br>
-		{if $TAGCLOUD_JS ne ''}
-	            <link href="{$TAGCLOUD_CSS}" rel="stylesheet" type="text/css">
-        	    <script language="JavaScript"  type="text/javascript" src="{$TAGCLOUD_JS}"></script>
-        	{/if}
-        	<br>
+		
 		<table border="0" cellpadding="0" cellspacing="0">
      		<tr><b>YOUR SHOUT!!!</b>
           		<td valign="top" >
@@ -162,29 +147,29 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 <div id="smiley_box">
 	<div class="smiley_top"><br /><a href="javascript:hideSmileyWindow();"><img src="smiletag/images/delete_icon.gif" alt="Close" /></a></div>
 	<div class="smiley_middle">
-		<div id="smiley_box_content" style="padding: 0px;">
+		<div id="smiley_box_content" style="padding: 0px; border: 0">
 			<table width="80%" border="0" cellspacing="5" cellpadding="0">
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="smiletag/images/smile.gif" alt=":)" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="smiletag/images/laugh.gif" alt=":D" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="smiletag/images/sad.gif" alt=":(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':)');"><img src="smiletag/images/smilies/smile.gif" alt=":)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':D');"><img src="smiletag/images/smilies/laugh.gif" alt=":D" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':(');"><img src="smiletag/images/smilies/sad.gif" alt=":(" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="smiletag/images/shock.gif" alt=":o" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="smiletag/images/tongue.gif" alt=":p" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="smiletag/images/wink.gif" alt=";)" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':o');"><img src="smiletag/images/smilies/shock.gif" alt=":o" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':p');"><img src="smiletag/images/smilies/tongue.gif" alt=":p" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(';)');"><img src="smiletag/images/smilies/wink.gif" alt=";)" /></a></td>
 			  </tr>
 			  <tr>
-				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="smiletag/images/blah.gif" alt=":|" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="smiletag/images/mad.gif" alt="x(" /></a></td>
-				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="smiletag/images/drool.gif" alt=":~" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':|');"><img src="smiletag/images/smilies/blah.gif" alt=":|" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley('x(');"><img src="smiletag/images/smilies/mad.gif" alt="x(" /></a></td>
+				<td align="center"><a href="javascript:insertSmiley(':~');"><img src="smiletag/images/smilies/drool.gif" alt=":~" /></a></td>
 			  </tr>
 </table>
 		</div>
 	</div>
 	<div class="smiley_bottom"></div>
 </div>
-  <a href="http://www.smiletag.com/" onclick="showSmileyWindow(event);return false">(Smilies)</a>
+  <a href="http://www.vtiger.com/" onclick="showSmileyWindow(event);return false">(Smilies)</a>
 			<br /><textarea name="message_box" rows="3" cols="20"></textarea><br />
               <input type="hidden" name="message" value="" />
               <input type="submit" name="submit" value="Post!!" onclick="clearMessage()" /> 
@@ -193,6 +178,12 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	       </td>
         </tr>
 </table>
+		<br>
+		{if $TAGCLOUD_JS ne ''}
+	            <link href="{$TAGCLOUD_CSS}" rel="stylesheet" type="text/css">
+        	    <script language="JavaScript"  type="text/javascript" src="{$TAGCLOUD_JS}"></script>
+        	{/if}
+        	<br>
 		</td>
 		</tr>
 		</table>
