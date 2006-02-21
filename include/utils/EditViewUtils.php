@@ -813,11 +813,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$currencyid=fetchCurrency($current_user->id);
-                $curr_symbol=getCurrencySymbol($currencyid);
-		$rate = getConversionRate($currencyid,$curr_symbol);
-		$editview_label[]=$mod_strings[$fieldlabel].': ('.$curr_symbol.')';
-		$fieldvalue[] = convertFromDollar($value,$rate);
+		$disp_currency = getDisplayCurrency();
+		$editview_label[]=$mod_strings[$fieldlabel].': ('.$disp_currency.')';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
@@ -1192,7 +1190,7 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 
 
-function getBlockInformation($module, $block, $mode, $col_fields,$tabid)
+function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_type='')
 {
 	//echo '*******************************<br>';
 	//echo '<pre>';print_r($col_fields);echo '</pre>';
@@ -1205,18 +1203,35 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid)
 
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
-        {
+	
+	if ($info_type != '')
+	{
+		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+        	{
 
-                $sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 order by sequence";
-        }
-        else
-        {
-                $profileList = getCurrentUserProfileList();
+                	$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and info_type = '".$info_type."' order by sequence";
+        	}
+        	else
+        	{
+                	$profileList = getCurrentUserProfileList();
 
-		$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by sequence";
+			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and info_type = '".$info_type."' and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by sequence";
+		}
 	}
-	//echo $sql;	
+	else
+	{
+		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+        	{
+
+                	$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 order by sequence";
+        	}
+        	else
+        	{
+                	$profileList = getCurrentUserProfileList();
+
+			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by sequence";
+		}
+	}
 
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
