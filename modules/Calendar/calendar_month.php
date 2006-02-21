@@ -134,7 +134,6 @@ $ny = $y;
 	echo "<tr><td>\n";
 		echo "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" align=\"center\">\n";
 	echo "<tr>\n";
-	echo "<th class=\"weekday\">". $mod_strings['LBL_WEEK'] ."</th>\n";
 
 for ( $i = $current_user->weekstart;$i<=6;$i++ ) 
 { 
@@ -146,6 +145,7 @@ for ( $i = 0;$i<$current_user->weekstart;$i++ )
   echo "<th class=\"weekday\">". $mod_strings['LBL_DAY'.$i] ."</th>\n";
 }
 
+	echo "<th class=\"weekday\">". $mod_strings['LBL_WEEK'] ."</th>\n";
 echo "</tr>\n";
 
 $ts = mktime(12,0,0,$m,1,$y);
@@ -192,7 +192,6 @@ while ( $go == 1 )
    		echo "<tr>\n";
    		$w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
    		$wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
-  		echo " <td align=\"right\" class=\"week\"> ". $wn ."&nbsp;</td>\n";
  	}
 
 // check for overlapping days
@@ -345,6 +344,7 @@ while ( $go == 1 )
  		if ( $wd == ($l->user->weekstart+6)%7   ) 
 		{
    			# end week
+  			echo " <td align=\"right\" class=\"week\"> ". $wn ."&nbsp;</td>\n";
    			echo "</tr>\n";
    			if ( ($xm > $m) || ($xy > $y)  ) 
 			{

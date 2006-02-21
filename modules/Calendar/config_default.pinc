@@ -549,7 +549,7 @@ $tutos[timezones][] = "Australia/Perth";
 # 0 = Sunday
 # 1 = Monday
 #
-$tutos[weekstart] = 1;
+$tutos[weekstart] = 0;
 #
 # Holidays
 # 0 = disable set

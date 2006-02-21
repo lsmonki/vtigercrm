@@ -120,7 +120,6 @@ echo "</td></tr>\n";
 echo "<tr><td>\n";
 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"100%\" align=\"center\">\n";
 echo "<tr>\n";
-echo "<th class=\"weekday\">". $current_module_strings['LBL_WEEK'] ."</th>\n";
 
 $WeekDayName=array('LBL_SM_SUN','LBL_SM_MON','LBL_SM_TUE','LBL_SM_WED','LBL_SM_THU','LBL_SM_FRI','LBL_SM_SAT');
  
@@ -132,6 +131,7 @@ for ( $i = 0;$i<$current_user->weekstart;$i++ ) {
   echo "<th class=\"weekday\">". $current_module_strings[$WeekDayName[$i]] ."</th>\n";
 }
 
+echo "<th class=\"weekday\">". $current_module_strings['LBL_WEEK'] ."</th>\n";
 echo "</tr>\n";
 
 $ts = mktime(12,0,0,$m,1,$y);
@@ -157,7 +157,6 @@ while ( $go == 1 ) {
    echo "<tr>\n";
    $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
    $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
-   echo " <td align=\"right\" class=\"week\">". $wn ."&nbsp;</td>\n";
  }
 
  $col = "";
@@ -263,6 +262,7 @@ if ($xm == $m )
 
  if ( $wd == ($l->user->weekstart+6)%7   ) {
    # end week
+   echo "<td align=\"right\" class=\"week\">". $wn ."&nbsp;</td>\n";
    echo "</tr>\n";
    if ( ($xm > $m) || ($xy > $y)  ) {
      break;
