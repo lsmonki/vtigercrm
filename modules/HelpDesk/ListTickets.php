@@ -106,7 +106,7 @@ $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;"
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='</tr>';
 
-for ($i=0; $i<$adb->num_rows($tktresult); $i++)
+for ($i=1; $i<=$adb->num_rows($tktresult); $i++)
 {
         if (($i%2)==0)
                 $list .= '<tr height=20 class=evenListRow>';
@@ -114,15 +114,15 @@ for ($i=0; $i<$adb->num_rows($tktresult); $i++)
                 $list .= '<tr height=20 class=oddListRow>';
 
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $ticketid = $adb->query_result($tktresult,$i,"ticketid");
+        $ticketid = $adb->query_result($tktresult,$i-1,"ticketid");
        $list .= '<td style="padding:0px 3px 0px 3px;">'.$ticketid.'</td>';
 
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $subject = '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+        $subject = '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i-1,"ticketid").'">'.$adb->query_result($tktresult,$i-1,"title").'</a>';
        $list .= '<td style="padding:0px 3px 0px 3px;">'.$subject.'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 
-	$parent_id = $adb->query_result($tktresult,$i,"parent_id");
+	$parent_id = $adb->query_result($tktresult,$i-1,"parent_id");
 	$parent_name = '';
 	if($parent_id != '' && $parent_id != NULL)
 	{
