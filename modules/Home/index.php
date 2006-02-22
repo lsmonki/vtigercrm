@@ -89,7 +89,7 @@ $query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgroup
 //$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
 
   $log->info("Here is the where clause for the list view: $query");
-	$result = $adb->limitquery($query,0,5) or die("Couldn't get the group listing");
+	$result = $adb->limitquery($query,0,5);
 
 //echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
 $list ='<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -112,6 +112,11 @@ $list .= ' ';
 
 
 
+if (!$result) {
+	$list .= '<tr><td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td><td colspan=5><em>Could not get the group listing.</em></td><td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+}
+else
+{
 $i=1;
 while($row = $adb->fetch_array($result))
 {
@@ -159,6 +164,7 @@ while($row = $adb->fetch_array($result))
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
   $list .= '</tr>';
   $i++;
+}
 }
 
         $list .= '<tr><td WIDTH="1" colspan="6" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
