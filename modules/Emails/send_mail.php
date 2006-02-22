@@ -55,7 +55,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$vtlog->logthis("Current logged in users signature is added with body of the email => ".$sign,'info');
 
 	$mail->Subject = $subject;
-	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
+	$mail->Body    = html_entity_decode(nl2br($contents));//"This is the HTML message body <b>in bold!</b>";
 
 	$initialfrom = $from;
 
