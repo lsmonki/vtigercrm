@@ -6979,6 +6979,17 @@ E</constraint>
 	</table>
 
 
-
+	<table name="announcement">
+	        <field name="creatorid" type="I" size="19">
+	          <KEY/>
+	        </field>
+	        <field name="announcement" type="X">
+	        </field>
+	        <field name="title" type="C" size="255">
+	         </field>
+	        <field name="time" type="T">
+	        <DEFTIMESTAMP/>
+	        </field>
+	</table>
 
 </schema>
