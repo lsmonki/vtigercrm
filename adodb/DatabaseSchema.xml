@@ -484,7 +484,7 @@
 			<DEFAULT value="Dollars"/>
 		</field>
 		<field name="imagename" type="C" size="150"></field>
-
+		<field name="reference" type="C" size="3"></field>
              		 
 		 <index name="ContactDetails_IDX1">
 			<col>accountid</col>
