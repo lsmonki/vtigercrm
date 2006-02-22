@@ -219,13 +219,13 @@ function getUserFldArray($fld_module)
 	$user_fld = Array();
 	$query = "select * from field where generatedtype=2 and tabid=".fetchTabIDVal($fld_module)." and uitype IN (15,16)";
 //        echo $query;
-        $result = mysql_query($query);
-	$noofrows = mysql_num_rows($result);
+        $result = $adb->query($query);
+	$noofrows = $adb->getRowCount($result);
         if($noofrows > 0)
         {
           for($i=0; $i<$noofrows; $i++)
           {
-            $user_fld[mysql_result($result,$i,"fieldlabel")] = mysql_result($result,$i,"columnname");	
+            $user_fld[$adb->query_result($result,$i,"fieldlabel")] = $adb->query_result($result,$i,"columnname");
           }
         }
           return $user_fld;
