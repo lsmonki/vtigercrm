@@ -52,7 +52,7 @@ $mod_strings = Array(
 'LBL_USER_SETTINGS'=>'User Settings',
 'LBL_THEME'=>'Theme:',
 'LBL_LANGUAGE'=>'Language:',
-'LBL_ADMIN'=>'Admin:',
+'LBL_ADMIN'=>'Admin :',
 'LBL_USER_INFORMATION'=>'User Information',
 'LBL_OFFICE_PHONE'=>'Office Phone:',
 'LBL_REPORTS_TO'=>'Reports to:',
@@ -343,6 +343,11 @@ $mod_strings = Array(
 'MNL'=>'My New Leads',
 'LBL_LEAD_VIEW'=>'Default Lead View',
 'LBL_TAG_CLOUD'=>'Tag Cloud',
+'LBL_LIST_TOOLS'=>'Tools',
+'LBL_STATISTICS'=>'Statistics',
+'LBL_TOTAL'=>'Total :',
+'LBL_OTHERS'=>'Others :',
+'LBL_USERS'=>'User(s)',
 );
 
 ?>

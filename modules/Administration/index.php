@@ -17,11 +17,6 @@
  * Description: TODO:  To be written.
  ********************************************************************************/
 
-global $mod_strings;
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
-echo "\n<BR>\n";
-
 include("modules/Users/ListView.php");
 
 ?>

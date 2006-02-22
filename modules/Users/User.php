@@ -210,50 +210,6 @@ class User extends SugarBean {
 		return '';
 	}
 	function create_tables () {
-		/*$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .= 'id char(36) NOT NULL';
-		$query .= ', user_name varchar(20)';
-		$query .= ', user_password varchar(30)';
-		$query .= ', user_hash char(32)';
-		$query .= ', first_name varchar(30)';
-		$query .= ', last_name varchar(30)';
-		$query .= ', reports_to_id char(36)';
-		$query .= ', is_admin char(3) default 0';
-		$query .= ', description text';
-		$query .= ', date_entered datetime NOT NULL';
-		$query .= ', date_modified datetime NOT NULL';
-		$query .= ', modified_user_id char(36) NOT NULL';
-		$query .= ', title varchar(50)';
-		$query .= ', department varchar(50)';
-		$query .= ', phone_home varchar(50)';
-		$query .= ', phone_mobile varchar(50)';
-		$query .= ', phone_work varchar(50)';
-		$query .= ', phone_other varchar(50)';
-		$query .= ', phone_fax varchar(50)';
-		$query .= ', email1 varchar(100)';
-		$query .= ', email2 varchar(100)';
-		$query .= ', yahoo_id varchar(100)';
-		$query .= ', status varchar(25)';
-		$query .= ', address_street varchar(150)';
-		$query .= ', address_city varchar(100)';
-		$query .= ', address_state varchar(100)';
-		$query .= ', address_country varchar(25)';
-		$query .= ', address_postalcode varchar(9)';
-		$query .= ', user_preferences TEXT';
-		$query .= ', tz varchar(30)';
-		$query .= ', holidays varchar(60)';
-		$query .= ', namedays varchar(60)';
-		$query .= ', workdays varchar(30)';
-		$query .= ', weekstart int(11)';
-		$query .= ', deleted bool NOT NULL default 0';
-		$query .= ', PRIMARY KEY ( ID )';
-		$query .= ', KEY ( user_name )';
-		$query .= ', KEY ( user_password ))';
-	
-		$this->db->query($query, true);
-
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-	*/
 	
 	}
 
@@ -603,6 +559,43 @@ class User extends SugarBean {
 											 "CITY","STATE","POSTALCODE","COUNTRY");	
   	return $mergeflds;
   }
+	//function added for the listview of users for 5.0 beta
+	function getUserListViewHeader()
+	{
+		global $mod_strings;
+		$header_array=array($mod_strings['LBL_LIST_TOOLS'],
+						    $mod_strings['LBL_LIST_NAME'],
+						    $mod_strings['LBL_LIST_USER_NAME'],
+						    $mod_strings['LBL_LIST_DEPARTMENT'],
+						    $mod_strings['LBL_LIST_EMAIL'],
+						    $mod_strings['LBL_USER_ROLE'],
+							$mod_strings['LBL_LIST_ADMIN']);
+		return $header_array;
+	}
+
+	function getUserListViewEntries($navigation_array)
+	{
+		global $theme;
+	    $theme_path="themes/".$theme."/";
+	    $image_path=$theme_path."images/";
+		$query = "SELECT * from users where deleted=0";
+		$result =$this->db->query($query);
+		$entries_list = array();
+		for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
+		{
+			$entries=array();
+			$id=$this->db->query_result($result,$i-1,'id');
+			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#"><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
+			$entries[]=$this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name');
+			$entries[]='<a href="index.php?action=DetailView&module=Users&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
+			$entries[]=$this->db->query_result($result,$i-1,'department');
+			$entries[]=$this->db->query_result($result,$i-1,'email1');
+			$entries[]=fetchUserRole($this->db->query_result($result,$i-1,'id'));
+			$entries[]=$this->db->query_result($result,$i-1,'is_admin');
+			$entries_list[]=$entries;
+		}
+		return $entries_list;
+	}
 }
 
 ?>

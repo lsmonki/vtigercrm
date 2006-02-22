@@ -1193,4 +1193,16 @@ function fnCpy(){
    }
 
 }
+function fnDown(obj){
+        var tagName = document.getElementById(obj);
+        var tabName = document.getElementById("one");
+        if(tagName.style.display == 'none'){
+                tagName.style.display = 'block';
+                tabName.style.display = 'block';
+        }
+        else{
+                tabName.style.display = 'none';
+                tagName.style.display = 'none';
+        }
+}
 

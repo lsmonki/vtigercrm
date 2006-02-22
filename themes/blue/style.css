@@ -719,6 +719,32 @@ border:0px;
 #userTab{position:relative;left:0px;top:0px;width:100%;display:none;}
 #studioTab{position:relative;left:0px;top:0px;width:100%;display:none;}
 
+
+#scrollTab{
+	position:relative;
+	width:100%;
+	height:350px;
+	overflow:auto;
+	border:0px solid #CCCCCC;
+	display:block;
+}
+
+.dock{
+	vertical-align:middle;
+	text-align:left;
+	padding-left:0px;
+}
+.imgDoc{
+	cursor:pointer;
+	border:0px;
+}
+
+#one{
+	position:relative;
+	display:block;
+	width:245px;
+}
+
 /* End of Settings */
 
 .bggray{
