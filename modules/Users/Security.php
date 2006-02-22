@@ -285,8 +285,9 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'donotcall','contactdetails',1,'56','donotcall','Do Not Call',1,0,0,100,20,4,1,'C~O',1,'','ADV')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'emailoptout','contactdetails',1,'56','emailoptout','Email Opt Out',1,0,0,100,21,4,1,'C~O',1,'','ADV')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,22,4,1,'V~M',1,'','ADV')");
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,23,4,2,'T~O',1,'','BAS')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,24,4,2,'T~O',1,'','BAS')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,'','ADV')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,24,4,2,'T~O',1,'','BAS')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,25,4,2,'T~O',1,'','BAS')");
 
 //Block4 -- End
 
@@ -2139,7 +2140,8 @@ title';
 	(6,20,6),
 	(6,23,7),
 	(7,24,1),
-    (2,26,7)");
+    (2,26,7),
+    (7,8,3)");
 	
 
 	       	}
