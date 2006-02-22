@@ -2140,9 +2140,11 @@ title';
 	(6,20,6),
 	(6,23,7),
 	(7,24,1),
-    (2,26,7),
-    (7,8,3)");
-	
+    	(2,26,7),
+	(7,27,2),
+    	(7,8,3)");
+
+	$this->db->query("insert into portal values(1,'VtigerCRM','http://vtiger.com/',0)");	
 
 	       	}
 	
