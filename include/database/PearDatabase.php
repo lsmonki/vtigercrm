@@ -747,7 +747,7 @@ function quote($string){
 
 
 function quote($string){
-	return ADOConnection::qstr($string,get_magic_quotes_gpc());	
+	return ADOConnection::qstr($string);	
 }
 
 
