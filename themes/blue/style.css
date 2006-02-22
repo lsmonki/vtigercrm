@@ -745,6 +745,43 @@ border:0px;
 	width:245px;
 }
 
+#mnuTab{
+
+   position:relative;
+
+   overflow:auto;
+
+   width:100%;
+
+   display:block;
+
+}
+
+#mnuTab1{
+
+   position:relative;
+
+   overflow:auto;
+
+   width:100%;
+
+   display:none;
+
+}
+
+#mnuTab2{
+
+   position:relative;
+
+   overflow:auto;
+
+   width:100%;
+
+   display:none;
+
+}
+
+
 /* End of Settings */
 
 .bggray{
