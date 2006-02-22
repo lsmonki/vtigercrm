@@ -353,7 +353,7 @@ while ( $go == 1 )
  		}
  		$a++;
  		$w++;
- 		$ts += 86400;
+ 		$ts = strtotime('+1 day', $ts);
 }
 if ( $n == 1 ) 
 {
