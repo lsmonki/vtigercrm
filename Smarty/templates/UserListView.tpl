@@ -31,7 +31,7 @@
 {section name=entries loop=$LIST_ENTRIES}
 	<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 	{foreach item=listvalues from=$LIST_ENTRIES[entries]}
-		<td>{$listvalues}</td>
+		<td nowrap>{$listvalues}</td>
 	{/foreach}
 	</tr>
 {/section}
