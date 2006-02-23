@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -33,13 +33,16 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 
+
 $focus = new User();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
+	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
     $focus->retrieve($_REQUEST['record']);
 }else
 {
+	$mode='create';
 	$password='<tr>
 	   		   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Password</td>
 		       <td width="30%"><input name="new_password" type="password" tabindex="1" size="25" maxlength="25"></td>
@@ -59,59 +62,66 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $log->info("User edit view");
-$xtpl=new XTemplate ('modules/Users/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
 
-if (isset($_REQUEST['error_string'])) $xtpl->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
+$smarty=new vtigerCRM_Smarty;
+
+$smarty->assign("UMOD", $mod_strings);
+global $current_language;
+$smod_strings = return_module_language($current_language,'Settings');
+$smarty->assign("MOD", $smod_strings);
+
+$smarty->assign("APP", $app_strings);
+
+if (isset($_REQUEST['error_string'])) $smarty->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
 if (isset($_REQUEST['return_module']))
 {
-        $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+        $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
         $RETURN_MODULE=$_REQUEST['return_module'];
 }
 if (isset($_REQUEST['return_action']))
 {
-        $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+        $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
         $RETURN_ACTION = $_REQUEST['return_action'];
 }
 if(isset($_REQUEST['activity_mode']))
 {
-	$xtpl->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
+	$smarty->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
 }
 if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
 {
-        $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+        $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
         $RETURN_ID = $_REQUEST['return_id'];
 }
 
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("USER_NAME", $focus->user_name);
-$xtpl->assign("FIRST_NAME", $focus->first_name);
-$xtpl->assign("LAST_NAME", $focus->last_name);
-$xtpl->assign("TITLE", $focus->title);
-$xtpl->assign("DEPARTMENT", $focus->department);
-$xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);
-$xtpl->assign("REPORTS_TO_NAME", $focus->reports_to_name);
-$xtpl->assign("PHONE_HOME", $focus->phone_home);
-$xtpl->assign("PHONE_MOBILE", $focus->phone_mobile);
-$xtpl->assign("PHONE_WORK", $focus->phone_work);
-$xtpl->assign("PHONE_OTHER", $focus->phone_other);
-$xtpl->assign("PHONE_FAX", $focus->phone_fax);
-$xtpl->assign("EMAIL1", $focus->email1);
-$xtpl->assign("EMAIL2", $focus->email2);
-$xtpl->assign("YAHOO_ID", $focus->yahoo_id);
-if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
-$xtpl->assign("ADDRESS_STREET", $focus->address_street);
-$xtpl->assign("ADDRESS_CITY", $focus->address_city);
-$xtpl->assign("ADDRESS_STATE", $focus->address_state);
-$xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
-$xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("SIGNATURE", $focus->signature);
-$xtpl->assign("DESCRIPTION", $focus->description);
-$xtpl->assign("USERIMAGE", $focus->imagename);
-$xtpl->assign("PASSWORD", $password);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("ID", $focus->id);
+$smarty->assign("USER_NAME", $focus->user_name);
+$smarty->assign("FIRST_NAME", $focus->first_name);
+$smarty->assign("LAST_NAME", $focus->last_name);
+$smarty->assign("TITLE", $focus->title);
+$smarty->assign("DEPARTMENT", $focus->department);
+$smarty->assign("REPORTS_TO_ID", $focus->reports_to_id);
+$smarty->assign("REPORTS_TO_NAME", $focus->reports_to_name);
+$smarty->assign("PHONE_HOME", $focus->phone_home);
+$smarty->assign("PHONE_MOBILE", $focus->phone_mobile);
+$smarty->assign("PHONE_WORK", $focus->phone_work);
+$smarty->assign("PHONE_OTHER", $focus->phone_other);
+$smarty->assign("PHONE_FAX", $focus->phone_fax);
+$smarty->assign("EMAIL1", $focus->email1);
+$smarty->assign("EMAIL2", $focus->email2);
+$smarty->assign("YAHOO_ID", $focus->yahoo_id);
+if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $smarty->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
+$smarty->assign("ADDRESS_STREET", $focus->address_street);
+$smarty->assign("ADDRESS_CITY", $focus->address_city);
+$smarty->assign("ADDRESS_STATE", $focus->address_state);
+$smarty->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
+$smarty->assign("ADDRESS_COUNTRY", $focus->address_country);
+$smarty->assign("SIGNATURE", $focus->signature);
+$smarty->assign("DESCRIPTION", $focus->description);
+$smarty->assign("USERIMAGE", $focus->imagename);
+$smarty->assign("MODE", $mode);
+$smarty->assign("MODULE", 'Settings');
 
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
 		
@@ -138,11 +148,11 @@ $DATE_FORMAT_SELECT_OPTION .= '<option value="yyyy-mm-dd" '.$selected3.'>';
 $DATE_FORMAT_SELECT_OPTION .= 'yyyy-mm-dd';
 $DATE_FORMAT_SELECT_OPTION .= '</option>';	
 $DATE_FORMAT_SELECT_OPTION .= ' </select>';
-$xtpl->assign("DATE_FORMAT", $DATE_FORMAT_SELECT_OPTION);
+$smarty->assign("DATE_FORMAT", $DATE_FORMAT_SELECT_OPTION);
 
 if (is_admin($current_user)) {
-	$status  = "<td width='20%' class='dataLabel'><FONT class='required'>".$app_strings['LBL_REQUIRED_SYMBOL']."</FONT>".$mod_strings['LBL_STATUS']."</td>\n";
-	$status .= "<td width='30%'><select name='status' tabindex='1'";
+	//$status  = "<td width='20%' class='dataLabel'><FONT class='required'>".$app_strings['LBL_REQUIRED_SYMBOL']."</FONT>".$mod_strings['LBL_STATUS']."</td>\n";
+	$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' tabindex='1'";
 	if (isset($default_user_name)
 		&& $default_user_name != ""
 		&& $default_user_name == $focus->user_name
@@ -153,7 +163,7 @@ if (is_admin($current_user)) {
 	$status .= ">";
 	$status .= get_select_options_with_id($app_list_strings['user_status_dom'], $focus->status);
 	$status .= "</select></td>\n";
-	$xtpl->assign("USER_STATUS_OPTIONS", $status);
+	$smarty->assign("USER_STATUS_OPTIONS", $status);
 
 
         
@@ -187,7 +197,7 @@ if (is_admin($current_user)) {
 		}
 		$ROLE_SELECT_OPTION .= ' </select>';
 		 
-                   $xtpl->assign("USER_ROLE", $ROLE_SELECT_OPTION);
+                   $smarty->assign("USER_ROLE", $ROLE_SELECT_OPTION);
 
 
 
@@ -217,7 +227,7 @@ if (is_admin($current_user)) {
                                   
                    $GROUP_SELECT_OPTION .= ' </select>';
                    
-                   $xtpl->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
+                   $smarty->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
 	
 	$CURRENCY_SELECT_OPTION = '<select name="currency_id">';
         if($focus->id != '')
@@ -239,18 +249,18 @@ if (is_admin($current_user)) {
                $CURRENCY_SELECT_OPTION .= '</option>';
         }
         $CURRENCY_SELECT_OPTION .= ' </select>';
-        $xtpl->assign("CURRENCY_NAME", $CURRENCY_SELECT_OPTION);
+        $smarty->assign("CURRENCY_NAME", $CURRENCY_SELECT_OPTION);
 
 }
 
-$xtpl->assign("ACTIVITY_VIEW", getActivityVIew($focus->activity_view));
-$xtpl->assign("CLOUD_TAG", $focus->tagcloud);
+$smarty->assign("ACTIVITY_VIEW", getActivityVIew($focus->activity_view));
+$smarty->assign("CLOUD_TAG", $focus->tagcloud);
 
-$xtpl->assign("LEAD_VIEW", getLeadVIew($focus->lead_view));
+$smarty->assign("LEAD_VIEW", getLeadVIew($focus->lead_view));
 
 		if($focus->cal_color == '') $focus->cal_color = '#E6FAD8';
 
- 		$xtpl->assign("CAL_COLOR",'<INPUT TYPE="text" readonly NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');
+ 		$smarty->assign("CAL_COLOR",'<INPUT TYPE="text" readonly NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');
 
 if (isset($default_user_name)
 	&& $default_user_name != ""
@@ -258,29 +268,31 @@ if (isset($default_user_name)
 	&& isset($lock_default_user_name)
 	&& $lock_default_user_name == true ) {
 	$status .= " disabled ";
-	$xtpl->assign("DISABLED", "disabled");
+	$smarty->assign("DISABLED", "disabled");
 }
 
 if ($_REQUEST['Edit'] == ' Edit ')
 {
-	$xtpl->assign("READONLY", "readonly");
-	$xtpl->assign("USERNAME_READONLY", "readonly");
+	$smarty->assign("READONLY", "readonly");
+	$smarty->assign("USERNAME_READONLY", "readonly");
 	
 }	
 if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 {
-	$xtpl->assign("USERNAME_READONLY", "readonly");
+	$smarty->assign("USERNAME_READONLY", "readonly");
 }
 
 
 
-if (is_admin($current_user) && $focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
+if (is_admin($current_user) && $focus->is_admin == 'on') $smarty->assign("IS_ADMIN", "checked");
 elseif (is_admin($current_user) && $focus->is_admin != 'on') ;
-elseif (!is_admin($current_user) && $focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "disabled checked");
-else $xtpl->assign("IS_ADMIN", "disabled");
+elseif (!is_admin($current_user) && $focus->is_admin == 'on') $smarty->assign("IS_ADMIN", "disabled checked");
+else $smarty->assign("IS_ADMIN", "disabled");
 
-$xtpl->parse("main");
-$xtpl->out("main");
+//$smarty->assign("",$focus->getUserListViewHeader());
+
+$smarty->display("UserEditView.tpl");
+
 /*
 echo "<br>";
 if(is_admin($current_user) && ! isset($focus->id))
