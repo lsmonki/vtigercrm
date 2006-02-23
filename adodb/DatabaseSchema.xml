@@ -1074,14 +1074,6 @@
 		</field>
 		<field name="type" type="C" size="100">
 		</field>
-
-		<field name="attachmentsize" type="C" size="50">
-			<NOTNULL/>
-		</field>
-		<field name="attachmentcontents" type="B">
-			<NOTNULL/>
-		</field>
-
 		<opt>Type=InnoDB</opt>
 		<index name="attachmentsid">
 			<col>attachmentsid</col>
