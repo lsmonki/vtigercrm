@@ -587,7 +587,7 @@ class User extends SugarBean {
 			$id=$this->db->query_result($result,$i-1,'id');
 			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#"><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
 			$entries[]=$this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name');
-			$entries[]='<a href="index.php?action=DetailView&module=Users&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
+			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 			$entries[]=$this->db->query_result($result,$i-1,'department');
 			$entries[]=$this->db->query_result($result,$i-1,'email1');
 			$entries[]=fetchUserRole($this->db->query_result($result,$i-1,'id'));
