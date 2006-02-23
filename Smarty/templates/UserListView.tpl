@@ -23,6 +23,7 @@
 <input type='hidden' name='action' value='EditView'>
 <input type='hidden' name='return_action' value='ListView'>
 <input type='hidden' name='return_module' value='Users'>
+<input type='hidden' name='parenttab' value='Settings'>
 <tr>
 {foreach item=header from=$LIST_HEADER}
 	<th class="detailedViewHeader">{$header}</th>
