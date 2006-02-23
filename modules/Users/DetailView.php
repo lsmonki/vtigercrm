@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('include/utils/utils.php');
@@ -97,54 +97,61 @@ if($focus->id != 1)
 }
 $log->info("User detail view");
 
-$xtpl=new XTemplate ('modules/Users/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty = new vtigerCRM_Smarty;
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("USER_NAME", $focus->user_name);
-$xtpl->assign("FIRST_NAME", $focus->first_name);
-$xtpl->assign("LAST_NAME", $focus->last_name);
-$xtpl->assign("STATUS", $focus->status);
-$xtpl->assign("YAHOO_ID", $focus->yahoo_id);
-$xtpl->assign("DATE_FORMAT", $focus->date_format);
+$smarty->assign("UMOD", $mod_strings);
+global $current_language;
+$smod_strings = return_module_language($current_language, 'Settings');
+$smarty->assign("MOD", $smod_strings);
+
+$smarty->assign("APP", $app_strings);
+
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("ID", $focus->id);
+$smarty->assign("USER_NAME", $focus->user_name);
+$smarty->assign("FIRST_NAME", $focus->first_name);
+$smarty->assign("LAST_NAME", $focus->last_name);
+$smarty->assign("STATUS", $focus->status);
+$smarty->assign("YAHOO_ID", $focus->yahoo_id);
+$smarty->assign("DATE_FORMAT", $focus->date_format);
 if(isset($focus->imagename))
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(/themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
 	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;'><img src='themes/images/scaler_slider.gif'></div>
-	</div>
+	</div><script language='JavaScript' type='text/javascript' src='include/js/prototype.js'></script>
+<script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
+
 	<div class='scale-image' style='padding: 10px; float: left; width: 153.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
 	<p><script type='text/javascript' src='include/js/scale_demo.js'></script></p>";
-	$xtpl->assign("USER_IMAGE",$imagestring);
+	$smarty->assign("USER_IMAGE",$imagestring);
 }
 				
-if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
+if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $smarty->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
 if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& isset($default_user_name)
 		&& $default_user_name == $focus->user_name
 		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true	) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
-	$xtpl->assign('EDIT_BUTTON',$buttons);
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$smarty->assign('EDIT_BUTTON',$buttons);
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
-	$xtpl->assign('EDIT_BUTTON',$buttons);
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$smarty->assign('EDIT_BUTTON',$buttons);
 	
  //global $AUTHCFG;
  	//if (strtoupper($AUTHCFG['authType']) == 'SQL') {
-		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
-		$xtpl->assign('CHANGE_PW_BUTTON',$buttons);
+		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
+		$smarty->assign('CHANGE_PW_BUTTON',$buttons);
 	//}
 	
-	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
-	$xtpl->assign('LOGIN_HISTORY_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='ListMailAccount'\" type='submit' name='ListMailServerAccount' value=' ".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_LABEL']." '>";
-	$xtpl->assign('LIST_MAILSERVER_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_CHANGE_HOMEPAGE_TITLE']."' class='button' align='center' onclick=\"this.form.return_module.value='Users';  this.form.return_action.value='DetailView';  this.form.action.value='EditHomeOrder';  this.form.record.value='$focus->id';\"  type='submit' name='EditHomeOrder'  value='  ".$mod_strings['LBL_CHANGE_HOMEPAGE_LABEL']."  '>";
-	$xtpl->assign('CHANGE_HOMEPAGE_BUTTON',$buttons);
+	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
+	$smarty->assign('LOGIN_HISTORY_BUTTON',$buttons);
+	$buttons = "<input title='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='ListMailAccount'\" type='submit' name='ListMailServerAccount' value=' ".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_LABEL']." '>";
+	$smarty->assign('LIST_MAILSERVER_BUTTON',$buttons);
+	$buttons = "<input title='".$mod_strings['LBL_CHANGE_HOMEPAGE_TITLE']."' class='small' align='center' onclick=\"this.form.return_module.value='Users';  this.form.return_action.value='DetailView';  this.form.action.value='EditHomeOrder';  this.form.record.value='$focus->id';\"  type='submit' name='EditHomeOrder'  value='  ".$mod_strings['LBL_CHANGE_HOMEPAGE_LABEL']."  '>";
+	$smarty->assign('CHANGE_HOMEPAGE_BUTTON',$buttons);
 
 	
 }
@@ -159,44 +166,40 @@ else
 */
 if (is_admin($current_user)) 
 {
-	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
-	$xtpl->assign('DUPLICATE_BUTTON',$buttons);
-
+	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
+	$smarty->assign('DUPLICATE_BUTTON',$buttons);
+	
 	//done so that only the admin user can see the customize tab button
 	if($_REQUEST['record'] == $current_user->id)
 	{
-		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
-		$xtpl->assign('TABCUSTOMIZE_BUTTON',$buttons);
+		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
+		$smarty->assign('TABCUSTOMIZE_BUTTON',$buttons);
 	}
 	if($_REQUEST['record'] != $current_user->id)
 	{
-		$buttons = "<input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '>";
-		$xtpl->assign('DELETE_BUTTON',$buttons);
+		$buttons = "<input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '>";
+		$smarty->assign('DELETE_BUTTON',$buttons);
 	}
 
         //$buttons .= "<input title='".$app_strings['LBL_ROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_ROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='ListPermissions'\" type='submit' name='ListPermissions' value=' ".$app_strings['LBL_ROLES_BUTTON_LABEL']." '></td>\n";
 	if($_SESSION['authenticated_user_roleid'] == 'administrator')
 	{
-		$buttons = "<input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '>";
-		$xtpl->assign('LISTROLES_BUTTON',$buttons);
+		$buttons = "<input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '>";
+		$smarty->assign('LISTROLES_BUTTON',$buttons);
 	}
 
 }
 
-$xtpl->parse("main");
-$xtpl->out("main");
 
 if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $focus->is_admin == 'on') {
-	$xtpl->assign("IS_ADMIN", "checked");
-	$xtpl->parse("user_settings");
-	$xtpl->out("user_settings");
+	$smarty->assign("IS_ADMIN", "checked");
 }
 
-$xtpl->assign("DESCRIPTION", nl2br($focus->description));
+$smarty->assign("DESCRIPTION", nl2br($focus->description));
 if(is_admin($current_user))
 {
-	$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
-	$xtpl->assign("CURRENCY_NAME",$currency);
+	$smarty->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
+	$smarty->assign("CURRENCY_NAME",$currency);
 }
 
 
@@ -214,36 +217,36 @@ if(is_admin($current_user))
 	{	
 		$group_lists = implode(",",$grouplists);
 	}
-	$xtpl->assign("GROUPASSIGNED",$group_lists);
+	$smarty->assign("GROUPASSIGNED",$group_lists);
 }
 else
 {
-	$xtpl->assign("GROUPASSIGNED",$group);
+	$smarty->assign("GROUPASSIGNED",$group);
 }
-$xtpl->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
+$smarty->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
 
 
-$xtpl->assign("ACTIVITY_VIEW", $focus->activity_view);
-$xtpl->assign("TITLE", $focus->title);
-$xtpl->assign("DEPARTMENT", $focus->department);
-$xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);
-$xtpl->assign("REPORTS_TO_NAME", $focus->reports_to_name);
-$xtpl->assign("PHONE_HOME", $focus->phone_home);
-$xtpl->assign("PHONE_MOBILE", $focus->phone_mobile);
-$xtpl->assign("PHONE_WORK", $focus->phone_work);
-$xtpl->assign("PHONE_OTHER", $focus->phone_other);
-$xtpl->assign("PHONE_FAX", $focus->phone_fax);
-$xtpl->assign("EMAIL1", $focus->email1);
-$xtpl->assign("EMAIL2", $focus->email2);
-$xtpl->assign("ADDRESS_STREET", $focus->address_street);
-$xtpl->assign("ADDRESS_CITY", $focus->address_city);
-$xtpl->assign("ADDRESS_STATE", $focus->address_state);
-$xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
-$xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("SIGNATURE", nl2br($focus->signature));
-$xtpl->parse("user_info");
-$xtpl->out("user_info");
+$smarty->assign("ACTIVITY_VIEW", $focus->activity_view);
+$smarty->assign("TITLE", $focus->title);
+$smarty->assign("DEPARTMENT", $focus->department);
+$smarty->assign("REPORTS_TO_ID", $focus->reports_to_id);
+$smarty->assign("REPORTS_TO_NAME", $focus->reports_to_name);
+$smarty->assign("PHONE_HOME", $focus->phone_home);
+$smarty->assign("PHONE_MOBILE", $focus->phone_mobile);
+$smarty->assign("PHONE_WORK", $focus->phone_work);
+$smarty->assign("PHONE_OTHER", $focus->phone_other);
+$smarty->assign("PHONE_FAX", $focus->phone_fax);
+$smarty->assign("EMAIL1", $focus->email1);
+$smarty->assign("EMAIL2", $focus->email2);
+$smarty->assign("ADDRESS_STREET", $focus->address_street);
+$smarty->assign("ADDRESS_CITY", $focus->address_city);
+$smarty->assign("ADDRESS_STATE", $focus->address_state);
+$smarty->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
+$smarty->assign("ADDRESS_COUNTRY", $focus->address_country);
+$smarty->assign("SIGNATURE", nl2br($focus->signature));
+$smarty->assign("MODULE", 'Settings');
 
+$smarty->display("UserDetailView.tpl");
 
 echo "</td></tr>\n";
 
