@@ -1206,3 +1206,57 @@ function fnDown(obj){
         }
 }
 
+/*
+* javascript function to add field rows
+* @param option_values :: List of Field names
+*/
+function fnAddSrch(option_values){
+
+    var tableName = document.getElementById('adSrc');
+
+    var prev = tableName.rows.length;
+
+    var count = prev;
+
+    var row = tableName.insertRow(prev);
+
+    if(count%2)
+
+        row.className = "dvtCellLabel";
+
+    else
+
+        row.className = "dvtCellInfo";
+
+    var colone = row.insertCell(0);
+
+    var coltwo = row.insertCell(1);
+
+    var colthree = row.insertCell(2);
+
+    //colone.innerHTML="<select name='Fields'+count class='detailedViewTextBox'><option>First Name</option><option>Last Name</option><option>Department</option><option>Role</option><option>E-Mild Id</option></select>";
+    colone.innerHTML="<select name='Fields'+count class='detailedViewTextBox'>"+option_values+"</select>";
+
+    coltwo.innerHTML="<select name='Condition'+count class='detailedViewTextBox'><option>Contains</option><option>doesn't Contains</option><option>is</option><option>isn't</option><option>Begins With</option><option>Ends With</option></select> ";
+
+    colthree.innerHTML="<input type='text' name='srch'+count class='detailedViewTextBox'>";
+
+}
+
+/*
+* javascript function to delete field rows in advance search
+* @param void :: void
+*/
+function delRow()
+{
+
+    var tableName = document.getElementById('adSrc');
+
+    var prev = tableName.rows.length;
+
+    if(prev > 1)
+
+    document.getElementById('adSrc').deleteRow(prev-1);
+
+}
+

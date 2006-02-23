@@ -256,6 +256,10 @@ $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);

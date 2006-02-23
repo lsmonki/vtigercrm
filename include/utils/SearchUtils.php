@@ -302,8 +302,77 @@ function BasicSearch($module,$search_field,$search_string)
 	}
 	return $where;
 }
+function getAdvSearchfields($module)
+        {
+                global $adb;
+                $tabid = getTabid($module);
+                global $profile_id;
 
+                $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
+		$sql.= " where field.tabid=".$tabid." and";
+		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
+		$sql.= " and profile2field.profileid=".$profile_id." order by block,sequence";
 
-								
+		$result = $adb->query($sql);
+                $noofrows = $adb->num_rows($result);
+		$block = '';
+		//Added on 14-10-2005 -- added ticket id in list
+                if($module == 'HelpDesk' && $block == 25)
+                {
+                        $module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+                }
+		//Added to include activity type in activity customview list
+                if($module == 'Activities' && $block == 19)
+                {
+                        $module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
+                }
+
+                for($i=0; $i<$noofrows; $i++)
+                {
+                        $fieldtablename = $adb->query_result($result,$i,"tablename");
+                        $fieldcolname = $adb->query_result($result,$i,"columnname");
+			$fieldtype = explode("~",$fieldtype);
+			$fieldtypeofdata = $fieldtype[0];
+                        /*if($fieldcolname == "crmid" || $fieldcolname == "parent_id")
+                        {
+                           $fieldtablename = "crmentity";
+			   $fieldcolname = "setype";
+                        }*/
+                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+				if($fieldlabel == "Related To")
+				{
+					$fieldlabel = "Related to";
+				}
+				if($fieldlabel == "Start Date & Time")
+                                {
+                                        $fieldlabel = "Start Date";
+					  if($module == 'Activities' && $block == 19)
+				               $module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
+
+                                }
+                        $fieldlabel1 = str_replace(" ","_",$fieldlabel);
+                        //$module_columnlist[$optionvalue] = $fieldlabel;
+			if ($i==0)
+			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
+			else
+			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
+                }
+                return $OPTION_SET;
+        }
+
+function getcriteria_options()
+{
+	$CRIT_OPT = "<option value=\"cts\">Contains</option>
+	            <option value=\"dcts\">doesn't Contains</option>
+		    <option value=\"is\">is</option>
+		    <option value=\"isn\">isn't</option>
+		    <option value=\"bwt\">Begins With</option>
+		    <option value=\"ewt\">Ends With</option>";
+	return $CRIT_OPT;
+}
+function getSearch_criteria()
+{
+	$condition_array = Array(''=>'',''=>'',''=>'',''=>'',''=>'',''=>'');
+}								
 
 ?>

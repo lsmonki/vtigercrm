@@ -187,35 +187,42 @@ rBox">
                                         <div align=center>
                                         <div class="advSearch" align=left>
 
-                                                        <table border=0 cellspacing=0 cellpadding=0 width=100%>
-                                                        <tr >
-                                                                <td colspan=4 class="detailedViewHeader"><b>General Details </b></td>
-							 </tr>
-                                                        <tr style="height:25px">
+					<table class="searchHd rBox" border="0" cellpadding="2" cellspacing="0" width="100%">
+					<tr>
+					<td nowrap class="small"><input name="radiobutton" type="radio" value="">&nbsp;Match All of the Following</td>
+					<td class="small"><input name="radiobutton" type="radio" value="radiobutton">&nbsp;Match Any of the Following</td>
 
-                                                                <td width=20%  align=right>Account name</td>
-                                                                <td width=30% align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                                <td width=20% align=right>Phone</td>
-                                                                <td width=30% align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                        </tr>
-                                                        <tr style="height:25px">
-                                                                <td align=right>Website URL</td>
+					<td>&nbsp;</td>
+					</tr>
+					<tr>
+					<td colspan="3" bgcolor="#FFFFFF" style="border:1px solid #CCCCCC;">
+					<div id="fixed" style="position:relative;top:0px;left:0px;width:95%;height:95px;overflow:auto;" class="padTab">
+					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
+					<tr  class="dvtCellInfo">
+					<td width="31%"><select name="Fields" class="detailedViewTextBox">
+					{$FIELDNAMES}
+					</select>
+					</td>
+					<td width="32%"><select name="Condition" class="detailedViewTextBox">
+					{$CRITERIA}
+					</select>
+					</td>
+					<td width="32%"><input type="text" name="srch" class="detailedViewTextBox"></td>
+					</tr>
+					</table>
+					</div>	
+					</td>
+					</tr>
+					<tr>
 
-                                                                <td align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                                <td align=right>Fax</td>
-                                                                <td align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                        </tr>
-                                                        <tr style="height:25px">
-                                                                <td align=right>Ticket Symbol</td>
-                                                                <td align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                                <td align=right>Other Phone</td>
-
-                                                                <td align=left class="dvtCellInfo"><input type="text" value="" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-                                                        </tr>
-							
-                                                        </table>
-
-                                                        </div>
+					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}')">
+					&nbsp;&nbsp;
+					<input name="button" type="button" value="Fewer" onclick="delRow()"></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					</tr>
+					</table>
+                                        </div>
                                         </div>
                                         <table border=0 cellspacing=0 cellpadding=5 width=100%>
                                         <tr><td align=center><input type="submit" class=small value="Search now" onClick="callSearch('Basic');"></td></tr></table>

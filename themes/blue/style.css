@@ -809,3 +809,30 @@ border:0px;
 	display:none;
 }
 
+/*Added for Advance Seearch*/
+#scrollTab{
+	position:relative;
+	width:100%;
+	height:350px;
+	overflow:auto;
+	border:0px solid #CCCCCC;
+	display:block;
+}
+
+.dock{
+	vertical-align:middle;
+	text-align:left;
+	padding-left:0px;
+}
+
+.imgDoc{
+	cursor:pointer;
+	border:0px;
+}
+
+#one{
+	position:relative;
+	display:block;
+	width:245px;
+}
+
