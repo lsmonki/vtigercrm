@@ -34,6 +34,8 @@ global $app_strings;
 
 $lbl_last_name = $mod_strings['LBL_LIST_LAST_NAME'];
 $lbl_user_name = $mod_strings['LBL_LIST_USER_NAME'];
+$lbl_new_password = $mod_strings['LBL_LIST_PASSWORD'];
+$lbl_confirm_new_password = $mod_strings['LBL_LIST_CONFIRM_PASSWORD'];
 $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
@@ -57,13 +59,21 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.last_name.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_last_name";
-	}
 	if (trim(form.user_name.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_user_name";
+	}
+	if (trim(form.new_password.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_new_password";
+	}
+	if (trim(form.confirm_new_password.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_confirm_new_password";
+	}
+	if (trim(form.last_name.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_last_name";
 	}
 	if (trim(form.email1.value) == "") {
 		isError = true;
