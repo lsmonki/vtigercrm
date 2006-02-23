@@ -14,7 +14,7 @@
 /**
 	\mainpage 	
 	
-	 @version V4.71 24 Jan 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
+	 @version V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. You can choose which license
 	you prefer.
@@ -171,7 +171,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V4.71 24 Jan 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -1506,11 +1506,11 @@
    * Flush cached recordsets that match a particular $sql statement. 
    * If $sql == false, then we purge all files in the cache.
     */
-   function CacheFlush($sql=false,$inputarr=false)
-   {
-   global $ADODB_CACHE_DIR;
-   
-      if (strlen($ADODB_CACHE_DIR) > 1 && !$sql) {
+	function CacheFlush($sql=false,$inputarr=false)
+	{
+	global $ADODB_CACHE_DIR;
+	
+		if (strlen($ADODB_CACHE_DIR) > 1 && !$sql) {
          /*if (strncmp(PHP_OS,'WIN',3) === 0)
             $dir = str_replace('/', '\\', $ADODB_CACHE_DIR);
          else */
@@ -1787,9 +1787,6 @@
 		return _adodb_getupdatesql($this,$rs,$arrFields,$forceUpdate,$magicq,$force);
 	}
 
-	
-	
-
 	/**
 	 * Generates an Insert Query based on an existing recordset.
 	 * $arrFields is an associative array of fields with the value
@@ -1911,8 +1908,8 @@
 		if (empty($this->_metars)) {
 			$rsclass = $this->rsPrefix.$this->databaseType;
 			$this->_metars =& new $rsclass(false,$this->fetchMode); 
+			$this->_metars->connection =& $this;
 		}
-		
 		return $this->_metars->MetaType($t,$len,$fieldobj);
 	}
 	
@@ -3731,7 +3728,7 @@
 				$fakedsn = 'fake'.substr($db,$at);
 				$dsna = @parse_url($fakedsn);
 				$dsna['scheme'] = substr($db,0,$at);
-				
+			
 				if (strncmp($db,'pdo',3) == 0) {
 					$sch = explode('_',$dsna['scheme']);
 					if (sizeof($sch)>1) {
@@ -3764,7 +3761,6 @@
 				}
 			} else $opt = array();
 		}
-		
 	/*
 	 *  phptype: Database backend used in PHP (mysql, odbc etc.)
 	 *  dbsyntax: Database used with regards to SQL syntax etc.
@@ -3814,6 +3810,8 @@
 				if (isset($dsna['port'])) $obj->port = $dsna['port'];
 				foreach($opt as $k => $v) {
 					switch(strtolower($k)) {
+					case 'new':
+										$nconnect = true; $persist = true; break;
 					case 'persist':
 					case 'persistent': 	$persist = $v; break;
 					case 'debug':		$obj->debug = (integer) $v; break;
@@ -3837,8 +3835,10 @@
 				}
 				if (empty($persist))
 					$ok = $obj->Connect($dsna['host'], $dsna['user'], $dsna['pass'], $dsna['path']);
-				else
+				else if (empty($nconnect))
 					$ok = $obj->PConnect($dsna['host'], $dsna['user'], $dsna['pass'], $dsna['path']);
+				else
+					$ok = $obj->NConnect($dsna['host'], $dsna['user'], $dsna['pass'], $dsna['path']);
 					
 				if (!$ok) return $false;
 			}
@@ -3873,6 +3873,7 @@
 		case 'oracle': $drivername = 'oci8'; break;
 		case 'access': if ($perf) $drivername = ''; break;
 		case 'db2'   : break;
+		case 'odbc_db2': $drivername = 'db2'; break;
 		case 'sapdb' : break;
 		default:
 			$drivername = 'generic';
