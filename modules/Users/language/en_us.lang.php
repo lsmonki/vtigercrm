@@ -33,6 +33,8 @@ $mod_strings = Array(
 'LBL_LIST_EMAIL'=>'Email',
 'LBL_LIST_PRIMARY_PHONE'=>'Primary Phone',
 'LBL_LIST_ADMIN'=>'Admin',
+'LBL_LIST_PASSWORD'=>'Password',
+'LBL_LIST_CONFIRM_PASSWORD'=>'Confirm Password',
 //added for patch2
 'LBL_GROUP_NAME'=>'Group',
 'LBL_CURRENCY_NAME'=>'Currency',
@@ -44,15 +46,15 @@ $mod_strings = Array(
 
 'LBL_ERROR'=>'Error:',
 'LBL_PASSWORD'=>'Password:',
-'LBL_USER_NAME'=>'User Name:',
+'LBL_USER_NAME'=>'User Name',
 'LBL_CRM_ID'=>'CRM ID',
-'LBL_FIRST_NAME'=>'First Name:',
-'LBL_LAST_NAME'=>'Last Name:',
-'LBL_YAHOO_ID'=>'Yahoo ID:',
+'LBL_FIRST_NAME'=>'First Name',
+'LBL_LAST_NAME'=>'Last Name',
+'LBL_YAHOO_ID'=>'Yahoo ID',
 'LBL_USER_SETTINGS'=>'User Settings',
 'LBL_THEME'=>'Theme:',
 'LBL_LANGUAGE'=>'Language:',
-'LBL_ADMIN'=>'Admin :',
+'LBL_ADMIN'=>'Admin',
 'LBL_USER_INFORMATION'=>'User Information',
 'LBL_OFFICE_PHONE'=>'Office Phone:',
 'LBL_REPORTS_TO'=>'Reports to:',
@@ -60,7 +62,7 @@ $mod_strings = Array(
 'LBL_OTHER_EMAIL'=>'Other Email:',
 'LBL_NOTES'=>'Notes:',
 'LBL_DEPARTMENT'=>'Department:',
-'LBL_STATUS'=>'Status:',
+'LBL_STATUS'=>'Status',
 'LBL_TITLE'=>'Title:',
 'LBL_ANY_PHONE'=>'Any Phone:',
 'LBL_ANY_EMAIL'=>'Any Email:',
@@ -74,8 +76,8 @@ $mod_strings = Array(
 'LBL_USER_INFORMATION'=>'User Information',
 'LBL_MOBILE_PHONE'=>'Mobile:',
 'LBL_OTHER'=>'Other:',
-'LBL_FAX'=>'Fax:',
-'LBL_EMAIL'=>'Email:',
+'LBL_FAX'=>'Fax',
+'LBL_EMAIL'=>'E-Mail Id',
 'LBL_HOME_PHONE'=>'Home Phone:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
 'LBL_PRIMARY_ADDRESS'=>'Primary Address:',
@@ -348,6 +350,11 @@ $mod_strings = Array(
 'LBL_TOTAL'=>'Total :',
 'LBL_OTHERS'=>'Others :',
 'LBL_USERS'=>'User(s)',
+'LBL_USER_LOGIN_ROLE'=>'User Login & Role',
+'LBL_USER_MORE_INFN'=>'More Information',
+'LBL_USER_ADDR_INFN'=>'Address Information'
+
+
 );
 
 ?>
