@@ -493,7 +493,7 @@ function copyAddressLeft(form) {
 		if (getObj("txtTax").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
 			if (!numValidate("txtTax","Tax","any")) return false
 				if (getObj("txtAdjustment").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-					if (!numValidate("txtAdjustment","Adjustment","any")) return false
+					if (!numValidate("txtAdjustment","Adjustment","any",true)) return false
 
 						return true    
 	}
