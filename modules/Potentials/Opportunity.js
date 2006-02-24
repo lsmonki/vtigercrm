@@ -75,8 +75,14 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.potential_name.value = product_name;
-        window.opener.document.EditView.potential_id.value = product_id;
+        
+	//getOpenerObj used for DetailView 
+        var fldName = getOpenerObj("potential_name");
+        var fldId = getOpenerObj("potential_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+	//window.opener.document.EditView.potential_name.value = product_name;
+        //window.opener.document.EditView.potential_id.value = product_id;
 }
 function add_data_to_relatedlist(entity_id,recordid) 
 {
