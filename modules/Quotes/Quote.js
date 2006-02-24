@@ -306,8 +306,14 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.quote_name.value = product_name;
-        window.opener.document.EditView.quote_id.value = product_id;
+        
+	//getOpenerObj used for DetailView 
+        var fldName = getOpenerObj("quote_name");
+        var fldId = getOpenerObj("quote_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+	//window.opener.document.EditView.quote_name.value = product_name;
+        //window.opener.document.EditView.quote_id.value = product_id;
         window.opener.document.EditView.action.value = 'EditView';
         window.opener.document.EditView.convertmode.value = 'update_quote_val';
 	window.opener.document.EditView.submit();

@@ -115,8 +115,13 @@ function clear_form(form)
 
 function set_return_specific(vendor_id, vendor_name) 
 {
-        window.opener.document.EditView.vendor_name.value = vendor_name;
-        window.opener.document.EditView.vendor_id.value = vendor_id;
+        //getOpenerObj used for DetailView 
+        var fldName = getOpenerObj("vendor_name");
+        var fldId = getOpenerObj("vendor_id");
+        fldName.value = vendor_name;
+        fldId.value = vendor_id;
+	//window.opener.document.EditView.vendor_name.value = vendor_name;
+        //window.opener.document.EditView.vendor_id.value = vendor_id;
 }
 
 function set_return_address(vendor_id, vendor_name, street, city, state, code, country,pobox ) 
