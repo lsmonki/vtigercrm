@@ -147,7 +147,7 @@ function pickColor(color)
 						<td class="dvtCellInfo"><input type="text" name="phone_fax" value='{$PHONE_FAX}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 					     </tr>
 					     <tr>
-						<td class="dvtCellLabel" align="right">{$UMOD.LBL_YAHOO_MSN_ID}</td>
+						<td class="dvtCellLabel" align="right">{$UMOD.LBL_YAHOO_ID}</td>
 						<td class="dvtCellInfo"><input type="text" name="yahoo_id" value='{$YAHOO_ID}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
 						<td class="dvtCellInfo"><input type="text" name="phone_home" value='{$PHONE_HOME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
@@ -174,7 +174,7 @@ function pickColor(color)
 							   	<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
 						       </tr>  
 						       <tr>
-							   <td class="dvtCellLabel" align="right">{$UMOD.LBL_STREET_ADDRESS}</td>
+							   <td class="dvtCellLabel" align="right">{$UMOD.LBL_ADDRESS}</td>
 							   <td class="dvtCellInfo"><textarea name="address_street" rows="3" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" >{$ADDRESS_STREET}</textarea></td>
 							   <td class="dvtCellInfo" >&nbsp;</td>
 							   <td class="dvtCellInfo">&nbsp;</td>
