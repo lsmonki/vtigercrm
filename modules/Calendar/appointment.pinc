@@ -1396,7 +1396,7 @@ class appointment extends tutos_base {
 			}
 			else 
 			{
-				$duration = "%s ". $start ." - ". $end;
+				$duration = "%s ". $start ." to ". $end;
 			}
 		}
 		if ( $this->repeat != APP_NOREP ) 
@@ -1409,7 +1409,7 @@ class appointment extends tutos_base {
 		}
 
 		echo " <tr>\n";
-		echo " <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b>". $this->getLink($duration) ."</b></td>\n";
+		echo " <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b>". $duration ."</b></td>\n";
 
 		//added from Fredy's patch	
 		echo "  <td class=\"". $class ."\" align=\"right\">". $this->creator ."&nbsp; </td>\n";
