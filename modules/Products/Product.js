@@ -124,8 +124,13 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.product_name.value = product_name;
-        window.opener.document.EditView.product_id.value = product_id;
+        //getOpenerObj used for DetailView 
+        var fldName = getOpenerObj("product_name");
+        var fldId = getOpenerObj("product_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+	//window.opener.document.EditView.product_name.value = product_name;
+        //window.opener.document.EditView.product_id.value = product_id;
 }
 
 function set_return_formname_specific(formname,product_id, product_name) {
