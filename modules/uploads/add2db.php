@@ -18,7 +18,7 @@ $directory = $root_directory."/storage/user_".getUserName($current_user->id)."/a
 
 if(!is_dir($directory))
 {
-	if(!mkdir($directory, 0777))	
+	if(!mkdirs($directory, 0777))	
 	{
 		echo "Access denined to create folder";
 		die;

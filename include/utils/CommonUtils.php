@@ -1180,4 +1180,16 @@ function UserCount()
 	return $count;
 }
 
+function mkdirs($dir) {
+if( is_null($dir) || $dir === "" ){
+	return FALSE;
+}
+if( is_dir($dir) || $dir === "/" ){
+	return TRUE;
+}
+if( mkdirs(dirname($dir), $mode, $recursive) ){
+	return mkdir($dir, $mode);
+}
+return FALSE;
+}
 ?>
