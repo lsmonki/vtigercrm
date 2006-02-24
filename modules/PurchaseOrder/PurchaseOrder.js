@@ -301,8 +301,14 @@ function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_id.value = product_id;
 }
 function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.purchaseorder_name.value = product_name;
-        window.opener.document.EditView.purchaseorder_id.value = product_id;
+        
+	//getOpenerObj used for DetailView 
+        var fldName = getOpenerObj("purchaseorder_name");
+        var fldId = getOpenerObj("purchaseorder_id");
+        fldName.value = product_name;
+        fldId.value = product_id;
+	//window.opener.document.EditView.purchaseorder_name.value = product_name;
+        //window.opener.document.EditView.purchaseorder_id.value = product_id;
 }
 function set_return_formname_specific(formname, product_id, product_name) {
         window.opener.document.EditView1.purchaseorder_name.value = product_name;
