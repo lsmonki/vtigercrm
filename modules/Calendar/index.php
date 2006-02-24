@@ -26,7 +26,7 @@ $image_path=$theme_path."images/";
 require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
-//include ('modules/Calendar/calendar_day.php'); 
-include ('modules/Calendar/new_calendar.php');
+include ('modules/Calendar/calendar_day.php'); 
+//include ('modules/Calendar/new_calendar.php');
 
 ?>
