@@ -1260,3 +1260,64 @@ function delRow()
 
 }
 
+function fnVis(obj){
+
+   var profTag = document.getElementById("prof");
+
+   var moreTag = document.getElementById("more");
+
+   var addrTag = document.getElementById("addr");
+
+  
+   if(obj == 'prof'){
+
+       document.getElementById('mnuTab').style.display = 'block';
+
+       document.getElementById('mnuTab1').style.display = 'none';
+
+       document.getElementById('mnuTab2').style.display = 'none';
+
+       profTag.className = 'dvtSelectedCell';
+
+       moreTag.className = 'dvtUnSelectedCell';
+
+       addrTag.className = 'dvtUnSelectedCell';
+
+   }
+
+  
+   else if(obj == 'more'){
+
+       document.getElementById('mnuTab1').style.display = 'block';
+
+       document.getElementById('mnuTab').style.display = 'none';
+
+       document.getElementById('mnuTab2').style.display = 'none';
+
+       moreTag.className = 'dvtSelectedCell';
+
+       profTag.className = 'dvtUnSelectedCell';
+
+       addrTag.className = 'dvtUnSelectedCell';
+
+   }
+
+  
+   else if(obj == 'addr'){
+
+       document.getElementById('mnuTab2').style.display = 'block';
+
+       document.getElementById('mnuTab').style.display = 'none';
+
+       document.getElementById('mnuTab1').style.display = 'none';
+
+       addrTag.className = 'dvtSelectedCell';
+
+       profTag.className = 'dvtUnSelectedCell';
+
+       moreTag.className = 'dvtUnSelectedCell';
+
+   }
+
+}
+
