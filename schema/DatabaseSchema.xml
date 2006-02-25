@@ -4443,13 +4443,6 @@
 	</table>
 
 	<table name="salesorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_SO3 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="salesorder" alter="true">
 	<constraint>ADD CONSTRAINT fk_SO4 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
@@ -4610,13 +4603,6 @@
 
 	<table name="invoice" alter="true">
 	<constraint>ADD CONSTRAINT fk_Invoice1 FOREIGN KEY (invoiceid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="invoice" alter="true">
-	<constraint>ADD CONSTRAINT fk_Invoice2 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
