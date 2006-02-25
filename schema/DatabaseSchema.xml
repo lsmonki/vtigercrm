@@ -1873,19 +1873,7 @@
 
         <table name="vendorcontactrel" alter="true">
 
-                <constraint>ADD CONSTRAINT fk_VendorContactRel FOREIGN KEY (vendorid) REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
-
-                <opt>Type=InnoDB</opt>
-
-                <data>
-                </data>
-        </table>
-
-
-
-        <table name="vendorcontactrel" alter="true">
-
-                <constraint>ADD CONSTRAINT fk_VendorContactRel FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+                <constraint>ADD CONSTRAINT fk_VendorContactRel2contactid FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		     <opt>Type=InnoDB</opt>
 
                 <data>
@@ -3894,6 +3882,16 @@
 		</data>
 	</table>
 
+        <table name="vendorcontactrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_VendorContactRel2vendorid FOREIGN KEY (vendorid) REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
 	<table name="vendorcf">
 		<field name="vendorid" type="I" size="19">
 			<KEY/>
@@ -4054,6 +4052,12 @@
 		<field name="terms_conditions" type="X"></field>
 		<index name="quotestage">
 			<col>quotestage</col>
+		</index>
+		<index name="potentialid">
+			<col>potentialid</col>
+		</index>
+		<index name="contactid">
+			<col>contactid</col>
 		</index>
 
 <opt>Type=InnoDB</opt>
@@ -4223,7 +4227,15 @@
 		<field name="subtotal" type="N" size="11.3"></field>
 		<field name="terms_conditions" type="X"></field>
 		<field name="postatus" type="C" size="200"></field>
-		
+		<index name="PO_Vend_IDX">
+			<col>vendorid</col>
+		</index>
+		<index name="PO_Quote_IDX">
+			<col>quoteid</col>
+		</index>
+		<index name="PO_Contact_IDX">
+			<col>contactid</col>
+		</index>
                   
 <opt>Type=InnoDB</opt>
 		<data>
@@ -4247,14 +4259,14 @@
 	</table>
 
 	<table name="purchaseorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_PO2 FOREIGN KEY (quoteid) REFERENCES quotes(quote) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_PO3 FOREIGN KEY (quoteid) REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
 	<table name="purchaseorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_PO3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_PO4 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -4402,7 +4414,12 @@
 		<field name="terms_conditions" type="X"></field>
 		<field name="purchaseorder" type="C" size='200'></field>
 		<field name="sostatus" type="C" size='200'></field>
-	
+		<index name="SoVend_IDX">
+			<col>vendorid</col>
+		</index>
+		<index name="SoContact_IDX">
+			<col>contactid</col>
+		</index>
                   
 <opt>Type=InnoDB</opt>
 		<data>
@@ -4426,14 +4443,14 @@
 	</table>
 
 	<table name="salesorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_SO2 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_SO3 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
 	<table name="salesorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_SO3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_SO4 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -4579,7 +4596,9 @@
 		<field name="terms_conditions" type="X"></field>
 		<field name="purchaseorder" type="C" size='200'></field>
 		<field name="invoicestatus" type="C" size='200'></field>
-
+		<index name="SoPo_IDX">
+			<col>purchaseorderid</col>
+		</index>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4752,9 +4771,7 @@
                 <field name="entitytype" type="C" size="100">
                         <NOTNULL/>
                 </field>
-		<index name="customview">
-                        <col>cvid</col>
-                </index>
+		<opt>Type=InnoDB</opt>
                 <data>
                 </data>
         </table>
@@ -4762,6 +4779,7 @@
 
 	<table name="cvcolumnlist">
 		<field name="cvid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 		     <NOTNULL/>
@@ -4843,6 +4861,7 @@
 
 	<table name="customaction">
                 <field name="cvid" type="I" size="19">
+			<KEY/>
                 </field>
                 <field name="subject" type="C" size="250">
                         <NOTNULL/>
@@ -4861,8 +4880,7 @@
         </table>
 
         <table name="customaction" alter="true">
-                <constraint>ADD CONSTRAINT customaction_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCAD
-E</constraint>
+                <constraint>ADD CONSTRAINT customaction_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data></data>
         </table>
@@ -4877,12 +4895,14 @@ E</constraint>
 		<field name="numofobjects" type="I" size="19">
                         <DEFAULT value="0"/>
                 </field>
+                <opt>Type=InnoDB</opt>
                 <data>
                 </data>
         </table>
 
 	<table name="selectcolumn">
 		<field name="queryid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 		     <NOTNULL/>
@@ -4899,13 +4919,14 @@ E</constraint>
 	</table>
 
 	<table name="selectcolumn" alter="true">
-		<constraint>ADD CONSTRAINT selectcolumn_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT selectcolumn_FK1 FOREIGN KEY (queryid) REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 
 	<table name="relcriteria">
 		<field name="queryid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<NOTNULL/>
@@ -4927,7 +4948,7 @@ E</constraint>
 	</table>
 
 	<table name="relcriteria" alter="true">
-		<constraint>ADD CONSTRAINT relcriteria_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT relcriteria_FK1 FOREIGN KEY (queryid) REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -4947,6 +4968,7 @@ E</constraint>
 		<field name="state" type="C" size="50">
 			<DEFAULT value="SAVED"/>
 		</field>
+		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 
@@ -4990,12 +5012,12 @@ E</constraint>
 	</table>
 
 	<table name="report" alter="true">
-		<constraint>ADD CONSTRAINT report_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT report_FK1 FOREIGN KEY (queryid) REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 	<table name="report" alter="true">
-		<constraint>ADD CONSTRAINT report_FK2 FOREIGN KEY (FOLDERID) REFERENCES reportfolder (FOLDERID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT report_FK2 FOREIGN KEY (folderid) REFERENCES reportfolder (folderid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
