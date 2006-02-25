@@ -4773,9 +4773,6 @@
 		<field name="columnname" type="C" size="250">
 		      <DEFAULT value=""/>
 		</field>
-		<index name="cvcolumnlist_IDX0">
-			<col>cvid</col>
-		</index>
 		<index name="columnindex">
 			<col>columnindex</col>
 		</index>
@@ -4897,9 +4894,6 @@
 		<field name="columnname" type="C" size="250">
 		      <DEFAULT value=""/>
 		</field>
-		<index name="selectcolumn_IDX0">
-			<col>queryid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -4926,9 +4920,6 @@
 		<field name="value" type="C" size="200">
 			<DEFAULT value=""/>
 		</field>
-		<index name="relcriteria_IDX0">
-			<col>queryid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -5019,9 +5010,6 @@
 		<field name="secondarymodules" type="C" size="250">
 			<DEFAULT value=""/>
 		</field>
-		<index name="reportmodules_IDX0">
-			<col>reportmodulesid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
