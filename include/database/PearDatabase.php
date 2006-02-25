@@ -799,12 +799,16 @@ function createTables($schemaFile, $dbHostName=false, $userName=false, $userPass
 
 	//$this->println("ADODB createTables connect status=".$db->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName));
 	$schema = new adoSchema( $db );
+	//Debug Adodb XML Schema
+	$sehema->XMLS_DEBUG = TRUE;
+	//Debug Adodb
+	$sehema->debug = true;
 	$sql = $schema->ParseSchema( $schemaFile );
 
 	$this->println("--------------Starting the table creation------------------");
 	//$this->println($sql);
 
-
+	//integer ExecuteSchema ([array $sqlArray = NULL], [boolean $continueOnErr = NULL])
 	$result = $schema->ExecuteSchema( $sql, true );
 	if($result)
 	print $db->errorMsg();
