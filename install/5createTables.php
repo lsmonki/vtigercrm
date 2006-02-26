@@ -61,9 +61,9 @@ require_once('data/Tracker.php');
 require_once('include/utils.php');
 require_once('modules/Users/Security.php');
 
-// load the config_override.php file to provide default user settings
-if (is_file("config_override.php")) {
-	require_once("config_override.php");
+// load the config.override.php file to provide default user settings
+if (is_file("config.override.php")) {
+	require_once("config.override.php");
 }
 
 $db = new PearDatabase();

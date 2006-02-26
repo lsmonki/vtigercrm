@@ -34,7 +34,7 @@ $current_dir = pathinfo(dirname(__FILE__));
 $current_dir = $current_dir['dirname']."/";
 $cache_dir = "cache/";
 
-if (is_file("config.php")) {
+if (is_file("config.php") && is_file("config.inc.php")) {
   require_once("config.php");
   session_start();
 

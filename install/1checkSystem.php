@@ -173,9 +173,9 @@ $gd_info_alternate = 'function gd_info() {
 
 	    </tr>
 		<tr>
-			<td bgcolor="#EEEEEE"><strong>config.php</strong></td>
+			<td bgcolor="#EEEEEE"><strong>config.inc.php</strong></td>
 
-			<td align="right"><?php echo (is_writable('./config.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
+			<td align="right"><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
 		</tr>
 		 <tr>
 		    <td bgcolor="#EEEEEE"><strong>Cache Directory (cache/)</strong></td>

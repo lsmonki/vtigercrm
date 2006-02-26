@@ -350,24 +350,24 @@ insert_charset_header();
 // Create or reestablish the current session
 session_start();
 
-if (!is_file('config.php')) {
-    header("Location: install.php");
-    exit();
+if (!is_file('config.inc.php')) {
+  header("Location: install.php");
+  exit();
 }
 
-require_once('config.php');
+require_once('config.inc.php');
 if (!isset($dbconfig['db_hostname'])) {
-    header("Location: install.php");
-    exit();
+  header("Location: install.php");
+  exit();
 }
 
-// load up the config_override.php file.  This is used to provide default user settings
-if (is_file('config_override.php')) 
-{
-	require_once('config_override.php');
-}
+// load up the config.override.php file
+// used to provide default user settings
+if (is_file('config.override.php'))
+  require_once('config.override.php');
+
 $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"3000000" );
- 	
+
 set_default_config($default_config_values);
 require_once('include/logging.php');
 require_once('modules/Users/User.php');

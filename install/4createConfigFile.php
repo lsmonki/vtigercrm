@@ -122,8 +122,8 @@ $cache_dir = 'cache/';
 if (isset($_REQUEST['root_directory']))
   $root_directory = $_REQUEST['root_directory'];
 
-if (is_file('config.php'))
-  $is_writable = is_writable('config.php');
+if (is_file('config.inc.php'))
+  $is_writable = is_writable('config.inc.php');
 else
   $is_writable = is_writable('.');
 
@@ -132,7 +132,7 @@ $templateFilename = 'config.template.php';
 $templateHandle = fopen($templateFilename, "r");
 if($templateHandle) {
   /* open include configuration file write only */
-  $includeFilename = 'config.php';
+  $includeFilename = 'config.inc.php';
   $includeHandle = fopen($includeFilename, "w");
   if($includeHandle) {
     while (!feof($templateHandle)) {
@@ -176,16 +176,16 @@ if($templateHandle) {
 
 if ($templateHandle && $includeHandle) {
   echo "<br><table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"><tbody><tr><td align=\"left\">";
-  echo "<h4>Successfully created configuration file (<b>config.php</b>) in :</h4></td>";
+  echo "<h4>Successfully created configuration file (<b>config.inc.php</b>) in :</h4></td>";
   echo "<td align=\"left\"><font color=\"00CC00\">".$root_directory."</font>\n";
   echo "</td></tr></table>";
 }
 else {
   echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tbody><tr><td align=\"left\">";
-  echo "Cannot write configuration file (config.php ) in the directory <font color=red>".$root_directory."</font>.\n";
-  echo "<P>You can continue this installation by manually creating the config.php file and pasting the configuration information below inside.However, you <strong>must</strong> create the configuration file before you continue to the next step.<P>\n";
+  echo "Cannot write configuration file (config.inc.php ) in the directory <font color=red>".$root_directory."</font>.\n";
+  echo "<P>You can continue this installation by manually creating the config.inc.php file and pasting the configuration information below inside.However, you <strong>must</strong> create the configuration file before you continue to the next step.<P>\n";
   echo  "<TEXTAREA class=\"dataInput\" rows=\"15\" cols=\"80\">".$config."</TEXTAREA>";
-  echo "<P>Did you remember to create the config.php file?</td></tr>";
+  echo "<P>Did you remember to create the config.inc.php file ?</td></tr>";
 }
 
 ?>
