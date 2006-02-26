@@ -20,12 +20,9 @@
  ********************************************************************************/
 
 require_once('include/utils.php');
+include('vtigerversion.php');
 
 session_start();
-
-// vtigerCRM version number; do not edit!
-$vtiger_version = "4.2.3";
-$release_date = "23 December 2005";
 
 if (isset($_REQUEST['db_hostname']))
   $db_hostname = $_REQUEST['db_hostname'];
@@ -131,11 +128,11 @@ else
   $is_writable = is_writable('.');
 
 /* open template configuration file read only */
-$templateFilename = $root_directory."install/config.template.php";
+$templateFilename = 'install/config.template.php';
 $templateHandle = fopen($templateFilename, "r");
 if($templateHandle) {
   /* open include configuration file write only */
-  $includeFilename = $root_directory."config.php";
+  $includeFilename = 'config.php';
   $includeHandle = fopen($includeFilename, "w");
   if($includeHandle) {
     while (!feof($templateHandle)) {

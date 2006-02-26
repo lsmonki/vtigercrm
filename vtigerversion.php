@@ -11,5 +11,6 @@
 
 $patch_version = '';
 $modified_database = '';
-$vtiger_current_version = '4.2.3';
+$vtiger_version = '4.2.3';
+$release_date = '23 December 2005';
 ?>

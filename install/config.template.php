@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
@@ -13,8 +13,7 @@
  * Contributor(s): ______________________________________.
 ********************************************************************************/
 
-$vtiger_version = '4.2.3';
-$release_date = '23 December 2005';
+include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
 // memory limit default value = 16M

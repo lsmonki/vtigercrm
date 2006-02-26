@@ -40,7 +40,7 @@ if($handle)
 		$newbuf .= "\$patch_version = '2';\n";
 		$newbuf .= "\$patch_release_date = '16 September 2005';\n";
     	    }
-	    elseif($starter == '$vtiger_current_version' && !stristr($tmp,'4.2'))
+	    elseif($starter == '$vtiger_version' && !stristr($tmp,'4.2'))
     	    {
 		die("<font color=red><center> *** This Patch cannot be applied for vtiger CRM versions other than 4.2! *** </center></font>");   
     	    }
