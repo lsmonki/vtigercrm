@@ -128,7 +128,7 @@ else
   $is_writable = is_writable('.');
 
 /* open template configuration file read only */
-$templateFilename = 'install/config.template.php';
+$templateFilename = 'config.template.php';
 $templateHandle = fopen($templateFilename, "r");
 if($templateHandle) {
   /* open include configuration file write only */
