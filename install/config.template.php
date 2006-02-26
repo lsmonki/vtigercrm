@@ -43,7 +43,7 @@ $HELPDESK_SUPPORT_NAME = 'your-domain name';
 */
 
 $dbconfig['db_server'] = '_DBC_SERVER_';
-// TODO test if port is empty
+// TODO: test if port is empty
 $dbconfig['db_port'] = ':_DBC_PORT_';
 $dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
 $dbconfig['db_username'] = '_DBC_USER_';
@@ -51,7 +51,7 @@ $dbconfig['db_password'] = '_DBC_PASS_';
 $dbconfig['db_name'] = '_DBC_NAME_';
 
 // db_type default value = mysql
-$dbconfig['db_type'] = '_DBC_TYPE';
+$dbconfig['db_type'] = '_DBC_TYPE_';
 
 // log_sql default value = false
 $dbconfig['log_sql'] = false;
