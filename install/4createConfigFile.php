@@ -137,26 +137,7 @@ if($templateHandle) {
   if($includeHandle) {
     while (!feof($templateHandle)) {
       $buffer = fgets($templateHandle);
-      /* TODO: add missing parameters
-      $vtiger_version = '".$vtiger_version."';\n";
-      $release_date = '".$release_date."';\n";
-      $dbconfig['db_hostname'] = '".$db_hostname."';\n";
-      $dbconfig['db_username'] = '".$db_username."';\n";
-      $dbconfig['db_password'] =  '".$db_password."';\n";
-      $dbconfig['db_name'] = '".$db_name."';\n";
-      $host_name = '".$db_hostname."';\n";
-      $site_URL = '".$site_URL."';\n";
-      $root_directory = '".$root_directory."';\n";
-      $cache_dir = '$cache_dir';\n";
-      $mail_server = '$mail_server';\n";
-      $mail_server_username = '$mail_server_username';\n";
-      $mail_server_password = '$mail_server_password';\n";
-      $tmp_dir = '" . ($cache_dir . "images/") . "';\n";
-      $import_dir = '" . ($cache_dir . "import/") . "';\n";
-      $upload_dir = '" . ($cache_dir . "upload/") . "';\n";
-      // includeDirectory default value = $root_directory.'include/\n";
-      $languages = $language_value;\n";
-      */
+
       /* replace _DBC_ variable */
       $buffer = str_replace( "_DBC_SERVER_", $db_hostname, $buffer);
       $buffer = str_replace( "_DBC_PORT_", "3306", $buffer);
@@ -164,6 +145,16 @@ if($templateHandle) {
       $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
       $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
       $buffer = str_replace( "_DBC_TYPE_", "mysql", $buffer);
+      /* replace dir variable */
+      $buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
+      $buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
+      $buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
+      $buffer = str_replace( "_VT_IMPORTDIR_", $cache_dir."import/", $buffer);
+      $buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
+      /* replace mail variable */
+      $buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
+      $buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
+      $buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
 
       fwrite($includeHandle, $buffer);
     }

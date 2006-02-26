@@ -41,16 +41,14 @@ $HELPDESK_SUPPORT_NAME = 'your-domain name';
       db_name
 */
 
-$dbconfig['db_server'] = '_DBC_SERVER_';
 // TODO: test if port is empty
+$dbconfig['db_server'] = '_DBC_SERVER_';
 $dbconfig['db_port'] = ':_DBC_PORT_';
-$dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
 $dbconfig['db_username'] = '_DBC_USER_';
 $dbconfig['db_password'] = '_DBC_PASS_';
 $dbconfig['db_name'] = '_DBC_NAME_';
-
-// db_type default value = mysql
 $dbconfig['db_type'] = '_DBC_TYPE_';
+$dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
 
 // log_sql default value = false
 $dbconfig['log_sql'] = false;
@@ -75,20 +73,26 @@ $dbconfigoption['ssl'] = false;
 
 $host_name = $dbconfig['db_hostname'];
 $site_URL = 'http://'.$dbconfig['db_server'].'/vtigercrm';
-$root_directory = '/var/www/vtigercrm';
-$cache_dir = 'cache/';
-$mail_server = '';
-$mail_server_username = '';
-$mail_server_password = '';
+
+// root directory path
+$root_directory = '_VT_ROOTDIR_';
+
+// cache direcory path
+$cache_dir = '_VT_CACHEDIR_';
 
 // tmp_dir default value prepended by cache_dir = images/
-$tmp_dir = 'cache/images/';
+$tmp_dir = '_VT_TMPDIR_';
 
-//  import_dir default value prepended by cache_dir = import/
-$import_dir = 'cache/import/';
+// import_dir default value prepended by cache_dir = import/
+$import_dir = '_VT_IMPORTDIR_';
 
 // upload_dir default value prepended by cache_dir = upload/
-$upload_dir = 'cache/upload/';
+$upload_dir = '_VT_UPLOADDIR_';
+
+// mail server parameters
+$mail_server = '_MAIL_SERVER_';
+$mail_server_username = '_MAIL_USERNAME_';
+$mail_server_password = '_MAIL_PASSWORD_';
 
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
@@ -106,7 +110,7 @@ $allow_exports = 'all';
 $upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm');
 
 // full path to include directory including the trailing slash
-// includeDirectory default value = /var/www/vtigercrm/.'include/
+// includeDirectory default value = $root_directory..'include/
 $includeDirectory = $root_directory.'include/';
 
 // list_max_entries_per_page default value = 20
