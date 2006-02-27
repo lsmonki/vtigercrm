@@ -80,3 +80,25 @@ function switchClass(myModule,toStatus) {
 		}
 		
 }
+
+function check_form()
+{
+        if(trim(document.appSave.subject.value) == "")
+        {
+                alert("Missing Event Name");
+                document.appSave.subject.focus()
+                return false;
+        }
+        else
+        {
+                if (document.appSave.activitytype[0].checked==true)
+                {
+                        document.appSave.duration_minutes.value = "15";
+                }
+                else if (document.appSave.activitytype[1].checked == true)
+                {
+                        document.appSave.duration_minutes.value = "45";
+                }
+                return true;
+        }
+}
