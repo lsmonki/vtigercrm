@@ -1,7 +1,27 @@
+<?php
+global $calpath,$callink;
+ $calpath = 'modules/Calendar/';
+ $callink = 'index.php?module=Calendar&action=';
+
+ global $theme;
+ $theme_path="themes/".$theme."/";
+ $image_path=$theme_path."images/";
+ require_once ($theme_path."layout_utils.php");
+ global $mod_strings,$app_strings,$current_user;
+?>
+       
 	<!-- Add Event DIV starts-->
 	<script language="JavaScript" type="text/javascript" src="general.js"></script>	
 	<div class="calAddEvent" style="display:none" id="addEvent" align=center> 
-	<form name="newRoleForm">	
+	<form name="appSave" onSubmit="return check_form()" method="POST" action="index.php">
+	<input type="hidden" name="module" value="Activities">
+	<input type="hidden" name="activity_mode" value="Events">
+	<input type="hidden" name="action" value="Save">
+	<input type="hidden" name="record" value="">
+	<input type="hidden" name="taskstatus" value="Not Started">
+	<input type="hidden" name="duration_hours" value="0">
+	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
+	<input type="hidden" name="duration_minutes" value="0">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
 			<td class="lvtHeaderText">Add Event</b></td>
@@ -15,15 +35,15 @@
 			<td width=80%>
 				<table>
 					<tr>
-					<td><input type="radio"></td><td> Call</td><td style="width:10px">
-					<td><input type="radio"></td><td> Meeting</td><td style="width:20px">
+					<td><input type="radio" name='activitytype' value='Call' onclick='document.appSave.module.value="Activities";' style='vertical-align: middle;' checked></td><td> Call</td><td style="width:10px">
+					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onclick='document.appSave.module.value="Activities";'></td><td> Meeting</td><td style="width:20px">
 					</tr>
 				</table>
 			</td>
 		</tr>
 		<tr>
 			<td nowrap ><b>Event Name :</b></td>
-			<td><input type="text" class="textbox" style="width:90%"></td>
+			<td><input name="subject" type="text" class="textbox" style="width:90%"></td>
 		</tr>
 		</table>
 		<br>
@@ -76,7 +96,7 @@
 			<!-- Invite UI -->
 				
 				<DIV id="addEventInviteUI" style="display:block;width:100%">
-				<table border
+				<table border>
 				<table border=0 cellspacing=0 cellpadding=2 width=100%>
 				<tr>
 					<td valign=top> 
@@ -271,7 +291,7 @@
 		<tr>
 			<td valign=top></td>
 			<td  align=right>
-				<input type="button" class=small style="width:90px" value="Save">
+				<input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="Save">
 				<input type="button" class=small style="width:90px" value="Close" onClick="ghide('addEvent')">
 			</td>
 		</tr>
