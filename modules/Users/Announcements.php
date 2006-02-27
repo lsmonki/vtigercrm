@@ -25,7 +25,7 @@ if($id != $current_user->id)
 	$html='<script>
 	function ajaxSaveResponse(response)
 	{
-		document.getElementById("announcement").value=response.responseText;
+		document.getElementById("announcement").innerHTML=response.responseText;
 		hide("an_busy");
 	}
 	function Announcement()
@@ -36,9 +36,7 @@ if($id != $current_user->id)
 	var announcement=document.getElementById("announcement").value;
 	var title=document.getElementById("title_announce").value;
 	var urlstring = "module=Users&action=UsersAjax&announcement="+announcement+"&announce_save=yes&title_announcement="+title;
-	if(announcement != "")
 		ajaxObj.process("index.php?",urlstring);
-	
 	}
 	</script>
 	<br><br><table align="center"><tbody><tr style="height: 40px;">

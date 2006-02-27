@@ -16,7 +16,12 @@ if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 	$announcement='';
 	$sql="select * from announcement order by time";
 	$result=$adb->query($sql);
-		$announcement.=getUserName($adb->query_result($result,$i,'creatorid')).' :  '.$adb->query_result($result,$i,'announcement').'   ';
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$announce = getUserName($adb->query_result($result,$i,'creatorid')).' :  '.$adb->query_result($result,$i,'announcement').'   ';
+		if($adb->query_result($result,$i,'announcement')!='')
+			$announcement.=$announce;
+	}
 	echo $announcement; 
 		
 }elseif(isset($_REQUEST['announce_save']) && ($_REQUEST['announce_save'] != ''))
@@ -31,6 +36,6 @@ if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 	else
 		$query="insert into announcement values (".$current_user->id.",".$adb->formatString("announcement","announcement",$announcement).",".$adb->formatString("announcement","time",$date_var).",'".$date_var."')";
 	$result=$adb->query($query);
-	echo $query.$announcement;
+	echo $announcement;
 	}
 ?>
