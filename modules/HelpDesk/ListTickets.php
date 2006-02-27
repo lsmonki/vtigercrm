@@ -102,8 +102,6 @@ $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;"
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_CREATED_DATE'].'</td>';
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_ASSIGNED_TO'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='</tr>';
 
 for ($i=1; $i<=$adb->num_rows($tktresult); $i++)
@@ -131,19 +129,17 @@ for ($i=1; $i<=$adb->num_rows($tktresult); $i++)
 
         $list .= '<td style="padding:0px 3px 0px 3px;">'.$parent_name.'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"status").'</td>';
+        $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i-1,"status").'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $list .= '<td style="padding:0px 3px 0px 3px;">'.getDisplayDate($adb->query_result($tktresult,$i,"createdtime")).'</td>';
-                $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"user_name").'</td>';
+        $list .= '<td style="padding:0px 3px 0px 3px;">'.getDisplayDate($adb->query_result($tktresult,$i-1,"createdtime")).'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
         $list .= '</tr>';
 }
 
 if($resultcount > 5)
-	$list .= '</td></tr><tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr><tr><td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td><td colspan="10">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td><td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	$list .= '</td></tr><tr><td COLSPAN="13" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr><tr><td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td><td colspan="8">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td><td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 
-$list.='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
+$list.='<tr><td COLSPAN="13" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
 $list .= '</div></td></tr></table>';
 $list .= '<script language=\'Javascript\'>
         var leftpanelistarray=new Array(\'home_mytkt\');
