@@ -97,7 +97,6 @@ require_once('modules/Calendar/UserCalendar.php');
                 for ($c = 0 ; $c < $maxcol ; $c++ ) {
                  if ( isset ( $table[$i][$c] ) ) {
                    if ( is_object ( $table[$i][$c] ) ) {
-                     //echo " <td class=\"line". (1+($i % 2)) ."\" valign=\"top\" rowspan=\"". $rowspan[$i][$c]."\">";
                         $color = "";
                         $username=$table[$i][$c]->creator;
                           if ($username!=""){
@@ -156,28 +155,6 @@ function trim(s) {
         }
 
         return s;
-}
-
-function check_form()
-{
-	if(trim(document.appSave.subject.value) == "")
-	{
-		alert("Missing Subject");	
-		document.appSave.subject.focus()
-		return false;
-	}
-	else
-	{
-		if (document.appSave.activitytype[0].checked==true)
-		{
-			document.appSave.duration_minutes.value = "15";
-		}
-		else if (document.appSave.activitytype[1].checked == true)
-		{
-			document.appSave.duration_minutes.value = "45";
-		}
-	        return true;
-	}
 }
 </script>
 <?php
@@ -308,23 +285,21 @@ function check_form()
      for ($i = -1 ; $i < 24 ; $i++ ) {
        $maxcol = max($maxcol,count($table[$i]));
      }
-	//New UI-integrated by mangai
+	//New UI-integrated by minnie
      echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">";
      echo "<form action=\"". $callink ."calendar_day\" method=\"get\">\n";
      echo "<tr><td>";
 	 echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" class=\"calTopBg\"><tr><td>\n";
 	echo "<img src=\"";
-	echo $image_path."calTopLeft.gif\"></td>";
-	echo "<td><img src=\"";
-	echo $image_path."calNavPrev.gif\" alt=\"Previous\" title=\"Previous\"></td>";
+	echo $image_path."calTopLeft.gif\"></td><td>";
+	echo $this->pref->menulink($callink ."calendar_dayview&t=".$last_day->getYYYYMMDD(),$this->pref->getImage(left,'list'),$last_day->getDate())."</td>";
 	echo "<td><img src=\"";
 	echo $image_path."calSep.gif\"></td>";
-	echo "<td align=\"center\" width=\"100%\" class=\"lvtHeaderText\">Day&nbsp;";
-	echo $day.",&nbsp;".$day_in_words;
+	echo "<td align=\"center\" width=\"100%\" class=\"lvtHeaderText\">";
+	echo "&nbsp;". strftime($mod_strings['LBL_DATE_TITLE'],$from->ts) ."&nbsp;";
 	echo "</td><td><img src=\"";
-	echo $image_path."calSep.gif\"></td>";
-	echo "<td><img src=\"";
-	echo $image_path."calNavNext.gif\" alt=\"Next\" title=\"Next\"></td>";
+	echo $image_path."calSep.gif\"></td><td>";
+	echo $this->pref->menulink($callink ."calendar_dayview&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate())."</td>";
 	echo "<td align=right><img src=\"";
 	echo $image_path."calTopRight.gif\"></td>";
 	echo "</tr></table></td></tr>";
@@ -332,17 +307,18 @@ function check_form()
 	echo "<!-- calendar list -->
               <table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" width=\"100%\" class=\"calDisplay\">
               <tr><td align=center >";
-	 echo "<div class=\"calDiv\" >";
-	 $this->getHourList('12am',$maxcol,$table,12);
-	 for ($i=1;$i <=11; $i++)
-	 {
-		$this->getHourList($i.'am',$maxcol,$table,$i);
-	 }
-	 $this->getHourList('12pm',$maxcol,$table,12);	
-         for ($i=1;$i <=11; $i++)
-         {
-                $this->getHourList($i.'pm',$maxcol,$table,$i);
-         }
+	echo "<div class=\"calDiv\" >";
+	for ($i = 0; $i <24 ; $i++ )
+	{
+		if($i == 0)
+			$this->getHourList('12am',$maxcol,$table,12);
+		if($i>0 && $i<12)
+			$this->getHourList($i.'am',$maxcol,$table,$i);
+		if($i == 12)
+			$this->getHourList('12pm',$maxcol,$table,12);
+		if($i>12 && $i<24)
+			$this->getHourList(($i - 12).'pm',$maxcol,$table,$i);
+	}
 	 echo "</div>";
 	 echo "</td></tr></table>\n";
 	 echo "</tr></td>\n";
