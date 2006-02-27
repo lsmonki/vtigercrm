@@ -222,7 +222,7 @@ class jpgraph {
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('max');
+				$bplot[$index]->SetValuePos('center');
 
 				//set client side image map URL's
 				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
@@ -510,7 +510,7 @@ class jpgraph {
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('max');
+				$bplot[$index]->SetValuePos('center');
 
 				//set client side image map URL's
 				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
@@ -783,7 +783,7 @@ class jpgraph {
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('max');
+				$bplot[$index]->SetValuePos('center');
 
 				//set client side image map URL's
 				$bplot[$index]->SetCSIMTargets($aTargets[$the_id],$aAlts[$the_id]);
