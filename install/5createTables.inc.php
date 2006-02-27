@@ -257,7 +257,7 @@ foreach ( $modules as $module ) {
 	$focus->create_tables(); // inserts only rows
 	eecho (", ");
 }
-eecho ("Done.\n");
+eecho ("Done.");
 
 /*
 if ($new_tables)
