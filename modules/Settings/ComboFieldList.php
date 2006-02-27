@@ -216,6 +216,7 @@ $xtpl->out("main");
 
 function getUserFldArray($fld_module)
 {
+	global $adb;
 	$user_fld = Array();
 	$query = "select * from field where generatedtype=2 and tabid=".fetchTabIDVal($fld_module)." and uitype IN (15,16)";
 //        echo $query;
