@@ -145,6 +145,9 @@ if($templateHandle) {
       $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
       $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
       $buffer = str_replace( "_DBC_TYPE_", "mysql", $buffer);
+      
+      $buffer = str_replace( "_SITE_URL_", "site_URL", $buffer);
+      
       /* replace dir variable */
       $buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
       $buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
