@@ -239,11 +239,13 @@ a:hover {
 	padding-right:10px;
 	border-bottom:1px solid #eaeaea;
 	color:#737373;
+	white-space:nowrap;
 }
 
 .dvtCellInfo {
 	padding-left:10px;
 	border-bottom:1px solid #eaeaea;
+	white-space:nowrap;
 }
 
 .rightMailMerge {
@@ -290,6 +292,16 @@ a:hover {
 	border:1px solid #bababa;
 	padding-left:5px;
 	width:90%;
+	background-color:#ffffff;
+}
+
+.detailedViewProdTextBox {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:85%;
 	background-color:#ffffff;
 }
 
@@ -834,5 +846,50 @@ border:0px;
 	position:relative;
 	display:block;
 	width:245px;
+}
+
+.prdTab{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+	width:100%;
+	border-left:1px solid #CCCCCC;
+	border-right:0px solid #CCCCCC;
+}
+
+.prdTab tr th{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+	border-right:1px solid #CCCCCC;
+	padding-left:5px;
+	background-color:#E5E5E5;
+	height:20px;
+	color:#000000;
+	font-weight:bold;
+	text-decoration:none;
+	border-bottom:1px solid #CCCCCC;
+}
+
+.prdTab tr td{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+	border-right:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+	padding-left:5px;
+	color:#000000;
+	text-decoration:none;
+	font-weight:normal;
+	height:20px;
+}
+
+.delTxt{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-decoration:underline;
+	font-weight:normal;
+	color:#000099;
+	cursor:pointer;
 }
 
