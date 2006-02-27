@@ -1321,3 +1321,31 @@ function fnVis(obj){
 
 }
 
+function fnvsh(obj,Lay){
+    var tagName = document.getElementById(Lay);
+    var leftSide = findPosX(obj);
+    var topSide = findPosY(obj);
+    tagName.style.left= leftSide + 175 + 'px';
+    tagName.style.top= topSide + 'px';
+    tagName.style.visibility = 'visible';
+}
+
+function fnvshobj(obj,Lay){
+    var tagName = document.getElementById(Lay);
+    var leftSide = findPosX(obj);
+    var topSide = findPosY(obj);
+    tagName.style.left= leftSide + 'px';
+    tagName.style.top= topSide + 'px';
+    tagName.style.visibility = 'visible';
+}
+
+function fninvsh(Lay){
+    var tagName = document.getElementById(Lay);
+    tagName.style.visibility = 'hidden';
+}
+
+function fnvshNrm(Lay){
+    var tagName = document.getElementById(Lay);
+    tagName.style.visibility = 'visible';
+}
+
