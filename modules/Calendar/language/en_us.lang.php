@@ -56,7 +56,7 @@ $mod_strings = Array(
 'LBL_SM_SAT' => 'Sat',
 'LBL_SM_SUN' => 'Sun',
 
-'LBL_DATE_TITLE' => '%A, %d. %B %Y',
+'LBL_DATE_TITLE' => 'Day %d, %A',
 
 'LBL_WEEK' => 'Week',
 'LBL_WEEK_BUTTON_KEY' => 'W',
