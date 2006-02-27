@@ -103,7 +103,8 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      var dtlView = "dtlview_"+ fieldLabel;
      var editArea = "editarea_"+ fieldLabel;
      var txtBox= "txtbox_"+ fieldLabel;
-      
+     var popupTxt= "popuptxt_"+ fieldLabel;      
+
      var tagValue = trim(document.getElementById(txtBox).value);
 
      var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
@@ -112,7 +113,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      
      var ajaxObj = new Ajax(dtlViewAjaxResponse);
      ajaxObj.process("index.php?",data);
-     
+     //alert(getObj(popupTxt));
      if(uitype == '13')
      {
           getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
@@ -120,6 +121,43 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      else if(uitype == '17')
      {
           getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
+     }
+     else if(getObj(popupTxt))
+     {
+	var popObj = getObj(popupTxt);
+	if(uitype == '50' || uitype == '73' || uitype == '51')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Accounts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else if(uitype == '57')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Contacts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else if(uitype == '59')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Products&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else if(uitype == '75' || uitype == '81' )
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Vendors&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+
+	}
+	else if(uitype == '76')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Potentials&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else if(uitype == '78')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Quotes&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else if(uitype == '80')
+	{
+		getObj(dtlView).innerHTML = "<a href=\"index.php?module=SalesOrder&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+	}
+	else
+	{
+		getObj(dtlView).innerHTML = popObj.value;
+	}
      }
      else
      {
