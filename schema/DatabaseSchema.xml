@@ -4765,7 +4765,7 @@
 
 	<table name="cvcolumnlist">
 		<field name="cvid" type="I" size="19">
-			<KEY/>
+			<NOTNULL/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 		     <NOTNULL/>
@@ -4775,6 +4775,9 @@
 		</field>
 		<index name="columnindex">
 			<col>columnindex</col>
+		</index>
+		<index name="cvcolumnlistIDXcvid">
+			<col>cvid</col>
 		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
@@ -4844,7 +4847,7 @@
 
 	<table name="customaction">
                 <field name="cvid" type="I" size="19">
-			<KEY/>
+			<NOTNULL/>
                 </field>
                 <field name="subject" type="C" size="250">
                         <NOTNULL/>
@@ -4870,7 +4873,7 @@
 	
 	<table name="selectquery">
                 <field name="queryid" type="I" size="19">
-			<KEY/>
+			<NOTNULL/>
                 </field>
                 <field name="startindex" type="I" size="19">
                         <DEFAULT value="0"/>
@@ -4878,6 +4881,9 @@
 		<field name="numofobjects" type="I" size="19">
                         <DEFAULT value="0"/>
                 </field>
+                <index name="selectquery_IDX0">
+                        <col>queryid</col>
+                </index>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -4885,7 +4891,7 @@
 
 	<table name="selectcolumn">
 		<field name="queryid" type="I" size="19">
-			<KEY/>
+			<NOTNULL/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 		     <NOTNULL/>
@@ -4894,6 +4900,9 @@
 		<field name="columnname" type="C" size="250">
 		      <DEFAULT value=""/>
 		</field>
+                <index name="selectcolumn_IDX0">
+                        <col>queryid</col>
+                </index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -4906,7 +4915,7 @@
 
 	<table name="relcriteria">
 		<field name="queryid" type="I" size="19">
-			<KEY/>
+			<NOTNULL/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<NOTNULL/>
@@ -4920,6 +4929,9 @@
 		<field name="value" type="C" size="200">
 			<DEFAULT value=""/>
 		</field>
+                <index name="relcriteria_IDX0">
+                        <col>queryid</col>
+                </index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
