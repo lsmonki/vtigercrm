@@ -1,3 +1,4 @@
+<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <td width="25%" valign="top">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 
@@ -20,8 +21,8 @@
 <a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PROFILES}</a>
 <a href="index.php?module=Users&action=listgroups&parenttab=Settings" class="lftSubMnu">{$MOD.USERGROUPLIST}</a>
 <a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
-<a href="#" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
-<a href="#" class="lftSubMnu">{$MOD.LBL_FIELD_ACCESSIBILITY}</a>
+<a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuFldAccess')" onmouseout="fninvsh('subMnuFldAccess')">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
+<a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldAccess&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuOrgFld')" onmouseout="fninvsh('subMnuOrgFld')">{$MOD.LBL_FIELD_ACCESSIBILITY}</a>
 <a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
 </div></div>
 
@@ -31,9 +32,9 @@
 </tr></table>
 <div id="top2">
 <div id="studio">
-<a href="#" class="lftSubMnu">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
-<a href="#" class="lftSubMnu">{$MOD.LBL_PICKLIST_SETTINGS}</a>
-<a href="#" class="lftSubMnu">{$MOD.LBL_FIELD_ORDERING}</a>
+<a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuCusFld')" onmouseout="fninvsh('subMnuCusFld')">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
+<a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuPickList')" onmouseout="fninvsh('subMnuPickList')">{$MOD.LBL_PICKLIST_SETTINGS}</a>
+<a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">{$MOD.LBL_FIELD_ORDERING}</a>
 </div></div>
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just2()">
 <tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_COMMUNICATION_TEMPLATES}</a></td>
@@ -79,6 +80,4 @@ ScrollEffect2.limit2 = 121;
 ScrollEffect2.closelimit2= 120;
 ScrollEffect3.limit3 = 161;
 ScrollEffect3.closelimit3= 160;
-
 </script>
-
