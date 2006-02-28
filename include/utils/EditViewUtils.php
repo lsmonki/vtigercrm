@@ -441,7 +441,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $contact_name;
 		$fieldvalue[] = $value;
 	}
-	elseif($uitype == 61 || $uitype == 69)
+	elseif($uitype == 61)
 	{
 		global $current_user;
 		if($value != '')
@@ -457,6 +457,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue[] = $filename;
 		$fieldvalue[] = $value;
+	}
+	elseif($uitype == 69)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$image_lists=explode("###",$value);
+		if(count($image_lists) > 1)
+		{
+			foreach($image_lists as $image)
+			{
+				$fieldvalue[] = $image;
+			}
+		}else
+		{
+			$fieldvalue[] = $value;
+		}
 	}
 	elseif($uitype == 62)
 	{
