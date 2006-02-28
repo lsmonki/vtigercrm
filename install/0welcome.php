@@ -48,7 +48,7 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Beta Configuration Wizard</title>
+<title>vtiger CRM 5.0 Alpha2 Configuration Wizard</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -63,7 +63,7 @@ foreach($pieces as $val)
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5beta" title="v5beta"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
 	</tr>
 	</table>
 	
@@ -79,7 +79,7 @@ foreach($pieces as $val)
 	style="text-alignment:justify">
 
 Welcome!<br><br>
-Thank you for trying out vtigerCRM 5 Beta  and for making it a part of your experience.<br>
+Thank you for trying out vtigerCRM 5 Alpha2  and for making it a part of your experience.<br>
 Every developer and contributor has added value to vtiger either in the
 form of bug reports, bug fixes, feature contributions or for that
 matter, providing the hosting machine or maintenance of the forge. This
@@ -120,9 +120,9 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 
 
-This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should
+This Configuration Wizard will create vtiger CRM 5.0 Alpha2 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions<br>
+				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions<br>
 				<br></span>
 <br>
 		</td>
@@ -2664,12 +2664,12 @@ This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables a
 	  </td>
     </tr>
 	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 5.0 Beta database tables and sets the configuration variables that you need to start.
+  			This installer creates the vtiger CRM 5.0 Alpha2 database tables and sets the configuration variables that you need to start.
 			The entire process should take about four minutes.
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 5.0 Beta is tested on mysql 4.1.x and PHP 4.3.8 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions</b> </font>
+ <font color=red> <b>Kindly note vtiger CRM 5.0 Alpha2 is tested on mysql 4.1.x and PHP 4.3.8 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions</b> </font>
 
 			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
