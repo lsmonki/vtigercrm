@@ -137,6 +137,22 @@ $server->wsdl->addComplexType(
 	     )
 );
 
+//Added to get the picklist values as array
+$server->wsdl->addComplexType(
+        'get_picklists_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'ticket_picklist' => array('name'=>'ticket_picklist','type'=>'tns:xsd:string'),
+             )
+);
+
+
+
+
+
+
 $server->register(
 	'authenticate_user',
 	array('user_name'=>'xsd:string','password'=>'xsd:string'),
@@ -157,7 +173,7 @@ $server->register(
 
 $server->register(
 	'get_tickets_list',
-	array('user_name'=>'xsd:string','id'=>'xsd:string'),
+	array('user_name'=>'xsd:string','id'=>'xsd:string','where'=>'xsd:string','match'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
 	$NAMESPACE);
 
@@ -190,7 +206,6 @@ $server->register(
 	'update_ticket_comment',
 	array('ticketid'=>'xsd:string',
               'ownerid'=>'xsd:string',
-              'createdtime'=>'xsd:string',
               'comments'=>'xsd:string'),
 	array('return'=>'tns:ticket_update_comment_array'),
 	$NAMESPACE);
@@ -218,6 +233,13 @@ $server->register(
         array('id'=>'xsd:string'),
         array('return'=>'xsd:string'),
         $NAMESPACE);
+
+$server->register(
+	'get_picklists',
+	array('id'=>'xsd:string'),
+	array('return'=>'tns:get_picklists_array'),
+	$NAMESPACE);
+
 
 
 function get_ticket_comments($ticketid)
@@ -308,7 +330,7 @@ function get_KBase_details($id='')
 		$result['faq'][$k]['faqcreatedtime'] = $adb->query_result($faq_result,$k,'createdtime');
 		$result['faq'][$k]['faqmodifiedtime'] = $adb->query_result($faq_result,$k,'modifiedtime');
 
-		$faq_comment_query = "select * from faqcomments where faqid=".$faqid;
+		$faq_comment_query = "select * from faqcomments where faqid=".$faqid." order by createdtime DESC";
 		$faq_comment_result = $adb->query($faq_comment_query);
 		$faq_comment_noofrows = $adb->num_rows($faq_comment_result);
 		for($l=0;$l<$faq_comment_noofrows;$l++)
@@ -336,13 +358,13 @@ function save_faq_comment($faqid,$comment)
 	$result = get_KBase_details('');
 	return $result;
 }
-function get_tickets_list($user_name,$id)
+function get_tickets_list($user_name,$id,$where='',$match='')
 {
 
         $seed_ticket = new HelpDesk();
         $output_list = Array();
-   
-	$response = $seed_ticket->get_user_tickets_list($user_name,$id);
+ 
+	$response = $seed_ticket->get_user_tickets_list($user_name,$id,$where,$match);
         $ticketsList = $response['list'];
     
        	// create a return array of ticket details.
@@ -405,7 +427,6 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	$ticket->column_fields[assigned_user_id]=$user_id;
 
 	$adb->println($ticket->column_fields);
-    	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
 
 	$subject = '[From Portal][ Ticket ID : '.$ticket->id.' ] '.$title;
@@ -447,7 +468,7 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	//return $tickets_list;
 	//return $ticket->id;
 }
-function update_ticket_comment($ticketid,$ownerid,$createdtime,$comments)
+function update_ticket_comment($ticketid,$ownerid,$comments)
 {
 	global $adb;
 	$servercreatedtime = date("Y-m-d H:i:s");
@@ -591,6 +612,20 @@ function get_ticket_creator($ticketid)
 	return $creator;
 }
 
+function get_picklists($picklist_name)
+{
+	global $adb;
+	$picklist_array = Array();
+
+	$res = $adb->query("select * from ".$picklist_name);
+	for($i=0;$i<$adb->num_rows($res);$i++)
+	{
+		$picklist_val = $adb->query_result($res,$i,$picklist_name);
+		$picklist_array[$i] = $picklist_val;
+	}
+
+	return $picklist_array;
+}
 
 /* Begin the HTTP listener service and exit. */ 
 $server->service($HTTP_RAW_POST_DATA); 
