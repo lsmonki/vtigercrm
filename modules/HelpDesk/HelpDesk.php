@@ -191,9 +191,51 @@ class HelpDesk extends CRMEntity {
 	 *	@param  int    $id	 - contact id 
 	 * 	@return array  which is return from the function process_list_query
 	**/
-	function get_user_tickets_list($user_name,$id)
+	function get_user_tickets_list($user_name,$id,$where='',$match='')
 	{
-		$query = "select crmentity.crmid, troubletickets.*, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, products.productid, products.productname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join products on products.productid = troubletickets.product_id left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.parent_id = '".$id."' order by crmentity.crmid desc";
+
+		$this->db->println("where ==> ".$where);
+
+		$query = "select crmentity.crmid, troubletickets.*, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, products.productid, products.productname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join products on products.productid = troubletickets.product_id left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.parent_id = '".$id."'";
+
+		if(trim($where) != '')
+		{
+			if($match == 'all' || $match == '')
+			{
+				$join = " and ";
+			}
+			elseif($match == 'any')
+			{
+				$join = " or ";
+			}
+			$where = explode("&&&",$where);
+			$count = count($where);
+			$count --;
+			$where_conditions = "";
+			foreach($where as $key => $value)
+			{
+				$this->db->println('key : '.$key.'...........value : '.$value);
+				$val = explode(" = ",$value);
+				$this->db->println('val0 : '.$val[0].'...........val1 : '.$val[1]);
+				if($val[0] == 'troubletickets.title')
+				{
+					$where_conditions .= $val[0]."  ".$val[1];
+					if($count != $key) 	$where_conditions .= $join;
+				}
+				elseif($val[1] != '' && $val[1] != 'Any')
+				{
+					$where_conditions .= $val[0]." = ".$val[1];
+					if($count != $key)	$where_conditions .= $join;
+				}
+			}
+			if($where_conditions != '')
+				$where_conditions = " and ( ".$where_conditions." ) ";
+
+			$query .= $where_conditions;
+			$this->db->println("where condition for customer portal tickets search : ".$where_conditions);
+		}
+
+		$query .= " order by crmentity.crmid desc";
 		return $this->process_list_query($query);
 	}
 
