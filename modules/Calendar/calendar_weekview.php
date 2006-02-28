@@ -115,7 +115,7 @@ require_once('modules/Calendar/UserCalendar.php');
      echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">";
      echo "<form action=\"". $callink ."calendar_weekview\" method=\"get\">\n";
      echo "<tr><td>";
-     echo "<table border=0 cellspacing=0 cellpadding=0 width=100% class=\"calTopBg\">\n";
+     echo "<table border=0 cellspacing=0 cellpadding=0 width=100% class=\"calTopBg\"><tr><td>\n";
      echo "<img src=\"";
      echo $image_path."calTopLeft.gif\"></td><td>";
      echo $this->pref->menulink($callink ."calendar_weekview&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."</td>";
