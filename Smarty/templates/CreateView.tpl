@@ -20,6 +20,7 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/searchajax.js"></script>
+
 <script type="text/javascript">
 
 function ajaxResponse(response)
@@ -41,7 +42,9 @@ function sensex_info()
                 ajaxObj.process("index.php?",urlstring);
         {rdelim}
 {rdelim}
+
 </script>
+
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 
 <tr><td style="height:2px"></td></tr>
@@ -157,10 +160,15 @@ function sensex_info()
 							<tr>
 						         <td colspan=4 class="detailedViewHeader">
                                                 	        <b>{$header}</b>
-                                                         </td>
-                                                         </tr>
+							 </td>
+		                                        </tr>
+														
 							{foreach key=label item=subdata from=$data}
-							<tr style="height:25px">
+							{if $header eq 'Product Details'}
+								<tr>
+							{else}
+								<tr style="height:25px">
+							{/if}
 							{foreach key=mainlabel item=maindata from=$subdata}
 							   {assign var="uitype" value="$maindata[0][0]"}
                                                            {assign var="fldlabel" value="$maindata[1][0]"}
@@ -169,7 +177,73 @@ function sensex_info()
                                                            {assign var="fldname" value="$maindata[2][0]"}
                                                            {assign var="fldvalue" value="$maindata[3][0]"}
                                                            {assign var="secondvalue" value="$maindata[3][1]"}
+							
+							{if $header eq 'Product Details'}
+							<tr><td colspan=4>
+							  <table class="prdTab"  border="0" cellspacing="0" cellpadding="2" id="proTab">
+			                                      <tr>
+			                                        <th width="20%"><font color='red'>*</font>Product</th>
+								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+									<th width="12%">Qty In Stock</th>
+								{/if}
+                        			                <th width="10%"><font color='red'>*</font>Qty</th>
+                                        			<th width="10%">Unit Price </th>
+                                        			<th width="19%"><font color='red'>*</font>List Price</th>
+                                        			<th width="10%">Total</th>
 
+			                                        <th width="5%">&nbsp;</th>
+                        			              </tr>
+                                      			      <tr id="row1" class="dvtCellLabel">
+			                                        <td nowrap><input type="text" name="txtProduct1" class="detailedViewProdTextBox" readonly />&nbsp;<img src="themes/blue/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this)" /></td>
+								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+								<td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>
+								{/if}
+                        			                <td><input type="text" name="txtQty1" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onBlur="calcTotal(this)" /></td>
+                                        			<td style="padding:3px;"><div id="unitPrice1"></div>&nbsp;</td>
+			                                        <td nowrap><input type="text" name="txtListPrice1" class="detailedViewProdTextBox" readonly/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" /></td>
+                        			                <td style="padding:3px;"><div id="total1" align="right"></div>&nbsp;</td>
+                                        			<td><input type="hidden" id="hdnProductId1" name="hdnProductId1"><input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1"><input type="hidden" id="hdnTotal1" name="hdnTotal1">&nbsp;</td>
+
+                                      				</tr>
+			                                    </table></td></tr>
+								<tr><td colspan=4>
+							     <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  								<tr>
+								<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRow();" /></td>
+								<td width="35%">&nbsp;</td>
+								<td style="text-align:right;padding:5px;"><b>Sub Total</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="subTotal"  class="detailedViewTextBox" readonly/></td>
+
+								<td width="5%">&nbsp;</td>
+								</tr>
+								<tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+    								<td style="text-align:right;padding:5px;"><b>Tax</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="txtTax" id="txtTax" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBox'" value="{$TAXVALUE}" onblur="calcGrandTotal()" /></td>
+							        <td>&nbsp;</td>
+
+  								</tr>
+  								<tr>
+								    <td>&nbsp;</td>
+								    <td>&nbsp;</td>
+								    <td style="text-align:right;padding:5px;"><b>Adjusment</b></td>
+								    <td style="text-align:left;padding:5px;"><input type="text" name="txtAdjustment" id="txtAdjustment" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBox'" value="{$ADJUSTMENTVALUE}" onblur="calcGrandTotal()" /></td>
+								    <td>&nbsp;</td>
+								    </tr>
+
+								  <tr>
+								    <td>&nbsp;</td>
+								    <td>&nbsp;</td>
+								    <td style="text-align:right;padding:5px;"><b>Grand Total</b></td>
+								    <td style="text-align:left;padding:5px;"><input type="text" name="grandTotal"  class="detailedViewTextBox"  readonly /></td>
+								    <td>&nbsp;</td>
+								    </tr>
+								    </table>
+<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="">
+  <input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="">
+</td></tr>
+							{/if}
 
 							{if $uitype eq 2}
 							<td width=20% class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
@@ -469,6 +543,7 @@ function sensex_info()
                          {else}
                          <input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
                          {/if}
+				
                          {elseif $uitype eq 61}
                          <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 						 <td colspan="3" width="30%" align=left class="dvtCellInfo"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
@@ -503,8 +578,10 @@ function sensex_info()
 							{/foreach}
 							 <tr style="height:25px"><td>&nbsp;</td></tr>
 							{/foreach}
+
 							<tr>
 								<td  colspan=4 style="padding:5px">
+					
 								<div align="center">
 								{if $MODULE eq 'Emails'}
                                                                 <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="small" onclick="window.open('index.php?module=Users&action=lookupemailtemplates&entityid={$ENTITY_ID}&entity={$ENTITY_TYPE}','emailtemplate','top=100,left=200,height=400,width=300,menubar=no,addressbar=no,status=yes')" type="button" name="button" value="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}">
@@ -948,4 +1025,6 @@ function sensex_info()
 
 
 </script>
+
+
 
