@@ -448,16 +448,16 @@ rename("install/", $renamefile."install/");
 		<tr><td colspan=2 align="center">
 				 <form action="index.php" method="post" name="form" id="form">
 				 <input type="hidden" name="default_user_name" value="admin">
-			 <input  type="image" src="<?echo $renamefile;?>/images/cwBtnFinish.gif" name="next" value="Finish" />
+			 <input  type="image" src="<?echo $renamefile;?>install/images/cwBtnFinish.gif" name="next" value="Finish" />
 				 </form>
 		</td></tr>
 		</table>		
 							<br><br>
 						<!-- Horizontal Shade -->
-					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(<?echo $renamefile;?>/images/cwShadeBg.gif) repeat-x;">
+					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(<?echo $renamefile;?>install/images/cwShadeBg.gif) repeat-x;">
 					<tr>
-				<td><img src="<?echo $renamefile;?>/images/cwShadeLeft.gif"></td>
-					<td align=right><img src="<?echo $renamefile;?>/images/cwShadeRight.gif"></td>
+				<td><img src="<?echo $renamefile;?>install/images/cwShadeLeft.gif"></td>
+					<td align=right><img src="<?echo $renamefile;?>install/images/cwShadeRight.gif"></td>
 					</tr>
 					</table><br><br>
 
