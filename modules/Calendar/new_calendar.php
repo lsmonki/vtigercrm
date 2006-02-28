@@ -21,8 +21,8 @@
 */ 
 	$mysel= $_GET['sel'];
 	
-	if ($mysel=="") { include "dayview.php"; }
-	if ($mysel=="day") { include "dayview.php"; }
+	if ($mysel=="") { include "calendar_dayview.php"; }
+	if ($mysel=="day") { include "calendar_dayview.php"; }
 	if ($mysel=="week") { include "weekview.php"; }
 	if ($mysel=="month") { include "monthview.php"; }
 	if ($mysel=="year") { include "yearview.php"; }
