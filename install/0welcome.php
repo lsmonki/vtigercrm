@@ -133,11 +133,7 @@ This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables a
 			<div align=left style="color:#737373;overflow: scroll; height: 100px; width: 95%;border:1px dashed #cccccc;padding:10px">
 			
 			<b>License Agreement</b><br>
-			This software is a collective work consisting of the following major
-			Open Source components: <br>
-			Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo,
-			SquirrelMail, and PHPMailer each licensed under a separate Open Source
-			License. <br>
+			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License.<br>
 			vtiger.com is not affiliated with nor endorsed by any of the above
 			providers.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<br>
