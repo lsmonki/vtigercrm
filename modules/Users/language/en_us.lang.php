@@ -352,7 +352,9 @@ $mod_strings = Array(
 'LBL_USERS'=>'User(s)',
 'LBL_USER_LOGIN_ROLE'=>'User Login & Role',
 'LBL_USER_MORE_INFN'=>'More Information',
-'LBL_USER_ADDR_INFN'=>'Address Information'
+'LBL_USER_ADDR_INFN'=>'Address Information',
+'LBL_USER_IMAGE'=>'User Image'
+
 
 
 );
