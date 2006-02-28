@@ -103,11 +103,11 @@ function showSmileyWindow(e){
 	var smileyBox = document.getElementById('smiley_box');
 			
 	smileyBox.style.display = 'block';
-	var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+/*	var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
 	var leftPos = e.clientX - 100;
 	if(leftPos<0)leftPos = 0;
 	smileyBox.style.left = leftPos + 'px';
-	smileyBox.style.top = e.clientY - smileyBox.offsetHeight -1 + st + 'px';
+	smileyBox.style.top = e.clientY - smileyBox.offsetHeight -1 + st + 'px';*/
 }	
 
 function hideSmileyWindow()

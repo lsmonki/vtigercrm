@@ -64,7 +64,7 @@ a:hover {
 
 #smiley_box{
 	width:95px;
-	position:absolute;
+	position:relative;
 	display:none;
 	margin-left: 55px;
 	border: 0px;
