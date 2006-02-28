@@ -535,11 +535,6 @@ function sensex_info()
 </tr>
 </table>
 </form>
-<script>
-	
-	ScrollEffect.limit = 201;
-	ScrollEffect.closelimit= 200;
-	
 {if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
      <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 	 <script type="text/javascript" defer="1">
@@ -552,7 +547,13 @@ function sensex_info()
 	 {/if}
      oFCKeditor.BasePath   = "include/fckeditor/" ;
 	 oFCKeditor.ReplaceTextarea() ;
+	</script>
 {/if}
+<script>
+	
+	ScrollEffect.limit = 201;
+	ScrollEffect.closelimit= 200;
+	
 
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
 

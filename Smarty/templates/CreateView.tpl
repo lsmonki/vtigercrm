@@ -994,7 +994,6 @@ function sensex_info()
 </tr>
 </table>
 </form>
-<script>
 
 {if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
        <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
@@ -1014,6 +1013,7 @@ function sensex_info()
 
        </script>
 {/if}
+<script>
 
 
 
