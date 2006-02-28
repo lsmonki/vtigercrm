@@ -1349,3 +1349,38 @@ function fnvshNrm(Lay){
     tagName.style.visibility = 'visible';
 }
 
+
+// Add & Delete Row in a Table
+
+function fnAddRow(){
+	var tableName = document.getElementById('proTab');
+	var prev = tableName.rows.length;
+    var count = prev;
+    var row = tableName.insertRow(prev);
+	if(count%2)
+		row.className = "dvtCellLabel";
+	else
+		row.className = "dvtCellInfo";
+	var colone = row.insertCell(0);
+	var coltwo = row.insertCell(1);
+	var colthree = row.insertCell(2);
+	var colfour = row.insertCell(3);
+	var colfive = row.insertCell(4);
+	var colsix = row.insertCell(5);
+	var colseven = row.insertCell(6);
+	colone.innerHTML="<input type='text' name='txtProduct'+count class='detailedViewProdTextBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' align='absmiddle' />";
+	coltwo.innerHTML="&nbsp;";	
+	colthree.innerHTML="<input type='text' name='txtQty'+count class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onblur='this.className=\"detailedViewTextBox\"'/> ";
+	colfour.innerHTML="&nbsp;";
+	colfive.innerHTML="<input type='text' name='txtListPrice'+count class='detailedViewProdTextBox' readonly/>&nbsp;<img src='themes/blue/images/pricebook.gif' align='absmiddle' /> ";
+	colsix.innerHTML="&nbsp;";
+	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
+	
+}
+  
+ 
+function deleteRow(i)
+{
+	 document.getElementById('proTab').deleteRow(i);
+}
+
