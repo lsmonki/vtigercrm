@@ -1,80 +1,11 @@
 <?xml version="1.0"?>
 <smiletag_message>
     <row>
-        <name><![CDATA[dadf]]></name>
-        <url><![CDATA[dadf]]></url>
-        <message><![CDATA[dfsdaf]]></message>
-        <datetime>1139933515</datetime>
+        <name><![CDATA[VTIGER TEAM]]></name>
+        <url><![CDATA[VTIGER TEAM]]></url>
+        <message><![CDATA[Welcome to Vtiger CRM.]]></message>
+        <datetime>1141107721</datetime>
         <ipaddress>127.0.0.1</ipaddress>
     </row>
-    <row>
-        <name><![CDATA[ad]]></name>
-        <url><![CDATA[ad]]></url>
-        <message><![CDATA[dasfd<img src="images/smilies/smile.gif" border="0" alt=":)"/>]]></message>
-        <datetime>1139933234</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[ahmed]]></name>
-        <url><![CDATA[ahmed]]></url>
-        <message><![CDATA[Hi <img src="images/smilies/smile.gif" border="0" alt=":)"/>]]></message>
-        <datetime>1139928863</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[Gopal]]></name>
-        <url><![CDATA[Gopal]]></url>
-        <message><![CDATA[Hi There!!!!!<img src="images/smilies/shock.gif" border="0" alt=":o"/>]]></message>
-        <datetime>1139308277</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[ahmed]]></name>
-        <url><![CDATA[ahmed]]></url>
-        <message><![CDATA[HI<img src="images/smilies/tongue.gif" border="0" alt=":p"/>]]></message>
-        <datetime>1139289670</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[Anwar]]></name>
-        <url><![CDATA[<a href="http://www.anwar.com" target="_blank" rel="external nofollow">Anwar</a>]]></url>
-        <message><![CDATA[Hi Ahmed]]></message>
-        <datetime>1139238216</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[Rakeeb]]></name>
-        <url><![CDATA[Rakeeb]]></url>
-        <message><![CDATA[ASAK]]></message>
-        <datetime>1139238165</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[shankar]]></name>
-        <url><![CDATA[shankar]]></url>
-        <message><![CDATA[Hi]]></message>
-        <datetime>1139236876</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[ahmed]]></name>
-        <url><![CDATA[ahmed]]></url>
-        <message><![CDATA[Get on with the things]]></message>
-        <datetime>1139219548</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[Ahmed]]></name>
-        <url><![CDATA[Ahmed]]></url>
-        <message><![CDATA[dsafda]]></message>
-        <datetime>1139219038</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
-    <row>
-        <name><![CDATA[Ahmed]]></name>
-        <url><![CDATA[Ahmed]]></url>
-        <message><![CDATA[hi there]]></message>
-        <datetime>1139217322</datetime>
-        <ipaddress>127.0.0.1</ipaddress>
-    </row>
+    
 </smiletag_message>
