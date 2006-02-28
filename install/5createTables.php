@@ -410,14 +410,14 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 
 
 
+
+
+}
         //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
 rename("install.php", $renamefile."install.php.txt");
 rename("install/", $renamefile."install/");
-
-
-}
 
 //populate Calendar data
 
@@ -433,8 +433,8 @@ rename("install/", $renamefile."install/");
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-            <li>Your install.php file has been renamed in the format INTEGER.install.php.txt.
-            <li>Your install folder too has been renamed in the format INTEGER.install/.  
+			<li>Your install.php file has been renamed in the format <?echo $renamefile;?>install.php.txt.
+		<li>Your install folder too has been renamed in the format <?echo $renamefile;?>install/.  
 			<li>Your system is now installed and configured for use.  
 			<li>You need to log in for the first time using the "admin" user name and the password you entered in step 2.
 			</ul>
