@@ -893,3 +893,85 @@ border:0px;
 	cursor:pointer;
 }
 
+/* Dashboard CSS */
+
+.dashMain{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	background-color:#EBEBEB;
+	width:840px;
+	border-left:1px solid #CBCBCB;
+	border-right:1px solid #CBCBCB;
+	border-bottom:1px solid #CBCBCB;
+}
+
+.dashMain tr th{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	padding:0px;
+	border:0px solid #CBCBCB;
+}
+.dashMain tr td{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	padding-left:10px;
+	border:0px solid #CBCBCB;
+}
+
+.dashMnuUnSel{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-decoration:none;
+	text-align:left;
+	padding:5px;
+	height:20px;
+	vertical-align:middle;
+}
+
+.dashMnuSel{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-decoration:none;
+	text-align:left;
+	background-color:#CBCBCB;
+	font-weight:bold;
+	color:#000000;
+	padding:5px;
+	height:20px;
+	vertical-align:middle;
+}
+
+.dashInner{
+	width:100%;
+	border:0px solid #000000;
+	padding:0px;
+}
+
+.dashInner tr td{
+	width:100%;
+	border:0px solid #000000;
+	padding-left:0px;
+	padding-bottom:0px;
+	padding-right:0px;
+	padding-top:0px;
+}
+
+#dashChart{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	background-color:#EBEBEB;
+	width:640px;
+	height:425px;
+	overflow:auto;
+	padding-left:5px;
+	padding-top:10px;
+	position:relative;
+}
+
+.dashSerial{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:30px;
+	font-weight:bold;
+	color:#000000;
+}
+
