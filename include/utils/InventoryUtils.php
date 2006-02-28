@@ -15,8 +15,9 @@
  * column fields/
  */
 
-function getProductDetailsBlockInfo($mode,$module,$focus,$num_of_products='',$associated_prod='')
+function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
 {
+	
 	$productDetails = Array();
 	$productBlock = Array();
 	if($num_of_products=='')
@@ -32,12 +33,21 @@ function getProductDetailsBlockInfo($mode,$module,$focus,$num_of_products='',$as
 	{
 		$productDetails['product_details'] = $associated_prod;
 	}
-	$productBlock[] = Array('mode'=>$focus->mode);
-	$productBlock[] = $productDetails['product_details'];
-	$productBlock[] = Array('taxvalue' => $focus->column_fields['txtTax']);
-	$productBlock[] = Array('taxAdjustment' => $focus->column_fields['txtAdjustment']);
-	$productBlock[] = Array('hdnSubTotal' => $focus->column_fields['hdnSubTotal']);
-	$productBlock[] = Array('hdnGrandTotal' => $focus->column_fields['hdnGrandTotal']);
+	if($focus != '')
+	{
+		$productBlock[] = Array('mode'=>$focus->mode);
+		$productBlock[] = $productDetails['product_details'];
+		$productBlock[] = Array('taxvalue' => $focus->column_fields['txtTax']);
+		$productBlock[] = Array('taxAdjustment' => $focus->column_fields['txtAdjustment']);
+		$productBlock[] = Array('hdnSubTotal' => $focus->column_fields['hdnSubTotal']);
+		$productBlock[] = Array('hdnGrandTotal' => $focus->column_fields['hdnGrandTotal']);
+	}
+	else
+	{
+		$productBlock[] = Array('Product Details' => 'Product Details');
+		
+	}
+	//echo '<pre>';print_r($productBlock);echo '</pre>';
 	return $productBlock;
 }
 ?>
