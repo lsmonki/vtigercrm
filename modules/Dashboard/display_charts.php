@@ -65,201 +65,148 @@ $invoice_query="select crmentity.*,invoice.* from invoice left join users on use
 //Query for tickets
 $helpdesk_query=" select troubletickets.status ticketstatus, troubletickets.*,crmentity.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
 
-
-
-//Charts for Lead Source
-if($type == "leadsource")
-{
-	$graph_by="leadsource";
-	$graph_title="Leads By Source";
-	$module="Leads";
-	$where="";
-	$query=$leads_query;
-
-	get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-
-}
-// To display the charts  for Lead status
-
-if ($type == "leadstatus")
-{
-	$graph_by="leadstatus";
-	$graph_title="Leads By Status";
-	$module="Leads";
-	$where="";
-	$query=$leads_query;
-	get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Charts for Lead Industry
-if($type == "leadindustry")
-{
-	$graph_by="industry";
-        $graph_title="Leads By Industry";
-        $module="Leads";
-        $where="";
-        $query=$leads_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Sales by Lead Source
-if($type == "salesbyleadsource")
-{
-        $graph_by="leadsource";
-        $graph_title="Sales by LeadSource";
-        $module="Potentials";
-        $where=" and potential.sales_stage like '%Closed Won%' ";
-        $query=$potential_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-//Sales by Account
-if($type == "salesbyaccount")
-{
-	$graph_by="accountid";
-        $graph_title="Sales by Accounts";
-        $module="Potentials";
-        $where=" and potential.sales_stage like '%Closed Won%' ";
-        $query=$potential_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-
-//Charts for Account by Industry
-if($type == "accountindustry")
-{
-	$graph_by="industry";
-        $graph_title="Account By Industry";
-        $module="Accounts";
-        $where="";
-        $query=$account_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Charts for Products by Category
-if($type == "productcategory")
-{
-	$graph_by="productcategory";
-        $graph_title="Products by Category";
-        $module="Products";
-        $where="";
-        $query=$products_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-// Sales Order by Accounts
-if($type == "sobyaccounts")
-{
-	$graph_by="accountid";
-        $graph_title="Sales Order by Accounts";
-        $module="SalesOrder";
-        $where="";
-        $query=$so_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Sales Order by Status
-if($type == "sobystatus")
-{
-        $graph_by="sostatus";
-        $graph_title="Sales Order by Status";
-        $module="SalesOrder";
-        $where="";
-        $query=$so_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Purchase Order by Status
-if($type == "pobystatus")
-{
-        $graph_by="postatus";
-        $graph_title="Purchase Order by Status";
-        $module="PurchaseOrder";
-        $where="";
-        $query=$po_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-
-//Quotes by Accounts
-if($type == "quotesbyaccounts")
-{
-        $graph_by="accountid";
-        $graph_title="Quotes by Accounts";
-        $module="Quotes";
-        $where="";
-        $query=$quotes_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-//Quotes by Stage
-if($type == "quotesbystage")
-{
-        $graph_by="quotestage";
-        $graph_title="Quotes by Stage";
-        $module="Quotes";
-        $where="";
-        $query=$quotes_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-//Invoice by Accounts
-if($type == "invoicebyacnts")
-{
-        $graph_by="accountid";
-        $graph_title="Invoices by Accounts";
-        $module="Invoice";
-        $where="";
-        $query=$invoice_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
-//Invoices by status
-if($type == "invoicebystatus")
-{
-        $graph_by="invoicestatus";
-        $graph_title="Invoices by status";
-        $module="Invoice";
-        $where="";
-        $query=$invoice_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Tickets by Status
-if($type == "ticketsbystatus")
-{
-        $graph_by="ticketstatus";
-        $graph_title="Tickets by status";
-        $module="HelpDesk";
-        $where="";
-        $query=$helpdesk_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-//Tickets by Priority
-if($type == "ticketsbypriority")
-{
-        $graph_by="priority";
-        $graph_title="Tickets by Priority";
-        $module="HelpDesk";
-        $where="";
-        $query=$helpdesk_query;
-        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
-}
-
-
  /**  This function returns  the values for the graph, for any type of graph needed	 
         * Portions created by vtiger are Copyright (C) vtiger.
         * All Rights Reserved.
         * Contributor(s): ______________________________________..
  */
+$graph_array = Array(
+          "leadsource" => "Leads By Source",
+          "leadstatus" => "Leads By Status",
+          "leadindustry" => "Leads By Industry",
+          "salesbyleadsource" => "Sales by LeadSource",
+          "salesbyaccount" => "Sales by Accounts",
+          "accountindustry" => "Account By Industry",
+          "productcategory" => "Products by Category",
+          "sobyaccounts" => "Sales Order by Accounts",
+          "sobystatus" => "Sales Order by Status",
+          "pobystatus" => "Purchase Order by Status",
+          "quotesbyaccounts" => "Quotes by Accounts",
+          "quotesbystage" => "Quotes by Stage",
+          "invoicebyacnts" => "Invoices by Accounts",
+          "invoicebystatus" => "Invoices by status",
+          "ticketsbystatus" => "Tickets by status",
+          "ticketsbypriority" => "Tickets by Priority",
+          );
 
+if($type == "leadsource")
+{
+     $graph_by="leadsource";
+     $graph_title="Leads By Source";
+     $module="Leads";
+     $classsel_name = "dashMnuSel";
+}
+// To display the charts  for Lead status                   
+if ($type == "leadstatus")
+{
+	$graph_by="leadstatus";
+	$graph_title="Leads By Status";
+	$module="Leads";
+	$classsel_name = "dashMnuSel";
+}
+//Charts for Lead Industry
+if($type == "leadindustry")
+{
+	$graph_by="industry";
+     $graph_title="Leads By Industry";
+     $module="Leads";
+     $classsel_name = "dashMnuSel";
+}
+//Sales by Lead Source
+if($type == "salesbyleadsource")
+{
+   $graph_by="leadsource";
+   $graph_title="Sales by LeadSource";
+   $module="Potentials";
+   $classsel_name = "dashMnuSel";
+}
+//Sales by Account
+if($type == "salesbyaccount")
+{
+     $graph_by="accountid";
+     $graph_title="Sales by Accounts";
+     $module="Potentials";
+     $classsel_name = "dashMnuSel";
+}
+//Charts for Account by Industry
+if($type == "accountindustry")
+{
+	$graph_by="industry";
+     $graph_title="Account By Industry";
+     $module="Accounts";
+     $classsel_name = "dashMnuSel";
+}
+//Charts for Products by Category
+if($type == "productcategory")
+{
+	$graph_by="productcategory";
+     $graph_title="Products by Category";
+     $module="Products";
+}
+// Sales Order by Accounts
+if($type == "sobyaccounts")
+{
+	$graph_by="accountid";
+     $graph_title="Sales Order by Accounts";
+     $module="SalesOrder";
+}
+//Sales Order by Status
+if($type == "sobystatus")
+{
+     $graph_by="sostatus";
+     $graph_title="Sales Order by Status";
+     $module="SalesOrder";
+}
+//Purchase Order by Status
+if($type == "pobystatus")
+{
+    $graph_by="postatus";
+    $graph_title="Purchase Order by Status";
+    $module="PurchaseOrder";
+}
+//Quotes by Accounts
+if($type == "quotesbyaccounts")
+{
+   $graph_by="accountid";
+   $graph_title="Quotes by Accounts";
+   $module="Quotes";
+}
+//Quotes by Stage
+if($type == "quotesbystage") 
+{
+   $graph_by="quotestage";
+   $graph_title="Quotes by Stage";
+   $module="Quotes";
+}
+//Invoice by Accounts
+if($type == "invoicebyacnts")
+{
+   $graph_by="accountid";
+   $graph_title="Invoices by Accounts";
+   $module="Invoice";
+}
+//Invoices by status
+if($type == "invoicebystatus")
+{
+   $graph_by="invoicestatus";
+   $graph_title="Invoices by status";
+   $module="Invoice";
+}
+//Tickets by Status
+if($type == "ticketsbystatus")
+{
+   $graph_by="ticketstatus";
+   $graph_title="Tickets by status";
+   $module="HelpDesk";
+}
+//Tickets by Priority
+if($type == "ticketsbypriority")
+{
+   $graph_by="priority";
+   $graph_title="Tickets by Priority";
+   $module="HelpDesk";
+}
+                    
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
 	global $user_id,$date_start,$end_date,$type;
@@ -289,7 +236,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
                 $bottom=120;
                 $title=$graph_title;
 
-                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+                return get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
         }
 	else
 	{
@@ -311,45 +258,82 @@ function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$h
 {
 
 	global $tmp_dir;
-
-		$val=explode(":",$title); 		
-		$display_title=$val[0];	
+     global $graph_title;
+	$val=explode(":",$title); 		
+	$display_title=$val[0];	
 			
-		echo "<h2><center>  $display_title in between  $date_start and  $end_date </center></h2>";
-	echo <<< END
-		
-		<table border=0 cellspacing=0 cellpadding=1>
-		<tr><td>	
-END;
-
- 	render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
-
-	echo <<< END
-		</td><td>
-END;
-	render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
-
-	echo <<< END
-		</td></tr>
-		<tr><td>
-END;
-
- 	render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,450,300,40,$right,$top,$bottom,$title,$target_val,"pie");
-	echo <<< END
-		</td></tr>
-		<tr><td>
-
-END;
-	//As the accumulated graph is not given as the function, it is called as the image 
-	echo <<< END
-        <img src="modules/Dashboard/accumulated_bargraph.php?refer_code=$graph_date&referdata=$name_val&width=350&height=600&left=70&datavalue=$urlstring&title=$lead_graph_title&test=$test_target_val" border="0">
-
+	//$sHTML = "<h2><center>  $display_title in between  $date_start and  $end_date </center></h2>";
 	
-        </td></tr>
+$sHTML .= "<tr>
+	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	  	 <tr>
+		   <td rowspan=2 valign=top><span class=dashSerial>1</span></td>
+ 		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
+ 		 </tr>
+   		 <tr>
+		   <td><span class=big>Horizontal Bar Chart</span> </td>
+		 </tr>
 		</table>
-END;
-	//accumlated_graph($graph_date,$name_val,$urlstring,$lead_graph_title,$target_val,350,600,110,$right,$top,$bottom)
+  	   </td>
+	</tr>
+	<tr>
+	   <td height=200>"; 
 
+	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
+
+$sHTML .= "</td>
+	</tr>
+	<tr>
+	   <td><hr noshade='noshade' size='1' /></td>
+	</tr>";
+	
+$sHTML .= "<tr>
+	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	  	 <tr>
+		   <td rowspan=2 valign=top><span class=dashSerial>2</span></td>
+ 		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
+ 		 </tr>
+   		 <tr>
+		   <td><span class=big>Vertical Bar Chart</span> </td>
+		 </tr>
+		</table>
+  	   </td>
+	</tr>
+	<tr>
+	   <td height=200>"; 
+
+	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+
+$sHTML .= "</td>
+	</tr>
+	<tr>
+	   <td><hr noshade='noshade' size='1' /></td>
+	</tr>";
+
+$sHTML .= "<tr>
+	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
+	  	 <tr>
+		   <td rowspan=2 valign=top><span class=dashSerial>3</span></td>
+ 		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
+ 		 </tr>
+   		 <tr>
+		   <td><span class=big>Pie Chart</span> </td>
+		 </tr>
+		</table>
+  	   </td>
+	</tr>
+	<tr>
+	   <td height=200>"; 
+
+	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,450,300,40,$right,$top,$bottom,$title,$target_val,"pie");
+
+$sHTML .= "</td>
+	</tr>
+	<tr>
+	   <td><hr noshade='noshade' size='1' /></td>
+	</tr>";
+
+	return $sHTML;
 }
 
  /** Returns graph, if the cached image is present it'll display that image,
@@ -369,15 +353,15 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		//If the Cached image is not present
 		if($graph_type=="horizontal")
 		{
-			horizontal_graph($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
+		 	return horizontal_graph($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
 		}
 		else if($graph_type=="vertical")	
 		{
-			vertical_graph($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
+			return vertical_graph($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
 		}
 		else if($graph_type=="pie")
 		{
-			pie_chart($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
+			return pie_chart($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
 			
 		}
 	}
@@ -391,8 +375,237 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		$ccc="cache/images/".$base_name_cache_file;
 		$return = "\n$imgMap\n";
 		$return .= "<img src=$ccc ismap usemap=#$html_imagename border='0'>";
-		echo $return;
+		return $return;
 	}
 }
 
 ?>
+<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tbody>
+    <tr>
+          <td style="height: 2px;"></td>
+    </tr>
+
+    <tr>
+       <td style="padding-left: 10px; padding-right: 10px;" class="moduleName" nowrap="nowrap">Analytics &gt; Dashboard </td>
+       <td style="width: 1px;"></td>
+       <td class="small" height="30">&nbsp;</td>
+    </tr>
+    <tr>
+       <td style="height: 20px;"></td>
+    </tr>
+ </tbody>
+</table>
+
+<table class="dashMain" cellspacing="0" cellpadding="0" align="center">
+   <tr>
+    <th colspan="3"><img src="themes/blue/images/topBnr.gif" width="840" height="67" /></th>
+  </tr>
+  <tr><td colspan="3">&nbsp;</td></tr>
+
+  <tr>
+    <td width="20%" nowrap valign="top">
+		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF">
+          	<tr><td class="dashMnuUnSel">
+                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome">Dashboard Home</a>
+               </td></tr>              
+               <?php 
+                 $mnuHTML = "";
+                 foreach($graph_array as $key=>$value)   
+                 {
+                    if($type == $key)
+                    {
+                         $mnuHTML .= '<tr><td class="dashMnuSel">
+                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
+                                      </td></tr>';
+                    }else
+                    {
+                         $mnuHTML .= '<tr><td class="dashMnuUnSel">
+                                        <a href="index.php?module=Dashboard&action=display_charts&type='.$key.'">'.$value.'</a>
+                                      </td></tr>';
+                    }
+                 }
+                 echo $mnuHTML;
+               ?>
+	    </table>
+	</td>
+     <td width="79%" bgcolor="#CBCBCB" valign="top" style="padding-right:10px;" align="left">
+		<table class="dashInner"  cellpadding="0" cellspacing="0">
+		<tr><td class="lvtHeaderText" align="left" height="10"></td></tr>
+		<tr><td><div id="dashChart">
+			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+				<!--char goes here-->
+				<?php 
+				//Charts for Lead Source
+                    if($type == "leadsource")
+                    {
+                    	$graph_by="leadsource";
+                    	$graph_title="Leads By Source";
+                    	$module="Leads";
+                    	$where="";
+                    	$query=$leads_query;                   
+                    	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    
+                    }
+                    // To display the charts  for Lead status                   
+                    if ($type == "leadstatus")
+                    {
+                    	$graph_by="leadstatus";
+                    	$graph_title="Leads By Status";
+                    	$module="Leads";
+                    	$where="";
+                    	$query=$leads_query;
+                    	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Charts for Lead Industry
+                    if($type == "leadindustry")
+                    {
+                    	$graph_by="industry";
+                            $graph_title="Leads By Industry";
+                            $module="Leads";
+                            $where="";
+                            $query=$leads_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Sales by Lead Source
+                    if($type == "salesbyleadsource")
+                    {
+                            $graph_by="leadsource";
+                            $graph_title="Sales by LeadSource";
+                            $module="Potentials";
+                            $where=" and potential.sales_stage like '%Closed Won%' ";
+                            $query=$potential_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Sales by Account
+                    if($type == "salesbyaccount")
+                    {
+                    	$graph_by="accountid";
+                         $graph_title="Sales by Accounts";
+                         $module="Potentials";
+                         $where=" and potential.sales_stage like '%Closed Won%' ";
+                         $query=$potential_query;
+                         echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Charts for Account by Industry
+                    if($type == "accountindustry")
+                    {
+                    	$graph_by="industry";
+                            $graph_title="Account By Industry";
+                            $module="Accounts";
+                            $where="";
+                            $query=$account_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Charts for Products by Category
+                    if($type == "productcategory")
+                    {
+                    	$graph_by="productcategory";
+                            $graph_title="Products by Category";
+                            $module="Products";
+                            $where="";
+                            $query=$products_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    // Sales Order by Accounts
+                    if($type == "sobyaccounts")
+                    {
+                    	$graph_by="accountid";
+                            $graph_title="Sales Order by Accounts";
+                            $module="SalesOrder";
+                            $where="";
+                            $query=$so_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Sales Order by Status
+                    if($type == "sobystatus")
+                    {
+                            $graph_by="sostatus";
+                            $graph_title="Sales Order by Status";
+                            $module="SalesOrder";
+                            $where="";
+                            $query=$so_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Purchase Order by Status
+                    if($type == "pobystatus")
+                    {
+                            $graph_by="postatus";
+                            $graph_title="Purchase Order by Status";
+                            $module="PurchaseOrder";
+                            $where="";
+                            $query=$po_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Quotes by Accounts
+                    if($type == "quotesbyaccounts")
+                    {
+                            $graph_by="accountid";
+                            $graph_title="Quotes by Accounts";
+                            $module="Quotes";
+                            $where="";
+                            $query=$quotes_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Quotes by Stage
+                    if($type == "quotesbystage")
+                    {
+                            $graph_by="quotestage";
+                            $graph_title="Quotes by Stage";
+                            $module="Quotes";
+                            $where="";
+                            $query=$quotes_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Invoice by Accounts
+                    if($type == "invoicebyacnts")
+                    {
+                            $graph_by="accountid";
+                            $graph_title="Invoices by Accounts";
+                            $module="Invoice";
+                            $where="";
+                            $query=$invoice_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Invoices by status
+                    if($type == "invoicebystatus")
+                    {
+                            $graph_by="invoicestatus";
+                            $graph_title="Invoices by status";
+                            $module="Invoice";
+                            $where="";
+                            $query=$invoice_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Tickets by Status
+                    if($type == "ticketsbystatus")
+                    {
+                            $graph_by="ticketstatus";
+                            $graph_title="Tickets by status";
+                            $module="HelpDesk";
+                            $where="";
+                            $query=$helpdesk_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    //Tickets by Priority
+                    if($type == "ticketsbypriority")
+                    {
+                            $graph_by="priority";
+                            $graph_title="Tickets by Priority";
+                            $module="HelpDesk";
+                            $where="";
+                            $query=$helpdesk_query;
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+				?>
+
+			</table>
+	</div></td></tr>
+		</table>
+	  <br />
+</td>
+
+ <td width="1%"></td>
+  </tr>
+  <tr><td colspan="3" height="30">&nbsp;</td></tr>
+</table>

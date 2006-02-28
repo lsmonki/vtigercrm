@@ -175,7 +175,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$ccc="cache/images/".$base_name_cache_file;
 	$img = "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
 	$img.=$imgMap;
-	echo $img;
+	return $img;
 }
 
 ?>

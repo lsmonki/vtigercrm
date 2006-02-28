@@ -58,7 +58,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
         global $adb;
         global $days,$date_array,$period_type;
 
-        $where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '%".$date_start."%' and '%".$end_date."%'" ;
+        $where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
         $query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
