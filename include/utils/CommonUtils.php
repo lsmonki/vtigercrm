@@ -777,16 +777,17 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
         $prev_header = "";
         for($i=0; $i<$noofrows; $i++)
         {
-                $block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
+		$block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
+		$block_label = $adb->query_result($result,$i,"blocklabel");
                 if($block_title !='')
                 {
                         $prev_header = $block_title;
 
                         if($disp_view == "detail_view")
                         {
-                                if($block_title=='LBL_RELATED_PRODUCTS')
+                                if($block_label=='LBL_RELATED_PRODUCTS')
                                 {
-                                        $getBlockInfo=getProductDetails();
+					$getBlockInfo=getProductDetailsBlockInfo($mode,$module);
                                 }
                                 else
 				 {
@@ -794,13 +795,23 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
                                 }
                         }
                         else
-                        {
-                                $getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
+			{
+				if($block_label=='LBL_RELATED_PRODUCTS')
+                                {
+					$getBlockInfo=getProductDetailsBlockInfo($mode,$module);
+				        //echo '<pre>';print_r($getBlockInfo);echo '</pre>';
+                                }
+				else
+				{
+                                	$getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
+				//echo '<pre>';print_r($getBlockInfo);echo '</pre>';
+				}
                         }
 
                         if(is_array($getBlockInfo))
                         {
                                 $block_detail[$block_title] = $getBlockInfo;
+				//echo '<pre>';print_r($block_detail);echo '</pre>';
                         }
                 }
                 else
@@ -833,6 +844,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
                 }
 
         }
+	//echo '<pre>';print_r($block_detail);echo '</pre>';
         return $block_detail;
 }
 
@@ -1180,16 +1192,4 @@ function UserCount()
 	return $count;
 }
 
-function mkdirs($dir) {
-if( is_null($dir) || $dir === "" ){
-	return FALSE;
-}
-if( is_dir($dir) || $dir === "/" ){
-	return TRUE;
-}
-if( mkdirs(dirname($dir), $mode, $recursive) ){
-	return mkdir($dir, $mode);
-}
-return FALSE;
-}
 ?>
