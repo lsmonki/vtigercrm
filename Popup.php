@@ -115,7 +115,14 @@ switch($currentModule)
 		case 'Products':
 			require_once("modules/$currentModule/Product.php");
 			$focus = new Product();
+			echo '<pre>';print_r($_REQUEST);echo '</pre>';
 			$smarty->assign("SINGLE_MOD",'Product');
+			if(isset($_REQUEST['curr_row']))
+			{
+				$curr_row = $_REQUEST['curr_row'];
+				$smarty->assign("CURR_ROW", $curr_row);
+				$url_string .="&curr_row=".$_REQUEST['curr_row'];
+			}
 			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 			if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
@@ -329,7 +336,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
         	        $search_query .= " and unit_price like '%".$unitprice."%'";
                 	$url_string .= "&unitprice=".$unitprice;
 	                $smarty->assign("UNITPRICE", $unitprice);
-        	}
+		}
+		
 
 	}
 	if($currentModule == 'PurchaseOrder')
