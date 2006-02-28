@@ -84,7 +84,7 @@ if($disp_view == 'edit_view')
 else	
 {
 	$smarty->assign("BASBLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields,'BAS'));
-	$smarty->assign("ADVBLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields,'ADV'))
+	$smarty->assign("ADVBLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields,'ADV'));
 }
 $smarty->assign("OP_MODE",$disp_view);
 
