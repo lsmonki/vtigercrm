@@ -152,6 +152,15 @@ function pickColor(color)
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
 						<td class="dvtCellInfo"><input type="text" name="phone_home" value='{$PHONE_HOME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 					     </tr>
+						
+					     <tr>
+					     <td class="dvtCellLabel" align="right">{$UMOD.LBL_USER_IMAGE}</td
+>
+					<td class="dvtCellInfo"><input name="imagename" value="" type="file" class="small"></td>
+					<td class="dvtCellLabel" align="right" colspan="2">&nbsp;</td>	
+				       	</tr>	
+						
+						
 						 <tr><td class="dvtCellLabel" align="right">
 						 {$UMOD.LBL_TAG_CLOUD}
 						 </td>
