@@ -244,50 +244,5 @@ if($image_error=="false")
 }
 
 
-//function to check whether same product name exists 
-function file_exist_fn($filename,$exist)
-{
-	global $uploaddir;
-
-	if(!isset($exist))
-	{
-		$exist=0;
-	}
-	$filename_path=$uploaddir.$filename;
-	if (file_exists($filename_path)) //Checking if the file name already exists in the directory
-	{
-		if($exist!=0)
-		{
-			$previous=$exist-1;
-			$next=$exist+1;
-			$explode_name=explode("_",$filename);
-			$implode_array=array();	
-                        for($j=0;$j<count($explode_name); $j++)
-			{
-				if($j!=0)
-				{
-					$implode_array[]=$explode_name[$j];
-				}
-			}
-			$implode_name=implode("_", $implode_array);
-			$test_name=$implode_name;
-		}
-		else
-		{
-			$implode_name=$filename;
-		}
-		$exist++;
-		$filename_val=$exist."_".$implode_name;
-		$testfilename = file_exist_fn($filename_val,$exist);
-		if($testfilename!="")
-		{
-			return $testfilename;
-		}
-	}
-	else
-	{
-		return $filename;
-	}
-}
 
 ?>
