@@ -183,10 +183,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                    if($imagename != '')
                    {
                            $imgpath = "test/contact/".$imagename;
-                           $label_fld[] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="80" height="75" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
+                           $label_fld[] =$mod_strings[$fieldlabel];
+                           $label_fld["cntimage"] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="60" height="60" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
                    }
                    else
-                           $label_fld[] =$mod_strings[$fieldlabel];
+                   {
+                         $label_fld[] =$mod_strings[$fieldlabel];
+                   }
+                           
            }
            else
            {
@@ -929,7 +933,7 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$output .= '<tr>';
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-		$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+		$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		$i++;
 		if($i<$noofrows)
 		{
@@ -943,7 +947,7 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 			$tabid = $adb->query_result($result,$i,"tabid");
 
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-			$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		}
 
 	}
