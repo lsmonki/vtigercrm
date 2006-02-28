@@ -31,7 +31,7 @@ $navigation_array = getNavigationValues($start, $no_of_users['user'], '10');
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$no_of_users['user'];
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Users","index",'');
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Administration","index",'');
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
