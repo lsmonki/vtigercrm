@@ -553,7 +553,8 @@ function sensex_info()
 	
 	ScrollEffect.limit = 201;
 	ScrollEffect.closelimit= 200;
-	
+</script>
+<script>	
 
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
 
@@ -573,7 +574,8 @@ function displaydeleted()
        {ldelim}
                imagelists+=ProductImages[x]+'###';
        {rdelim}
-       document.EditView.imagelist.value=imagelists
+	if(imagelists != '')
+       		document.EditView.imagelist.value=imagelists
 {rdelim}
 
 </script>
