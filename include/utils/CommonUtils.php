@@ -987,11 +987,13 @@ function updateInfo($id)
     return $update_info;
 }
 
+
 function getContactImages($parenttab)
 {
     global $adb;
 	$imagelists = '<script>var leftrightslide=new Array();';
-   	$i=0;
+	$imagenamelists='<script>var dynimages=new Array();';
+   	$imagecount=0;
     $query='select imagename,firstname,lastname,contactid from contactdetails inner join crmentity on contactdetails.contactid=crmentity.crmid where deleted = 0 ';
     $result = $adb->query($query);
     $noofimages = $adb->num_rows($result);
@@ -1002,10 +1004,16 @@ function getContactImages($parenttab)
 		$id = $adb->query_result($result,$j,'contactid');
 		$contactname=$adb->query_result($result,$j,'firstname').' '.$adb->query_result($result,$j,'lastname');
 		if($imagename != '')
-			$imagelists .= 'leftrightslide['.$i++.']= \'<div class=thumbnail><a href='.$imgpath.' target="_blank"><img src="'.$imgpath.'" border=1 height=50 width=80></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
+		{
+			$imagelists .= 'leftrightslide['.$imagecount.']= \'<div class=thumbnail><a href='.$imgpath.' onMouseover=modifyimage("dynloadarea",'.$imagecount.') onMouseOut=document.getElementById("dynloadarea").style.display="none"; target="_blank"><img src="'.$imgpath.'" border=1 height=40 width=80></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
+			$imagenamelists .='dynimages['.$imagecount.']=["'.$imgpath.'","index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'"];';
+			$imagecount++;
+		}	
 	}
 	$imagelists.= '</script>';
-	if($i>0)	
+	$imagenamelists.='</script>';
+	$imagelists = $imagelists.$imagenamelists;	
+	if($imagecount>0)	
 		return $imagelists;
 }
 
