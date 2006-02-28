@@ -105,8 +105,8 @@ function pickColor(color)
 				 <tr>
 				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_COLOR}</td>
 					<td>&nbsp;&nbsp;{$CAL_COLOR}</td>
-				    <td class="dvtCellInfo" align="right">&nbsp;</td>
-                                    <td span class="dvtCellInfo">&nbsp;</td>
+				    <td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
+                                    <td span class="dvtCellInfo">{$CURRENCY_NAME}</td>
 				 </tr>
 				 <tr><td colspan="4" height="30">&nbsp;</td></tr>
 				 </table>
