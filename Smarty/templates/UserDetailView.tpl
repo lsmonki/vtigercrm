@@ -28,6 +28,7 @@
 
 			<tr valign="center">
 		            <td class="small" valign="center">
+				{$USER_IMAGE}
 				{$EDIT_BUTTON}
 				{$CHANGE_PW_BUTTON}
 				{$LOGIN_HISTORY_BUTTON}
