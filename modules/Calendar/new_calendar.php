@@ -23,7 +23,7 @@
 	
 	if ($mysel=="") { include "calendar_dayview.php"; }
 	if ($mysel=="day") { include "calendar_dayview.php"; }
-	if ($mysel=="week") { include "weekview.php"; }
+	if ($mysel=="week") { include "calendar_weekview.php"; }
 	if ($mysel=="month") { include "monthview.php"; }
 	if ($mysel=="year") { include "yearview.php"; }
 
