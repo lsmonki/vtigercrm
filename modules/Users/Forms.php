@@ -92,7 +92,11 @@ function verify_data(form) {
 		alert('"' + form.email2.value + '" $err_invalid_email_address');
 		return false;
 	}
-
+   	if(trim(form.new_password.value) != trim(form.confirm_new_password.value))
+    	{
+	        alert("The password does't match");
+	        return false;
+	}
 	return true;
 }
 
