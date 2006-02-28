@@ -433,8 +433,8 @@ rename("install/", $renamefile."install/");
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-			<li>Your install.php file has been renamed in the format <?echo $renamefile;?>install.php.txt.
-		<li>Your install folder too has been renamed in the format <?echo $renamefile;?>install/.  
+			<li>Your install.php file has been renamed to <?echo $renamefile;?>install.php.txt.
+		<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
 			<li>Your system is now installed and configured for use.  
 			<li>You need to log in for the first time using the "admin" user name and the password you entered in step 2.
 			</ul>
@@ -448,16 +448,16 @@ rename("install/", $renamefile."install/");
 		<tr><td colspan=2 align="center">
 				 <form action="index.php" method="post" name="form" id="form">
 				 <input type="hidden" name="default_user_name" value="admin">
-				 <input  type="image" src="install/images/cwBtnFinish.gif" name="next" value="Finish" />
+			 <input  type="image" src="<?echo $renamefile;?>/images/cwBtnFinish.gif" name="next" value="Finish" />
 				 </form>
 		</td></tr>
 		</table>		
 							<br><br>
 						<!-- Horizontal Shade -->
-					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(<?echo $renamefile;?>/images/cwShadeBg.gif) repeat-x;">
 					<tr>
-						<td><img src="install/images/cwShadeLeft.gif"></td>
-						<td align=right><img src="install/images/cwShadeRight.gif"></td>
+				<td><img src="<?echo $renamefile;?>/images/cwShadeLeft.gif"></td>
+					<td align=right><img src="<?echo $renamefile;?>/images/cwShadeRight.gif"></td>
 					</tr>
 					</table><br><br>
 
