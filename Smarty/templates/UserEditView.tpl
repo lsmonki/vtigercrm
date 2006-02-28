@@ -152,8 +152,13 @@ function pickColor(color)
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
 						<td class="dvtCellInfo"><input type="text" name="phone_home" value='{$PHONE_HOME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 					     </tr>
+						 <tr><td class="dvtCellLabel" align="right">
+						 {$UMOD.LBL_TAG_CLOUD}
+						 </td>
+						 <td colspan=3 class="dvtCellInfo"><input name='tagcloud' type="text" size='40' maxlength='250' value="{$CLOUD_TAG}" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"></td>
+						 </tr>
 					     <tr>
-					        <td class="dvtCellLabel" align="right">{$UMOD.LBL_SIGNATURE}</td>
+					    <td class="dvtCellLabel" align="right">{$UMOD.LBL_SIGNATURE}</td>
 						<td class="dvtCellInfo"><textarea name="signature" rows="3" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" >{$SIGNATURE}</textarea></td>
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_NOTES}</td>
 						<td span class="dvtCellInfo"><textarea name="description" rows="3" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" >{$DESCRIPTION}</textarea>
