@@ -39,6 +39,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
                   		                  <input name="module" type="hidden" value="{$RETURN_MODULE}">
 		                                  <input name="action" type="hidden" value="{$RETURN_ACTION}">
                   		                  <input name="pmodule" type="hidden" value="{$MODULE}">
+					  	  <input type="hidden" name="curr_row" value="{$CURR_ROW}">	
 		                                  <input name="entityid" type="hidden" value="">
 		                                  <input name="idlist" type="hidden" value="">
 						{if $SELECT eq 'enable'}
