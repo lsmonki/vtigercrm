@@ -1842,7 +1842,7 @@ function start_end_dates($period)
         }
         else if($period=="tmon")
         {
-		  $st_date=date("Y-m-d",mktime(0,0,0,date("n"),date("1"),date("Y")));
+		/*$st_date=date("Y-m-d",mktime(0,0,0,date("n"),date("1"),date("Y")));
                 $end_date=date("Y-m-d",mktime(0,0,0,date("n"),date("j")+1,date("Y")));
                 $period_type="month";
                 $width="840";
@@ -1851,7 +1851,10 @@ function start_end_dates($period)
                 {
                         $st_date=date("Y-m-d",mktime(0,0,0,date("n")-1,date("1"),date("Y")));
                         $end_date = date("Y-m-d",mktime(0, 0, 1, date("n"), 0,date("Y")));
-                }
+                }*/
+		$period_type="month";
+		$width="840";
+		$st_date = date("Y-m-d",mktime(0, 0, 0, date("m"), "01",   date("Y")));							     $end_date = date("Y-m-t");
 
         }
         else if($period=="lmon")
