@@ -496,7 +496,6 @@ function get_contacts($id)
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 	$query = 'select contactdetails.accountid, potential.potentialid, potential.potentialname, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, contactdetails.title, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from potential inner join contpotentialrel on contpotentialrel.potentialid = potential.potentialid inner join contactdetails on contpotentialrel.contactid = contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where potential.potentialid = '.$id.' and crmentity.deleted=0';
-	echo $query;
 	return GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
 }
 
