@@ -348,6 +348,14 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 {
 
 	//Checks whether the cached image is present or not
+	if(file_exists($cahce_file_name)
+	{
+		unlink($cache_file_name);
+	}
+	if(file_exists($cache_file_name.'.map')
+	{
+		unlink($cache_file_name.'.map');
+	}	
 	if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map')) 
 	{
 		//If the Cached image is not present
