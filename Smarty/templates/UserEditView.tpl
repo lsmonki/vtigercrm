@@ -73,9 +73,9 @@ function pickColor(color)
 				{if $MODE neq 'edit'}
 				<tr>
 				    <td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_PASSWORD} </td>
-				    <td class="dvtCellInfo" width="20%"><input type="text" name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+				    <td class="dvtCellInfo" width="20%"><input name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 				    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
-				    <td class="dvtCellInfo" width="20%"><input type="text" name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+				    <td class="dvtCellInfo" width="20%"><input name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			        </tr>
 				{/if}	
 			        <tr>
