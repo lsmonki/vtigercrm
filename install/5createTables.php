@@ -157,7 +157,7 @@ function create_default_users()
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Beta Installer: Step 5</title>
+<title>vtiger CRM 5.0 Alpha2 Installer: Step 5</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 <style type="text/css"><!--
 
@@ -205,7 +205,7 @@ function create_default_users()
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5beta" title="v5beta"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
 	</tr>
 	</table>
 	
