@@ -278,8 +278,16 @@ $array = Array(
             <td valign=top bgcolor="white"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience issues with the word template feature. Visit <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> for more details </font>"; ?></td>
         </tr>
 		<tr bgcolor="#fafafa">
-		    <td valign=top ><strong>Uploads Directory</strong><br> (test/upload/)</td>
-            <td valign=top bgcolor="white"><?php echo (is_writable('./test/upload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File attachments issue</a> for more details </font>"; ?></td>
+		    <td valign=top ><strong>Uploads Directory</strong><br> (storage/)</td>
+            <td valign=top bgcolor="white"><?php echo (is_writable('./storage/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File attachments issue</a> for more details </font>"; ?></td>
+        </tr>
+		<tr bgcolor="#fafafa">
+		    <td valign=top ><strong>Install Directory</strong><br> (install/)</td>
+            <td valign=top bgcolor="white"><?php echo (is_writable('./install/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
+        </tr>
+		<tr bgcolor="#fafafa">
+		    <td valign=top ><strong>Installation file</strong><br> (install.php)</td>
+            <td valign=top bgcolor="white"><?php echo (is_writable('./install.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the last step of installation.</font>"; ?></td>
         </tr>
 	<tr bgcolor="#fafafa">
 		<td valign=top ><strong>Product Image Directory</strong><br> (test/product/)</td>
