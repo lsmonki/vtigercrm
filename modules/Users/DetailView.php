@@ -115,14 +115,14 @@ $smarty->assign("LAST_NAME", $focus->last_name);
 $smarty->assign("STATUS", $focus->status);
 $smarty->assign("YAHOO_ID", $focus->yahoo_id);
 $smarty->assign("DATE_FORMAT", $focus->date_format);
-if(isset($focus->imagename))
+if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(/themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
 	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;'><img src='themes/images/scaler_slider.gif'></div>
 	</div><script language='JavaScript' type='text/javascript' src='include/js/prototype.js'></script>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
-	<div class='scale-image' style='padding: 10px; float: left; width: 153.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
+	<div class='scale-image' style='padding: 10px; float: left; width: 83.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
 	<p><script type='text/javascript' src='include/js/scale_demo.js'></script></p>";
 	$smarty->assign("USER_IMAGE",$imagestring);
 }

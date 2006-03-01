@@ -155,6 +155,12 @@
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
 						<td class="dvtCellInfo">{$PHONE_HOME}</td>
 					     </tr>
+						 <tr>
+						 <td class="dvtCellLabel" align="right">{$UMOD.LBL_DATE_FORMAT}</td>
+						     <td class="dvtCellInfo" width="30%">{$DATE_FORMAT}</td>
+							 <td class="dvtCellLabel" align="right">&nbsp;</td>
+							 <td class="dvtCellInfo">&nbsp;</td>
+							 </tr>
 					     <tr>
 					        <td class="dvtCellLabel" align="right">{$UMOD.LBL_SIGNATURE}</td>
 						<td class="dvtCellInfo">{$SIGNATURE}</td>

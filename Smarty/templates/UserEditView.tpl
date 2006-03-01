@@ -157,7 +157,8 @@ function pickColor(color)
 					     <td class="dvtCellLabel" align="right">{$UMOD.LBL_USER_IMAGE}</td
 >
 					<td class="dvtCellInfo"><input name="imagename" value="" type="file" class="small"></td>
-					<td class="dvtCellLabel" align="right" colspan="2">&nbsp;</td>	
+					<td class="dvtCellLabel" align="right">{$UMOD.LBL_DATE_FORMAT}</td>
+                    <td class="dvtCellInfo" width="30%">{$DATE_FORMAT}</td>
 				       	</tr>	
 						
 						
