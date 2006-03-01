@@ -987,6 +987,9 @@ function updateInfo($id)
     return $update_info;
 }
 
+/**
+ * This function is used to get the Contact Images with the script for scrolling and the thumbnailview .
+ */
 
 function getContactImages($parenttab)
 {
@@ -1017,6 +1020,12 @@ function getContactImages($parenttab)
 		return $imagelists;
 }
 
+/**
+ * This function is used to get the Product Images for the given Product  .
+ * It accepts the product id as argument and returns the Images with the script for 
+ * rotating the product Images
+ */
+
 function getProductImages($id)
 {
     global $adb;
@@ -1036,6 +1045,12 @@ function getProductImages($id)
 	if($imagename != '')
 		return $script;
 }	
+
+/**
+ * This function is used to save the Images .
+ * It acceps the File lists,modulename,id and the mode as arguments  
+ * It returns the array details of the upload
+ */
 
 function SaveImage($_FILES,$module,$id,$mode)
 {
@@ -1188,6 +1203,11 @@ function file_exist_fn($filename,$exist)
 	}
 }
 
+/**
+ * This function is used get the User Count  .
+ * It returns the array which has the total users ,admin users,and the non admin users 
+ */
+
 function UserCount()
 {
 	global $adb;
@@ -1200,4 +1220,22 @@ function UserCount()
 	return $count;
 }
 
+/**
+ * This function is used to create folders recursively   .
+ */
+
+function mkdirs($dir, $mode = 0777, $recursive = true)
+{
+	if( is_null($dir) || $dir === "" ){
+		return FALSE;
+	}
+	if( is_dir($dir) || $dir === "/" ){
+		return TRUE;
+	}
+	if( mkdirs(dirname($dir), $mode, $recursive) ){
+		return mkdir($dir, $mode);
+	}
+	return FALSE;
+}
+										    
 ?>
