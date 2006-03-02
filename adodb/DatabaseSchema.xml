@@ -6984,4 +6984,123 @@ E</constraint>
 	        </field>
 	</table>
 
+	<table name="chat_msg">
+		<field name="id" type="I" size="20">
+			<AUTOINCREMENT/>
+			<NOTNULL/>
+			<KEY/>
+		</field>
+		<field name="chat_from" type="I" size="20">
+			<DEFAULT value="0"/>
+			<NOTNULL/>
+		</field>
+		<field name="chat_to" type="I" size="20">
+			<DEFAULT value="0"/>
+			<NOTNULL/>
+		</field>
+		<field name="born" type="T">
+			<DEFAULT value="0000-00-00 00:00:00"/>
+		</field>
+		<field name="msg" type="C" size="200">
+			<NOTNULL/>
+		</field>
+
+		<opt>Type=InnoDB</opt>
+		<index name="chat_msg_IDX0">
+			<col>chat_from</col>
+		</index>
+		<index name="chat_msg_IDX1">
+			<col>chat_to</col>
+		</index>
+		<index name="chat_msg_IDX2">
+			<col>born</col>
+		</index>
+		<data>
+		</data>
+
+	</table>
+
+	<table name="chat_msg" alter="true">
+
+		<constraint>ADD CONSTRAINT `chat_msg_ibfk_1` FOREIGN KEY (`chat_from`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE </constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="chat_pchat">
+		<field name="id" type="I" size="20">
+			<AUTOINCREMENT/>
+			<NOTNULL/>
+			<KEY/>
+		</field>
+		<field name="msg" type="I" size="20">
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="chat_pchat_UK0">
+			<UNIQUE/>
+			<col>msg</col>
+		</index>
+	</table>
+	<table name="chat_pchat" alter="true">
+
+		<constraint>ADD CONSTRAINT `chat_pchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE </constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="chat_pvchat">
+		<field name="id" type="I" size="20">
+			<AUTOINCREMENT/>
+			<NOTNULL/>
+			<KEY/>
+	</field>
+	<field name="msg" type="I" size="20">
+		<DEFAULT value="0"/>
+	</field>
+	<opt>Type=InnoDB</opt><index name="chat_pvchat_UK0">
+		<UNIQUE/>
+		<col>msg</col>
+		</index>
+	</table>
+	<table name="chat_pvchat" alter="true">
+		<constraint>ADD CONSTRAINT `chat_pvchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+	</data>
+</table>
+
+
+<table name="chat_users">
+	<field name="id" type="I" size="20">
+		<AUTOINCREMENT/>
+		<NOTNULL/>
+		<KEY/>
+		</field>
+		<field name="nick" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="session" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="ip" type="C" size="20">
+			<DEFAULT value="000.000.000.000"/>
+			<NOTNULL/>
+		</field>
+		<field name="ping" type="T">
+			<DEFAULT value="0000-00-00 00:00:00"/>
+		</field>
+
+		<opt>Type=InnoDB</opt> <index name="chat_users_IDX0">
+			<col>nick</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="chat_users_IDX1">
+			<col>session</col>
+		</index>
+		<index name="chat_users_IDX2">
+			<col>ping</col>
+		</index>
+	</table>
+
 </schema>
