@@ -23,6 +23,7 @@ require_once('modules/Leads/Lead.php');
 require_once('modules/Contacts/contactSeedData.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
+require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Activities/Activity.php');
 require_once('include/database/PearDatabase.php');
@@ -46,6 +47,7 @@ global $street_address_array;
 global $street_address_count;
 global $city_array;
 global $city_array_count;
+global $campaign_name_array,$campaign_type_array,$campaign_status_array;
  $db = new PearDatabase();
 
 function add_digits($quantity, &$string, $min = 0, $max = 9)
@@ -628,6 +630,23 @@ for($i=0;$i<6;$i++)
 
 $adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
 
+$expected_revenue = Array("250000","750000","500000");
+$budget_cost = Array("25000","50000","90000");
+$actual_cost = Array("23500","45000","80000");
+$num_sent = Array("2000","2500","3000");
+for($i=0;$i<count($campaign_name_array);$i++)
+{
+	$campaign = new Campaign();
+	$campaign_name = $campaign_name_array[$i];
+	$campaign->column_fields["campaignname"] = $campaign_name;
+	$campaign->column_fields["campaigntype"] = $campaign_type_array[$i];
+	$campaign->column_fields["campaignstatus"] = $campaign_status_array[$i];
+	$campaign->column_fields["numsent"] = $num_sent[$i];
+	$campaign->column_fields["expectedrevenue"] = $expected_revenue[$i];
+	$campaign->column_fields["budgetcost"] = $budget_cost[$i];
+	$campaign->column_fields["actualcost"] = $actual_cost[$i];
+	$campaign->save("Campaigns");
+}
 
 /*
 for($i = 0; $i < $company_name_count; $i++)
