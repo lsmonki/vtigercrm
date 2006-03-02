@@ -66,3 +66,5 @@
 </td>
 </tr>
 </table>
+	{include file='SettingsSubMenu.tpl'}
+

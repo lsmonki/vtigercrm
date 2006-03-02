@@ -248,21 +248,4 @@ function pickColor(color)
 
 {$JAVASCRIPT}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	{include file='SettingsSubMenu.tpl'}

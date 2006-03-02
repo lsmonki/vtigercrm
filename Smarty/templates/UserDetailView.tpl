@@ -235,22 +235,4 @@
 </table>
 
 {$JAVASCRIPT}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	{include file='SettingsSubMenu.tpl'}
