@@ -21154,7 +21154,24 @@ $city_array = Array(
  "San Francisco",
  "Sunnyvale",
  "San Mateo");
- 
+
+$campaign_name_array = Array(
+"User Conference",
+"International Electrical Engineers Association Trade Show",
+"DM Campaign to Top Customers",
+);
+
+$campaign_type_array = Array(
+"Conference",
+"Trade Show",
+"Direct Mail",
+);
+
+$campaign_status_array = Array(
+"Planned",
+"Planned",
+"Completed",
+);
  
 
 $last_name_count = count($last_name_array);
