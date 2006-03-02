@@ -43,7 +43,7 @@
    <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
    <tr>
       <td align=left style="padding:5px">
-<?
+<?php
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
@@ -54,7 +54,7 @@
 
  require_once('modules/Calendar/preference.pinc');
  require_once('include/database/PearDatabase.php');
-require_once('modules/Calendar/UserCalendar.php');
+ require_once('modules/Calendar/UserCalendar.php');
 
  
  /* Check if user is allowed to use it */
@@ -65,6 +65,7 @@ require_once('modules/Calendar/UserCalendar.php');
   * display a calendar dfor a week
   */
  class calendar_week extends layout {
+
    /**
     * A one week calendar sheet
     */
@@ -85,7 +86,7 @@ require_once('modules/Calendar/UserCalendar.php');
      //$adr = $this->pref;
      $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
 
-	$xy=Date("w",$ts);
+     $xy=Date("w",$ts);
 
      /* Back to last Monday or Sunday before ts */
      while ( Date("w",$ts) != $this->pref->weekstart ) {
@@ -133,87 +134,98 @@ require_once('modules/Calendar/UserCalendar.php');
      echo "<!-- calendar list -->
               <table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" width=\"100%\" class=\"calDisplay\">
               <tr><td align=center>";
+     echo "
+	     <div align=left style=\"padding:5px;width:95%\">
+	     Time filter : <select class=small>
+	     <option>Select ...</option>
+	     <option> - Work hours (8am - 8pm)</option>
+
+	     <option> - Early morning to Noon (12am - 12pm)</option>
+	     <option> - Noon to Midnight (12pm - 12am)</option>
+	     <option> - Full day (24 Hours)</option>
+	     <option> - Custom time...</option>
+	     </select>
+
+	     </div>";
+     echo "<div class=\"calDiv\" >";
+	echo "<table border=0 cellspacing=1 cellpadding=5 width=100% class=\"calDayHour\" style=\"background-color: #dadada\">";
 
      $day = 0;
      $col = 1;
      $dd = new DateTime();
-     while ( $day < 8 ) {
-	   if ($day!=7) {
-		   $dd->setDateTimeTS($ts);
-		   $d = $dd->getDate();
-		   $tref = Date("Ymd",$ts);
-		   $dinfo = GetDaysInfo($ts);
-		   /* Select appointments for this day */
+     for ($row=1;$row<=1;$row++)
+     {
+	     echo "<tr>";
+	     echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>&nbsp;</td>";
+	     for ($column=0;$column<=6;$column++)
+	     {
+		     $next = NextDay($ts);
+		     echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>";
+		     echo strftime($mod_strings['LBL_DATE_TITLE'],$ts);
+		     echo "</td>";
+		     $ts = $next;
+	     }
+     }
+     for ($row=1;$row<=24;$row++)
+     {
+	     echo "<tr>";
+	     for ($column=0;$column<=7;$column++)
+	     {
+		if ($column==0)
+		{
+		     echo "<td  style=\"background-color:#eaeaea; border-top:1px solid #efefef;height:40px\" width=12% valign=top>";
+		     echo $row,"pm";
+		}
+		else
+		{
+		     $dd->setDateTimeTS($ts);
+                     $d = $dd->getDate();
+                     $tref = Date("Ymd",$ts);
+                     $dinfo = GetDaysInfo($ts);
 
-	     $from =  new DateTime();
-	     $to =  new DateTime();
-	     $from->setDateTimeTS($ts - 12 * 3600);
-	     $to->setDateTimeTS($ts - 12 * 3600);
-	     #$to->addDays(7);
-	     $this->pref->callist = array();
-	     appointment::readCal($this->pref,$from,$to);
+		     $from =  new DateTime();
+		     $to =  new DateTime();
+		     $from->setDateTimeTS($ts - 12 * 3600);
+		     $to->setDateTimeTS($ts - 12 * 3600);
+#$to->addDays(7);
+		     $this->pref->callist = array();
+		     appointment::readCal($this->pref,$from,$to);
 
-		   $next = NextDay($ts);
-	
-		   if ( $col == 1 ) {
-			 echo " <tr>\n";
-		   }
-		   
-		   echo "  <td valign=\"top\" width=\"50%\" height=\"100%\">\n";	
-		   
-		   # DAY-TABLE STARTS
-		   echo "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" height=\"100%\">\n";
-		   echo " <tr>\n";
-		   echo "  <th class=\"weekhead\">\n";
-		   echo $this->pref->menulink($callink ."calendar_day&t=". $tref,$mod_strings['LBL_DAY'. Date("w",$ts)],strftime($mod_strings['LBL_DATE_TITLE'],$ts));
-		   if ( isset($dinfo[Desc]) ) {
-			 #echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO'],$dinfo[popinfo]) ."\n";
-			 echo " " . $this->pref->menulink($callink ."calendar_day&t=". $tref,$d,strftime($mod_strings['LBL_DATE_TITLE'],$ts),$dinfo[popinfo]) ."\n";
-		   } else {
-			 #echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
-			 echo " " . $this->pref->menulink($callink ."calendar_day&t=". $tref,$d,strftime($mod_strings['LBL_DATE_TITLE'],$ts)) ."\n";
-		   }
-		   echo "  </th>\n";
-		   echo " </tr>\n";
-		   echo " <tr>\n";
-		   //echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\" style=\"\">\n";
-		   echo "  <td width=\"50%\" style=\"\">\n";
-		   if ( isset($dinfo[Desc]) ) {
-		   //echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
-		   	echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
-			
-		   }
-		   
-		   $hastable = false;
-		   foreach ($this->pref->callist as $idx => $x) {
-			
-			 /* the correct day */
-			 if ( ! $this->pref->callist[$idx]->inside($dd) ) {
-			   continue;
-			 }
-			 /*if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
-			   continue;
-			 }*/
-			 // Do not show finished tasks
-			 if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]->state == 2) ) {
+		     $next = NextDay($ts);
 
-			   continue;
-			 }
-			if ( !$hastable ) 
-			{
-				
-			  	echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
-			   	$hastable = true;
-			} 
-			else 
-			{
-			   	echo "  <tr><td class=\"eventSep\" colspan=\"3\"><img src=\"". $image_path ."blank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
-				
-			}
-			// Show appointments or task or whatever
-			$color = "";
-			$username=$this->pref->callist[$idx]->creator;
-			if ($username!="")
+		     echo "<td onmouseover=\"this.classname='cellnormalhover'\" onmouseout=\"this.classname='cellnormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
+
+			foreach ($this->pref->callist as $idx => $x) {
+
+                          //the correct day
+                         if ( ! $this->pref->callist[$idx]->inside($dd) ) {
+                           continue;
+                         }
+                         //if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
+                           //continue;
+                         //}
+                         // do not show finished tasks
+                         if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]
+->state == 2) ) {
+
+                           continue;
+                         }
+                        if ( !$hastable )
+                        {
+
+                                echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
+                                $hastable = true;
+                        }
+                        else
+                        {
+                                echo "  <tr><td class=\"eventsep\" colspan=\"3\"><img src=\"". $image_path ."b
+lank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
+
+                        }
+                        // show appointments or task or whatever
+                        $color = "";
+                        $username=$this->pref->callist[$idx]->creator;
+                        if ($username!="")
 			{
 				$query="SELECT cal_color FROM users where user_name = '$username'";
 
@@ -229,35 +241,17 @@ require_once('modules/Calendar/UserCalendar.php');
 			$this->pref->callist[$idx]->formatted();
 			echo "\n</table></td></tr>";
 
-		   }
-		   if ( $hastable ) 
-		   {
-			 echo " </table>\n";
-		   }
-		   else 
-		   {
-			  echo "<br/><br/><br/><br/>\n";
-		   }
-	
-		   # DAY-TABLE ENDS
-		   echo "</td></tr>\n";
-		   echo "</table>\n";
-	
-		   echo "  </td>\n";
-		   if ( $col == 2 ) {
-			 echo " </tr>\n";
-			 $col = 0;
-		   }
-	
-		   $day++;
-		   $col++;
-		   $ts = $next;
-  	   } else {
-	   		echo "<td class=\"appday\">&nbsp;</td>\n";
-			$day++;
-			$col++;
-	   }
+			}
+
+
+		     echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  width=10% class=\"small\" id=$row.\" pm\"><br>";
+		     echo "+";
+		     echo"</div></td>";
+		}
+	      }
+	     echo "</tr>";
      }
+
      if ( $col == 2 ) {
        echo " </tr>\n";
      }
