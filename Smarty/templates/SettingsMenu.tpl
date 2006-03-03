@@ -15,7 +15,7 @@
 </tr>
 </table>
 <div id="top">
-<div id="user">
+<div id="user" style="height:195px;">
 <a href="index.php?module=Administration&action=index&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_USERS}</a>
 <a href="index.php?module=Users&action=listroles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ROLES}</a>
 <a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PROFILES}</a>
@@ -31,7 +31,7 @@
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 <div id="top2">
-<div id="studio">
+<div id="studio" style="height:75px;">
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuCusFld')" onmouseout="fninvsh('subMnuCusFld')">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuPickList')" onmouseout="fninvsh('subMnuPickList')">{$MOD.LBL_PICKLIST_SETTINGS}</a>
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">{$MOD.LBL_FIELD_ORDERING}</a>
@@ -41,7 +41,7 @@
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 <div id="top3">		
-<div id="comm">
+<div id="comm" style="height:125px;">
 <a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings" class="lftSubMnu">{$MOD.EMAILTEMPLATES}</a>
 <a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings" class="lftSubMnu">{$MOD.WORDINTEGRATION}</a>
 <a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings" class="lftSubMnu">{$MOD.NOTIFICATIONSCHEDULERS}</a>
@@ -55,7 +55,7 @@
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 <div id="top4">
-<div id="config">
+<div id="config" style="height:160px;">
 <a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ORGANIZATION_DETAILS}</a>
 <a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_EMAIL_CONFIG}</a>
 <a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a>
