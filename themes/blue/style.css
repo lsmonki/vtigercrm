@@ -723,10 +723,10 @@ border:0px;
 }
 								
 
-#user{position:relative;left:0px;top:0px;width:100%;display:none;}
-#studio{position:relative;left:0px;top:0px;width:100%;display:none;}
-#comm{position:relative;left:0px;top:0px;width:100%;display:none;}
-#config{position:relative;left:0px;top:0px;width:100%;display:none;}
+#user{position:relative;left:0px;top:0px;width:100%;display:block;}
+#studio{position:relative;left:0px;top:0px;width:100%;display:block;}
+#comm{position:relative;left:0px;top:0px;width:100%;display:block;}
+#config{position:relative;left:0px;top:0px;width:100%;display:block;}
 
 #userTab{position:relative;left:0px;top:0px;width:100%;display:none;}
 #studioTab{position:relative;left:0px;top:0px;width:100%;display:none;}
@@ -840,6 +840,11 @@ border:0px;
 .imgDoc{
 	cursor:pointer;
 	border:0px;
+}
+
+#slideMnu{
+	background-color:#BBBBBB;
+		vertical-align:top;
 }
 
 #one{

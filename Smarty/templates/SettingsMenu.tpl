@@ -3,12 +3,12 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 <tr>
-<td width="24%" class="lftMnuTab" valign="top" id="slideMnu" >
+<td width="24%" valign="top" id="slideMnu" >
 <div id="one">
 <table  cellspacing="0" cellpadding="0" class="lftMnuHdr" >
 <tr>
 <td>
-<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just();">
+<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top','user');">
 
 <tr><td width="95%"><a href="#" class="lftMnuHdr">{$MOD.LBL_USER_MANAGEMENT}</a></td>
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}/downArrow.gif" border="0" /></a></td>
@@ -26,7 +26,7 @@
 <a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
 </div></div>
 
-<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just1();">
+<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top2','studio');">
 <tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_STUDIO}</a></td>
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
@@ -36,7 +36,7 @@
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuPickList')" onmouseout="fninvsh('subMnuPickList')">{$MOD.LBL_PICKLIST_SETTINGS}</a>
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">{$MOD.LBL_FIELD_ORDERING}</a>
 </div></div>
-<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just2()">
+<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top3','comm')" >
 <tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_COMMUNICATION_TEMPLATES}</a></td>
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
@@ -50,7 +50,7 @@
 </div>
 </div>
 
-<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="just3()">
+<table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top4','config')">
 <tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_CONFIGURATION}</a></td>
 <td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
@@ -70,14 +70,4 @@
 </table>
 </div>
 </td>
-<td width="1%" class="dock"><img src="{$IMAGE_PATH}/rhtArrow.gif" class="imgDoc" onclick="fnDown('slideMnu')" /></td>
-<script>
-ScrollEffect.limit = 191;
-ScrollEffect.closelimit= 190;
-ScrollEffect1.limit1 = 81;
-ScrollEffect1.closelimit1= 80;
-ScrollEffect2.limit2 = 121;
-ScrollEffect2.closelimit2= 120;
-ScrollEffect3.limit3 = 161;
-ScrollEffect3.closelimit3= 160;
-</script>
+<td width="1%" class="dock"><img src="{$IMAGE_PATH}/rhtArrow.gif" class="imgDoc" alt="Expand/Close Menu" title="Expand/Close Menu" onclick="fnSlide('slideMnu','one')" /></td>
