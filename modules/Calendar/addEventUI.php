@@ -1,4 +1,6 @@
 <?php
+require_once('include/utils/CommonUtils.php');
+require_once('modules/Activities/Activity.php');
 global $calpath,$callink;
  $calpath = 'modules/Calendar/';
  $callink = 'index.php?module=Calendar&action=';
@@ -8,6 +10,8 @@ global $calpath,$callink;
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
  global $mod_strings,$app_strings,$current_user;
+ $focus= new Activity();
+ $userDetails=getAllUserName();
 ?>
        
 	<!-- Add Event DIV starts-->
@@ -55,15 +59,15 @@ global $calpath,$callink;
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3 ><b>Event starts at</b></td></tr>
-					<tr><td><input type="text" value="12:00 AM" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="../images/btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-					<tr><td><input type="text" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="../images/btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+				        <tr><td><input type="text" name="time_start" value="12:00 AM" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
+                                        <tr><td><input type="text" name="date_start" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
 					</table>
 				</td>
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td><b>Event ends on</b></td></tr>
-					<tr><td><input type="text" value="12:00 AM" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="../images/btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-					<tr><td><input type="text" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="../images/btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+				        <tr><td><input type="text" value="12:00 AM" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
+				        <tr><td><input type="text" name="due_date" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
 					</table>
 				</td>
 				</tr>
@@ -116,13 +120,12 @@ global $calpath,$callink;
 						</tr>
 						<tr>
 							<td width=40% align=center valign=top>
-								<select name="available" id="available" class=small size=5 multiple style="height:70px;width:100%">
-								<option>admin</option>
-								<option>john</option>
-								<option>craig</option>
-								<option>hasnu</option>
-								<option>dimja</option>
-								
+							<select name="available" id="available" class=small size=5 multiple style="height:70px;width:100%">
+							<?php
+								for($i=1;$i<=count($userDetails);$i++){
+									echo "<option>".$userDetails[$i]."</option>";
+									}
+							?>
 								</select>
 								
 							</td>
