@@ -392,7 +392,9 @@ $product_name_array= array( "Vtiger Single User Pack", "Vtiger 5 Users Pack", "V
         "abcd1234", "Cd-R CD Recordable", "Sharp - Plain Paper Fax" , "Brother Ink Jet Cartridge"); 
 $product_code_array= array("001","002","003","023","005","sg-106","1324356","sg-108","sg-119","sg-125");
 $subscription_rate=array("149","699","1299","2999","4995");
-
+//added by jeri to populate product images
+$product_image_array = array("product1.jpeg###","product2.jpeg###product3.jpeg###","product4.jpeg###product5.jpeg###product6
+.jpeg###","product7.jpeg###product8.jpeg###product9.jpeg###product10.jpeg###");
 for($i=0; $i<10; $i++)
 {
         $product = new Product();
@@ -409,6 +411,7 @@ for($i=0; $i<10; $i++)
 		$manufacturer	= 	"";
 		$commission_rate=	rand(10,99);
 		$unit_price	=	rand(100,999);
+		$product_image_name = '';
 	}
 	else
 	{
@@ -423,6 +426,7 @@ for($i=0; $i<10; $i++)
 		$manufacturer	= 	"vtiger";
 		$commission_rate=	0;
 		$unit_price	=	$subscription_rate[$i];
+		$product_image_name = $product_image_array[$i];
 	}
 
         $product->column_fields["productname"] 	= 	$product_name_array[$i];
@@ -447,7 +451,7 @@ for($i=0; $i<10; $i++)
         $product->column_fields["usageunit"]	= 	$usageunit;
      	$product->column_fields["qty_per_unit"] = 	$qty_per_unit;
         $product->column_fields["qtyinstock"] 	= 	$qty_in_stock;
-      	//$product->column_fields["reorderlevel"] =	rand(10, 99);
+	$product->column_fields["imagename"] =  $product_image_name;
 
 	$product->save("Products");
 	$product_ids[] = $product ->id;
