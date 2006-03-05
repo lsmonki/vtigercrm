@@ -142,6 +142,7 @@ if($focus->mode == 'edit')
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($upload_maxsize)) $xtpl->assign("MAX_FILE_SIZE", $upload_maxsize);
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 if(isset($_REQUEST['activity_mode'])) $xtpl->assign("ACTIVITYMODE", $_REQUEST['activity_mode']);
 $xtpl->assign("THEME", $theme);

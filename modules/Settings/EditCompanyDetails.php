@@ -74,6 +74,8 @@ if (isset($organization_fax))
 	$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
 if (isset($organization_website))
 	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
+if (isset($upload_maxsize))
+	$xtpl->assign("MAX_FILE_SIZE",$upload_maxsize);
 if (isset($organization_logoname))
 	$xtpl->assign("ORGANIZATIONLOGONAME",$organization_logoname);
 

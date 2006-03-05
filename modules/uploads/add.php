@@ -37,7 +37,7 @@ else {
 <HTML>
 <BODY>
 <FORM METHOD="post" ACTION="index.php?module=uploads&action=add" ENCTYPE="multipart/form-data">
- <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">
+ <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?=$upload_maxsize?>">
  <INPUT TYPE="hidden" NAME="action" VALUE="upload">
  <TABLE BORDER="1">
   <TR>

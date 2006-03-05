@@ -11,7 +11,7 @@
 <HTML>
 <BODY>
 <FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data">
-  <?php
+<?php
 		$ret_action = $_REQUEST['return_action'];
 		$ret_module = $_REQUEST['return_module']; 
 		$ret_id = $_REQUEST['return_id'];
@@ -25,7 +25,7 @@
 	echo get_module_title($ret_module,$ret_module." : ".$mod_strings['LBL_ATTACH_FILE'],true); 
 ?>
   <br>
-  <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">
+  <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $upload_maxsize ?>">
   <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
   <INPUT TYPE="hidden" NAME="return_action" VALUE="<?php echo $ret_action ?>">
   <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">

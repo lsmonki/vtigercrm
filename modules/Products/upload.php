@@ -22,7 +22,7 @@
 </B>
 <hr>
 <br>
- <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="100000">
+ <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $upload_maxsize ?>">
  <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
  <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
  <TABLE BORDER="0" cellspacing="2" cellpadding="2">
