@@ -254,6 +254,15 @@ global $vtlog;
 		return $result;
 	}
 
+	function updateBlobFile($tablename, $colname, $id, $filename)	
+	{
+		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename);
+		$this->checkConnection();
+		$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename." status=".$result);
+		return $result;
+	}
+
 	/* ADODB converted
 	function limitQuery($sql,$start,$count, $dieOnError=false, $msg=''){
 		if($this->dbType == "mysql")
