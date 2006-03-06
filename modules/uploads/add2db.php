@@ -85,22 +85,36 @@ else
 	if($errorCode == 4)
 	{
 	    include('themes/'.$theme.'/header.php');
-	    $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
+	    $errormessage = "<B><font color='red'>Please give a valid file for upload.</font></B> <br>" ;
 	    echo $errormessage;
 	    include "upload.php";
 	}
 	else if($errorCode == 2)
 	{
-	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
+	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than $upload_maxsize bytes</font></B> <br>";
 	    include('themes/'.$theme.'/header.php');
 	    echo $errormessage;
 	    include "upload.php";
 	    //echo $errorCode;
 	}
-	else if($errorCode == 3 || $errorcode == '')
+	else if($errorCode == 1)
+	{
+	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the upload_max_filesize directive in php.ini</font></B> <br>";
+	    include('themes/'.$theme.'/header.php');
+	    echo $errormessage;
+	    include "upload.php";
+	    //echo $errorCode;
+	}
+	else if($errorCode == 3)
 	{
 	    include('themes/'.$theme.'/header.php');
-	    echo "<b><font color='red'>Problems in file upload. Please try again!</font></b><br>";
+	    echo "<b><font color='red'>The uploaded file was only partially received.  Please try again.</font></b><br>";
+	    include "upload.php";
+	}
+	else if($errorcode == '')
+	{
+	    include('themes/'.$theme.'/header.php');
+	    echo "<b><font color='red'>Error while receiving file.  Check post_max_size in php.ini</font></b><br>";
 	    include "upload.php";
 	}
 	  
