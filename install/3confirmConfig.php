@@ -260,7 +260,7 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
 	<! ---------------------------------------------- System Configuration-->
 
 	<div style="background-color:#ff0000;color:#ffffff;padding:5px">
-	<b>MySQL version <?php echo $mysql_server_version; ?> is not supported,Connect to MySQL 4.1.x versions</b>
+	<b>MySQL version <?php echo $mysql_server_version; ?> is not supported,kindly connect to MySQL 4.1.x</b>
 	</div>
 	<br><br>
 	<table border=0 width=100% cellspacing=0 cellpadding=0>
