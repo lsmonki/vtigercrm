@@ -113,7 +113,6 @@
      $last_week = Date("Ymd",$ts -  7 * 86400);
      $next_week = Date("Ymd",$ts +  7 * 86400);
 
-
      if ($mn_name == $m_name)
      {
 	$mn_name ="";
@@ -158,6 +157,7 @@
      $day = 0;
      $col = 1;
      $dd = new DateTime();
+     $tempts=$ts;
      for ($row=1;$row<=1;$row++)
      {
 	     echo "<tr>";
@@ -174,6 +174,7 @@
      }
      for ($row=0;$row<24;$row++)
      {
+	     $ts=$tempts;
 	     echo "<tr>";
 	     for ($column=0;$column<=7;$column++)
 	     {
@@ -242,8 +243,8 @@ lank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
 		     echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  width=10% class=\"small\" id=$row.\" pm\"><br>";
 		     echo "+";
 		     echo"</div></td>";
+		     $ts=$next;
 		}
-		$ts=$next;
 	      }
 	     echo "</tr>";
      }
@@ -257,6 +258,36 @@ lank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
      $this->addHidden("t", $this->t);
      echo $this->getHidden();
      echo "</form>\n";
+     echo "</td></tr>";
+     echo "<tr>
+     <td>
+     <table border=0 cellspacing=0 cellpadding=0 width=100% class=\"calBottomBg\">
+     <tr>
+
+     <td><img src=\"".$image_path."calBottomLeft.gif\"></td>
+     <td width=100%><img src=\"".$image_path."calBottomBg.gif\"></td>
+     <td align=right><img src=\"".$image_path."calBottomRight.gif\"></td>
+     </tr>
+     </table>
+     </td>
+     </tr>
+     </table>
+     <!-- content cache -->
+
+     </td>
+     </tr>
+     </table>
+
+     </td>
+     </tr>
+     </table>
+     </div>
+     <!-- PUBLIC CONTENTS STOPS-->
+     </td>
+
+     <td align=right valign=top><img src=\"".$image_path."showPanelTopRight.gif\"></td>
+     </tr>
+     </table>";
    }
    /**
     * naviagte
