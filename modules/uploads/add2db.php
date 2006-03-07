@@ -31,7 +31,6 @@ $_FILES["binFile"]["name"] = $binFile;
 
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
-	$binFile = $_FILES['binFile']['name'];
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
@@ -43,8 +42,13 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		$description = addslashes($desc);
 		$date_var = date('YmdHis');
 
-		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+		$filenameBase64 = $filename.".base64";
+		$rfh = fopen($uploaddir.$filename, "r");
+		$wfh = fopen($uploaddir.$filenameBase64, "w");
+		//FIXME: find a way to stream data to base64_encode() to reduce memory usage -mikefedyk
+		fwrite($wfh,base64_encode(fread($rfh, $filesize)));
+		deleteFile($uploaddir,$filename);
 		
 		$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
 		$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."','".$date_var."')";
@@ -54,9 +58,10 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
 		$result = $adb->query($sql);
 	
+		//FIXME: adodb reads entire file into memory instead of streaming to DB -mikefedyk
 		if($result!=false)	    
-			$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
-	
+			$result = $adb->updateBlobFile('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$uploaddir.$filenameBase64);
+		deleteFile($uploaddir,$filenameBase64);
 
 		$crmid = $_REQUEST['return_id'];
 
