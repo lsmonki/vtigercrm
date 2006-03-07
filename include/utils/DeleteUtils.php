@@ -288,13 +288,17 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$del_query = "delete from rss where rssid=".$record;
 			$adb->query($del_query);
 	break;
+		case Portal:
+			$del_query = "delete from portal where portalid=".$record;
+			$adb->query($del_query);
+	break;
 	endswitch;
 	global $current_user;
 	require_once('include/freetag/freetag.class.php');
 	$freetag=new freetag();
 	$freetag->delete_all_object_tags_for_user($current_user->id,$record);
 	
-	if($return_module == $module && $return_module !='Rss')
+	if($return_module == $module && $return_module !='Rss' && $return_module !='Portal')
 	{	
 		$focus->mark_deleted($record);
 	}

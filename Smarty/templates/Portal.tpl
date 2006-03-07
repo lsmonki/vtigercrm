@@ -21,9 +21,9 @@
 			<ul id="tablist" style="margin-left: 40px;">
 			{section name=portalinfo loop=$PORTALS}
 				{if $smarty.section.portalinfo.iteration eq '1'}
-					<li><a class="current" href="{$PORTALS[portalinfo].portalurl}" onClick="return handlelink(this)">{$PORTALS[portalinfo].portalname}</a></li>
+					<li><a class="current" href="{$PORTALS[portalinfo].portalurl}" onClick="return handlelink(this)">{$PORTALS[portalinfo].portalname}</a><a href="index.php?module=Portal&action=Delete&return_module=Portal&return_action=index&record={$PORTALS[portalinfo].portalid}"><img src='{$IMAGEPATH}/del.gif' border=0 align=absmiddle></a></li>
 				{else}	
-					<li><a href="{$PORTALS[portalinfo].portalurl}" onClick="return handlelink(this)">{$PORTALS[portalinfo].portalname}</a></li>
+					<li><a href="{$PORTALS[portalinfo].portalurl}" onClick="return handlelink(this)">{$PORTALS[portalinfo].portalname}</a><a href="index.php?module=Portal&action=Delete&return_module=Portal&return_action=index&record={$PORTALS[portalinfo].portalid}"><img src='{$IMAGEPATH}/del.gif' border=0 align=absmiddle></a></li>
 				{/if}
 			{/section}
 			</ul>

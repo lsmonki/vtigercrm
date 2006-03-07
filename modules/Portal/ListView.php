@@ -28,6 +28,7 @@ for($i=0 ; $i<$no_of_portals; $i++)
 {
 	$portalname = $adb->query_result($result,$i,'portalname');
 	$portalurl = $adb->query_result($result,$i,'portalurl');
+	$portal_array['portalid'] = $adb->query_result($result,$i,'portalid'); 
 	$portal_array['portalname'] = $portalname;
 	$portal_array['portalurl'] = $portalurl;
 	$portal_info[]=$portal_array;
