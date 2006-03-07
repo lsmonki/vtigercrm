@@ -155,7 +155,7 @@ class vtigerRSS extends CRMEntity
                    $shtml .= "<td width=\"15\">
                    <img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','0')\"></td>";
                    $shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=index&record=$allrssrow[rssid]
-\" class=\"rssTitle\">".substr($allrssrow['rsstitle'],0,15)."...</a></td>";
+\" class=\"rssTitle\">".substr($allrssrow['rsstitle'],0,15)."...</a></td><td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
                    $shtml .= "</tr>";
 		}
                 return $shtml;
@@ -184,7 +184,7 @@ class vtigerRSS extends CRMEntity
                    }
                    $shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 \" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
-                   $shtml .= "</tr>";
+                   $shtml .= "<td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td></tr>";
 
                 }
                 return $shtml;
@@ -210,7 +210,7 @@ class vtigerRSS extends CRMEntity
       			   $shtml .= "<td width=\"15\">
 			   <img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\"></td>";
 			}
-                   $shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
+                   $shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
   	           $shtml .= "</tr>";
 			
 		}
@@ -428,8 +428,7 @@ class vtigerRSS extends CRMEntity
                    $shtml .= "<tr>";
                    $shtml .= "<td width=\"15\">
                    <img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\"></td>";
-                   $shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=index&record=$allrssrow[rssid]
-\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
+                   $shtml .= "<td class=\"rssTitle\" width=\"10%\"><a href=\"index.php?module=Rss&action=index&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\"  border=\"0\" align=\"absmiddle\"></a></td>";
                    $shtml .= "</tr>";
                 }
                 return $shtml;
