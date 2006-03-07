@@ -36,11 +36,11 @@ echo "\n<BR>\n";
 		     <table border=0 cellspacing=0 cellpadding=3 width=100%>
              		<tr>
           		      <td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-		              <td class="dvtSelectedCell" align=center nowrap>Day</td>
+               		      <td class="dvtSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day&t=<?echo $t?>">Day</a></td>
                 	      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-		              <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week">Week</a></td>
+          		      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=<?echo $t?>">Week</a></td>
                 	      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-		              <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month">Month</a></td>
+		              <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=<?echo $t?>">Month</a></td>
 		              <td class="dvtTabCache" style="width:10px">&nbsp;</td>
 		              <td class="dvtTabCache" style="width:100%">&nbsp;</td>
 	                </tr>
