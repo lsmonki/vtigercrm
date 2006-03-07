@@ -80,7 +80,8 @@ function handleEdit()
 function dtlViewAjaxResponse(response)
 {
      var item = response.responseText;
-     if(item.indexOf(":#:FAILURE")>-1)
+     alert(response.responseText)
+	 if(item.indexOf(":#:FAILURE")>-1)
      {
           alert("Error while Editing");
      }
@@ -165,4 +166,22 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      }
      showHide(dtlView,editArea);  //show,hide
      itsonview=false;
+}
+
+
+function dtlViewAjaxTagResponse(response)
+{
+     var item = response.responseText;
+	 getObj('tagfields').innerHTML = item;
+     hide("vtbusy_info");
+}
+
+function SaveTag(txtBox,crmId,module)
+{
+	var tagValue = document.getElementById(txtBox).value;
+    var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue;
+    
+	var ajaxObj = new Ajax(dtlViewAjaxTagResponse);
+    ajaxObj.process("index.php?",data);
+   	show("vtbusy_info");
 }

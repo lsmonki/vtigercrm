@@ -93,13 +93,12 @@
 	<td valign=top><img src="themes/blue/images/showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" valign=top width=100%>
 		<!-- PUBLIC CONTENTS STARTS-->
-		<div class="small" style="padding:20px">
+		<div class="small" style="padding:20px" >
 		
-		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span> <br>
-		 {$UPDATEINFO}	 
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><td><td>&nbsp;</td></tr>
+		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap>&nbsp;{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/></td></tr>		 
 		 <hr noshade size=1>
-		 <br> 
 		
 		<!-- Account details tabs -->
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
@@ -437,6 +436,10 @@
 							</td>
 						</tr>
 						</table>
+						<br><br>
+						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc" class="small">
+						<tr><td><span id="tagfields"></span></td></tr>
+						</table>
 					</td>
 				</tr>
 				</table>
@@ -458,5 +461,18 @@
 <script language="JavaScript" type="text/javascript" src="modules/Products/Productsslide.js"></script>
 <script language="JavaScript" type="text/javascript">Carousel();</script>
 {/if}
+
+<script>
+var data = "module={$MODULE}&action={$MODULE}Ajax&ajxaction=GETTAGCLOUD";
+var ajaxObj = new Ajax(ajaxTagCloudResp);
+ajaxObj.process("index.php?",data);
+function ajaxTagCloudResp(response)
+{ldelim}
+	
+	var item = response.responseText;
+	getObj('tagfields').innerHTML = item;
+	
+{rdelim}
+</script>
 
 </td></tr></table></form>

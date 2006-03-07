@@ -980,3 +980,14 @@ border:0px;
 	color:#000000;
 }
 
+a.tagLink{
+	color:#333333;
+	text-decoration:none;
+	font-family:arial, Helvetica, sans-serif;
+}
+
+a.tagLink:Hover{
+	color:#000000;
+	text-decoration:underline;
+}
+
