@@ -23,20 +23,25 @@
 ?>
 <table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 <tr>
+<form name="Calendar" method="GET" action="index.php">
+          <input type="hidden" name="module" value="Calendar">
+	  <input type="hidden" name="action">
+	  <input type="hidden" name="t">
   <td>
    <table border=0 cellspacing=0 cellpadding=3 width=100%>
    <tr>
       <td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day">Day</a></td>
+      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day&t=<?echo $t?>">Day</a></td>
       <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtSelectedCell" align=center nowrap>Week</td>
+      <td class="dvtSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=<?echo $t?>">Week</a></td>
       <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month">Month</a></td>
+      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=<?echo $t?>">Month</a></td>
       <td class="dvtTabCache" style="width:10px">&nbsp;</td>
       <td class="dvtTabCache" style="width:100%">&nbsp;</td>
    </tr>
    </table>
   </td>
+ </form> 
 </tr>
 <tr>
   <td valign=top align=left >
@@ -161,20 +166,26 @@
 	     {
 		     $next = NextDay($ts);
 		     echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>";
-		     echo strftime($mod_strings['LBL_DATE_TITLE'],$ts);
+		     echo strftime("%d - %a",$ts);
 		     echo "</td>";
 		     $ts = $next;
 	     }
+	     echo "</tr>";
      }
-     for ($row=1;$row<=24;$row++)
+     for ($row=0;$row<24;$row++)
      {
 	     echo "<tr>";
 	     for ($column=0;$column<=7;$column++)
 	     {
+		$next = NextDay($ts);
 		if ($column==0)
 		{
 		     echo "<td  style=\"background-color:#eaeaea; border-top:1px solid #efefef;height:40px\" width=12% valign=top>";
-		     echo $row,"pm";
+		     if($row==0) echo "12am";
+		     if($row>0 && $row<12) echo $row."am";
+		     if($row == 12) echo $row."pm";
+		     if($row>12 && $row<24) echo ($row-12)."pm";
+		     echo "</td>";
 		}
 		else
 		{
@@ -191,10 +202,9 @@
 		     $this->pref->callist = array();
 		     appointment::readCal($this->pref,$from,$to);
 
-		     $next = NextDay($ts);
+		     echo "<td onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
 
-		     echo "<td onmouseover=\"this.classname='cellnormalhover'\" onmouseout=\"this.classname='cellnormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
-
+		        $hastable = false;
 			foreach ($this->pref->callist as $idx => $x) {
 
                           //the correct day
@@ -222,32 +232,18 @@
 lank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
 
                         }
-                        // show appointments or task or whatever
-                        $color = "";
-                        $username=$this->pref->callist[$idx]->creator;
-                        if ($username!="")
-			{
-				$query="SELECT cal_color FROM users where user_name = '$username'";
-
-				$result=$adb->query($query);
-				if($adb->getRowCount($result)!=0)
-				{
-					$res = $adb->fetchByAssoc($result, -1, false);
-					$usercolor = $res['cal_color'];
-					$color="style=\"background: ".$usercolor.";\"";
-				}
-			}
-			echo "\n<tr><td><table width=\"100%\" class=\"event\" $color cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 			$this->pref->callist[$idx]->formatted();
-			echo "\n</table></td></tr>";
 
 			}
-
+			if ( $hastable ) {
+			 echo " </table>\n";
+			}
 
 		     echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  width=10% class=\"small\" id=$row.\" pm\"><br>";
 		     echo "+";
 		     echo"</div></td>";
 		}
+		$ts=$next;
 	      }
 	     echo "</tr>";
      }
