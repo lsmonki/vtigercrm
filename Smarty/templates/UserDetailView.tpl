@@ -48,9 +48,9 @@
 			  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 			  <tr>
 			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
-			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onclick="fnVis('prof')" ><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
-				 <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onclick="fnVis('more')"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
-				 <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onclick="fnVis('addr')"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
+			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onMouseOver="fnVis('prof')" ><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
+				 <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onMouseOver="fnVis('more')"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
+				 <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onMouseOver="fnVis('addr')"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
 				<td class="dvtTabCache" nowrap="nowrap" width="10">&nbsp;</td>
 			  </tr>
 			  </table>
