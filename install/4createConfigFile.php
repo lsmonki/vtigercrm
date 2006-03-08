@@ -158,6 +158,7 @@ if($templateHandle) {
       $buffer = str_replace( "_MAIL_SERVER_", $mail_server, $buffer);
       $buffer = str_replace( "_MAIL_USERNAME_", $mail_server_username, $buffer);
       $buffer = str_replace( "_MAIL_PASSWORD_", $mail_server_password, $buffer);
+      $buffer = str_replace( "_DB_STAT_", "true", $buffer);
 
       fwrite($includeHandle, $buffer);
     }

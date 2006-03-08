@@ -356,7 +356,7 @@ if (!is_file('config.inc.php')) {
 }
 
 require_once('config.inc.php');
-if (!isset($dbconfig['db_hostname'])) {
+if (!isset($dbconfig['db_hostname']) || $dbconfig['db_status']=='_DB_STAT_') {
   header("Location: install.php");
   exit();
 }
