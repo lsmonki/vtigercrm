@@ -1,5 +1,32 @@
+<script language="javascript" type="text/javascript">
+	var Sele= '{$HOMEDEFAULTVIEW}';
+	divarray = new Array('home_myaccount','home_mypot','home_mytopquote','home_metrics','home_mytkt','home_myact','home_mygrp','home_mytopso','home_mytopinv','home_mynewlead' );
+	trarray = new Array('My Top Accounts','My Top Open Potentials','My Top Open Quotes','Key Metrics','My Tickets','My Upcoming and Pending Activities','My Group Allocation ','My Top Open Sales Orders','My Top Open Invoice','My New Leads'); 	
+	var selrow ;
+
+	function toggleshowhide(currentselected,rowselected)
+	{ldelim}
+		for(i = 0; i < divarray.length ;i++)
+		{ldelim}
+			if(Sele == divarray[i])
+			{ldelim}
+				selrow = trarray[i];			
+				break;	
+			{rdelim}
+		{rdelim}
+		hide (Sele);
+		document.getElementById(selrow).className="mnuUnSel";
+		Sele = currentselected;
+		selrow = rowselected;
+		document.getElementById(selrow).className="mnuSel";
+		show (Sele);
+	{rdelim}
+</script>
+
 
 <script type="text/javascript" language="JavaScript" src="smiletag/smiletag-script.js"></script>
+
+<script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
 
 
 {*<!--Home Page Entries  -->*}
@@ -57,57 +84,83 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 
 </TABLE>
 
+{* Main Contents Start Here *}
 
-<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-	<tr>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
-	<td class="showPanelBg" valign=top width=100%>
-		<div align=center class=small>
-		<table border=0 cellspacing=0 cellpadding=10 width=100%>
-		<tr>
-		<td align=left valign=top width=70%>
-		<br>	
-		<!-- block for each table !-->
-		{foreach key=table item=tabledetail from=$HOMEDETAILS}
-		{if $tabledetail ne ''}
-		<script language='Javascript'>
-		        var leftpanelistarray=new Array('{$tabledetail.Title[2]}');
-				  setExpandCollapse_gen()</script>
-		<table class="tblPro1" border="0" cellpadding="0" cellspacing="0" width="100%">
-		<tbody>
-		<tr>
-			<td>
-			{if $tabledetail.Title[3] ne ''}	
-			<script>
-			function {$tabledetail.Title[4]}(selectactivity_view)
-			{ldelim}
-			//script to reload the page with the view type when the combo values are changed
-			View_name = selectactivity_view.options[selectactivity_view.options.selectedIndex].value;
-			document.{$tabledetail.Title[5]}.action = "index.php?module=Home&action=index&{$tabledetail.Title[6]}="+View_name;
-			document.{$tabledetail.Title[5]}.submit();
-			{rdelim}
-			</script>
-			<form name="{$tabledetail.Title[5]}" method="post">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="75%" style="padding:10px;" valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td colspan="3" class="hometop">
+		
+		<div>		
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr><td>My Home - <b>At a Glance</b></td>
+					<td align="right" style="padding-right:10px; ">
+						<select class="frmSelect">
+							<option>Show Top 10</option>
+							<option>Show Top 20</option>
+							<option>Show Top 40</option>
+							<option>Show All</option>
+						</select>
+
+					</td>
+				
+		{* {foreach item=hometab from=$HOMEDETAILS} 
+	  		{if $hometab.Title.3 neq ''}	
+				<td align="right" style="padding-right:10px; ">
+					{$hometab.Title.3}
+				</td>
 			{/if}
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
-			<tbody>
-				<tr>
-				<!--title part-->
-				<td class="tblPro1IconCell" align="center" width="50"><img src="{$IMAGE_PATH}{$tabledetail.Title[0]}"></td>
-				<td class="tblPro1HeadingCell" width="80%">{$tabledetail.Title[1]}</td>
-				<td>{$tabledetail.Title[3]}</td>
-				<td valign="top" width="24"><img src="{$IMAGE_PATH}tblPro1BtnHide.gif" alt="Minimize / Maximize" border="0" onclick="javascript:expandCont('{$tabledetail.Title[2]}');"></td>
-				<!--end of title part -->	
+		{/foreach} *}
 				</tr>
-			</tbody>
-			</table>
+		
+
+		</table>
+		</div>
+		</td>
+        </tr>
+      <tr>
+        <td colspan="3" class="homeBtm" >&nbsp;</td>
+        </tr>
+	   <tr>
+
+        <td bgcolor="#959595" height="300" width="8"></td>
+        <td valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="24%" bgcolor="#D7D7D7" valign="top">
+				<table class="mnuTabH"  cellspacing="0" cellpadding="5">
+				{foreach item=hometab from=$HOMEDETAILS}
+	             		{if $hometab neq ''}
+				{if $hometab.Title.2 eq $HOMEDEFAULTVIEW}  
+				   <tr id="{$hometab.Title.1}" class="mnuSel" onclick = "toggleshowhide('{$hometab.Title.2}','{$hometab.Title.1}');">
+    	           			 <td><img src="{$IMAGE_PATH}{$hometab.Title.0}" width="24" height="24" /></td>
+
+        	        		 <td>{$hometab.Title.1}</td>
+            	  		   </tr>
+				{else}
+					<tr id="{$hometab.Title.1}" class="mnuUnSel" onclick = "toggleshowhide('{$hometab.Title.2}','{$hometab.Title.1}');">
+    	           			 <td><img src="{$IMAGE_PATH}{$hometab.Title.0}" width="24" height="24"/></td>
+        	        		 <td>{$hometab.Title.1}</td>
+            	  		   </tr>
+			{/if}
+			{/if}
+	              		{/foreach}		  
+	            </table>
 			</td>
-		</tr>
-		<tr>
-			<td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
-			<div id="{$tabledetail.Title[2]}" style="display: block;" class="divEventToDo">
-			<table class="EventToDo" border="0" cellpadding="3" cellspacing="0" width="100%">
-			<tbody>
+			<td class="padTab1">
+				
+				{foreach item=tabledetail from=$HOMEDETAILS}
+				{if $tabledetail neq ''}
+				{if $tabledetail.Title.2 neq $HOMEDEFAULTVIEW}	
+				<div id="{$tabledetail.Title.2}" style="display:none">
+				{else}   
+				<div id="{$tabledetail.Title.2}" style="display:block">
+				{/if}
+				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+				<tr>
+				  <td colspan="4"><span class="genHeaderSmall">{$tabledetail.Title.1}</span> <a href="#">(Mark as Default View)</a></td>
+				</tr>
+				<tr><td colspan="4">&nbsp;</td></tr>
 				<tr>
 				<!--header part-->
 				{foreach key=header item=headerdetail from=$tabledetail.Header}	
@@ -125,25 +178,31 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 				<!--end of entries -->
 				</tr>
 				{/foreach}
-				<!--end of rows entries-->
-			</tbody></table>
+				
+			</table>
 			</div>
+{/if}
+{/foreach}
 			</td>
-		</tr>
-		{if $tabledetail.Title[3] ne ''}
-		</form>
-		{/if}
-		</tbody></table>
-		<br><br>
-		{/if}
-		{/foreach}
-		<!--end of block for each table !-->		
-		<br>	
-		</td>
-		<td align=left valign=top width=30%>
-		Pipeline chart comes here..<br><br>
-		
-		<table border="0" cellpadding="0" cellspacing="0" width="75%">
+			<td class="tabRht"></td>
+          </tr>
+        </table></td>
+
+        <td bgcolor="#959595" width="8"></td>
+      </tr>
+	   <tr>
+        <td height="8" colspan="3" bgcolor="#959595"></td>
+	</tr>
+
+       <tr>
+        <td colspan="3" background="blue/themes/images/Home_15.gif" height="18"><img src="blue/themes/images/Home_15.gif">&nbsp;</td>
+      </tr>
+	  
+    </table></td>
+
+    <td width="25%" valign="top"><br>
+	
+	<table border="0" cellpadding="0" cellspacing="0" width="75%">
      		<tr><td class="tblPro1ColHeader" width="92%"><b>YOUR SHOUT!!!</b></td><td class="tblPro1ColHeader" width="8%" align="right" ><img src="{$IMAGE_PATH}tblPro1BtnHide.gif" alt="Minimize / Maximize" border="0" onClick="showhide('shoutbox');"></td></tr>
           	<tr><td colspan=2>&nbsp;</td></tr>	
 			<tr><td valign="top" colspan=2>
@@ -209,6 +268,8 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 	</tr>
 </table>
+	
+</td></tr></table>
 <script>
 function showhide(tab)
 {ldelim}
@@ -220,3 +281,6 @@ else
 	show(tab)
 {rdelim}
 </script>
+
+	
+			
