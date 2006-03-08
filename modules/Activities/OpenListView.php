@@ -111,7 +111,8 @@ function getPendingActivities()
 	
 	$title=array();
 	$title[]='myUpcoPendAct.gif';
-	$title[]=$current_module_strings["LBL_UPCOMING"].'('.$current_module_strings["LBL_TODAY"].' '.$later_day.')';
+	$title[]=$current_module_strings["LBL_UPCOMING"];
+	//.'('.$current_module_strings["LBL_TODAY"].' '.$later_day.')';
 	$title[]='home_myact';
 	$title[]=getActivityView($activity_view);
 	$title[]='showActivityView';		
