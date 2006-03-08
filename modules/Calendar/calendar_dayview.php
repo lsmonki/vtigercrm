@@ -117,7 +117,7 @@ require_once('modules/Calendar/UserCalendar.php');
 			   }
                      }
              }
-                echo "          <td onMouseOver=\"gshow('".$hour."')\"  onMouseOut=\"ghide('".$hour."')\"  width=10%>
+                echo "<td onMouseOver=\"gshow('".$hour."')\"  onMouseOut=\"ghide('".$hour."')\"  width=10%>
                                  <div id=".$hour." style=\"display:none\">
                                  <table border=\"0\">
                                    <tr>
@@ -281,9 +281,8 @@ function trim(s) {
          }
        }
      }
-     $maxcol = 1;
      for ($i = -1 ; $i < 24 ; $i++ ) {
-       $maxcol = max($maxcol,count($table[$i]));
+       $maxcol[$i] = max($maxcol[$i],count($table[$i]));
      }
 	//New UI-integrated by minnie
      echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">";
@@ -311,13 +310,13 @@ function trim(s) {
 	for ($i = 0; $i <24 ; $i++ )
 	{
 		if($i == 0)
-			$this->getHourList('12am',$maxcol,$table,12);
+			$this->getHourList('12am',$maxcol[$i],$table,$i);
 		if($i>0 && $i<12)
-			$this->getHourList($i.'am',$maxcol,$table,$i);
+			$this->getHourList($i.'am',$maxcol[$i],$table,$i);
 		if($i == 12)
-			$this->getHourList('12pm',$maxcol,$table,12);
+			$this->getHourList('12pm',$maxcol[$i],$table,$i);
 		if($i>12 && $i<24)
-			$this->getHourList(($i - 12).'pm',$maxcol,$table,$i);
+			$this->getHourList(($i - 12).'pm',$maxcol[$i],$table,$i);
 	}
 	 echo "</div>";
 	 echo "</td></tr></table>\n";
