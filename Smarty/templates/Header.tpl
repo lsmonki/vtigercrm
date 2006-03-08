@@ -117,3 +117,25 @@ function ajaxRssResponse(response)
 {rdelim}
 setInterval("Announcement_rss()",5000)
 </script>
+
+{* Begining of Slide Menu *}
+
+<div id="mnuSlide">
+<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	<td  width="112" id="slidemenu">
+	<div id="slide" style="display:none;">
+	{foreach item=modulename from=$MODULELISTS}
+		<a href="index.php?module={$modulename}&action=index" class="submenu">{$modulename}</a>
+	{/foreach}
+	</div>		
+	</td>
+	<td width="8" valign="top" onMouseOver="fnSlide1('slidemenu','slide')">
+	<div id="mnuKey">J<br />U<br />M<br />P<BR /><BR />T<BR />O</div>
+	</td>
+	</tr>
+</table>
+</div>
+
+{* End *}
+
