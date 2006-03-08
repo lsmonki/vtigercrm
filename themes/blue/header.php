@@ -64,6 +64,8 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 
 $smarty->assign("MODULE_NAME", $currentModule);
 
+$smarty->assign("MODULELISTS", $app_list_strings['moduleList']);
+
 $smarty->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
 
 if ($current_user->first_name != '') $smarty->assign("CURRENT_USER", $current_user->first_name);
