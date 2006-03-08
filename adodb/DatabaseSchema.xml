@@ -7001,7 +7001,7 @@ E</constraint>
 		<field name="born" type="T">
 			<DEFAULT value="0000-00-00 00:00:00"/>
 		</field>
-		<field name="msg" type="C" size="200">
+		<field name="msg" type="C" size="255">
 			<NOTNULL/>
 		</field>
 
@@ -7101,6 +7101,61 @@ E</constraint>
 		<index name="chat_users_IDX2">
 			<col>ping</col>
 		</index>
+	</table>
+
+	<table name="freetags">
+		<field name="id" type="I" size="19">
+			<NOTNULL/>
+			<KEY/>
+	</field>
+	<field name="tag" type="C" size="50">
+		<NOTNULL/>
+		<DEFAULT value=""/>
+	</field>
+	<field name="raw_tag" type="C" size="50">
+		<NOTNULL/>
+		<DEFAULT value=""/>
+	</field>
+	</table>
+	
+	<table name="freetagged_objects">
+	<field name="tagg_id" type="I" size="20">
+		<NOTNULL/>
+		<DEFAULT value="0"/>
+		<KEY/>
+	</field>
+	<field name="tagger_id" type="I" size="20">
+		<NOTNULL/>
+		<DEFAULT value="0"/>
+		<KEY/>
+	</field>
+	<field name="object_id" type="I" size="20">
+		<NOTNULL/>
+		<DEFAULT value="0"/>
+		<KEY/>
+	</field>
+	<field name="tagged_on" type="T">
+			<DEFAULT value="000.000.000.000"/>
+			<NOTNULL/>
+	</field>
+	<field name="module" type="C">
+			<DEFAULT value=""/>
+			<NOTNULL/>
+	</field>
+		<opt>Type=InnoDB</opt>
+		<index name="tag_id_index">
+			<col>tagg_id</col>
+		</index>
+		<index name="tagger_id_index">
+			<col>tagger_id</col>
+		</index>
+		<index name="object_id_index">
+			<col>object_id</col>
+		</index>
+		<data>
+
+		</data>
+
 	</table>
 
 </schema>
