@@ -47,7 +47,7 @@ $dbconfig['db_username'] = '_DBC_USER_';
 $dbconfig['db_password'] = '_DBC_PASS_';
 $dbconfig['db_name'] = '_DBC_NAME_';
 $dbconfig['db_type'] = '_DBC_TYPE_';
-$dbconfig['db_status'] = '_DBC_STAT_';
+$dbconfig['db_status'] = '_DB_STAT_';
 
 // TODO: test if port is empty
 // TODO: set db_hostname dependending on db_type
