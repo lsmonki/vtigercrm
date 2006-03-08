@@ -1,0 +1,13 @@
+&lt;style type=&quot;text/css&quot;&gt;
+BODY { background: url(&quot;http://crm.fosslabs.com/themes/fosslabs/images/mail_bg.png&quot;) }
+&lt;/style&gt; &lt;a href=&quot;http://fosslabs.com&quot;&gt;&lt;img width=&quot;300&quot; height=&quot;69&quot; border=&quot;0&quot; alt=&quot;FOSS Labs&quot; src=&quot;http://crm.fosslabs.com/themes/fosslabs/images/mail_logo.jpg&quot; /&gt;&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;
+The undersigned hereby acknowledges receipt and delivery
+of the goods.
+The undersigned will release the payment subject to the goods being discovered not satisfactory.
+&lt;br&gt;&lt;br&gt;
+Signed under seal this &lt;date&gt;
+&lt;br /&gt;&lt;br /&gt; 
+Sincerly,&lt;br /&gt;&lt;br /&gt; 
+$users_first_name $users_last_name&lt;br /&gt; 
+office: 866-303-1414&lt;br /&gt; 
+fax: 888-254-6208

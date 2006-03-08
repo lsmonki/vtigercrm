@@ -1,0 +1,224 @@
+<?php
+global $current_user;
+require_once('Smarty_setup.php');
+require_once("data/Tracker.php");
+require_once('themes/'.$theme.'/layout_utils.php');
+require_once('include/logging.php');
+require_once('include/utils/utils.php');
+require_once('modules/CustomView/CustomView.php');
+require_once('include/utils/UserInfoUtil.php');
+
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Emails");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+//<<<<<customview>>>>>
+
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+
+global $mbox;
+$mbox = @imap_open("\{$imapServerAddress/imap}$mailbox", $login_username, $secretkey) or die("Connection to server failed");
+
+function SureRemoveDir($dir) {
+   if(!$dh = @opendir($dir)) return;
+   while (($obj = readdir($dh))) {
+     if($obj=='.' || $obj=='..') continue;
+     if (!@unlink($dir.'/'.$obj)) {
+         SureRemoveDir($dir.'/'.$obj);
+     } else {
+         $file_deleted++;
+     }
+   }
+   if (@rmdir($dir)) $dir_deleted++;
+}
+if($_REQUEST["delete_msg"]) {
+	imap_delete($mbox, $_REQUEST["delete_msg"]);
+}
+if($_REQUEST["undelete_msg"]) {
+	imap_undelete($mbox, $_REQUEST["undelete_msg"]);
+}
+if($_REQUEST["expunge"]) {
+	imap_expunge($mbox);
+	$save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
+	$user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
+	SureREmoveDir($user_dir);
+}
+if($_REQUEST["set_flag"]) {
+	$id=$_REQUEST["mailid"];
+	$status=imap_setflag_full($mbox,$id,"\\".$_REQUEST["set_flag"]);
+}
+if($_REQUEST["clear_flag"]) {
+	$id=$_REQUEST["mailid"];
+	$status=imap_clearflag_full($mbox,$id,"\\".$_REQUEST["clear_flag"]);
+}
+$headers = @imap_headers($mbox);
+$numEmails = sizeof($headers);
+
+if(!isset($start_message) || $start_message=="") {$start_message=$numEmails;}
+if(isset($_REQUEST["start"]) && $_REQUEST["viewname"]=="20") {
+	if($_REQUEST["start"] == "" || ($_REQUEST["start"] == 1 && !$_REQUEST["allflag"] == "All")) {
+		$endMsg=$start_message-50;
+	} elseif ($_REQUEST["allflag"] == "All" && isset($_REQUEST["start"])) {
+		$endMsg=1;
+	} else {
+		$num=$_REQUEST["start"];
+		$count=($numEmails)-($num*50);
+		$start_message=$count;
+		$endMsg=$start_message-50;
+	}
+} else {
+	$endMsg=$start_message-50;
+}
+if($numEmails>=50 && !$_REQUEST["allflag"] == "All")
+	$c=50;
+else
+	$c=$numEmails;
+
+$overview = @imap_fetch_overview($mbox, "$endMsg:$start_message", 0);
+
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("MODULE","Webmails");
+$smarty->assign("SINGLE_MOD",'Webmails');
+$smarty->assign("BUTTONS",$other_text);
+$smarty->assign("CATEGORY","My  Home Page");
+?>
+</td>
+</table>
+</td></tr>
+</table>
+<!-- MAIN MSG LIST TABLE -->
+<table width="100%" cellpadding="2" cellspacing="0" align="center" border="0" class=""><tr><td>
+<?
+	$navigation_array = getNavigationValues($_REQUEST["start"], $numEmails, $c);
+
+$mails = array();
+if (is_array($overview)) {
+   foreach ($overview as $val) {
+	$mails[$val->msgno] = $val;
+   }
+}
+
+$listview_entries = array();
+$listview_header = array("","Flags","","Subject","","Date","","From","","Del","Reply");
+$smarty->assign("LISTHEADER", $listview_header);
+
+require_once("modules/Webmails/MailParse.php");
+if($numEmails == 0)
+	$listview_entries[0][] = '<td colspan="10" width="100%" align="center"><b>No Emails In This Folder</b></td>';
+else {
+//echo '<script>alert("'.($c).'");</script>';
+$i=0;
+while ($i<$c) {
+  $num = $mails[$start_message]->msgno;
+  $flags='<table border=0><tr>';
+
+  // TODO: scan the current db tables to find a
+  // matching email address that will make a good
+  // candidate for record_id
+  // this module will also need to be able to associate to any entity type
+  $record_id='';
+
+  // Let's pre-build our URL parameters since it's too much of a pain not to
+  $detailParams = 'record='.$record_id.'&mailbox='.$mailbox.'&mailid='.$mails[$start_message]->msgno.'&parenttab=My%20Home%20Page';
+  $defaultParams = 'parenttab=My%20Home%20Page&mailbox='.$mailbox;
+
+  // Attachment Icons
+  if(getAttachmentDetails($start_message,$mbox))
+	$flags.='<td><img src="modules/Webmails/images/stock_attach.png" border="0" width="14" height="14"></td>';
+  else
+	$flags.='<td width="15px" heigh="15px">&nbsp;</td>';
+
+  // read/unread/forwarded/replied
+  if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
+  	$flags.='<td><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="14" height="14"></a></td> ';
+  elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/RE:/i",$mails[$start_message]->subject))
+	$flags.='<td><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="12" height="12"></td>';
+  elseif (preg_match("/fw:/i",$mails[$start_message]->subject))
+	$flags.='<td><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="13" height="13"></td>';
+  else
+  	$flags.='<td><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="11" height="11"></a></td> ';
+
+  // Add to Vtiger
+  if($mails[$start_message]->flagged)
+	$flags.='<td><a href="index.php?module=Webmails&action=index&clear_flag=Flagged&mailid='.$mails[$start_message]->msgno.'&'.$defaultParams.'"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11"></a></td>';
+  else 
+	$flags.='<td><a href="index.php?module=Webmails&action=index&set_flag=Flagged&mailid='.$mails[$start_message]->msgno.'&mailbox='.$mailbox.'&'.defaultParams.'" width="100%"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11"></a></td>';
+
+  $flags.='</tr></table>';
+
+  if($mails[$start_message]->subject=="")
+	$mails[$start_message]->subject="(No Subject)";
+
+  $tmp=imap_mime_header_decode($mails[$start_message]->from);
+  $from = $tmp[0]->text;
+  $listview_entries[$num] = array();
+
+
+  if ($mails[$start_message]->deleted) {
+	$listview_entries[$num][0] = '<td nowrap>'.$flags.'</td>';
+        $listview_entries[$num][1] = '<td align="left" width="50%"><s><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'">'.$mails[$start_message]->subject.'</a></s></td>';
+        $listview_entries[$num][2] = '<td align="left" width="20%" nowrap><s>'.$mails[$start_message]->date.'</s></td>';
+        $listview_entries[$num][3] = '<td align="left" width="25%"><s>'.$from.'</s></td>';
+  } elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
+	$listview_entries[$num][0] = '<td nowrap>'.$flags.'</td>';
+        $listview_entries[$num][1] = '<td align="left" width="50%"><b><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'">'.$mails[$start_message]->subject.'</a></b></td>';
+        $listview_entries[$num][2] = '<td align="left" width="20%" nowrap><b>'.$mails[$start_message]->date.'</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
+        $listview_entries[$num][3] = '<td align="left" width="25%"><b>'.$from.'</b></td>';
+  } else {
+	$listview_entries[$num][0] = '<td nowrap>'.$flags.'</td>';
+        $listview_entries[$num][1] = '<td align="left" width="50%"><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'">'.$mails[$start_message]->subject.'</a></td>';
+        $listview_entries[$num][2] = '<td align="left" width="20%" nowrap>'.$mails[$start_message]->date.'</td>';
+        $listview_entries[$num][3] = '<td align="left" width="25%">'.$from.'</td>';
+  }
+	if($mails[$start_message]->deleted)
+  		$listview_entries[$num][4] = '<td nowrap align="center"><a href="index.php?module=Webmails&action=index&undelete_msg='.$mails[$start_message]->msgno.'&'.$defaultParams.'"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>&nbsp;';
+	else
+  		$listview_entries[$num][4] = '<td nowrap align="center"><a href="index.php?module=Webmails&action=index&delete_msg='.$mails[$start_message]->msgno.'&'.$defaultParams.'"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>&nbsp;';
+	$listview_entries[$num][5] = '<a href="index.php?module=Emails&action=EditView&mailid='.$mails[$start_message]->msgno.'&'.$defaultParams.'"><img src="modules/Webmails/images/stock_mail-reply.png" alt="reply" width="14" height="14"  border="0"></a>&nbsp;</td></tr>';
+$i++;
+$start_message--;
+}
+}
+$smarty->assign("LISTENTITY", $listview_entries);
+?>
+  </table>
+ </td></tr>
+</table>
+<?
+$navigationOutput = getTableHeaderNavigation($navigation_array,"&".$defaultParams,"Webmails","index",$viewid);
+$navigationOutput .= '<td size="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="right"><a href="index.php?module=Webmails&action=index&'.$defaultParams.'">Check for new e-Mails</a>
+</td>';
+$list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
+sort($list);
+if (is_array($list)) {
+	$boxes = '<select name="mailbox" onchange="changeMbox(this)">';
+        foreach ($list as $key => $val) {
+		if (preg_match("/".$_REQUEST["mailbox"]."/",$val->name)) {
+		//if (preg_match("/".$_REQUEST["mailbox"]."/",$val->name)) {
+         		$boxes .= '<option value="'.$val->name.'" SELECTED>'.$val->name;
+		} else
+         		$boxes .= '<option value="'.$val->name.'">'.$val->name;
+ 	}
+	$boxes .= '</select>';
+}
+$navigationOutput .= "<td size='10%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td align='right'><a href='index.php?action=index&module=Webmails&expunge=1&".$defaultParams."'>Expunge Mailbox</a></td>";
+$navigationOutput .= "<td size='100%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;". preg_replace(array("/\{.*?\}/i"),array(""),$boxes)."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+$navigationOutput .= '<td align="right">Viewing Messages: <b>'.($start_message+$c).'</b> to <b>'.$start_message.'</b> ('.$numEmails.' Total)</td>';
+
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->display("ListView.tpl");
+imap_close($mbox);
+?>

@@ -1,0 +1,22 @@
+&lt;style type=&quot;text/css&quot;&gt;
+BODY { background: url(&quot;http://crm.fosslabs.com/themes/fosslabs/images/mail_bg.png&quot;) }
+&lt;/style&gt;
+&lt;a href=&quot;http://fosslabs.com&quot;&gt;&lt;img width=&quot;300&quot; height=&quot;69&quot; border=&quot;0&quot; src=&quot;http://crm.fosslabs.com/themes/fosslabs/images/mail_logo.jpg&quot; alt=&quot;FOSS Labs&quot; /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;
+Hello $contacts_firstname $contacts_lastname,&lt;br /&gt;
+        We are planning a system upgrade that will start at
+&lt;strong&gt;DATE&lt;/strong&gt;.  Please let us know if you have any questions.
+&lt;br&gt;
+Sincerely,
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+The Foss Labs Engineering Team&lt;br&gt;
+office: 866-303-1414&lt;br&gt;
+fax: 888-254-6208&lt;br&gt;
+&lt;br /&gt;
+-------&lt;br&gt;
+&lt;small&gt;
+This message is sent by the Foss Labs engineering team to keep our
+customers informed about system status and security updates.  If you
+would like this message sent to a different person in your company or
+think you received this message in error, please contact
+&lt;a href=&#039;mailto:support@fosslabs.com&#039;&gt;Support&lt;/a&gt;
+&lt;/small&gt;
