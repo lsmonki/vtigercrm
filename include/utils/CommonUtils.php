@@ -1236,6 +1236,12 @@ function mkdirs($dir, $mode = 0777, $recursive = true)
 		return mkdir($dir, $mode);
 	}
 	return FALSE;
+
 }
-										    
+function DefHomeView()
+{
+		global $adb;
+		global $current_user;
+		$query="select defhomeview from users where id = ".$current_user->id;
+		$result=$adb->query($query);						$defaultview=$adb->query_result($result,0,'defhomeview');							return $defaultview;	}
 ?>
