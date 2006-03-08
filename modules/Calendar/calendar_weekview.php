@@ -165,6 +165,94 @@
 	     for ($column=0;$column<=6;$column++)
 	     {
 		     $next = NextDay($ts);
+		     $dd->setDateTimeTS($next);
+		     $d = $dd->getDate();
+		     $tref = Date("Ymd",$next);
+		     $dinfo = GetDaysInfo($next);
+
+		     $from =  new DateTime();
+		     $to =  new DateTime();
+		     $from->setDateTimeTS($next - 12 * 3600);
+		     $to->setDateTimeTS($next - 12 * 3600);
+		     $this->pref->callist = array();
+		     appointment::readCal($this->pref,$from,$to);
+		     //start
+
+		     for ($i = -1 ; $i < 24 ; $i++ ) {
+			     $table[$column][$i] = array();
+		     }
+		     foreach ($this->pref->callist as $idx => $xx) {
+			     if ( ! $this->pref->callist[$idx]->inside($from)) {
+				     continue;
+		             }
+			     if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]->state == 2) ) {
+		             	     continue;
+			     }
+			     if ( $this->pref->callist[$idx]->gettype() == "note" ) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     if ( $this->pref->callist[$idx]->gettype() == "watchlist" ) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     if ( $this->pref->callist[$idx]->gettype() == "task" ) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     if ( $this->pref->callist[$idx]->gettype() == "reminder" ) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     if ( $this->pref->callist[$idx]->t_ignore == 1) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     if ( ($this->pref->callist[$idx]->s_out == 1) && ($this->pref->callist[$idx]->e_out == 1) ) {
+				     $table[$column][-1][] = &$this->pref->callist[$idx];
+				     $rowspan[$column][-1][] = 1;
+				     continue;
+			     }
+			     $x1 = Date("G",$this->pref->callist[$idx]->start->getTimeStamp());
+			     $x2 = Date("G",$this->pref->callist[$idx]->end->getTimeStamp());
+
+			     if ( $this->pref->callist[$idx]->s_out == 1 ) {
+				     $x1 = 0;
+			     }
+			     if ( $this->pref->callist[$idx]->e_out == 1 ) {
+				     $x2 = 23;
+			     }
+# find a free position
+		     	     $pos = -1;
+		             $found = false;
+			     while ( $found == false ) {
+				     $found = true;
+				     $pos ++;
+				     for ( $i = $x1; $i <= $x2 ; $i++ ) {
+					     if (isset($table[$column][$i][$pos]) ) {
+						     $found = false;
+						     continue;
+					     }
+				     }
+			     }
+			     for ( $i = $x1; $i <= $x2 ; $i++ ) {
+				     if ( $i == $x1 ) {
+					     $table[$column][$i][$pos] = &$this->pref->callist[$idx];
+					     $rowspan[$column][$i][$pos] = ($x2 - $x1 +1);
+				     } else {
+					     $table[$column][$i][$pos] = -1;
+				     }
+			     }
+		     }
+		     for ($i = -1 ; $i < 24 ; $i++ ) {
+			     $maxcol[$i] = max($maxcol[$i],count($table[$column][$i]));
+		     }
+		     //end
 		     echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>";
 		     echo strftime("%d - %a",$ts);
 		     echo "</td>";
@@ -176,10 +264,8 @@
      {
 	     $ts=$tempts;
 	     echo "<tr>";
-	     for ($column=0;$column<=7;$column++)
-	     {
-		$next = NextDay($ts);
-		if ($column==0)
+	        $next = NextDay($ts);
+	        for ($column=1;$column<=1;$column++)
 		{
 		     echo "<td  style=\"background-color:#eaeaea; border-top:1px solid #efefef;height:40px\" width=12% valign=top>";
 		     if($row==0) echo "12am";
@@ -188,63 +274,38 @@
 		     if($row>12 && $row<24) echo ($row-12)."pm";
 		     echo "</td>";
 		}
-		else
+		for ($column=0;$column<=6;$column++)
 		{
-		     $dd->setDateTimeTS($ts);
-                     $d = $dd->getDate();
-                     $tref = Date("Ymd",$ts);
-                     $dinfo = GetDaysInfo($ts);
-
-		     $from =  new DateTime();
-		     $to =  new DateTime();
-		     $from->setDateTimeTS($ts - 12 * 3600);
-		     $to->setDateTimeTS($ts - 12 * 3600);
-#$to->addDays(7);
-		     $this->pref->callist = array();
-		     appointment::readCal($this->pref,$from,$to);
-
 		     echo "<td onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
 
-		        $hastable = false;
-			foreach ($this->pref->callist as $idx => $x) {
+		     for ($c = 0 ; $c < $maxcol[$row] ; $c++ ) {
+			     if ( isset ( $table[$column][$row][$c] ) ) {
+				     if ( is_object ( $table[$column][$row][$c] ) ) {
+					     $color = "";
+					     $username=$table[$column][$row][$c]->creator;
+					     if ($username!=""){
+						     $query="SELECT cal_color FROM users where user_name = '$username'";
 
-                          //the correct day
-                         if ( ! $this->pref->callist[$idx]->inside($dd) ) {
-                           continue;
-                         }
-                         //if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
-                           //continue;
-                         //}
-                         // do not show finished tasks
-                         if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]
-->state == 2) ) {
+						     $result=$adb->query($query);
+						     if($adb->getRowCount($result)!=0){
+							     $res = $adb->fetchByAssoc($result, -1, false);
+							     $usercolor = $res['cal_color'];
+							     $color="style=\"background: ".$usercolor.";\"";
+						     }
+					     }
+					     echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" class=\"calEventNormal\" width=100%>\n";
+					     echo $table[$column][$row][$c]->formatted();
+					     echo " </table>";//</td>\n";
+				     } else if ( $table[$column][$row][$c] = -1 ) {
+					     # SKIP occupied by rowspan
+				     }
+			     }
+		     }
 
-                           continue;
-                         }
-                        if ( !$hastable )
-                        {
-
-                                echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
-                                $hastable = true;
-                        }
-                        else
-                        {
-                                echo "  <tr><td class=\"eventsep\" colspan=\"3\"><img src=\"". $image_path ."b
-lank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
-
-                        }
-			$this->pref->callist[$idx]->formatted();
-
-			}
-			if ( $hastable ) {
-			 echo " </table>\n";
-			}
-
-		     echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  width=10% class=\"small\" id=$row.\" pm\"><br>";
+   		     echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  width=10% class=\"small\" id=$row.\" pm\"><br>";
 		     echo "+";
 		     echo"</div></td>";
 		     $ts=$next;
-		}
 	      }
 	     echo "</tr>";
      }
