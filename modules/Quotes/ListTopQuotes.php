@@ -123,7 +123,7 @@ function getTopQuotes()
 	}
 
 
-	$title=array('myTopInvoices.gif',$current_module_strings['LBL_MY_TOP_QUOTE'],'home_mytopinv');
+	$title=array('TopOpenQuotes.gif',$current_module_strings['LBL_MY_TOP_QUOTE'],'home_mytopquote');
 	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
 
