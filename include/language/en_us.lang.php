@@ -796,17 +796,19 @@ $app_list_strings = Array(
 
 				, 'Potentials'=>'Potentials'
 
+				, 'Campaigns'=>'Campaigns'
+
 				, 'Notes'=>'Notes'
 
 				, 'Emails'=>'Emails'
 
 				, 'Activities'=>'Activities'
 
-				, 'MessageBoard'=>'MessageBoard'
-
 				, 'Products'=>'Products'
 
 				, 'HelpDesk'=>'HelpDesk'
+
+				, 'Faq'=>'Faq'
 
 				, 'Calendar'=>'Calendar'
 
@@ -816,7 +818,7 @@ $app_list_strings = Array(
 
 				, 'Invoice'=>'Invoice'
 
-				, 'Rss'=>'RSS'
+				, 'Rss'=>'Rss'
 				
 				, 'Reports'=>'Reports'
 				
@@ -825,6 +827,8 @@ $app_list_strings = Array(
 				, 'PriceBooks'=>'PriceBooks'
 
 				, 'SalesOrder'=>'SalesOrder'
+
+				, 'Portal'=>'Portal'
 				
 				),
 
