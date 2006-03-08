@@ -87,3 +87,40 @@ function fnUnWipeLay(obj,inner)
 }
 
 
+
+function fnSlide1(obj,inner)
+{
+  var buff = document.getElementById(obj).width;
+  closeLimit = buff.substring(0,buff.length);
+  menu_max = eval(closeLimit);
+  var tagName = document.getElementById(inner);
+  document.getElementById(obj).style.width=0 + "px"; menu_i=0;
+  if (tagName.style.display == 'none')
+	  fnexpanLay1(obj,inner);
+  else
+	fncloseLay1(obj,inner);
+ }
+
+function fnexpanLay1(obj,inner)
+{
+     document.getElementById(obj).style.display = 'block';
+   var setText = eval(closeLimit) - 1;
+   if (menu_i<=eval(closeLimit))
+   {
+	    if (menu_i>setText){document.getElementById(inner).style.display='block';}
+       document.getElementById(obj).style.width=menu_i + "px";
+	   setTimeout(function() { fnexpanLay1(obj,inner); },5);
+        menu_i=menu_i+14;   
+   }
+}
+
+ function fncloseLay1(obj,inner)
+{
+  if (menu_max >= eval(openLimit))
+   {
+	    if (menu_max<eval(closeLimit)){document.getElementById(inner).style.display='none';}
+       document.getElementById(obj).style.width=menu_max +"px";
+	  setTimeout(function() { fncloseLay1(obj,inner); }, 5);
+       menu_max = menu_max -14;
+   }
+}
