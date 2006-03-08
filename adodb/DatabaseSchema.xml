@@ -74,6 +74,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<field name="defhomeview" type="C" size="100"> </field>
 	<opt>Type=InnoDB</opt>
 		<index name="idx_user_name">
 			<col>user_name</col>
