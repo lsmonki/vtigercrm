@@ -49,7 +49,7 @@ require_once("include/calculator/Calc.php");
 
 
 global $currentModule;
-
+global $app_list_strings;
 global $moduleList;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -73,7 +73,7 @@ if ($current_user->first_name != '') $smarty->assign("CURRENT_USER", $current_us
 else $smarty->assign("CURRENT_USER", $current_user->user_name);
 
 $smarty->assign("CURRENT_USER_ID", $current_user->id);
-
+$smarty->assign("MODULELISTS",$app_list_strings['moduleList']);
 $smarty->assign("CATEGORY",getParentTab());
 $smarty->assign("CALC",get_calc($image_path));
 
