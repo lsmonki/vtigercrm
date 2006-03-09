@@ -7139,7 +7139,7 @@ E</constraint>
 			<DEFAULT value="000.000.000.000"/>
 			<NOTNULL/>
 	</field>
-	<field name="module" type="C">
+	<field name="module" type="C" size="50">
 			<DEFAULT value=""/>
 			<NOTNULL/>
 	</field>
