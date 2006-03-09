@@ -195,7 +195,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	</tr>
 
        <tr>
-        <td colspan="3" background="blue/themes/images/Home_15.gif" height="18"><img src="blue/themes/images/Home_15.gif">&nbsp;</td>
+        <td colspan="3" background="{$IMAGE_PATH}Home_15.gif" height="18">&nbsp;</td>
       </tr>
 	  
     </table></td>
