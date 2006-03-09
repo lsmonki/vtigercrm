@@ -55,7 +55,7 @@
 			  <tr id="tabs">
 			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
 			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab1" id="current"><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></a></td>
-				    <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab2"><b>{$UMOD.LBL_USER_MORE_INFN}</b</a></td>
+				    <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab2"><b>{$UMOD.LBL_USER_MORE_INFN}</b></a></td>
 				    <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab3"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></a></td>
 				    <td class="dvtTabCache" nowrap="nowrap" width="10">&nbsp;</td>
 			  </tr>
@@ -70,7 +70,7 @@
 				<tr><td align="left">
 				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
   		    	<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
+				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_INFORMATION}</b></td>
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_NAME} </td>
@@ -128,7 +128,7 @@
 				<tr><td align="left">
 				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
 				<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
+				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_TITLE}</td>
@@ -184,7 +184,7 @@
 			    <tr><td align="left">
 				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
 				<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_INFORMATION}</b></td>
+				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADDRESS}</td>
