@@ -15,7 +15,7 @@ $the_calc = <<<EOQ
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:0;margin-left:0;" align="center">
   <tr>
-    <td class="calcBg">
+    <td>
         <table border="0" cellpadding="2" cellspacing="2">
 		<form name="calculator">
           <tr style="height:5">
