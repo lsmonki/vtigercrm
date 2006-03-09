@@ -47,7 +47,7 @@ require_once("include/utils/utils.php");
 
 
 global $currentModule;
-
+global $app_list_strings;
 global $moduleList;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -87,4 +87,4 @@ require_once('include/Menu.php');
 
 global $module_menu;
 $smarty->display("Header.tpl");
-?>
+?><script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
