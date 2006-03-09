@@ -26,6 +26,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/CommonUtils.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -164,6 +165,7 @@ $current_module_strings = return_module_language($current_language, 'Calendar');
 $t=Date("Ymd");
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("HOMEDETAILS",$home_values);
+$smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->display("HomePage.tpl");
 
 function getLoginHistory()
