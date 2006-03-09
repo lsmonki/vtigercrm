@@ -160,10 +160,16 @@
      $tempts=$ts;
      for ($row=1;$row<=1;$row++)
      {
-	     echo "<tr>";
-	     echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>&nbsp;</td>";
-	     for ($column=0;$column<=6;$column++)
+	     for ($column=0;$column<=7;$column++)
 	     {
+		     if($column==0)
+		     {
+			echo "<tr>";
+			echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>&nbsp;</td>";
+		     }
+		     else
+		     {
+			     
 		     $next = NextDay($ts);
 		     $dd->setDateTimeTS($next);
 		     $d = $dd->getDate();
@@ -187,36 +193,6 @@
 		             }
 			     if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]->state == 2) ) {
 		             	     continue;
-			     }
-			     if ( $this->pref->callist[$idx]->gettype() == "note" ) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
-			     }
-			     if ( $this->pref->callist[$idx]->gettype() == "watchlist" ) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
-			     }
-			     if ( $this->pref->callist[$idx]->gettype() == "task" ) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
-			     }
-			     if ( $this->pref->callist[$idx]->gettype() == "reminder" ) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
-			     }
-			     if ( $this->pref->callist[$idx]->t_ignore == 1) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
-			     }
-			     if ( ($this->pref->callist[$idx]->s_out == 1) && ($this->pref->callist[$idx]->e_out == 1) ) {
-				     $table[$column][-1][] = &$this->pref->callist[$idx];
-				     $rowspan[$column][-1][] = 1;
-				     continue;
 			     }
 			     $x1 = Date("G",$this->pref->callist[$idx]->start->getTimeStamp());
 			     $x2 = Date("G",$this->pref->callist[$idx]->end->getTimeStamp());
@@ -257,6 +233,7 @@
 		     echo strftime("%d - %a",$ts);
 		     echo "</td>";
 		     $ts = $next;
+		     }
 	     }
 	     echo "</tr>";
      }
