@@ -118,6 +118,7 @@ function create_default_users()
  	// added by jeri to populate default image and tagcloud for admin	
 	$user->imagename = 'admin.jpeg';
         $user->tagcloud = 'http://www.tagcloud.com/cloud/js/mycloud79/default/50';	
+	$user->defhomeview = 'home_myaccount';
         //added by philip for default default admin emailid
 	if($admin_email == '')
 	$admin_email ="admin@administrator.com";
