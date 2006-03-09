@@ -117,8 +117,8 @@ $smarty->assign("YAHOO_ID", $focus->yahoo_id);
 $smarty->assign("DATE_FORMAT", $focus->date_format);
 if(isset($focus->imagename) && $focus->imagename!='')
 {
-	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(/themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
-	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;'><img src='themes/images/scaler_slider.gif'></div>
+	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
+	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
 	</div><script language='JavaScript' type='text/javascript' src='include/js/prototype.js'></script>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
