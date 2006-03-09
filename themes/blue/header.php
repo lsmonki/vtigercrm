@@ -44,10 +44,12 @@ require_once("data/Tracker.php");
 
 require_once("include/utils/utils.php");
 
+require_once("include/calculator/Calc.php");
+
 
 
 global $currentModule;
-global $app_list_strings;
+
 global $moduleList;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -64,8 +66,6 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 
 $smarty->assign("MODULE_NAME", $currentModule);
 
-$smarty->assign("MODULELISTS", $app_list_strings['moduleList']);
-
 $smarty->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
 
 if ($current_user->first_name != '') $smarty->assign("CURRENT_USER", $current_user->first_name);
@@ -75,6 +75,7 @@ else $smarty->assign("CURRENT_USER", $current_user->user_name);
 $smarty->assign("CURRENT_USER_ID", $current_user->id);
 
 $smarty->assign("CATEGORY",getParentTab());
+$smarty->assign("CALC",get_calc($image_path));
 
 if (is_admin($current_user)) $smarty->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'>".$app_strings['LBL_SETTINGS']."</a>");
 
@@ -87,4 +88,4 @@ require_once('include/Menu.php');
 
 global $module_menu;
 $smarty->display("Header.tpl");
-?><script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
+?>

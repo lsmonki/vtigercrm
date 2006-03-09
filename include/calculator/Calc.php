@@ -14,13 +14,7 @@ $the_calc = <<<EOQ
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:0;margin-left:0;" align="center">
-  <!--tr>
-    <!-- td width="7" height="6"><img src="$image_path/calc_top_left.gif"></td -->
-    <!-- td height="6" class="calcBg"><img src="$image_path/blank.gif"></td -->
-    <!-- td width="8" height="6"><img src="$image_path/calc_top_right.gif"></td -->
-  </tr -->
   <tr>
-    <!-- td class="calcBg" width="7"></td -->
     <td class="calcBg">
         <table border="0" cellpadding="2" cellspacing="2">
 		<form name="calculator">
@@ -29,31 +23,16 @@ $the_calc = <<<EOQ
           </tr>
           <tr>
             <td colspan=6><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <!-- tr>
-                  <!-- td width="3" height="3"><img src="$image_path/calc_res_tl.gif"></td -->
-                  <!-- td height="3" background="$image_path/calc_res_tc.gif"><img src="$image_path/blank.gif"></td -->
-                  <!--td width="3" height="3"><img src="$image_path/calc_res_tr.gif"></td -->
-                </tr -->
                 <tr>
-                  <!--td width="3"class="calcResult"><img src="$image_path/blank.gif"></td--><!-- background="$image_path/calc_res_ml.gif" -->
                   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td width="10%"><input type="text" class="calcMem" name="mem" value="M" readonly></td>
                         <td width="90%"><input type="text" class="calcResult" name="answer" maxlength="30" onChange="CheckNumber(this.value)" readonly></td>
                       </tr>
                     </table></td>
-                  <!-- td width="3" background="$image_path/calc_res_mr.gif"><img src="$image_path/blank.gif"></td -->
                 </tr>
-                <!-- tr>
-                  <!-- td width="3" height="3"><img src="$image_path/calc_res_bl.gif"></td -->
-                  <!-- td height="3" background="$image_path/calc_res_bc.gif"><img src="$image_path/blank.gif"></td -->
-                  <!-- td width="3" height="3"><img src="$image_path/calc_res_br.gif"></td -->
-                </tr -->
               </table></td>
           </tr>
-          <!--<tr style="height:5">
-            <td></td>
-          </tr>-->
           <tr>
             <td colspan="3"><!-- div align="center"><img src="$image_path/calc_logo.gif" width="80" height="17"></div--></td>
             <td width="25"> <input type="button" name="CE" class="calcCancBtn" value="CE" onClick="CECalc(); return false;">
@@ -99,13 +78,7 @@ $the_calc = <<<EOQ
 		   </form>
         </table>
      </td>
-    <!-- td width="8" background="$image_path/calc_middle_right.gif"></td -->
   </tr>
-  <!-- tr>
-    <!-- td width="7" height="8"><img src="$image_path/calc_bottom_left.gif"></td -->
-    <!-- td height="8" background="$image_path/calc_bottom_center.gif"><img src="$image_path/blank.gif"></td -->
-    <!-- td width="8" height="8"><img src="$image_path/calc_bottom_right.gif"></td -->
-  </tr -->
 </table>
 EOQ;
 
