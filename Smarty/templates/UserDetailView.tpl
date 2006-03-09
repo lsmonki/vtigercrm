@@ -234,6 +234,8 @@ for(var i = 1; i < contents.length; i++)
 {ldelim}
 	contents[i].style.display = 'none';
 {rdelim}
+//to set the slider to the default size
+document.getElementById('handle1').style.left='45px';
 </script>
 </div>
 </td></tr>
