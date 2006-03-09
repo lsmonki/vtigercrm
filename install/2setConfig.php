@@ -100,10 +100,10 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
   if (isset($_REQUEST['db_name']))
     $db_name = $_REQUEST['db_name'];
-  elseif (isset($dbconfig['db_name']))
+  elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
     $db_name = $dbconfig['db_name'];
   else
-    $db_name = 'vtigercrm';
+    $db_name = 'vtigercrm4_2_4';
 
   !isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 
@@ -143,7 +143,7 @@ else {
   !isset($_REQUEST['db_username']) ? $db_username = $mysql_username : $db_username = $_REQUEST['db_username'];
   !isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
   */
-  !isset($_REQUEST['db_name']) ? $db_name = "vtigercrm" : $db_name = $_REQUEST['db_name'];
+  !isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_2_4" : $db_name = $_REQUEST['db_name'];
   !isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
   !isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
   !isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
