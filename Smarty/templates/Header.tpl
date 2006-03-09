@@ -277,8 +277,8 @@ setInterval("Announcement_rss()",5000)
        {/foreach}
        </div>
        </td>
-       <td width="8" valign="top" onMouseOver="fnSlide1('slidemenu','slide')">
-       <div id="mnuKey">J<br />U<br />M<br />P<BR /><BR />T<BR />O</div>
+       <td width="8" valign="top" onClick="fnSlide1('slidemenu','slide')">
+       <div id="mnuKey"><br />G<br />O<br /><br />T<BR />O</div>
        </td>
        </tr>
 </table>
