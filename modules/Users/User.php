@@ -90,6 +90,7 @@ class User extends SugarBean {
 	var $lead_view;
 	var $tagcloud;
 	var $imagename;
+	var $defhomeview;
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -130,6 +131,7 @@ class User extends SugarBean {
 		,"lead_view"
 		,"tagcloud"
 		,"imagename"
+		,"defhomeview"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");
