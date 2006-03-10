@@ -2145,9 +2145,19 @@ title';
 	(7,27,2),
     	(7,8,3)");
 
-	$this->db->query("insert into portal values(1,'VtigerCRM','http://vtiger.com/',0)");	
+		//portal feeds
+		$this->db->query("insert into portal values(1,'VtigerCRM','http://vtiger.com/',0)");	
+		$this->db->query("insert into portal values(2,'Zoho','http://www.zoho.com/',1)");	
+		$this->db->query("insert into portal values(3,'Search','http://www.lycos.com/',2)");	
+		$this->db->query("insert into portal values(4,'Yahoo Finance','http://finance.yahoo.com/',3)");
 
-	       	}
+		//rss feeds
+
+		$this->db->query("insert into rss values(1,'http://finance.yahoo.com/rss/headline?s=IBM','IBM Finblog',0,1,'IBM Finance')");	
+		$this->db->query("insert into rss values(2,'http://finance.yahoo.com/rss/headline?s=HPQ','HP Blog',0,1,'HP Finance')");
+		$this->db->query("insert into rss values(3,'http://finance.yahoo.com/rss/headline?s=GM','GM blog',0,0,'GM Finance')");	
+
+		}
 	
 	
 
