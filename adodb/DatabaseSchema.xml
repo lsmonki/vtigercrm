@@ -4474,6 +4474,16 @@
                 </field>
                 <field name="mail_servername" type="C" size="50">
                 </field>
+                <field name="box_refresh" type="I" size="10">
+                </field>
+                <field name="mails_per_page" type="I" size="10">
+                </field>
+                <field name="ssltype" type="C" size="50">
+                </field>
+                <field name="sslmeth" type="C" size="50">
+                </field>
+                <field name="showbody" type="C" size="10">
+                </field>
                 <field name="status" type="C" size="10">
                 </field>
                 <field name="set_default" type="I" size="2">
