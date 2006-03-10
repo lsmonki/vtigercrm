@@ -60,7 +60,29 @@
 	<tr><td colspan="2" class="formSecHeader">{MOD.LBL_MAIL_SERVER_INFO}</td></tr>
   <tr> 
     <td width="30%" nowrap class="dataLabel">{MOD.LBL_MAIL_PROTOCOL}:</td>
-    <td align="left"> <input class="dataInput" type="radio" name="mailprotocol" value="POP" {POP_SELECT} {POP}/>&nbsp;{MOD.LBL_POP}<input class="dataInput" type="radio" name="mailprotocol" value="IMAP" {IMAP}/>&nbsp;{MOD.LBL_IMAP} 
+	<td><input class="dataInput" type="radio" name="mailprotocol" value="imap" {IMAP}/>&nbsp;{MOD.LBL_IMAP} 
+	<input class="dataInput" type="radio" name="mailprotocol" value="pop3" {POP3}/>&nbsp;{MOD.LBL_POP} 
+	<input class="dataInput" type="radio" name="mailprotocol" value="imap2" {IMAP2}/>&nbsp;IMAP2
+	<input class="dataInput" type="radio" name="mailprotocol" value="IMAP4" {IMAP4}/>&nbsp;IMAP4
+	<input class="dataInput" type="radio" name="mailprotocol" value="imap4rev1" {IMAP4R1}/>&nbsp;IMAP4-rev1
+    </td>
+  </tr>
+  <tr>
+    <td nowrap class="dataLabel"> SSL Options:</td>
+	<td><input class="dataInput" type="radio" name="ssltype" value="notls" {NOTLS} />&nbsp;No TLS
+	<input class="dataInput" type="radio" name="ssltype" value="tls" {TLS} />&nbsp; TLS
+    </td>
+  </tr>
+  <tr>
+    	<td nowrap class="dataLabel">Certificate Validations</td>
+	<td><input class="dataInput" type="radio" name="sslmeth" value="validate-cert" {VALIDATECERT} />&nbsp;Validate SSL Cert
+	<input class="dataInput" type="radio" name="sslmeth" value="novalidate-cert" {NOVALIDATECERT} />&nbsp;Don't Validate SSL Cert
+    </td>
+  </tr>
+  <tr>
+    	<td nowrap class="dataLabel">Show Body in "Quick View"</td>
+	<td><input class="dataInput" type="radio" name="showbody" value="yes" {SHOWBODY} />&nbsp;Yes (slower and marks all emails as "Seen")
+	<input class="dataInput" type="radio" name="showbody" value="no" {NOSHOWBODY} />&nbsp;No
     </td>
   </tr>
   <tr>
@@ -78,22 +100,40 @@
     <td align="left"><input class="dataInput" name="mail_servername" value="{SERVERNAME}" size="30" /> 
     </td>
   </tr>
-
 </table>
 </td>
 </tr>
 </table>
 <br>
-<!--table width="50%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr><td>
 <table width="100%" cellpadding="0" cellspacing="1" border="0">
   <tbody> 
-	<tr><td><input type="checkbox" name="accounttest">&nbsp;&nbsp;{MOD.LBL_TEST_SETTINGS}</td>
-	</tr>
- </table>
- </td>
+	<tr><td colspan="2" class="formSecHeader">Mail Preferences</td></tr>
+  <tr> 
+    <td width="30%" nowrap class="dataLabel">Refresh Timeout:</td>
+	<td>
+		<select name="box_refresh">
+			<option value="60000">1 minute
+			<option value="120000">2 minutes
+			<option value="240000">3 minutes
+			<option value="360000">4 minutes
+			<option value="480000">5 minutes
+		</select>
+	</td>
+  </tr>
+  <tr>
+    <td nowrap class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT> Emails per page:</td>
+    <td align="left"><input class="dataInput" name="mails_per_page" value="{MAILS_PER_PAGE}" size="10" /> 
+    </td>
+  </tr>
+    </td>
+  </tr>
+</table>
+</td>
 </tr>
-</table-->
+</table>
+<br>
 <br>
 <table width="65%" cellpadding="0" cellspacing="0" border="0" align="center"><tbody>
 	<tr>
@@ -104,7 +144,7 @@
 	</form>
 </table>
 {JAVASCRIPT}
-<a href=index.php?module=Settings&action=ListMailAccount>{MOD.LBL_LIST_MAIL_ACCOUNT}</a>
+<!-- <a href=index.php?module=Settings&action=ListMailAccount>{MOD.LBL_LIST_MAIL_ACCOUNT}</a> -->
 
 <!-- END: main -->
 

@@ -19,6 +19,11 @@ $mailprotocol=$_REQUEST['mailprotocol'];
 $server_username = $_REQUEST['server_username'];
 $server_password = $_REQUEST['server_password'];
 $mail_servername = $_REQUEST['mail_servername'];
+$box_refresh = $_REQUEST['box_refresh'];
+$mails_per_page = $_REQUEST['mails_per_page'];
+$ssltype = $_REQUEST["ssltype"];
+$sslmeth = $_REQUEST["sslmeth"];
+$showbody = $_REQUEST["showbody"];
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
@@ -29,12 +34,12 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 
 if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 {
-	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."' where account_id = ".$id;
+	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', showbody='".$showbody."' where account_id = '".$id."'";
 }
 else
 {
 	$account_id = $adb->getUniqueID("mail_accounts");
-	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."',1,0)";
+	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."',1,0,'".$box_refresh."','".$mails_per_page."', '".$ssltype."', '".$sslmeth."', '".$showbody."')";
 }
 
 $adb->query($sql);

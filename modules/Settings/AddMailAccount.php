@@ -29,7 +29,6 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/Settings/AddMailAccount.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("POP_SELECT", "CHECKED");
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
@@ -48,29 +47,42 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 			$xtpl->assign("SERVERPASSWORD", $temprow['mail_password']);
 			$xtpl->assign("SERVERNAME", $temprow['mail_servername']);
 			$xtpl->assign("RECORD_ID", $temprow['account_id']);
+			$xtpl->assign("BOX_REFRESH", $temprow['box_refresh']);
+			$xtpl->assign("MAILS_PER_PAGE", $temprow['mails_per_page']);
 			$xtpl->assign("EDIT", "TRUE");
+
+			if(strtolower($temprow['mail_protocol']) == "imap")
+				$xtpl->assign("IMAP", "CHECKED");
+			if(strtolower($temprow['mail_protocol']) == "imap2")
+				$xtpl->assign("IMAP2", "CHECKED");
+			if(strtolower($temprow['mail_protocol']) == "imap4")
+				$xtpl->assign("IMAP4", "CHECKED");
+			if(strtolower($temprow['mail_protocol']) == "imap4rev1")
+				$xtpl->assign("IMAP4R1", "CHECKED");
+			if(strtolower($temprow['mail_protocol']) == "pop3")
+				$xtpl->assign("POP3", "CHECKED");
+
+			if(strtolower($temprow['ssltype']) == "notls")
+				$xtpl->assign("NOTLS", "CHECKED");
+			if(strtolower($temprow['ssltype']) == "tls")
+				$xtpl->assign("TLS", "CHECKED");
+
+			if(strtolower($temprow['sslmeth']) == "validate-cert")
+				$xtpl->assign("VALIDATECERT", "CHECKED");
+			if(strtolower($temprow['sslmeth']) == "novalidate-cert")
+				$xtpl->assign("NOVALIDATECERT", "CHECKED");
+
+			if(strtolower($temprow['showbody']) == "yes")
+				$xtpl->assign("SHOWBODY", "CHECKED");
+			if(strtolower($temprow['showbody']) == "no")
+				$xtpl->assign("NOSHOWBODY", "CHECKED");
 		}
 	}
 }	
 
-/*$sql="select * from systems where server_type = 'email'";
-$result = $adb->query($sql);
-$mail_server = $adb->query_result($result,0,'server');
-$mail_server_username = $adb->query_result($result,0,'server_username');
-$mail_server_password = $adb->query_result($result,0,'server_password');
-*/
-
 $xtpl->assign("RETURN_MODULE","Settings");
 $xtpl->assign("RETURN_ACTION","index");
 $xtpl->assign("JAVASCRIPT", get_validate_record_js());
-/*if (isset($mail_server))
-	$xtpl->assign("MAILSERVER",$mail_server);
-if (isset($mail_server_username))
-	$xtpl->assign("USERNAME",$mail_server_username);
-if (isset($mail_server_password))
-	$xtpl->assign("PASSWORD",$mail_server_password);
-*/
 $xtpl->parse("main");
 $xtpl->out("main");
-
 ?>
