@@ -7120,7 +7120,7 @@ E</constraint>
 	</table>
 	
 	<table name="freetagged_objects">
-	<field name="tagg_id" type="I" size="20">
+	<field name="tag_id" type="I" size="20">
 		<NOTNULL/>
 		<DEFAULT value="0"/>
 		<KEY/>
