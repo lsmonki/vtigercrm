@@ -42,5 +42,6 @@ $smarty->assign("LIST_ENTRIES",$focus->getUserListViewEntries($navigation_array)
 $smarty->assign("USER_COUNT",$no_of_users);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("USER_IMAGES",getUserImageNames());
 $smarty->display("UserListView.tpl");
 ?>

@@ -1943,4 +1943,22 @@ function getUserImageName($id)
 }
 
 
+function getUserImageNames()
+{
+	global $adb;
+	global $log;
+	$query = "select imagename from users where deleted=0";
+	$result = $adb->query($query);
+	$image_name=array();
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		if($adb->query_result($result,$i,"imagename")!='')
+			$image_name[] = $adb->query_result($result,$i,"imagename");
+	}
+	$log->debug("Inside getUserImageNames.");
+	if(count($image_name) > 0)
+		return $image_name;
+}
+
+
 ?>

@@ -12,12 +12,25 @@
 <tr>
 <form name='EditView' method='POST' action='index.php'>
 <td align="left" width="50%"><input title='New User [Alt+N]' accessyKey='N' class='button' type='submit' name='button' value='New User' ></td>
+<td>
+{if $USER_IMAGES neq ''}
+<script language="JavaScript" type="text/javascript" src="include/js/xfade2.js"></script>
+<style type="text/css">@import url(modules/Users/fade.css);</style>
+<div id="outerimageContainer">
+<a href="#" onClick="document.getElementById('outerimageContainer').style.display='none'";>[X] Close</a>
+    <div id="imageContainer">
+{foreach item=imagename from=$USER_IMAGES}
+    <img style="display: block; opacity: 0.24;" src="test/user/{$imagename}" alt="{$imagename}" height="150" width="210">
+{/foreach}	
+	</div>
+</div>
+{/if}
+</td>
 <td align="center" width="25%">{$RECORD_COUNTS}</td>
-{$NAVIGATION}
-
+<td nowrap>{$NAVIGATION}</td>
 </tr>
 <tr><td colspan="4">&nbsp;</td></tr>
-<tr><td colspan="2"><div id="scrollTab">
+<tr><td colspan="4"><div id="scrollTab">
 <table width="100%"  border="0" cellspacing="0" cellpadding="5">
 <input type='hidden' name='module' value='Users'>
 <input type='hidden' name='action' value='EditView'>
