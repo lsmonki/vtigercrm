@@ -36,6 +36,12 @@ require_once('modules/PriceBooks/PriceBook.php');
 require_once('modules/Vendors/Vendor.php');
 require_once('modules/Faq/Faq.php');
 require_once('modules/HelpDesk/HelpDesk.php');
+require_once('modules/Notes/Note.php');
+require_once('modules/Quotes/Quote.php');
+require_once('modules/SalesOrder/SalesOrder.php');
+require_once('modules/PurchaseOrder/PurchaseOrder.php');
+require_once('modules/Invoice/Invoice.php');
+require_once('modules/Emails/Email.php');
 
 global $first_name_array;
 global $first_name_count;
@@ -88,8 +94,14 @@ function create_date()
 $account_ids = Array();
 $opportunity_ids = Array();
 $vendor_ids = Array();
+$contact_ids = Array();
 $product_ids = Array();
 $pricebook_ids = Array();
+$quote_ids = Array();
+$salesorder_ids = Array();
+$purchaseorder_ids = Array();
+$invoice_ids = Array();
+$email_ids = Array();
 
 // Determine the assigned user for all demo data.  This is the default user if set, or admin
 $assigned_user_name = "admin";
@@ -164,8 +176,9 @@ for($i = 0; $i < $company_name_count; $i++)
 	$account_ids[] = $account->id;
 
 //	$adb->println("PSD Account [".$account->id."] - ".$account_name);
-	
-	//Create new opportunities
+
+		
+//Create new opportunities
 	$opp = new Potential();
 
 	$opp->column_fields["assigned_user_id"] = $assigned_user_id;
@@ -303,7 +316,10 @@ for($i=0; $i<10; $i++)
 	$lead->column_fields["assigned_user_id"] = $assigned_user_id;
 	
 	$lead->column_fields["email"] = strtolower($lead->column_fields["firstname"])."_".strtolower($lead->column_fields["lastname"])."@company.com";
-
+	
+	$website = str_replace($whitespace, "", strtolower(ucfirst(strtolower($company_name_array[$i]))));
+        $lead->column_fields["website"] = "www.".$website.".com";
+	
 	$lead->column_fields["phone"] = create_phone_number();
 	$lead->column_fields["mobile"] = create_phone_number();
 	
@@ -466,7 +482,14 @@ for($i=0; $i<10; $i++)
 	"Error message: The file is damaged and could not be repaired.",
 	"A program is trying to access e-mail addresses you have stored in Outlook. Do you want to allow this? If this is unexpected, it may be a virus and you should choose No when trying to add Email to vitger CRM ",
 	"When trying to merge a template with a contact, First I was asked allow installation of ActiveX control. I accepted. After it appears a message that it will not be installed because it can't verify the publisher. Do you have a workarround for this issue ?",
-	" Error message - please close all instances of word before using the vtiger word plugin. Do I need to close all Word and Outlook instances first before I can reopen Word and sign in?"
+	" Error message - please close all instances of word before using the vtiger word plugin. Do I need to close all Word and Outlook instances first before I can reopen Word and sign in?",
+	"How to migrate data from previous versions to the latest version?",
+	"A program is trying to access e-mail addresses you have stored in Outlook. Do you want to allow this? If this is unexpected, it may be a virus and you should choose No when trying to add Email to vitger CRM ",
+	" Error message - please close all instances of word before using the vtiger word plugin. Do I need to close all Word and Outlook instances first before I can reopen Word and sign in?",
+	"Error message: The file is damaged and could not be repaired.",
+	"When trying to merge a template with a contact, First I was asked allow installation of ActiveX control. I accepted. After it appears a message that it will not be installed because it can't verify the publisher. Do you have a workarround for this issue ?",
+	" Error message - please close all instances of word before using the vtiger word plugin. Do I need to close all Word and Outlook instances first before I can reopen Word and sign in?",
+	"How to migrate data from previous versions to the latest version?",
 	
 	);
 
@@ -502,8 +525,8 @@ In IE from Tools->Internet Options->Security->Custom Level, there you can see va
 	"Before modifying any templates, please ensure that you don\'t have any documents open and only one instance of word is available in your memory."
 	);
 
-$num_array=array(0,1,2,3,4);
-for($i=0;$i<5;$i++)
+$num_array=array(0,1,2,3,4,6,7,8,9,10,11,12);
+for($i=0;$i<12;$i++)
 {
 
 	$faq = new Faq();
@@ -518,6 +541,192 @@ for($i=0;$i<5;$i++)
 	$faq->save("Faq");
 	$faq_ids[] = $faq ->id;
 }
+
+//Populate Quote Data
+
+$sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
+$stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
+$total_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
+$invmgr_array = array ("admin", "user");
+
+for($i=0;$i<5;$i++)
+{
+	$quote = new Quote();
+	
+	$quote->column_fields["assigned_user_id"] = $assigned_user_id;
+	$account_key = array_rand($account_ids);
+	$quote->column_fields["account_id"] = $account_ids[$account_key];
+	$op_key = array_rand($opportunity_ids);
+	$quote->column_fields["potential_id"] = $opportunity_ids[$op_key];
+	$contact_key = array_rand($contact_ids);
+        $quote->column_fields["contact_id"] = $contact_ids[$contact_key];
+	$rand = array_rand($num_array);
+	$quote->column_fields["subject"] = $sub_array[$i];
+	$quote->column_fields["quotestage"] = $stage_array[$i];	
+	$quote->column_fields["hdnGrandTotal"] = $total_array[$i];
+	$quote->column_fields["carrier"] = $carrier_array[$i];
+	$quote->column_fields["inventorymanager"] = $invmgr_array[$i];
+
+	$quote->save("Quotes");
+
+	$quote_ids[] = $quote->id;
+}
+
+//Populate SalesOrder Data
+
+$subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
+$status_array = array ("Created",  "Delivered", "Approved" , "Cancelled");
+$sototal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
+
+for($i=0;$i<5;$i++)
+{
+	$so = new SalesOrder();
+	
+	$so->column_fields["assigned_user_id"] = $assigned_user_id;
+	$account_key = array_rand($account_ids);
+	$so->column_fields["account_id"] = $account_ids[$account_key];
+	$quote_key = array_rand($quote_ids);
+	$so->column_fields["quote_id"] = $quote_ids[$quote_key];
+	$contact_key = array_rand($contact_ids);
+        $so->column_fields["contact_id"] = $contact_ids[$contact_key];
+	$rand = array_rand($num_array);
+	$so->column_fields["subject"] = $subj_array[$i];
+	$so->column_fields["sostatus"] = $status_array[$i];	
+	$so->column_fields["hdnGrandTotal"] = $sototal_array[$i];
+	$so->column_fields["carrier"] = $carrier_array[$i];
+
+	$so->save("SalesOrder");
+
+	$salesorder_ids[] = $so->id;
+}
+
+
+//Populate PurchaseOrder Data
+
+$psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk", "PO_vendtl");
+$pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
+$pototal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
+$trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
+
+for($i=0;$i<5;$i++)
+{
+	$po = new Order();
+	
+	$po->column_fields["assigned_user_id"] = $assigned_user_id;
+	$vendor_key = array_rand($vendor_ids);
+	$po->column_fields["vendor_id"] = $vendor_ids[$vendor_key];
+	$contact_key = array_rand($contact_ids);
+        $po->column_fields["contact_id"] = $contact_ids[$contact_key];
+	$rand = array_rand($num_array);
+	$po->column_fields["subject"] = $psubj_array[$i];
+	$po->column_fields["postatus"] = $pstatus_array[$i];	
+	$po->column_fields["hdnGrandTotal"] = $pototal_array[$i];
+	$po->column_fields["carrier"] = $carrier_array[$i];
+	$po->column_fields["tracking_no"] = $trkno_array[$i];
+	
+	$po->save("PurchaseOrder");
+
+	$purchaseorder_ids[] = $po->id;
+}
+
+//Populate Invoice Data
+
+$isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
+$istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
+$itotal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+
+for($i=0;$i<5;$i++)
+{
+	$invoice = new Invoice();
+	
+	$invoice->column_fields["assigned_user_id"] = $assigned_user_id;
+	$account_key = array_rand($account_ids);
+	$invoice->column_fields["accountid"] = $account_ids[$account_key];
+	$so_key = array_rand($salesorder_ids);
+	$invoice->column_fields["salesorder_id"] = $salesorder_ids[$so_key];
+	$contact_key = array_rand($contact_ids);
+        $invoice->column_fields["contactid"] = $contact_ids[$contact_key];
+	$rand = array_rand($num_array);
+	$invoice->column_fields["subject"] = $isubj_array[$i];
+	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];	
+	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
+	
+	$invoice->save("Invoice");
+
+	$invoice_ids[] = $invoice->id;
+}
+
+//Populate RSS Data
+
+
+
+
+//Populate Email Data
+
+$esubj_array =  array ("Vtiger Releases 5.0 Alpha2", "Try Zoho Writer", "Hi There!!!", "Welcome to Open Source", "SOS Vtiger");
+$filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
+
+for($i=0;$i<5;$i++)
+{
+	$email = new Email();
+
+	$email->column_fields["assigned_user_id"] = $assigned_user_id;
+	
+	$rand = array_rand($num_array);
+	$email->column_fields["subject"] = $esubj_array[$i];
+	$email->column_fields["filename"] = $filename_array[$i];	
+	$email->column_fields["date_start"] = & create_date();
+	$email->column_fields["activitytype"] = 'Emails';
+	
+	$email->save("Emails");
+
+	$email_ids[] = $email->id;
+	
+}
+
+
+//Populate PriceBook data
+
+$PB_array = array ("Cd-R PB", "Vtiger PB", "Gator PB", "Kyple PB", "Pastor PB", "Zoho PB", "PB_100", "Per_PB", "CST_PB", "GATE_PB", "Chevron_PB", "Pizza_PB");
+$Active_array = array ("0", "1", "1", "0", "1","0", "1", "1", "0", "1","0","1");
+
+//$num_array = array(0,1,2,3,4);
+for($i=0;$i<12;$i++)
+{
+	$pricebook = new PriceBook();
+
+	$rand = array_rand($num_array);
+	$pricebook->column_fields["bookname"]   = $PB_array[$i];
+	$pricebook->column_fields["active"]     = $Active_array[$i];
+
+	$pricebook->save("PriceBooks");
+	$pricebook_ids[] = $pricebook ->id;
+}
+
+//Populate Notes Data
+
+$notes_array = array ("Cont_Notes", "Prod_Notes", "PB_Notes", "Vendor_Notes", "Invoice_Notes", "Task_Notes", "Event_Notes", "Email_Notes", "Rss_Notes", "Qt_Notes", "Notes_Customer", "Notes_PO");
+$att_array = array ("cont.doc", "prod.txt", "pb.doc", "vendor.xls", "invoice.xls", "task.doc", "ev.xls", "em.txt", "rss.txt", "qt.txt", "cust.doc", "PO.doc");
+
+for($i=0;$i<12;$i++)
+{
+	$notes = new Note();
+
+	$rand = array_rand($num_array);
+	$contact_key = array_rand($contact_ids);
+        $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
+	$notes->column_fields["title"]		=	$notes_array[$i];
+	$notes->column_fields["filename"]       =	$att_array[$i];
+
+	$notes->save("Notes");
+	$notes_ids[] = $notes ->id;
+	
+}
+
+
 
 // Populate Ticket data
 
@@ -543,10 +752,12 @@ for($i=0;$i<5;$i++)
 	$helpdesk->column_fields["ticketseverities"]	= "Minor";
 	$helpdesk->column_fields["ticketstatus"]	= $status_array[$i];
 	$helpdesk->column_fields["ticketcategories"]	= $category_array[$i];
-	//$rand_key = array_rand($s);
+	//$rand_key = array_rand($s);$contact_key = array_rand($contact_ids);
+        $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
 	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
 	
-        $helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
+        $helpdesk->column_fields["assigned_user_id"] = $contact_key = array_rand($contact_ids);
+        $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];$assigned_user_id;
 
 	
 	$helpdesk->save("HelpDesk");
