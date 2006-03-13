@@ -7,6 +7,7 @@
  * @modulegroup appointment
  * @module calendar_week
  */
+ require_once('modules/Calendar/CalendarCommon.php');
  global $calpath,$callink;
  $calpath = 'modules/Calendar/';
  $callink = 'index.php?module=Calendar&action=';
@@ -20,35 +21,8 @@
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_APPOINTMENT'], true); 
  echo "\n<BR>\n";
  $t=Date("Ymd");
-?>
-<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
-<tr>
-<form name="Calendar" method="GET" action="index.php">
-          <input type="hidden" name="module" value="Calendar">
-	  <input type="hidden" name="action">
-	  <input type="hidden" name="t">
-  <td>
-   <table border=0 cellspacing=0 cellpadding=3 width=100%>
-   <tr>
-      <td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day&t=<?echo $t?>">Day</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=<?echo $t?>">Week</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=<?echo $t?>">Month</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtTabCache" style="width:100%">&nbsp;</td>
-   </tr>
-   </table>
-  </td>
- </form> 
-</tr>
-<tr>
-  <td valign=top align=left >
-   <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
-   <tr>
-      <td align=left style="padding:5px">
-<?php
+ $html = getHeaderTab($t,'week');
+ echo $html;
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
@@ -83,6 +57,37 @@
 	$this->tablename = $calobj->table_name;
 
    }
+
+   /**
+    * Function to get options for time filter combo
+    * @param $selcriteria -- selected option :: Type string
+    * Constructs html option tag
+    * returns html option tag in string format
+    */
+   //Code added by Minnie - Starts
+   function getTimeFilterOption($selcriteria="")
+   {
+	$timefilter = Array("fullday"=>"Full day (24 Hours)",
+	 		    "workhr"=>"Work hours (8am - 8pm)",
+		            "morningtonoon"=>"Early morning to Noon (12am - 12pm)",
+			    "noontomidnight"=>"Noon to Midnight (12pm - 12am)",
+		            //"custom"=>"Custom"
+			);
+	$thtml = "";
+	foreach($timefilter as $FilterKey=>$FilterValue)
+   	{
+	       if($FilterKey == $selcriteria)
+	       {
+		      $thtml .= "<option selected value=\"".$FilterKey."\">".$FilterValue."</option>";
+	       }else
+	       {
+	              $thtml .= "<option value=\"".$FilterKey."\">".$FilterValue."</option>";
+	       }
+	}
+	return $thtml;
+   }
+   //Code added by Minnie - Ends
+   
    Function info() {
   //   global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
 	global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings,$adb;
@@ -117,40 +122,17 @@
      {
 	$mn_name ="";
      }
-     echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">";
-     echo "<form action=\"". $callink ."calendar_weekview\" method=\"get\">\n";
-     echo "<tr><td>";
-     echo "<table border=0 cellspacing=0 cellpadding=0 width=100% class=\"calTopBg\"><tr><td>\n";
-     echo "<img src=\"";
-     echo $image_path."calTopLeft.gif\"></td><td>";
-     echo $this->pref->menulink($callink ."calendar_weekview&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."</td>";
-     echo "<td><img src=\"";
-     echo $image_path."calSep.gif\"></td>";
-     echo "<td align=\"center\" width=\"100%\" class=\"lvtHeaderText\">";
-     echo $mod_strings['LBL_WEEK'] ."&nbsp;of&nbsp;" . $m_name . "&nbsp;".$day_from."&nbsp;to&nbsp;".$mn_name.$day_to."&nbsp;". $yy ."&nbsp;";
-     echo "</td><td><img src=\"";
-     echo $image_path."calSep.gif\"></td><td>";
-     echo $this->pref->menulink($callink ."calendar_weekview&t=".$next_week,$this->pref->getImage(right,'list') ,$mod_strings['LBL_NEXT_WEEK']) ."</td>\n";
-     echo "<td align=right><img src=\"";
-     echo $image_path."calTopRight.gif\"></td>";
-     echo "</tr></table></td></tr>";
+     $calendarheader = getCalendarHeader($last_week,$next_week,"week",$day_from,$this->pref,$day_to,$m_name,$yy);
+     echo $calendarheader;
      echo "<tr><td>";
      echo "<!-- calendar list -->
               <table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" width=\"100%\" class=\"calDisplay\">
               <tr><td align=center>";
-     echo "
-	     <div align=left style=\"padding:5px;width:95%\">
-	     Time filter : <select class=small>
-	     <option>Select ...</option>
-	     <option> - Work hours (8am - 8pm)</option>
-
-	     <option> - Early morning to Noon (12am - 12pm)</option>
-	     <option> - Noon to Midnight (12pm - 12am)</option>
-	     <option> - Full day (24 Hours)</option>
-	     <option> - Custom time...</option>
-	     </select>
-
-	     </div>";
+     echo "<div align=left style=\"padding:5px;width:95%\">";
+     echo "Time filter : <select class=small onchange='getTimeRange(this.options[this.selectedIndex].value )'>";
+     echo $this->getTimeFilterOption();
+     echo "</select>";
+     echo "</div>";
      echo "<div class=\"calDiv\" >";
 	echo "<table border=0 cellspacing=1 cellpadding=5 width=100% class=\"calDayHour\" style=\"background-color: #dadada\">";
 
