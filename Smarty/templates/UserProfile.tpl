@@ -39,7 +39,7 @@
 		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0">
 		{/if}
 		&nbsp;</td>
-		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</td>
+		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</a></td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
 		<tr>
 	{/section}	
@@ -50,6 +50,7 @@
 <td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
 </tr>
 </table>
+</form>
 </td>
 </tr>
 </table>
