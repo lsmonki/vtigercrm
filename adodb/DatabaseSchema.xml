@@ -4011,6 +4011,7 @@
 		<field name="profilename" type="C" size="50">
 			<NOTNULL/>
 		</field>
+		<field name="description" type="X"></field>
 		<data>		
 		</data>
 	</table>
