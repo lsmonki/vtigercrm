@@ -1,4 +1,5 @@
 <?php
+require_once('modules/Calendar/CalendarCommon.php');
 /**
  * Copyright 1999 - 2004 by Gero Kohnert
  */
@@ -14,30 +15,9 @@ global $mod_strings,$currentModule,$app_strings;
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'], true); 
 echo "\n<BR>\n";
  $t=Date("Ymd");
-?>
-<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
-<tr>
-  <td>
-   <table border=0 cellspacing=0 cellpadding=3 width=100%>
-   <tr>
-      <td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day&t=<?echo $t?>">Day</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=<?echo $t?>">Week</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=<?echo $t?>">Month</a></td>
-      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-      <td class="dvtTabCache" style="width:100%">&nbsp;</td>
-   </tr>
-   </table>
-  </td>
-</tr>
-<tr>
-  <td valign=top align=left >
-   <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
-   <tr>
-      <td align=left style="padding:5px">
-<?
+ $html = getHeaderTab($t,'month');
+ echo $html;
+ 
 session_write_close();
 loadlayout();
 $pref = new preference();
@@ -113,12 +93,6 @@ echo "</script>\n";
 
 
 $yoff =  Date("Y") + 10;
-#echo "<body leftmargin=\"0\" topmargin=\"5\">\n";
-	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
-	echo "<tr><td>";
-		echo "<table border=0 cellspacing=0 cellpadding=0 width=100% class=\"calTopBg\"><tr><td>\n";
-		echo "<img src=\"";
-		echo $image_path."calTopLeft.gif\"></td><td>";
 $nm = $m + 1;
 $ny = $y;
 	if ( $nm == 13 ) 
@@ -135,22 +109,8 @@ $ny = $y;
 	}
 
 	$m_name = $mod_strings['cal_month_long'][$m];
-		
-		//echo $this->pref->menulink($callink."calendar_monthview&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."</td>";
-		echo "<td align=\"left\"><a class=\"nodeco\" href=\"".$callink."calendar_monthview&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\" title=\"Previous Month\"><img border=\"0\" src=\"".$image_path."left.gif\"></a></td>\n";
-		echo "<td><img src=\"";
-                echo $image_path."calSep.gif\"></td>";
-                echo "<td align=\"center\" width=\"100%\" class=\"lvtHeaderText\">";
-
-		echo $m_name ." ". $y;
-
-		echo "</td><td><img src=\"";
-                echo $image_path."calSep.gif\"></td><td>";
-
-		echo "<td align=\"right\"><a class=\"nodeco\" href=\"". $callink ."calendar_monthview&f=".$f."&n=".$n."&m=".$nm."&d=".$d."&y=".$ny."\" title=\"Next Month\"><img border=\"0\" src=\"".$image_path."right.gif\"></a></td>\n";
-		echo "<td align=right><img src=\"";
-                echo $image_path."calTopRight.gif\"></td>";
-                echo "</tr></table></td></tr>";
+	$calendarheader = getCalendarHeader($lm,$nm,"month",$ly,$this->pref,$ny,$m_name,$y,$d,$f,$n);
+	echo $calendarheader;
                 echo "<tr><td>";
                 echo "<!-- calendar list -->
                       <table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" width=\"100%\" class=\"calDisplay\">
