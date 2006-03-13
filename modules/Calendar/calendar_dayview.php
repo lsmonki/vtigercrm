@@ -8,6 +8,7 @@
  * @module calendar_day
  */
  require_once('modules/Users/User.php');
+ require_once('modules/Calendar/CalendarCommon.php');
 
  global $calpath,$callink;
  $calpath = 'modules/Calendar/';
@@ -25,34 +26,9 @@
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'], true); 
 echo "\n<BR>\n";
  $t=Date("Ymd");
-?>
-	<table border="0" cellspacing="0" cellpadding="0" width="95%" align="center">
-        <tr>
-        <form name="Calendar" method="GET" action="index.php">
-          <input type="hidden" name="module" value="Calendar">
-          <input type="hidden" name="action">
-          <input type="hidden" name="t">
-          <td>
-		     <table border=0 cellspacing=0 cellpadding=3 width=100%>
-             		<tr>
-          		      <td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-               		      <td class="dvtSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=day&t=<?echo $t?>">Day</a></td>
-                	      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-          		      <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=<?echo $t?>">Week</a></td>
-                	      <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-		              <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=<?echo $t?>">Month</a></td>
-		              <td class="dvtTabCache" style="width:10px">&nbsp;</td>
-		              <td class="dvtTabCache" style="width:100%">&nbsp;</td>
-	                </tr>
-         	    </table>
-	  </td>
-       </form>
-       </tr>
-       <tr>
-        <td valign=top align=left >
-           <table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">                                <tr>
-                  <td align=left style="padding:5px">
-    <?php
+ $html = getHeaderTab($t,'day');
+ echo $html;
+ 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
  include_once $calpath .'preference.pinc';
@@ -78,8 +54,15 @@ require_once('modules/Calendar/UserCalendar.php');
 //	$this->tablename = $calobj->table_name;
    }
   
-   
-   //for new UI
+   /**
+     * Function to get UI&Activities for each hour
+     * @param $hour -- hour(in am/pm) :: Type string
+     * @param $maxcol -- no. of events in particular hour :: Type integer
+     * @param $table -- events in array format :: Type Array
+     * @param $i -- count :: Type integer
+     * Constructs UI for each hour in html table format and calls formatted() to get activities for that hour
+     * returns the html table in string format
+     */
     function getHourList($hour,$maxcol,$table,$i)
      {
                 //echo '<pre>';print_r($table);echo '</pre>';
@@ -285,23 +268,8 @@ function trim(s) {
        $maxcol[$i] = max($maxcol[$i],count($table[$i]));
      }
 	//New UI-integrated by minnie
-     echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">";
-     echo "<form action=\"". $callink ."calendar_day\" method=\"get\">\n";
-     echo "<tr><td>";
-	 echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" class=\"calTopBg\"><tr><td>\n";
-	echo "<img src=\"";
-	echo $image_path."calTopLeft.gif\"></td><td>";
-	echo $this->pref->menulink($callink ."calendar_dayview&t=".$last_day->getYYYYMMDD(),$this->pref->getImage(left,'list'),$last_day->getDate())."</td>";
-	echo "<td><img src=\"";
-	echo $image_path."calSep.gif\"></td>";
-	echo "<td align=\"center\" width=\"100%\" class=\"lvtHeaderText\">";
-	echo "&nbsp;". strftime($mod_strings['LBL_DATE_TITLE'],$from->ts) ."&nbsp;";
-	echo "</td><td><img src=\"";
-	echo $image_path."calSep.gif\"></td><td>";
-	echo $this->pref->menulink($callink ."calendar_dayview&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate())."</td>";
-	echo "<td align=right><img src=\"";
-	echo $image_path."calTopRight.gif\"></td>";
-	echo "</tr></table></td></tr>";
+     $calendarheader = getCalendarHeader($last_day,$next_day,"day",$from->ts,$this->pref);
+     echo $calendarheader;
 	echo "<tr><td>";
 	echo "<!-- calendar list -->
               <table border=\"0\" cellspacing=\"0\" cellpadding=\"10\" width=\"100%\" class=\"calDisplay\">
