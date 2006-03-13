@@ -39,7 +39,7 @@ if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 else
 {
 	$account_id = $adb->getUniqueID("mail_accounts");
-	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."',1,0,'".$box_refresh."','".$mails_per_page."', '".$ssltype."', '".$sslmeth."', '".$showbody."')";
+	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."','".$box_refresh."','".$mails_per_page."', '".$ssltype."', '".$sslmeth."', '".$showbody."','1','0')";
 }
 
 $adb->query($sql);
