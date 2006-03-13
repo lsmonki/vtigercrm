@@ -14,8 +14,9 @@ global $adb;
 
 $profilename = $_REQUEST['profileName'];
 $parentProfileId= $_REQUEST['parentProfileId'];
+$description= $_REQUEST['profileName'];
 //Creating Profile
-createProfile($profilename,$parentProfileId);
+createProfile($profilename,$parentProfileId,$description);
 
 $loc = "Location: index.php?action=ListProfiles&module=Users";
 header($loc);

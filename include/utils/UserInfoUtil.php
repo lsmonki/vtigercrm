@@ -1890,11 +1890,11 @@ function getProfileAllActionPermission($profileid)
   * @param $profilename -- Profile Name:: Type varchar
   * @param $parentProfileId -- Profile Id:: Type integer
  */
-function createProfile($profilename,$parentProfileId)
+function createProfile($profilename,$parentProfileId,$description)
 {
 	global $adb;
 	//Inserting values into Profile Table
-	$sql1 = "insert into profile values('','".$profilename."')";
+	$sql1 = "insert into profile values('','".$profilename."','".$description."')";
 	$adb->query($sql1);
 
 	//Retreiving the profileid
