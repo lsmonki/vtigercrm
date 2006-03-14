@@ -165,9 +165,24 @@ if (is_admin($current_user)) {
 	$status .= "</select></td>\n";
 	$smarty->assign("USER_STATUS_OPTIONS", $status);
 
+}
+else
+{
+		$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' tabindex='1' disabled>";
+		$status .= get_select_options_with_id($app_list_strings['user_status_dom'], $focus->status);
+		$status .= "</select></td>\n";
+		$smarty->assign("USER_STATUS_OPTIONS", $status);
 
-        
-        $ROLE_SELECT_OPTION = '<select name="user_role">';
+}	
+
+if (is_admin($current_user)) {
+      
+        	$ROLE_SELECT_OPTION = '<select name="user_role">';
+	}
+else
+{
+		
+		$ROLE_SELECT_OPTION = '<select name="user_role" disabled>';	}
         if($focus->id != '')
         {
 
@@ -201,7 +216,7 @@ if (is_admin($current_user)) {
 
 
 
-                   
+if (is_admin($current_user)) {                   
         $GROUP_SELECT_OPTION = '<select name="group_name">';
 		$GROUP_SELECT_OPTION .= '<option value="">--None--</option>';
                $sql = "select groupname from users2group inner join groups on groups.groupid=users2group.groupid where userid='" .$focus->id ."'";
@@ -228,8 +243,16 @@ if (is_admin($current_user)) {
                    $GROUP_SELECT_OPTION .= ' </select>';
                    
                    $smarty->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
-	
+ }
+
+if (is_admin($current_user)) { 
 	$CURRENCY_SELECT_OPTION = '<select name="currency_id">';
+	}
+else
+{
+	$CURRENCY_SELECT_OPTION = '<select name="currency_id" disabled>';
+}
+	
         if($focus->id != '')
         {
                 $currencyselectedid=fetchCurrency($focus->id);
@@ -251,7 +274,7 @@ if (is_admin($current_user)) {
         $CURRENCY_SELECT_OPTION .= ' </select>';
         $smarty->assign("CURRENCY_NAME", $CURRENCY_SELECT_OPTION);
 
-}
+
 
 $smarty->assign("ACTIVITY_VIEW", getActivityVIew($focus->activity_view));
 $smarty->assign("CLOUD_TAG", $focus->tagcloud);
