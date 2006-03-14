@@ -13,6 +13,7 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/GetUserGroups.php');
 include('config.php');
 global $log;
 
@@ -69,17 +70,11 @@ function fetchUserProfileId($userid)
 function fetchUserGroupids($userid)
 {
 	global $adb;
-	$sql= "select users2group.groupid from users2group inner join groups on groups.groupid=users2group.groupid where userid=" .$userid; 
-        $result = $adb->query($sql);
-	//code changed to return a list of groups related to the userid as comma seperated	
-	if($adb->num_rows($result)!=0)
-		{
-			for($i=0;$i<$adb->num_rows($result);$i++)	
-				$groupid[]=  $adb->query_result($result,$i,"groupid");
+        $focus = new GetUserGroups();
+        $focus->getAllUserGroups($userid);
+        $groupidlists = implode(",",$focus->user_groups);
+        return $groupidlists;
 		
-			$groupidlists = implode (",",$groupid);
-		}
-	return $groupidlists;
 }
 
 /** Function to load all the permissions
