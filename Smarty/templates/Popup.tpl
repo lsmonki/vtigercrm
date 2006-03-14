@@ -28,7 +28,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
         	<td class="showPanelBg" valign=top width=100%>
                 	<div class="small" style="padding:20px">
-			       <form name="massdelete" method="POST">
+			       <form name="selectall" method="POST">
 		               <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
                 		<tr style="background-color:#efefef">
                         		<td >
