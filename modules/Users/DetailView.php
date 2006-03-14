@@ -199,8 +199,13 @@ $smarty->assign("DESCRIPTION", nl2br($focus->description));
 if(is_admin($current_user))
 {
 	$smarty->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
-	$smarty->assign("CURRENCY_NAME",$currency);
 }
+else
+{
+	$smarty->assign("ROLEASSIGNED",$rolename);
+}
+
+	$smarty->assign("CURRENCY_NAME",$currency);
 
 //Getting the Group Lists
 $query ="select groupid,groupname from groups where groupid in (".fetchUserGroupids($focus->id).")";
