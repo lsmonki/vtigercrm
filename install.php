@@ -35,6 +35,13 @@ if (substr(phpversion(), 0, 1) == "5") {
 	$_GET = array_map("stripslashes_checkstrings", $_GET);
 
 }
+
+//Run command line if no web var detected
+if (!isset($_SERVER['REQUEST_METHOD'])) {
+	require("install/5createTables.inc.php");
+	exit;
+}
+			
 if (isset($_POST['file'])) $the_file = $_POST['file'];
 else $the_file = "0welcome.php";
 
