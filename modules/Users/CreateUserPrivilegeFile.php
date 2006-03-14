@@ -43,7 +43,7 @@ function createUserPrivilegesfile($userid)
 			$user_role_info=getRoleInformation($user_role);
 			$user_role_parent=$user_role_info[$user_role][1];
 			$userGroupFocus=new GetUserGroups();
-			$userGroupFocus->userRole=$user_role;
+			//$userGroupFocus->userRole=$user_role;
 			$userGroupFocus->getAllUserGroups($userid);
 			$subRoles=getRoleSubordinates($user_role);
 			$subRoleAndUsers=getSubordinateRoleAndUsers($user_role);
