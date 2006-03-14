@@ -849,6 +849,11 @@ $expected_revenue = Array("250000","750000","500000");
 $budget_cost = Array("25000","50000","90000");
 $actual_cost = Array("23500","45000","80000");
 $num_sent = Array("2000","2500","3000");
+$clo_date = Array('2003-1-2','2004-2-3','2005-4-12');
+
+
+
+$expected_response = Array(null,null,null);
 for($i=0;$i<count($campaign_name_array);$i++)
 {
 	$campaign = new Campaign();
@@ -860,6 +865,8 @@ for($i=0;$i<count($campaign_name_array);$i++)
 	$campaign->column_fields["expectedrevenue"] = $expected_revenue[$i];
 	$campaign->column_fields["budgetcost"] = $budget_cost[$i];
 	$campaign->column_fields["actualcost"] = $actual_cost[$i];
+	$campaign->column_fields["closingdate"] = $clo_date[$i];
+	$campaign->column_fields["expectedresponse"] = $expected_response[$i];
 	$campaign->save("Campaigns");
 }
 
