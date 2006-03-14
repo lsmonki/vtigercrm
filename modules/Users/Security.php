@@ -425,7 +425,7 @@ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field")
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productsheet','products',1,'1','productsheet','Product Sheet',1,0,0,100,17,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'glacct','products',1,'15','glacct','GL Account',1,0,0,100,18,31,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,31,2,'T~O',1,null,'BAS')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,20,31,2,'T~O',1,'BAS')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,20,31,2,'T~O',1,null,'BAS')");
 
 
 //Block32 Pricing Information
@@ -482,8 +482,8 @@ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,1,23,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,24,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,9,1,23,'T~O',1,null,'BAS')");
-	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,22,'T~O',1,'')");
- 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,21,2,'T~O',1,'')");
+	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,22,'T~O',1,null,'BAS')");
+ 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,21,2,'T~O',1,null,'BAS')");
 
 //Block21 -- End
 //Email Details -- END
