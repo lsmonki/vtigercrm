@@ -66,7 +66,7 @@ function pickColor(color)
 					   </tr>  
 				<tr>
 				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_NAME} </td>
-				    <td class="dvtCellInfo"><input type="text" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" /></td>
+				    <td class="dvtCellInfo"><input type="text" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"{$USERNAME_READONLY} /></td>
 				     <td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
                                      <td class="dvtCellInfo"><input type="checkbox" name="is_admin" {$DISABLED} {$IS_ADMIN}/></td>
 				</tr>
@@ -86,14 +86,17 @@ function pickColor(color)
 				 </tr>
 				 <tr>
 				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_ROLE}</td>
-				    <td class="dvtCellInfo">{$USER_ROLE}</td>							      <td class="dvtCellLabel" align="right">{$UMOD.LBL_GROUP_NAME}</td>
-				    <td class="dvtCellInfo">{$GROUP_NAME}</td>
+				    <td class="dvtCellInfo">{$USER_ROLE}</td>
+
+
+				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
+                                    <td class="dvtCellInfo"><input type="text" name="email1" value='{$EMAIL1}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			         </tr>
 				 <tr>
-				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
-				    <td class="dvtCellInfo"><input type="text" name="email1" value='{$EMAIL1}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
-				   {$USER_STATUS_OPTIONS}
+
+				  <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
+				 {$USER_STATUS_OPTIONS}
+				<td class="dvtCellInfo" colspan="2" >&nbsp;</td>	
 				 </tr>
 				 <tr><td colspan="4" class="dvtCellInfo" height="30">&nbsp;</td></tr>
 				 <tr>
