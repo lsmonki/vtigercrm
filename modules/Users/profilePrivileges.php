@@ -1,5 +1,4 @@
 <?php
-require_once('XTemplate/xtpl.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -13,729 +12,598 @@ $image_path=$theme_path."images/";
 $profileId=$_REQUEST['profileid'];
 $profileName=getProfileName($profileId);
 
-$xtpl=new XTemplate ('modules/Users/profilePrivileges.html');
+$parentProfileId=$_REQUEST['parentprofile'];
+if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
+	$parentProfileId = '';
+
+$smarty = new vtigerCRM_Smarty;
 $secondaryModule='';
 $mode='';
 $output ='';
 $output1 ='';
-$xtpl->assign("PROFILEID", $profileId);
-$xtpl->assign("PROFILE_NAME", $profileName);
+$smarty->assign("PROFILEID", $profileId);
+$smarty->assign("PROFILE_NAME", $profileName);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
 
 //Initially setting the secondary selected tab
-if(isset($_REQUEST['secmodule']) && $_REQUEST['secmodule'] != '')
-{
-	$secondaryModule=$_REQUEST['secmodule'];
-	$mode=$_REQUEST['mode'];
+$mode=$_REQUEST['mode'];
 
+//Global Privileges
+
+if($mode == 'view')
+{
+	$global_per_arry = getProfileGlobalPermission($profileId);
+	$view_all_per = $global_per_arry[1];
+	$edit_all_per = $global_per_arry[2];
+	$privileges_global[]=getGlobalDisplayValue($view_all_per,1);
+	$privileges_global[]=getGlobalDisplayValue($edit_all_per,2); 
 }
-else
+elseif($mode == 'edit')
 {
-	
-	$secondaryModule='global_priv';
-	$mode='view'; 
-	
+	$global_per_arry = getProfileGlobalPermission($profileId);
+	$view_all_per = $global_per_arry[1];
+	$edit_all_per = $global_per_arry[2];
+	$privileges_global[]=getGlobalDisplayOutput($view_all_per,1);
+	$privileges_global[]=getGlobalDisplayOutput($edit_all_per,2);
 }
-
-if($secondaryModule == 'global_priv')
+elseif($mode == 'create')
 {
-		$xtpl->assign("GLOBAL_PRIV_CLASS", 'prvPrfSelectedTab');
-		$xtpl->assign("TAB_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("STAND_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("UTIL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("FIELD_PRIV_CLASS", 'prvPrfUnSelectedTab');
-
-		if($mode == 'view')
-		{
-			$edit_save='<a href="index.php?module=Users&action=profilePrivileges&mode=edit&secmodule=global_priv&profileid='.$profileId.'">Edit Privileges</a>';
-			$xtpl->assign("EDIT_SAVE", $edit_save);
-
-			$global_per_arry = getProfileGlobalPermission($profileId);
-			$view_all_per = $global_per_arry[1];
-			$edit_all_per = $global_per_arry[2];
-
-			$output .= '<tr>';
-                        $output .= '<td width=80%>View All</td>';
-                        $output .= '<td width=20%>'.getGlobalDisplayValue($view_all_per,1).'</td>';
-                        $output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$output1 .= '<tr>';
-                        $output1 .= '<td width=80%>Edit All</td>';
-                        $output1 .= '<td width=20%>'.getGlobalDisplayValue($edit_all_per,2).'</td>';
-                        $output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$xtpl->assign("OUTPUT", $output);
-			$xtpl->assign("OUTPUT1", $output1);
-				
-		}
-		elseif($mode == 'edit')
-		{
-			$edit_save .= '<input type="hidden" name="module" value="Users">';
-        		$edit_save .= '<input type="hidden" name="profileid" value="'.$profileId.'">';
-		        $edit_save .= '<input type="hidden" name="action" value="UpdateProfileChanges">';
-		        $edit_save .= '<input type="hidden" name="secmodule" value="global_priv">';	
-		        $edit_save .= '<input type="hidden" name="mode" value="save">';
-		        $edit_save .= '<input title="Save" accessKey="S" class="button" type="submit" name="Save" value="Save">';
-			$xtpl->assign("EDIT_SAVE", $edit_save);
-
-			$global_per_arry = getProfileGlobalPermission($profileId);
-			//print_r($global_per_arry);
-			$view_all_per = $global_per_arry[1];
-			$edit_all_per = $global_per_arry[2];
-
-			$output .= '<tr>';
-                        $output .= '<td width=80%>View All</td>';
-                        $output .= '<td width=20%>'.getGlobalDisplayOutput($view_all_per,1).'</td>';
-                        $output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$output1 .= '<tr>';
-                        $output1 .= '<td width=80%>Edit All</td>';
-                        $output1 .= '<td width=20%>'.getGlobalDisplayOutput($edit_all_per,2).'</td>';
-                        $output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$xtpl->assign("OUTPUT", $output);
-			$xtpl->assign("OUTPUT1", $output1);	
-				
-					
-	
-		}
-		
-
-
-}
-elseif($secondaryModule == 'stand_priv')
-{
-		$xtpl->assign("GLOBAL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("TAB_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("STAND_PRIV_CLASS", 'prvPrfSelectedTab');
-		$xtpl->assign("UTIL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("FIELD_PRIV_CLASS", 'prvPrfUnSelectedTab');
-
-		if($mode == 'view')
-		{
-			//Updating the Edit Save Option
-			$edit_save='<a href="index.php?module=Users&action=profilePrivileges&mode=edit&secmodule=stand_priv&profileid='.$profileId.'">Edit Privileges</a>';
-			$xtpl->assign("EDIT_SAVE", $edit_save);	
-
-			$output1 .= '<tr>';
-			$output1 .= '<td width=33%>Create/Edit</td>';
-			$output1 .= '<td width=33%>Delete</td>';
-			$output1 .= '<td width=34%>View</td>';
-			$output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			$output .= '<tr>';
-			$output .= '<td width=80%>Entity</td>';
-			$output .= '<td width=20%></td>';
-			$output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			$act_perr_arry = getTabsActionPermission($profileId);	
-			foreach($act_perr_arry as $tabid=>$action_array)
-			{
-				$entity_name = getTabname($tabid);
-				//Create/Edit Permission
-				$tab_create_per_id = $action_array['1'];
-				$tab_create_per = getDisplayValue($tab_create_per_id,$tabid,'1');
-				//Delete Permission
-				$tab_delete_per_id = $action_array['2'];
-				$tab_delete_per = getDisplayValue($tab_delete_per_id,$tabid,'2');
-				//View Permission
-				$tab_view_per_id = $action_array['4'];
-				$tab_view_per = getDisplayValue($tab_view_per_id,$tabid,'4');
-
-				$output1 .= '<tr>';
-				$output1 .= '<td width=33%>'.$tab_create_per.'</td>';
-				$output1 .= '<td width=33%>'.$tab_delete_per.'</td>';
-				$output1 .= '<td width=34%>'.$tab_view_per.'</td>';
-				$output1 .= '</tr>';
-				$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				$output .= '<tr>';
-				$output .= '<td width=80%>'.$entity_name.'</td>';
-				$output .= '<td width=20%></td>';
-				$output .= '</tr>';
-				$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			}
-				
-	
-		}
-		if($mode == 'edit')
-		{
-			$edit_save .= '<input type="hidden" name="module" value="Users">';
-                        $edit_save .= '<input type="hidden" name="profileid" value="'.$profileId.'">';
-                        $edit_save .= '<input type="hidden" name="action" value="UpdateProfileChanges">';
-                        $edit_save .= '<input type="hidden" name="secmodule" value="stand_priv">';
-                        $edit_save .= '<input type="hidden" name="mode" value="save">';
-	                $edit_save .= '<input title="Save" accessKey="S" class="button" type="submit" name="Save" value="Save">';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);
-			
-
-			$output1 .= '<tr>';
-			$output1 .= '<td width=33%>Create/Edit</td>';
-			$output1 .= '<td width=33%>Delete</td>';
-			$output1 .= '<td width=34%>View</td>';
-			$output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			$output .= '<tr>';
-			$output .= '<td width=80%>Entity</td>';
-			$output .= '<td width=20%></td>';
-			$output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			$act_perr_arry = getTabsActionPermission($profileId);	
-			foreach($act_perr_arry as $tabid=>$action_array)
-			{
-				$entity_name = getTabname($tabid);
-				//Create/Edit Permission
-				$tab_create_per_id = $action_array['1'];
-				$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
-				//Delete Permission
-				$tab_delete_per_id = $action_array['2'];
-				$tab_delete_per = getDisplayOutput($tab_delete_per_id,$tabid,'2');
-				//View Permission
-				$tab_view_per_id = $action_array['4'];
-				$tab_view_per = getDisplayOutput($tab_view_per_id,$tabid,'4');
-
-				$output1 .= '<tr>';
-				$output1 .= '<td width=33%>'.$tab_create_per.'</td>';
-				$output1 .= '<td width=33%>'.$tab_delete_per.'</td>';
-				$output1 .= '<td width=34%>'.$tab_view_per.'</td>';
-				$output1 .= '</tr>';
-				$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				$output .= '<tr>';
-				$output .= '<td width=80%>'.$entity_name.'</td>';
-				$output .= '<td width=20%></td>';
-				$output .= '</tr>';
-				$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-			}
-				
-	
-		}
-		$xtpl->assign("OUTPUT", $output);
-		$xtpl->assign("OUTPUT1", $output1);
-
-}
-elseif($secondaryModule == 'tab_priv')
-{
-		$xtpl->assign("GLOBAL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("TAB_PRIV_CLASS", 'prvPrfSelectedTab');
-		$xtpl->assign("STAND_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("UTIL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("FIELD_PRIV_CLASS", 'prvPrfUnSelectedTab');
-
-		if($mode == 'view')
-		{
-			$edit_save='<a href="index.php?module=Users&action=profilePrivileges&mode=edit&secmodule=tab_priv&profileid='.$profileId.'">Edit Privileges</a>';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);
-			
-			$tab_perr_array = getTabsPermission($profileId);
-			$no_of_tabs =  sizeof($tab_perr_array);
-			$i=1;
-		        foreach($tab_perr_array as $tabid=>$tab_perr)
-        		{
-				$entity_name = getTabname($tabid);
-				$tab_allow_per_id = $tab_perr_array[$tabid];
-		                $tab_allow_per = getDisplayValue($tab_allow_per_id,$tabid,'');	
-
-				if ($i%2==0)
-				{
-					$output1 .= '<tr>';
-	                        	$output1 .= '<td width=80%>'.$entity_name.'</td>';
-	        	                $output1 .= '<td width=20%>'.$tab_allow_per.'</td>';
- 	  	             	        $output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
-				else
-				{
-					$output .= '<tr>';
-	                        	$output .= '<td width=80%>'.$entity_name.'</td>';
-	        	                $output .= '<td width=20%>'.$tab_allow_per.'</td>';
- 	  	             	        $output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
-				$i++;	
-			}
-			$xtpl->assign("OUTPUT", $output);
-			$xtpl->assign("OUTPUT1", $output1);	
-	
-		}
-		if($mode == 'edit')
-		{
-			$edit_save .= '<input type="hidden" name="module" value="Users">';
-                        $edit_save .= '<input type="hidden" name="profileid" value="'.$profileId.'">';
-                        $edit_save .= '<input type="hidden" name="action" value="UpdateProfileChanges">';
-                        $edit_save .= '<input type="hidden" name="secmodule" value="tab_priv">';
-                        $edit_save .= '<input type="hidden" name="mode" value="save">';
-	                $edit_save .= '<input title="Save" accessKey="S" class="button" type="submit" name="Save" value="Save">';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);
-
-			$tab_perr_array = getTabsPermission($profileId);
-			$no_of_tabs =  sizeof($tab_perr_array);
-			$i=1;
-		        foreach($tab_perr_array as $tabid=>$tab_perr)
-        		{
-				$entity_name = getTabname($tabid);
-				$tab_allow_per_id = $tab_perr_array[$tabid];
-		                $tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
-
-				if ($i%2==0)
-				{
-					$output1 .= '<tr>';
-	                        	$output1 .= '<td width=80%>'.$entity_name.'</td>';
-	        	                $output1 .= '<td width=20%>'.$tab_allow_per.'</td>';
- 	  	             	        $output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
-				else
-				{
-					$output .= '<tr>';
-	                        	$output .= '<td width=80%>'.$entity_name.'</td>';
-	        	                $output .= '<td width=20%>'.$tab_allow_per.'</td>';
- 	  	             	        $output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
-				$i++;	
-			}
-			$xtpl->assign("OUTPUT", $output);
-			$xtpl->assign("OUTPUT1", $output1);	
-	
-		}
-
-
-}
-elseif($secondaryModule == 'util_priv')
-{
-	$xtpl->assign("GLOBAL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-	$xtpl->assign("TAB_PRIV_CLASS", 'prvPrfUnSelectedTab');
-	$xtpl->assign("STAND_PRIV_CLASS", 'prvPrfUnSelectedTab');
-	$xtpl->assign("UTIL_PRIV_CLASS", 'prvPrfSelectedTab');
-	$xtpl->assign("FIELD_PRIV_CLASS", 'prvPrfUnSelectedTab');
-	$i=1;
-	if($mode == 'view')
+	if($parentProfileId != '')
 	{
-
-		$edit_save='<a href="index.php?module=Users&action=profilePrivileges&mode=edit&secmodule=util_priv&profileid='.$profileId.'">Edit Privileges</a>';
-                $xtpl->assign("EDIT_SAVE", $edit_save);
-
-		$act_utility_arry = getTabsUtilityActionPermission($profileId);
-
-		foreach($act_utility_arry as $tabid=>$action_array)
-		{
-
-			$entity_name = getTabname($tabid);
-
-			$output .= '<tr>';
-			$output .= '<td width=80%><b>'.$entity_name.'</b></td>';
-			$output .= '<td width=20%></td>';
-			$output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$output1 .= '<tr>';
-			$output1 .= '<td width=80%></td>';
-			$output1 .= '<td width=20%></td>';
-			$output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-		
-			$k=1;
-			$no_of_actions=sizeof($action_array);
-			foreach($action_array as $action_id=>$act_per)
-			{
-				
-
-				$action_name = getActionName($action_id);
-				$tab_util_act_per = $action_array[$action_id];
-				$tab_util_per = getDisplayValue($tab_util_act_per,$tabid,$action_id);
-
-				
-
-				if($k%2 == 0)
-				{
-					$output1 .= '<tr>';
-					$output1 .= '<td width=80%>'.$action_name.'</td>';
-					$output1 .= '<td width=20%>'.$tab_util_per.'</td>';
-					$output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					
-
-				} 
-				else
-				{
-				
-					$output .= '<tr>';
-					$output .= '<td width=80%>'.$action_name.'</td>';
-					$output .= '<td width=20%>'.$tab_util_per.'</td>';
-					$output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					if($k == $no_of_actions)
-					{
-						$output1 .= '<tr>';
-						$output1 .= '<td width=80%></td>';
-						$output1 .= '<td width=20%></td>';
-						$output1 .= '</tr>';
-						$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					}
-				}
-				$k++;	
-
-
-
-
-			}
-
-		}
-
-
-
-
-		
-
+		$global_per_arry = getProfileGlobalPermission($parentProfileId);
+		$view_all_per = $global_per_arry[1];
+		$edit_all_per = $global_per_arry[2];
+		$privileges_global[]=getGlobalDisplayOutput($view_all_per,1);
+		$privileges_global[]=getGlobalDisplayOutput($edit_all_per,2);
 	}
-	elseif($mode == 'edit')
+	else
 	{
-		$edit_save .= '<input type="hidden" name="module" value="Users">';
-                $edit_save .= '<input type="hidden" name="profileid" value="'.$profileId.'">';
-                $edit_save .= '<input type="hidden" name="action" value="UpdateProfileChanges">';
-                $edit_save .= '<input type="hidden" name="secmodule" value="util_priv">';
-                $edit_save .= '<input type="hidden" name="mode" value="save">';
-	        $edit_save .= '<input title="Save" accessKey="S" class="button" type="submit" name="Save" value="Save">';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);	
+		$privileges_global[]=getGlobalDisplayOutput(0,1);
+		$privileges_global[]=getGlobalDisplayOutput(0,2);
+	}
 
-		$act_utility_arry = getTabsUtilityActionPermission($profileId);
+}
 
+$smarty->assign("GLOBAL_PRIV",$privileges_global);			
+
+//standard privileges	
+if($mode == 'view')
+{
+	$act_perr_arry = getTabsActionPermission($profileId);	
+	foreach($act_perr_arry as $tabid=>$action_array)
+	{
+		$stand = array();
+		$entity_name = getTabname($tabid);
+		//Create/Edit Permission
+		$tab_create_per_id = $action_array['1'];
+		$tab_create_per = getDisplayValue($tab_create_per_id,$tabid,'1');
+		//Delete Permission
+		$tab_delete_per_id = $action_array['2'];
+		$tab_delete_per = getDisplayValue($tab_delete_per_id,$tabid,'2');
+		//View Permission
+		$tab_view_per_id = $action_array['4'];
+		$tab_view_per = getDisplayValue($tab_view_per_id,$tabid,'4');
+
+		$stand[]=$entity_name;
+		$stand[]=$tab_create_per;
+		$stand[]=$tab_delete_per;
+		$stand[]=$tab_view_per;
+		$privileges_stand[]=$stand;
+	}
+}
+if($mode == 'edit')
+{
+	$act_perr_arry = getTabsActionPermission($profileId);	
+	foreach($act_perr_arry as $tabid=>$action_array)
+	{
+		$stand = array();
+		$entity_name = getTabname($tabid);
+		//Create/Edit Permission
+		$tab_create_per_id = $action_array['1'];
+		$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
+		//Delete Permission
+		$tab_delete_per_id = $action_array['2'];
+		$tab_delete_per = getDisplayOutput($tab_delete_per_id,$tabid,'2');
+		//View Permission
+		$tab_view_per_id = $action_array['4'];
+		$tab_view_per = getDisplayOutput($tab_view_per_id,$tabid,'4');
+
+		$stand[]=$entity_name;
+		$stand[]=$tab_create_per;
+		$stand[]=$tab_delete_per;
+		$stand[]=$tab_view_per;
+		$privileges_stand[]=$stand;
+	}
+}
+if($mode == 'create')
+{
+	if($parentProfileId != '')
+	{
+		$act_perr_arry = getTabsActionPermission($parentProfileId);
+		foreach($act_perr_arry as $tabid=>$action_array)
+		{
+			$stand = array();
+			$entity_name = getTabname($tabid);
+			//Create/Edit Permission
+			$tab_create_per_id = $action_array['1'];
+			$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
+			//Delete Permission
+			$tab_delete_per_id = $action_array['2'];
+			$tab_delete_per = getDisplayOutput($tab_delete_per_id,$tabid,'2');
+			//View Permission
+			$tab_view_per_id = $action_array['4'];
+			$tab_view_per = getDisplayOutput($tab_view_per_id,$tabid,'4');
+
+			$stand[]=$entity_name;
+			$stand[]=$tab_create_per;
+			$stand[]=$tab_delete_per;
+			$stand[]=$tab_view_per;
+			$privileges_stand[]=$stand;
+		}	
+	}
+	else
+	{
+		$act_perr_arry = getTabsActionPermission(1);	
+		foreach($act_perr_arry as $tabid=>$action_array)
+		{
+			$stand = array();
+			$entity_name = getTabname($tabid);
+			//Create/Edit Permission
+			$tab_create_per_id = $action_array['1'];
+			$tab_create_per = getDisplayOutput(0,$tabid,'1');
+			//Delete Permission
+			$tab_delete_per_id = $action_array['2'];
+			$tab_delete_per = getDisplayOutput(0,$tabid,'2');
+			//View Permission
+			$tab_view_per_id = $action_array['4'];
+			$tab_view_per = getDisplayOutput(0,$tabid,'4');
+
+			$stand[]=$entity_name;
+			$stand[]=$tab_create_per;
+			$stand[]=$tab_delete_per;
+			$stand[]=$tab_view_per;
+			$privileges_stand[]=$stand;
+		}
+		$act_perr_arry = getTabsActionPermission($parentProfileId);
+	}
+
+}
+$smarty->assign("STANDARD_PRIV",$privileges_stand);			
+
+//tab Privileges
+
+if($mode == 'view')
+{
+	$tab_perr_array = getTabsPermission($profileId);
+	$no_of_tabs =  sizeof($tab_perr_array);
+	foreach($tab_perr_array as $tabid=>$tab_perr)
+	{
+		$tab=array();
+		$entity_name = getTabname($tabid);
+		$tab_allow_per_id = $tab_perr_array[$tabid];
+		$tab_allow_per = getDisplayValue($tab_allow_per_id,$tabid,'');	
+		$tab[]=$entity_name;
+		$tab[]=$tab_allow_per;
+		$privileges_tab[]=$tab;
+	}
+}
+if($mode == 'edit')
+{
+	$tab_perr_array = getTabsPermission($profileId);
+	$no_of_tabs =  sizeof($tab_perr_array);
+	foreach($tab_perr_array as $tabid=>$tab_perr)
+	{
+		$tab=array();
+		$entity_name = getTabname($tabid);
+		$tab_allow_per_id = $tab_perr_array[$tabid];
+		$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
+		$tab[]=$entity_name;
+		$tab[]=$tab_allow_per;
+		$privileges_tab[]=$tab;
+	}
+}
+if($mode == 'create')
+{
+	if($parentProfileId != '')
+	{
+		$tab_perr_array = getTabsPermission($parentProfileId);
+		$no_of_tabs =  sizeof($tab_perr_array);
+		foreach($tab_perr_array as $tabid=>$tab_perr)
+		{
+			$tab=array();
+			$entity_name = getTabname($tabid);
+			$tab_allow_per_id = $tab_perr_array[$tabid];
+			$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
+			$tab[]=$entity_name;
+			$tab[]=$tab_allow_per;
+			$privileges_tab[]=$tab;
+		}
+	}
+	else
+	{
+		$tab_perr_array = getTabsPermission(1);
+		$no_of_tabs =  sizeof($tab_perr_array);
+		foreach($tab_perr_array as $tabid=>$tab_perr)
+		{
+			$tab=array();
+			$entity_name = getTabname($tabid);
+			$tab_allow_per_id = $tab_perr_array[$tabid];
+			$tab_allow_per = getDisplayOutput(0,$tabid,'');	
+			$tab[]=$entity_name;
+			$tab[]=$tab_allow_per;
+			$privileges_tab[]=$tab;
+		}
+	}
+
+}
+$privileges_tab = array_chunk($privileges_tab, 2);
+$smarty->assign("TAB_PRIV",$privileges_tab);			
+
+//utilities privileges
+
+if($mode == 'view')
+{
+	$act_utility_arry = getTabsUtilityActionPermission($profileId);
+	foreach($act_utility_arry as $tabid=>$action_array)
+	{
+		$util=array();
+		$entity_name = getTabname($tabid);
+		$no_of_actions=sizeof($action_array);
+		foreach($action_array as $action_id=>$act_per)
+		{
+			$action_name = getActionName($action_id);
+			$tab_util_act_per = $action_array[$action_id];
+			$tab_util_per = getDisplayValue($tab_util_act_per,$tabid,$action_id);
+			$util[]=$action_name;
+			$util[]=$tab_util_per;
+		}
+		$util=array_chunk($util,2);
+		$util=array_chunk($util,2);
+		$privilege_util[$entity_name] = $util;
+	}
+}
+elseif($mode == 'edit')
+{
+	$act_utility_arry = getTabsUtilityActionPermission($profileId);
+	foreach($act_utility_arry as $tabid=>$action_array)
+	{
+		$util=array();
+		$entity_name = getTabname($tabid);
+		$no_of_actions=sizeof($action_array);
+		foreach($action_array as $action_id=>$act_per)
+		{
+			$action_name = getActionName($action_id);
+			$tab_util_act_per = $action_array[$action_id];
+			$tab_util_per = getDisplayOutput($tab_util_act_per,$tabid,$action_id);
+			$util[]=$action_name;
+			$util[]=$tab_util_per;
+		}
+		$util=array_chunk($util,2);
+		$util=array_chunk($util,2);
+		$privilege_util[$entity_name] = $util;
+	}
+}
+elseif($mode == 'create')
+{
+	if($parentProfileId != '')
+	{
+		$act_utility_arry = getTabsUtilityActionPermission($parentProfileId);
 		foreach($act_utility_arry as $tabid=>$action_array)
 		{
-
+			$util=array();
 			$entity_name = getTabname($tabid);
-
-			$output .= '<tr>';
-			$output .= '<td width=80%><b>'.$entity_name.'</b></td>';
-			$output .= '<td width=20%></td>';
-			$output .= '</tr>';
-			$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-			$output1 .= '<tr>';
-			$output1 .= '<td width=80%></td>';
-			$output1 .= '<td width=20%></td>';
-			$output1 .= '</tr>';
-			$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-
-		
-			$k=1;
 			$no_of_actions=sizeof($action_array);
 			foreach($action_array as $action_id=>$act_per)
 			{
-				
-
 				$action_name = getActionName($action_id);
 				$tab_util_act_per = $action_array[$action_id];
 				$tab_util_per = getDisplayOutput($tab_util_act_per,$tabid,$action_id);
-
-				
-
-				if($k%2 == 0)
-				{
-					$output1 .= '<tr>';
-					$output1 .= '<td width=80%>'.$action_name.'</td>';
-					$output1 .= '<td width=20%>'.$tab_util_per.'</td>';
-					$output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					
-
-				} 
-				else
-				{
-				
-					$output .= '<tr>';
-					$output .= '<td width=80%>'.$action_name.'</td>';
-					$output .= '<td width=20%>'.$tab_util_per.'</td>';
-					$output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					if($k == $no_of_actions)
-					{
-						$output1 .= '<tr>';
-						$output1 .= '<td width=80%></td>';
-						$output1 .= '<td width=20%></td>';
-						$output1 .= '</tr>';
-						$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-					}
-				}
-				$k++;	
-
+				$util[]=$action_name;
+				$util[]=$tab_util_per;
 			}
+			$util=array_chunk($util,2);
+			$util=array_chunk($util,2);
+			$privilege_util[$entity_name] = $util;
+		}
+	}
+	else
+	{
+		$act_utility_arry = getTabsUtilityActionPermission(1);
+		foreach($act_utility_arry as $tabid=>$action_array)
+		{
+			$util=array();
+			$entity_name = getTabname($tabid);
+			$no_of_actions=sizeof($action_array);
+			foreach($action_array as $action_id=>$act_per)
+			{
+				$action_name = getActionName($action_id);
+				$tab_util_act_per = $action_array[$action_id];
+				$tab_util_per = getDisplayOutput(0,$tabid,$action_id);
+				$util[]=$action_name;
+				$util[]=$tab_util_per;
+			}
+			$util=array_chunk($util,2);
+			$util=array_chunk($util,2);
+			$privilege_util[$entity_name] = $util;
 		}
 
 	}
-	$xtpl->assign("OUTPUT", $output);
-	$xtpl->assign("OUTPUT1", $output1);
 
 }
-elseif($secondaryModule == 'field_priv')
+$smarty->assign("UTILITIES_PRIV",$privilege_util);		
+
+//Field privileges		
+$modArr= Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
+		'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
+		'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
+		'Potentials'=>'LBL_OPPORTUNITY_FIELD_ACCESS',
+		'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
+		'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
+		'Notes'=>'LBL_NOTE_FIELD_ACCESS',
+		'Emails'=>'LBL_EMAIL_FIELD_ACCESS',
+		'Activities'=>'LBL_TASK_FIELD_ACCESS',
+		'Events'=>'LBL_EVENT_FIELD_ACCESS',
+		'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
+		'PriceBooks'=>'LBL_PB_FIELD_ACCESS',
+		'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
+		'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
+		'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
+		'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
+	      );
+$no_of_mod=sizeof($modArr);
+for($i=0;$i<$no_of_mod; $i++)
 {
-		$xtpl->assign("GLOBAL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("TAB_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("STAND_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("UTIL_PRIV_CLASS", 'prvPrfUnSelectedTab');
-		$xtpl->assign("FIELD_PRIV_CLASS", 'prvPrfSelectedTab');
-		if($mode == 'list')
+	$fldModule=key($modArr);
+	$lang_str=$modArr[$fldModule];	
+	$privilege_fld[]=$fldModule;
+	next($modArr);
+}
+$smarty->assign("PRI_FIELD_LIST",$privilege_fld);	
+
+if($mode=='view')
+{
+	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);
+	for($i=0; $i<count($fieldListResult);$i++)
+	{
+		$field_module=array();
+		$module_name=key($fieldListResult);
+		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
-			$modArr= Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
-					'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
-					'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
-					'Potentials'=>'LBL_OPPORTUNITY_FIELD_ACCESS',
-					'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
-					'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
-					'Notes'=>'LBL_NOTE_FIELD_ACCESS',
-					'Emails'=>'LBL_EMAIL_FIELD_ACCESS',
-					'Activities'=>'LBL_TASK_FIELD_ACCESS',
-					'Events'=>'LBL_EVENT_FIELD_ACCESS',
-					'Vendor'=>'LBL_VENDOR_FIELD_ACCESS',
-					'PriceBook'=>'LBL_PB_FIELD_ACCESS',
-					'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
-					'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
-					'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
-					'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
-					);
-
-			$no_of_mod=sizeof($modArr);
-			for($i=0;$i<$no_of_mod; $i++)
+			$field=array();
+			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$fldModule=key($modArr);
-				$lang_str=$modArr[$fldModule];	
-
-				$output .= '<tr>';
-	                        $output .= '<td width=80%><a href="index.php?module=Users&action=profilePrivileges&mode=view&secmodule=field_priv&profileid='.$profileId.'&fld_module='.$fldModule.'"><img src="'.$image_path.'/bullet.gif" align="absmiddle" border="0" hspace="5">'.$mod_strings[$lang_str].'</a></td>';
-        	                $output .= '<td width=20%></td>';
-                	        $output .= '</tr>';
-				$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				$i++;
-				next($modArr);
-				$fldModule=key($modArr);
-				$lang_str=$modArr[$fldModule];
-
-				$output1 .= '<tr>';
-        	                $output1 .= '<td width=80%><a href="index.php?module=Users&action=profilePrivileges&mode=view&secmodule=field_priv&profileid='.$profileId.'&fld_module='.$fldModule.'"><img src="'.$image_path.'/bullet.gif" align="absmiddle" border="0" hspace="5">'.$mod_strings[$lang_str].'</a></td>';
-                	        $output1 .= '<td width=20%></td>';
-                        	$output1 .= '</tr>';
-				$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				next($modArr);
+				$visible = "<img src=".$image_path."/yes.gif>";
 			}
-			
-				
-		}
-		elseif($mode=='view')
-		{
-			
-			$fld_module=$_REQUEST['fld_module'];
-			$xtpl->assign("FIELDMODULE", '&nbsp;&nbsp;<b>- '.$fld_module.' Field Access</b>');	
-			$edit_save='<a href="index.php?module=Users&action=profilePrivileges&mode=edit&secmodule=field_priv&profileid='.$profileId.'&fld_module='.$fld_module.'">Edit Privileges</a>';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);
-
-			$fieldListResult = getProfile2FieldList($fld_module, $profileId);
-			$noofrows = $adb->num_rows($fieldListResult);
-			for($i=0; $i<$noofrows; $i++)
+			else
 			{
-				$fldLabel= $adb->query_result($fieldListResult,$i,"fieldlabel");
-				if($adb->query_result($fieldListResult,$i,"visible") == 0)
-       			        {
-                        		$visible = "<img src=".$image_path."/yes.gif>";
-                		}
-                		else
-                		{
-		                        $visible = "<img src=".$image_path."/no.gif>";
-                		}
-
-				if(($i+1)%2 == 0)
-				{
-					$output1 .= '<tr>';
-	                	        $output1 .= '<td width=80%>'.$fldLabel.'</td>';
-		                        $output1 .= '<td width=20%>'.$visible.'</td>';
-        		                $output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
-				else
-				{
-					$output .= '<tr>';
-		                        $output .= '<td width=80%>'.$fldLabel.'</td>';
-        			        $output .= '<td width=20%>'.$visible.'</td>';
-                	        	$output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
-				}
+				$visible = "<img src=".$image_path."/no.gif>";
 			}
-			
-	
+			$field[]=$fieldListResult[$module_name][$j][0];
+			$field[]=$visible;
+			$field_module[]=$field;
 		}
-		elseif($mode=='edit')
+		$privilege_field[$module_name] = array_chunk($field_module,2);
+		next($fieldListResult);
+	}
+}
+elseif($mode=='edit')
+{
+	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);
+	for($i=0; $i<count($fieldListResult);$i++)
+	{
+		$field_module=array();
+		$module_name=key($fieldListResult);
+		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
-			$fld_module=$_REQUEST['fld_module'];
-			$xtpl->assign("FIELDMODULE", '&nbsp;&nbsp;<b>- '.$fld_module.' Field Access</b>');	
-			$edit_save .= '<input type="hidden" name="module" value="Users">';
-	                $edit_save .= '<input type="hidden" name="profileid" value="'.$profileId.'">';
-        	        $edit_save .= '<input type="hidden" name="action" value="UpdateProfileChanges">';
-                	$edit_save .= '<input type="hidden" name="secmodule" value="field_priv">';
-                	$edit_save .= '<input type="hidden" name="fld_module" value="'.$fld_module.'">';
-	                $edit_save .= '<input type="hidden" name="mode" value="save">';
-		        $edit_save .= '<input title="Save" accessKey="S" class="button" type="submit" name="Save" value="Save">';
-                        $xtpl->assign("EDIT_SAVE", $edit_save);	
-			
-			$fieldListResult = getProfile2FieldList($fld_module, $profileId);
-			$noofrows = $adb->num_rows($fieldListResult);
-			for($i=0; $i<$noofrows; $i++)
+			$fldLabel= $fieldListResult[$module_name][$j][0];
+			$uitype = $fieldListResult[$module_name][$j][2];
+			$mandatory = '';
+			$readonly = '';
+			$field=array();
+
+			if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 			{
-				$fldLabel= $adb->query_result($fieldListResult,$i,"fieldlabel");
-				$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		                $mandatory = '';
-                		$readonly = '';
+				$mandatory = '<font color="red">*</font>';
+				$readonly = 'disabled';
+			}	
+			if($fieldListResult[$module_name][$j][3] == 0)
+			{
+				$visible = "checked";
+			}
+			else
+			{
+				$visible = "";
+			}
+			$field[]=$mandatory.' '.$fldLabel;
+			$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+			$field_module[]=$field;
+		}
+		$privilege_field[$module_name] = array_chunk($field_module,2);
+		next($fieldListResult);
+	}
+}
+elseif($mode=='create')
+{
+	if($parentProfileId != '')
+	{
+		$fieldListResult = getProfile2AllFieldList($modArr,$parentProfileId);
+		for($i=0; $i<count($fieldListResult);$i++)
+		{
+			$field_module=array();
+			$module_name=key($fieldListResult);
+			for($j=0; $j<count($fieldListResult[$module_name]); $j++)
+			{
+				$fldLabel= $fieldListResult[$module_name][$j][0];
+				$uitype = $fieldListResult[$module_name][$j][2];
+				$mandatory = '';
+				$readonly = '';
+				$field=array();
 
 				if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
-                		{
-                        		$mandatory = '<font color="red">*</font>';
-		                        $readonly = 'disabled';
-        	        	}	
-				if($adb->query_result($fieldListResult,$i,"visible") == 0)
-       			        {
-					$visible = "checked";
-                		}
-                		else
-                		{
-					$visible = "";
-                		}
-
-				if(($i+1)%2 == 0)
 				{
-					$output1 .= '<tr>';
-	                	        $output1 .= '<td width=80%>'.$mandatory.' '.$fldLabel.'</td>';
-		                        $output1 .= '<td width=20%><input type="checkbox" name="'.$adb->query_result($fieldListResult,$i,"fieldid").'" '.$visible.' '.$readonly.'></td>';
-        		                $output1 .= '</tr>';
-					$output1 .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
+					$mandatory = '<font color="red">*</font>';
+					$readonly = 'disabled';
+				}	
+				if($fieldListResult[$module_name][$j][3] == 0)
+				{
+					$visible = "checked";
 				}
 				else
 				{
-					$output .= '<tr>';
-					$output .= '<td width=80%>'.$mandatory.' '.$fldLabel.'</td>';
-		                        $output .= '<td width=20%><input type="checkbox" name="'.$adb->query_result($fieldListResult,$i,"fieldid").'" '.$visible.' '.$readonly.'></td>';
-                	        	$output .= '</tr>';
-					$output .='<tr><td colspan=4 style="border-top:1px dashed #ebebeb"></td></tr>';
+					$visible = "";
 				}
+				$field[]=$mandatory.' '.$fldLabel;
+				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+				$field_module[]=$field;
 			}
-			
-	
+			$privilege_field[$module_name] = array_chunk($field_module,2);
+			next($fieldListResult);
 		}
-		$xtpl->assign("OUTPUT", $output);
-		$xtpl->assign("OUTPUT1", $output1);
+	}
+	else
+	{
+		$fieldListResult = getProfile2AllFieldList($modArr,1);
+		for($i=0; $i<count($fieldListResult);$i++)
+		{
+			$field_module=array();
+			$module_name=key($fieldListResult);
+			for($j=0; $j<count($fieldListResult[$module_name]); $j++)
+			{
+				$fldLabel= $fieldListResult[$module_name][$j][0];
+				$uitype = $fieldListResult[$module_name][$j][2];
+				$mandatory = '';
+				$readonly = '';
+				$field=array();
+
+				if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+				{
+					$mandatory = '<font color="red">*</font>';
+					$readonly = 'disabled';
+				}	
+				$visible = "checked";
+				$field[]=$mandatory.' '.$fldLabel;
+				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+				$field_module[]=$field;
+			}
+			$privilege_field[$module_name] = array_chunk($field_module,2);
+			next($fieldListResult);
+		}	
+	}
 }
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
-
-$xtpl->parse("main");
-
-$xtpl->out("main");
-
+$smarty->assign("FIELD_PRIVILEGES",$privilege_field);	
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+if($mode == 'view')
+	$smarty->display("ProfileDetailView.tpl");
+else
+	$smarty->display("EditProfile.tpl");
 
 function getGlobalDisplayValue($id,$actionid)
 {
-        global $image_path;
-        if($id == '')
-        {
-                $value = '&nbsp;';
-        }
-        elseif($id == 0)
-        {
-                $value = '<img src="'.$image_path.'yes.gif">';
-        }
-        elseif($id == 1)
-        {
-                $value = '<img src="'.$image_path.'no.gif">';
-        }
-        else
-        {
-                $value = '&nbsp;';
-        }
+	global $image_path;
+	if($id == '')
+	{
+		$value = '&nbsp;';
+	}
+	elseif($id == 0)
+	{
+		$value = '<img src="'.$image_path.'yes.gif">';
+	}
+	elseif($id == 1)
+	{
+		$value = '<img src="'.$image_path.'no.gif">';
+	}
+	else
+	{
+		$value = '&nbsp;';
+	}
 
-        return $value;
+	return $value;
 
 }
 
 function getGlobalDisplayOutput($id,$actionid)
 {
-        if($actionid == '1')
-        {
-                $name = 'view_all';
-        }
-        elseif($actionid == '2')
-        {
+	if($actionid == '1')
+	{
+		$name = 'view_all';
+	}
+	elseif($actionid == '2')
+	{
 
-                $name = 'edit_all';
-        }
+		$name = 'edit_all';
+	}
 
-        if($id == '')
-        {
-                $value = '';
-        }
-        elseif($id == 0)
-        {
-                $value = '<input type="checkbox" name="'.$name.'" checked>';
-        }
-        elseif($id == 1)
-        {
-                $value = '<input type="checkbox" name="'.$name.'">';
-        }
-        return $value;
+	if($id == '' && $id != 0)
+	{
+		$value = '';
+	}
+	elseif($id == 0)
+	{
+		$value = '<input type="checkbox" name="'.$name.'" checked>';
+	}
+	elseif($id == 1)
+	{
+		$value = '<input type="checkbox" name="'.$name.'">';
+	}
+	return $value;
 
 }
 
 function getDisplayValue($id)
 {
-        global $image_path;
+	global $image_path;
 
-        if($id == '')
-        {
-                $value = '&nbsp;';
-        }
-        elseif($id == 0)
-        {
-                $value = '<img src="'.$image_path.'yes.gif">';
-        }
-        elseif($id == 1)
-        {
-                $value = '<img src="'.$image_path.'no.gif">';
-        }
-        else
-        {
-                $value = '&nbsp;';
-        }
-        return $value;
+	if($id == '')
+	{
+		$value = '&nbsp;';
+	}
+	elseif($id == 0)
+	{
+		$value = '<img src="'.$image_path.'yes.gif">';
+	}
+	elseif($id == 1)
+	{
+		$value = '<img src="'.$image_path.'no.gif">';
+	}
+	else
+	{
+		$value = '&nbsp;';
+	}
+	return $value;
 
 }
 
 function getDisplayOutput($id,$tabid,$actionid)
 {
-        if($actionid == '')
-        {
-                $name = $tabid.'_tab';
-        }
-        else
-        {
-                $temp_name = getActionname($actionid);
-                $name = $tabid.'_'.$temp_name;
-        }
+	if($actionid == '')
+	{
+		$name = $tabid.'_tab';
+	}
+	else
+	{
+		$temp_name = getActionname($actionid);
+		$name = $tabid.'_'.$temp_name;
+	}
 
 
 
-        if($id == '')
-        {
-                $value = '';
-        }
-        elseif($id == 0)
-        {
-                $value = '<input type="checkbox" name="'.$name.'" checked>';
-        }
-        elseif($id == 1)
-        {
-                $value = '<input type="checkbox" name="'.$name.'">';
-        }
-        return $value;
+	if($id == '' && $id != 0)
+	{
+		$value = '';
+	}
+	elseif($id == 0)
+	{
+		$value = '<input type="checkbox" name="'.$name.'" checked>';
+	}
+	elseif($id == 1)
+	{
+		$value = '<input type="checkbox" name="'.$name.'">';
+	}
+	return $value;
 
 }
 

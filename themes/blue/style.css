@@ -1320,4 +1320,80 @@ a.imageTab:Hover{
 	background: url(images/calc_mem_btn.gif) no-repeat;
 	width:25px;
 }
+/* profile */
+
+.small {
+		font-family: Arial, Helvetica, sans-serif;
+			font-size: 11px;
+}
+
+.prvPrfBigText {
+		font-family: Arial, Helvetica, sans-serif;
+			font-size: 14px;
+}
+
+.prvPrfTopBg {
+		background-color:#ebebeb;
+}
+
+.prvPrfBottomBg {
+		background-color:#ebebeb;
+}
+
+.prvPrfOutline {
+		border:1px solid #ebebeb;
+}
+
+.prvPrfSelectedTab {
+		background:url(images/prvPrfSelectedTab.gif) repeat-x;
+		cursor:pointer;
+
+}
+
+.prvPrfUnSelectedTab {
+		background:url(images/prvPrfUnSelectedTab.gif) repeat-x;
+		cursor:pointer;
+
+}
+
+.prvPrfTexture {
+		background:url(images/prvPrfTexture1.gif);
+
+}
+.prvPrfBgOn{
+		background-color:#33ee33;
+}
+.prvPrfBgOff{
+		background-color:#cccccc;
+}
+
+.prvPrfHoverOn {
+		background-color:#ffffef;
+			
+}
+.prvPrfHoverOut {
+		background-color:#ffffff;
+}
+
+.prvPrfBgImgGlobal {
+		background:url(images/prvPrfBgImgGlobal.jpg) top right no-repeat;
+}
+.prvPrfBgImgTab {
+		background:url(images/prvPrfBgImgTab.jpg) top right no-repeat;
+}
+.prvPrfBgImgStandard {
+		background:url(images/prvPrfBgImgStandard.jpg) top right no-repeat;
+}
+.prvPrfBgImgUtils {
+		background:url(images/prvPrfBgImgUtils.jpg) top right no-repeat;
+}
+.prvPrfBgImgField {
+		background:url(images/prvPrfBgImgField.jpg) top right no-repeat;
+}
+
+.prvPrfTabSample {
+		border-top:1px solid #ababab;
+		border-left:1px solid #ababab;
+		border-right:1px solid #a1a1a1;
+}
 

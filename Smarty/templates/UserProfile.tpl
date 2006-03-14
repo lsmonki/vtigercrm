@@ -8,6 +8,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 <form action="index.php" method="post" name="new" id="form">
 <input type="hidden" name="module" value="Users">
+<input type="hidden" name="mode" value="create">
 <input type="hidden" name="action" value="CreateProfile">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
@@ -36,10 +37,10 @@
 		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 		<td nowrap>&nbsp;
 		{if $LIST_ENTRIES[entries].del_permission eq 'yes'}
-		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0">
+		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a><a href="index.php?module=Users&action=profilePrivileges&mode=edit&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
 		{/if}
 		&nbsp;</td>
-		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</a></td>
+		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&mode=view&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
 		<tr>
 	{/section}	
@@ -50,7 +51,6 @@
 <td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
 </tr>
 </table>
-</form>
 </td>
 </tr>
 </table>

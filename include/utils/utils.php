@@ -1005,6 +1005,44 @@ function getProfile2FieldList($fld_module, $profileid)
 	$result = $adb->query($query);
 	return $result;
 }
+
+//added by jeri
+
+function getProfile2FieldPermissionList($fld_module, $profileid)
+{
+	global $log;
+    $log->info("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid);
+
+	global $adb;
+	$tabid = getTabid($fld_module);
+	
+	$query = "select profile2field.visible,field.* from profile2field inner join field on field.fieldid=profile2field.fieldid where profile2field.profileid=".$profileid." and profile2field.tabid=".$tabid;
+	$result = $adb->query($query);
+	$return_data=array();
+    for($i=0; $i<$adb->num_rows($result); $i++)
+    {
+		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"));
+	}	
+	return $return_data;
+}
+
+function getProfile2AllFieldList($mod_array,$profileid)
+{
+	global $log;
+    $log->info("in getProfile2AllFieldList profile id is " .$profileid);
+
+	global $adb;
+	$profilelist=array();
+	for($i=0;$i<count($mod_array);$i++)
+	{
+		$profilelist[key($mod_array)]=getProfile2FieldPermissionList(key($mod_array), $profileid);
+		next($mod_array);
+	}
+	return $profilelist;	
+}
+
+//end of fn added by jeri
+
 function getDefOrgFieldList($fld_module)
 {
 	global $log;
