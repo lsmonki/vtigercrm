@@ -16,7 +16,7 @@ require_once('include/utils/GetParentGroups.php');
 class GetUserGroups { 
 
 	var $user_groups=Array();
-	var $userRole='';
+	//var $userRole='';
 
 	/** to get all the parent groups of the specified group
 	 * @params $groupId --> Group Id :: Type Integer
@@ -38,12 +38,16 @@ class GetUserGroups {
 					
 			}
 		}
+
+		//Setting the User Role
+		$userRole = fetchUserRole($userid);
+
 		//echo 'user2group Array<BR>';
 		//print_r($this->user_groups);
 		//echo 'user2group Array<BR>';
 
 		//Retreiving from the user2role
-		$query="select * from group2role where roleid='".$this->userRole."'";
+		$query="select * from group2role where roleid='".$userRole."'";
                 $result = $adb->query($query);
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)
@@ -57,13 +61,13 @@ class GetUserGroups {
                 }
 
 		//Retreiving from the user2rs
-		$parentRoles=getParentRole($this->userRole);
+		$parentRoles=getParentRole($userRole);
 		$parentRolelist="(";
 		foreach($parentRoles as $par_rol_id)
 		{
 			$parentRolelist .= "'".$par_rol_id."',";		
 		}
-		$parentRolelist .= "'".$this->userRole."')";
+		$parentRolelist .= "'".$userRole."')";
 		//echo '<BR> '.$parentRolelist.'<BR>';		
 		$query="select * from group2rs where roleandsubid in".$parentRolelist;
                 $result = $adb->query($query);
