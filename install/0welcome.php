@@ -84,21 +84,27 @@ Every developer and contributor has added value to vtiger either in the
 form of bug reports, bug fixes, feature contributions or for that
 matter, providing the hosting machine or maintenance of the forge. This
 is a product of pure teamwork and passion. We intend to create something worth
-using and worth using for long.<br><br>
+using, worth using for long.<br><br>
 
 <i>We sincerely hope, we are able to live upto your expectations.</i>
 
 <br>
 <br>
-<bold>
-vtiger does not believe in any big dollar marketing campaign or model
-sponsor. But we do believe that <b>you</b> can and will make a
-difference.
- <br>
-If you feel we have lived upto your expectations,
+<bold>vtiger is 100% pure Open Source. <u>You do not have to pay anything to use the product </u>.There are no hidden costs. We would be happy if you would subscribe to the support package though. 
+
+<ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
+vtiger does not believe in any big dollar marketing campaign hence you will not find much advertisement about vtiger from us. Whatever you see and hear is purely due to word of mouth. We do believe that <b>YOU</b> can and will make a
+difference.If you feel we have lived upto your expectations,
  please do consider spreading the word about vtiger by - telling a
 friend,  setting it up for someone, or blogging about us or in any
-other manner you are comfortable with.
+other manner you are comfortable with. Please find mentioned below some information about us that you could utilize
+<ul>http://blogs.vtiger.com</ul> 
+<ul>http://forums.vtiger.com </ul>
+<ul>http://vtiger.fosslabs.com (vtigerforge)</ul> 
+<ul>vtigercrm-developers@lists.vtigercrm.com (Mailing List)</ul>
+<ul>Join Freenode - /join #vtiger (IRC Channel)</ul>
+
+
 <br>
 <br>
 <br>
@@ -122,7 +128,7 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 This Configuration Wizard will create vtiger CRM 5.0 Alpha2 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions<br>
+				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
 				<br></span>
 <br>
 		</td>
