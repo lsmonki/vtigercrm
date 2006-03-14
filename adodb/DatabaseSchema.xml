@@ -5276,10 +5276,10 @@
 			<DEFAULT value=""/>
 		</field>
 		<field name="startdate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="0000-00-00"/>
 		</field>
 		<field name="enddate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="0000-00-00"/>
 		</field>
 		<index name="cvstdfilter_IDX0">
 			<col>cvid</col>
