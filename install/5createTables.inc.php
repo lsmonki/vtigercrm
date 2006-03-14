@@ -39,7 +39,7 @@ require_once('modules/Users/TabMenu.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('modules/Users/Security.php');
 
 // load the config_override.php file to provide default user settings
