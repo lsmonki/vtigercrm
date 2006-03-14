@@ -16,123 +16,142 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+
+// TODO: deprecate connection.php file
 //require_once("connection.php");
 
-$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
+// TODO: introduce MySQL port as parameters to use non-default value 3306
+//$sock_path=":" .$mysql_port;
+$hostname = $_SERVER['SERVER_NAME'];
+
+// TODO: introduce Apache port as parameters to use non-default value 80
+//$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
+$web_root = $hostname.$_SERVER['PHP_SELF'];
 $web_root = str_replace("/install.php", "", $web_root);
-$web_root = "http://$web_root";
+$web_root = "http://".$web_root;
+
 $current_dir = pathinfo(dirname(__FILE__));
-$current_dir=$current_dir['dirname']."/";
+$current_dir = $current_dir['dirname']."/";
 $cache_dir = "cache/";
 
-// To make MySQL run in desired port
-$sock_path=":" .$mysql_port;
-
-$H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
-if (is_file("config.php")) {
+if (is_file("config.php") && is_file("config.inc.php")) {
 	require_once("config.php");
-
 	session_start();
+
 	if(isset($upload_maxsize))
-                 $_SESSION['upload_maxsize'] = $upload_maxsize;
-         if(isset($allow_exports))
-                 $_SESSION['allow_exports'] = $allow_exports;
+	$_SESSION['upload_maxsize'] = $upload_maxsize;
+
+	if(isset($allow_exports))
+	$_SESSION['allow_exports'] = $allow_exports;
+
 	if(isset($disable_persistent_connections))
-		$_SESSION['disable_persistent_connections'] = $disable_persistent_connections;
+	$_SESSION['disable_persistent_connections'] = $disable_persistent_connections;
+
 	if(isset($default_language))
-		$_SESSION['default_language'] = $default_language;
+	$_SESSION['default_language'] = $default_language;
+
 	if(isset($translation_string_prefix))
-		$_SESSION['translation_string_prefix'] = $translation_string_prefix;
+	$_SESSION['translation_string_prefix'] = $translation_string_prefix;
+
 	if(isset($default_charset))
-		$_SESSION['default_charset'] = $default_charset;
-	if(isset($languages))
-	{
-		// We need to encode the languages in a way that can be retrieved later.
+	$_SESSION['default_charset'] = $default_charset;
+
+	if(isset($languages)) {
+		// need to encode the languages in a way that can be retrieved later
 		$language_keys = Array();
 		$language_values = Array();
 
-		foreach($languages as $key=>$value)
-		{
+		foreach($languages as $key=>$value) {
 			$language_keys[] = $key;
 			$language_values[] = $value;
 		}
-
 		$_SESSION['language_keys'] = urlencode(implode(",",$language_keys));
 		$_SESSION['language_values'] = urlencode(implode(",",$language_values));
 	}
-
+													
 	global $dbconfig;
-	if (isset($_REQUEST['db_host_name'])) {
-		$db_host_name = $_REQUEST['db_host_name'];
-	}
-	elseif (isset($dbconfig['db_host_name'])) {
-		$db_host_name = $dbconfig['db_host_name'];
-	}
-	else {
-		$db_host_name = $H_NAME.$sock_path;
-	}
 
-	if (isset($_REQUEST['db_user_name'])) {
-		$db_user_name = $_REQUEST['db_user_name'];
-	}
-	elseif (isset($dbconfig['db_user_name'])) {
-		$db_user_name = $dbconfig['db_user_name'];
-	}
-	else {
-		$db_user_name = $mysql_username;
-	}
+	if (isset($_REQUEST['db_hostname']))
+	$db_hostname = $_REQUEST['db_hostname'];
+	elseif (isset($dbconfig['db_hostname']))
+	$db_hostname = $dbconfig['db_hostname'];
+	else
+	$db_hostname = $hostname;
+	// TODO: introduce MySQL port as parameters to use non-default value 3306
+	//  else
+	//    $db_hostname = $hostname.$sock_path;
 
-	if (isset($_REQUEST['db_password'])) {
-		$db_password = $_REQUEST['db_password'];
-	}
-	elseif (isset($dbconfig['db_password'])) {
-		$db_password = $dbconfig['db_password'];
-	}
-	else {
-		$db_password = $mysql_password;
-	}
+	if (isset($_REQUEST['db_username']))
+	$db_username = $_REQUEST['db_username'];
+	elseif (isset($dbconfig['db_username']))
+	$db_username = $dbconfig['db_username'];
+	// TODO: deprecate connection.php file parameters
+	//  else
+	//    $db_username = $mysql_username;
 
-	if (isset($_REQUEST['db_name'])){
-		$db_name = $_REQUEST['db_name'];
-	}
-	elseif (isset($dbconfig['db_name'])) {
-		$db_name = $dbconfig['db_name'];
-	}
-	else {
-		$db_name = 'vtigercrm5_beta';
-	}
+	if (isset($_REQUEST['db_password']))
+	$db_password = $_REQUEST['db_password'];
+	elseif (isset($dbconfig['db_password']))
+	$db_password = $dbconfig['db_password'];
+	// TODO: deprecate connection.php file parameters
+	//  else
+	//    $db_password = $mysql_password;
+
+	if (isset($_REQUEST['db_name']))
+	$db_name = $_REQUEST['db_name'];
+	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
+	$db_name = $dbconfig['db_name'];
+	else
+	$db_name = 'vtigercrm5_beta';
+
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
-
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
-	else $host_name = $_SERVER['SERVER_NAME'];
+	else $host_name = $hostname;
+
 	if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
 	else $site_URL = $web_root;
+
 	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
 	else $root_directory = $current_dir;
-	if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
-	if (isset($_REQUEST['mail_server'])) $mail_server= $_REQUEST['mail_server'];
-	if (isset($_REQUEST['mail_server_username'])) $mail_server_username= $_REQUEST['mail_server_username'];
-	if (isset($_REQUEST['mail_server_password'])) $mail_server_password= $_REQUEST['mail_server_password'];
-	if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
-	if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
-}
-else {
-	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
-	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
-	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm5_beta" : $db_name = $_REQUEST['db_name'];
-	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
-	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
-	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
-	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
-	!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
 
-	!isset($_REQUEST['mail_server']) ? $mail_server = $mail_server : $mail_server = stripslashes($_REQUEST['mail_server']);
-	!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
-	!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
-	!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
-}
+	if (isset($_REQUEST['cache_dir']))
+	$cache_dir= $_REQUEST['cache_dir'];
 
+	if (isset($_REQUEST['mail_server']))
+	$mail_server= $_REQUEST['mail_server'];
+
+	if (isset($_REQUEST['mail_server_username']))
+	$mail_server_username= $_REQUEST['mail_server_username'];
+
+	if (isset($_REQUEST['mail_server_password']))
+	$mail_server_password= $_REQUEST['mail_server_password'];
+
+	if (isset($_REQUEST['admin_email']))
+	$admin_email = $_REQUEST['admin_email'];
+
+	if (isset($_REQUEST['admin_password']))
+	$admin_password = $_REQUEST['admin_password'];
+	}
+	else {
+		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
+		/*
+		TODO: introduce MySQL port as parameters to use non-default value 3306
+		TODO: deprecate connection.php file parameters
+		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname.$sock_path : $db_hostname = $_REQUEST['db_hostname'];
+		!isset($_REQUEST['db_username']) ? $db_username = $mysql_username : $db_username = $_REQUEST['db_username'];
+		!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
+		*/
+		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm5_beta" : $db_name = $_REQUEST['db_name'];
+		!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
+		!isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
+		!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
+		!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
+		!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
+		!isset($_REQUEST['mail_server']) ? $mail_server = $mail_server : $mail_server = stripslashes($_REQUEST['mail_server']);
+		!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
+		!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
+		!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
+		}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -162,15 +181,15 @@ function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
 	// Here we decide whether to submit the form.
-	if (trim(form.db_host_name.value) =='') {
+	if (trim(form.db_hostname.value) =='') {
 		isError = true;
 		errorMessage += "\n database host name";
-		form.db_host_name.focus();
+		form.db_hostname.focus();
 	}
-	if (trim(form.db_user_name.value) =='') {
+	if (trim(form.db_username.value) =='') {
 		isError = true;
 		errorMessage += "\n database user name";
-		form.db_user_name.focus();
+		form.db_username.focus();
 	}
 	if (trim(form.db_name.value) =='') {
 		isError = true;
@@ -306,11 +325,11 @@ function verify_data(form) {
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
+               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>

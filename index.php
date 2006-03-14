@@ -281,17 +281,17 @@ insert_charset_header();
 // Create or reestablish the current session
 session_start();
 
-if (!is_file('config.php')) {
-    header("Location: install.php");
-    exit();
+if (!is_file('config.inc.php')) {
+	header("Location: install.php");
+	exit();
 }
 
-require_once('config.php');
-if (!isset($dbconfig['db_host_name'])) {
-    header("Location: install.php");
-    exit();
+require_once('config.inc.php');
+if (!isset($dbconfig['db_hostname']) || $dbconfig['db_status']=='_DB_STAT_') {
+		header("Location: install.php");
+		exit();
 }
-
+			
 // load up the config_override.php file.  This is used to provide default user settings
 if (is_file('config_override.php')) 
 {
