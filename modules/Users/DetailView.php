@@ -202,26 +202,40 @@ if(is_admin($current_user))
 	$smarty->assign("CURRENCY_NAME",$currency);
 }
 
+//Getting the Group Lists
+$query ="select groupid,groupname from groups where groupid in (".fetchUserGroupids($focus->id).")";
+$result = $adb->query($query);
+$num_rows = $adb->num_rows($result);
 
+
+
+//Assigning the group lists
 if(is_admin($current_user))
 {
-	$query ="select groupname from groups where groupid in (".fetchUserGroupids($current_user->id).")";
-	$result = $adb->query($query);
-	$num_rows = $adb->num_rows($result);
+	for($i=0;$i < $num_rows;$i++)
+	{
+		$groupid = $adb->query_result($result,$i,'groupid');
+		$groupname = $adb->query_result($result,$i,'groupname');
+		$grouplists[$i] ="<a href='index.php?module=Users&action=GroupDetailView&groupId=".$groupid."'>".$groupname."</a>";
+	}
+	if($grouplists != '')
+	{	
+		$group_lists = implode(",",$grouplists);
+	}	
+	$smarty->assign("GROUPASSIGNED",$group_lists);
+}
+else
+{
 	for($i=0;$i < $num_rows;$i++)
 	{
 		$groupname = $adb->query_result($result,$i,'groupname');
-		$grouplists[$i] ="<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$groupname."'>".$groupname."</a>";
+		$grouplists[$i] =$groupname;
 	}
 	if($grouplists != '')
 	{	
 		$group_lists = implode(",",$grouplists);
 	}
 	$smarty->assign("GROUPASSIGNED",$group_lists);
-}
-else
-{
-	$smarty->assign("GROUPASSIGNED",$group);
 }
 $smarty->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
 
