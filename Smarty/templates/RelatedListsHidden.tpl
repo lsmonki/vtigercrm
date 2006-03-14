@@ -62,4 +62,4 @@
 {elseif $MODULE eq 'HelpDesk'}
         <input type="hidden" name="ticket_id" value="{$id}">
 {/if}
-</form>
+
