@@ -30,11 +30,11 @@ class PopulateComboValues
           {
             if($val != '')
             {
-              $adb->query("insert into ".$tableName. " values('','".$val."',".$i.",1)");
+              $adb->query("insert into ".$tableName. " values(null,'".$val."',".$i.",1)");
             }
             else
             {
-              $adb->query("insert into ".$tableName. " values('','--None--',".$i.",1)");
+              $adb->query("insert into ".$tableName. " values(null,'--None--',".$i.",1)");
             }
             $i++;
           }
