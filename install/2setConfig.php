@@ -35,7 +35,7 @@ $current_dir = $current_dir['dirname']."/";
 $cache_dir = "cache/";
 
 if (is_file("config.php") && is_file("config.inc.php")) {
-	require_once("config.php");
+	require_once("config.inc.php");
 	session_start();
 
 	if(isset($upload_maxsize))

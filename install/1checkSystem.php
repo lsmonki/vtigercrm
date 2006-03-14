@@ -242,8 +242,8 @@ $array = Array(
 		</tr>
 		<tr bgcolor="#efefef"><td colspan=2><strong><span style="color:#003399">Read/Write Access</span></strong></td></tr>
 		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>PHP Configuration</strong><br>(config.php)</strong></td>
-			<td valign=top bgcolor="white" ><?php echo (is_writable('./config.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
+			<td valign=top ><strong>PHP Configuration</strong><br>(config.inc.php)</strong></td>
+			<td valign=top bgcolor="white" ><?php echo (is_writable('./config.inc.php') || is_writable('.'))?"<strong><font color=\"#0066CC\">Writeable</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Writeable</font>"; ?></td>
 		</tr>
 		 <tr bgcolor="#fafafa">
 		    <td valign=top ><strong>Cache Directory </strong> <br>(cache/)</td>
