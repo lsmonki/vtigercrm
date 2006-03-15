@@ -2276,25 +2276,77 @@ function getRoleAndSubordinatesRoleIds($roleId)
  */
 function deleteRole($roleId,$transferRoleId)
 {
-	global $adb;
-	$roleInfo=getRoleAndSubordinatesInformation($roleId);
-	foreach($roleInfo as $roleid=>$roleDetArr)
-	{
-		
-		$sql1 = "update user2role set roleid='".$transferRoleId."' where roleid='".$roleid."'";
-		$adb->query($sql1);
+        global $adb;
+        $roleInfo=getRoleAndSubordinatesInformation($roleId);
+        foreach($roleInfo as $roleid=>$roleDetArr)
+        {
 
-		//Deleteing from role2profile table
-		$sql2 = "delete from role2profile where roleid='".$roleid."'";
-		$adb->query($sql2);
+                $sql1 = "update user2role set roleid='".$transferRoleId."' where roleid='".$roleid."'";
+                $adb->query($sql1);
 
-		//delete from role table;
-		$sql9 = "delete from role where roleid='".$roleid."'";
-		$adb->query($sql9);
-		//echo $sql1.'            '.$sql2.'           '.$sql9;		
-	}
+                //Deleteing from role2profile table
+                $sql2 = "delete from role2profile where roleid='".$roleid."'";
+                $adb->query($sql2);
+
+                //delete handling for groups
+                $sql10 = "delete from group2role where roleid='".$roleid."'";
+                $adb->query($sql10);
+
+                $sql11 = "delete from group2rs where roleandsubid='".$roleid."'";
+                $adb->query($sql11);
+
+
+                //delete handling for sharing rules
+                deleteRoleRelatedSharingRules($roleid);
+
+                //delete from role table;
+                $sql9 = "delete from role where roleid='".$roleid."'";
+                $adb->query($sql9);
+                //echo $sql1.'            '.$sql2.'           '.$sql9;
+
+
+
+        }
 
 }
+
+/** Function to delete the role related sharing rules
+  * @param $roleid -- RoleId :: Type varchar
+ */
+function deleteRoleRelatedSharingRules($roleId)
+{
+        global $adb;
+        $dataShareTableColArr=Array('datashare_grp2role'=>'to_roleid',
+                                    'datashare_grp2rs'=>'to_roleandsubid',
+                                    'datashare_role2group'=>'share_roleid',
+                                    'datashare_role2role'=>'share_roleid::to_roleid',
+                                    'datashare_role2rs'=>'share_roleid::to_roleandsubid',
+                                    'datashare_rs2grp'=>'share_roleandsubid',
+                                    'datashare_rs2role'=>'share_roleandsubid::to_roleid',
+                                    'datashare_rs2rs'=>'share_roleandsubid::to_roleandsubid');
+
+        foreach($dataShareTableColArr as $tablename=>$colname)
+        {
+                $colNameArr=explode('::',$colname);
+                $query="select shareid from ".$tablename." where ".$colNameArr[0]."='".$roleId."'";
+                if(sizeof($colNameArr) >1)
+                {
+                        $query .=" or ".$colNameArr[1]."='".$roleId."'";
+                }
+
+
+                $result=$adb->query($query);
+                $num_rows=$adb->num_rows($result);
+                for($i=0;$i<$num_rows;$i++)
+                {
+                        $shareid=$adb->query_result($result,$i,'shareid');
+                        deleteSharingRule($shareid);
+                }
+
+        }
+}
+
+
 
 /** Function to get userid and username of all users 
   * @returns $userArray -- User Array in the following format:
