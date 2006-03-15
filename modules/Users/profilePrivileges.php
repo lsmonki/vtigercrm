@@ -10,11 +10,13 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $profileId=$_REQUEST['profileid'];
-$profileName=getProfileName($profileId);
+$profileName='';
 
 $parentProfileId=$_REQUEST['parentprofile'];
 if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
+
+
 
 $smarty = new vtigerCRM_Smarty;
 $secondaryModule='';
@@ -22,13 +24,40 @@ $mode='';
 $output ='';
 $output1 ='';
 $smarty->assign("PROFILEID", $profileId);
-$smarty->assign("PROFILE_NAME", $profileName);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 
+if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
+{	
+	$profileName=$_REQUEST['profile_name'];
+}
+else
+{
+	$profileName=getProfileName($profileId);
+}
+
+$smarty->assign("PROFILE_NAME", $profileName);
+
+if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
+	$smarty->assign("PROFILE_DESCRIPTION",$_REQUEST['profile_description']);
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
+	$smarty->assign("MODE",$_REQUEST['mode']);
+
+
+
+
 //Initially setting the secondary selected tab
 $mode=$_REQUEST['mode'];
+if($mode == 'create')
+{
+	$smarty->assign("ACTION",'SaveProfile');
+}
+elseif($mode == 'edit')
+{
+	$smarty->assign("ACTION",'UpdateProfileChanges');
+}
+
 
 //Global Privileges
 
