@@ -209,6 +209,7 @@ if($mysql_status == 'false')
 	</html>
 <?php
 }
+/*
 elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
 {
 ?>
@@ -315,6 +316,7 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
 
 <?php
 }
+*/
 elseif($mysql_status == 'true' && $mysql_db_status == 'false')
 {
 ?>
