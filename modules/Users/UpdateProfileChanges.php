@@ -14,7 +14,6 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 $profileid = $_REQUEST['profileid'];
-$secmodule = $_REQUEST['secmodule'];
 
 //Retreiving the tabs permission array
 $tab_perr_result = $adb->query("select * from profile2tab where profileid=".$profileid);
@@ -24,8 +23,6 @@ $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
 
-if($secmodule=='global_priv')
-{
 	//Updating profile2global permissons table
 	$view_all_req=$_REQUEST['view_all'];
 	$view_all = getPermissionValue($view_all_req);
@@ -38,11 +35,8 @@ if($secmodule=='global_priv')
 	$update_query = "update  profile2globalpermissions set globalactionpermission=".$edit_all." where globalactionid=2 and profileid=".$profileid;
 	$adb->query($update_query);
 
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=global_priv&mode=view&profileid=".$profileid;
-	header($loc);
-}
-elseif($secmodule=='tab_priv')
-{
+	
+	//profile2tab permissions
 	for($i=0; $i<$num_tab_per; $i++)
 	{
 		$tab_id = $adb->query_result($tab_perr_result,$i,"tabid");
@@ -67,12 +61,8 @@ elseif($secmodule=='tab_priv')
 			}
 		}
 	}
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=tab_priv&mode=view&profileid=".$profileid;
-	header($loc);
-		
-}
-elseif($secmodule=='stand_priv')
-{
+	
+	//profile2standard permissions	
 	for($i=0; $i<$num_act_per; $i++)
 	{
 		$tab_id = $adb->query_result($act_perr_result,$i,"tabid");
@@ -116,11 +106,8 @@ elseif($secmodule=='stand_priv')
 
 		}
 	}
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=stand_priv&mode=view&profileid=".$profileid;
-	header($loc);
-}
-elseif($secmodule=='util_priv')
-{
+
+	//Update Profile 2 utility
 	for($i=0; $i<$num_act_util_per; $i++)
 	{
 		$tab_id = $adb->query_result($act_utility_result,$i,"tabid");
@@ -146,12 +133,29 @@ elseif($secmodule=='util_priv')
 
 
 	}
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=util_priv&mode=view&profileid=".$profileid;
-	header($loc);	
-}
-elseif($secmodule=='field_priv')
+
+
+
+	$modArr= Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
+                'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
+                'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
+                'Potentials'=>'LBL_OPPORTUNITY_FIELD_ACCESS',
+                'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
+                'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
+                'Notes'=>'LBL_NOTE_FIELD_ACCESS',
+                'Emails'=>'LBL_EMAIL_FIELD_ACCESS',
+                'Activities'=>'LBL_TASK_FIELD_ACCESS',
+                'Events'=>'LBL_EVENT_FIELD_ACCESS',
+                'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
+                'PriceBooks'=>'LBL_PB_FIELD_ACCESS',
+                'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
+                'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
+                'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
+                'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
+              );
+
+foreach($modArr as $fld_module => $fld_label)
 {
-	$fld_module = $_REQUEST['fld_module'];
 	$fieldListResult = getProfile2FieldList($fld_module, $profileid);
 	$noofrows = $adb->num_rows($fieldListResult);
 	$tab_id = getTabid($fld_module);
@@ -178,18 +182,10 @@ elseif($secmodule=='field_priv')
 		$adb->query($update_query);
 
 	}
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=field_priv&mode=view&fld_module=".$fld_module."&profileid=".$profileid;
-	header($loc);
 }
-/*
-//Updating the profile2tab table
-	
-//Updating the profile2standardpermissions table
+	$loc = "Location: index.php?action=profilePrivileges&module=Users&mode=view&profileid=".$profileid;
+	header($loc);
 
-
-//Updating the profile2utility table
-
-*/
 function getPermissionValue($req_per)
 {
 	if($req_per == 'on')
@@ -202,8 +198,5 @@ function getPermissionValue($req_per)
 	}
 	return $permission_value;
 }
-/*
-$loc = "Location: index.php?action=ProfileDetailView&module=Users&fld_module=".$fld_module."&profileid=".$profileid;
-header($loc);
-*/
+
 ?>
