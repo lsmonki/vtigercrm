@@ -38,9 +38,9 @@
 		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 		<td nowrap>&nbsp;
 		<img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";>
-		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&groupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
+		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&mode=editgroupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
 		&nbsp;</td>
-		<td nowrap><a href="index.php?module=Users&action=GroupDetailView&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</td>
+		<td nowrap><a href="index.php?module=Users&action=GroupDetailView&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</a></td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
 		<tr>
 	{/section}	

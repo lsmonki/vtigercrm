@@ -120,6 +120,7 @@ function validate()
 <input type="hidden" name="action" value="SaveGroup">
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="parenttab" value="Settings">
+<input type="hidden" name="groupId" value="{$GROUPID}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
