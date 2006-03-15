@@ -12,7 +12,6 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/UserInfoUtil.php');
 
@@ -25,8 +24,7 @@ $groupId=$_REQUEST['groupId'];
 $groupInfoArr=getGroupInfo($groupId);
 
 
-echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Users",' Group: '.$groupInfoArr[0], true);
+$smarty = new vtigerCRM_Smarty;
 
 global $adb;
 global $theme;
@@ -34,65 +32,26 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Users/GroupDetailView.html');
+$smarty->assign("GROUPINFO", getStdOutput($groupInfoArr,$groupId, $mod_strings));
+$smarty->assign("GROUPID",$groupId);
+$smarty->assign("GROUP_NAME",$groupInfoArr[0]);
 
-$standCustFld = getStdOutput($groupInfoArr,$groupId, $mod_strings);
-
-//Standard PickList Fields
 function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 {
 	global $adb;
-	//echo get_form_header("Profiles", "", false );
-	$standCustFld= '';
-	$standCustFld .= '<input type="hidden" name="module" value="Users">';
-	$standCustFld .= '<input type="hidden" name="action" value="createnewgroup">';
-	$standCustFld .= '<input type="hidden" name="groupId" value="'.$groupId.'">';
-	$standCustFld .= '<input type="hidden" name="mode" value="edit">';
-	$standCustFld .= '<br><input title="Edit" accessKey="E" class="button" type="submit" name="Edit" value="Edit">&nbsp;&nbsp;';
-	$standCustFld .= '<input title="Delete" accessKey="D" class="button" type="submit" name="Delete" value="Delete" onclick="this.form.action.value=\'DeleteGroup\'">&nbsp;&nbsp;';
-	$standCustFld .= '<input title="Back" accessKey="C" class="button" onclick="this.form.action.value=\'listgroups\';this.form.module.value=\'Users\'" type="submit" name="New" value="Back">';
-	$standCustFld .= '<br><BR>';
-	
-	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" width="50%" class="formOuterBorder">';
-        $standCustFld .=  '<tr colspan="2">';
-        $standCustFld .=   '<td class="formSecHeader" colspan="2">Group Information</td>';
-        $standCustFld .=  '</tr>';
-        $standCustFld .=  '<tr>';
-        $standCustFld .=   '<td width="40%" nowrap class="dataLabel" height="21">Group Name: </td>';
-        $standCustFld .=   '<td class="dataField">'.$groupInfoArr[0].'</td>';
-        $standCustFld .=  '</tr>';
-        $standCustFld .=  '<tr>';
-        $standCustFld .=   '<td class="dataLabel" nowrap height="21">Description: </td>';
-        $standCustFld .=   '<td class="dataField">'.$groupInfoArr[1].'</td>';
-        $standCustFld .=  '</tr>';
-        $standCustFld .='</table>';
-        $standCustFld .='<BR><BR>';
-
- 
-	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
-	$standCustFld .=  '<tr height=20>';
-	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><div align="center"><b>Group Member Name</b></div></td>';
-	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Type</b></td>';
-	$standCustFld .=  '</tr>';
+    $groupfields['groupname'] = $groupInfoArr[0];    
+    $groupfields['description'] = $groupInfoArr[1];
 
 	$row=1;
-	$groupMember=$groupInfoArr[2];
+	$groupMember = $groupInfoArr[2];
+	$information = array();
 	foreach($groupMember as $memberType=>$memberValue)
 	{
 
+		$memberinfo = array();
 		foreach($memberValue as $memberId)
 		{
-
-			if ($row%2==0)
-			{
-				$trowclass = 'evenListRow';
-			}
-			else
-			{	
-				$trowclass = 'oddListRow';
-			}
-
-			$standCustFld .= '<tr class="'.$trowclass.'">';
+			$groupmembers = array();
 			if($memberType == 'roles')
 			{
 				$memberName=getRoleName($memberId);
@@ -121,22 +80,24 @@ function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 				$memberActionParameter="record";
 				$memberDisplayType="User";
 			}
-
-			$standCustFld .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Users&action='.$memberAction.'&'.$memberActionParameter.'='.$memberId.'">'.$memberName.'</a></div></td>';
-			$standCustFld .= '<td wheight="21" style="padding:0px 3px 0px 3px;">'.$memberDisplayType.'</td></tr>';
+			$groupmembers ['membername'] = $memberName;
+			$groupmembers ['memberid'] = $memberId;
+			$groupmembers ['membertype'] = $memberDisplayType;
+			$groupmembers ['memberaction'] = $memberAction;
+			$groupmembers ['actionparameter'] = $memberActionParameter;
 			$row++;
-
+			$memberinfo [] = $groupmembers;
 		}
+		$information[$memberDisplayType] = $memberinfo;
 	}
-	$standCustFld .='</table>';
-	//echo $standCustFld;	
-	return $standCustFld;
+	$returndata=array($groupfields,$information);
+	return $returndata;
 }
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("GROUPINFO", $standCustFld);
 
-
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("GroupDetailview.tpl");
 
 ?>
