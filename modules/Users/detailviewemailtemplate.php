@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
@@ -16,14 +16,21 @@ require_once('include/database/PearDatabase.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
+global $current_language;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-$xtpl=new XTemplate ('modules/Users/detailviewemailtemplate.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("THEME", $theme);
+
+$smarty = new vtigerCRM_smarty;
+
+$smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
+$smarty->assign("UMOD", $mod_strings);
+$smod_strings = return_module_language($current_language,'Settings');
+$smarty->assign("MOD", $smod_strings);
+$smarty->assign("MODULE", 'Settings');
+$smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
@@ -47,18 +54,16 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 //
 	$emailtemplateResult = $adb->fetch_array($result);
 }
-$xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
+$smarty->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
 
-$xtpl->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
-$xtpl->assign("DESCRIPTION", $emailtemplateResult["description"]);
-$xtpl->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
+$smarty->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
+$smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
+$smarty->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
 
-$xtpl->assign("SUBJECT", $emailtemplateResult["subject"]);
-$xtpl->assign("BODY", nl2br($emailtemplateResult["body"]));
+$smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
+$smarty->assign("BODY", nl2br($emailtemplateResult["body"]));
 
-$xtpl->parse("main");
-$xtpl->out("main");
-
+$smarty->display("DetailViewEmailTemplate.tpl");
 
 
 ?>
