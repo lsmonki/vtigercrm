@@ -42,6 +42,15 @@ $adb->query($sql7);
 $sql8 = "update users_last_import set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
 $adb->query($sql8);
 
+//delete from users to group table
+$sql9 = "delete from user2role where userid=".$del_id;
+$adb->query($sql9);
+
+//delete from users to role table
+$sql9 = "delete from users2group where userid=".$del_id;
+$adb->query($sql9);
+
+
 //delete from user table;
 $sql9 = "delete from users where id=".$del_id;
 $adb->query($sql9);
