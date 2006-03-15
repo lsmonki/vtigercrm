@@ -858,8 +858,9 @@ border:0px;
 	font-size:11px;
 	text-align:left;
 	width:100%;
-	border-left:1px solid #CCCCCC;
+	border-left:0px solid #CCCCCC;
 	border-right:0px solid #CCCCCC;
+	border-collapse: collapse;
 }
 
 .prdTab tr th{
@@ -867,6 +868,7 @@ border:0px;
 	font-size:11px;
 	text-align:left;
 	border-right:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
 	padding-left:5px;
 	background-color:#E5E5E5;
 	height:20px;
@@ -881,6 +883,7 @@ border:0px;
 	font-size:11px;
 	text-align:left;
 	border-right:1px solid #CCCCCC;
+	border-left:1px solid #CCCCCC;
 	border-bottom:1px solid #CCCCCC;
 	padding-left:5px;
 	color:#000000;
