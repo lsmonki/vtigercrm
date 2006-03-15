@@ -34,9 +34,11 @@
 	</table>
 	<form action="index.php" method="post" name="new" id="form">
 	<input type="hidden" name="module" value="Users">		
-	<input type="hidden" name="action" value="profilePrivileges">		
-	<input type="hidden" name="mode" value="edit">	
-	<input type="hidden" name="profileid" value="{$PROFILEID}">	
+	<input type="hidden" name="action" value="{$ACTION}">		
+	<input type="hidden" name="mode" value="{$MODE}">	
+	<input type="hidden" name="profileid" value="{$PROFILEID}">
+	<input type="hidden" name="profile_name" value="{$PROFILE_NAME}">
+	<input type="hidden" name="profile_description" value="{$PROFILE_DESCRIPTION}">	
 	
 	<table border="0" cellspacing="0" cellpadding=	"0" width="100%" class="prvPrfOutline">
 	<tr>
