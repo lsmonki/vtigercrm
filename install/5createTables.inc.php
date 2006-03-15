@@ -195,7 +195,7 @@ function create_default_users() {
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 
-	$sql_stmt1 = "insert into user2role values(".$user->id.",".$role_id.")";
+	$sql_stmt1 = "insert into user2role values(".$user->id.",'".$role_id."')";
 	$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 }
 
@@ -229,8 +229,8 @@ $success = $db->createTables("schema/DatabaseSchema.xml");
 // TODO HTML
 if($success==0)
 	die("Error: Tables not created.  Table creation failed.\n");
-elseif ($success==1)
-	die("Error: Tables partially created.  Table creation failed.\n");
+//elseif ($success==1)
+//	die("Error: Tables partially created.  Table creation failed.\n");
 else
 	eecho("Tables Successfully created.\n");
 
@@ -290,7 +290,7 @@ $db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 $role_result = $db->query($role_query);
 $role_id = $db->query_result($role_result,0,"roleid");
 
-$sql_stmt2 = "insert into user2role values(".$uid.",".$role_id.")";
+$sql_stmt2 = "insert into user2role values(".$uid.",'".$role_id."')";
 $db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 // create and populate combo tables
