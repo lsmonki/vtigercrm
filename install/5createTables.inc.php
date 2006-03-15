@@ -190,7 +190,7 @@ function create_default_users() {
         }
 
 	// insert values into user2role table
-	$role_query = "select roleid from role where name='administrator'";
+	$role_query = "select roleid from role where rolename='administrator'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
@@ -285,7 +285,7 @@ $db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 //$sql_stmt1 = "insert into user2role values(1,1)";
 //$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
-$role_query = "select roleid from role where name='standard_user'";
+$role_query = "select roleid from role where rolename='standard_user'";
 $db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 $role_result = $db->query($role_query);
 $role_id = $db->query_result($role_result,0,"roleid");
