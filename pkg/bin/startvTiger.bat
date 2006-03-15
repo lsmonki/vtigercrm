@@ -43,18 +43,18 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm5_alpha
-bin\apache -k uninstall -n vtigercrm5_alpha
+bin\apache -k stop -n vtigercrm5_beta
+bin\apache -k uninstall -n vtigercrm5_beta
 echo ""
 echo ""
-echo "installing vtigercrm5_alpha apache service"
+echo "installing vtigercrm5_beta apache service"
 echo ""
 echo ""
-bin\apache -k install -n vtigercrm5_alpha -f conf\httpd.conf
+bin\apache -k install -n vtigercrm5_beta -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm5_alpha apache service"
+echo "Starting  vtigercrm5_beta apache service"
 echo ""
-bin\apache -n vtigercrm5_alpha -k start
+bin\apache -n vtigercrm5_beta -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -112,27 +112,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm5_alpha database already exists"
+echo "check to see if vtigercrm5_beta database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm5_alpha'" | "%WINDIR%\system32\find.exe" "vtigercrm5_alpha" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm5_beta'" | "%WINDIR%\system32\find.exe" "vtigercrm5_beta" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm5_alpha database exists"
+ECHO  "vtigercrm5_beta database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm5_alpha database does not exist"
+ECHO "vtigercrm5_beta database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm5_alpha and populate the same"
+echo "Proceeding to create database vtigercrm5_beta and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm5_alpha"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm5_beta"
 echo ""
-echo "vtigercrm5_alpha database created"
+echo "vtigercrm5_beta database created"
 echo ""
 goto end
 

@@ -17,42 +17,42 @@ cd ${INS_DIR}
 cd ${PREV_DIR}
 if [ ${APACHE_STATUS} == "false" ]
 then
-	diff conf/httpd.conf conf/vtiger_conf/vtigerCRM5_alpha1/httpd.conf > /dev/null;
+	diff conf/httpd.conf conf/vtiger_conf/vtigerCRM5_beta/httpd.conf > /dev/null;
 	if [ $? -eq 0 ]
 	then
-		cp conf/vtigerCRMBackup/vtigerCRM5_alpha1/httpd.vtiger.crm.conf conf/httpd.conf
+		cp conf/vtigerCRMBackup/vtigerCRM5_beta/httpd.vtiger.crm.conf conf/httpd.conf
 		echo "The httpd.conf file successfully reverted"
 	else
-		echo "The httpd.conf file under apache/conf has been edited since installation. Hence the uninstallation will not revert the httpd.conf file. The original httpd.conf file is present in <apache home>/conf/vtigerCRMBackup/vtigerCRM5_alpha1/httpd.vtiger.crm.conf. Kindly revert the same manually"
+		echo "The httpd.conf file under apache/conf has been edited since installation. Hence the uninstallation will not revert the httpd.conf file. The original httpd.conf file is present in <apache home>/conf/vtigerCRMBackup/vtigerCRM5_beta/httpd.vtiger.crm.conf. Kindly revert the same manually"
 	fi
 
-	diff modules/libphp4.so modules/vtiger_modules/vtigerCRM5_alpha1/libphp4.so > /dev/null;
+	diff modules/libphp4.so modules/vtiger_modules/vtigerCRM5_beta/libphp4.so > /dev/null;
 	if [ $? -eq 0 ]
         then
-		cp modules/vtigerCRMBackup/vtigerCRM5_alpha1/libphp4.vtiger.crm.so modules/libphp4.so
+		cp modules/vtigerCRMBackup/vtigerCRM5_beta/libphp4.vtiger.crm.so modules/libphp4.so
 		echo "The libphp4.so file successfully reverted"
 	else
-		echo "The libphp4.so file under apache/modules has been edited since installation. Hence the uninstallation will not revert the libphp4.so file. The original libphp4.so file is present in <apache home>/modules/vtigerCRMBackup/vtigerCRM5_alpha1/libphp4.vtiger.crm.so. Kindly revert the same manually"
+		echo "The libphp4.so file under apache/modules has been edited since installation. Hence the uninstallation will not revert the libphp4.so file. The original libphp4.so file is present in <apache home>/modules/vtigerCRMBackup/vtigerCRM5_beta/libphp4.vtiger.crm.so. Kindly revert the same manually"
 	fi
 	
 	cd -
 	
-	if [ -d $PWD/vtigerCRM5_alpha1 ]; then
+	if [ -d $PWD/vtigerCRM5_beta ]; then
 		echo "Uninstalling vtigerCRM from the system..."
-		rm -rf ../conf/vtiger_conf/vtigerCRM5_alpha1
-		rm -rf ../modules/vtiger_modules/vtigerCRM5_alpha1
-		rm -rf vtigerCRM5_alpha1
+		rm -rf ../conf/vtiger_conf/vtigerCRM5_beta
+		rm -rf ../modules/vtiger_modules/vtigerCRM5_beta
+		rm -rf vtigerCRM5_beta
 		echo "Uninstallation of vtigerCRM completed"
 		cd ${HOME}
 	fi
 
 else
 	cd -
-	if [ -d $PWD/vtigerCRM5_alpha1 ]; then
+	if [ -d $PWD/vtigerCRM5_beta ]; then
                 echo "Uninstalling vtigerCRM from the system..."
-		rm -rf ../conf/vtiger_conf/vtigerCRM5_alpha1
-                rm -rf ../modules/vtiger_modules/vtigerCRM5_alpha1
-                rm -rf vtigerCRM5_alpha1
+		rm -rf ../conf/vtiger_conf/vtigerCRM5_beta
+                rm -rf ../modules/vtiger_modules/vtigerCRM5_beta
+                rm -rf vtigerCRM5_beta
                 echo "Uninstallation of vtigerCRM completed"
                 cd ${HOME}
         fi
