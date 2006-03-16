@@ -8,6 +8,7 @@
  * @module calendar_week
  */
  require_once('modules/Calendar/CalendarCommon.php');
+ require_once('modules/Calendar/addEventUI.php');
  global $calpath,$callink;
  $calpath = 'modules/Calendar/';
  $callink = 'index.php?module=Calendar&action=';
