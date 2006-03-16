@@ -79,23 +79,27 @@ foreach($pieces as $val)
 	style="text-alignment:justify">
 
 Welcome!<br><br>
-Thank you for trying out vtigerCRM 5 Alpha2  and for making it a part of your experience.<br>
+Thank you for trying out vtigerCRM 5 Beta  and for making it a part of your experience.<br>
 Every developer and contributor has added value to vtiger either in the
 form of bug reports, bug fixes, feature contributions or for that
-matter, providing the hosting machine or maintenance of the forge. This
-is a product of pure teamwork and passion. We intend to create something worth
+matter, providing the hosting machine or maintenance of the forge. We
+have learnt a lot working with you.This is a product of pure teamwork and passion. We intend to create something worth
 using, worth using for long.<br><br>
 
 <i>We sincerely hope, we are able to live upto your expectations.</i>
 
 <br>
 <br>
-<bold>vtiger is 100% pure Open Source. <u>You do not have to pay anything to use the product </u>.There are no hidden costs. We would be happy if you would subscribe to the support package though. 
+<bold>vtiger is 100% pure Open Source. <u>You do not have to pay
+anything to use the product </u>.There are no hidden costs. We would
+be happy if you would subscribe to the support package though. The
+link for subscription is as follows :- 
 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
-vtiger does not believe in any big dollar marketing campaign hence you will not find much advertisement about vtiger from us. Whatever you see and hear is purely due to word of mouth. We do believe that <b>YOU</b> can and will make a
-difference.If you feel we have lived upto your expectations,
- please do consider spreading the word about vtiger by - telling a
+vtiger does not believe in any big dollar marketing campaign hence you
+will not find much advertisement about vtiger from us.
+Whatever you see and hear is purely due to word of mouth. We do believe that <b>YOU</b> can and will make a
+difference.If you feel we have lived upto your expectations, please do consider spreading the word about vtiger by - telling a
 friend,  setting it up for someone, or blogging about us or in any
 other manner you are comfortable with. Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
