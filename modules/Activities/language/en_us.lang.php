@@ -88,6 +88,7 @@ $mod_strings = Array(
 'Contact Name'=>'Contact Name',
 'Status'=>'Status',
 'Priority'=>'Priority',
+'Visibility'=>'Visibility',
 'Send Notification'=>'Send Notification',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
