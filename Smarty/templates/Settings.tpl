@@ -42,9 +42,7 @@
 <td><a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" border="0"/></a><br>						
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
 
-<td><a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldAccess&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" title="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" border="0"/></a><br>
-<a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldAccess&parenttab=Settings" alt="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}" title="{$MOD.LBL_SETTING_FIELD_ACCESSIBILITY}">{$MOD.LBL_FIELD_ACCESSIBILITY}</a></td>
-<td><a href=""><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
+<td><a href="index.php?module=Users&action=Announcements&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
 <a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}">{$MOD.LBL_ANNOUNCEMENT}</a></td>
 <td>&nbsp;</td>
 
@@ -94,7 +92,7 @@
 <table class="controlTab" cellspacing="0" cellpadding="0">
 <tr>
 
-<td width="25%"><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" border="0" alt="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}" title="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}"/></a><br />
+<td width="25%"><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img src="{$IMAGE_PATH}ViewTemplate.gif" border="0" alt="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}" title="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}"/></a><br />
 <a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings" alt="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}" title="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}">{$MOD.EMAILTEMPLATES}</a></td>
 
 <td width="25%"><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}" title="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}" border="0"/></a><br />

@@ -4,8 +4,7 @@
 position:absolute;
 width:155px;
 	  background-color:#FFFFFF;
-	  /*opacity:.7;
-filter: progid:DXImageTransform.Microsoft.BasicImage(opacity=.7);*/
+	filter: progid:DXImageTransform.Microsoft.BasicImage(opacity=.7);*/
 	  border-top:1px solid #CCCCCC;
 	  border-left:1px solid #CCCCCC;
 	  border-right:2px solid #CCCCCC;
@@ -25,7 +24,6 @@ display:block;
 width:140px;
 height:15px;
 padding:2px;
-		/*border-bottom:1px solid #999999;*/
 {rdelim}
 
 a.mnuSub:Hover
@@ -36,13 +34,11 @@ a.mnuSub:Hover
 	text-align:left;
 	background-color:#E9DCE9;
 opacity:.7;
-		/*filter: progid:DXImageTransform.Microsoft.BasicImage(opacity=.7);*/
 color:#000000;
 display:block;
 width:142px;
 height:15px;
 padding:2px;
-		/*border-bottom:1px solid #999999;*/
 {rdelim}
 </style>
 <div id="subMnuFldAccess" class="subMnu" onmouseover="fnvshNrm('subMnuFldAccess')" onmouseout="fninvsh('subMnuFldAccess')">
@@ -68,28 +64,6 @@ padding:2px;
 </table>
 </div>
 
-<div id="subMnuOrgFld" class="subMnu" onmouseover="fnvshNrm('subMnuOrgFld')" onmouseout="fninvsh('subMnuOrgFld')">
-<table width="99%" cellpadding="5" cellspacing="0" border="0">
-<tr><td>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads" class="mnuSub">{$MOD.LBL_LEAD_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts" class="mnuSub">{$MOD.LBL_ACCOUNT_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts" class="mnuSub">{$MOD.LBL_CONTACT_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials" class="mnuSub">{$MOD.LBL_OPPORTUNITY_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk" class="mnuSub">{$MOD.LBL_HELPDESK_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products" class="mnuSub">{$MOD.LBL_PRODUCT_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes" class="mnuSub">{$MOD.LBL_NOTE_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails" class="mnuSub">{$MOD.LBL_EMAIL_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities" class="mnuSub">{$MOD.LBL_TASK_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events" class="mnuSub">{$MOD.LBL_EVENT_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Vendor" class="mnuSub">{$MOD.LBL_VENDOR_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=PriceBook" class="mnuSub">{$MOD.LBL_PB_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Quotes" class="mnuSub">{$MOD.LBL_QUOTE_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Orders" class="mnuSub">{$MOD.LBL_PO_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=SalesOrder" class="mnuSub">{$MOD.LBL_SO_FIELD_ACCESS}</a>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Invoice" class="mnuSub">{$MOD.LBL_INVOICE_FIELD_ACCESS}</a>
-</td></tr>
-</table>
-</div>
 
 <div id="subMnuCusFld" class="subMnu" onmouseover="fnvshNrm('subMnuCusFld')" onmouseout="fninvsh('subMnuCusFld')">
 <table width="99%" cellpadding="5" cellspacing="0" border="0">
@@ -109,6 +83,7 @@ padding:2px;
 </td></tr>
 </table>
 </div>
+
 <div id="subMnuPickList" class="subMnu" onmouseover="fnvshNrm('subMnuPickList')" onmouseout="fninvsh('subMnuPickList')">
 <table width="99%" cellpadding="5" cellspacing="0" border="0">
 <tr><td>
