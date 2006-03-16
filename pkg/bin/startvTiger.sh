@@ -96,7 +96,7 @@ if [ $exit_status -ne 0 ]; then
 		echo ""
 		#chown -R nobody .
 		#chgrp -R nobody .
-		./bin/mysqld_safe --basedir=$MYSQL_HOME --datadir=$MYSQL_HOME/data --socket=$mysql_socket --tmpdir=$MYSQL_HOME/tmp --user=root --port=$mysql_port --default-table-type=INNODB > /dev/null &
+		./bin/mysqld_safe --log-queries-not-using-indexes --log-slow-admin-statements --log-error --low-priority-updates --log-slow-queries=vtslowquery.log --basedir=$MYSQL_HOME --datadir=$MYSQL_HOME/data --socket=$mysql_socket --tmpdir=$MYSQL_HOME/tmp --user=root --port=$mysql_port --default-table-type=INNODB > /dev/null &
 		sleep 8
 		echo "select 1"| ./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket > /dev/null
 		if [ $? -ne 0 ]; then
