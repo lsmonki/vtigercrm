@@ -1989,13 +1989,35 @@ function deleteProfile($prof_id,$transfer_profileid='')
 	$sql7 ="delete from profile2utility where profileid=".$prof_id;
 	$adb->query($sql7);
 
-
 	//updating role2profile
-	if(isset($transfer_profileid) && $transfer_profileid != '')
-	{
-		$sql8 = "update role2profile set profileid=".$transfer_profileid." where profileid=".$prof_id;
-		$adb->query($sql8);
-	}
+        if(isset($transfer_profileid) && $transfer_profileid != '')
+        {
+
+                $sql8 = "select roleid from role2profile where profileid=".$prof_id;
+                $result=$adb->query($sql8);
+                $num_rows=$adb->num_rows($result);
+
+                for($i=0;$i<$num_rows;$i++)
+                {
+                        $roleid=$adb->query_result($result,$i,'roleid');
+                        $sql = "select profileid from role2profile where roleid='".$roleid."'";
+                        $profresult=$adb->query($sql);
+                        $num=$adb->num_rows($profresult);
+                        if($num>1)
+                        {
+                                $sql10="delete from role2profile where roleid='".$roleid."' and profileid=".$prof_id;
+                                $adb->query($sql10);
+                        }
+                        else
+                        {
+                                $sql8 = "update role2profile set profileid=".$transfer_profileid." where profileid=".$prof_
+id." and roleid='".$roleid."'";
+                                $adb->query($sql8);
+                        }
+
+
+                }
+        }
 
 	//delete from profile table;
 	$sql9 = "delete from profile where profileid=".$prof_id;
