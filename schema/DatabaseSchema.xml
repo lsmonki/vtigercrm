@@ -1010,7 +1010,7 @@
 
 		<field name="sendnotification" type="C" size="3">
 			<NOTNULL/>
-			<DEFAULT value="false"/>
+			<DEFAULT value="0"/>
 		</field>
                 <field name="duration_hours" type="C" size="2"></field> 
                 <field name="duration_minutes" type="C" size="2"></field> 
@@ -5595,10 +5595,10 @@
 			<DEFAULT value=""/>
 		</field>
 		<field name="startdate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="0000-00-00"/>
 		</field>
 		<field name="enddate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="0000-00-00"/>
 		</field>
 		<index name="reportdatefilter_IDX0">
 			<col>datefilterid</col>
