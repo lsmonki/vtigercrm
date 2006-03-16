@@ -2010,8 +2010,7 @@ function deleteProfile($prof_id,$transfer_profileid='')
                         }
                         else
                         {
-                                $sql8 = "update role2profile set profileid=".$transfer_profileid." where profileid=".$prof_
-id." and roleid='".$roleid."'";
+                                $sql8 = "update role2profile set profileid=".$transfer_profileid." where profileid=".$prof_id." and roleid='".$roleid."'";
                                 $adb->query($sql8);
                         }
 
