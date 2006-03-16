@@ -11,6 +11,7 @@
 //Code Added by Minnie -Starts
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
+ require_once('include/database/PearDatabase.php');
 
  require_once('modules/Calendar/preference.pinc');
 global $calpath,$callink;
@@ -21,21 +22,22 @@ $image_path=$theme_path."images/";
 $callink = 'index.php?module=Calendar&action=';
 
 /**
- * Function to get the calendar header tabs
+ * Create HTML to display calendar header tabs
  * @param $t -- date :: Type string
  * @param $view -- view name(day/week/month) :: Type string
- * takes date & view name as inputs and construct calendar header tabs
- * in html table format and returns the html table in string format.
+ * Returns the html in string format.
  */
 function getHeaderTab($t,$view)
 {
-        $day_selected = $week_selected = $month_selected = "dvtUnSelectedCell";
+        $day_selected = $week_selected = $month_selected = $shared_selected = "dvtUnSelectedCell";
         if($view == 'day')
 		$day_selected="dvtSelectedCell";
         if($view == 'week')
                 $week_selected="dvtSelectedCell";
         if($view == 'month')
                 $month_selected="dvtSelectedCell";
+	if($view == 'shared')
+	        $shared_selected = "dvtSelectedCell";
         $space_class = "dvtTabCache";
 	$tabhtml = "";
 	$tabhtml .= <<<EOQ
@@ -43,7 +45,7 @@ function getHeaderTab($t,$view)
         <tr>
            <form name="Calendar" method="GET" action="index.php">
            <input type="hidden" name="module" value="Calendar">
-           <input type="hidden" name="action">
+           <input type="hidden" name="action" value="">
            <input type="hidden" name="t">
            <td>
               <table border=0 cellspacing=0 cellpadding=3 width=100%>
@@ -54,6 +56,8 @@ function getHeaderTab($t,$view)
                  <td class="$week_selected" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=week&t=$t">Week</a></td>
                  <td class="$space_class" style="width:10px">&nbsp;</td>
                  <td class="$month_selected" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month&t=$t">Month</a></td>
+		 <td class="$space_class" style="width:10px">&nbsp;</td>
+		 <td class="$shared_selected" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=share&t=$t">Share</a></td>
                  <td class="$space_class" style="width:10px">&nbsp;</td>
                  <td class="$space_class" style="width:100%">&nbsp;</td>
               </tr>
@@ -71,7 +75,7 @@ return $tabhtml;
 }
 
 /**
- * Function to get the calendar heading
+ * Create HTML to display calendar heading for each view
  * @params $prev,$next,$day_from,$day_to -- date :: Type string
  * @param $pref -- Object of preference class
  * @param $view -- view name(day/week/month) :: Type string
@@ -80,8 +84,7 @@ return $tabhtml;
  * @param $f -- string :: Type string
  * @param $n -- Numeric representation of a month, without leading zeros :: Type string
  * $param $d -- Day of the month, 2 digits with leading zeros :: Type string
- * constructs calendar heading in html table format 
- * and returns the html table in string format.
+ * Returns the html in string format.
  */
 function getCalendarHeader($prev,$next,$view,$day_from,$pref="",$day_to="",$month="",$year="",$d="",$f="",$n="")
 {
@@ -134,6 +137,75 @@ function getCalendarHeader($prev,$next,$view,$day_from,$pref="",$day_to="",$mont
 EOQ;
 return $headerhtml;
   
+}
+
+/**
+ * Function to get the lists of sharedids related in calendar sharing of an user
+ * This function accepts the user id as arguments and
+ * returns the shared ids related with the user id
+ * as an array
+ */
+function getSharedUserId($id)
+{
+        global $adb;
+        $query = "SELECT * from sharedcalendar where userid=".$id;
+        $result = $adb->query($query);
+        $rows = $adb->num_rows($result);
+        for($j=0;$j<$rows;$j++)
+        {
+	        $sharedid[] = $adb->query_result($result,$j,'sharedid');
+        }
+        return $sharedid;
+}
+
+/**
+ * Function to get the lists of user ids who shared their calendar with an user
+ * This function accepts the shared id as arguments and
+ * returns the user ids related with the shared id
+ * as a comma seperated string
+ */
+function getSharedCalendarId($sharedid)
+{
+	global $adb;
+	$query = "SELECT * from sharedcalendar where sharedid=".$sharedid;
+	$result = $adb->query($query);
+	if($adb->num_rows($result)!=0)
+	{
+		for($j=0;$j<$adb->num_rows($result);$j++)
+			$userid[] = $adb->query_result($result,$j,'userid');
+		$shared_ids = implode (",",$userid);
+	}
+	return $shared_ids;
+}
+
+/**
+ * Function to get the label for user lists
+ * Returns the label as an array
+ */
+function getSharedUserListViewHeader()
+{
+	global $mod_strings;
+		$header_label=array($mod_strings['LBL_LIST_NAME'],
+			            $mod_strings['LBL_LIST_USER_NAME'],
+				   );
+	return $header_label;
+}
+
+/**
+ * Function to get the entries for user lists
+ * This function accepts the shared id as arguments and
+ * returns the user entries related with the shared id
+ * as an array
+ */
+function getSharedUserListViewEntries($sharedid)
+{
+	global $adb;
+	$query = "SELECT * from users where id=".$sharedid;
+	$result =$adb->query($query);
+	$entries[]=$adb->query_result($result,0,'first_name').' '.$adb->query_result($result,0,'last_name');
+	$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$sharedid.'">'.$adb->query_result($result,0,'user_name').'</a>';
+	return $entries;
+
 }
 //Code Added by Minnie -Ends
 ?>
