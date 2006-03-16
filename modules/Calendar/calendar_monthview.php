@@ -1,5 +1,6 @@
 <?php
 require_once('modules/Calendar/CalendarCommon.php');
+require_once('modules/Calendar/addEventUI.php');
 /**
  * Copyright 1999 - 2004 by Gero Kohnert
  */
