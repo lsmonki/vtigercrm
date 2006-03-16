@@ -504,6 +504,8 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,19,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,15,19,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,16,19,3,'V~O',1,null,'BAS')");
+ $this->db->query("Insert into field values (9,".$this->db->getUniqueID("field").",'visibility','activity',1,1
+ 5,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')");
 
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,20,1,'V~O',1,null,'BAS')");
 
@@ -543,6 +545,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,41,2,'T~O',1,null,'BAS')");
  $this->db->query("Insert into field values (16,".$this->db->getUniqueID("field").",'priority','activity',1,15,'taskpriority','Priority',1,0,0,100,17,41,1,'V~O',1,null,'BAS')");
  $this->db->query("Insert into field values (16,".$this->db->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,41,1,'C~O',1,null,'BAS')");
+ $this->db->query("Insert into field values (16,".$this->db->getUniqueID("field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')");
  
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,43,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'reminder_time','activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,42,1,'I~O',1,null,'BAS')");
