@@ -10,15 +10,7 @@
 
 <body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0>
 
-<? 
-/*
-	include "basicIncludes.php";
-	include "Tabs.php";
-	include "header.php";
-?>
-
-<?
-*/ 
+<?php 
 	$mysel= $_GET['sel'];
 	
 	if ($mysel=="") { include "calendar_dayview.php"; }
@@ -26,6 +18,7 @@
 	if ($mysel=="week") { include "calendar_weekview.php"; }
 	if ($mysel=="month") { include "calendar_monthview.php"; }
 	if ($mysel=="year") { include "yearview.php"; }
+	if ($mysel=="share") { include "calendar_share.php"; }
 
 ?>
 	
