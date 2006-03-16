@@ -29,7 +29,7 @@ define ('APP_STATE_YES',1);
 
  include_once 'modules/Calendar/base.pinc';
  require_once('include/database/PearDatabase.php');
- //require_once('modules/Calls/Call.php');
+ require_once('modules/Calendar/CalendarCommon.php');
  
 /**
  * options for calendar selection
@@ -1890,10 +1890,7 @@ class appointment extends tutos_base {
 	{
 		global $msg,$current_user,$table,$db;
 
-		//if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
-		//  return;
-		//}
-
+		$shared_ids = getSharedCalendarId($current_user->id,'shared');
 		$from->setDateTime($from->getYYYYMMDD());
 		$to->setDateTime($to->getYYYYMMDD());
 
@@ -1902,10 +1899,6 @@ class appointment extends tutos_base {
 			$to->addDays(1);
 		}
 
-		/*
-		   $x1 = DateTime1($from);
-		   $x2 = DateTime1($to);
-		 */
 		$x1 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
 
 		$x2 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
@@ -1944,32 +1937,26 @@ class appointment extends tutos_base {
 	
 		if(!is_admin($current_user))
 		{
-			$q .= "  ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') ";
+			$q .= "  ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') or (crmentity.smownerid in ($shared_ids) and salesmanactivityrel.smid in ($shared_ids) and activity.visibility='Public'))";
 		}
 		$q .= " AND crmentity.deleted = 0)";
 		$q .= " ORDER by activity.date_start,activity.time_start";
 		$r = $this->db->query($q);
 		$n = $this->db->getRowCount($r);
 		$a = 0;
-		// print("GS --> ".$n." q=".$q);
 
 		while ( $a < $n ) 
 		{
 			$o = &new appointment();
 			$result = $this->db->fetchByAssoc($r);
-			//print_r($result);
-			//$o->read_result($r,$a);
 			$o->read_result($result);
 			$a++;
 			if ( $o->see_ok() ) { 
 				/* Get all participants */
-				//$o->read_participants();
-				//print("GS --> see");
 				$obj->callist[$o->record_id] = &$o;
 			}
 			unset($o);
 		}
-		//
 
 		// Query created by Jaguar
 		#
@@ -1986,38 +1973,29 @@ class appointment extends tutos_base {
 		$q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
 		if(!is_admin($current_user))
 		{
-			$q .= " ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) ";
+			$q .= " ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) or (crmentity.smownerid in ($shared_ids) and salesmanactivityrel.smid in ($shared_ids) and activity.visibility='Public'))";
 		}
 		$q .= " AND crmentity.deleted = 0 )" ; 
 		$q .= " ORDER by recurringid";
 		$r = $this->db->query($q);
 		$n = $this->db->getRowCount($r);
 		$a = 0;
-		//   print("<br>GS --> ".$n." q=".$q);
 		while ( $a < $n ) 
 		{
 			$o = &new appointment();
 			$result = $this->db->fetchByAssoc($r);
-			//print_r($result);
-			//$o->read_result($r,$a);
 			$o->read_result($result);
 			$a++;
 			if ( $o->see_ok() ) { 
 				/* Get all participants */
-				//$o->read_participants();
-				//print("GS --> see");
 				$obj->callist[$o->record_id] = &$o;
 			}
 			unset($o);
 		}
 
-		//
-
 		// Query created by Jagaur
 		#  query ( Get Group activities in the calendar )
 		#
-		//if(!is_admin($current_user))
-		//{
 		$q=" Select activity.*,crmentity.*,account.accountname,account.accountid,activitygrouprelation.groupname FROM ";
 		$q.=" activity inner join crmentity on activity.activityid = crmentity.crmid "; 
 		$q.=" inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid"; 
@@ -2036,11 +2014,9 @@ class appointment extends tutos_base {
 		$q .= " and crmentity.smownerid=0 and users2group.userid=".$current_user->id;	
 		$q .= " ORDER by activity.date_start,activity.time_start";
 
-		//echo $q;
 		$r = $this->db->query($q);
 		$n = $this->db->getRowCount($r);
 		$a = 0;
-		// print("GS --> ".$n." q=".$q);
 
 		while ( $a < $n ) {
 			$o = &new appointment();
@@ -2052,57 +2028,7 @@ class appointment extends tutos_base {
 			}
 			unset($o);
 		}
-		//}
-		//
 
-		/*    #
-			# First query ( non repeating appointments )
-			#
-			$q = "SELECT * FROM ". $this->tablename." WHERE ";
-			$q .= " (";
-			if(!is_admin($current_user))
-			{
-			$q .= " ( ";
-			}
-			$q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-			$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-			$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-			if(!is_admin($current_user))
-			{
-			$q .= " ) AND ( creator = '".$current_user->id."' ) ";
-			}
-			$q .= " )";
-			$q .= " ORDER by a_start";
-
-			//print("GS --> allowed ".is_admin($current_user)." q=".$q);
-			# always at the end of query
-			# check_dbacl( $q, $current_user->id);
-
-			// srini cal appoint 
-			$r = $this->db->query($q);
-			$n = $this->db->getRowCount($r);
-			$a = 0;
-			//print("GS --> ".$n." q=".$q);
-			while ( $a < $n ) 
-			{	
-
-				$o = &new appointment();
-				$result = mysql_fetch_assoc($r);
-				//$o->read_result($r,$a);
-				$o->read_result($result);
-				$a++;
-				if ( $o->see_ok() ) 
-				{ */
-					/* Get all participants */
-					/*    //$o->read_participants();
-					//print("GS --> see");
-					$obj->callist[$o->id] = &$o;
-				}
-				unset($o);
-			}
-		//$r->free();
-
-					 */
 		$x = new DateTime();
 		$x->setDateTimeTS($from->ts);
 
@@ -2118,70 +2044,6 @@ class appointment extends tutos_base {
 			$ymd .= $pre ."'". Date("j/n",$x->getTimeStamp()) ."'";
 			$x->addDays(1);
 		}
-		#
-		# Second query ( repeating appointments w/o end )
-		#
-		/*    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-		      $q .= " r_ignore = 1 AND (";
-		      $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-		      $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-		      $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-		      $q .= " OR ( repeat = 4 )";
-		      $q .= " ) AND ( a_start <= ". $x2 ." )";
-		      $q .= "";
-		      $q .= " ORDER by a_start";
-
- 		*/
-		# always at the end of query
-		#   check_dbacl( $q, $current_user->id);
-
-		#   $r = $obj->dbconn->Exec($q);
-		#   $n = $r->numrows();
-		#   $a = 0;
-		#   while ( $a < $n ) {
-		#     $o = &new appointment($obj->dbconn);
-		#     $o->read_result($r,$a);
-		#     $a++;
-		#     if ( $o->see_ok() ) { 
-			/* Get all participants */
-		#       $o->read_participants();
-		#       $obj->callist[$o->id] = &$o;
-		#     }
-		#     unset($o);
-		#   }
-		#   $r->free();
-
-		#
-		# Third query ( repeating appointments with end )
-		#
-		/*   $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-		     $q .= " r_ignore = 0 AND (";
-		     $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-		     $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-		     $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-		     $q .= " OR ( repeat = 4 )";
-		     $q .= ") AND ( (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-		     $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-		     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-		     $q .= ")";
-		     $q .= " ORDER by a_start";
-		 */
-		#   $r = $obj->dbconn->Exec($q);
-		#   $n = $r->numrows();
-		#   $a = 0;
-		#   while ( $a < $n ) {
-		#     $o = &new appointment($obj->dbconn);
-		#     $o->read_result($r,$a);
-		#     $a++;
-		#     if ( $o->see_ok() ) { 
-			/* Get all participants */
-		#       $o->read_participants();
-		#       $obj->callist[$o->id] = &$o;
-		#     }
-		#     unset($o);
-		#   }
-		#   $r->free();
-
 		return;	
 	}
   /**
