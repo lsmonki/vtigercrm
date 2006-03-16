@@ -236,7 +236,7 @@ while ( $go == 1 )
  		}
 
  
- echo "<td onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>\n";
+ echo "<td onClick=\"gshow('addEvent')\" href=\"javascript:void(0)\" onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>\n";
  		if (($xm == $m ) || $month_overlap)
  		{
 		 	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
