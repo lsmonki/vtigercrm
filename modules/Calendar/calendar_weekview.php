@@ -235,7 +235,7 @@
 		}
 		for ($column=0;$column<=6;$column++)
 		{
-		     echo "<td onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
+		     echo "<td onClick=\"gshow('addEvent')\" href=\"javascript:void(0)\" onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>";
 
 		     for ($c = 0 ; $c < $maxcol[$row] ; $c++ ) {
 			     if ( isset ( $table[$column][$row][$c] ) ) {
