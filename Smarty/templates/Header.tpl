@@ -71,12 +71,18 @@
 	</td>
 	<td align=right style="padding-right:10px" >
 		<table border=0 cellspacing=0 cellpadding=0 id="search" style="border:1px solid #999999;background-color:white">
-		<tr>
-		<td style="height:19px;background-color:#ffffef" ><input type="text" value="Search..." class="searchBox" onClick="this.value=''" ></td>
-		<td style="background-color:#cccccc"><input type="button" class="searchBtn" value="Find" alt="Find" title="Find"> </td>
-		</td>
-
-		</tr>
+		   <tr>
+			<form name="UnifiedSearch" method="post" action="index.php">
+			<td style="height:19px;background-color:#ffffef" >
+				<input type="hidden" name="action" value="UnifiedSearch">
+				<input type="hidden" name="module" value="Home">
+				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
+			</td>
+			<td style="background-color:#cccccc">
+				<input type="submit" class="searchBtn" value="Find" alt="Find" title="Find">
+			</td>
+			</form>
+		   </tr>
 		</table>
 	</td>
 </td>
