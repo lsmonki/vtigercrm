@@ -915,9 +915,12 @@ class freetag {
 		// by $step.
 		$cloud_html = '';
 		$cloud_spans = array();
+		//included to get the site URL
+		include("config.php");
+
 		foreach ($tag_list as $tag => $qty) {
           		$size = $min_font_size + ($qty - $min_qty) * 3;
-			$cloud_span[] = '<span class="' . $span_class . '"><a href="'.$tag_page_url . $tag . '" style="font-size: '. $size . $font_units . '" class="tagLink">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
+			$cloud_span[] = '<span class="' . $span_class . '"><a href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '" class="tagLink">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
 
 		}
 		$cloud_html = join("\n ", $cloud_span);
