@@ -187,6 +187,10 @@ $combo_strings = Array(
                         'Euro'=>'Euro'
                         ),
 
+'visibility_dom' => Array('Private'=>'Private',
+                          'Public'=>'Public'
+			 ),
+				     
 'rsscategory_dom' => Array('vtiger Discussions'=>'vtiger Discussions',
                        'vtiger Wiki'=>'vtiger Wiki'
                       ),
