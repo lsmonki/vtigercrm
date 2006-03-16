@@ -28,6 +28,12 @@ $mod_strings = Array(
 'LBL_CONTACT'=>'Contact:',
 'LBL_SAVE'=>'Save',
 'LBL_RESET'=>'Cancel',
+'LBL_LIST_USER_NAME'=>'User Name',
+'LBL_LIST_NAME'=>'Name',
+'LBL_CALENDAR_SHARED'=>'Calendar currently shared with',
+'LBL_CALENDAR_SHARING'=>'Share calendar with',
+'LBL_SHARING_OPTION'=>'Can see my calendar?',
+'LBL_LIST_TOOLS'=>'Tools',
 
 'LBL_CALL' => 'Call',
 'LBL_MEET' => 'Meeting',
