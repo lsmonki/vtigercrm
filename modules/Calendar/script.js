@@ -102,3 +102,54 @@ function check_form()
                 return true;
         }
 }
+
+
+function DisableSharing()
+{
+
+        x = document.SharedList.selected_id.length;
+        idstring = "";
+
+        if ( x == undefined)
+        {
+
+                if (document.SharedList.selected_id.checked)
+                {
+                        document.SharedList.idlist.value=document.SharedList.selected_id.value;
+                }
+                else
+                {
+                        alert("Please select atleast one user");
+                        return false;
+                }
+        }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.SharedList.selected_id[i].checked)
+                        {
+                                idstring = document.SharedList.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.SharedList.idlist.value=idstring;
+                }
+                else
+                {
+                        alert("Please select atleast one user");
+                        return false;
+                }
+        }
+	if(confirm("Are you sure you want to disable sharing for selected "+xx+" user(s) ?"))
+        {
+                document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=index&sel=share";
+        }
+        else
+        {
+                return false;
+        }
+}
