@@ -8,21 +8,28 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 global $theme;
+global $current_user;
+global $current_language;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 global $log;
 
+$mode = 'create';
+
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
+	$mode = 'edit';
 	$templateid = $_REQUEST['templateid'];
 	 $log->debug("the templateid is set to the value ".$templateid);
 }
@@ -30,17 +37,23 @@ $sql = "select * from emailtemplates where templateid=".$templateid;
 $result = $adb->query($sql);
 $emailtemplateResult = $adb->fetch_array($result);
 
-$xtpl=new XTemplate ('modules/Users/createemailtemplate.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
-$xtpl->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
-$xtpl->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
-$xtpl->assign("DESCRIPTION", $emailtemplateResult["description"]);
-$xtpl->assign("SUBJECT", $emailtemplateResult["subject"]);
-$xtpl->assign("BODY", $emailtemplateResult["body"]);
+$smod_strings = return_module_language($current_language,'Settings');
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty = new vtigerCRM_smarty;
+
+$smarty->assign("UMOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme_path);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("MOD", $smod_strings);
+$smarty->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
+$smarty->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
+$smarty->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
+$smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
+$smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
+$smarty->assign("BODY", $emailtemplateResult["body"]);
+$smarty->assign("MODULE", 'Settings');
+$smarty->assign("EMODE", $mode);
+
+$smarty->display("CreateEmailTemplate.tpl");
 ?>
