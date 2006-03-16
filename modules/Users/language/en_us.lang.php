@@ -161,11 +161,11 @@ $mod_strings = Array(
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
-'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge fields to personalize your email content. You can add substitute text to any merge field.',
+'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge fields to personalize your email content.',
 'LBL_AVAILABLE_MERGE_FIELDS'=>'Available Merge Fields',
-'LBL_SELECT_FIELD_TYPE'=>'Select Field Type',
-'LBL_SELECT_FIELD'=>'Select Field',
-'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value',
+'LBL_SELECT_FIELD_TYPE'=>'Select Field Type :',
+'LBL_SELECT_FIELD'=>'Select Field :',
+'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value :',
 'LBL_CONTACT_FIELDS'=>'Contact Fields',
 'LBL_LEAD_FIELDS'=>'Lead Fields',
 'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge field value into your template below.',
@@ -179,6 +179,9 @@ $mod_strings = Array(
 'LBL_TEMPLATE_TOOLS'=>'Tools',
 'LBL_TEMPLATE_PUBLIC'=>'Public Access',
 'LBL_TEMPLATE_PRIVATE'=>'Private Access',
+'LBL_TEMPLATE_SUBJECT'=>'Email Subject',
+'LBL_TEMPLATE_MESSAGE'=>'Email Message',
+
 
 // Added fields in createnewgroup.php
 'LBL_CREATE_NEW_GROUP'=>'Create New Group',
