@@ -504,8 +504,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,19,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,15,19,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,16,19,3,'V~O',1,null,'BAS')");
- $this->db->query("Insert into field values (9,".$this->db->getUniqueID("field").",'visibility','activity',1,1
- 5,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')");
+ $this->db->query("Insert into field values (9,".$this->db->getUniqueID("field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')");
 
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,20,1,'V~O',1,null,'BAS')");
 
