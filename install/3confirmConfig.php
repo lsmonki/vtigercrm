@@ -497,12 +497,7 @@ elseif($mysql_status == 'true' && $mysql_db_status == 'true')
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
 	<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
 	</tr>
-	<tr bgcolor="White">
-	<td noWrap bgcolor="#F5F5F5" width="40%">Drop Existing Tables</td>
-	<td align="left" nowrap> <font class="dataInput">
-	<?php if (isset($db_drop_tables) && $db_drop_tables == true) echo "True"; else echo "False"; ?>
-	</font></td>
-	</tr></table><br>
+	</table><br>
 
 	<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc"><tbody>
 	<tr>
