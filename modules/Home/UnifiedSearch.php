@@ -24,122 +24,188 @@ require_once('include/logging.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Potentials/Opportunity.php');
-//require_once('modules/Cases/Case.php');
+require_once('modules/Leads/Lead.php');
+require_once('modules/Faq/Faq.php');
+require_once('modules/Vendors/Vendor.php');
+require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/Quotes/Quote.php');
+require_once('modules/PurchaseOrder/PurchaseOrder.php');
+require_once('modules/SalesOrder/SalesOrder.php');
+require_once('modules/Invoice/Invoice.php');
+require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Home/language/en_us.lang.php');
+require_once('include/database/PearDatabase.php');
+
+require_once('Smarty_setup.php');
 global $mod_strings;
 
-function build_account_where_clause ($the_query_string) {
-	$where_clauses = Array();
-
-	array_push($where_clauses, "accountname like '$the_query_string%'");
-	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "fax like '%$the_query_string%'");
-		array_push($where_clauses, "phone like '%$the_query_string%'");
-	}
-	
-	$the_where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($the_where != "") $the_where .= " or ";
-		$the_where .= $clause;
-	}
-	$log = LoggerManager::getLogger('account_unified_search');
-	$log->info("Here is the where clause for the Accounts list view: $the_where");
-	
-	return $the_where;
-}
-
-function build_contact_where_clause ($the_query_string) {
-	$where_clauses = Array();
-
-	array_push($where_clauses, "lastname like '$the_query_string%'");
-	array_push($where_clauses, "firstname like '$the_query_string%'");
-	array_push($where_clauses, "contactsubdetails.assistant like '$the_query_string%'");
-	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone like '%$the_query_string%'");
-		array_push($where_clauses, "mobile like '%$the_query_string%'");
-		array_push($where_clauses, "homephone like '%$the_query_string%'");
-		array_push($where_clauses, "otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
-		array_push($where_clauses, "assistant_phone like '%$the_query_string%'");
-	}
-	
-	$the_where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($the_where != "") $the_where .= " or ";
-		$the_where .= $clause;
-	}
-	$log = LoggerManager::getLogger('contact_unified_search');
-	$log->info("Here is the where clause for the Contacts list view: $the_where");
-	
-	return $the_where;
-}
-
-function build_opportunity_where_clause ($the_query_string) {
-	$where_clauses = Array();
-
-	array_push($where_clauses, "potentialname like '$the_query_string%'");
-
-	$the_where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($the_where != "") $the_where .= " or ";
-		$the_where .= $clause;
-	}
-	$log = LoggerManager::getLogger('opportunity_unified_search');
-	$log->info("Here is the where clause for the Potentials list view: $the_where");
-	
-	return $the_where;
-}
-/*
-function build_case_where_clause ($the_query_string) {
-	$where_clauses = Array();
-
-	array_push($where_clauses, "cases.name like '$the_query_string%'");
-	if (is_numeric($the_query_string)) array_push($where_clauses, "cases.number like '$the_query_string%'");
-
-	$the_where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($the_where != "") $the_where .= " or ";
-		$the_where .= $clause;
-	}
-	$log = LoggerManager::getLogger('case_unified_search');
-	$log->info("Here is the where clause for the Cases list view: $the_where");
-	
-	return $the_where;
-}
-*/
-//main
-echo get_module_title("", "Search Results", true); 
-echo "\n<BR>\n";
+//echo get_module_title("", "Search Results", true); 
 if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
-	//get accounts
-	$where = Account::build_generic_where_clause($_REQUEST['query_string']);
-	echo "<table><td><tr>\n";
-	include ("modules/Accounts/ListView.php");
 
-	//get contacts
-	
-	$where = Contact::build_generic_where_clause($_REQUEST['query_string']);
-	echo "<table><td><tr>\n";
-	include ("modules/Contacts/ListView.php");
+	//module => object
+	$object_array = Array(
+				'Potentials'=>'Potential',
+				'Accounts'=>'Account',
+				'Contacts'=>'Contact',
+				'Leads'=>'Lead',
+				'Notes'=>'Note',
+				'Activities'=>'Activity',
+				'Emails'=>'Email',
+				'HelpDesk'=>'HelpDesk',
+				'Products'=>'Product',
+				'Faq'=>'Faq',
+				//'Events'=>'',
+				'Vendors'=>'Vendor',
+				'PriceBooks'=>'PriceBook',
+				'Quotes'=>'Quote',
+				'PurchaseOrder'=>'Order',
+				'SalesOrder'=>'SalesOrder',
+				'Invoice'=>'Invoice',
+				'Campaigns'=>'Campaign'
+			     );
+	global $adb;
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
 
-	//get opportunities
-	$where = Potential::build_generic_where_clause($_REQUEST['query_string']);
-	echo "<table><td><tr>\n";
-	include ("modules/Potentials/ListView.php");
+	$search_val = $_REQUEST['query_string'];
 
-	//get cases
-//	$where = aCase::build_generic_where_clause($_REQUEST['query_string']);
-//	echo "<table><td><tr>\n";
-//	include ("modules/Cases/ListView.php");
+	getComboList($_REQUEST['search_module']);
+
+	foreach($object_array as $module => $object_name)
+	{
+		$focus = new $object_name();
+
+		$smarty = new vtigerCRM_Smarty;
+
+		$smarty->assign("MOD", $mod_strings);
+		$smarty->assign("APP", $app_strings);
+		$smarty->assign("IMAGE_PATH",$image_path);
+		$smarty->assign("MODULE",$module);
+		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
+		$smarty->assign("SINGLE_MOD",'Account');
+
+		$listquery = getListQuery($module);
+		$where = getUnifiedWhere($listquery,$module,$search_val);
+
+		if($where != '')
+			$listquery .= ' and '.$where;
+
+		$list_result = $adb->query($listquery);
+		$noofrows = $adb->num_rows($list_result);
+
+		if($noofrows >= 1)
+			$list_max_entries_per_page = $noofrows;
+		//Here we can change the max list entries per page per module
+		$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
+
+		$listview_header = getListViewHeader($focus,$module);
+		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","EditView","Delete","");
+
+		//Do not display the Header if there are no entires in listview_entries
+		if(count($listview_entries) > 0)
+		{
+			$display_header = 1;
+		}
+		else
+		{
+			$display_header = 0;
+		}
+		
+		$smarty->assign("LISTHEADER", $listview_header);
+		$smarty->assign("LISTENTITY", $listview_entries);
+		$smarty->assign("DISPLAYHEADER", $display_header);
+		$smarty->assign("HEADERCOUNT", count($listview_header));
+
+		$smarty->assign("MODULES_LIST", $object_array);
+
+		$smarty->display("GlobalListView.tpl");
+	}
+
 }
 else {
-	echo "<br><br><em>".$mod_strings['ERR_ONE_CHAR']."</em>";
-	//echo "</td></tr></table>\n";
+	echo "<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>".$mod_strings['ERR_ONE_CHAR']."</em>";
 }
 
+
+function getUnifiedWhere($listquery,$module,$search_val)
+{
+	global $adb;
+
+	$query = "select * from field where tabid=".getTabid($module);
+	$result = $adb->query($query);
+	$noofrows = $adb->num_rows($result);
+
+	$where = '';
+	for($i=0;$i<$noofrows;$i++)
+	{
+		$columnname = $adb->query_result($result,$i,'columnname');
+		$tablename = $adb->query_result($result,$i,'tablename');
+
+		//Before form the where condition, check whether the table for the field has been added in the listview query
+		if(strstr($listquery,$tablename))
+		{
+			if($where != '')
+				$where .= ' or ';
+			$where .= $tablename.'.'.$columnname.' like "%'.$search_val.'%"';
+		}
+	}
+
+	return $where;
+}
+
+function getComboList($search_module)
+{
+	global $object_array;
+
+	?>
+		<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+		<script>
+		function displayModuleList(selectmodule_view)
+		{
+			<?php
+			foreach($object_array as $module => $object_name)
+			{
+				?>
+				mod = "global_list_"+"<?php echo $module; ?>";
+				if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value == "All")
+					show(mod);
+				else
+					hide(mod);
+				<?php
+			}
+			?>
+			
+			if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value != "All")
+			{
+				selectedmodule="global_list_"+selectmodule_view.options[selectmodule_view.options.selectedIndex].value;
+				show(selectedmodule);
+			}
+		}
+		</script>
+		 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+		     <tr>
+		        <td>&nbsp;</td>
+		        <td nowrap align="right">Show Results in &nbsp;
+		                <select name="global_search_module" onChange="displayModuleList(this);">
+		                        <option value="All">All</option>
+						<?php
+						foreach($object_array as $module => $object_name)
+						{
+							$selected = '';
+							if($search_module != '' && $module == $search_module)
+								$selected = 'selected';
+							if($search_module == '' && $module == 'Contacts')
+								$selected = 'selected';
+							?>
+							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $module; ?></option>
+							<?php
+						}
+						?>
+		     		</select>
+		        </td>
+		     </tr>
+		</table>
+	<?php
+}
 ?>
