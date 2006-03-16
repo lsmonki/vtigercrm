@@ -16,7 +16,7 @@ require_once('class_http/class_http.php');
   * @returns $desc -- desc:: Type string array
   *
  */
-function getComdata($url,$variable)
+function getComdata($url,$variable="")
 {
 	$h = new http();
 	$desc = array();
@@ -25,20 +25,36 @@ function getComdata($url,$variable)
 	  echo "<h2>There is a problem with the http request!</h2>";
 	  echo $h->log;
 	  exit();
-	} 
-	$msft_stats = http::table_into_array($h->body, 'Find Symbol', 0, null);
-	//echo '<pre>';print_r($msft_stats);echo '</pre>';
-        //die;
-        if($msft_stats != '')
-        {
-		$desc=$msft_stats[0];
-		$data=getQuoteData($variable);
-		foreach($data as $key=>$value)
-			array_push($desc,$value);
-		return $desc;
+	}
+        if($variable != "")
+        {	
+		$msft_stats = http::table_into_array($h->body, 'Find Symbol', 0, null);
+	        if($msft_stats != '')
+        	{
+			$desc=$msft_stats[0];
+			$data=getQuoteData($variable);
+			foreach($data as $key=>$value)
+				array_push($desc,$value);
+			return $desc;
+		}
+		else
+		        return "Information on ".$variable." is not available or '".$variable."' is not a valid ticker symbol.";
 	}
 	else
-	        return "Information on ".$variable." is not available or '".$variable."' is not a valid ticker symbol.";
+	{
+		$headlines = array();
+		$news = http::table_into_array($h->body, 'HEADLINES',0, null);
+		if($news != '')
+		{
+			$headlines[] = $news[35];
+			$headlines[] = $news[37];
+			$headlines[] = $news[39];
+			$headlines[] = $news[41];
+			return $headlines;
+		}
+		else
+			return "No headlines available";
+	}
 }
 
 /** Function to get company quotes from external site
@@ -48,7 +64,6 @@ function getComdata($url,$variable)
  */
 function getQuoteData($var)
 {
-	//$url = "http://moneycentral.msn.com/detail/stock_quote?Symbol=".$var;
 	$url = "http://finance.yahoo.com/q?s=".$var;
 	$h = new http();
         $h->dir = "class_http_dir/";
@@ -59,8 +74,6 @@ function getQuoteData($var)
         }
 	$res_arr=array();
 	$quote_data = http::table_into_array($h->body, 'Delayed quote data', 0, null);
-	//echo '<pre>';print_r($quote_data);echo '</pre>';
-        //die;
         if($quote_data[0][0] == '')
         {
                 array_shift($quote_data);
@@ -73,10 +86,6 @@ function getQuoteData($var)
                 if($quote_data !='')
  	                $res_arr[]=$quote_data[$i];
         }
-	//array_shift($res_arr);
-	//array_shift($res_arr);	
-	//echo '<pre>';print_r($quote_data);echo '</pre>';
-	//die;
 	return $res_arr;
 }
 ?>
