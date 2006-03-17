@@ -1,7 +1,6 @@
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	line-height: 14px;
 	color: #000000;
 }
 .big {
@@ -1325,11 +1324,6 @@ a.imageTab:Hover{
 }
 /* profile */
 
-.small {
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 11px;
-}
-
 .prvPrfBigText {
 		font-family: Arial, Helvetica, sans-serif;
 			font-size: 14px;
@@ -1400,3 +1394,114 @@ a.imageTab:Hover{
 		border-right:1px solid #a1a1a1;
 }
 
+/*  Organization */
+
+.orgTab{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	font-weight:normal;
+color:#000000;
+border:0px solid #9B9B9B;
+	   border-collapse:collapse;
+width:100%;
+}
+
+.orgTab tr th{
+	text-align:left;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	text-decoration:none;
+	font-weight:bold;
+height:20px;
+	   padding-left:5px;
+}
+
+.orgTab tr td{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-decoration:none;
+	font-weight:none;
+	padding-left:5px;
+height:20px;
+	   border-bottom:1px solid #CCCCCC;
+	   border-right:1px solid #CCCCCC;
+}
+
+.globTab{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	font-weight:normal;
+color:#000000;
+border:1px solid #999999;
+	   border-collapse:collapse;
+width:100%;
+}
+
+.globTab tr th{
+	text-align:right;
+	background-color:#CCCCCC;
+	border-bottom:1px solid #999999;
+	border-right:2px solid #999999;
+color:#000000;
+	  font-family:Arial, Helvetica, sans-serif;
+	  font-size:12px;
+	  text-decoration:none;
+	  font-weight:bold;
+height:20px;
+	   padding-right:5px;
+
+}
+
+.globTab tr td{
+	text-align:left;
+border:1px solid #CCCCCC;
+color:#666666;
+	  font-family:Arial, Helvetica, sans-serif;
+	  font-size:11px;
+	  text-decoration:none;
+	  font-weight:none;
+	  padding-left:5px;
+height:20px;
+}
+
+#orgLay{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+width:500px;
+border:3px solid #CCCCCC;
+	   background-color:#FFFFFF;
+padding:5px;
+}
+/*#tempdiv{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+width:500px;
+border:3px solid #CCCCCC;
+	   background-color:#FFFFFF;
+padding:5px;
+}
+*/
+/* Groups */
+
+.groupul{
+margin:0px;
+	   font-family:Arial, Helvetica, sans-serif;
+	   font-weight:bold;
+	   font-size:12px;
+color:#000000;
+	  text-decoration:underline;
+	  text-align:left;
+}
+
+.groupli{
+	margin-left:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight:normal;
+	font-size:12px;
+	text-decoration:none;
+color:#333333;
+	  list-style-type:none;
+	  text-align:left;
+}

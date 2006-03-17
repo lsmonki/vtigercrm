@@ -11,7 +11,11 @@
 
 global $current_user;
 global $adb;
-if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
+if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
+{
+	require_once('modules/Users/CreateSharingRule.php');	
+}
+elseif(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 {
 	$announcement='';
 	$sql="select * from announcement order by time";
@@ -37,5 +41,5 @@ if(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 		$query="insert into announcement values (".$current_user->id.",".$adb->formatString("announcement","announcement",$announcement).",".$adb->formatString("announcement","time",$date_var).",'".$date_var."')";
 	$result=$adb->query($query);
 	echo $announcement;
-	}
+}
 ?>
