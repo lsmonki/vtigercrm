@@ -4978,12 +4978,19 @@
 	</table>
 
 	<table name="salesorder" alter="true">
-	<constraint>ADD CONSTRAINT fk_SO4 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_SO4 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
+	<table name="salesorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_SO3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
 	<table name="sobillads">
 		<field name="sobilladdressid" type="I" size="19">
 			<KEY/>
@@ -5307,6 +5314,9 @@
                         <NOTNULL/>
                 </field>
 		<opt>Type=InnoDB</opt>
+		<index name="customview">
+                        <col>cvid</col>
+                </index>
 		<data>
                 </data>
         </table>
@@ -7246,6 +7256,8 @@
 			<col>tagger_id</col>
 			<col>object_id</col>
 		</index>
+		<data>
+		</data>			
 
 	</table>
 
