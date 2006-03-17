@@ -226,7 +226,7 @@ class freetag {
 			$tagger_sql
 			ORDER BY object_id ASC
 			";
-        echo $sql;
+        	//echo $sql;
 		$rs = $adb->query($sql) or die("Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
