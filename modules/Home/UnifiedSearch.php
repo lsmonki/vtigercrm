@@ -64,13 +64,15 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 				'Campaigns'=>'Campaign'
 			     );
 	global $adb;
+	global $current_user;
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
 	$search_val = $_REQUEST['query_string'];
+	$search_module = $_REQUEST['search_module'];
 
-	getComboList($_REQUEST['search_module']);
+	getComboList($search_module);
 
 	foreach($object_array as $module => $object_name)
 	{
@@ -86,11 +88,19 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("SINGLE_MOD",'Account');
 
 		$listquery = getListQuery($module);
-		$where = getUnifiedWhere($listquery,$module,$search_val);
+
+		if($search_module != '')//This is for Tag search
+		{
+			$where = getTagWhere($search_val,$current_user->id);
+		}
+		else			//This is for Global search
+		{
+			$where = getUnifiedWhere($listquery,$module,$search_val);
+		}
 
 		if($where != '')
 			$listquery .= ' and '.$where;
-
+		
 		$list_result = $adb->query($listquery);
 		$noofrows = $adb->num_rows($list_result);
 
@@ -153,7 +163,27 @@ function getUnifiedWhere($listquery,$module,$search_val)
 
 	return $where;
 }
+function getTagWhere($search_val,$current_user_id)
+{
+	require_once('include/freetag/freetag.class.php');
 
+	$freetag_obj = new freetag();
+
+	$crmid_array = $freetag_obj->get_objects_with_tag_all($search_val,$current_user_id);
+
+	$where = '';
+	if(count($crmid_array) > 0)
+	{
+		$where = ' crmentity.crmid in (';
+		foreach($crmid_array as $index => $crmid)
+		{
+			$where .= $crmid.',';
+		}
+		$where = trim($where,',').')';
+	}
+
+	return $where;
+}
 function getComboList($search_module)
 {
 	global $object_array;
