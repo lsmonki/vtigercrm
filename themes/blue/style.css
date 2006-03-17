@@ -1473,16 +1473,8 @@ border:3px solid #CCCCCC;
 	   background-color:#FFFFFF;
 padding:5px;
 }
-/*#tempdiv{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-align:left;
-width:500px;
-border:3px solid #CCCCCC;
-	   background-color:#FFFFFF;
-padding:5px;
-}
-*/
+
+
 /* Groups */
 
 .groupul{
@@ -1505,3 +1497,24 @@ color:#333333;
 	  list-style-type:none;
 	  text-align:left;
 }
+
+#DeleteLay{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+width:300px;
+border:3px solid #CCCCCC;
+	   background-color:#FFFFFF;
+padding:5px;
+}
+
+.classBtn{
+	font-family:Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	font-weight:normal;
+	font-size:11px;
+	background-color:#999999;
+border:1px solid #666666;
+	   text-align:center;
+}
+

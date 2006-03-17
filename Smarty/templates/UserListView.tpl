@@ -79,5 +79,21 @@
 </td>
 </tr>
 </table>
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
+<script>
+function ajaxSaveResponse(response)
+{ldelim}
+	document.getElementById("tempdiv").innerHTML=response.responseText;
+{rdelim}
+
+function DeleteProfile(userid)
+{ldelim}
+	//show("an_busy");
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring = "module=Users&action=UsersAjax&file=UserDeleteStep1&record="+userid;
+	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+</script>
+
 	{include file='SettingsSubMenu.tpl'}
 

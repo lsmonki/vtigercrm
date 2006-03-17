@@ -587,7 +587,7 @@ class User extends SugarBean {
 		{
 			$entries=array();
 			$id=$this->db->query_result($result,$i-1,'id');
-			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="index.php?return_module=Users&return_action=ListView&module=Users&action=UserDeleteStep1&record='.$id.'"><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
+			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
 			$entries[]=$this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name');
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 			$entries[]=$this->db->query_result($result,$i-1,'department');

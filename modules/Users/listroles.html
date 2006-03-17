@@ -14,9 +14,7 @@
 
 <div id="item_movelayer" style="display:none;position:absolute;" bgcolor="red">
 </div>
-
-{HR}
-{ROLES}
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
 var moveLayerObj=getObj('item_movelayer')
 var itemOnMove=true;
@@ -116,5 +114,19 @@ function hidex(argg)
 	var x=document.getElementById(argg).style;
 	x.display="none";
 }
+
+function ajaxSaveResponse(response)
+{
+   document.getElementById("tempdiv").innerHTML=response.responseText;
+}
+
+function DeleteRole(roleid)
+{
+    //show("an_busy");
+    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var urlstring = "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid;
+    ajaxObj.process("index.php?",urlstring);
+}
+
 </script>
 <!-- END: main -->

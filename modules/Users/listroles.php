@@ -130,7 +130,7 @@ function indent($hrarray,$roleout,$role_det)
 		echo '<td style="width:5px"></td>';
 		if(! $roledepth == 0)
 		{
-			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&roleid='.$roleid.'">View</a></span></td>';
+			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&mode=edit">Edit</a> | <a href="#" onclick="DeleteRole(\''.$roleid.'\')">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&roleid='.$roleid.'">View</a></span></td>';
 		}
 		else
 		{

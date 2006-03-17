@@ -37,7 +37,7 @@
 		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 		<td nowrap>&nbsp;
 		{if $LIST_ENTRIES[entries].del_permission eq 'yes'}
-		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a>
+		<a href="#"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15" onclick="DeleteProfile('{$LIST_ENTRIES[entries].profileid}')"></a>
 		{else}
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		{/if}
@@ -62,5 +62,20 @@
 </td>
 </tr>
 </table>
-	{include file='SettingsSubMenu.tpl'}
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
+<script>
+function ajaxSaveResponse(response)
+{ldelim}
+	document.getElementById("tempdiv").innerHTML=response.responseText;
+{rdelim}
+
+function DeleteProfile(profileid)
+{ldelim}
+	//show("an_busy");
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring = "module=Users&action=UsersAjax&file=ProfileDeleteStep1&profileid="+profileid;
+	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+</script>
+{include file='SettingsSubMenu.tpl'}
 

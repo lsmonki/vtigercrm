@@ -11,6 +11,11 @@
 
 global $current_user;
 global $adb;
+
+if(isset($_REQUEST['file']) && ($_REQUEST['file'] !=''))
+{
+	require_once('modules/Users/'.$_REQUEST['file'].'.php');
+}
 if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
 {
 	require_once('modules/Users/CreateSharingRule.php');	
