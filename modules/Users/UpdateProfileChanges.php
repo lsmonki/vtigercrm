@@ -15,6 +15,11 @@ require_once('include/utils/utils.php');
 global $adb;
 $profileid = $_REQUEST['profileid'];
 
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action']!= '')
+	$return_action =$_REQUEST['return_action'];
+else
+	$return_action = 'ListProfiles';
+
 //Retreiving the tabs permission array
 $tab_perr_result = $adb->query("select * from profile2tab where profileid=".$profileid);
 $act_perr_result = $adb->query("select * from profile2standardpermissions where profileid=".$profileid);
@@ -183,7 +188,7 @@ foreach($modArr as $fld_module => $fld_label)
 
 	}
 }
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&mode=view&profileid=".$profileid;
+	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&profileid=".$profileid;
 	header($loc);
 
 function getPermissionValue($req_per)

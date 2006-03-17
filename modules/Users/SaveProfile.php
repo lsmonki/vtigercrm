@@ -15,7 +15,6 @@ require_once('include/utils/utils.php');
 global $adb;
 $profilename = $_REQUEST['profile_name'];
 $description= $_REQUEST['profile_description'];
-
 //Inserting values into Profile Table
 $sql1 = "insert into profile values('','".$profilename."','".$description."')";
 $adb->query($sql1);
@@ -210,7 +209,7 @@ foreach($modArr as $fld_module => $fld_label)
                 $adb->query($sql11);
 	}
 }
-	$loc = "Location: index.php?action=profilePrivileges&module=Users&mode=view&profileid=".$profileid;
+	$loc = "Location: index.php?action=ListProfiles&module=Users&mode=view&profileid=".$profileid;
 	header($loc);
 
 function getPermissionValue($req_per)

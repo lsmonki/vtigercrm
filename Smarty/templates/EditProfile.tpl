@@ -39,6 +39,7 @@
 	<input type="hidden" name="profileid" value="{$PROFILEID}">
 	<input type="hidden" name="profile_name" value="{$PROFILE_NAME}">
 	<input type="hidden" name="profile_description" value="{$PROFILE_DESCRIPTION}">	
+	<input type="hidden" name="return_action" value="{$RETURN_ACTION}">	
 	
 	<table border="0" cellspacing="0" cellpadding=	"0" width="100%" class="prvPrfOutline">
 	<tr>
@@ -406,7 +407,11 @@
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
+	{if $ACTION eq 'SaveProfile'}
+	<input type="submit" value=" Finish " name="save"/>&nbsp;&nbsp;
+	{else}
 	<input type="submit" value=" Save " name="save"/>&nbsp;&nbsp;
+	{/if}
 	<input type="button" value=" Cancel " name="Cancel" onClick="window.history.back();"/>
 
 	</td>

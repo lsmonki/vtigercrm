@@ -35,6 +35,7 @@
 	<form action="index.php" method="post" name="new" id="form">
 	<input type="hidden" name="module" value="Users">		
 	<input type="hidden" name="action" value="profilePrivileges">		
+	<input type="hidden" name="return_action" value="profilePrivileges">		
 	<input type="hidden" name="mode" value="edit">	
 	<input type="hidden" name="profileid" value="{$PROFILEID}">	
 	

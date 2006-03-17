@@ -11,7 +11,6 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $profileId=$_REQUEST['profileid'];
 $profileName='';
-
 $parentProfileId=$_REQUEST['parentprofile'];
 if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
@@ -27,6 +26,9 @@ $smarty->assign("PROFILEID", $profileId);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
+	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+
 
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
 {	
@@ -390,7 +392,7 @@ for($i=0;$i<$no_of_mod; $i++)
 	next($modArr);
 }
 $smarty->assign("PRI_FIELD_LIST",$privilege_fld);	
-
+$smarty->assign("MODE",$mode);
 if($mode=='view')
 {
 	$fieldListResult = getProfile2AllFieldList($modArr,$profileId);

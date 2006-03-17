@@ -37,8 +37,12 @@
 		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 		<td nowrap>&nbsp;
 		{if $LIST_ENTRIES[entries].del_permission eq 'yes'}
-		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a><a href="index.php?module=Users&action=profilePrivileges&mode=edit&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
+		<a href="index.php?module=Users&action=ProfileDeleteStep1&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15"></a>
+		{else}
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		{/if}
+		
+		<a href="index.php?module=Users&action=profilePrivileges&return_action=ListProfiles&mode=edit&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
 		&nbsp;</td>
 		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&mode=view&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</a></td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
