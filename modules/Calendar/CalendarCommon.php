@@ -207,5 +207,27 @@ function getSharedUserListViewEntries($sharedid)
 	return $entries;
 
 }
+
+/**
+ * Function to get userid and username of all users except the current user
+ * @returns $userArray -- User Array in the following format:
+ * $userArray=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
+ */
+function getOtherUserName($id)
+{
+	global $adb;
+	$query="select * from users where deleted=0 and id!=".$id;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$user_details=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$userid=$adb->query_result($result,$i,'id');
+		$username=$adb->query_result($result,$i,'user_name');
+ 		$user_details[$userid]=$username;
+	}
+	return $user_details;
+}
+
 //Code Added by Minnie -Ends
 ?>
