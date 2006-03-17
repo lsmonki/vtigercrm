@@ -2863,7 +2863,7 @@ function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$to
 	elseif($shareEntityType == 'groups' && $toEntityType == 'roles')
 	{
 		
-		$type_string='GRP::ROLES';
+		$type_string='GRP::ROLE';
 		$query = "insert into datashare_grp2role values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
 	}
 	elseif($shareEntityType == 'groups' && $toEntityType == 'rs')
@@ -2949,7 +2949,7 @@ function updateSharingRule($shareid,$tabid,$shareEntityType,$toEntityType,$share
 	elseif($shareEntityType == 'groups' && $toEntityType == 'roles')
 	{
 		
-		$type_string='GRP::ROLES';
+		$type_string='GRP::ROLE';
 		$query = "insert into datashare_grp2role values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
 	}
 	elseif($shareEntityType == 'groups' && $toEntityType == 'rs')
