@@ -156,10 +156,10 @@
 
 	<table name="sharedcalendar">
 		<field name="userid" type="I" size="19">
-			</KEY>
+			<KEY/>
 		</field>
 		<field name="sharedid" type="I" size="19">
-			</KEY>
+			<KEY/>
 		</field>
 	</table>
 
