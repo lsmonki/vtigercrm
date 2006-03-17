@@ -21,6 +21,22 @@
 		document.getElementById(selrow).className="mnuSel";
 		show (Sele);
 	{rdelim}
+
+	function ajaxResponse(response)
+        {ldelim}
+                document.getElementById('headlines').innerHTML = response.responseText;
+                document.getElementById('headlines').style.display="block";
+        {rdelim}
+	
+	function getHeadLines(Ticker)
+        {ldelim}
+                if(Ticker!='')
+                {ldelim}
+                        var ajaxObj = new Ajax(ajaxResponse);
+                        var urlstring = "module=Accounts&action=HeadLines&tickersymbol="+Ticker;
+                        ajaxObj.process("index.php?",urlstring);
+                {rdelim}
+        {rdelim}
 </script>
 
 
@@ -147,8 +163,8 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	              		{/foreach}		  
 	            </table>
 			</td>
+			<td id ="headlines"></td>
 			<td class="padTab1">
-				
 				{foreach item=tabledetail from=$HOMEDETAILS}
 				{if $tabledetail neq ''}
 				{if $tabledetail.Title.2 neq $HOMEDEFAULTVIEW}	
@@ -157,6 +173,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 				<div id="{$tabledetail.Title.2}" style="display:block">
 				{/if}
 				<table border="0" cellpadding="3" cellspacing="0" width="100%">
+				<form name="homepage">
 				<tr>
 				  <td colspan="4"><span class="genHeaderSmall">{$tabledetail.Title.1}</span> <a href="#">(Mark as Default View)</a></td>
 				</tr>
@@ -178,7 +195,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 				<!--end of entries -->
 				</tr>
 				{/foreach}
-				
+				</form>
 			</table>
 			</div>
 {/if}
