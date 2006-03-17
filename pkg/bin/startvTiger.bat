@@ -100,7 +100,7 @@ goto checkdatabase
 echo ""
 echo "Starting MySQL on port specified by the user"
 echo ""
-start mysqld-nt -b .. --log-queries-not-using-indexes --log-slow-admin-statements --log-error --low-priority-updates --log-slow-queries=vtslowquery.log --datadir=../data --port=%mysql_port%
+start mysqld-nt -b .. --skip-bdb --log-queries-not-using-indexes --log-slow-admin-statements --log-error --low-priority-updates --log-slow-queries=vtslowquery.log --datadir=../data --port=%mysql_port%
 %SLEEP_STR% -n 11 127.0.0.1>nul
 mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases" > NUL
 IF ERRORLEVEL 1 goto notstarted
