@@ -45,10 +45,10 @@ function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 	$row=1;
 	$groupMember = $groupInfoArr[2];
 	$information = array();
+	$memberinfo = array();
 	foreach($groupMember as $memberType=>$memberValue)
 	{
 
-		$memberinfo = array();
 		foreach($memberValue as $memberId)
 		{
 			$groupmembers = array();
