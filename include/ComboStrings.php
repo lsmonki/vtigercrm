@@ -270,18 +270,58 @@ $combo_strings = Array(
 			'Canceled'=>'Canceled'
 			),
 
-'campaignstatus_dom' => Array('Planning'=>'Planning',
-			'Active'=>'Active',
-			'Inactive'=>'Inactive',
-                      'Canceled'=>'Canceled',
-                      'Complete'=>'Complete'
-			),
+'campaignstatus_dom' => Array(''=>'',
+			      'Planning'=>'Planning',						      	      'Active'=>'Active',							      'Inactive'=>'Inactive',
+			      'Complete'=>'Complete',
+			      'Cancelled'=>'Cancelled',							      ),
+			
 
-'campaigntype_dom' => Array('Conference'=>'Conference',
-			'Podcast'=>'Podcast',
-			'Advertisement'=>'Advertisement',
-			'Email'=>'Email'
-			),
+'campaigntype_dom' => Array(''=>'',
+			    'Conference'=>'Conference',
+			    'Webinar'=>'Webinar',
+			    'Trade Show'=>'Trade Show',				    			    'Public Relations'=>'Public Relations',					    'Partners'=>'Partners',
+			    'Referral Program'=>'Referral Program',
+			    'Advertisement'=>'Advertisement',
+			    'Banner Ads'=>'Banner Ads',
+			    'Direct Mail'=>'Direct Mail',
+			    'Email'=>'Email',
+			    'Telemarketing'=>'Telemarketing',
+			    'Others'=>'Others'
+			    ),
+
+'cmpnexpectedrevenue_dom' => Array(''=>'',
+			    	   '$80,000'=>'$80,000',
+				   '$90,000'=>'$90,000',
+				   '$1,00,000'=>'$1,00,000',
+				   '$1,10,000'=>'$1,10,000',
+				   '$1,20,000'=>'$1,20,000',
+				   '$1,30,000'=>'$1,30,000',
+				   '$1,40,000'=>'$1,40,000',
+				   '$1,50,000'=>'$1,50,000'
+
+			   ),
+
+'cmpnactualcost_dom' => Array(''=>'',
+			      '$60,000'=>'$60,000',
+   			      '$65,000'=>'$65,000',
+			      '$70,000'=>'$70,000',
+                              '$80,000'=>'$80,000',
+			      '$85,000'=>'$85,000',
+                              '$95,000'=>'$95,000',
+			      '$1,05,000'=>'$1,05,000',
+                              '$1,10,000'=>'$1,10,000',
+			      '$1,20,000'=>'$1,20,000'
+			      ),
+
+
+'cmpnexpectedresponse_dom' => Array(''=>'',
+			      'Excellent'=>'Excellent',
+			      'Good'=>'Good',
+			      'Average'=>'Average',
+                              'Poor'=>'Poor'
+			      ),			      
+
+			    
 		
 );
 
