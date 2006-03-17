@@ -154,6 +154,16 @@
 		</data>
 	</table>
 
+	<table name="sharedcalendar">
+		<field name="userid" type="I" size="19">
+			</KEY>
+		</field>
+		<field name="sharedid" type="I" size="19">
+			</KEY>
+		</field>
+	</table>
+
+
 	<table name="tab">
 		<field name="tabid" type="I" size="19">
 			<KEY/>
@@ -1025,6 +1035,9 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<field name="visibility" type="C" size="50">
+			<NOTNULL/>
+		</field>
 			<opt>Type=InnoDB</opt>
 		 <index name="Activity_IDX0">
 			<col>activityid</col>
@@ -1311,6 +1324,31 @@
 		<opt>Type=InnoDB</opt> <index name="Currency_CRY">
 			<UNIQUE/>
 			<col>currency</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="visibility">
+		<field name="visibilityid" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+
+		</field>
+		<field name="visibility" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Visibility_VLY">
+			<UNIQUE/>
+			<col>visibility</col>
 		</index>
 		<data>
 		</data>
