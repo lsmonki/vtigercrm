@@ -32,7 +32,7 @@ function getTopAccounts()
 	$current_module_strings = return_module_language($current_language, "Accounts");
 	$log = LoggerManager::getLogger('top accounts_list');
 
-	$list_query = 'select account.accountid, account.accountname, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
+	$list_query = 'select account.accountid, account.accountname, account.tickersymbol, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
 	$noofrows = min($adb->num_rows($list_result),7);
@@ -42,6 +42,7 @@ function getTopAccounts()
 			$open_accounts_list[] = Array('accountid' => $adb->query_result($list_result,$i,'accountid'),
 					'accountname' => $adb->query_result($list_result,$i,'accountname'),
 					'amount' => $adb->query_result($list_result,$i,'amount'),
+					'tickersymbol' => $adb->query_result($list_result,$i,'tickersymbol'),
 					);								 
 		}
 
@@ -67,12 +68,8 @@ function getTopAccounts()
 				'AMOUNT' => ($account['amount']),
 				);
 
-		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'">'.$account['accountname'].'</a>';
+		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'" onMouseOver=getHeadLines("'.$account['tickersymbol'].'")>'.$account['accountname'].'</a>';
 		$value[]=convertFromDollar($account['amount'],$rate);
-
-
-
-
 		$entries[$account['accountid']]=$value;	
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
