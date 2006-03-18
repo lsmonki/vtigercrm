@@ -2367,6 +2367,40 @@ function deleteRoleRelatedSharingRules($roleId)
         }
 }
 
+/** Function to delete the group related sharing rules
+  * @param $roleid -- RoleId :: Type varchar
+ */
+function deleteGroupRelatedSharingRules($grpId)
+{
+
+        global $adb;
+        $dataShareTableColArr=Array('datashare_grp2grp'=>'share_groupid::to_groupid',
+                                    'datashare_grp2role'=>'share_groupid',
+                                    'datashare_grp2rs'=>'share_groupid',
+                                    'datashare_role2group'=>'to_groupid',
+                                    'datashare_rs2grp'=>'to_groupid');
+
+
+        foreach($dataShareTableColArr as $tablename=>$colname)
+        {
+                $colNameArr=explode('::',$colname);
+                $query="select shareid from ".$tablename." where ".$colNameArr[0]."=".$grpId;
+                if(sizeof($colNameArr) >1)
+                {
+                        $query .=" or ".$colNameArr[1]."=".$grpId;
+                }
+
+
+                $result=$adb->query($query);
+                $num_rows=$adb->num_rows($result);
+                for($i=0;$i<$num_rows;$i++)
+                {
+                        $shareid=$adb->query_result($result,$i,'shareid');
+                        deleteSharingRule($shareid);
+                }
+
+        }
+}
 
 
 /** Function to get userid and username of all users 
@@ -2748,7 +2782,8 @@ function deleteGroup($groupId)
 	deleteGroupRelatedGroups($groupId);
 	deleteGroupRelatedRoles($groupId);
 	deleteGroupRelatedRolesAndSubordinates($groupId);
-	deleteGroupRelatedUsers($groupId);	
+	deleteGroupRelatedUsers($groupId);
+	deleteGroupRelatedSharingRules($groupId);		
 
 }
 
