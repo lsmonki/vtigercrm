@@ -229,8 +229,8 @@ $success = $db->createTables("schema/DatabaseSchema.xml");
 // TODO HTML
 if($success==0)
 	die("Error: Tables not created.  Table creation failed.\n");
-//elseif ($success==1)
-//	die("Error: Tables partially created.  Table creation failed.\n");
+elseif ($success==1)
+	die("Error: Tables partially created.  Table creation failed.\n");
 else
 	eecho("Tables Successfully created.\n");
 
