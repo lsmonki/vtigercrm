@@ -31,6 +31,7 @@
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('include/utils/UserInfoUtil.php');
 
 // User is used to store customer information.
 class User extends SugarBean {
@@ -583,6 +584,9 @@ class User extends SugarBean {
 		$query = "SELECT * from users where deleted=0";
 		$result =$this->db->query($query);
 		$entries_list = array();
+		$roleinfo = getAllRoleDetails();
+		
+		//echo '<pre>'; print_r($roleinfo['H1']); '</pre>';
 		for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
 		{
 			$entries=array();
@@ -592,7 +596,8 @@ class User extends SugarBean {
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 			$entries[]=$this->db->query_result($result,$i-1,'department');
 			$entries[]=$this->db->query_result($result,$i-1,'email1');
-			$entries[]=fetchUserRole($this->db->query_result($result,$i-1,'id'));
+			$rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
+			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$roleinfo[$rolecode][0];
 			$entries[]=$this->db->query_result($result,$i-1,'is_admin');
 			$entries_list[]=$entries;
 		}
