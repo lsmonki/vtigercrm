@@ -270,8 +270,6 @@ function set_return_specific(product_id, product_name) {
         var fldId = getOpenerObj("account_id");
         fldName.value = product_name;
         fldId.value = product_id;
-	//window.opener.document.EditView.account_name.value = product_name;
-        //window.opener.document.EditView.account_id.value = product_id;
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 
