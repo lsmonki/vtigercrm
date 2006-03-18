@@ -209,15 +209,17 @@
 </tr>
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
+<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;vertical-align:center;left:887px;top:0px;height:17px;">Processing Request...</div>
 <script>
 function ajaxSaveResponse(response)
 {ldelim}
+	hide("status");
 	document.getElementById("tempdiv").innerHTML=response.responseText;
 {rdelim}
 
 function callEditDiv(modulename)
 {ldelim}
-	//show("an_busy");
+	show("status");
 	var ajaxObj = new Ajax(ajaxSaveResponse);
 	var urlstring = "module=Users&action=UsersAjax&orgajax=true&mode=create&sharing_module="+modulename;
 	ajaxObj.process("index.php?",urlstring);
