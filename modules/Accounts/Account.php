@@ -277,7 +277,6 @@ class Account extends CRMEntity {
 				and (activity.status='Completed' or activity.status = 'Deferred'  or (activity.eventstatus != 'Planned' and activity.eventstatus !=''))
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
-		//echo $query;
 		return getHistory('Accounts',$query,$id);
 	}
 
@@ -459,7 +458,6 @@ class Account extends CRMEntity {
 
 	function set_account_opportunity_relationship($account_id, $opportunity_id)
 	{
-          //$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opportunity_id', account_id='$account_id'";
           	$query = "insert into accounts_opportunities (id, opportunity_id, account_id) values('".create_guid()."','$opportunity_id','$account_id')";
 		$this->db->query($query,true,"Error setting account to opportunity relationship: ");
 	}
@@ -484,7 +482,6 @@ class Account extends CRMEntity {
 
 	function set_account_contact_relationship($account_id, $contact_id)
 	{
-          //	$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
 	$query = "insert into accounts_contacts (id,contact_id,account_id) values ('".create_guid()."','$contact_id','$account_id')";
 		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
@@ -609,7 +606,6 @@ class Account extends CRMEntity {
 		// Fill in the assigned_user_name
 		$this->assigned_user_name = get_assigned_user_name($this->smownerid);
 
-		//$query = "SELECT a1.name from account as a1, accounts as a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
                 $query = "SELECT a1.name from account a1, account a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
@@ -665,7 +661,6 @@ class Account extends CRMEntity {
 		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=6";
         	$result = $adb->query($sql1);
 		$numRows = $adb->num_rows($result);
-	//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel	
 		$sql3 = "select ";
 		for($i=0; $i < $numRows;$i++)
 		{
@@ -694,8 +689,6 @@ class Account extends CRMEntity {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
-  //$result = mysql_query("select * from accountcf");
-  //$testrow = mysql_num_fields($result);
  $result = $this->db->query("select * from accountscf");
  $testrow = $this->db->num_fields($result);
 	if($testrow > 1)
@@ -778,7 +771,6 @@ function getColumnNames_Acnt()
 	$mergeflds = $custom_fields;
 	return $mergeflds;
  }
-//End
 
 }
 
