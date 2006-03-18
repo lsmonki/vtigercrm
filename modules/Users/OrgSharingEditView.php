@@ -8,66 +8,42 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once('include/utils/utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-echo '<form action="index.php" method="post" name="def_org_share" id="form">';
-echo get_module_title("Security", "Default Organisation Sharing Privileges", true);
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Users/OrgSharingEditView.html');
-
+$smarty = new vtigerCRM_Smarty; 
 $defSharingPermissionData = getDefaultSharingEditAction();
-$output = '';
-$output .= '<input type="hidden" name="module" value="Users">';
-$output .= '<input type="hidden" name="action" value="SaveOrgSharing">';
-$output .= '<br><input title="Save" accessKey="C" class="button" type="submit" name="Save" value="'.$mod_strings['LBL_SAVE_PERMISSIONS'].'"><br><br>';
-$output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="formOuterBorder">';
-$output .= '<tr>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</b></td>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Access Privilege</b></td>';
-$output .=  '</tr>';
 
 $row=1;
+$entries = Array();
 foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
-//	if($tab_id != 8 && $tab_id != 14 && $tab_id != 15 && $tab_id != 18 && $tab_id != 19 && $tab_id != 16 && $tab_id != 22)
-//	{
-	
-	
 		$entity_name = getTabname($tab_id);
 		if($tab_id == 6)
 		{
 			$cont_name = getTabname(4);
 			$entity_name .= ' & '.$cont_name;
 		}
-
-		//$entity_perr= getDefOrgShareActionName($deff_perr)
 		$defActionArr=getModuleSharingActionArray($tab_id);
 
-		if ($row%2==0)
-			$output .=   '<tr class="evenListRow">';
-		else
-			$output .=   '<tr class="oddListRow">';
-
-		$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;" >'.$entity_name.'</TD>';
-		$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">';
-
+		$entries[] = $entity_name;
+		
 		if($tab_id != 6)
 		{
-			$output .= '<select class="select" name="'.$tab_id.'_per">';
+			$output = '<select class="detailedViewTextBox"  name="'.$tab_id.'_per">';
 		}
 		else
 		{
-			$output .= '<select class="select" name="'.$tab_id.'_per" onchange="checkAccessPermission(this.value)">';
+			$output = '<select class="detailedViewTextBox"  name="'.$tab_id.'_per" onchange="checkAccessPermission(this.value)">';
 		}
+		$entries[] = $tab_id;
 		
 		foreach($defActionArr as $shareActId=>$shareActName)
 		{
@@ -82,18 +58,16 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 
 
 		$output .= '</select>';
-		$output .= '</div></TD>';
-		$output .=  '</tr>';
-
+		$entries[] = $output;
 		$row++;
-//	}
 }
 
+$list_entries=array_chunk($entries,3);
+$smarty->assign("ORGINFO",$list_entries);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
 
-$output .=  '</TABLE></form><br>';
-
-$xtpl->assign("DEFAULT_SHARING", $output);
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("OrgSharingEditView.tpl");
 ?>

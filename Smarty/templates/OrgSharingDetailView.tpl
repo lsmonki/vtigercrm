@@ -129,11 +129,6 @@
 				<!-- Start of Module Display -->
 						{foreach key=modulename item=details from=$MODSHARING}
 						<div align="right"><a href="#">Go to Top</a></div>
-						<form action="index.php" method="post" name="{$modulename}" id="form">
-						<input type="hidden" name="module" value="Users">
-						<input type="hidden" name="action" value="CreateSharingRule">
-						<input type="hidden" name="sharing_module" value="{$modulename}">
-						<input type="hidden" name="mode" value="create">
 						{if $details.0 neq ''}
 						<table class="orgTab" cellpadding="0" cellspacing="0">
 						<tbody>
@@ -172,7 +167,7 @@
 					  	<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
 						<b>{$modulename}</b>&nbsp;&nbsp; 
 						</td>
-					 	<td align="right"><input title="New" class="small" type="submit" name="Create" value="Add Privileges"></td>
+					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}')"></td>
 				  	</tr>
 				  	<tr>
 				  		<td colspan="2" style="padding: 20px;" bgcolor="#ffffff" align="center">
@@ -185,7 +180,6 @@
 					</table>
 			    <!-- END OF NO DATA -->
 					{/if}
-					</form>
 					<br><br>
 					{/foreach}
 					</td>
