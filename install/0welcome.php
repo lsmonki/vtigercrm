@@ -80,10 +80,12 @@ foreach($pieces as $val)
 
 Welcome!<br><br>
 Thank you for trying out vtigerCRM 5 Beta  and for making it a part of your experience.<br>
+This is a product of pure teamwork and passion.
 Every developer and contributor has added value to vtiger either in the
 form of bug reports, bug fixes, feature contributions or for that
 matter, providing the hosting machine or maintenance of the forge. We
-have learnt a lot working with you.This is a product of pure teamwork and passion. We intend to create something worth
+have learnt a lot working with all of you.
+ We intend to create something worth
 using, worth using for long.<br><br>
 
 <i>We sincerely hope, we are able to live upto your expectations.</i>
@@ -91,9 +93,9 @@ using, worth using for long.<br><br>
 <br>
 <br>
 <bold>vtiger is 100% pure Open Source. <u>You do not have to pay
-anything to use the product </u>.There are no hidden costs. We would
-be happy if you would subscribe to the support package though. The
-link for subscription is as follows :- 
+anything to use the product. If you do subscribe to the support package though, you will be able
+to get time bound answers to all your queries and help for any other issue that you might 
+be facing</u>.There are no other hidden costs. The support subscription link is as follows :- 
 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
 vtiger does not believe in any big dollar marketing campaign hence you
