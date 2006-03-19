@@ -41,13 +41,11 @@ $primarymodule = $ogReport->primodule;
 $secondarymodule = $ogReport->secmodule;
 $oReportRun = new ReportRun($reportid);
 $filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
-//print_r($filterlist);
 $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 $totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-
+if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+{
 ?>
-<html>
-<head>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script type="text/javascript" language="JavaScript">
     function goToURL( url )
@@ -55,8 +53,6 @@ $totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
         document.location.href = url;
     }
 </script>
-</head>
-<body>
 <?php
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, false);  
 ?>
@@ -113,6 +109,10 @@ return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterFiel
     <input type="hidden" name="reportDesc"/>
     <input type="hidden" name="folder"/>
 </form>
-</body>
-</html>
 <br>
+<?
+}
+else
+{
+	echo $mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule;
+}

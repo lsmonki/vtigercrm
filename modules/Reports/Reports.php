@@ -10,6 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
+require_once('include/utils/UserInfoUtil.php');
 global $calpath;
 global $app_strings,$mod_strings;
 global $app_list_strings;
@@ -20,7 +21,9 @@ global $log;
 
 global $report_modules;
 global $related_modules;
+global $profileList;
 
+$profileList = getCurrentUserProfileList();
 $adv_filter_options = array("e"=>"equals",
 		            "n"=>"not equal to",
 			    "s"=>"starts with",
@@ -233,8 +236,8 @@ class Reports extends CRMEntity{
 					  $count_flag = 0;
 					  do
 					  {
-						if(isPermitted($report['primarymodule'],'index') == "yes" && (isPermitted($report['secondarymodules'],'index')== "yes" || $report['secondarymodules'] == ''))
-						{
+					/*	if(isPermitted($report['primarymodule'],'index') == "yes" && (isPermitted($report['secondarymodules'],'index')== "yes" || $report['secondarymodules'] == ''))
+						{*/
 							$count_flag = 1;
 							if ($rowcnt%2 == 0)
 							$srptdetails .= '<tr class="evenListRow">';
@@ -258,13 +261,13 @@ class Reports extends CRMEntity{
 							<td  height="21" style="padding:0px 3px 0px 3px;">'.$report["description"].'</td>
 							</tr>';
 							$rowcnt++;
-						}
+					//	}
 					  }while($report = $adb->fetch_array($result));
-					  if($count_flag == 0)	
+				/*	  if($count_flag == 0)	
 					  {
 						$srptdetails .= "<tr><td colspan=3 align='center'>".$mod_strings['LBL_NO_PERMISSION']."</td></tr>";	
 					   }
-
+*/
 				    	$srptdetails .= '</table>
 				    		</td>
 				  			</tr>
@@ -349,12 +352,21 @@ class Reports extends CRMEntity{
 	function getColumnsListbyBlock($module,$block)
 	{
         global $adb;
-		global $log;
-        $tabid = getTabid($module);
+	global $log;
         global $profile_id;
+	global $profileList;
 
-        $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
-
+        $tabid = getTabid($module);
+	
+	//Security Check 
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	{
+		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid =  ".$profile_id." order by sequence";
+	}
+	else
+	{
+        	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList." group by field.fieldid order by sequence";
+	}
         $result = $adb->query($sql);
         $noofrows = $adb->num_rows($result);
         for($i=0; $i<$noofrows; $i++)
@@ -952,12 +964,19 @@ class Reports extends CRMEntity{
 		//retreive the tabid	
 		global $adb;
 		global $log;
+		global $profileList;
 
 		$tabid = getTabid($module);
 		global $profile_id;
 		$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
-		$ssql = "select * from field inner join tab on tab.tabid = field.tabid inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
-		
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+		{
+			$ssql = "select * from field inner join tab on tab.tabid = field.tabid inner join def_org_field on def_org_field.fieldid=field.fieldid inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 and def_org_field.visible=0 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
+		}
+		else
+		{
+			$ssql = "select * from field inner join tab on tab.tabid = field.tabid inner join def_org_field on def_org_field.fieldid=field.fieldid inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 and def_org_field.visible=0 and profile2field.visible=0 and profile2field.profileid in ".$profileList." order by sequence";
+		}
 		$result = $adb->query($ssql);
 		$columntototalrow = $adb->fetch_array($result);
                 $n = 0;

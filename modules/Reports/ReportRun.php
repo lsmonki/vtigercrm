@@ -340,7 +340,6 @@ class ReportRun extends CRMEntity
 			}
 
 		}
-
 		return $stdfilterlist;
 
 	}

@@ -79,7 +79,7 @@ $mod_strings = Array(
 'LBL_EXPORTXL_BUTTON'=>'Export To Excel',
 
 //Added for 5 Beta
-'LBL_NO_PERMISSION'=>'You are not permitted to view reports for this module',
+'LBL_NO_PERMISSION'=>'Your profile dosen\'t allow you view the reports for one of the  module(s)',
 
 );
 

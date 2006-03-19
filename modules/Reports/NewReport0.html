@@ -11,7 +11,21 @@
 <!-- BEGIN: main -->
 <html>
 <head>
-   <script language="javascript" type="text/javascript" src="modules/Reports/Report.js"></script> 
+<script language="javascript" type="text/javascript" src="modules/Reports/Report.js"></script> 
+<script language="javascript">
+function checkmodule()
+{
+	if(document.NewReport.primarymodule.value=='')
+	{
+		alert("{ERROR_MSG}");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}						        
+</script>
 	</head>
 <body>
 <form name="NewReport" action="index.php">
@@ -45,7 +59,7 @@
         </td>
         </tr>        
         <tr> 
-          <td><br><input name="nextBtn" class="button" type="submit" value="{MOD.LBL_CONTINUE_BUTTON}" onClick="">&nbsp;
+          <td><br><input name="nextBtn" class="button" type="submit" value="{MOD.LBL_CONTINUE_BUTTON}" onClick="return checkmodule();">&nbsp;
           <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onClick="document.location.href='?module=Reports&action=index'"></td>
 
         </tr>

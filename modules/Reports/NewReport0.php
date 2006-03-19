@@ -41,6 +41,7 @@ function getPrimaryModuleList()
 	global $adb;
 	global $app_list_strings;
 	global $report_modules;	
+	global $mod_strings;
 
 	$count_flag = 0;
 	foreach($app_list_strings['moduleList'] as $key=>$value)
@@ -60,7 +61,7 @@ function getPrimaryModuleList()
 	}
 	if($count_flag == 0)
 	{
-			$shtml .= "<option value=\"\">--None--</option>";
+			$shtml .= "<option value=\"\">".$mod_strings['LBL_NO_PERMISSION']."</option>";
 	}
 	return $shtml;
 }
@@ -74,6 +75,7 @@ function getRelatedModuleList()
 {
 	global $app_list_strings;
 	global $related_modules;
+	global $mod_strings;
 
 	foreach($related_modules as $key_module=>$rel_modules)
 	{
@@ -93,7 +95,7 @@ function getRelatedModuleList()
 				}	
 			}
 		}
-		$shtml .= $optionhtml."</select>";
+			$shtml .= $optionhtml."</select>";
 		}
 	}
 	
@@ -108,6 +110,7 @@ $list_report_form->assign("APP", $app_strings);
 $list_report_form->assign("PRIMARYMODULE",$primary_module_html);
 $list_report_form->assign("RELATEDMODULES",$related_module_html);
 $list_report_form->assign("IMAGE_PATH", $image_path);
+$list_report_form->assign("ERROR_MSG", $mod_strings['LBL_NO_PERMISSION']);
 $list_report_form->parse("main");
 $list_report_form->out("main");
 ?>
