@@ -1210,7 +1210,8 @@ function fnDown(obj){
 * javascript function to add field rows
 * @param option_values :: List of Field names
 */
-function fnAddSrch(option_values){
+var count = 0;
+function fnAddSrch(option_values,criteria_values){
 
     var tableName = document.getElementById('adSrc');
 
@@ -1235,12 +1236,17 @@ function fnAddSrch(option_values){
     var colthree = row.insertCell(2);
 
     //colone.innerHTML="<select name='Fields'+count class='detailedViewTextBox'><option>First Name</option><option>Last Name</option><option>Department</option><option>Role</option><option>E-Mild Id</option></select>";
-    colone.innerHTML="<select name='Fields'+count class='detailedViewTextBox'>"+option_values+"</select>";
+    colone.innerHTML="<select name='Fields"+count+"' class='detailedViewTextBox'>"+option_values+"</select>";
 
-    coltwo.innerHTML="<select name='Condition'+count class='detailedViewTextBox'><option>Contains</option><option>doesn't Contains</option><option>is</option><option>isn't</option><option>Begins With</option><option>Ends With</option></select> ";
+    coltwo.innerHTML="<select name='Condition"+count+"' class='detailedViewTextBox'>"+criteria_values+"</select> ";
 
-    colthree.innerHTML="<input type='text' name='srch'+count class='detailedViewTextBox'>";
+    colthree.innerHTML="<input type='text' name='Srch_value"+count+"' class='detailedViewTextBox'>";
 
+}
+
+function totalnoofrows()
+{
+        document.basicSearch.search_cnt.value = count;
 }
 
 /*

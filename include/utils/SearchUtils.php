@@ -362,12 +362,7 @@ function getAdvSearchfields($module)
 
 function getcriteria_options()
 {
-	$CRIT_OPT = "<option value=\"cts\">Contains</option>
-	            <option value=\"dcts\">doesn't Contains</option>
-		    <option value=\"is\">is</option>
-		    <option value=\"isn\">isn't</option>
-		    <option value=\"bwt\">Begins With</option>
-		    <option value=\"ewt\">Ends With</option>";
+	$CRIT_OPT = "<option value=\'cts\'>Contains</option><option value=\'dcts\'>does not Contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>Begins With</option><option value=\'ewt\'>Ends With</option>";
 	return $CRIT_OPT;
 }
 function getSearch_criteria()

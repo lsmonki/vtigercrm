@@ -158,6 +158,7 @@ rBox">
                                                 <input type="hidden" name="parenttab" value="{$CATEGORY}">
 						<input type="hidden" name="action" value="index">
                                                 <input type="hidden" name="query" value="true">
+						<input type="hidden" name="search_cnt">
 
 
                                         </td>
@@ -200,15 +201,15 @@ rBox">
 					<div id="fixed" style="position:relative;top:0px;left:0px;width:95%;height:95px;overflow:auto;" class="padTab">
 					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
 					<tr  class="dvtCellInfo">
-					<td width="31%"><select name="Fields" class="detailedViewTextBox">
+					<td width="31%"><select name="Fields0" class="detailedViewTextBox">
 					{$FIELDNAMES}
 					</select>
 					</td>
-					<td width="32%"><select name="Condition" class="detailedViewTextBox">
+					<td width="32%"><select name="Condition0" class="detailedViewTextBox">
 					{$CRITERIA}
 					</select>
 					</td>
-					<td width="32%"><input type="text" name="srch" class="detailedViewTextBox"></td>
+					<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
 					</tr>
 					</table>
 					</div>	
@@ -216,7 +217,7 @@ rBox">
 					</tr>
 					<tr>
 
-					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}')">
+					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')">
 					&nbsp;&nbsp;
 					<input name="button" type="button" value="Fewer" onclick="delRow()"></td>
 					<td>&nbsp;</td>
@@ -255,8 +256,8 @@ rBox">
 			
 
 {*<!-- Contents -->*}
+<form name="massdelete" method="POST">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-     <form name="massdelete" method="POST">
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
@@ -358,7 +359,7 @@ rBox">
 
      </td>
    </tr>
-   </form>	
 </table>
+</form>	
 {$SELECT_SCRIPT}
 
