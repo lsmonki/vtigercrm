@@ -217,9 +217,11 @@
                                                         </td>
                                                         </tr>
 						     <tr>{strip}
-						     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5"><b>
-						        {$header}
-		        			     </b></td>{/strip}
+						     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+							<b>
+						        	{$header}
+	  			     			</b>
+						     </td>{/strip}
 					             </tr>
 						   {foreach item=detail from=$detail}
 						     <tr style="height:25px">
@@ -236,7 +238,9 @@
 							   {assign var=keycntimage value=$data.cntimage}
                                       {if $label ne ''}
                                              {if $keycntimage ne ''}
-									      <td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
+							{if $keyid neq 'P'}<!-- only to avoid Product Details in Inventory-->
+								      <td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
+							{/if}
 								     {else}
 								            <td class="dvtCellLabel" align=right width=25%>{$label}</td>
 								     {/if}  
@@ -358,9 +362,13 @@
                                               		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
                                                        </div>
                                                   </td>
-                                             {else}
-                                                  <td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
-                                             {/if}
+						{else}
+						   {if $keyid eq 'P'}<!-- only for Product Details in Inventory-->
+							{$ASSOCIATED_PRODUCTS}
+                                             	   {else}
+                                                  	<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
+                                                   {/if}
+						{/if}
 							   {else} 
                                            <td class="dvtCellLabel" align=right></td>
                                            <td class="dvtCellInfo" align=left ></td>
