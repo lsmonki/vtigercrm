@@ -31,7 +31,7 @@ $data_print['start_tag'] = "<!-- startscrmprint -->";
 $data_print['stop_tag'] = "<!-- stopscrmprint -->";
 $data_print['default_charset'] = "utf-8";
 
-require_once("config.php");
+require_once("config.inc.php");
 require_once("include/utils/utils.php");
 
   function insert_charset_header()
