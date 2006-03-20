@@ -209,7 +209,11 @@ function sensex_info()
 								<tr><td colspan=4>
 							     <table width="100%" border="0" cellspacing="0" cellpadding="0">
   								<tr>
-								<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRow();" /></td>
+								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+									<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRow();" /></td>
+									{else}
+										<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRowForPO();" /></td>
+								{/if}
 								<td width="35%">&nbsp;</td>
 								<td style="text-align:right;padding:5px;"><b>Sub Total</b></td>
 								<td style="text-align:left;padding:5px;"><input type="text" name="subTotal"  class="detailedViewTextBox" readonly/></td>
