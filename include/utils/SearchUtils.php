@@ -365,9 +365,37 @@ function getcriteria_options()
 	$CRIT_OPT = "<option value=\'cts\'>Contains</option><option value=\'dcts\'>does not Contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>Begins With</option><option value=\'ewt\'>Ends With</option>";
 	return $CRIT_OPT;
 }
-function getSearch_criteria()
+function getSearch_criteria($criteria,$searchstring,$searchfield)
 {
-	$condition_array = Array(''=>'',''=>'',''=>'',''=>'',''=>'',''=>'');
+	$where_string = '';
+	switch($criteria)
+	{
+		case 'cts':
+			$where_string = $searchfield." like '%".$searchstring."%' ";
+			break;
+		
+		case 'dcts':
+			$where_string = $searchfield." not like '%".$searchstring."%' ";
+			break;
+			
+		case 'is':
+			$where_string = $searchfield." = '".$searchstring."' ";
+			break;
+			
+		case 'isn':
+			$where_string = $searchfield." <> '".$searchstring."' ";
+			break;
+			
+		case 'bwt':
+			$where_string = $searchfield." like '".$searchstring."%' ";
+			break;
+
+		case 'ewt':
+			$where_string = $searchfield." like '%".$searchstring."' ";
+			break;
+
+	}
+	return $where_string;
 }								
 
 ?>
