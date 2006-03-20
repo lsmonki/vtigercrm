@@ -69,9 +69,9 @@ function create_phone_number() {
 function create_date() {
 	$date = "";
 	$date .= "2006";
-	$date .= "/";
+	$date .= "-";
 	$date .= rand(1,9);
-	$date .= "/";
+	$date .= "-";
 	$date .= rand(1,28);
 	
 	return $date;
@@ -449,6 +449,8 @@ for($i=0; $i<10; $i++) {
 $status_array = array (
 	"Draft",
 	"Reviewed",
+	"Published",
+	"Draft",
 	"Published");
 
 $question_array = array (
@@ -492,6 +494,7 @@ for($i=0;$i<5;$i++) {
 	$faq->column_fields["faqstatus"] = $status_array[$i];
 	$faq->column_fields["question"]	= $question_array[$i];
 	$faq->column_fields["faq_answer"] = $answer_array[$i];
+	$faq->column_fields["comments"] = "Test ".$i;
 
 	$faq->save("Faq");
 	$faq_ids[] = $faq ->id;
@@ -537,6 +540,7 @@ for($i=0;$i<5;$i++) {
 	$helpdesk->column_fields["ticketcategories"] = $category_array[$i];
 	//$rand_key = array_rand($s);
 	$helpdesk->column_fields["ticket_title"] = $ticket_title_array[$i];
+	$helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
 	
 	$helpdesk->save("HelpDesk");
 	$helpdesk_ids[] = $helpdesk->id;
@@ -628,12 +632,13 @@ for($i=0;$i<6;$i++) {
 	}
 	else
 		$event->column_fields["activitytype"]	= "Call";	
+	$event->column_fields["assigned_user_id"] = $assigned_user_id;
 
 	$event->save("Activities");
         $event_ids[] = $event->id;
 }
 
-$adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
+$adb->query("update crmentity set smcreatorid=".$assigned_user_id);
 
 /*
 for($i = 0; $i < $company_name_count; $i++) {
