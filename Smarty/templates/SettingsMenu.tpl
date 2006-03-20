@@ -22,7 +22,7 @@
 	<a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PROFILES}</a>	
 	<a href="index.php?module=Users&action=listgroups&parenttab=Settings" class="lftSubMnu">{$MOD.USERGROUPLIST}</a>
 	<a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
-	<a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuFldAccess')" onmouseout="fninvsh('subMnuFldAccess')">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
+	<a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
 	<a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
 </div></div>
 

@@ -39,8 +39,8 @@
 <a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}" title="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
 </td>
 
-<td><a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" border="0"/></a><br>						
-<a href="index.php?module=Settings&action=SettingsSubMenu&type=Organization&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
+<td><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" border="0"/></a><br>						
+<a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
 
 <td><a href="index.php?module=Users&action=Announcements&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
 <a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}">{$MOD.LBL_ANNOUNCEMENT}</a></td>

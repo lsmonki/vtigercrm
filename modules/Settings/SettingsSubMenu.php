@@ -21,11 +21,8 @@ require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
-if($_REQUEST['type']=='Organization')
-	$smarty->display("Organizationindex.tpl");
-elseif($_REQUEST['type']=='FieldAccess')
-	$smarty->display("FieldAccessindex.tpl");
-elseif($_REQUEST['type']=='CustomField')
+
+if($_REQUEST['type']=='CustomField')
 	$smarty->display("CustomFieldindex.tpl");
 elseif($_REQUEST['type']=='PickList')
 	$smarty->display("PickListindex.tpl");
