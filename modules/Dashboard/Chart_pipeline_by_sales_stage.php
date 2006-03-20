@@ -140,6 +140,8 @@ if (substr(phpversion(), 0, 1) == "5") { // php5 }
 	echo "<em>Charts not supported in PHP 5.</em>";
 }
 else {
+if(isPermitted('Potentials','index')=="yes")
+{
 $draw_this = new jpgraph();
 echo $draw_this->pipeline_by_sales_stage($datax, $date_start, $date_end, $ids, $tmp_dir.$cache_file_name, $refresh);
 echo "<P><font size='1'><em>".$current_module_strings['LBL_SALES_STAGE_FORM_DESC']."</em></font></P>";
@@ -201,6 +203,11 @@ else {
 </em>[<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&pbss_refresh=true"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
 [<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
-<?php } 
+<?php }
+}
+else
+{
+	echo $mod_strings['LBL_NO_PERMISSION'];
+} 
 //echo get_validate_chart_js();
 }?>

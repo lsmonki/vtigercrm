@@ -50,7 +50,8 @@ $mod_strings = Array(
 'LBL_LEAD_SOURCES'=>'Lead Sources:',
 'LBL_DATE_START'=>'Begin Date:',
 'LBL_DATE_END'=>'End Date:',
-
+//Added for 5.0 
+'LBL_NO_PERMISSION'=>'Your profile doesn\'t allow you view the Graph for this module',
 );
 
 ?>
