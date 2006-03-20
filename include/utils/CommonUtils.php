@@ -987,38 +987,6 @@ function updateInfo($id)
     return $update_info;
 }
 
-/**
- * This function is used to get the Contact Images with the script for scrolling and the thumbnailview .
- */
-
-function getContactImages($parenttab)
-{
-    global $adb;
-	$imagelists = '<script>var leftrightslide=new Array();';
-	$imagenamelists='<script>var dynimages=new Array();';
-   	$imagecount=0;
-    $query='select imagename,firstname,lastname,contactid from contactdetails inner join crmentity on contactdetails.contactid=crmentity.crmid where deleted = 0 ';
-    $result = $adb->query($query);
-    $noofimages = $adb->num_rows($result);
-	for($j=0; $j<$noofimages; $j++)
-    {
-		$imagename=$adb->query_result($result,$j,'imagename');
-		$imgpath = 'test/contact/'.$imagename;
-		$id = $adb->query_result($result,$j,'contactid');
-		$contactname=$adb->query_result($result,$j,'firstname').' '.$adb->query_result($result,$j,'lastname');
-		if($imagename != '')
-		{
-			$imagelists .= 'leftrightslide['.$imagecount.']= \'<div class=thumbnail><a href='.$imgpath.' onMouseover=modifyimage("dynloadarea",'.$imagecount.') onMouseOut=document.getElementById("dynloadarea").style.display="none"; target="_blank"><img src="'.$imgpath.'" border=1 height=40 width=80></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
-			$imagenamelists .='dynimages['.$imagecount.']=["'.$imgpath.'","index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'"];';
-			$imagecount++;
-		}	
-	}
-	$imagelists.= '</script>';
-	$imagenamelists.='</script>';
-	$imagelists = $imagelists.$imagenamelists;	
-	if($imagecount>0)	
-		return $imagelists;
-}
 
 /**
  * This function is used to get the Product Images for the given Product  .

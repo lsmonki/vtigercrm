@@ -1147,11 +1147,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                                  if($imagename != '')
                                                  {
                                                          $imgpath = "test/contact/".$imagename;
-                                                         $contact_image='&nbsp;&nbsp;<img src="'.$imgpath.'" width="20" height="20" border="0">';
+                                                         $contact_image='&nbsp;&nbsp;<img align="right" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=hide("dynloadarea");>';
                                                  }
                                         }
 					//Commented to give link even to the first name - Jaguar
-					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>'.$contact_image;
+					$value = $contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Activities")
                                 {

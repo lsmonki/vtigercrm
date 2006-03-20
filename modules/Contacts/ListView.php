@@ -201,7 +201,6 @@ $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("IMAGELISTS",getContactImages($category));
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 

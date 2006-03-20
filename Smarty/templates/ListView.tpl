@@ -16,9 +16,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 {if $MODULE eq 'Contacts'}
-{$IMAGELISTS}
-<script language="JavaScript" type="text/javascript" src="include/js/thumbnail.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/conveyor.js"></script>
 <div id="dynloadarea" style=float:left;position:absolute;left:350px;top:150px;></div>
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
@@ -61,7 +58,7 @@ function callSearch(searchtype)
                                         <td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
                                         {/if}
 					 <td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');showhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
-					<td style="padding-right:0px"><a href="#" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a>
+					<td style="padding-right:0px"><a href="#" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a>
                     			 </td>	
 				</tr>
 				</table>
@@ -367,5 +364,17 @@ rBox">
    </tr>
 </table>
 <div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
+{if $MODULE eq 'Contacts'}
+
+{literal}
+<script>
+function modifyimage(divid,imagename)
+{
+    document.getElementById('dynloadarea').innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
+    show(divid);
+}
+</script>
+{/literal}
+{/if}
 
 
