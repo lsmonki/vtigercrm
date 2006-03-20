@@ -2776,6 +2776,7 @@ function updateGroup($groupId,$groupName,$groupMemberArray,$description)
 function deleteGroup($groupId)
 {
 	global $adb;
+	deleteGroupRelatedSharingRules($groupId);		
 	$query="delete from groups where groupid=".$groupId;
 	$adb->query($query);
 
@@ -2783,7 +2784,6 @@ function deleteGroup($groupId)
 	deleteGroupRelatedRoles($groupId);
 	deleteGroupRelatedRolesAndSubordinates($groupId);
 	deleteGroupRelatedUsers($groupId);
-	deleteGroupRelatedSharingRules($groupId);		
 
 }
 
