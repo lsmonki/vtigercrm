@@ -127,12 +127,12 @@ y:0.90;z-index:50"></div>
 
 {*<!-- Search  in Module -->*}
 <div id="searchAcc" style="z-index:1;display:none;position:absolute;">
+<form name="basicSearch" action="index.php">
 <table border=0 cellspacing=0 cellpadding=0 width=640px align=center class="moduleSearch">
 <tr>
         <td class=small>
 
                 <table border=0 cellspacing=0 cellpadding=2 width=100%>
-		<form name="basicSearch" action="index.php">
                 <tr>
                         <td >
 
@@ -142,7 +142,7 @@ y:0.90;z-index:50"></div>
 rBox">
                                         <tr>
                                                 <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" title="Basic Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch')">Go to Advanced Search</a></span></td>
+                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span></td>
 
                                                 <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
                                         </tr>
@@ -163,6 +163,7 @@ rBox">
                                                 <input type="hidden" name="parenttab" value="{$CATEGORY}">
 						<input type="hidden" name="action" value="index">
                                                 <input type="hidden" name="query" value="true">
+						<input type="hidden" name="search_cnt">
 
 
                                         </td>
@@ -195,9 +196,8 @@ rBox">
 
 					<table class="searchHd rBox" border="0" cellpadding="2" cellspacing="0" width="100%">
 					<tr>
-					<td nowrap class="small"><input name="radiobutton" type="radio" value="">&nbsp;Match All of the Following</td>
-					<td class="small"><input name="radiobutton" type="radio" value="radiobutton">&nbsp;Match Any of the Following</td>
-
+					<td nowrap class="small"><input name="matchtype" type="radio" value="all">&nbsp;Match All of the Following</td>
+					<td class="small"><input name="matchtype" type="radio" value="any" checked>&nbsp;Match Any of the Following</td>
 					<td>&nbsp;</td>
 					</tr>
 					<tr>
@@ -205,15 +205,15 @@ rBox">
 					<div id="fixed" style="position:relative;top:0px;left:0px;width:95%;height:95px;overflow:auto;" class="padTab">
 					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
 					<tr  class="dvtCellInfo">
-					<td width="31%"><select name="Fields" class="detailedViewTextBox">
+					<td width="31%"><select name="Fields0" class="detailedViewTextBox">
 					{$FIELDNAMES}
 					</select>
 					</td>
-					<td width="32%"><select name="Condition" class="detailedViewTextBox">
+					<td width="32%"><select name="Condition0" class="detailedViewTextBox">
 					{$CRITERIA}
 					</select>
 					</td>
-					<td width="32%"><input type="text" name="srch" class="detailedViewTextBox"></td>
+					<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
 					</tr>
 					</table>
 					</div>	
@@ -221,7 +221,7 @@ rBox">
 					</tr>
 					<tr>
 
-					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}')">
+					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')">
 					&nbsp;&nbsp;
 					<input name="button" type="button" value="Fewer" onclick="delRow()"></td>
 					<td>&nbsp;</td>
@@ -231,7 +231,7 @@ rBox">
                                         </div>
                                         </div>
                                         <table border=0 cellspacing=0 cellpadding=5 width=100%>
-                                        <tr><td align=center><input type="submit" class=small value="Search now" onClick="callSearch('Basic');"></td></tr></table>
+                                        <tr><td align=center><input type="submit" class=small value="Search now" onClick="callSearch('Basic');totalnoofrows();"></td></tr></table>
 
 
                                 </div>				
@@ -250,12 +250,11 @@ rBox">
                         </td>
                 </tr>
                 </table>
-		</form>
         </td>
 </tr>
 </table>
 </div>
-
+</form>
 <br>
 			
 
