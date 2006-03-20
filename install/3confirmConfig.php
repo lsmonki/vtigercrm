@@ -63,7 +63,11 @@ else
 		else
 		{
 			$mysql_status = 'true';
-			$mysql_db_status = 'false';
+			$dbstatus = @mysql_create_db($db_name);
+			if(!$dbstatus)
+				$mysql_db_status = 'false';
+			else	
+				$mysql_db_status = 'true';
 		}
 	}
 }
@@ -368,9 +372,9 @@ elseif($mysql_status == 'true' && $mysql_db_status == 'false')
 	<! ---------------------------------------------- System Configuration-->
 
 	<div style="background-color:#ff0000;color:#ffffff;padding:5px">
-	<b>Database Not Found</b>
+	<b>Unable to Create Database <?php echo $db_name ?></b>
 	</div>
-	<P>Message: The specified database <?php echo $db_name ?> is not present. Try changing the Database settings<P></font>
+	<P>Message: The MySQL User "<? echo $db_username ?>" doesn't have permission to Create database. Try changing the Database settings<P></font>
 
 	<br><br>
 	<table border=0 width=100% cellspacing=0 cellpadding=0>
