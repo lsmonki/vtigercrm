@@ -94,15 +94,14 @@ using, worth using for long.<br><br>
 <br>
 <bold>vtiger is 100% pure Open Source. <u>You do not have to pay
 anything to use the product. If you do subscribe to the support package though, you will be able
-to get time bound answers to all your queries and help for any other issue that you might 
-be facing</u>.There are no other hidden costs. The support subscription link is as follows :- 
-
+to get time bound answers to all your queries</u>.We do provide telephone support for paid customers.
+There are no other hidden costs. The support subscription link is as follows :- 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
+
 vtiger does not believe in any big dollar marketing campaign hence you
 will not find much advertisement about vtiger from us.
 Whatever you see and hear is purely due to word of mouth. We do believe that <b>YOU</b> can and will make a
-difference.If you feel we have lived upto your expectations, please do consider spreading the word about vtiger by - telling a
-friend,  setting it up for someone, or blogging about us or in any
+difference.If you feel we have lived upto your expectations, please do consider spreading the word about vtiger by - telling a friend,  setting it up for someone, or blogging about us or in any
 other manner you are comfortable with. Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
 <ul>http://forums.vtiger.com </ul>
