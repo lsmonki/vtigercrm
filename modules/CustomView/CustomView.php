@@ -307,6 +307,7 @@ class CustomView extends CRMEntity{
 
 	function getStdFilterCriteria($selcriteria = "")
         {
+		$filter = array();
 
                 $stdfilter = Array("custom"=>"Custom",
 					 "prevfy"=>"Previous FY",
@@ -339,13 +340,18 @@ class CustomView extends CRMEntity{
 		{
 			if($FilterKey == $selcriteria)
 			{
-			 $shtml .= "<option selected value='".$FilterKey."'>".$FilterValue."</option>";
+				$shtml['value'] = $FilterKey;
+				$shtml['text'] = $FilterValue;
+				$shtml['selected'] = "selected";
 			}else
 			{
-			 $shtml .= "<option value='".$FilterKey."'>".$FilterValue."</option>";
+				$shtml['value'] = $FilterKey;
+				$shtml['text'] = $FilterValue;
+				$shtml['selected'] = "";
 			}
+		$filter[] = $shtml;
 		}
-		return $shtml;
+		return $filter;
 
         }
 
