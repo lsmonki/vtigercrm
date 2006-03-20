@@ -174,6 +174,7 @@ function massDelete()
 {
 
 	x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
 	if ( x == undefined)
@@ -212,7 +213,12 @@ function massDelete()
 	}
 	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
     {
-document.massdelete.action="index.php?module=Users&action=massdelete&return_module=PriceBooks&return_action=index"
+		show("status");
+		alert("in fn")
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var urlstring ="module=Users&action=massdelete&return_module=PriceBooks&viewname="+viewid+"&idlist="+idstring;
+		alert(urlstring)
+	    ajaxObj.process("index.php?",urlstring);
 	}
 	else
 	{

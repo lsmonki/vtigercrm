@@ -18,7 +18,11 @@ $local_log =& LoggerManager::getLogger('CampaignsAjax');
 
 $ajaxaction = $_REQUEST["ajxaction"];
 
-if($ajaxaction == "DETAILVIEW")
+if($_REQUEST['file'] != '')
+{
+	require_once('modules/Campaigns/'.$_REQUEST['file'].'.php');
+}
+elseif($ajaxaction == "DETAILVIEW")
 {
      $crmid = $_REQUEST["recordid"];
      $tablename = $_REQUEST["tableName"];

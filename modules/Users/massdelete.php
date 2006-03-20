@@ -38,6 +38,6 @@ if($returnmodule!='Faq')
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid);
 }
 else
-	header("Location: index.php?module=".$returnmodule."&action=index".$smod);
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView");
 ?>
 

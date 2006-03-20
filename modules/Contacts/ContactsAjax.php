@@ -19,7 +19,11 @@ $local_log =& LoggerManager::getLogger('ContactsAjax');
 
 $ajaxaction = $_REQUEST["ajxaction"];
 
-if($ajaxaction == "DETAILVIEW")
+if($_REQUEST['file'] != '')
+{
+	require_once('modules/Contacts/'.$_REQUEST['file'].'.php');
+}
+elseif($ajaxaction == "DETAILVIEW")
 {
      $crmid = $_REQUEST["recordid"];
      $tablename = $_REQUEST["tableName"];

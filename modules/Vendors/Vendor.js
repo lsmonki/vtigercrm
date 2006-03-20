@@ -93,7 +93,10 @@ function massDelete()
 	}
 	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
     {
-	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Vendors&return_action=index&viewname="+viewid;
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var urlstring ="module=Users&action=massdelete&return_module=Vendors&viewname="+viewid+"&idlist="+idstring;
+	    ajaxObj.process("index.php?",urlstring);
 	}
 	else
 	{

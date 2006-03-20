@@ -218,5 +218,8 @@ $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
 
-$smarty->display("ListView.tpl");
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("ListViewEntries.tpl");
+else	
+	$smarty->display("ListView.tpl");
 ?>

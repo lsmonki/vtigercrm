@@ -247,7 +247,10 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 
-$smarty->display("ListView.tpl");
 
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("ListViewEntries.tpl");
+else	
+	$smarty->display("ListView.tpl");
 
 ?>

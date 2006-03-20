@@ -18,6 +18,10 @@ $local_log =& LoggerManager::getLogger('NotesAjax');
 
 $ajaxaction = $_REQUEST["ajxaction"];
 
+if($_REQUEST['file'] != '')
+{
+	require_once('modules/Notes/'.$_REQUEST['file'].'.php');
+}
 if($ajaxaction == "DETAILVIEW")
 {
      $crmid = $_REQUEST["recordid"];
