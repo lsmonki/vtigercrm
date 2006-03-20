@@ -184,14 +184,18 @@ function mandatoryCheck()
 			     <td width="75%" align="right" class="dvtCellLabel">Select a Column :</td>
 			     <td width="25%" class="dvtCellInfo">
 				<select name="stdDateFilterField" class="select">
-				{$STDFILTERCOLUMNS}
+				{foreach item=stdfilter from=$STDFILTERCOLUMNS}
+                                        <option {$stdfilter.selected} value={$stdfilter.value}>{$stdfilter.text}</option>
+                                {/foreach}
                                 </select>
 			  </tr>
 			  <tr>
 			     <td align="right" class="dvtCellLabel">Select Duration :</td>
 			     <td class="dvtCellInfo">
 			        <select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
-				{$STDFILTERCRITERIA}
+				{foreach item=duration from=$STDFILTERCRITERIA}
+                                        <option {$duration.selected} value={$duration.value}>{$duration.text}</option>
+                                {/foreach}
 				</select>
 			     </td>
 			  </tr>
@@ -225,10 +229,9 @@ function mandatoryCheck()
    <div id="mnuTab2">
       <table width="100%" cellspacing="0" cellpadding="5" class="dvtContentSpace">
        <tr><td>&nbsp;</td></tr>
-       <tr><td class="dvtCellInfo">
-	Set the search conditions to further restrict the list.<br /><br />
-	<li style="margin-left:30px;">You can use "or" filters by entering multiple items in the third column.</li>
-	<li style="margin-left:30px;">You can enter up to 10 items, separated by commas. For example: CA, NY, TX, FL searches for CA or NY or TX or FL.</li>
+       <tr><td class="dvtCellInfo">{$MOD.LBL_AF_HDR1}<br /><br />
+	<li style="margin-left:30px;">{$MOD.LBL_AF_HDR2}</li>
+	<li style="margin-left:30px;">{$MOD.LBL_AF_HDR2}</li>
 	<br /><br />
        </td></tr>
        <tr><td>
@@ -237,7 +240,7 @@ function mandatoryCheck()
 	  {section name=advancedFilter start=1 loop=6 step=1}
 	  <tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 	    <td align="left" width="33%">
-	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol1" onchange="updatefOptions(this, 'fop1'); class="detailedViewTextBox">
+	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol{$smarty.section.advancedFilter.index}" onchange="updatefOptions(this, 'fop{$smarty.section.advancedFilter.index}'); class="detailedViewTextBox">
 	      <option value="">None</option>
 	      {foreach item=filteroption key=label from=$BLOCK}
 		<optgroup label="{$label}" class=\"select\" style=\"border:none\">
