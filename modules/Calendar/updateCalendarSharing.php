@@ -19,13 +19,8 @@ if(isset($_REQUEST['sharedid']) && $_REQUEST['sharedid'] != '')
         {
                 if($sid != '')
                 {
-			$check_query = "select * from sharedcalendar where userid=".$_REQUEST["current_userid"]." and sharedid=".$sid;
-			$result = $adb->query($check_query);
-			if($adb->num_rows($result) == 0)
-			{
-				$sql = "insert into sharedcalendar values (".$_REQUEST["current_userid"].",".$sid.")";
-			        $adb->query($sql);
-			}
+			$sql = "insert into sharedcalendar values (".$_REQUEST["current_userid"].",".$sid.")";
+		        $adb->query($sql);
                 }
         }
         header("Location: index.php?action=calendar_share&module=Calendar");
