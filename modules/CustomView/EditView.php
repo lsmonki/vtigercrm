@@ -112,8 +112,8 @@ else
         {
                 $advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
 		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
-		$smarty->assign("FOPTION".$i,$advfilterhtml);
-                $smarty->assign("BLOCK".$i,$advcolumnhtml);
+		$smarty->assign("FOPTION",$advfilterhtml);
+                $smarty->assign("BLOCK",$advcolumnhtml);
 		$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
         }
 
@@ -194,6 +194,7 @@ function getStdFilterHTML($module,$selected="")
 {
         global $app_list_strings;
         global $oCustomView;
+	$stdfilter = array();
         $result = $oCustomView->getStdCriteriaByModule($module);
 	$mod_strings = return_module_language($current_language,$module);
 
@@ -205,26 +206,34 @@ function getStdFilterHTML($module,$selected="")
 			{
 			if($key == $selected)
                         {
-                        $shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				$filter['value'] = $key;
+				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+				$filter['selected'] = "selected";
                         }else
                         {
-                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				$filter['value'] = $key;
+				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+				$filter['selected'] ="";
                         }
 			}else
 			{
 			if($key == $selected)
                         {
-                   	$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				$filter['value'] = $key;
+				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+				$filter['selected'] = 'selected';
                         }else
                         {
-                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</opt
-ion>";
+				$filter['value'] = $key;
+				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+				$filter['selected'] ='';
                         }
 			}
+			$stdfilter[]=$filter;
                 }
         }
 
-        return $shtml;
+        return $stdfilter;
 }
 //step3
 
