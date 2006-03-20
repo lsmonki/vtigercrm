@@ -11,6 +11,13 @@
 function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
+
+function productPickList(currObj) {
+	var trObj=currObj.parentNode.parentNode
+	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod_po&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
+}
+
 function priceBookPickList(currObj) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
