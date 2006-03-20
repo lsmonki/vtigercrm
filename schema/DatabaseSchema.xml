@@ -3997,6 +3997,25 @@
 
 
 
+	
+	<table name="profile2globalpermissions">
+		<field name="profileid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="globalactionid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="globalactionpermission" type="I" size="19"></field>
+	<index name="idx_profile2globalpermissions">
+                        <col>profileid</col>
+                        <col>globalactionid</col>
+                        
+                </index>		
+
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 
 	<table name="activsubtype">
@@ -4200,6 +4219,24 @@
 		
 		</data>
 	</table>
+
+
+
+
+	<table name="org_share_action_mapping">
+		<field name="share_action_id" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="share_action_name" type="C" size="200">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
 	
 
 	<table name="def_org_share">
@@ -6046,25 +6083,6 @@
 		<data>
 		</data>
 	</table>
-	
-	<table name="profile2globalpermissions">
-		<field name="profileid" type="I" size="19">
-			<KEY/>
-		</field>
-		<field name="globalactionid" type="I" size="19">
-			<KEY/>
-		</field>
-		<field name="globalactionpermission" type="I" size="19"></field>
-	<index name="idx_profile2globalpermissions">
-                        <col>profileid</col>
-                        <col>globalactionid</col>
-                        
-                </index>		
-
-<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
 
 	<table name="profile2globalpermissions" alter="true">
 	<constraint>ADD CONSTRAINT fk_profile2globalpermissions57 FOREIGN KEY (profileid) REFERENCES profile(profileid) ON DELETE CASCADE</constraint>
@@ -6101,21 +6119,6 @@
 
 
 
-
-
-
-
-	<table name="org_share_action_mapping">
-		<field name="share_action_id" type="I" size="19">
-			<KEY/>
-		</field>
-		<field name="share_action_name" type="C" size="200">
-			<KEY/>
-		</field>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
 
 
 
