@@ -771,6 +771,7 @@ $task_array=array("Tele Conference","Call user - John","Send Fax to Mary Smith")
 $event_array=array("","","Call Smith","Team Meeting","Call Richie","Meeting with Don");
 $task_status_array=array("Not Started","In Progress","Completed");
 $task_priority_array=array("High","Medium","Low");
+$visibility=array("","","Private","Public","Private","Public");
 
 for($i=0;$i<6;$i++)
 {
@@ -806,12 +807,14 @@ for($i=0;$i<6;$i++)
 		}
 		$event->column_fields["taskstatus"]	= $task_status_array[$i];	
 		$event->column_fields["taskpriority"]	= $task_priority_array[$i];	
-		$event->column_fields["activitytype"]	= "Task";	
+		$event->column_fields["activitytype"]	= "Task";
+		$event->column_fields["visibility"] = $visibility[$i];	
 				
 	}
 	else
 	{
 		$event->column_fields["subject"]	= $event_array[$i];	
+		$event->column_fields["visibility"] = $visibility[$i];
 		$event->column_fields["duration_hours"]	= rand(0,3);	
 		$event->column_fields["duration_minutes"]= rand(0,59);	
 		$event->column_fields["eventstatus"]	= "Planned";	
