@@ -3053,6 +3053,10 @@ function deleteSharingRule($shareid)
 	$adb->query($query3);
 	$query4="delete from datashare_module_rel where shareid=".$shareid;
 	$adb->query($query4);
+
+	//deleting the releated module sharing permission
+	$query5="delete from datashare_relatedmodule_permission where shareid=".$shareid;
+	$adb->query($query5);
 	
 }
 
