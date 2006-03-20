@@ -5,7 +5,7 @@
 	<title>vtiger CRM 5 - Free, Commercial grade Open Source CRM</title>
 	<!--link rel="stylesheet" type="text/css" href="../style.css"-->
 
-	<script src="modules/Calendar/script.js">	</script>
+	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js">	</script>
 </head>
 
 <body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0>
