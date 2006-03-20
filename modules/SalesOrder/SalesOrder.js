@@ -131,6 +131,13 @@ function calcTotal(currObj) {
 
 function calcGrandTotal() {
 	var subTotal=0,grandTotal=0;
+
+	//This is added for calculate Total for Product Details in Invoice
+	var temp = document.getElementsByTagName('table');
+	for(i=0;i<temp.length;i++){
+		if(temp[i].className == 'prdTab') var rowCnt=temp[i].rows.length -1;
+	}
+
 	for (var i=1;i<=rowCnt;i++) {
 		if (getObj("hdnTotal"+i).value=="") 
 			getObj("hdnTotal"+i).value=0
