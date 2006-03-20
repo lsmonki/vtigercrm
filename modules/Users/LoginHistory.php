@@ -98,16 +98,16 @@ class LoginHistory extends SugarBean {
 	function user_login(&$usname,&$usip,&$intime)
 	{
 		//print("GS --> intime=".$intime);
-		$query = "Insert into loginhistory values ('','$usname','$usip','',".$this->db->formatDate($intime).",'Signedin')";
+		$query = "Insert into loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signedin')";
 		$result = $this->db->query($query)
-                        or die("MySQL error: ".mysql_error());
+                        or die("SQL error: ".$this->db->database->ErrorMsg());
 		
 		return $result;
 	}
 	
 	function user_logout(&$usname,&$usip,&$outtime)
 	{
-		$logid_qry = "SELECT max(login_id) login_id from loginhistory where user_name='$usname' and user_ip='$usip'";
+		$logid_qry = "SELECT max(login_id) as login_id from loginhistory where user_name='$usname' and user_ip='$usip'";
 		$result = $this->db->query($logid_qry);
 		//if($this->db->num_rows($result) !=1 ) return;
 		$loginid = $this->db->query_result($result,0,"login_id");

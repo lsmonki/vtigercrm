@@ -123,20 +123,20 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
+		array_push($where_clauses, "activity.subject ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
 		$url_string .= "&name=".$name;
 	}
 	if(isset($contactname) && $contactname != '')
 	{
 		//$contactnames = explode(" ", $contactname);
 		//foreach ($contactnames as $name) {
-		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
+		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($contactname.'%').")");
 		$url_string .= "&contactname=".$contactname;
 		//}
 	}
 	if(isset($duedate) && $duedate != '')
 	{
-		array_push($where_clauses, "activity.duedate like ".PearDatabase::quote($datedue.'%')."");
+		array_push($where_clauses, "activity.duedate ".$adb->getLike()." ".PearDatabase::quote($datedue.'%')."");
 	}
 	if(isset($status) && $status != '')
 	{
@@ -236,13 +236,14 @@ if ($task_title) $title_display= $task_title;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
+$distincton = $adb->isPostgres() ? 'crmid' : '';
 if($viewid != "0")
 {
-	$listquery = getListQuery("Activities");
+	$listquery = getListQuery("Activities", '', $distincton);
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Activities");
 }else
 {
-	$list_query = getListQuery("Activities");
+	$list_query = getListQuery("Activities", '', $distincton);
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -290,7 +291,9 @@ $view_script = "<script language='javascript'>
 	set_selected();
 	</script>";
 
+	if(!$adb->isPostgres()) {  // postgres wont group if all members of the select list aren't in the group by, use distinct on instead
 $list_query .= ' GROUP BY crmentity.crmid'; //Appeding for the recurring event by jaguar
+	}
 
 if(isset($order_by) && $order_by != '')
 {

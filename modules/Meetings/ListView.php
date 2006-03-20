@@ -81,18 +81,18 @@ if(isset($_REQUEST['query']))
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "meetings.assigned_user_id='$current_user->id'");
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "meetings.name like '".PearDatabase::quote($name)."%'");
+		array_push($where_clauses, "meetings.name ".$adb->getLike()." '".PearDatabase::quote($name)."%'");
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contacts.first_name like '".PearDatabase::quote($name)."%' OR contacts.last_name like '".PearDatabase::quote($name)."%')");
+			array_push($where_clauses, "(contacts.first_name ".$adb->getLike()." '".PearDatabase::quote($name)."%' OR contacts.last_name ".$adb->getLike()." '".PearDatabase::quote($name)."%')");
 		}
 	}
 	if(isset($date_start) && $date_start != '')
 	{
-		array_push($where_clauses, "meetings.date_start like '".PearDatabase::quote($date_start)."%'");
+		array_push($where_clauses, "meetings.date_start ".$adb->getLike()." '".PearDatabase::quote($date_start)."%'");
 	}
 	if(isset($location) && $location != '')
 	{

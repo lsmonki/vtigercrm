@@ -15,7 +15,8 @@ global $adb;
 $profilename = $_REQUEST['profileName'];
 $parentProfileId= $_REQUEST['parentProfileId'];
 //Inserting values into Profile Table
-$sql1 = "insert into profile values('','".$profilename."')";
+$id = $adb->getUniqueID('profile');
+$sql1 = "insert into profile (profileid, profilename) values($id,'".$profilename."')";
 $adb->query($sql1);
 
 //Retreiving the profileid

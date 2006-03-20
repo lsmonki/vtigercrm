@@ -438,6 +438,7 @@ function save_relationship_changes($is_update)
 	
 	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
 	{
+		if($recurid == '') $recurid = $this->db->getUniqueID($this->reminder_table);
 		//Check for activityid already present in the reminder_table
 		$query_exist = "SELECT activity_id FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
 		$result_exist = $this->db->query($query_exist);

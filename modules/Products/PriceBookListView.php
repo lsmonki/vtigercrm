@@ -78,7 +78,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 			if($uitype[$i] == 56)
                                 $str=" pricebookcf.".$column[$i]." = 1";
                         else
-			        $str=" pricebookcf.".$column[$i]." like '$customfield[$i]%'";
+			        $str=" pricebookcf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];
@@ -88,15 +88,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($bookname) && $bookname !='')
 	{
-		array_push($where_clauses, "bookname like ".PearDatabase::quote($bookname.'%'));
-		//$search_query .= " and productname like '".$productname."%'";
+		array_push($where_clauses, "bookname ".$adb->getLike()." ".PearDatabase::quote($bookname.'%'));
+		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&bookname=".$bookname;
 	}
 	
 	if (isset($active) && $active !='')
 	{
 		array_push($where_clauses, "active = 1");
-		//$search_query .= " and productcode like '".$productcode."%'";
+		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&active=".$active;
 	}
 	$where = "";

@@ -113,14 +113,16 @@ function renderRelatedProducts($query,$id)
 		global $adb,$image_path,$vtlog;
 		$avail_flag="false";
 		$avail_date=getDBInsertDateValue($avail_date);
+		$distincton = $adb->isPostgres() ? 'DISTINCT ON (crmid)' : '';
+		$groupby = $adb->isPostgres() ? '' : 'GROUP BY crmid';
 		if( $owner != $userid)
 		{
 			
-			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id."  and crmentity.deleted=0 group by crmid;";
+			$usr_query="select $distincton activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' ".$adb->getLike()." date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id."  and crmentity.deleted=0 $groupby;";
 		}
 		else
 		{
-			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0 group by crmid;";
+			$usr_query="select $distincton activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' ".$adb->getLike()." date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0 $groupby;";
 		}
 		$result_cal=$adb->query($usr_query);   
 		$noofrows_cal = $adb->num_rows($result_cal);
@@ -149,7 +151,7 @@ function renderRelatedProducts($query,$id)
 		}
 		if($avail_flag!="true")
 		{
-			$recur_query="SELECT activity.activityid, activity.time_start, activity.duration_hours, activity.duration_minutes , crmentity.smownerid, recurringevents.recurringid, recurringevents.recurringdate as date_start from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid where ('".$avail_date."' like recurringevents.recurringdate) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0 group by crmid";
+			$recur_query="SELECT activity.activityid, activity.time_start, activity.duration_hours, activity.duration_minutes , crmentity.smownerid, recurringevents.recurringid, recurringevents.recurringdate as date_start from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid where ('".$avail_date."' ".$adb->getLike()." recurringevents.recurringdate) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id." and crmentity.deleted=0";
 			
 			$result_cal=$adb->query($recur_query);   
 			$noofrows_cal = $adb->num_rows($result_cal);
@@ -266,7 +268,8 @@ function renderRelatedUsers($query,$id)
 	$noofrows_recur = $adb->num_rows($recur_result);
 	if($noofrows_recur==0)
 	{
-		$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+		$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id;
+		if(!$adb->isPostgres()) $recur_dates_qry .= ' group by activity.activityid';
 		$recur_result=$adb->query($recur_dates_qry);
 		$noofrows_recur = $adb->num_rows($recur_result);
 
@@ -386,7 +389,7 @@ function renderRelatedUsers($query,$id)
 	$activity_start_time=time_to_number($act_time_start);	
 	$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
 
-	$activity_owner_qry='select users.user_name,users.id  userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
+	$activity_owner_qry='select users.user_name,users.id AS userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
 	$result_owner=$adb->query($activity_owner_qry);
 
         while($row_owner = $adb->fetch_array($result_owner))

@@ -90,7 +90,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" potentialscf.".$column[$i]." = 1";
 		else
-	                $str=" potentialscf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" potentialscf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -98,11 +98,11 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //upto this added for Custom Field
 
 	if(isset($name) && $name != "") {
-			array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote($name.'%')."");
+			array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
 			$url_string .= "&potentialname=".$name;
 	}
 	if(isset($accountname) && $accountname != "") {
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
+			array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($accountname.'%')."");
 			$url_string .= "&accountname=".$accountname;
 
 
@@ -121,11 +121,11 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$url_string .= "&opportunity_type=".$opportunity_type;
 	}
 	if(isset($amount) && $amount != "") {
-			array_push($where_clauses, "potential.amount like ".PearDatabase::quote($amount.'%')."");
+			array_push($where_clauses, "potential.amount ".$adb->getLike()." ".PearDatabase::quote($amount.'%')."");
 			$url_string .= "&amount=".$amount;
 	}
 	if(isset($nextstep) && $nextstep != "") {
-			array_push($where_clauses, "potential.nextstep like ".PearDatabase::quote($nextstep.'%')."");
+			array_push($where_clauses, "potential.nextstep ".$adb->getLike()." ".PearDatabase::quote($nextstep.'%')."");
 			$url_string .= "&nextstep=".$nextstep;
 	}
 	if(isset($sales_stage) && $sales_stage != "") {
@@ -136,7 +136,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$url_string .= "&sales_stage=".$sales_stage;
 	}
 	if(isset($probability) && $probability != "") {
-			array_push($where_clauses, "potential.probability like ".PearDatabase::quote($probability.'%')."");
+			array_push($where_clauses, "potential.probability ".$adb->getLike()." ".PearDatabase::quote($probability.'%')."");
 			$url_string .= "&probability=".$probability;
 
 	}
@@ -145,7 +145,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$url_string .= "&current_user_only=".$current_user_only;
 	}
 	if(isset($date_closed) && $date_closed != "") {
-			array_push($where_clauses, $adb->getDBDateString("potential.closingdate")." like ".PearDatabase::quote($date_closed.'%')."");
+			array_push($where_clauses, $adb->getDBDateString("potential.closingdate")." ".$adb->getLike()." ".PearDatabase::quote($date_closed.'%')."");
 			$url_string .= "&closingdate=".$date_closed;
 	}
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
@@ -357,7 +357,7 @@ if(isset($where) && $where != '')
             $defaultcv_criteria = $_REQUEST['viewname'];
        }
 
-  	$list_query .= " and sales_stage like "."'%" .$defaultcv_criteria ."%'";
+  	$list_query .= " and sales_stage ".$adb->getLike()." "."'%" .$defaultcv_criteria ."%'";
 	$viewname = $_REQUEST['viewname'];
         $view_script = "<script language='javascript'>
                 function set_selected()

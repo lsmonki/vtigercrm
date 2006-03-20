@@ -963,8 +963,8 @@ class Reports extends CRMEntity{
 		global $modules;
 		global $vtlog;
 
-		$ssql = "select relcriteria.* from report inner join selectquery on relcriteria.queryid = report.queryid";
-		$ssql.= " left join relcriteria on relcriteria.queryid = selectquery.queryid";
+		$ssql = "select relcriteria.* from report inner join selectquery on selectquery.queryid = report.queryid";
+		$ssql.= " left join relcriteria on relcriteria.queryid = report.queryid";
 		$ssql.= " where report.reportid =".$reportid." order by relcriteria.columnindex";
 
 		$result = $adb->query($ssql);

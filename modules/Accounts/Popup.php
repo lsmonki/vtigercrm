@@ -82,23 +82,23 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" accountcf.".$column[$i]." like '$customfield[$i]%'";
+                $str=" accountcf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
         }
 }
 //upto this added for Custom Field
 */	
 	if(isset($name) && $name != ""){
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($name."%"));
 		$url_string .= "&name=".$name;
 	}
-	if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
+	if(isset($website) && $website != "") array_push($where_clauses, "account.website ".$adb->getLike()." ".PearDatabase::quote("%".$website."%"));
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.otherphone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.fax ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%").")");
 	if(isset($address_city) && $address_city != ""){
-		array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote("%".$address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
+		array_push($where_clauses, "(accountbillads.city ".$adb->getLike()." ".PearDatabase::quote("%".$address_city."%")." OR accountshipads.city ".$adb->getLike()." ".PearDatabase::quote($address_city."%").")");
 		$url_string .= "&address_city=".$address_city;
 	}
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
+	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership ".$adb->getLike()." ".PearDatabase::quote($ownership."%"));
 	if(isset($current_user_only) && $current_user_only != ""){
 		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 		$url_string .= "&current_user_only=".$current_user_only;

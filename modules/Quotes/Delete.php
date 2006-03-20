@@ -37,12 +37,12 @@ if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module
 }
 elseif($_REQUEST['return_module'] == "Potentials")
 {
-	$relation_query = "UPDATE quotes set potentialid='' where quoteid=".$_REQUEST['record'];
+	$relation_query = "UPDATE quotes set potentialid=null where quoteid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
 elseif($_REQUEST['return_module'] == "Contacts")
 {
-	$relation_query = "UPDATE quotes set contactid='' where quoteid=".$_REQUEST['record'];
+	$relation_query = "UPDATE quotes set contactid=null where quoteid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
 elseif($_REQUEST['return_module'] == "Products")

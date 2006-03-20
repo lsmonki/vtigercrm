@@ -65,7 +65,9 @@ class ReportRun extends CRMEntity
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			if($querycolumns == "")
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." '".$selectedfields[2]."'";
+		// mysql my need quotes around the alias I'm not sure
+		//		$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." as '".$selectedfields[2]."'";
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." as ".$selectedfields[2]."";
 			}else
 			{
 				$columnslist[$fieldcolname] = $querycolumns;
@@ -173,7 +175,7 @@ class ReportRun extends CRMEntity
 	function getAdvComparator($comparator,$value)
         {
 
-		global $vtlog;
+		global $adb, $vtlog;
 
 		if($comparator == "e")
                 {
@@ -197,15 +199,15 @@ class ReportRun extends CRMEntity
                 }
                 if($comparator == "s")
                 {
-                        $rtvalue = " like ".PearDatabase::quote($value."%");
+                        $rtvalue = " ".$adb->getLike()." ".PearDatabase::quote($value."%");
                 }
                 if($comparator == "c")
                 {
-                        $rtvalue = " like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
                 }
                 if($comparator == "k")
                 {
-                        $rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " not ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
                 }
                 if($comparator == "l")
                 {
@@ -296,7 +298,7 @@ class ReportRun extends CRMEntity
 			{
 				if($datefilter == "custom")
                                 {
-                                        if($startdate != "0000-00-00" && $enddate != "0000-00-00")
+                                        if($startdate && $startdate != "0000-00-00" && $enddate && $enddate != "0000-00-00")
                                         {
                                                 $selectedfields = explode(":",$fieldcolname);
                                                 $stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";

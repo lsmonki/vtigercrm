@@ -51,11 +51,11 @@ if(isset($_REQUEST['query']))
 
 	if(isset($name))
 	{
-		array_push($where_clauses, "name like '$name%'");
+		array_push($where_clauses, "name ".$adb->getLike()." '$name%'");
 	}
 	if(isset($billing_address_city))
 	{
-		array_push($where_clauses, "billing_address_city like '$billing_address_city%'");
+		array_push($where_clauses, "billing_address_city ".$adb->getLike()." '$billing_address_city%'");
 	}
 
 	$where = "";

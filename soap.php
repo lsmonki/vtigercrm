@@ -153,10 +153,10 @@ function validate_user($user_name, $password){
 }
 function add_contacts_matching_email_address(&$output_list, $email_address, &$seed_contact, &$msi_id)
 {
-	global $log;
+	global $adb, $log;
 	$safe_email_address = addslashes($email_address);
 
-	$where = "email1 like '$safe_email_address' OR email2 like '$safe_email_address'";
+	$where = "email1 ".$adb->getLike()." '$safe_email_address' OR email2 ".$adb->getLike()." '$safe_email_address'";
 	$response = $seed_contact->get_list("first_name, last_name", $where, 0);
 	$contactList = $response['list'];
 

@@ -79,7 +79,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 			if($uitype[$i] == 56)
                                 $str=" vendorcf.".$column[$i]." = 1";
                         else
-			        $str="vendorcf.".$column[$i]." like '$customfield[$i]%'";
+			        $str="vendorcf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];
@@ -89,72 +89,72 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($vendorname) && $vendorname !='')
 	{
-		array_push($where_clauses, "vendorname like ".PearDatabase::quote($vendorname.'%'));
-		//$search_query .= " and productname like '".$productname."%'";
+		array_push($where_clauses, "vendorname ".$adb->getLike()." ".PearDatabase::quote($vendorname.'%'));
+		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&vendorname=".$vendorname;
 	}
 
 	if (isset($email) && $email !='')
 	{
 		array_push($where_clauses, "email =".PearDatabase::quote($email));
-		//$search_query .= " and productcode like '".$productcode."%'";
+		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&email=".$email;
 	}
 	
 	if (isset($category) && $category !='')
 	{
-		array_push($where_clauses, "category like ".PearDatabase::quote($category.'%'));
-		//$search_query .= " and productcode like '".$productcode."%'";
+		array_push($where_clauses, "category ".$adb->getLike()." ".PearDatabase::quote($category.'%'));
+		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&category=".$category;
 	}
 
 /*	if (isset($commissionrate) && $commissionrate !='')
 	{
-		array_push($where_clauses, "commissionrate like ".PearDatabase::quote($commissionrate.'%'));
-		 //$search_query .= " and commissionrate like '".$commissionrate."%'";
+		array_push($where_clauses, "commissionrate ".$adb->getLike()." ".PearDatabase::quote($commissionrate.'%'));
+		 //$search_query .= " and commissionrate ".$adb->getLike()." '".$commissionrate."%'";
 		 $url_string .= "&commissionrate=".$commissionrate;
 	}
 
 	if (isset($qtyperunit) && $qtyperunit !='')
 	{
-		array_push($where_clauses, "qty_per_unit like ".PearDatabase::quote($qtyperunit.'%'));
-	 	//$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
+		array_push($where_clauses, "qty_per_unit ".$adb->getLike()." ".PearDatabase::quote($qtyperunit.'%'));
+	 	//$search_query .= " and qty_per_unit ".$adb->getLike()." '".$qtyperunit."%'";
 		$url_string .= "&qtyperunit=".$qtyperunit;
 	}
 
 	if (isset($unitprice) && $unitprice !='')
 	{
-		array_push($where_clauses, "unit_price like ".PearDatabase::quote($unitprice.'%'));
-	 //	$search_query .= " and unit_price like '".$unitprice."%'";
+		array_push($where_clauses, "unit_price ".$adb->getLike()." ".PearDatabase::quote($unitprice.'%'));
+	 //	$search_query .= " and unit_price ".$adb->getLike()." '".$unitprice."%'";
 		$url_string .= "&unitprice=".$unitprice;
 	}
 	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
         {
-		array_push($where_clauses, "manufacturer like ".PearDatabase::quote($manufacturer.'%'));
-        	//$search_query .= " and manufacturer like '".$manufacturer."%'";
+		array_push($where_clauses, "manufacturer ".$adb->getLike()." ".PearDatabase::quote($manufacturer.'%'));
+        	//$search_query .= " and manufacturer ".$adb->getLike()." '".$manufacturer."%'";
                 $url_string .= "&manufacturer=".$manufacturer;
 	}
 	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
         {
-		array_push($where_clauses, "productcategory like ".PearDatabase::quote($productcategory.'%'));
-        	//$search_query .= " and productcategory like '".$productcategory."%'";
+		array_push($where_clauses, "productcategory ".$adb->getLike()." ".PearDatabase::quote($productcategory.'%'));
+        	//$search_query .= " and productcategory ".$adb->getLike()." '".$productcategory."%'";
                 $url_string .= "&productcategory=".$productcategory;
 	}
 	if (isset($start_date) && $start_date !='')
         {
-		array_push($where_clauses, "start_date like ".PearDatabase::quote($start_date.'%'));
+		array_push($where_clauses, "start_date ".$adb->getLike()." ".PearDatabase::quote($start_date.'%'));
                 //$search_query .= " and start_date = '".$start_date."%'";
                 $url_string .= "&start_date=".$start_date;
         }
 	if (isset($expiry_date) && $expiry_date !='')
         {
-		array_push($where_clauses, "expiry_date like ".PearDatabase::quote($expiry_date.'%'));
+		array_push($where_clauses, "expiry_date ".$adb->getLike()." ".PearDatabase::quote($expiry_date.'%'));
                 //$search_query .= " and expiry_date = '".$expiry_date."%'";
                 $url_string .= "&expiry_date=".$expiry_date;
         }
 	if (isset($purchase_date) && $purchase_date !='')
         {
-		array_push($where_clauses, "purchase_date like ".PearDatabase::quote($purchase_date.'%'));
+		array_push($where_clauses, "purchase_date ".$adb->getLike()." ".PearDatabase::quote($purchase_date.'%'));
                 //$search_query .= " and purchase_date = '".$purchase_date."%'";
                 $url_string .= "&purchase_date=".$purchase_date;
         }

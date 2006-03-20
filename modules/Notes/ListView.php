@@ -111,14 +111,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "notes.title like ".PearDatabase::quote($name.'%')."");
+		array_push($where_clauses, "notes.title ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
 		$url_string .= "&title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($name.'%').")");
+			array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($name.'%').")");
 		}
 		$url_string .= "&contact_name=".$contact_name;
 	}
@@ -212,7 +212,9 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-$query .= ' group by notes.notesid';
+if(!$adb->isPostgres()) {  // postgres wont group if all members of the select list aren't in the group by, use distinct on instead
+	$query .= ' group by notes.notesid';
+}
 
 if(isset($order_by) && $order_by != '')
 {

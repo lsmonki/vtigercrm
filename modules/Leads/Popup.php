@@ -75,15 +75,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where_clauses = Array();
 
 	if(isset($last_name) && $last_name != ""){
-		array_push($where_clauses, "leaddetails.lastname like '$last_name%'");
+		array_push($where_clauses, "leaddetails.lastname ".$adb->getLike()." '$last_name%'");
 		$url_string .= "&last_name=".$last_name;
 	}
 	if(isset($first_name) && $first_name != ""){
-		array_push($where_clauses, "leaddetails.firstname like '%$first_name%'");
+		array_push($where_clauses, "leaddetails.firstname ".$adb->getLike()." '%$first_name%'");
 		$url_string .= "&first_name=".$first_name;
 	}
 	if(isset($company) && $company != ""){
-		array_push($where_clauses, "leaddetails.company like '%$company%'");
+		array_push($where_clauses, "leaddetails.company ".$adb->getLike()." '%$company%'");
 		$url_string .= "&company=".$company;
 	}
 	if(isset($current_user_only) && $current_user_only != ""){

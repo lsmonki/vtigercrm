@@ -27,13 +27,14 @@ $body = $_REQUEST["body"];
 	  $vtlog->logthis("the body is ".$body,'debug');  
 if ($body !='')
 {
-	$body = to_html($body);
+	$body = $adb->database->qstr(to_html($body));
+	$description = $adb->database->qstr($description);
 	  $vtlog->logthis("the body value is set ",'info');  
 }
 if(isset($templateid) && $templateid !='')
 {
 	$vtlog->logthis("the templateid is set",'info');  
-	$sql = "update emailtemplates set foldername = '".$folderName."', templatename ='".$templateName."', subject ='".$subject."', description ='".$description."', body ='".$body."' where templateid =".$templateid;
+	$sql = "update emailtemplates set foldername = '".$folderName."', templatename ='".$templateName."', subject ='".$subject."', description =".$description.", body =".$body." where templateid =".$templateid;
 	$adb->query($sql);
  
 	$vtlog->logthis("about to invoke the detailviewemailtemplate file",'info');  
@@ -41,7 +42,7 @@ if(isset($templateid) && $templateid !='')
 }
 else
 {
-	$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0,".$db->getUniqueID('emailtemplates').")";
+	$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."',".$description.".$body.",0,".$db->getUniqueID('emailtemplates').")";
 	$adb->query($sql);
 
 	$vtlog->logthis("added to the db the emailtemplate",'info');  

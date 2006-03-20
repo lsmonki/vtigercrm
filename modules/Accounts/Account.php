@@ -230,7 +230,7 @@ class Account extends CRMEntity {
 	{
           // First, get the list of IDs.
 //          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-	  $query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
+	  $query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL OR activity.status != 'Completed' ) and (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held')";
           renderRelatedTasks($query,$id); //Query Changed by Jaguar
 
           //return $this->build_related_list($query, new Task());
@@ -293,9 +293,9 @@ class Account extends CRMEntity {
 
 	function get_attachments($id)
 	{
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' AS ActivityType, notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
 		$query .= ' union all ';
-		$query .= "select attachments.description  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+		$query .= "select attachments.description AS title ,'Attachments' AS ActivityType, attachments.name AS filename, attachments.type AS FileType, crm2.modifiedtime AS lastmodified, attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 		renderRelatedAttachments($query,$id);
 	}
 	function get_quotes($id)
@@ -547,14 +547,15 @@ class Account extends CRMEntity {
 		do not include any $this-> because this is called on without having the class instantiated
 	*/
 	function build_generic_where_clause ($the_query_string) {
+		global $adb;
 	
 	$where_clauses = Array();
 	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "accountname like '$the_query_string%'");
+	array_push($where_clauses, "accountname ".$adb->getLike()." '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "fax like '%$the_query_string%'");
-		array_push($where_clauses, "phone like '%$the_query_string%'");
+		array_push($where_clauses, "otherphone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "fax ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "phone ".$adb->getLike()." '%$the_query_string%'");
 	}
 	
 	$the_where = "";
@@ -623,8 +624,8 @@ return $exists;
 		{
           
   $query = $this->constructCustomQueryAddendum() . ", 
-			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
-                        users.user_name, users.status  user_status
+			account.*, ".$this->entity_table.".*, accountbillads.city AS billing_city, accountbillads.country AS billing_country, accountbillads.code AS billing_code, accountbillads.state AS billing_state, accountbillads.street AS billing_street, accountshipads.city AS shipping_city, accountshipads.country AS shipping_country, accountshipads.code AS shipping_code, accountshipads.state AS shipping_state, AS accountshipads.street AS shipping_street,
+                        users.user_name, users.status AS user_status
                         FROM ".$this->entity_table."
                         INNER JOIN account
                         ON crmentity.crmid=account.accountid
@@ -641,8 +642,8 @@ return $exists;
 		else
 		{
                   $query = "SELECT 
-			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state billing_state, accountbillads.street billing_street, accountshipads.city shipping_city, accountshipads.country shipping_country, accountshipads.code shipping_code, accountshipads.state shipping_state,  accountshipads.street shipping_street,
-                        users.user_name, users.status user_status
+			account.*, ".$this->entity_table.".*, accountbillads.city AS billing_city, accountbillads.country AS billing_country, accountbillads.code AS billing_code, accountbillads.state AS billing_state, accountbillads.street AS billing_street, accountshipads.city AS shipping_city, accountshipads.country AS shipping_country, accountshipads.code AS shipping_code, accountshipads.state AS shipping_state,  accountshipads.street AS shipping_street,
+                        users.user_name, users.status AS user_status
                         FROM ".$this->entity_table."
                         INNER JOIN account
                         ON crmentity.crmid=account.accountid

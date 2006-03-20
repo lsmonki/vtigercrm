@@ -79,7 +79,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" purchaseordercf.".$column[$i]." = 1";
 		else
-	                $str=" purchaseordercf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" purchaseordercf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -88,17 +88,17 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "purchaseorder.subject like ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "purchaseorder.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($vendorname) && $vendorname != "")
 	{
-		array_push($where_clauses, "vendor.vendorname like ".PearDatabase::quote("%".$vendorname."%"));
+		array_push($where_clauses, "vendor.vendorname ".$adb->getLike()." ".PearDatabase::quote("%".$vendorname."%"));
 		$url_string .= "&vendorname=".$vendorname;
 	}
 	if(isset($trackingno) && $trackingno != "")
 	{
-		array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$trackingno."%"));
+		array_push($where_clauses, "purchaseorder.tracking_no ".$adb->getLike()." ".PearDatabase::quote("%".$trackingno."%"));
 		$url_string .= "&trackingno=".$trackingno;
 	}
 	

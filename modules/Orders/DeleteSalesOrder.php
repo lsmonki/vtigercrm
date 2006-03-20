@@ -37,17 +37,17 @@ if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module
 }
 elseif($_REQUEST['return_module'] == "Quotes")
 {
-	$relation_query = "UPDATE salesorder set quoteid='' where salesorderid=".$_REQUEST['record'];
+	$relation_query = "UPDATE salesorder set quoteid=null where salesorderid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
 elseif($_REQUEST['return_module'] == "Potentials")
 {
-	$relation_query = "UPDATE salesorder set potentialid='' where salesorderid=".$_REQUEST['record'];
+	$relation_query = "UPDATE salesorder set potentialid=null where salesorderid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
 elseif($_REQUEST['return_module'] == "Contacts")
 {
-	$relation_query = "UPDATE salesorder set contactid='' where salesorderid=".$_REQUEST['record'];
+	$relation_query = "UPDATE salesorder set contactid=null where salesorderid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
 elseif($_REQUEST['return_module'] == "Products")

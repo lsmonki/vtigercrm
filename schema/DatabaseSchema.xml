@@ -160,7 +160,7 @@
 		<opt>Type=InnoDB</opt> <index name="Tab_IDX0">
 			<col>modifiedby</col>
 		</index>
-		<index name="tabid">
+		<index name="tab_tabid">
 			<col>tabid</col>
 		</index>
 		<data>
@@ -225,7 +225,7 @@
 		<index name="fieldname">
 			<col>fieldname</col>
 		</index>
-		<index name="tabid">
+		<index name="field_tabid">
 			<col>tabid</col>
 			<col>block</col>
 			<col>displaytype</col>
@@ -726,7 +726,6 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="contact_id" type="I" size="19">
-			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
 	
@@ -808,10 +807,10 @@
 			<opt>Type=InnoDB</opt> <index name="Potential_IDX0">
 			<col>accountid</col>
 		</index>
-		<index name="potentialid">
+		<index name="potential_potentialid">
 			<col>potentialid</col>
 		</index>
-		<index name="sales_stage">
+		<index name="potentail_sales_stage">
 			<col>sales_stage</col>
 		</index>
 		<opt>Type=InnoDB</opt>
@@ -845,7 +844,7 @@
 		<field name="amount" type="N"></field>
 		<field name="stage" type="C" size="100"></field>
 
-		<field name="probability" type="N" size="2.3"></field>
+		<field name="probability" type="N" size="7.3"></field>
 		<field name="expectedrevenue" type="N"></field>
 		<field name="closedate" type="D"></field>
 		<field name="lastmodified" type="T">
@@ -916,7 +915,6 @@
 		</field>
 
        		<field name="date_start" type="D">      
-			<NOTNULL/>
                         </field>                        
 		<field name="due_date" type="D">      
                         </field>                        
@@ -945,7 +943,7 @@
 			<col>activityid</col>
 			<col>subject</col>
 		</index>
-		<index name="activitytype">
+		<index name="activity_activitytype">
 			<col>activitytype</col>
 			<col>date_start</col>
 		</index>
@@ -957,10 +955,10 @@
 			<col>date_start</col>
 			<col>time_start</col>
 		</index>
-		<index name="eventstatus">
+		<index name="activity_eventstatus">
 			<col>eventstatus</col>
 		</index>
-		<index name="status">
+		<index name="activity_status">
 			<col>status</col>
 			<col>eventstatus</col>
 		</index>
@@ -1003,7 +1001,7 @@
 		</field>
 
 		<opt>Type=InnoDB</opt> 
-		<index name="attachmentsid">
+		<index name="attachments_attachmentsid">
 			<col>attachmentsid</col>
 		</index>
 		<index name="description">
@@ -1044,7 +1042,7 @@
 		<opt>Type=InnoDB</opt> <index name="SeAttachmentsRel_IDX1">
 			<col>crmid</col>
 		</index>
-		<index name="attachmentsid">
+		<index name="seattachmentsrel_attachmentsid">
 			<col>attachmentsid</col>
 			<col>crmid</col>
 		</index>
@@ -1180,7 +1178,7 @@
 		<field name="start_date" type="D"></field>
 		<field name="expiry_date" type="D"></field>
 		<field name="cost_factor" type="I" size="11"></field>
-		<field name="commissionrate" type="N" size="3.3"></field>
+		<field name="commissionrate" type="N" size="7.3"></field>
 		<field name="commissionmethod" type="C" size="50"></field>
 		<field name="discontinued" type="I" size="1"></field>
 		<field name="usageunit" type="C" size="200"></field>
@@ -1582,7 +1580,7 @@
 			<DEFAULT value="0"/>
 		</field>
 
-		<field name="dealprobability" type="N" size="2.3">
+		<field name="dealprobability" type="N" size="7.3">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -1757,7 +1755,7 @@
 	 		<index name="troubletickets_IDX0">
                                 <col>ticketid</col>
                         </index>	
-			<index name="status">
+			<index name="troubletickets_status">
                                 <col>status</col>
                         </index>	
 
@@ -1788,6 +1786,7 @@
                 </field>
                 <field name="ownertype" type="C" size="10"></field>
 		<field name="createdtime" type="T" >
+			<DEFTIMESTAMP/>
                         <NOTNULL/>
                 </field>
 
@@ -2028,18 +2027,6 @@
 		<opt>Type=InnoDB</opt> <index name="SeTicketsRel_IDX0">
 			<col>ticketid</col>
 		</index>
-		
-		<data>
-		</data>
-	</table>
-
-
-
-	<table name="seticketsrel" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_SeTicketsRel1 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
-		
-		<opt>Type=InnoDB</opt>
 		
 		<data>
 		</data>
@@ -2381,6 +2368,7 @@
 		<field name="faqid" type="I" size="19"></field>
                 <field name="comments" type="X"></field>
 		<field name="createdtime" type="T" >
+			<DEFTIMESTAMP/>
                         <NOTNULL/>
                 </field>
 
@@ -3033,7 +3021,7 @@
 			<DEFAULT value="1"/>
 		</field>
 
-		<field name="probability" type="N" size="2.3">
+		<field name="probability" type="N" size="7.3">
 			<DEFAULT value="0"/>
 		</field>
 		<opt>Type=InnoDB</opt> <index name="OpportunityStage_UK0">
@@ -3572,7 +3560,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<index name="idx_profile2tab">
+		<index name="profile2tab_profile2tab">
 			<col>profileid</col>	
 			<col>tabid</col>
 		</index>
@@ -3607,11 +3595,11 @@
 			<col>tabid</col>
 			<col>fieldname</col>
 		</index>
-		<index name="tabid">
+		<index name="profile2field_tabid">
 			<col>tabid</col>
 			<col>profileid</col>
 		</index>
-		<index name="visible">
+		<index name="profile2field_visible">
 			<col>visible</col>
 			<col>profileid</col>
 		</index>
@@ -3657,10 +3645,10 @@
 				<col>tabid</col>
 				<col>fieldid</col>
 			</index>
-			<index name="tabid">
+			<index name="def_org_field_tabid">
 				<col>tabid</col>
 			</index>
-			<index name="visible">
+			<index name="def_org_field_visible">
 				<col>visible</col>
 				<col>fieldid</col>
 			</index>	
@@ -3793,7 +3781,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<index name="idx_profile2tab">
+		<index name="relatedlists_profile2tab">
 			<col>relation_id</col>	
 		</index>
 		
@@ -4050,10 +4038,10 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
-		<index name="quotestage">
+		<index name="quote_quotestage">
 			<col>quotestage</col>
 		</index>
-		<index name="potentialid">
+		<index name="quotes_potentialid">
 			<col>potentialid</col>
 		</index>
 		<index name="contactid">
@@ -4076,13 +4064,6 @@
 
 	<table name="quotes" alter="true">
 	<constraint>ADD CONSTRAINT fk_Quotes2 FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="quotes" alter="true">
-	<constraint>ADD CONSTRAINT fk_Quotes3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -4799,10 +4780,10 @@
 			<DEFAULT value=""/>
 		</field>
 		<field name="startdate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="NULL"/>
 		</field>
 		<field name="enddate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="NULL"/>
 		</field>
 		<index name="cvstdfilter_IDX0">
 			<col>cvid</col>
@@ -4873,6 +4854,7 @@
 	
 	<table name="selectquery">
                 <field name="queryid" type="I" size="19">
+			<KEY />
 			<NOTNULL/>
                 </field>
                 <field name="startindex" type="I" size="19">
@@ -5070,10 +5052,10 @@
 			<DEFAULT value=""/>
 		</field>
 		<field name="startdate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="NULL"/>
 		</field>
 		<field name="enddate" type="D">
-			<DEFAULT value=""/>
+			<DEFAULT value="NULL"/>
 		</field>
 		<index name="reportdatefilter_IDX0">
 			<col>datefilterid</col>

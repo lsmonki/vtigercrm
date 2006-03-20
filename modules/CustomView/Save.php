@@ -122,8 +122,10 @@ if($cvmodule != "")
 			    $stdfiltersql = "insert into cvstdfilter(cvid,columnname,stdfilter,startdate,enddate)";
 			    $stdfiltersql .= " values (".$genCVid.",'".$std_filter_list["columnname"]."',";
 			    $stdfiltersql .= "'".$std_filter_list["stdfilter"]."',";
-			    $stdfiltersql .= "'".$std_filter_list["startdate"]."',";
-			    $stdfiltersql .= "'".$std_filter_list["enddate"]."')";
+			    if($std_filter_list["startdate"]) $stdfiltersql .= "'".$std_filter_list["startdate"]."',";
+			    else $stdfiltersql .= "null,";
+			    if($std_filter_list["enddate"]) $stdfiltersql .= "'".$std_filter_list["enddate"]."')";
+			    else $stdfiltersql .= "null)";
 			    //echo $stdfiltersql;
 			    $stdfilterresult = $adb->query($stdfiltersql);
 			    $vtlog->logthis("CustomView :: Save :: cvstdfilter created successfully","info");

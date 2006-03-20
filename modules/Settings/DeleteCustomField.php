@@ -19,15 +19,15 @@ $colName = $_REQUEST["colName"];
 $uitype = $_REQUEST["uitype"];
 
 //Deleting the CustomField from the Custom Field Table
-$query='delete from field where fieldid="'.$id.'"';
+$query="delete from field where fieldid='".$id."'";
 $adb->query($query);
 
 //Deleting from profile2field table
-$query='delete from profile2field where fieldid="'.$id.'"';
+$query="delete from profile2field where fieldid='".$id."'";
 $adb->query($query);
 
 //Deleting from def_org_field table
-$query='delete from def_org_field where fieldid="'.$id.'"';
+$query="delete from def_org_field where fieldid='".$id."'";
 $adb->query($query);
 
 //Dropping the column in the module table

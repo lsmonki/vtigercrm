@@ -235,7 +235,8 @@ class Contact extends CRMEntity {
 
         function get_contacts1($user_name,$email_address)
     {   
-      $query = "select contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id   from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0  and contactdetails.email like '%" .$email_address ."%' limit 50";
+	    global $adb;
+      $query = "select contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id   from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0  and contactdetails.email ".$adb->getLike()." '%" .$email_address ."%' limit 50";
       //echo $query;
       return $this->process_list_query1($query);
     }
@@ -350,7 +351,7 @@ class Contact extends CRMEntity {
           // First, get the list of IDs.
 
 		//$query = 'SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = '.$id.' and (activitytype="Task" or activitytype="Call" or activitytype="Meeting") and crmentity.deleted=0';
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid where contactdetails.contactid = ".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')"; //recurring type is added in Query -Jaguar
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid where contactdetails.contactid = ".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL OR activity.status != 'Completed' ) and (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held')"; //recurring type is added in Query -Jaguar
 		renderRelatedTasks($query,$id);		
 
           //return $this->build_related_list($query, new Task());
@@ -370,9 +371,9 @@ class Contact extends CRMEntity {
         function get_attachments($id)
         {
 		//$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' AS ActivityType, notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-		$query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+		$query .= "select attachments.description AS title ,'Attachments' AS ActivityType, attachments.name AS filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
                 renderRelatedAttachments($query,$id);
 	  }
 	  function get_quotes($id)
@@ -492,8 +493,8 @@ return $exists;
 		{
 	   $query =  $this->constructCustomQueryAddendum() .",
                                 contactdetails.*, contactaddress.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM contactdetails
 				inner join crmentity on crmentity.crmid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
@@ -506,8 +507,8 @@ return $exists;
 		{
                   	 $query = "SELECT
                                 contactdetails.*, contactaddress.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM contactdetails
                                 inner join crmentity on crmentity.crmid=contactdetails.contactid
                                 LEFT JOIN users ON crmentity.smcreatorid=users.id
@@ -754,21 +755,22 @@ return $exists;
 		do not include any $this-> because this is called on without having the class instantiated
 	*/
 	function build_generic_where_clause ($the_query_string) {
+		global $adb;
 	$where_clauses = Array();
 	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "lastname like '$the_query_string%'");
-	array_push($where_clauses, "firstname like '$the_query_string%'");
-	array_push($where_clauses, "contactsubdetails.assistant like '$the_query_string%'");
-	array_push($where_clauses, "email like '$the_query_string%'");
-	array_push($where_clauses, "otheremail like '$the_query_string%'");
-	array_push($where_clauses, "yahooid like '$the_query_string%'");
+	array_push($where_clauses, "lastname ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "firstname ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "contactsubdetails.assistant ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "email ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "otheremail ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "yahooid ".$adb->getLike()." '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone like '%$the_query_string%'");
-		array_push($where_clauses, "mobile like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.homephone like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "fax like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.assistantphone like '%$the_query_string%'");
+		array_push($where_clauses, "phone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "mobile ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.homephone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.otherphone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "fax ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.assistantphone ".$adb->getLike()." '%$the_query_string%'");
 	}
 	
 	$the_where = "";

@@ -15,8 +15,9 @@ global $adb;
 //if($_REQUEST['module']=='Users')
 //	$sql = "insert into salesmanactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 //else
+if($_REQUEST['module']=='Potentials')
 	$sql = "insert into contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-$adb->query($sql);
+else
 	$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
 $adb->query($sql);
  header("Location: index.php?action=DetailView&module=Potentials&record=".$_REQUEST["parid"]);
