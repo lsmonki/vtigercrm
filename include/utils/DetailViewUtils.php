@@ -743,35 +743,26 @@ function getDetailAssociatedProducts($module,$focus)
 	global $adb;
 	global $theme;
 	global $log;
-        $theme_path="themes/".$theme."/";
-        $image_path=$theme_path."images/";
-	 $log->debug("in getDetailAssociatedProducts. Module is  ".$module);
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$log->debug("in getDetailAssociatedProducts. Module is  ".$module);
 
 	$output = '';
-	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-	$output .=  '<tr><td  class="formBorder">';
-	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
-    $output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">';
-    $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
-    $output .= '<td width="20%" style="padding:3px;">Product</td>';
-    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    if($module != 'PurchaseOrder')
-    {
-    	$output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
-    	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    }	
-    $output .= '<td width="12%" style="padding:3px;">Qty</td>';
-    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="15%" style="padding:3px;">Unit Price</td>';
-    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="16%" style="padding:3px;">List Price</td>';
-    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td style="padding:3px;"><div align="center">Total</div></td>';
-    $output .=  '</tr>';
-    $output .=  '<tr id="tableheadline">';
-    $output .=  '<td colspan="11" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .=  '</tr>';
-		
+	$output .= '<table class="prdTab" border="0" cellspacing="0" cellpadding="0" id="proTab">';
+	$output .=  '<tr><th width="20%">Product</th>';
+
+	if($module == 'Quotes' || $module == 'SalesOrder' || $module == 'Invoice')
+	{
+		$output .= '<th width="12%">Qty In Stock</th>';
+	}
+
+	$output .= '<th width="10%">Qty</th>';
+	$output .= '<th width="10%">Unit Price </th>';
+	$output .= '<th width="19%">List Price</th>';
+	$output .= '<th width="10%">Total</th>';
+	//$output .= '<th width="5%">&nbsp;</th>';
+	$output .= '</tr>';
+
 	if($module == 'Quotes')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
@@ -802,59 +793,54 @@ function getDetailAssociatedProducts($module,$focus)
 
 		if($i%2 == 0)
 		{
-			$row_class = "evenListRow";
+			$row_class = "dvtCellLable";
 		}
 		else
 		{
-			$row_class = "oddListRow";
+			$row_class = "dvtCellInfo";
 		}
 
 		$output .= '<tr class="'.$row_class.'">';
-        	$output .= '<td height="25" style="padding:3px;" nowrap>'.$productname.'</td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td nowrap>'.$productname.'</td>';
 		if($module != 'PurchaseOrder')
 		{	
-                	$output .= '<td style="padding:3px;">'.$qtyinstock.'</td>';
-	        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$output .= '<td>'.$qtyinstock.'</td>';
 		}
-	        $output .= '<td style="padding:3px;">'.$qty.'</td>';
-	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                $output .= '<td style="padding:3px;">'.$unitprice.'</td>';
-	        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-	        $output .= '<td style="padding:3px;">'.$listprice.'</td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        	$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
-                $output .= '</tr>';
+		$output .= '<td style="padding:3px;">'.$qty.'</td>';
+		$output .= '<td style="padding:3px;">'.$unitprice.'</td>';
+		$output .= '<td style="padding:3px;">'.$listprice.'</td>';
+		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+		$output .= '</tr>';
 
 
 	}
 	$output .= '<tr id="tableheadline">';
-        $output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	$output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	$output .= '</table>';
-  	$output .= '</div>';
+	$output .= '</div>';
 	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
-        $output .= '<tr>'; 
+	$output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
-      	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
-        $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
-        $output .= '</tr>';
-        $output .= '<tr>'; 
+	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
+	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
+	$output .= '</tr>';
+	$output .= '<tr>'; 
 	$output .=  '<td>&nbsp;</td>';
-        $output .= '<td><div align="right"><b>Tax:</b></div></td>';
-        $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
-      $output .= '</tr>';
-      $output .= '<tr>'; 
-      $output .= '<td>&nbsp;</td>';
-      $output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
-      $output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
-      $output .= '</tr>';
-      $output .= '<tr>'; 
-      $output .= '<td>&nbsp;</td>';
-      $output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
-      $output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
-    $output .= '</tr>';
-    $output .= '</table>';
-    $output .= '</td></tr></table>';	
+	$output .= '<td><div align="right"><b>Tax:</b></div></td>';
+	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
+	$output .= '</tr>';
+	$output .= '<tr>'; 
+	$output .= '<td>&nbsp;</td>';
+	$output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
+	$output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
+	$output .= '</tr>';
+	$output .= '<tr>'; 
+	$output .= '<td>&nbsp;</td>';
+	$output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
+	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
+	$output .= '</tr>';
+	$output .= '</table>';
+	$output .= '</td></tr></table>';	
 
 	return $output;
 
