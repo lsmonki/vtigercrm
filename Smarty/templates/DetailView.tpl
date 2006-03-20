@@ -97,7 +97,7 @@
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><td><td>&nbsp;</td></tr>
-		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap>&nbsp;{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/></td></tr>		 
+		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><a href="#" onClick="show('tagdiv')">+addtag</a><div id="tagdiv" style="display:none";>{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv')"></div></td></tr>		 
 		 <hr noshade size=1>
 		
 		<!-- Account details tabs -->
@@ -468,9 +468,9 @@ var ajaxObj = new Ajax(ajaxTagCloudResp);
 ajaxObj.process("index.php?",data);
 function ajaxTagCloudResp(response)
 {ldelim}
-	
 	var item = response.responseText;
 	getObj('tagfields').innerHTML = item;
+	document.getElementById(txtBox).value ='';	
 	
 {rdelim}
 </script>
