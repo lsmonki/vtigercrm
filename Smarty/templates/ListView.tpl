@@ -328,7 +328,7 @@ rBox">
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massDelete()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete()"/>
                                         {elseif $button_check eq 's_mail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
                                         {elseif $button_check eq 's_cmail'}
