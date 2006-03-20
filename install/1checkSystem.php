@@ -169,7 +169,7 @@ $gd_info_alternate = 'function gd_info() {
 		<tr>
 			<td bgcolor="#EEEEEE"><strong>Database</strong></td>
 
-        	<td align="right"><?php echo function_exists('mysql_connect')?"<strong><font color=\"#0066CC\">Available</font></strong>":"<strong><font color=\"#FF0000\">Not Available</font></strong>";?></td>
+        	<td align="right"><?php echo function_exists('mysql_connect') || function_exists('pg_connect')?"<strong><font color=\"#0066CC\">Available</font></strong>":"<strong><font color=\"#FF0000\">Not Available</font></strong>";?></td>
 
 	    </tr>
 		<tr>
