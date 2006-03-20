@@ -31,7 +31,7 @@
 	<td>&nbsp;</td>
 	</tr>
 	<tr>
-	<td align="right" width="5%" style="padding-right:10px;"><input name="radiobutton" type="radio" value="baseprofile" /></td>
+	<td align="right" width="5%" style="padding-right:10px;"><input name="radiobutton" checked type="radio" value="baseprofile" /></td>
 	<td width="95%" align="left" style="padding-left:10px;">I would like to setup a base profile and edit privileges <b>(Recommened)</b></td>
 	</tr>
 	<tr>

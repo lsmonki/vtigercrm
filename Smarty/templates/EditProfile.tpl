@@ -407,6 +407,7 @@
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
+	<input type="button" value=" &lsaquo; Back " name="back" onclick="window.history.back()" />&nbsp;&nbsp;
 	{if $ACTION eq 'SaveProfile'}
 	<input type="submit" value=" Finish " name="save"/>&nbsp;&nbsp;
 	{else}
