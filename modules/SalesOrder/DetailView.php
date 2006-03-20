@@ -85,6 +85,9 @@ if(isPermitted("SalesOrder",2,$_REQUEST['record']) == 'yes')
 
 $smarty->assign("MODULE", $module);
 $smarty->assign("CONVERTMODE",'sotoinvoice');
+//Get the associated Products and then display above Terms and Conditions
+$smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$focus));
+
 $smarty->display("DetailView.tpl");
 //Security check for related list
 global $profile_id;
