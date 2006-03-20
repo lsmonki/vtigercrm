@@ -227,6 +227,30 @@ elseif ($success==1)
 else
 	eecho("Tables Successfully created.\n");
 
+// ensure required sequences are created (adodb creates them as needed, but if
+// creation occurs within a transaction we get problems
+$db->getUniqueID("activity_reminder");
+$db->getUniqueID("crmentity");
+$db->getUniqueID("customfield_sequence");
+$db->getUniqueID("customview");
+$db->getUniqueID("def_org_share");
+$db->getUniqueID("emailtemplates");
+$db->getUniqueID("field");
+$db->getUniqueID("import_maps");
+$db->getUniqueID("inventorynotification");
+$db->getUniqueID("mail_accounts");
+$db->getUniqueID("notificationscheduler");
+$db->getUniqueID("potstagehistory");
+$db->getUniqueID("profile");
+$db->getUniqueID("relatedlists");
+$db->getUniqueID("reportmodules");
+$db->getUniqueID("role");
+$db->getUniqueID("rss");
+$db->getUniqueID("selectquery");
+$db->getUniqueID("systems");
+$db->getUniqueID("wordtemplates");
+
+
 eecho ("Creating tables for module: ");
 foreach ( $modules as $module ) {
         $focus = new $module();
