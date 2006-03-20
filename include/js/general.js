@@ -1235,7 +1235,6 @@ function fnAddSrch(option_values,criteria_values){
 
     var colthree = row.insertCell(2);
 
-    //colone.innerHTML="<select name='Fields'+count class='detailedViewTextBox'><option>First Name</option><option>Last Name</option><option>Department</option><option>Role</option><option>E-Mild Id</option></select>";
     colone.innerHTML="<select name='Fields"+count+"' class='detailedViewTextBox'>"+option_values+"</select>";
 
     coltwo.innerHTML="<select name='Condition"+count+"' class='detailedViewTextBox'>"+criteria_values+"</select> ";
@@ -1246,7 +1245,8 @@ function fnAddSrch(option_values,criteria_values){
 
 function totalnoofrows()
 {
-        document.basicSearch.search_cnt.value = count;
+	var tableName = document.getElementById('adSrc');
+	document.basicSearch.search_cnt.value = tableName.rows.length;
 }
 
 /*
