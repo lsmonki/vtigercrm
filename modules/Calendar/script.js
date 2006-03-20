@@ -109,7 +109,7 @@ function DisableSharing()
 
         x = document.SharedList.selected_id.length;
         idstring = "";
-
+	xx = 0;
         if ( x == undefined)
         {
 
@@ -125,7 +125,6 @@ function DisableSharing()
         }
         else
         {
-                xx = 0;
                 for(i = 0; i < x ; i++)
                 {
                         if(document.SharedList.selected_id[i].checked)
@@ -146,7 +145,7 @@ function DisableSharing()
         }
 	if(confirm("Are you sure you want to disable sharing for selected "+xx+" user(s) ?"))
         {
-                document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=index&sel=share";
+                document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=calendar_share";
         }
         else
         {
