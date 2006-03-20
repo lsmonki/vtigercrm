@@ -747,7 +747,7 @@
 				$this->_transOK = false;
 				if ($this->debug) ADOConnection::outp("Smart Commit failed");
 			} else
-				if ($this->debug) ADOConnection::outp("Smart Commit occurred");
+				if (false) ADOConnection::outp("Smart Commit occurred");
 		} else {
 			$this->_transOK = false;
 			$this->RollbackTrans();
