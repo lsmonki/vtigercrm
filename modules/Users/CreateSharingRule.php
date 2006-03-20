@@ -36,9 +36,9 @@ foreach($grpDetails as $groupid=>$groupname)
 	$combovalues .='<option value="groups::'.$groupid.'" selected>Group::'.$groupname.'</option>';
 }
 		global $adb;
+			$mode = $_REQUEST['mode'];
 		if(isset($_REQUEST['shareid']) && $_REQUEST['shareid'] != '')
 		{	
-			$mode = 'edit';
 			$shareid=$_REQUEST['shareid'];
 			$shareInfo=getSharingRuleInfo($shareid);
 			$tabid=$shareInfo[1];
@@ -47,7 +47,6 @@ foreach($grpDetails as $groupid=>$groupname)
 		}
 		else
 		{
-			$mode = 'create';
 			$sharing_module=$_REQUEST['sharing_module'];
 			$tabid=getTabid($sharing_module);
 		}
@@ -110,7 +109,7 @@ foreach($grpDetails as $groupid=>$groupname)
 		<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
 		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$sharing_module.' - Add Custom Privilege Rule</td>
-		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'orgLay\').style.display=\'none\'";>Close</a></td>
+		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'orgLay\')";>Close</a></td>
 		
 		</tr>
 		<tr><td colspan="2">&nbsp;</td></tr>

@@ -137,7 +137,7 @@
 							<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
 							<b>{$modulename}</b>&nbsp; 
 							</td>
-							<td align="right" colspan=2><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}')"></td>
+							<td align="right" colspan=2><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}','create','{$elements.0}')"></td>
 						</tr>
 					  	<tr>
 							<th class="lvtCol" nowrap width="9%">Rule No.</th>
@@ -152,7 +152,7 @@
 							<td>{$elements.1}</td>
 							<td>{$elements.2}</td>
 							<td>{$elements.3}</td>
-							<td align="center"><a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" height="15" width="16" border=0></td>
+							<td align="center"><a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" height="15" width="16" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" height="15" width="16" border=0></a></td>
 					    </tr>
 						{/foreach}
 				  		</tbody></table>
@@ -167,12 +167,12 @@
 					  	<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
 						<b>{$modulename}</b>&nbsp;&nbsp; 
 						</td>
-					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}')"></td>
+					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}','create','')"></td>
 				  	</tr>
 				  	<tr>
 				  		<td colspan="2" style="padding: 20px;" bgcolor="#ffffff" align="center">
 						No Custom Access Rules defined . 
-						<a href="javascript:onClick=callEditDiv('{$modulename}')">Click here</a>
+						<a href="javascript:onClick=callEditDiv('{$modulename}','create','')">Click here</a>
 						to create a new Rule
 					    </td>
 				  	</tr>
@@ -217,11 +217,11 @@ function ajaxSaveResponse(response)
 	document.getElementById("tempdiv").innerHTML=response.responseText;
 {rdelim}
 
-function callEditDiv(modulename)
+function callEditDiv(modulename,mode,id)
 {ldelim}
 	show("status");
 	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring = "module=Users&action=UsersAjax&orgajax=true&mode=create&sharing_module="+modulename;
+	var urlstring = "module=Users&action=UsersAjax&orgajax=true&mode="+mode+"&sharing_module="+modulename+"&shareid="+id;
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
 
