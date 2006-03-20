@@ -23,6 +23,11 @@
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">
+function ajaxSaveResponse(response)
+{ldelim}
+	hide("status");
+	document.getElementById("ListViewContents").innerHTML=response.responseText;
+{rdelim}
 
 function callSearch(searchtype)
 {ldelim}
@@ -158,7 +163,6 @@ rBox">
                                                 <input type="hidden" name="parenttab" value="{$CATEGORY}">
 						<input type="hidden" name="action" value="index">
                                                 <input type="hidden" name="query" value="true">
-						<input type="hidden" name="search_cnt">
 
 
                                         </td>
@@ -201,15 +205,15 @@ rBox">
 					<div id="fixed" style="position:relative;top:0px;left:0px;width:95%;height:95px;overflow:auto;" class="padTab">
 					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
 					<tr  class="dvtCellInfo">
-					<td width="31%"><select name="Fields0" class="detailedViewTextBox">
+					<td width="31%"><select name="Fields" class="detailedViewTextBox">
 					{$FIELDNAMES}
 					</select>
 					</td>
-					<td width="32%"><select name="Condition0" class="detailedViewTextBox">
+					<td width="32%"><select name="Condition" class="detailedViewTextBox">
 					{$CRITERIA}
 					</select>
 					</td>
-					<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
+					<td width="32%"><input type="text" name="srch" class="detailedViewTextBox"></td>
 					</tr>
 					</table>
 					</div>	
@@ -217,7 +221,7 @@ rBox">
 					</tr>
 					<tr>
 
-					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')">
+					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}')">
 					&nbsp;&nbsp;
 					<input name="button" type="button" value="Fewer" onclick="delRow()"></td>
 					<td>&nbsp;</td>
@@ -256,17 +260,17 @@ rBox">
 			
 
 {*<!-- Contents -->*}
-<form name="massdelete" method="POST">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-     <input name="idlist" type="hidden">
-     <input name="change_owner" type="hidden">
-     <input name="change_status" type="hidden">
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 
 	<td class="showPanelBg" valign=top width=100%>
 	   <!-- PUBLIC CONTENTS STARTS-->
-	   <div class="small" style="padding:20px">
+	   <div id="ListViewContents" class="small" style="padding:20px">
+     <form name="massdelete" method="POST">
+     <input name="idlist" type="hidden">
+     <input name="change_owner" type="hidden">
+     <input name="change_status" type="hidden">
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr style="background-color:#efefef">
 		      <td>
@@ -275,7 +279,7 @@ rBox">
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massDelete()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete()"/>
                                         {elseif $button_check eq 's_mail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
                                         {elseif $button_check eq 's_cmail'}
@@ -355,11 +359,14 @@ rBox">
 		       </td>
 		   </tr>
 	    </table>
+
+   </form>	
+{$SELECT_SCRIPT}
 	</div>
 
      </td>
    </tr>
 </table>
-</form>	
-{$SELECT_SCRIPT}
+<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
+
 

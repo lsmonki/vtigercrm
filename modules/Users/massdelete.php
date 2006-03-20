@@ -18,11 +18,12 @@
 
 
 require_once('include/database/PearDatabase.php');
-$idlist = $_POST['idlist'];
+$idlist = $_REQUEST['idlist'];
 $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
+
 foreach($storearray as $id)
 {
 	$sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
@@ -33,7 +34,9 @@ if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 	$smod = "&smodule=".$_REQUEST['smodule'];
 }
 if($returnmodule!='Faq')
-	header("Location: index.php?module=".$returnmodule."&action=index&viewname=".$viewid.$smod);
+{
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid);
+}
 else
 	header("Location: index.php?module=".$returnmodule."&action=index".$smod);
 ?>

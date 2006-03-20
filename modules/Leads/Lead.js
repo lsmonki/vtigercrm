@@ -144,7 +144,7 @@ function massDelete()
 			if(document.massdelete.selected_id[i].checked)
 			{
 				idstring = document.massdelete.selected_id[i].value +";"+idstring
-			xx++	
+				xx++;	
 			}
 		}
 		if (xx != 0)
@@ -158,8 +158,11 @@ function massDelete()
 		}
 	}
 	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
-	{	
-		document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Leads&return_action=index&viewname="+viewid;
+	{
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var urlstring ="module=Users&action=massdelete&return_module=Leads&viewname="+viewid+"&idlist="+idstring;
+	    ajaxObj.process("index.php?",urlstring);
 	}
 	else
 	{
