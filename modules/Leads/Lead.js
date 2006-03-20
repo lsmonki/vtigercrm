@@ -65,10 +65,12 @@ function togglePotFields(form)
 
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=Leads&action=index&return_module=Leads&return_action=index&viewname="+viewName;
- document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=Leads&action=LeadsAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
+	
 }
 //code added by raju for better emailing
 function eMail()

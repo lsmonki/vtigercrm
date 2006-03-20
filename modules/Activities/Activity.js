@@ -92,18 +92,11 @@ function showDefaultCustomView(selectView)
 
 {
 
-viewName = selectView.options[selectView.options.selectedIndex].value;
-
-document.massdelete.viewname.value=viewName;
-
-//document.massdelete.action="index.php";
-
-
-
-document.massdelete.action="index.php?module=Activities&action=index&return_module=Activities&return_action=ListView&viewname="+viewName;
-
-document.massdelete.submit();
-
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=Activities&action=ActivitiesAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 function massDelete()
 {
@@ -150,7 +143,10 @@ function massDelete()
         }
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{
-        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Activities&return_action=ListView&viewname="+viewid;
+			show("status");
+			var ajaxObj = new Ajax(ajaxSaveResponse);
+			var urlstring ="module=Users&action=massdelete&return_module=Activities&viewname="+viewid+"&idlist="+idstring;
+	    	ajaxObj.process("index.php?",urlstring);
 		}
 		else
 		{

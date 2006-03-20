@@ -59,8 +59,8 @@ $_SESSION['ACCOUNTS_SORT_ORDER'] = $sorder;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView($currentModule);
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $groupid = $oCustomView->getGroupId($currentModule);
 //<<<<<customview>>>>>

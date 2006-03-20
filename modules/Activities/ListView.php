@@ -27,6 +27,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $list_max_entries_per_page;
@@ -37,7 +38,7 @@ global $currentModule;
 
 global $image_path;
 global $theme;
-
+global $adb;
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
@@ -58,11 +59,10 @@ $_SESSION['ACTIVITIES_SORT_ORDER'] = $sorder;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView($currentModule);
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
 
 $where = "";
 
@@ -128,19 +128,6 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
 }
-
-$view_script = "<script language='javascript'>
-	function set_selected()
-	{
-		len=document.massdelete.viewname.length;
-		for(i=0;i<len;i++)
-		{
-			if(document.massdelete.viewname[i].value == '$viewid')
-				document.massdelete.viewname[i].selected = true;
-		}
-	}
-	set_selected();
-	</script>";
 
 $list_query .= ' GROUP BY crmentity.crmid'; //Appeding for the recurring event by jaguar
 
@@ -224,5 +211,8 @@ $smarty->assign("CATEGORY",$category);
 
 
 
-$smarty->display("ListView.tpl");
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("ListViewEntries.tpl");
+else	
+	$smarty->display("ListView.tpl");
 ?>

@@ -131,13 +131,6 @@ function calcTotal(currObj) {
 
 function calcGrandTotal() {
 	var subTotal=0,grandTotal=0;
-
-	//This is added for calculate Total for Product Details in Invoice
-	var temp = document.getElementsByTagName('table');
-	for(i=0;i<temp.length;i++){
-		if(temp[i].className == 'prdTab') var rowCnt=temp[i].rows.length -1;
-	}
-
 	for (var i=1;i<=rowCnt;i++) {
 		if (getObj("hdnTotal"+i).value=="") 
 			getObj("hdnTotal"+i).value=0
@@ -246,10 +239,11 @@ function FindDuplicate()
 }
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=SalesOrder&action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=SalesOrder&action=SalesOrderAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 function massDelete()
 {

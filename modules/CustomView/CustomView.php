@@ -151,7 +151,7 @@ class CustomView extends CRMEntity{
 		}
 		return $customviewlist;		
 	}	
-	function getCustomViewCombo()
+	function getCustomViewCombo($viewid='')
 	{
 		global $adb;
                 $tabid = getTabid($this->customviewmodule);
@@ -161,7 +161,7 @@ class CustomView extends CRMEntity{
                 $result = $adb->query($ssql);
                 while($cvrow=$adb->fetch_array($result))
                 {
-                        if($cvrow['setdefault'] == 1)
+                        if($cvrow['cvid'] == $viewid)
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];

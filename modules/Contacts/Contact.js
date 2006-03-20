@@ -62,10 +62,11 @@ if(this.document.getElementById( id).style.display=='none'){
 
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=Contacts&action=index&return_module=Contacts&return_action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=Contacts&action=ContactsAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 //code added by raju for better emiling
 function eMail()

@@ -78,8 +78,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("HelpDesk");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
@@ -141,18 +141,6 @@ if(isset($where) && $where != '')
 {
 	$list_query .= ' and '.$where;
 }
-$view_script = "<script language='javascript'>
-			function set_selected()
-			{
-				len=document.massdelete.viewname.length;
-				for(i=0;i<len;i++)
-				{
-					if(document.massdelete.viewname[i].value == '$viewid')
-						document.massdelete.viewname[i].selected = true;
-				}
-			}
-			set_selected();
-		</script>";
 
 //sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')

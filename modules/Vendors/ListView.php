@@ -70,8 +70,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Vendors");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
@@ -132,19 +132,6 @@ $list_result = $adb->query($list_query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
-
-$view_script = "<script language='javascript'>
-	function set_selected()
-	{
-		len=document.massdelete.viewname.length;
-		for(i=0;i<len;i++)
-		{
-			if(document.massdelete.viewname[i].value == '$viewid')
-				document.massdelete.viewname[i].selected = true;
-		}
-	}
-	set_selected();
-	</script>";
 
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')

@@ -62,10 +62,11 @@ function toggleAssignType(currType)
 
 function showDefaultCustomView(selectView)
 {
-	viewName = selectView.options[selectView.options.selectedIndex].value;
-	document.massdelete.viewname.value=viewName;
-	document.massdelete.action="index.php?module=HelpDesk&action=index&return_module=HelpDesk&return_action=ListView&viewname="+viewName;
-	document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=HelpDesk&action=HelpDeskAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 
 function massDelete()

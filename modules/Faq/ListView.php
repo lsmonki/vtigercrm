@@ -48,8 +48,8 @@ $other_text = Array();
 $url_string = ''; 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Faq");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 

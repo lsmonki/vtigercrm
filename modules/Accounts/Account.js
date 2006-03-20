@@ -47,10 +47,11 @@ function copyAddressLeft(form) {
 
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=Accounts&action=index&return_module=Accounts&return_action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=Accounts&action=AccountsAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 //added by raju for emails
 

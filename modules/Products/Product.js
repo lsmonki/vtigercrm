@@ -63,10 +63,11 @@ function check4null(form)
 }
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=Products&action=index&return_module=Products&return_action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=Products&action=ProductsAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 function massDelete()
 {

@@ -11,13 +11,6 @@
 function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
-
-function productPickList(currObj) {
-	var trObj=currObj.parentNode.parentNode
-	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod_po&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
-}
-
 function priceBookPickList(currObj) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
@@ -239,10 +232,11 @@ function delRow(rowId) {
 
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=PurchaseOrder&action=index&return_module=PurchaseOrder&return_action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=PurchaseOrder&action=PurchaseOrderAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 function massDelete()
 {

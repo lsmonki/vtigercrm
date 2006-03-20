@@ -105,10 +105,11 @@ document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&re
 
 function showDefaultCustomView(selectView)
 {
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=PriceBooks&action=index&return_module=PriceBooks&return_action=index&viewname="+viewName;
-document.massdelete.submit();
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var viewName = selectView.options[selectView.options.selectedIndex].value;
+		var urlstring ="module=PriceBooks&action=PriceBooksAjax&file=ListView&ajax=true&viewname="+viewName;
+	    ajaxObj.process("index.php?",urlstring);
 }
 
 function updateListPrice(unitprice,fieldname)
@@ -214,8 +215,10 @@ function massDelete()
 	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
     {
 		show("status");
+		alert("in fn")
 		var ajaxObj = new Ajax(ajaxSaveResponse);
 		var urlstring ="module=Users&action=massdelete&return_module=PriceBooks&viewname="+viewid+"&idlist="+idstring;
+		alert(urlstring)
 	    ajaxObj.process("index.php?",urlstring);
 	}
 	else

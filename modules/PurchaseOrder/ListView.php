@@ -77,8 +77,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("PurchaseOrder");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
@@ -141,20 +141,6 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-$view_script = "<script language='javascript'>
-	function set_selected()
-	{
-		len=document.massdelete.viewname.length;
-		for(i=0;i<len;i++)
-		{
-			if(document.massdelete.viewname[i].value == '$viewid')
-				document.massdelete.viewname[i].selected = true;
-		}
-	}
-	set_selected();
-	</script>";
-
-//$url_qry = getURLstring($focus);
 
 if(isset($order_by) && $order_by != '')
 {

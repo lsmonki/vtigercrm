@@ -31,6 +31,9 @@ require_once('modules/CustomView/CustomView.php');
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
 
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=Webmails&action=index&parenttab=parenttab=My Home Page'=>'Emails'); 
+
+if($_REQUEST['ajax'] == '')
+{
 echo '<br>';
 
 ?>
@@ -85,7 +88,7 @@ echo '<br>';
  </table>
  <br>
 <?
-
+}
 global $app_strings;
 global $mod_strings;
 
@@ -125,8 +128,8 @@ global $focus_list;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
@@ -206,18 +209,6 @@ if(isset($order_by) && $order_by != '')
 $list_result = $adb->query($list_query);
 
 //Constructing the list view
-$view_script = "<script language='javascript'>
-	function set_selected()
-	{
-		len=document.massdelete.viewname.length;
-		for(i=0;i<len;i++)
-		{
-			if(document.massdelete.viewname[i].value == '$viewid')
-				document.massdelete.viewname[i].selected = true;
-		}
-	}
-	set_selected();
-	</script>";
 
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MOD", $mod_strings);
@@ -275,5 +266,8 @@ $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
 
-$smarty->display("ListView.tpl");
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("ListViewEntries.tpl");
+else	
+	$smarty->display("ListView.tpl");
 ?>
