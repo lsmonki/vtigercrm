@@ -65,12 +65,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	//Get the tabid of the module
 	//require_once('include/utils/UserInfoUtil.php')
 	$tabid = getTabid($smodule);
-	global $profile_id;
-	if($profile_id == '')
-	{
-		global $current_user;
-		$profile_id = fetchUserProfileId($current_user->id);
-	}
+	global $current_user;
 	//added for customview 27/5
 	if($oCv)
 	{
@@ -221,7 +216,6 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
-		global $profile_id;
 		$tabid = getTabid($module);
 
 		global $current_user;
@@ -410,7 +404,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 			}
 
-			global $profile_id;
 			global $current_user;	
 			require('user_privileges/user_privileges_'.$current_user->id.'.php');	
 			if($is_admin==false)	
@@ -614,13 +607,15 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
 		/*if (($i%2)==0)
-			$list_header .= '<tr height=20 class=evenListRow>';
-		else
-			$list_header .= '<tr height=20 class=oddListRow>';*/
+		  $list_header .= '<tr height=20 class=evenListRow>';
+		  else
+		  $list_header .= '<tr height=20 class=oddListRow>';*/
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
@@ -630,18 +625,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		foreach($focus->search_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->search_fields_name[$name];
-			global $profile_id;
-			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-			$result = $adb->query($query);
-	
-			//Getting the Entries from def_org_field table
-			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-			$result_def = $adb->query($query1);
 
-
-			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+			if($is_admin==false)
 			{
+				$profileList = getCurrentUserProfileList();
+				$query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
 
+				$result = $adb->query($query);
+			}
+
+			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+			{			
 				if($fieldname == '')
 				{
 					$table_name = '';
@@ -667,9 +661,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$contact_name = "";
 							$value="";
 							if($last_name != 'NULL')
-                                                                $contact_name .= $last_name;
-                                                        if($first_name != 'NULL')
-                                                                $contact_name .= " ".$first_name;
+								$contact_name .= $last_name;
+							if($first_name != 'NULL')
+								$contact_name .= " ".$first_name;
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 						}
@@ -679,17 +673,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 						$value=getRelatedToEntity($module,$list_result,$i-1);
 					}
 					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder' || $module == 'Quotes'))
-                                        {
-                                                $account_id = $adb->query_result($list_result,$i-1,"accountid");
-                                                $account_name = getAccountName($account_id);
-                                                $value = $account_name;
-                                        }
+					{
+						$account_id = $adb->query_result($list_result,$i-1,"accountid");
+						$account_name = getAccountName($account_id);
+						$value = $account_name;
+					}
 					elseif($name=='Quote Name' && $module == 'SalesOrder')
-                                        {
-                                                $quote_id = $adb->query_result($list_result,$i-1,"quoteid");
-                                                $quotename = getQuoteName($quote_id);
-                                                $value = $quotename;
-                                        }
+					{
+						$quote_id = $adb->query_result($list_result,$i-1,"quoteid");
+						$quotename = getQuoteName($quote_id);
+						$value = $quotename;
+					}
 					else
 					{
 						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
@@ -700,9 +694,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 
 				}
-			//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-			//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-			  $list_header[]=$value;
+				//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+				//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+				$list_header[]=$value;
 			}
 		}	
 		//$list_header .= '</tr>';
