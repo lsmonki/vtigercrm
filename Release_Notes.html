@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en"><head><title>vtiger CRM 5 Alpha2: Release Notes</title>
+<html lang="en"><head><title>vtiger CRM 5 Alpha3: Release Notes</title>
   
   <style>
 p {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
@@ -17,8 +17,220 @@ background-attachment: fixed;
   </style></head>
 
 <body class="background">
-<p><img src="themes/images/vtiger.jpg" height="48" width="112">
+<p><img src="themes/images/vtiger.jpg" height="48" width="112"> </p>
+<h1>vtiger CRM 5.0 Alpha 3: Release Notes</h1>
+<p><b>Date: March 21, 2006</b></p>
+<p>vtiger CRM 5.0 Alpha 3 release is currently in active development phase. The 
+  intent of this release is to showcase to the vtiger community, the significant 
+  changes made after v5 Alpha 2 release i.e., changes since Feb 28, 06' . The 
+  noteworthy features in v5 Alpha 3 are enhanced user interface for Home page, 
+  security scope for reports and dashboards, integration of AJAX based Chat application, 
+  new user interface for System Administration, global search function for all 
+  the modules, tag based grouping of the records, and so forth. In addition, we 
+  are also supporting much awaited <b>MySQL 5.0.19</b> and <b>MySQL 4.1.x</b> 
+  database systems. Please note, the vtiger CRM 5 Alpha 3 will not work with MySQL 
+  4.0.x.<br>
 </p>
+<p><b>NOTE:</b> We strongly recommend CRM community NOT to USE <b>vtiger CRM 5 
+  Alpha 3</b> for real-time deployment. In case you are looking for an immediate 
+  CRM solution for your business, please consider using the <b>vtiger CRM 4.2.3</b> 
+  (latest stable version), which can be downloaded from <a href="http://www.vtiger.com"><b>vtiger.com</b></a>.</p>
+<p><b><i>Appeal to Developers, Testers, Analysts, Writers, and end users! </i> 
+  </b></p>
+<p>Jump-start to vtiger Public Discussions and post your valuable suggestions 
+  &amp; comments to help us deliver a world class open source CRM for you in another 
+  few weeks time. It is very simple,</p>
+<p><b><font size="3">Step 1:</font></b> Browse through <a href="http://www.vtiger.com/products/crm/demo_5alpha/index.php"><b>Live 
+  Demo</b></a></p>
+<p><b><font size="3">Step 2:</font></b> Download product from the <a href="http://vtiger.com/index.php?option=com_content&task=view&id=70&Itemid=109"><b>vtiger.com</b></a> 
+  and install in your favorite Operating System.</p>
+<p><b><font size="3">Step 3:</font></b> Post your suggestions &amp; comments at 
+  vtiger Discussions under : <a href="http://forums.vtiger.com/index.php?c=10"><b>vtiger 
+  CRM 5.x</b></a> category</p>
+<p><b><a name="TOC3"></a>Table of Contents</b></p>
+<ol>
+  <li><a href="#Summary5_Alpha2">Summary</a></li>
+  <li><a href="#Features5_Alpha2">Features</a></li>
+</ol>
+<h3><a name="Summary5_Alpha2"></a>1. Summary</h3>
+<table border="1" cellpadding="5" cellspacing="0" width="65%">
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="5%"><b><font color="#990000">S. No</font></b></td>
+    <td width="40%"><b><font color="#990000">Item</font></b></td>
+    <td width="55%"><b><font color="#990000">Status</font></b></td>
+  </tr>
+  <tr> 
+    <td width="5%">1 </td>
+    <td width="40%">Features</td>
+    <td width="55%"> 
+      <p>23</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="5%">2 </td>
+    <td width="40%">Product Size</td>
+    <td width="55%">Platform Independent - <b>9.3 MB<br>
+      </b>Windows (EXE) - <b>26 MB</b><br>
+      Linux (BIN) - <b>39 MB</b></td>
+  </tr>
+  <tr> 
+    <td width="5%">4 </td>
+    <td width="40%">Database Migration</td>
+    <td width="55%"><b><font color="#ff0000">Not Available/Will Not be Available</font></b></td>
+  </tr>
+  <tr> 
+    <td width="5%">5 </td>
+    <td width="40%">vtiger CRM - PHP Documentation</td>
+    <td width="55%">Download from vtigercrm project in SF.net. URL: <a href="http://prdownloads.sourceforge.net/vtigercrmvtiger_CRM_5_Alpha3_PhpDocs.zip?download">Click 
+      Here</a></td>
+  </tr>
+  <tr> 
+    <td width="5%">6 </td>
+    <td width="40%">Product Documentation</td>
+    <td width="55%">Available at the <a href="http://www.vtiger.com/wiki/index.php/Main_Page">Wiki</a></td>
+  </tr>
+  <tr> 
+    <td width="5%">8 </td>
+    <td width="40%">Source Code Label</td>
+    <td width="55%">VTIGERCRM_5_ALPHA3</td>
+  </tr>
+  </tbody> 
+</table>
+<h3><a name="Features5_Alpha2"></a>2. Features</h3>
+<table style="width: 65%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody> 
+  <tr> 
+    <td  width="9%"><b>S. No</b></td>
+    <td  width="91%"><b>Feature</b></td>
+  </tr>
+  <tr> 
+    <td  width="9%">1 </td>
+    <td  width="91%">Sleek Home page user interface</td>
+  </tr>
+  <tr> 
+    <td  width="9%">2 </td>
+    <td  width="91%">Demo data populated across the 
+      modules</td>
+  </tr>
+  <tr> 
+    <td  width="9%">3 </td>
+    <td  width="91%">Manage RSS feeds completely</td>
+  </tr>
+  <tr> 
+    <td  width="9%">4</td>
+    <td  width="91%"> Manage frequently visited sites 
+      in mySites module</td>
+  </tr>
+  <tr> 
+    <td  width="9%">5</td>
+    <td  width="91%">Prototype, a third-party package 
+      bundled with the product </td>
+  </tr>
+  <tr> 
+    <td  width="9%">6</td>
+    <td  width="91%">Email Templates module redesigned 
+    </td>
+  </tr>
+  <tr> 
+    <td  width="9%">7</td>
+    <td  width="91%">Custom Views in all the modules 
+      are redesigned using Smarty templates</td>
+  </tr>
+  <tr> 
+    <td  width="9%">9</td>
+    <td  width="91%">Shared/Group Calendar with multiple 
+      users</td>
+  </tr>
+  <tr> 
+    <td  width="9%">10</td>
+    <td  width="91%">Slide show of the users' photos 
+      in Users List View</td>
+  </tr>
+  <tr> 
+    <td  width="9%">11</td>
+    <td  width="91%">Search records easily by tagging 
+      a set of records</td>
+  </tr>
+  <tr> 
+    <td  width="9%">12</td>
+    <td  width="91%">Newly designed Calculator and 
+      Clock are integrated</td>
+  </tr>
+  <tr> 
+    <td  width="9%">13</td>
+    <td  width="91%">Fade effect while accessing different 
+      sub-tabs in User Detail View</td>
+  </tr>
+  <tr> 
+    <td  width="9%">14</td>
+    <td  width="91%">Integrated AJAX based third-party 
+      Chat application.</td>
+  </tr>
+  <tr> 
+    <td  width="9%">15</td>
+    <td  width="91%">AJAXified Mass Delete function 
+      in all the modules</td>
+  </tr>
+  <tr> 
+    <td  width="9%">16</td>
+    <td  width="91%">AJAXified Custom View for all 
+      modules</td>
+  </tr>
+  <tr> 
+    <td  width="9%">17</td>
+    <td  width="91%"> AJAXified Change Owner and Change 
+      Status functions in Leads module</td>
+  </tr>
+  <tr> 
+    <td  width="9%">18</td>
+    <td  width="91%">Security Management User Interface 
+      is completely redesigned </td>
+  </tr>
+  <tr> 
+    <td  width="9%">19</td>
+    <td  width="91%">Advance search functions integrated 
+      only for Leads module</td>
+  </tr>
+  <tr> 
+    <td  width="9%">20</td>
+    <td  width="91%">Security feature enabled for 
+      Reports and Dashbords Home Page</td>
+  </tr>
+  <tr> 
+    <td  width="9%">21</td>
+    <td  width="91%">Global search for all the modules</td>
+  </tr>
+  <tr> 
+    <td  width="9%">22</td>
+    <td  width="91%">MySQL 5.0.19 database support</td>
+  </tr>
+  <tr> 
+    <td  width="9%">23</td>
+    <td  width="91%">Delete handling in security module</td>
+  </tr>
+  </tbody> 
+</table>
+<p>&nbsp; </p>
+<table border="1" width="60%">
+  <tbody>
+  <tr> 
+    <td> 
+      <p><b><a name="Refer_Note"></a>Note: </b></p>
+      <p><b>1. Configuring Web services to update Publicly traded company profiles 
+        (With Ticker symbol in Accounts)</b> In Account module, if ticker symbol 
+        is specified, company profile will be displayed on top of Edit view page. 
+        For this specify the server name, port number, user name and password 
+        has in class_http/class_http.php under &lt;vtiger CRM Home&gt; directory.</p>
+      <p>Line: 166</p>
+      <p>Assign values to the given variables: $server,$port,$user,$pwd</p>
+      <p>2. Shoutbox feature has been phased out.</p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<hr>
 <h1>vtiger CRM 5.0 Alpha 2: Release Notes</h1>
 <p><b>Date: February 28, 2006</b></p>
 <p>vtiger CRM 5.0 Alpha 2 release is currently in active development phase. The 
@@ -41,7 +253,7 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
 <p>Jump-start to vtiger Public Discussions and post your valuable suggestions 
   &amp; comments to help us deliver a world class open source CRM for you in another 
   few weeks time. It is very simple,</p>
-<p><b><font size="3">Step 1:</font></b> Browse through Live Demo: <a href="http://www.vtiger.com/products/crm/demo_5alpha">http://www.vtiger.com/products/crm/demo_5alpha</a></p>
+<p><b><font size="3">Step 1:</font></b> Browse through Live Demo: <a href="http://vtiger.com/demo/alpha2">http://vtiger.com/demo/alpha2</a></p>
 <p><b><font size="3">Step 2:</font></b> Ready with LAMP/WAMP, Download product 
   from: </p>
 <p><b><font size="3">Step 3:</font></b> Post your suggestions &amp; comments at 
@@ -110,7 +322,7 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
     <td width="40%">vtiger CRM - PHP Documentation</td>
       
     <td width="55%">Download from vtigercrm project in SF.net. 
-      URL: <a href="http://prdownloads.sourceforge.net/vtigercrm/vtiger_CRM_5_Alpha2_PhpDocs.zip?download">Click 
+      URL: <a href="http://prdownloads.sourceforge.net/vtigercrmvtiger_CRM_5_Alpha2_PhpDocs.zip?download">Click 
       Here</a></td>
     </tr>
     <tr>
@@ -124,14 +336,14 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
     </tr>
     <tr>
       
-    <td style="vertical-align: top;" width="5%">7
+    <td  width="5%">7
       </td>
       
-    <td style="vertical-align: top;" width="40%">List of files modified between 
+    <td  width="40%">List of files modified between 
       alpha and alpha 2
       </td>
       
-    <td style="vertical-align: top;" width="55%">&nbsp;</td>
+    <td  width="55%">&nbsp;</td>
     </tr>
     <tr>
       
@@ -159,215 +371,215 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
   <tr> 
     <td style="width: 64px; vertical-align: top;" width="69"><b>Sl No.
       </b></td>
-    <td style="vertical-align: top;" width="57"><b>Ticket ID</b></td>
-    <td style="vertical-align: top;" width="492"><b>Description</b></td>
+    <td  width="57"><b>Ticket ID</b></td>
+    <td  width="492"><b>Description</b></td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">1</td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Enhanced Dashboards with more 
+    <td  width="69">1</td>
+    <td  width="57">-</td>
+    <td  width="492">Enhanced Dashboards with more 
       than 20 charts</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">2
+    <td  width="69">2
     </td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Multiple currency support and 
+    <td  width="57">-</td>
+    <td  width="492">Multiple currency support and 
       currency conversion through Web service integration</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">3</td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Campaign Management module for 
+    <td  width="69">3</td>
+    <td  width="57">-</td>
+    <td  width="492">Campaign Management module for 
       Marketing automation</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">4
+    <td  width="69">4
     </td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Update some of your publicly 
+    <td  width="57">-</td>
+    <td  width="492">Update some of your publicly 
       traded accounts details online using Web services integration. Input only 
       the Ticker Symbol in Account page and update the other real-time data. (<a href="#Refer_Note"><b>Refer 
       to Note</b></a>)</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">5
+    <td  width="69">5
     </td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Stay-in-touch with your customers' 
+    <td  width="57">-</td>
+    <td  width="492">Stay-in-touch with your customers' 
       by uploading their photos.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">6
+    <td  width="69">6
     </td>
-    <td style="vertical-align: top;" width="57">&nbsp;
+    <td  width="57">&nbsp;
     </td>
-    <td style="vertical-align: top;" width="492">Analyze your customers business 
+    <td  width="492">Analyze your customers business 
       performance based on their Web traffic.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">7
+    <td  width="69">7
     </td>
-    <td style="vertical-align: top;" width="57">779
+    <td  width="57">779
     </td>
-    <td style="vertical-align: top;" width="492">Show/Hide HTML Editor (FCKEditior).</td>
+    <td  width="492">Show/Hide HTML Editor (FCKEditior).</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">8
+    <td  width="69">8
     </td>
-    <td style="vertical-align: top;" width="57">1000</td>
-    <td style="vertical-align: top;" width="492">Send E-mail notification to assigned 
+    <td  width="57">1000</td>
+    <td  width="492">Send E-mail notification to assigned 
       users when potential is updated.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">9
+    <td  width="69">9
     </td>
-    <td style="vertical-align: top;" width="57">1006 </td>
-    <td style="vertical-align: top;" width="492">Send E-mail notification to other 
+    <td  width="57">1006 </td>
+    <td  width="492">Send E-mail notification to other 
       users.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">10
+    <td  width="69">10
     </td>
-    <td style="vertical-align: top;" width="57">736</td>
-    <td style="vertical-align: top;" width="492">Show latest/new leads on a Home 
+    <td  width="57">736</td>
+    <td  width="492">Show latest/new leads on a Home 
       page.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">11</td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492"> Ajax-based multidimensional 
+    <td  width="69">11</td>
+    <td  width="57">-</td>
+    <td  width="492"> Ajax-based multidimensional 
       product images upload.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">12
+    <td  width="69">12
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Contact Images Scrolling in Contact 
+    <td  width="492">Contact Images Scrolling in Contact 
       ListView</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">13
+    <td  width="69">13
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Ajax-based <b>my Portal</b> module 
+    <td  width="492">Ajax-based <b>my Portal</b> module 
       under Tools tab.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">14</td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">In Home page, display the status 
+    <td  width="69">14</td>
+    <td  width="57">-</td>
+    <td  width="492">In Home page, display the status 
       of modified records since last logout for users.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">15
+    <td  width="69">15
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Tag&nbsp;Cloud - Integration 
+    <td  width="492">Tag&nbsp;Cloud - Integration 
       (http://tagcloud.com)</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">16
+    <td  width="69">16
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Company-wide Announcements configuration 
+    <td  width="492">Company-wide Announcements configuration 
       from Settings.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">17
+    <td  width="69">17
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Thumbnail view on Mouseover for 
+    <td  width="492">Thumbnail view on Mouseover for 
       Contact images in List View.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" height="21" width="69">18
+    <td  height="21" width="69">18
     </td>
-    <td style="vertical-align: top;" height="21" width="57">-
+    <td  height="21" width="57">-
     </td>
-    <td style="vertical-align: top;" height="21" width="492">Upload vtiger CRM 
-    Users' photos.</td>
+    <td  height="21" width="492"><font color="#FF0000">Upload vtiger CRM 
+    Users' photos.(Not Working)</font></td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">19
+    <td  width="69">19
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Resize the users photos and create 
-    thumbnails.</td>
+    <td  width="492"><font color="#FF0000">Resize the users photos and create 
+    thumbnails.(Not Working)</font></td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">20
+    <td  width="69">20
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Attach multiple files in single 
+    <td  width="492">Attach multiple files in single 
       step.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">21
+    <td  width="69">21
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">FCK editor upgraded to the latest 
+    <td  width="492">FCK editor upgraded to the latest 
       version (v2.2).</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">22
+    <td  width="69">22
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Shout Box integration with vtiger 
+    <td  width="492">Shout Box integration with vtiger 
       CRM Home page for vtiger users to chat online.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">23
+    <td  width="69">23
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Tabbed approach of Detail View 
+    <td  width="492">Tabbed approach of Detail View 
       information. Sections are spited to <b class="moz-txt-star"><span class="moz-txt-tag"></span>Basic<span class="moz-txt-tag"></span></b> &amp; <b class="moz-txt-star"><span class="moz-txt-tag"></span>More<span class="moz-txt-tag"></span></b> for Leads, 
       Accounts, Contacts, Potentials &amp; Product modules.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" height="21" width="69">24
+    <td  height="21" width="69">24
     </td>
-    <td style="vertical-align: top;" height="21" width="57">445
+    <td  height="21" width="57">445
     </td>
-    <td style="vertical-align: top;" height="21" width="492">Addition of multiple 
+    <td  height="21" width="492">Addition of multiple 
       <b>Contacts</b> in Activities, Emails, Potentials, Vendors related lists.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">25
+    <td  width="69">25
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Add New E-mail in Related List 
+    <td  width="492">Add New E-mail in Related List 
       of Leads &amp; Contacts.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">26
+    <td  width="69">26
     </td>
-    <td style="vertical-align: top;" width="57">502</td>
-    <td style="vertical-align: top;" width="492"> Address Inheritance for Contacts.</td>
+    <td  width="57">502</td>
+    <td  width="492"> Address Inheritance for Contacts.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">27
+    <td  width="69">27
     </td>
-    <td style="vertical-align: top;" width="57">-
+    <td  width="57">-
     </td>
-    <td style="vertical-align: top;" width="492">Ajaxified detail view for all 
+    <td  width="492">Ajaxified detail view for all 
       modules.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="69">28</td>
-    <td style="vertical-align: top;" width="57">-</td>
-    <td style="vertical-align: top;" width="492">Separate Log Messages for Security 
+    <td  width="69">28</td>
+    <td  width="57">-</td>
+    <td  width="492">Separate Log Messages for Security 
       Management.</td>
   </tr>
   </tbody> 
@@ -393,143 +605,143 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
 <table style="text-align: left; width: 650px; height: 224px;" border="1" cellpadding="2" cellspacing="2">
   <tbody> 
   <tr> 
-    <td style="vertical-align: top;" width="45"><b>SL No.
+    <td  width="45"><b>SL No.
       </b></td>
-    <td style="vertical-align: top;" width="62"><b>Ticket ID
+    <td  width="62"><b>Ticket ID
       </b></td>
-    <td style="vertical-align: top;" width="515"><b>Description</b></td>
+    <td  width="515"><b>Description</b></td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">1
+    <td  width="45">1
     </td>
-    <td style="vertical-align: top;" width="62">1058</td>
-    <td style="vertical-align: top;" width="515">While creating customview for 
+    <td  width="62">1058</td>
+    <td  width="515">While creating customview for 
       salesorder return action is not redirected to Salesorder Listview.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">2
+    <td  width="45">2
     </td>
-    <td style="vertical-align: top;" width="62">1070</td>
-    <td style="vertical-align: top;" width="515">In activity related list,when 
+    <td  width="62">1070</td>
+    <td  width="515">In activity related list,when 
       I click on "Activity Information" link,activity detailview is not displayed 
     </td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" height="19" width="45">3
+    <td  height="19" width="45">3
     </td>
-    <td style="vertical-align: top;" height="19" width="62">1067</td>
-    <td style="vertical-align: top;" height="19" width="515">minute combo box 
+    <td  height="19" width="62">1067</td>
+    <td  height="19" width="515">minute combo box 
       of duration field is not displaying proper values </td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">4
+    <td  width="45">4
     </td>
-    <td style="vertical-align: top;" width="62">-</td>
-    <td style="vertical-align: top;" width="515">In Popup SalesOrder and PurchaseOrder 
+    <td  width="62">-</td>
+    <td  width="515">In Popup SalesOrder and PurchaseOrder 
       "Hacking attempt" exception is thrown.</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">5
+    <td  width="45">5
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">Adding New Event in Potential 
+    <td  width="515">Adding New Event in Potential 
       Relatedlist will not be working</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">6
+    <td  width="45">6
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">In Listview when a set of accounts 
+    <td  width="515">In Listview when a set of accounts 
       are selected and 'sendmail' button is clicked, finally in email editview 
       the addresses are populated both in To and cc field</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">7
+    <td  width="45">7
     </td>
-    <td style="vertical-align: top;" width="62">866</td>
-    <td style="vertical-align: top;" width="515">Problem with ticket creation</td>
+    <td  width="62">866</td>
+    <td  width="515">Problem with ticket creation</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">8
+    <td  width="45">8
     </td>
-    <td style="vertical-align: top;" width="62">898 </td>
-    <td style="vertical-align: top;" width="515">Attachment Error Message not 
+    <td  width="62">898 </td>
+    <td  width="515">Attachment Error Message not 
       proper</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">9
+    <td  width="45">9
     </td>
-    <td style="vertical-align: top;" width="62">913 </td>
-    <td style="vertical-align: top;" width="515">parent email id is not selected 
+    <td  width="62">913 </td>
+    <td  width="515">parent email id is not selected 
       when select a single contact or lead from listview-send mail</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">10
+    <td  width="45">10
     </td>
-    <td style="vertical-align: top;" width="62">1011</td>
-    <td style="vertical-align: top;" width="515">Customer portal issue</td>
+    <td  width="62">1011</td>
+    <td  width="515">Customer portal issue</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">11
+    <td  width="45">11
     </td>
-    <td style="vertical-align: top;" width="62">1034 </td>
-    <td style="vertical-align: top;" width="515"> export of accounts</td>
+    <td  width="62">1034 </td>
+    <td  width="515"> export of accounts</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">12
+    <td  width="45">12
     </td>
-    <td style="vertical-align: top;" width="62">1077</td>
-    <td style="vertical-align: top;" width="515">can not add email id in 'To' 
+    <td  width="62">1077</td>
+    <td  width="515">can not add email id in 'To' 
       field of email</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">13
+    <td  width="45">13
     </td>
-    <td style="vertical-align: top;" width="62">1088</td>
-    <td style="vertical-align: top;" width="515">Ticket notification with wrong 
+    <td  width="62">1088</td>
+    <td  width="515">Ticket notification with wrong 
       signature</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">14
+    <td  width="45">14
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">Create New User, Edit &amp; Detail 
+    <td  width="515">Create New User, Edit &amp; Detail 
       View of the My Preference/Settings Smartified
     </td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">15
+    <td  width="45">15
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">In create customview 'Choose 
+    <td  width="515">In create customview 'Choose 
       columns' the 'Event information' and 'Event Description' does'nt list</td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">16
+    <td  width="45">16
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">Security Support for Reports
+    <td  width="515">Security Support for Reports
     </td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">17
+    <td  width="45">17
     </td>
-    <td style="vertical-align: top;" width="62">-
+    <td  width="62">-
     </td>
-    <td style="vertical-align: top;" width="515">Activity Reminder Notification 
+    <td  width="515">Activity Reminder Notication 
       email<span style="font-weight: bold;"> </span></td>
   </tr>
   <tr> 
-    <td style="vertical-align: top;" width="45">18
+    <td  width="45">18
     </td>
-    <td style="vertical-align: top;" width="62">964
+    <td  width="62">964
     </td>
-    <td style="vertical-align: top;" width="515">Activities are not in start date 
+    <td  width="515">Activities are not in start date 
       order and not configurable</td>
   </tr>
   </tbody> 
@@ -553,6 +765,12 @@ are also supporting much awaited <b>MySQL 4.1.x</b> database system. Please note
   <li>Reports are not fully functional. You may experience some errors while working 
     with reports.</li>
   <li>Quick create and global search are not supported.</li>
+</ul>
+<h3><a name="v5atov5a2"></a>5. List of Files Changed from V 5 alpha to V 5 alpha 
+  2</h3>
+<ul>
+  <li>List of Changed files</li>
+  <li>Files Moved to Attic&nbsp; </li>
 </ul>
 <hr>
 <h1>vtiger CRM 5.0 Alpha: Release Notes</h1>
@@ -778,14 +996,14 @@ to Top</a></b></p>
   <tbody>
     <tr bgcolor="#ccccff">
       <td width="56"><b><font color="#990000">S. No </font></b></td>
-      <td style="vertical-align: top;"><b><font color="#990000">Ticket
+      <td ><b><font color="#990000">Ticket
 ID
       </font></b></td>
       <td width="764"><b><font color="#990000">Subject</font></b></td>
     </tr>
     <tr>
       <td width="56">1</td>
-      <td style="vertical-align: top;">
+      <td >
       <br>
 </td>
       <td>
@@ -795,7 +1013,7 @@ in Installation wizard. </p>
     </tr>
     <tr>
       <td width="56">2</td>
-      <td style="vertical-align: top;">
+      <td >
       <br>
 </td>
       <td>Default Organization Sharing in Security is modified
@@ -804,13 +1022,13 @@ provided for this feature.</td>
     </tr>
     <tr>
       <td width="56">3</td>
-      <td style="vertical-align: top;">588
+      <td >588
       </td>
       <td>Suppress sending mail to account when a ticket is submitted.</td>
     </tr>
     <tr>
       <td width="56">4</td>
-      <td style="vertical-align: top;">
+      <td >
       <br>
 </td>
       <td>Product quantity in stock is automatically updated when
@@ -822,7 +1040,7 @@ immediately after receiving the shipment.</td>
     </tr>
     <tr>
       <td width="56">5</td>
-      <td style="vertical-align: top;"><br>
+      <td ><br>
       </td>
       <td>In Office Plug-in, fields from multiple modules (Accounts,
 Contacts, Leads, HelpDesk, and Users) can be merged while creating mail
@@ -830,20 +1048,20 @@ merge templates.</td>
     </tr>
     <tr>
       <td width="56">6</td>
-      <td style="vertical-align: top;"><br>
+      <td ><br>
       </td>
       <td>In vtiger CRM create mail merge documents by merging fields
 from multiple modules (Accounts,Contacts, Users)</td>
     </tr>
     <tr>
       <td width="56">7</td>
-      <td style="vertical-align: top;"><br>
+      <td ><br>
       </td>
       <td>Provided support for User field in mail merge documents</td>
     </tr>
     <tr>
       <td width="56">8</td>
-      <td style="vertical-align: top;"><br>
+      <td ><br>
       </td>
       <td>Mail merge all the records from a module by selecting "Select
 All" checkbox in ListView of Accounts, Contacts, Leads, and HelpDesk
@@ -997,68 +1215,68 @@ defined</td>
 vulnerability fix.</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">21<br>
+      <td >21<br>
       </td>
-      <td style="vertical-align: top;">833<br>
+      <td >833<br>
       </td>
-      <td style="vertical-align: top;">test mail can be sent to test
+      <td >test mail can be sent to test
 the e-mail function on configuring the mail server </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">22<br>
+      <td >22<br>
       </td>
-      <td style="vertical-align: top;">718<br>
+      <td >718<br>
       </td>
-      <td style="vertical-align: top;">Signatures are double-spaced in
+      <td >Signatures are double-spaced in
 e-mails </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">23<br>
+      <td >23<br>
       </td>
-      <td style="vertical-align: top;">453<br>
+      <td >453<br>
       </td>
-      <td style="vertical-align: top;">issue in vendor search </td>
+      <td >issue in vendor search </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">24<br>
+      <td >24<br>
       </td>
-      <td style="vertical-align: top;">564<br>
+      <td >564<br>
       </td>
-      <td style="vertical-align: top;">Tickets assigned to Groups </td>
+      <td >Tickets assigned to Groups </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">25<br>
+      <td >25<br>
       </td>
-      <td style="vertical-align: top;">195<br>
+      <td >195<br>
       </td>
-      <td style="vertical-align: top;">Email - admin mail is empty,
+      <td >Email - admin mail is empty,
 then cc in email is not going </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">26<br>
+      <td >26<br>
       </td>
-      <td style="vertical-align: top;">710<br>
+      <td >710<br>
       </td>
-      <td style="vertical-align: top;">activity notifications -&gt;
+      <td >activity notifications -&gt;
 display further information </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">27<br>
+      <td >27<br>
       </td>
-      <td style="vertical-align: top;">504 </td>
-      <td style="vertical-align: top;">New Contact -Account addressNew
+      <td >504 </td>
+      <td >New Contact -Account addressNew
 Contact -Account address</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">28</td>
-      <td style="vertical-align: top;">259</td>
-      <td style="vertical-align: top;">Office Integration account name
+      <td >28</td>
+      <td >259</td>
+      <td >Office Integration account name
 in address block</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">29</td>
-      <td style="vertical-align: top;">378</td>
-      <td style="vertical-align: top;">Office Plugin field selection</td>
+      <td >29</td>
+      <td >378</td>
+      <td >Office Plugin field selection</td>
     </tr>
   </tbody>
 </table>
