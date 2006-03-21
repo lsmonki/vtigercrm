@@ -88,7 +88,7 @@ $graph_array = Array(
           "ticketsbystatus" => "Tickets by status",
           "ticketsbypriority" => "Tickets by Priority",
           );
-
+/*
 if($type == "leadsource")
 {
      $graph_by="leadsource";
@@ -206,7 +206,7 @@ if($type == "ticketsbypriority")
    $graph_title="Tickets by Priority";
    $module="HelpDesk";
 }
-                    
+  */                  
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
 	global $user_id,$date_start,$end_date,$type;
@@ -445,7 +445,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 				<!--char goes here-->
 				<?php 
 				//Charts for Lead Source
-                    if($type == "leadsource")
+                    if(($type == "leadsource") && (getFieldVisibilityPermission('Leads',$user_id,'leadsource') == "0"))
                     {
                     	$graph_by="leadsource";
                     	$graph_title="Leads By Source";
@@ -455,6 +455,10 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     
                     }
+		    else
+		    {
+			echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+		    }
                     // To display the charts  for Lead status                   
                     if ($type == "leadstatus")
                     {

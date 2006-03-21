@@ -52,6 +52,7 @@ $mod_strings = Array(
 'LBL_DATE_END'=>'End Date:',
 //Added for 5.0 
 'LBL_NO_PERMISSION'=>'Your profile doesn\'t allow you view the Graph for this module',
+'LBL_NO_PERMISSION_FIELD'=>'Your profile doesn\'t allow you view the Graph for this module or for the Field',
 );
 
 ?>

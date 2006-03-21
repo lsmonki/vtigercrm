@@ -3982,4 +3982,29 @@ function getGrpId($groupname)
 	$groupid = $adb->query_result($result,0,'groupid');
 	return $groupid;
 }
+
+/** Function to check permission to access a field for a given user
+  * @param $fld_module -- Module :: Type String
+  * @param $userid -- User Id :: Type integer
+  * @param $fieldname -- Field Name :: Type varchar
+  * @returns $rolename -- Role Name :: Type varchar
+  *
+ */
+function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
+{
+	
+	global $adb;
+
+        //get profile list using userid
+	$profilelist = getCurrentUserProfileList();
+
+        //get tabid
+	$tabid = getTabid($fld_module);
+
+        $query="select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in".$profilelist." and field.fieldname='".$fieldname."' group by field.fieldid";
+	$result = $adb->query($query);
+	return $adb->query_result($result,"0","visible");
+
+}
+
 ?>
