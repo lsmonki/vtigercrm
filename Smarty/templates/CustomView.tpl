@@ -131,14 +131,114 @@ function mandatoryCheck()
 		  <b>Select Columns to show in this view </b>
 		 </td>
 		</tr>
-		{section name=SelectColumn start=1 loop=4 step=1}
+		<tr class="dvtCellLabel">
+		  <td><select name="column1" id="column1">
+	                <option value="">None</option>
+			{foreach item=filteroption key=label from=$CHOOSECOLUMN1}
+				<optgroup label="{$label}" class=\"select\" style=\"border:none\">
+				{foreach item=text from=$filteroption}
+		                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                	        {/foreach}
+			{/foreach}
+          	        {$CHOOSECOLUMN1}
+	              </select></td>
+		   <td><select name="column2" id="column2">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN2}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN2}
+                      </select></td>
+		   <td><select name="column3" id="column3">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN3}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN3}
+                      </select></td>
+		   <td><select name="column4" id="column4">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN4}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN4}
+                      </select></td>
+			
+		</tr>
+		<tr class="dvtCellInfo">
+		   <td><select name="column5" id="column5">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN5}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN5}
+                      </select></td>
+                   <td><select name="column6" id="column6">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN6}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN6}
+                      </select></td>
+                   <td><select name="column7" id="column7">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN7}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN7}
+                      </select></td>
+                   <td><select name="column8" id="column8">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN8}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN8}
+			</select></td>
+		</tr>
+		<tr class="dvtCellLabel">
+		   <td><select name="column9" id="column9">
+                        <option value="">None</option>
+                        {foreach item=filteroption key=label from=$CHOOSECOLUMN9}
+                                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                                {foreach item=text from=$filteroption}
+                                     <option {$text.selected} value={$text.value}>{$text.text}</option>
+                                {/foreach}
+                        {/foreach}
+                        {$CHOOSECOLUMN9}
+                        </select></td>
+		     <td>&nbsp;</td>
+		     <td>&nbsp;</td>
+		     <td>&nbsp;</td>
+		</tr>	
+		{*section name=SelectColumn start=1 loop=4 step=1}
 		<tr class="{cycle values="dvtCellLabel,dvtCellInfo"}">
 		 {section name=Column start=1 loop=5 step=1}
 		<td align="center">
 		{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}.&nbsp;	
 		  <select id="column{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}" name ="column{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}" class="detailedViewTextBox">
 		   <option value="">None</option>
-		   {foreach item=filteroption key=label from=$BLOCK}
+		   {foreach item=filteroption key=label from={$CHOOSECOLUMN|cat: {math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}}}
 		    <optgroup label="{$label}" class=\"select\" style=\"border:none\">
 		    {foreach item=text from=$filteroption}
 		     <option {$text.selected} value={$text.value}>{$text.text}</option>
@@ -148,7 +248,7 @@ function mandatoryCheck()
 		 </td>
 		 {/section}
 	        </tr>
-		{/section}
+		{/section*}
 		<tr><td colspan="4">&nbsp;</td></tr>
 		<tr><td colspan="4"><table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
 		<tbody><tr>
@@ -185,8 +285,8 @@ function mandatoryCheck()
 			     <td width="25%" class="dvtCellInfo">
 				<select name="stdDateFilterField" class="select">
 				{foreach item=stdfilter from=$STDFILTERCOLUMNS}
-                                        <option {$stdfilter.selected} value={$stdfilter.value}>{$stdfilter.text}</option>
-                                {/foreach}
+					<option {$stdfilter.selected} value={$stdfilter.value}>{$stdfilter.text}</option>	
+				{/foreach}
                                 </select>
 			  </tr>
 			  <tr>
@@ -194,8 +294,8 @@ function mandatoryCheck()
 			     <td class="dvtCellInfo">
 			        <select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
 				{foreach item=duration from=$STDFILTERCRITERIA}
-                                        <option {$duration.selected} value={$duration.value}>{$duration.text}</option>
-                                {/foreach}
+					<option {$duration.selected} value={$duration.value}>{$duration.text}</option>
+				{/foreach}
 				</select>
 			     </td>
 			  </tr>
@@ -231,13 +331,100 @@ function mandatoryCheck()
        <tr><td>&nbsp;</td></tr>
        <tr><td class="dvtCellInfo">{$MOD.LBL_AF_HDR1}<br /><br />
 	<li style="margin-left:30px;">{$MOD.LBL_AF_HDR2}</li>
-	<li style="margin-left:30px;">{$MOD.LBL_AF_HDR2}</li>
+	<li style="margin-left:30px;">{$MOD.LBL_AF_HDR3}</li>
 	<br /><br />
        </td></tr>
        <tr><td>
 	<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
 	  <tr><td colspan="3" class="detailedViewHeader"><b>Rule</b></td></tr>
-	  {section name=advancedFilter start=1 loop=6 step=1}
+	  
+	  <tr class="dvtCellLabel">
+          <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
+              <option value="">None</option>
+              {foreach item=filteroption key=label from=$BLOCK1}
+                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                {foreach item=text from=$filteroption}
+                  <option {$text.selected} value={$text.value}>{$text.text}</option>
+                {/foreach}
+              {/foreach}
+              </select> &nbsp; <select name="fop1" id="fop1">
+              <option value="">None</option>
+              {foreach item=criteria from=$FOPTION1}
+                <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
+              {/foreach}
+              </select>&nbsp; <input name="fval1" id="fval1" type="text" size=30 maxlength=80 value="{$VALUE1}">
+            &nbsp;And</td>
+        </tr>
+	<tr class="dvtCellInfo">
+          <td><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
+              <option value="">None</option>
+              {foreach item=filteroption key=label from=$BLOCK2}
+                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                {foreach item=text from=$filteroption}
+                  <option {$text.selected} value={$text.value}>{$text.text}</option>
+                {/foreach}
+              {/foreach}
+              </select> &nbsp; <select name="fop2" id="fop2">
+              <option value="">None</option>
+              {foreach item=criteria from=$FOPTION2}
+                <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
+              {/foreach}
+              </select>&nbsp; <input name="fval2" id="fval2" type="text" size=30 maxlength=80 value="{$VALUE2}">
+            &nbsp;And</td>
+        </tr>
+	<tr class="dvtCellLabel">
+          <td><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
+              <option value="">None</option>
+              {foreach item=filteroption key=label from=$BLOCK3}
+                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                {foreach item=text from=$filteroption}
+                  <option {$text.selected} value={$text.value}>{$text.text}</option>
+                {/foreach}
+              {/foreach}
+              </select> &nbsp; <select name="fop3" id="fop3">
+              <option value="">None</option>
+              {foreach item=criteria from=$FOPTION3}
+                <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
+              {/foreach}
+              </select>&nbsp; <input name="fval3" id="fval3" type="text" size=30 maxlength=80 value="{$VALUE3}">
+            &nbsp;And</td>
+        </tr>
+	<tr class="dvtCellInfo">
+          <td><select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
+              <option value="">None</option>
+              {foreach item=filteroption key=label from=$BLOCK4}
+                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                {foreach item=text from=$filteroption}
+                  <option {$text.selected} value={$text.value}>{$text.text}</option>
+                {/foreach}
+              {/foreach}
+              </select> &nbsp; <select name="fop4" id="fop4">
+              <option value="">None</option>
+              {foreach item=criteria from=$FOPTION4}
+                <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
+              {/foreach}
+              </select>&nbsp; <input name="fval4" id="fval4" type="text" size=30 maxlength=80 value="{$VALUE4}">
+            &nbsp;And</td>
+        </tr>
+	<tr class="dvtCellLabel">
+          <td><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
+              <option value="">None</option>
+              {foreach item=filteroption key=label from=$BLOCK5}
+                <optgroup label="{$label}" class=\"select\" style=\"border:none\">
+                {foreach item=text from=$filteroption}
+                  <option {$text.selected} value={$text.value}>{$text.text}</option>
+                {/foreach}
+              {/foreach}
+              </select> &nbsp; <select name="fop5" id="fop5">
+              <option value="">None</option>
+              {foreach item=criteria from=$FOPTION5}
+                <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
+              {/foreach}
+              </select>&nbsp; <input name="fval5" id="fval5" type="text" size=30 maxlength=80 value="{$VALUE5}">
+            &nbsp;</td>
+        </tr>
+
+	  {*section name=advancedFilter start=1 loop=6 step=1}
 	  <tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 	    <td align="left" width="33%">
 	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol{$smarty.section.advancedFilter.index}" onchange="updatefOptions(this, 'fop{$smarty.section.advancedFilter.index}'); class="detailedViewTextBox">
@@ -251,7 +438,7 @@ function mandatoryCheck()
 	      </select>
 	    </td>
 	    <td align="left" width="33%">
-	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol1" class="detailedViewTextBox">
+	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol{$smarty.section.advancedFilter.index}" class="detailedViewTextBox">
 	      <option value="">None</option>
 	      {foreach item=criteria from=$FOPTION}
 		<option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
@@ -260,7 +447,7 @@ function mandatoryCheck()
 	    </td>
 	    <td width="34%" nowrap><input name="txt" value="" class="detailedViewTextBox" type="text"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/>&nbsp;And</td>
 	  </tr>
-	  {/section}
+	  {/section*}
 	</table>
        </td></tr>
        <tr><td>&nbsp;</td></tr>
@@ -273,8 +460,10 @@ function mandatoryCheck()
   <tr><td colspan="4" style="padding: 5px;">
 	<div align="center">
 	  <input title="Save [Alt+S]" accesskey="S" class="small"  name="button2" value="{$APP.LBL_SAVE_BUTTON_LABEL}" style="width: 70px;" type="submit" />
-	  <input title="Cancel [Alt+X]" accesskey="X" class="small" name="button2" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" style="width: 70px;" type="button" />
+	  <input title="Cancel [Alt+X]" accesskey="X" class="small" name="button2" onclick='window.history.back()' value="{$APP.LBL_CANCEL_BUTTON_LABEL}" style="width: 70px;" type="button" />
 	</div>
   </td></tr>
   <tr><td colspan="4">&nbsp;</td></tr>
 </table>
+{$STDFILTER_JAVASCRIPT}
+{$JAVASCRIPT}
