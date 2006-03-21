@@ -89,9 +89,5 @@ $smarty->assign("CONVERTMODE",'sotoinvoice');
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$focus));
 
 $smarty->display("DetailView.tpl");
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 
 ?>
