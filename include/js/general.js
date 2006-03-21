@@ -1211,6 +1211,7 @@ function fnDown(obj){
 * @param option_values :: List of Field names
 */
 var count = 0;
+var rowCnt = 1;
 function fnAddSrch(option_values,criteria_values){
 
     var tableName = document.getElementById('adSrc');
@@ -1359,6 +1360,7 @@ function fnvshNrm(Lay){
 // Add & Delete Row in a Table
 
 function fnAddRow(){
+	rowCnt++;
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
     var count = prev;
@@ -1376,15 +1378,17 @@ function fnAddRow(){
 	var colsix = row.insertCell(5);
 	var colseven = row.insertCell(6);
 	colone.innerHTML="<input type='text' name='txtProduct"+count+"' class='detailedViewProdTextBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this)' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
-	coltwo.innerHTML="&nbsp;";	
+	coltwo.innerHTML="<div id='qtyInStock"+count+"'>";	
 	colthree.innerHTML="<input type='text' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; calcTotal(this);' /> ";
-	colfour.innerHTML="&nbsp;<div id='qtyInStock"+count+"'></div><div id='unitPrice"+count+"'></div>";
+	colfour.innerHTML="&nbsp;</div><div id='unitPrice"+count+"'></div>";
 	colfive.innerHTML="<input type='text' name='txtListPrice"+count+"' class='detailedViewProdTextBox' readonly onBlur='calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
 	colsix.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
 	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
 }
 function fnAddRowForPO(){
+	rowCnt++;
+
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
 	var count = prev;
@@ -1401,9 +1405,9 @@ function fnAddRowForPO(){
 	var colfive = row.insertCell(4);
 	var colsix = row.insertCell(5);
 	colone.innerHTML="<input type='text' name='txtProduct"+count+"' class='detailedViewProdTextBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this)' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
-	coltwo.innerHTML="<input type='text' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; calcTotal(this);' /> ";
-	colthree.innerHTML="&nbsp;<div id='qtyInStock"+count+"'></div><div id='unitPrice"+count+"'></div>";
-	colfour.innerHTML="<input type='text' name='txtListPrice"+count+"' class='detailedViewProdTextBox' readonly onBlur='calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
+	coltwo.innerHTML="<input type='text' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; settotalnoofrows(); calcTotal(this);' /> ";
+	colthree.innerHTML="&nbsp;<div id='unitPrice"+count+"'></div>";
+	colfour.innerHTML="<input type='text' name='txtListPrice"+count+"' class='detailedViewProdTextBox' readonly onBlur='settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
 	colfive.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
 	colsix.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
@@ -1412,6 +1416,7 @@ function fnAddRowForPO(){
  
 function deleteRow(i)
 {
+	rowCnt--;
 	 document.getElementById('proTab').deleteRow(i);
 }
 
