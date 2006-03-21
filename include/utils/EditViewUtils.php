@@ -1218,7 +1218,6 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 	//retreive the tabid	
 	global $adb;
 	//$tabid = getTabid($module);
-	global $profile_id;
 	$editview_arr = Array();
 
 	global $current_user;
