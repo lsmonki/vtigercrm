@@ -1058,21 +1058,15 @@ function getDefOrgFieldList($fld_module)
 
 function getQuickCreate($tabid,$actionid)
 {
+	$module=getTabModuleName($tabid);
+	$actionname=getActionname($actionid);
         $QuickCreateForm= 'true';
 
-        $profile_id = $_SESSION['authenticated_user_profileid'];
-        $tab_per_Data = getAllTabsPermission($profile_id);
-
-        $permissionData = $_SESSION['action_permission_set'];
-
-        if($tab_per_Data[$tabid] !=0)
-        {
+	$perr=isPermitted($module,$actionname);
+	if($perr = 'no')
+	{
                 $QuickCreateForm= 'false';
-        }
-        if($permissionData[$tabid][1] !=0)
-        {
-                $QuickCreateForm= 'false';
-        }
+	}	
 	return $QuickCreateForm;
 
 }
