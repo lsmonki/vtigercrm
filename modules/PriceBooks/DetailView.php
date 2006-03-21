@@ -59,10 +59,6 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("NAME", $focus->name);
 
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $smarty->assign("MODULE", $module);
 $smarty->assign("SINGLE_MOD","PriceBook");
 $smarty->display("DetailView.tpl");
