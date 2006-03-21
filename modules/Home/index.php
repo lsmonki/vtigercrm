@@ -31,10 +31,6 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 $smarty = new vtigerCRM_Smarty;
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 
 $_REQUEST['search_form'] = 'false';
 $_REQUEST['query'] = 'true';
