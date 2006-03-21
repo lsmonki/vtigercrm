@@ -63,8 +63,4 @@ $smarty->assign("MODULE", $module);
 $smarty->assign("SINGLE_MOD","Vendor");
 $smarty->display("DetailView.tpl");
 
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
-
 ?>
