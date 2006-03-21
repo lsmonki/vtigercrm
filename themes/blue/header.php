@@ -85,6 +85,11 @@ $module_path="modules/".$currentModule."/";
 
 require_once('include/Menu.php');
 
+//Assign the entered global search string to a variable and display it again
+if($_REQUEST['query_string'] != '')
+	$smarty->assign("QUERY_STRING",$_REQUEST['query_string']);
+else
+	$smarty->assign("QUERY_STRING","Search...");
 
 global $module_menu;
 $smarty->display("Header.tpl");
