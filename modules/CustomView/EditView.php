@@ -48,18 +48,24 @@ if($recordid == "")
 	{
         	$choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist);
 	}
-        //step2
+	//step2
         $stdfilterhtml = $oCustomView->getStdFilterCriteria();
          $log->info('CustomView :: Successfully got StandardFilter for the module'.$cv_module);
 	$stdfiltercolhtml = getStdFilterHTML($cv_module);
         $stdfilterjs = $oCustomView->getCriteriaJS();
 
-        //step4
+	//step4
         $advfilterhtml = getAdvCriteriaHTML();
-	$smarty->assign("CHOOSECOLUMN",$choosecolhtml);
+	for($i=1;$i<10;$i++)
+        {
+                $smarty->assign("CHOOSECOLUMN".$i,$choosecolhtml);
+        }
 	$log->info('CustomView :: Successfully got AdvancedFilter for the module'.$cv_module);
-	$smarty->assign("FOPTION",$advfilterhtml);
-       	$smarty->assign("BLOCK",$choosecolhtml);
+	for($i=1;$i<6;$i++)
+        {
+                $smarty->assign("FOPTION".$i,$advfilterhtml);
+                $smarty->assign("BLOCK".$i,$choosecolhtml);
+        }
 
 	$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
 	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
@@ -112,8 +118,9 @@ else
         {
                 $advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
 		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
-		$smarty->assign("FOPTION",$advfilterhtml);
-                $smarty->assign("BLOCK",$advcolumnhtml);
+		$smarty->assign("FOPTION".$i,$advfilterhtml);
+                $smarty->assign("BLOCK".$i,$advcolumnhtml);
+		//echo '<pre>';print_r($advcolumnhtml);echo '</pre>';
 		$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
         }
 
@@ -142,12 +149,12 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
 	global $oCustomView;
 	global $app_list_strings;
-	$advfilter = array();	
+	$advfilter = array();
 	$mod_strings = return_module_language($current_language,$module);
 
 	foreach($oCustomView->module_list[$module] as $key=>$value)
         {
-	    $advfilter = array();
+	    $advfilter = array();			
 	    $label = $app_list_strings['moduleList'][$module]." ".$key;
 	    if(isset($columnslist[$module][$key]))
 	    {
@@ -158,26 +165,26 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 			    if($selected == $field)
 			    {
 				    $advfilter_option['value'] = $field;
-				    $advfilter_option['text'] = $mod_strings[$fieldlabel];
-				    $advfilter_option['selected'] = "selected";
+	                            $advfilter_option['text'] = $mod_strings[$fieldlabel];
+            		            $advfilter_option['selected'] = "selected";
 			    }else
 			    {
 				    $advfilter_option['value'] = $field;
-				    $advfilter_option['text'] = $mod_strings[$fieldlabel];
-				    $advfilter_option['selected'] = "";
+                                    $advfilter_option['text'] = $mod_strings[$fieldlabel];
+                                    $advfilter_option['selected'] = "";
 			    }
 		    }else
 		    {
 			    if($selected == $field)
 			    {
 				    $advfilter_option['value'] = $field;
-				    $advfilter_option['text'] = $fieldlabel;
-				    $advfilter_option['selected'] = "selected";
+                                    $advfilter_option['text'] = $fieldlabel;
+                                    $advfilter_option['selected'] = "selected";
 			    }else
 			    {
 				    $advfilter_option['value'] = $field;
-				    $advfilter_option['text'] = $fieldlabel;
-				    $advfilter_option['selected'] = "";
+                                    $advfilter_option['text'] = $fieldlabel;
+                                    $advfilter_option['selected'] = "";
 			    }
 		    }
 	    $advfilter[] = $advfilter_option;
@@ -206,11 +213,11 @@ function getStdFilterHTML($module,$selected="")
 			{
 			if($key == $selected)
                         {
-				$filter['value'] = $key;
-				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
-				$filter['selected'] = "selected";
+			       $filter['value'] = $key;
+			       $filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+			       $filter['selected'] = "selected";
                         }else
-                        {
+        	        {
 				$filter['value'] = $key;
 				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
 				$filter['selected'] ="";
@@ -220,13 +227,13 @@ function getStdFilterHTML($module,$selected="")
 			if($key == $selected)
                         {
 				$filter['value'] = $key;
-				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-				$filter['selected'] = 'selected';
+                                $filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+                                $filter['selected'] = 'selected';
                         }else
                         {
 				$filter['value'] = $key;
-				$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
-				$filter['selected'] ='';
+                                $filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+                                $filter['selected'] ='';
                         }
 			}
 			$stdfilter[]=$filter;
@@ -248,15 +255,15 @@ function getAdvCriteriaHTML($selected="")
                 if($selected == $key)
                 {
 			$advfilter_criteria['value'] = $key;
-			$advfilter_criteria['text'] = $value;
+			$advfilter_criteria['text'] = $value; 
 			$advfilter_criteria['selected'] = "selected";
                 }else
                 {
 			$advfilter_criteria['value'] = $key;
-			$advfilter_criteria['text'] = $value;
-			$advfilter_criteria['selected'] = "";
+                        $advfilter_criteria['text'] = $value;
+                        $advfilter_criteria['selected'] = "";
                 }
-         $AdvCriteria[] = $advfilter_criteria;
+	 $AdvCriteria[] = $advfilter_criteria;
          }
 
          return $AdvCriteria;
