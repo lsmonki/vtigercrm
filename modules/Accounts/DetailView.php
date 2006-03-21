@@ -94,11 +94,6 @@ if(isPermitted("Accounts",8,'') == 'yes')
 }
 
 
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
-
 $smarty->assign("MODULE","Accounts");
 $smarty->display("DetailView.tpl");
 ?>
