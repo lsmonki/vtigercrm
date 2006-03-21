@@ -1518,6 +1518,19 @@ border:1px solid #666666;
 	   text-align:center;
 }
 /*cloud css*/
+
+.statechange
+{
+	position:absolute;
+	visibility:hidden;
+	left:10px;
+	top:20px;
+	width:300px;
+	border:3px solid #CCCCCC;
+	background-color:#FFFFFF;
+}
+			    
+
 .cloudLft{
 	background-image:url(images/cloud_left_bdr.gif);
 	background-position:left top;
