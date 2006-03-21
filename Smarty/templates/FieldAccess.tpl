@@ -19,7 +19,11 @@
 		<form action="index.php" method="post" name="new" id="form">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="parenttab" value="Settings">
+		{if $MODE neq 'view'}
+		<input type="hidden" name="action" value="UpdateDefaultFieldLevelAccess">
+		{else}
 		<input type="hidden" name="action" value="EditDefOrgFieldLevelAccess">
+		{/if}	
 		<tbody><tr>
 		<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="7"><img src="{$IMAGE_PATH}top_left.jpg" align="top"></td>
 		<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif; height: 6px;" bgcolor="#ebebeb"></td>
