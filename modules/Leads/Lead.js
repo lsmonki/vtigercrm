@@ -216,7 +216,7 @@ function massMail()
         document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module=Leads&return_action=index&viewname="+viewid;
 }
 
-function changeStatus()
+function changeStatus(obj,divid)
 {
 	x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
@@ -255,9 +255,8 @@ function changeStatus()
 			alert("Please select atleast one entity");
 			return false;
 		}
-	}	
-
-	document.massdelete.action="index.php?module=Users&action=massChangeStatus&parenttab=Sales&viewname="+viewid;
+	}
+	fnvshobj(obj,divid);
 }
 
 //to merge to a list of leads

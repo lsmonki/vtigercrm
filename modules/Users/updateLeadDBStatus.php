@@ -11,13 +11,12 @@
  ********************************************************************************/
 
 
-
-
 require_once('include/database/PearDatabase.php');
 
-$idlist= $_POST['idlist'];
-$leadstatusval = $_POST['leadval'];
+$idlist= $_REQUEST['idlist'];
+$leadstatusval = $_REQUEST['leadval'];
 $idval=$_REQUEST['user_id'];
+$viewid = $_REQUEST['viewname'];
 global $current_user;
 global $adb;
 $storearray = explode(";",$idlist);
@@ -41,6 +40,6 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 		$result1 = $adb->query($query);
 	}
 }
-header("Location: index.php?module=Leads&action=index");
+header("Location: index.php?module=Leads&action=LeadsAjax&file=ListView&ajax=changestate&viewname=".$viewid);
 ?>
 

@@ -15,11 +15,11 @@
                                         {elseif $button_check eq 's_mail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
@@ -66,9 +66,9 @@
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}

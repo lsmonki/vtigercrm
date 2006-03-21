@@ -281,9 +281,9 @@ rBox">
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
@@ -330,9 +330,9 @@ rBox">
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
@@ -364,8 +364,95 @@ rBox">
    </tr>
 </table>
 <div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
-{if $MODULE eq 'Contacts'}
 
+{if $MODULE eq 'Leads'}
+
+<div id="changeowner" class="statechange">
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<tr>
+	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
+	<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changeowner')">Close</a></td>
+</tr>
+<tr>
+	<td colspan="3">&nbsp;</td>
+</tr>
+<tr>
+	<td width="50%"><b>Transfer Ownership to</b></td>
+	<td width="2%"><b>:</b></td>
+	<td width="48%">
+	<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
+	{$CHANGE_OWNER}
+	</select>
+	</td>
+</tr>
+<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+<tr>
+	<td colspan="3" align="center">
+	&nbsp;&nbsp;
+	<input type="button" name="button" class="small" value="Update Owner" onClick="ajaxChangeStatus('owner')">
+</td>
+</tr>
+</table>
+</div>
+
+
+<div id="changestatus" class="statechange">
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+<tr>
+	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Status Information</td>
+	<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
+	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('changestatus')">Close</a></td>
+</tr>
+<tr>
+	<td colspan="3">&nbsp;</td>
+</tr>
+<tr>
+	<td width="50%"><b>Select New Status</b></td>
+	<td width="2%"><b>:</b></td>
+	<td width="48%">
+	<select name="lead_status" id="lead_status" class="detailedViewTextBox">
+	{$CHANGE_STATUS}
+	</select>
+	</td>
+</tr>
+<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+<tr>
+	<td colspan="3" align="center">
+	&nbsp;&nbsp;
+	<input type="button" name="button" class="small" value="Update Status" onClick="ajaxChangeStatus('status')">
+</td>
+</tr>
+</table>
+</div>
+<script>
+{literal}
+function ajaxChangeStatus(statusname)
+{
+	fninvsh('changestatus');
+	fninvsh('changeowner');
+	show("status");
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var viewid = document.massdelete.viewname.value;
+	var idstring = document.massdelete.idlist.value;
+	if(statusname == 'status')
+	{
+		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
+	}
+	else if(statusname == 'owner')
+	{
+		var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+	}
+	
+	
+	var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+url+"&viewname="+viewid+"&idlist="+idstring;
+	ajaxObj.process("index.php?",urlstring);
+}
+</script>
+{/literal}
+{/if}
+
+{if $MODULE eq 'Contacts'}
 {literal}
 <script>
 function modifyimage(divid,imagename)

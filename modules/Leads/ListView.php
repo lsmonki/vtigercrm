@@ -67,6 +67,18 @@ $_SESSION['LEADS_ORDER_BY'] = $order_by;
 $_SESSION['LEADS_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
+//for change owner and change status
+$change_status = get_select_options_with_id($comboFieldArray['leadstatus_dom'], $focus->lead_status);
+$smarty->assign("CHANGE_STATUS",$change_status);
+$result=$adb->query("select * from users");
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+       $useridlist[$i]=$adb->query_result($result,$i,'id');
+       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
+}
+$change_owner = get_select_options_with_id($usernamelist, $focus->lead_owner);
+$smarty->assign("CHANGE_OWNER",$change_owner);
+	
 
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')

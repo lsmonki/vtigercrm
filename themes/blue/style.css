@@ -1517,4 +1517,29 @@ padding:5px;
 border:1px solid #666666;
 	   text-align:center;
 }
+/*cloud css*/
+.cloudLft{
+	background-image:url(images/cloud_left_bdr.gif);
+	background-position:left top;
+	background-repeat:repeat-y;
+}
 
+.cloudRht{
+	background-image:url(images/cloud_right_bdr.gif);
+	background-position:right top;
+	background-repeat:repeat-y;
+}
+
+a.tagit{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	color:#000066;
+	text-decoration:none;
+}
+
+a.tagit:hover{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	color:#FFFFFF;
+	text-decoration:none;
+	background-color:#000066;
+	opacity:.7;
+}
