@@ -133,7 +133,7 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 This Configuration Wizard will create vtiger CRM 5.0 Alpha2 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, PHP 4.3.8 and Apache 2.0.40.vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
+				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 4.3.8 and Apache 2.0.40. vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
 				<br></span>
 <br>
 		</td>
