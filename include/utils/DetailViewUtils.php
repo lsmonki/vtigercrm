@@ -849,10 +849,10 @@ function getDetailAssociatedProducts($module,$focus)
 function getRelatedLists($module,$focus)
 {
 	global $adb;
-	global $profile_id;
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	
 	$mod_dir_name=getModuleDirName($module);
-	$tab_per_Data = getAllTabsPermission($profile_id);
-	$permissionData = $_SESSION['action_permission_set'];
 	$cur_tab_id = getTabid($module);
 
 	$sql1 = "select * from relatedlists where tabid=".$cur_tab_id;
@@ -861,13 +861,16 @@ function getRelatedLists($module,$focus)
 	for($i=0; $i<$num_row; $i++)
 	{
 		$rel_tab_id = $adb->query_result($result,$i,"related_tabid");
+		echo '<BR>'.$rel_tab_id.'<BR>';
 		$funtion_name = $adb->query_result($result,$i,"name");
+		echo '<BR>'.$funtion_name.'<BR>';
 		$label = $adb->query_result($result,$i,"label");
 		if($rel_tab_id != 0)
 		{
-			if($tab_per_Data[$rel_tab_id] == 0)
+
+			if($profileTabsPermission[$rel_tab_id] == 0)
 			{
-		        	if($permissionData[$rel_tab_id][3] == 0)
+		        	if($profileActionPermission[$rel_tab_id][3] == 0)
         			{
 		                	$focus_list[$label] = $focus->$funtion_name($focus->id);
         			}
@@ -887,7 +890,6 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 	//retreive the tabid	
 	global $adb;
 	#$tabid = getTabid($module);
-        global $profile_id;
 	global $current_user;
 	$label_data = Array();
 
