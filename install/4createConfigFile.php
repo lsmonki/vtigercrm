@@ -50,7 +50,12 @@ $vtiger_version = "5.0 Beta";
 $release_date = "31 March 2006";
 
 
-if (isset($_REQUEST['db_hostname'])) 	$db_hostname = 	$_REQUEST['db_hostname'];
+if (isset($_REQUEST['db_hostname'])) 	list($db_hostname,$db_port) = 	split(":",$_REQUEST['db_hostname']);
+
+// update default mysql port if not 
+// provided, to be removed latter
+if ($db_port == "")
+$db_port = "3306";
 
 if (isset($_REQUEST['db_username'])) 	$db_username = 	$_REQUEST['db_username'];
 
@@ -163,7 +168,7 @@ $cache_dir = 'cache/';
 
 				      /* replace _DBC_ variable */
 				      $buffer = str_replace( "_DBC_SERVER_", $db_hostname, $buffer);
-				      $buffer = str_replace( "_DBC_PORT_", "3306", $buffer);
+				      $buffer = str_replace( "_DBC_PORT_", $db_port, $buffer);
 				      $buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
 				      $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
 				      $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
