@@ -402,7 +402,7 @@
 								<td >
 								<select class=small style="width:100%" name="mergefile">
 									<option>Select template...</option>
-									{html_options options=$TOPTIONS name=merge_option}
+									{html_options options=$TOPTIONS}
 								</select>
 								</td>
 								</tr>
