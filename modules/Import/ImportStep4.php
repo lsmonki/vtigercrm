@@ -89,7 +89,7 @@ if ( isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on')
 {
 	$has_header = 1;
 }
-if($_REQUEST['modulename'] != '')
+if(isset( $_REQUEST['modulename']) && $_REQUEST['modulename'] != '')
 	$_REQUEST['module'] = $_REQUEST['modulename'];
 
 if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
@@ -239,23 +239,21 @@ if($xrows != '')
 {
 	$datarows = $xrows;
 }
-if($_REQUEST['skipped_record_count'] != '')
+if(isset($_SESSION['skipped_record_count']) && $_REQUEST['skipped_record_count'] != '')
 	$skipped_record_count = $_REQUEST['skipped_record_count'];
 else
 	$_REQUEST['skipped_record_count'] = 0;
 
-if($_REQUEST['noofrows'] != '')
+if(isset($_REQUEST['noofrows']) && $_REQUEST['noofrows'] != '')
 	$totalnoofrows = $_REQUEST['noofrows'];
 else
 	$totalnoofrows = count($datarows);
 
-$loopcount = ($totalnoofrows/$RECORDCOUNT)+1;
-
-if($_REQUEST['startval'] != '')
+if(isset($_REQUEST['startval']) && $_REQUEST['startval'] != '')
 	$START = $_REQUEST['startval'];
 else
 	$START = $_SESSION['startval'];
-if($_REQUEST['recordcount'] != '')
+if(isset($_REQUEST['recordcount']) && $_REQUEST['recordcount'] != '')
 	$RECORDCOUNT = $_REQUEST['recordcount'];
 else
 	$RECORDCOUNT = $_SESSION['recordcount'];
