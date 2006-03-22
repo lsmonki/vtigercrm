@@ -555,7 +555,7 @@ class CRMEntity extends SugarBean
 		  {
 			  $fldvalue = '';
 		  }
-		  if($fldvalue=='') $fldvalue ="''";
+		  if($fldvalue=='') $fldvalue ="NULL";
 		  if($insertion_mode == 'edit')
 		  {
 			  //code by richie starts
