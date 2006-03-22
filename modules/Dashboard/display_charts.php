@@ -455,12 +455,8 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     
                     }
-		    else
-		    {
-			echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
-		    }
                     // To display the charts  for Lead status                   
-                    if ($type == "leadstatus")
+                    elseif (($type == "leadstatus")&& (getFieldVisibilityPermission('Leads',$user_id,'leadstatus') == "0"))
                     {
                     	$graph_by="leadstatus";
                     	$graph_title="Leads By Status";
@@ -470,7 +466,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Lead Industry
-                    if($type == "leadindustry")
+                    elseif (($type == "leadindustry") && (getFieldVisibilityPermission('Leads',$user_id,'industry') == "0"))
                     {
                     	$graph_by="industry";
                             $graph_title="Leads By Industry";
@@ -480,7 +476,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Lead Source
-                    if($type == "salesbyleadsource")
+                    elseif (($type == "salesbyleadsource")&& (getFieldVisibilityPermission('Potentials',$user_id,'leadsource') == "0"))
                     {
                             $graph_by="leadsource";
                             $graph_title="Sales by LeadSource";
@@ -490,7 +486,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Account
-                    if($type == "salesbyaccount")
+                    elseif (($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'account_id') == "0"))
                     {
                     	$graph_by="accountid";
                          $graph_title="Sales by Accounts";
@@ -500,7 +496,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                          echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Account by Industry
-                    if($type == "accountindustry")
+                    elseif (($type == "accountindustry") && (getFieldVisibilityPermission('Accounts',$user_id,'industry') == "0"))
                     {
                     	$graph_by="industry";
                             $graph_title="Account By Industry";
@@ -510,7 +506,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Products by Category
-                    if($type == "productcategory")
+                    elseif (($type == "productcategory") && (getFieldVisibilityPermission('Products',$user_id,'productcategory') == "0"))
                     {
                     	$graph_by="productcategory";
                             $graph_title="Products by Category";
@@ -520,7 +516,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     // Sales Order by Accounts
-                    if($type == "sobyaccounts")
+                    elseif (($type == "sobyaccounts") && (getFieldVisibilityPermission('SalesOrder',$user_id,'account_id') == "0"))
                     {
                     	$graph_by="accountid";
                             $graph_title="Sales Order by Accounts";
@@ -530,7 +526,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales Order by Status
-                    if($type == "sobystatus")
+                    elseif (($type == "sobystatus") && (getFieldVisibilityPermission('SalesOrder',$user_id,'sostatus') == "0"))
                     {
                             $graph_by="sostatus";
                             $graph_title="Sales Order by Status";
@@ -540,7 +536,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Purchase Order by Status
-                    if($type == "pobystatus")
+                    elseif (($type == "pobystatus") && (getFieldVisibilityPermission('PurchaseOrder',$user_id,'postatus') == "0"))
                     {
                             $graph_by="postatus";
                             $graph_title="Purchase Order by Status";
@@ -550,7 +546,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Quotes by Accounts
-                    if($type == "quotesbyaccounts")
+                    elseif (($type == "quotesbyaccounts") && (getFieldVisibilityPermission('Quotes',$user_id,'account_id') == "0"))
                     {
                             $graph_by="accountid";
                             $graph_title="Quotes by Accounts";
@@ -560,7 +556,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Quotes by Stage
-                    if($type == "quotesbystage")
+                    elseif (($type == "quotesbystage") && (getFieldVisibilityPermission('Quotes',$user_id,'quotestage') == "0"))
                     {
                             $graph_by="quotestage";
                             $graph_title="Quotes by Stage";
@@ -570,7 +566,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Invoice by Accounts
-                    if($type == "invoicebyacnts")
+                    elseif (($type == "invoicebyacnts") && (getFieldVisibilityPermission('Invoice',$user_id,'account_id') == "0"))
                     {
                             $graph_by="accountid";
                             $graph_title="Invoices by Accounts";
@@ -580,7 +576,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Invoices by status
-                    if($type == "invoicebystatus")
+                    elseif (($type == "invoicebystatus") && (getFieldVisibilityPermission('Invoice',$user_id,'invoicestatus') == "0"))
                     {
                             $graph_by="invoicestatus";
                             $graph_title="Invoices by status";
@@ -590,7 +586,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Status
-                    if($type == "ticketsbystatus")
+                    elseif (($type == "ticketsbystatus") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketstatus') == "0"))
                     {
                             $graph_by="ticketstatus";
                             $graph_title="Tickets by status";
@@ -600,7 +596,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Priority
-                    if($type == "ticketsbypriority")
+                    elseif (($type == "ticketsbypriority") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketpriorities') == "0"))
                     {
                             $graph_by="priority";
                             $graph_title="Tickets by Priority";
@@ -609,6 +605,11 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             $query=$helpdesk_query;
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
+		    else
+                    {
+                        echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+                    }
+
 				?>
 
 			</table>
