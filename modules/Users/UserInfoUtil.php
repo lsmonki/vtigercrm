@@ -571,6 +571,7 @@ function updateActivityGroupRelation($activityid,$groupname)
 	global $adb;
   $sqldelete = "delete from activitygrouprelation where activityid=".$activityid;
   $adb->query($sqldelete);
+  if($groupname == '') return;
   $sql = "insert into activitygrouprelation values (".$activityid .",'" .$groupname ."')";  
   $adb->query($sql);
 
