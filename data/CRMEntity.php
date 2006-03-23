@@ -676,6 +676,8 @@ $vtlog->logthis("module is =".$module,'info');
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
 		  $groupname = $_REQUEST['assigned_group_name'];
+		if (isset($_REQUEST['assigntype']))
+		{
 		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
 		  {
 			  if($table_name == 'leaddetails')
@@ -691,7 +693,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  {
 			  insert2TicketGroupRelation($this->id,$groupname);
 		  }
-
+		}
 	  }
 
   }
