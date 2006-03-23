@@ -17,6 +17,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+if (is_file('../install_lock')) {
+    header("Location: ../index.php");
+    exit();
+}
+
 // TODO: deprecate connection.php file
 //require_once("connection.php");
 

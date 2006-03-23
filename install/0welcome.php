@@ -17,6 +17,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+if (is_file('../install_lock')) {
+    header("Location: ../index.php");
+    exit();
+}
+
 //get php configuration settings. requires elaborate parsing of phpinfo() output
 ob_start();
 phpinfo(INFO_GENERAL);

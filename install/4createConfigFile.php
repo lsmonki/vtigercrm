@@ -19,6 +19,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+if (is_file('../install_lock')) {
+    header("Location: ../index.php");
+    exit();
+}
+
 require_once('include/utils.php');
 include('vtigerversion.php');
 
