@@ -687,6 +687,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
 		  $groupname = $_REQUEST['assigned_group_name'];
+		//Fix ref to undefined variable during lead import -mikefedyk
 		if (isset($_REQUEST['assigntype']))
 		{
 		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
