@@ -294,7 +294,7 @@ function getCustomFieldArray($module)
 	
 }
 
-function getCustomFieldTrans($module, $trans_array)
+function getCustomFieldTrans($module, &$trans_array)
 {
 	global $adb;
 	$tab_id = getTabid($module);	
