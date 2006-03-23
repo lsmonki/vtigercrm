@@ -18,7 +18,8 @@ function getHiddenValues($id)
 	$hidden .= '<input type="hidden" name="module">';
 	$hidden .= '<input type="hidden" name="mode">';
 	$hidden .= '<input type="hidden" name="potential_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="contact_id" value="'.$id.'">';
+	//2-21-06 arodes - removed contact_id value = $id since the id passed in is not a contact id value
+	$hidden .= '<input type="hidden" name="contact_id" value="">';
 	$hidden .= '<input type="hidden" name="return_module" value="Potentials">';
 	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
 	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';

@@ -53,6 +53,12 @@ foreach($focus->column_fields as $fieldname => $val)
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
+	$match = stristr($fieldname,'id'); 	// adding this to try and set only foreign keys. 
+	if(empty($value) && $match != '0') 	// we dont want ALL blank values set to null
+		{ 
+		$value = 'null';
+		} 
+	
 		//echo '<BR>';
 		//echo $fieldname."         ".$value;
 		//echo '<BR>';
