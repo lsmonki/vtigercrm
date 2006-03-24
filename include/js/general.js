@@ -1379,9 +1379,9 @@ function fnAddRow(){
 	var colseven = row.insertCell(6);
 	colone.innerHTML="<input type='text' name='txtProduct"+count+"' class='detailedViewProdTextBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this)' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
 	coltwo.innerHTML="<div id='qtyInStock"+count+"'>";	
-	colthree.innerHTML="<input type='text' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; calcTotal(this);' /> ";
+	colthree.innerHTML="<input type='text' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; settotalnoofrows(); calcTotal(this);' /> ";
 	colfour.innerHTML="&nbsp;</div><div id='unitPrice"+count+"'></div>";
-	colfive.innerHTML="<input type='text' name='txtListPrice"+count+"' class='detailedViewProdTextBox' readonly onBlur='calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
+	colfive.innerHTML="<input type='text' name='txtListPrice"+count+"' class='detailedViewProdTextBox' readonly onBlur='settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
 	colsix.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
 	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
