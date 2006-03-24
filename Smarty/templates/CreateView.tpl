@@ -296,6 +296,19 @@ function sensex_info()
 								{/foreach}
 							   </select>
 							</td>
+							{elseif $uitype eq 33}
+                                                        <td width="20%" class="dvtCellLabel" align=right>
+                                                                {$fldlabel}
+                                                        </td>
+                                                        <td width="30%" align=left class="dvtCellInfo">
+                                                           <select MULTIPLE name="{$fldname}" size="2">
+                                                                {foreach item=arr from=$fldvalue}
+                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                <option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                                                        {/foreach}
+                                                                {/foreach}
+                                                           </select>
+                                                        </td>
 
 							{elseif $uitype eq 53}
                                                         <td width="20%" class="dvtCellLabel" align=right>
