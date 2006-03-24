@@ -94,7 +94,8 @@ $smarty->assign("SINGLE_MOD","Product");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("ROWCOUNT", getImageCount($focus->id));
+if($focus->id != '')
+	$smarty->assign("ROWCOUNT", getImageCount($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
