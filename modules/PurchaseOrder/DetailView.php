@@ -82,6 +82,10 @@ if(isPermitted("PurchaseOrder",2,$_REQUEST['record']) == 'yes')
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
+
+//Get the associated Products and then display above Terms and Conditions
+$smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('PurchaseOrder',$focus));
+
 $smarty->display("DetailView.tpl");
 
 
