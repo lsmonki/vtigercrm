@@ -173,6 +173,110 @@ function sensex_info()
                                                            {assign var="secondvalue" value="$maindata[3][1]"}
 
 
+
+<!-- Added to display the Product Details -->
+				{if $header eq 'Product Details'}
+					   <tr>
+						<td colspan=4>
+							<table class="prdTab"  border="0" cellspacing="0" cellpadding="2" id="proTab">
+			                                   <tr>
+			                                	<th width="20%"><font color='red'>*</font>Product</th>
+
+								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+									<th width="12%">Qty In Stock</th>
+								{/if}
+
+                        			                <th width="10%"><font color='red'>*</font>Qty</th>
+                                        			<th width="10%">Unit Price </th>
+                                        			<th width="19%"><font color='red'>*</font>List Price</th>
+                                        			<th width="10%">Total</th>
+
+			                                        <th width="5%">&nbsp;</th>
+							   </tr>
+
+					{foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS.1}
+						{assign var="txtProduct" value="txtProduct"|cat:$row_no}
+						{assign var="qtyInStock" value="qtyInStock"|cat:$row_no}
+						{assign var="txtQty" value="txtQty"|cat:$row_no}
+						{assign var="unitPrice" value="unitPrice"|cat:$row_no}
+						{assign var="txtListPrice" value="txtListPrice"|cat:$row_no}
+						{assign var="total" value="total"|cat:$row_no}
+						{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
+						{assign var="hdnRowStatus" value="hdnRowStatus"|cat:$row_no}
+						{assign var="hdnTotal" value="hdnTotal"|cat:$row_no}
+
+                                      			   <tr id="row1" class="dvtCellLabel">
+			                                   	<td nowrap><input type="text" name="{$txtProduct}" value="{$data.$txtProduct}" class="detailedViewProdTextBox" readonly />&nbsp;<img src="themes/blue/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this)" /></td>
+
+								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+									<td style="padding:3px;"><div id="{$qtyInStock}">{$data.$qtyInStock}</div>&nbsp;</td>
+								{/if}
+
+                        			                <td><input type="text" name="{$txtQty}" value="{$data.$txtQty}" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(this)" /></td>
+                                        			<td style="padding:3px;"><div id="{$unitPrice}">{$data.$unitPrice}</div>&nbsp;</td>
+			                                        <td nowrap><input type="text" name="{$txtListPrice}" value="{$data.$txtListPrice}" class="detailedViewProdTextBox" readonly onBlur="settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" /></td>
+                        			                <td style="padding:3px;"><div id="{$total}" align="right">{$data.$total}</div>&nbsp;</td>
+                                        			<td>
+									<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
+									<input type="hidden" id="{$hdnRowStatus}" name="{$hdnRowStatus}">
+									<input type="hidden" id="{$hdnTotal}" name="{$hdnTotal}" value="{$data.$hdnTotal}">&nbsp;
+								</td>
+                                      			   </tr>
+					{/foreach}
+							</table>
+						</td>
+					   </tr>
+					   <tr>
+						<td colspan=4>
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  							   <tr>
+
+							   {if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+								<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRow();" /></td>
+							   {else}
+								<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRowForPO();" /></td>
+							   {/if}
+
+								<td width="35%">&nbsp;</td>
+								<td style="text-align:right;padding:5px;"><b>Sub Total</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="subTotal" value="{$SUBTOTAL}"  class="detailedViewTextBox" readonly/></td>
+
+								<td width="5%">&nbsp;</td>
+							   </tr>
+							   <tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+    								<td style="text-align:right;padding:5px;"><b>Tax</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="txtTax" id="txtTax" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBox'" value="{$TAXVALUE}" onblur="calcGrandTotal()" /></td>
+							        <td>&nbsp;</td>
+
+  							   </tr>
+  							   <tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td style="text-align:right;padding:5px;"><b>Adjusment</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="txtAdjustment" id="txtAdjustment" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBox'" value="{$ADJUSTMENTVALUE}" onblur="calcGrandTotal()" /></td>
+								<td>&nbsp;</td>
+							   </tr>
+							   <tr>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td style="text-align:right;padding:5px;"><b>Grand Total</b></td>
+								<td style="text-align:left;padding:5px;"><input type="text" name="grandTotal"  value="{$GRANDTOTAL}" class="detailedViewTextBox"  readonly /></td>
+								<td>&nbsp;</td>
+							   </tr>
+							</table>
+							<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{$SUBTOTAL}">
+							<input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{$GRANDTOTAL}">
+							<input type="hidden" name="totalProductCount" id="totalProductCount" value="{$row_no}">
+						</td>
+					   </tr>
+				{/if}
+<!-- Upto this Added to display the Product Details -->
+
+
+
+
 							{if $uitype eq 2}
 							<td width=20% class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
