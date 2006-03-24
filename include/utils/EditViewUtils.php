@@ -105,7 +105,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$fieldvalue[] = array($date_format=>$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']);
 		}
 	}
-	elseif($uitype == 15 || $uitype == 16)
+	elseif($uitype == 15 || $uitype == 16 || $uitype == 33)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from ".$fieldname;
