@@ -31,14 +31,6 @@ function splitValues() {
 				break;
 			}
 		}
-/*		while(pickListContent.indexOf("\n")!=-1) {
-			if (pickListContent.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0) {
-				pickListAry[i]=pickListContent.substr(0,pickListContent.indexOf("\n")).replace(/^\s+/g, '').replace(/\s+$/g, '')
-				pickListContent=pickListContent.substr(pickListContent.indexOf("\n")+1,pickListContent.length)
-				i++
-			} else break;
-		}
-*/
 	} else if (pickListContent.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0) {
 		pickListAry[0]=pickListContent.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	}
@@ -115,8 +107,8 @@ function validate() {
 }
 </script>
 <script language="JavaScript" type="text/javaScript">
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea')
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea')
+var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo')
+var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo')
 var currFieldIdx=0,totFieldType;
 function init() {
 	lengthLayer=getObj("lengthdetails")
@@ -186,7 +178,7 @@ function selFieldType(id,scrollLayer,bool) {
 		lengthLayer.style.display="block"
 		decimalLayer.style.display="block"
 		pickListLayer.style.display="none"
-	} else if (type=='picklist') {
+	} else if (type=='picklist' || type=='multiselectcombo') {
 		lengthLayer.style.display="none"
 		decimalLayer.style.display="none"
 		pickListLayer.style.display="block"
@@ -259,7 +251,10 @@ function resetFieldTypeHilite() {
 <body onClick="resetFieldTypeHilite()">
 <form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
 <input type="hidden" name="module" value="Settings">
+<input type="hidden" name="parenttab" value="Settings">
 <input type="hidden" name="action" value="AddCustomFieldToDB">
+<input type="hidden" name="fieldid" value="{FLDID}">
+<input type="hidden" name="column" value="{COLUMN}">
 <div class="error">	<BR> {DUPLICATE_ERROR} </div>
 <div align="right" style="width:90%"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
 <table width="90%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
@@ -328,7 +323,7 @@ function resetFieldTypeHilite() {
 <script type="text/javascript">
 function testing()
 {
-	document.location.href="index.php?module=Settings&action=CustomFieldList&fld_module="+document.addtodb.fld_module.value	
+	document.location.href="index.php?module=Settings&action=CustomFieldList&fld_module="+document.addtodb.fld_module.value+"&parenttab=Settings"	
 }
 </script>
 <!-- END: main -->
