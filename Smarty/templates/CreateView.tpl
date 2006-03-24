@@ -183,9 +183,11 @@ function sensex_info()
 							  <table class="prdTab"  border="0" cellspacing="0" cellpadding="2" id="proTab">
 			                                      <tr>
 			                                        <th width="20%"><font color='red'>*</font>Product</th>
+
 								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 									<th width="12%">Qty In Stock</th>
 								{/if}
+
                         			                <th width="10%"><font color='red'>*</font>Qty</th>
                                         			<th width="10%">Unit Price </th>
                                         			<th width="19%"><font color='red'>*</font>List Price</th>
@@ -195,12 +197,14 @@ function sensex_info()
                         			              </tr>
                                       			      <tr id="row1" class="dvtCellLabel">
 			                                        <td nowrap><input type="text" name="txtProduct1" class="detailedViewProdTextBox" readonly />&nbsp;<img src="themes/blue/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this)" /></td>
+
 								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-								<td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>
+									<td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>
 								{/if}
-                        			                <td><input type="text" name="txtQty1" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onBlur="calcTotal(this)" /></td>
+
+                        			                <td><input type="text" name="txtQty1" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(this)" /></td>
                                         			<td style="padding:3px;"><div id="unitPrice1"></div>&nbsp;</td>
-			                                        <td nowrap><input type="text" name="txtListPrice1" class="detailedViewProdTextBox" readonly/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" /></td>
+			                                        <td nowrap><input type="text" name="txtListPrice1" class="detailedViewProdTextBox" readonly onBlur="settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" /></td>
                         			                <td style="padding:3px;"><div id="total1" align="right"></div>&nbsp;</td>
                                         			<td><input type="hidden" id="hdnProductId1" name="hdnProductId1"><input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1"><input type="hidden" id="hdnTotal1" name="hdnTotal1">&nbsp;</td>
 
@@ -209,11 +213,13 @@ function sensex_info()
 								<tr><td colspan=4>
 							     <table width="100%" border="0" cellspacing="0" cellpadding="0">
   								<tr>
+
 								{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
 									<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRow();" /></td>
 									{else}
 										<td><input type="button" name="Button" class="small" value="Add Product" onclick="fnAddRowForPO();" /></td>
 								{/if}
+
 								<td width="35%">&nbsp;</td>
 								<td style="text-align:right;padding:5px;"><b>Sub Total</b></td>
 								<td style="text-align:left;padding:5px;"><input type="text" name="subTotal"  class="detailedViewTextBox" readonly/></td>
