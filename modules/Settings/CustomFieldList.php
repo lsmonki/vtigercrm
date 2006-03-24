@@ -21,6 +21,8 @@ echo '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
 echo '<form action="index.php" method="post" name="new" id="form">';
 echo '<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">';
 echo '<input type="hidden" name="module" value="Settings">';
+echo '<input type="hidden" name="parenttab" value="Settings">';
+echo '<input type="hidden" name="mode">';
 echo '<input type="hidden" name="action" value="CreateCustomField">';
 echo '<tr><br>';
 echo '<td><input title="'.$mod_strings['`'].'" accessKey="C" class="button" type="submit" name="NewCustomField" value="'.$mod_strings['NewCustomField'].'"></td>';
@@ -37,7 +39,6 @@ echo '<br>';
 
 function fetchTabIDVal($fldmodule)
 {
-
   global $adb;
   $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
   $tabidresult = $adb->query($query);
@@ -45,7 +46,6 @@ function fetchTabIDVal($fldmodule)
 }
 
 $tabid = fetchTabIDVal($_REQUEST['fld_module']);
-
 $fld_module = $_REQUEST['fld_module'];
 
 echo getCustomFieldList($tabid,$mod_strings,$fld_module);
@@ -100,6 +100,8 @@ $trowclass = 'oddListRow';
 	$list .= '<td height="21" style="padding:0px 3px 0px 3px;"><div>';
 
 	 $list .= '<a href="javascript:deleteCustomField('.$row["fieldid"].',\''.$fld_module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')">'.$mod_strings['Delete'].'</a>'; 
+	$list .=' | <a href="index.php?module=Settings&action=CreateCustomField&fieldid='.$row["fieldid"].'&tabid='.$tabid.'&uitype='.$row["uitype"].'&fld_module='.$fld_module.'&parenttab=Settings">'.$mod_strings['Edit'].'</a>';
+	
 
 	$list .= '</div></td>';
 
