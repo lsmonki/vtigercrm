@@ -9,20 +9,11 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('adodb/adodb.php');
 
 $fldmodule=$_REQUEST['fld_module'];
  $fldlabel=$_REQUEST['fldLabel'];
  $fldType= $_REQUEST['fieldType'];
-
-/*
-
-echo 'module is  ' .$fldmodule;
-echo 'label is    '. $fldlabel;
-echo 'field type is  ' .$fldType;
-
-*/
-
+ $parenttab=$_REQUEST['parenttab'];
 
 function fetchTabIDVal($fldmodule)
 {
@@ -74,30 +65,22 @@ if($adb->num_rows($checkresult) != 0)
 		$fldPickList='';
 	}
 	
-	header("Location:index.php?module=Settings&action=CreateCustomField&fld_module=".$fldmodule."&fldType=".$fldType."&fldlabel=".$fldlabel."&fldlength=".$fldlength."&flddecimal=".$flddecimal."&fldPickList=".$fldPickList."&duplicate=yes");
+	header("Location:index.php?module=Settings&action=CreateCustomField&fld_module=".$fldmodule."&fldType=".$fldType."&fldlabel=".$fldlabel."&fldlength=".$fldlength."&flddecimal=".$flddecimal."&fldPickList=".$fldPickList."&parenttab=".$parenttab."&duplicate=yes");
 
 }
 else
 {
-  /*
-	//Creating the ColumnName
-  $sql = "select max(fieldid) fieldid from customfields";
-	$result = $adb->query($sql);
-	if($adb->num_rows($result) != 0)
+	if($_REQUEST['fieldid'] == '')
 	{
-		$row = $adb->fetch_array($result);
-		$max_fieldid = $row["fieldid"];
-		$max_fieldid++;
+		$max_fieldid = $adb->getUniqueID("field");
+		$columnName = 'cf_'.$max_fieldid;
 	}
 	else
 	{
-		$max_fieldid = "1";
+		$max_fieldid = $_REQUEST['column'];
+		$columnName = $max_fieldid;
 	}
-  */
   
-  $max_fieldid = $adb->getUniqueID("field");
-  
-	$columnName = 'cf_'.$max_fieldid;
 	//Assigning the table Name
 	$tableName ='';
 	if($fldmodule == 'Leads')
@@ -168,14 +151,12 @@ else
 	{
 	$uichekdata='V~O~LE~'.$fldlength;
 		$uitype = 1;
-		//$type = "varchar(".$fldlength.")";
 		$type = "C(".$fldlength.")"; // adodb type
 	}
 	elseif($fldType == 'Number')
 	{
 		$uitype = 7;
 
-		//$type="double(".$fldlength.",".$decimal.")";	
 		//this may sound ridiculous passing decimal but that is the way adodb wants
 		$dbfldlength = $fldlength + $decimal + 1;
  
@@ -185,14 +166,12 @@ else
 	elseif($fldType == 'Percent')
 	{
 		$uitype = 9;
-		//$type="double(".$fldlength.",".$decimal.")";
 		$type="N(5.2)"; //adodb type
 		$uichekdata='N~O~2~2';
 	}
 	elseif($fldType == 'Currency')
 	{
 		$uitype = 71;
-		//$type="double(".$fldlength.",".$decimal.")";
 		$dbfldlength = $fldlength + $decimal + 1;
 		$type="N(".$dbfldlength.".".$decimal.")"; //adodb type
 	$uichekdata='N~O~'.$fldlength .','.$decimal;
@@ -201,21 +180,18 @@ else
 	{
 	$uichekdata='D~O';
 		$uitype = 5;
-		//$type = "date";
 		$type = "D"; // adodb type
 		
 	}
 	elseif($fldType == 'Email')
 	{
 		$uitype = 13;
-		//$type = "varchar(50)";
 		$type = "C(50)"; //adodb type
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Phone')
 	{
 		$uitype = 11;
-		//$type = "varchar(30)";
 		$type = "C(30)"; //adodb type
 		
 		$uichekdata='V~O';
@@ -223,21 +199,18 @@ else
 	elseif($fldType == 'Picklist')
 	{
 		$uitype = 15;
-		//$type = "varchar(255)";
 		$type = "C(255)"; //adodb type
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'URL')
 	{
 		$uitype = 17;
-		//$type = "varchar(255)";
 		$type = "C(255)"; //adodb type
 		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Checkbox')	 
         {	 
                  $uitype = 56;	 
-                 //$type = "varchar(255)";	 
                  $type = "C(3) default 0"; //adodb type	 
                  $uichekdata='C~0';	 
         }
@@ -247,6 +220,12 @@ else
                  $type = "X"; //adodb type	 
                  $uichekdata='V~0';	 
         }
+	elseif($fldType == 'MultiSelectCombo')
+	{
+		 $uitype = 33;
+		 $type = "X"; //adodb type
+		 $uichekdata='V~0';
+	}
 	// No Decimal Pleaces Handling
 
         
@@ -257,9 +236,11 @@ else
         //1. add the customfield table to the field table as Block4
         //2. fetch the contents of the custom field and show in the UI
         
-        //$query = "insert into customfields values('','".$columnName."','".$tableName."',2,".$uitype.",'".$fldlabel."','0','".$fldmodule."')";
 	//retreiving the sequence
-	$custfld_fieldid=$adb->getUniqueID("field");
+	if($_REQUEST['fieldid'] == '')
+	{
+		$custfld_fieldid=$adb->getUniqueID("field");
+	}
 	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
     	
 	$blockid ='';
@@ -268,13 +249,19 @@ else
 
         if(is_numeric($blockid))
         {
-
-		$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'ADV')";
-
-		$adb->query($query);
-
-		$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
-
+		if($_REQUEST['fieldid'] == '')
+		{
+			$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'ADV')";
+			$adb->query($query);
+			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
+		}
+		else
+		{
+			$query = "update field set fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where fieldid=".$_REQUEST['fieldid'];
+			$adb->query($query);
+			$adb->alterTable($tableName, $columnName, "Delete_Column");
+			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
+		}
 		//Inserting values into profile2field tables
 		$sql1 = "select * from profile";
 		$sql1_result = $adb->query($sql1);
@@ -291,11 +278,9 @@ else
 		$adb->query($sql_def);
 
 
-		if($fldType == 'Picklist')
+		if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
 		{
 			// Creating the PickList Table and Populating Values
-			/*$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
-			  mysql_query($query);*/
 			$adb->createTable($columnName, $columnName." C(255)");
 			//Adding Primary Key
 			$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
@@ -322,6 +307,6 @@ else
 			$adb->query($sql_def);
 		}
 	}
-	header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule);
+	header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule."&parenttab=".$parenttab);
 }
 ?>
