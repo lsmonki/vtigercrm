@@ -66,6 +66,10 @@ function getCustomFieldTypeName($uitype)
 	{
 		$fldname = 'Text Area';
 	}
+	elseif($uitype == 33)
+	{
+		$fldname = 'Multi-Select Combo Box';
+	}
 	return $fldname;
 }
 
@@ -394,4 +398,71 @@ function CustomFieldSearch($customfieldarray, $fldModule, $tableName,$colidName,
         }
 }
 
+function getCustomFieldData($tab,$id,$datatype)
+{
+	global $adb;
+	$query = "select * from field where tabid=".$tab." and fieldid=".$id;
+	$result = $adb->query($query);
+	$return_data=$adb->fetch_array($result);
+	return $return_data[$datatype];
+}
+
+function getFldTypeandLengthValue($label,$typeofdata)
+{
+	if($label == 'Text')
+	{
+		$types = explode("~",$typeofdata);
+		$data_array=array('0',$types[3]);
+		$fieldtype = implode(";",$data_array);
+	}
+	elseif($label == 'Number')
+	{
+		$types = explode("~",$typeofdata);
+		$data_decimal = explode(",",$types[2]);
+		$data_array=array('1',$data_decimal[0],$data_decimal[1]);
+		$fieldtype = implode(";",$data_array);
+	}
+	elseif($label == 'Percent')
+	{
+		$types = explode("~",$typeofdata);
+		$data_array=array('2','5',$types[3]);
+		$fieldtype = implode(";",$data_array);
+	}
+	elseif($label == 'Currency')
+	{
+		$types = explode("~",$typeofdata);
+		$data_decimal = explode(",",$types[2]);
+		$data_array=array('3',$data_decimal);
+		$fieldtype = implode(";",$data_array);
+	}
+	elseif($label == 'Date')
+	{
+		$fieldtype = '4';
+	}
+	elseif($label == 'Email')
+	{
+		$fieldtype = '5';
+	}
+	elseif($label == 'Phone')
+	{
+		$fieldtype = '6';
+	}
+	elseif($label == 'PickList')
+	{
+		$fieldtype = '7';
+	}
+	elseif($label == 'Url')
+	{
+		$fieldtype = '8';
+	}
+	elseif($label == 'Checkbox')
+	{
+		$fieldtype = '9';
+	}
+	elseif($label == 'Text Area')
+	{
+		$fieldtype = '10';
+	}
+	return $fieldtype;
+}
 ?>
