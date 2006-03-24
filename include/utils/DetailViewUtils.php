@@ -760,7 +760,6 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<th width="10%">Unit Price </th>';
 	$output .= '<th width="19%">List Price</th>';
 	$output .= '<th width="10%">Total</th>';
-	//$output .= '<th width="5%">&nbsp;</th>';
 	$output .= '</tr>';
 
 	if($module == 'Quotes')
@@ -817,7 +816,6 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<tr id="tableheadline">';
 	$output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	$output .= '</table>';
-	$output .= '</div>';
 	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
 	$output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
@@ -840,7 +838,6 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
 	$output .= '</tr>';
 	$output .= '</table>';
-	$output .= '</td></tr></table>';	
 
 	return $output;
 
