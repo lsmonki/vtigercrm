@@ -1115,56 +1115,28 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$list_price_var = 'txtListPrice'.$i;	
 		$total_var = 'total'.$i;
 		
-		if($i%2 == 0)
-		{
-			$row_class = "evenListRow";
-		}
-		else
-		{
-			$row_class = "oddListRow";
-		}
+		if($i%2 == 0)		$row_class = "evenListRow";
+		else			$row_class = "oddListRow";
 
-		$product_Detail[$i]['txtProduct']= $productname;
-		
-		/*$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
-		$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		*/
-		if($module != 'Orders' && $focus->object_name != 'Order')
+		$product_Detail[$i]['txtProduct'.$i]= $productname;
+
+		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
 		{
-			//$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
-			//$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
-		}	
-		#$output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
+		}
 		$product_Detail[$i]['txtQty'.$i]=$qty;
-		#$output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
-		#$output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
-		#$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$product_Detail[$i]['txtListPrice'.$i]=$listprice;
-		#$output .= '<td style="padding:3px;"><input type=text id="txtListPrice'.$i.'" name="txtListPrice'.$i.'" value="'.$listprice.'" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
-		#$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$product_Detail[$i]['total'.$i]=$total;
-		#$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
-		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 
 		if($i != 1)
 		{
-			#$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50"><a id="delRow'.$i.'" href=\'javascript:;\' onclick=\'delRow(this.id)\'>Del</a>';
 			$product_Detail[$i]['delRow'.$i]="Del";
 		}
-		else
-		{
-			#$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50">';
-		}
-		$product_Detail[$i]['hdnProductId'.$i]=$total;
-		#$output .= '<input type="hidden" id="hdnProductId'.$i.'" name="hdnProductId'.$i.'" value="'.$productid.'">';
-		$product_Detail[$i]['hdnRowStatus'.$i]='';
-		#$output .= '<input type="hidden" id="hdnRowStatus'.$i.'" name="hdnRowStatus'.$i.'">';
-		$product_Detail[$i]['hdnTotal'.$i]='';
-		#$output .= '<input type="hidden" id="hdnTotal'.$i.'" name="hdnTotal'.$i.'" value="'.$total.'">';
-		#$output .= '</td></tr>';	
+
+		$product_Detail[$i]['hdnProductId'.$i] = $productid;
+		$product_Detail[$i]['hdnRowStatus'.$i] = '';
+		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
 	}
 	return $product_Detail;
