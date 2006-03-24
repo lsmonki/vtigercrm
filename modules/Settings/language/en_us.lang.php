@@ -234,6 +234,8 @@ $mod_strings = Array(
 
 'PickList'=>'Pick List',
 
+'LBL_MULTISELECT_COMBO'=>'Multi-Select Combo Box',
+
 
 
 //added for patch2
