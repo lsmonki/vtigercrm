@@ -10,8 +10,8 @@
  ********************************************************************************/
 
 require_once ($theme_path."layout_utils.php");
-global $mod_strings;
-
+require_once('include/CustomFieldUtil.php');
+global $mod_strings,$adb;
 echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
 require_once('XTemplate/xtpl.php');
 global $mod_strings;
@@ -22,8 +22,37 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
+$tabid=$_REQUEST['tabid'];
+$fieldid=$_REQUEST['fieldid'];
 $xtpl=new XTemplate ('modules/Settings/customfield.html');
+if(isset($fieldid) && $fieldid!='')
+{
+	$mode='edit';
+	$customfield_columnname=getCustomFieldData($tabid,$fieldid,'columnname');
+	$customfield_typeofdata=getCustomFieldData($tabid,$fieldid,'typeofdata');
+	$customfield_fieldlabel=getCustomFieldData($tabid,$fieldid,'fieldlabel');
+	$customfield_typename=getCustomFieldTypeName($_REQUEST['uitype']);
+	$fieldtype_lengthvalue=getFldTypeandLengthValue($customfield_typename,$customfield_typeofdata);
+	list($fieldtype,$fieldlength,$decimalvalue)= explode(";",$fieldtype_lengthvalue);
+	$xtpl->assign("LABELVALUE",$customfield_fieldlabel);
+	$xtpl->assign("LENGTHVALUE",$fieldlength);
+	$xtpl->assign("DECIMALVALUE",$decimalvalue);
+	if($fieldtype == '7')
+	{
+		$query = "select * from ".$customfield_columnname;
+		$result = $adb->query($query);
+		$fldVal='';
+		while($row = $adb->fetch_array($result))
+		{
+			$fldVal .= $row[$customfield_columnname];
+			$fldVal .= "\n";
+		}
+		$xtpl->assign("PICKLISTVALUE",$fldVal);
+	}
+	$xtpl->assign("FLDTYPEVALUE", $fieldtype);
+	$xtpl->assign("FLDID", $fieldid);
+	$xtpl->assign("COLUMN",$customfield_columnname);
+}
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("FLD_MODULE", $_REQUEST['fld_module']);
@@ -35,7 +64,6 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	$xtpl->assign("LENGTHVALUE", $_REQUEST["fldlength"]);
 	$xtpl->assign("DECIMALVALUE", $_REQUEST["flddecimal"]);
 	$xtpl->assign("PICKLISTVALUE", $_REQUEST["fldPickList"]);
-	//$xtpl->assign("FLDTYPEVALUE", $_REQUEST["fldType"]);
 	$typeVal = Array(
 	'Text'=>'0',
 	'Number'=>'1',
