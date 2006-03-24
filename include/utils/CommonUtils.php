@@ -331,12 +331,16 @@ $log->info("in getproductname ".$product_id);
 function getPotentialName($potential_id)
 {
 	global $log;
-$log->info("in getPotentialName ".$potential_id);
+	$log->info("in getPotentialName ".$potential_id);
 
 	global $adb;
-	$sql = "select potentialname from potential where potentialid=".$potential_id;
-        $result = $adb->query($sql);
-	$potentialname = $adb->query_result($result,0,"potentialname");
+	$potentialname = '';
+	if($potential_id != '')
+	{
+		$sql = "select potentialname from potential where potentialid=".$potential_id;
+        	$result = $adb->query($sql);
+		$potentialname = $adb->query_result($result,0,"potentialname");
+	}
 	return $potentialname;
 }
 
