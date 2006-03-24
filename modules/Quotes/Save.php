@@ -25,6 +25,7 @@ require_once('modules/Quotes/Quote.php');
 require_once('include/logging.php');
 //require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
+include("modules/Emails/mail.php");
 
 $local_log =& LoggerManager::getLogger('index');
 
@@ -213,7 +214,6 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
                 $body = str_replace('{QUOTEQUANTITY}',$qty,$body);
                 $body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);
 
-		include("modules/Emails/mail.php");
 		$mail_status = send_mail("Quotes",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
         }
 
