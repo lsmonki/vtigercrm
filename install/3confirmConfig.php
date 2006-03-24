@@ -213,8 +213,7 @@ if($mysql_status == 'false')
 	</html>
 <?php
 }
-/*
-elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
+elseif($mysql_server_version < '4.1' || $mysql_server_version >= '5.0.19')
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -265,7 +264,7 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
 	<! ---------------------------------------------- System Configuration-->
 
 	<div style="background-color:#ff0000;color:#ffffff;padding:5px">
-	<b>MySQL version <?php echo $mysql_server_version; ?> is not supported,kindly connect to MySQL 4.1.x</b>
+	<b>MySQL version <?php echo $mysql_server_version; ?> is not supported,kindly connect to MySQL 4.1.x or above</b>
 	</div>
 	<br><br>
 	<table border=0 width=100% cellspacing=0 cellpadding=0>
@@ -320,7 +319,6 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version >= '4.2')
 
 <?php
 }
-*/
 elseif($mysql_status == 'true' && $mysql_db_status == 'false')
 {
 ?>

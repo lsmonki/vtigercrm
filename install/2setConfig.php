@@ -324,6 +324,13 @@ function verify_data(form) {
 			<table width="90%" cellpadding="5"  cellspacing="1" border="0" class=small style="background-color:#cccccc"><tbody>
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
+               <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
+               <td width="75%" bgcolor="white" align="left"><select name="dbtype">
+			   <option value="mysql" selected="selected">MySQL</option>
+			   </select>
+			   </td>
+            </tr>
+			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
                <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" /></td>
               </tr>
@@ -339,16 +346,6 @@ function verify_data(form) {
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
                <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
-			<input type="hidden" name="dbtype" value="<?php
-                if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
-                {
-                        echo $dbconfig['db_type'];
-                }
-                elseif(isset($databasetype) && $databasetype != '')
-                {
-                        echo $databasetype;
-
-                } ?>">
               </tr>
               </table>
 			
@@ -409,16 +406,6 @@ function verify_data(form) {
 		<td><img src="install/images/cwURL.gif"></td>
 		<td align=right>
 			<input type="hidden" name="file" value="3confirmConfig.php" />
-
-			<input type="hidden" name="dbtype" value="<?php 
-									if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
-									{
-										echo $dbconfig['db_type'];
-									}
-									elseif(isset($databasetype) && $databasetype != '')
-									{
-										echo $databasetype;
-									} ?>"> 
 
 			<input type="image" src="install/images/cwBtnNext.gif" border="0" onclick="return verify_data(this.form); window.location=('install.php')">
 		</td>
