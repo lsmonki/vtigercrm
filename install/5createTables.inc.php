@@ -157,7 +157,7 @@ function create_default_users() {
 	$user->date_format = 'yyyy-mm-dd';
 	// added by jeri to populate default image and tagcloud for admin	
 	$user->imagename = 'admin.jpeg';
-        $user->tagcloud = 'http://www.tagcloud.com/cloud/js/mycloud79/default/50';	
+        $user->tagcloud = '';	
 	$user->defhomeview = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
