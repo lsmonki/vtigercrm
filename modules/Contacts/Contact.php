@@ -42,43 +42,15 @@ class Contact extends CRMEntity {
 	var $mode;
 
 	var $contactid;
-	var $leadsource;
-	var $description;
-	var $salutation;	
-	var $firstname;
-	var $lastname;
-	var $title;
-	var $department;
-	var $birthdate;
-	var $reportsto;
-	var $do_not_call;
-	var $phone_home;
-	var $phone_mobile;
-	var $phone_work;
-	var $phone_other;
-	var $phone_fax;
-	var $email1;
-	var $email2;
-	var $yahoo_id;
-	var $assistant;
-	var $assistant_phone;
-	var $email_opt_out;
+	
 
 	// These are for related fields
 	var $accountname;
 	var $accountid;
 	var $campaignid;
 	var $reports_to_name;
-	var $opportunity_role;
-	var $opportunity_rel_id;
 	var $opportunity_id;
-	var $case_role;
-	var $case_rel_id;
-	var $case_id;
-	var $task_id;
 	var $note_id;
-	var $meeting_id;
-	var $call_id;
 	var $email_id;
 	var $assigned_user_name;
 		
@@ -87,9 +59,6 @@ class Contact extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid','customerdetails'=>'customerid');
 
 
-	var $rel_account_table = "accounts_contacts";
-	//This is needed for upgrade.  This table definition moved to Opportunity module.
-	var $rel_opportunity_table = "opportunities_contacts";
 
 	var $module_id = "contactid";
 	var $object_name = "Contact";
@@ -100,8 +69,6 @@ class Contact extends CRMEntity {
 	
 	var $sortby_fields = Array('lastname','firstname','title','email','phone','smownerid');
 
-	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = Array('assigned_user_name', 'account_name', 'account_id', 'opportunity_id', 'case_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
 	
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array(
@@ -113,30 +80,9 @@ class Contact extends CRMEntity {
 	'Phone' => Array('contactdetails'=>'phone'),
 	'Assigned To' => Array('crmentity'=>'smownerid')
 	);
-	
-	var $range_fields = Array(
-	'first_name',
-	'last_name',
-	'primary_address_city',
-	'account_name',
-	'account_id',
-	'id',
-	'email1',
-	'salutation',
-	'title',
-	'phone_mobile',
-	'reports_to_name',
-	'primary_address_street',
-	'primary_address_city',
-	'primary_address_state',
-	'primary_address_postalcode',
-	'primary_address_country',
-	'alt_address_city',
-	'alt_address_street',
-	'alt_address_city',
-	'alt_address_state',
-	'alt_address_postalcode',
-	'alt_address_country',
+
+		
+	var $range_fields = Array(                                                                                                 'first_name',                                                                                                              'last_name',                                                                                                               'primary_address_city',                                                                                                    'account_name',                                                                                                            'account_id',                                                                                                              'id',                                                                                                                      'email1',                                                                                                                  'salutation',                                                                                                              'title',                                                                                                                   'phone_mobile',                                                                                                            'reports_to_name',                                                                                                         'primary_address_street',                                                                                                  'primary_address_city',                                                                                                    'primary_address_state',                                                                                                   'primary_address_postalcode',                                                                                              'primary_address_country',                                                                                                 'alt_address_city',                                                                                                        'alt_address_street',                                                                                                      'alt_address_city',                                                                                                        'alt_address_state',                                                                                                       'alt_address_postalcode',                                                                                                  'alt_address_country',
 
     'office_phone',
     'home_phone',
@@ -147,9 +93,10 @@ class Contact extends CRMEntity {
     'assistant_name',
     'assistant_phone'
 
-	
-	);
 
+        );
+
+	
 	var $list_fields_name = Array(
 	'Last Name' => 'lastname',
 	'First Name' => 'firstname',
@@ -161,7 +108,6 @@ class Contact extends CRMEntity {
 	);
 
 	
-	var $list_link_field= 'lastname';
 
 	var $record_id;
 	var $list_mode;
@@ -190,17 +136,6 @@ class Contact extends CRMEntity {
 		$this->column_fields = getColumnFields('Contacts');
 	}
 
-	function create_tables () {
-	
-	}
-
-	function drop_tables () {
-	}
-	
-	function delete($id)
-        {
-          $this->db->query('update crmentity set deleted=1 where crmid = \'' .$contactid . '\'');
-        }
     
     function getCount($user_name) 
     {
@@ -270,24 +205,6 @@ class Contact extends CRMEntity {
     }
 
 
-	function get_summary_text()
-	{
-		return "$this->first_name $this->last_name";
-	}
-	
-	/** Returns a list of the associated contactdetails who are direct reports
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_direct_reports()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT c1.contactid from contactdetails c1, contactdetails c2 where c2.contactid=c1.reports_to_id AND c2.contactid='$this->contactid' AND c1.deleted=0 order by c1.last_name";
-		
-		return $this->build_related_list($query, new Contact());
-	}
-	
 	/** Returns a list of the associated opportunities
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -511,34 +428,7 @@ class Contact extends CRMEntity {
 		return GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
 	}
 
-	function create_list_query(&$order_by, &$where)
-	{
-		// Determine if the account name is present in the where clause.
-		$account_required = ereg("accounts\.name", $where);
-		
-		if($account_required)
-		{
-			$query = "SELECT * FROM accounts, accounts_contacts a_c, contactdetails ";
-			$where_auto = "a_c.contact_id = contactdetails.contactid AND a_c.account_id = accounts.id AND a_c.deleted=0 AND accounts.deleted=0 AND contactdetails.deleted=0";
-		}
-		else 
-		{
-			$query = "select * from $this->table_name left join contactscf on contactdetails.contactid=contactscf.contactid ";
-			//$query = "SELECT * FROM contactdetails ";
-			//$query = "SELECT id, yahoo_id, contactdetails.assigned_user_id, first_name, last_name, phone_work, title, email1 FROM contactdetails ";
-			$where_auto = "deleted=0";
-		}
-		
-		if($where != "")
-			$query .= "where ($where) AND ".$where_auto;
-		else 
-			$query .= "where ".$where_auto;		
-
-		if(!empty($order_by))
-			$query .= " ORDER BY $order_by";
-
-		return $query;
-	}
+	
 
 
 //method added to construct the query to fetch the custom fields 
@@ -622,267 +512,14 @@ return $exists;
 		return $query;
         }
 
-
-
-	function save_relationship_changes($is_update)
-    {
-    	$this->clear_account_contact_relationship($this->id);
-    	
-    	if($this->account_id != "")
-    	{
-    		$this->set_account_contact_relationship($this->id, $this->account_id);    	
-    	}
-        if($this->reports_to_id == "")
-    	{
-              $this->clear_contact_direct_report_relationship($this->id);
-    	}
 	
-    	if($this->opportunity_id != "")
-    	{
-    		$this->set_opportunity_contact_relationship($this->id, $this->opportunity_id);    	
-    	}
-    	if($this->case_id != "")
-    	{
-    		$this->set_case_contact_relationship($this->id, $this->case_id);    	
-    	}
-    	if($this->task_id != "")
-    	{
-    		$this->set_task_contact_relationship($this->id, $this->task_id);    	
-    	}
-    	if($this->note_id != "")
-    	{
-    		$this->set_note_contact_relationship($this->id, $this->note_id);    	
-    	}
-    	if($this->meeting_id != "")
-    	{
-    		$this->set_meeting_contact_relationship($this->id, $this->meeting_id);    	
-    	}
-    	if($this->call_id != "")
-    	{
-    		$this->set_call_contact_relationship($this->id, $this->call_id);    	
-    	}
-    	if($this->email_id != "")
-    	{
-    		$this->set_email_contact_relationship($this->id, $this->email_id);    	
-    	}
-    }
-
-	function clear_account_contact_relationship($contact_id)
-	{
-		$query = "UPDATE accounts_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing account to contact relationship: ");
-	}
-    
-	function set_account_contact_relationship($contact_id, $account_id)
-	{
-		$query = "insert into accounts_contacts (id,contact_id,account_id) values ('".create_guid()."','$contact_id','$account_id')";
-		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
-	}
-
-	function set_opportunity_contact_relationship($contact_id, $opportunity_id)
-	{
-		global $app_list_strings;
-		$default = $app_list_strings['opportunity_relationship_type_default_key'];
-		$query = "insert into opportunities_contacts (id,opportunity_id,contact_id,contact_role) values('".create_guid()."','$opportunity_id','$contact_id','$default')";
-		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
-	}
-
-	function clear_opportunity_contact_relationship($contact_id)
-	{
-		$query = "UPDATE opportunities_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing opportunity to contact relationship: ");
-	}
-    
-	function set_case_contact_relationship($contact_id, $case_id)
-	{
-		global $app_list_strings;
-		$default = $app_list_strings['case_relationship_type_default_key'];
-		$query = "insert into contacts_cases (id,case_id,contact_id,contact_role) values ('".create_guid()."','$case_id','$contact_id','$default')";
-		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
-	}
-
-	function clear_case_contact_relationship($contact_id)
-	{
-		$query = "UPDATE contacts_cases set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing case to contact relationship: ");
-	}
-    
-	function set_task_contact_relationship($contact_id, $task_id)
-	{
-		$query = "UPDATE tasks set contact_id='$contact_id' where id='$task_id'";
-		$this->db->query($query,true,"Error setting contact to task relationship: ");
-	}
-	
-	function clear_task_contact_relationship($contact_id)
-	{
-		$query = "UPDATE tasks set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing task to contact relationship: ");
-	}
-
-	function set_note_contact_relationship($contact_id, $note_id)
-	{
-		$query = "UPDATE notes set contact_id='$contact_id' where id='$note_id'";
-		$this->db->query($query,true,"Error setting contact to note relationship: ");
-	}
-	
-	function clear_note_contact_relationship($contact_id)
-	{
-		$query = "UPDATE notes set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing note to contact relationship: ");
-	}
-
-	function set_meeting_contact_relationship($contact_id, $meeting_id)
-	{
-		$query = "insert into meetings_contacts (id,meeting_id,contact_id) values ('".create_guid()."','$meeting_id','$contact_id')";
-		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
-	}
-
-	function clear_meeting_contact_relationship($contact_id)
-	{
-		$query = "UPDATE meetings_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing meeting to contact relationship: ");
-	}
-
-	function set_call_contact_relationship($contact_id, $call_id)
-	{
-		$query = "insert into calls_contacts (id,call_id,contact_id) values ('".create_guid()."','$call_id','$contact_id')";
-		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
-	}
-
-	function clear_call_contact_relationship($contact_id)
-	{
-		$query = "UPDATE calls_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing call to contact relationship: ");
-	}
-
-	function set_email_contact_relationship($contact_id, $email_id)
-	{
-		$query = "insert into emails_contacts (id,email_id,contact_id) values ('".create_guid()."','$email_id','$contact_id')";
-		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
-	}
-
-	function clear_email_contact_relationship($contact_id)
-	{
-		$query = "UPDATE emails_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to contact relationship: ");
-	}
-
-	function clear_contact_all_direct_report_relationship($contact_id)
-	{
-		$query = "UPDATE contactdetails set reports_to_id='' where reports_to_id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
-	}
-
-	function clear_contact_direct_report_relationship($contact_id)
-	{
-		$query = "UPDATE contactdetails set reports_to_id='' where id='$contact_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
-	}
-
-	function mark_relationships_deleted($id)
-	{
-		$this->clear_contact_all_direct_report_relationship($id);
-		$this->clear_account_contact_relationship($id);
-		$this->clear_opportunity_contact_relationship($id);
-		$this->clear_case_contact_relationship($id);
-		$this->clear_task_contact_relationship($id);
-		$this->clear_note_contact_relationship($id);
-		$this->clear_call_contact_relationship($id);
-		$this->clear_meeting_contact_relationship($id);
-		$this->clear_email_contact_relationship($id);
-	}
-		
-	function fill_in_additional_list_fields()
-	{
-		$this->fill_in_additional_detail_fields();	
-	}
-	
-	function fill_in_additional_detail_fields()
-	{
-		// Fill in the assigned_user_name
-		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
-		
-		//$query = "SELECT acc.id, acc.name from accounts acc, accounts_contacts  a_c where acc.id = a_c.account_id and a_c.contact_id = '$this->id' and a_c.deleted=0";
-		$query = "SELECT acc.accountid, acc.accountname from account acc, contactdetails  a_c where acc.accountid = a_c.contactid and a_c.contactid = '$this->id' and a_c.deleted=0";
-		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
-
-		// Get the id and the name.
-		$row = $this->db->fetchByAssoc($result);
-		
-		if($row != null)
-		{
-			$this->account_name = $row['name'];
-			$this->account_id = $row['id'];
-		}
-		else 
-		{
-			$this->account_name = '';
-			$this->account_id = '';
-		}		
-		$query = "SELECT c1.firstname, c1.lastname from contactdetails c1, contactdetails c2 where c1.contactid = c2.reportsto and c2.contactid = '$this->id' and c1.deleted=0";
-		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
-
-		// Get the id and the name.
-		$row = $this->db->fetchByAssoc($result);
-		
-		if($row != null)
-		{
-			$this->reports_to_name = $row['first_name'].' '.$row['last_name'];
-		}
-		else 
-		{
-			$this->reports_to_name = '';
-		}		
-	}
 	function get_list_view_data(){
 		$temp_array = $this->get_list_view_array();
     	$temp_array["ENCODED_NAME"]=htmlspecialchars($this->first_name.' '.$this->last_name, ENT_QUOTES);
     	return $temp_array;
 		
 	}
-	function list_view_parse_additional_sections(&$list_form, $section){
-		
-		if($list_form->exists($section.".row.yahoo_id") && isset($this->yahoo_id) && $this->yahoo_id != '')
-			$list_form->parse($section.".row.yahoo_id");
-		elseif ($list_form->exists($section.".row.no_yahoo_id"))
-				$list_form->parse($section.".row.no_yahoo_id");
-		return $list_form;
-		
-		
-	}
-	/**
-		builds a generic search based on the query string using or
-		do not include any $this-> because this is called on without having the class instantiated
-	*/
-	function build_generic_where_clause ($the_query_string) {
-	$where_clauses = Array();
-	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "lastname like '$the_query_string%'");
-	array_push($where_clauses, "firstname like '$the_query_string%'");
-	array_push($where_clauses, "contactsubdetails.assistant like '$the_query_string%'");
-	array_push($where_clauses, "email like '$the_query_string%'");
-	array_push($where_clauses, "otheremail like '$the_query_string%'");
-	array_push($where_clauses, "yahooid like '$the_query_string%'");
-	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone like '%$the_query_string%'");
-		array_push($where_clauses, "mobile like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.homephone like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "fax like '%$the_query_string%'");
-		array_push($where_clauses, "contactsubdetails.assistantphone like '%$the_query_string%'");
-	}
 	
-	$the_where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($the_where != "") $the_where .= " or ";
-		$the_where .= $clause;
-	}
-
-	
-	return "( ".$the_where." )";
-}
-
 
 //Used By vtigerCRM Word Add-In
 function getColumnNames()
