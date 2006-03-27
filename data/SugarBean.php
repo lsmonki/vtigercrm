@@ -371,14 +371,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-/*	function track_view($user_id, $current_module)
-	{
-		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
-
-		$tracker = new Tracker();
-		$tracker->track_view($user_id, $current_module, $this->id, $this->get_summary_text());
-	}
-	*/
 	function track_view($user_id, $current_module,$id='')
 	{
 		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
