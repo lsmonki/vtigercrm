@@ -30,10 +30,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $mod_strings;
-global $current_user;
-global $log;
+global $app_strings,$mod_strings,$log,$theme;
 
 $log->debug("Inside Sales Order EditView");
 
@@ -160,7 +157,6 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['record']=='' && $_REQUEST['accou
 
 }
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 //retreiving the combo values array
