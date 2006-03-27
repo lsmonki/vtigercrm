@@ -173,7 +173,7 @@ class UsersLastImport extends SugarBean
 				AND accounts.deleted=0
 				AND users.status='ACTIVE'";*/
 				$query = "SELECT distinct account.*, accountbillads.city,
-                                users.user_name assigned_user_name,
+                                users.user_name AS assigned_user_name,
 				crmid, smownerid 
 				FROM account
 				inner join crmentity on crmentity.crmid=account.accountid
@@ -215,9 +215,9 @@ class UsersLastImport extends SugarBean
 				AND users.status='ACTIVE'";*/
 
 			$query = "SELECT distinct
-                                account.accountid account_id,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name,
+                                account.accountid AS account_id,
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name,
 				crmentity.crmid, smownerid,
 				potential.*
                                FROM potential 
@@ -236,7 +236,7 @@ class UsersLastImport extends SugarBean
 		else if($this->bean_type == 'Leads')
 		{
 			$query = "SELECT distinct leaddetails.*, crmentity.crmid, leadaddress.phone,leadsubdetails.website,
-                                users.user_name assigned_user_name,
+                                users.user_name AS assigned_user_name,
 				smownerid 
 				FROM leaddetails 
 				inner join crmentity on crmentity.crmid=leaddetails.leadid 

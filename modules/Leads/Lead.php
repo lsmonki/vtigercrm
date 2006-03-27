@@ -211,7 +211,7 @@ return $exists;
 		{
           
   $query = $this->constructCustomQueryAddendum() . ", 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country, leadaddress.phone phone, users.user_name, users.status user_status
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city AS city, leadaddress.state AS state,leadaddress.code AS code,leadaddress.country AS country, leadaddress.phone AS phone, users.user_name, users.status AS user_status
                         FROM ".$this->entity_table."
                         INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
@@ -228,7 +228,7 @@ return $exists;
 		else
 		{
                   $query = "SELECT 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status AS user_status FROM ".$this->entity_table."
                         INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
                         LEFT JOIN leadsubdetails
