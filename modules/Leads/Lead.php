@@ -152,13 +152,6 @@ class Lead extends CRMEntity {
 		$this->column_fields = getColumnFields('Leads');
 	}
 
-	function create_tables () {
-          
-	}
-
-	function drop_tables () {
-        }
-
 	function get_summary_text()
 	{
 		return "$this->firstname $this->lastname";
