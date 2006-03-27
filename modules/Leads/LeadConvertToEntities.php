@@ -279,7 +279,7 @@ $vtlog->logthis("contact id is ".$contact_id,'debug');
 $adb->query($sql_insert_contact);
 
 
-$sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'','','".$adb->quote($row['leadsource'])."')";
+$sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'','',".$adb->quote($row['leadsource']).")";
 
 $adb->query($sql_insert_contactsubdetails);
 
