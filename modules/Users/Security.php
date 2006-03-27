@@ -2147,12 +2147,6 @@ title';
 	(7,27,2),
     	(7,8,3)");
 
-		//portal feeds
-		$this->db->query("insert into portal values(1,'VtigerCRM','http://vtiger.com/',0)");	
-		$this->db->query("insert into portal values(2,'Zoho','http://www.zoho.com/',1)");	
-		$this->db->query("insert into portal values(3,'Search','http://www.lycos.com/',2)");	
-		$this->db->query("insert into portal values(4,'Yahoo Finance','http://finance.yahoo.com/',3)");
-
 		//rss feeds
 
 		$this->db->query("insert into rss values(1,'http://finance.yahoo.com/rss/headline?s=IBM','IBM Finblog',0,1,'IBM Finance')");	
