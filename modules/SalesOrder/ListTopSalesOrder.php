@@ -23,22 +23,10 @@ function getTopSalesOrder()
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
-	global $app_strings;
-	global $current_language;
-	global $current_user;
+	global $current_language,$current_user,$list_max_entries_per_page,$theme,$adb;
 	$current_module_strings = return_module_language($current_language, 'SalesOrder');
 
-	global $list_max_entries_per_page;
-	global $urlPrefix;
-
 	$log = LoggerManager::getLogger('so_list');
-
-	global $currentModule;
-	global $theme;
-	global $adb;
-
-	// focus_list is the means of passing data to a ListView.
-	global $focus_list;
 
 	$url_string = '';
 	$sorder = '';
@@ -56,7 +44,6 @@ function getTopSalesOrder()
 	}
 	$focus = new SalesOrder();
 
-	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
