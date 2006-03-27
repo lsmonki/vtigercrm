@@ -317,8 +317,6 @@ function set_return_specific(product_id, product_name) {
         var fldId = getOpenerObj("salesorder_id");
         fldName.value = product_name;
         fldId.value = product_id;
-	//window.opener.document.EditView.salesorder_name.value = product_name;
-        //window.opener.document.EditView.salesorder_id.value = product_id;
 	window.opener.document.EditView.action.value = 'EditView';
         window.opener.document.EditView.convertmode.value = 'update_so_val';
         window.opener.document.EditView.submit();
