@@ -351,16 +351,6 @@ $log->info("in  track view method ".$current_module);
 		$this->db->query($query);*/
 
 	}
-
-	function drop_tables () {
-		/*$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-
-		$this->db->query($query);
-
-		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-		*/
-
-	}
 }
 
 
