@@ -858,9 +858,7 @@ function getRelatedLists($module,$focus)
 	for($i=0; $i<$num_row; $i++)
 	{
 		$rel_tab_id = $adb->query_result($result,$i,"related_tabid");
-		echo '<BR>'.$rel_tab_id.'<BR>';
-		$funtion_name = $adb->query_result($result,$i,"name");
-		echo '<BR>'.$funtion_name.'<BR>';
+		$function_name = $adb->query_result($result,$i,"name");
 		$label = $adb->query_result($result,$i,"label");
 		if($rel_tab_id != 0)
 		{
@@ -869,13 +867,13 @@ function getRelatedLists($module,$focus)
 			{
 		        	if($profileActionPermission[$rel_tab_id][3] == 0)
         			{
-		                	$focus_list[$label] = $focus->$funtion_name($focus->id);
+		                	$focus_list[$label] = $focus->$function_name($focus->id);
         			}
 			}
 		}
 		else
 		{
-			$focus_list[$label] = $focus->$funtion_name($focus->id);
+			$focus_list[$label] = $focus->$function_name($focus->id);
 		}
 	}
 	return $focus_list;
