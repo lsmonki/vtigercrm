@@ -26,8 +26,7 @@ require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings;
-global $app_strings;
+global $mod_strings,$app_strings,$theme;
 
 $focus = new SalesOrder();
 
@@ -41,7 +40,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
