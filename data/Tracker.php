@@ -337,22 +337,5 @@ $log->info("in  track view method ".$current_module);
         }
     }
 
-	function create_tables() {
-		/*$query = 'CREATE TABLE '.$this->table_name.' (';
-		$query = $query.'id int( 11 ) NOT NULL auto_increment';
-		$query = $query.', user_id char(36)';
-		$query = $query.', module_name char(25)';
-		$query = $query.', item_id char(36)';
-		$query = $query.', item_summary char(255)';
-		$query = $query.', PRIMARY KEY ( ID ) )';
-
-
-
-		$this->db->query($query);*/
-
-	}
 }
-
-
-
 ?>
