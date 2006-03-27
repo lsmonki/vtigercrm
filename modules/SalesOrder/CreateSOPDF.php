@@ -3,13 +3,7 @@ require('include/fpdf/fpdf.php');
 require_once('modules/Orders/SalesOrder.php');
 require_once('include/database/PearDatabase.php');
 
-//define('EURO', chr(128) );
-//define('EURO_VAL', 6.55957 );
-//define('USD',"£");
-
-//Curency Settings By OpenCRM
-global $adb;
-global $app_strings;
+global $adb,$app_strings,$products_per_page;
 
 $sql="select currency_symbol from currency_info";
 $result = $adb->query($sql);
@@ -17,11 +11,9 @@ $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no
 $endpage="1";
-global $products_per_page;
 $products_per_page="6";
 
 $id = $_REQUEST['record'];
-global $adb;
 //retreiving the invoice info
 $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
@@ -133,8 +125,6 @@ function sizeOfText( $text, $largeur )
 }
 
 // addImage
-// $logo_name = name of logo, no path needed.
-// $location = array ('x','y','width','height')
 // Default will place vtiger in the top left corner
 function addImage( $logo_name, $location=array('10','10','0','0') ) {
 	if($logo_name)//error checking just in case, by OpenCRM
@@ -175,38 +165,11 @@ function title ($label, $total, $position)
 	$mid = $y1 + ($y2 / 2);
 	$width=10;
 	$this->SetFillColor(192);
-	//$this->RoundedRect($r1-16, $y1-1, (strlen($label." ".$total)*8)+4, $y2+1, 2.5, 'DF');
 	$this->RoundedRect($r1-16, $y1-1, 52, $y2+1, 2.5, 'DF');
 	$this->SetXY( $r1 + 4, $y1+1 );
 	$this->SetFont( "Helvetica", "B", 15);
 	$this->Cell($width,5, $label." ".$total, 0, 0, "C");
 }
-
-/*
-// Label and number of invoice/estimate
-function title( $label, $num, $position )
-{
-	$length =strlen($label.$num);
-	$r1  = $position[0];
-	$r2  = $r1 + ($length*2.5);
-	$y1  = 6;
-	$y2  = $y1 + 2;
-	$mid = $r1 + $r2;
-
-	$text  = $label ." ". $num;
-	$szfont = 23;
-
-	$this->SetFont( "Helvetica", "", $szfont );
-	$sz = $this->GetStringWidth( $text );
-
-	$this->SetLineWidth(0.1);
-	$this->SetFillColor(192);
-	//$this->RoundedRect($r1, $position[1], ($r2 - $r1), $y2, 2.5, 'DF');
-	$this->RoundedRect($r1-15, $position[1]-3, $sz+5, 12, 2.5, 'DF');
-	$this->SetXY($r1, $position[1]+1);
-	$this->Cell($r2-$r1 -1,5, $text, 0, 0, "C" );
-}
-*/
 
 // text block, non-wrapped
 function addTextBlock( $title,$text,$positions )
@@ -343,11 +306,9 @@ function addCols( $tab ,$positions ,$bottom)
 	$r2  = $this->w - ($r1 * 2) ;
 	$y1  = 80;
 	$x1  = $positions[1];
-	//$y2  = $this->h - $x1 - $y1 - 17;
 	$y2  = $bottom;
 	$this->SetXY( $r1, $y1 );
 	$this->SetFont( "Helvetica", "", 10);
-	//$this->Rect( $r1, $y1, $r2, $y2, "D");
 
 	$colX = $r1;
 	$columns = $tab;
@@ -377,14 +338,6 @@ function addLineFormat( $tab )
 	}
 }
 
-// add a line to the invoice/estimate
-/*    $line = array( 	"Product Name" 	=> prodname,
-						"Description" 	=> descr,
-						"Qty" 		=> rty,
-						"List Price" 	=> listprice,
-						"Unit Price" 	=> unitprice,
-			"total" 	=> total);
-*/
 function addProductLine( $line, $tab )
 {
 	global $columns, $format;
@@ -563,7 +516,6 @@ for($i=0;$i<$num_products;$i++) {
 $page_num='1';
 $pdf = new PDF( 'P', 'mm', 'A4' );
 $pdf->Open();
-//$pdf->AddPage();
 
 $num_pages=ceil(($num_products/$products_per_page));
 
