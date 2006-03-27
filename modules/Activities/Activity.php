@@ -326,52 +326,6 @@ class Activity extends CRMEntity {
     if (isset($list)) return $list;
     else return null;
   }
- /* 
-	function create_list_query(&$order_by, &$where)
-	{
-		$contact_required = ereg("contacts", $where);
-                
-		if($contact_required)
-		{
-			$query = "SELECT task.taskid, tasks.assigned_user_id, task.status, task.name, task.parent_type, tasks.parent_id, tasks.contact_id, tasks.datedue, contactdetails.firstname, contactdetails.lastname ,task.priority,task.description FROM contactdetails, task ";
-			$where_auto = "task.contact_id = contactdetails.contactid AND task.deleted=0 AND contact.deleted=0";
-		}
-		else
-		{
-			$query = 'SELECT taskid, smcreatorid, task.status, duedate ,priority FROM task inner join crmentity on crmentity.crmid=task.taskid ';
-			$where_auto = " AND deleted=0";
-		}
-
-		if($where != "")
-                  $query .= "where $where ".$where_auto;
-		else
-			$query .= "where ".$where_auto;
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-		else
-                  //$query .= " ORDER BY name";
-		return $query;
-
-	}
-*/
-        function create_export_query(&$order_by, &$where)
-        {
-                $contact_required = ereg("contacts", $where);
-
-                if($contact_required)
-                {
-                      $query = "SELECT task.*, contactdetailss.firstname, contactdetails.lastname FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0";
-                }
-                else
-                {
-                      $query = 'SELECT * FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0';
-                }
-                return $query;
-
-        }
-
-
 
 	function fill_in_additional_list_fields()
 	{
