@@ -25,50 +25,6 @@ if (isset($_REQUEST['db_populate'])) $db_populate		= $_REQUEST['db_populate'];
 if (isset($_REQUEST['admin_email'])) $admin_email		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_password'];
 
-
-//Drop old tables if table exists and told to drop it
-/*
-function drop_table_install(&$focus)
-{
-
-        global $log, $db;
-
-        $result = $db->requireSingleResult("SHOW TABLES LIKE '".$focus->table_name."'");
-        if (!empty($result)) {
-
-
-
-                $focus->drop_tables();
-                $log->info("Dropped old ".$focus->table_name." table.");
-                return 1;
-
-        }
-        else
-        {
-                $log->info("Did not need to drop old ".$focus->table_name." table.  It doesn't exist.");
-                return 0;
-        }
-}
-
-// Creating new tables if they don't exist.
-function create_table_install(&$focus)
-{
-
-        global $log, $db;
-        $result = $db->query("SHOW TABLES LIKE '".$focus->table_name."'");
-        if ($db->getRowCount($result) == 0)
-        {
-                $focus->create_tables();
-                $log->info("Created ".$focus->table_name." table.");
-                return 1;
-        }
-        else
-        {
-                $log->info("Table ".$focus->table_name." already exists.");
-                return 0;
-        }
-}
-*/
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
