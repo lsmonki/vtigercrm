@@ -94,12 +94,6 @@ class Note extends CRMEntity {
 
 	var $new_schema = true;
 
-	function create_tables () {
-	}
-
-	function drop_tables () {
-	}
-
 	function get_summary_text()
 	{
 		return "$this->name";
