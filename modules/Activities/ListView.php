@@ -236,7 +236,13 @@ if ($task_title) $title_display= $task_title;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-$distincton = $adb->isPostgres() ? 'crmid' : '';
+$distincton = '';
+if($adb->isPostgres()) {
+	if(isset($order_by) && $order_by != '') {
+		$distincton = $order_by . ', ';
+	}
+	$distincton .= 'crmid';
+}
 if($viewid != "0")
 {
 	$listquery = getListQuery("Activities", '', $distincton);
