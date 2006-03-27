@@ -213,7 +213,7 @@ if($mysql_status == 'false')
 	</html>
 <?php
 }
-elseif($mysql_server_version < '4.1' || $mysql_server_version >= '5.0.19')
+elseif($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19')
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

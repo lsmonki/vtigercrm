@@ -115,29 +115,9 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 	require_once('install/5createTables.inc.php');
 
 	
-/*if (ob_get_level() == 0) {
-   ob_start();
-}
-echo str_pad('Loading... ',4096)."<br />\n";
-for ($i = 0; $i < 48; $i++) {
-   $d = $d + 11;
-   $m=$d+10;
-   //This div will show loading percents
-   echo '<div class="percents">' . $i*2 . '%&nbsp;complete</div>';
-   //This div will show progress bar
-   echo '<div class="blocks" style="left: '.$d.'px">&nbsp;</div>';
-   flush();
-   ob_flush();
-   sleep(1);
-   ob_end_flush();
-}*/
-?>
-<!--<div class="percents" style="z-index:12">Done.</div>-->
-<?
-
 //populating forums data
 
-        //this is to rename the installation file and folder so that no one destroys the setup
+//this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
 rename("install.php", $renamefile."install.php.txt");
