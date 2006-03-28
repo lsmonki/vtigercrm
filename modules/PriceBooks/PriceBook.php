@@ -78,10 +78,7 @@ class PriceBook extends CRMEntity {
 
 		$button = '';
 
-		$button .= '<input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'PriceBooks\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'">&nbsp;';
-
 		$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
-
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
 		return getPriceBookRelatedProducts($query,$focus,$returnset);
