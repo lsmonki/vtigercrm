@@ -165,25 +165,6 @@ function roundValue(val) {
    return val;
 } 
 
-/*
-
-
-function roundValue(val) {
-	if (val.indexOf(".")<0) {
-		val+=".00"
-	} else {
-		var dec=val.substring(val.indexOf(".")+1,val.length)
-		if (dec.length>2)
-			val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,2)
-		else if (dec.length==1)
-			val=val+"0"
-	}
-	
-	return val;
-}
-*/
-
-
 function copyAddressRight(form) {
 
 	form.ship_street.value = form.bill_street.value;
@@ -347,8 +328,6 @@ function set_return_specific(product_id, product_name) {
         var fldId = getOpenerObj("product_id");
         fldName.value = product_name;
         fldId.value = product_id;
-	//window.opener.document.EditView.product_name.value = product_name;
-        //window.opener.document.EditView.product_id.value = product_id;
 }
 
 function set_return_formname_specific(formname,product_id, product_name) {
