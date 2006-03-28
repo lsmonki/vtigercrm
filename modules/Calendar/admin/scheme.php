@@ -13,13 +13,11 @@
  global $calpath;
  $calpath='modules/Calendar/';
  $tutos['base'] = "modules/Calendar";
- #ini_set("include_path","..");
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
  include_once $calpath .'appointment.pinc';
  include_once $calpath .'timetrack.pinc';
  include_once $calpath .'product.pinc';
- #include_once $calpath .'task.pinc';
  include_once $calpath .'mail.pinc';
  include_once $calpath .'history.pinc';
 
@@ -37,67 +35,47 @@
      global $table,$tableidx,$sequence;
 
      echo "<p>";
-     #echo "<p>";
      echo "<font color=green>Creating Calendar Tables</font><br />\n";
-     #echo "Trying to open this Database !<br />\n";
-     #echo "(you have to create the database or change config.pinc if this test failed !<br />\n";
    flush();
      $out = 0;
 	if ( $this->obj->conn != -1 ) {
-       #echo "&nbsp; Looks OK <i>(". $this->obj->gettype() ." -> ". $this->obj->conn .")</i> !<br />\n";
      } else {
        echo "<font color=red>failed to open Database! </font><br />";
        flush();
        return;
      }
-     #echo "<p>";
      flush();
 
      foreach ($table as $i => $f) {
-       #echo $f[Desc] ."<br />\n";
        if ($this->obj->droptable($f) == -1) {
-         #echo "Table <b>". $this->obj->prefix . $f[name] ."</b> not dropped:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
          echo "<font color=red><span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> dropped</span></font><br />\n";
        }
       
        if ($this->obj->createtable($f) == -1) {
-         #echo "Table not created:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
          echo "<font color=green><span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> created</span></font><br />\n";
        }
        flush();
      }
      # Build the inidces
-     //echo "<p>\n";
      foreach ($tableidx as $i => $f) {
-       //echo $f[Desc] ."<br />\n";
        if ($this->obj->dropindex($f) == -1) {
-#       echo "Index not dropped:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
-#         echo "<span class=\"found\">Index dropped</span><br />\n";
        }
        if ($this->obj->createindex($f) == -1) {
-#        echo "Index <b>". $this->obj->prefix . $f[name] ."</b> not created:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
-#         echo "<span class=\"found\">Index <b>". $this->obj->prefix . $f[name] ."</b> created</span><br />\n";
        }
        flush();
      }
      # Build the sequencers
-#     echo "<p>\n";
      @reset($sequence);
      while ( list ($i,$f) = @each ($sequence) ) {
-#       echo $f[Desc] ."<br />\n";
        if ( $this->obj->dropsequence($f) == -1 ) {
-#         echo "Sequence ". $this->obj->prefix . $f[name] ." not dropped:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else {
-#         echo "<span class=\"found\">Sequence ". $this->obj->prefix . $f[name] ." dropped</span><br />\n";
        };
        if ( $this->obj->createsequence($f) == -1 ) {
-#         echo "Sequence ". $this->obj->prefix . $f[name] ." not created:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else {
-#         echo "<span class=\"found\">Sequence ". $this->obj->prefix . $f[name] ." created</span><br />\n";
        };
        flush();
      }
@@ -128,10 +106,6 @@
      $adr->birthday = new DateTime();
      $adr->creator = $adr;
 
-     #$q = "DELETE FROM ". $adr->tablename ." WHERE f_name = ". $adr->dbconn->String($adr->f_name) ." AND l_name = ". $adr->dbconn->String($adr->l_name);
-     #$adr->dbconn->exec($q);
-
-     #$msg .= $adr->save();
 
      $this->user = new tutos_user($this->obj);
      $this->user->updatepw = 1;
@@ -140,11 +114,6 @@
      $this->user->id = $adr->id;
      $this->user->admin = 1;
 
-     #$q = "DELETE FROM ". $this->user->tablename ." WHERE login = ". $this->user->dbconn->String($this->user->login);
-     #$this->user->dbconn->exec($q);
-
-     #$msg = $this->user->save();
-#     echo $msg ."<br />\n";
    }
    /**
     * Perform Step 3  (example data)
@@ -152,10 +121,8 @@
    Function step3() {
      global $lang,$tutos,$current_user;
 
-#     echo "Creating some demo data<br />\n";
      flush();
      $msg = "";
-     # No mails here !!
      $tutos[demo] = 0;
 
      # a array to store the demo env
@@ -171,13 +138,11 @@
        if (!isset($tutos[modules][$r][file])) continue;
        if (file_exists(dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/demodata.p3") ) {
          loadmodule($r);
-#         echo "<b>now Loading Demodata for module :<i>". $r ."</i></b><br />\n";
          @include_once dirname($tutos['base'] ."/". $tutos[modules][$r][file]) ."/demodata.p3";
        }
      }
    
      # Notes
-#     echo $msg ."<br />\n";
      return;
    }
    /**
@@ -187,34 +152,6 @@
      global $tutos,$lang;
 
      echo $this->DataTableStart();
-/*     echo "<tr>\n";
-     echo " <th colspan=\"4\">". $lang['AdminDBInfo'] ."</th>\n";
-     echo "</tr>\n";
-     echo "<tr>\n";
-     echo $this->showfield($lang['AdminDBType']);
-     echo $this->showdata($this->obj->GetType(),1);
-     echo $this->showfield($lang['AdminDBAlias']);
-     echo $this->showdata($this->obj->db->alias,1);
-     echo "</tr>\n";
-     echo "<tr>\n";
-     echo $this->showfield($lang['AdminDBInfo']);
-     echo $this->showdata($this->obj->moreinfo(),3);
-     echo "</tr>\n";
-     echo "<tr>\n";
-     echo $this->showfield($lang['AdminDBName']);
-     echo $this->showdata($this->obj->db->name ."  ". $this->obj->prefix,1);
-     echo $this->showfield($lang['AdminDBUser']);
-     echo $this->showdata($this->obj->db->user);
-     echo "</tr>\n";
-     echo "<tr>\n";
-     echo $this->showfield($lang['AdminDBHost']);
-     echo $this->showdata($this->obj->db->host);
-     echo $this->showfield($lang['AdminDBPort']);
-     echo $this->showdata($this->obj->db->port);
-     echo "</tr>\n";
-     echo $this->DataTableEnd();
-     flush();
-*/
      $this->addHidden("id",$this->id);
        $this->step1();
        $this->step2();
@@ -226,18 +163,10 @@
    Function navigate() {
      global $tutos,$lang;
 
-     #echo "<tr><td nowrap>";
-     #echo menulink("admin/update.php?id=".$this->id ,"UPDATE ". $tutos[dbalias][$this->id]);
-     #echo "<br />\n";
-     #echo "<br />\n";
 
      foreach ($tutos[dbname] as $i => $f) {
-       #echo menulink("admin/scheme.php?id=".$i ,$tutos[dbalias][$i],$tutos[dbalias][$i]);
-       #echo "<br />\n";
      }
 
-     #echo "<br />\n";
-     #echo "</td></tr>";
    }
 
    /**
@@ -274,10 +203,8 @@
        $this->id = $_GET['id'];
      } else {
        $this->id = 0;
-       #$msg .= "Using default Database ID 0  (see config.pinc)";
      }
      if ( ! isset($tutos[dbname][$this->id] ) ) {
-       #$msg .= "<br />The given database id ". $this->id ." is not defined in you configuration";
        $this->stop = true;
      } else {
        $this->obj = DB_Open($this->id,false);
