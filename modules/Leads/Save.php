@@ -39,41 +39,10 @@ if(isset($_REQUEST['mode']))
 
 foreach($focus->column_fields as $fieldname => $val)
 {
-  /*
-  $tempvalue;
-  if($field == 'assigned_user_id')
-  {
-    //check which radio button the user has chosen
-    if($_REQUEST['assigntype'] == 'T')
-    {
-      $value='null';
-      $focus->$field = $value;
-    }
-    else
-    {
-      $tempvalue = $_REQUEST['assigned_user_id'];
-      $value = $tempvalue;
-      $focus->$field = $value;
-    }
-  }
-  else if(isset($_REQUEST[$field]))
-  {
-    $value=$_REQUEST[$field];
-    $focus->$field = $value;
-  }
-	
-  if(get_magic_quotes_gpc() == 1)
-  {
-    $focus->$field = stripslashes($focus->$field);
-  }
-  */
-  	if(isset($_REQUEST[$fieldname]))
+    	if(isset($_REQUEST[$fieldname]))
 	{
           $value = $_REQUEST[$fieldname];
             $log->info("the value is ".$value);
-	  //echo '<BR>';
-          //echo $fieldname."         ".$value;
-          //echo '<BR>';
           $focus->column_fields[$fieldname] = $value;
         }
 	if(isset($_REQUEST['annualrevenue']))
@@ -84,73 +53,10 @@ foreach($focus->column_fields as $fieldname => $val)
         
 }
 
-/*
-foreach($focus->additional_column_fields as $field)
-{
-	if(isset($_REQUEST[$field]))
-	{
-          if($field == 'assigned_user_id')
-          {
-            //check which radio button the user has chosen
-            if($_REQUEST['assigntype'] == 'T')
-            {
-              $value = 'null';
-            }
-            else
-            {
-              $value = $_REQUEST['assigned_user_id'];
-            }
-          }
-        
-          else
-          {
-            $value = $_REQUEST[$field];
-          }
-          $focus->$field = $value;
-          if(get_magic_quotes_gpc() == 1)
-          {
-            $focus->$field = stripslashes($focus->$field);
-          }
-	}
-}
-$createLeadFlag = true;
-if($focus->id == "")
-{
-}
-else
-{
-$createLeadFlag = false;
-if($_REQUEST['assigntype'] == 'T')
-			{
-				$tempvalue = $_REQUEST['assigned_group_name'];
-				$value=$tempvalue;
-                                updateLeadGroupRelation($focus->id,$value);
-                        }
-else
-{
-updateLeadGroupRelation($focus->id,'');
-}
-
-
-}
-*/
-//$focus->saveentity("Leads");
 $focus->save("Leads");
 
 $return_id = $focus->id;
 	 $log->info("the return id is ".$return_id);
-/*
-if($createLeadFlag)
-{
-		if($_REQUEST['assigntype'] == 'T')
-			{
-				$tempvalue = $_REQUEST['assigned_group_name'];
-				$value=$tempvalue;
-                                insert2LeadGroupRelation($focus->id,$value);
-                        }
-}
-save_customfields($focus->id);
-*/
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Leads";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
@@ -239,19 +145,5 @@ function save_customfields($entity_id)
 		}
 		
 	}
-	/* srini patch
-	else
-	{
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into leadcf ('.$columns.') values('.$values.')';
-			$adb->query($query);
-		}
-	}*/	
 }
 ?>

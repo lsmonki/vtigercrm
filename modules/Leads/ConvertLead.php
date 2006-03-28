@@ -29,10 +29,6 @@ $userid = $row["smownerid"];
 
 $log->debug(" the userid is ".$userid);
 $crmid = $adb->getUniqueID("crmentity");
-//$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$id.",".$userid.",".$userid.",account,0,0)";
-
-//$adb->query($sql_crmentity);
-
 
 $sql = "SELECT firstname, lastname, company, smownerid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.leadid =".$id;
 $result = $adb->query($sql);

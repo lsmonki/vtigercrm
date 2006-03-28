@@ -186,8 +186,6 @@ class Lead extends CRMEntity {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
-  //$result = mysql_query("select * from accountcf");
-  //$testrow = mysql_num_fields($result);
  $result = $this->db->query("select * from leadscf");
  $testrow = $this->db->num_fields($result);
 	if($testrow > 1)
