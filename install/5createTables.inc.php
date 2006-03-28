@@ -125,7 +125,8 @@ function create_default_users() {
 }
 
 $startTime = microtime();
-
+$modules = array("Security");
+$focus=0;				
 // tables creation
 eecho("Creating Core tables: ");
 $success = $db->createTables("schema/DatabaseSchema.xml");
@@ -138,6 +139,12 @@ elseif ($success==1)
 else
 	eecho("Tables Successfully created.\n");
 
+foreach ( $modules as $module ) 
+{
+	$focus = new $module();
+	$focus->create_tables();
+}
+			
 create_default_users();
 
 // populate users table
