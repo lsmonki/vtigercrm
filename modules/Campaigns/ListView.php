@@ -140,7 +140,6 @@ else
 	$list_query = getListQuery("Campaigns");
 }
 //<<<<<<<<customview>>>>>>>>>
-//echo $listquery;
 
 if(isset($where) && $where != '')
 {
