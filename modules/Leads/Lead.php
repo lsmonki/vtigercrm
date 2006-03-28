@@ -29,60 +29,59 @@ class Lead extends CRMEntity {
 	var $db;
 
 	// Stored fields
-  var $leadid;
-        var $email;
+	var $leadid;
+	var $email;
 	var $firstname;
-        var $salutation;
+	var $salutation;
 	var $lastname;
 	var $company;
 	var $annualrevenue;
-  
+
 	var $industry;
-  var $campaign;
-         var $rating;
-         var $status;
-         var $leadsource;
-         var $designation;
-         var $licencekey;
-  var $region;
-  var $space;
-  var $comments;
-  var $priority;
-  var $partnercontact;
-  var $maildate;
-  var $nextstepdate;
-  var $fundingsituation;
-  var $deleted;
-  
-  	var $description;
-        // These are for related fields
-  var $city;
-  var $code;
-  var $state;
-  var $country;
-  var $phone;
-  var $mobile;
-  var $fax;
-  var $lane;
-  var $leadaddresstype;
-  var $currency;
-  var $website;
-  var $callornot;
-  var $readornot;
-  var $empct;
-  
-  var $accountid;
+	var $campaign;
+	var $rating;
+	var $status;
+	var $leadsource;
+	var $designation;
+	var $licencekey;
+	var $region;
+	var $space;
+	var $comments;
+	var $priority;
+	var $partnercontact;
+	var $maildate;
+	var $nextstepdate;
+	var $fundingsituation;
+	var $deleted;
+
+	var $description;
+	// These are for related fields
+	var $city;
+	var $code;
+	var $state;
+	var $country;
+	var $phone;
+	var $mobile;
+	var $fax;
+	var $lane;
+	var $leadaddresstype;
+	var $currency;
+	var $website;
+	var $callornot;
+	var $readornot;
+	var $empct;
+
+	var $accountid;
 	var $contactid;
 	var $campaignid;
-  	var $potentialid;
-  	
+	var $potentialid;
+
 	var $module_id = "leadid";
-	//var $tab_name = Array('crmentity','account','accountbillads','accountshipads');
 
 	var $tab_name = Array('crmentity','leaddetails','leadsubdetails','leadaddress','leadscf');
-        var $tab_name_index = Array('crmentity'=>'crmid','leaddetails'=>'leadid','leadsubdetails'=>'leadsubscriptionid','leadaddress'=>'leadaddressid','leadscf'=>'leadid');
+	var $tab_name_index = Array('crmentity'=>'crmid','leaddetails'=>'leadid','leadsubdetails'=>'leadsubscriptionid','leadaddress'=>'leadaddressid','leadscf'=>'leadid');
 
-	
+
 	var $entity_table = "crmentity";
 	var $table_name = "leaddetails";
 
@@ -94,51 +93,50 @@ class Lead extends CRMEntity {
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('lastname','firstname','email','phone','company','smownerid');
-       
+
 	var $combofieldNames = Array('leadsource'=>'leadsource_dom'
-                      ,'salutation'=>'salutation_dom'
-                      ,'status'=>'leadstatus_dom'
-                      ,'industry'=>'industry_dom'
-                      ,'rating'=>'rating_dom'
-                      ,'licencekey'=>'licensekey_dom');
-	
+	,'salutation'=>'salutation_dom'
+	,'status'=>'leadstatus_dom'
+	,'industry'=>'industry_dom'
+	,'rating'=>'rating_dom'
+	,'licencekey'=>'licensekey_dom');
+
 	// This is used to retrieve related fields from form posts.
-	
 	var $additional_column_fields = Array('smcreatorid', 'smownerid', 'contactid','potentialid' ,'crmid');
-	
+
 	// This is the list of fields that are in the lists.
-        var $list_fields = Array(
-                                'Last Name'=>Array('leaddetails'=>'lastname'),
-                                'First Name'=>Array('leaddetails'=>'firstname'),
-                                'Company'=>Array('leaddetails'=>'company'),
-                                'Phone'=>Array('leadaddress'=>'phone'),
-                                'Website'=>Array('leadsubdetails'=>'website'),
-                                'Email'=>Array('leaddetails'=>'email'),
-                                'Assigned To'=>Array('crmentity'=>'smownerid')
-                                );
-        var $list_fields_name = Array(
-                                        'Last Name'=>'lastname',
-                                        'First Name'=>'firstname',
-                                        'Company'=>'company',
-                                        'Phone'=>'phone',
-                                        'Website'=>'website',
-                                        'Email'=>'email',
-                                        'Assigned To'=>'assigned_user_id'
-                                     );
-        var $list_link_field= 'lastname';
+	var $list_fields = Array(
+		'Last Name'=>Array('leaddetails'=>'lastname'),
+		'First Name'=>Array('leaddetails'=>'firstname'),
+		'Company'=>Array('leaddetails'=>'company'),
+		'Phone'=>Array('leadaddress'=>'phone'),
+		'Website'=>Array('leadsubdetails'=>'website'),
+		'Email'=>Array('leaddetails'=>'email'),
+		'Assigned To'=>Array('crmentity'=>'smownerid')
+	);
+	var $list_fields_name = Array(
+		'Last Name'=>'lastname',
+		'First Name'=>'firstname',
+		'Company'=>'company',
+		'Phone'=>'phone',
+		'Website'=>'website',
+		'Email'=>'email',
+		'Assigned To'=>'assigned_user_id'
+	);
+	var $list_link_field= 'lastname';
 
 	var $record_id;
 	var $list_mode;
-        var $popup_type;
+	var $popup_type;
 
 	var $search_fields = Array(
-                                'Name'=>Array('leaddetails'=>'lastname'),
-                                'Company'=>Array('leaddetails'=>'company')
-                                );
-        var $search_fields_name = Array(
-                                        'Name'=>'lastname',
-                                        'Company'=>'company'
-                                        );
+		'Name'=>Array('leaddetails'=>'lastname'),
+		'Company'=>Array('leaddetails'=>'company')
+	);
+	var $search_fields_name = Array(
+		'Name'=>'lastname',
+		'Company'=>'company'
+	);
 
 	var $required_fields =  array("lastname"=>1, 'company'=>1);
 
@@ -152,12 +150,7 @@ class Lead extends CRMEntity {
 		$this->column_fields = getColumnFields('Leads');
 	}
 
-	function get_summary_text()
-	{
-		return "$this->firstname $this->lastname";
-	}
-	
-//method added to construct the query to fetch the custom fields 
+	//method added to construct the query to fetch the custom fields 
 	function constructCustomQueryAddendum()
 	{
         global $adb;
@@ -165,7 +158,7 @@ class Lead extends CRMEntity {
 		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=7";
         	$result = $adb->query($sql1);
 		$numRows = $adb->num_rows($result);
-	//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel	
+		//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel	
 		$sql3 = "select ";
 		for($i=0; $i < $numRows;$i++)
 		{
@@ -384,100 +377,6 @@ function get_products($id)
 
 
 
-  function save_relationship_changes($is_update)
-  {
-    if($this->task_id != "")
-    	{
-    		$this->set_lead_task_relationship($this->id, $this->task_id);
-    	}
-    	if($this->note_id != "")
-    	{
-    		$this->set_lead_note_relationship($this->id, $this->note_id);
-    	}
-    	if($this->meeting_id != "")
-    	{
-    		$this->set_lead_meeting_relationship($this->id, $this->meeting_id);
-    	}
-    	if($this->call_id != "")
-    	{
-    		$this->set_lead_call_relationship($this->id, $this->call_id);
-    	}
-    	if($this->email_id != "")
-    	{
-    		$this->set_lead_email_relationship($this->id, $this->email_id);
-    	}
-    }
-
-  
-	function set_lead_task_relationship($lead_id, $task_id)
-	{
-		$query = "UPDATE tasks set parent_id='$lead_id', parent_type='Lead' where id='$task_id'";
-		$this->db->query($query) or die("Error setting lead to task relationship: ".mysql_error());
-	}
-
-	function clear_lead_task_relationship($lead_id)
-	{
-		$query = "update tasks set parent_id='', parent_type='' where parent_id='$lead_id' and deleted=0";
-		$this->db->query($query) or die("Error clearing lead to task relationship: ".mysql_error());
-	}
-
-	function set_lead_note_relationship($lead_id, $note_id)
-	{
-		$query = "UPDATE notes set parent_id='$lead_id', parent_type='Lead' where id='$note_id'";
-		$this->db->query($query) or die("Error setting lead to note relationship: ".mysql_error());
-	}
-
-	function clear_lead_note_relationship($lead_id)
-	{
-		$query = "update notes set parent_id='', parent_type='' where parent_id='$lead_id' and deleted=0";
-		$this->db->query($query) or die("Error clearing lead to note relationship: ".mysql_error());
-	}
-
-	function set_lead_meeting_relationship($lead_id, $meeting_id)
-	{
-		$query = "UPDATE meetings set parent_id='$lead_id', parent_type='Lead' where id='$meeting_id'";
-		$this->db->query($query) or die("Error setting lead to meeting relationship: ".mysql_error());
-	}
-
-	function clear_lead_meeting_relationship($lead_id)
-	{
-		$query = "update meetings set parent_id='', parent_type='' where parent_id='$lead_id' and deleted=0";
-		$this->db->query($query) or die("Error clearing lead to meeting relationship: ".mysql_error());
-	}
-
-	function set_lead_call_relationship($lead_id, $call_id)
-	{
-		$query = "UPDATE calls set parent_id='$lead_id', parent_type='Lead' where id='$call_id'";
-		$this->db->query($query) or die("Error setting lead to call relationship: ".mysql_error());
-	}
-
-	function clear_lead_call_relationship($lead_id)
-	{
-		$query = "update calls set parent_id='', parent_type='' where parent_id='$lead_id' and deleted=0";
-		$this->db->query($query) or die("Error clearing lead to call relationship: ".mysql_error());
-	}
-
-	function set_lead_email_relationship($lead_id, $email_id)
-	{
-		$query = "UPDATE emails set parent_id='$lead_id', parent_type='Lead' where id='$email_id'";
-		$this->db->query($query) or die("Error setting lead to email relationship: ".mysql_error());
-	}
-
-	function clear_lead_email_relationship($lead_id)
-	{
-		$query = "update emails set parent_id='', parent_type='' where parent_id='$lead_id' and deleted=0";
-		$this->db->query($query) or die("Error clearing lead to email relationship: ".mysql_error());
-	}
-
-  function mark_relationships_deleted($id)
-	{
-          
-		$this->clear_lead_task_relationship($id);
-		$this->clear_lead_note_relationship($id);
-		$this->clear_lead_meeting_relationship($id);
-		$this->clear_lead_call_relationship($id);
-		$this->clear_lead_email_relationship($id);
-	}
 
 	// This method is used to provide backward compatibility with old data that was prefixed with http://
 	// We now automatically prefix http://
@@ -497,28 +396,12 @@ function get_products($id)
 		$this->remove_redundant_http();
 	}
 
-	function list_view_parse_additional_sections(&$list_form, $section){
-		
-		if($list_form->exists($section.".row.yahoo_id") && isset($this->yahoo_id) && $this->yahoo_id != '')
-			$list_form->parse($section.".row.yahoo_id");
-		elseif ($list_form->exists($section.".row.no_yahoo_id"))
-				$list_form->parse($section.".row.no_yahoo_id");
-		return $list_form;
-		
-		
-	}
 	function get_lead_field_options($list_option)
 	{
 		$comboFieldArray = getComboArray($this->combofieldNames);
 		return $comboFieldArray[$list_option];
 	}
-	function get_list_view_data(){
-                $temp_array = $this->get_list_view_array();
-        $temp_array["ENCODED_NAME"]=htmlspecialchars($this->firstname.' '.$this->lastname, ENT_QUOTES);
-        return $temp_array;
-
-        }
-
+	
 //Used By vtigerCRM Word Plugin
 function getColumnNames_Lead()
 {
