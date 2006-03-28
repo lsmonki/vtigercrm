@@ -3,9 +3,7 @@ require_once('include/fpdf/fpdf.php');
 require_once('modules/Quotes/Quote.php');
 require_once('include/database/PearDatabase.php');
 
-//Curency Settings By OpenCRM
-global $adb;
-global $app_strings;
+global $adb,$app_strings;
 
 $sql="select currency_symbol from currency_info";
 $result = $adb->query($sql);
@@ -304,11 +302,9 @@ function addCols( $tab ,$positions ,$bottom)
 	$r2  = $this->w - ($r1 * 2) ;
 	$y1  = 80;
 	$x1  = $positions[1];
-	//$y2  = $this->h - $x1 - $y1 - 17;
 	$y2  = $bottom;
 	$this->SetXY( $r1, $y1 );
 	$this->SetFont( "Helvetica", "", 10);
-	//$this->Rect( $r1, $y1, $r2, $y2, "D");
 
 	$colX = $r1;
 	$columns = $tab;
@@ -517,7 +513,6 @@ for($i=0;$i<$num_products;$i++) {
 $page_num='1';
 $pdf = new PDF( 'P', 'mm', 'A4' );
 $pdf->Open();
-//$pdf->AddPage();
 
 $num_pages=ceil(($num_products/$products_per_page));
 
