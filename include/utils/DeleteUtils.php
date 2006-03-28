@@ -104,11 +104,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module=="Products")
 		{
-			//$relation_query = "DELETE from invoiceproductrel where productid=".$return_id." and invoiceid=".$record;
-			//$adb->query($relation_query);
 			//Removing the relation from the quotes product rel
 			$inv_query = "select * from invoiceproductrel where productid=".$return_id;
-			//echo $qt_query;
 			$result = $adb->query($inv_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
@@ -220,11 +217,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Products")
 		{
-			//$relation_query = "DELETE FROM quotesproductrel where productid=".$return_id." and quoteid=".$record;
-			//$adb->query($relation_query);
 			//Removing the relation from the quotes product rel
 			$qt_query = "select * from quotesproductrel where productid=".$return_id;
-			//echo $qt_query;
 			$result = $adb->query($qt_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
