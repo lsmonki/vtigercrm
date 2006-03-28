@@ -10,7 +10,6 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('include/utils/utils.php');
 require_once('modules/Vendors/Vendor.php');
 require_once('include/utils/utils.php');
 
@@ -28,10 +27,8 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$focus->id = "";
 }
 
-global $app_strings;
-global $mod_strings;
+global $app_strings,$mod_strings,$theme;
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
