@@ -88,125 +88,6 @@ $graph_array = Array(
           "ticketsbystatus" => "Tickets by status",
           "ticketsbypriority" => "Tickets by Priority",
           );
-/*
-if($type == "leadsource")
-{
-     $graph_by="leadsource";
-     $graph_title="Leads By Source";
-     $module="Leads";
-     $classsel_name = "dashMnuSel";
-}
-// To display the charts  for Lead status                   
-if ($type == "leadstatus")
-{
-	$graph_by="leadstatus";
-	$graph_title="Leads By Status";
-	$module="Leads";
-	$classsel_name = "dashMnuSel";
-}
-//Charts for Lead Industry
-if($type == "leadindustry")
-{
-	$graph_by="industry";
-     $graph_title="Leads By Industry";
-     $module="Leads";
-     $classsel_name = "dashMnuSel";
-}
-//Sales by Lead Source
-if($type == "salesbyleadsource")
-{
-   $graph_by="leadsource";
-   $graph_title="Sales by LeadSource";
-   $module="Potentials";
-   $classsel_name = "dashMnuSel";
-}
-//Sales by Account
-if($type == "salesbyaccount")
-{
-     $graph_by="accountid";
-     $graph_title="Sales by Accounts";
-     $module="Potentials";
-     $classsel_name = "dashMnuSel";
-}
-//Charts for Account by Industry
-if($type == "accountindustry")
-{
-	$graph_by="industry";
-     $graph_title="Account By Industry";
-     $module="Accounts";
-     $classsel_name = "dashMnuSel";
-}
-//Charts for Products by Category
-if($type == "productcategory")
-{
-	$graph_by="productcategory";
-     $graph_title="Products by Category";
-     $module="Products";
-}
-// Sales Order by Accounts
-if($type == "sobyaccounts")
-{
-	$graph_by="accountid";
-     $graph_title="Sales Order by Accounts";
-     $module="SalesOrder";
-}
-//Sales Order by Status
-if($type == "sobystatus")
-{
-     $graph_by="sostatus";
-     $graph_title="Sales Order by Status";
-     $module="SalesOrder";
-}
-//Purchase Order by Status
-if($type == "pobystatus")
-{
-    $graph_by="postatus";
-    $graph_title="Purchase Order by Status";
-    $module="PurchaseOrder";
-}
-//Quotes by Accounts
-if($type == "quotesbyaccounts")
-{
-   $graph_by="accountid";
-   $graph_title="Quotes by Accounts";
-   $module="Quotes";
-}
-//Quotes by Stage
-if($type == "quotesbystage") 
-{
-   $graph_by="quotestage";
-   $graph_title="Quotes by Stage";
-   $module="Quotes";
-}
-//Invoice by Accounts
-if($type == "invoicebyacnts")
-{
-   $graph_by="accountid";
-   $graph_title="Invoices by Accounts";
-   $module="Invoice";
-}
-//Invoices by status
-if($type == "invoicebystatus")
-{
-   $graph_by="invoicestatus";
-   $graph_title="Invoices by status";
-   $module="Invoice";
-}
-//Tickets by Status
-if($type == "ticketsbystatus")
-{
-   $graph_by="ticketstatus";
-   $graph_title="Tickets by status";
-   $module="HelpDesk";
-}
-//Tickets by Priority
-if($type == "ticketsbypriority")
-{
-   $graph_by="priority";
-   $graph_title="Tickets by Priority";
-   $module="HelpDesk";
-}
-  */                  
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
 	global $user_id,$date_start,$end_date,$type;
@@ -245,12 +126,12 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
  
 }
 
- /** Returns  the Horizontal,vertical, pie graphs and Accumulated Graphs 
-	for the details
-        * Portions created by vtiger are Copyright (C) vtiger.
-        * All Rights Reserved.
-        * Contributor(s): ______________________________________..
- */
+/** Returns  the Horizontal,vertical, pie graphs and Accumulated Graphs 
+for the details
+* Portions created by vtiger are Copyright (C) vtiger.
+* All Rights Reserved.
+* Contributor(s): ______________________________________..
+*/
 
 
 // Function for get graphs
@@ -262,7 +143,6 @@ function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$h
 	$val=explode(":",$title); 		
 	$display_title=$val[0];	
 			
-	//$sHTML = "<h2><center>  $display_title in between  $date_start and  $end_date </center></h2>";
 	
 $sHTML .= "<tr>
 	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
@@ -336,12 +216,12 @@ $sHTML .= "</td>
 	return $sHTML;
 }
 
- /** Returns graph, if the cached image is present it'll display that image,
-	otherwise it will render the graph with the given details	
-	* Portions created by vtiger are Copyright (C) vtiger.
-	* All Rights Reserved.
-        * Contributor(s): ______________________________________..
- */
+/** Returns graph, if the cached image is present it'll display that image,
+otherwise it will render the graph with the given details	
+* Portions created by vtiger are Copyright (C) vtiger.
+* All Rights Reserved.
+* Contributor(s): ______________________________________..
+*/
 
 // Function to get the chached image if exists
 function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_type)

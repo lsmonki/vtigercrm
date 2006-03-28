@@ -13,72 +13,66 @@ $right=(isset($_REQUEST['right']))?$_REQUEST['right']:20;
 $top=(isset($_REQUEST['top']))?$_REQUEST['top']:40;
 $bottom=(isset($_REQUEST['bottom']))?$_REQUEST['bottom']:50;
 $title=(isset($_REQUEST['title']))?$_REQUEST['title']:"Horizontal graph";
-//$target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
 $target_val=(isset($_REQUEST['test']))?$_REQUEST['test']:"";
-/*
-function accumlated_graph($refer_code,$referdata,$datavalue,$title,$target_val,$width,$height,$left,$right,$top,$bottom)
+//Exploding the data values
+$datavalue=explode("K",$datavalue);
+$name_value=explode(",",$referdata);
+$datax=explode(",",$refer_code); //The values to the XAxis
+$target_val=urldecode($target_val);
+$target_val=explode("K",$target_val);
+
+
+
+
+$color_array=array("#FF8B8B","#8BFF8B","#A8A8FF","#FFFF6E","#C5FFFF","#FFA8FF","#FFE28B","lightpink","burlywood2","cadetblue");
+
+// Create the graph. These two calls are always required
+$graph = new Graph($width,$height,"auto");    
+$graph->SetScale("textlin");
+
+$graph->SetShadow();
+
+
+// Create the lines of the Graph
+for($i=0;$i<count($datavalue);$i++)
 {
-*/
-	//Exploding the data values
-	$datavalue=explode("K",$datavalue);
-	$name_value=explode(",",$referdata);
-	$datax=explode(",",$refer_code); //The values to the XAxis
-	$target_val=urldecode($target_val);
-        $target_val=explode("K",$target_val);
+	$data=$datavalue[$i];
+	$target=$target_val[$i];
+	$graph_data=explode(",",$data);
+	$data[$i]=$data;
+	$bplot[$i] = new BarPlot($graph_data);
+	$bplot[$i]->SetFillColor($color_array[$i]);
+	$bplot[$i]->SetWidth(10);
 
+	$bplot[$i]->value->Show();
+	$bplot[$i]->value->SetFont(FF_FONT1,FS_NORMAL,8);
+	$bplot[$i]->value->SetColor("black");
+	$bplot[$i]->value->SetFormat('%d');
+	$bplot[$i]->SetValuePos('max');
 
+}
 
+$gbplot = new AccBarPlot($bplot);
+$gbplot->SetWidth(0.7);
 
-	$color_array=array("#FF8B8B","#8BFF8B","#A8A8FF","#FFFF6E","#C5FFFF","#FFA8FF","#FFE28B","lightpink","burlywood2","cadetblue");
+// Add the bar to the graph
+$graph->Add($gbplot);
 
-	// Create the graph. These two calls are always required
-	$graph = new Graph($width,$height,"auto");    
-	$graph->SetScale("textlin");
+$graph->xaxis->SetTickLabels($datax);
 
-	$graph->SetShadow();
+$graph->title->Set($title);
 
+$graph->Set90AndMargin($left,$right,$top,$bottom);
+//$graph->SetFrame(false);
+$graph->title->SetFont(FF_FONT1,FS_BOLD);
+$graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
+$graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
 
-	// Create the lines of the Graph
-	for($i=0;$i<count($datavalue);$i++)
-	{
-		$data=$datavalue[$i];
-		$target=$target_val[$i];
-	        $graph_data=explode(",",$data);
-        	$data[$i]=$data;
-	        $bplot[$i] = new BarPlot($graph_data);
-        	$bplot[$i]->SetFillColor($color_array[$i]);
-		$bplot[$i]->SetWidth(10);
+$graph->SetColor("#7D9CB8");
+$graph->SetMarginColor("#3D6A93");
 
-                $bplot[$i]->value->Show();
-                $bplot[$i]->value->SetFont(FF_FONT1,FS_NORMAL,8);
-                $bplot[$i]->value->SetColor("black");
-                $bplot[$i]->value->SetFormat('%d');
-                $bplot[$i]->SetValuePos('max');
-
-	}
-
-	$gbplot = new AccBarPlot($bplot);
-	$gbplot->SetWidth(0.7);
-
-        // Add the bar to the graph
-        $graph->Add($gbplot);
-
-	$graph->xaxis->SetTickLabels($datax);
-
-	$graph->title->Set($title);
-
-	$graph->Set90AndMargin($left,$right,$top,$bottom);
-	//$graph->SetFrame(false);
-	$graph->title->SetFont(FF_FONT1,FS_BOLD);
-	$graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
-	$graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
-
-	$graph->SetColor("#7D9CB8");
-	$graph->SetMarginColor("#3D6A93");
-
-	// Display the graph
-	$graph->Stroke();
-//}
+// Display the graph
+$graph->Stroke();
 
 ?>
 

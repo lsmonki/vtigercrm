@@ -40,23 +40,14 @@ $target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
 
 // Setup the graph
 
-//$graph = new Graph(300,200);
 $graph = new Graph($width,$height);
 $graph->SetMarginColor('white');
 $graph->SetScale("textlin");
-//$graph->SetFrame(false);
-//$graph->SetMargin(30,50,30,30);
 $graph->SetMargin($left,$right,$top,$bottom);
-
 $graph->tabtitle->Set($title );
 $graph->tabtitle->SetFont(FF_FONT2,FS_BOLD,13);
-
-
 $graph->yaxis->HideZeroLabel();
-//$graph->ygrid->SetFill(true,'#EFEFEF@0.5','#BBCCFF@0.5');
-//$graph->ygrid->SetFill(true,'#E3FDFA@0.5','#F4FDF5@0.5');
 $graph->xgrid->Show();
-//$graph->xgrid->Show();
 
 $thick=6;
 // Create the lines of the Graph
@@ -66,8 +57,6 @@ for($i=0;$i<count($datavalue);$i++)
 	$graph_data=explode(",",$data);
 
 	$name=$name_value[$i];
-	
-//	$lineplot ->SetWeight($i);	
 	$color_val=$color_array[$i];
 	$temp="p".$i;
 	$$temp = new LinePlot($graph_data);
@@ -102,9 +91,6 @@ $graph->legend->Pos(0,0.4,"right","center");
 // Set some other color then the boring default
 $graph->SetColor("#CCDFCC");
 $graph->SetMarginColor("#98C098");
-
-
-//$graph->xaxis->SetTextAlign('center','top');
 $graph->xaxis->SetTickLabels($datax);
 $graph->xaxis->SetLabelAngle(90);
 

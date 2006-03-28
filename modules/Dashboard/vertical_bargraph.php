@@ -15,9 +15,9 @@ include ("jpgraph/src/jpgraph_flags.php");
 include ("jpgraph/src/jpgraph_iconplot.php");
 
 /** Function to render the Vertical Bar Graph
-        * Portions created by vtiger are Copyright (C) vtiger.
-        * All Rights Reserved.
-        * Contributor(s): ______________________________________..
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 
 function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
@@ -27,7 +27,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	$datay=explode(",",$referdata); //The datay values
 	$datax=explode(",",$refer_code); // The datax values
 	$target_val=urldecode($target_val);// The links values for bar are given as string in the encoded form, here we are decoding it
-        $target=explode(",",$target_val);
+	$target=explode(",",$target_val);
 
 	$alts=array(); //Array which contains the data which is displayed on the mouse over
 	$temp=array();
@@ -97,7 +97,6 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
 	$graph->SetFrame(false);
 	$graph->SetMarginColor('white');
-	//$graph->ygrid->SetFill(true,'azure1','azure2');
 	$graph->xgrid->Show();
 
 	// To get the Targets 
@@ -120,18 +119,15 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 
 	$bplot->value->SetFormat('%d');
 
-	// Display the graph
-//	$graph->Stroke(); 
-
-        //Getting the graph in the form of html page
+	//Getting the graph in the form of html page
 	$graph-> Stroke( $cache_file_name );
 	$imgMap = $graph ->GetHTMLImageMap ($html_image_name);
-        save_image_map($cache_file_name.'.map', $imgMap);
-        $base_name_cache_file=basename($cache_file_name);
-        $ccc="cache/images/".$base_name_cache_file;
-        $img= "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
-        $img.=$imgMap;
-        return $img;
+	save_image_map($cache_file_name.'.map', $imgMap);
+	$base_name_cache_file=basename($cache_file_name);
+	$ccc="cache/images/".$base_name_cache_file;
+	$img= "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
+	$img.=$imgMap;
+	return $img;
 
 }
 ?>
