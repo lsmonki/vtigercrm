@@ -149,10 +149,6 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		if(isPermitted("HelpDesk",1,"") == 'yes')
-		{
-			$button .= '<input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\';this.form.return_action.value=\'DetailView\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TICKET'].'">&nbsp;';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join products on products.productid=troubletickets.product_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
@@ -170,11 +166,6 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-        if(isPermitted("Activities",1,"") == 'yes')
-        {
-		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
-		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';;this.form.activity_mode.value=\'Events\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
@@ -188,10 +179,6 @@ class Product extends CRMEntity {
 		$focus = new Quote();
 	
 		$button = '';
-		if(isPermitted("Quotes",1,"") == 'yes')
-        {
-		$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
@@ -206,10 +193,6 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		if(isPermitted("PurchaseOrder",1,"") == 'yes')
-		{
-			$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
@@ -222,10 +205,6 @@ class Product extends CRMEntity {
         $focus = new SalesOrder();
  
 		$button = '';
-		if(isPermitted("SalesOrder",1,"") == 'yes')
-        	{
-			$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and products.productid = ".$id;
@@ -238,10 +217,6 @@ class Product extends CRMEntity {
 		$focus = new Invoice();
 
 		$button = '';
-		if(isPermitted("Invoice",1,"") == 'yes')
-		{
-			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
@@ -254,11 +229,6 @@ class Product extends CRMEntity {
 		require_once('modules/PriceBooks/PriceBook.php');
 		$focus = new PriceBook();
 		$button = '';
-		if(isPermitted("PriceBook",3,"") == 'yes' && $focus->get_pricebook_noproduct($id))
-		{
-			$button .= '<input title="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_TITLE'].'" accessyKey="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'AddProductToPriceBooks\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_LABEL'].'">&nbsp;</td>';
-
-		}
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 
@@ -305,8 +275,6 @@ class Product extends CRMEntity {
 	//check if the custom table exists or not in the first place
 	function checkIfCustomTableExists()
 	{
-		//$result = mysql_query("select * from accountcf");
-		//$testrow = mysql_num_fields($result);
 		$result = $this->db->query("select * from productcf");
 		$testrow = $this->db->num_fields($result);
 		if($testrow > 1)
