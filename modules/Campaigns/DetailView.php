@@ -42,7 +42,6 @@ $smarty->assign("APP", $app_strings);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks("Campaigns","detail_view",'',$focus->column_fields));
-//echo '<pre>';print_r($focus->column_fields); echo '</pre>';
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","Campaign");
@@ -67,6 +66,5 @@ global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 $focus->id = $_REQUEST['record'];
-
 
 ?>
