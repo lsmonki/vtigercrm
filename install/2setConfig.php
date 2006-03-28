@@ -290,7 +290,7 @@ function verify_data(form) {
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><select style="width:145px" name="dbtype">
+               <td width="75%" bgcolor="white" align="left"><select name="dbtype">
 			   <option value="mysql" selected="selected">MySQL</option>
 			   </select>
 			   </td>
