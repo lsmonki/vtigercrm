@@ -1,3 +1,54 @@
+function DisableSharing()
+{
+
+        x = document.SharedList.selected_id.length;
+        idstring = "";
+        xx = 0;
+        if ( x == undefined)
+        {
+
+                if (document.SharedList.selected_id.checked)
+                {
+                        document.SharedList.idlist.value=document.SharedList.selected_id.value;
+                }
+                else
+                {
+                        alert("Please select atleast one user");
+                        return false;
+                }
+        }
+        else
+        {
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.SharedList.selected_id[i].checked)
+                        {
+                                idstring = document.SharedList.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.SharedList.idlist.value=idstring;
+                }
+                else
+                {
+                        alert("Please select atleast one user");
+                        return false;
+                }
+        }
+        if(confirm("Are you sure you want to disable sharing for selected "+xx+" user(s) ?"))
+        {
+                document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=calendar_share";
+        }
+        else
+        {
+                return false;
+        }
+}
+
+
+
 function showhide(argg)
 {
 	var x=document.getElementById(argg).style;
@@ -83,7 +134,7 @@ function switchClass(myModule,toStatus) {
 
 function check_form()
 {
-        if(trim(document.appSave.subject.value) == "")
+        if(document.appSave.subject.value == "")
         {
                 alert("Missing Event Name");
                 document.appSave.subject.focus()
@@ -104,51 +155,108 @@ function check_form()
 }
 
 
-function DisableSharing()
+
+var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
+function setObjects()
 {
+        availListObj=getObj("available")
+        selectedColumnsObj=getObj("selectedusers")
 
-        x = document.SharedList.selected_id.length;
-        idstring = "";
-	xx = 0;
-        if ( x == undefined)
+}
+
+function addColumn()
+{
+        var selectlength=selectedColumnsObj.length
+        var availlength=availListObj.length
+        var s=0
+        for (i=0;i<selectlength;i++)
         {
-
-                if (document.SharedList.selected_id.checked)
-                {
-                        document.SharedList.idlist.value=document.SharedList.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select atleast one user");
-                        return false;
-                }
+                selectedColumnsObj.options[i].selected=false
         }
-        else
+        for (i=0;i<availlength;i++)
         {
-                for(i = 0; i < x ; i++)
+                if (availListObj.options[s].selected==true)
                 {
-                        if(document.SharedList.selected_id[i].checked)
+                        for (j=0;j<selectlength;j++)
                         {
-                                idstring = document.SharedList.selected_id[i].value +";"+idstring
-                        xx++
+                                if (selectedColumnsObj.options[j].value==availListObj.options[s].value)
+                                {
+                                        var rowFound=true
+                                        var existingObj=selectedColumnsObj.options[j]
+                                        breaK;
+                                }
+                        }
+                        if (rowFound!=true)
+                        {
+                                var newColObj=document.createElement("OPTION")
+                                        newColObj.value=availListObj.options[s].value
+                                        if (browser_ie) newColObj.innerText=availListObj.options[s].innerText
+                                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[s].text
+                                                selectedColumnsObj.appendChild(newColObj)
+                                        availListObj.removeChild(availListObj.options[s])
+                                        newColObj.selected=true
+                                        rowFound=false
+                        }
+                        else
+                        {
+                                existingObj.selected=true
                         }
                 }
-                if (xx != 0)
-                {
-                        document.SharedList.idlist.value=idstring;
-                }
-                else
-                {
-                        alert("Please select atleast one user");
-                        return false;
-                }
+		else
+                        s++
         }
-	if(confirm("Are you sure you want to disable sharing for selected "+xx+" user(s) ?"))
+}
+
+function delColumn()
+{
+        var selectlength=selectedColumnsObj.length
+        var availlength=availListObj.length
+        var s=0
+        for (i=0;i<availlength;i++)
         {
-                document.SharedList.action="index.php?module=Calendar&action=disable_sharing&return_module=Calendar&return_action=calendar_share";
+                availListObj.options[i].selected=false
         }
-        else
+        for (i=0;i<selectlength;i++)
         {
-                return false;
+                if (selectedColumnsObj.options[s].selected==true)
+                {
+                        for (j=0;j<availlength;j++)
+                        {
+                                if (availListObj.options[j].value==selectedColumnsObj.options[s].value)
+                                {
+                                        var rowFound=true
+                                        var existingObj=availListObj.options[j]
+                                        breaK;
+                                }
+                        }
+
+                        if (rowFound!=true)
+                        {
+                                var newColObj=document.createElement("OPTION")
+                                        newColObj.value=selectedColumnsObj.options[s].value
+                                        if (browser_ie) newColObj.innerText=selectedColumnsObj.options[s].innerText
+                                        else if (browser_nn4 || browser_nn6) newColObj.text=selectedColumnsObj.options[s].text
+                                                availListObj.appendChild(newColObj)
+                                        selectedColumnsObj.removeChild(selectedColumnsObj.options[s])
+                                        newColObj.selected=true
+                                        rowFound=false
+                        }
+                        else
+                        {
+                                existingObj.selected=true
+                        }
+                }
+		else
+                        s++
         }
+}
+
+function formSelectColumnString()
+{
+	var selectedColStr = "";
+        for (i=0;i<selectedColumnsObj.options.length;i++)
+        {
+        	selectedColStr += selectedColumnsObj.options[i].value + ";";
+        }
+        document.SharingForm.sharedid.value = selectedColStr;
 }
