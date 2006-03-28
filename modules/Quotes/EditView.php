@@ -29,10 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $mod_strings;
-global $current_user;
-global $log;
+global $app_strings,$mod_strings,$log,$theme;
 
 $log->debug("Inside Quote EditView");
 
@@ -89,7 +86,6 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['r
 	 $log->debug("Accountid Id from the request is ".$_REQUEST['account_id']);
 }
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 //retreiving the combo values array
@@ -135,8 +131,7 @@ if($focus->mode == 'edit')
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$num_of_products = getNoOfAssocProducts($module,$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
-	//$associated_prod = getAssociatedProducts("Quotes",$focus);
-	$associated_prod = getProductDetailsBlockInfo('edit','Quotes',$focus); //getAssociatedProducts("Quotes",$focus);
+	$associated_prod = getProductDetailsBlockInfo('edit','Quotes',$focus); 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
 	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
@@ -164,35 +159,6 @@ elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || 
         $smarty->assign("ADJUSTMENTVALUE", "0.000");
         $smarty->assign("SUBTOTAL", $InvTotal.".00");
         $smarty->assign("GRANDTOTAL", $InvTotal.".00");
-
-}
-else
-{
-	$smarty->assign("ROWCOUNT", '1');
-	$smarty->assign("TAXVALUE", '0');
-	$smarty->assign("ADJUSTMENTVALUE", '0');
-	//Setting the first row
-	 $log->debug("Setting the first product row when the mode is create");
-	$output ='';
-	$output .= '<tr id="row1" class="oddListRow">';
-        $output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct1" name="txtProduct1" type="text" readonly> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>';
-        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:3px;"><input type=text id="txtQty1" name="txtQty1" size="7" onBlur=\'calcTotal(this)\'></td>';
-        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:3px;"><div id="unitPrice1"></div>&nbsp;</td>';
-        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:3px;"><input type=text id="txtListPrice1" name="txtListPrice1" value="0.00" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
-        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:3px;"><div id="total1" align="right"></div></td>';
-        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50">';
-        $output .= '<input type="hidden" id="hdnProductId1" name="hdnProductId1">';
-        $output .= '<input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1">';
-        $output .= '<input type="hidden" id="hdnTotal1" name="hdnTotal1">';
-        $output .= '</td></tr>';
-	$smarty->assign("ROW1", $output);
 
 }
 
