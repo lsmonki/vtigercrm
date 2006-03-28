@@ -306,7 +306,7 @@ $mod_strings = Array(
 
 //Fields for Settings
 
-'LBL_USER_MANAGEMENT'=>'User Management',
+'LBL_USER_MANAGEMENT'=>'Users & Access Management',
 
 'LBL_USERS'=>'Users',
 
