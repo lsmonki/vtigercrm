@@ -12,20 +12,12 @@ require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 require_once('modules/PriceBooks/PriceBook.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
-global $app_strings;
-global $mod_strings;
-global $current_language;
+global $app_strings,$mod_strings,$current_language,$theme,$log;
+
 $current_module_strings = return_module_language($current_language, 'Products');
 
-global $list_max_entries_per_page;
-global $urlPrefix;
-
-
-global $theme;
-global $log;
 $productid = $_REQUEST['return_id'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -33,7 +25,6 @@ require_once($theme_path.'layout_utils.php');
 $productname = getProductName($productid);
 echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_ADD_PRODUCT_PRICEBOOKS'].": ".$productname, true);
 echo "<br>";
-//echo get_form_header("Product Search", "", false);
 
 $xtpl=new XTemplate ('modules/Products/AddProductToPriceBooks.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -43,7 +34,6 @@ $xtpl->assign("IMAGE_PATH",$image_path);
 $focus = new PriceBook();
 
 echo get_form_footer();
-//echo '<br><br>';
 
 
 
@@ -59,7 +49,6 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0">
 
 //Retreive the list from Database
 
-//$list_query = $focus->get_nonproduct_pricebooks($productid);
 $list_query = getListQuery("PriceBooks");
 $xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
@@ -73,7 +62,6 @@ $record_string= "Total No of Rows: ".$num_rows;
 //Retreiving the array of already releated products;
 
 $sql1="select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_price from pricebookproductrel inner join crmentity on crmentity.crmid=pricebookproductrel.productid inner join products on products.productid=pricebookproductrel.productid where crmentity.deleted=0 and pricebookproductrel.productid=".$productid;
-//$sql1 = "select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_price from pricebookproductrel inner join crmentity on crmentity.crmid=pricebookproductrel.productid inner join products on products.productid=pricebookproductrel.productid where crmentity.delete=0 and pricebookproductrel.productid=".$productid;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
 $pbk_array = Array();
@@ -130,7 +118,6 @@ for($i=0; $i<$num_rows; $i++)
 		else
 			$list_body .= '<tr height=20 class=oddListRow>';
 
-		//$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$field_name=$entity_id."_listprice";
 
 		$list_body .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -147,8 +134,6 @@ for($i=0; $i<$num_rows; $i++)
 }
 
 
-//$listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array);
-//$xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
@@ -156,7 +141,6 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $xtpl->assign("LISTENTITY", $list_body);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 $xtpl->assign("RETURN_ID", $productid);
 
 $xtpl->parse("main");
