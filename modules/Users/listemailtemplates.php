@@ -16,8 +16,6 @@ require_once('include/database/PearDatabase.php');
    $sql = "select * from emailtemplates order by templateid DESC";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
-  //echo '<pre>'; print_r($temprow); echo '</pre>';	
-
    
 $edit="Edit  ";
 $del="Del  ";
@@ -31,7 +29,6 @@ global $mod_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("UMOD", $mod_strings);
