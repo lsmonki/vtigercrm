@@ -15,16 +15,7 @@ $fldmodule=$_REQUEST['fld_module'];
  $fldType= $_REQUEST['fieldType'];
  $parenttab=$_REQUEST['parenttab'];
 
-function fetchTabIDVal($fldmodule)
-{
-
-  global $adb;
-  $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
-  $tabidresult = $adb->query($query);
-  return $adb->query_result($tabidresult,0,"tabid");
-}
-
-$tabid = fetchTabIDVal($fldmodule);
+$tabid = getTabid($fldmodule);
 
 if(get_magic_quotes_gpc() == 1)
 {
@@ -259,8 +250,6 @@ else
 		{
 			$query = "update field set fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where fieldid=".$_REQUEST['fieldid'];
 			$adb->query($query);
-			$adb->alterTable($tableName, $columnName, "Delete_Column");
-			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 		}
 		//Inserting values into profile2field tables
 		$sql1 = "select * from profile";
