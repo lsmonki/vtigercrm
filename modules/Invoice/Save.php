@@ -38,22 +38,15 @@ if(isset($_REQUEST['mode']))
 	$focus->mode = $_REQUEST['mode'];
 }
 
-//$focus->retrieve($_REQUEST['record']);
-
 foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
-		//echo '<BR>';
-		//echo $fieldname."         ".$value;
-		//echo '<BR>';
 		$focus->column_fields[$fieldname] = $value;
 	}
 		
 }
-
-//print_r($focus->column_fields);
 
 $focus->save("Invoice");
 
@@ -80,7 +73,6 @@ if($focus->mode == 'edit')
 	}	
 
         $query1 = "delete from invoiceproductrel where invoiceid=".$focus->id;
-        //echo $query1;
         $adb->query($query1);
 
 }
@@ -118,8 +110,7 @@ $local_log->debug("Saved record with id of ".$return_id);
 
 function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 {
-	global $adb;
-	global $current_user;
+	global $adb,$current_user;
 	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
 	if($mode == 'edit')
@@ -163,17 +154,13 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 			sendPrdStckMail($product_id,$upd_qty,$prod_name);
 	}	
 	
-
-	//$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
-	//$adb->query($query);
 	//Check for reorder level and send mail
 	
 }
 
 function sendPrdStckMail($product_id,$upd_qty,$prod_name)
 {
-	global $current_user;
-	global $adb;
+	global $current_user,$adb;
 	$reorderlevel = getPrdReOrderLevel($product_id);
 	if($upd_qty < $reorderlevel)
 	{
