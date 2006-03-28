@@ -15,7 +15,6 @@ require_once('include/database/PearDatabase.php');
 
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 global $current_language;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -37,21 +36,6 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 	$tempid = $_REQUEST['templateid'];
 	$sql = "select * from emailtemplates where templateid=".$tempid;
 	$result = $adb->query($sql);
-/*	$temprow = $adb->fetch_array($result);
-	$cnt=1;
-	$selcount = $_REQUEST['templatename'];	
-	do
-	{
-	  if ($cnt == $selcount)
-  	  {
-	      $templatename = $temprow["templatename"]; 
-  	  }
-	  $cnt++;
-	}while($temprow = $adb->fetch_array($result));
-
-	$result = fetchEmailTemplateInfo($templatename);
-*/
-//
 	$emailtemplateResult = $adb->fetch_array($result);
 }
 $smarty->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
@@ -64,7 +48,6 @@ $smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
 $smarty->assign("BODY", nl2br($emailtemplateResult["body"]));
 
 $smarty->display("DetailViewEmailTemplate.tpl");
-
 
 ?>
 
