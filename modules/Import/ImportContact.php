@@ -18,19 +18,6 @@
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-/*
-require_once('database/DatabaseConnection.php');
-require_once('data/SugarBean.php');
-require_once('include/utils/utils.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Cases/Case.php');
-require_once('modules/Tasks/Task.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Meetings/Meeting.php');
-require_once('modules/Calls/Call.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Accounts/Account.php');
-*/
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('include/database/PearDatabase.php');
@@ -54,16 +41,16 @@ class ImportContact extends Contact {
 
        // This is the list of the functions to run when importing
         var $special_functions =  array(
-		//"get_names_from_full_name"
-		"add_create_account"
-		//,"add_salutation"
-		//,"add_lead_source"
-		//,"add_birthdate"
-		//,"add_do_not_call"
-		//,"add_email_opt_out"
-		//,"add_primary_address_streets"
-		//,"add_alt_address_streets"
-		);
+						//"get_names_from_full_name"
+						"add_create_account"
+						//,"add_salutation"
+						//,"add_lead_source"
+						//,"add_birthdate"
+						//,"add_do_not_call"
+						//,"add_email_opt_out"
+						//,"add_primary_address_streets"
+						//,"add_alt_address_streets"
+					);
 
 	function add_salutation()
 	{
@@ -83,7 +70,6 @@ class ImportContact extends Contact {
 		}
 
 	}
-
 
 	function add_birthdate()
 	{
@@ -162,98 +148,6 @@ class ImportContact extends Contact {
 
         }
 
-       /* function add_create_account()
-        {
-		global $adb;
-		// global is defined in UsersLastImport.php
-		global $imported_ids;
-                global $current_user;
-
-		if ( (! isset($this->account_name) || $this->account_name == '') &&
-			(! isset($this->account_id) || $this->account_id == '') )
-		{
-			return; 
-		}
-
-                $arr = array();
-
-		// check if it already exists
-                $focus = new Account();
-
-		$query = '';
-
-		// if user is defining the account id to be associated with this contact..
-		if ( isset($this->account_id) && $this->account_id != '')
-		{
-                	$query = "select * from {$focus->table_name} WHERE id='{$this->account_id}'";
-		}	
-		// else user is defining the account name to be associated with this contact..
-		else 
-		{
-                	$query = "select * from {$focus->table_name} WHERE name='{$this->account_name}'";
-		}
-
-                $this->log->info($query);
-
-                $result = $adb->query($query)
-                       or die("Error selecting sugarbean: ".mysql_error());
-
-                $row = $this->db->fetchByAssoc($result, -1, false);
-
-		// we found a row with that id
-                if (isset($row['id']) && $row['id'] != -1)
-                {
-                        // if it exists but was deleted, just remove it entirely
-                        if ( isset($row['deleted']) && $row['deleted'] == 1)
-                        {
-                                $query2 = "delete from {$focus->table_name} WHERE id='". $row['id']."'";
-
-                                $this->log->info($query2);
-
-                                $result2 = $adb->query($query2)
-                                        or die("Error deleting existing sugarbean: ".mysql_error());
-
-                        }
-			// else just use this id to link the contact to the account
-                        else
-                        {
-                                $focus->id = $row['id'];
-                        }
-                }
-
-		// if we didnt find the account, so create it
-                if (! isset($focus->id) || $focus->id == '')
-                {
-                        $focus->name = $this->account_name;
-                        $focus->assigned_user_id = $current_user->id;
-                        $focus->modified_user_id = $current_user->id;
-
-			if ( isset($this->account_id)  &&
-                                $this->account_id != '')
-                        {
-				$focus->new_with_id = true;
-                                $focus->id = $this->account_id;
-                        }
-
-                        $focus->save();
-			// avoid duplicate mappings:
-			if (! isset( $imported_ids[$this->account_id]) )
-			{
-				// save the new account as a users_last_import
-                		$last_import = new UsersLastImport();
-                		$last_import->assigned_user_id = $current_user->id;
-                		$last_import->bean_type = "Accounts";
-                		$last_import->bean_id = $focus->id;
-                		$last_import->save();
-				$imported_ids[$this->account_id] = 1;
-			}
-                }
-
-		// now just link the account
-                $this->account_id = $focus->id;
-
-        }*/
-
 	function add_create_account()
         {
 		global $adb;
@@ -277,29 +171,13 @@ class ImportContact extends Contact {
 		$query = '';
 
 		// if user is defining the account id to be associated with this contact..
-		/*if ( isset($this->account_id) && $this->account_id != '')
-		{
-                	$query = "select * from {$focus->table_name} WHERE id='{$this->account_id}'";
-		}	
-		// else user is defining the account name to be associated with this contact..
-		else 
-		{
-                	$query = "select * from {$focus->table_name} WHERE name='{$this->account_name}'";
-		}*/
-		
-		//$query = "select * from {$focus->table_name} WHERE accountname='{$acc_name}' left join crmentity on crmentity.crmid =account.accountid";
 
 		//Modified to remove the spaces at first and last in account name -- after 4.2 patch 2
-		$adb->println("Account name in csv file related to contact - to be search =>'".$acc_name."'");
 		$acc_name = trim(addslashes($acc_name));
-		$adb->println("Account name going to search in database after addslashes, trim =>'".$acc_name."'");
 
 		$query = "select crmentity.deleted, account.* from account,crmentity WHERE accountname='{$acc_name}' and crmentity.crmid =account.accountid";
 
-                $this->log->info($query);
-
-                $result = $adb->query($query)
-                       or die("Error selecting sugarbean: ".mysql_error());
+                $result = $adb->query($query)	or die("Error selecting sugarbean: ".mysql_error());
 
                 $row = $this->db->fetchByAssoc($result, -1, false);
 
@@ -317,8 +195,7 @@ class ImportContact extends Contact {
 
                                 $this->log->info($query2);
 
-                                $result2 = $adb->query($query2)
-                                        or die("Error deleting existing sugarbean: ".mysql_error());
+                                $result2 = $adb->query($query2)	or die("Error deleting existing sugarbean: ".mysql_error());
 
                         }
 			// else just use this id to link the contact to the account
@@ -343,14 +220,6 @@ class ImportContact extends Contact {
 
 			$adb->println("New Account created id=".$focus->id);
 
-			/*if ( isset($this->account_id)  &&
-                                $this->account_id != '')
-                        {
-				$focus->new_with_id = true;
-                                $focus->id = $this->account_id;
-                        }
-
-                        $focus->save();*/
 			// avoid duplicate mappings:
 			if (! isset( $imported_ids[$acc_id]) )
 			{
@@ -377,7 +246,7 @@ class ImportContact extends Contact {
 	// This is the list of fields that can be imported
 	// some of these don't map directly to columns in the db
 
-//we need to add two or more arrays as the columns are distributed across the tables now
+	//we need to add two or more arrays as the columns are distributed across the tables now
 	/*var $importable_fields =  array(
 		"contactid"=>1,
 		"firstname"=>1,

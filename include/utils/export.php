@@ -41,92 +41,21 @@ if(isset($_SESSION['authenticated_user_id']))
         $result = $current_user->retrieve($_SESSION['authenticated_user_id']);
         if($result == null)
         {
-                session_destroy();
-            header("Location: index.php?action=Login&module=Users");
+		session_destroy();
+		header("Location: index.php?action=Login&module=Users");
         }
 
 }
 if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) )
 {
-die("you can't export!");
+	die("you can't export!");
 }
 
-
-
-$contact_fields = array(
-"id"=>"Contact ID"
-,"lead_source"=>"Lead Source"
-,"date_entered"=>"Date Entered"
-,"date_modified"=>"Date Modified"
-,"first_name"=>"First Name"
-,"last_name"=>"Last Name"
-,"salutation"=>"Salutation"
-,"birthdate"=>"Lead Source"
-,"do_not_call"=>"Do Not Call"
-,"email_opt_out"=>"Email Opt Out"
-,"title"=>"Title"
-,"department"=>"Department"
-,"birthdate"=>"Birthdate"
-,"do_not_call"=>"Do Not Call"
-,"phone_home"=>"Phone (Home)"
-,"phone_mobile"=>"Phone (Mobile)"
-,"phone_work"=>"Phone (Work)"
-,"phone_other"=>"Phone (Other)"
-,"phone_fax"=>"Fax"
-,"email1"=>"Email"
-,"email2"=>"Email (Other)"
-,"yahoo_id"=>"Yahoo! ID"
-,"assistant"=>"Assistant"
-,"assistant_phone"=>"Assistant Phone"
-,"primary_address_street"=>"Primary Address Street"
-,"primary_address_city"=>"Primary Address City"
-,"primary_address_state"=>"Primary Address State"
-,"primary_address_postalcode"=>"Primary Address Postalcode"
-,"primary_address_country"=>"Primary Address Country"
-,"alt_address_street"=>"Other Address Street"
-,"alt_address_city"=>"Other Address City"
-,"alt_address_state"=>"Other Address State"
-,"alt_address_postalcode"=>"Other Address Postalcode"
-,"alt_address_country"=>"Other Address Country"
-,"description"=>"Description"
-);
-
-/*$account_fields = array(
-"id"=>"Account ID",
-"name"=>"Account Name",
-"website"=>"Website",
-"industry"=>"Industry",
-"account_type"=>"Type",
-"ticker_symbol"=>"Ticker Symbol",
-"employees"=>"Employees",
-"ownership"=>"Ownership",
-"phone_office"=>"Phone",
-"phone_fax"=>"Fax",
-"phone_alternate"=>"Other Phone",
-"email1"=>"Email",
-"email2"=>"Other Email",
-"rating"=>"Rating",
-"sic_code"=>"SIC Code",
-"annual_revenue"=>"Annual Revenue",
-"billing_address_street"=>"Billing Address Street",
-"billing_address_city"=>"Billing Address City",
-"billing_address_state"=>"Billing Address State",
-"billing_address_postalcode"=>"Billing Address Postalcode",
-"billing_address_country"=>"Billing Address Country",
-"shipping_address_street"=>"Shipping Address Street",
-"shipping_address_city"=>"Shipping Address City",
-"shipping_address_state"=>"Shipping Address State",
-"shipping_address_postalcode"=>"Shipping Address Postalcode",
-"shipping_address_country"=>"Shipping Address Country",
-"description"=>"Description"
-);
-
-*/
-
 //Function added to convert line breaks to space in description during export 
-function br2nl_vt($str) {
-   $str = preg_replace("/(\r\n)/", " ", $str);
-   return $str;
+function br2nl_vt($str) 
+{
+	$str = preg_replace("/(\r\n)/", " ", $str);
+	return $str;
 }
 
 function export_all($type)
@@ -140,7 +69,7 @@ function export_all($type)
 	if ($type == "Contacts")
 	{
 		$focus = new Contact;
-			}
+	}
 	else if ($type == "Accounts")
 	{
 		$focus = new Account;
@@ -168,7 +97,6 @@ function export_all($type)
 	{
 		$focus = new Lead;
 	}
-
 	else if ($type == "Emails")
 	{
 		$focus = new Email;
@@ -190,22 +118,10 @@ function export_all($type)
 		$where = $_SESSION['export_where'];
 	}
 
-/*
-	if ( isset( $_SESSION['order_by'] ))
-	{
-		$order_by = $_SESSION['order_by'];
-	} 
-	else
-	{
-		$order_by = "";
-	}
-	*/
 	$order_by = "";
 
-             $query = $focus->create_export_query($order_by,$where);
+	$query = $focus->create_export_query($order_by,$where);
 
-	//print $query;
-//exit;
 
 	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
 
@@ -222,7 +138,6 @@ function export_all($type)
 	{
 		$new_arr = array();
 
-		//foreach (array_values($val) as $value)
 		foreach ($val as $key => $value)
 		{
 			if($key=="description")
@@ -248,7 +163,7 @@ header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
 header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
 header( "Cache-Control: post-check=0, pre-check=0", false );
 header("Content-Length: ".strlen($content));
-	print $content;
+print $content;
+
 exit;
 ?>
-        

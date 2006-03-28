@@ -24,8 +24,6 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Potentials/Opportunity.php');
-//require_once('modules/Cases/Case.php');
-//require_once('modules/Calls/Call.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Accounts/Account.php');
@@ -35,15 +33,10 @@ require_once('include/ComboUtil.php');
 class ImportAccount extends Account {
 	 var $db;
 
-// Get _dom arrays from Database
-//$comboFieldNames = Array('accounttype'=>'account_type_dom'
-//                      ,'industry'=>'industry_dom');
-//$comboFieldArray = getComboArray($comboFieldNames);
-
-
-	// these are fields that may be set on import
-	// but are to be processed and incorporated
-	// into fields of the parent class
+	// Get _dom arrays from Database
+	//$comboFieldNames = Array('accounttype'=>'account_type_dom'
+	//                      ,'industry'=>'industry_dom');
+	//$comboFieldArray = getComboArray($comboFieldNames);
 
 
 	// This is the list of fields that are required.
@@ -51,10 +44,10 @@ class ImportAccount extends Account {
 	
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
-	//"add_billing_address_streets"
-	//,"add_shipping_address_streets"
-	//,"fix_website"
-	 );
+						//"add_billing_address_streets"
+						//,"add_shipping_address_streets"
+						//,"fix_website"
+				       );
 
 
 	function fix_website()

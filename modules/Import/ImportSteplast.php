@@ -61,23 +61,22 @@ $log->info("Upload Step 2");
 
 if ( isset($_REQUEST['message']))
 {
-?>
+	?>
+	<br>
 
-<br>
-
-<table width="100%" border=1>
-<tr>
-<td>
-<br>
-<?php 
-
-echo $_REQUEST['message']; ?>
-<br>
-<br>
-</td>
-</tr>
-</table>
-<?php 
+	<table width="100%" border=1>
+	   <tr>
+		<td>
+		   <br>
+		   <?php 
+			echo $_REQUEST['message']; 
+		   ?>
+		   <br>
+		   <br>
+		</td>
+	   </tr>
+	</table>
+	<?php 
 }
 ?>
 <br>
@@ -89,29 +88,31 @@ echo $_REQUEST['message']; ?>
 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
 <input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
 
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
-        <td align="right"><input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  "></td>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+   <tr>
+	<td align="right"><input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  "></td>
         <td></td>
-</tr>
+   </tr>
 </table>
 </form>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
- <form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
-                        <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-                        <input type="hidden" name="action" value="Import">
-                        <input type="hidden" name="step" value="1">
-                        <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-                        <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-                        <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
-        <tr>
-        <td align="right">
-<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
-<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;"></td>
-        <td></td>
-</tr>
-</table>
 
-        </form>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+	<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+		<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+                <input type="hidden" name="action" value="Import">
+                <input type="hidden" name="step" value="1">
+                <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
+                <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
+                <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
+   <tr>
+	<td align="right">
+		<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
+		<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
+	</td>
+        <td></td>
+   </tr>
+</table>
+</form>
 
 <?php
 
@@ -123,18 +124,13 @@ global $list_max_entries_per_page;
 $implict_account = false;
 $newForm = null;
 
+//To display the list of Contacts imported
 $seedUsersLastImport = new UsersLastImport();
 $seedUsersLastImport->bean_type = "Contacts";
 $contact_query = $seedUsersLastImport->create_list_query($o,$w);
 $current_module_strings = return_module_language($current_language, 'Contacts');
 
-/*$seedUsersLastImport->list_fields = Array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id');
-
-$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Contacts' and users_last_import.bean_id=contactdetails.contactid AND users_last_import.deleted=0";
-*/
-
 $contact = new Contact();
-//$seedUsersLastImport->list_fields = $contact->column_fields;
 $seedUsersLastImport->list_fields = $contact->list_fields;
 
 $list_result = $adb->query($contact_query);
@@ -143,13 +139,13 @@ $noofrows = $adb->num_rows($list_result);
 
 if($noofrows>1) 
 {
+	//Change this XTemplate to Smarty
 	$implict_account=true;
 	echo get_form_header('Last Imported Contacts','', false);
 	$xtpl=new XTemplate ('modules/Contacts/ListView.html');
 	$xtpl->assign("MOD", $mod_strings);
 	$xtpl->assign("APP", $app_strings);
 	$xtpl->assign("IMAGE_PATH",$image_path);
-
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -166,8 +162,8 @@ if($noofrows>1)
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 	$adb->println("IMPLST Naviga");
 	$adb->println($navigation_array);
-	//Retreive the List View Table Header
 
+	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($contact,"Contacts");
 	$xtpl->assign("LISTHEADER", $listview_header);
 	
@@ -219,23 +215,14 @@ if($noofrows>1)
 
 	$xtpl->out("main");
 
-	#$ListView = new ListView();
-	#$ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
-	#$ListView->setHeaderTitle("Last Imported Contacts" );
-	#$ListView->setQuery($where, "", "","CONTACT");
-	#$ListView->processListView($seedUsersLastImport, "main", "CONTACT");
-
-
 	echo "<BR>";
 }
 
 
-//opps list
+//To display the list of Potentials imported
 $newForm = null;
 $seedUsersLastImport = new UsersLastImport();
 $seedUsersLastImport->bean_type = "Potentials";
-
-#$seedUsersLastImport->list_fields = Array('id', 'name','account_id','account_name','amount','date_closed','assigned_user_name', 'assigned_user_id');
 
 $current_module_strings = return_module_language($current_language, 'Potentials');
 $potential_query = $seedUsersLastImport->create_list_query($o,$w);
@@ -250,13 +237,13 @@ $noofrows = $adb->num_rows($list_result);
 
 if($noofrows>1)
 {
+	//Change this XTemplate to Smarty
 	$implict_account=true;
 	echo get_form_header('Last Imported Potentials','', false);
 	$xtpl=new XTemplate ('modules/Potentials/ListView.html');
 	$xtpl->assign("MOD", $mod_strings);
 	$xtpl->assign("APP", $app_strings);
 	$xtpl->assign("IMAGE_PATH",$image_path);
-
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -271,7 +258,6 @@ if($noofrows>1)
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 	
 	//Retreive the List View Table Header
-
 	$listview_header = getListViewHeader($potential,"Potentials");
 	$xtpl->assign("LISTHEADER", $listview_header);
 
@@ -317,26 +303,16 @@ if($noofrows>1)
 	$xtpl->assign("Prev", $prevoutput);
 	
 	$xtpl->parse("main");
-
 	$xtpl->out("main");
 
-	//$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Potentials' and users_last_import.bean_id=potential.potentialid AND users_last_import.deleted=0";
-
-	#$ListView = new ListView();
-	#$ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
-	#$ListView->setHeaderTitle("Last Imported Potentials" );
-	#$ListView->setQuery($where, "", "","POTENTIAL");
-	#$ListView->processListView($seedUsersLastImport, "main", "POTENTIAL");
 	echo "<BR>";
 }
 
 
-//leads list
+//To display the list of Leads imported
 $newForm = null;
 $seedUsersLastImport = new UsersLastImport();
 $seedUsersLastImport->bean_type = "Leads";
-
-#$seedUsersLastImport->list_fields = Array('id', 'name','account_id','account_name','amount','date_closed','assigned_user_name', 'assigned_user_id');
 
 $current_module_strings = return_module_language($current_language, 'Potentials');
 $lead_query = $seedUsersLastImport->create_list_query($o,$w);
@@ -351,6 +327,7 @@ $noofrows = $adb->num_rows($list_result);
 
 if($noofrows>1)
 {
+	//Change this XTemplate to Smarty
 	$implict_account=true;
 	echo get_form_header('Last Imported Leads','', false);
 	$xtpl=new XTemplate ('modules/Leads/ListView.html');
@@ -371,7 +348,6 @@ if($noofrows>1)
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 	
 	//Retreive the List View Table Header
-
 	$listview_header = getListViewHeader($lead,"Leads");
 	$xtpl->assign("LISTHEADER", $listview_header);
 
@@ -417,26 +393,16 @@ if($noofrows>1)
 	$xtpl->assign("Prev", $prevoutput);
 
 	$xtpl->parse("main");
-
 	$xtpl->out("main");
 
-	//$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Potentials' and users_last_import.bean_id=potential.potentialid AND users_last_import.deleted=0";
-
-	#$ListView = new ListView();
-	#$ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
-	#$ListView->setHeaderTitle("Last Imported Potentials" );
-	#$ListView->setQuery($where, "", "","POTENTIAL");
-	#$ListView->processListView($seedUsersLastImport, "main", "POTENTIAL");
 	echo "<BR>";
 }
 
-
+//To display the list of Accounts imported
 $newForm = null;
 $seedUsersLastImport = new UsersLastImport();
 $seedUsersLastImport->bean_type = "Accounts";
 $account_query = $seedUsersLastImport->create_list_query($o,$w);
-//$seedUsersLastImport->list_fields = Array('id', 'name', 'website', 'phone_office', 'billing_address_city', 'assigned_user_name', 'assigned_user_id');
-//$seedUsersLastImport->list_fields = Array('accountid', 'accountname', 'website', 'phone', 'email1', 'assigned_user_name', 'fax');
 
 $current_module_strings = return_module_language($current_language, 'Accounts');
 
@@ -449,6 +415,7 @@ $noofrows = $adb->num_rows($list_result);
 
 if($noofrows>1)
 {
+	//Change this XTemplate to Smarty
 	if($implict_account==true)
 		echo get_form_header('Newly created Accounts','', false);
 	else
@@ -457,7 +424,6 @@ if($noofrows>1)
 	$xtpl->assign("MOD", $mod_strings);
 	$xtpl->assign("APP", $app_strings);
 	$xtpl->assign("IMAGE_PATH",$image_path);
-	
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -472,9 +438,7 @@ if($noofrows>1)
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
 	//Retreive the List View Table Header
-
 	$listview_header = getListViewHeader($account,"Accounts");
-	//$xtpl->assign("LISTHEADER", $listview_header);
 	
 	$listview_entries = getListViewEntries($account,"Accounts",$list_result,$navigation_array);
 	$xtpl->assign("LISTHEADER", $listview_header);
@@ -521,14 +485,6 @@ if($noofrows>1)
 
 	$xtpl->out("main");
 
-	//$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Accounts' and users_last_import.bean_id=account.accountid AND users_last_import.deleted=0";
-
-	#$ListView = new ListView();
-	#$ListView->initNewXTemplate( 'modules/Accounts/ListView.html',$current_module_strings);
-	#$ListView->setHeaderTitle("Last Imported Accounts" );
-	#$ListView->setQuery($where, "", "name");
-	#$ListView->setQuery($where, "", "","ACCOUNT");
-	#$ListView->processListView($seedUsersLastImport, "main", "ACCOUNT");
 }
 
 ?>

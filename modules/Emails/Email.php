@@ -45,7 +45,6 @@ class Email extends CRMEntity {
 	var $date_start;
 	var $time_start;
   	var $module_id="emailid";
-	var $default_email_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
 
 	var $table_name = "activity";
 	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel');
@@ -53,24 +52,20 @@ class Email extends CRMEntity {
 
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
-       'Subject'=>Array('activity'=>'subject'),
-       'Related to'=>Array('seactivityrel'=>'activityid'),
-       'Date Sent'=>Array('activity'=>'date_start'),
-       'Assigned To'=>Array('crmentity','smownerid')
-       );
+				       'Subject'=>Array('activity'=>'subject'),
+				       'Related to'=>Array('seactivityrel'=>'activityid'),
+				       'Date Sent'=>Array('activity'=>'date_start'),
+				       'Assigned To'=>Array('crmentity','smownerid')
+			        );
 
        var $list_fields_name = Array(
-       'Subject'=>'subject',
-       'Related to'=>'activityid',
-       'Date Sent'=>'date_start',
-       'Assigned To'=>'assigned_user_id');
+				       'Subject'=>'subject',
+				       'Related to'=>'activityid',
+				       'Date Sent'=>'date_start',
+				       'Assigned To'=>'assigned_user_id'
+				    );
 
        var $list_link_field= 'subject';
-
-
-	var $rel_users_table = "salesmanactivityrel";
-	var $rel_contacts_table = "cntactivityrel";
-	var $rel_serel_table = "seactivityrel";
 
 	var $object_name = "Email";
 
@@ -82,9 +77,6 @@ class Email extends CRMEntity {
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
 
-	function create_tables () {
-
-        }
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
 		$this->db = new PearDatabase();
@@ -106,12 +98,7 @@ class Email extends CRMEntity {
 
 		$focus = new Contact();
 
-		$button .= '<input title="Bulk Mail" accessyKey="F" class="button" onclick="this.form.action.value=\'sendmail\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.return_module.value=\'Emails\';" type="submit" name="button" value="'.$mod_strings['LBL_BULK_MAILS'].'">&nbsp;';
-
-		if(isPermitted("Contacts",3,"") == 'yes')
-		{
-			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-		}
+		$button = '';
 		$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
 
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where cntactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
@@ -136,7 +123,7 @@ class Email extends CRMEntity {
 		$result=$adb->query($query);   
 
 		$noofrows = $adb->num_rows($result);
-		$header[] = $app_strings['LBL_LIST_NAME'];
+		$header [] = $app_strings['LBL_LIST_NAME'];
 
 		$header []= $app_strings['LBL_LIST_USER_NAME'];
 
@@ -172,7 +159,7 @@ class Email extends CRMEntity {
 
 			//Adding Security Check for User
 
-			$entries_list[] = entries;
+			$entries_list[] = $entries;
 		}
 
 		if($entries_list != '')
@@ -198,7 +185,6 @@ class Email extends CRMEntity {
 			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".PearDatabase::quote($id);
-		//where crmentity.crmid=".$id;
 		$query .= ' union all ';
 		$query .= "select attachments.description title ,'Attachments'  ActivityType,
 			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
@@ -225,32 +211,33 @@ class Email extends CRMEntity {
                 return $query;
         }
         
-     /**
-     * Used to releate email and contacts -- Outlook Plugin
-     */  
-     function set_emails_contact_invitee_relationship($email_id, $contact_id)
-     {
-          $query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
-          $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
-     }
+	/**
+	* Used to releate email and contacts -- Outlook Plugin
+	*/  
+	function set_emails_contact_invitee_relationship($email_id, $contact_id)
+	{
+		$query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
+		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+	}
      
-     /**
-     * Used to releate email and salesentity -- Outlook Plugin
-     */
-     function set_emails_se_invitee_relationship($email_id, $contact_id)
-     {
-          $query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
-          $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
-     }
+	/**
+	* Used to releate email and salesentity -- Outlook Plugin
+	*/
+	function set_emails_se_invitee_relationship($email_id, $contact_id)
+	{
+		$query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
+		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+	}
      
-     /**
-     * Used to releate email and Users -- Outlook Plugin
-     */    
-     function set_emails_user_invitee_relationship($email_id, $user_id)
-     {
-          $query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
-          $this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
-     }        
+	/**
+	* Used to releate email and Users -- Outlook Plugin
+	*/    
+	function set_emails_user_invitee_relationship($email_id, $user_id)
+	{
+		$query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
+		$this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
+	}        
+
 
 }
 ?>

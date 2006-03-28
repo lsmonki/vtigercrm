@@ -36,41 +36,42 @@ class HelpDesk extends CRMEntity {
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
 
 	var $list_fields = Array(
-	'Ticket ID'=>Array('crmentity'=>'crmid'),
-	'Subject'=>Array('troubletickets'=>'title'),	  			
-	'Related to'=>Array('troubletickets'=>'parent_id'),	  			
-	'Status'=>Array('troubletickets'=>'status'),
-	'Priority'=>Array('troubletickets'=>'priority'),
-	'Assigned To'=>Array('crmentity','smownerid')
-	);
+					'Ticket ID'=>Array('crmentity'=>'crmid'),
+					'Subject'=>Array('troubletickets'=>'title'),	  			
+					'Related to'=>Array('troubletickets'=>'parent_id'),	  			
+					'Status'=>Array('troubletickets'=>'status'),
+					'Priority'=>Array('troubletickets'=>'priority'),
+					'Assigned To'=>Array('crmentity','smownerid')
+				);
 
 	var $list_fields_name = Array(
-	'Ticket ID'=>'',
-	'Subject'=>'ticket_title',	  			
-	'Related to'=>'parent_id',	  			
-	'Status'=>'ticketstatus',
-	'Priority'=>'ticketpriorities',
-	'Assigned To'=>'assigned_user_id');
+					'Ticket ID'=>'',
+					'Subject'=>'ticket_title',	  			
+					'Related to'=>'parent_id',	  			
+					'Status'=>'ticketstatus',
+					'Priority'=>'ticketpriorities',
+					'Assigned To'=>'assigned_user_id'
+				     );
 
 	var $list_link_field= 'ticket_title';
 			
 	var $range_fields = Array(
-	        'ticketid',
-		'title',
-        	'firstname',
-	        'lastname',
-        	'parent_id',
-        	'productid',
-        	'productname',
-        	'priority',
-        	'severity',
-	        'status',
-        	'category',
-		'description',
-		'solution',
-		'modifiedtime',
-		'createdtime'
-		);
+				        'ticketid',
+					'title',
+			        	'firstname',
+				        'lastname',
+			        	'parent_id',
+			        	'productid',
+			        	'productname',
+			        	'priority',
+			        	'severity',
+				        'status',
+			        	'category',
+					'description',
+					'solution',
+					'modifiedtime',
+					'createdtime'
+				);
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'crmid';
@@ -97,11 +98,6 @@ class HelpDesk extends CRMEntity {
 
 		$button = '';
 
-		if(isPermitted("Activities",1,"") == 'yes')
-		{
-			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'HelpDesk\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
-			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'HelpDesk\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
-		}
 		$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT activity.*, crmentity.crmid, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, recurringevents.recurringtype, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
@@ -112,10 +108,10 @@ class HelpDesk extends CRMEntity {
 	 */
 	function Get_Ticket_History()
 	{
-        global $mod_strings;
-        echo '<br><br>';
-        echo get_form_header($mod_strings['LBL_TICKET_HISTORY'],"", false);
-        include("modules/HelpDesk/TicketHistory.php");
+	        global $mod_strings;
+	        echo '<br><br>';
+	        echo get_form_header($mod_strings['LBL_TICKET_HISTORY'],"", false);
+        	include("modules/HelpDesk/TicketHistory.php");
 	}
 
 	/**	Function to form the query to get the list of attachments and notes
@@ -156,35 +152,35 @@ class HelpDesk extends CRMEntity {
 	/**	Function to get the ticket comments as a array
 	 *	@param  int   $ticketid - ticketid
 	 *	@return array $output - array(	
-						[comments][$i]    => comments
-						[owner][$i]       => name of the user or customer who made the comment
-						[createdtime][$i] => the comment created time
+						[$i][comments]    => comments
+						[$i][owner]       => name of the user or customer who made the comment
+						[$i][createdtime] => the comment created time
 					     ) 
 				where $i = 0,1,..n which are all made for the ticket
 	**/
          function get_ticket_comments_list($ticketid)
+	 {
+		 $sql = "select * from ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
+		 $result = $this->db->query($sql);
+		 $noofrows = $this->db->num_rows($result);
+		 for($i=0;$i<$noofrows;$i++)
 		 {
-			 $sql = "select * from ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
-			 $result = $this->db->query($sql);
-			 $noofrows = $this->db->num_rows($result);
-			 for($i=0;$i<$noofrows;$i++)
+			 $ownerid = $this->db->query_result($result,$i,"ownerid");
+			 $ownertype = $this->db->query_result($result,$i,"ownertype");
+			 if($ownertype == 'user')
+				 $name = getUserName($ownerid);
+			 elseif($ownertype == 'customer')
 			 {
-				 $ownerid = $this->db->query_result($result,$i,"ownerid");
-				 $ownertype = $this->db->query_result($result,$i,"ownertype");
-				 if($ownertype == 'user')
-					 $name = getUserName($ownerid);
-				 elseif($ownertype == 'customer')
-				 {
-					 $sql1 = 'select * from portalinfo where id='.$ownerid;
-					 $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
-				 }
-
-				 $output[$i]['comments'] = nl2br($this->db->query_result($result,$i,"comments"));
-				 $output[$i]['owner'] = $name;
-				 $output[$i]['createdtime'] = $this->db->query_result($result,$i,"createdtime");
+				 $sql1 = 'select * from portalinfo where id='.$ownerid;
+				 $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
 			 }
-			 return $output;
+
+			 $output[$i]['comments'] = nl2br($this->db->query_result($result,$i,"comments"));
+			 $output[$i]['owner'] = $name;
+			 $output[$i]['createdtime'] = $this->db->query_result($result,$i,"createdtime");
 		 }
+		 return $output;
+	 }
 		
 	/**	Function to form the query which will give the list of tickets based on customername and id ie., contactname and contactid
 	 *	@param  string $user_name - name of the customer ie., contact name

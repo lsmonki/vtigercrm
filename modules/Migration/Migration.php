@@ -100,22 +100,6 @@ class Migration
 		echo '<br> Current Database has been created.';
 	}
 
-	function dropAllData($conn)
-	{
-		$tables_list = $conn->get_tables();
-                foreach($tables_list as $key)
-                {
-                        //if the table name has _seq, the let it pass
-                        if(strpos($key,"_seq"))
-                        {
-                                $conn->println('<br> skipping table '.$key .' for truncation ');
-                                continue;
-                        }
-                        $sql = "delete from ".$key;
-                        $conn->query($sql);
-                }
-	}
-
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
 	{
 		if($mysql_password != '')
@@ -149,7 +133,7 @@ class Migration
 
 		//To handle the file includes for each and every version
 		//Here we have to decide which files should be included, where the files will be added newly for every public release
-		//Mickie -- Handle Here
+		//Handle Here -- Mickie
 		include("ModifyDatabase/42P2_to_50Alpha.php");
 
 		$conn->println("Mickie ---- Ends\n\n\n");
@@ -201,9 +185,6 @@ class Migration
 			//Create the new current(latest) Database
 			$this->conn->println("Going to Create the current Database");
 			$this->createDatabase($conn,$new_dbname);
-
-			//Drop all the values from the tables
-			//$this->dropAllData($conn);
 
 			//Apply the dump of the old database to the current database
 			$this->conn->println("Going to apply the old database dump to the new database.");
