@@ -26,9 +26,7 @@ require_once('modules/Quotes/Quote.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings;
-global $app_strings;
-global $currentModule;
+global $mod_strings,$app_strings,$currentModule,$theme,$profile_id;
 $focus = new Quote();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -42,7 +40,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -80,20 +77,13 @@ if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("CONVERTSALESORDER","permitted");
 
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
-{
 	$smarty->assign("CONVERTINVOICE","permitted");
-	//$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">&nbsp;");
-}
 
 if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
-{
 	$smarty->assign("DELETE","permitted");
-	//$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='ListView';this.form.module.value='Quotes'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
-}
 
 
 //Security check for related list
-global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 $smarty->assign("CONVERTMODE",'quotetoinvoice');
