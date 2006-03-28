@@ -31,87 +31,86 @@ if(isset($viewid) && trim($viewid) != "")
 
 if(trim($subject) != "")
 {
-if(isset($storearray) && $camodule != "")
-{
-	foreach($storearray as $id)
+	if(isset($storearray) && $camodule != "")
 	{
-		if($camodule == "Contacts")
+		foreach($storearray as $id)
 		{
-			$sql="select * from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid where crmentity.deleted =0 and contactdetails.contactid='" .$id ."'";
-			$result = $adb->query($sql);
-			$camodulerow = $adb->fetch_array($result);
-			if(isset($camodulerow))
+			if($camodule == "Contacts")
 			{
-				$emailid = $camodulerow["email"];
-				$otheremailid = $camodulerow["otheremail"];
-				$yahooid = $camodulerow["yahooid"];
+				$sql="select * from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid where crmentity.deleted =0 and contactdetails.contactid='" .$id ."'";
+				$result = $adb->query($sql);
+				$camodulerow = $adb->fetch_array($result);
+				if(isset($camodulerow))
+				{
+					$emailid = $camodulerow["email"];
+					$otheremailid = $camodulerow["otheremail"];
+					$yahooid = $camodulerow["yahooid"];
 
-				if(trim($emailid) != "")
-				{
-					SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
-				}elseif(trim($otheremailid) != "")
-				{
-					SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
-				}elseif(trim($yahooid) != "")
-				{
-					SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
+					if(trim($emailid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
+					}elseif(trim($otheremailid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
+					}elseif(trim($yahooid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
+					}
+					else
+					{
+						$adb->println("There is no email id for this Contact. Please give any email id.");
+					}
 				}
-				else
+
+			}elseif($camodule == "Leads")
+			{
+				$sql="select * from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid where crmentity.deleted =0 and leaddetails.leadid='" .$id ."'";
+				$result = $adb->query($sql);
+				$camodulerow = $adb->fetch_array($result);
+				if(isset($camodulerow))
 				{
-					$adb->println("There is no email id for this Contact. Please give any email id.");
+					$emailid = $camodulerow["email"];
+					$yahooid = $camodulerow["yahooid"];
+
+					if(trim($emailid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
+					}
+					elseif($trim($yahooid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
+					}
+					else
+					{
+						$adb->println("There is no email id for this Lead. Please give any email id.");
+					}
 				}
+			}elseif($camodule == "Accounts")
+			{
+				$sql="select * from account inner join crmentity on crmentity.crmid = account.accountid where crmentity.deleted =0 and account.accountid='" .$id ."'";
+				$result = $adb->query($sql);
+				$camodulerow = $adb->fetch_array($result);
+				if(isset($camodulerow))
+				{
+					$emailid = $camodulerow["email1"];
+					$otheremailid = $camodulerow["email2"];
+
+					if(trim($emailid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
+					}
+					elseif(trim($otheremailid) != "")
+					{
+						SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
+					}
+					else
+					{
+						$adb->println("There is no email id for this Account. Please give any email id.");
+					}
+				}	
 			}
-
-		}elseif($camodule == "Leads")
-		{
-			$sql="select * from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid where crmentity.deleted =0 and leaddetails.leadid='" .$id ."'";
-			//echo $sql;
-                        $result = $adb->query($sql);
-                        $camodulerow = $adb->fetch_array($result);
-                        if(isset($camodulerow))
-                        {
-                                $emailid = $camodulerow["email"];
-                                $yahooid = $camodulerow["yahooid"];
-
-                                if(trim($emailid) != "")
-                                {
-                                        SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
-                                }
-				elseif($trim($yahooid) != "")
-                                {
-                                        SendMailtoCustomView($camodule,$id,$yahooid,$current_user->id,$subject,$contents);
-                                }
-				else
-				{
-					$adb->println("There is no email id for this Lead. Please give any email id.");
-				}
-                        }
-		}elseif($camodule == "Accounts")
-		{
-			$sql="select * from account inner join crmentity on crmentity.crmid = account.accountid where crmentity.deleted =0 and account.accountid='" .$id ."'";
-                        $result = $adb->query($sql);
-                        $camodulerow = $adb->fetch_array($result);
-                        if(isset($camodulerow))
-                        {
-                                $emailid = $camodulerow["email1"];
-                                $otheremailid = $camodulerow["email2"];
-
-                                if(trim($emailid) != "")
-                                {
-                                     SendMailtoCustomView($camodule,$id,$emailid,$current_user->id,$subject,$contents);
-                                }
-				elseif(trim($otheremailid) != "")
-                                {
-                                     SendMailtoCustomView($camodule,$id,$otheremailid,$current_user->id,$subject,$contents);
-				}
-				else
-				{
-					$adb->println("There is no email id for this Account. Please give any email id.");
-				}
-                        }	
 		}
 	}
-}
 }
 
 function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$contents)
@@ -119,57 +118,57 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 
 	require_once("modules/Emails/class.phpmailer.php");
 
-        $mail = new PHPMailer();
+	$mail = new PHPMailer();
 
-        $mail->Subject = $subject;
-        $mail->Body    = nl2br($contents);
-        $mail->IsSMTP();
+	$mail->Subject = $subject;
+	$mail->Body    = nl2br($contents);
+	$mail->IsSMTP();
 
-        if($current_user_id != '')
-        {
-                global $adb;
-                $sql = "select * from users where id= ".$current_user_id;
-                $result = $adb->query($sql);
-                $from = $adb->query_result($result,0,'email1');
-                $initialfrom = $adb->query_result($result,0,'user_name');
-        }
-        if($mail_server=='')
-        {
-                global $adb;
-                $mailserverresult=$adb->query("select * from systems where server_type='email'");
-                $mail_server = $adb->query_result($mailserverresult,0,'server');
-                $mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
-                $smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
+	if($current_user_id != '')
+	{
+		global $adb;
+		$sql = "select * from users where id= ".$current_user_id;
+		$result = $adb->query($sql);
+		$from = $adb->query_result($result,0,'email1');
+		$initialfrom = $adb->query_result($result,0,'user_name');
+	}
+	if($mail_server=='')
+	{
+		global $adb;
+		$mailserverresult=$adb->query("select * from systems where server_type='email'");
+		$mail_server = $adb->query_result($mailserverresult,0,'server');
+		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
+		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
+		$smtp_auth = $adb->query_result($mailserverresult,0,'smtp_auth');
 
 		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
-                $_REQUEST['server']=$mail_server;
-        }
-        $mail->Host = $mail_server;
-        $mail->SMTPAuth = $smtp_auth;
-        $mail->Username = $mail_server_username;
-        $mail->Password = $mail_server_password;
-        $mail->From = $from;
-        $mail->FromName = $initialfrom;
+		$_REQUEST['server']=$mail_server;
+	}
+	$mail->Host = $mail_server;
+	$mail->SMTPAuth = $smtp_auth;
+	$mail->Username = $mail_server_username;
+	$mail->Password = $mail_server_password;
+	$mail->From = $from;
+	$mail->FromName = $initialfrom;
 
-        $mail->AddAddress($to);
-        $mail->AddReplyTo($from);
-        $mail->WordWrap = 50;
+	$mail->AddAddress($to);
+	$mail->AddReplyTo($from);
+	$mail->WordWrap = 50;
 
-        $mail->IsHTML(true);
+	$mail->IsHTML(true);
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
 	$adb->println("Mail sending process : To => '".$to."', From => '".$from."'");
-        if(!$mail->Send())
-        {
+	if(!$mail->Send())
+	{
 		$adb->println("(CustomView/SendMailAction.php) Error in Mail Sending : ".$mail->ErrorInfo);
-                $errormsg = "Mail Could not be sent...";
-        }
+		$errormsg = "Mail Could not be sent...";
+	}
 	else
 	{
 		$adb->println("(CustomView/SendMailAction.php) Mail has been Sent to => ".$to);
 	}
-	
+
 }
 header("Location: index.php?action=index&module=$camodule&viewname=$viewid");
 ?>

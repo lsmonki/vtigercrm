@@ -23,7 +23,7 @@ if($cvid != "")
 	if($mode == "new")
 	{
 		$customactionsql = "insert into customaction(cvid,subject,module,content)";
-                $customactionsql .= " values(".$cvid.",'".$subject."','".$cvmodule."','".$body."')";
+		$customactionsql .= " values(".$cvid.",'".$subject."','".$cvmodule."','".$body."')";
 		$customactionresult = $adb->query($customactionsql);
 		if($customactionresult == false)
 		{
@@ -34,21 +34,19 @@ if($cvid != "")
 			echo $errormessage;
 
 		}
-		//print_r($customactionsql);
 
 	}elseif($mode == "edit")
 	{
 		$updatecasql = "update customaction set subject='".$subject."',content='".$body."' where cvid=".$cvid;
 		$updatecaresult = $adb->query($updatecasql);
-	 	if($updatecaresult == false)
+		if($updatecaresult == false)
 		{
 			include('themes/'.$theme.'/header.php');
-                                        $errormessage = "<font color='red'><B>Error Message<ul>
-                                        <li><font color='red'>Error while inserting the record</font>
-                                        </ul></B></font> <br>" ;
-                                        echo $errormessage;
+			$errormessage = "<font color='red'><B>Error Message<ul>
+				<li><font color='red'>Error while inserting the record</font>
+				</ul></B></font> <br>" ;
+			echo $errormessage;
 		}
-		//print_r($updatecasql);
 	}
 }
 header("Location: index.php?action=index&module=$cvmodule&viewname=$cvid");

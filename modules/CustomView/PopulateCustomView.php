@@ -341,54 +341,53 @@ $cvstdfilters = Array(Array('columnname'=>'crmentity:modifiedtime:modifiedtime:L
                      );
 
 $cvadvfilters = Array(
-                      Array(
-                            Array('columnname'=>'leaddetails:leadstatus:leadstatus:Leads_Lead_Status:V',
-                                  'comparator'=>'e',
-                                  'value'=>'Hot'
+                	Array(
+               			 Array('columnname'=>'leaddetails:leadstatus:leadstatus:Leads_Lead_Status:V',
+		                      'comparator'=>'e',
+        		              'value'=>'Hot'
+                     			)
+                     	 ),
+		      		Array(
+                          Array('columnname'=>'account:account_type:accounttype:Accounts_Type:V',
+                                'comparator'=>'e',
+                                 'value'=>'Prospect'
                                  )
                            ),
-
-		      Array(
-                            Array('columnname'=>'account:account_type:accounttype:Accounts_Type:V',
-                                  'comparator'=>'e',
-                                  'value'=>'Prospect'
-                                 )
-                           ),
-		     Array(
+				     Array(
                             Array('columnname'=>'potential:sales_stage:sales_stage:Potentials_Sales_Stage:V',
                                   'comparator'=>'e',
                                   'value'=>'Closed Won'
                                  )
                            ),
-		     Array(
+				     Array(
                             Array('columnname'=>'potential:sales_stage:sales_stage:Potentials_Sales_Stage:V',
                                   'comparator'=>'e',
                                   'value'=>'Prospecting'
                                  )
                            ),
-		     Array(
+				     Array(
                             Array('columnname'=>'troubletickets:status:ticketstatus:HelpDesk_Status:V',
                                   'comparator'=>'n',
                                   'value'=>'Closed'
                                  )
                            ),
-		     Array(
+				     Array(
                             Array('columnname'=>'troubletickets:priority:ticketpriorities:HelpDesk_Priority:V',
                                   'comparator'=>'e',
                                   'value'=>'High'
                                  )
                            ),
-		     Array(
-                            Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
+				     Array(
+	                        Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                                   'comparator'=>'n',
                                   'value'=>'Accepted'
                                  ),
-			    Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
+						    Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                                   'comparator'=>'n',
                                   'value'=>'Rejected'
                                  )
                            ),
-		     Array(
+				     Array(
                             Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                                   'comparator'=>'e',
                                   'value'=>'Rejected'
@@ -398,9 +397,9 @@ $cvadvfilters = Array(
 
 foreach($customviews as $key=>$customview)
 {
-        $queryid = insertCustomView($customview['viewname'],$customview['setdefault'],$customview['setmetrics'],$customview['cvmodule']);
-        insertCvColumns($queryid,$cvcolumns[$key]);
-	
+	$queryid = insertCustomView($customview['viewname'],$customview['setdefault'],$customview['setmetrics'],$customview['cvmodule']);
+	insertCvColumns($queryid,$cvcolumns[$key]);
+
 	if(isset($cvstdfilters[$customview['stdfilterid']]))
 	{
 		$i = $customview['stdfilterid'];
@@ -408,7 +407,7 @@ foreach($customviews as $key=>$customview)
 	}
 	if(isset($cvadvfilters[$customview['advfilterid']]))
 	{
-        	insertCvAdvFilter($queryid,$cvadvfilters[$customview['advfilterid']]);
+		insertCvAdvFilter($queryid,$cvadvfilters[$customview['advfilterid']]);
 	}
 }
 
@@ -423,10 +422,8 @@ function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 
 		$customviewsql = "insert into customview(cvid,viewname,setdefault,setmetrics,entitytype)";
 		$customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
-		//echo $customviewsql;
 		$customviewresult = $adb->query($customviewsql);
 	}
-
 	return $genCVid;
 }
 
@@ -439,7 +436,6 @@ function insertCvColumns($CVid,$columnslist)
 		{
 			$columnsql = "insert into cvcolumnlist (cvid,columnindex,columnname)";
 			$columnsql .= " values (".$CVid.",".$i.",'".$columnslist[$i]."')";
-			//echo $columnsql;
 			$columnresult = $adb->query($columnsql);
 		}
 	}
@@ -455,7 +451,6 @@ function insertCvStdFilter($CVid,$filtercolumn,$filtercriteria,$startdate,$endda
 		$stdfiltersql .= "'".$filtercriteria."',";
 		$stdfiltersql .= "'".$startdate."',";
 		$stdfiltersql .= "'".$enddate."')";
-		//echo $stdfiltersql;
 		$stdfilterresult = $adb->query($stdfiltersql);
 	}
 }
@@ -468,23 +463,11 @@ function insertCvAdvFilter($CVid,$filters)
 		foreach($filters as $i=>$filter)
 		{
 			$advfiltersql = "insert into cvadvfilter(cvid,columnindex,columnname,comparator,value)";
-                        $advfiltersql .= " values (".$CVid.",".$i.",'".$filter['columnname']."',";
-                        $advfiltersql .= "'".$filter['comparator']."',";
-                        $advfiltersql .= "'".$filter['value']."')";
-			//echo $advfiltersql;
-                        $advfilterresult = $adb->query($advfiltersql);
-		}
-
-		/*for($i=0;$i<count($filtercolumns);$i++)
-		{
-			$advfiltersql = "insert into cvadvfilter(cvid,columnindex,columnname,comparator,value)";
-			$advfiltersql .= " values (".$CVid.",".$i.",'".$filtercolumns[$i]."',";
-			$advfiltersql .= "'".$filteroption[$i]."',";
-			$advfiltersql .= "'".$filtervalue[$i]."')";
-			//echo $advfiltersql;
+			$advfiltersql .= " values (".$CVid.",".$i.",'".$filter['columnname']."',";
+			$advfiltersql .= "'".$filter['comparator']."',";
+			$advfiltersql .= "'".$filter['value']."')";
 			$advfilterresult = $adb->query($advfiltersql);
-		}*/
-
+		}
 	}
 }
 ?>

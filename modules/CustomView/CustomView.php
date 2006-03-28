@@ -154,14 +154,13 @@ class CustomView extends CRMEntity{
 	function getCustomViewCombo($viewid='')
 	{
 		global $adb;
-                $tabid = getTabid($this->customviewmodule);
-                $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
-                $ssql .= " where tab.tabid=".$tabid;
-                //echo $ssql;
-                $result = $adb->query($ssql);
-                while($cvrow=$adb->fetch_array($result))
-                {
-                        if($cvrow['cvid'] == $viewid)
+		$tabid = getTabid($this->customviewmodule);
+		$ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
+		$ssql .= " where tab.tabid=".$tabid;
+		$result = $adb->query($ssql);
+		while($cvrow=$adb->fetch_array($result))
+		{
+			if($cvrow['cvid'] == $viewid)
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];
@@ -170,84 +169,78 @@ class CustomView extends CRMEntity{
 			{
 				$shtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 			}
-                }
-		//echo $shtml;
-                return $shtml;
+		}
+		return $shtml;
 	}
 	function getColumnsListbyBlock($module,$block)
-        {
-                global $adb;
-                $tabid = getTabid($module);
-                global $profile_id;
+	{
+		global $adb;
+		$tabid = getTabid($module);
+		global $profile_id;
 
-                $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
+		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
 		$sql.= " where field.tabid=".$tabid." and field.block in (".$block.") and";
 		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
 		$sql.= " and profile2field.profileid=".$profile_id." order by sequence";
 
 		$result = $adb->query($sql);
-                $noofrows = $adb->num_rows($result);
+		$noofrows = $adb->num_rows($result);
 		//Added on 14-10-2005 -- added ticket id in list
-                if($module == 'HelpDesk' && $block == 25)
-                {
-                        $module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
-                }
+		if($module == 'HelpDesk' && $block == 25)
+		{
+			$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+		}
 		//Added to include activity type in activity customview list
-                if($module == 'Activities' && $block == 19)
-                {
-                        $module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
-                }
+		if($module == 'Activities' && $block == 19)
+		{
+			$module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
+		}
 
-                for($i=0; $i<$noofrows; $i++)
-                {
-                        $fieldtablename = $adb->query_result($result,$i,"tablename");
-                        $fieldcolname = $adb->query_result($result,$i,"columnname");
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$fieldtablename = $adb->query_result($result,$i,"tablename");
+			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldname = $adb->query_result($result,$i,"fieldname");
 			$fieldtype = $adb->query_result($result,$i,"typeofdata");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
-                        /*if($fieldcolname == "crmid" || $fieldcolname == "parent_id")
-                        {
-                           $fieldtablename = "crmentity";
-			   $fieldcolname = "setype";
-                        }*/
-                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-				if($fieldlabel == "Related To")
-				{
-					$fieldlabel = "Related to";
-				}
-				if($fieldlabel == "Start Date & Time")
-                                {
-                                        $fieldlabel = "Start Date";
-					  if($module == 'Activities' && $block == 19)
-				               $module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
+			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+			if($fieldlabel == "Related To")
+			{
+				$fieldlabel = "Related to";
+			}
+			if($fieldlabel == "Start Date & Time")
+			{
+				$fieldlabel = "Start Date";
+				if($module == 'Activities' && $block == 19)
+					$module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
 
-                                }
-                        $fieldlabel1 = str_replace(" ","_",$fieldlabel);
-                        $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-                        $module_columnlist[$optionvalue] = $fieldlabel;
+			}
+			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+			$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			$module_columnlist[$optionvalue] = $fieldlabel;
 			if($fieldtype[1] == "M")
 			{
 				$this->mandatoryvalues[] = "'".$optionvalue."'";
 				$this->showvalues[] = $fieldlabel;
 			}
-                }
-                return $module_columnlist;
-        }
+		}
+		return $module_columnlist;
+	}
 
 	function getModuleColumnsList($module)
-        {
-                foreach($this->module_list[$module] as $key=>$value)
-                {
-                        $columnlist = $this->getColumnsListbyBlock($module,$value);
+	{
+		foreach($this->module_list[$module] as $key=>$value)
+		{
+			$columnlist = $this->getColumnsListbyBlock($module,$value);
 			if(isset($columnlist))
 			{
 				$ret_module_list[$module][$key] = $columnlist;
 			}
-                }
-                return $ret_module_list;
-        }
-	
+		}
+		return $ret_module_list;
+	}
+
 	function getColumnsListByCvid($cvid)
 	{
 		global $adb;
@@ -255,7 +248,6 @@ class CustomView extends CRMEntity{
 		$sSQL = "select cvcolumnlist.* from cvcolumnlist";
 		$sSQL .= " inner join customview on customview.cvid = cvcolumnlist.cvid";
 		$sSQL .= " where customview.cvid =".$cvid." order by cvcolumnlist.columnindex";
-		//echo $sSQL;
 		$result = $adb->query($sSQL);
 		
 		while($columnrow = $adb->fetch_array($result))
@@ -267,345 +259,339 @@ class CustomView extends CRMEntity{
 	}
 
 	function getStdCriteriaByModule($module)
-        {
-                global $adb;
-                $tabid = getTabid($module);
-                global $profile_id;
-	
+	{
+		global $adb;
+		$tabid = getTabid($module);
+		global $profile_id;
+
 		foreach($this->module_list[$module] as $key=>$blockid)
-                {
-                        $blockids[] = $blockid;
-                }
-                $blockids = implode(",",$blockids);
-	
-                $sql = "select * from field inner join tab on tab.tabid = field.tabid
-                        inner join profile2field on profile2field.fieldid=field.fieldid
-                        where field.tabid=".$tabid." and field.block in (".$blockids.") 
+		{
+			$blockids[] = $blockid;
+		}
+		$blockids = implode(",",$blockids);
+
+		$sql = "select * from field inner join tab on tab.tabid = field.tabid
+			inner join profile2field on profile2field.fieldid=field.fieldid
+			where field.tabid=".$tabid." and field.block in (".$blockids.") 
 			and (field.uitype =5 or field.displaytype=2) 
 			and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
 
-                $result = $adb->query($sql);
+		$result = $adb->query($sql);
 
-                while($criteriatyperow = $adb->fetch_array($result))
-                {
-                        $fieldtablename = $criteriatyperow["tablename"];
-                        $fieldcolname = $criteriatyperow["columnname"];
-                        $fieldlabel = $criteriatyperow["fieldlabel"];
+		while($criteriatyperow = $adb->fetch_array($result))
+		{
+			$fieldtablename = $criteriatyperow["tablename"];
+			$fieldcolname = $criteriatyperow["columnname"];
+			$fieldlabel = $criteriatyperow["fieldlabel"];
 			$fieldname = $criteriatyperow["fieldname"];
-                        /*if($fieldtablename == "crmentity")
-                        {
-                           $fieldtablename = $fieldtablename.$module;
-                        }*/
-                        $fieldlabel1 = str_replace(" ","_",$fieldlabel);
-                        $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1;
-                        $stdcriteria_list[$optionvalue] = $fieldlabel;
-                }
+			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+			$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1;
+			$stdcriteria_list[$optionvalue] = $fieldlabel;
+		}
 
-                return $stdcriteria_list;
+		return $stdcriteria_list;
 
-        }
+	}
 
 	function getStdFilterCriteria($selcriteria = "")
-        {
+	{
 		$filter = array();
 
-                $stdfilter = Array("custom"=>"Custom",
-					 "prevfy"=>"Previous FY",
-					 "thisfy"=>"Current FY",
-					 "nextfy"=>"Next FY",
-					 "prevfq"=>"Previous FQ",
-					 "thisfq"=>"Current FQ",
-					 "nextfq"=>"Next FQ",
-                                         "yesterday"=>"Yesterday",
-					 "today"=>"Today",
-					 "tomorrow"=>"Tomorrow",
-					 "lastweek"=>"Last Week",
-					 "thisweek"=>"Current Week",
-					 "nextweek"=>"Next Week",
-					 "lastmonth"=>"Last Month",
-					 "thismonth"=>"Current Month",
-                                         "nextmonth"=>"Next Month",
-					 "last7days"=>"Last 7 Days",
-					 "last30days"=>"Last 30 Days", 
-					 "last60days"=>"Last 60 Days",
-					 "last90days"=>"Last 90 Days",
-					 "last120days"=>"Last 120 Days",
-                                         "next30days"=>"Next 30 Days",
-					 "next60days"=>"Next 60 Days",
-					 "next90days"=>"Next 90 Days",
-					 "next120days"=>"Next 120 Days"
-					 );
+		$stdfilter = Array("custom"=>"Custom",
+				"prevfy"=>"Previous FY",
+				"thisfy"=>"Current FY",
+				"nextfy"=>"Next FY",
+				"prevfq"=>"Previous FQ",
+				"thisfq"=>"Current FQ",
+				"nextfq"=>"Next FQ",
+				"yesterday"=>"Yesterday",
+				"today"=>"Today",
+				"tomorrow"=>"Tomorrow",
+				"lastweek"=>"Last Week",
+				"thisweek"=>"Current Week",
+				"nextweek"=>"Next Week",
+				"lastmonth"=>"Last Month",
+				"thismonth"=>"Current Month",
+				"nextmonth"=>"Next Month",
+				"last7days"=>"Last 7 Days",
+				"last30days"=>"Last 30 Days", 
+				"last60days"=>"Last 60 Days",
+				"last90days"=>"Last 90 Days",
+				"last120days"=>"Last 120 Days",
+				"next30days"=>"Next 30 Days",
+				"next60days"=>"Next 60 Days",
+				"next90days"=>"Next 90 Days",
+				"next120days"=>"Next 120 Days"
+					);
 
-		foreach($stdfilter as $FilterKey=>$FilterValue)
-		{
-			if($FilterKey == $selcriteria)
-			{
-				$shtml['value'] = $FilterKey;
-				$shtml['text'] = $FilterValue;
-				$shtml['selected'] = "selected";
-			}else
-			{
-				$shtml['value'] = $FilterKey;
-				$shtml['text'] = $FilterValue;
-				$shtml['selected'] = "";
-			}
-		$filter[] = $shtml;
-		}
-		return $filter;
+				foreach($stdfilter as $FilterKey=>$FilterValue)
+				{
+					if($FilterKey == $selcriteria)
+					{
+						$shtml['value'] = $FilterKey;
+						$shtml['text'] = $FilterValue;
+						$shtml['selected'] = "selected";
+					}else
+					{
+						$shtml['value'] = $FilterKey;
+						$shtml['text'] = $FilterValue;
+						$shtml['selected'] = "";
+					}
+					$filter[] = $shtml;
+				}
+				return $filter;
 
-        }
+	}
 
 	function getCriteriaJS()
-        {
-                $today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
-                $tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
-                $yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
+	{
+		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
+		$tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
+		$yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
 
-                $currentmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m"), "01",   date("Y")));
-                $currentmonth1 = date("Y-m-t");
-                $lastmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m")-1, "01",   date("Y")));
-                $lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
-                $nextmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m")+1, "01",   date("Y")));
-                $nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
+		$currentmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m"), "01",   date("Y")));
+		$currentmonth1 = date("Y-m-t");
+		$lastmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m")-1, "01",   date("Y")));
+		$lastmonth1 = date("Y-m-t", strtotime("-1 Month"));
+		$nextmonth0 = date("Y-m-d",mktime(0, 0, 0, date("m")+1, "01",   date("Y")));
+		$nextmonth1 = date("Y-m-t", strtotime("+1 Month"));
 
-                $lastweek0 = date("Y-m-d",strtotime("-2 week Sunday"));
-                $lastweek1 = date("Y-m-d",strtotime("-1 week Saturday"));
+		$lastweek0 = date("Y-m-d",strtotime("-2 week Sunday"));
+		$lastweek1 = date("Y-m-d",strtotime("-1 week Saturday"));
 
-                $thisweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
-                $thisweek1 = date("Y-m-d",strtotime("this Saturday"));
+		$thisweek0 = date("Y-m-d",strtotime("-1 week Sunday"));
+		$thisweek1 = date("Y-m-d",strtotime("this Saturday"));
 
-                $nextweek0 = date("Y-m-d",strtotime("this Sunday"));
-                $nextweek1 = date("Y-m-d",strtotime("+1 week Saturday"));
+		$nextweek0 = date("Y-m-d",strtotime("this Sunday"));
+		$nextweek1 = date("Y-m-d",strtotime("+1 week Saturday"));
 
-                $next7days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+6, date("Y")));
-                $next30days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+29, date("Y")));
-                $next60days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+59, date("Y")));
-                $next90days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+89, date("Y")));
-                $next120days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+119, date("Y")));
+		$next7days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+6, date("Y")));
+		$next30days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+29, date("Y")));
+		$next60days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+59, date("Y")));
+		$next90days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+89, date("Y")));
+		$next120days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+119, date("Y")));
 
-                $last7days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-6, date("Y")));
-                $last30days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-29, date("Y")));
-                $last60days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-59, date("Y")));
-                $last90days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-89, date("Y")));
-                $last120days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-119, date("Y")));
+		$last7days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-6, date("Y")));
+		$last30days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-29, date("Y")));
+		$last60days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-59, date("Y")));
+		$last90days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-89, date("Y")));
+		$last120days = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-119, date("Y")));
 
-                $currentFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")));
-                $currentFY1 = date("Y-m-t",mktime(0, 0, 0, "12", date("d"),   date("Y")));
-                $lastFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")-1));
-                $lastFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")-1));
+		$currentFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")));
+		$currentFY1 = date("Y-m-t",mktime(0, 0, 0, "12", date("d"),   date("Y")));
+		$lastFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")-1));
+		$lastFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")-1));
 
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
-                $nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
+		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
-                $sjsStr = '<script language="JavaScript" type="text/javaScript">
-                function showDateRange( type )
-                {
-                        if (type!="custom")
-                        {
-                                document.CustomView.startdate.readOnly=true
-                                document.CustomView.enddate.readOnly=true
-                                getObj("jscal_trigger_date_start").style.visibility="hidden"
-                                getObj("jscal_trigger_date_end").style.visibility="hidden"
-                        }
-                        else
-                        {
-                                document.CustomView.startdate.readOnly=false
-                                document.CustomView.enddate.readOnly=false
-                                getObj("jscal_trigger_date_start").style.visibility="visible"
-                                getObj("jscal_trigger_date_end").style.visibility="visible"
-                        }
-                        if( type == "today" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$today.'";
-                        }
-                        else if( type == "yesterday" )
-                        {
-                        document.CustomView.startdate.value = "'.$yesterday.'";
-                        document.CustomView.enddate.value = "'.$yesterday.'";
-			}
-                        else if( type == "tomorrow" )
-                        {
-
-                        document.CustomView.startdate.value = "'.$tomorrow.'";
-                        document.CustomView.enddate.value = "'.$tomorrow.'";
-                        }
-                        else if( type == "thisweek" )
-                        {
-                        document.CustomView.startdate.value = "'.$thisweek0.'";
-                        document.CustomView.enddate.value = "'.$thisweek1.'";
-                        }
-                        else if( type == "lastweek" )
-                        {
-                        document.CustomView.startdate.value = "'.$lastweek0.'";
-                        document.CustomView.enddate.value = "'.$lastweek1.'";
-                        }
-                        else if( type == "nextweek" )
-                        {
-                        document.CustomView.startdate.value = "'.$nextweek0.'";
-                        document.CustomView.enddate.value = "'.$nextweek1.'";
-                        }
-                        else if( type == "thismonth" )
-                        {
-                        document.CustomView.startdate.value = "'.$currentmonth0.'";
-                        document.CustomView.enddate.value = "'.$currentmonth1.'";
-                        }
-                        else if( type == "lastmonth" )
-                        {
-                        document.CustomView.startdate.value = "'.$lastmonth0.'";
-                        document.CustomView.enddate.value = "'.$lastmonth1.'";
-			}
-                        else if( type == "nextmonth" )
-                        {
-                        document.CustomView.startdate.value = "'.$nextmonth0.'";
-                        document.CustomView.enddate.value = "'.$nextmonth1.'";
-                        }
-                        else if( type == "next7days" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$next7days.'";
-                        }
-                        else if( type == "next30days" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$next30days.'";
-                        }
-                        else if( type == "next60days" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$next60days.'";
-                        }
-                        else if( type == "next90days" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$next90days.'";
-                        }
-                        else if( type == "next120days" )
-                        {
-                        document.CustomView.startdate.value = "'.$today.'";
-                        document.CustomView.enddate.value = "'.$next120days.'";
-                        }
-                        else if( type == "last7days" )
+		$sjsStr = '<script language="JavaScript" type="text/javaScript">
+			function showDateRange( type )
 			{
-                        document.CustomView.startdate.value = "'.$last7days.'";
-                        document.CustomView.enddate.value =  "'.$today.'";
-                        }
-                        else if( type == "last30days" )
-                        {
-                        document.CustomView.startdate.value = "'.$last30days.'";
-                        document.CustomView.enddate.value = "'.$today.'";
-                        }
-                        else if( type == "last60days" )
-                        {
-                        document.CustomView.startdate.value = "'.$last60days.'";
-                        document.CustomView.enddate.value = "'.$today.'";
-                        }
-                        else if( type == "last90days" )
-                        {
-                        document.CustomView.startdate.value = "'.$last90days.'";
-                        document.CustomView.enddate.value = "'.$today.'";
-                        }
-                        else if( type == "last120days" )
-                        {
-                        document.CustomView.startdate.value = "'.$last120days.'";
-                        document.CustomView.enddate.value = "'.$today.'";
-                        }
-                        else if( type == "thisfy" )
-                        {
-                        document.CustomView.startdate.value = "'.$currentFY0.'";
-                        document.CustomView.enddate.value = "'.$currentFY1.'";
-                        }
-                        else if( type == "prevfy" )
-                        {
-			document.CustomView.startdate.value = "'.$lastFY0.'";
-                        document.CustomView.enddate.value = "'.$lastFY1.'";
-                        }
-                        else if( type == "nextfy" )
-                        {
-                        document.CustomView.startdate.value = "'.$nextFY0.'";
-                        document.CustomView.enddate.value = "'.$nextFY1.'";
-                        }
-                        else if( type == "nextfq" )
-                        {
-                        document.CustomView.startdate.value = "2005-07-01";
-                        document.CustomView.enddate.value = "2005-09-30";
-                        }
-                        else if( type == "prevfq" )
-                        {
-                        document.CustomView.startdate.value = "2005-01-01";
-                        document.CustomView.enddate.value = "2005-03-31";
-                        }
-                        else if( type == "thisfq" )
-                        {
-                        document.CustomView.startdate.value = "2005-04-01";
-                        document.CustomView.enddate.value = "2005-06-30";
-                        }
-                        else
-                        {
-                        document.CustomView.startdate.value = "";
-                        document.CustomView.enddate.value = "";
-                        }
-                }
-                </script>';
+				if (type!="custom")
+				{
+					document.CustomView.startdate.readOnly=true
+						document.CustomView.enddate.readOnly=true
+						getObj("jscal_trigger_date_start").style.visibility="hidden"
+						getObj("jscal_trigger_date_end").style.visibility="hidden"
+				}
+				else
+				{
+					document.CustomView.startdate.readOnly=false
+						document.CustomView.enddate.readOnly=false
+						getObj("jscal_trigger_date_start").style.visibility="visible"
+						getObj("jscal_trigger_date_end").style.visibility="visible"
+				}
+				if( type == "today" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$today.'";
+				}
+				else if( type == "yesterday" )
+				{
+					document.CustomView.startdate.value = "'.$yesterday.'";
+					document.CustomView.enddate.value = "'.$yesterday.'";
+				}
+				else if( type == "tomorrow" )
+				{
 
-                return $sjsStr;
-        }
+					document.CustomView.startdate.value = "'.$tomorrow.'";
+					document.CustomView.enddate.value = "'.$tomorrow.'";
+				}
+				else if( type == "thisweek" )
+				{
+					document.CustomView.startdate.value = "'.$thisweek0.'";
+					document.CustomView.enddate.value = "'.$thisweek1.'";
+				}
+				else if( type == "lastweek" )
+				{
+					document.CustomView.startdate.value = "'.$lastweek0.'";
+					document.CustomView.enddate.value = "'.$lastweek1.'";
+				}
+				else if( type == "nextweek" )
+				{
+					document.CustomView.startdate.value = "'.$nextweek0.'";
+					document.CustomView.enddate.value = "'.$nextweek1.'";
+				}
+				else if( type == "thismonth" )
+				{
+					document.CustomView.startdate.value = "'.$currentmonth0.'";
+					document.CustomView.enddate.value = "'.$currentmonth1.'";
+				}
+				else if( type == "lastmonth" )
+				{
+					document.CustomView.startdate.value = "'.$lastmonth0.'";
+					document.CustomView.enddate.value = "'.$lastmonth1.'";
+				}
+				else if( type == "nextmonth" )
+				{
+					document.CustomView.startdate.value = "'.$nextmonth0.'";
+					document.CustomView.enddate.value = "'.$nextmonth1.'";
+				}
+				else if( type == "next7days" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$next7days.'";
+				}
+				else if( type == "next30days" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$next30days.'";
+				}
+				else if( type == "next60days" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$next60days.'";
+				}
+				else if( type == "next90days" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$next90days.'";
+				}
+				else if( type == "next120days" )
+				{
+					document.CustomView.startdate.value = "'.$today.'";
+					document.CustomView.enddate.value = "'.$next120days.'";
+				}
+				else if( type == "last7days" )
+				{
+					document.CustomView.startdate.value = "'.$last7days.'";
+					document.CustomView.enddate.value =  "'.$today.'";
+				}
+				else if( type == "last30days" )
+				{
+					document.CustomView.startdate.value = "'.$last30days.'";
+					document.CustomView.enddate.value = "'.$today.'";
+				}
+				else if( type == "last60days" )
+				{
+					document.CustomView.startdate.value = "'.$last60days.'";
+					document.CustomView.enddate.value = "'.$today.'";
+				}
+				else if( type == "last90days" )
+				{
+					document.CustomView.startdate.value = "'.$last90days.'";
+					document.CustomView.enddate.value = "'.$today.'";
+				}
+				else if( type == "last120days" )
+				{
+					document.CustomView.startdate.value = "'.$last120days.'";
+					document.CustomView.enddate.value = "'.$today.'";
+				}
+				else if( type == "thisfy" )
+				{
+					document.CustomView.startdate.value = "'.$currentFY0.'";
+					document.CustomView.enddate.value = "'.$currentFY1.'";
+				}
+				else if( type == "prevfy" )
+				{
+					document.CustomView.startdate.value = "'.$lastFY0.'";
+					document.CustomView.enddate.value = "'.$lastFY1.'";
+				}
+				else if( type == "nextfy" )
+				{
+					document.CustomView.startdate.value = "'.$nextFY0.'";
+					document.CustomView.enddate.value = "'.$nextFY1.'";
+				}
+				else if( type == "nextfq" )
+				{
+					document.CustomView.startdate.value = "2005-07-01";
+					document.CustomView.enddate.value = "2005-09-30";
+				}
+				else if( type == "prevfq" )
+				{
+					document.CustomView.startdate.value = "2005-01-01";
+					document.CustomView.enddate.value = "2005-03-31";
+				}
+				else if( type == "thisfq" )
+				{
+					document.CustomView.startdate.value = "2005-04-01";
+					document.CustomView.enddate.value = "2005-06-30";
+				}
+				else
+				{
+					document.CustomView.startdate.value = "";
+					document.CustomView.enddate.value = "";
+				}
+			}
+		</script>';
+
+		return $sjsStr;
+	}
 	
 	function getStdFilterByCvid($cvid)
-        {
-                global $adb;
-		
+	{
+		global $adb;
+
 		$sSQL = "select cvstdfilter.* from cvstdfilter inner join customview on customview.cvid = cvstdfilter.cvid";
 		$sSQL .= " where cvstdfilter.cvid=".$cvid;
 
-                $result = $adb->query($sSQL);
-                $stdfilterrow = $adb->fetch_array($result);
+		$result = $adb->query($sSQL);
+		$stdfilterrow = $adb->fetch_array($result);
 
-                $stdfilterlist["columnname"] = $stdfilterrow["columnname"];
-                $stdfilterlist["stdfilter"] = $stdfilterrow["stdfilter"];
+		$stdfilterlist["columnname"] = $stdfilterrow["columnname"];
+		$stdfilterlist["stdfilter"] = $stdfilterrow["stdfilter"];
 
-                if($stdfilterrow["stdfilter"] == "custom")
-                {
-                        if($stdfilterrow["startdate"] != "0000-00-00")
-                        {
-                                $stdfilterlist["startdate"] = $stdfilterrow["startdate"];
-                        }
-                        if($stdfilterrow["enddate"] != "0000-00-00")
-                        {
-                                $stdfilterlist["enddate"] = $stdfilterrow["enddate"];
-                        }
-                }
-		
+		if($stdfilterrow["stdfilter"] == "custom")
+		{
+			if($stdfilterrow["startdate"] != "0000-00-00")
+			{
+				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
+			}
+			if($stdfilterrow["enddate"] != "0000-00-00")
+			{
+				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
+			}
+		}
+
 		return $stdfilterlist;
-        }
+	}
 	
 	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
-        function getAdvFilterByCvid($cvid)
-        {
-                global $adb;
-                global $modules;
-	
+    function getAdvFilterByCvid($cvid)
+	{
+		global $adb;
+		global $modules;
+
 		$sSQL = "select cvadvfilter.* from cvadvfilter inner join customview on cvadvfilter.cvid = customview.cvid";
 		$sSQL .= " where cvadvfilter.cvid=".$cvid;
-		//echo $sSQL;
-                $result = $adb->query($sSQL);
+		$result = $adb->query($sSQL);
 
-                while($advfilterrow = $adb->fetch_array($result))
-                {
-                        $advft["columnname"] = $advfilterrow["columnname"];
-                        $advft["comparator"] = $advfilterrow["comparator"];
-                        $advft["value"] = $advfilterrow["value"];
+		while($advfilterrow = $adb->fetch_array($result))
+		{
+			$advft["columnname"] = $advfilterrow["columnname"];
+			$advft["comparator"] = $advfilterrow["comparator"];
+			$advft["value"] = $advfilterrow["value"];
 			$advfilterlist[] = $advft;
-                }
+		}
 
-                return $advfilterlist;
-        }
-        //<<<<<<<<advanced filter>>>>>>>>>>>>>>
+		return $advfilterlist;
+	}
+    //<<<<<<<<advanced filter>>>>>>>>>>>>>>
 
 	function getCvColumnListSQL($cvid)
 	{
 		$columnslist = $this->getColumnsListByCvid($cvid);
-		//print_r($columnslist);
 		if(isset($columnslist))
 		{
 			foreach($columnslist as $columnname=>$value)
@@ -614,19 +600,19 @@ class CustomView extends CRMEntity{
 				if($value != "")
 				{
 					$list = explode(":",$value);
-					//$sqllist[] = $list[0].".".$list[1];
+					
 					//Added For getting status for Activities -Jaguar
 					$sqllist_column = $list[0].".".$list[1];
-                                        if($this->customviewmodule == "Activities")
-                                        {
-                                                if($list[1] == "status")
-                                                {
-                                                        $sqllist_column = "case when (activity.status not like '') then activity.status else activity.eventstatus end as activitystatus";
-                                                }
-                                        }
-	                                $sqllist[] = $sqllist_column;
-				
+					if($this->customviewmodule == "Activities")
+					{
+						if($list[1] == "status")
+						{
+							$sqllist_column = "case when (activity.status not like '') then activity.status else activity.eventstatus end as activitystatus";
+						}
+					}
+					$sqllist[] = $sqllist_column;
 					//Ends
+					
 					$tablefield[$list[0]] = $list[1];
 					$fieldlabel = trim(str_replace($this->escapemodule," ",$list[3]));
 					$this->list_fields[$fieldlabel] = $tablefield;
@@ -641,9 +627,7 @@ class CustomView extends CRMEntity{
 	function getCVStdFilterSQL($cvid)
 	{
 		global $adb;
-
 		$stdfilterlist = $this->getStdFilterByCvid($cvid);
-		//print_r($stdfilterlist);
 		if(isset($stdfilterlist))
 		{
 			foreach($stdfilterlist as $columnname=>$value)
@@ -668,14 +652,12 @@ class CustomView extends CRMEntity{
 				$startdate = $datearray[0];
 				$enddate = $datearray[1];
 			}
-
 			if($startdate != "" && $enddate != "")
 			{
 				$columns = explode(":",$filtercolumn);
 				$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 			}
 		}
-		//echo $stdfiltersql;
 		return $stdfiltersql;
 	}
 	function getCVAdvFilterSQL($cvid)
@@ -687,11 +669,10 @@ class CustomView extends CRMEntity{
 			{
 				if(isset($advfltrow))
 				{
-					//echo $advfltrow["columnname"];
 					$columns = explode(":",$advfltrow["columnname"]);
 					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "" && $advfltrow["value"] != "")
 					{
-						
+
 						$valuearray = explode(",",trim($advfltrow["value"]));
 						if(isset($valuearray) && count($valuearray) > 1)
 						{
@@ -705,11 +686,11 @@ class CustomView extends CRMEntity{
 						}else
 						{
 							//Added for getting activity Status -Jaguar
-							 if($this->customviewmodule == "Activities" && $columns[1] == "status")
-                                                        {
-                                                                $advfiltersql[] = "case when (activity.status not like '') then activity.status else activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]));
-                                                        }
-                                                        else
+							if($this->customviewmodule == "Activities" && $columns[1] == "status")
+							{
+								$advfiltersql[] = "case when (activity.status not like '') then activity.status else activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]));
+							}
+							else
 							{
 								$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]));
 							}
@@ -720,7 +701,7 @@ class CustomView extends CRMEntity{
 		}
 		if(isset($advfiltersql))
 		{
-		    $advfsql = implode(" and ",$advfiltersql);
+			$advfsql = implode(" and ",$advfiltersql);
 		}
 		return $advfsql;
 	}
@@ -896,36 +877,25 @@ class CustomView extends CRMEntity{
 
 	function getAdvComparator($comparator,$value)
 	{
-/*		fLabels['e'] = 'equals';
-		fLabels['n'] = 'not equal to';
-		fLabels['s'] = 'starts with';
-		fLabels['c'] = 'contains';
-		fLabels['k'] = 'does not contain';
-		fLabels['l'] = 'less than';
-		fLabels['g'] = 'greater than';
-		fLabels['m'] = 'less or equal';
-		fLabels['h'] = 'greater or equal';*/
-		//require_once('include/database/PearDatabase.php');
-
 		if($comparator == "e")
 		{
 			if(trim($value) != "")
-                        {
-                                $rtvalue = " = ".PearDatabase::quote($value);
-                        }else
-                        {
-                                $rtvalue = " is NULL";
-                        }
+			{
+				$rtvalue = " = ".PearDatabase::quote($value);
+			}else
+			{
+				$rtvalue = " is NULL";
+			}
 		}
 		if($comparator == "n")
 		{
 			if(trim($value) != "")
-                        {
-                                $rtvalue = " <> ".PearDatabase::quote($value);
-                        }else
-                        {
-                                $rtvalue = "is NOT NULL";
-                        }
+			{
+				$rtvalue = " <> ".PearDatabase::quote($value);
+			}else
+			{
+				$rtvalue = "is NOT NULL";
+			}
 		}
 		if($comparator == "s")
 		{
@@ -955,7 +925,7 @@ class CustomView extends CRMEntity{
 		{
 			$rtvalue = " >= ".PearDatabase::quote($value);
 		}
-		
+
 		return $rtvalue;
 	}
 	function getDateforStdFilterBytype($type)
@@ -1163,12 +1133,6 @@ class CustomView extends CRMEntity{
 		if($viewid != "" && $listquery != "")
 		{
 			$listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
-			//$listviewquery = substr($listviewquery,strpos($listviewquery,'from'),strpos($listviewquery,'where'));
-
-			//$wherequery = substr($listquery, strpos($listquery,'where'),strlen($listquery));
-
-
-			//echo $listviewquery." ".$wherequery;
 			if($module == "Activities" || $module == "Emails")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,activity.* ".$listviewquery;
@@ -1195,7 +1159,6 @@ class CustomView extends CRMEntity{
 			}
 
 		}
-		//echo $query;
 		return $query;
 	}
 	
@@ -1223,46 +1186,22 @@ class CustomView extends CRMEntity{
                 return $query;
 	}
 	
-	/*function getMetricsCustomView($viewnames)
-	{
-		global $adb;
-                $tabid = getTabid($this->customviewmodule);
-                $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
-                $ssql .= " where ;
-                //echo $ssql;
-                $result = $adb->query($ssql);
-                while($cvrow=$adb->fetch_array($result))
-                {
-                        if($cvrow['setdefault'] == 1)
-                        {
-                                $shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
-                                $this->setdefaultviewid = $cvrow['cvid'];
-                        }
-                        else
-                        {
-                                $shtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
-                        }
-                }
-                //echo $shtml;
-                return $shtml;
-	}*/
 	function getCustomActionDetails($cvid)
 	{
 		global $adb;
 
 		$sSQL = "select customaction.* from customaction inner join customview on customaction.cvid = customview.cvid";
-                $sSQL .= " where customaction.cvid=".$cvid;
-                //echo $sSQL;
-                $result = $adb->query($sSQL);
+		$sSQL .= " where customaction.cvid=".$cvid;
+		$result = $adb->query($sSQL);
 
-                while($carow = $adb->fetch_array($result))
-                {
-                        $calist["subject"] = $carow["subject"];
-                        $calist["module"] = $carow["module"];
-                        $calist["content"] = $carow["content"];
+		while($carow = $adb->fetch_array($result))
+		{
+			$calist["subject"] = $carow["subject"];
+			$calist["module"] = $carow["module"];
+			$calist["content"] = $carow["content"];
 			$calist["cvid"] = $carow["cvid"];
-                }
-                return $calist;	
+		}
+		return $calist;	
 	}
 
 	function getParentId($fields,$values)

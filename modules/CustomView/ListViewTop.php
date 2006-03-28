@@ -80,7 +80,7 @@ function getKeyMetrics()
 
 			$value[]='<a href="index.php?action=index&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['name'].'</a>';
 			$value[]='<a href="index.php?action=index&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['count'].'</a>';
-				$entries[$metriclist['id']]=$value;
+			$entries[$metriclist['id']]=$value;
 		}
 
 	}
@@ -94,7 +94,6 @@ function getMetricList()
 	global $adb;
 	$ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
 	$ssql .= " where customview.setmetrics = 1 order by customview.entitytype";
-	//echo $ssql;
 	$result = $adb->query($ssql);
 	while($cvrow=$adb->fetch_array($result))
 	{

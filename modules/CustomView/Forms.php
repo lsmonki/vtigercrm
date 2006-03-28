@@ -162,13 +162,7 @@ EOQ;
 
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {
-/*
-echo '<br> column fields : ';print_r($column_fields);
-echo '<br> column  : '.$colnum;
-echo '<br> required fields : ';print_r($required_fields);
-echo '<br> suggest fields : '.$suggest_field;
-echo '<br> translated fields : ';print_r($translated_fields);
-*/	global $mod_strings;
+	global $mod_strings;
 	global $app_strings;
 	global $outlook_contacts_field_map;
 	require_once('include/database/PearDatabase.php');
@@ -195,7 +189,6 @@ echo '<br> translated fields : ';print_r($translated_fields);
 		{
 			continue;
 		}
-//echo '<br> : '.$field;
 		$output .= "<option value=\"".$field;
 
 		if ( isset( $suggest_field) && 
@@ -220,17 +213,6 @@ echo '<br> translated fields : ';print_r($translated_fields);
 
 		$count ++;
 	}
-	/*if($module == 'Contacts')
-	{
-	$module ='contactdetails';
-	}	
-	$custquery = "select * from field where tablename='".$module."'";
-	$cust_result = $adb->query($custquery);
-	while($row = $adb->fetch_array($cust_result))
-	{
-			$output .= "<option value='".$row['columnname']."'>". $row['fieldlabel'] . "</option>\n";
-	}*/
-
 	$output .= "</select>\n";
 
 	return $output;
