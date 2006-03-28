@@ -56,7 +56,6 @@ if($_REQUEST['imagelist'] != '')
 }
 
 //Checking If image is given or not 
-//echo '<pre>';print_r($_FILES);echo '</pre>';
 $uploaddir = $root_directory."test/product/" ;//set this to which location you need to give the product image
 $log->info("The Location to Save the Product Image is ".$uploaddir);
 $image_lists=array();
@@ -193,7 +192,6 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 
 }
-//echo '<pre>';print_r($image_lists);echo '</pre>';
 if($saveimage=="true")
 {
 	$image_lists_db=implode("###",$image_lists);
