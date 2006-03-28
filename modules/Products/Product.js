@@ -17,7 +17,6 @@ function clear_form(form) {
 }
 function updateListPrice(unitprice,fieldname)
 {
-	//document.addToPB.elements[fieldname].value=unitprice;
 	var elem=document.addToPB.elements;
         var i;
         for(i=0; i<elem.length; i++)
@@ -28,9 +27,6 @@ function updateListPrice(unitprice,fieldname)
                 }
         }
 
-}
-function set_focus()
-{
 }
 function cancelForm(frm)
 {
@@ -133,8 +129,6 @@ function set_return_specific(product_id, product_name) {
         var fldId = getOpenerObj("product_id");
         fldName.value = product_name;
         fldId.value = product_id;
-	//window.opener.document.EditView.product_name.value = product_name;
-        //window.opener.document.EditView.product_id.value = product_id;
 }
 
 function set_return_formname_specific(formname,product_id, product_name) {
