@@ -29,7 +29,6 @@ class auth_cmdline extends auth {
     for ($i = 0 ; $i < $_SERVER['argc']; $i++ ) {
 	  if ($_SERVER['argv'][$i] == "-".$x) {
         $r = $_SERVER['argv'][$i+1];
-#        echo $i ." = ". $_SERVER['argv'][$i] ." = ". $r ."\n";
 		return $r;
 	  }
     }
