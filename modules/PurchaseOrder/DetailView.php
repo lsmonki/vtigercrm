@@ -26,8 +26,7 @@ require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings;
-global $app_strings;
+global $mod_strings,$app_strings,$theme,$profile_id;
 
 $focus = new Order();
 
@@ -41,7 +40,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -79,7 +77,6 @@ if(isPermitted("PurchaseOrder",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 //Security check for related list
-global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
