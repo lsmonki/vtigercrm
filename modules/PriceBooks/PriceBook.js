@@ -136,9 +136,6 @@ function clear_form(form)
 	}
 }
 
-function set_focus()
-{
-}
 function cancelForm(frm)
 {
 	window.history.back();
@@ -235,8 +232,6 @@ function set_return_specific(vendor_id, vendor_name)
         var fldId = getOpenerObj("vendor_id");
         fldName.value = vendor_name;
         fldId.value = vendor_id;
-	//window.opener.document.EditView.vendor_name.value = vendor_name;
-        //window.opener.document.EditView.vendor_id.value = vendor_id;
 }
 function set_return_inventory_pb(listprice, fldname) 
 {
