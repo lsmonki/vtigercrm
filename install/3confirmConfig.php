@@ -61,7 +61,7 @@ else
 			$root_user = $_REQUEST['root_user'];
 			$root_password = $_REQUEST['root_password'];
 			$create_conn = @mysql_connect($db_hostname,$root_user,$root_password);
-			if(mysql_select_db($db_name,$conn))
+			if(mysql_select_db($db_name,$create_conn))
 				@mysql_drop_db($db_name,$create_conn);
 			$dbstatus = @mysql_create_db($db_name,$create_conn);
 			if(!$dbstatus)
@@ -73,7 +73,7 @@ else
 				$mysql_db_status = 'true';
 				$mysql_createddb_status = 'true';
 			}
-			mysql_close($create_conn);	
+			@mysql_close($create_conn);	
 		}else
 		{	
 			if(mysql_select_db($db_name,$conn))
