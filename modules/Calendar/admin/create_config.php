@@ -87,9 +87,6 @@ $info = array();
    return $msg;
  }
 
-/**
- *
- */
  function check_permission_to_go() {
    global $cc;
 
@@ -234,7 +231,6 @@ $info = array();
 
 
  $tutos['base'] = "../..";
- #ini_set("include_path","..");
  include_once 'modules/Calendar/webelements.p3';
  include_once 'modules/Calendar/permission.p3';
  require 'modules/Calendar/admin/mconfig.pinc';
@@ -459,8 +455,6 @@ $info = array();
      $this->test = array();
 
      if ( $tutos[demo] != 0 ) {
-#       $msg .= "will not work in demo";
-#       $this->stop = true;
      }
 
      $this->test_config($this->test);
