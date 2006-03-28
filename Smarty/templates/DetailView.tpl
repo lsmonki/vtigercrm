@@ -74,9 +74,6 @@
 			<a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> |
 		{/if}
 		<a href="index.php?module={$MODULE}&action=Export&all=1">Export {$MODULE}</a>
-		{if $MODULE eq 'Contacts'}
-			&nbsp;|&nbsp;<a href='index.php?module={$MODULE}&action=AddBusinessCard&return_module={$MODULE}&return_action=ListView'>Add Business Card</a>
-		{/if}
 		</td>
 		{else}
 			<td nowrap style="width:50%;padding:10px">&nbsp;</td>
