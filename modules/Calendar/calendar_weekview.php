@@ -27,18 +27,13 @@
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
- #include_once $calpath .'task.pinc';
  include_once $calpath .'appointment.pinc';
- #include_once $calpath .'product.pinc';
- #include_once $calpath .'timetrack.pinc';
 
  require_once('modules/Calendar/preference.pinc');
  require_once('include/database/PearDatabase.php');
  require_once('modules/Calendar/UserCalendar.php');
 
  
- /* Check if user is allowed to use it */
- #check_user();
  loadmodules('appointment','show');
  loadlayout();
  /**
@@ -72,7 +67,6 @@
 	 		    "workhr"=>"Work hours (8am - 8pm)",
 		            "morningtonoon"=>"Early morning to Noon (12am - 12pm)",
 			    "noontomidnight"=>"Noon to Midnight (12pm - 12am)",
-		            //"custom"=>"Custom"
 			);
 	$thtml = "";
 	foreach($timefilter as $FilterKey=>$FilterValue)
@@ -90,11 +84,8 @@
    //Code added by Minnie - Ends
    
    Function info() {
-  //   global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
 	global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings,$adb;
 
-     //$adr = $this->user;
-     //$adr = $this->pref;
      $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
 
      $xy=Date("w",$ts);
@@ -108,7 +99,6 @@
      $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
 
 
-     #$yy = Date("y",$ts);
      $yy = Date("Y",$ts);
      $day_from = Date("d",$ts);
      $day_to = Date("d",$ts + 6 * 86400);
@@ -255,7 +245,7 @@
 					     }
 					     echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" class=\"calEventNormal\" width=100%>\n";
 					     echo $table[$column][$row][$c]->formatted();
-					     echo " </table>";//</td>\n";
+					     echo " </table>";
 				     } else if ( $table[$column][$row][$c] = -1 ) {
 					     # SKIP occupied by rowspan
 				     }
@@ -322,29 +312,14 @@
      global $tutos, $lang;
 
      $this->name = $mod_strings['LBL_MODULE_NAME'];
-     #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
-     #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
-     #  $this->stop = true;
-     #}
-
-     #$this->team = $this->user->get_prefteam();
      $this->teamname = "";
-     #$this->uids = cal_parse_options($this->user,$this->teamname);
      $this->t = $_GET['t'];
-     # menu
-     #$m = appointment::getSelectLink($this->user);
-     #$m[category][] = "obj";
-     #$this->addmenu($m);
-     #$m = appointment::getAddLink($this->user,$this->user);
-     #$this->addMenu($m);
    }
  }
 
-# info($_GET['t'],$current_user->get_prefteam(),$teamname,$uids);
 
  $l = new calendar_week($current_user);
  $l->display();
- #$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id: calendar_week.php 2074 2005-10-14 11:51:34Z cooljaguar $
