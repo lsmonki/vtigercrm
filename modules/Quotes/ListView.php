@@ -25,20 +25,13 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 
-global $app_strings;
-global $list_max_entries_per_page;
+global $app_strings,$list_max_entries_per_page,$currentModule,$theme;
 
 $log = LoggerManager::getLogger('quote_list');
-
-global $currentModule;
-global $theme;
 
 // Get _dom arrays from Database
 $comboFieldNames = Array('quotestage'=>'quotestage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-
-// focus_list is the means of passing data to a ListView.
-global $focus_list;
 
 if (!isset($where)) $where = "";
 
@@ -114,7 +107,6 @@ $cvHTML = '<td><a href="index.php?module=Quotes&action=CustomView">'.$app_string
 			'.$cvHTML;
 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
