@@ -49,13 +49,6 @@ if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['curre
 
 
 //get a list of all the group allocated tasks/calls/leads
-
-
-
-//select leads.last_name,LeadGroupRelation.groupname from leads inner join LeadGroupRelation on leads.id=LeadGroupRelation.LEADID where LeadGroups.deleted=0  and Leads.deleted=0
-
-
-
 if(isset($_REQUEST['query']))
 {
 

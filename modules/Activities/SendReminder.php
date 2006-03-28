@@ -30,8 +30,6 @@ require("config.php");
 global $adb;
 
 // Select the events with reminder
-//$query="select crmentity.crmid,activity.*,activity_reminder.* from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id where ".$adb->getDBDateString("activity.date_start")." >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
-
 
 $query="select crmentity.crmid,activity.*,activity_reminder.*,recurringevents.activityid,recurringevents.recurringdate,recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left join recurringevents on activity.activityid=recurringevents.activityid where '".date('Y-m-d')."' between ".$adb->getDBDateString("activity.date_start")." and ". $adb->getDBDateString("activity.due_date") ." and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
 
@@ -111,7 +109,7 @@ if($adb->num_rows($result) >= 1)
 
 			//Set the mail body/contents here
 			#$contents ="Hi,\n\n This a activity reminder mail. Kindly visit the link for more details of the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>\n\n Regards,\n Reminder Manager";
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a> \n\n Regards,\n Reminder Manager";
 
 			if(count($to_addr) >=1)
 			{
