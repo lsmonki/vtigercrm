@@ -15,9 +15,7 @@ require_once('modules/Products/Product.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
-global $current_user;
 
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
@@ -113,7 +111,6 @@ if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $smarty->assign("MODE", $focus->mode);
-//	$smarty->assign("IMAGELISTS",getProductImages($focus->id));
 }
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
