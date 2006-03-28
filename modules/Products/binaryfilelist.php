@@ -22,13 +22,7 @@ global $app_strings,$adb,$log;
 
 	$dbQuery .= " ORDER BY filename ASC";
 
-	//echo $dbQuery;
-
 	$result = $adb->query($dbQuery) or die("Couldn't get file list");
-
-//$list = '<br><br>';
-//$list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-//$list .= '<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">Attachment</td></tr></tbody></table>';
 
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 
