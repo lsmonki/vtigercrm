@@ -223,7 +223,3 @@ function formValidate(form)
 	return true;
 }
 </script>
-<?
-
-
-?>
