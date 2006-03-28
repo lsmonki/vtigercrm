@@ -42,6 +42,9 @@
 <td><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" border="0"/></a><br>						
 <a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
 
+<td><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" border="0"/></a><br />
+<a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings" clt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}">{$MOD.LBL_ASSIGN_MODULE_OWNERS}</a>
+
 <td><a href="index.php?module=Users&action=Announcements&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
 <a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}">{$MOD.LBL_ANNOUNCEMENT}</a></td>
 <td>&nbsp;</td>
@@ -147,8 +150,6 @@
 <td><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}" border="0"/></a><br />
 <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}">{$MOD.LBL_CURRENCY_CONFIG}</a> </td>
 
-<td><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings" clt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}">{$MOD.LBL_ASSIGN_MODULE_OWNERS}</a>
 
 <td><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}" border="0"/></a><br />
 <a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}">{$MOD.LBL_MIGRATION}</a></td>
