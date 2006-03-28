@@ -41,11 +41,6 @@ class GetUserGroups {
 
 		//Setting the User Role
 		$userRole = fetchUserRole($userid);
-
-		//echo 'user2group Array<BR>';
-		//print_r($this->user_groups);
-		//echo 'user2group Array<BR>';
-
 		//Retreiving from the user2role
 		$query="select * from group2role where roleid='".$userRole."'";
                 $result = $adb->query($query);
@@ -68,14 +63,12 @@ class GetUserGroups {
 			$parentRolelist .= "'".$par_rol_id."',";		
 		}
 		$parentRolelist .= "'".$userRole."')";
-		//echo '<BR> '.$parentRolelist.'<BR>';		
 		$query="select * from group2rs where roleandsubid in".$parentRolelist;
                 $result = $adb->query($query);
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)
                 {
                         $now_group_id=$adb->query_result($result,$i,'groupid');
-			//echo '<BR>    '.$now_group_id.'  <BR>';
  
 			if(! in_array($now_group_id,$this->user_groups))
 			{
@@ -85,12 +78,9 @@ class GetUserGroups {
                 }
 		foreach($this->user_groups as $grp_id)
 		{
-			//echo '<BR>'.$grp_id.'<BR>';
 			$focus = new GetParentGroups();
 			$focus->getAllParentGroups($grp_id);
 			
-			//print_r($focus->parent_groups);
-			//echo '<BR><BR>';
 			foreach($focus->parent_groups as $par_grp_id)
 			{
 				if(! in_array($par_grp_id,$this->user_groups))

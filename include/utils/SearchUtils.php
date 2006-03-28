@@ -333,11 +333,6 @@ function getAdvSearchfields($module)
                         $fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
-                        /*if($fieldcolname == "crmid" || $fieldcolname == "parent_id")
-                        {
-                           $fieldtablename = "crmentity";
-			   $fieldcolname = "setype";
-                        }*/
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 				if($fieldlabel == "Related To")
 				{
@@ -351,7 +346,6 @@ function getAdvSearchfields($module)
 
                                 }
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
-                        //$module_columnlist[$optionvalue] = $fieldlabel;
 			if ($i==0)
 			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
 			else

@@ -116,8 +116,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$account_name = getAccountName($account_id);
 		}
 		//Account Name View	
-		//$label_fld[] = $mod_strings[$fieldlabel];
-		//$label_fld[] ='<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $account_name;
 		$label_fld["secid"] = $account_id;
@@ -231,7 +229,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
           $label_fld[] = $contact_name;
 		$label_fld["secid"] = $contact_id;
 		$label_fld["link"] = "index.php?module=Contacts&action=DetailView&record=".$contact_id; 
-		//$label_fld[] ='<a href="index.php?module=Contacts&action=DetailView&record='.$contact_id.'">'.$contact_name.'</a>';
         }
 	elseif($uitype == 59)
 	{
@@ -244,7 +241,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $product_name;
 		$label_fld["secid"] = $product_id;
 		$label_fld["link"] = "index.php?module=Products&action=DetailView&record=".$product_id; 
-		//$label_fld[] ='<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 		
 	}
         elseif($uitype == 61)
@@ -666,7 +662,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
           $label_fld[] = $potential_name;
 		$label_fld["secid"] = $potential_id;
 		$label_fld["link"] = "index.php?module=Potentials&action=DetailView&record=".$potential_id; 
-		//$label_fld[] = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
         }
 	elseif($uitype == 78)
         {
@@ -679,7 +674,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
           $label_fld[] = $quote_name;
 		$label_fld["secid"] = $quote_id;
 		$label_fld["link"] = "index.php?module=Quotes&action=DetailView&record=".$quote_id; 
-		//$label_fld[] = '<a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a>';
         }
 	elseif($uitype == 79)
         {
@@ -692,7 +686,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
            $label_fld[] = $purchaseorder_name;
 		 $label_fld["secid"] = $purchaseorder_id;
 		 $label_fld["link"] = "index.php?module=PurchaseOrder&action=DetailView&record=".$purchaseorder_id; 
-		//$label_fld[] = '<a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
         }
 	elseif($uitype == 80)
         {
@@ -705,7 +698,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
           $label_fld[] = $salesorder_name;
 		$label_fld["secid"] = $salesorder_id;
 		$label_fld["link"] = "index.php?module=SalesOrder&action=DetailView&record=".$salesorder_id; 
-		//$label_fld[] = '<a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
         }
 	elseif($uitype == 30)
 	{

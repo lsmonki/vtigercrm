@@ -1646,8 +1646,6 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 		global $adb;
 		global $current_user;
 		$tabid = getTabid($module);
-		//echo "tab id is ".$tabid;
-		//echo '<BR>';
 		$actionid = getActionid($action);
 		$profile_id = fetchUserProfileId($user_id);
 		$tab_per_Data = getAllTabsPermission($profile_id);
@@ -1659,14 +1657,10 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 		//Checking whether this tab is allowed
 		if($tab_per_Data[$tabid] == 0)
 		{
-			//echo "inside tab permission success";
-			//echo '<BR>';
 			$permission = 'yes';
 			//Checking whether this action is allowed
 			if($permissionData[$tabid][$actionid] == 0)
 			{
-				//echo "inside action permission success";
-	                        //echo '<BR>';	
 				$permission = 'yes';
 				$rec_owner_id = '';
 				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
@@ -1676,10 +1670,6 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 
 				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
 				{
-					//echo "inside other permission success";
-                                	//echo '<BR>';
-					//Checking for Default Sharing Permission
-					//$rec_owner_id = getUserId($record_id);
 					if($rec_owner_id != $current_user->id)
 					{
 						if($others_permission_id == 0)

@@ -127,7 +127,6 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 				if($private == 'private')
 				{
 					$log->debug("Sharing is Private. Only the current user should be listed");
-					//$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
 					$query = "select id as id,user_name as user_name from users where id=".$current_user->id." and status='Active' union select user2role.userid as id,users.user_name as user_name from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%' and status='Active' union select shareduserid as id,users.user_name as user_name from tmp_read_user_sharing_per inner join users on users.id=tmp_read_user_sharing_per.shareduserid where status='Active' and tmp_read_user_sharing_per.userid=".$current_user->id." and tmp_read_user_sharing_per.tabid=".getTabid($module);	
 						
 				}
@@ -143,7 +142,6 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 
 		$query .= " order by user_name ASC";
 
-		//$log->debug("get_user_array query: $query");
 		$result = $db->query($query, true, "Error filling in user array: ");
 
 		if ($add_blank==true){
@@ -282,7 +280,6 @@ function return_module_language($language, $module)
 	if($currentModule == $module && isset($mod_strings) && $mod_strings != null)
 	{
 		// We should have already loaded the array.  return the current one.
-		//$log->fatal("module strings already loaded for language: ".$language." and module: ".$module);
 		return $mod_strings;
 	}
 
@@ -835,52 +832,6 @@ function getActionname($actionid)
 	$result =$adb->query($query);
 	$actionname=$adb->query_result($result,0,"actionname");
 	return $actionname;
-	/*
-	$log->info("getActionName   ".$actionid);
-
-	$actionname = '';
-	if($actionid == 0)
-	{
-		$actionname= 'Save';
-	}
-	else if($actionid == 1)
-	{
-		$actionname= 'EditView';
-	}
-	else if($actionid == 2)
-	{
-		$actionname= 'Delete';
-	}
-	else if($actionid == 3)
-	{
-		$actionname= 'index';
-	}
-	else if($actionid == 4)
-	{
-		$actionname= 'DetailView';
-	}		
-	else if($actionid == 5)
-	{
-		$actionname= 'Import';
-	}
-	else if($actionid == 6)
-	{
-		$actionname= 'Export';
-	}
-	else if($actionid == 7)
-	{
-		$actionname= 'BusinessCard';
-	}
-	else if($actionid == 8)
-	{
-		$actionname= 'Merge';
-	}
-	else if($actionid == 9)
-	{
-		$actionname= 'ConvertLead';
-	}
-	return $actionname;
-	*/
 }
 
 
@@ -1096,8 +1047,6 @@ function getDBInsertDateValue($value)
         {
                 $dat_fmt = 'dd-mm-yyyy';
         }
-	//echo $dat_fmt;
-	//echo '<BR>';
 	$insert_date='';
 	if($dat_fmt == 'dd-mm-yyyy')
 	{
@@ -1112,7 +1061,6 @@ function getDBInsertDateValue($value)
 		list($y,$m,$d) = split('-',$value);
 	}
 		
-	//echo $display_date;
 	$insert_date=$y.'-'.$m.'-'.$d;
 	return $insert_date;
 }
@@ -1874,19 +1822,10 @@ function start_end_dates($period)
         }
         else if($period=="tmon")
         {
-		/*$st_date=date("Y-m-d",mktime(0,0,0,date("n"),date("1"),date("Y")));
-                $end_date=date("Y-m-d",mktime(0,0,0,date("n"),date("j")+1,date("Y")));
-                $period_type="month";
-                $width="840";
-                $start_month=date("d",mktime(0,0,0,date("n"),date("j"),date("Y")));
-                if($start_month==1)
-                {
-                        $st_date=date("Y-m-d",mktime(0,0,0,date("n")-1,date("1"),date("Y")));
-                        $end_date = date("Y-m-d",mktime(0, 0, 1, date("n"), 0,date("Y")));
-                }*/
 		$period_type="month";
 		$width="840";
-		$st_date = date("Y-m-d",mktime(0, 0, 0, date("m"), "01",   date("Y")));							     $end_date = date("Y-m-t");
+		$st_date = date("Y-m-d",mktime(0, 0, 0, date("m"), "01",   date("Y")));	
+		$end_date = date("Y-m-t");
 
         }
         else if($period=="lmon")
