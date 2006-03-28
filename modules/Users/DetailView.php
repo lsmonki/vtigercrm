@@ -76,11 +76,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
 
-if(isset($_REQUEST['reset_preferences'])){
-	print_r($current_user->user_preferences);
-	$current_user->resetPreferences();
-}
-
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
