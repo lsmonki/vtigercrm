@@ -171,21 +171,6 @@ class User extends SugarBean {
 
 			
 	}
-	function resetPreferences(){
-		if(!isset($this->user_preferences)){
-				if(isset($_SESSION["USER_PREFERENCES"])){
-					$this->user_preferences = $_SESSION["USER_PREFERENCES"];
-					foreach($this->user_preferences as $key => $val){
-						unset($_SESSION[$key]);	
-					}
-				}
-		}
-		unset($this->user_preferences);
-		unset ($_SESSION["USER_PREFERENCES"]);
-		$query = "UPDATE $this->table_name SET user_preferences=NULL where id='$this->id'";	
-		$result =& $this->db->query($query);
-		$this->log->debug("RESETING: PREFERENCES ROWS AFFECTED WHILE UPDATING USER PREFERENCES:".$this->db->getAffectedRowCount($result));
-	}
 	
 	function savePreferecesToDB(){
 		$data = base64_encode(serialize($this->user_preferences));
@@ -207,23 +192,7 @@ class User extends SugarBean {
 		}
 		
 	}
-	function getPreference($name){
-		if(array_key_exists($name,$this->user_preferences ))
-			return $this->user_preferences[$name];
-		return '';
-	}
-	function create_tables () {
 	
-	}
-
-	function drop_tables () {
-		/*$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-		$this->db->query($query, true);	*/
-		
-
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-
-	}
 	
 	function get_summary_text()
 	{
