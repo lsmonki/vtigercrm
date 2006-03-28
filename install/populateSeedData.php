@@ -476,7 +476,7 @@ for($i=0; $i<10; $i++)
 
 //Populating HelpDesk- FAQ Data
 
-	$status_array=array ("Draft","Reviewed","Published");
+	$status_array=array ("Draft","Reviewed","Published","Draft","Reviewed","Draft","Reviewed","Draft","Reviewed","Draft","Reviewed","Draft");
 	$question_array=array (
 	"How to migrate data from previous versions to the latest version?",
 	"Error message: The file is damaged and could not be repaired.",
