@@ -33,7 +33,6 @@ for($i=0 ; $i<$no_of_portals; $i++)
 	$portal_array['portalurl'] = $portalurl;
 	$portal_info[]=$portal_array;
 }
-//echo '<pre>';print_r($portal_array);echo '</pre>';
 $smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("IMAGEPATH", $image_path);
