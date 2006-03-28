@@ -77,25 +77,16 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	$db_hostname = $dbconfig['db_hostname'];
 	else
 	$db_hostname = $hostname;
-	// TODO: introduce MySQL port as parameters to use non-default value 3306
-	//  else
-	//    $db_hostname = $hostname.$sock_path;
 
 	if (isset($_REQUEST['db_username']))
 	$db_username = $_REQUEST['db_username'];
 	elseif (isset($dbconfig['db_username']))
 	$db_username = $dbconfig['db_username'];
-	// TODO: deprecate connection.php file parameters
-	//  else
-	//    $db_username = $mysql_username;
 
 	if (isset($_REQUEST['db_password']))
 	$db_password = $_REQUEST['db_password'];
 	elseif (isset($dbconfig['db_password']))
 	$db_password = $dbconfig['db_password'];
-	// TODO: deprecate connection.php file parameters
-	//  else
-	//    $db_password = $mysql_password;
 
 	if (isset($_REQUEST['db_name']))
 	$db_name = $_REQUEST['db_name'];
@@ -134,13 +125,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
-		/*
-		TODO: introduce MySQL port as parameters to use non-default value 3306
-		TODO: deprecate connection.php file parameters
-		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname.$sock_path : $db_hostname = $_REQUEST['db_hostname'];
-		!isset($_REQUEST['db_username']) ? $db_username = $mysql_username : $db_username = $_REQUEST['db_username'];
-		!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-		*/
 		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm5_beta" : $db_name = $_REQUEST['db_name'];
 		!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 		!isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
@@ -166,6 +150,17 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
 <script type="text/javascript" language="Javascript">
 <!--  to hide script contents from old browsers
+function showhide()
+{
+	if(document.getElementById('check_createdb').checked != true)
+	{
+		document.getElementById('root_info').style.display = 'none';
+	}
+	else
+	{
+		document.getElementById('root_info').style.display = 'block';
+	}
+}
 function trim(s) {
         while (s.substring(0,1) == " ") {
                 s = s.substring(1, s.length);
@@ -206,13 +201,6 @@ function verify_data(form) {
 		errorMessage += "\n path";
 		form.root_directory.focus();
 	}
-/*
-	 if (trim(form.admin_email.value) =='') {
-                isError = true;
-                errorMessage += "\n admin email";
-                form.admin_email.focus();
-        }
-*/
 	if (trim(form.admin_password.value) =='') {
 		isError = true;
 		errorMessage += "\n admin password";
@@ -223,29 +211,6 @@ function verify_data(form) {
                 errorMessage += "\n temp directory path";
                 form.root_directory.focus();
         }
-/*
-	if (trim(form.mail_server.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server name";
-                form.mail_server.focus();
-        }
-
- if (trim(form.mail_server_username.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server username";
-                form.mail_server_username.focus();
-        }
-
-
- if (trim(form.mail_server_password.value) =='') {
-                isError = true;
-                errorMessage += "\n mail server password";
-                form.mail_server_password.focus();
-        }
-
-*/
-
-
 
 
 	// Here we decide whether to submit the form.
@@ -325,7 +290,7 @@ function verify_data(form) {
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><select name="dbtype">
+               <td width="75%" bgcolor="white" align="left"><select style="width:145px" name="dbtype">
 			   <option value="mysql" selected="selected">MySQL</option>
 			   </select>
 			   </td>
@@ -344,9 +309,24 @@ function verify_data(form) {
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
-
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;<input name="check_createdb" type="checkbox" id="check_createdb" onClick="showhide()"/>&nbsp;Create Database(will drop the database if exists)</td>
               </tr>
+			  <tr><td colspan=2>
+              
+			  <div id="root_info" style="display:none;width:100%;border:0px;padding:0px">
+			  <table cellpadding=5 cellspacing=1 border=0 width="100%" class=small style="background-color:#cccccc">
+			  <tr>
+               <td width="25%" nowrap bgcolor="#F5F5F5"><strong>Root Username</strong> <sup><font color=red>*</font></sup></td>
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="root_user" value="" /></td>
+              </tr>
+              <tr>
+               <td nowrap bgcolor="#F5F5F5"><strong>Root Password</strong> <sup><font color=red>*</font></sup></td>
+               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="root_password" value="" /></td>
+              </tr>
+			  </table>
+			  </div>
+			  
+			  </td></tr>
               </table>
 			
 			<br><br>
