@@ -26,9 +26,7 @@ require_once('modules/Invoice/Invoice.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings;
-global $app_strings;
-global $currentModule;
+global $mod_strings,$app_strings,$currentModule,$theme;
 $focus = new Invoice();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -41,7 +39,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
