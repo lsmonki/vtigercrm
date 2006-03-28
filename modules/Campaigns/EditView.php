@@ -19,7 +19,6 @@ global $app_list_strings;
 global $mod_strings;
 global $current_user;
 global $currentModule;
-//echo '+++++++++++++++++'.$currentModule;
 
 $focus = new Campaign();
 $smarty = new vtigerCRM_Smarty();
@@ -93,8 +92,6 @@ $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-//$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-
 
 $campaign_tables = Array('campaign','crmentity');
 $tabid = getTabid("Campaigns");
