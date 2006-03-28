@@ -23,25 +23,15 @@ function getTopQuotes()
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 	
-	global $app_strings;
-	global $current_language;
-	global $current_user;
+	global $app_strings,$current_language,$current_user;
 	$current_module_strings = return_module_language($current_language, 'Quotes');
 
-	global $list_max_entries_per_page;
-	global $urlPrefix;
-	global $adb;
+	global $list_max_entries_per_page,$adb,$theme,$mod_strings;
 	$log = LoggerManager::getLogger('quote_list');
-
-	global $currentModule;
-	global $theme;
 
 	// Get _dom arrays from Database
 	$comboFieldNames = Array('quotestage'=>'quotestage_dom');
 	$comboFieldArray = getComboArray($comboFieldNames);
-
-	// focus_list is the means of passing data to a ListView.
-	global $focus_list;
 
 	$url_string = '';
 	$sorder = '';
@@ -59,8 +49,6 @@ function getTopQuotes()
 	}
 	$focus = new Quote();
 
-	global $theme;
-	global $mod_strings;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
