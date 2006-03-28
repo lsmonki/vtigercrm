@@ -280,7 +280,7 @@ function resetFieldTypeHilite() {
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
 	  <td class="dataLabel" nowrap width="100"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_LENGTH}</td>
-          <td width="150"><input type="text" name="fldLength" value="{LENGTHVALUE}" style="width:100%"></td>
+	  <td width="150"><input type="text" name="fldLength" value="{LENGTHVALUE}" {READ} style="width:100%"></td>
 	</tr>
 	</table>
 	</div>
@@ -288,7 +288,7 @@ function resetFieldTypeHilite() {
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
 	  <td class="dataLabel" nowrap width="100">{MOD.LBL_DECIMAL_PLACES}</td>
-          <td width="150"><input type="text" name="fldDecimal" value="{DECIMALVALUE}" style="width:100%"></td>
+	  <td width="150"><input type="text" name="fldDecimal" value="{DECIMALVALUE}" {READ} style="width:100%"></td>
 	</tr>
 	</table>
 	</div>
@@ -296,7 +296,7 @@ function resetFieldTypeHilite() {
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
           <td class="dataLabel" nowrap width="100" valign="top"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_PICK_LIST_VALUES}</td>
-          <td width="150" valign="top"><textarea name="fldPickList" rows="10" style="width:100%">{PICKLISTVALUE}</textarea></td>
+	  <td width="150" valign="top"><textarea name="fldPickList" rows="10" {READ} style="width:100%">{PICKLISTVALUE}</textarea></td>
 	  <td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td>
         </tr>
 	</table>
