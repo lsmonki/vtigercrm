@@ -8,6 +8,7 @@
  *
  ********************************************************************************/
 
+document.write("<script type='text/javascript' src='include/js/Inventory.js'></"+"script>");
 
 function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
@@ -164,62 +165,25 @@ function roundValue(val) {
    
    return val;
 } 
-
-function copyAddressRight(form) {
-
-	form.ship_street.value = form.bill_street.value;
-
-	form.ship_city.value = form.bill_city.value;
-
-	form.ship_state.value = form.bill_state.value;
-
-	form.ship_code.value = form.bill_code.value;
-
-	form.ship_country.value = form.bill_country.value;
-
-	form.ship_pobox.value = form.bill_pobox.value;
-	
-	return true;
-
-}
-
-function copyAddressLeft(form) {
-
-	form.bill_street.value = form.ship_street.value;
-
-	form.bill_city.value = form.ship_city.value;
-
-	form.bill_state.value = form.ship_state.value;
-
-	form.bill_code.value =	form.ship_code.value;
-
-	form.bill_country.value = form.ship_country.value;
-
-	form.bill_pobox.value = form.ship_pobox.value;
-	
-	return true;
-
-}
-
 	function validate() {
 		if(!formValidate())
 			return false
-		if(!FindDuplicate())
-                        return false;
+				if(!FindDuplicate())
+					return false;
 		if(rowCnt == 0)
 		{
 			alert('No product is selected. Select atleast one Product');
 			return false;
 		}
-		
 
-				for (var i=1;i<=rowCnt;i++) {
-					if (!emptyCheck("txtProduct"+i,"Product","text")) return false
-						if (!emptyCheck("txtQty"+i,"Qty","text")) return false
-							if (!numValidate("txtQty"+i,"Qty","any")) return false
-								if (!numConstComp("txtQty"+i,"Qty","GE","1")) return false
-									if (!emptyCheck("txtListPrice"+i,"List Price","text")) return false
-										if (!numValidate("txtListPrice"+i,"List Price","any")) return false           }
+
+		for (var i=1;i<=rowCnt;i++) {
+			if (!emptyCheck("txtProduct"+i,"Product","text")) return false
+				if (!emptyCheck("txtQty"+i,"Qty","text")) return false
+					if (!numValidate("txtQty"+i,"Qty","any")) return false
+						if (!numConstComp("txtQty"+i,"Qty","GE","1")) return false
+							if (!emptyCheck("txtListPrice"+i,"List Price","text")) return false
+								if (!numValidate("txtListPrice"+i,"List Price","any")) return false           }
 		if (getObj("txtTax").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
 			if (!numValidate("txtTax","Tax","any")) return false
 				if (getObj("txtAdjustment").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)

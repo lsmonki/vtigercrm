@@ -9,42 +9,7 @@
  ********************************************************************************/
 
 
-function copyAddressRight(form) {
-
-	form.ship_street.value = form.bill_street.value;
-
-	form.ship_city.value = form.bill_city.value;
-
-	form.ship_state.value = form.bill_state.value;
-
-	form.ship_code.value = form.bill_code.value;
-
-	form.ship_country.value = form.bill_country.value;
-
-	form.ship_pobox.value = form.bill_pobox.value;
-	
-	return true;
-
-}
-
-function copyAddressLeft(form) {
-
-	form.bill_street.value = form.ship_street.value;
-
-	form.bill_city.value = form.ship_city.value;
-
-	form.bill_state.value = form.ship_state.value;
-
-	form.bill_code.value =	form.ship_code.value;
-
-	form.bill_country.value = form.ship_country.value;
-
-	form.bill_pobox.value = form.ship_pobox.value;
-
-	return true;
-
-}
-
+document.write("<script type='text/javascript' src='include/js/Inventory.js'></"+"script>");
 function showDefaultCustomView(selectView)
 {
 		show("status");
