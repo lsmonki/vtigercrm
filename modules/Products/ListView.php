@@ -11,7 +11,6 @@
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/Products/Product.php');
-require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
