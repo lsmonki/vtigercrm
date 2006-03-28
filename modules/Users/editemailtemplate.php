@@ -15,9 +15,7 @@ require_once('include/database/PearDatabase.php');
 
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 global $theme;
-global $current_user;
 global $current_language;
 
 $theme_path="themes/".$theme."/";
