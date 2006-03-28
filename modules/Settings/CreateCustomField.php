@@ -8,22 +8,22 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-require_once ($theme_path."layout_utils.php");
+ 
 require_once('include/CustomFieldUtil.php');
-global $mod_strings,$adb;
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
 require_once('XTemplate/xtpl.php');
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
 
-global $theme;
+echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
+
+global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+
 require_once($theme_path.'layout_utils.php');
+
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
+
 $xtpl=new XTemplate ('modules/Settings/customfield.html');
 if(isset($fieldid) && $fieldid!='')
 {
@@ -37,7 +37,8 @@ if(isset($fieldid) && $fieldid!='')
 	$xtpl->assign("LABELVALUE",$customfield_fieldlabel);
 	$xtpl->assign("LENGTHVALUE",$fieldlength);
 	$xtpl->assign("DECIMALVALUE",$decimalvalue);
-	if($fieldtype == '7')
+	$xtpl->assign("READ","readonly");
+	if($fieldtype == '7' || $fieldtype == '11')
 	{
 		$query = "select * from ".$customfield_columnname;
 		$result = $adb->query($query);
