@@ -21,11 +21,9 @@ require_once('include/utils/utils.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Leads/Lead.php');
 
-
 class Campaign extends CRMEntity {
 	var $log;
 	var $db;
-
 
 	// Stored fields
 	var $id;
@@ -73,7 +71,6 @@ class Campaign extends CRMEntity {
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
 
                 $query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.campaignid = '.$id;
-                //echo $query;
 
                 return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
         }
