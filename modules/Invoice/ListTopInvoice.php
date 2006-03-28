@@ -23,22 +23,10 @@ function getTopInvoice()
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
-	global $app_strings;
-	global $current_language;
-	global $current_user;
+	global $app_strings,$current_language,$current_user,$adb,$list_max_entries_per_page,$theme;
 	$current_module_strings = return_module_language($current_language, 'Invoice');
 
-	global $list_max_entries_per_page;
-	global $urlPrefix;
-	global $adb;
 	$log = LoggerManager::getLogger('invoice_list');
-
-	global $currentModule;
-	global $theme;
-
-
-	// focus_list is the means of passing data to a ListView.
-	global $focus_list;
 
 	$url_string = '';
 	$sorder = '';
@@ -56,7 +44,6 @@ function getTopInvoice()
 	}
 	$focus = new Invoice();
 
-	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
