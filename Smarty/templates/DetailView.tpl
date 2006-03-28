@@ -500,7 +500,7 @@ function ajaxTagCloudResp(response)
 {ldelim}
 	var item = response.responseText;
 	getObj('tagfields').innerHTML = item;
-	document.getElementById(txtBox).value ='';	
+	document.getElementById('txtbox_tagfields').value ='';	
 	
 {rdelim}
 </script>
