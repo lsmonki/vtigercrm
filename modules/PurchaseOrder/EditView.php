@@ -29,10 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $mod_strings;
-global $current_user;
-global $log;
+global $app_strings,$mod_strings,$log,$theme;
 
 
 $focus = new Order();
@@ -76,7 +73,6 @@ if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['rec
 	$focus->column_fields['ship_country']=$vend_focus->column_fields['country'];
 
 }
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 //retreiving the combo values array
