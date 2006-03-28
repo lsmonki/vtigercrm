@@ -15,7 +15,6 @@ require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
 echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings[$_REQUEST['fld_module']].$mod_strings['CustomFields'] , true);
-//or die("Couldn't connect to database $dbDatabase");
 
 echo '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
 echo '<form action="index.php" method="post" name="new" id="form">';
@@ -34,18 +33,8 @@ if($_REQUEST['fld_module']=="Leads")
 
 echo '</tr></form></table>';
 echo '<br>';
-//onclick="this.form.return_module.value="Settings"; this.form.action.value="index"
 
-
-function fetchTabIDVal($fldmodule)
-{
-  global $adb;
-  $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
-  $tabidresult = $adb->query($query);
-  return $adb->query_result($tabidresult,0,"tabid");
-}
-
-$tabid = fetchTabIDVal($_REQUEST['fld_module']);
+$tabid = getTabid($_REQUEST['fld_module']);
 $fld_module = $_REQUEST['fld_module'];
 
 echo getCustomFieldList($tabid,$mod_strings,$fld_module);
@@ -54,11 +43,8 @@ echo getCustomFieldList($tabid,$mod_strings,$fld_module);
 function getCustomFieldList($tabid, $mod_strings, $fld_module)
 {
   global $adb;
-        //fieldid,fieldlabel,column_name,typdesc
-
-	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype from field where tabid=".$tabid." and generatedtype=2 order by sequence";
-        
-        $result = $adb->query($dbQuery) or die("Couldn't get file list");
+  $dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype from field where tabid=".$tabid." and generatedtype=2 order by sequence";
+  $result = $adb->query($dbQuery) or die("Couldn't get file list");
 
 
 $list = '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="60%">';
@@ -77,14 +63,11 @@ $list .= '<td class="ModuleListTitle" height="21" width="20%" style="padding:0px
 
 $list .= $mod_strings['FieldName'].'</b></td>';
 
-//$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 $list .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><b>';
 
 $list .= $mod_strings['FieldType'].'</b></td>';
 
 $list .= '</tr>';
-
-//$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 
 $i=1;
 while($row = $adb->fetch_array($result))
