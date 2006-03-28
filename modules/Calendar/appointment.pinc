@@ -164,12 +164,7 @@ function cal_parse_options(&$user,&$teamname) {
   if ( isset($_GET['team']) ) {
     $team = $_GET['team'];
     $x = $user->set_prefteam($team);
-  } //else {
-    /* Get the last used team */
-    //$team = $user->get_prefteam();
-  //}
-  //$user->readKnownParties();
-
+  } 
   /* Get group or user whose calendar should be displayed */
   /* default to current checked in user                   */
   if ( ($team == CAL_EVERYTHING) && ! is_admin($current_user) ) {
@@ -339,18 +334,12 @@ function cal_parse_options(&$user,&$teamname) {
  */
 class appointment extends tutos_base {
 
-  /* ---------------------------------------------------------------------------
-   */
    var $db;
   function appointment() {
     global $table,$current_user;
 
-    #$this->init($dbconn);
     $this->db = new PearDatabase();
 
-   # if ( ! class_exists ("product") ) {
-   #   require_once 'product.pinc';
-   # }
     $this->descr = "";
     $this->trace = 0;
     $this->outside = 0;
@@ -359,7 +348,6 @@ class appointment extends tutos_base {
     $this->end      = new DateTime();
     $this->t_ignore = 0;
     $this->visitor  = -1;
-    #$this->product  = new product($this->dbconn);
     $this->remember = 0;
     $this->remembered = 0;
     $this->email = 0;
@@ -373,7 +361,6 @@ class appointment extends tutos_base {
 
 	$this->init_custom("appointment1");
 
-    # Repeat stuff
     $this->repeat = APP_NOREP;
     $this->r_arg = 0;
     $this->r_ignore = 0;
@@ -383,21 +370,6 @@ class appointment extends tutos_base {
     $this->tablename  = $this->dbconn->prefix .$table['appointment1'][name];
   }
 
-  /**
-   * fill the object data with a given resultset
-   *
-   * @param Object $r    a result set object 
-   * @param int    $pos  a index in the resultset
-   */
-
- /* function getUserName($userid)
-  {
-	//require_once("modules/Users/User.php");
-	$user = new User();
-	$user->retrieve($userid);
-	return $user->first_name." ".$user->last_name;	
-  }
-*/
   function getContactName($contactid)
   {
 	require_once("modules/Contacts/Contact.php");
@@ -409,10 +381,7 @@ class appointment extends tutos_base {
 // srini read_result
   	function read_result ($val_array, $pos=-1) 
 	{
-		//  print("<br>GS --> read_result pos=".$pos);
-		// print_r($val_array);
 		if($pos!=-1) return;
-		//print("GS --> continuing");
 		$fmt_sthr='';
 		$fmt_stm='';
 		list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
@@ -461,10 +430,8 @@ class appointment extends tutos_base {
 		$this->subject     = $val_array["subject"];
 		$this->module_name = $val_array["activitytype"];
 		$this->record_id   = $val_array["activityid"];
-	#$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
 		$obj->creator->id = $val_array["smownerid"];
 
-		#$this->creator = $val_array["creator"];
 		$this->creator = getUserName($val_array["smownerid"]);
 
 		//For displaying the group name in the calendar -Jaguar
@@ -958,19 +925,11 @@ class appointment extends tutos_base {
   function getLink($text = -1) {
     global $lang,$mod_strings;
 
-	// commented temporary srini
-    /*if ( ($this->mod_ok()) && ($this->end->getTimestamp() - time() > 0 ) ) {*/
       // commented and added by raj
       #$url = $this->getModURL();
- //     $url = "../../index.php?module=Activities&action=DetailView&actvity_mode=Events&record=".$this->record_id;
       $url = "index.php?action=DetailView&module=Activities&record=".$this->record_id ."&activity_mode=Events";
 
-      //
       $info = $mod_strings['LBL_CHANGE_APPNT'];
-    /*} else {
-      $url = $this->getURL();
-      $info = $lang['seeapp'];
-    }*/
     if ( $this->repeat == APP_NOREP ) {
       if ( $this->t_ignore == 0) {
         $info = sprintf ($info,$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
@@ -1074,8 +1033,6 @@ class appointment extends tutos_base {
     } else if ($fld == "end") {
       $d = new DateTime($data);
       $this->setEndTime($d);
-#    } else if ($fld == "participant") {
-#      $this->setLName($data);
     } else if ($fld == "t_ignore") {
       $this->t_ignore = $data;
     } else if ($fld == "r_ignore") {
@@ -1244,9 +1201,7 @@ class appointment extends tutos_base {
       $end = $app->end;
       $start->setDateTime($app->start->getYYYYMMDD());
       $end->setDateTime($app->end->getYYYYMMDD());
-#     if ( $start->getDate() == $end->GetDate() ) {
         $end->addDays(1);
-#     }
       $start_ts2 = $start->getTimestamp();
       $end_ts2 = $end->getTimestamp();
     } else {
@@ -1322,7 +1277,6 @@ class appointment extends tutos_base {
    */
   function getLocation() {
     global $lang;
-    #return "<span class=\"apploc". $this->outside ."\">". $lang['AppLoc'][$this->outside] ."</span>";
     return "<span>". $this->outside ."</span>";
   }
   /**
@@ -1415,8 +1369,6 @@ class appointment extends tutos_base {
 
 		//added from Fredy's patch	
 		echo "  <td class=\"". $class ."\" align=\"right\">". $this->creator ."&nbsp; </td>\n";
-		#echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
-		#echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->outside ."</b></td>\n";
 		echo "  </tr>\n";
 
 		//added account names to the calendar entry given by Fredy
@@ -1484,10 +1436,8 @@ class appointment extends tutos_base {
 		//Added for description 
 		$descr = eregi_replace("\n","<br />",$this->descr);
 		if ($descr != "" ) {
-			//echo "  <tr><td colspan=2 class=\"".$class."\" width=\"16\" align=\"right\" valign=\"top\"><img src=\"".$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td>
                         echo "<tr><td colspan=2>&nbsp;</td>";
                         echo "<td align=left>".$this->getLink(urlReplace($descr))."&nbsp;</td></tr>\n";
-                        //echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
 
 		}
 
@@ -1513,11 +1463,6 @@ class appointment extends tutos_base {
 				echo "<br />". $this->visitor->getLink() ."</td></tr>\n";
 			}
 
-			/*product::small_infolist($current_user,$this,3,$class);
-			  foreach($tutos[activemodules] as $i => $f) {
-			  $x = new $tutos[modules][$f][name]($this->dbconn);
-			  $x->small_infolist($current_user,$this,3,$class);
-			  }*/
 		}
 		return;
 	}
@@ -1678,24 +1623,6 @@ class appointment extends tutos_base {
                    info => $lang['NewAppointInfo'],
                    category => array("app","new","obj")
                  );
- /*   if ( ($obj->getType() == "company") ||
-         ($obj->getType() == "department")
-       ) {
-      $x[0][url] = addUrlParameter($x[0][url],"vid=".$obj->id);
-      $x[0][category] = array("app","new","module");
-      $x[0][text] = $lang['NewAppoint'];
-    } else if ( ($obj->getType() == "product") ) {
-      $x[0][url] = addUrlParameter($x[0][url],"pid=".$obj->id);
-      $x[0][category] = array("app","new","module");
-      $x[0][text] = $lang['NewAppoint'];
-    } else {
-      $x[1] = array( url => "app_new_r.php",
-                     text => $lang['NewAppointR'],
-                     info => $lang['NewAppointInfoR'],
-                     category => array("app","new","obj")
-                   );
-    }
-*/
     return $x;
   }
   /**
