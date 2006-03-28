@@ -16,7 +16,6 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
-// TabMenu shown in the header page.
 class Security extends CRMEntity {
 	var $table_name = "role";
 		
@@ -358,7 +357,6 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'N~O',0,5,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,3,76,1,'N~O',0,5,'BAS')");
- //$this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignid','campaign',1,'50','campaignid','Campaign ID',1,0,0,100,4,76,1,'V~M',0,2)");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'V~O',1,null,'BAS')");
@@ -377,9 +375,7 @@ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field")
 //Ticket Details -- START
 //Block25 -- Start
 
-// $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'groupname','troubletickets',1,'54','groupname','Group',1,0,0,100,1,1,1)");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,25,1,'V~M',1,null,'BAS')");
- // $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'crmid','seticketsrel',1,'59','parent_id','Product Name',1,0,0,100,3,1,1,'V~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'parent_id','troubletickets',1,'68','parent_id','Related To',1,0,0,100,4,25,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'priority','troubletickets',1,'15','ticketpriorities','Priority',1,0,0,100,5,25,1,'V~O',0,3,'BAS')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'product_id','troubletickets',1,'59','product_id','Product Name',1,0,0,100,6,25,1,'I~O',1,null,'BAS')");
@@ -432,7 +428,6 @@ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field")
 
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'71','unit_price','Unit Price',1,0,0,100,1,32,1,'N~O',1,null,'BAS')"); 
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'9','commissionrate','Commission Rate',1,0,0,100,2,32,1,'N~O',1,null,'BAS')"); 
-// $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'currency','products',1,'1','currency','Currency',1,0,0,100,3,2,1,'V~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'taxclass','products',1,'15','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
 
 
@@ -535,8 +530,6 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'66','parent_id','Related To',1,0,0,100,9,41,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'contactid','cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,10,41,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,11,41,1,'V~O',0,3,'BAS')");
-//Priority not needed in events
-# $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,12,41,1,'C~O',1,null,'BAS')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,13,41,1,'V~O',0,4,'BAS')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'location','activity',1,'1','location','Location',1,0,0,100,14,41,1,'V~O',1,null,'BAS')");
@@ -571,7 +564,6 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
 //Block44-47
 
 $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'vendorname','vendor',1,'2','vendorname','Vendor Name',1,0,0,100,1,44,1,'V~M',1,null,'BAS')");
-// $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'company_name','vendor',1,'2','company_name','Company Name',1,0,0,100,2,1,1,'V~M')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'phone','vendor',1,'1','phone','Phone',1,0,0,100,3,44,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,44,1,'E~O',1,null,'BAS')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'website','vendor',1,'17','website','Website',1,0,0,100,5,44,1,'V~O',1,null,'BAS')");
@@ -599,7 +591,6 @@ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field")
 //Block48
 
 $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'bookname','pricebook',1,'2','bookname','Price Book Name',1,0,0,100,1,48,1,'V~M',1,null,'BAS')");
-// $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'productid','pricebookproductrel',1,'59','product_id','Product Name',1,0,0,100,2,1,1,'I~O')");
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'active','pricebook',1,'56','active','Active',1,0,0,100,3,48,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,48,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,48,2,'T~O',1,null,'BAS')");
@@ -621,13 +612,11 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'validtill','quotes',1,'5','validtill','Valid Till',1,0,0,100,4,51,1,'D~O',1,null,'BAS')");	
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'team','quotes',1,'1','team','Team',1,0,0,100,5,51,1,'V~O',1,null,'BAS')");	
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'contactid','quotes',1,'57','contact_id','Contact Name',1,0,0,100,6,51,1,'V~O',1,null,'BAS')");
- //$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'currency','quotes',1,'1','currency','Currency',1,0,0,100,7,1,1,'V~O')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'carrier','quotes',1,'15','carrier','Carrier',1,0,0,100,8,51,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'subtotal','quotes',1,'1','hdnSubTotal','Sub Total',1,0,0,100,9,51,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'shipping','quotes',1,'1','shipping','Shipping',1,0,0,100,10,51,1,'V~O',1,null,'BAS')");
 
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'inventorymanager','quotes',1,'77','assigned_user_id1','Inventory Manager',1,0,0,100,11,51,1,'I~O',1,null,'BAS')");
-// $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'type','quotes',1,'1','type','Type',1,0,0,100,12,1,1,'V~O')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'tax','quotes',1,'1','txtTax','Tax',1,0,0,100,13,51,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'adjustment','quotes',1,'1','txtAdjustment','Adjustment',1,0,0,100,20,51,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'total','quotes',1,'1','hdnGrandTotal','Total',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
@@ -671,7 +660,6 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  //Block57
  
 $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'subject','purchaseorder',1,'2','subject','Subject',1,0,0,100,1,57,1,'V~M',1,null,'BAS')");	
- //$this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'quoteid','purchaseorder',1,'78','quote_id','Quote Name',1,0,0,100,2,1,1,'I~M')");	
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'vendorid','purchaseorder',1,'81','vendor_id','Vendor Name',1,0,0,100,3,57,1,'I~M',1,null,'BAS')");	
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'requisition_no','purchaseorder',1,'1','requisition_no','Requisition No',1,0,0,100,4,57,1,'V~O',1,null,'BAS')");	
 
@@ -679,7 +667,6 @@ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'contactid','purchaseorder',1,'57','contact_id','Contact Name',1,0,0,100,6,57,1,'I~O',1,null,'BAS')");	
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'duedate','purchaseorder',1,'5','duedate','Due Date',1,0,0,100,7,57,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'carrier','purchaseorder',1,'15','carrier','Carrier',1,0,0,100,8,57,1,'V~O',1,null,'BAS')");
- //$this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'type','purchaseorder',1,'1','type','Type',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'salestax','purchaseorder',1,'1','txtTax','Sales Tax',1,0,0,100,10,57,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'adjustment','purchaseorder',1,'1','txtAdjustment','Adjustment',1,0,0,100,10,57,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'salescommission','purchaseorder',1,'1','salescommission','Sales Commission',1,0,0,100,11,57,1,'N~O',1,null,'BAS')");
@@ -731,9 +718,7 @@ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field")
 $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'quoteid','salesorder',1,'78','quote_id','Quote Name',1,0,0,100,4,63,1,'I~O',1,null,'BAS')");	
 $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'purchaseorder','salesorder',1,'1','purchaseorder','Purchase Order',1,0,0,100,4,63,1,'V~O',1,null,'BAS')");	
 
- //$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorterms','salesorder',1,'1','vendorterms','Vendor Terms',1,0,0,100,5,1,1,'V~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'contactid','salesorder',1,'57','contact_id','Contact Name',1,0,0,100,6,63,1,'I~O',1,null,'BAS')");	
- //$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorid','salesorder',1,'75','vendor_id','Vendor Name',1,0,0,100,7,1,1,'I~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'duedate','salesorder',1,'5','duedate','Due Date',1,0,0,100,8,63,1,'D~O',1,null,'BAS')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'carrier','salesorder',1,'15','carrier','Carrier',1,0,0,100,9,63,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'pending','salesorder',1,'1','pending','Pending',1,0,0,100,10,63,1,'V~O',1,null,'BAS')");
@@ -788,7 +773,6 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salesorderid','invoice',1,'80','salesorder_id','Sales Order',1,0,0,100,2,69,1,'I~O',1,null,'BAS')");	
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'customerno','invoice',1,'1','customerno','Customer No',1,0,0,100,3,69,1,'V~O',1,null,'BAS')");	
 
-// $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'notes','invoice',1,'1','notes','Notes',1,0,0,100,4,1,1,'V~O')");	
  
 //to include contact name field in Invoice-start
 $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,69,1,'I~O',1,null,'BAS')");
@@ -796,9 +780,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,69,1,'D~O',1,null,'BAS')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'duedate','invoice',1,'5','duedate','Due Date',1,0,0,100,6,69,1,'D~O',1,null,'BAS')");
- //$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoiceterms','invoice',1,'1','invoiceterms','Invoice Terms',1,0,0,100,7,1,1,'V~O')");
 $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'purchaseorder','invoice',1,'1','purchaseorder','Purchase Order',1,0,0,100,8,69,1,'V~O',1,null,'BAS')");
-// $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'type','invoice',1,'1','type','Type',1,0,0,100,8,1,1,'V~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salestax','invoice',1,'1','txtTax','Sales Tax',1,0,0,100,9,69,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'adjustment','invoice',1,'1','txtAdjustment','Sales Tax',1,0,0,100,9,69,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salescommission','invoice',1,'1','salescommission','Sales Commission',1,0,0,10,13,69,1,'N~O',1,null,'BAS')");
@@ -961,23 +943,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile4_id.",25,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",26,0)");
 		//Inserting into profile2standardpermissions  Adminsitrator
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",1,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",1,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",1,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",1,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",1,4,0)");
-
+		
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,4,0)");
-
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",3,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",3,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",3,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",3,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",3,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",4,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",4,1,0)");
@@ -1089,24 +1060,11 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		//Insert into Profile 2 std permissions for Sales User  
 		//Help Desk Create/Delete not allowed. Read-Only	
 
-
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",1,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",1,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",1,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",1,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",1,4,0)");
-
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",2,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",2,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",2,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",2,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",2,4,0)");
-
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",3,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",3,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",3,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",3,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",3,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",4,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",4,1,0)");
@@ -1206,7 +1164,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",23,4,0)");
 
 
-        $this->db->query("insert into profile2standardpermissions values (".$profile2_id.",26,0,0)");
+        	$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",26,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",26,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",26,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",26,3,0)");
@@ -1214,23 +1172,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 		//Inserting into profile2std for Support Profile
 		// Potential is read-only
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",1,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",1,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",1,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",1,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",1,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",2,0,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",2,1,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",2,2,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",2,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",2,4,0)");
-
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",3,0,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",3,1,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",3,2,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",3,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",3,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",4,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",4,1,0)");
@@ -1330,7 +1277,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",23,4,0)");
 
 
-        $this->db->query("insert into profile2standardpermissions values (".$profile3_id.",26,0,0)");
+        	$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",26,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",26,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",26,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",26,3,0)");
@@ -1338,23 +1285,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
         
 		//Inserting into profile2stdper for Profile Guest Profile
 		//All Read-Only
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",1,0,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",1,1,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",1,2,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",1,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",1,4,0)");
-
+		
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",2,0,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",2,1,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",2,2,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",2,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",2,4,0)");
-
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",3,0,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",3,1,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",3,2,1)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",3,3,0)");
-		//$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",3,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",4,0,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",4,1,1)");
