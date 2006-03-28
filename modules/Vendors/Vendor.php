@@ -59,10 +59,6 @@ class Vendor extends CRMEntity {
                                         'Vendor Name'=>'vendorname',
                                         'Phone'=>'phone'
                                      );
-/*	
-//	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
-                      ,'productcategory'=>'productcategory_dom');
-*/
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'vendorname';
@@ -86,19 +82,7 @@ class Vendor extends CRMEntity {
 
 		$button = '';
 
-		if(isPermitted("Products",1,"") == 'yes')
-		{
-			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Vendors\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
-		}
-		if(isPermitted("Products",3,"") == 'yes')
-		{
-			if($focus->product_novendor() !=0)
-			{
-				$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Vendors&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-			}
-		}
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
-
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.vendorname from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
 		return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
@@ -111,13 +95,7 @@ class Vendor extends CRMEntity {
 
 		$button = '';
 
-		if(isPermitted("PurchaseOrder",1,"") == 'yes')
-		{
-
-			$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Vendors\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
-		}
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
-
 
 		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
 		return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
@@ -129,10 +107,6 @@ class Vendor extends CRMEntity {
 		$focus = new Contact();
 
 		$button = '';
-		if(isPermitted("Contacts",1,"") == 'yes')
-		{
-			$button .= '<input title="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE'].'" accessKey="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY'].'" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Products&smodule=VENDOR&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-		}
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid,vendorcontactrel.vendorid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  inner join vendorcontactrel on vendorcontactrel.contactid=contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
