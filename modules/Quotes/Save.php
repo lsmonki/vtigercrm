@@ -23,7 +23,6 @@
 
 require_once('modules/Quotes/Quote.php');
 require_once('include/logging.php');
-//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 include("modules/Emails/mail.php");
 
@@ -45,18 +44,11 @@ if(isset($_REQUEST['mode']))
 	  $log->debug("Mode is  ".$focus->mode);
 }
 
-
-
-//$focus->retrieve($_REQUEST['record']);
-
 foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
-		//echo '<BR>';
-		//echo $fieldname."         ".$value;
-		//echo '<BR>';
 		$focus->column_fields[$fieldname] = $value;
 	}
 		
@@ -79,7 +71,6 @@ if($focus->mode == 'edit')
 	
 	 $log->debug("Deleting from quotesproductrel table ");
 	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
-	//echo $query1;
 	$adb->query($query1);
 
 }
@@ -101,7 +92,6 @@ for($i=1; $i<=$tot_no_prod; $i++)
 	{
 		
 		$query ="insert into quotesproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
-		//echo $query;
 		$adb->query($query);
 		//Checking the re-order level and sending mail	
 		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr); 	
@@ -109,15 +99,6 @@ for($i=1; $i<=$tot_no_prod; $i++)
 }
 
 
-/*
-echo 'rowid : '.$_REQUEST[$product_id_var];
-echo '<BR>';
-echo 'status : '.$_REQUEST['hdnRowStatus1'];
-echo '<BR>';
-echo 'qty : '.$_REQUEST['txtQty1'];
-echo '<BR>';
-echo 'LP: '.$_REQUEST['txtListPrice1'];
-*/
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
@@ -150,8 +131,6 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 				
 				$diff_qty = $old_qty - $qty;
 				$upd_qty = $qtyinstk+$diff_qty;
-				//Updating the Product Quantity
-				 //updateProductQty($product_id, $upd_qty);
 	   			 sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
 					
 			}
@@ -159,7 +138,6 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 			{
 				$diff_qty = $qty - $old_qty;
 				$upd_qty = $qtyinstk-$diff_qty;
-				//updateProductQty($product_id, $upd_qty);
 				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
 				
 				
@@ -168,7 +146,6 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 		else
 		{
 			$upd_qty = $qtyinstk-$qty;
-			//updateProductQty($product_id, $upd_qty);
 			sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);	
 				
 		}
@@ -177,7 +154,6 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 	{
 		
 			$upd_qty = $qtyinstk-$qty;
-			//updateProductQty($product_id, $upd_qty);
 			sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
 	}
 	
