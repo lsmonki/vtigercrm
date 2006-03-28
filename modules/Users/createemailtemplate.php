@@ -16,9 +16,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
-global $current_user;
 global $current_language;
 
 global $theme;
