@@ -39,12 +39,6 @@ $_REQUEST['current_user_only'] = 'On';
 
 $task_title = $mod_strings['LBL_OPEN_TASKS'];
 
-?>
-<table width=100% cellpadding="5" cellspacing="5" border="0">
-<tr>
-<td valign="top">
-<?php
-
 // MWC Home Order Sorting functions given by mike
 global $adb;
 global $current_user;

@@ -32,10 +32,7 @@ echo ("	  <generator>vtigerCRM</generator>\n");
 //retrieving notifications******************************
 //<<<<<<<<<<<<<<<< start of owner notify>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 $query = "select crmentity.setype,crmentity.crmid,crmentity.smcreatorid,crmentity.modifiedtime from crmentity inner join ownernotify on crmentity.crmid=ownernotify.crmid";
-//where ownernotify.smownerid=".$current_user->id;
 
-//echo $query;
-//$notify=array ('Accounts' =>0,'Potentials'=>0,'Contacts'=>0,'Leads'=>0,'Vendor'=>0,'Products'=>0,'Faq'=>0,'HelpDesk'=>0,'Activities'=>0);
 $result = $adb->query($query);
 for($i=0;$i<$adb->num_rows($result);$i++)
 {
@@ -120,24 +117,6 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 
 
-/*	if($notify['Accounts']>0)
-		$notify_values='Accounts  '.$notify['Accounts'].'<br>';
-	if($notify['Potentials']>0)
-		$notify_values.='Potentials  '.$notify['Potentials'].'<br>';
-	if($notify['Contacts']>0)
-		$notify_values.='Contacts  '.$notify['Contacts'].'<br>';
-	if($notify['Leads']>0)
-		$notify_values.='Leads  '.$notify['Leads'].'<br>';
-	if($notify['Vendor']>0)
-		$notify_values.='Vendor  '.$notify['Vendor'].'<br>';
-	if($notify['Products']>0)
-		$notify_values.='Products  '.$notify['Products'].'<br>';
-	if($notify['Faq']>0)
-		$notify_values.='Faq  '.$notify['Faq'].'<br>';
-	if($notify['HelpDesk']>0)
-		$notify_values.='Ticket  '.$notify['HelpDesk'].'<br>';
-	if($notify['Activities']>0)
-		$notify_values.='Activity  '.$notify['Activities'];*/
 
 //<<<<<<<<<<<<<<<< end of owner notify>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   // Variable reassignment and reformatting for author
@@ -145,9 +124,6 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	$entry_author = getUserName($author_id);
 	$entry_author = htmlspecialchars ($entry_author);
 	
-	//$entry_text = strip_tags($db->query_result($tktresult,$i,'description'));
-	//$entry_id = $db->query_result($tktresult,$i,'ticketid');
-	//$entry_title = htmlspecialchars($db->query_result($tktresult,$i,'title'));
 	$entry_link = $site_URL."/index.php?modules=".$mod_notify[$i]['setype']."&amp;action=DetailView&amp;record=".$mod_notify[$i]['crmid'];
 	$entry_link = htmlspecialchars($entry_link);
 	$entry_time = $db->query_result($result,$i,'modifiedtime');
