@@ -81,20 +81,15 @@ class Contact extends CRMEntity {
 	'Assigned To' => Array('crmentity'=>'smownerid')
 	);
 
-		
 	var $range_fields = Array(                                                                                                 'first_name',                                                                                                              'last_name',                                                                                                               'primary_address_city',                                                                                                    'account_name',                                                                                                            'account_id',                                                                                                              'id',                                                                                                                      'email1',                                                                                                                  'salutation',                                                                                                              'title',                                                                                                                   'phone_mobile',                                                                                                            'reports_to_name',                                                                                                         'primary_address_street',                                                                                                  'primary_address_city',                                                                                                    'primary_address_state',                                                                                                   'primary_address_postalcode',                                                                                              'primary_address_country',                                                                                                 'alt_address_city',                                                                                                        'alt_address_street',                                                                                                      'alt_address_city',                                                                                                        'alt_address_state',                                                                                                       'alt_address_postalcode',                                                                                                  'alt_address_country',
-
-    'office_phone',
-    'home_phone',
-    'other_phone',
-    'fax',
-    'department',
-    'birthdate',
-    'assistant_name',
-    'assistant_phone'
-
-
-        );
+	'office_phone',
+	'home_phone',
+	'other_phone',
+	'fax',
+	'department',
+	'birthdate',
+	'assistant_name',
+	'assistant_phone');
 
 	
 	var $list_fields_name = Array(
@@ -106,8 +101,6 @@ class Contact extends CRMEntity {
 	'Phone' => 'phone',
 	'Assigned To' => 'assigned_user_id'
 	);
-
-	
 
 	var $record_id;
 	var $list_mode;
