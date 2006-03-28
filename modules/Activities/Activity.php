@@ -123,13 +123,7 @@ class Activity extends CRMEntity {
 
 	var $new_schema = true;
 
-	function create_tables () {
-		global $app_strings;
-	}
-
-	function drop_tables () {
-	}
-
+	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
 	{	
@@ -156,7 +150,7 @@ class Activity extends CRMEntity {
 
 //Function Call for Related List -- Start
         function get_contacts($id)
-		{
+	{
 			global $app_strings;
 
 			$focus = new Contact();
@@ -175,7 +169,7 @@ class Activity extends CRMEntity {
         }
 
         function get_users($id)
-		{
+	{
 			$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
 			$activity_id=$id;
 			global $adb,$log;
@@ -292,16 +286,8 @@ class Activity extends CRMEntity {
 
 		}
 
-
-
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
-
-
-  function get_full_list($criteria)
-  {
+  	function get_full_list($criteria)
+  	{
     $query = "select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid WHERE crmentity.deleted=0 ".$criteria;
     $result =& $this->db->query($query);
 	echo $query;
@@ -414,12 +400,6 @@ class Activity extends CRMEntity {
 		}
 	}
 
-   function delete($id)
-        {
-		
-          $this->db->query("update tasks set deleted=1 where id = '" . $id . "'");
-        }
-		  
 //calendarsync
     function getCount_Meeting($user_name) 
 	{
@@ -453,7 +433,6 @@ class Activity extends CRMEntity {
 
     function get_tasks($user_name,$from_index,$offset)
     {   
-//         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
 
 	 $query = "select activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status, crmentity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task' limit " .$from_index ."," .$offset;
 
@@ -504,24 +483,6 @@ class Activity extends CRMEntity {
 
 	
 
-function save_relationship_changes($is_update)
-    {
-
-		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to task relationship: ");
-
-     //  echo "\n Quwry is " .$query; 
-      // echo "\ncontact_id is " .$this->contact_id; 
-
-    	
-    	if($this->contact_id != "")
-    	{
-          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
-          //echo $query;  
-	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
-    	}
-
-    }
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
 		$today = date("Y-m-d", time());
