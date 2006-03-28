@@ -23,65 +23,6 @@
  ********************************************************************************/
 
 /**
- * Create javascript to validate the data entered into a record.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- */
-
-require_once('include/utils/utils.php'); //new
-
-require_once('include/ComboUtil.php');
-
-function get_validate_record_js () {
-global $mod_strings;
-global $app_strings;
-
-$lbl_product_name = $mod_strings['LBL_LIST_PRODUCT_NAME'];
-$err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
-$err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
-
-$the_script  = <<<EOQ
-
-<script type="text/javascript" language="Javascript">
-<!--  to hide script contents from old browsers
-
-function trim(s) {
-	while (s.substring(0,1) == " ") {
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == ' ') {
-		s = s.substring(0,s.length-1);
-	}
-
-	return s;
-}
-
-function verify_data(form) {
-	var isError = false;
-	var errorMessage = "";
-	if (trim(form.productname.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_product_name";
-	}
-
-	if (isError == true) {
-		alert("$err_missing_required_fields" + errorMessage);
-		return false;
-	}
-
-	return true;
-}
-
-// end hiding contents from old browsers  -->
-</script>
-
-EOQ;
-
-return $the_script;
-}
-
-/**
  * Create HTML form to enter a new record with the minimum necessary fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -123,8 +64,6 @@ $qcreate_form.='<input type="hidden" name="module" value="Products">';
 $qcreate_form.='<input type="hidden" name="record" value="">';
 $qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
 $qcreate_form.='<input type="hidden" name="action" value="Save">';			
-//$qcreate_form.='<input type="hidden" name="return_action" value="index">';
-//$qcreate_form.='<input type="hidden" name="return_module" value="Products">';
 $qcreate_form.='<input type="hidden" name="start_date" value="'.$start_date.'">';
 $qcreate_form.='<input type="hidden" name="expiry_date" value="'.$start_date.'">';
 $qcreate_form.='<input type="hidden" name="purchase_date" value="'.$start_date.'">';
