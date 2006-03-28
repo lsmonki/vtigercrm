@@ -32,14 +32,10 @@ echo "\n<BR>\n";
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
  include_once $calpath .'preference.pinc';
- #include_once $calpath .'task.pinc';
  include_once $calpath .'appointment.pinc';
  include_once $calpath .'addEventUI.php';
 require_once('modules/Calendar/UserCalendar.php');
- #include_once $calpath .'product.pinc';
 
- /* Check if user is allowed to use it */
- #check_user();
  loadmodules("appointment","show");
  loadlayout();
  /**
@@ -51,7 +47,6 @@ require_once('modules/Calendar/UserCalendar.php');
    	$this->pref = new preference();
 	$this->db = new PearDatabase();
 	$calobj = new UserCalendar();
-//	$this->tablename = $calobj->table_name;
    }
   
    /**
@@ -65,8 +60,6 @@ require_once('modules/Calendar/UserCalendar.php');
      */
     function getHourList($hour,$maxcol,$table,$i)
      {
-                //echo '<pre>';print_r($table);echo '</pre>';
-                //echo $maxcol;
                 global $adb;
                 echo "<a name=".$hour.">";
                 echo "
@@ -94,7 +87,7 @@ require_once('modules/Calendar/UserCalendar.php');
                         }
                         echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\" class=\"calEventNormal\" width=100%>\n";
                         echo $table[$i][$c]->formatted();
-                        echo " </table>";//</td>\n";
+                        echo " </table>";
                        } else if ( $table[$i][$c] = -1 ) {
                           # SKIP occupied by rowspan
 			   }
@@ -115,7 +108,6 @@ require_once('modules/Calendar/UserCalendar.php');
                         ";
 
          }
-        //end
 
 
 
@@ -316,10 +308,6 @@ function trim(s) {
      global $tutos, $lang,$msg;
 
      $this->name = $mod_strings['LBL_MODULE_NAME'];
-     #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
-     #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
-     #  $this->stop = true;
-     #}
      $this->teamname = "";
      $this->t = Date("Ymd");
 
@@ -337,22 +325,11 @@ function trim(s) {
      }
      $this->addHidden("t", $this->t);
      $this->uids = cal_parse_options($this->pref,$this->teamname);
-     #$this->team = $this->user->get_prefteam();
-     # menu
-     #$m = appointment::getSelectLink($this->user);
-     #$m[category][] = "obj";
-     #$this->addmenu($m);
-     #$m = appointment::getAddLink($this->user,$this->user);
-     #$this->addMenu($m);
    }
  }
 
-
-# info($t,$this->user->get_prefteam(),$teamname,$uids);
-
  $l = new calendar_day($current_user);
  $l->display();
- #$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id: calendar_day.php,v 1.22 2005/12/16 18:52:20 jerrydgeorge Exp $
