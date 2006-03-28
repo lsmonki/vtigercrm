@@ -4,7 +4,6 @@ require_once('modules/Calendar/addEventUI.php');
 /**
  * Copyright 1999 - 2004 by Gero Kohnert
  */
-//global $calpath,$callink,$current_user;
 global $calpath,$callink,$current_user,$adb;
 $callink = "index.php?module=Calendar&action=";
 include_once $calpath .'webelements.p3';
@@ -68,7 +67,6 @@ if ( $y == -1 )
   $y = Date("Y");
 }
 
-#echo "<html>\n";
 echo "<style type=\"text/css\">@import url(\"". $theme_path ."/style.css\");</style>";
 echo "<script language='JavaScript'>\n";
 echo " function closeandaway (d, m, y) { \n";
@@ -78,7 +76,6 @@ echo "  x.". $f ."_d.selectedIndex = d-1; \n";
 echo "  x.". $f ."_m.selectedIndex = m-1; \n";
 echo "  x.". $f ."_y.selectedIndex = y; \n";
 
-# echo "  d.EventDT.value = mo + '/' + dy + '/' + yr; \n";
 echo "  window.close(); \n";
 echo " }\n";
 echo " function noneandaway () { \n";
@@ -87,7 +84,6 @@ echo "  \n";
 echo "  x.". $f ."_d.selectedIndex = 0; \n";
 echo "  x.". $f ."_m.selectedIndex = 0; \n";
 echo "  x.". $f ."_y.selectedIndex = 0; \n";
-# echo "  d.EventDT.value = mo + '/' + dy + '/' + yr; \n";
 echo "  window.close(); \n";
 echo " }\n";
 echo "</script>\n";
@@ -120,7 +116,6 @@ $ny = $y;
 		echo "<table border=0 cellspacing=1 cellpadding=5 width=100% class=\"calDayHour\" style=\"background-color: #dadada\">";
 
 	echo "<tr>\n";
-	//echo "<td width=12% class=\"lvtCol\" bgcolor=\"blue\" valign=top>". $mod_strings['LBL_WEEK'] ."</td>\n";
 
 for ( $i = $current_user->weekstart;$i<=6;$i++ ) 
 { 
@@ -155,15 +150,6 @@ while ( $go == 1 )
  $xm = Date("n",$ts);  // month (1-12
  $xy = Date("Y",$ts);  // Year (2005)
 
-/* if ( $wd == $l->user->weekstart ) {
-   # new week
-   echo "<tr>\n";
-   $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
-   $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
-   echo " <td align=\"right\" class=\"week\">". $wn ."&nbsp;</td>\n";
- }
-*/
-
 // Overlapping days -starts by Fredy
 
 	if ( $wd == $l->user->weekstart ) 
@@ -173,11 +159,9 @@ while ( $go == 1 )
          	//	break; //commented as january is not coming for all the even years
      		}
    # new week
-		//echo "******************************";
    		echo "<tr>\n";
    		$w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
    		$wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
-  		//echo " <td align=\"right\" class=\"week\"> ". $wn ."&nbsp;</td>\n";
  	}
 
 // check for overlapping days
@@ -240,22 +224,18 @@ while ( $go == 1 )
  echo "<td onClick=\"gshow('addEvent')\" href=\"javascript:void(0)\" onMouseOver=\"this.className='cellNormalHover'\" onMouseOut=\"this.className='cellNormal'\" bgcolor=\"white\" style=\"height:40px\" width=12% valign=top>\n";
  		if (($xm == $m ) || $month_overlap)
  		{
-		 	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
 		     // added by raj
 		     /* Select appointments for this day */
 		     	$from =  new DateTime();
 		     	$to   =  new DateTime();
 		     	$from->setDateTimeTS($ts - 12 * 3600);
 		     	$to->setDateTimeTS($ts - 12 * 3600);
-		     	#$to->addDays(7);
      
 		     	$pref->callist = array();
 		     	$app = new appointment();
 		     	$app->readCal($pref,$from,$to);
-		     	// appointment::readCal($pref,$from,$to);
 
 		     	$dd = new DateTime();
-		     	# $d = strftime($lang['DateFormatStr'],$ts);
        		     	$dd->setDateTimeTS($ts);
        			$d = $dd->getDate();
        			$tref = Date("Ymd",$ts);
@@ -265,7 +245,6 @@ while ( $go == 1 )
 			if ($col=="today")
 			{
 				echo $xd;
-				//echo "  <a class=\"today\" href=\"index.php?module=". $currentModule ."&action=calendar_day&t=".$tref."\">". $xd ."</a>";
 				echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  onMouseOut=\"ghide('12pm')\"  width=10%>";
 				echo "+";
 				echo "</div>";
@@ -273,12 +252,10 @@ while ( $go == 1 )
 			else
 			{
 				echo $xd;
-				//echo "  <a href=\"index.php?module=". $currentModule ."&action=calendar_day&t=".$tref."\">". $xd ."</a>";
 				echo "<div valign=bottom align=right onclick=\"gshow('addEvent')\"  onMouseOut=\"ghide('12pm')\"  width=10%>";
 				echo "+";
 				echo "</div>";
 			}
-			//
 
        			$next = NextDay($ts);
        			# Check for workday
@@ -308,11 +285,9 @@ while ( $go == 1 )
          			} 
         			else 
 				{
-           				//echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
 	   				echo "  <tr><td height=\"2\" colspan=\"4\" class=\"eventSep\"><img src=\"". $image_path ."blank.gif\"></td></tr>\n";
          			}
 				
-				#echo "1 ".$this->user->weekstart ."<br />";
 
                                 $color = "";
 	  	                $username=$pref->callist[$idx]->creator;
@@ -330,8 +305,6 @@ while ( $go == 1 )
               		 echo "\n<table class=\"event\" $color cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n";
 
          			$pref->callist[$idx]->formatted();
-				//echo "\n<table>";
-				#echo "2 ".$this->user->weekstart ."<br />";
          			$a++;
        			}
 
@@ -340,7 +313,6 @@ while ( $go == 1 )
          			echo "</table>\n";
        			}
 
-	//
  		}
  		else
  		{
@@ -359,10 +331,8 @@ while ( $go == 1 )
  		}
  		$a++;
  		$w++;
-        //	$ts += 86400;
 
         //changed for fixing the Daylight Saving Time issue as per suggestion by Bushwack post id
-        //http://forums.vtiger.com/viewtopic.php?p=14967#14967
         $ts = strtotime('+1 day', $ts);
 }
 if ( $n == 1 ) 
@@ -371,15 +341,6 @@ if ( $n == 1 )
 }
 
 echo "</table>\n";
-//echo "</td></tr>";
-//echo "<tr><td>";
-//echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"navigate\">\n";
-//echo "<tr height=\"30\">\n";
-//echo "<td align=\"left\"><a class=\"nodeco\" href=\"".$callink."calendar_month&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\" title=\"Previous Month\"><img border=\"0\" src=\"".$image_path."left.gif\"></a></td>\n";
-//echo "<td>&nbsp;</td>\n";
-//echo "<td align=\"right\"><a class=\"nodeco\" href=\"". $callink ."calendar_month&f=".$f."&n=".$n."&m=".$nm."&d=".$d."&y=".$ny."\" title=\"Next Month\"><img border=\"0\" src=\"".$image_path."right.gif\"></a></td>\n";
-//echo "</tr>\n";
-//echo "</table>\n";
 echo "</td></tr></table>\n";
 echo "</td></tr>";
 echo "<tr>
@@ -418,8 +379,6 @@ echo "<tr>
 # selection of none allowed
 
 echo "<br>\n";
-#echo "</body>\n";
-#echo "</html>\n";
 
 ?>
 <!--
