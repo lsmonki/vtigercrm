@@ -74,10 +74,11 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	'Email'=>'5',
 	'Phone'=>'6',
 	'Picklist'=>'7',
-	'URL'=>'8');
+	'URL'=>'8',
+	'MultiSelectCombo'=>'11');
 	$xtpl->assign("FLDTYPEVALUE", $typeVal[$_REQUEST["fldType"]]);
 }
-else
+elseif($fieldid == '')
 {
 	$xtpl->assign("FLDTYPEVALUE", "0");
 }
