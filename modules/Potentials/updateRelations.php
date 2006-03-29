@@ -13,10 +13,6 @@ require_once('include/database/PearDatabase.php');
 global $adb;
 $idlist = $_REQUEST['idlist'];
 $returnmodule = $_REQUEST['return_module'];
-//echo 'eeeeeeeeeeeeeeeee'.$_REQUEST['idlist'].'=============='.$_REQUEST['parentid'];
-//if($_REQUEST['module']=='Users')
-//	$sql = "insert into salesmanactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-//else
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
