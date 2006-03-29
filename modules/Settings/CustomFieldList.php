@@ -28,7 +28,7 @@ echo '<td><input title="'.$mod_strings['`'].'" accessKey="C" class="button" type
 
 if($_REQUEST['fld_module']=="Leads")
 {
-	echo '<td><input title="'.$mod_strings['CUSTOMFIELDMAPPING'].'"  class="button" onclick="this.form.action.value=\'ListLeadCustomFieldMapping\'" type="submit" name="ListLeadCustomFieldMapping" value="'.$mod_strings['CUSTOMFIELDMAPPING'].'"></td>'; //button for custom field mapping
+	echo '<td><input title="'.$mod_strings['CUSTOMFIELDMAPPING'].'"  class="button" onclick="this.form.action.value=\'LeadCustomFieldMapping\'" type="submit" name="ListLeadCustomFieldMapping" value="'.$mod_strings['CUSTOMFIELDMAPPING'].'"></td>'; //button for custom field mapping
 }
 
 echo '</tr></form></table>';
