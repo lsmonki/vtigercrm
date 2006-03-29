@@ -93,12 +93,6 @@ class Product extends CRMEntity {
 		$this->column_fields = getColumnFields('Products');
 	}
 
-  function get_summary_text()
-        {
-                return $this->name;
-        }
-
-  		
 	function get_attachments($id)
         {
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
