@@ -183,26 +183,12 @@ class Lead extends CRMEntity {
 
 	}
 
-//check if the custom table exists or not in the first place
-function checkIfCustomTableExists()
-{
- $result = $this->db->query("select * from leadscf");
- $testrow = $this->db->num_fields($result);
-	if($testrow > 1)
-	{
-		$exists=true;
-	}
-	else
-	{
-		$exists=false;
-	}
-return $exists;
-}
+
 
 
 	function create_export_query(&$order_by, &$where)
         {
-		if($this->checkIfCustomTableExists())
+		if($this->checkIfCustomTableExists('leadscf'))
 		{
           
   $query = $this->constructCustomQueryAddendum() . " 
