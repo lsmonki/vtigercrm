@@ -148,7 +148,6 @@ class ImportMap extends SugarBean
 					$focus->$field = $row[$field];
 				} 
 			} 
-			$focus->fill_in_additional_detail_fields(); 
 			array_push($obj_arr,$focus);
 		}
 		return $obj_arr;

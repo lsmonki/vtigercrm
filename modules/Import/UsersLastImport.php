@@ -61,11 +61,6 @@ class UsersLastImport extends SugarBean
 		$this->db = new PearDatabase();
 	}
 
-	function fill_in_additional_detail_fields()
-	{
-		
-	}
-
 	function mark_deleted_by_user_id($user_id)
         {
                 $query = "UPDATE $this->table_name set deleted=1 where assigned_user_id='$user_id'";
