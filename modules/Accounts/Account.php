@@ -213,20 +213,6 @@ class Account extends CRMEntity {
 
 	}
 
-	/** Returns a list of the associated notes
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function get_notes()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT id from notes where parent_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new note());
-	}
-
-
 	function get_history($id)
 	{
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
