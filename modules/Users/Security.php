@@ -2091,14 +2091,5 @@ title';
 
 		}
 	
-	
-
-	function drop_tables () {
-	}
-	
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
 }
 ?>
