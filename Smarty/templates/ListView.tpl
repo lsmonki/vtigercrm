@@ -14,6 +14,7 @@
 
 {*<!-- module header -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 {if $MODULE eq 'Contacts'}
 <div id="dynloadarea" style=float:left;position:absolute;left:350px;top:150px;></div>
@@ -272,11 +273,11 @@ rBox">
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_owner'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
@@ -321,11 +322,11 @@ rBox">
 				 <td style="padding-right:20px" nowrap>
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete()"/>
+                                            <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
                                         {elseif $button_check eq 's_cmail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_owner'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
