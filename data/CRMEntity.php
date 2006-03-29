@@ -1316,5 +1316,40 @@ $log->debug("type is ".$type);
                 return $exists;
         }
 
+	/**
+	 * function to construct the query to fetch the custom fields
+	 * return the query to fetch the custom fields
+         */
+        function constructCustomQueryAddendum($tablename,$module)
+        {
+                global $adb;
+		$tabid=getTabid($module);		
+                $sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=".$tabid;
+                $result = $adb->query($sql1);
+                $numRows = $adb->num_rows($result);
+                $sql3 = "select ";
+                for($i=0; $i < $numRows;$i++)
+                {
+                        $columnName = $adb->query_result($result,$i,"columnname");
+                        $fieldlable = $adb->query_result($result,$i,"fieldlabel");
+                        //construct query as below
+                        if($i == 0)
+                        {
+                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlable."'";
+                        }
+                        else
+                        {
+                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlable."'";
+                        }
+
+                }
+                if($numRows>0)
+                {
+                        $sql3=$sql3.',';
+                }
+                return $sql3;
+
+        }	
+
 }
 ?>
