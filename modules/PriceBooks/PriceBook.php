@@ -64,12 +64,6 @@ class PriceBook extends CRMEntity {
 		$this->column_fields = getColumnFields('PriceBooks');
 	}
 
-  function get_summary_text()
-        {
-                return $this->name;
-        }
-
-	
 	function get_pricebook_products($id)
 	{
 		global $app_strings;
