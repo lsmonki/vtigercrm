@@ -30,7 +30,6 @@ class TabMenu
     else
     {
       $sql="SELECT name from tab where tabid in (" .$permittedModuleList .") and presence = 0 order by tabsequence";
-      //echo $sql;
     }
    
     $tabrow=$conn->query($sql);    
@@ -47,62 +46,5 @@ class TabMenu
 
 
 }
-// TabMenu shown in the header page.
-class Tab extends CRMEntity {
-	var $log;
-	var $db;
 
-	// Stored fields
-	var $tabid;
-	var $name;
-	var $presence;
-	var $tabsequence;
-	var $label;
-	var $modifiedby;
-	var $modifiedtime;
-	var $customized;
-	
-	//var $default_task_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
-
-	var $table_name = "tab";
-
-	var $object_name = "Tab";
-
-	var $column_fields = Array("tabid"
-		, "name"
-		, "presence"
-		, "tabsequence"
-		, "label"
-		, "modifiedby"
-		, "modifiedtime"
-		, "customized"
-		);
-
-	// This is used to retrieve related fields from form posts.
-	//var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contact_name', 'contact_phone', 'contact_email', 'parent_name');		
-
-	// This is the list of fields that are in the lists.
-	//var $list_fields = Array('id', 'status', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_due', 'contact_id', 'contact_name', 'assigned_user_name', 'assigned_user_id');
-		
-	function Tab() {
-		$this->log = LoggerManager::getLogger('tab');
-		$this->db = new PearDatabase();
-	}
-
-	var $new_schema = true;
-
-	function create_tables () {
-		global $app_strings;
-	}
-
-	function drop_tables () {
-
-
-	}
-	
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
-}
 ?>
