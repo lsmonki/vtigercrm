@@ -39,15 +39,6 @@ function makeRequest(targetUrl) {
             break;
         }       
     }
-function trim(s) {
-        while (s.substring(0,1) == " ") {
-                s = s.substring(1, s.length);
-        }
-        while (s.substring(s.length-1, s.length) == ' ') {
-                s = s.substring(0,s.length-1);
-        }
-        return s;
-}
 function verify_data(form) {
         var isError = false;
         var errorMessage = "";
