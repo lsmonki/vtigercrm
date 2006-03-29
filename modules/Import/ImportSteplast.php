@@ -17,7 +17,7 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
@@ -122,369 +122,79 @@ global $limit;
 global $list_max_entries_per_page;
 
 $implict_account = false;
-$newForm = null;
 
-//To display the list of Contacts imported
-$seedUsersLastImport = new UsersLastImport();
-$seedUsersLastImport->bean_type = "Contacts";
-$contact_query = $seedUsersLastImport->create_list_query($o,$w);
-$current_module_strings = return_module_language($current_language, 'Contacts');
+$import_modules_array = Array(
+				"Contacts"=>"Contact",
+				"Potentials"=>"Potential",
+				"Leads"=>"Lead",
+				"Accounts"=>"Account"
+			     );
 
-$contact = new Contact();
-$seedUsersLastImport->list_fields = $contact->list_fields;
-
-$list_result = $adb->query($contact_query);
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
-
-if($noofrows>1) 
+foreach($import_modules_array as $module_name => $object_name)
 {
-	//Change this XTemplate to Smarty
-	$implict_account=true;
-	echo get_form_header('Last Imported Contacts','', false);
-	$xtpl=new XTemplate ('modules/Contacts/ListView.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
-	$xtpl->assign("IMAGE_PATH",$image_path);
 
-	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-		$start = 1;
-	}
+	$seedUsersLastImport = new UsersLastImport();
+	$seedUsersLastImport->bean_type = $module_name;
+	$list_query = $seedUsersLastImport->create_list_query($o,$w);
+	$current_module_strings = return_module_language($current_language, $module_name);
 
-	$adb->println("IMPLST debug start");
-	//Retreive the Navigation array
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-	$adb->println("IMPLST Naviga");
-	$adb->println($navigation_array);
+	$object = new $object_name();
+	$seedUsersLastImport->list_fields = $object->list_fields;
 
-	//Retreive the List View Table Header
-	$listview_header = getListViewHeader($contact,"Contacts");
-	$xtpl->assign("LISTHEADER", $listview_header);
-	
-	$adb->println("IMPLST listviewhead");
-	$adb->println($listview_header);
+	$list_result = $adb->query($list_query);
+	//Retreiving the no of rows
+	$noofrows = $adb->num_rows($list_result);
 
-	$listview_entries = getListViewEntries($contact,"Contacts",$list_result,$navigation_array);
-	$xtpl->assign("LISTHEADER", $listview_header);
-	$xtpl->assign("LISTENTITY", $listview_entries);
-	$adb->println("GS1");
-	if(isset($navigation_array['start']))
+	if($noofrows>1) 
 	{
-		$startoutput = '<a href="index.php?action=index&module=Contacts&start=1"><b>Start</b></a>';
-	}
-	else
-	{
-		$startoutput = '[ Start ]';
-	}
-	if(isset($navigation_array['end']))
-	{
-		$endoutput = '<a href="index.php?action=index&module=Contacts&start='.$navigation_array['end'].'"><b>End</b></a>';
-	}
-	else
-	{
-		$endoutput = '[ End ]';
-	}
-	if(isset($navigation_array['next']))
-	{
-		$nextoutput = '<a href="index.php?action=index&module=Contacts&start='.$navigation_array['next'].'"><b>Next</b></a>';
-	}
-	else
-	{
-		$nextoutput = '[ Next ]';
-	}
-	if(isset($navigation_array['prev']))
-	{
-		$prevoutput = '<a href="index.php?action=index&module=Contacts&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-	}
-	else
-	{
-		$prevoutput = '[ Prev ]';
-	}
-	$xtpl->assign("Start", $startoutput);
-	$xtpl->assign("End", $endoutput);
-	$xtpl->assign("Next", $nextoutput);
-	$xtpl->assign("Prev", $prevoutput);
+		if($module_name != 'Accounts')
+		{
+			$implict_account=true;
+		}
 
-	$xtpl->parse("main");
+		if($module_name == 'Accounts' && $implict_account==true)
+			echo get_form_header('','<b>Newly created Accounts</b>', false);
+		else
+			echo get_form_header('','<b>Last Imported '.$module_name.'</b>', false);
 
-	$xtpl->out("main");
+		$smarty = new vtigerCRM_Smarty;
 
-	echo "<BR>";
-}
+		$smarty->assign("MOD", $mod_strings);
+		$smarty->assign("APP", $app_strings);
+		$smarty->assign("IMAGE_PATH",$image_path);
+		$smarty->assign("MODULE",$module_name);
+		$smarty->assign("SINGLE_MOD",$module_name);
+		$smarty->assign("SHOW_MASS_SELECT",'false');
 
+		//Retreiving the start value from request
+		if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		{
+			$start = $_REQUEST['start'];
+		}
+		else
+		{
+			$start = 1;
+		}
 
-//To display the list of Potentials imported
-$newForm = null;
-$seedUsersLastImport = new UsersLastImport();
-$seedUsersLastImport->bean_type = "Potentials";
+		$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
+		$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
+		$viewid = '';
 
-$current_module_strings = return_module_language($current_language, 'Potentials');
-$potential_query = $seedUsersLastImport->create_list_query($o,$w);
+		//Retreive the Navigation array
+		$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+		$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Import","ImportSteplast",$viewid);
 
-$potential = new Potential();
-$seedUsersLastImport->list_fields = $potential->list_fields;
+		//Retreive the List View Header and Entries
+		$listview_header = getListViewHeader($object,$module_name);
+		$listview_entries = getListViewEntries($object,$module_name,$list_result,$navigation_array,"","","EditView","Delete","");
 
-$list_result = $adb->query($potential_query);
+		$smarty->assign("NAVIGATION", $navigationOutput);
+		$smarty->assign("LISTHEADER", $listview_header);
+		$smarty->assign("LISTENTITY", $listview_entries);
 
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
-
-if($noofrows>1)
-{
-	//Change this XTemplate to Smarty
-	$implict_account=true;
-	echo get_form_header('Last Imported Potentials','', false);
-	$xtpl=new XTemplate ('modules/Potentials/ListView.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
-	$xtpl->assign("IMAGE_PATH",$image_path);
-
-	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
+		$smarty->display("ListViewEntries.tpl");
+		echo "<BR>";
 	}
-	else
-	{
-		$start = 1;
-	}
-	//Retreive the Navigation array
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-	
-	//Retreive the List View Table Header
-	$listview_header = getListViewHeader($potential,"Potentials");
-	$xtpl->assign("LISTHEADER", $listview_header);
-
-	$listview_entries = getListViewEntries($potential,"Potentials",$list_result,$navigation_array);
-	$xtpl->assign("LISTHEADER", $listview_header);
-	$xtpl->assign("LISTENTITY", $listview_entries);
-
-	if(isset($navigation_array['start']))
-	{
-		$startoutput = '<a href="index.php?action=index&module=Potentials&start=1"><b>Start</b></a>';
-	}
-	else
-	{
-		$startoutput = '[ Start ]';
-	}
-	if(isset($navigation_array['end']))
-	{
-		$endoutput = '<a href="index.php?action=index&module=Potentials&start='.$navigation_array['end'].'"><b>End</b></a>';
-	}
-	else
-	{
-		$endoutput = '[ End ]';
-	}
-	if(isset($navigation_array['next']))
-	{
-		$nextoutput = '<a href="index.php?action=index&module=Potentials&start='.$navigation_array['next'].'"><b>Next</b></a>';
-	}
-	else
-	{
-		$nextoutput = '[ Next ]';
-	}
-	if(isset($navigation_array['prev']))
-	{
-		$prevoutput = '<a href="index.php?action=index&module=Potentials&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-	}
-	else
-	{
-		$prevoutput = '[ Prev ]';
-	}
-	$xtpl->assign("Start", $startoutput);
-	$xtpl->assign("End", $endoutput);
-	$xtpl->assign("Next", $nextoutput);
-	$xtpl->assign("Prev", $prevoutput);
-	
-	$xtpl->parse("main");
-	$xtpl->out("main");
-
-	echo "<BR>";
-}
-
-
-//To display the list of Leads imported
-$newForm = null;
-$seedUsersLastImport = new UsersLastImport();
-$seedUsersLastImport->bean_type = "Leads";
-
-$current_module_strings = return_module_language($current_language, 'Potentials');
-$lead_query = $seedUsersLastImport->create_list_query($o,$w);
-
-$lead = new Lead();
-$seedUsersLastImport->list_fields = $lead->list_fields;
-
-$list_result = $adb->query($lead_query);
-
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
-
-if($noofrows>1)
-{
-	//Change this XTemplate to Smarty
-	$implict_account=true;
-	echo get_form_header('Last Imported Leads','', false);
-	$xtpl=new XTemplate ('modules/Leads/ListView.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
-	$xtpl->assign("IMAGE_PATH",$image_path);
-
-	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-		$start = 1;
-	}
-	//Retreive the Navigation array
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-	
-	//Retreive the List View Table Header
-	$listview_header = getListViewHeader($lead,"Leads");
-	$xtpl->assign("LISTHEADER", $listview_header);
-
-	$listview_entries = getListViewEntries($lead,"Leads",$list_result,$navigation_array);
-	$xtpl->assign("LISTHEADER", $listview_header);
-	$xtpl->assign("LISTENTITY", $listview_entries);
-	
-	if(isset($navigation_array['start']))
-	{
-		$startoutput = '<a href="index.php?action=index&module=Leads&start=1"><b>Start</b></a>';
-	}
-	else
-	{
-		$startoutput = '[ Start ]';
-	}
-	if(isset($navigation_array['end']))
-	{
-		$endoutput = '<a href="index.php?action=index&module=Leads&start='.$navigation_array['end'].'"><b>End</b></a>';
-	}
-	else
-	{
-		$endoutput = '[ End ]';
-	}
-	if(isset($navigation_array['next']))
-	{
-		$nextoutput = '<a href="index.php?action=index&module=Leads&start='.$navigation_array['next'].'"><b>Next</b></a>';
-	}
-	else
-	{
-		$nextoutput = '[ Next ]';
-	}
-	if(isset($navigation_array['prev']))
-	{
-		$prevoutput = '<a href="index.php?action=index&module=Leads&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-	}
-	else
-	{
-		$prevoutput = '[ Prev ]';
-	}
-	$xtpl->assign("Start", $startoutput);
-	$xtpl->assign("End", $endoutput);
-	$xtpl->assign("Next", $nextoutput);
-	$xtpl->assign("Prev", $prevoutput);
-
-	$xtpl->parse("main");
-	$xtpl->out("main");
-
-	echo "<BR>";
-}
-
-//To display the list of Accounts imported
-$newForm = null;
-$seedUsersLastImport = new UsersLastImport();
-$seedUsersLastImport->bean_type = "Accounts";
-$account_query = $seedUsersLastImport->create_list_query($o,$w);
-
-$current_module_strings = return_module_language($current_language, 'Accounts');
-
-$account = new Account();
-$seedUsersLastImport->list_fields = $account->list_fields;
-
-$list_result = $adb->query($account_query);
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
-
-if($noofrows>1)
-{
-	//Change this XTemplate to Smarty
-	if($implict_account==true)
-		echo get_form_header('Newly created Accounts','', false);
-	else
-		echo get_form_header('Last Imported Accounts','', false);
-	$xtpl=new XTemplate ('modules/Accounts/ListView.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
-	$xtpl->assign("IMAGE_PATH",$image_path);
-
-	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-		$start = 1;
-	}
-	//Retreive the Navigation array
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
-	//Retreive the List View Table Header
-	$listview_header = getListViewHeader($account,"Accounts");
-	
-	$listview_entries = getListViewEntries($account,"Accounts",$list_result,$navigation_array);
-	$xtpl->assign("LISTHEADER", $listview_header);
-	$xtpl->assign("LISTENTITY", $listview_entries);
-	
-	if(isset($navigation_array['start']))
-	{
-		$startoutput = '<a href="index.php?action=index&module=Accounts&start=1"><b>Start</b></a>';
-	}
-	else
-	{
-		$startoutput = '[ Start ]';
-	}
-	if(isset($navigation_array['end']))
-	{
-		$endoutput = '<a href="index.php?action=index&module=Accounts&start='.$navigation_array['end'].'"><b>End</b></a>';
-	}
-	else
-	{
-		$endoutput = '[ End ]';
-	}
-	if(isset($navigation_array['next']))
-	{
-		$nextoutput = '<a href="index.php?action=index&module=Accounts&start='.$navigation_array['next'].'"><b>Next</b></a>';
-	}
-	else
-	{
-		$nextoutput = '[ Next ]';
-	}
-	if(isset($navigation_array['prev']))
-	{
-		$prevoutput = '<a href="index.php?action=index&module=Accounts&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-	}
-	else
-	{
-		$prevoutput = '[ Prev ]';
-	}
-	$xtpl->assign("Start", $startoutput);
-	$xtpl->assign("End", $endoutput);
-	$xtpl->assign("Next", $nextoutput);
-	$xtpl->assign("Prev", $prevoutput);
-
-	$xtpl->parse("main");
-
-	$xtpl->out("main");
-
 }
 
 ?>
