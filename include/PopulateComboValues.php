@@ -16,67 +16,36 @@ require_once('include/ComboStrings.php');
 
 class PopulateComboValues
 {
-
-	//var $table_name="lead_source";
 	var $app_list_strings;
 
-  function insertComboValues($values, $tableName)
+	function insertComboValues($values, $tableName)
 	{
-          global $adb;
-//        global $log;
-//        $log->info("in  insertComboValues ".$tableName);
-          $i=0;
-          foreach ($values as $val => $cal)
-          {
-            if($val != '')
-            {
-              $adb->query("insert into ".$tableName. " values(null,'".$val."',".$i.",1)");
-            }
-            else
-            {
-              $adb->query("insert into ".$tableName. " values(null,'--None--',".$i.",1)");
-            }
-            $i++;
-          }
+		global $adb;
+		$i=0;
+		foreach ($values as $val => $cal)
+		{
+			if($val != '')
+			{
+				$adb->query("insert into ".$tableName. " values(null,'".$val."',".$i.",1)");
+			}
+			else
+			{
+				$adb->query("insert into ".$tableName. " values(null,'--None--',".$i.",1)");
+			}
+			$i++;
+		}
 	}
 
-	function create_tables () {
+	function create_tables () 
+	{
 		global $app_list_strings,$adb;
-                global $combo_strings;
+		global $combo_strings;
 		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus','invoicestatus','postatus','sostatus','visibility','campaigntype','campaignstatus','cmpnexpectedrevenue','cmpnactualcost','cmpnexpectedresponse');
 
 		foreach ($comboTables as $comTab)
 		{
-			/*$result = mysql_query("show tables like '%".$comTab."%'");
-			if(mysql_num_rows($result) == 0)
-			{
-				$query = 'CREATE TABLE '.$comTab.' (';
-						$query .=$comTab.' varchar(200) NOT NULL';
-						$query .=', PRIMARY KEY ('.$comTab.'))';
-
-				mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
-				echo("Created table ".$comTab);
-				echo("<BR>");
-				$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
-			}
-			else
-			{
-				echo("Table ".$comTab." already exists");
-				echo("<BR>");
-				$tableRows = mysql_query("select * from ".$comTab);
-				if(mysql_num_rows($tableRows) == 0)
-				{
-
-					$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
-				}
-			}*/
-
-                  $this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
+			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 		}
-
 	}
-
-
-
 }
 ?>
