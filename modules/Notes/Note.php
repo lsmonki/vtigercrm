@@ -94,39 +94,6 @@ class Note extends CRMEntity {
 
 	var $new_schema = true;
 
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
-
-	function create_list_query(&$order_by, &$where)
-	{
-		$contact_required = ereg("contacts\.first_name", $where);
-
-		if($contact_required)
-		{
-			$query = "SELECT notes.notesid, notes.title, notes.filename,  FROM contactdetailss, notes ";
-			$where_auto = "notes.contact_id = contacts.id AND notes.deleted=0 AND contacts.deleted=0";
-		}
-		else
-		{
-			$query = 'SELECT notesid, title, filename  FROM notes ';
-			$where_auto = "deleted=0";
-		}
-
-		if($where != "")
-			$query .= "where $where AND ".$where_auto;
-		else
-			$query .= "where ".$where_auto;
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-		else
-			$query .= " ORDER BY title";
-
-		return $query;
-	}
-
         function create_export_query(&$order_by, &$where)
         {
              $query = "SELECT
