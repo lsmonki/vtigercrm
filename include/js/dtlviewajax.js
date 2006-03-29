@@ -22,8 +22,6 @@ function hndCancel(valuespanid,textareapanid,fieldlabel)
 {
 
   showHide(valuespanid,textareapanid);
-  //fieldLabelObj = getObj(fieldlabel);
-  //fieldLabelObj.className="label";
   itsonview=false;
   return false;
 }
@@ -39,13 +37,9 @@ function hndMouseOver(uitype,fieldLabel)
       }
       
       show("crmspanid");
-      //globalfieldlabel=fieldLabel;
       globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
-      //globalsubvaluespanid="subvalue_"+ fieldLabel;//subvaluespanid;
       globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
-      //globaluitype=uitype;
       globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
-      //globalismandatory=ismandatory;
       divObj = getObj('crmspanid'); 
       crmy = findPosY(getObj(mouseArea));
       crmx = findPosX(getObj(mouseArea));
@@ -63,25 +57,18 @@ function hndMouseOver(uitype,fieldLabel)
 
 function handleEdit()
 {
-     //setValue(globalvaluespanid,globaltextboxpanid,globalsubvaluespanid,globaluitype,globalfieldlabel);
-	//setValue(globalvaluespanid,globaltextboxpanid,globalsubvaluespanid,globaluitype,globalfieldlabel,globalismandatory);
      show(globaleditareaspanid) ;
      hide(globaldtlviewspanid);
      getObj(globaltxtboxid).focus();
      hide('crmspanid');
      itsonview=true;
-     //if(dhtmlHistory.currentLocation!="start")
-     //{
-     //  window.historyStorage.put("start",getObj('show').innerHTML);
-     //}
      return false;
 }
 
 function dtlViewAjaxResponse(response)
 {
      var item = response.responseText;
-     alert(response.responseText)
-	 if(item.indexOf(":#:FAILURE")>-1)
+     if(item.indexOf(":#:FAILURE")>-1)
      {
           alert("Error while Editing");
      }
@@ -114,7 +101,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      
      var ajaxObj = new Ajax(dtlViewAjaxResponse);
      ajaxObj.process("index.php?",data);
-     //alert(getObj(popupTxt));
      if(uitype == '13')
      {
           getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
