@@ -109,60 +109,6 @@ class Event extends SugarBean {
         return $row["count(*)"];
     }       
 
-    function get_tasks($user_name,$from_index,$offset)
-    {   
-         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
-
-    return $this->process_list_query1($query);
-    
-    }
-
-
-    function process_list_query1($query)
-    {
-        $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
-        $list = Array();
-        $rows_found =  $this->db->getRowCount($result);
-        if($rows_found != 0)
-        {
-               for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
-            
-            {
-                foreach($this->list_fields as $field)
-                {
-                    if (isset($row[$field])) {
-                        $this->$field = $row[$field];
-                    }   
-                    else     
-                    {   
-                            $this->$field = "";
-                    }   
-                }   
-    
-    // TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every contacts and hence 
-    // account query goes for ecery single account row
-
-       //         $this->fill_in_additional_list_fields();
-		//$this->account_name = $row['accountname'];
-		//$this->account_id = $row['accountid'];
-        $this->contact_name = return_name($row, 'cfn', 'cln');
-        
-    
-                    $list[] = $this;
-                }
-        }   
-
-        $response = Array();
-        $response['list'] = $list;
-        $response['row_count'] = $rows_found;
-        $response['next_offset'] = $next_offset;
-        $response['previous_offset'] = $previous_offset;
-
-
-
-        return $response;
-    }
-
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
 		$today = date("Y-m-d", time());
