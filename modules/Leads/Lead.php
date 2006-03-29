@@ -373,27 +373,6 @@ function get_products($id)
 	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
 }
 
-
-
-
-	// This method is used to provide backward compatibility with old data that was prefixed with http://
-	// We now automatically prefix http://
-	function remove_redundant_http()
-	{
-		if(eregi("http://", $this->website))
-		{
-			$this->website = substr($this->website, 7);
-		}
-	}
-
-	function fill_in_additional_list_fields()
-	{
-		// Fill in the assigned_user_name
-		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
-
-		$this->remove_redundant_http();
-	}
-
 	function get_lead_field_options($list_option)
 	{
 		$comboFieldArray = getComboArray($this->combofieldNames);
