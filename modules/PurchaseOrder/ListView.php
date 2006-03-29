@@ -98,7 +98,7 @@ $cvHTML = '<td><a href="index.php?module=PurchaseOrder&action=CustomView">'.$app
 }
 	$custom_view_strings='<td>'.$app_strings[LBL_VIEW].'</td>
 			<td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'PurchaseOrder\')">
 				'.$customviewcombo_html.'
                         </SELECT></td>
 			'.$cvHTML;
