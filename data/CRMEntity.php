@@ -1296,5 +1296,25 @@ $log->debug("type is ".$type);
 		} 
 	}
 
+	/**
+         * Function to check if the custom field table exists
+         * return true or false
+         */
+        function checkIfCustomTableExists($tablename)
+        {
+                $query = "select * from ".$tablename;
+                $result = $this->db->query($query);
+                $testrow = $this->db->num_fields($result);
+                if($testrow > 1)
+                {
+                        $exists=true;
+                }
+                else
+                {
+                        $exists=false;
+                }
+                return $exists;
+        }
+
 }
 ?>
