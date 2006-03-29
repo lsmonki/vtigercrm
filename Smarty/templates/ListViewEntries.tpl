@@ -40,14 +40,18 @@
                          <div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
 			      <tr>
-             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+				{if $SHOW_MASS_SELECT neq 'false'}
+	             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+				{/if}
 				 {foreach item=header from=$LISTHEADER}
         			 <td class="lvtCol">{$header}</td>
 			         {/foreach}
 			      </tr>
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
 			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
-				 <td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+				{if $SHOW_MASS_SELECT neq 'false'}
+					 <td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+				{/if}
 				 {foreach item=data from=$entity}	
 				 <td>{$data}</td>
 	                         {/foreach}
