@@ -112,7 +112,7 @@ else
 
 $customstrings ='<td>'.$app_strings[LBL_VIEW].'
                         <td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Campaigns\' )">
                                 '.$customviewcombo_html.'
                         </SELECT></td>
                         '.$cvHTML;
