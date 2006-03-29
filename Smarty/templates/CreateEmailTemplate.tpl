@@ -104,8 +104,6 @@
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="templateid" value="{$TEMPLATEID}">
 
-
-
 <!-- EMAIL TEMPLATE PAGE STARTS HERE -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
@@ -236,21 +234,7 @@
 </tr>
 </table>
 
-
-
 <script>
-function trim(s)
-{ldelim}
-        while (s.substring(0,1) == " ") {ldelim}
-                s = s.substring(1, s.length);
-        {rdelim}
-        while (s.substring(s.length-1, s.length) == ' ') {ldelim}
-                s = s.substring(0,s.length-1);
-        {rdelim}
-
-        return s;
-{rdelim}
-
 
 function check4null(form)
 {ldelim}
@@ -284,8 +268,6 @@ function check4null(form)
 init();
 
 </script>
-
-
 
 {$JAVASCRIPT}
 {include file='SettingsSubMenu.tpl'}
