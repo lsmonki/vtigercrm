@@ -194,11 +194,6 @@ class User extends SugarBean {
 	}
 	
 	
-	function get_summary_text()
-	{
-		return "$this->first_name $this->last_name";
-	}
-
 	/**
 	* @return string encrypted password for storage in DB and comparison against DB password.
 	* @param string $user_name - Must be non null and at least 2 characters
@@ -375,7 +370,6 @@ class User extends SugarBean {
 		$this->loadPreferencesFromDB($row['user_preferences']);
 		
 		
-		$this->fill_in_additional_detail_fields();
 		if ($this->status != "Inactive") $this->authenticated = true;
 		
 		unset($_SESSION['loginattempts']);
@@ -437,29 +431,6 @@ class User extends SugarBean {
 		return $this->authenticated;
 	}
 	
-	function fill_in_additional_list_fields()
-	{
-		$this->fill_in_additional_detail_fields();	
-	}
-	
-	function fill_in_additional_detail_fields()
-	{
-		//$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$query = "SELECT u1.first_name, u1.last_name from users u1, users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$result =$this->db->query($query, true, "Error filling in additional detail fields") ;
-		
-		$row = $this->db->fetchByAssoc($result);
-		$this->log->debug("additional detail query results: $row");
-		
-		if($row != null)
-		{
-			$this->reports_to_name = stripslashes($row['first_name'].' '.$row['last_name']);
-		}
-		else 
-		{
-			$this->reports_to_name = '';
-		}		
-	}
 
 	function retrieve_user_id($user_name)
 	{
@@ -512,15 +483,7 @@ class User extends SugarBean {
 		if ($this->is_admin == 'on') $user_fields['IS_ADMIN'] = 'X';
 		return $user_fields;	
 	}
-	function list_view_parse_additional_sections(&$list_form, $xTemplateSection){
 
-		if($list_form->exists($xTemplateSection.".row.yahoo_id") && isset($this->yahoo_id) && $this->yahoo_id != '')
-			$list_form->parse($xTemplateSection.".row.yahoo_id");
-		elseif ($list_form->exists($xTemplateSection.".row.no_yahoo_id"))
-				$list_form->parse($xTemplateSection.".row.no_yahoo_id");
-		return $list_form;
-		
-	}
 	
 	function getColumnNames_User()
   {
