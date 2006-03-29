@@ -424,44 +424,13 @@ class Contact extends CRMEntity {
 	
 
 
-//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{
-        
-	 global $log;
-         global $adb;
-        	//get all the custom fields created 
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=4";
-        	$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-		       if($i == 0)
-		      	{
-				$sql3 .= "contactscf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{	
-				$sql3 .= ", contactscf.".$columnName. " '" .$fieldlable."'";
-			}
-        
-	         }
-		 $log->info("Custom Query successfully Constructed in constructCustomQueryAddendum()");
-		return $sql3;
-        }
-
-
 
         function create_export_query(&$order_by, &$where)
         {
 		global $log;
 		if($this->checkIfCustomTableExists('contactscf'))
 		{
-	   $query =  $this->constructCustomQueryAddendum() .",
+	   $query =  $this->constructCustomQueryAddendum('contactscf','Contacts') .",
                                 contactdetails.*, contactaddress.*,
                                 account.accountname account_name,
                                 users.user_name assigned_user_name
