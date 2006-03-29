@@ -147,33 +147,6 @@ class Potential extends CRMEntity {
 
 		return $query;
 	}
-	//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{		
-
-		global $adb;
-		//get all the custom fields created 
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=2";
-		$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-			if($i == 0)
-			{
-				$sql3 .= "potentialscf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{	
-				$sql3 .= ", potentialscf.".$columnName. " '" .$fieldlable."'";
-			}
-		}
-		return $sql3;
-
-	}
 
 
 	function create_export_query($order_by, $where)
@@ -181,7 +154,7 @@ class Potential extends CRMEntity {
 
 		if($this->checkIfCustomTableExists('potentialscf'))
 		{
-			$query = $this->constructCustomQueryAddendum() .",                                potential.*,
+			$query = $this->constructCustomQueryAddendum('potentialscf','Potentials') .",                                potential.*,
 				account.accountname account_name,
 				users.user_name assigned_user_name
 					FROM potential
