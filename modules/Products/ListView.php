@@ -108,7 +108,7 @@ if(isPermitted('Products',2,'') == 'yes')
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
 	$customstrings ='<td align="right" class="small">'.$app_strings[LBL_VIEW].'</td>
-                        <td><SELECT NAME="viewname" class="small"  onchange="showDefaultCustomView(this)">
+                        <td><SELECT NAME="viewname" class="small"  onchange="showDefaultCustomView(this,\'Products\')">
 				'.$customviewcombo_html.'
 	                </SELECT></td>
 			'.$cvHTML;
