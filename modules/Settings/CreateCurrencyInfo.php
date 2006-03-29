@@ -10,15 +10,11 @@
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
+global $mod_strings,$app_strings,$adb,$theme;
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_CURRENCY_CONFIG'], true);
 echo '<br><br>';
 
-global $adb;
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
