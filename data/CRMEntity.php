@@ -1102,33 +1102,6 @@ $log->debug("type is ".$type);
       $this->saveentity($module_name,$migration);
   }
   
-	function create_list_query($order_by, $where)
-	{
-		$adr_table = "";
-		$adr_where = "";
-		
-		$query = "SELECT * FROM users ";
-		$query .= "where users.deleted=0";
-		return $query;
-	}
-	
-	function create_lead_list_query($order_by, $where)
-	{
-                $query = "select * from $this->table_name left join leadcf on leads.id=leadcf.leadid ";
-		//$query = "SELECT * FROM $this->table_name ";
-
-		if($where != "")
-			$query .= "where ($where) AND deleted=0 AND converted=0";
-		else
-			$query .= "where deleted=0 AND converted=0";
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-
-		return $query;
-	}
-
-
 	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
 	{
 		global $list_max_entries_per_page;
@@ -1227,41 +1200,6 @@ $log->debug("type is ".$type);
 		else return null;
 	}
 	
-	/**
-	 * return the summary text that should show up in the recent history list for this object.
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function get_summary_text()
-	{
-		return "Base Implementation.  Should be overridden.";
-	}
-
-	/**
-	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
-	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
-	 * This method is only used for populating extra fields in lists
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function fill_in_additional_list_fields()
-	{
-	}
-
-	/**
-	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
-	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
-	 * This method is only used for populating extra fields in the detail form
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function fill_in_additional_detail_fields()
-	{
-	}
-
 	/** This function should be overridden in each module.  It marks an item as deleted.
 	* If it is not overridden, then marking this type of item is not allowed
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
@@ -1273,91 +1211,9 @@ $log->debug("type is ".$type);
 		$query = "UPDATE crmentity set deleted=1 where crmid='$id'";
 		$this->db->query($query, true,"Error marking record deleted: ");
 
-		//$this->mark_relationships_deleted($id);
-
-		// Take the item off of the recently viewed lists.
-		//$tracker = new Tracker();
-		//$tracker->delete_item_history($id);
 
 	}
 
-	/** This function deletes relationships to this object.  It should be overridden to handle the relationships of the specific object.
-	* This function is called when the item itself is being deleted.  For instance, it is called on Contact when the contact is being deleted.
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function mark_relationships_deleted($id)
-	{
-
-	}
-
-	/**
-	 * This function is used to execute the query and create an array template objects from the resulting ids from the query.
-	 * It is currently used for building sub-panel arrays.
-	 * param $query - the query that should be executed to build the list
-	 * param $template - The object that should be used to copy the records.
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function build_related_list($query, &$template)
-	{
-
-		$this->log->debug("Finding linked records $this->object_name: ".$query);
-
-		$result =& $this->db->query($query, true);
-
-		$list = Array();
-
-		while($row = $this->db->fetchByAssoc($result))
-		{
-			$template->retrieve($row['id']);
-
-			// this copies the object into the array
-			$list[] = $template;
-		}
-
-		return $list;
-	}
-
-	/**
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function build_related_list2($query, &$template, &$field_list)
-	{
-
-		$this->log->debug("Finding linked values $this->object_name: ".$query);
-
-		$result =& $this->db->query($query, true);
-
-		$list = Array();
-
-		while($row = $this->db->fetchByAssoc($result))
-		{
-			// Create a blank copy
-			$copy = $template;
-			
-			foreach($field_list as $field)
-			{
-				// Copy the relevant fields
-				$copy->$field = $row[$field];
-				
-			}	
-
-			// this copies the object into the array
-			$list[] = clone($copy);//added by Richie to support PHP5
-		}
-
-		return $list;
-	}
-
-	/* This is to allow subclasses to fill in row specific columns of a list view form */
-	function list_view_parse_additional_sections(&$list_form)
-	{
-	}
 
 	/* This function assigns all of the values into the template for the list view */
 	function get_list_view_array(){
@@ -1420,7 +1276,6 @@ $log->debug("type is ".$type);
 				$this->$field = $row[$field];
 			}
 		} 
-		$this->fill_in_additional_detail_fields();
 		return $this;
 	}
 
@@ -1440,101 +1295,6 @@ $log->debug("type is ".$type);
 			} 
 		} 
 	}
-	/**
-		builds a generic search based on the query string using or
-		do not include any $this-> because this is called on without having the class instantiated
-	*/
-	function build_generic_where_clause($value){
-			$where_clause = "WHERE "; 
-		$first = 1; 
-		foreach ($fields_array as $name=>$value) 
-		{ 
-			if ($first) 
-			{ 
-				$first = 0;
-			} 
-			else 
-			{ 
-				$where_clause .= " or";
-			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
-		} 
-
-		$where_clause .= " AND deleted=0";
-		return $where_clause;
-	}
-
-/*	
-	function get_msgboard_data($orderby = "" , $where = "" ,$row_offset = 0)
- 	{
- 	         $response = $this->get_messageboard_list($order_by, $where , $row_offset,$limit= -1,$max_per_page = -1);
- 	         return $response;
- 	}
- 	
-  function get_messageboard_list($orderby, $where, $row_offset,$limit= -1, $max_per_page = -1)
-  {
-    global $list_max_entries_per_page;
-
-		if(isset($_REQUEST['query']))
-			{
-$sql='select distinct(t.topic_id), t.topic_title, c.cat_title, first.username as author, t.topic_replies,FROM_UNIXTIME(p.post_time) as post_time from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_categories c, phpbb_users first where t.topic_id = p.topic_id and p.post_id=t.topic_last_post_id and t.topic_poster=first.user_id and t.forum_id=f.forum_id and f.cat_id=c.cat_id and ' .$where;
-	
-//				$sql='select distinct(t.topic_title),c.cat_title,t.topic_poster, t.topic_replies,FROM_UNIXTIME(p.post_time) as post_time, t.topic_replies from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_categories c,phpbb_users u where t.forum_id=f.forum_id and f.cat_id=c.cat_id and ' .$where ;
-			}
-			else
-			{
-				$sql='select t.topic_id,p.post_id,t.topic_title,FROM_UNIXTIME(p.post_time) as post_time, f.forum_name , u.username , t.topic_replies from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_users u where p.topic_id=t.topic_id and t.forum_id=f.forum_id and u.user_id=t.topic_poster ORDER BY p.post_time ';
- 	 		}
- 	                 $result = mysql_query($sql);
- 	                 $list = Array();
-                        
-                         if($max_per_page == -1)
-                         {
-                           $max_per_page 	= $list_max_entries_per_page;
-                         }
-	
- 	                 $rows_found =  $this->db->getRowCount($result);
- 	                 $previous_offset = $row_offset - $max_per_page;
- 	                 $next_offset = $row_offset + $max_per_page;
- 	                 if($rows_found != 0)
- 	                 {
-                           //$max_per_page=15;
- 	                    for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page ||  $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index))
- 	                         {
- 	                                 foreach($this->list_fields as $field)
- 	                                 {
- 	                                         //print_r($this->list_fields);
- 	                                         if (isset($row[$field]))
- 	                                         {
- 	                                                 $this->$field = $row[$field];
- 	                                         }
- 	                                         else
- 	                                         {
- 	                                                 $this->$field = "";
- 	                                         }
- 	                                 }
- 	 
- 	                    $list[] = clone($this);//added by Richie to support PHP5
- 	                         }
- 	                 }
- 	 
- 	           $response = Array();
- 	                 $response['list'] = $list;
- 	                 $response['row_count'] = $rows_found;
- 	                 $response['next_offset'] = $next_offset;
- 	                 $response['previous_offset'] = $previous_offset;
-                         /*
- 	                 foreach($this->list_fields as $field)
- 	                                {
- 	                                        if (isset($row[$field]))
- 	                                         {
- 	                                                $this->$field = $row[$field];
- 	                                                $this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
- 	                                        }
- 	                                }
- 	                 return $response;
-  }
-	*/
 }
 ?>
