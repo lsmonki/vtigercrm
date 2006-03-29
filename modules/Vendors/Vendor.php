@@ -70,10 +70,6 @@ class Vendor extends CRMEntity {
 		$this->column_fields = getColumnFields('Vendors');
 	}
 
-  function get_summary_text()
-        {
-                return $this->name;
-        }
 	function get_products($id)
 	{
 		global $app_strings;
@@ -113,31 +109,4 @@ class Vendor extends CRMEntity {
 		return GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
 
 	}
-       function get_related_contacts($id)
-       {
-               $query = 'SELECT vendorcontactrel.*, crmentity.crmid from vendorcontactrel inner join crmentity on crmentity.crmid = vendorcontactrel.contactid where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
-               $result = $this->db->query($query);
-               $cnt_id = array();
-               $cnt_list = '';
-               if($this->db->num_rows($result)!=0)
-               {
-                       while($row = $this->db->fetch_array($result))
-                       {
-                               $cnt_id[] = $row['contactid'];
-                       }
-                       for ($i = 0; $i < count($cnt_id); $i++)
-                       {
-                               $cnt_list .= $cnt_id[$i] . ',';
-                       }
-
-                       if ($cnt_list)
-                       {
-                               $cnt_list = substr($cnt_list, 0, strlen($cnt_list) -1);
-                       }
-
-               }
-               return $cnt_list;
-         }
-
-}
 ?>
