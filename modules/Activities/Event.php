@@ -255,28 +255,6 @@ class Event extends SugarBean {
 
         return $response;
     }
-	
-
-function save_relationship_changes($is_update)
-    {
-
-		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
-		$this->db->query($query,true,"Error clearing contact to task relationship: ");
-
-     //  echo "\n Quwry is " .$query; 
-      // echo "\ncontact_id is " .$this->contact_id; 
-
-    	
-    	if($this->contact_id != "")
-    	{
-          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
-          //echo $query;  
-	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
-    	}
-
-    }
-    
-
 
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
