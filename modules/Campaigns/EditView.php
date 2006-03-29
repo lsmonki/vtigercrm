@@ -14,11 +14,7 @@ require_once('include/utils/utils.php');
 require_once('modules/Campaigns/Campaign.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $app_list_strings;
-global $mod_strings;
-global $current_user;
-global $currentModule;
+global $app_strings,$mod_strings,$currentModule,$theme;
 
 $focus = new Campaign();
 $smarty = new vtigerCRM_Smarty();
@@ -36,7 +32,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
     	$focus->mode = ''; 	
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
