@@ -131,7 +131,7 @@ $cvHTML='<td><a href="index.php?module=Accounts&action=CustomView">'.$app_string
 }
 	$customviewstrings='<td>'.$app_strings[LBL_VIEW].'</td>
 			<td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Account\')">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Accounts\')">
 				'.$customviewcombo_html.'
                         </SELECT></td>
 			'.$cvHTML;
