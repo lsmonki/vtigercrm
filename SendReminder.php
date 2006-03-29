@@ -87,22 +87,7 @@ if($adb->num_rows($result) >= 1)
 				}
 			}
 		
-			// Selecting contacts to send reminder /*commented as the customer need not receive the mail
-			/*
-			$query_cnt="SELECT contactdetails.email,cntactivityrel.contactid,crmentity.crmid FROM cntactivityrel inner join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=cntactivityrel.contactid where cntactivityrel.activityid =".$activity_id." and crmentity.deleted=0"; 
-			$cnt_result = $adb->query($query_cnt);
-			if($adb->num_rows($cnt_result)>=1)
-			{
-				while($cnt_result_row = $adb->fetch_array($cnt_result))
-				{
-					if($cnt_result_row['email']!='' || $cnt_result_row['email'] !=NULL)
-					{
-						$to_addr[] = $cnt_result_row['email'];
-					}
-				}
-			}
-			*/ //Comments ends
-			// Set the preferred email id
+				// Set the preferred email id
 			$from ="reminders@localserver.com";
 			
 			// Retriving the Subject and message from reminder table		
@@ -160,7 +145,6 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 
 
 	$mail->IsSMTP();                                      // set mailer to use SMTP
-	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
 
 	if($mail_server=='')
 	{
@@ -188,7 +172,6 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 		$log->info("Mail sending process : To Email id = '".$addr."' (set in the mail object)");
 
 	}
-	//$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
 
 	$mail->IsHTML(true);                                  // set email format to HTML
