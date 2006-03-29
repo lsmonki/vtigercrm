@@ -1204,16 +1204,5 @@ class CustomView extends CRMEntity{
 		return $calist;	
 	}
 
-	function getParentId($fields,$values)
-	{
-		global $adb;
-
-		if($fields = 'crmentity.smownerid')
-		{
-			$sSQL = " left join users on users".$value;
-			$result = $adb->query($sSQL);
-		}
-	}
-
 }
 ?>
