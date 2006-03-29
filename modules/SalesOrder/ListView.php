@@ -125,7 +125,7 @@ $cvHTML = '<td><a href="index.php?module=SalesOrder&action=CustomView">'.$app_st
 <a href="index.php?module=CustomView&action=Delete&dmodule=SalesOrder&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 	$customstrings = '<td align="right" class="small">'.$app_strings[LBL_VIEW].'</td>
-			<td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+			<td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'SalesOrder\')">
 				'.$customviewcombo_html.'
                         </SELECT></td>
 			'.$cvHTML;
