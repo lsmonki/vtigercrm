@@ -9,6 +9,8 @@
  ********************************************************************************/
 
 
+document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
+document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 function verify_data(form) {
 	if(! form.createpotential.checked == true)
 	{
@@ -63,98 +65,6 @@ function togglePotFields(form)
 
 }
 
-//code added by raju for better emailing
-function eMail()
-{
-    x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-	idstring = "";
-
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        else
-        {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                                xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        document.massdelete.action="index.php?module=Emails&action=SelectEmails&return_module=Leads&return_action=index";
-}
-
-
-//end of code added by raju
-
-
-function massMail()
-{
-
-        x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-	idstring = "";
-	
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        else
-        {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                                xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module=Leads&return_action=index&viewname="+viewid;
-}
-
 function changeStatus(obj,divid)
 {
 	x = document.massdelete.selected_id.length;
@@ -197,61 +107,6 @@ function changeStatus(obj,divid)
 	}
 	fnvshobj(obj,divid);
 }
-
-//to merge to a list of leads
-function massMerge()
-{
-
-	x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-	idstring = "";
-
-	if ( x == undefined)
-	{
-	
-		if (document.massdelete.selected_id.checked)
-		{
-			document.massdelete.idlist.value=document.massdelete.selected_id.value;
-		}
-		else 
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
-	}
-	else
-	{
-		xx = 0;
-		for(i = 0; i < x ; i++)
-		{
-			if(document.massdelete.selected_id[i].checked)
-			{
-				idstring = document.massdelete.selected_id[i].value +";"+idstring
-			xx++	
-			}
-		}
-		if (xx != 0)
-		{
-			document.massdelete.idlist.value=idstring;
-		}
-		else
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
-	}	
-	if(getObj('selectall').checked == true)
-		{
-				getObj('idlist').value = getObj('allids').value;
-		}
-	document.massdelete.action="index.php?module=Leads&action=Merge&return_module=Leads&return_action=index&parenttab=Sales&viewname="+viewid;
-}
-
-//added for massemail by raju
-function set_return_emails(entity_id,email_id,parentname,emailadd){
-		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
-		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>; ';
-}		
 
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;

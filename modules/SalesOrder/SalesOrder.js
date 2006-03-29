@@ -8,6 +8,7 @@
 *
  ********************************************************************************/
 
+document.write("<script type='text/javascript' src='include/js/Inventory.js'></"+"script>");
 function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
@@ -156,37 +157,6 @@ function roundValue(val) {
 	}
 	
 	return val;
-}
-function copyAddressRight(form) {
-
-	form.ship_street.value = form.bill_street.value;
-
-	form.ship_city.value = form.bill_city.value;
-
-	form.ship_state.value = form.bill_state.value;
-
-	form.ship_code.value = form.bill_code.value;
-
-	form.ship_country.value = form.bill_country.value;
-
-	return true;
-
-}
-
-function copyAddressLeft(form) {
-
-	form.bill_street.value = form.ship_street.value;
-
-	form.bill_city.value = form.ship_city.value;
-
-	form.bill_state.value = form.ship_state.value;
-
-	form.bill_code.value =	form.ship_code.value;
-
-	form.bill_country.value = form.ship_country.value;
-
-	return true;
-
 }
 function validate() {
 		if(!formValidate())
