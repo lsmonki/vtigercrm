@@ -229,6 +229,7 @@ class Product extends CRMEntity {
 		$query = 'select crmentity.crmid, pricebook.*,pricebookproductrel.productid as prodid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id; 
 		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
 	}
+
 	function product_novendor()
 	{
 		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id=''";
@@ -236,42 +237,13 @@ class Product extends CRMEntity {
 		return $this->db->num_rows($result);
 	}
 	
- //method added to construct the query to fetch the custom fields
-	function constructCustomQueryAddendum()
-	{
-		global $adb;
-		//get all the custom fields created
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=14";
-		$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-			if($i == 0)
-			{
-				$sql3 .= "productcf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{
-				$sql3 .= ", productcf.".$columnName. " '" .$fieldlable."'";
-			}
-
-		}
-		return $sql3;
-
-	}
-
 	
 	function create_export_query(&$order_by, &$where)
 	{
 		if($this->checkIfCustomTableExists('productcf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum() . 
+			$query = $this->constructCustomQueryAddendum('productcf','Products') . 
 				",    
 				products.productid productid,
 			products.productname productname,
