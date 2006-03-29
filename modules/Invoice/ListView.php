@@ -94,7 +94,7 @@ $cvHTML = '<td><a href="index.php?module=Invoice&action=CustomView">'.$app_strin
 <a href="index.php?module=CustomView&action=Delete&dmodule=Invoice&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'</td>
-			  <td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+			  <td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Invoice\')">
 				'.$customviewcombo_html.'
                           </SELECT></td>
 			'.$cvHTML;
