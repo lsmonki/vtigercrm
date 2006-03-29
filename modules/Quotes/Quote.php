@@ -114,11 +114,6 @@ class Quote extends CRMEntity {
 		$this->column_fields = getColumnFields('Quotes');
 	}
 
-	function get_summary_text()
-	{
-		return $this->name;
-	}
-	
 	function get_salesorder($id)
 	{
 		require_once('modules/SalesOrder/SalesOrder.php');
