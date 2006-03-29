@@ -127,9 +127,6 @@ class Note extends CRMEntity {
 		return $query;
 	}
 
-
-
-
         function create_export_query(&$order_by, &$where)
         {
              $query = "SELECT
@@ -141,84 +138,6 @@ class Note extends CRMEntity {
                 return $query;
         }
 
-
-
-
-	function fill_in_additional_list_fields()
-	{
-		$this->fill_in_additional_detail_fields();
-	}
-
-	function fill_in_additional_detail_fields()
-	{
-		# TODO:  Seems odd we need to clear out these values so that list views don't show the previous rows value if current value is blank
-		$this->contact_name = '';
-		$this->contact_phone = '';
-		$this->contact_email = '';
-		$this->parent_name = '';
-
-		if (isset($this->contact_id) && $this->contact_id != '') {
-			require_once("modules/Contacts/Contact.php");
-			$contact = new Contact();
-			$query = "SELECT first_name, last_name, phone_work, email1 from $contact->table_name where id = '$this->contact_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-
-			if($row != null)
-			{
-				$this->contact_name = return_name($row, 'first_name', 'last_name');
-				if ($row['phone_work'] != '') $this->contact_phone = $row['phone_work'];
-				else $this->contact_phone = '';
-				if ($row['email1'] != '') $this->contact_email = $row['email1'];
-				else $this->contact_email = '';
-			}
-		}
-
-		if ($this->parent_type == "Opportunities") {
-			require_once("modules/Opportunities/Opportunity.php");
-			$parent = new Opportunity();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-
-			if($row != null)
-			{
-				if ($row['name'] != '') stripslashes($this->parent_name = $row['name']);
-			}
-		}
-		elseif ($this->parent_type == "Cases") {
-			require_once("modules/Cases/Case.php");
-			$parent = new aCase();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-
-			if($row != null)
-			{
-				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
-			}
-		}
-		elseif ($this->parent_type == "Accounts") {
-			require_once("modules/Accounts/Account.php");
-			$parent = new Account();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-
-			if($row != null)
-			{
-				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
-			}
-		}
-	}
 	function get_list_view_data(){
 		$note_fields = $this->get_list_view_array();
 		global $app_list_strings, $focus, $action, $currentModule;
