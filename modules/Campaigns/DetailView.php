@@ -11,7 +11,6 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('include/utils/utils.php');
 require_once('modules/Campaigns/Campaign.php');
 require_once('include/utils/utils.php');
 
@@ -27,10 +26,8 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-global $app_strings;
-global $mod_strings;
+global $app_strings,$mod_strings,$theme,$profile_id;;
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -62,7 +59,6 @@ $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("MODULE","Campaigns");
 $smarty->display("DetailView.tpl");
 //Security check for related list
-global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 $focus->id = $_REQUEST['record'];
