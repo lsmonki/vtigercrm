@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Quotes/Quote.php');
-require_once('modules/Accounts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -161,6 +160,13 @@ elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || 
         $smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 }
+else
+{
+	$smarty->assign("ROWCOUNT", '1');
+	$smarty->assign("TAXVALUE", '0');
+	$smarty->assign("ADJUSTMENTVALUE", '0');
+}
+
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $smarty->assign("RETURN_MODULE","Quotes");
