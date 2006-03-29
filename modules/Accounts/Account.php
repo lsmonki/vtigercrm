@@ -371,45 +371,12 @@ class Account extends CRMEntity {
 	}
 
 
-	//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{
-		global $adb;
-		//get all the custom fields created 
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=6";
-		$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-			if($i == 0)
-			{
-				$sql3 .= "accountscf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{	
-				$sql3 .= ", accountscf.".$columnName. " '" .$fieldlable."'";
-			}
-
-		}
-		if($numRows>0)
-		{
-			$sql3=$sql3.',';
-		}
-		return $sql3;
-
-	}
-
-
 	function create_export_query(&$order_by, &$where)
 	{
 		if($this->checkIfCustomTableExists('accountscf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum() . " 
+			$query = $this->constructCustomQueryAddendum('accountscf','Accounts') . " 
 				account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
 				users.user_name, users.status  user_status
 					FROM ".$this->entity_table."
