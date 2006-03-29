@@ -83,18 +83,6 @@ class Event extends SugarBean {
 
 	var $new_schema = true;
 
-	function create_tables () {
-		global $app_strings;
-	}
-
-	function drop_tables () {
-	}
-
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
-
 
     function getCount($user_name) 
     {
