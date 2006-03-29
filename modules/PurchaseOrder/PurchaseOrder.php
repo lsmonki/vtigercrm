@@ -110,14 +110,6 @@ class Order extends CRMEntity {
 		$this->column_fields = getColumnFields('PurchaseOrder');
 	}
 
-/** Function to get summary text
- *  This function returns name property(ie.,summary text) of the Order class.
-*/
-	function get_summary_text()
-	{
-		return $this->name;
-	}
-
 /** Function to get activities associated with the id
  *  This function accepts the id as arguments and execute the MySQL query using the id
  *  and sends the query and the id as arguments to renderRelatedActivities() method 
