@@ -17,19 +17,14 @@ global $adb;
 $local_log =& LoggerManager::getLogger('AccountsAjax');
 
 $ajaxaction = $_REQUEST["ajxaction"];
-if($_REQUEST['file'] != '')
-{
-	require_once('modules/Accounts/'.$_REQUEST['file'].'.php');
-}
-elseif($ajaxaction == "DETAILVIEW")
+if($ajaxaction == "DETAILVIEW")
 {
      $crmid = $_REQUEST["recordid"];
      $tablename = $_REQUEST["tableName"];
      $fieldname = $_REQUEST["fldName"];
      $fieldvalue = $_REQUEST["fieldValue"];
-     
      if($crmid != "")
-	{
+	 {
 		$acntObj = new Account();
 	     $acntObj->retrieve_entity_info($crmid,"Accounts");
 	     $acntObj->column_fields[$fieldname] = $fieldvalue;
@@ -46,51 +41,10 @@ elseif($ajaxaction == "DETAILVIEW")
 	}else
 	{
          echo ":#:FAILURE";
-     }
+    }
 }
-elseif($ajaxaction == "SAVETAG")
+else
 {
-
-	require_once('include/freetag/freetag.class.php');
-	global $current_user;
-	$crmid = $_REQUEST["recordid"];
-	$module = $_REQUEST["module"];
-	$tagfields = $_REQUEST["tagfields"];
-	$userid = $current_user->id;
-	$freetag = new freetag();
-	if (isset($_REQUEST["tagfields"]) && trim($_REQUEST["tagfields"]) != "")
-	{
-		$freetag->tag_object($userid,$crmid,$tagfields,$module);
-		$tagcloud = $freetag->get_tag_cloud_html($module);
-		echo $tagcloud;
-	}
-
+	require_once('include/Ajax/CommonAjax.php');
 }
-elseif($ajaxaction == 'GETTAGCLOUD')
-{
-	require_once('include/freetag/freetag.class.php');
-	$freetag = new freetag();
-	$module = $_REQUEST["module"];
-	$useid = $current_user->id;
-	global $adb;
-	$query='select * from freetagged_objects where module = "'.$module .'"';
-	$result=$adb->query($query);
-	if($adb->num_rows($result) > 0)
-	{
-		if(trim($module) != "")
-		{
-			$tagcloud = $freetag->get_tag_cloud_html($module);
-			echo $tagcloud;
-		}else
-		{
-			$tagcloud = $freetag->get_tag_cloud_html();
-			echo $tagcloud;
-		}
-	}
-	else
-	{
-		echo '';
-	}
-}
-
 ?>
