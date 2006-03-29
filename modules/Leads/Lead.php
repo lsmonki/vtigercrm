@@ -150,89 +150,56 @@ class Lead extends CRMEntity {
 		$this->column_fields = getColumnFields('Leads');
 	}
 
-	//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{
-        global $adb;
-        	//get all the custom fields created 
-		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=7";
-        	$result = $adb->query($sql1);
-		$numRows = $adb->num_rows($result);
-		//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel	
-		$sql3 = "select ";
-		for($i=0; $i < $numRows;$i++)
-		{
-			$columnName = $adb->query_result($result,$i,"columnname");
-			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
-			//construct query as below
-		       if($i == 0)
-		      	{
-				$sql3 .= "leadscf.".$columnName. " '" .$fieldlable."'";
-			}
-			else
-			{	
-				$sql3 .= ", leadscf.".$columnName. " '" .$fieldlable."'";
-			}
-        
-	         }
-		if ($numRows > 0)
-		{
-			$sql3=$sql3.',';
-		}
-	return $sql3;
-
-	}
-
-
+	
 
 
 	function create_export_query(&$order_by, &$where)
-        {
+	{
 		if($this->checkIfCustomTableExists('leadscf'))
 		{
-          
-  $query = $this->constructCustomQueryAddendum() . " 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country, leadaddress.phone phone, users.user_name, users.status user_status
-                        FROM ".$this->entity_table."
-                        INNER JOIN leaddetails
-                        ON crmentity.crmid=leaddetails.leadid
-                        LEFT JOIN leadaddress 
-                        ON leaddetails.leadid=leadaddress.leadaddressid
-                        LEFT JOIN leadsubdetails
-                        ON leaddetails.leadid=leadsubdetails.leadsubscriptionid
-                        LEFT JOIN leadscf 
-                        ON leadscf.leadid=leaddetails.leadid
-                        LEFT JOIN users
-                        ON crmentity.smownerid = users.id ";
+
+			$query = $this->constructCustomQueryAddendum('leadscf','Leads') . " 
+				leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country, leadaddress.phone phone, users.user_name, users.status user_status
+				FROM ".$this->entity_table."
+				INNER JOIN leaddetails
+				ON crmentity.crmid=leaddetails.leadid
+				LEFT JOIN leadaddress 
+				ON leaddetails.leadid=leadaddress.leadaddressid
+				LEFT JOIN leadsubdetails
+				ON leaddetails.leadid=leadsubdetails.leadsubscriptionid
+				LEFT JOIN leadscf 
+				ON leadscf.leadid=leaddetails.leadid
+				LEFT JOIN users
+				ON crmentity.smownerid = users.id ";
 
 		}
 		else
 		{
-                  $query = "SELECT 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
-                        INNER JOIN leaddetails
-                        ON crmentity.crmid=leaddetails.leadid
-                        LEFT JOIN leadsubdetails
-                        ON leaddetails.leadid = leadsubdetails.leadsubscriptionid
-                        LEFT JOIN leadaddress
-                        ON leaddetails.leadid=leadaddress.leadaddressid
-			LEFT JOIN users
-                        ON crmentity.smownerid = users.id ";
+			$query = "SELECT 
+				leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
+				INNER JOIN leaddetails
+				ON crmentity.crmid=leaddetails.leadid
+				LEFT JOIN leadsubdetails
+				ON leaddetails.leadid = leadsubdetails.leadsubscriptionid
+				LEFT JOIN leadaddress
+				ON leaddetails.leadid=leadaddress.leadaddressid
+				LEFT JOIN users
+				ON crmentity.smownerid = users.id ";
 		}
 
-                        $where_auto = " users.status='Active'
-                        AND crmentity.deleted=0 AND leaddetails.converted =0";
+		$where_auto = " users.status='Active'
+			AND crmentity.deleted=0 AND leaddetails.converted =0";
 
-                if($where != "")
-                        $query .= "where ($where) AND ".$where_auto;
-                else
-                        $query .= "where ".$where_auto;
+		if($where != "")
+			$query .= "where ($where) AND ".$where_auto;
+		else
+			$query .= "where ".$where_auto;
 
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
+		if(!empty($order_by))
+			$query .= " ORDER BY $order_by";
 
-                return $query;
-        }
+		return $query;
+	}
 
 
 	
