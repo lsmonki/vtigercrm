@@ -1081,6 +1081,32 @@ function constructArray($var)
    	}
 }
 
+function constructSingleStringValueArray($var)
+{
+
+        $size = sizeof($var);
+        $i=1;
+        if (is_array($var))
+        {
+                $code = 'array(';
+                foreach ($var as $key => $value)
+                {
+                        if($i<$size)
+                        {
+                                $code .= $key."=>'".$value."',";
+                        }
+                        else
+                        {
+                                $code .= $key."=>'".$value."'";
+                        }
+                        $i++;
+                }
+                $code .= ')';
+                return $code;
+        }
+}
+
+
 function constructSingleArray($var)
 {
 	if (is_array($var))
