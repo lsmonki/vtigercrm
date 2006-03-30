@@ -153,25 +153,8 @@ if(isset($CActionDtls))
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Leads&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML = '<td><a href="index.php?module=Leads&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Leads&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
-	$customstrings = '<td>'.$app_strings[LBL_VIEW].'</td>
-			<td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Leads\')">
-				'.$customviewcombo_html.'
-                        </SELECT></td>
-			'.$cvHTML;
 
 
 $custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
@@ -181,7 +164,8 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Lead');
 $smarty->assign("BUTTONS",$other_text);
