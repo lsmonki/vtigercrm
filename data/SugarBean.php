@@ -159,18 +159,6 @@ class SugarBean
 		return $this->id;
 	}
 
-    /** 
-     * This function is a good location to save changes that have been made to a relationship.
-     * This should be overriden in subclasses that have something to save.
-     * param $is_update true if this save is an update.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
-     */
-    function save_relationship_changes($is_update)
-    {
-    	
-    }
     
     /**
      * This function retrieves a record of the appropriate type from the DB.
@@ -207,7 +195,27 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 			}
 		}
 
+		$this->fill_in_additional_detail_fields();
+
 		return $this;
+	}
+
+	/**
+	 * This function returns a paged list of the current object type.  It is intended to allow for
+	 * hopping back and forth through pages of data.  It only retrieves what is on the current page.
+	 * This method must be called on a new instance.  It trashes the values of all the fields in the current one.
+	 */
+	function get_lead_list($order_by = "", $where = "", $row_offset = 0) {
+		$query = $this->create_lead_list_query($order_by, $where);
+		return $this->process_list_query($query, $row_offset);
+	}
+		
+	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1, $max=-1) {
+		$this->log->debug("get_list:  order_by = '$order_by' and where = '$where' and limit = '$limit'");
+		
+		$query = $this->create_list_query($order_by, $where);
+		
+		return $this->process_list_query($query, $row_offset, $limit, $max);
 	}
 
 	/**
@@ -239,6 +247,63 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		return $query;
 	}
 	
+
+	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
+	{
+		global $list_max_entries_per_page;
+		$this->log->debug("process_list_query: ".$query);
+		if(!empty($limit) && $limit != -1){
+			$result =& $this->db->limitQuery($query, $row_offset + 0, $limit,true,"Error retrieving $this->object_name list: ");
+		}else{
+			$result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
+		}
+
+		$list = Array();
+		if($max_per_page == -1){
+			$max_per_page 	= $list_max_entries_per_page;
+		}
+		$rows_found =  $this->db->getRowCount($result);
+
+		$this->log->debug("Found $rows_found ".$this->object_name."s");
+                
+		$previous_offset = $row_offset - $max_per_page;
+		$next_offset = $row_offset + $max_per_page;
+
+		if($rows_found != 0)
+		{
+
+			// We have some data.
+
+			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page || $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
+				foreach($this->list_fields as $field)
+				{
+					if (isset($row[$field])) {
+						$this->$field = $row[$field];
+						
+						
+						$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else 
+					{
+						$this->$field = "";
+					}
+				}
+
+				$this->fill_in_additional_list_fields();
+
+				$list[] = $this;
+			}
+		}
+
+		$response = Array();
+		$response['list'] = $list;
+		$response['row_count'] = $rows_found;
+		$response['next_offset'] = $next_offset;
+		$response['previous_offset'] = $previous_offset;
+
+		return $response;
+	}
+
 	function process_full_list_query($query)
 	{
 		$this->log->debug("process_full_list_query: query is ".$query);
@@ -261,6 +326,8 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 					}
 				}
 
+				$this->fill_in_additional_list_fields();
+
 				$list[] = $this;
 			}
 		}
@@ -276,6 +343,14 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
+/*	function track_view($user_id, $current_module)
+	{
+		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
+
+		$tracker = new Tracker();
+		$tracker->track_view($user_id, $current_module, $this->id, $this->get_summary_text());
+	}
+	*/
 	function track_view($user_id, $current_module,$id='')
 	{
 		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
@@ -285,10 +360,94 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	}
 
 
+	/**
+	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
+	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
+	 * This method is only used for populating extra fields in lists
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function fill_in_additional_list_fields()
+	{
+	}
+
+	/**
+	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
+	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
+	 * This method is only used for populating extra fields in the detail form
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function fill_in_additional_detail_fields()
+	{
+	}
+
+	/** This function should be overridden in each module.  It marks an item as deleted.
+	* If it is not overridden, then marking this type of item is not allowed
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function mark_deleted($id)
+	{
+		$query = "UPDATE $this->table_name set deleted=1 where id='$id'";
+		$this->db->query($query, true,"Error marking record deleted: ");
+
+		$this->mark_relationships_deleted($id);
+
+		// Take the item off of the recently viewed lists.
+		$tracker = new Tracker();
+		$tracker->delete_item_history($id);
+
+	}
+
+
 	/* This is to allow subclasses to fill in row specific columns of a list view form */
 	function list_view_parse_additional_sections(&$list_form)
 	{
 	}
+
+	/* This function assigns all of the values into the template for the list view */
+	function get_list_view_array(){
+		$return_array = Array();
+		
+		foreach($this->list_fields as $field)
+		{
+			$return_array[strtoupper($field)] = $this->$field;
+		}
+		
+		return $return_array;	
+	}
+	function get_list_view_data()
+	{
+		
+		return $this->get_list_view_array();
+	}
+
+	function get_where(&$fields_array)
+	{ 
+		$where_clause = "WHERE "; 
+		$first = 1; 
+		foreach ($fields_array as $name=>$value) 
+		{ 
+			if ($first) 
+			{ 
+				$first = 0;
+			} 
+			else 
+			{ 
+				$where_clause .= " AND ";
+			} 
+
+			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+		} 
+
+		$where_clause .= " AND deleted=0";
+		return $where_clause;
+	}
+
 
 	function retrieve_by_string_fields($fields_array, $encode=true) 
 	{ 
@@ -311,6 +470,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$this->$field = $row[$field];
 			}
 		} 
+		$this->fill_in_additional_detail_fields();
 		return $this;
 	}
 
@@ -330,6 +490,32 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 			} 
 		} 
 	}
-	
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause($value){
+			$where_clause = "WHERE "; 
+		$first = 1; 
+		foreach ($fields_array as $name=>$value) 
+		{ 
+			if ($first) 
+			{ 
+				$first = 0;
+			} 
+			else 
+			{ 
+				$where_clause .= " or";
+			} 
+
+			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+		} 
+
+		$where_clause .= " AND deleted=0";
+		return $where_clause;
+	}
+
 }
+
+
 ?>

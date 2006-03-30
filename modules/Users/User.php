@@ -478,12 +478,6 @@ class User extends SugarBean {
 		
 		return $verified;
 	}
-	function get_list_view_data(){
-		$user_fields = $this->get_list_view_array();
-		if ($this->is_admin == 'on') $user_fields['IS_ADMIN'] = 'X';
-		return $user_fields;	
-	}
-
 	
 	function getColumnNames_User()
   {
@@ -534,6 +528,29 @@ class User extends SugarBean {
 			$entries_list[]=$entries;
 		}
 		return $entries_list;
+	}
+	function fill_in_additional_list_fields()
+	{
+		$this->fill_in_additional_detail_fields();	
+	}
+	
+	function fill_in_additional_detail_fields()
+	{
+		//$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		$query = "SELECT u1.first_name, u1.last_name from users u1, users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		$result =$this->db->query($query, true, "Error filling in additional detail fields") ;
+		
+		$row = $this->db->fetchByAssoc($result);
+		$this->log->debug("additional detail query results: $row");
+		
+		if($row != null)
+		{
+			$this->reports_to_name = stripslashes($row['first_name'].' '.$row['last_name']);
+		}
+		else 
+		{
+			$this->reports_to_name = '';
+		}		
 	}
 }
 
