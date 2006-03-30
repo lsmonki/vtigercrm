@@ -21,54 +21,9 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
-/**
- * Create javascript to validate the data entered into a record.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- */
-
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
-function get_validate_record_js () 
-{
-	global $mod_strings;
-	global $app_strings;
-
-	$lbl_subject = $mod_strings['LBL_TICKET_TITLE'];
-	$err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
-
-	$the_script  = <<<EOQ
-
-		<script type="text/javascript" language="Javascript">
-		<!--  to hide script contents from old browsers
-
-		function verify_data(form) 
-		{
-			var isError = false;
-			var errorMessage = "";
-			if (trim(form.ticket_title.value) == "") 
-			{
-				isError = true;
-				errorMessage += "\\n$lbl_subject";
-			}
-			// Here we decide whether to submit the form.
-			if (isError == true) 
-			{
-				alert("$err_missing_required_fields" + errorMessage);
-				return false;
-			}
-			return true;
-		}
-	// end hiding contents from old browsers  -->
-	</script>
-
-EOQ;
-
-	return $the_script;
-}
 
 /**
  * Create HTML form to enter a new record with the minimum necessary fields.
