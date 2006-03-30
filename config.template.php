@@ -120,6 +120,9 @@ $includeDirectory = $root_directory.'include/';
 // list_max_entries_per_page default value = 20
 $list_max_entries_per_page = '20';
 
+// limitpage_navigation default value = 5
+$limitpage_navigation = '5';
+
 // history_max_viewed default value = 5
 $history_max_viewed = '5';
 
