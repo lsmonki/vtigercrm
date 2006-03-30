@@ -32,10 +32,6 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
-// Unimplemented until jscalendar language files are fixed
-// global $current_language;
-// global $default_language;
-// global $cal_codes;
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
@@ -121,7 +117,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
          $log->info("Entity info successfully retrieved for EditView.");
 	$focus->name=$focus->column_fields['name'];		
 }
-//$old_id = '';
 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
@@ -174,11 +169,8 @@ if($_REQUEST['reply'])
 	require_once(SM_PATH . 'functions/i18n.php');
 	require_once(SM_PATH . 'functions/mime.php');
 	require_once(SM_PATH .'include/load_prefs.php');
-	//require_once(SM_PATH . 'class/mime/Message.class.php');
 	require_once(SM_PATH . 'class/mime.class.php');
-	//sqgetGlobalVar('key',       $key,           SQ_COOKIE);
 	sqgetGlobalVar('username',  $username,      SQ_SESSION);
-	//sqgetGlobalVar('onetimepad',$onetimepad,    SQ_SESSION);
 	$mailbox = 'INBOX';
 
 
@@ -206,7 +198,6 @@ if($_REQUEST['reply'])
 
 		for ($u = 0; $u < $cnt; $u++)
 		{
-			//echo 'message id number is ' .$_REQUEST['passed_id']. '     imapConnection  ' .$imapConnection .'  color ' .$color. ' wrap at ' .$wrap_at . '   ent   '.$ent_ar[$u].' mailbox  '.$mailbox;
 			$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u],$_REQUEST['passed_id'] , $mailbox);
 			$msgData = $messagebody;
 		}
@@ -218,10 +209,6 @@ if($_REQUEST['reply'])
 	$theme = $tmp_theme;
 }
 //get Email Information
-
-//$disp_view = getView($focus->mode);
-
-//echo "<pre>";print_r(getBlocks("Emails",$disp_view,$focus->mode,$focus->column_fields));echo "</pre>";
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
@@ -320,48 +307,13 @@ if($focus->parent_type == "Account")
 $email_tables = Array('emails','crmentity','activity'); 
 $tabid = getTabid("Emails");
 $validationData = getDBValidationData($email_tables,$tabid);
-$fieldName = '';
-$fieldLabel = '';
-$fldDataType = '';
+$data = split_validationdataArray($validationData);
 
-$rows = count($validationData);
-foreach($validationData as $fldName => $fldLabel_array)
-{
-	if($fieldName == '')
-	{
-		$fieldName="'".$fldName."'";
-	}
-	else
-	{
-		$fieldName .= ",'".$fldName ."'";
-	}
-	foreach($fldLabel_array as $fldLabel => $datatype)
-	{
-		if($fieldLabel == '')
-		{
-
-			$fieldLabel = "'".$fldLabel ."'";
-		}		
-		else
-		{
-			$fieldLabel .= ",'".$fldLabel ."'";
-		}
-		if($fldDataType == '')
-		{
-			$fldDataType = "'".$datatype ."'";
-		}
-		else
-		{
-			$fldDataType .= ",'".$datatype ."'";
-		}
-	}
-}
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
