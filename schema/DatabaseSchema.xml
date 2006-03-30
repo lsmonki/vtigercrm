@@ -820,7 +820,6 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="contact_id" type="I" size="19">
-			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
 	
@@ -7336,26 +7335,6 @@
 		</index>
      </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<table name="campaigntype">
 		<field name="campaigntypeid" type="I" size="19">
 			<KEY/>
@@ -7380,9 +7359,6 @@
 		<data>
 		</data>
 	</table>
-
-
-
 
 	<table name="campaignstatus">
 		<field name="campaignstatusid" type="I" size="19">
@@ -7409,14 +7385,81 @@
 		<data>
 		</data>
 	</table>
-
-
-
-
-
-
-
-
+	
+	<table name="cmpnexpectedrevenue">
+		<field name="expectedrevenueid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="expectedrevenue" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="CampaignExpRev_UK01">
+			<UNIQUE/>
+			<col>expectedrevenue</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+	<table name="cmpnactualcost">
+		<field name="cmpnactualcostid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="actualcost" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="CampaignActCst_UK01">
+			<UNIQUE/>
+			<col>actualcost</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+	<table name="cmpnexpectedresponse">
+		<field name="cmpnexpectedresponseid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="expectedresponse" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="CampaignExpRes_UK01">
+			<UNIQUE/>
+			<col>expectedresponse</col>
+		</index>
+		<data>
+		</data>
+	</table>
 
 	<table name="portal">
 		<field name="portalid" type="I" size="19">
