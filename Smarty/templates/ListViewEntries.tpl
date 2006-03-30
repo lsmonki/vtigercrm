@@ -32,7 +32,24 @@
                                  </td>
 				 <td width=100% align="right">
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
-					<tr>{$CUSTOMVIEW}</tr>
+					<tr>
+						<td>{$APP.LBL_VIEW}</td>
+						<td style="padding-left:5px;padding-right:5px">
+						    <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
+						    {if $ALL eq 'All'}
+							<td><a href="index.php?module={$MODULE}&action=CustomView">{$APP.LNK_CV_CREATEVIEW}</a>
+							<span class="small">|</span>
+                                                        <span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+							<span class="small">|</span>
+                                                        <span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
+						    {else}
+							<td><a href="index.php?module={$MODULE}&action=CustomView">{$APP.LNK_CV_CREATEVIEW}</a>
+							<span class="small">|</span>
+							<a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}">{$APP.LNK_CV_EDIT}</a>
+							<span class="small">|</span>
+							<a href="index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}">{$APP.LNK_CV_DELETE}</a></td>
+						    {/if}	
+					</tr>
 				   </table>
 				 </td>	
                		      </tr>
