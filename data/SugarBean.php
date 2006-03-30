@@ -207,8 +207,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 			}
 		}
 
-		$this->fill_in_additional_detail_fields();
-
 		return $this;
 	}
 
@@ -263,8 +261,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 					}
 				}
 
-				$this->fill_in_additional_list_fields();
-
 				$list[] = $this;
 			}
 		}
@@ -315,7 +311,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$this->$field = $row[$field];
 			}
 		} 
-		$this->fill_in_additional_detail_fields();
 		return $this;
 	}
 
