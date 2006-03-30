@@ -23,11 +23,10 @@ global $entityDel;
 global $display;
 global $category;
 require_once('include/utils/utils.php');
-//$phpbb_root_path='./modules/MessageBoard/';
-if (substr(phpversion(), 0, 1) == "5") {
+//if (substr(phpversion(), 0, 1) == "5") {
 // while using php5, in graphs we get illegal exception
  //       ini_set("zend.ze1_compatibility_mode", "1");
-}
+//}
 
 if (version_compare(phpversion(), '5.0') < 0) {
     eval('
@@ -38,10 +37,6 @@ if (version_compare(phpversion(), '5.0') < 0) {
   }
 
 global $currentModule;
-//if(!isset($category))
-  //  $category=getParentTabName(1);
-//else
-  //  $category=getParentTabName($currentModule);
 function fetchPermissionDataForTabList()
 {
   $permittedTabs = $_SESSION['tab_permission_set'];
@@ -74,12 +69,7 @@ function fetchPermissionData($module,$action)
 	require_once('include/utils/UserInfoUtil.php');
 	$tabid = getTabid($module);
 
-	//echo 'tab id isss  '.$tabid;
-	//echo '<BR>';
-
 	$actionid = getActionid($action);
-	//echo 'action idd isss '.$actionid;
-	//echo '<BR>';
 	$profile_id = $_SESSION['authenticated_user_profileid'];
 	$tab_per_Data = getAllTabsPermission($profile_id);
 
@@ -87,92 +77,6 @@ function fetchPermissionData($module,$action)
 	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
 	$others_permission_id = $defSharingPermissionData[$tabid];
 	
-/*
-	$i=0;
-
-	
-
-	$accessFlag = false;
-	if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
-	{
-		$rec_owner_id = getUserId($_REQUEST['record']);
-	}
-	if($tab_per_Data[$tabid] !=0)
-	{
-		echo "You are not permitted to execute this operation";
-                $display = "No";
-	}
-
-	if($permissionData[$tabid][$actionid] !=0)
-	{
-		echo "You are not permitted to execute this operation";
-		$display = "No";
-	}
-	elseif(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
-	{
-		//$rec_owner_id = getUserId($_REQUEST['record']);
-		if($rec_owner_id != $current_user->id)
-		{
-			if($others_permission_id == 0)
-			{
-				if($action == 'EditView' || $action == 'Delete')
-				{
-					echo "You are not permitted to execute this operation";
-			                $display = "No";	
-				}
-				else
-				{
-					return;
-				}
-			}
-			elseif($others_permission_id == 1)
-			{
-				if($action == 'Delete')
-				{
-					echo "You are not permitted to execute this operation";
-			                $display = "No";	
-				}
-				else
-				{
-					return;
-				}
-			}
-			elseif($others_permission_id == 2)
-			{
-				
-				return;
-			}
-			elseif($others_permission_id == 3)
-			{
-				if($action == 'DetailView' || $action == 'EditView' || $action == 'Delete')
-				{
-					echo "You are not permitted to execute this operation";
-			                $display = "No";	
-				}
-				else
-				{
-					return;
-				}
-			}
-				
-			
-		}
-		else
-		{
-			return;
-		}
-	}
-	else
-	{
-		return;
-	}
-
-	if(!$accessFlag)
-	{
-		echo "You are not permitted to execute this operation";
-		$display = "No";
-	}
-*/
 }
 
 //we have to do this as there is no UI page for Delete. Hence, when the user clicks delete, it gets stuck halfway and the page looks ugly because the theme is not set
@@ -216,47 +120,6 @@ function checkDeletePermission($tabid)
         $_GET = array_map("stripslashes_checkstrings", $_GET);
 
 }
-
-// Simulating the login process of forums here 
-//This needs to be called only once. This check has been put so that common.php does not get invoked time and again
-	if(isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login']) || isset($HTTP_POST_VARS['Logout']) || isset($HTTP_GET_VARS['Logout']))
-	{
-	/*
-		if((isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login'])) && !$userdata['session_logged_in'])
-		{
-			//now log in to the Forums for the current user
-		/*
-			include($phpbb_root_path . 'common.php');
-
-		 	//$sql = "SELECT user_id, username, user_password, user_active, user_level
-                        //	FROM " . USERS_TABLE . "
-	                  //      WHERE username = '" . $HTTP_POST_VARS['user_name'] . "'";
-        	        if ( !($result = $db->sql_query($sql)) )
-                	{
-                        	message_die(GENERAL_ERROR, 'Error in obtaining userdata', '', __LINE__, __FILE__, $sql);
-                	}
-			$password=$HTTP_POST_VARS['user_password'];
-			$username=$HTTP_POST_VARS['user_name'];
-                	if( $row = $db->sql_fetchrow($result) )
-                	{
-                        	if( $row['user_level'] != ADMIN && $board_config['board_disable'] )
-                        	{
-                        	}
-                        	else
-                        	{
-		                         if( md5($password) == $row['user_password'] && $row['user_active'] )
-                	                {	
-						$autologin = 0;
-
-                                	        $session_id = session_begin($row['user_id'], $user_ip, PAGE_INDEX, FALSE, $autologin);
-                                	}
-                        	}
-                	}
-
-		}
-	*/
-	}
-
 
 // Allow for the session information to be passed via the URL for printing.
 if(isset($_REQUEST['PHPSESSID']))
@@ -539,10 +402,6 @@ $app_strings = return_application_language($current_language);
 $app_list_strings = return_app_list_strings_language($current_language);
 $mod_strings = return_module_language($current_language, $currentModule);
 
-//TODO: Clint - this key map needs to be moved out of $app_list_strings since it never gets translated.
-//              best to just have an upgrade script that changes the parent_type column from Account to Accounts, etc.
-$app_list_strings['record_type_module'] = array('Account' => 'Accounts','Potential' => 'Potentials', 'Case' => 'Cases');
-
 //If DetailView, set focus to record passed in
 if($action == "DetailView")
 {
@@ -633,10 +492,6 @@ if($action == "DetailView")
 			break;
 		}
 	
-		
-	//$focus->retrieve($_REQUEST['record']);
-        //$focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
-	
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
         {
                 // Only track a viewing if the record was retrieved.
@@ -662,7 +517,6 @@ if (isset($_SESSION['authenticated_user_language'])) {
 //skip headers for popups, deleting, saving, importing and other actions
 if(!$skipHeaders) {
 	$log->debug("including headers");
-	//include('themes/'.$theme.'/header.php');
 	if($use_current_login)
 	{
 		if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
@@ -804,14 +658,12 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<table width=20% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 		echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
 		
-		//echo "Click <a href='copyright.html' onclick='popup()'>Link to popup</a>";
                 echo "&copy; Click <a href ='javascript:mypopup()'>here</a> for Copyright details.<br>";
 		echo "</td></tr></table></td></tr></table>\n";
 
 		echo "<table align='center'><tr><td align='center'>";
-		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements in both
-		// the code and end-user application.
-		//echo("<br>&copy; 2004 <a href='http://www.sugarcrm.com' target='_blank'>SugarCRM Inc.</a> All Rights Reserved.<BR />");	
+		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
+		// in both the code and end-user application.
 		if($calculate_response_time)
 		{
 			$endTime = microtime();
