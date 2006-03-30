@@ -26,9 +26,7 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
 require_once('include/utils/utils.php');
 
-global $app_strings;
-global $app_list_strings;
-global $mod_strings;
+global $app_strings,$app_list_strings,$mod_strings,$theme;
 
 $focus = new Note();
 $smarty = new vtigerCRM_Smarty();
@@ -92,7 +90,6 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
 
 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
