@@ -121,28 +121,8 @@ if(isset($CActionDtls))
 }
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Contacts&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
-
-	$customstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
-		<td style="padding-left:5px;padding-right:5px">
-		<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Contacts\')">
-			'.$customviewcombo_html.'
-		</SELECT></td>
-		'.$cvHTML;
-
-//
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -184,10 +164,11 @@ $custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
