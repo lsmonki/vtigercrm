@@ -903,29 +903,32 @@ function getHeaderArray()
 {
 	global $adb;
 	global $current_user;
-        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	$query='select parenttabid from parenttab order by sequence';
-	$result = $adb->query($query);
-    	$noofrows = $adb->num_rows($result);
-	for($i=0; $i<$noofrows; $i++)
-    	{
-		$subtabs =array();
-		$parenttabid = $adb->query_result($result,$i,"parenttabid");
-		$query1 = 'select tabid from parenttabrel where parenttabid='.$parenttabid.' order by sequence';
-		$result1 = $adb->query($query1);
-		$noofsubtabs = $adb->num_rows($result1);
-		for($j=0; $j<$noofsubtabs; $j++)
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	include('parent_tabdata.php');
+	include('tabdata.php');
+	$noofrows = count($parent_tab_info_array);
+	foreach($parent_tab_info_array as $parid=>$parval)
+	{
+		$subtabs = Array();
+		$tablist=$parent_child_tab_rel_array[$parid];
+		$noofsubtabs = count($tablist);
+
+		foreach($tablist as $childTabId)
 		{
-			$subtabid = $adb->query_result($result1,$j,"tabid");
-			$module = getTabModuleName($subtabid);
-			//$subtabs[] = getTabname($subtabid); 
+			$module = array_search($childTabId,$tab_info_array);
+			
 			if($is_admin)
-			$subtabs[] = $module;
-			elseif($profileGlobalPermission[2]==0 ||$profileGlobalPermission[1]==0 || $profileTabsPermission[$subtabid]==0) 
-			$subtabs[] = $module;
+			{
+				$subtabs[] = $module;
+			}	
+			elseif($profileGlobalPermission[2]==0 ||$profileGlobalPermission[1]==0 || $profileTabsPermission[$childTabId]==0) 
+			{
+				$subtabs[] = $module;
+			}	
 		}
-		$parenttab = getParentTabName($parenttabid);
-		
+
+		$parenttab = getParentTabName($parid);
+
 		if($parenttab == 'Settings' && $is_admin)
 		{
 			$subtabs[] = 'Settings';
@@ -933,7 +936,7 @@ function getHeaderArray()
 		if($parenttab != 'Settings' ||($parenttab == 'Settings' && $is_admin))
 		{
 			if(!empty($subtabs))
-			$relatedtabs[$parenttab] = $subtabs;
+				$relatedtabs[$parenttab] = $subtabs;
 		}
 	}
 	return $relatedtabs;
@@ -1261,7 +1264,6 @@ function setObjectValuesFromRequest($focus)
 
 
 
-
  /**
  * Function to write the tabid and name to a flat file tabdata.txt so that the data
  * is obtained from the file instead of repeated queries
@@ -1284,9 +1286,6 @@ function create_tab_data_file()
                 $result_array[$tabname]=$tabid;
 
         }
-        echo '<BR>****************<BR>';
-        print_r($result_array);
-        echo '<BR>****************<BR>';
 
         $filename = 'tabdata.php';
 	
@@ -1323,6 +1322,93 @@ if (file_exists($filename)) {
 		echo "The file $filename does not exist";
 		return;
 			}
+}
+
+
+ /**
+ * Function to write the parenttabid and name to a flat file parent_tabdata.txt so that the data
+ * is obtained from the file instead of repeated queries
+ * returns null
+ */
+
+function create_parenttab_data_file()
+{
+	global $log;
+	$log->info("creating parent_tabdata file");
+	global $adb;
+	$sql = "select parenttabid,parenttab_label from parenttab order by sequence";
+	$result = $adb->query($sql);
+	$num_rows=$adb->num_rows($result);
+	$result_array=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$parenttabid=$adb->query_result($result,$i,'parenttabid');
+		$parenttab_label=$adb->query_result($result,$i,'parenttab_label');
+		$result_array[$parenttabid]=$parenttab_label;
+
+	}
+
+	$filename = 'parent_tabdata.php';
+
+
+	if (file_exists($filename)) {
+
+		if (is_writable($filename))
+		{
+
+			if (!$handle = fopen($filename, 'w+'))
+			{
+				echo "Cannot open file ($filename)";
+				exit;
+			}
+			require_once('modules/Users/CreateUserPrivilegeFile.php');
+			$newbuf='';
+			$newbuf .="<?php\n\n";
+			$newbuf .="\n";
+			$newbuf .= "//This file contains the commonly used variables \n";
+			$newbuf .= "\n";
+			$newbuf .= "\$parent_tab_info_array=".constructSingleStringValueArray($result_array).";\n";
+			$newbuf .="\n";
+			
+
+			$parChildTabRelArray=Array();
+
+			foreach($result_array as $parid=>$parvalue)
+			{
+				$childArray=Array();
+				$sql = "select * from parenttabrel where parenttabid=".$parid." order by sequence";
+				$result = $adb->query($sql);
+				$num_rows=$adb->num_rows($result);
+				$result_array=Array();
+				for($i=0;$i<$num_rows;$i++)
+				{
+					$tabid=$adb->query_result($result,$i,'tabid');
+					$childArray[]=$tabid;
+				}
+				$parChildTabRelArray[$parid]=$childArray;
+
+			}
+			$newbuf .= "\n";
+			$newbuf .= "\$parent_child_tab_rel_array=".constructTwoDimensionalValueArray($parChildTabRelArray).";\n";
+			$newbuf .="\n";
+			 $newbuf .="\n";
+                        $newbuf .="\n";
+                        $newbuf .= "?>";
+                        fputs($handle, $newbuf);
+                        fclose($handle);
+
+		}
+		else
+		{
+			echo "The file $filename is not writable";
+		}
+
+	}
+	else
+	{
+		echo "The file $filename does not exist";
+		return;
+	}
 }
 
 
