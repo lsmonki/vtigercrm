@@ -78,25 +78,8 @@ if(isPermitted('Vendors',2,'') == 'yes')
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Vendors&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML = '<td><a href="index.php?module=Vendors&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Vendors&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Vendors&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
-	$customviewstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
-			<td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Vendors\')">
-				'.$customviewcombo_html.'
-                        </SELECT></td>
-			'.$cvHTML;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -160,7 +143,8 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Vendors",$list_result,$navigation_array,'','&return_module=Vendors&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
-$smarty->assign("CUSTOMVIEW",$customviewstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendors","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','vendorname','true','basic',"","","","",$viewid);
 $smarty->assign("ALPHABETICAL", $alphabetical);
