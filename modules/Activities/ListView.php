@@ -34,13 +34,7 @@ global $list_max_entries_per_page;
 
 $log = LoggerManager::getLogger('task_list');
 
-global $currentModule;
-
-global $image_path;
-global $theme;
-global $adb;
-// focus_list is the means of passing data to a ListView.
-global $focus_list;
+global $currentModule,$image_path,$theme,$adb;
 
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
@@ -81,33 +75,13 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Activities&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}
-else
-{
-$cvHTML = '<td><a href="index.php?module=Activities&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
 
 if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-	$customviewstrings='<td>'.$app_strings['LBL_VIEW'].'</td>
-			<td style="padding-left:5px;padding-right:5px">
-			<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
-				'.$customviewcombo_html.'
-			</SELECT></td>
-			'.$cvHTML;
-//
-
 global  $task_title;
 $title_display = $current_module_strings['LBL_LIST_FORM_TITLE'];
 if ($task_title) $title_display= $task_title;
@@ -142,8 +116,8 @@ if(isset($order_by) && $order_by != '')
 $list_result = $adb->query($list_query);
 
 //Constructing the list view
-
-$smarty->assign("CUSTOMVIEW", $customviewstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
