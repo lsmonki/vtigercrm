@@ -183,135 +183,125 @@ class CRMEntity extends SugarBean
   }
 
 
-  function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
-  {
-    $date_var = date('YmdHis');
-    // global $current_user;
-    global $adb;
-    //global $root_directory;
-	global $log;
-
-    $ownerid = $user_id;
-		
-
-    if($filesize != 0)
-    {
-      $data = base64_encode(fread(fopen($filedata, "r"), $filesize));
-    }
-		
-    $current_id = $adb->getUniqueID("crmentity");
-
-    if($module=='Emails') 
-    { 
-	$log->info("module is ".$module);
-      $idname='emailid';      $tablename='emails';    $descname='description';}
-    else     
-    { 
-      $idname='notesid';      $tablename='notes';     $descname='notecontent';}
-	$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
-    $adb->query($sql);
-
-	$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
-    $adb->query($sql1);
-
-    //$this->id = $current_id;
-
-	$sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) values(".$current_id.",'".$filename."','"."','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
-    $result=$adb->query($sql2);
-
-    if($result!=false)
-      $result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
-
-    $sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
-    $adb->query($sql3);
-  }
-        
-
-
-
-  function insertIntoAttachment($id,$module)
-  {
-	$date_var = date('YmdHis');
-	global $current_user;
-	global $adb;
-	global $root_directory;
-	global $upload_badext;
-
-	$ownerid = $this->column_fields['assigned_user_id'];
-	$adb->println("insertattach ownerid=".$ownerid." mod=".$module);
-	$adb->println($this->column_fields);	
-
-	if(!isset($ownerid) || $ownerid=='')
-		$ownerid = $current_user->id;
-
-	$uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
-	// Arbitrary File Upload Vulnerability fix - Philip
-	$binFile = $_FILES['filename']['name'];
-	$ext_pos = strrpos($binFile, ".");
-
-	$ext = substr($binFile, $ext_pos + 1);
-
-	if (in_array($ext, $upload_badext))
+	function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
 	{
-		$binFile .= ".txt";
-	}
-	// Vulnerability fix ends
+		$date_var = date('YmdHis');
+		global $current_user;
+		global $adb;
+		//global $root_directory;
+		global $log;
 
-	$filename = basename($binFile);
-	$filetype= $_FILES['filename']['type'];
-	$filesize = $_FILES['filename']['size'];
-
-	if($binFile != '')
-	{
-		if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$binFile))
+		$ownerid = $user_id;
+		
+		if($filesize != 0)
 		{
-			//$binFile = $_FILES['filename']['name'];
-			//$filename = basename($binFile);
-			//$filetype= $_FILES['filename']['type'];
-			//$filesize = $_FILES['filename']['size'];
-
-			if($filesize != 0)
-			{
-				$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-			}
+			$data = base64_encode(fread(fopen($filedata, "r"), $filesize));
 		}
+		
 		$current_id = $adb->getUniqueID("crmentity");
 
-		//This is only to update the attached filename in the notes table for the Notes module
-		if($module=='Notes')
-		{
-			$sql="update notes set filename='".$filename."' where notesid = ".$id;
-			$adb->query($sql);
+		if($module=='Emails') 
+		{ 
+			$log->info("module is ".$module);
+			$idname='emailid';      $tablename='emails';    $descname='description';
+		}
+		else     
+		{ 
+			$idname='notesid';      $tablename='notes';     $descname='notecontent';
 		}
 
-		$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+		$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
+		$adb->query($sql);
+
+		$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
 		$adb->query($sql1);
 
-		//$this->id = $current_id;
-		$sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) values(".$current_id.",'".$filename."','".$this->column_fields[$descname]."','".$filetype."','".$filesize."',".$adb->getEmptyBlob().")";
-
+		$sql2="insert into attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','"."','".$filetype."')";
 		$result=$adb->query($sql2);
 
-		if($result!=false)
-			$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
+		//TODO -- instead of put contents in db now we should store the file in harddisk
 
-		if($_REQUEST['mode'] == 'edit')
-		{
-			if($id != '' && $_REQUEST['fileid'] != '')
-			{
-				$delquery = 'delete from seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
-				$adb->query($delquery);
-			}
-		}
-		if($module == 'Notes')
-		{
-			$query = "delete from seattachmentsrel where crmid = ".$id;
-			$adb->query($query);
-		}
 		$sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
 		$adb->query($sql3);
 	}
-  }
+
+
+
+	function insertIntoAttachment($id,$module)
+	{
+		$date_var = date('YmdHis');
+		global $current_user;
+		global $adb;
+		global $root_directory;
+		global $upload_badext;
+
+		$ownerid = $this->column_fields['assigned_user_id'];
+
+		if(!isset($ownerid) || $ownerid=='')
+			$ownerid = $current_user->id;
+
+		$uploaddir = $root_directory ."/test/upload/";
+		// Arbitrary File Upload Vulnerability fix - Philip
+		$binFile = $_FILES['filename']['name'];
+		$ext_pos = strrpos($binFile, ".");
+
+		$ext = substr($binFile, $ext_pos + 1);
+
+		if (in_array($ext, $upload_badext))
+		{
+			$binFile .= ".txt";
+		}
+		// Vulnerability fix ends
+
+		$filename = basename($binFile);
+		$filetype= $_FILES['filename']['type'];
+		$filesize = $_FILES['filename']['size'];
+
+		if($binFile != '')
+		{
+			if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$binFile))
+			{
+				if($filesize != 0)
+				{
+					$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+				}
+			}
+			$current_id = $adb->getUniqueID("crmentity");
+
+			//This is only to update the attached filename in the notes table for the Notes module
+			if($module=='Notes')
+			{
+				$sql="update notes set filename='".$filename."' where notesid = ".$id;
+				$adb->query($sql);
+			}
+
+			$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+			$adb->query($sql1);
+
+			$sql2="insert into attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','".$this->column_fields[$descname]."','".$filetype."')";
+			$result=$adb->query($sql2);
+
+			//TODO -- instead of put contents in db now we should store the file in harddisk
+
+			if($_REQUEST['mode'] == 'edit')
+			{
+				if($id != '' && $_REQUEST['fileid'] != '')
+				{
+					$delquery = 'delete from seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
+					$adb->query($delquery);
+				}
+			}
+			if($module == 'Notes')
+			{
+				$query = "delete from seattachmentsrel where crmid = ".$id;
+				$adb->query($query);
+			}
+			$sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
+			$adb->query($sql3);
+		}
+	}
+
+
 
   function insertIntoCrmEntity($module,$migration='')
   {
