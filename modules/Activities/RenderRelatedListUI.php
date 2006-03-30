@@ -133,6 +133,4 @@ require_once('include/utils/UserInfoUtil.php');
 		
 	}
 
-}
-
 ?>
