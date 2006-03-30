@@ -255,12 +255,24 @@ function get_group_options()
 
 function getTabid($module)
 {
+
+ if (file_exists('tabdata.php')) 
+	{
+	global $log;
+        $log->info("the file exists");
+		include('tabdata.php');
+		$tabid= $tab_info_array[$module];
+	}
+	else
+	{	
+
         global $log;
         $log->info("module  is ".$module);
         global $adb;
 	$sql = "select tabid from tab where name='".$module."'";
 	$result = $adb->query($sql);
 	$tabid=  $adb->query_result($result,0,"tabid");
+	}
 	return $tabid;
 
 }
@@ -1245,6 +1257,79 @@ function setObjectValuesFromRequest($focus)
 		}
 	}
 }
+
+
+
+
+
+ /**
+ * Function to write the tabid and name to a flat file tabdata.txt so that the data
+ * is obtained from the file instead of repeated queries
+ * returns null
+ */
+
+function create_tab_data_file()
+{
+        global $log;
+        $log->info("creating tabdata file");
+        global $adb;
+        $sql = "select * from tab";
+        $result = $adb->query($sql);
+        $num_rows=$adb->num_rows($result);
+        $result_array=Array();
+        for($i=0;$i<$num_rows;$i++)
+        {
+                $tabid=$adb->query_result($result,$i,'tabid');
+                $tabname=$adb->query_result($result,$i,'name');
+                $result_array[$tabname]=$tabid;
+
+        }
+        echo '<BR>****************<BR>';
+        print_r($result_array);
+        echo '<BR>****************<BR>';
+
+        $filename = 'tabdata.php';
+	
+	
+if (file_exists($filename)) {
+
+        if (is_writable($filename))
+        {
+
+                if (!$handle = fopen($filename, 'w+')) {
+                        echo "Cannot open file ($filename)";
+                        exit;
+                }
+	require_once('modules/Users/CreateUserPrivilegeFile.php');
+                $newbuf='';
+                $newbuf .="<?php\n\n";
+                $newbuf .="\n";
+                $newbuf .= "//This file contains the commonly used variables \n";
+                $newbuf .= "\n";
+                $newbuf .= "\$tab_info_array=".constructArray($result_array).";\n";
+                $newbuf .= "?>";
+                fputs($handle, $newbuf);
+                fclose($handle);
+
+        }
+        else
+        {
+                echo "The file $filename is not writable";
+        }
+
+                          }
+			else
+			{
+		echo "The file $filename does not exist";
+		return;
+			}
+}
+
+
+
+
+
+
 
 
 ?>
