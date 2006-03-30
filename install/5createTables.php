@@ -120,6 +120,7 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 create_tab_data_file();
+create_parenttab_data_file()
 rename("install.php", $renamefile."install.php.txt");
 rename("install/", $renamefile."install/");
 
