@@ -742,12 +742,22 @@ function getTabname($tabid)
 
 function getTabModuleName($tabid)
 {
+	if (file_exists('tabdata.php'))
+        {
+	global $log;
+        $log->info("the file exists");
+                include('tabdata.php');
+		$tabname = array_search($tabid,$tab_info_array);
+        }
+        else
+        {
 	global $log;
         $log->info("tab id is ".$tabid);
         global $adb;
         $sql = "select name from tab where tabid='".$tabid."'";
         $result = $adb->query($sql);
         $tabname=  $adb->query_result($result,0,"name");
+	}
         return $tabname;
 }
 
