@@ -80,26 +80,8 @@ if(isPermitted('Invoice',2,'') == 'yes')
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Invoice&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML = '<td><a href="index.php?module=Invoice&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Invoice&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Invoice&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
-	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'</td>
-			  <td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Invoice\')">
-				'.$customviewcombo_html.'
-                          </SELECT></td>
-			'.$cvHTML;
-
-
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -108,7 +90,8 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Invoice');
-$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
