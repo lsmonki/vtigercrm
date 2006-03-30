@@ -737,7 +737,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				{	
 					$mycrmid=$adb->query_result($myresult,$i,'crmid');
 					$parent_module = getSalesEntityType($mycrmid);
-					//echo $mycrmid.'id<br>'.$parent_module;
 					if($parent_module == "Leads")
 					{
 						$sql = "select firstname,lastname,email from leaddetails where leadid=".$mycrmid;
@@ -1184,12 +1183,7 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_type='')
 {
-	//echo '*******************************<br>';
-	//echo '<pre>';print_r($col_fields);echo '</pre>';
-	//echo '*******************************<br>';
-	//retreive the tabid	
 	global $adb;
-	//$tabid = getTabid($module);
 	$editview_arr = Array();
 
 	global $current_user;
@@ -1226,7 +1220,6 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
-	//$output='';
 	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
 		 global $log;
@@ -1248,12 +1241,9 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
-		//$output .= '<tr>';
 		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-		//$output .= $custfld;	
 		$editview_arr[]=$custfld;
 		if ($mvAdd_flag == true)
-		//$output .= $moveAddress;
 		$mvAdd_flag = false;
 		$i++;
 		if($i<$noofrows)
@@ -1265,18 +1255,10 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
-			//$output .= '';
 			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);			
-			//$output .= $custfld;
-			//echo '<pre>';print_r($custfld);echo '</pre>';		
-			//die;
 			$editview_arr[]=$custfld;
 		}
-		//$output .= '</tr>';
-		//echo '<pre>';print_r($editview_arr);echo '</pre>';
-			
 	}
-	//return $output;
 	for ($i=0,$j=0;$i<count($editview_arr);$i=$i+2,$j++)
         {
                 $key1=$editview_arr[$i];
@@ -1291,9 +1273,49 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
                 $return_data[$j]=array(0 => $key1,1 => $key2);
         }
         return $return_data;	
-	//return $editview_arr;
 		
-		
+}
+
+function split_validationdataArray($validationData)
+{
+	$fieldName = '';
+	$fieldLabel = '';
+	$fldDataType = '';
+	$rows = count($validationData);
+	foreach($validationData as $fldName => $fldLabel_array)
+	{
+		if($fieldName == '')
+		{
+			$fieldName="'".$fldName."'";
+		}
+		else
+		{
+			$fieldName .= ",'".$fldName ."'";
+		}
+		foreach($fldLabel_array as $fldLabel => $datatype)
+		{
+			if($fieldLabel == '')
+			{
+				$fieldLabel = "'".$fldLabel ."'";
+			}
+			else
+			{
+				$fieldLabel .= ",'".$fldLabel ."'";
+			}
+			if($fldDataType == '')
+			{
+				$fldDataType = "'".$datatype ."'";
+			}
+			else
+			{
+				$fldDataType .= ",'".$datatype ."'";
+			}
+		}
+	}
+	$data['fieldname'] = $fieldName;
+	$data['fieldlabel'] = $fieldLabel;
+	$data['datatype'] = $fldDataType;
+	return $data;
 }
 
 
