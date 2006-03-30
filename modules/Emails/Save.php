@@ -47,14 +47,8 @@ require_once('include/database/PearDatabase.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Email();
-if(isset($_REQUEST['record']))
-{
-        $focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-        $focus->mode = $_REQUEST['mode'];
-}
+
+setObjectValuesFromRequest(&$focus);
 
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
@@ -135,8 +129,6 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 function checkIfContactExists($mailid)
 {
 	global $adb;
-	//query being changed so that the deleted contacts are not considered
-	//$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= '".$mailid ."' ";
 	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= ".PearDatabase::quote($mailid);
 	$result = $adb->query($sql);
 	$numRows = $adb->num_rows($result);
@@ -150,40 +142,6 @@ function checkIfContactExists($mailid)
 	}
 }
 
-//Added for retrieve the old existing attachments when duplicated without new attachment
-//this code will only assign the file name, type and size where these values will be saved in saveentity function call
-//But the update blob will fail because of tmp_name. this update blob is added after save function called.
-if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
-{
-	//$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
-	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".PearDatabase::quote($_REQUEST['old_id']);
-
-	$result = $adb->query($sql);
-	if($adb->num_rows($result) != 0)
-		$attachmentid = $adb->query_result($result,0,'attachmentsid');
-	if($attachmentid != '')
-	{
-		$attachquery = "select * from attachments where attachmentsid = ".PearDatabase::quote($attachmentid);
-		$result = $adb->query($attachquery);
-		$filename = $adb->query_result($result,0,'name');
-		$filetype = $adb->query_result($result,0,'type');
-		$filesize = $adb->query_result($result,0,'attachmentsize');
-		$data = $adb->query_result($result,0,'attachmentcontents');
-		$_FILES['filename']['name'] = $filename;
-		$_FILES['filename']['type'] = $filetype;
-		$_FILES['filename']['size'] = $filesize;
-	}
-}
-
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-}
-
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
@@ -192,17 +150,6 @@ $focus->save("Emails");
 
 $return_id = $focus->id;
 $email_id = $return_id;
-
-//Added for update the existing attachments when duplicated without new attachment
-//this is to update the blob with the data retrieved from the database
-if($attachmentid != '')
-{
-	//$sql = "select attachmentsid from seattachmentsrel where crmid=".$focus->id;
-	$sql = "select attachmentsid from seattachmentsrel where crmid=".PearDatabase::quote($focus->id);
-	$attachmentid = $adb->query_result($adb->query($sql),0,'attachmentsid');
-	//$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$attachmentid."' and name='".$filename."'",$data);
-	$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".PearDatabase::quote($attachmentid)."' and name='".PearDatabase::quote($filename)."'",$data);
-}
 
 $focus->retrieve_entity_info($return_id,"Emails");
 

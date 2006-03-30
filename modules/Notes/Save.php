@@ -28,14 +28,8 @@ require_once('include/upload_file.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Note();
-if(isset($_REQUEST['record']))
-{
-        $focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-        $focus->mode = $_REQUEST['mode'];
-}
+
+setObjectValuesFromRequest(&$focus);
 
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
@@ -44,47 +38,9 @@ if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 	$_FILES = '';
 }
 
-//Added for retrieve the old existing attachments when duplicated without new attachment
-if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
-{
-	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
-	$result = $adb->query($sql);
-	if($adb->num_rows($result) != 0)
-		$attachmentid = $adb->query_result($result,0,'attachmentsid');
-	if($attachmentid != '')
-	{
-		$attachquery = "select * from attachments where attachmentsid = ".$attachmentid;
-		$result = $adb->query($attachquery);
-		$filename = $adb->query_result($result,0,'name');
-		$filetype = $adb->query_result($result,0,'type');
-		$filesize = $adb->query_result($result,0,'attachmentsize');
-		$data = $adb->query_result($result,0,'attachmentcontents');
-		$_FILES['filename']['name'] = $filename;
-		$_FILES['filename']['type'] = $filetype;
-		$_FILES['filename']['size'] = $filesize;
-	}
-}
-
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-}
-
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
 $focus->save("Notes");
-
-//Added for update the existing attachments when duplicated without new attachment
-if($attachmentid != '')
-{
-	$sql = "select attachmentsid from seattachmentsrel where crmid=".$focus->id;
-	$attachmentid = $adb->query_result($adb->query($sql),0,'attachmentsid');
-	$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$attachmentid."' and name='".$filename."'",$data);
-}
 
 $return_id = $focus->id;
 $note_id = $return_id;
@@ -111,7 +67,6 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_R
 $local_log->debug("Saved record with id of ".$return_id);
 
 //Redirect to EditView if the given file is not valid.
-
 if($file_upload_error)
 {
 	$return_module = 'Notes';
