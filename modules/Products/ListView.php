@@ -89,29 +89,13 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Products&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML = '<td><a href="index.php?module=Products&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Products&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
 
 if(isPermitted('Products',2,'') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-	$customstrings ='<td align="right" class="small">'.$app_strings[LBL_VIEW].'</td>
-                        <td><SELECT NAME="viewname" class="small"  onchange="showDefaultCustomView(this,\'Products\')">
-				'.$customviewcombo_html.'
-	                </SELECT></td>
-			'.$cvHTML;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -188,7 +172,8 @@ $alphabetical = AlphabeticalSearch($currentModule,'index','productname','true','
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-$smarty->assign("CUSTOMVIEW", $customstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
 
 
