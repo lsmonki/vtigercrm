@@ -21,10 +21,7 @@ $tab_id = getTabid($fld_module);
 for($i=0; $i<$noofrows; $i++)
 {
 	$fieldid =  $adb->query_result($fieldListResult,$i,"fieldid");
-	//echo 'fieldid '.$fieldid;
 		$visible = $_REQUEST[$fieldid];
-		//echo '      visible   '.$visible;
-		//echo '<BR>';
 		if($visible == 'on')
 		{
 			$visible_value = 0;
@@ -42,11 +39,6 @@ for($i=0; $i<$noofrows; $i++)
 	
 		//Updating the database
 		$update_query = "update profile2field set visible=".$visible_value." where fieldid='".$fieldid."' and profileid=".$profileid." and tabid=".$tab_id;
-		/*
-		   echo '<BR>';
-		   echo $update_query;
-		   echo '<BR>';
-		*/
 		$adb->query($update_query);
 
 }
