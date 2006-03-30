@@ -97,47 +97,11 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 $faq_tables = Array('faq'); 
 
 $validationData = getDBValidationData($faq_tables);
-$fieldName = '';
-$fieldLabel = '';
-$fldDataType = '';
+ $data = split_validationdataArray($validationData);
 
-$rows = count($validationData);
-foreach($validationData as $fldName => $fldLabel_array)
-{
-	if($fieldName == '')
-	{
-		$fieldName="'".$fldName."'";
-	}
-	else
-	{
-		$fieldName .= ",'".$fldName ."'";
-	}
-	foreach($fldLabel_array as $fldLabel => $datatype)
-	{
-		if($fieldLabel == '')
-		{
-
-			$fieldLabel = "'".$fldLabel ."'";
-		}		
-		else
-		{
-			$fieldLabel .= ",'".$fldLabel ."'";
-		}
-		if($fldDataType == '')
-		{
-			$fldDataType = "'".$datatype ."'";
-		}
-		else
-		{
-			$fldDataType .= ",'".$datatype ."'";
-		}
-	}
-}
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else
