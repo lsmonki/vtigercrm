@@ -43,7 +43,6 @@ function createUserPrivilegesfile($userid)
 			$user_role_info=getRoleInformation($user_role);
 			$user_role_parent=$user_role_info[$user_role][1];
 			$userGroupFocus=new GetUserGroups();
-			//$userGroupFocus->userRole=$user_role;
 			$userGroupFocus->getAllUserGroups($userid);
 			$subRoles=getRoleSubordinates($user_role);
 			$subRoleAndUsers=getSubordinateRoleAndUsers($user_role);
@@ -336,7 +335,7 @@ function createUserSharingPrivilegesfile($userid)
 		}
 	}
 }
-//print_r(getCombinedUserGlobalPermissions($userid));
+
 function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups)
 {
 	global $adb;
@@ -696,11 +695,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 		}
 		$mod_share_read_permission['ROLE']=$role_read_per;
 		$mod_share_write_permission['ROLE']=$role_write_per;
-		//echo '<BR>//////////////////////////<BR>';
-		//print_r($mod_share_read_permission);
-		//echo '<BR>//////////////////////////<BR>';
-		//print_r($mod_share_write_permission);
-
+		
 		//Retreiving from the grp2role sharing
 		$query="select datashare_grp2role.* from datashare_grp2role inner join datashare_module_rel on datashare_module_rel.shareid=datashare_grp2role.shareid where datashare_module_rel.tabid=".$mod_tabid." and datashare_grp2role.to_roleid='".$current_user_roles."'";
 		$result=$adb->query($query);
@@ -901,9 +896,7 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 			{
 				foreach($shareEntArr as $key=>$shareEntId)
 				{
-					//echo '<BR><BR>';
-					//print_r($shareEntId);
-					//echo '<BR><BR>';	
+						
 					if($shareType == 'ROLE')
 					{
 						if($share_permission == 1)
@@ -1235,7 +1228,6 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 	global $adb;	
 	require('user_privileges/sharing_privileges_'.$userid.'.php');
 	$tabid=getTabid($module);
-	//echo $module.'               '.$enttype.'                '.$pertype.'<BR>';                       
 	if($enttype=='USER')
 	{
 		if($pertype =='read')
@@ -1252,10 +1244,6 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
 		{
-			//echo '<BR>';
-			//print_r('<pre>');
-			//print_r($var_name_arr['ROLE']);
-			//print_r('</pre>');
 			foreach($var_name_arr['ROLE'] as $roleid=>$roleusers)
 			{
 				
@@ -1344,10 +1332,6 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
 		{
-			//echo '<BR>';
-			//print_r('<pre>');
-			//print_r($var_name_arr['ROLE']);
-			//print_r('</pre>');
 			foreach($var_name_arr['ROLE'] as $roleid=>$roleusers)
 			{
 				
