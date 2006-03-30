@@ -29,13 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
-global $current_user;
-// Unimplemented until jscalendar language files are fixed
-// global $current_language;
-// global $default_language;
-// global $cal_codes;
 
 $focus = new Potential();
 $smarty = new vtigerCRM_Smarty();
@@ -61,7 +55,6 @@ if($disp_view == 'edit_view')
 	$smarty->assign("BLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));
 else
 {
-	//echo "<pre>";print_r(getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'BAS'));echo "</pre>";
 	$smarty->assign("BASBLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields,'BAS'));
 	$smarty->assign("ADVBLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields,'ADV'));
 }
@@ -135,48 +128,11 @@ $smarty->assign("SINGLE_MOD","Potential");
  $potential_tables = Array('potential','crmentity','potentialscf'); 
  $tabid = getTabid("Potentials");
  $validationData = getDBValidationData($potential_tables,$tabid);
- $fieldName = '';
- $fieldLabel = '';
- $fldDataType = '';
+ $data = split_validationdataArray($validationData);
 
- $rows = count($validationData);
- foreach($validationData as $fldName => $fldLabel_array)
- {
-   if($fieldName == '')
-   {
-     $fieldName="'".$fldName."'";
-   }
-   else
-   {
-     $fieldName .= ",'".$fldName ."'";
-   }
-   foreach($fldLabel_array as $fldLabel => $datatype)
-   {
-	if($fieldLabel == '')
-	{
-			
-     		$fieldLabel = "'".$fldLabel ."'";
-	}		
-      else
-       {
-      $fieldLabel .= ",'".$fldLabel ."'";
-        }
- 	if($fldDataType == '')
-         {
-      		$fldDataType = "'".$datatype ."'";
-    	}
-	 else
-        {
-       		$fldDataType .= ",'".$datatype ."'";
-     	}
-   }
- }
-
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
 else
