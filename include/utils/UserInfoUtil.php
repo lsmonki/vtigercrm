@@ -4006,4 +4006,32 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 	}
 }
 
+/** Function to get the field access module array 
+  * @returns The field Access module Array :: Type Array
+  *
+ */
+function getFieldModuleAccessArray()
+{
+
+	$fldModArr=Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
+                'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
+                'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
+                'Potentials'=>'LBL_OPPORTUNITY_FIELD_ACCESS',
+                'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
+                'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
+                'Notes'=>'LBL_NOTE_FIELD_ACCESS',
+                'Emails'=>'LBL_EMAIL_FIELD_ACCESS',
+                'Activities'=>'LBL_TASK_FIELD_ACCESS',
+                'Events'=>'LBL_EVENT_FIELD_ACCESS',
+                'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
+                'PriceBooks'=>'LBL_PB_FIELD_ACCESS',
+                'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
+                'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
+                'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
+                'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
+              );
+
+	return $fldModArr;
+}
+
 ?>
