@@ -30,27 +30,10 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new SalesOrder();
 
-if(isset($_REQUEST['record']))
-{
-	$focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
-}
-
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-		
-}
-
+setObjectValuesFromRequest(&$focus);
 
 $focus->save("SalesOrder");
+
 //Checking if quote_id is present and updating the quote status
 if($focus->column_fields["quote_id"] != '')
 {
@@ -58,7 +41,6 @@ if($focus->column_fields["quote_id"] != '')
         $query1 = "update quotes set quotestage='Accepted' where quoteid=".$qt_id;
         $adb->query($query1);
 }
-
 
 $ext_prod_arr = Array();
 if($focus->mode == 'edit')

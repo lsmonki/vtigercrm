@@ -32,31 +32,14 @@ $currencyid=fetchCurrency($current_user->id);
 $curr_symbol=getCurrencySymbol($currencyid);
 $rate = getConversionRate($currencyid,$curr_symbol);
 
-if(isset($_REQUEST['record']))
+setObjectValuesFromRequest(&$focus);
+
+if(isset($_REQUEST['amount']))
 {
-	$focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
+	$value = convertToDollar($_REQUEST['amount'],$rate);
+	$focus->column_fields['amount'] = $value;
 }
 
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-	if(isset($_REQUEST['amount']))
-        {
-                        $value = convertToDollar($_REQUEST['amount'],$rate);
-                        $focus->column_fields['amount'] = $value;
-        }
-		
-}
-
-//$focus->saveentity("Potentials");
 $focus->save("Potentials");
 $return_id = $focus->id;
 

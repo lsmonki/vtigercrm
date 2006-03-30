@@ -26,25 +26,8 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $focus = new Vendor();
-if(isset($_REQUEST['record']))
-{
-	$focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
-}
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-		
-}
+setObjectValuesFromRequest(&$focus);
 
-//$focus->saveentity("Vendors");
 $focus->save("Vendors");
 $return_id = $focus->id;
 
@@ -53,6 +36,7 @@ else $return_module = "Vendors";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

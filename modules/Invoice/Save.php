@@ -29,24 +29,8 @@ include("modules/Emails/mail.php");
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Invoice();
-if(isset($_REQUEST['record']))
-{
-	$focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
-}
 
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-		
-}
+setObjectValuesFromRequest(&$focus);
 
 $focus->save("Invoice");
 

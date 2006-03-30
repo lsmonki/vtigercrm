@@ -26,25 +26,9 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $focus = new PriceBook();
-if(isset($_REQUEST['record']))
-{
-	$focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
-}
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-		
-}
 
-//$focus->saveentity("PriceBooks");
+setObjectValuesFromRequest(&$focus);
+
 $focus->save("PriceBooks");
 $return_id = $focus->id;
 
