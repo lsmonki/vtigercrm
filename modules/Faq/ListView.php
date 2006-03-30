@@ -24,14 +24,10 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Faq');
 
-global $theme;
 global $currentModule;
 
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
@@ -70,8 +66,6 @@ $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 if(isPermitted('Faq',2,'') == 'yes')
 $other_text ['del'] = $app_strings[LBL_MASS_DELETE]; 
 
-//$other_text ='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
-//		  <td align="right">&nbsp;</td>';
 
 //Retreive the list from Database
 $list_query = getListQuery("Faq");
@@ -97,11 +91,6 @@ $list_result = $adb->query($list_query);
 //Constructing the list view 
 
 
-//$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-//                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
-//                                '.$customviewcombo_html.'
-//                        </SELECT>
-//                </td>';
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -110,7 +99,6 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-//$smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("SINGLE_MOD",'Note');
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
