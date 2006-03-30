@@ -256,7 +256,7 @@ function get_group_options()
 function getTabid($module)
 {
 
- if (file_exists('tabdata.php')) 
+ if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
 	{
 	global $log;
         $log->info("the file exists");

@@ -742,7 +742,7 @@ function getTabname($tabid)
 
 function getTabModuleName($tabid)
 {
-	if (file_exists('tabdata.php'))
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0))
         {
 	global $log;
         $log->info("the file exists");
