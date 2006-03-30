@@ -293,8 +293,14 @@ $array = Array(
 	
 	<tr bgcolor="#fafafa">
                 <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
-                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not able to login </font>";?></td>
+                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to login </font>";?></td>
         </tr>
+	
+	<tr bgcolor="#fafafa">
+                <td valign=top ><strong>Tabdata File Permission </strong><br> (Smarty/templates_c)</td>
+                <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
+        </tr>
+	
 	<tr bgcolor="#fafafa">
                 <td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
                 <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
