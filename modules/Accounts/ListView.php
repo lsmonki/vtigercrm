@@ -100,10 +100,6 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
-//Modified by Raju
-//$other_text='	<input name="gname" type="hidden" value="'.$groupid.'">';
-
-	//Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
@@ -116,25 +112,8 @@ if(isset($CActionDtls))
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="small">|</span>
-<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
-}else
-{
-$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Accounts&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+	$smarty->assign("ALL", 'All');
 }
-	$customviewstrings='<td>'.$app_strings[LBL_VIEW].'</td>
-			<td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Accounts\')">
-				'.$customviewcombo_html.'
-                        </SELECT></td>
-			'.$cvHTML;
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -142,7 +121,8 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$customviewstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Account');
