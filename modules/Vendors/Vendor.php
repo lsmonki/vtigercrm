@@ -109,4 +109,5 @@ class Vendor extends CRMEntity {
 		return GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
 
 	}
+}
 ?>
