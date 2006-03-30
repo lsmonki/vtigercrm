@@ -15,10 +15,7 @@ require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/HelpDesk/Forms.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $app_list_strings;
-global $mod_strings;
-global $current_user;
+global $app_strings,$mod_strings,$theme;
 
 $focus = new HelpDesk();
 $smarty = new vtigerCRM_Smarty();
@@ -36,7 +33,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
     	$focus->mode = ''; 	
 } 
 
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -93,53 +89,15 @@ $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-
 
 $ticket_tables = Array('troubletickets','crmentity');
 $tabid = getTabid("HelpDesk");
 $validationData = getDBValidationData($ticket_tables,$tabid);
-$fieldName = '';
-$fieldLabel = '';
-$fldDataType = '';
+$data = split_validationdataArray($validationData);
 
-$rows = count($validationData);
-foreach($validationData as $fldName => $fldLabel_array)
-{
-	if($fieldName == '')
-	{
-		$fieldName="'".$fldName."'";
-	}
-	else
-	{
-		$fieldName .= ",'".$fldName ."'";
-	}
-	foreach($fldLabel_array as $fldLabel => $datatype)
-	{
-		if($fieldLabel == '')
-		{
-
-			$fieldLabel = "'".$fldLabel ."'";
-		}		
-		else
-		{
-			$fieldLabel .= ",'".$fldLabel ."'";
-		}
-		if($fldDataType == '')
-		{
-			$fldDataType = "'".$datatype ."'";
-		}
-		else
-		{
-			$fldDataType .= ",'".$datatype ."'";
-		}
-	}
-}
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else
