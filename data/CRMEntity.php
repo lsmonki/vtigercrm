@@ -1215,46 +1215,6 @@ $log->debug("type is ".$type);
 	}
 
 
-	/* This function assigns all of the values into the template for the list view */
-	function get_list_view_array(){
-		$return_array = Array();
-		
-		foreach($this->list_fields as $field)
-		{
-			$return_array[strtoupper($field)] = $this->$field;
-		}
-		
-		return $return_array;	
-	}
-	function get_list_view_data()
-	{
-		
-		return $this->get_list_view_array();
-	}
-
-	function get_where(&$fields_array)
-	{ 
-		$where_clause = "WHERE "; 
-		$first = 1; 
-		foreach ($fields_array as $name=>$value) 
-		{ 
-			if ($first) 
-			{ 
-				$first = 0;
-			} 
-			else 
-			{ 
-				$where_clause .= " AND ";
-			} 
-
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
-		} 
-
-		$where_clause .= " AND deleted=0";
-		return $where_clause;
-	}
-
-
 	function retrieve_by_string_fields($fields_array, $encode=true) 
 	{ 
 		$where_clause = $this->get_where($fields_array);

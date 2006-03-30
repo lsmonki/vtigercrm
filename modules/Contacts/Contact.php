@@ -461,14 +461,6 @@ class Contact extends CRMEntity {
         }
 
 	
-	function get_list_view_data(){
-		$temp_array = $this->get_list_view_array();
-    	$temp_array["ENCODED_NAME"]=htmlspecialchars($this->first_name.' '.$this->last_name, ENT_QUOTES);
-    	return $temp_array;
-		
-	}
-	
-
 //Used By vtigerCRM Word Add-In
 function getColumnNames()
 {

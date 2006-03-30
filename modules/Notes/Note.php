@@ -105,23 +105,5 @@ class Note extends CRMEntity {
                 return $query;
         }
 
-	function get_list_view_data(){
-		$note_fields = $this->get_list_view_array();
-		global $app_list_strings, $focus, $action, $currentModule;
-		$note_fields["DATE_MODIFIED"] = substr($note_fields["DATE_MODIFIED"], 0 , 10);
-		if (isset($this->parent_type)) {
-			$note_fields['PARENT_MODULE'] = $this->parent_type;
-		}
-
-		if (! isset($this->filename) || $this->filename != '') 
-		{
-                        $note_fields['FILENAME'] = $this->filename;
-                        $note_fields['FILE_URL'] = UploadFile::get_url($this->filename,$this->id);
-                }
-
-
-		return $note_fields;
-	}
-
 }
 ?>
