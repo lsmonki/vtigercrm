@@ -400,7 +400,7 @@ global $log;
 		if(isset($result) && !empty($result))
 			$rows= $result->RecordCount();			
 		//$this->println("ADODB getRowCount rows=".$rows);	
-		$log->debug('getRowCount rows= '.$rows);
+		//$log->debug('getRowCount rows= '.$rows);
 		return $rows;			
 	}
 
