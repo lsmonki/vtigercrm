@@ -8,11 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-
 require_once('modules/Campaigns/Campaign.php');
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
@@ -23,9 +18,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
-global $app_strings;
-global $mod_strings;
-global $current_language;
+global $app_strings,$mod_strings,$current_language;
 $current_module_strings = return_module_language($current_language, 'Campaigns');
 
 $comboFieldNames = Array('campaigntype'=>'campaigntype_dom'
@@ -82,7 +75,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 //<<<<<customview>>>>>
 
-
+$smarty = new vtigerCRM_Smarty;
 if($viewid != 0)
 {
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
@@ -95,31 +88,12 @@ if(isPermitted('Campaigns',2,'') == 'yes')
 
 if($viewnamedesc['viewname'] == 'All')
 {
-	$cvHTML = '<td><a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-		<span class="small">|</span>
-                <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-                <span class="small">|</span>
-                <span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
+	$smarty->assign("ALL", 'All');
 }
-else
-{
-	$cvHTML = '<td><a href="index.php?module=Campaigns&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-		<span class="small">|</span>
-                <a href="index.php?module=Campaigns&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
-                <span class="small">|</span>
-                <a href="index.php?module=CustomView&action=Delete&dmodule=Campaigns&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
-}
-
-$customstrings ='<td>'.$app_strings[LBL_VIEW].'
-                        <td style="padding-left:5px;padding-right:5px">
-                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this,\'Campaigns\' )">
-                                '.$customviewcombo_html.'
-                        </SELECT></td>
-                        '.$cvHTML;
 
 $customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
-$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
