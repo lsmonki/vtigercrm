@@ -394,26 +394,7 @@ class Activity extends CRMEntity {
 
         return $response;
     }
-
-	
-
-	function get_list_view_data(){
-		global $action, $currentModule, $focus, $app_list_strings;
-		$today = date("Y-m-d", time());
-		$task_fields =$this->get_list_view_array();
-		if (isset($this->parent_type))
-			$task_fields['PARENT_MODULE'] = $this->parent_type;
-		if ($this->status != "Completed" && $this->status != "Deferred" ) {
-			$task_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=" . ((is_object($focus)) ? $focus->id : "") . "&action=Save&module=Tasks&record=$this->id&status=Completed'>X</a>";
-		}
-
-
-		if ($this->duedate	< $toDAy) {
-			$task_fields['DATE_DUE'] = "<font class='overdueTask'>".$task_fields['DATE_DUE']."</font>";
-		}
-		return $task_fields;
-	}
-	
+		
 	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
 	{
 		//Check for activityid already present in the reminder_table
