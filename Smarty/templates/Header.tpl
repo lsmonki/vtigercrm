@@ -283,8 +283,8 @@ setInterval("Announcement_rss()",5000)
        {/foreach}
        </div>
        </td>
-       <td width="8" valign="top" onClick="fnSlide1('slidemenu','slide')">
-       <div id="mnuKey"><br />G<br />O<br /><br />T<BR />O</div>
+       <td width="8" valign="top">
+       <div id="mnuKey" onclick="fnSlide1('slidemenu','slide')" ><img src="{$IMAGEPATH}/jump.gif"></div>
        </td>
        </tr>
 </table>
