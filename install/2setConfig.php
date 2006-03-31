@@ -26,7 +26,8 @@ $hostname = $_SERVER['SERVER_NAME'];
 
 // TODO: introduce Apache port as parameters to use non-default value 80
 //$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
-$web_root = $hostname.$_SERVER['PHP_SELF'];
+//$web_root = $hostname.$_SERVER['PHP_SELF'];
+$web_root = $HTTP_SERVER_VARS["HTTP_HOST"] . $HTTP_SERVER_VARS["REQUEST_URI"];
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://".$web_root;
 
@@ -100,6 +101,8 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	else $host_name = $hostname;
 
 	if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
+	elseif (isset($site_URL) && $site_URL!='_SITE_URL_')
+	$site_URL = $site_URL;
 	else $site_URL = $web_root;
 
 	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
