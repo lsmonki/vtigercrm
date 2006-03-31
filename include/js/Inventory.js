@@ -177,8 +177,8 @@ function calcGrandTotal() {
 	
 	grandTotal=subTotal+parseFloat(getObj("txtTax").value)+parseFloat(getObj("txtAdjustment").value)
 	
-	getObj("subTotal").innerHTML=getObj("hdnSubTotal").value=roundValue(subTotal.toString())
-	getObj("grandTotal").innerHTML=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
+	getObj("subTotal").value=getObj("hdnSubTotal").value=roundValue(subTotal.toString())
+	getObj("grandTotal").value=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
 }
 
 //Method changed as per advice by jon http://forums.vtiger.com/viewtopic.php?t=4162
