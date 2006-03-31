@@ -231,9 +231,9 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		}
 
 		$entries[] = nl2br($row['description']); 
-		$attachmentname=explode('_',$row['filename'],2);
-		
-		$entries[] = '<a href="index.php?module=uploads&action=downloadfile&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'">'.$attachmentname[1].'</a>';
+		$attachmentname = ltrim($row['filename'],$id.'_');//explode('_',$row['filename'],2);
+
+		$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
 
 		$entries[] = $row['activitytype'];	
 

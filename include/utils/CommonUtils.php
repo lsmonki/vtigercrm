@@ -1411,6 +1411,29 @@ function create_parenttab_data_file()
 	}
 }
 
+/**
+ * This function is used to get the File Storage Path in the server.
+ * @param int $attachmentid - file attachment id ie., crmid of the attachment
+ * @param string $filename  - file name
+ * return string $filepath  - filepath inwhere the file stored in the server will be return
+*/
+function getFilePath($attachmentid,$filename)
+{
+	global $adb;
+	global $root_directory;
+
+	$query = 'select crmid, setype, smownerid, users.user_name from crmentity inner join users on crmentity.smownerid=users.id where crmid='.$attachmentid;
+	$res = $adb->query($query);
+
+	$user_name = $adb->query_result($res,0,'user_name');
+
+	if(is_file($root_directory.'storage/user_'.$user_name.'/attachments/'.$filename))
+		$filepath = $root_directory.'storage/user_'.$user_name.'/attachments/';
+	else
+		$filepath = $root_directory.'test/upload/';
+
+	return $filepath;
+}
 
 
 
