@@ -48,7 +48,7 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Alpha2 Configuration Wizard</title>
+<title>vtiger CRM 5.0 Alpha4 Configuration Wizard</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -63,7 +63,7 @@ foreach($pieces as $val)
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 	
@@ -131,9 +131,9 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 
 
-This Configuration Wizard will create vtiger CRM 5.0 Alpha2 databases and tables and configuration files you need to start. The entire process should
+This Configuration Wizard will create vtiger CRM 5.0 Alpha4 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Alpha2 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 4.3.8 and Apache 2.0.40. vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
+				<span style="color:#555555">- vtiger CRM 5.0 Alpha4 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 4.3.8 and Apache 2.0.40. vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
 				<br></span>
 <br>
 		</td>
@@ -2675,12 +2675,12 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha2 databases and tables
 	  </td>
     </tr>
 	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 5.0 Alpha2 database tables and sets the configuration variables that you need to start.
+  			This installer creates the vtiger CRM 5.0 Alpha4 database tables and sets the configuration variables that you need to start.
 			The entire process should take about four minutes.
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 5.0 Alpha2 is tested on mysql 4.1.x and PHP 4.3.8 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions. vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup</b> </font>
+ <font color=red> <b>Kindly note vtiger CRM 5.0 Alpha4 is tested on mysql 5.0.19, mysql 4.1.x and PHP 5.1.19 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions. vtiger crm can run on a system which has lamp/wamp already installed in it. Please follow the wizard for the installation procedure regardless of the setup</b> </font>
 
 			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>

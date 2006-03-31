@@ -666,7 +666,7 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Vtiger Releases 5.0 Alpha2", "Try Zoho Writer", "Hi There!!!", "Welcome to Open Source", "SOS Vtiger");
+$esubj_array =  array ("Vtiger Releases 5.0 Alpha4", "Try Zoho Writer", "Hi There!!!", "Welcome to Open Source", "SOS Vtiger");
 $startdate_array =  array ("2006-1-2","2003-3-4","2003-4-5","2001-2-1","2005-8-8");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 

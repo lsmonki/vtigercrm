@@ -109,7 +109,7 @@ if($mysql_status == 'true' && $mysqlconn_status == 'false')
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 	<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 
@@ -247,7 +247,7 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19')
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 	<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 
@@ -353,7 +353,7 @@ elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_createddb
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 	<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 
@@ -461,7 +461,7 @@ elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_db_status
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 	<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 
@@ -570,7 +570,7 @@ elseif($mysql_status == 'true' && $mysqlconn_status == 'true' && ($mysql_db_stat
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 	<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha2" title="v5alpha2"></td>
+	<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 
