@@ -289,7 +289,7 @@ $combo_strings = Array(
 			    'Others'=>'Others'
 			    ),
 
-'cmpnexpectedrevenue_dom' => Array(''=>'',
+'expectedrevenue_dom' => Array(''=>'',
 			    	   '$80,000'=>'$80,000',
 				   '$90,000'=>'$90,000',
 				   '$1,00,000'=>'$1,00,000',
@@ -301,7 +301,7 @@ $combo_strings = Array(
 
 			   ),
 
-'cmpnactualcost_dom' => Array(''=>'',
+'actualcost_dom' => Array(''=>'',
 			      '$60,000'=>'$60,000',
    			      '$65,000'=>'$65,000',
 			      '$70,000'=>'$70,000',
@@ -314,7 +314,7 @@ $combo_strings = Array(
 			      ),
 
 
-'cmpnexpectedresponse_dom' => Array(''=>'',
+'expectedresponse_dom' => Array(''=>'',
 			      'Excellent'=>'Excellent',
 			      'Good'=>'Good',
 			      'Average'=>'Average',
