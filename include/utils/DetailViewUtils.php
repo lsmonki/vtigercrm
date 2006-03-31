@@ -253,7 +253,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$attachquery = "select * from attachments where attachmentsid=".$attachmentid;
         		        $col_fields[$fieldname] = $adb->query_result($adb->query($attachquery),0,'name');
 		}
-                $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&filename='.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
+
+		//This is added to strip the crmid and _ from the file name and show the original filename
+		$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
+                $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
 
 		$label_fld[] =$mod_strings[$fieldlabel];
 
