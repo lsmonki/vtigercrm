@@ -268,7 +268,7 @@ function ajaxRssResponse(response)
 	if(document.getElementById("rss").innerHTML != response.responseText)
 		document.getElementById("rss").innerHTML=response.responseText;
 {rdelim}
-setInterval("Announcement_rss()",5000)
+setInterval("Announcement_rss()",300000)
 </script>
 
 {* Begining of Slide Menu *}
