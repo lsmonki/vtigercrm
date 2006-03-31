@@ -44,7 +44,7 @@ function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',
 	}
 	else
 	{
-		$productBlock[] = Array('Product Details' => 'Product Details');
+		$productBlock[] = Array(Array());
 		
 	}
 	return $productBlock;
