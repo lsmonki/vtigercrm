@@ -48,7 +48,7 @@ class Email extends CRMEntity {
 
 	var $table_name = "activity";
 	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel');
-        var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid');
+        var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','attachments'=>'attachmentsid');
 
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
