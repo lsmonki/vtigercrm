@@ -1715,29 +1715,29 @@
 
 	<table name="campaign">
                 <field name="campaignname" type="C" size="255">
-			<KEY/>
                 </field>
 		<field name="campaigntype" type="C" size="255">
                 </field>
 		<field name="campaignstatus" type="C" size="255">
                 </field>
-    <field name="expectedrevenue" type="N" size="11.3">
+    <field name="expectedrevenue" type="C" size="255">
                 </field>
-    <field name="budgetcost" type="N" size="11.3">
+    <field name="budgetcost" type="C" size="255">
                     </field>
- <field name="actualcost" type="N" size="11.3">
+ <field name="actualcost" type="C" size="255">
                     </field>
- <field name="expectedresponse" type="N" size="10.0">
+ <field name="expectedresponse" type="C" size="255">
                     </field>
  <field name="numsent" type="N" size="11.0">
                     </field>
- <field name="campaignid" type="I" size="7">
+ <field name="campaignid" type="I" size="11">
+			<KEY/>
                     </field>
  <field name="closingdate" type="D"></field>
 
 
 		<opt>Type=InnoDB</opt>
-		<index name="idx_campaignid">
+		<index name="idx_campaignstatus">
                         <col>campaignstatus</col>
                 </index>
 		<index name="idx_campaignname">
@@ -7386,7 +7386,7 @@
 		</data>
 	</table>
 	
-	<table name="cmpnexpectedrevenue">
+	<table name="expectedrevenue">
 		<field name="expectedrevenueid" type="I" size="19">
 			<KEY/>
 	<AUTOINCREMENT/>
@@ -7411,8 +7411,8 @@
 		</data>
 	</table>
 	
-	<table name="cmpnactualcost">
-		<field name="cmpnactualcostid" type="I" size="19">
+	<table name="actualcost">
+		<field name="actualcostid" type="I" size="19">
 			<KEY/>
 	<AUTOINCREMENT/>
 		
@@ -7436,8 +7436,8 @@
 		</data>
 	</table>
 	
-	<table name="cmpnexpectedresponse">
-		<field name="cmpnexpectedresponseid" type="I" size="19">
+	<table name="expectedresponse">
+		<field name="expectedresponseid" type="I" size="19">
 			<KEY/>
 	<AUTOINCREMENT/>
 		
@@ -7731,14 +7731,6 @@
 		<data>
 		</data>
 	</table>
-
-
-
-
-
-
-
-
 
 	<table name="invoicegrouprelation" alter="true">
 		
