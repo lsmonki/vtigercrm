@@ -23,31 +23,38 @@
 require_once('modules/Contacts/Contact.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
+require_once("modules/Emails/mail.php");
+
+
+/**
+ * This function is used to get a random password.
+ * @return a random password with alpha numeric chanreters of length 8
+ */
+function makeRandomPassword() 
+{
+        $salt = "abcdefghijklmnopqrstuvwxyz0123456789";
+        srand((double)microtime()*1000000);
+        $i = 0;
+        while ($i <= 7)
+	{
+                $num = rand() % 33;
+                $tmp = substr($salt, $num, 1);
+                $pass = $pass . $tmp;
+                $i++;
+	}
+      return $pass;
+}
 
 $local_log =& LoggerManager::getLogger('index');
 
 global $log;
 $focus = new Contact();
-if(isset($_REQUEST['record']))
-{
-        $focus->id = $_REQUEST['record'];
-}
-if(isset($_REQUEST['mode']))
-{
-        $focus->mode = $_REQUEST['mode'];
-}
-if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
 
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		$value = $_REQUEST[$fieldname];
-		$focus->column_fields[$fieldname] = $value;
-	}
-}
-	if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
-	if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
+setObjectValuesFromRequest(&$focus);
+
+if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
+if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
+if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
 
 //Checking If image is given or not
 $image_upload_array=SaveImage($_FILES,'contact',$focus->id,$focus->mode);
@@ -56,8 +63,7 @@ $image_error=$image_upload_array['imageerror'];
 $errormessage=$image_upload_array['errormessage'];
 $saveimage=$image_upload_array['saveimage'];
 
-
- //code added for returning back to the current view after edit from list view
+//code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
@@ -69,14 +75,13 @@ if($image_error=="true") //If there is any error in the file upload then moving 
         if($_REQUEST['return_action'] != '')$return_action=$_REQUEST['return_action'];
         if($_REQUEST['return_id'] != '')$return_id=$_REQUEST['return_id'];
 
-         $log->debug("There is an error during the upload of contact image.");
+        $log->debug("There is an error during the upload of contact image.");
         $field_values_passed.="";
         foreach($focus->column_fields as $fieldname => $val)
         {
                 if(isset($_REQUEST[$fieldname]))
                 {
-                         $log->debug("Assigning the previous values given for the contact to respective fields
- ");
+			$log->debug("Assigning the previous values given for the contact to respective fields ");
                         $field_values_passed.="&";
                         $value = $_REQUEST[$fieldname];
                         $focus->column_fields[$fieldname] = $value;
@@ -121,95 +126,83 @@ if($image_error=="false")
 
 	if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '') $activitymode = $_REQUEST['activity_mode'];
 
-$local_log->debug("Saved record with id of ".$return_id);
+	$local_log->debug("Saved record with id of ".$return_id);
 
-//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
-if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
-{
-	$sql = "update portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
-	$adb->query($sql);
-}
-elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
-{
-	$id = $_REQUEST['record'];
-	$username = $_REQUEST['email'];
-
-	if($_REQUEST['mode'] != 'edit')
-		$insert = 'true';
-
-	$sql = "select id,user_name,user_password,isactive from portalinfo";
-	$result = $adb->query($sql);
-
-	for($i=0;$i<$adb->num_rows($result);$i++)
+	//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
+	if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 	{
-		if($id == $adb->query_result($result,$i,'id'))
-		{
-			$dbusername = $adb->query_result($result,$i,'user_name');
-			$isactive = $adb->query_result($result,$i,'isactive');
+		$sql = "update portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
+		$adb->query($sql);
+	}
+	elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
+	{
+		$id = $_REQUEST['record'];
+		$username = $_REQUEST['email'];
 
-			if($username == $dbusername && $isactive == 1)
-				$flag = 'true';
-			else
+		if($_REQUEST['mode'] != 'edit')
+			$insert = 'true';
+
+		$sql = "select id,user_name,user_password,isactive from portalinfo";
+		$result = $adb->query($sql);
+
+		for($i=0;$i<$adb->num_rows($result);$i++)
+		{
+			if($id == $adb->query_result($result,$i,'id'))
 			{
-				$sql = "update portalinfo set user_name='".$username."', isactive=1 where id=".$id;
-				$adb->query($sql);
-				$update = 'true';
-				$flag = 'true';
-				$password = $adb->query_result($result,$i,'user_password');
+				$dbusername = $adb->query_result($result,$i,'user_name');
+				$isactive = $adb->query_result($result,$i,'isactive');
+
+				if($username == $dbusername && $isactive == 1)
+					$flag = 'true';
+				else
+				{
+					$sql = "update portalinfo set user_name='".$username."', isactive=1 where id=".$id;
+					$adb->query($sql);
+					$update = 'true';
+					$flag = 'true';
+					$password = $adb->query_result($result,$i,'user_password');
+				}
 			}
 		}
-	}
-	if($flag != 'true')
-		$insert = 'true';
-	else
-		$insert = 'false';
+		if($flag != 'true')
+			$insert = 'true';
+		else
+			$insert = 'false';
 
-	if($insert == 'true')
-	{
-		$password = makeRandomPassword();
-		$sql = "insert into portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
-                $adb->query($sql);
-	}
+		if($insert == 'true')
+		{
+			$password = makeRandomPassword();
+			$sql = "insert into portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
+			$adb->query($sql);
+		}
 
-	$subject = "Customer Portal Login Details";
-	$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
-	$contents .= 'Your Customer Portal Login details are given below:';
-	$contents .= "<br><br>User Id : ".$_REQUEST['email'];
-	$contents .= '<br>Password : '.$password;
-	$contents .= "<br><br><a href='".$PORTAL_URL."/cp_index.php'>Please Login Here</a>";
+		$subject = "Customer Portal Login Details";
+		$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
+		$contents .= 'Your Customer Portal Login details are given below:';
+		$contents .= "<br><br>User Id : ".$_REQUEST['email'];
+		$contents .= '<br>Password : '.$password;
+		$contents .= "<br><br><a href='".$PORTAL_URL."/cp_index.php'>Please Login Here</a>";
 
-	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
-	$contents .= '<br><br>Support Team';
+		$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
+		$contents .= '<br><br>Support Team';
 
- $log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
-	if($insert == 'true' || $update == 'true')
-	{
-		//Removed the function SendMailToCustomer and used the send_mail function to send mail to the customer
-		require_once("modules/Emails/mail.php");
-		$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
+		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
+		if($insert == 'true' || $update == 'true')
+		{
+			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
+		}
+		$log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 	}
-   $log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
-}
-function makeRandomPassword() 
-{
-        $salt = "abcdefghijklmnopqrstuvwxyz0123456789";
-        srand((double)microtime()*1000000);
-        $i = 0;
-        while ($i <= 7)
-	{
-                $num = rand() % 33;
-                $tmp = substr($salt, $num, 1);
-                $pass = $pass . $tmp;
-                $i++;
-	}
-      return $pass;
-}
-//END -- Code for Create Customer Portal Users password and Send Mail
-$log->info("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id);
-//code added for returning back to the current view after edit from list view
-if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
+	//END -- Code for Create Customer Portal Users password and Send Mail
+
+	$log->info("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id);
+
+	//code added for returning back to the current view after edit from list view
+	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
+
 }
 
 
