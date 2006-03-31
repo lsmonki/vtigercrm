@@ -154,8 +154,6 @@ class SugarBean
 	        	$this->id = $this->db->getOne("SELECT LAST_INSERT_ID()" );
 		}
 	        
-		// let subclasses save related field changes
-		$this->save_relationship_changes($isUpdate);
 		return $this->id;
 	}
 
