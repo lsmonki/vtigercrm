@@ -37,43 +37,20 @@ if(isset($_REQUEST['mode']))
         $focus->mode = $_REQUEST['mode'];
 }
 if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
-/*
-if (isset($_REQUEST['new_reports_to_id'])) {
-	$focus->retrieve($_REQUEST['new_reports_to_id']);
-	$focus->reports_to_id = $_REQUEST['record']; 
-}
-*/
-//else {
-//	$focus->retrieve($_REQUEST['record']);
 
 foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
-		//$focus->$field = $_REQUEST[$field];
 		$value = $_REQUEST[$fieldname];
 		$focus->column_fields[$fieldname] = $value;
 	}
 }
-/*	
-	foreach($focus->additional_column_fields as $field)
-	{
-		if(isset($_REQUEST[$field]))
-		{
-			$value = $_REQUEST[$field];
-			$focus->$field = $value;
-			
-		}
-	}
-*/
 	if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
 	if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
-//}
 
 //Checking If image is given or not
-
-//Checking If image is given or not
-$image_upload_array=SaveImage($_FILES,'contact',$id,$focus->mode);
+$image_upload_array=SaveImage($_FILES,'contact',$focus->id,$focus->mode);
 $image_name_val=$image_upload_array['imagename'];
 $image_error=$image_upload_array['imageerror'];
 $errormessage=$image_upload_array['errormessage'];
