@@ -175,8 +175,9 @@ require_once('modules/Reports/PopulateReports.php');
 // default customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
-// create and Populate PHPBB tables and data
-//create_populate_phpbb();
+//Writing tab data in flat file
+create_tab_data_file();
+create_parenttab_data_file();
 
 // populate the db with seed data
 if ($db_populate) {
