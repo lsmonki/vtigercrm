@@ -176,12 +176,12 @@ $vtlog->logthis("module is ".$module,'info');
 
   function insertIntoAttachment($id,$module)
   {
-    $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
     global $current_user;
     global $adb;
     global $root_directory;
     global $upload_badext;
 
+    $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
     $ownerid = $this->column_fields['assigned_user_id'];
     $adb->println("insertattach ownerid=".$ownerid." mod=".$module);
     $adb->println($this->column_fields);	
