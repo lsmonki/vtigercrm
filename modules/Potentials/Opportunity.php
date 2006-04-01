@@ -312,8 +312,8 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
  $query = $this->constructCustomQueryAddendum() .",                                potential.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM potential
                                 INNER JOIN crmentity
                                 ON crmentity.crmid=potential.potentialid
@@ -325,8 +325,8 @@ return $exists;
 		{
                   	$query = "SELECT
                                 potential.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM potential inner join crmentity on crmentity.crmid=potential.potentialid                                LEFT JOIN users
                                 ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on potential.accountid=account.accountid  LEFT JOIN potentialscf on potentialscf.potentialid=potential.potentialid where crmentity.deleted=0 ";
