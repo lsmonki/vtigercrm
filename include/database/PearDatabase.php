@@ -930,11 +930,11 @@ function formatDate($datetime)
 	return $date;
 }
 
-function getDBDateString($datecolname)
+function getDBDateString($datecolname, $format='Y-m-d, H:i:s')
 {
 	$this->checkConnection();
 	$db = &$this->database;
-	$datestr = $db->SQLDate("Y-m-d, H:i:s" ,$datecolname);
+	$datestr = $db->SQLDate($format ,$datecolname);
 	return $datestr;	
 }
 

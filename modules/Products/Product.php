@@ -215,27 +215,29 @@ class Product extends CRMEntity {
 	
 	function create_export_query(&$order_by, &$where)
 	{
+		global $adb;
+
 		if($this->checkIfCustomTableExists())
 		{
 
 			$query = $this->constructCustomQueryAddendum() . 
 				",    
 				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
+			products.productname AS productname,
+			products.productcode AS productcode,
+			products.productcategory AS productcategory,
+			products.manufacturer AS manufacturer,
+			products.product_description AS product_description,
+			products.qty_per_unit AS qty_per_unit,
+			products.unit_price AS unit_price,
+			products.weight AS weight,
+			products.pack_size AS pack_size, "
+			.$adb->getDBDateString('products.start_date', 'Y-M-D')." AS start_date, "
+			.$adb->getDBDateString('products.expiry_date', 'Y-M-D')." AS expiry_date,
+			products.cost_factor AS cost_factor,
+			products.commissionrate AS commissionrate,
+			products.commissionmethod AS commissionmethod,
+			products.discontinued AS discontinued,
 			products.sales_start_date AS sales_start_date,
 			products.sales_end_date AS sales_end_date,
 			products.usageunit AS usageunit,
@@ -260,22 +262,22 @@ class Product extends CRMEntity {
 		else
 		{
 			$query = "SELECT
-				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
+				products.productid AS productid,
+			products.productname AS productname,
+			products.productcode AS productcode,
+			products.productcategory AS productcategory,
+			products.manufacturer AS manufacturer,
+			products.product_description AS product_description,
+			products.qty_per_unit AS qty_per_unit,
+			products.unit_price AS unit_price,
+			products.weight AS weight,
+			products.pack_size AS pack_size, "
+			.$adb->getDBDateString('products.start_date', 'Y-M-D')." AS start_date, "
+			.$adb->getDBDateString('products.expiry_date', 'Y-M-D')." AS expiry_date,
+			products.cost_factor AS cost_factor,
+			products.commissionrate AS commissionrate,
+			products.commissionmethod AS commissionmethod,
+			products.discontinued AS discontinued,
 			products.sales_start_date AS sales_start_date,
 			products.sales_end_date AS sales_end_date,
 			products.usageunit AS usageunit,
