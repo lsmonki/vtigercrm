@@ -37,7 +37,7 @@ if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
         $xtpl->assign("SMODULE",$_REQUEST['smodule']);
 	$smodule = $_REQUEST['smodule'];
 	$url_string = '&smodule=VENDOR';
-	$search_query .= " and vendor_id=''";
+	$search_query .= " and vendor_id is null";
 }
 
 

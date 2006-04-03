@@ -32,8 +32,10 @@ if($_REQUEST['return_module']== 'Contacts')
 	$sql = 'update notes set contact_id = 0 where notesid = '.$_REQUEST['record'];
 	$adb->query($sql);
 }
-$sql = 'delete from senotesrel where notesid = '.$_REQUEST['record']. ' and crmid = '.$_REQUEST['return_id'];
-$adb->query($sql);
+if($_REQUEST['return_id']) {
+	$sql = 'delete from senotesrel where notesid = '.$_REQUEST['record']. ' and crmid = '.$_REQUEST['return_id'];
+	$adb->query($sql);
+}
 
 $sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 $adb->query($sql_recentviewed);
