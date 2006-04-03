@@ -264,7 +264,14 @@ global $vtlog;
 	{
 		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename);
 		$this->checkConnection();
-		$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+		if($this->isPostgres()) {
+			$fp = fopen($filename, "r");
+			$filecontent = fread($fp, filesize($filename));
+			$result = $this->database->UpdateBlob($tablename, $colname, $filecontent, $id);
+			fclose($fp);
+		} else {
+			$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+		}
 		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename." status=".$result);
 		return $result;
 	}
