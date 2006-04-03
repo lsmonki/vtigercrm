@@ -4034,4 +4034,42 @@ function getFieldModuleAccessArray()
 	return $fldModArr;
 }
 
+/** Function to get the permitted module name Array with presence as 0 
+  * @returns permitted module name Array :: Type Array
+  *
+ */
+function getPermittedModuleNames()
+{
+	global $current_user;
+	$permittedModules=Array();
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	include('tabdata.php');
+
+	if($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+	{
+		foreach($tab_seq_array as $tabid=>$seq_value)
+		{
+			if($seq_value ==0 && $profileTabsPermission[$tabid] == 0)
+			{
+				$permittedModules[]=getTabModuleName($tabid);
+			}
+			
+		}	
+	
+
+	}
+	else
+	{
+		foreach($tab_seq_array as $tabid=>$seq_value)
+		{
+			if($seq_value ==0)
+			{
+				$permittedModules[]=getTabModuleName($tabid);
+			}
+			
+		}	
+	}
+	return $permittedModules;			
+}
+
 ?>
