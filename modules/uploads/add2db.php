@@ -40,7 +40,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		$current_id = $adb->getUniqueID("crmentity");
 		$desc = $_REQUEST['txtDescription'];
 		$description = addslashes($desc);
-		$date_var = date('YmdHis');
+		$date_var = $adb->database->DBTimeStamp(date('YmdHis'));
 
 		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 		$filenameBase64 = $filename.".base64";
@@ -50,8 +50,8 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		fwrite($wfh,base64_encode(fread($rfh, $filesize)));
 		deleteFile($uploaddir,$filename);
 		
-		$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
-		$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."','".$date_var."')";
+		$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('";
+		$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."',".$date_var.",".$date_var.")";
 		$result = $adb->query($query);
 
 		$sql = "insert into attachments values(";
