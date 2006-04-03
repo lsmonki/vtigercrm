@@ -552,6 +552,25 @@ class User extends SugarBean {
 			$this->reports_to_name = '';
 		}		
 	}
+
+	function retrieveCurrentUserInfoFromFile($userid)
+	{
+		require('user_privileges/user_privileges_'.$userid.'.php');
+		foreach($this->column_fields as $field)
+                {
+                        if(isset($user_info[$field]))
+                        {
+                                $this->$field = $user_info[$field];
+                        }
+                }
+		return $this;
+		
+	}
+
+	
 }
+
+	
+
 
 ?>

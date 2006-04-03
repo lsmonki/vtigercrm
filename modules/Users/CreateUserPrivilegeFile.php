@@ -21,9 +21,17 @@ function createUserPrivilegesfile($userid)
 		$newbuf .= "//This is the access privilege file\n";
 		$user_focus= new User();
 		$user_focus->retrieve($userid);
+		$userInfo=Array();
+		foreach($user_focus->column_fields as $field)
+        	{
+               		$userInfo[$field]= $user_focus->$field;
+        	}
+
 		if($user_focus->is_admin == 'on')
 		{
 			$newbuf .= "\$is_admin=true;\n";
+			$newbuf .="\n";		
+			$newbuf .= "\$user_info=".constructSingleStringKeyValueArray($userInfo).";\n";
 			$newbuf .= "\n";
 			$newbuf .= "?>";
 			fputs($handle, $newbuf);
@@ -50,6 +58,8 @@ function createUserPrivilegesfile($userid)
 			$parentRoles=getParentRole($user_role);
 
 			
+
+			
 			$newbuf .= "\$current_user_roles='".$user_role."';\n";
 			$newbuf .= "\n";
 			$newbuf .= "\$current_user_parent_role_seq='".$user_role_parent."';\n";
@@ -69,6 +79,8 @@ function createUserPrivilegesfile($userid)
 			$newbuf .= "\$parent_roles=".constructSingleCharArray($parentRoles).";\n";
 			$newbuf .="\n";		
 			$newbuf .= "\$subordinate_roles_users=".constructTwoDimensionalCharIntSingleArray($subRoleAndUsers).";\n";
+			$newbuf .="\n";		
+			$newbuf .= "\$user_info=".constructSingleStringKeyValueArray($userInfo).";\n";
 
 			$newbuf .= "?>";
 			fputs($handle, $newbuf);
@@ -1105,6 +1117,32 @@ function constructSingleStringValueArray($var)
                 return $code;
         }
 }
+
+function constructSingleStringKeyValueArray($var)
+{
+
+        $size = sizeof($var);
+        $i=1;
+        if (is_array($var))
+        {
+                $code = 'array(';
+                foreach ($var as $key => $value)
+                {
+                        if($i<$size)
+                        {
+                                $code .= "'".$key."'=>'".$value."',";
+                        }
+                        else
+                        {
+                                $code .= "'".$key."'=>'".$value."'";
+                        }
+                        $i++;
+                }
+                $code .= ')';
+                return $code;
+        }
+}
+
 
 
 function constructSingleArray($var)
