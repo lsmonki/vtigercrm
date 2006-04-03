@@ -42,7 +42,7 @@ if(isset($templateid) && $templateid !='')
 }
 else
 {
-	$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."',".$description.".$body.",0,".$db->getUniqueID('emailtemplates').")";
+	$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."',".$description.",".$body.",0,".$db->getUniqueID('emailtemplates').")";
 	$adb->query($sql);
 
 	$vtlog->logthis("added to the db the emailtemplate",'info');  
