@@ -33,7 +33,6 @@ require_once('modules/Emails/Email.php');
 require_once('modules/Users/User.php');
 require_once('modules/Import/ImportMap.php');
 require_once('modules/Import/UsersLastImport.php');
-require_once('modules/Users/TabMenu.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php');
