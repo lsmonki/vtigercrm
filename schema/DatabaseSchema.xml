@@ -5657,14 +5657,11 @@
 		<field name="secondarymodules" type="C" size="250">
 			<DEFAULT value=""/>
 		</field>
-		<index name="reportmodules_IDX0">
-			<col>reportmodulesid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 	<table name="reportmodules" alter="true">
-		<constraint>ADD CONSTRAINT reportmodules_FK1 FOREIGN KEY (REPORTMODULESID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT reportmodules_FK1 FOREIGN KEY (reportmodulesid) REFERENCES report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -5672,13 +5669,9 @@
 	<table name="reportsortcol">
 		<field name="sortcolid" type="I" size="19">
 			<KEY/>
-			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="reportid" type="I" size="19">
 			<KEY/>
-			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<DEFAULT value=""/>
@@ -5686,14 +5679,11 @@
 		<field name="sortorder" type="C" size="250">
 			<DEFAULT value="Asc"/>
 		</field>
-		<index name="reportsortcol_IDX0">
-			<col>reportid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 	<table name="reportsortcol" alter="true">
-		<constraint>ADD CONSTRAINT reportsortcol_FK1 FOREIGN KEY (REPORTID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT FK1_reportsortcol FOREIGN KEY (reportid) REFERENCES report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -5701,8 +5691,6 @@
 	<table name="reportdatefilter">
 		<field name="datefilterid" type="I" size="19">
 			<KEY/>
-			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="datecolumnname" type="C" size="250">
 			<DEFAULT value=""/>
@@ -5716,14 +5704,11 @@
 		<field name="enddate" type="D">
 			<DEFAULT value="0000-00-00"/>
 		</field>
-		<index name="reportdatefilter_IDX0">
-			<col>datefilterid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 	<table name="reportdatefilter" alter="true">
-		<constraint>ADD CONSTRAINT reportdatefilter_FK1 FOREIGN KEY (DATEFILTERID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT FK1_reportdatefilter FOREIGN KEY (datefilterid) REFERENCES report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
@@ -5731,26 +5716,19 @@
 	<table name="reportsummary">
 		<field name="reportsummaryid" type="I" size="19">
 			<KEY/>
-			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="summarytype" type="I" size="19">
 			<KEY/>
-			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<KEY/>
 			<DEFAULT value=""/>
 		</field>
-		<index name="reportsummary_IDX0">
-			<col>reportsummaryid</col>
-		</index>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
 	<table name="reportsummary" alter="true">
-		<constraint>ADD CONSTRAINT reportsummary_FK1 FOREIGN KEY (REPORTSUMMARYID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT reportsummary_FK1 FOREIGN KEY (reportsummaryid) REFERENCES report(reportid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
