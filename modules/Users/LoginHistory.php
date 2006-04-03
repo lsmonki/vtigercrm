@@ -126,7 +126,7 @@ class LoginHistory extends SugarBean {
 		// Determine if the account name is present in the where clause.
 	//	$query = "SELECT * from loginhistory order by login_time";
 		global $current_user;
-		$query = "SELECT user_name,user_ip,".$this->db->getDBDateString("login_time")." login_time,".$this->db->getDBDateString("logout_time")." logout_time,status FROM $this->table_name ";
+		$query = "SELECT user_name,user_ip,".$this->db->getDBDateString("login_time")." AS login_time,".$this->db->getDBDateString("logout_time")." AS logout_time,status FROM $this->table_name ";
 		if($where != "")
 		{
 			if(!is_admin($current_user))
