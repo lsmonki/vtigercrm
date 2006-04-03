@@ -320,37 +320,6 @@ else {
 $log->info("current page is $currentModuleFile");	
 $log->info("current module is $currentModule ");	
 
-//define default home pages for each module
-require_once("modules/Users/TabMenu.php");
-$tabData = new TabMenu();
-
-global $permittedModulesList;
-
-$permittedModulesList = fetchPermissionDataForTabList();
-//print_r($permittedModulesList);
-$tempList="";
-if(!$permittedModulesList == "")
-{
-     
-     foreach ($permittedModulesList as $list) 
-     {
-       if($tempList=="")
-       {
-         $tempList = "'".$list."'" ;  
-       }
-       else
-       {
-         $tempList .= ",'" . $list."'" ;
-       }
-       $list="";
-     }
-}
-
-$moduleList = $tabData->getTabNames($tempList);
-
-foreach ($moduleList as $mod) {
-	$moduleDefaultFile[$mod] = "modules/".$currentModule."/index.php";
-}
 
 // for printing
 $module = (isset($_REQUEST['module'])) ? $_REQUEST['module'] : "";
@@ -363,12 +332,21 @@ $current_user = new User();
 
 if($use_current_login)
 {
-	$result = $current_user->retrieve($_SESSION['authenticated_user_id']);
+	//$result = $current_user->retrieve($_SESSION['authenticated_user_id']);
+	//getting the current user info from flat file
+	$result = $current_user->retrieveCurrentUserInfoFromFile($_SESSION['authenticated_user_id']);
 	if($result == null)
 	{
 		session_destroy();
 	    header("Location: index.php?action=Login&module=Users");
 	}
+
+	$moduleList = getPermittedModuleNames();
+
+        foreach ($moduleList as $mod) {
+                $moduleDefaultFile[$mod] = "modules/".$currentModule."/index.php";
+        }
+	
 	
 	$log->debug('Current user is: '.$current_user->user_name);
 }
