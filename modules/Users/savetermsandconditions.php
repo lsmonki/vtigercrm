@@ -11,7 +11,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
-$inv_type=$_REQUEST['inventory_type'];
+$inv_type='Inventory';
 $inv_tandc=$_REQUEST['inventory_tandc'];
 
 $sql="select * from inventory_tandc where type='".$inv_type."'";
