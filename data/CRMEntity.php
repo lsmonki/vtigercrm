@@ -740,8 +740,9 @@ $vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  
 	else
 		$ownertype = 'customer';
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+	$comment = $adb->quote($_REQUEST['comments']);
+	$id = $adb->getUniqueID("ticketcomments_commentid");
+	$sql = "insert into ticketcomments values(".$id.",".$this->id.",".$comment.",'".$current_user->id."','".$ownertype."','".$current_time."')";
         $adb->query($sql);
 }
 function insertIntoFAQCommentTable($table_name, $module)

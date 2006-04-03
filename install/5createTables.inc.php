@@ -248,6 +248,7 @@ $db->getUniqueID("role");
 $db->getUniqueID("rss");
 $db->getUniqueID("selectquery");
 $db->getUniqueID("systems");
+$db->getUniqueID("ticketcomments_commentid");
 $db->getUniqueID("wordtemplates");
 
 
