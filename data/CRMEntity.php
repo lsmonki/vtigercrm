@@ -753,8 +753,9 @@ $vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$
 
         $current_time = date('Y-m-d H:i:s');
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+	$comment = $adb->quote($_REQUEST['comments']);
+	$id = $adb->getUniqueID("faqcomments_commentid");
+	$sql = "insert into faqcomments values(".$id.",".$this->id.",".$comment.",'".$current_time."')";
 	$adb->query($sql);
 }
 function insertIntoReminderTable($table_name,$module,$recurid)

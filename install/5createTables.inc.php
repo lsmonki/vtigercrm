@@ -235,6 +235,7 @@ $db->getUniqueID("customfield_sequence");
 $db->getUniqueID("customview");
 $db->getUniqueID("def_org_share");
 $db->getUniqueID("emailtemplates");
+$db->getUniqueID("faqcomments_commentid");
 $db->getUniqueID("field");
 $db->getUniqueID("import_maps");
 $db->getUniqueID("inventorynotification");
