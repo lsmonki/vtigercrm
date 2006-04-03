@@ -19,8 +19,8 @@ $focus = new Reports();
 
 $rfid = $_REQUEST['record'];
 $mode = $_REQUEST['mode'];
-$foldername = addslashes($_REQUEST["folderName"]);
-$folderdesc = addslashes($_REQUEST["folderDesc"]);
+$foldername = $adb->quote($_REQUEST["folderName"]);
+$folderdesc = $adb->quote($_REQUEST["folderDesc"]);
 //echo $id.$mode."1".$foldername."2".$folderdesc;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
@@ -32,9 +32,8 @@ if($mode=="Save")
 {
 	if($rfid=="")
 	{
-		$sql = "INSERT INTO reportfolder ";
-		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-		$sql .= "VALUES ('','".$foldername."','".$folderdesc."','CUSTOMIZED')";
+		$sql = "INSERT INTO reportfolder (foldername,description,state)
+			VALUES (".$foldername.",".$folderdesc.",'CUSTOMIZED')";
 		$result = $adb->query($sql);
 		if($result!=false)
 		{
@@ -53,8 +52,8 @@ if($mode=="Save")
 	if($rfid != "")
 	{
 		$sql = "update reportfolder set ";
-		$sql .= "FOLDERNAME='".$foldername."', ";
-		$sql .= "DESCRIPTION='".$folderdesc."' ";
+		$sql .= "FOLDERNAME=".$foldername.", ";
+		$sql .= "DESCRIPTION=".$folderdesc." ";
 		$sql .= "where folderid=".$rfid;
 		$result = $adb->query($sql);
 		if($result!=false)

@@ -36,10 +36,10 @@ $smodule = $_REQUEST["secondarymodule"];
 //<<<<<<<reportmodules>>>>>>>>>
 
 //<<<<<<<report>>>>>>>>>
-$reportname = $adb->database->qstr($_REQUEST["reportName"]);
-$reportdescription = $adb->database->qstr($_REQUEST["reportDesc"]);
-$reporttype = $adb->database->qstr($_REQUEST["reportType"]);
-$folderid = $adb->database->qstr($_REQUEST["folder"]);
+$reportname = $adb->quote($_REQUEST["reportName"]);
+$reportdescription = $adb->quote($_REQUEST["reportDesc"]);
+$reporttype = $adb->quote($_REQUEST["reportType"]);
+$folderid = $adb->quote($_REQUEST["folder"]);
 //<<<<<<<report>>>>>>>>>
 
 //<<<<<<<standarfilters>>>>>>>>>
@@ -214,9 +214,9 @@ if($reportid == "")
 		}
 		
 		$ireportsql = "update report set";
-		$ireportsql .= " REPORTNAME='".$reportname."',";
-		$ireportsql .= " DESCRIPTION='".$reportdescription."',";
-		$ireportsql .= " REPORTTYPE='".$reporttype."'";
+		$ireportsql .= " REPORTNAME=".$reportname.",";
+		$ireportsql .= " DESCRIPTION=".$reportdescription.",";
+		$ireportsql .= " REPORTTYPE=".$reporttype."";
 		$ireportsql .= " where REPORTID=".$reportid;
 		$ireportresult = $adb->query($ireportsql);
 		$vtlog->logthis("Reports :: Save->Successfully saved report","info");
