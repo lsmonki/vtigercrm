@@ -10,54 +10,36 @@
 ********************************************************************************/
 
 
-require_once('XTemplate/xtpl.php');
-//require_once('data/Tracker.php');
-//require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
+require_once('Smarty_setup.php');
 
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['INV_TERMSANDCONDITIONS'],true);
-echo '<br><br>';
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate('modules/Users/OrganizationTermsandConditions.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-
-
+$smarty = new vtigerCRM_Smarty;
 $sql="select * from inventory_tandc";
 $result = $adb->query($sql);
-//$inventoryResult = $adb->fetch_array($result);
 $inventory_id = $adb->query_result($result,0,'id');
 $inventory_type = $adb->query_result($result,0,'type');
 $inventory_tandc = $adb->query_result($result,0,'tandc');
 
-if(isset($inventory_id))
-       $xtpl->assign("INVENTORYID",$inventory_id);
-if (isset($inventory_type))
-        $xtpl->assign("INVENTORYTYPE",$inventory_type);
 if (isset($inventory_tandc))
-        $xtpl->assign("INV_TERMSANDCONDITIONS",$inventory_tandc);
-
-
-/*
-        $xtpl->assign("INVENTORYID",$inventoryResult["id"]);  
-//if (isset($inventory_type))
-        $xtpl->assign("INVENTORYTYPE",$inventoryResult["type"]);
-//if (isset($inventory_tandc))
-        $xtpl->assign("INV_TERMSANDCONDITIONS",$inventoryResult["tandc"]);*/
-
-
-$xtpl->parse("main");
-$xtpl->out("main");
-
-?>
-
+        $smarty->assign("INV_TERMSANDCONDITIONS",$inventory_tandc);
+if(isset($_REQUEST['inv_terms_mode']) && $_REQUEST['inv_terms_mode'] != '')
+	$smarty->assign("INV_TERMS_MODE",$_REQUEST['inv_terms_mode']);
+else
+	$smarty->assign("INV_TERMS_MODE",'view');
 	
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("Settings/InventoryTerms.tpl");
+?>

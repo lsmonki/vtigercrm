@@ -9,6 +9,7 @@
  *
  ********************************************************************************/
 
+require_once('XTemplate/xtpl.php');
 global $adb;
 global $current_user;
 global $theme;
@@ -19,46 +20,13 @@ $result=$adb->query($query);
 $announcement=$adb->query_result($result,0,'announcement');
 $title_prev=$adb->query_result($result,0,'title');
 $id=$adb->query_result($result,0,'creatorid');
-if($id != $current_user->id)
-	$announcement='';
 
-	$html='<script>
-	function ajaxSaveResponse(response)
-	{
-		document.getElementById("announcement").innerHTML=response.responseText;
-		hide("an_busy");
-	}
-	function Announcement()
-	{
-	show("an_busy");	
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	//alert(document.getElementById("announcement").value);
-	var announcement=document.getElementById("announcement").value;
-	var title=document.getElementById("title_announce").value;
-	var urlstring = "module=Users&action=UsersAjax&announcement="+announcement+"&announce_save=yes&title_announcement="+title;
-		ajaxObj.process("index.php?",urlstring);
-	}
-	</script>
-	<br><br><table align="center"><tbody><tr style="height: 40px;">
-	<td class="dvtSelectedCell" align="center" nowrap="nowrap" colspan="4">Announcements<div id="an_busy" style="display:none;float:left;position:relative;"><img src="'.$image_path.'vtbusy.gif" align="right"></div></td>
-	</tr>
-	<tr style="height: 25px;"><td class="dvtCellLabel" align="right" width="20%">Title</td>
-	<td><input name="title_announce" id="title_announce" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="text" value="'.$title_prev.'"></td></tr>
-	<tr style="height: 25px;">
-	<td class="dvtCellLabel" align="right" width="20%">
-	Create Announcement</td>	
-	<td colspan="3"><textarea class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" id= "announcement" name="announcement" onblur="this.className=\'detailedViewTextBox\'" cols="100" rows="8">'.$announcement.'</textarea>
-	</td>
-	</tr>
-	<tr style="height: 25px;"><td colspan="4">&nbsp;</td></tr>
-	<tr>
-	<td colspan="4" style="padding: 5px;">
-	<div align="center">
-	<input title="Save [Alt+S]" accesskey="S" class="small" onclick="javascript:Announcement();" name="button" value="  Save  " style="width: 70px;" type="submit">
-	<input title="Cancel [Alt+X]" accesskey="X" class="small" onclick="window.history.back()" name="button" value="  Cancel  " style="width: 70px;" type="button">
-	</div>
-	</td>
-	</tr>
-	</tbody></table>';
-	echo $html;
+$smarty->assign("ANNOUNCE",$announcement);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+
+$smarty->display("Settings/Announcements.tpl");
+
 ?>

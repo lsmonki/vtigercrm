@@ -10,28 +10,30 @@
 ********************************************************************************/
 
 	
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_SETTINGS'].' : '. $mod_strings['LBL_COMPANY_INFO'], true);
-echo '<br><br>';
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate('modules/Settings/OrganizationConfig.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+global $mod_strings;
+global $app_strings;
+global $app_list_strings;
 
 
-	 $xtpl->assign("EDITCOMPANYDETAILS","<td align=center><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='EditCompanyDetails'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
-	 
-	 $xtpl->assign("CANCELCOMPANYDETAILS","<input title=\"$app_strings[LBL_CANCEL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CANCEL_BUTTON_KEY]\" class=\"button\"; onclick=\"this.form.action.value='index'\" type=\"submit\" name=\"Cancel\" value=\"$app_strings[LBL_CANCEL_BUTTON_LABEL]\"></td>");
+global $adb;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+
+
+$smarty = new vtigerCRM_Smarty;
 
 $sql="select * from organizationdetails";
 $result = $adb->query($sql);
@@ -47,30 +49,26 @@ $organization_website = $adb->query_result($result,0,'website');
 $organization_logo = $adb->query_result($result,0,'logo');
 $organization_logoname = $adb->query_result($result,0,'logoname');
 
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","index");
-
-
 if (isset($organization_name))
-	$xtpl->assign("ORGANIZATIONNAME",$organization_name);
+	$smarty->assign("ORGANIZATIONNAME",$organization_name);
 if (isset($organization_address))
-	$xtpl->assign("ORGANIZATIONADDRESS",$organization_address);
+	$smarty->assign("ORGANIZATIONADDRESS",$organization_address);
 if (isset($organization_city))
-	$xtpl->assign("ORGANIZATIONCITY",$organization_city);
+	$smarty->assign("ORGANIZATIONCITY",$organization_city);
 if (isset($organization_state))
-	$xtpl->assign("ORGANIZATIONSTATE",$organization_state);
+	$smarty->assign("ORGANIZATIONSTATE",$organization_state);
 if (isset($organization_code))
-	$xtpl->assign("ORGANIZATIONCODE",$organization_code);
+	$smarty->assign("ORGANIZATIONCODE",$organization_code);
 if (isset($organization_country))
-        $xtpl->assign("ORGANIZATIONCOUNTRY",$organization_country);
+    $smarty->assign("ORGANIZATIONCOUNTRY",$organization_country);
 if (isset($organization_phone))
-	$xtpl->assign("ORGANIZATIONPHONE",$organization_phone);
+	$smarty->assign("ORGANIZATIONPHONE",$organization_phone);
 if (isset($organization_fax))
-	$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
+	$smarty->assign("ORGANIZATIONFAX",$organization_fax);
 if (isset($organization_website))
-	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
+	$smarty->assign("ORGANIZATIONWEBSITE",$organization_website);
 if (isset($organization_logo))
-	$xtpl->assign("ORGANIZATIONLOGO",$organization_logo);
+	$smarty->assign("ORGANIZATIONLOGO",$organization_logo);
 
 $path = "test/logo";
 $dir_handle = @opendir($path) or die("Unable to open directory $path");
@@ -95,12 +93,14 @@ while ($file = readdir($dir_handle))
 
 
 if (isset($organization_logopath))
-	$xtpl->assign("ORGANIZATIONLOGOPATH",$path);
+	$smarty->assign("ORGANIZATIONLOGOPATH",$path);
 if (isset($organization_logoname))
-	$xtpl->assign("ORGANIZATIONLOGONAME",$logo_name);
+	$smarty->assign("ORGANIZATIONLOGONAME",$logo_name);
 closedir($dir_handle);
 
-$xtpl->parse("main");
-$xtpl->out("main");
-
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display('Settings/CompanyInfo.tpl');
 ?>

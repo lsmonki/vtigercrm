@@ -8,33 +8,25 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_EMAIL_CONFIG'], true);
-echo '<br>';
-
 //Display the mail send status
+$smarty = new vtigerCRM_Smarty;
 if($_REQUEST['mail_error'] != '')
 {
         require_once("modules/Emails/mail.php");
         $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
-	echo '<b><font color="purple">Test Mail status : '.$error_msg.'</font></b><br>';
+		$smarty->assign("ERROR_MSG",'<b><font color="purple">Test Mail status : '.$error_msg.'</font></b>');
 }
-echo '<br>';
 
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
-$xtpl=new XTemplate ('modules/Settings/EmailConfig.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
 
 $sql="select * from systems where server_type = 'email'";
 $result = $adb->query($sql);
@@ -43,22 +35,28 @@ $mail_server_username = $adb->query_result($result,0,'server_username');
 $mail_server_password = $adb->query_result($result,0,'server_password');
 $smtp_auth = $adb->query_result($result,0,'smtp_auth');
 
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","index");
-
 if (isset($mail_server))
-	$xtpl->assign("MAILSERVER",$mail_server);
+	$smarty->assign("MAILSERVER",$mail_server);
 if (isset($mail_server_username))
-	$xtpl->assign("USERNAME",$mail_server_username);
+	$smarty->assign("USERNAME",$mail_server_username);
+if (isset($mail_server_password))
+	$smarty->assign("PASSWORD",$mail_server_password);
 if (isset($smtp_auth))
 {
 	if($smtp_auth == 'true')
-		$xtpl->assign("SMTP_AUTH",'checked');
+		$smarty->assign("SMTP_AUTH",'checked');
 	else
-		$xtpl->assign("SMTP_AUTH",'');
+		$smarty->assign("SMTP_AUTH",'');
 }
 
-$xtpl->parse("main");
-$xtpl->out("main");
+if(isset($_REQUEST['emailconfig_mode']) && $_REQUEST['emailconfig_mode'] != '')
+	$smarty->assign("EMAILCONFIG_MODE",$_REQUEST['emailconfig_mode']);
+else
+	$smarty->assign("EMAILCONFIG_MODE",'view');
 
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("Settings/EmailConfig.tpl");
 ?>

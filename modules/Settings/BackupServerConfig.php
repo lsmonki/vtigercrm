@@ -9,41 +9,45 @@
 *
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_BACKUP_SERVER_CONFIG'], true);
-echo '<br><br>';
-
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Settings/BackupServerConfig.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
 
+$smarty = new vtigerCRM_Smarty;
+if($_REQUEST['error'] != '')
+{
+		$smarty->assign("ERROR_MSG",'<b><font color="purple">'.$_REQUEST["error"].'</font></b>');
+}
 $sql="select * from systems where server_type = 'backup'";
 $result = $adb->query($sql);
 $server = $adb->query_result($result,0,'server');
 $server_username = $adb->query_result($result,0,'server_username');
 $server_password = $adb->query_result($result,0,'server_password');
 
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","index");
+if(isset($_REQUEST['bkp_server_mode']) && $_REQUEST['bkp_server_mode'] != '')
+	$smarty->assign("BKP_SERVER_MODE",$_REQUEST['bkp_server_mode']);
+else
+	$smarty->assign("BKP_SERVER_MODE",'view');
 
 if (isset($server))
-	$xtpl->assign("FTPSERVER",$server);
+	$smarty->assign("FTPSERVER",$server);
 if (isset($server_username))
-	$xtpl->assign("FTPUSER",$server_username);
+	$smarty->assign("FTPUSER",$server_username);
 if (isset($server_password))
-	$xtpl->assign("FTPPASSWORD",$server_password);
+	$smarty->assign("FTPPASSWORD",$server_password);
 
-$xtpl->parse("main");
-$xtpl->out("main");
 
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("Settings/BackupServer.tpl");
 ?>

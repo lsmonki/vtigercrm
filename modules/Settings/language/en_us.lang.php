@@ -539,7 +539,8 @@ $mod_strings = Array(
 //Added fields after 5.0 Alpha
 'LBL_REQUIRE_SMTP_AUTHENTICATION'=>'Require SMTP Authentication?',
 'LBL_ANNOUNCEMENT'=>'Announcements',
-'LBL_SETTING_ANNOUNCEMENT'=>'Announcements',
+'LBL_SETTING_ANNOUNCEMENT'=>'Announcement',
+'LBL_ANNOUNCEMENT_INFO'=>'Type the announcement text below, and click the save button.',
 );
 
 

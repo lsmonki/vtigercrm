@@ -36,7 +36,6 @@ require_once('include/utils/utils.php');
 			{
 				$savelogo="false";
 				$error_flag ="1";
-				//$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
 			}		
 			else if($result!=false)
 			{
@@ -47,7 +46,6 @@ require_once('include/utils/utils.php');
 		{
 			$savelogo="false";
 			$error_flag ="1";
-			//$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
 		}
 		
 	}
@@ -56,10 +54,6 @@ require_once('include/utils/utils.php');
 		$savelogo="false";
 		if($filename != "") 
 			$error_flag ="2";
-		//$errormessage = "<font color='red'><B>Error Message<ul>
-		//<li><font color='red'>Invalid file OR</font>
-		//<li><font color='red'>File has no data</font>
-		//</ul></B></font> <br>" ;
 	}
 		
 	$errorCode =  $_FILES['binFile']['error'];
@@ -73,14 +67,12 @@ require_once('include/utils/utils.php');
 	else if($errorCode == 2)
 	{
 	   	$error_flag ="3";
-		//$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes</font></B> <br>";
 	   	$savelogo="false";	    	
 		$nologo_specified="false";
 	}
 	else if($errorCode == 3 )
 	{
 		$error_flag ="4";
-		//$errormessage = "<b>Problems in file upload. Please try again! </b><br>";
   		$savelogo="false";
 		$nologo_specified="false";
 	}
