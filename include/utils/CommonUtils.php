@@ -1279,11 +1279,14 @@ function create_tab_data_file()
         $result = $adb->query($sql);
         $num_rows=$adb->num_rows($result);
         $result_array=Array();
+	$seq_array=Array();
         for($i=0;$i<$num_rows;$i++)
         {
                 $tabid=$adb->query_result($result,$i,'tabid');
                 $tabname=$adb->query_result($result,$i,'name');
+		$presence=$adb->query_result($result,$i,'presence');
                 $result_array[$tabname]=$tabid;
+		$seq_array[$tabid]=$presence;
 
         }
 
@@ -1306,6 +1309,8 @@ if (file_exists($filename)) {
                 $newbuf .= "//This file contains the commonly used variables \n";
                 $newbuf .= "\n";
                 $newbuf .= "\$tab_info_array=".constructArray($result_array).";\n";
+                $newbuf .= "\n";
+                $newbuf .= "\$tab_seq_array=".constructArray($seq_array).";\n";
                 $newbuf .= "?>";
                 fputs($handle, $newbuf);
                 fclose($handle);
