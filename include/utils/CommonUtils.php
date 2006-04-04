@@ -944,19 +944,45 @@ function getHeaderArray()
 
 function getParentTabName($parenttabid)
 {
-    global $adb;
-    $sql = "select parenttab_label from parenttab where parenttabid=".$parenttabid;
-    $result = $adb->query($sql);
-    $parent_tabname=  $adb->query_result($result,0,"parenttab_label");
-    return $parent_tabname;
+	global $adb;
+	if (file_exists('parent_tabdata.php') && (filesize('parent_tabdata.php') != 0))
+	{
+		include('parent_tabdata.php');
+		$parent_tabname= $parent_tab_info_array[$parenttabid];
+	}
+	else
+	{
+		$sql = "select parenttab_label from parenttab where parenttabid=".$parenttabid;
+		$result = $adb->query($sql);
+		$parent_tabname=  $adb->query_result($result,0,"parenttab_label");
+	}
+	return $parent_tabname;
 }
+
 function getParentTabFromModule($module)
 {
 	global $adb;
-	$sql = "select parenttab.* from parenttab inner join parenttabrel on parenttabrel.parenttabid=parenttab.parenttabid inner join tab on tab.tabid=parenttabrel.tabid where tab.name='".$module."'";
-	$result = $adb->query($sql);
-	$tab =  $adb->query_result($result,0,"parenttab_label");
-	return $tab;
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0) && file_exists('parent_tabdata.php') && (filesize('parent_tabdata.php') != 0))
+	{
+		include('tabdata.php');
+		include('parent_tabdata.php');
+		$tabid=$tab_info_array[$module];
+		foreach($parent_child_tab_rel_array as $parid=>$childArr)
+		{
+			if(in_array($tabid,$childArr))
+			{
+				$parent_tabname= $parent_tab_info_array[$parid];
+			}
+		}
+		return $parent_tabname;
+	}
+	else
+	{
+		$sql = "select parenttab.* from parenttab inner join parenttabrel on parenttabrel.parenttabid=parenttab.parenttabid inner join tab on tab.tabid=parenttabrel.tabid where tab.name='".$module."'";
+		$result = $adb->query($sql);
+		$tab =  $adb->query_result($result,0,"parenttab_label");
+		return $tab;
+	}
 }
 
 /**
