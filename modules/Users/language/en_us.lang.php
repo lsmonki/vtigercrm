@@ -150,6 +150,7 @@ $mod_strings = Array(
 'LBL_ROLE_DETAILS'=>'Role Details',
 //added for vtigercrm4 rc
 'LBL_FILE'=> 'File Name',
+'LBL_FILE_TYPE'=>'File Type',
 'LBL_UPLOAD'=>'Upload File',
 'LBL_ATTACH_FILE'=>'Attach Mail Merge Template',
 'LBL_EMAIL_TEMPLATES'=>'Email Templates',
@@ -157,6 +158,10 @@ $mod_strings = Array(
 'LBL_TEMPLATE_HEADER'=>'Template',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Communication Templates > Email Templates',
+'LBL_MAILMERGE_TEMPLATES_LIST'=>'> Communication Templates > Mail Merge Templates',
+'LBL_DOWNLOAD_NOW'=>'Download Now',
+'LBL_DOWNLOAD'=>'Download',
+
 
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
