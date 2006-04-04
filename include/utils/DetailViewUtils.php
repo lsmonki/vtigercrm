@@ -844,7 +844,6 @@ function getRelatedLists($module,$focus)
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	
-	$mod_dir_name=getModuleDirName($module);
 	$cur_tab_id = getTabid($module);
 
 	$sql1 = "select * from relatedlists where tabid=".$cur_tab_id;
