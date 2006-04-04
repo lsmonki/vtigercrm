@@ -74,7 +74,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 
-	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
+	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list ='(';
 	$j=0;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -224,10 +224,37 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	global $adb;
 	global $theme;
 	global $app_strings;
-        global $mod_strings;
+        global $mod_strings,$current_user;
         $arrow='';
 	$list_header = Array();
-
+	$tabid = getTabid($module);
+	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
+	$field_list ='(';
+	$j=0;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	foreach($focus->search_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->search_fields_name[$name];
+		if($j != 0)
+		{
+			$field_list .= ', ';
+		}
+		$field_list .= "'".$fieldname."'";
+		$j++;
+	}
+	$field_list .=')';
+	if($is_admin==false)
+	{
+		$profileList = getCurrentUserProfileList();
+		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$result = $adb->query($query);
+		$field=Array();
+		for($k=0;$k < $adb->num_rows($result);$k++)
+		{
+			$field[]=$adb->query_result($result,$k,"fieldname");
+		}
+	}
+	//end
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
 	foreach($focus->search_fields as $name=>$tableinfo)
@@ -409,6 +436,21 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$field[]=$adb->query_result($result,$k,"fieldname");
 		}
 	}
+	//constructing the uitype and columnname array
+	$ui_col_array=Array();
+
+	$query = "select uitype,columnname,fieldname from field where tabid=".$tabid." and fieldname in".$field_list;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$tempArr=array();
+		$uitype=$adb->query_result($result,$i,'uitype');
+		$columnname=$adb->query_result($result,$i,'columnname');
+		$field_name=$adb->query_result($result,$i,'fieldname');
+		$tempArr[$uitype]=$columnname;
+		$ui_col_array[$field_name]=$tempArr;
+	}
 	//end
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
@@ -584,10 +626,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					else
 					{
-						$query="select uitype,columnname from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
-						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
 				//Added condition to hide the close symbol in Related Lists
@@ -631,19 +671,58 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
 {
-	global $adb;
+	global $adb,$theme,$current_user;
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '';
-	global $theme;	
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$list_block = Array();
 
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
-	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	
+	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
+	$field_list ='(';
+	$j=0;
+	foreach($focus->search_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->search_fields_name[$name];
+		if($j != 0)
+		{
+			$field_list .= ', ';
+		}
+		$field_list .= "'".$fieldname."'";
+		$j++;
+	}
+	$field_list .=')';
+	if($is_admin==false)
+	{
+		$profileList = getCurrentUserProfileList();
+		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$result = $adb->query($query);
+		$field=Array();
+		for($k=0;$k < $adb->num_rows($result);$k++)
+		{
+			$field[]=$adb->query_result($result,$k,"fieldname");
+		}
+	}
+	//constructing the uitype and columnname array
+	$ui_col_array=Array();
 
+	$query = "select uitype,columnname,fieldname from field where tabid=".$tabid." and fieldname in".$field_list;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$tempArr=array();
+		$uitype=$adb->query_result($result,$i,'uitype');
+		$columnname=$adb->query_result($result,$i,'columnname');
+		$field_name=$adb->query_result($result,$i,'fieldname');
+		$tempArr[$uitype]=$columnname;
+		$ui_col_array[$field_name]=$tempArr;
+	}
+	//end
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
 
@@ -715,11 +794,8 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 					else
 					{
-						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
-
-						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
 					}
 
 				}
@@ -738,10 +814,14 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
 	global $adb;
-	$tabname = getParentTab();	
-	$uitype = $adb->query_result($field_result,0,"uitype");
+	$tabname = getParentTab();
+	$uicolarr=$field_result[$fieldname];
+	foreach($uicolarr as $key=>$value)
+	{
+		$uitype = $key;
 	
-	$colname = $adb->query_result($field_result,0,"columnname");
+		$colname = $value;
+        }
 
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Activities' && $colname == "status")
