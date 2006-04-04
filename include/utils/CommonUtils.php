@@ -519,7 +519,13 @@ function getGroupName($id, $module)
 
 }
 
-
+/**
+ * Get the username by giving the user id.   This method expects the user id
+ * param $label_list - the array of strings to that contains the option list
+ * param $key_list - the array of strings to that contains the values list
+ * param $selected - the string which contains the default value
+ */
+     
 function getUserName($userid)
 {
 global $log;
@@ -535,7 +541,11 @@ $log->info("in getUserName ".$userid);
 	return $user_name;	
 }
 
-
+/**
+ * Creates and returns database query. To be used for search and other text links.   This method expects the module object.
+ * param $focus - the module object contains the column fields
+ */
+   
 function getURLstring($focus)
 {
 	$qry = "";
@@ -566,7 +576,10 @@ function getURLstring($focus)
 
 }
 
-
+/** This function returns the date in user specified format.
+  * param $cur_date_val - the default date format
+ */
+    
 function getDisplayDate($cur_date_val)
 {
 	global $current_user;
@@ -576,26 +589,20 @@ function getDisplayDate($cur_date_val)
 		$dat_fmt = 'dd-mm-yyyy';
 	}
 
-		//echo $dat_fmt;
-		//echo '<BR>'.$cur_date_val.'<BR>';
 		$date_value = explode(' ',$cur_date_val);
 		list($y,$m,$d) = split('-',$date_value[0]);
-		//echo $y.'----'.$m.'------'.$d;
 		if($dat_fmt == 'dd-mm-yyyy')
 		{
-			//echo '<br> inside 1';
 			$display_date = $d.'-'.$m.'-'.$y;
 		}
 		elseif($dat_fmt == 'mm-dd-yyyy')
 		{
 
-			//echo '<br> inside 2';
 			$display_date = $m.'-'.$d.'-'.$y;
 		}
 		elseif($dat_fmt == 'yyyy-mm-dd')
 		{
 
-			//echo '<br> inside 3';
 			$display_date = $y.'-'.$m.'-'.$d;
 		}
 
@@ -607,6 +614,10 @@ function getDisplayDate($cur_date_val)
  			
 }
 
+/** This function returns the date in user specified format.
+  * Takes no param, receives the date format from current user object
+  */
+    
 function getNewDisplayDate()
 {
 	global $log;
@@ -638,6 +649,10 @@ function getNewDisplayDate()
 	return $display_date;
 }
 
+/** This function returns the default currency information.
+  * Takes no param, return type array.
+    */
+    
 function getDisplayCurrency()
 {
         global $adb;
@@ -655,15 +670,29 @@ function getDisplayCurrency()
         return $curr_array;
 }
 
+/** This function returns the amount converted to dollar.
+  * param $amount - amount to be converted.
+    * param $crate - conversion rate.
+      */
+      
 function convertToDollar($amount,$crate){
                 return $amount / $crate;
 
         }
 
+/** This function returns the amount converted from dollar.
+  * param $amount - amount to be converted.
+    * param $crate - conversion rate.
+      */
 function convertFromDollar($amount,$crate){
                 return $amount * $crate;
         }
 
+/** This function returns the conversion rate for a given currency.
+  * param $id - currency id.
+    * param $symbol - currency symbol.
+      */
+      
 function getConversionRate($id,$symbol)
 {
         global $adb;
@@ -673,6 +702,11 @@ function getConversionRate($id,$symbol)
         return $rate;
 }
 
+/** This function returns the conversion rate for a given currency.
+  * param $id - currency id.
+  * param $symbol - currency symbol.
+  */
+      
 function getCurrencySymbol($id)
 {
         global $adb;
@@ -682,6 +716,10 @@ function getCurrencySymbol($id)
         return $curr_symbol;
 }
 
+/** This function returns the terms and condition from the database.
+  * Takes no param and the return type is text.
+  */
+	    
 function getTermsandConditions()
 {
         global $adb;
@@ -691,19 +729,15 @@ function getTermsandConditions()
         return $tandc;
 }
 
-function getModuleDirName($module)
-{
-	if($module == 'Vendor' || $module == 'PriceBook')
-	{
-		$dir_name = 'Products';	
-	}
-	else
-	{
-		$dir_name = $module;
-	}
-	return $dir_name;
-}
-
+/**
+ * Create select options in a dropdown list.  To be used inside
+  *  a reminder select statement in a activity form. 
+   * param $start - start value
+   * param $end - end value
+   * param $fldname - field name 
+   * param $selvalue - selected value 
+   */
+    
 function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 {
 	global $mod_strings;
@@ -722,7 +756,11 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 	return $OPTION_FLD;
 }
 
-
+/** This function returns the List price of a given product in a given price book.
+  * param $productid - product id.
+  * param $pbid - pricebook id.
+  */
+  
 function getListPrice($productid,$pbid)
 {
 	global $log;
@@ -735,12 +773,20 @@ function getListPrice($productid,$pbid)
 	return $lp;
 }
 
+/** This function returns a string with removed new line character, single quote, and back slash double quoute.
+  * param $str - string to be converted.
+  */
+      
 function br2nl($str) {
    $str = preg_replace("/(\r\n)/", " ", $str);
    $str = preg_replace("/'/", " ", $str);
    $str = preg_replace("/\"/", " ", $str);
    return $str;
 }
+
+/** This function returns a text, which escapes the html encode for link tag/ a href tag
+*param $text - string/text
+*/
 
 function make_clickable($text)
 {
