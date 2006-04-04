@@ -13,8 +13,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	global $app_strings;
 	global $current_language;
 
-	$mod_dir=getModuleDirName($module);
-	$current_module_strings = return_module_language($current_language, $mod_dir);
+	$current_module_strings = return_module_language($current_language, $module);
 
 	global $list_max_entries_per_page;
 	global $urlPrefix;
