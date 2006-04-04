@@ -109,9 +109,9 @@
 	<tr>
 		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
 			{if $EMODE eq 'edit'}
-        	        	<span class="lvtHeaderText">Communication Templates &gt; Editing Email Templates &gt; {$TEMPLATENAME}</span>
+        	        	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > Communication Templates &gt; Editing Email Templates &gt; {$TEMPLATENAME}</b></span>
 			{else}
-				<span class="lvtHeaderText">Communication Templates &gt; Creating Email Templates &gt; New</span>
+				<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > Communication Templates &gt; Creating Email Templates &gt; New</b> </span>
 			{/if}
             	    <hr noshade="noshade" size="1" />
 		</td>
