@@ -9,62 +9,39 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
+require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
-<head>
-<title>Roles List</title>
-<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
-</head>
-<body>
-<!--c:out value="${locale}"/-->
-<!--fmt:setLocale value="ja_JP"/--><form action="index.php">
-<input type="hidden" name="module" value="Settings">
-<input type="hidden" name="action" value="CreateCurrencyInfo">
-<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_CURRENCY_CONFIG'], true);?>
-<br>
-<input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_CURRENCY']; ?>">
-<br>
-<br>
-<table width="65%" border="0" cellspacing="1" cellpadding="5" class="FormBorder">
-  <tr>
-    <td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_NAME']; ?></b></td>
-    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_CODE']; ?></b></td>
-    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_SYMBOL']; ?></b></td>
-    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_CRATE']; ?></b></td>
-    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_STATUS']; ?></b></td>
-    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">&nbsp;</td>
-  </tr>
- <?php
+require_once('include/utils/UserInfoUtil.php');
+global $mod_strings,$adb,$theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+$smarty=new vtigerCRM_Smarty;
+
    $sql = "select * from currency_info";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
-   $del="Del  ";
    $cnt=1;
-
-require_once('include/utils/UserInfoUtil.php');
+   $currency = Array();
 do
 {
-  if ($cnt%2==0)
-  printf("<tr class='evenListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
-  else
-  printf("<tr class='oddListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
-  if($temprow["defaultid"] == '-11')
-        printf("%s</td>",$temprow["currency_name"]);
-  else
- 	printf("<a href=index.php?module=Settings&action=CurrencyDetailView&record=".$temprow["id"].">%s</a></td>",$temprow["currency_name"]);
-  printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_code"]);
-  printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_symbol"]);
-  printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["conversion_rate"]);
-  printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_status"]);
-  if($temprow["defaultid"] != '-11')
-	printf("<td style='padding:0px 3px 0px 3px;' nowrap><a href=index.php?module=Settings&action=CurrencyDelete&record=".$temprow["id"].">%s</a></td>",$del);
-  $cnt++;
+	$currency_element = Array();
+	$currency_element['name'] = $temprow["currency_name"];
+	$currency_element['code'] = $temprow["currency_code"];
+	$currency_element['symbol'] = $temprow["currency_symbol"];
+	$currency_element['crate'] = $temprow["conversion_rate"];
+	$currency_element['status'] = $temprow["currency_status"];
+	if($temprow["defaultid"] != '-11')
+	{
+		$currency_element['name'] = '<a href=index.php?module=Settings&action=CurrencyDetailView&record='.$temprow["id"].'>'.$temprow["currency_name"].'</a>';
+		$currency_element['tool']= '<a href=index.php?module=Settings&action=CurrencyDetailView&record='.$temprow["id"].'><img src="'.$image_path.'editField.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;|&nbsp;<a href=index.php?module=Settings&action=CurrencyDelete&record='.$temprow["id"].' onClick=DeleteCurrency("'.$temprow["id"].'");><img src="'.$image_path.'currencydelete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+	}
+	else
+		$currency_element['tool']= '';
+ 	$currency[] = $currency_element; 
+	$cnt++;
 }while($temprow = $adb->fetch_array($result));
+$smarty->assign("MOD",$mod_strings);
+$smarty->assign("CURRENCY_LIST",$currency);
+$smarty->display('CurrencyListView.tpl');
 ?>
-</table>
-</body>
-</html>
 
