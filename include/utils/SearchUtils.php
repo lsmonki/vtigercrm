@@ -26,7 +26,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         global $adb;
         global $theme;
         global $app_strings;
-        global $mod_strings;
+        global $mod_strings,$current_user;
         //Seggregating between module and smodule
         if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
         {
@@ -64,6 +64,41 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         $focus->list_fields = $oCv->list_fields;
                 }
         }
+	//Added to reduce the no. of queries logging for non-admin users -- by Minnie-start
+	$field_list ='(';
+	$j=0;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	foreach($focus->list_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->list_fields_name[$name];
+		if($oCv)
+		{
+			if(isset($oCv->list_fields_name))
+			{
+				$fieldname = $oCv->list_fields_name[$name];
+			}
+		}
+		if($j != 0)
+		{
+			$field_list .= ', ';
+		}
+		$field_list .= "'".$fieldname."'";
+		$j++;
+	}
+	$field_list .=')';
+	//Getting the Entries from Profile2 field table
+	if($is_admin == false)
+	{
+		$profileList = getCurrentUserProfileList();
+		//changed to get field.fieldname
+		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$result = $adb->query($query);
+		$field=Array();
+		for($k=0;$k < $adb->num_rows($result);$k++)
+		{
+			$field[]=$adb->query_result($result,$k,"fieldname");
+		}
+	}
 
         //modified for customview 27/5 - $app_strings change to $mod_strings
         foreach($focus->list_fields as $name=>$tableinfo)
@@ -92,19 +127,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         $fieldname = $focus->list_fields_name[$name];
                 }
 
-                //Getting the Entries from Profile2 field table
-                global $current_user;
-                require('user_privileges/user_privileges_'.$current_user->id.'.php');
-                if($is_admin == false)
-                {
-
-                        $profileList = getCurrentUserProfileList();
-                        $query  = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
-                        $result = $adb->query($query);
-                }
-
-
-                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
                         if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
