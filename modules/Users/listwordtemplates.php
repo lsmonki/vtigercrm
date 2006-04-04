@@ -9,53 +9,49 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
+require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
-<head>
-<title>Word Templates List</title>
-<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
-</head>
-<body><form method="post" action="index.php">
-<input type="hidden" name="module" value="Users">
-<input type="hidden" name="action" value="upload">
-<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_WORD_TEMPLATES'],false);?>	
-<br>
-<input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_WORD_TEMPLATE']; ?>">
-<br>
-<br>
-<?php
-require_once('modules/Users/binaryfilelist.php');
-echo getAttachmentsList();
-/*
-   $sql = "select * from wordtemplatestorage";
-   $result = mysql_query($sql);
-   $temprow = mysql_fetch_array($result);
+
+   global $adb;
+   $sql = "select templateid, module, description, filename, filesize, filetype from wordtemplates order by filename ASC";
+   $result = $adb->query($sql);
+
 $edit="Edit  ";
 $del="Del  ";
 $bar="  | ";
 $cnt=1;
-*/
-/*
-do
-{
-  $name=$temprow["name"];
-  if ($cnt%2==0)
-  printf("<tr class='evenListRow'> <td height='25'>");
-  else
-  printf("<tr class='oddListRow'> <td height='25'>");
-  
-  printf(" <a href='#'>%s</a></td>",$temprow["filename"]);
-*/
-/*
-  printf("<td height='25'>%s</td>",$temprow["description"]);
-   $cnt++;
- }
- while($temprow = mysql_fetch_array($result));
-*/
+
+$return_data = Array();
+$num_rows = $adb->num_rows($result);
+
+
+for($i=0;$i < $num_rows; $i++)
+{	
+  $wordtemplatearray=array();
+  $wordtemplatearray['templateid'] = $adb->query_result($result,$i,'templateid');
+  $wordtemplatearray['description'] = $adb->query_result($result,$i,'description');
+  $wordtemplatearray['module'] = $adb->query_result($result,$i,'module');
+  $wordtemplatearray['filename'] = $adb->query_result($result,$i,'filename');
+  $wordtemplatearray['filetype'] = $adb->query_result($result,$i,'filetype');
+  $wordtemplatearray['filesize'] = $adb->query_result($result,$i,'filesize');	 
+  $return_data []= $wordtemplatearray;	
+}
+require_once('include/utils/UserInfoUtil.php');
+global $app_strings;
+global $mod_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
+$smarty = new vtigerCRM_Smarty;
+global $current_language;
+$smod_strings = return_module_language($current_language,'Settings');
+$smarty->assign("MOD", $smod_strings);
+$smarty->assign("UMOD", $mod_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+
+
+$smarty->assign("WORDTEMPLATES",$return_data);
+$smarty->display("ListWordTemplates.tpl");
 
 ?>
-</body>
-</html>
