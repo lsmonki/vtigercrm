@@ -63,7 +63,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$list_header = Array();
 
 	//Get the tabid of the module
-	//require_once('include/utils/UserInfoUtil.php')
 	$tabid = getTabid($smodule);
 	global $current_user;
 	//added for customview 27/5
@@ -75,10 +74,44 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 
+	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
+	$field_list ='(';
+	$j=0;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	foreach($focus->list_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->list_fields_name[$name];
+		if($oCv)
+		{
+			if(isset($oCv->list_fields_name))
+			{
+				$fieldname = $oCv->list_fields_name[$name];
+			}
+		}
+		if($j != 0)
+		{
+			$field_list .= ', ';
+		}
+		$field_list .= "'".$fieldname."'";
+		$j++;
+	}
+	$field_list .=')';
+	if($is_admin==false)
+	{
+		$profileList = getCurrentUserProfileList();
+		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$result = $adb->query($query);
+		$field=Array();
+		for($k=0;$k < $adb->num_rows($result);$k++)
+		{
+			$field[]=$adb->query_result($result,$k,"fieldname");
+		}
+	}
+	//end
+	
 	//modified for customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
-		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
 		//added for customview 27/5
 		if($oCv)
 		{
@@ -94,19 +127,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$fieldname = $focus->list_fields_name[$name];
 		}
 
-		//Getting the Entries from Profile2 field table
-		global $current_user;	
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');	
-		if($is_admin == false)		
-		{
-
-			$profileList = getCurrentUserProfileList();
-			$query 	= "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
-			$result = $adb->query($query);
-		}
-
-
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
@@ -184,7 +205,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 													//Added condition to hide the close column in Related Lists
 													if($name == 'Close' && $relatedlist != '')
 													{
-													//$list_header .= '';
 													// $list_header[] = '';
 													}
 													else
@@ -208,11 +228,8 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
         $arrow='';
 	$list_header = Array();
 
-	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
-	//$list_header = '<tr class="moduleListTitle" height=20>';
-	//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
@@ -258,11 +275,8 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                 }
                         }
 			$list_header[]=$name;
-			//$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-			//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 		}
 	}	
-	//$list_header .= '</tr>';
 	return $list_header;
 
 }
@@ -343,7 +357,7 @@ function getNavigationValues($display, $noofrows, $limit)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
-	global $adb;
+	global $adb,$current_user;
 	global $app_strings;
 	$noofrows = $adb->num_rows($list_result);
 	$list_block = Array();
@@ -362,7 +376,40 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$focus->list_fields = $oCv->list_fields;
 		}
 	}
-
+	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
+	$field_list ='(';
+	$j=0;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	foreach($focus->list_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->list_fields_name[$name];
+		if($oCv)
+		{
+			if(isset($oCv->list_fields_name))
+			{
+				$fieldname = $oCv->list_fields_name[$name];
+			}
+		}
+		if($j != 0)
+		{
+			$field_list .= ', ';
+		}
+		$field_list .= "'".$fieldname."'";
+		$j++;
+	}
+	$field_list .=')';
+	if($is_admin==false)
+	{
+		$profileList = getCurrentUserProfileList();
+		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$result = $adb->query($query);
+		$field=Array();
+		for($k=0;$k < $adb->num_rows($result);$k++)
+		{
+			$field[]=$adb->query_result($result,$k,"fieldname");
+		}
+	}
+	//end
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
 		$list_header =Array();
@@ -404,17 +451,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 			}
 
-			global $current_user;	
-			require('user_privileges/user_privileges_'.$current_user->id.'.php');	
-			if($is_admin==false)	
-			{	
-				$profileList = getCurrentUserProfileList();
-				$query 	= "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
-
-				$result = $adb->query($query);	
-			}	
-
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field))
 			{
 
 
@@ -547,11 +584,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					else
 					{
-
-						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$query="select uitype,columnname from field where tabid=".$tabid." and fieldname='".$fieldname."'";
 						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
-
 						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
@@ -600,7 +635,6 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '';
 	global $theme;	
-	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$list_block = Array();
@@ -612,16 +646,11 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-		/*if (($i%2)==0)
-		  $list_header .= '<tr height=20 class=evenListRow>';
-		  else
-		  $list_header .= '<tr height=20 class=oddListRow>';*/
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
 		$list_header=Array();
 
-		//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->search_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->search_fields_name[$name];
@@ -694,15 +723,11 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 
 				}
-				//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-				//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 				$list_header[]=$value;
 			}
 		}	
-		//$list_header .= '</tr>';
 		$list_block[$entity_id]=$list_header;
 	}
-	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_block;
 }
 
@@ -856,9 +881,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($parentid != '')
                 {
 			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
-			//echo '<br> query : .. '.$sql;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
-			//echo '<br><br> val : '.$fieldvalue;
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -887,9 +910,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($parentid != '')
                 {
 			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
-			//echo '<br> query : .. '.$sql;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
-			//echo '<br><br> val : '.$fieldvalue;
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
@@ -1047,7 +1068,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$row_id = $_REQUEST['curr_row'];
 
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
-					//$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
@@ -1185,7 +1205,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$value = $temp_val;
 		}
 	}
-//	$value .= $returnset;
 	
 	// Mike Crowe Mod --------------------------------------------------------Make right justified and currency value
 	if ( in_array($uitype,array(71,72,7,9,90)) )
