@@ -9,7 +9,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 	   <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
-              <span class="lvtHeaderText">{$UMOD.LBL_EMAIL_TEMPLATE_INFORMATION} &quot;{$TEMPLATENAME}&quot;</span>
+              <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_EMAIL_TEMPLATE_INFORMATION} &quot;{$TEMPLATENAME}&quot;</b></span>
 	        <hr noshade="noshade" size="1" />
 	   </td>
 		<td width="10%" class="showPanelBg">&nbsp;</td>
