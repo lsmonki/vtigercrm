@@ -70,11 +70,13 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_CODE'=>'Currency Code',
 
-'LBL_CURRENCY_SYMBOL'=>'Currency Symbol',
+'LBL_CURRENCY_SYMBOL'=>'Symbol',
 
 'LBL_CURRENCY_CRATE'=>'Conversion Rate',
 
 'LBL_CURRENCY_STATUS'=>'Status',
+
+'LBL_CURRENCY_TOOL'=>'Tools',
 
 
 
@@ -298,9 +300,6 @@ $mod_strings = Array(
 'LBL_CURRENCY_CONFIG'=>'Currency Configuration',
 
 'LBL_CURRENCY_INFO'=>'Currency Information',
-'LBL_CURRENCY_NAME'=>'Currency Name',
-'LBL_CURRENCY_CODE'=>'Currency Code',
-'LBL_CURRENCY_SYMBOL'=>'Currency Symbol',
 
 
 
