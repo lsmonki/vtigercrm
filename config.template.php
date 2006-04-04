@@ -19,11 +19,13 @@ include('vtigerversion.php');
 // memory limit default value = 16M
 ini_set('memory_limit','16M');
 
-// show or hide world clock and calculator
+// show or hide world clock, calculator and FCKEditor
 // world_clock_display default value = true
-// calculator_clock_display default value = true
+// calculator_display default value = true
+// fckeditor_display default value = true
 $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
+$FCKEDITOR_DISPLAY = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
 $PORTAL_URL = 'http://your-domain.com/customerportal';
