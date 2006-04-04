@@ -9,63 +9,75 @@
 * 
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : Assign Module Owners', true);
-
+require_once('Smarty_setup.php');
+require_once('include/utils/utils.php');
 global $mod_strings, $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-
 $module_array = getModuleNameList();
-$user_array = get_user_array();
-
-$row = 1;
-foreach($module_array as $val)
+if($_REQUEST['list_module_mode'] != '' && $_REQUEST['list_module_mode'] == 'save')
 {
-	if ($row%2==0)
-        {
-		$trowclass = 'evenListRow';
-	}
-	else
+	foreach($module_array as $val)
 	{
-		$trowclass = 'oddListRow';
+		$req_name = 'user_'.strtolower($val);
+		$userid = $_REQUEST[$req_name];
+		$tabid = getTabid($val);
+		if($tabid != '' && $userid != '')
+		{
+			$sql = 'update moduleowners set user_id = '.$userid.' where tabid = '.$tabid;
+			$adb->query($sql);
+		}
 	}
-	$row ++;
-	$user_list .= '<tr class="'.$trowclass.'"><td nowrap width="20%" height="21" style="padding:0px 3px 0px 3px;">'.$val.' : </td>';
+	
+}
+elseif($_REQUEST['list_module_mode'] != '' && $_REQUEST['list_module_mode'] == 'edit')
+{
+	$user_array = get_user_array(false);
+	foreach($module_array as $val)
+	{
+		$user_combo = getUserCombo($user_array,$val);
 
-	//get the user array as a combo list
-	$user_id = getModuleOwner(getTabid($val));
-	$user_name = getUserName($user_id);
+		$user_list []= $val;
+		$user_list []= $user_combo;
 
-	$user_list .= '<td width="20%" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td></tr>';
-
-	//To add the modules as single string to pass as hidden value
-	$modules .= $val.'&&&';
+	}
+	$user_list = array_chunk($user_list,2);
 }
 
+$smarty = new vtigerCRM_Smarty;
+if($_REQUEST['list_module_mode'] != 'edit')
+{
+	foreach($module_array as $val)
+	{
+		$user_list []= $val;
 
-require_once($theme_path.'layout_utils.php');
+		//get the user array as a combo list
+		$user_id = getModuleOwner(getTabid($val));
+		$user_name = getUserName($user_id);
 
+		$user_list []= $user_id;
+		$user_list []= $user_name;
+	}
+
+	$user_list = array_chunk($user_list,3);
+}
 $log->info("Settings Module Owners view");
 
-$xtpl=new XTemplate ('modules/Settings/ListModuleOwners.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("MODULE", "Settings");
+$smarty->assign("MODULE_MODE",$_REQUEST['list_module_mode']);
+$smarty->assign("USER_LIST", $user_list);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
 
-$xtpl->assign("MODULES_LIST", $modules);
-
-$xtpl->assign("USER_LIST", $user_list);
-
-$xtpl->parse("main");
-
-$xtpl->out("main");
-
+if($_REQUEST['file_mode'] != 'ajax')
+	$smarty->display("Settings/ModuleOwners.tpl");
+else
+	$smarty->display("Settings/ModuleOwnersContents.tpl");
+	
 function getModuleOwner($tabid)
 {
 	global $adb;
@@ -87,9 +99,31 @@ function getModuleNameList()
 	{
 		array_push($mod_array,$row['name']);
 	}
-	//echo '<pre>';print_r($mod_array);echo '</pre>';
-
 	return $mod_array;
 }
+function getUserCombo($user_array,$name)
+{
+	global $adb;
 
+	$tabid = getTabid($name);
+	$sql = "select * from moduleowners where tabid=".$tabid;
+	$res = $adb->query($sql);
+	$db_userid = $adb->query_result($res,0,'user_id');
+	
+	//Form the user combo list for each module
+	$combo_name = "user_".strtolower($name);
+	$user_combo = '<select name="'.$combo_name.'">';
+	foreach($user_array as $user_id => $user_name)
+	{
+		$selected = '';
+		if($user_id == $db_userid)
+		{	
+			$selected = 'selected';
+		}
+		$user_combo .= '<OPTION value="'.$user_id.'" '.$selected.'>'.$user_name.'</OPTION>';
+	}
+	$user_combo .= '</select>';
+
+	return $user_combo;
+}
 ?>
