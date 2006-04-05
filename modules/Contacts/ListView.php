@@ -34,12 +34,7 @@ global $list_max_entries_per_page;
 
 $log = LoggerManager::getLogger('contact_list');
 
-global $currentModule;
-global $theme;
-
-// Get _dom arrays from Database
-$comboFieldNames = Array('leadsource'=>'leadsource_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
+global $currentModule,$theme;
 
 $focus = new Contact();
 $smarty = new vtigerCRM_Smarty;
