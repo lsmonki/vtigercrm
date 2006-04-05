@@ -540,6 +540,9 @@ $mod_strings = Array(
 'LBL_ANNOUNCEMENT'=>'Announcements',
 'LBL_SETTING_ANNOUNCEMENT'=>'Announcement',
 'LBL_ANNOUNCEMENT_INFO'=>'Type the announcement text below, and click the save button.',
+'LBL_EMAIL_CONTENTS'=>'Email Contents',
+'LBL_SUBJECT'=>'Subject',
+'LBL_MESSAGE'=>'Message',
 );
 
 
