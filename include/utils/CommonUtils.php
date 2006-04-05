@@ -20,25 +20,9 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-
-
-/** This function returns the name of the person.
-  * It currently returns "first last".  It should not put the space if either name is not available.
-  * It should not return errors if either name is not available.
-  * If no names are present, it will return ""
-  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-  * All Rights Reserved.
-  * Contributor(s): ______________________________________..
-  */
-
   require_once('include/database/PearDatabase.php');
   require_once('include/ComboUtil.php'); //new
   require_once('include/utils/utils.php'); //new
-
-
-
-
-
 
 /**
  * Check if user id belongs to a system admin.
@@ -832,7 +816,6 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
         $block_detail = Array();
         $getBlockinfo = "";
         $query="select blockid,blocklabel,show_title from blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
-	//echo $query;
 
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
@@ -861,19 +844,16 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 				if($block_label=='LBL_RELATED_PRODUCTS')
                                 {
 					$getBlockInfo=getProductDetailsBlockInfo($mode,$module);
-				        //echo '<pre>';print_r($getBlockInfo);echo '</pre>';
                                 }
 				else
 				{
                                 	$getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
-				//echo '<pre>';print_r($getBlockInfo);echo '</pre>';
 				}
                         }
 
                         if(is_array($getBlockInfo))
                         {
                                 $block_detail[$block_title] = $getBlockInfo;
-				//echo '<pre>';print_r($block_detail);echo '</pre>';
                         }
                 }
                 else
@@ -906,7 +886,6 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
                 }
 
         }
-	//echo '<pre>';print_r($block_detail);echo '</pre>';
         return $block_detail;
 }
 
@@ -944,6 +923,11 @@ function getBlockId($tabid,$label)
         return $blockid;
 }
 
+/**
+ * This function is used to get the Parent and Child tab relation array.
+ * Takes no parameter and get the data from parent_tabdata.php and tabdata.php
+ * This returns array type value
+ */
 
 function getHeaderArray()
 {
@@ -988,6 +972,12 @@ function getHeaderArray()
 	return $relatedtabs;
 }
 
+/**
+ * This function is used to get the Parent Tab name for a given parent tab id.
+ * Takes the input parameter as $parenttabid - Parent tab id
+ * This returns value string type 
+ */
+
 function getParentTabName($parenttabid)
 {
 	global $adb;
@@ -1004,6 +994,13 @@ function getParentTabName($parenttabid)
 	}
 	return $parent_tabname;
 }
+
+/**
+ * This function is used to get the Parent Tab name for a given module.
+ * Takes the input parameter as $module - module name
+ * This returns value string type 
+ */
+
 
 function getParentTabFromModule($module)
 {
@@ -1032,8 +1029,11 @@ function getParentTabFromModule($module)
 }
 
 /**
- * This function returns the parenttab and for the given module.
+ * This function is used to get the Parent Tab name for a given module.
+ * Takes no parameter but gets the parenttab value from form request
+ * This returns value string type 
  */
+
 function getParentTab()
 {
     if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] !='')
@@ -1216,7 +1216,13 @@ function SaveImage($_FILES,$module,$id,$mode)
 	'mode'=>$mode);
 	return $return_value;
 }
-//function to check whether same product name exists
+
+ /**
+ * This function is used to generate file name if more than one image with same name is added to a given Product.
+ * Param $filename - product file name
+ * Param $exist - number time the file name is repeated.
+ */
+
 function file_exist_fn($filename,$exist)
 {
 	global $uploaddir;
@@ -1263,7 +1269,7 @@ function file_exist_fn($filename,$exist)
 }
 
 /**
- * This function is used get the User Count  .
+ * This function is used get the User Count.
  * It returns the array which has the total users ,admin users,and the non admin users 
  */
 
@@ -1280,7 +1286,10 @@ function UserCount()
 }
 
 /**
- * This function is used to create folders recursively   .
+ * This function is used to create folders recursively.
+ * Param $dir - directory name
+ * Param $mode - directory access mode
+ * Param $recursive - create directory recursive, default true
  */
 
 function mkdirs($dir, $mode = 0777, $recursive = true)
@@ -1297,6 +1306,9 @@ function mkdirs($dir, $mode = 0777, $recursive = true)
 	return FALSE;
 }
 
+/**This function returns the module name which has been set as default home view for a given user.
+ * Takes no parameter, but uses the user object $current_user.
+ */
 function DefHomeView()
 {
 		global $adb;
@@ -1332,9 +1344,6 @@ function setObjectValuesFromRequest($focus)
 		}
 	}
 }
-
-
-
 
  /**
  * Function to write the tabid and name to a flat file tabdata.txt so that the data
@@ -1511,11 +1520,4 @@ function getFilePath($attachmentid,$filename)
 
 	return $filepath;
 }
-
-
-
-
-
-
-
 ?>
