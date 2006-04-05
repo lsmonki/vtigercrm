@@ -44,8 +44,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 if($_REQUEST['directmode'] != '')
-	$smarty->display("Settings/EmailNotoficationContents.tpl");
+	$smarty->display("Settings/EmailNotificationContents.tpl");
 else
-	$smarty->display("Settings/EmailNotofication.tpl");
+	$smarty->display("Settings/EmailNotification.tpl");
 	
 ?>		
