@@ -36,11 +36,6 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $other_text = Array();
 
-
-$comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
-                      ,'productcategory'=>'productcategory_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
 $focus = new Product();
