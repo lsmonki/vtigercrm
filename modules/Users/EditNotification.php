@@ -9,52 +9,40 @@
 *
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_HDR_EMAIL_SCHDS'], true);
-echo '<br><br>';
 
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+$smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') 
 {
     $id = $_REQUEST['record'];
-    $mode = 'edit'; 	
-	$xtpl=new XTemplate ('modules/Users/EditNotification.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
-
+	
 	$sql="select * from notificationscheduler where schedulednotificationid = ".$id;
 	$result = $adb->query($sql);
 	if($adb->num_rows($result) ==1);
 	{
-		$label = $mod_strings[$adb->query_result($result,0,'label')];
-		$notification_subject = $adb->query_result($result,0,'notificationsubject');
-		$notification_body = $adb->query_result($result,0,'notificationbody');
-
-		$xtpl->assign("RETURN_MODULE","Users");
-		$xtpl->assign("RETURN_ACTION","listnotificationschedulers");
-		$xtpl->assign("RECORD_ID",$id);
-
-		if (isset($label))
-			$xtpl->assign("LABEL",$label);
-		if (isset($notification_subject))
-			$xtpl->assign("SUBNOTIFY",$notification_subject);
-		if (isset($notification_body))
-			$xtpl->assign("BODYNOTIFY",$notification_body);
+		$notification = Array();
+		$notification['active'] = $adb->query_result($result,0,'active');
+		$notification['subject'] = $adb->query_result($result,0,'notificationsubject');
+		$notification['body'] = $adb->query_result($result,0,'notificationbody');
+		$notification['name'] = $mod_strings[$adb->query_result($result,0,'label')];
+		$notification['id'] = $adb->query_result($result,0,'schedulednotificationid');
 	}
-	$xtpl->parse("main");
-	$xtpl->out("main");
+	
+	$smarty->assign("NOTIFY_DETAILS",$notification);
 }
-else
-{
-	header("Location:index.php?module=Users&action=listnotificationschedulers");
-}
+
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("Settings/EditEmailNotofication.tpl");
 ?>

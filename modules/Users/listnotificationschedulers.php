@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
@@ -11,77 +10,42 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-
+require_once('Smarty_setup.php');
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-?>
-<html>
-<head>
-<title>Untitled Document</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-<body>
-<form action="index.php" method="post">
-<input type="hidden" name="module" value="Users">
-<input type="hidden" name="action" value="updateNotificationSchedulers">
-<?php echo get_module_title($_REQUEST["module"],$mod_strings['LBL_HDR_EMAIL_SCHDS'],false);?>
-<br>
-<?php echo $mod_strings['LBL_EMAIL_SCHDS_DESC'];?>
-<br><br>
-<input class="button" type="submit" value ="<?php echo $mod_strings['LBL_BUTTON_UPDATE'];?>">
-<br><br>
-  <table width="70%" border="0" cellspacing="1" cellpadding="5" class="FormBorder">
-    <tr height="20"> 
-      <td  class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"><b><?php echo $mod_strings['LBL_ACTIVE'];?></b></div></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_NOTIFICATION'];?></b></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_DESCRIPTION'];?></b></td>
-    </tr>
-<?
-
+$smarty = new vtigerCRM_Smarty;
 $query = "SELECT * FROM notificationscheduler";
 $result = $adb->query($query);
 if($adb->num_rows($result) >=1)
 {
-	$row_list  = 1;
+	$notifiy_array = Array();
 	while($result_row = $adb->fetch_array($result))
 	{
-		$chkd = '';
-		$disabled = '';
-		$active = $result_row['active'];
-		$shedid = $result_row['schedulednotificationid'];
-		$label = $result_row['label'];
-		$shedname = $result_row['schedulednotificationname'];
-		if($active == 1)
-		{
-			$chkd = "CHECKED";
-		}
-		if($row_list%2 ==1)
-		{
-			$ListRow = "oddListRow";
-		}
-		else
-		{
-			$ListRow = "evenListRow";
-		}
+		$result_data = Array();
+		$result_data['active'] = $result_row['active'];
+		$result_data['schedulename'] = $mod_strings[$result_row['schedulednotificationname']];
+		$result_data['schedulednotificationid'] = $result_row['schedulednotificationid'];
 		
-		if ($label == 'LBL_ACTIVITY_NOTIFICATION')
-		{
-			$disabled = 'disabled="disabled"';
-		} 
-		echo   '<tr class="'.$ListRow.'"> 
-			 <td height="21" valign="top" nowrap> <div align="center">
-			<INPUT TYPE=CHECKBOX '.$disabled.' NAME="'.$shedid.'" '.$chkd.' ></div></td>
-		         <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=EditNotification&record='.$shedid.'">'.$mod_strings[$label].'</a></td>
-			 <td valign="top" style="padding:0px 3px 0px 3px;">'.$mod_strings[$shedname].'</td>
-			</tr>';
-		$disabled ='';
+		if($result_data['active'] != 1)	
+			$result_data['active'] = 'no';
+		else
+			$result_data['active'] = 'yes';
+			
+		$result_data['label'] = $mod_strings[$result_row['label']];
+		$notifiy_array []= $result_data;
 	}
-
-}
-?>
-  </table>
-</form>
-</body>
-</html>
+	$smarty->assign("NOTIFICATION",$notifiy_array);
+}	
+		
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+if($_REQUEST['directmode'] != '')
+	$smarty->display("Settings/EmailNotoficationContents.tpl");
+else
+	$smarty->display("Settings/EmailNotofication.tpl");
+	
+?>		
