@@ -32,10 +32,6 @@ $log = LoggerManager::getLogger('account_list');
 global $currentModule;
 global $theme;
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('accounttype'=>'account_type_dom'
-                      ,'industry'=>'industry_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
 $category = getParentTab();
 
 // focus_list is the means of passing data to a ListView.
