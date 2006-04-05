@@ -56,7 +56,7 @@
 			
 			{foreach  key=maintabs item=detail from=$HEADERS}
 				{if $maintabs eq $CATEGORY}
-					<select class=small style="width:120px" title="Create New">
+					<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
 					<option>Quick create...{$maintabs}</option>
 					{foreach  key=number item=module from=$detail}
 						<option>New -{$module}</option>
@@ -255,6 +255,7 @@
 </table>
 </div>
 
+<div id="qcform" style="position:absolute;"></div>
 <script>
 function Announcement_rss()
 {ldelim}
@@ -270,6 +271,23 @@ function ajaxRssResponse(response)
 {rdelim}
 setInterval("Announcement_rss()",300000)
 </script>
+
+<script>
+function QCreate(qcoptions)
+{ldelim}
+        show("status");
+        var ajaxObj = new Ajax(ajaxQCreateResponse);
+        var module = qcoptions.options[qcoptions.options.selectedIndex].value;
+        var urlstring = "module="+module+"&action="+module+"Ajax";
+        ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function ajaxQCreateResponse(response)
+{ldelim}
+        hide("status");
+        document.getElementById('qcform').innerHTML = response.responseText;
+{rdelim}
+</script>
+
 
 {* Begining of Slide Menu *}
 
