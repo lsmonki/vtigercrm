@@ -744,8 +744,6 @@ function getTabModuleName($tabid)
 {
 	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0))
         {
-	global $log;
-        $log->info("the file exists");
                 include('tabdata.php');
 		$tabname = array_search($tabid,$tab_info_array);
         }
