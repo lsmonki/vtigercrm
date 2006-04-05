@@ -34,11 +34,11 @@ rem shut down apache
 echo ""
 echo "stopping vtigercrm5_beta apache service"
 echo ""
-bin\apache -n vtigercrm4_5 -k stop
+bin\apache -n vtigercrm5_beta -k stop
 echo ""
 echo "uninstalling vtigercrm5_beta apache service"
 echo ""
-bin\apache -k uninstall -n vtigercrm4_5
+bin\apache -k uninstall -n vtigercrm5_beta
 rem .\bin\ShutdownApache.exe logs\httpd.pid
 goto StopMySQL
 
