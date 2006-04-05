@@ -29,12 +29,6 @@ $log = LoggerManager::getLogger('potential_list');
 
 global $currentModule,$theme;
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('leadsource'=>'leadsource_dom'
-                        ,'opportunity_type'=>'opportunity_type_dom'
-                        ,'sales_stage'=>'sales_stage_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 $category = getParentTab();
 
 if (!isset($where)) $where = "";
