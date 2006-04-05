@@ -21,13 +21,7 @@ require_once('modules/CustomView/CustomView.php');
 global $app_strings,$mod_strings,$current_language;
 $current_module_strings = return_module_language($current_language, 'Campaigns');
 
-$comboFieldNames = Array('campaigntype'=>'campaigntype_dom'
-                         ,'campaignstatus'=>'campaignstatus_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-global $currentModule;
-
-
-global $theme;
+global $currentModule,$theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
