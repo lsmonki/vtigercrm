@@ -28,12 +28,6 @@ global $app_strings,$list_max_entries_per_page,$currentModule,$theme;
 
 $log = LoggerManager::getLogger('order_list');
 
-
-// Get _dom arrays from Database
-$comboFieldNames = Array('accounttype'=>'account_type_dom'
-                      ,'industry'=>'industry_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 if (!isset($where)) $where = "";
 
 $url_string = '&smodule=PO';
