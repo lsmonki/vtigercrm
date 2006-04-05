@@ -1343,7 +1343,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Leads")
 	{
-               $query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0 ";
+               $query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and leaddetails.converted=0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1448,7 +1448,7 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid where crmentity.deleted=0".$where;
+		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid left join users on users.id=crmentity.smownerid where crmentity.deleted=0".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
