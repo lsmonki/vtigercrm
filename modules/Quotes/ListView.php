@@ -29,10 +29,6 @@ global $app_strings,$list_max_entries_per_page,$currentModule,$theme;
 
 $log = LoggerManager::getLogger('quote_list');
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('quotestage'=>'quotestage_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 if (!isset($where)) $where = "";
 
 $url_string = '';
