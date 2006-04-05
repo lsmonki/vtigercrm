@@ -37,10 +37,7 @@ global $currentModule;
 global $theme;
 
 // Get _dom arrays from Database
-$comboFieldNames = Array('leadsource'=>'leadsource_dom'
-                      ,'leadstatus'=>'leadstatus_dom'
-                      ,'rating'=>'rating_dom'
-                      ,'industry'=>'industry_dom');
+$comboFieldNames = Array('leadstatus'=>'leadstatus_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
 $category = getParentTab();
