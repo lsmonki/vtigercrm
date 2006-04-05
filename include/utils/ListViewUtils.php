@@ -621,8 +621,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
 					{
-						$group_info = getGroupName($entity_id, $module);
-						$value = $group_info[0];
+						$value=$adb->query_result($list_result,$i-1,"groupname");
 					}
 					else
 					{
@@ -661,7 +660,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			else
 				$varreturnset .= '&activity_mode=Events';
 		}
-		$mod_dir=getModuleDirName($module);
 		$list_block[$entity_id] = $list_header;
 
 	}
@@ -838,8 +836,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		
 	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
-                $user_name = getUserName($temp_val);
-		$value = $user_name;
+		$value = $adb->query_result($list_result,$list_result_count,'user_name');
 	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
@@ -1797,12 +1794,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td>';
-	$dir_name=getModuleDirName($module);
-	$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
+	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
 	if(($navigation_array['prev']) != 0)
 	{
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	}
 	else
@@ -1815,13 +1811,13 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .='<b>'.$i.'</b>&nbsp;';
 		}
 		else{
-			$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
+			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
 		}
 	}
 	if(($navigation_array['next']) !=0)
 	{
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
