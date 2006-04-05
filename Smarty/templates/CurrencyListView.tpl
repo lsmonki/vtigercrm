@@ -13,7 +13,8 @@
 -->*}
 <form action="index.php">
 <input type="hidden" name="module" value="Settings">
-<input type="hidden" name="action" value="CurrencyInfo">
+<input type="hidden" name="action" value="CurrencyEditView">
+<input type="hidden" name="parenttab" value="Settings">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		<td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
