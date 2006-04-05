@@ -242,8 +242,6 @@ function getTabid($module)
 
  if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
 	{
-	global $log;
-        $log->info("the file exists");
 		include('tabdata.php');
 		$tabid= $tab_info_array[$module];
 	}
