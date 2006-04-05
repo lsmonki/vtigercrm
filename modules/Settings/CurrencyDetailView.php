@@ -8,37 +8,34 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-global $theme;
+global $mod_strings,$app_strings,$theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-$xtpl=new XTemplate ('modules/Settings/CurrencyInfo.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
         $tempid = $_REQUEST['record'];
         $sql = "select * from currency_info where id=".$tempid;
         $result = $adb->query($sql);
         $currencyResult = $adb->fetch_array($result);
-$xtpl->assign("CURRENCY_NAME",$currencyResult['currency_name']);
-$xtpl->assign("CURRENCY_CODE",$currencyResult['currency_code']);
-$xtpl->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
-$xtpl->assign("CONVERSION_RATE",$currencyResult['conversion_rate']);
-$xtpl->assign("CURRENCY_STATUS",$currencyResult['currency_status']);
-$xtpl->assign("ID",$tempid);
+$smarty->assign("CURRENCY_NAME",$currencyResult['currency_name']);
+$smarty->assign("CURRENCY_CODE",$currencyResult['currency_code']);
+$smarty->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
+$smarty->assign("CONVERSION_RATE",$currencyResult['conversion_rate']);
+$smarty->assign("CURRENCY_STATUS",$currencyResult['currency_status']);
+$smarty->assign("ID",$tempid);
 }
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("CurrencyEditView.tpl");
 
 
 
