@@ -25,12 +25,6 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-
-$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom'
-			,'ticketstatus'=>'ticketstatus_dom'
-			,'ticketcategories'=>'ticketcategories_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 global $currentModule;
 
 $focus = new HelpDesk();
