@@ -33,7 +33,7 @@ do
 	if($temprow["defaultid"] != '-11')
 	{
 		$currency_element['name'] = '<a href=index.php?module=Settings&action=CurrencyDetailView&record='.$temprow["id"].'>'.$temprow["currency_name"].'</a>';
-		$currency_element['tool']= '<a href=index.php?module=Settings&action=CurrencyDetailView&record='.$temprow["id"].'><img src="'.$image_path.'editField.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;|&nbsp;<a href=index.php?module=Settings&action=CurrencyDelete&record='.$temprow["id"].' onClick=DeleteCurrency("'.$temprow["id"].'");><img src="'.$image_path.'currencydelete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+		$currency_element['tool']= '<a href=index.php?module=Settings&action=CurrencyDetailView&record='.$temprow["id"].'><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;|&nbsp;<a href=index.php?module=Settings&action=CurrencyDelete&record='.$temprow["id"].' onClick=DeleteCurrency("'.$temprow["id"].'");><img src="'.$image_path.'currencydelete.gif" border="0"  alt="Delete" title="Delete"/></a>';
 	}
 	else
 		$currency_element['tool']= '';
