@@ -10,9 +10,10 @@
 *
  ********************************************************************************/
 
-include ("jpgraph/src/jpgraph.php");
-include ("jpgraph/src/jpgraph_bar.php");
 require_once('config.php');
+require_once('include/utils/GraphUtils.php');
+include_once ('Image/Graph.php');
+include_once ('Image/Canvas.php');
 
 $tmp_dir=$root_directory."cache/images/";
 
@@ -24,7 +25,7 @@ $tmp_dir=$root_directory."cache/images/";
 function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
 
-	global $log,$root_directory;
+	global $log,$root_directory,$lang_crm,$theme;
 //We'll be getting the values in the form of a string separated by commas
 	$datay=explode(",",$referdata); // The datay values  
 	$datax=explode(",",$refer_code); // The datax values  
@@ -71,110 +72,152 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	//datax is the status
 
 	// Set the basic parameters of the graph
-	$graph = new Graph($width,$height,'auto');
-	$graph->SetScale("textlin");
+	$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
+	$imagemap = $canvas->getImageMap();
+	$graph =& Image_Graph::factory('graph', $canvas);
+	$font =& $graph->addNew('font', calculate_font_name($lang_crm));
+	// set the font size to 12
+	$font->setSize(8);
 
-	// To get a horizontal Graph	
-	$graph->Set90AndMargin($left,$right,$top,$bottom);
+	if($theme == "blue")
+	{
+		$font_color = "#212473";
+	}
+	else
+	{
+		$font_color = "#000000";
+	}
+	$font->setColor($font_color);
+		
+	$graph->setFont($font);
+	$titlestr =& Image_Graph::factory('title', array($title,10));
+   	$plotarea =& Image_Graph::factory('plotarea',array(
+				'axis',
+				'axis',
+				'horizontal'
+                ));
+	$graph->add(
+	    Image_Graph::vertical($titlestr,
+			$plotarea,
+    	5
+	 	)
+	);   
 
-	$graph->xaxis->SetPos('min');
 
-	// Nice shadow
-	$graph->SetShadow();
+	// Now create a bar plot
+	$max=0;
+	$xlabels = array();
+	$dataset = & Image_Graph::factory('dataset');
+	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
+	for($i=0;$i<count($datay); $i++)
+	{
+		$x=1+2*$i;
+		if($datay[$i]>=$max) $max=$datay[$i];
+		$dataset->addPoint(
+			        $x,
+			        $datay[$i],
+			        array(
+			            'url' => $target[$i],
+			            'alt' => $alts[$i]
+			        )
+	    );
+	    // build the xaxis label array to allow intermediate ticks
+	    $xlabels[$x] = $datax[$i];
+	    $xlabels[$x+1] = '';
+	}
 
+
+	$bplot = & $plotarea->addNew('bar', $dataset);
+	$bplot->setFillStyle($fill);
+
+	//You can change the width of the bars if you like
+	$bplot->setBarWidth(50/count($datax),"%");
+	$bplot->setPadding(array('top'=>20));
+
+	// We want to display the value of each bar at the top
+	//$bplot->value->Show();
+	//$bplot->value->SetFont(FF_FONT2,FS_BOLD,12);
+	//$bplot->value->SetAlign('left','center');
+	//$bplot->value->SetColor("black","gray4");
+	//$bplot->value->SetFormat('%d');
+
+	//$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
+	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
+	//$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
+
+	//$graph->SetFrame(false);
+	//$graph->SetMarginColor('cadetblue2');
+	//$graph->ygrid->SetFill(true,'azure1','azure2');
+	//$graph->xgrid->Show();
+
+	// Add the bar to the graph
+	//$graph->Add($bplot);
+	
 	// Setup title
-	$graph->title->Set($title);
-	$graph->title->SetFont(FF_FONT2,FS_BOLD,14);
+	//$titlestr->setText($title);
 
 	// Setup X-axis
-	$graph->xaxis->SetTickLabels($datax);
-	$graph->xaxis->SetFont(FF_FONT2,FS_NORMAL,12);
+	$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+	$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+	$yaxis->setFontSize(10);
+	
+	// Invert X-axis and put Y-axis at bottom
+	$xaxis->setInverted(true);
+	$yaxis->setAxisIntersection('max');
+			
+	// set grid
+	$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
+	$gridY->setLineColor('#E5E5E5@0.5');
+	$gridY2 =& $plotarea->addNew('bar_grid', null, IMAGE_GRAPH_AXIS_Y); 
+	$gridY2->setFillColor('#66CDAA@0.2'); 
 
-	// Some extra margin looks nicer
-	$graph->xaxis->SetLabelMargin(5);
-
-	// Label align for X-axis
-	$graph->xaxis->SetLabelAlign('right','center');
-
-	if($max>=5)
-	{
-		$graph->xaxis->SetLabelFormat('%d');
-	}
 
 	// Add some grace to y-axis so the bars doesn't go
 	// all the way to the end of the plot area
-	$graph->yaxis->scale->SetGrace(20);
-
-	// Setup the Y-axis to be displayed in the bottom of the
-	// graph. We also finetune the exact layout of the title,
-	// ticks and labels to make them look nice.
-	$graph->yaxis->SetPos('max');
+	$yaxis->forceMaximum(round(($max * 1.1) + 0.5));
 
 	// First make the labels look right
-	$graph->yaxis->SetLabelAlign('center','top');
-	$graph->yaxis->SetLabelFormat('%d');
-	$graph->yaxis->SetLabelSide(SIDE_RIGHT);
+	$yaxis->setLabelInterval(1);
+	$yaxis->setTickOptions(-5,0);
+	$yaxis->setLabelInterval(0.5,2);
+	$yaxis->setTickOptions(-2,0,2);
+	
+	// Create the xaxis labels
+	$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+	    array($xlabels) 
+	); 
 
 	// The fix the tick marks
-	//$graph->yaxis->SetTickSide(SIDE_LEFT);
-
-	// Finally setup the title
-	$graph->yaxis->SetTitleSide(SIDE_RIGHT);
-	$graph->yaxis->SetTitleMargin(35);
-
-	$graph->yaxis->title->SetFont(FF_FONT2,FS_BOLD,12);
-	$graph->yaxis->title->SetAngle(0);
-
-	$graph->yaxis->SetFont(FF_FONT2,FS_NORMAL);
-
-	// Now create a bar pot
-	$max=0;
-	for($i=0;$i<count($datay); $i++)
-	{
-		$x=$datay[$i];
-		if($x>=$max)
-			$max=$x;
-		else
-			$max=$max;
-	}
-
-
-	$bplot = new BarPlot($datay);
-	$bplot->SetFillColor("aquamarine3");
-
-	//You can change the width of the bars if you like
-	$bplot->SetWidth(0.2);
-
-	// We want to display the value of each bar at the top
-	$bplot->value->Show();
-	$bplot->value->SetFont(FF_FONT2,FS_BOLD,12);
-	$bplot->value->SetAlign('left','center');
-	$bplot->value->SetColor("black","gray4");
-	$bplot->value->SetFormat('%d');
-
-	//Adding this top get usemap	
-	$bplot->SetCSIMTargets($target,$alts);
-
-	$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
-	$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
-
-	$graph->SetFrame(false);
-	$graph->SetMarginColor('cadetblue2');
-	$graph->ygrid->SetFill(true,'azure1','azure2');
-	$graph->xgrid->Show();
-
-	// Add the bar to the graph
-	$graph->Add($bplot);
+	$xaxis->setDataPreprocessor($array_data);
+	$xaxis->forceMinimum(0);
+	$xaxis->forceMaximum(2*count($datay));
+	$xaxis->setLabelInterval(1);
+	$xaxis->setTickOptions(0,0);
+	$xaxis->setLabelInterval(2,2);
+	$xaxis->setTickOptions(5,0,2);
+			
+	// set markers
+	$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
+	$marker->setFillColor('000000@0.0');
+	$marker->setBorderColor('000000@0.0');
+	$marker->setFontSize(10);
+	// shift markers 10 pix right
+	$marker_pointing =& $graph->addNew('Image_Graph_Marker_Pointing', array(10,0,& $marker));
+	$marker_pointing->setLineColor('000000@0.0');
+	$bplot->setMarker($marker_pointing);
 
 
 	//Getting the graph in the form of html page	
-	$graph-> Stroke( $cache_file_name );
-	$imgMap = $graph ->GetHTMLImageMap ($html_image_name);
-	save_image_map($cache_file_name.'.map', $imgMap);
-	$base_name_cache_file=basename($cache_file_name);
-	$ccc="cache/images/".$base_name_cache_file;
-	$img = "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
-	$img.=$imgMap;
+	$img = $graph->done(
+						    array(
+							        'tohtml' => true,
+							        'border' => 0,
+							        'filename' => $cache_file_name,
+							        'filepath' => '',
+							        'urlpath' => ''
+							    ));
+	save_image_map($cache_file_name.'.map', $img);
+
 	return $img;
 }
 

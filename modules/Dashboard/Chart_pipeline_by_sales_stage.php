@@ -136,10 +136,6 @@ $log->debug($ids);
 $cache_file_name = $id_hash."_pipeline_".$current_language."_".crc32(implode('',$datax)).$date_start.$date_end.".png";
 $log->debug("cache file name is: $cache_file_name");
 
-if (substr(phpversion(), 0, 1) == "5") { // php5 }
-	echo "<em>Charts not supported in PHP 5.</em>";
-}
-else {
 if(isPermitted('Potentials','index')=="yes")
 {
 $draw_this = new jpgraph();
@@ -210,4 +206,4 @@ else
 	echo $mod_strings['LBL_NO_PERMISSION'];
 } 
 //echo get_validate_chart_js();
-}?>
+?>

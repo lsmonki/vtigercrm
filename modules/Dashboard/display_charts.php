@@ -110,7 +110,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 	       	$test_target_val=$graph_details[7];
 
 
-                $width=350;
+                $width=600;
                 $height=400;
                 $top=30;
                 $left=140;
@@ -205,7 +205,7 @@ $sHTML .= "<tr>
 	<tr>
 	   <td height=200>"; 
 
-	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,450,300,40,$right,$top,$bottom,$title,$target_val,"pie");
+	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,40,$right,$top,$bottom,$title,$target_val,"pie");
 
 $sHTML .= "</td>
 	</tr>
