@@ -11,55 +11,35 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
+require_once('Smarty_setup.php');
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-?>
-<html>
-<head>
-<title>Untitled Document</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-<body>
-<?php echo get_module_title($_REQUEST["module"],$mod_strings['INVENTORYNOTIFICATION'],false);?>
-<br>
-<?php echo $mod_strings['LBL_INV_NOT_DESC'];?>
-<br><br>
-  <table width="80%" border="0" cellspacing="1" cellpadding="0" class="FormBorder">
-    <tr height="20"> 
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_NOTIFICATION'];?></b></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_DESCRIPTION'];?></b></td>
-    </tr>
-<?
-
+$smarty = new vtigerCRM_Smarty;
 $query = "SELECT * FROM inventorynotification";
 $result = $adb->query($query);
 $num_rows = $adb->num_rows($result);
-$out = '';
+$output = Array();
 for($i=0; $i<$num_rows; $i++)
 {
+	$out = Array();
 	$not_id = $adb->query_result($result,$i,'notificationid');
 	$not_mod = $adb->query_result($result,$i,'notificationname');	
 	$not_des = $adb->query_result($result,$i,'label');
-	if($row_list%2 ==1)
-	{
-		$ListRow = "oddListRow";
-	}
-	else
-	{
-		$ListRow = "evenListRow";
-	}
-	$out .= '<tr class="'.$ListRow.'" height="70">';
-	$out .='<td valign="top" nowrap style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=EditInventoryNotification&record='.$not_id.'">'.$mod_strings[$not_mod].'</a></td>';
-	$out .= '<td valign="top" style="padding:0px 3px 0px 3px;">'.$mod_strings[$not_des].'</td>';
-	$out .= '</tr>';
+	$out ['notificationname'] = $mod_strings[$not_mod];
+	$out ['label'] = $mod_strings[$not_des];
+	$out ['id'] = $not_id;
+	$output [] = $out;
 }
-	
-	echo $out;
-?>
-  </table>
-</form>
-</body>
-</html>
+$smarty->assign("NOTIFICATION",$output);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+
+if($_REQUEST['directmode'] != '')
+	$smarty->display("Settings/InventoryNotifyContents.tpl");
+else
+	$smarty->display("Settings/InventoryNotify.tpl");

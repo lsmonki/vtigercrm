@@ -17,6 +17,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	$query="UPDATE inventorynotification set notificationsubject='".$_REQUEST['notifysubject']."', notificationbody='".$_REQUEST['notifybody']."' where notificationid=".$_REQUEST['record'];
 	$adb->query($query);	
 }
-$loc = "Location: index.php?action=listinventorynotifications&module=Users";
+$loc = "Location: index.php?action=UsersAjax&file=listinventorynotifications&module=Users&directmode=ajax";
 header($loc);
 ?>
