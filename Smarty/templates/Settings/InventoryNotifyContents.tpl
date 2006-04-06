@@ -12,7 +12,7 @@
 	<td>{$smarty.foreach.notifyfor.iteration}</td>
 	<td>{$elements.notificationname}</td>
 	<td>{$elements.label}</td>
-	<td align="center" onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
+	<td align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
 	</tr>
 	{/foreach}
 	</tbody>
