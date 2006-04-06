@@ -46,5 +46,6 @@ if($ajaxaction == "DETAILVIEW")
 else
 {
 	require_once('include/Ajax/CommonAjax.php');
+	require_once('quickcreate.php');
 }
 ?>
