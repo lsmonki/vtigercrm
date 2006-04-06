@@ -1,14 +1,13 @@
-<html>
-<head>
-	<title>vtiger CRM 5 - Free, Commercial grade Open Source CRM</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
-	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
-</head>
+
+<script language="javascript">
+        var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
+        var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
+        var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+</script>
+
 
 <body class=small>
-
-<div id=small>
+{include file='QuickCreateHidden.tpl'}
 <table border=0 cellspacing=0 cellpadding=0 width=400 class=qcWindow>
 <tr>
 <td>
@@ -365,9 +364,9 @@
 		<!-- save cancel buttons -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class=qcTransport>
 		<tr>
-			<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" ></td>
+			<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" ></td>
 			<td width=50% align=left>
-				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" onclick="fninvsh('qcform');" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 			</td>
 		</tr>
 		</table>
@@ -378,6 +377,5 @@
 </td>
 </tr>
 </table>
-</div>
+</form>
 </body>
-v</html>
