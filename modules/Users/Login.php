@@ -95,7 +95,7 @@ function set_focus() {
 		<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
 		<tr>
 			<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha4" title="Alpha4"></td>
+			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha5" title="Alpha5"></td>
 		</tr>
 		</table>
 		
@@ -109,15 +109,18 @@ function set_focus() {
 		<tr>
 			<td valign=top width=60% height="250" class="loginBillBoard">
 				<div align=left style="padding:20px">
-				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha4</span><br><br>
+				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha5</span><br><br>
 				
 				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications. <br><br>
 				
-				<b>New in version 5</b> <br>
+				<b>New in Alpha 5</b> <br>
 				<li>New UI with improved usability</li>
-		                <li>Smarty integration</li>
-                		<li>Security feature</li>
-		                <li>Bug fixes</li>	 		
+		                <li>Exposing API docs</li>
+                		<li>Security Document</li>
+		                <li>Performance Optimizations</li>
+			        <li>ImageGraph Usage instead of
+				Jpgraph with PHP5 for Dashboards</li>	 		
+		                <li>Migration from 4.2.3 to Alpha5</li>	 		
 				
 				</div>
 			
