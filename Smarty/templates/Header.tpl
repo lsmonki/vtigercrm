@@ -59,7 +59,7 @@
 					<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
 					<option>Quick create...{$maintabs}</option>
 					{foreach  key=number item=module from=$detail}
-						<option>New -{$module}</option>
+						<option value="{$module}">New -{$module}</option>
 					{/foreach}
 					</select>
 				{/if}
