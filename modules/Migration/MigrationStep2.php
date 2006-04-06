@@ -75,12 +75,12 @@ elseif($checkDumpFileAndApply == 1)
 	//TODO - Check whether the given file is Dump file and then apply to the new database
 	echo '<br> Going to apply the Dump file to the new database.';
 
-	include("config.php");
+	include("config.inc.php");
 	global $dbconfig;
 
-	$new_host_name = $dbconfig['db_host_name'];
+	$new_host_name = $dbconfig['db_hostname'];
 	$new_dbname = $dbconfig['db_name'];
-	$new_mysql_username = $dbconfig['db_user_name'];
+	$new_mysql_username = $dbconfig['db_username'];
 	$new_mysql_password = $dbconfig['db_password'];
 
 	$conn = new PearDatabase("mysql",$new_host_name,$new_dbname,$new_mysql_username,$new_mysql_password);

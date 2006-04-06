@@ -9,7 +9,7 @@
  *
  ********************************************************************************/
 
-include("config.php");
+include("config.inc.php");
 
 $old_version = $_REQUEST['old_version'];
 $latest_version = $_REQUEST['latest_version'];
@@ -23,8 +23,8 @@ $old_dbname = $_REQUEST['old_dbname'];
 
 //new database values get from the current vtigerCRM's config.php
 global $dbconfig;
-$new_host_name = $dbconfig['db_host_name'];
-$new_mysql_username = $dbconfig['db_user_name'];
+$new_host_name = $dbconfig['db_hostname'];
+$new_mysql_username = $dbconfig['db_username'];
 $new_mysql_password = $dbconfig['db_password'];
 $new_dbname = $dbconfig['db_name'];
 

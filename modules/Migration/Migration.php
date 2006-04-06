@@ -98,6 +98,9 @@ class Migration
 		$conn->query($sql);
 
 		echo '<br> Current Database has been created.';
+
+		//Added to avoid the No Database Selected error when execute the queries
+		$conn->connect();
 	}
 
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
