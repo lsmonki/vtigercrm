@@ -8,8 +8,8 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
+require_once('Smarty_setup.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
@@ -35,7 +35,7 @@ if(isset($_REQUEST[record]))
 	$recordid = $_REQUEST[record];
 }
 
-$rss_form=new XTemplate ('modules/Rss/ListView.html');
+$rss_form = new vtigerCRM_Smarty;
 $rss_form->assign("MOD", $mod_strings);
 $rss_form->assign("APP", $app_strings);
 $rss_form->assign("IMAGEPATH",$image_path);
@@ -46,7 +46,7 @@ $rss_form->assign("IMAGEPATH",$image_path);
 $oRss = new vtigerRSS();
 if(isset($_REQUEST[record]))
 {
-        $recordid = $_REQUEST[record];
+    $recordid = $_REQUEST[record];
 	$url = $oRss->getRssUrlfromId($recordid);
 	if($oRss->setRSSUrl($url))
 	{
@@ -55,6 +55,7 @@ if(isset($_REQUEST[record]))
 	{
         	$rss_html = "<strong>No RSS Feeds are selected</strong>";
 	}
+	$rss_form->assign("TITLE",gerRssTitle($recordid));
 }else
 {
 	$rss_html = $oRss->getStarredRssHTML();
@@ -64,29 +65,23 @@ if($currentModule == "Rss")
 	require_once("modules/".$currentModule."/Forms.php");
 	if (function_exists('get_rssfeeds_form'))
 	{
-		$rss_form->assign("RSSFEEDS_TITLE","<br><div style='float:left'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add<img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
+		$rss_form->assign("RSSFEEDS_TITLE","<img src='".$image_path."rssroot.gif' align='absmiddle'/>&nbsp;<a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add RSS Feed</a>");
 		$rss_form->assign("RSSFEEDS", get_rssfeeds_form());
 	}
 }
 
 
-
-//$all_rss_html = $oRss->getAllRssFeeds();
-//$stared_rss_html = $oRss->getStaredRssFeeds();
-//$crm_rss_html = $oRss->getCRMRssFeeds();
-//$category_rss_html = $oRss->getRSSCategoryHTML();
-//$top_stared_rss_html = $oRss->getTopStarredRSSFeeds();
-//print_r($rss_hdr_html);
-//$rss_form->assign("TOPSTARSSFEEDS",$top_stared_rss_html);
-//$rss_form->assign("RSSHEADERDETAILS",$rss_hdr_html);
 $rss_form->assign("RSSDETAILS",$rss_html);
-//$rss_form->assign("ALLRSSFEEDS",$all_rss_html);
-//$rss_form->assign("STAREDFEEDS",$stared_rss_html);
-//$rss_form->assign("CRMRSSFEEDS",$crm_rss_html);
-//$rss_form->assign("CATEGORYFEEDS",$category_rss_html);
 //<<<<<<<<<<<<<<lastrss>>>>>>>>>>>>>>>>>>//
 
-$rss_form->parse("main");
-$rss_form->out("main");
-
+$rss_form->display("Rss.tpl");
+function gerRssTitle($id)
+{
+	global $adb;
+	$query = 'select * from rss where rssid ='.$id;	 
+	$result = $adb->query($query);	
+	$title = $adb->query_result($result,0,'rsstitle');
+	return $title;
+	
+}
 ?>

@@ -99,7 +99,7 @@ class vtigerRSS extends CRMEntity
 			foreach($this->rss_object as $key=>$item)
                 	{
 			   $i = $i + 1;	   
-			   $shtml .= "<li><a href=\"$item[link]\" class=\"rssNews\" target=\"_blank\">$item[title]</a></li>";
+			   $shtml .= "<li><a href=\"javascript:display('".$item[link]."','".$item[title]."')\"; class=\"rssNews\">$item[title]</a></li>";
 			   if($i == 10)
 			   {
 				return $shtml;
@@ -320,7 +320,7 @@ class vtigerRSS extends CRMEntity
 			   <table class=\"formOuterBorder\" width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\">			       <tr><td class=\"formSecHeader\">";    
 		$shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','0')\"> 
 			   <span style=\"font-weight:normal\">Today at</span>";
-                $shtml .= " <a href=\"$this->rss_link\" target=\"_blank\">".$allrssrow['rsstitle']."</a>";
+                $shtml .= " <a href=\"javascript:display('".$this->rss_link."',this)\";>".$allrssrow['rsstitle']."</a>";
 		$shtml .= "</td></tr>";
 		$shtml .= "<tr><td style=\"padding-top:10\"><ul>".$rss_html."</ul></td></tr>";
 		if(isset($this->rss_object))
@@ -328,7 +328,7 @@ class vtigerRSS extends CRMEntity
 		 	if(count($this->rss_object) > 10)
 			{
 		  		$shtml .= "<tr><td align=\"right\">
-				  	   <a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
+				  	   <a href=\"javascript:display('".$this->rss_link."',this)\";>More...</a>
 		  		           </td></tr>";
 			}
 		 }
@@ -374,7 +374,7 @@ class vtigerRSS extends CRMEntity
                 {
         $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\"> <span style=\"font-weight:normal\">Today at</span> ";
                 }
-		 $shtml .= " <a href=\"$this->rss_link\" target=\"_blank\">".$allrssrow['rsstitle']."</a>";
+		 $shtml .= " <a href=\"javascript:display('".$this->rss_link."',this)\";>".$allrssrow['rsstitle']."</a>";
 		 $shtml .= "</td></tr>";
 		 $shtml .= "<tr><td style=\"padding-top:10\"><ul>".$rss_html."</ul></td></tr>";
 		 }
@@ -383,7 +383,7 @@ class vtigerRSS extends CRMEntity
                         if(count($this->rss_object) > 10)
                         {
                                 $shtml .= "<tr><td align=\"right\">
-                                           <a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
+                                           <a href=\"javascript:display('".$this->rss_link."',this)\";>More...</a>
                                            </td></tr>";
                         }
                  }
