@@ -51,13 +51,20 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 	die("you can't export!");
 }
 
-//Function added to convert line breaks to space in description during export 
+/**Function convert line breaks to space in description during export 
+ * Pram $str - text
+ * retrun type string
+*/
 function br2nl_vt($str) 
 {
 	$str = preg_replace("/(\r\n)/", " ", $str);
 	return $str;
 }
 
+/**This function exports all the data for a given module
+ * Param $type - module name
+ * Return type text
+*/
 function export_all($type)
 {
 	$contact_fields = Array();

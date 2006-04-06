@@ -1519,6 +1519,11 @@ function getFilePath($attachmentid,$filename)
 	return $filepath;
 }
 
+/**
+ * This function is used to get the Quick create form field parameters for a given module.
+ * Param $module - module name 
+ * returns the value in array format
+ */
 
 
 function QuickCreate($module)

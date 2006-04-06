@@ -20,22 +20,21 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-
-
-/** This function returns the name of the person.
-  * It currently returns "first last".  It should not put the space if either name is not available.
-  * It should not return errors if either name is not available.
-  * If no names are present, it will return ""
-  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-  * All Rights Reserved.
-  * Contributor(s): ______________________________________..
-  */
-
-
-
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
+
+
+/** This function returns the detail view form field and and its properties in array format.
+  * Param $uitype - UI type of the field
+  * Param $fieldname - Form field name
+  * Param $fieldlabel - Form field label name
+  * Param $col_fields - array contains the fieldname and values
+  * Param $generatedtype - Field generated type (default is 1)
+  * Param $tabid - tab id to which the Field belongs to (default is "")
+  * Return type is an array
+  */
+
 function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid='')
 {
 	global $adb;
@@ -732,6 +731,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	return $label_fld;
 }
 
+/** This function returns a HTML output of associated products for a given entity (Quotes,Invoice,Sales order or Purchase order)
+  * Param $module - module name
+  * Param $focus - module object
+  * Return type string
+  */
 
 function getDetailAssociatedProducts($module,$focus)
 {
@@ -838,6 +842,12 @@ function getDetailAssociatedProducts($module,$focus)
 
 }
 
+/** This function returns the related tab details for a given entity or a module.
+* Param $module - module name
+* Param $focus - module object
+* Return type is an array
+*/
+		
 function getRelatedLists($module,$focus)
 {
 	global $adb;
@@ -873,6 +883,13 @@ function getRelatedLists($module,$focus)
 	return $focus_list;
 }
 
+/** This function returns the detailed block information of a record in a module.
+* Param $module - module name
+* Param $block - block id
+* Param $col_fields - column fields array for the module 
+* Param $tabid - tab id
+* Return type is an array
+*/
 
 function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 {

@@ -26,6 +26,10 @@ DEFINE("FF_BIG5",'Big5');
 
 DEFINE("FF_FONT1",'Verdana');
 
+/**This function is used to get the font name when a language code is given
+* Param $locale - language code
+* Return type string
+*/
 function calculate_font_name($locale)
 
 {
@@ -47,6 +51,11 @@ function calculate_font_name($locale)
 
 	return FF_FONT1;
 }
+
+/**This function is used to generate the color format.
+* Param $count - language code
+* Return type string
+*/
 
 function color_generator($count = 1, $start = '33CCFF', $step = '221133')
 {

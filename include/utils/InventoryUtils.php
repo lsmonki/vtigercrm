@@ -50,6 +50,16 @@ function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',
 	return $productBlock;
 }
 
+/**
+ * This function updates the stock information once the product is ordered.
+ * Param $productid - product id
+ * Param $qty - product quantity in no's
+ * Param $mode - mode type
+ * Param $ext_prod_arr - existing products 
+ * Param $module - module name
+ * return type void
+ */
+
 function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 {
 	global $adb;
@@ -118,6 +128,17 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 	}
 }
 
+/**
+ * This function sends a mail to the handler whenever the product reaches the reorder level.
+ * Param $product_id - product id
+ * Param $upd_qty - updated product quantity in no's
+ * Param $prod_name - product name
+ * Param $qtyinstk - quantity in stock 
+ * Param $qty - quantity  
+ * Param $module - module name
+ * return type void
+ */
+
 function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 {
 	global $current_user;
@@ -173,6 +194,10 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 	}
 }
 
+/**This function is used to get the quantity in stock of a given product
+*Param $product_id - product id
+*Returns type numeric
+*/
 function getPrdQtyInStck($product_id)
 {
 	global $adb;
@@ -182,6 +207,11 @@ function getPrdQtyInStck($product_id)
 	return $qtyinstck;
 }
 
+/**This function is used to get the reorder level of a product
+*Param $product_id - product id
+*Returns type numeric
+*/
+
 function getPrdReOrderLevel($product_id)
 {
 	global $adb;
@@ -190,6 +220,11 @@ function getPrdReOrderLevel($product_id)
 	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
 	return $reorderlevel;
 }
+
+/**This function is used to get the handler for a given product
+*Param $product_id - product id
+*Returns type numeric
+*/
 
 function getPrdHandler($product_id)
 {

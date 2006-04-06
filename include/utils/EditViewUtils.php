@@ -20,20 +20,20 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-
-
-/** This function returns the name of the person.
-  * It currently returns "first last".  It should not put the space if either name is not available.
-  * It should not return errors if either name is not available.
-  * If no names are present, it will return ""
-  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-  * All Rights Reserved.
-  * Contributor(s): ______________________________________..
-  */
-
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
+
+/** This function returns the field details for a given fieldname.
+  * Param $uitype - UI type of the field
+  * Param $fieldname - Form field name
+  * Param $fieldlabel - Form field label name
+  * Param $maxlength - maximum length of the field
+  * Param $col_fields - array contains the fieldname and values
+  * Param $generatedtype - Field generated type (default is 1)
+  * Param $module_name - module name
+  * Return type is an array
+  */
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name)
 {
@@ -962,9 +962,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	return $final_arr;
 }
 
-
-
-
+/** This function returns the invoice object populated with the details from sales order object.
+* Param $focus - Invoice object
+* Param $so_focus - Sales order focus
+* Param $soid - sales order id
+* Return type is an object array
+*/
 
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
@@ -999,6 +1002,12 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 
 }
 
+/** This function returns the invoice object populated with the details from quote object.
+* Param $focus - Invoice object
+* Param $quote_focus - Quote order focus
+* Param $quoteid - quote id
+* Return type is an object array
+*/
 
 
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
@@ -1027,6 +1036,12 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 
 }
 
+/** This function returns the sales order object populated with the details from quote object.
+* Param $focus - Sales order object
+* Param $quote_focus - Quote order focus
+* Param $quoteid - quote id
+* Return type is an object array
+*/
 
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
@@ -1057,6 +1072,13 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
         return $focus;
 
 }
+
+/** This function returns the detailed list of products associated to a given entity or a record.
+* Param $module - module name
+* Param $focus - module object
+* Param $seid - sales entity id
+* Return type is an object array
+*/
 
 
 function getAssociatedProducts($module,$focus,$seid='')
@@ -1142,6 +1164,13 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 }
 
+/** This function returns the no of products associated to the given entity or a record.
+* Param $module - module name
+* Param $focus - module object
+* Param $seid - sales entity id
+* Return type is an object array
+*/
+
 function getNoOfAssocProducts($module,$focus,$seid='')
 {
 	global $adb;
@@ -1177,9 +1206,15 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 	return $num_rows;
 }
 
-
-
-
+/** This function returns the detail block information of a record for given block id.
+* Param $module - module name
+* Param $block - block name
+* Param $mode - view type (detail/edit/create)
+* Param $col_fields - fields array
+* Param $tabid - tab id
+* Param $info_type - information type (basic/advance) default ""
+* Return type is an object array
+*/
 
 function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_type='')
 {
@@ -1275,6 +1310,12 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
         return $return_data;	
 		
 }
+
+/** This function returns the data type of the fields, with field label, which is used for javascript validation.
+* Param $validationData - array of fieldnames with datatype
+* Return type array 
+*/
+
 
 function split_validationdataArray($validationData)
 {
