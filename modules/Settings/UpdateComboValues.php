@@ -9,16 +9,14 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-$fld_module=$_REQUEST["field_module"];
-$fldName=$_REQUEST["field_name"];
+$fld_module=$_REQUEST["fld_module"];
 $tableName=$_REQUEST["table_name"];
-$columnName=$_REQUEST["column_name"];
 $fldPickList =  $_REQUEST['listarea'];
 
 //Deleting the already existing values
-//$delquery="truncate ".$tableName;
 $delquery="delete from ".$tableName;
 $adb->query($delquery);
+
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
 
@@ -36,9 +34,8 @@ for($i = 0; $i < $count; $i++)
 			$query = "insert into ".$tableName." values('".$pickArray[$i]."')";
 		else
 			$query = "insert into ".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
-
-                $adb->query($query);
+        $adb->query($query);
 	}
 }
-header("Location:index.php?module=Settings&action=EditComboField&fld_module=".$fld_module."&fld_name=".$fldName."&table_name=".$tableName."&column_name=".$columnName);
+header("Location:index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module=".$fld_module);
 ?>

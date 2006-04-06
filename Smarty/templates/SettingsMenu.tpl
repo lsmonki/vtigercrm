@@ -35,7 +35,7 @@
 <div id="top2">
 <div id="studio" style="height:70px;">
 	<a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuCusFld')" onmouseout="fninvsh('subMnuCusFld')">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
-	<a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuPickList')" onmouseout="fninvsh('subMnuPickList')">{$MOD.LBL_PICKLIST_SETTINGS}</a>
+	<a href="index.php?module=Settings&action=PickList&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PICKLIST_SETTINGS}</a>
 	<a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" onmouseover="fnvsh(this,'subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">{$MOD.LBL_FIELD_ORDERING}</a>
 </div></div>
 

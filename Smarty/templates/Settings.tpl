@@ -70,8 +70,8 @@
 <td width="25%"><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" border="0" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}"/></a><br />
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a></td>
 
-<td width="25%"><a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=SettingsSubMenu&type=PickList&parenttab=Settings" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}">{$MOD.LBL_PICKLIST_SETTINGS}</a> </td>
+<td width="25%"><a href="index.php?module=Settings&action=PickList&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}" border="0"/></a><br />
+<a href="index.php?module=Settings&action=PickList&parenttab=Settings" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}">{$MOD.LBL_PICKLIST_SETTINGS}</a> </td>
 
 <td width="25%"><a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings"><img src="{$IMAGE_PATH}user_mgmt.gif" alt="{$MOD.LBL_FIELD_ORDERING_DESC}" title="{$MOD.LBL_FIELD_ORDERING_DESC}"  border="0" /></a><br />
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" alt="{$MOD.LBL_FIELD_ORDERING_DESC}" title="{$MOD.LBL_FIELD_ORDERING_DESC}">{$MOD.LBL_FIELD_ORDERING}</a> </td>

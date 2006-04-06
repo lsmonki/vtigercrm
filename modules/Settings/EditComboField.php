@@ -9,41 +9,35 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-$fld_module=$_REQUEST["fld_module"];
-$fld_name=$_REQUEST["fld_name"];
-$tableName=$_REQUEST["table_name"];
-$columnName=$_REQUEST["column_name"];
-
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$fld_module." ".$mod_strings['EditPickListValues'], true);
-echo '<br>';
+$tableName=$_REQUEST["fieldname"];
+$moduleName=$_REQUEST["fld_module"];
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Settings/EditField.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("FIELDNAME", $fld_name);
-$xtpl->assign("TABLENAME", $tableName);
-$xtpl->assign("COLUMNNAME", $columnName);
-$xtpl->assign("FIELDMODULE", $fld_module);
+$smarty = new vtigerCRM_Smarty;
 $query = "select * from ".$tableName ;//." order by sortorderid";
 $result = $adb->query($query);
 $fldVal='';
 
 while($row = $adb->fetch_array($result))
 {
-	$fldVal .= $row[$columnName];
+	$fldVal .= $row[$tableName];
 	$fldVal .= "\n";	
 }
-$xtpl->assign("FLDVALUES", $fldVal);
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->assign("ENTRIES",$fldVal);
+$smarty->assign("MODULE",$moduleName);
+$smarty->assign("FIELDNAME",$tableName);
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("Settings/EditPickList.tpl");
 ?>

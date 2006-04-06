@@ -543,6 +543,12 @@ $mod_strings = Array(
 'LBL_EMAIL_CONTENTS'=>'Email Contents',
 'LBL_SUBJECT'=>'Subject',
 'LBL_MESSAGE'=>'Message',
+'LBL_PICKLIST_EDITOR'=>'Picklist Editor',
+'LBL_PICKLIST_AVAIL'=>'Picklists Availabe in',
+'LBL_PICKLIST_AVAILINFO1'=>'The picklists available in',
+'LBL_PICKLIST_AVAILINFO2'=>'are shown below. Click Edit to modify the contents of the list.',
+'LBL_EDIT_PICKLIST'=>'Edit Pick List',
+'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
 );
 
 
