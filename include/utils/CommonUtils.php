@@ -1536,18 +1536,22 @@ $category = getParentTab();
 $quickcreate_query = "select * from field where quickcreate=0 and tabid = ".$tabid." order by quickcreatesequence";
 $result = $adb->query($quickcreate_query);
 $noofrows = $adb->num_rows($result);
-
+$fieldName_array = Array();
 for($i=0; $i<$noofrows; $i++)
 {
       $fieldtablename = $adb->query_result($result,$i,'tablename');
-      $fieldcolname = $adb->query_result($result,$i,"columnname");
       $uitype = $adb->query_result($result,$i,"uitype");
       $fieldname = $adb->query_result($result,$i,"fieldname");
       $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
       $maxlength = $adb->query_result($result,$i,"maximumlength");
       $generatedtype = $adb->query_result($result,$i,"generatedtype");
+      $typeofdata = $adb->query_result($result,$i,"typeofdata");
+
+      //to get validationdata
+      $fldLabel_array = Array();
+      $fldLabel_array[$fieldlabel] = $typeofdata;
+      $fieldName_array[$fieldname] = $fldLabel_array;
       $custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-      //echo '<pre>';print_r($custfld);echo '</pre>';
       $qcreate_arr[]=$custfld;
 }
 for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
@@ -1563,7 +1567,9 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
        }
                 $return_data[$j]=array(0 => $key1,1 => $key2);
 }
-																        return $return_data;
+	$form_data['form'] = $return_data;
+	$form_data['data'] = $fieldName_array;
+	return $form_data;
 }
 
 
