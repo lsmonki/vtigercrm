@@ -26,8 +26,8 @@ if($adb->num_rows($result) >=1)
 		$result_data = Array();
 		$result_data['active'] = $result_row['active'];
 		$result_data['schedulename'] = $mod_strings[$result_row['schedulednotificationname']];
-		$result_data['schedulednotificationid'] = $result_row['schedulednotificationid'];
-		
+		$result_data['id'] = $result_row['schedulednotificationid'];
+	
 		if($result_data['active'] != 1)	
 			$result_data['active'] = '<img src="'.$image_path.'no.gif">';
 		else
