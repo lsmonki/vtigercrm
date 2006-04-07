@@ -13,7 +13,7 @@
 	<td>{$elements.label}</td>
 	<td>{$elements.schedulename}</td>
 	<td>{$elements.active}</td>
-	<td onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');">edit</td>
+	<td onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
 	</tr>
 	{/foreach}
 	</tbody>
