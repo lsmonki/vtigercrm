@@ -90,7 +90,7 @@ $cache_dir = '_VT_CACHEDIR_';
 $tmp_dir = '_VT_TMPDIR_';
 
 // import_dir default value prepended by cache_dir = import/
-$import_dir = '_VT_IMPORTDIR_';
+$import_dir = 'cache/import/';
 
 // upload_dir default value prepended by cache_dir = upload/
 $upload_dir = '_VT_UPLOADDIR_';
