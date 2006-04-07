@@ -39,7 +39,6 @@ if($_REQUEST['type']=='CustomField')
 {
 	$smarty->display("CustomFieldindex.tpl");
 }
-	$smarty->display("CustomFieldindex.tpl");
 elseif($_REQUEST['type']=='PickList')
 	$smarty->display("PickListindex.tpl");
 elseif($_REQUEST['type']=='FieldOrder')
