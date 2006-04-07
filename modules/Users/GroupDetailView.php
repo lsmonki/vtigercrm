@@ -45,10 +45,9 @@ function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 	$row=1;
 	$groupMember = $groupInfoArr[2];
 	$information = array();
-	$memberinfo = array();
 	foreach($groupMember as $memberType=>$memberValue)
 	{
-
+		$memberinfo = array();
 		foreach($memberValue as $memberId)
 		{
 			$groupmembers = array();
@@ -88,7 +87,8 @@ function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 			$row++;
 			$memberinfo [] = $groupmembers;
 		}
-		$information[$memberDisplayType] = $memberinfo;
+		if(sizeof($memberinfo) >0)
+			$information[$memberDisplayType] = $memberinfo;
 	}
 	$returndata=array($groupfields,$information);
 	return $returndata;
