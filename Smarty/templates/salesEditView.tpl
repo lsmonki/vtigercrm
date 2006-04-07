@@ -656,9 +656,6 @@ function sensex_info()
      <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 	 <script type="text/javascript" defer="1">
      var oFCKeditor = null;
-	 {if $MODULE eq 'Emails'}
-          oFCKeditor = new FCKeditor( "description" ) ;
-     {/if}
 	 {if $MODULE eq 'Notes'}
 	          oFCKeditor = new FCKeditor( "notecontent" ) ;
 	 {/if}

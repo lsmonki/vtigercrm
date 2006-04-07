@@ -1037,9 +1037,6 @@ function sensex_info()
 
        var oFCKeditor = null;
 
-       {if $MODULE eq 'Emails'}
-               oFCKeditor = new FCKeditor( "description" ) ;
-       {/if}
        {if $MODULE eq 'Notes'}
                oFCKeditor = new FCKeditor( "notecontent" ) ;
        {/if}
