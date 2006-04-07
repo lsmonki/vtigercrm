@@ -15,8 +15,6 @@ require_once('include/utils/GraphUtils.php');
 include_once ('Image/Graph.php');
 include_once ('Image/Canvas.php');
 
-$tmp_dir=$root_directory."cache/images/";
-
 /** Function to render the Horizontal Graph
         * Portions created by vtiger are Copyright (C) vtiger.
         * All Rights Reserved.
