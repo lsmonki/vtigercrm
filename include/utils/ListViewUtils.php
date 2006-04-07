@@ -19,23 +19,21 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
-
-
-/** This function returns the name of the person.
-  * It currently returns "first last".  It should not put the space if either name is not available.
-  * It should not return errors if either name is not available.
-  * If no names are present, it will return ""
-  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-  * All Rights Reserved.
-  * Contributor(s): ______________________________________..
-  */
-
   
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 
+/**This function is used to get the list view header values in a list view
+*Param $focus - module object
+*Param $module - module name
+*Param $sort_qry - sort by value
+*Param $sorder - sorting order (asc/desc)
+*Param $order_by - order by
+*Param $relatedlist - flag to check whether the header is for listvie or related list
+*Param $oCv - Custom view object
+*Returns the listview header values in an array
+*/
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
 	global $adb;
@@ -108,7 +106,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 	//end
-	
+
 	//modified for customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
@@ -173,51 +171,57 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							if($lbl_name =='Amount')
 							{
 								$currencyid=fetchCurrency($current_user->id);
-                                                                $curr_symbol=getCurrencySymbol($currencyid);
+								$curr_symbol=getCurrencySymbol($currencyid);
 								$lbl_name .=': (in '.$curr_symbol.')';
-								}
+							}
 
-										$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
-										$arrow = '';
-										}
-										}
-										else
-										{       if($app_strings[$name])
-										{
-										$name = $app_strings[$name];
-										}
-										elseif($mod_strings[$name])
-										{
-										$name = $mod_strings[$name];
-										}
-										}
+							$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+							$arrow = '';
+						}
+					}
+					else
+					{       if($app_strings[$name])
+						{
+							$name = $app_strings[$name];
+						}
+						elseif($mod_strings[$name])
+						{
+							$name = $mod_strings[$name];
+						}
+					}
 
-										}
-										}
-										//added to display currency symbol in related listview header
-										if($name =='Amount' && $relatedlist !='' )
-										{
-											$currencyid=fetchCurrency($current_user->id);
-							                                $curr_symbol=getCurrencySymbol($currencyid);
-											$name .=': (in '.$curr_symbol.')';
-													}
+				}
+			}
+																	//added to display currency symbol in related listview header
+																	if($name =='Amount' && $relatedlist !='' )
+		{
+			$currencyid=fetchCurrency($current_user->id);
+			$curr_symbol=getCurrencySymbol($currencyid);
+			$name .=': (in '.$curr_symbol.')';
+		}
 
-													//Added condition to hide the close column in Related Lists
-													if($name == 'Close' && $relatedlist != '')
-													{
-													// $list_header[] = '';
-													}
-													else
-													{
-													$list_header[]=$name;
-													}
-													}
-													}
-													return $list_header;
-													}
+		//Added condition to hide the close column in Related Lists
+		if($name == 'Close' && $relatedlist != '')
+		{
+			// $list_header[] = '';
+		}
+		else
+		{
+			$list_header[]=$name;
+		}
+	}
+     }
+	return $list_header;
+}
 
-
-
+/**This function is used to get the list view header in popup 
+*Param $focus - module object
+*Param $module - module name
+*Param $sort_qry - sort by value
+*Param $sorder - sorting order (asc/desc)
+*Param $order_by - order by
+*Returns the listview header values in an array
+*/
 
 function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='')
 {
@@ -308,7 +312,12 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 
 }
 
-
+/**This function generates the navigation array in a listview 
+*Param $display - start value of the navigation
+*Param $noofrows - no of records
+*Param $limit - no of entries per page
+*Returns an array type
+*/
 
 //code contributed by raju for improved pagination
 function getNavigationValues($display, $noofrows, $limit)
@@ -375,11 +384,17 @@ function getNavigationValues($display, $noofrows, $limit)
 
 //End of code contributed by raju for improved pagination
 
-
-
-
-
-
+/**This function generates the List view entries in a list view 
+*Param $focus - module object
+*Param $list_result - resultset of a listview query
+*Param $navigation_array - navigation values in an array
+*Param $relatedlist - check for related list flag
+*Param $returnset - list query parameters in url string
+*Param $edit_action - Edit action value
+*Param $del_action - delete action value
+*Param $oCv - customview object
+*Returns an array type
+*/
 
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
@@ -666,6 +681,18 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	return $list_block;
 }
 
+/**This function generates the List view entries in a popup list view 
+*Param $focus - module object
+*Param $list_result - resultset of a listview query
+*Param $navigation_array - navigation values in an array
+*Param $relatedlist - check for related list flag
+*Param $returnset - list query parameters in url string
+*Param $edit_action - Edit action value
+*Param $del_action - delete action value
+*Param $oCv - customview object
+*Returns an array type
+*/
+
 
 function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
 {
@@ -806,7 +833,20 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 }
 
 
-
+/**This function generates the value for a given field namee 
+*Param $field_result - field result in array
+*Param $list_result - resultset of a listview query
+*Param $fieldname - field name
+*Param $focus - module object
+*Param $module - module name
+*Param $entity_id - entity id
+*Param $list_result_count - list result count
+*Param $mode - mode type 
+*Param $popuptype - popup type
+*Param $returnset - list query parameters in url string
+*Param $viewid - custom view id
+*Returns an string value
+*/
 
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
