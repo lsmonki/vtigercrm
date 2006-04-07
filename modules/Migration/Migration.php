@@ -61,22 +61,39 @@ class Migration
 		$this->conn->println("New Database Parameters has been set.");
 	}
 
-
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
 		$this->conn->println("Inside the function taleDatabaseDump. Going to take the old database dump...");
 		$dump_filename = 'dump_'.$dbname.'.txt';
 
-		exec("echo 'set FOREIGN_KEY_CHECKS = 0;' > ".$dump_filename);
 		if($mysql_password != '')
 		{
-			exec("mysqldump -u".$mysql_username." -p".$mysql_password." -h ".$host_name." --port=".$mysql_port." ".$dbname." >> ".$dump_filename);
+			$password_str = " -p".$mysql_password;
 		}
 		else
 		{
-			exec("mysqldump -u".$mysql_username." -h ".$host_name." --port=".$mysql_port." ".$dbname." >> ".$dump_filename);
+			$password_str = '';
 		}
-		exec("echo 'set FOREIGN_KEY_CHECKS = 1;' >> ".$dump_filename);
+		if($_SESSION['windows_mysql_path'] != '')
+		{
+			$current_working_dir = getcwd();
+			$win_mysql_path = $_SESSION['windows_mysql_path'];
+
+			$dump_str = "mysqldump -u".$mysql_username.$password_str." -h ".$host_name." --port=".$mysql_port." ".$dbname." >> ".$dump_filename;
+
+			chdir ($win_mysql_path);
+
+			exec("echo 'set FOREIGN_KEY_CHECKS = 0;' > ".$dump_filename);
+			exec($dump_str);
+			exec("echo 'set FOREIGN_KEY_CHECKS = 1;' >> ".$dump_filename);
+			
+			exec('cp "'.$win_mysql_path.'\\'.$dump_filename.'" "'.$current_working_dir.'\\'.$dump_filename).'"';
+			chdir ($current_working_dir);
+		}
+		else
+		{
+			exec("mysqldump -u".$mysql_username." -h ".$host_name.$password_str." --port=".$mysql_port." ".$dbname." >> ".$dump_filename);
+		}
 
 		echo '<br> Old Database Dump has been taken and the file is ==> '.$dump_filename;
 
@@ -107,11 +124,28 @@ class Migration
 	{
 		if($mysql_password != '')
 		{
-			exec("mysql --user=".$mysql_username." --password=".$mysql_password." -h ".$host_name." --force --port=".$mysql_port." ".$dbname." < ".$dumpfile);
+			$password_str = " --password".$mysql_password;
 		}
 		else
 		{
-			exec("mysql --user=".$mysql_username." -h ".$host_name." --force --port=".$mysql_port." ".$dbname." < ".$dumpfile);
+			$password_str = '';
+		}
+		if($_SESSION['windows_mysql_path'] != '')
+		{
+			$current_working_dir = getcwd();
+			$win_mysql_path = $_SESSION['windows_mysql_path'];
+			
+			$dump_str = "mysql --user=".$mysql_username.$password_str." -h ".$host_name." --force --port=".$mysql_port." ".$dbname." < ".$dumpfile;
+
+			chdir ($win_mysql_path);
+
+			exec($dump_str);
+			
+			chdir ($current_working_dir);
+		}
+		else
+		{
+			exec("mysql --user=".$mysql_username." -h ".$host_name." --force --port=".$mysql_port.$password_str." ".$dbname." < ".$dumpfile);
 		}
 
 		echo '<br> Old Database Dump has been applied to the Current Database.';
