@@ -17,6 +17,14 @@
  * Description:  Starts the installation process.
  ********************************************************************************/
 
+if (is_file('config.php')) {
+	require_once('config.php');
+	if (isset($dbconfig['db_hostname']) & is_file('install_lock')) {
+    	header("Location: index.php");
+    	exit();
+    }
+}
+
 if (substr(phpversion(), 0, 1) == "5") {
   ini_set("zend.ze1_compatibility_mode", "1");
 }

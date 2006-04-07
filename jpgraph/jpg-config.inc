@@ -64,6 +64,10 @@ DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
 // either FF_CHINESE or FF_BIG5
 DEFINE('CHINESE_TTF_FONT','bkai00mp.ttf');
 
+// For Traditional Chinese with UTF-8 encode
+// Download from http://twpug.net/modules/wfdownloads/visit.php?cid=33&lid=566
+DEFINE('TCHINESE_UTF8_FONT','fireflysung.ttf');
+
 // Special unicode cyrillic language support
 DEFINE("LANGUAGE_CYRILLIC",false);
 

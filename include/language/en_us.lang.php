@@ -924,8 +924,35 @@ $app_list_strings = Array(
 
 		'Opportunities' => 'Opportunity'),
 
+// AlphabeticalSearch values for UTF-8-aware procedure
+// Allows multicharacter elements
+
+'alphabetical_search_values' => Array('A'
+                                , 'B'
+                                , 'C'
+                                , 'D'
+                                , 'E'
+                                , 'F'
+                                , 'G'
+                                , 'H'
+                                , 'I'
+                                , 'J'
+                                , 'K'
+                                , 'L'
+                                , 'M'
+                                , 'N'
+                                , 'O'
+                                , 'P'
+                                , 'Q'
+                                , 'R'
+                                , 'S'
+                                , 'U'
+                                , 'V'
+                                , 'W'
+                                , 'X'
+                                , 'Y'
+                                , 'Z'                                
+                                  ),
 );
-
-
 
 ?>

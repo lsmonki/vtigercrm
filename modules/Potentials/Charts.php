@@ -40,6 +40,7 @@ DEFINE("FF_TREBUCHE",17);
 DEFINE("FF_SIMSUN",30);
 DEFINE("FF_CHINESE",31);
 DEFINE("FF_BIG5",31);
+DEFINE("FF_TCHINESE_UTF8",32);
 
 
 function calculate_font_family($locale)
@@ -50,6 +51,8 @@ function calculate_font_family($locale)
 	{
 		case 'cn_zh':
 			return FF_SIMSUN;
+		case 'zh-tw':
+		    return FF_TCHINESE_UTF8;
 		case 'tw_zh':
 			if(!function_exists('iconv')){
 				echo " Unable to display traditional Chinese on the graphs.<BR>The function iconv does not exists please read more about <a href='http://us4.php.net/iconv'>iconv here</a><BR>";

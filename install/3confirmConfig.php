@@ -17,6 +17,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+if (is_file('../install_lock')) {
+    header("Location: ../index.php");
+    exit();
+}
+
 if (isset($_REQUEST['db_hostname']))
 	$db_hostname = $_REQUEST['db_hostname'];
 

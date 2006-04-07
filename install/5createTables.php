@@ -18,6 +18,11 @@
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
+if (is_file('../install_lock')) {
+    header("Location: ../index.php");
+    exit();
+}
+
 set_time_limit(600);
 
 if (isset($_REQUEST['db_name']))
@@ -81,6 +86,23 @@ $useHtmlEntities = true;
 
 require_once('install/5createTables.inc.php');
 
+if (is_file('install_lock'))
+	$is_writable = is_writable('install_lock');
+else
+	$is_writable = is_writable('.');
+	
+$config_lock = "/*\n\nInstallation Lock File\n\n";
+$config_lock .= "This File is Used to Prevent\n";
+$config_lock .= "Changes to An Existing Configuration\n";
+$config_lock .= "of vtiger.\n\n";
+$config_lock .= "To re-enable the installation mode,\n";
+$config_lock .= "delete this file, and use the\n";
+$config_lock .= "install.php file to restart the configuration.\n\n*/"; 
+
+if ($is_writable && ($install_lock_file = @ fopen("install_lock", "w"))) {
+	fputs($install_lock_file, $config_lock, strlen($config_lock));
+	fclose($install_lock_file);
+}
 ?>
 <HR></HR>
 total time: <?php echo "$deltaTime"; ?> seconds.<BR />

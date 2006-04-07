@@ -300,7 +300,7 @@ else
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type='.$row[1].'&fileid='.$row[5].'&filename='.$row[2].'">'.$row[2].'</a>';
+		$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type=' . $row[1] . '&fileid=' . $row[5] . '&filename=' . urlencode($row[2]) . '">' . $row[2] . '</a>';
 		$list .= '</td>';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';

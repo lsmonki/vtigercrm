@@ -1385,7 +1385,7 @@ class ReportRun extends CRMEntity
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 
-					$coltotalhtml .= "<table width='60%' cellpadding='0' cellspacing='0' border='0' class='formOuterBorder'><tr><td class='rptHead'>Totals</td><td class='rptHead'>SUM</td><td class='rptHead'>AVG</td><td class='rptHead'>MIN</td><td class='rptHead'>MAX</td></tr>";
+					$coltotalhtml .= "<table width='60%' cellpadding='0' cellspacing='0' border='0' class='formOuterBorder'><tr><td class='rptHead'>{$mod_strings['LBL_COLUMNS']}</td><td class='rptHead'>{$mod_strings['LBL_COLUMNS_SUM']}</td><td class='rptHead'>{$mod_strings['LBL_COLUMNS_AVERAGE']}</td><td class='rptHead'>{$mod_strings['LBL_COLUMNS_LOW_VALUE']}</td><td class='rptHead'>{$mod_strings['LBL_COLUMNS_LARGE_VALUE']}</td></tr>";
 
 					foreach($this->totallist as $key=>$value)
 					{
