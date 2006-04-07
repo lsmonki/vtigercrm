@@ -8,14 +8,19 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-//include('include/database/PearDatabase.php');
-global $adb;
-$templateid = $_REQUEST["record"];
-$sql = "delete from wordtemplates where templateid=".$templateid;
-$adb->query($sql);
 
-header("Location:index.php?module=Users&action=listwordtemplates");
+ $idlist = $_REQUEST['idlist'];
+ $id_array=explode(';', $idlist);
 
+ for($i=0; $i < count($id_array)-1; $i++)
+ {
+
+	         $sql = "delete from wordtemplates where templateid=".$id_array[$i];
+	         $adb->query($sql);
+
+ }
+ header("Location:index.php?module=Users&action=listwordtemplates");
+ 			 
 
 ?>
 
