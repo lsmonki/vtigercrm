@@ -84,6 +84,7 @@
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="action">
+<input type="hidden" name="parenttab" value="{$CATEGORY}">
 <input type="hidden" name="return_module" value="{$RETURN_MODULE}">
 <input type="hidden" name="return_id" value="{$RETURN_ID}">
 <input type="hidden" name="return_action" value="{$RETURN_ACTION}">
