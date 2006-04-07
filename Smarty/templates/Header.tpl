@@ -255,7 +255,7 @@
 </table>
 </div>
 
-<div id="qcform" style="position:absolute;"></div>
+<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;"></div>
 <script>
 function Announcement_rss()
 {ldelim}
@@ -284,6 +284,7 @@ function QCreate(qcoptions)
 function ajaxQCreateResponse(response)
 {ldelim}
         hide("status");
+        show("qcform");
         document.getElementById('qcform').innerHTML = response.responseText;
 {rdelim}
 </script>
