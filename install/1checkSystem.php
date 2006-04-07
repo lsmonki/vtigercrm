@@ -18,13 +18,8 @@
  ********************************************************************************/
 
 //get php configuration settings.  requires elaborate parsing of phpinfo() output
-
-
 ?>
-<html
-
-
-
+<html>
 <?
 
 
