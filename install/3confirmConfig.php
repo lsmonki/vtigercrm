@@ -726,4 +726,3 @@ elseif($mysql_status == 'true' && $mysqlconn_status == 'true' && ($mysql_db_stat
 <?php
 }
 ?>
-
