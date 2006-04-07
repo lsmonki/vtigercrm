@@ -303,7 +303,7 @@ function ajaxQCreateResponse(response)
        </div>
        </td>
        <td width="8" valign="top">
-       <div id="mnuKey" onclick="fnSlide1('slidemenu','slide')" ><img src="{$IMAGEPATH}/jump.gif"></div>
+       <div id="mnuKey" onclick="fnSlide1('slidemenu','slide')" ><img src="{$IMAGEPATH}/jump.gif" style="opacity:.7;"></div>
        </td>
        </tr>
 </table>
