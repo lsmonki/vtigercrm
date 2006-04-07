@@ -14,10 +14,195 @@ background-repeat: no-repeat;
 background-position: bottom center;
 background-attachment: fixed;
 }
-  </style></head>
+  .style1 {
+	color: #FF0000;
+	font-weight: bold;
+}
+  </style>
+</head>
 
 <body class="background">
 <p><img src="themes/images/vtiger.jpg" height="48" width="112"> </p>
+<h1>vtiger CRM 5.0 Alpha 5: Release Notes</h1>
+<p><b>Date: April 07, 2006</b></p>
+<p> vtiger CRM 5.0 Alpha 5 release is another release in v5 alpha release cycle, which is currently in active development phase. The intent of this release is to showcase to the vtiger community, the significant changes made after v5 Alpha 4 release i.e., changes since Mar 31, 06' . The noteworthy features in v5 Alpha 5 are new user interface for Company Information, Email templates, Company information, Outgoing mail server, Announcements, RSS, optimized the database queries for List Views function in all the modules, and others. In addition to this, we have&nbsp; conducted performance testing for some of the modules using a popular Web Based Testing Software (<a href="http://www.adventnet.com/products/qengine/index.html"><strong>AdventNet QEngine 6.0</strong></a>), which helped us to identify some of the bottlenecks in performance. We will publish the performance reports soon. We thank AdventNet for permitting us to make use of this interesting software and we gladly recommend it to everyone too, not because AdventNet allowed us to use it but because it is really good. </p>
+<p><b>IMPORTANT NOTES:</b> </p>
+<ul>
+  <li>We strongly recommend CRM community NOT to USE <b>vtiger CRM 5 Alpha 5 </b>for any real-time deployments. In case you are looking for an immediate CRM solution for your business, please consider using the <b>vtiger CRM 4.2.3</b> (latest stable version), which can be downloaded from <a href="http://www.vtiger.com"><b>vtiger.com</b></a>.</li>
+  <li>JpGraph used for generating dashboards has been replaced by ImageGraph, a third party charting software.</li>
+  <li class="style1">Database migration script is provided for migrating data from v4.2.3 to v5 Alpha 5 only for testing purpose. Hence users are strongly recommended to take a backup of the the v4.2.3 data before testing the migration script.</li>
+</ul>
+<p><b><i>Appeal to Developers, Testers, Analysts, Writers, and real end users! </i> </b></p>
+<p>Jump-start to the vtiger Public Discussions and post your valuable suggestions &amp; comments to help us deliver a world class open source CRM for you in another few weeks time. It is very simple to start working with vtiger CRM 5 Alpha 5,</p>
+<p><b><font size="3">Step 1:</font></b> Browse through <a href="http://www.vtiger.com/products/crm/demo_5alpha/index.php"><b>Live Demo</b></a></p>
+<p><b><font size="3">Step 2:</font></b> Download product from the <a href="http://vtiger.com/index.php?option=com_content&amp;task=view&amp;id=70&amp;Itemid=109"><b>vtiger.com</b></a> and install in your favorite Operating System.</p>
+<p><b><font size="3">Step 3:</font></b> Post your suggestions &amp; comments at vtiger Discussions under : <a href="http://forums.vtiger.com/index.php?c=10"><b>vtiger CRM 5.x</b></a> category</p>
+<p><b><a name="TOC3" id="TOC3"></a>Table of Contents</b></p>
+<ol>
+  <li><a href="#Summary5_Alpha5">Summary</a></li>
+  <li><a href="#Features5_Alpha5">Features</a></li>
+  <li><a href="#v5_Bug_Fixes_alpha5">Bug Fixes</a></li>
+  <li><a href="#KI5_Alpha5">Known Issues </a></li>
+</ol>
+<h3><a name="Summary5_Alpha5" id="Summary5_Alpha5"></a>1. Summary</h3>
+<table border="1" cellpadding="5" cellspacing="0" width="73%">
+  <tbody>
+    <tr bgcolor="#ccccff">
+      <td width="5%"><b><font color="#990000">S. No</font></b></td>
+      <td width="40%"><b><font color="#990000">Item</font></b></td>
+      <td width="55%"><b><font color="#990000">Status</font></b></td>
+    </tr>
+    <tr>
+      <td width="5%">1 </td>
+      <td width="40%">Features</td>
+      <td width="55%">
+        <p>15</p></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Bug Fixes </td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td width="5%">3</td>
+      <td width="40%">Product Size</td>
+      <td width="55%">Platform Independent - <b>5.3 MB<br />
+        </b>Windows (EXE) - <b>26 MB</b><br />
+        Linux (BIN) - <b>40 MB</b></td>
+    </tr>
+    <tr>
+      <td width="5%">4</td>
+      <td width="40%">Database Migration</td>
+      <td width="55%"><b><font color="#ff0000">Available only for the Testing Purpose. Data (Migration script from v4.2.3 to v5 alpha 5) </font></b></td>
+    </tr>
+    <tr>
+      <td width="5%">5</td>
+      <td width="40%">vtiger CRM - PHP Documentation</td>
+      <td width="55%">Download from vtigercrm project in SF.net. URL: <a href="http://prdownloads.sourceforge.net/vtigercrm/vtiger_CRM_5_alpha4_PhpDocs.zip?download">Click Here</a></td>
+    </tr>
+    <tr>
+      <td width="5%">6</td>
+      <td width="40%">Product Documentation</td>
+      <td width="55%"><ul>
+        <li>Available at the <a href="http://www.vtiger.com/wiki/index.php/Main_Page">Wiki</a></li>
+        <li>        <a href="vtigercrm5_alpha_Security.html">Security Management</a> Document is bundled with the product. </li>
+      </ul></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="Features5_Alpha5" id="Features5_Alpha5"></a>2. Features</h3>
+<table style="width: 65%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td  width="9%"><b>S. No</b></td>
+      <td  width="91%"><b>Feature</b></td>
+    </tr>
+    <tr>
+      <td  width="9%">1 </td>
+      <td  width="91%"> Smarty template applied to Currency and Custom Fields list view features </td>
+    </tr>
+    <tr>
+      <td  width="9%">2 </td>
+      <td  width="91%"> List View feature database queries  are optimized for all the modules </td>
+    </tr>
+    <tr>
+      <td  width="9%">3 </td>
+      <td  width="91%">PHP API documentation for some of the major functions </td>
+    </tr>
+    <tr>
+      <td  width="9%">4</td>
+      <td  width="91%"> New module called Marketing is added. Campaigns module is now part of Marketing primary module. </td>
+    </tr>
+    <tr>
+      <td  width="9%">5</td>
+      <td  width="91%"> AJAXified Notification Schedulers</td>
+    </tr>
+    <tr>
+      <td  width="9%">6</td>
+      <td  width="91%"> AJAXified Inventory Notifications</td>
+    </tr>
+    <tr>
+      <td  width="9%">7</td>
+      <td  width="91%"> AJAXified Picklist Settings</td>
+    </tr>
+    <tr>
+      <td  width="9%">8</td>
+      <td  width="91%"> AJAXified Assign Module Owners</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td> New UI for Integration of Mail Merge Templates</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td> New UI for Company Information</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td> New UI for Outgoing Mail Server</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td> New UI for Backup Server Configuration</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td> New UI for Terms and Conditions</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td> New UI for Announcements</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td> New UI for RSS module </td>
+    </tr>
+  </tbody>
+</table>
+<p>&nbsp; </p>
+<table border="1" width="60%">
+  <tbody>
+    <tr>
+      <td>
+        <p><b>Note: </b></p>
+        <p><b>1. Configuring Web services to update Publicly traded company profiles (With Ticker symbol in Accounts)</b> In Account module, if ticker symbol is specified, company profile will be displayed on top of Edit view page. For this specify the server name, port number, user name and password has in class_http/class_http.php under &lt;vtiger CRM Home&gt; directory.</p>
+        <p>Line: 166</p>
+        <p>Assign values to the given variables: $server,$port,$user,$pwd</p></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="v5_Bug_Fixes_alpha5" id="v5_Bug_Fixes_alpha5"></a>Bug Fixes</h3>
+<table width="65%" border="1" cellpadding="2" cellspacing="2" text-align="left">
+  <tbody>
+    <tr>
+      <td  width="37"><b>SL No. </b></td>
+      <td  width="80"><b>Ticket ID </b></td>
+      <td  width="352"><b>Description</b></td>
+    </tr>
+    <tr>
+      <td  width="37">1 </td>
+      <td  width="80">-</td>
+      <td  width="352"> There seems to be two "search in emails" icons on the email page </td>
+    </tr>
+    <tr>
+      <td  width="37">2 </td>
+      <td  width="80">-</td>
+      <td  width="352"> Quick create drop down menu enabled. </td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="KI5_Alpha5" id="KI5_Alpha5"></a>3. Known Issues</h3>
+<ul>
+  <li> While creating a new e-mail using the e-mail template, the values for the  fields will not appear in the e-mail</li>
+  <li>Webmail has been moved from ajax/js to prototype framework</li>
+  <li> Error are not handled properly in Webmail module</li>
+  <li> Attachments will not work properly in Webmail module </li>
+  <li> When deleting the groups, the ownership of the records that are owned by the group that is being deleted should be changed. This functionality is  not handled in v5 Alpha 5</li>
+  <li> When the data of a group is shared with other users/groups, the&nbsp; records owned by the sub groups users will be shared properly but the records owned by the sub-group  will not be shared </li>
+  <li> PHP 5 related exception while saving a ticket or potential</li>
+</ul>
+<hr />
 <h1>vtiger CRM 5.0 Alpha 4: Release Notes</h1>
 <p><b>Date: March 31, 2006</b></p>
 <p>vtiger CRM 5.0 Alpha 4 release is currently in active development phase. The 
