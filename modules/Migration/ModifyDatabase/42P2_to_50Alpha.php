@@ -18,6 +18,8 @@ $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Start
 echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.....</b><br>";
 
 /****************** 5.0(Alpha) dev version 1 Database changes -- Starts*********************/
+//$list =  "<table border=1>";
+//$list .= '<tr width="100%"><td width="20%"><b> Status Object </b></td><td width="10%">Suceess/Failure</td><td width="80%"> Query</td></tr>';
 
 //Added the announcement table creation to avoid the error
 $ann_query = "CREATE TABLE `announcement` (
@@ -61,8 +63,7 @@ $alter_array1 = Array(
 		);
 foreach($alter_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 //Tables profile2globalpermissions, actionmapping creation
@@ -73,8 +74,7 @@ $create_sql1 = "CREATE TABLE `profile2globalpermissions` (
 	PRIMARY KEY (`profileid`,`globalactionid`),
 	CONSTRAINT `fk_profile2globalpermissions` FOREIGN KEY (`profileid`) REFERENCES `profile` (`profileid`) ON DELETE CASCADE
 	)";
-$status = $conn->query($create_sql1);
-echo '<br>'.$status.' ==> '.$create_sql1;
+Execute($create_sql1);
 
 $create_sql2 = "CREATE TABLE `actionmapping` (
 	`actionid` int(19) NOT NULL default '0',
@@ -82,9 +82,7 @@ $create_sql2 = "CREATE TABLE `actionmapping` (
 	`securitycheck` int(19) default NULL,
 PRIMARY KEY (`actionid`,`actionname`)
 	) TYPE=InnoDB";
-$status = $conn->query($create_sql2);
-echo '<br>'.$status.' ==> '.$create_sql2;
-
+Execute($create_sql2);
 
 //For all Profiles, insert the following entries into profile2global permissions table:
 $sql = 'select * from profile';
@@ -98,18 +96,14 @@ for($i=0;$i<$noofprofiles;$i++)
 	$sql1 = "insert into profile2globalpermissions values ($profile_id,1,0)";
 	$sql2 = "insert into profile2globalpermissions values ($profile_id,2,0)";
 
-	$status1 = $conn->query($sql1);
-	$status2 = $conn->query($sql2);
-
-	echo '<br>'.$status1.' ==> '.$sql1;
-	echo '<br>'.$status2.' ==> '.$sql2;
+	Execute($sql1);
+	Execute($sql2);
 }
 
 
 //Removing entries for Dashboard and Home module from profile2standardpermissions table
 $del_query1 = "delete from profile2standardpermissions where tabid in(1,3)";
-$status = $conn->query($del_query1);
-echo '<br>'.$status.' ==> '.$del_query1;
+Execute($del_query1);
 
 //For all Profile do the following insert into profile2utility table:
 $sql = 'select * from profile';
@@ -123,11 +117,8 @@ for($i=0;$i<$noofprofiles;$i++)
 	$sql1 = "insert into profile2utility values ($profile_id,4,7,0)";
 	$sql2 = "insert into profile2utility values ($profile_id,7,9,0)";
 
-	$status1 = $conn->query($sql1);
-	$status2 = $conn->query($sql2);
-
-	echo '<br>'.$status1.' ==> '.$sql1;
-	echo '<br>'.$status2.' ==> '.$sql2;
+	Execute($sql1);
+	Execute($sql2);
 }
 
 
@@ -158,8 +149,7 @@ $actionmapping_array = Array(
 		);
 foreach($actionmapping_array as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
@@ -170,8 +160,7 @@ $alter_array2 = Array(
 		);
 foreach($alter_array2 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 $update_array1 = Array(
@@ -222,26 +211,22 @@ $update_array1 = Array(
 		);
 foreach($update_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 //Added for the "Color By User in Calendar " which has been contributed by Cesar
 $alter_query1 = "ALTER TABLE `users` ADD `cal_color` VARCHAR(25) DEFAULT '#E6FAD8' AFTER `user_hash`";
-$status = $conn->query($alter_query1);
-echo '<br>'.$status.' ==> '.$alter_query1;
+Execute($alter_query1);
 
 //code contributed by Fredy for color priority
 $newfieldid = $conn->getUniqueID("field");
 $insert_query1 = "insert into field values (16,".$newfieldid.",'priority','activity',1,15,'taskpriority','Priority',1,0,0,100,17,1,1,'V~O',1,'')";
-$status = $conn->query($insert_query1);
-echo '<br>'.$status.' ==> '.$insert_query1;
+Execute($insert_query1);
 
 //Added on 23-12-2005 which is missed from Fredy's contribution for Color priority
 populateFieldForSecurity('16',$newfieldid);
 $activity_alter_query = "alter table activity add column priority varchar(150) default NULL";
-$status = $conn->query($activity_alter_query);
-echo '<br>'.$status.' ==> '.$activity_alter_query;
+Execute($activity_alter_query);
 
 //Code contributed by Raju for better emailing 
 /*
@@ -263,25 +248,20 @@ $insert_array1 = array(
 		      );
 foreach($insert_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 //code contributed by mike to rearrange the home page
 $alter_query2 = "alter table users add column homeorder varchar(255) default 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI' after date_format";
-$status = $conn->query($alter_query2);
-echo '<br>'.$status.' ==> '.$alter_query2;
-
+Execute($alter_query2);
 
 //Added one column in invoice table to include 'Contact Name' field in Invoice module
 $alter_query3 = "ALTER TABLE invoice ADD column contactid int(19) after customerno";
-$status = $conn->query($alter_query3);
-echo '<br>'.$status.' ==> '.$alter_query3;
+Execute($alter_query3);
 
 $newfieldid = $conn->getUniqueID("field");
 $insert_query2 = "insert into field values (23,".$newfieldid.",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')";
-$status = $conn->query($insert_query2);
-echo '<br>'.$status.' ==> '.$insert_query2;
+Execute($insert_query2);
 //Added on 23-12-2005 because we must populate field entries in profile2field and def_org_field if we add a field in field table
 populateFieldForSecurity('23',$newfieldid);
 
@@ -309,24 +289,21 @@ $update_array2 = Array(
 		);
 foreach($update_array2 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
 //Added field emailoptout in account table
 $newfieldid = $conn->getUniqueID("field");
 $insert_query3 = "insert into field values (6,".$newfieldid.",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,1,1,'C~O',1,'')";
-$status = $conn->query($insert_query3);
-echo '<br>'.$status.' ==> '.$insert_query3;
+Execute($insert_query3);
 
 //Added on 23-12-2005 because we must populate field entries in profile2field and def_org_field if we add a field in field table
 populateFieldForSecurity('6',$newfieldid);
 
 //Added on 22-12-2005
 $alter_query4 = "alter table account add column emailoptout varchar(3) default 0";
-$status = $conn->query($alter_query4);
-echo '<br>'.$status.' ==> '.$alter_query4;
+Execute($alter_query4);
 
 $update_array3 = Array(
 		"update field set sequence=18 where tabid=6 and fieldname ='assigned_user_id'",
@@ -335,8 +312,7 @@ $update_array3 = Array(
 		);
 foreach($update_array3 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
@@ -348,8 +324,7 @@ $create_query2 = "CREATE TABLE `moduleowners`
  PRIMARY KEY  (`tabid`),
  CONSTRAINT `fk_ModuleOwners` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
-$status = $conn->query($create_query2);
-echo '<br>'.$status.' ==> '.$create_query2;
+Execute($create_query2);
 
 //Populated the default entries for moduleowners which is created newly
 $module_array = Array(
@@ -374,8 +349,7 @@ $module_array = Array(
 foreach($module_array as $mod)
 {
 	$query = "insert into moduleowners values(".$this->localGetTabID($mod).",1)";
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
@@ -389,20 +363,17 @@ $update_array4 = Array(
 		);
 foreach($update_array4 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
 
 //Table 'inventory_tandc' added newly to include Inventory Terms &Conditions
 $create_query1 = "CREATE TABLE  inventory_tandc(id INT(19),type VARCHAR(30) NOT NULL,tandc LONGTEXT default NULL,PRIMARY KEY(id))";
-$status = $conn->query($create_query1);
-echo '<br>'.$status.' ==> '.$create_query1;
+Execute($create_query1);
 
 $insert_query4 = "insert into inventory_tandc values('".$conn->getUniqueID('inventory_tandc')."','Inventory','  ')";
-$status = $conn->query($insert_query4);
-echo '<br>'.$status.' ==> '.$insert_query4;
+Execute($insert_query4);
 
 /****************** 5.0(Alpha) dev version 1 Database changes -- Ends*********************/
 
@@ -418,8 +389,7 @@ echo '<br>'.$status.' ==> '.$insert_query4;
 /****************** 5.0(Alpha) dev version 2 Database changes -- Starts*********************/
 
 $query1 = "ALTER TABLE leadaddress change lane lane varchar(250)";
-$status1 = $conn->query($query1);
-echo '<br>'.$status1.' ==> '.$query1;
+Execute($query1);
 
 $rename_table_array1 = Array(
 		"update field set tablename='customerdetails' where tabid=4 and fieldname in ('portal','support_start_date','support_end_date')",
@@ -432,14 +402,12 @@ $rename_table_array1 = Array(
 		);
 foreach($rename_table_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
 $query2 = "create table ownernotify(crmid int(19),smownerid int(19),flag int(3))";
-$status2 = $conn->query($query2);
-echo '<br>'.$status2.' ==> '.$query2;
+Execute($query2);
 
 
 //Form the role_map_array as roleid=>name mapping array
@@ -468,13 +436,11 @@ echo '<pre> List of user2role : (userid => roleid)';print_r($user2role_array);ec
 
 //Delete the role entries
 $sql = "truncate role";
-$result = $conn->query($sql);
-echo '<br>'.$result.' ==> '.$sql;
+Execute($sql);
 
 
 $query3 = "alter table user2role drop FOREIGN KEY fk_user2role2";
-$status3 = $conn->query($query3);
-echo '<br>'.$status3.' ==> '.$query3;
+Execute($query3);
 
 //4,5 th are the Extra added queries
 $alter_query_array1 = Array(
@@ -486,14 +452,12 @@ $alter_query_array1 = Array(
 		);
 foreach($alter_query_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
 $query4 = "ALTER TABLE user2role ADD CONSTRAINT fk_user2role2 FOREIGN KEY (roleid) REFERENCES role(roleid) ON DELETE CASCADE";
-$status4 = $conn->query($query4);
-echo '<br>'.$status4.' ==> '.$query4;
+Execute($query4);
 
 $alter_query_array2 = Array(
 		"alter table role CHANGE name rolename varchar(200)",
@@ -503,15 +467,13 @@ $alter_query_array2 = Array(
 		);
 foreach($alter_query_array2 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
 
 $query5 = "insert into role values('H1','Organisation','H1',0)";
-$status5 = $conn->query($query5);
-echo '<br>'.$status5.' ==> '.$query5;
+Execute($query5);
 
 //include("include/utils/UserInfoUtil.php");
 //Create role based on role_map_array values and form the new_role_map_array with old roleid and new roleid
@@ -531,8 +493,7 @@ foreach($role_map_array as $roleid => $rolename)
 foreach($user2role_array as $userid => $roleid)
 {
 	$sql = "insert into user2role (userid, roleid) values(".$userid.",'".$new_role_map_array[$roleid]."')";
-	$status = $conn->query($sql);
-	echo '<br>'.$status.' ==> '.$sql;
+	Execute($sql);
 }
 //Commented the following loop as we have backup the user2role and insert the entries with the new rold id using new_role_map_array above
 //Update the user2role table with new roleid
@@ -540,16 +501,14 @@ foreach($user2role_array as $userid => $roleid)
    foreach($new_role_map_array as $old_roleid => $new_roleid)
    {
    $update_user2role = "update user2role set roleid='".$new_roleid."' where roleid=".$old_roleid;
-   $status = $conn->query($update_user2role);
-   echo '<br>'.$status.' ==> '.$update_user2role;
+   Execute($update_user2role);
    }
  */
 //Update the role2profile table with new roleid
 foreach($new_role_map_array as $old_roleid => $new_roleid)
 {
 	$update_role2profile = "update role2profile set roleid='".$new_roleid."' where roleid=".$old_roleid;
-	$status = $conn->query($update_role2profile);
-	echo '<br>'.$status.' ==> '.$update_role2profile;
+	Execute($update_role2profile);
 }
 
 
@@ -588,8 +547,7 @@ echo '<pre>List of users2group : ';print_r($users2group_map_array);echo '</pre>'
 
 //Step 3 : delete all entries from groups table
 $sql = "truncate groups";
-$result = $conn->query($sql);
-echo '<br>'.$result.' ==> '.$sql;
+Execute($sql);
 
 $alter_query_array3 = Array(
 		"alter table users2group drop FOREIGN KEY fk_users2group",
@@ -600,8 +558,7 @@ $alter_query_array3 = Array(
 		);
 foreach($alter_query_array3 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 //2 nd query is the Extra added query
@@ -614,8 +571,7 @@ $alter_query_array4 = Array(
 		);
 foreach($alter_query_array4 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
@@ -627,8 +583,7 @@ $query8 = "CREATE TABLE `group2grouprel`
  PRIMARY KEY (`groupid`,`containsgroupid`),
  CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
-$status8 = $conn->query($query8);
-echo '<br>'.$status8.' ==> '.$query8;
+Execute($query8);
 
 $query9 = "CREATE TABLE `group2role` 
 (
@@ -637,8 +592,7 @@ $query9 = "CREATE TABLE `group2role`
  PRIMARY KEY (`groupid`,`roleid`),
  CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
-$status9 = $conn->query($query9);
-echo '<br>'.$status9.' ==> '.$query9;
+Execute($query9);
 
 $query10 = "CREATE TABLE `group2rs` 
 (
@@ -647,8 +601,7 @@ $query10 = "CREATE TABLE `group2rs`
  PRIMARY KEY (`groupid`,`roleandsubid`),
  CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
-$status10 = $conn->query($query10);
-echo '<br>'.$status10.' ==> '.$query10;
+Execute($query10);
 
 //Insert all the retrieved old values to the new groups table ie., create new groups
 foreach($group_map_array as $groupname => $description)
@@ -668,8 +621,7 @@ foreach($group_map_array as $groupname => $description)
 
 //Step 4 : Drop and again create users2group
 $query6 = "drop table users2group";
-$status6 = $conn->query($query6);
-echo '<br>'.$status6.' ==> '.$query6;
+Execute($query6);
 
 
 $query7 = "CREATE TABLE `users2group` 
@@ -679,16 +631,14 @@ $query7 = "CREATE TABLE `users2group`
  PRIMARY KEY (`groupid`,`userid`),
  CONSTRAINT `fk_users2group1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
-$status7 = $conn->query($query7);
-echo '<br>'.$status7.' ==> '.$query7;
+Execute($query7);
 
 //Step 5 : put entries to users2group table based on users2group_map_array. Here get the groupid from groups table based on groupname
 foreach($users2group_map_array as $userid => $groupname)
 {
 	//$groupid = $conn->query_result($conn->query("select * from groups where groupname='".$groupname."'"),0,'groupid');
 	$sql = "insert into users2group (groupid,userid) values(".$group_name_id_mapping[$groupname].",".$userid.")";
-	$status = $conn->query($sql);
-	echo '<br>'.$status.' ==> '.$sql;
+	Execute($sql);
 }
 
 
@@ -699,8 +649,7 @@ $alter_query_array5 = Array(
 		);
 foreach($alter_query_array5 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 //Moved the create table queries for group2grouprel, group2role, group2rs to before creatinf the Group ie., before call the createGroup
 
@@ -708,8 +657,7 @@ foreach($alter_query_array5 as $query)
 /***Added to include decimal places for amount field in potential table  --by Mangai 15-Nov-2005***/
 
 $query11 = "ALTER TABLE potential change amount amount decimal(10,2)";
-$status11 = $conn->query($query11);
-echo '<br>'.$status11.' ==> '.$query11;
+Execute($query11);
 
 /****************** 5.0(Alpha) dev version 2 Database changes -- Ends*********************/
 
@@ -728,8 +676,7 @@ echo '<br>'.$status11.' ==> '.$query11;
 
 //Drop the column company_name from vendor table ---- modified by Mickie on 18-11-2005
 $altersql1 = "alter table vendor drop column company_name";
-$status1 = $conn->query($altersql1);
-echo '<br>'.$status1.' ==> '.$altersql1;
+Execute($altersql1);
 //TODO (check): Remove this company_name entry from the field table if it already exists
 
 //Migration for Default Organisation Share -- Added by Don on 20-11-2005
@@ -739,8 +686,7 @@ $query1 = "CREATE TABLE `org_share_action_mapping` (
 	`share_action_name` varchar(200) NOT NULL default '',
 PRIMARY KEY  (`share_action_id`,`share_action_name`)
 	) TYPE=InnoDB ";
-$status1 = $conn->query($query1);
-echo '<br>'.$status1.' ==> '.$query1;
+Execute($query1);
 
 $query2 = "CREATE TABLE `org_share_action2tab` (
 	`share_action_id` int(19) NOT NULL default '0',
@@ -748,17 +694,14 @@ $query2 = "CREATE TABLE `org_share_action2tab` (
 	PRIMARY KEY  (`share_action_id`,`tabid`),
 	CONSTRAINT `fk_org_share_action2tab` FOREIGN KEY (`share_action_id`) REFERENCES `org_share_action_mapping` (`share_action_id`) ON DELETE CASCADE
 	) TYPE=InnoDB";
-$status2 = $conn->query($query2);
-echo '<br>'.$status2.' ==> '.$query2;
+Execute($query2);
 
 
 $query3 = "alter table def_org_share add column editstatus int(19)";
-$status3 = $conn->query($query3);
-echo '<br>'.$status3.' ==> '.$query3;
+Execute($query3);
 
 $query4 = "delete from def_org_share where tabid in(8,14,15,18,19)";
-$status4 = $conn->query($query4);
-echo '<br>'.$status7.' ==> '.$query4;
+Execute($query4);
 
 
 
@@ -775,8 +718,7 @@ $insert_query_array1 = Array(
 			);
 foreach($insert_query_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 
@@ -792,8 +734,7 @@ foreach($def_org_tabid as $def_tabid)
 			);
 	foreach($insert_query_array2 as $query)
 	{
-		$status = $conn->query($query);
-		echo '<br>'.$status.' ==> '.$query;
+		Execute($query);
 	}
 }
 
@@ -805,8 +746,7 @@ $insert_query_array3 = Array(
 		);
 foreach($insert_query_array3 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 $query_array1 = Array(
@@ -818,8 +758,7 @@ $query_array1 = Array(
 		);
 foreach($query_array1 as $query)
 {
-	$status = $conn->query($query);
-	echo '<br>'.$status.' ==> '.$query;
+	Execute($query);
 }
 
 /****************** 5.0(Alpha) dev version 3 Database changes -- Ends*********************/
@@ -2602,11 +2541,15 @@ function Execute($query)
 	$status = $conn->query($query);
 	if(is_object($status))
 	{
+		//$list .= '<tr width="100%"><td width="20%">'.$status.'</td><td width="10%"><font color="green"> S </font></td><td width="80%">'.$query.'</td></tr>';
 		echo '<br>'.$status.' ==> '.$query;
+		$success_query_array[] = $query;
 	}
 	else
 	{
-		echo '<br><br>'.$status.' ======> '.$query;
+		//$list .= '<tr width="100%"><td width="20%">'.$status.'</td><td width="10%"><font color="red"> F </font></td><td width="80%">'.$query.'</td></tr>';
+		echo '<br><br>'.$status.' ======>  '.$query;
+		$failure_query_array[] = $query;
 	}
 }
 //Added on 23-12-2005 which is used to populate the profile2field and def_org_field table entries for the field per tab
@@ -2621,15 +2564,13 @@ function populateFieldForSecurity($tabid,$fieldid)
 	{
         	$profileid = $conn->query_result($profileresult,$i,'profileid');
 	        $sqlProf2FieldInsert[$i] = 'insert into profile2field values ('.$profileid.','.$tabid.','.$fieldid.',0,1)';
-        	$status = $conn->query($sqlProf2FieldInsert[$i]);
-	        echo '<br>'.$status.' ==> '.$sqlProf2FieldInsert[$i];
+        	Execute($sqlProf2FieldInsert[$i]);
 	}
 	$def_query = "insert into def_org_field values (".$tabid.",".$fieldid.",0,1)";
-	$status = $conn->query($def_query);
-	echo '<br>'.$status.' ==> '.$def_query;
+	Execute($def_query);
 }
-
-
+//$list .= '</table>';
+//echo $list;
 
 
 ?>
