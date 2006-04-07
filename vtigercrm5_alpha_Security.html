@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="en">
 <head>
-<title>vtiger CRM 5 Alpha - Security Management Implementation</title>
+  <title>vtiger CRM 5: Security Management Implementation</title>
   <style>
 p {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
 td{  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
@@ -15,204 +15,456 @@ background-repeat: no-repeat;
 background-position: bottom center;
 background-attachment: fixed;
 } 
-</style>
+  </style>
 </head>
-<body bgcolor="#FFFFFF">
-<h1>vtiger CRM 5 Alpha - Security Management Implementation</h1>
-<P>Date: January 16, 2006
-<P>The following functions are incorporated in the vtiger CRM 5 Alpha Security 
-  Management implementation:
-<P>1. The Role is based on Organization Hierarchy.
-<P>2. The Roles can have one-to-multiple profiles.
-<P>3. Each User is associated with a role, which in turn associated with the profiles.
-<P>4. Profiles specify the access for various actions in each of the modules.
-<P>5. Group Support- Group can consists of:<br>
+<body class="background">
+	<p><img src="themes/images/vtiger.jpg"></p>
+<h1><span style="font-weight: bold;">vtiger CRM 5 - Security Management Implementation</span></h1>
+  Date:<strong> 06-04-2006</strong></p>
+  <p><strong>
+<a name="Back_to_Top"></a>Table of Contents:</strong></p>
+  <ol>
+    <li><a href="#Introduction"> Introduction</a></li>
+    <li>      <a href="#Users"> Users</a></li>
+    <li>      <a href="#Roles"> Roles</a></li>
+    <li>      <a href="#Profiles"> Profiles</a>
+      <ul>
+        <li><a href="#Global_Privileges">Global Privileges</a></li>
+        <li><a href="#Tab_Privileges">Tab Privileges</a></li>
+        <li><a href="#Standard_Privileges"> Standard Privileges</a></li>
+        <li><a href="#Utility_Privileges">Utility Privileges</a></li>
+        <li><a href="#Field_Privileges">        Field Privileges</a></li>
+      </ul>
+    </li>
+    <li><a href="#Groups"> Groups</a></li>
+    <li>      <a href="#Default_Organization_Sharing_Access"> Default
+      Organization Sharing Access</a></li>
+    <li>      <a href="#User_Defined_Sharing_Access"> User Defined Sharing
+      Access</a>
+      <ul>
+        <li><a href="#Leads_Sharing_Rules">Leads Sharing Rules</a></li>
+        <li><a href="#Accounts_Sharing_Rules">Accounts Sharing Rules</a></li>
+        <li><a
+ href="#Potentials_Sharing_Rules">Potentials Sharing Rules</a></li>
+        <li><a href="#HelpDesk_Sharing_Rules"> HelpDesk Sharing Rules</a></li>
+        <li><a href="#Email_Sharing_Rules">Emails Sharing Rules</a></li>
+        <li><a href="#Quotes_Sharing_Rules">Quotes Sharing Rules</a></li>
+        <li><a
+ href="#Sales_Order_Sharing_Rules">Sales Order Sharing Rules</a></li>
+        <li><a
+ href="#Purchase_Order_Sharing_Rules">Purchase Order Sharing Rules</a></li>
+        <li><a href="#Invoice_Sharing_Rules">Invoice Sharing Rules</a></li>
+      </ul>
+    </li>
+    <li>      <a href="#Default_Organization_Field_Access"> Organizational
+      Level Field Access</a></li>
+    <li><a href="#Limitations_and_Know_Issues">Known Issues &amp; Limitations</a>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; </li>
+  </ol>
+<h2><a name="Introduction"></a>1. Introduction</h2>
+<p> The vtiger CRM  is a Customer Relationship Management
+    software for your organization-wide sales, marketing, customer support,
+    and product management requirements. Security  Management is one of the primary modules in vtiger CRM that provides access level control (ACL) to various functions to the users according to their privileges in an organization.&nbsp; With&nbsp; User Management,
+    the users for your organization can be created and their access
+privileges can be defined.
+<p> Security Management consists for the following sub-modules:
 <ul>
-  <li>Groups</li>
-  <li>Roles</li>
-  <li>Roles &amp; Subordinates</li>
-  <li> Users</li>
+  <li>Users</li>
+  <li> Roles</li>
+  <li> Profiles</li>
+  <li> Groups</li>
+  <li> Default Organization Sharing Access</li>
+  <li> User Defined Sharing Rules</li>
+  <li> Default Organization Field Access</li>
 </ul>
-<p><b>Note:</b> In vtiger CRM 5.0 Alpha group level security has been implemented 
-  only for the Leads, Tickets, FAQ, and Activities modules.</p>
-<p><b>6.&nbsp; Profiles override the Sharing Rules i.e. the Profile is the master:</b></p>
-<p>For example, one of the users has sharing privilege to view others accounts. 
-  But his profile does not allow him to view accounts. In this case,&nbsp; the 
-  user cannot view the accounts.<br>
-  <br>
-  <b>7. Default Organization Sharing Access:</b></p>
-<p>Your organization's 
-  sharing model sets the default access that users have to each other's data. 
-  The default sharing access levels are listed below.&nbsp; </p>
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-  <tbody> 
-  <tr align="center" valign="middle"> 
-    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Type</b></td>
-    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Default Access Level</b></td>
-    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Controlled By</b></td>
+<p align="right"><a href="#Back_to_Top">Back to Top</a> </p>
+<h2><a name="Users"></a>2. Users</span></h2>
+<p><span style="font-weight: bold;">Users </span>in user management facilitate to
+      Add/Edit/Delete/View Users.&nbsp;<span style="font-weight: bold;"> </span>There
+      are two types of users in vtiger CRM software, <span
+ style="font-weight: bold;">Standard Users</span> and <span
+ style="font-weight: bold;">Administrator users</span>. <br>
+    <br>
+      <span style="font-weight: bold;">Standard Users</span> can perform only
+      CRUD (Create, Retrieve, Update, and Delete) operations on records such
+      as, leads, accounts, contacts, potentials, trouble tickets, and
+      others. Where as <span style="font-weight: bold;">Administrators</span> can manage the complete software that includes, managing users/groups &amp; their access privileges, customizing vtiger CRM user interface,
+      creating communications templates and configuring all organization wide
+      settings.&nbsp; In general Standard Users will not have access to the
+      Settings Panel and only Admin Users will have access to the Settings
+      Panel<br>
+    <br>
+      <span style="font-weight: bold;">How to create a Administrator User and
+Standard User?</span></p>
+<p>In
+      the user creation screen there is a check box called <strong>Admin</strong>. When a user
+      is created with selecting the <strong>Admin</strong> option then the user is an
+      Administrator User and if the User is created without selecting  the
+Admin option then the user is a Standard User.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <ul>
+          <li>Each user created in the system must be associated with a ROLE</span></li>
+          <li> Admin User will have all privileges in the organization</span></li>
+          <li> Standard User's&nbsp; privilege will be defined by his&nbsp; Role</span></li>
+        </ul></td>
   </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Accounts</td>
-    <td>Public Read/Write </td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Activities</td>
-    <td>Private</td>
-    <td>
-      <p>Access to other users' activities is based on your&nbsp; position in 
-        the hierarchy.</p>
-      <p>Note that access to events in a calendar view is controlled by the organization-wide 
-        calendar sharing.</p>
-    </td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Calendar Access</td>
-    <td>Hide Details and Add Events</td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Tickets</td>
-    <td>Public Read/Write</td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Contacts</td>
-    <td>Public Read/Write </td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Emails</td>
-    <td>Public Read/Write</td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Leads</td>
-    <td>Public Read/Write</td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td>Opportunities</td>
-    <td>Public Read Only</td>
-    <td>Organization-wide defaults</td>
-  </tr>
-  <tr><td >Quotes</td>
-    <td >Public Read/Write</td>
-    <td >Organization-wide defaults&nbsp; </td>
-  </tr>
-  <tr> 
-    <td >Sales Order</td>
-    <td >Public Read/Write</td>
-    <td >Organization-wide defaults </td>
-  </tr>
-  <tr> 
-    <td >Purchase Order</td>
-    <td >Public Read/Write</td>
-    <td >Organization-wide defaults</td>
-  </tr>
-  <tr> 
-    <td >Invoice</td>
-    <td >Public Read/Write</td>
-    <td >Organization-wide defaults&nbsp; </td>
-  </tr>
-  </tbody> 
 </table>
-<p>The following Sharing Permissions can be set :<span style="font-weight: bold;"></span><br>
-<br>
-<table border="1" cellpadding="3" cellspacing="0">
-  <tbody> 
-  <tr align="center" valign="middle"> 
-    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Field</b></td>
-    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Description</b></td>
+<p>The other functions in User management are <span
+ style="">Change Password, Deactivate Users, List
+    Mail Server, Home Page Order, and View Login History.</span></p>
+<p align="right"><a href="#Back_to_Top">Back to Top</a> </p>
+<h2><span
+ style="">  <a name="Roles" id="Roles"></a>3. Roles</span></h2>
+<p><span
+ style="font-weight: bold;"> </span>The
+      organization level hierarchy can be defined using Roles. Roles control
+      the visibility level that users have in the organization&#8217;s
+      data. <span style="font-weight: bold;">Users at any given role level
+      can always view, edit, delete&nbsp; all data owned by users below them
+      in the hierarchy </span>. For example, the Sales Manger can access/edit/delete all the
+      Sales Reps' records because they are in the higher hierarchical level
+      in
+      the role tree. The Sales Reps can access only their records. <br>
+    <br>
+<span
+ style="font-weight: bold;">Roles </span>in user management facilitate
+      to Add/Edit/Delete/View Roles. Multiple profile support is available in
+  roles i.e. a role can consists of one or more number of profiles.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <ul>
+          <li>Users in the higher level of hierarchy cannot view the records that are shared to their subordinate users</span></li>
+          <li>Role must be associated to at least one profile</span></li>
+        </ul></td>
   </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td> Private</td>
-    <td>Only the record owner, and users above that role in the hierarchy, 
-        can view, edit, and report on those records. </td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td> Public Read Only</td>
-    <td>All users can view and report on records but not edit them. Only the 
-        owner, and users above that role in the hierarchy, can edit those records.</td>
-  </tr>
-  <tr bgcolor="#f9f9f9" > 
-    <td> Public Read/Write</td>
-    <td>All users can view, edit all records.</td>
-  </tr>
-  <tr> 
-    <td >Public Read/Write/Delete</td>
-    <td >All users can view, edit and delete all records</td>
-  </tr>
-  </tbody> 
 </table>
-<p><b>Note:</b> When Account is Private, the Related Potential, Ticket, Quote, 
-  Sales Order, Purchase Order, and Invoice access is also set to private in Default 
-  Organization Sharing model. </p>
-<p><b>8.&nbsp; Sharing Rules Specification by Administrator:</b></p>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2><a name="Profiles" id="Profiles"></a>4. Profiles</span></h2>
+<p>Profile
+      function provides access to vtiger CRM modules (tabs), standard
+      actions, utility actions , fields in various modules and global
+      permissions. Users associated to the specific profile can access the
+functions that are assigned to them.</p>
+<p>Profiles defines the access privileges for the
+following:</span></p>
+<h3> <a name="Global_Privileges" id="Global_Privileges"></a>4.1.
+ Global Privileges</h3>
+<p>Global Privileges define the global permissions for
+ all modules and all actions. Global Privileges consists of :</p>
 <ul>
-  <li>Apart from the Default Organization Sharing Access, the administrator&nbsp; 
-    can also create Organization Level Sharing Rules for the following modules 
-    to share the data between Roles, Roles&amp;Subordinates and Groups : 
-    <ul>
-      <li>Leads</li>
-      <li> Accounts/Contacts</li>
-      <li> Potentials</li>
-      <li>Emails</li>
-      <li>HelpDesk</li>
-      <li>Quotes</li>
-      <li>SalesOrder</li>
-      <li>Purchase Order</li>
-      <li>Invoices</li>
-    </ul>
-  </li>
-  <li>Sharing Rules can only extend the visibility and cannot hide the visibility&nbsp; 
-    &nbsp;&nbsp;&nbsp; <br>
-  </li>
-  <li>On creating the Sharing Rules, Access for the Related modules can also be 
-    specified.<br>
-  </li>
-  <li>Sharing Rules are created to share data between Roles, Roles&amp;Subordinates 
-    and Groups</li>
+  <li> <strong>View all</strong>: can view
+     all&nbsp; module data in the organization</li>
+  <li> <strong>Edit all</strong>: can create/edit all module data in the organization</li>
 </ul>
-<p><b> Notes on Data Sharing:</b><br>
+<h3>    <a
+ name="Tab_Privileges" id="Tab_Privileges"></a>4.2.
+  Tab Privileges</h3>
+<p>Tab Privileges define the module tab level access
+ for the following modules:</p>
+<p>  Leads, Accounts, Contacts, Potentials,
+      Dashboards, Activities, Trouble Tickets, FAQ, Calendar, Price Books,
+      Purchase Orders,&nbsp; Invoices, Reports, Notes, Emails, Products,
+Vendors, Quotes, Sales Orders, RSS, Campaigns</p>
+<h3>  <a
+ name="Standard_Privileges" id="Standard_Privileges"></a>4.3.
+  Standard Privileges</h3>
+<p>  Standard Privileges define the permissions
+  for Create/Edit, View, Delete Actions in the following modules:</p>
+<p> -Leads, Accounts, Contacts,
+      Potentials, Activities,
+      Trouble Tickets, FAQ, Price Books, Purchase Order,&nbsp; Invoices, Notes, Emails,
+      Products, Vendors, Quotes, Sales Orders</p>
+<h3>  <span
+ style=""><a name="Field_Privileges" id="Field_Privileges"></a>4.4. Field
+        Privileges</span></h3>
+<p>Field Privileges define the
+      access permissions for the fields (standard fields/custom fields) in the following modules:</p>
+<p> Leads,
+      Accounts, Contacts, Potentials, Activities,
+      Trouble Tickets, FAQ, Price Books, Purchase Orders,&nbsp; Invoices, Notes, Emails,
+      Products, Vendors, Quotes, and Sales Orders.</p>
+<p>You can also define Field Privileges for the custom fields.</p>
+<h3>  <span
+ style=""><a name="Utility_Privileges" id="Utility_Privileges"></a>4.5.
+  Utility Privileges</span></h3>
+<p>      Utility Privileges define the permissions for<span
+ style="font-weight: bold;"> </span>the actions Import, Export, Merge,
+      Convert Lead<span style="font-weight: bold;">&nbsp; </span><br>
+      <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span><br>
+                              <span
+ style="font-weight: bold;">Profiles </span>in user management
+ facilitate to Add/Edit/Delete/View Roles.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <ul>
+          <li><span style="font-weight: bold;"> Global Privileges in Profiles override the permissions defined by Tab, Standard, Utility and Field Privileges.&nbsp; </span>For example, in a profile the access for Potentials tab is denied via Tab Privileges. Even then the Profile User can view the Potentials module data if the 'View all'&nbsp; permission is allowed in the global privileges of that profile.</li>
+          <li> <span
+ style="font-weight: bold;">Privileges defined in the profile apply to only non-admin users. For admin users the permissions defined in profile is immaterial.</span></li>
+          <li><span
+ style="font-weight: bold;"> Profiles override the Default Organization Sharing Rules and the User defined Sharing Rules.&nbsp; </span>For example consider that the organization sharing rule allows an user to view the Potentials of other users. But the user cannot view the Potentials module because his profile does not allow him to access the Potential module.</li>
+        </ul></td>
+  </tr>
+</table>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2>  <a name="Groups" id="Groups"></a>5. Groups</span></h2>
+<p>Groups
+      can be created to manage a set of common records.&nbsp; A group can
+  consist of the following:</p>
+<ul>
+  <li><span style="font-weight: bold;">Groups --&gt; </span>group can consists of sub groups. All the users
+    present in this sub group will also be in the main group.</li>
+  <li><span style="font-weight: bold;"> Roles --&gt; </span>all
+        the users under the given role will be in the group</li>
+  <li><span style="font-weight: bold;">Roles and
+            Subordinates --&gt; </span>all the users under the given role and role
+        subordinates will be in the group.</li>
+  <li> <span
+ style="font-weight: bold;">User --&gt; </span>the specified user will
+    be present in the group</li>
+</ul>
+<p>Users associated with a particular group can
+          access the records assigned to the group and perform the necessary CRUD
+      operations on the records. </p>
+<p>  <span style="font-weight: bold;">Groups </span>in
+        user management
+        facilitate to Add/Edit/Delete/View Roles.<span style="font-weight: bold;">
+</span></p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <ul>
+          <li>A user, role, role subordinate, group can be present in any number of groups</span></li>
+          <li> When a group is assigned as owner to a crmentity, all the members&nbsp; of the group can access the entity. When the ownership is changed to any one member in the group&nbsp; then only that member can access the entity and all other members in the group cannot access the entity. If in this&nbsp; case it is required that all the members of the group should have access to the entity, then user defined sharing rule should be defined to share all the data between the group members</span></li>
+        </ul></td>
+  </tr>
+</table>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2>  <a name="Default_Organization_Sharing_Access" id="Default_Organization_Sharing_Access"></a>6. Default
+    Organization Sharing Access</span></h2>
+<p><span style="font-weight: bold;"> </span>Default Organization Sharing Access
+      controls the data sharing at organization level. Other users can access
+      the owners' records as per organization-level data (records in various
+      modules) access privilege. You can provide the following types of
+      access levels to vtiger CRM 
+  modules:</p>
+<ul>
+  <li><span
+ style="font-weight: bold;">Private</span>: Only the record owner, and
+          users above
+          that role in the hierarchy, can view, edit, and delete on those
+  records.</li>
+  <li><span
+ style="font-weight: bold;">Public</span>: Read Only: All
+            users can view the records but cannot edit them. Only the owner,
+            and users above that role in the hierarchy, can edit/delete those
+    records.</li>
+  <li><span
+ style="font-weight: bold;">Public: Read Create/Edit</span>: All
+            users can view/create/edit the records but cannot delete them. Only the
+            owner,
+    and users above that role in the hierarchy, can delete those records.</li>
+  <li><span
+ style="font-weight: bold;">Public: Read Create/Edit, Delete</span>:&nbsp; This sharing privilege provides global access for all the users. All
+            the users can view/create/edit/delete other users records in the
+  organization.</li>
+</ul>
+<p> Default Organization sharing privileges can be defined for the
+  following modules:</p>
+<p> Accounts &amp; Contacts, Potentials,
+        Leads,&nbsp; Emails, HelpDesk, Quotes, Purchase Order, Sales Order,
+        Invoice<br>
+    <br>
+    For Activities module the default organization sharing privilege value
+is Private and it is a fixed value and this cannot be altered.<br>
+    <br>
+    By default, the default organization sharing privilege value for all
+the modules will be <strong>Public:Read Create/Edit, Delete</strong></p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <p>If the Default Organization Sharing Privilege is set as Private for Accounts &amp; Contacts, then the default organization sharing privilege value for the following modules will also be set as a private:</span></p>
+        <p>Potentials,&nbsp; Emails, HelpDesk, Quotes, Purchase Order, Sales Order and Invoice</span></p></td>
+  </tr>
+</table>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2><a
+ name="User_Defined_Sharing_Access" id="User_Defined_Sharing_Access"></a>7. User Defined Sharing
+    Access</span></h2>
+<p>User Defined Sharing Rules
+      allows the administrators to selectively grant data access to a&nbsp; set of Users. Data Sharing rules can be created to share data between
+  the following modules:</p>
+<ul>
+  <li> From Role to Role</li>
+  <li>From Role to Role
+      Subordinates</li>
+  <li>From Role to Group</li>
+  <li>From Role Subordinates to
+      Role</li>
+  <li>From Role Subordinates to
+      Role Subordinates</li>
+  <li>From Role Subordinates to
+      Groups</li>
+  <li>From Group to Role</li>
+  <li>From Group to Role
+            Subordinates</li>
+  <li>From Group to Group</li>
+</ul>
+<p>Sharing Rules can be created for the
+  following modules:</p>
+<p><span style="font-weight: bold;"> <a
+ name="Leads_Sharing_Rules" id="Leads_Sharing_Rules"></a>1. Leads Sharing Rules:</span></p>
+<p>Leads owned by
+        the Users of a given Role/Role
+        Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read
+Write. </p>
+<p>These lead
+          related Emails will also be shared in the permission of
+          Read Only/ Read Write.<br>
+    <br>
+  <span style="font-weight: bold;"><a
+ name="Accounts_Sharing_Rules" id="Accounts_Sharing_Rules"></a>2. Accounts Sharing Rules:</span>&nbsp;
 </p>
-<ul>
-  <li>Regardless of the organization-wide defaults, users can always view and 
-    edit all data owned by or shared with users below them in the role hierarchy.</li>
-  <li>While your sharing model controls visibility to records, user permissions 
-    control what users can do to the records that are visible to them. For example, 
-    if you share an account with other users, those users can only see the account 
-    if they have the "Read" permission on accounts. Likewise, users who have the 
-    "Edit" permission on contacts may still not be able to edit contacts they 
-    do not own if they are working in a Private sharing model.</li>
-  <li>Administrators, and users with the "View All Data" or "Edit All Data" permissions, 
-    have access to view or edit all data.</li>
-  <li>Only Administrators have access to configure the Access Privileges &nbsp;&nbsp; 
-  </li>
-  <li>You must have at least read access to a record to be able to add activities 
-    or other associated records to it (for example associated products)</li>
-</ul>
-<p><b>IMPORTANT:</b></p>
-<p><b>The new security management support is provided for the following:</b></p>
-<ul>
-  <li>Home Page, Custom View, Reports, Dashboard, Activity History, and Calendar.<br>
-  </li>
-  <li> Delete Handling of Roles, Groups is not fully functional.<br>
-  </li>
-  <li> Editing of Groups will not function properly.<br>
-  </li>
-  <li> In ListView, Related List View, Popup List View &amp; Search List View 
-    Sharing Rules for Related Modules are not implemented.<br>
-  </li>
-  <li> Tab hiding in header is not implemented.<br>
-  </li>
-  <li> Group Level Security support is implemented only for the Leads, Activities 
-    and Tickets modules.<br>
-  </li>
-  <li> Parent Type Security Handling is not implemented for the Products and Notes 
-    modules. <br>
-  </li>
-  <li>Read Only Support in field level security is not implemented.</li>
-</ul>
+<p>Accounts owned
+        by the Users of a given Role/Role Subordinates/Group can be shared with
+users of a&nbsp; Role/Role Subordinates/Group in the permission of&nbsp; Read Only/Read Write.</p>
+<p> These account
+        related Potentials, Tickets, Quotes, Sales Order, Invoice, Emails will
+also be shared in the permission of Read Only/ Read Write.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span
+ style="font-weight: bold;">Note</span></p>
+        <p> <span
+ style="">Sharing Rules created for Accounts module will also apply to the contacts module</span><span
+ style="font-weight: bold;"></span></p></td>
+  </tr>
+</table>
+<p>          <span
+ style="font-weight: bold;"><a name="Potentials_Sharing_Rules" id="Potentials_Sharing_Rules"></a>3.
+Potentials Sharing Rules:</span></p>
+<p> Potentials
+        owned by the Users of a given Role/Role
+        Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read
+  Write.</p>
+<p>These
+        potential related&nbsp; Quotes and
+        Sales Order will also be shared in the permission of
+        Read Only/ Read Write.<br>
+    <br>
+  <span
+ style="font-weight: bold;"><a name="HelpDesk_Sharing_Rules" id="HelpDesk_Sharing_Rules"></a>4.</span>
+  <span style="font-weight: bold;">HelpDesk Sharing Rules:</span></p>
+<p>
+    Tickets owned by the Users of a given Role/Role
+    Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read
+        Write.&nbsp; <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <br>
+ <span
+ style="font-weight: bold;"><a name="Email_Sharing_Rules" id="Email_Sharing_Rules"></a>5.</span>
+<span style="font-weight: bold;">Email Sharing Rules:</span></p>
+<p>Emails owned by the Users of a given Role/Role
+    Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read Write.<br>
+    <br>
+  <span
+ style="font-weight: bold;"><a name="Quotes_Sharing_Rules" id="Quotes_Sharing_Rules"></a>6.
+Quotes Sharing Rules:</span></p>
+<p>Quotes owned
+        by the Users of a given Role/Role
+        Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read
+Write.</p>
+<p> These quote
+        related&nbsp; Sales Order will also be shared in the permission of
+        Read Only/ Read Write.<br>
+    <br>
+  <span
+ style="font-weight: bold;"><a name="Purchase_Order_Sharing_Rules" id="Purchase_Order_Sharing_Rules"></a>7.
+</span><span style="font-weight: bold;">Purchase Order Sharing Rules:        </span></p>
+<p>Purchase Orders owned by the Users of a given Role/Role
+    Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read Write.<br>
+    <br>
+  <span
+ style="font-weight: bold;"><a name="Sales_Order_Sharing_Rules" id="Sales_Order_Sharing_Rules"></a>8.
+Sales Order Sharing Rules:</span></p>
+<p>Sales Order
+        owned by the Users of a given Role/Role
+        Subordinates/Group can be shared with users of a&nbsp; Role/Role
+        Subordinates/Group in the permission of&nbsp; Read Only/Read
+  Write.</p>
+<p>These sales
+        order related&nbsp; Invoice will also be shared in the permission of
+        Read Only/ Read Write.<br>
+    <br>
+  <span
+ style="font-weight: bold;"><a name="Invoice_Sharing_Rules" id="Invoice_Sharing_Rules"></a>9. </span><span
+ style="font-weight: bold;">Invoice Sharing Rules:</span></p>
+<p>
+    Invoices owned by the Users of a given Role/Role
+    Subordinates/Group can be shared with users of a&nbsp; Role/Role
+  Subordinates/Group in the permission of&nbsp; Read Only/Read Write.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+        <ul>
+          <li>Sharing Rules can be used only to widen the data access and they cannot be used to restrict data access</li>
+          <li>Any number of sharing rules can be defined for a single Role, Role Subordinates and Group</li>
+          <li>Sharing rules are applicable to all existing data and the data that will be created in future</li>
+          <li>Sharing Rules cannot be specified to share data between User to User. To achieve this, the two users should be put in two groups and the data sharing rule should be specified to share data between these two groups. </li>
+        </ul></td>
+  </tr>
+</table>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2><span style="font-weight: bold;"><a name="Default_Organization_Field_Access" id="Default_Organization_Field_Access"></a></span>8. Default
+        Organization Field Access</span></h2>
+<p>
+  <span style="font-weight: bold;">Default Organization Field Access</span> function is used to control the visibility of the fields in various modules for
+      the entire organization. You can use this function to define your
+      organization level business process to some extent from vtiger CRM user
+      interface instead of programmatically defining the fields in various
+    modules.</p>
+<p> With default organization field access, one can either show or hide a
+      field to the entire organization. Default Organization Field Privileges
+      can be defined for the following modules:</p>
+<p>Leads,
+        Accounts, Contacts, Potentials, Activities,
+        Trouble Tickets, FAQ, Price Books, Purchase Order,&nbsp; Invoice, Notes, Emails,
+      Products, Vendors, Quotes, and Sales Orders.</p>
+<table width="80%"  border="1">
+  <tr>
+    <td bordercolor="#003300"><p><span style="font-weight: bold;">Notes</span></p>
+      <ul>
+        <li><span style="font-weight: bold;"> </span>It is not possible to disable the mandatory fields in the modules. (for example, Last Name and Company fields in Leads module)</span></li>
+        <li> Default Organization field access overrides the profile level field access. For example your profile may allow to view the website field in leads. But you cannot view this field as it's access if denied in organization level field access</span></li>
+        <li> Default Organization level field access can be specified for custom fields also.</span></li>
+        <li> Changes made in Users, Roles, Profiles, Sharing Access and Field Access will not be reflected immediately. The user has to logout and login to&nbsp; get the changes reflected.</span></li>
+    </ul></td>
+  </tr>
+</table>
+<p align="right"><a href="#Back_to_Top">Back to Top</a></p>
+<h2><a name="Limitations_and_Know_Issues"></a>9. Know Issues &amp; Limitations</h2>
+  <p>Security Management functions are not implemented for the
+following modules:</p>
+  <ul>
+    <li>Calendar, Import, Export,
+          Mass Delete, Change Owner, Change Status, Campaigns, Attachments and
+    Outlook Plugin</li>
+    <li>Non-admin users should be allowed to view
+    their Roles Subordinates, Profiles, and Groups.</li>
+    <li>When a group is deleted, handling to change
+            the current ownership to the entities owned by this group should be
+    done.    
+  </ul>
+  <p align="right"><a href="#Back_to_Top">Back to Top</a> </p>
+  <p><hr>
+  <p>&copy; vtiger.com. 2006 All rights reserved.</p>
 </body>
 </html>
