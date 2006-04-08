@@ -4,6 +4,8 @@ require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Webmails/Webmail.php');
 
+if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] != $current_user->id) {echo "ajax failed";flush();exit();}
+
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $login_username= $temprow["mail_username"];
@@ -24,8 +26,8 @@ $mbox = @imap_open("\{$imapServerAddress/$mail_protocol/$ssltype/$sslmeth}$mailb
 $email = new Webmail($mbox,$mailid);
 $email->loadMail();
 
-if(isset($_REQUEST["command"])) {
-	$command = $_REQUEST["command"];
+if(isset($_POST["command"])) {
+	$command = $_POST["command"];
 	if($command == "expunge")
 		imap_expunge($mbox);
 	if($command == "delete_msg")
