@@ -76,7 +76,7 @@ if($attachments || $inline) {
 	elseif ($attachments[$i]["filesize"] > 1024)
 		$filesize= substr(($attachments[$i]["filesize"]/1024),0,5)." kilobytes";
 
-	$at.=" <tr><td width='100%' nowrap>".$cnt.") <a href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."'>".$fname."</a></b><br><i>".$filesize."</i></td></tr>";
+	$at.=" <tr><td width='100%' nowrap>".$cnt.") <a target='_blank' href='index.php?module=Webmails&action=dlAttachments&mailid=".$mailid."&num=".$i."'>".$fname."</a></b><br><i>".$filesize."</i></td></tr>";
 	$cnt++;
     }
     for($i=0;$i<count($inline);$i++) {
@@ -86,8 +86,26 @@ if($attachments || $inline) {
     $at.="</table>";
     $tmp = (count($inline)+count($attachments));
     $atL= $tmp." Attachment(s)";
-}
 
+?>
+<script type="text/javascript">
+function check_tags() {
+	var el = document.getElementById("tagfields");
+	if(el) {
+		window.setTimeout(function() {
+			el.innerHTML = 'Attachments: <?php echo addslashes($at);?>';
+		},2000);
+	} else {
+		window.setTimeout(function() {
+			check_tags();
+		},1000);
+	}
+}
+check_tags();
+</script>
+<?
+echo $at;
+}
 
 $block["Email Information"][] = array("From:"=>array("value"=>"<a href='mailto:".$from."'>".$from."</a>"),"Date &amp; Time Sent:"=>array("value"=>$date));
 $block["Email Information"][] = array("To:"=>array("value"=>$to),"CC:"=>array("value"=>$cc_list));
