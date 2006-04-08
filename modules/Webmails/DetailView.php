@@ -88,12 +88,16 @@ if($attachments || $inline) {
     $atL= $tmp." Attachment(s)";
 }
 
-$block["Email Information"][] = array("From:"=>array($email->fromname." &lt;".$from."&gt;"=>'0'),"Date &amp; Time Sent:"=>array($date=>'0'));
-$block["Email Information"][] = array("To:"=>array($to=>0),"CC:"=>array($cc_list=>'0'));
-$block["Email Information"][] = array("Reply To:"=>array($reply_to=>0));
-$block["Email Information"][] = array("Subject:"=>array($subject=>'0'));
-//$block["Email Information"][] = array("Related To:"=>array($email->relationship['id']=>'0'));
-$block["Email Information"][] = array("Email Body:"=>array('<iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&login_username='.$login_username.'&secretkey='.$secretkey.'&imapServerAddress='.$imapServerAddress.'&mailbox='.$mailbox.'" width="100%" height="350">'.$body.'body</iframe>'=>'0'));
+
+$block["Email Information"][] = array("From:"=>array("value"=>"<a href='mailto:".$from."'>".$from."</a>"),"Date &amp; Time Sent:"=>array("value"=>$date));
+$block["Email Information"][] = array("To:"=>array("value"=>$to),"CC:"=>array("value"=>$cc_list));
+$block["Email Information"][] = array("Reply To:"=>array("value"=>"<a href='mailto:".$reply_to."'>".$reply_to."</a>"));
+$block["Email Information"][] = array("Subject:"=>array("value"=>$subject));
+//$block["Email Information"][] = array("Related To:"=>array("value"=>$email->relationship['id']));
+//$block["Email Information"][] = array("Email Body:"=>array("ui"=>19,,"value"=>'<iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&login_username='.$login_username.'&secretkey='.$secretkey.'&imapServerAddress='.$imapServerAddress.'&mailbox='.$mailbox.'" width="100%" height="350">'.$body.'body</iframe>'));
+
+$block["Email Information"][] = array("Email Body:"=>array("ui"=>82,"value"=>$body));
+
 
 echo '<input type="hidden" name="mailid" value="'.$mailid.'">';
 //echo '<pre>';print_r($block);echo "</pre>";
