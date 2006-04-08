@@ -51,7 +51,6 @@ function runEmailCommand(com,id) {
 	$("status").style.display="block";
 	command=com;
 	id=id;
-	alert(id);
 	new Ajax.Request(
                 'index.php',
                 {queue: {position:'front', scope: 'command', limit:1},
