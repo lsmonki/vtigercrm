@@ -5,11 +5,16 @@ require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
-//require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/MailParse.php");
+require_once('modules/CustomView/CustomView.php');
 
 $mailInfo = getMailServerInfo($current_user);
+if($adb->num_rows($mailInfo) < 1) {
+	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+	exit();
+}
+
 $temprow = $adb->fetch_array($mailInfo);
 //print_r($temprow);
 $login_username= $temprow["mail_username"];
@@ -43,6 +48,8 @@ function refresh_list() {
 var command;
 var id;
 function runEmailCommand(com,id) {
+	$("status").style.display="block";
+	$("status").innerHTML = "Please Wait";
 	command=com;
 	id=id;
 	new Ajax.Request(
@@ -120,28 +127,32 @@ function runEmailCommand(com,id) {
 				    break;
 
 				}
+				$("status").style.display="none";
+				$("status").innerHTML = "Processing Request";
                         }
                 }
         );
 }
 function changeMbox(el) {
 	destination = el.options[el.selectedIndex].value;
-	if (destination) location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+destination+"&start=1&viewname=20";
+	if (destination) location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+destination+"&start=1";
 }
 </script>
 <?
-/*
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Emails");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-$viewid = $oCustomView->getViewId($currentModule);
-$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
-*/
-//<<<<<customview>>>>>
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
 $viewname="20";
+
+// CUSTOM VIEW
+//<<<<cutomview>>>>>>>
+global $currentModule;
+$oCustomView = new CustomView("Webmails");
+$viewid = $oCustomView->getViewId($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+//<<<<<customview>>>>>
+
 
 global $mbox;
 $mbox = @imap_open("\{$imapServerAddress/$mail_protocol}$mailbox", $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
@@ -337,7 +348,8 @@ $navigationOutput .= '<td align="right">Viewing Messages: <b>'.($start_message+$
 imap_close($mbox);
 //print_r($listview_entries);
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("CUSTOMVIEW",$customstrings);
+
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
