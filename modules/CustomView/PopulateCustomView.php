@@ -126,6 +126,10 @@ $customviews = Array(Array('viewname'=>'All',
                           'setdefault'=>'1','setmetrics'=>'0',
                           'cvmodule'=>'Campaigns','stdfilterid'=>'','advfilterid'=>''),
 
+		    Array('viewname'=>'All',
+                          'setdefault'=>'1','setmetrics'=>'0',
+                          'cvmodule'=>'Webmails','stdfilterid'=>'','advfilterid'=>''),
+
 		    );
 
 
@@ -323,6 +327,12 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
 		       'campaign:expectedrevenue:expectedrevenue:Campaigns_Expected_Revenue:V',
 		       'campaign:closingdate:closingdate:Campaigns_Expected_Close_Date:D',
 		       'crmentity:smownerid:assigned_user_id:Campaigns_Assigned_To:V'),
+
+
+		 Array('subject:subject:subject:Subject:V',
+		       'from:fromname:fromname:From:N',
+		       'to:tpname:toname:To:N',
+		       'body:body:body:Body:V'),
                   );
 
 
