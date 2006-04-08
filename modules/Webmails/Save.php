@@ -73,20 +73,9 @@ if(!isset($_REQUEST["email_body"])) {
     $return_id = $focus->id;
     $return_module='Emails';
     $return_action='DetailView';
-    $tables = array("account"=>array("email1","email2"),"contactdetails"=>array("email"),"leaddetails"=>array("email"));
-    $ids = array("accountid","contactid","leadid");
-    $i=0;
-    foreach($tables as $key=>$value) {
-	for($j=0;$j<count($tables[$key]);$j++) {
-		$q = "SELECT ".$ids[$i]." AS id FROM ".$key." WHERE ".$tables[$key][$j]."='".$email->from."'";
-		$rs = $adb->query($q);
-		if($adb->num_rows($rs) > 0) {
-			$entity = $adb->fetch_array($rs);
-			$q = "INSERT INTO seactivityrel (crmid,activityid) VALUES ('".$entity["id"]."','".$focus->id."')";
-			$rs = $adb->query($q);
-		}
-	}
-	$i++;
+    if($email->relationship != 0) {
+	$q = "INSERT INTO seactivityrel (crmid,activityid) VALUES ('".$email->relationship["id"]."','".$focus->id."')";
+	$rs = $adb->query($q);
     }
 }
 

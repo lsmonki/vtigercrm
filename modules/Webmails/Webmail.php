@@ -120,7 +120,7 @@ function load_headers($mailid,$mbox) {
 function find_relationships($db,$from) {
 
 	// leads search
-	$sql = "SELECT * from leaddetails left join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.email = '".$from."' AND crmentity.deleted='0' AND crmentity.presence='0'";
+	$sql = "SELECT * from leaddetails left join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.email = '".$from."' AND crmentity.deleted='0'";
 	$res = $db->query($sql,true,"Error: "."<BR>$query");
 	$numRows = $db->num_rows($res);
 	if($numRows > 0)
@@ -134,26 +134,12 @@ function find_relationships($db,$from) {
 		return array('type'=>"Contacts",'id'=>$db->query_result($res,0,"contactid"),'name'=>$db->query_result($res,0,"firstname")." ".$db->query_result($res,0,"lastname"));
 
 	// accounts search
-	$sql = "SELECT * from account left join crmentity on crmentity.crmid=account.accountid where account.email1 = '".$from."' OR account.email1='".$from."'  AND crmentity.deleted='0' AND crmentity.presence='0'";
+	$sql = "SELECT * from account left join crmentity on crmentity.crmid=account.accountid where account.email1 = '".$from."' OR account.email1='".$from."'  AND crmentity.deleted='0'";
 	$res = $db->query($sql,true,"Error: "."<BR>$query");
 	$numRows = $db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Accounts",'id'=>$db->query_result($res,0,"accountid"),'name'=>$db->query_result($res,0,"accountname"));
-/*
-	// user search
-	$sql = "SELECT * from users where users.email1 = '".$from."' OR users.email2='".$from."' AND deleted='0'";
-	$res = $db->query($sql,true,"Error: "."<BR>$query");
-	$numRows = $db->num_rows($res);
-	if($numRows > 0)
-		return array('type'=>"User",'id'=>$db->query_result($res,0,"userid"));
 
-	// vendor search
-	$sql = "SELECT * from vendor left join crmentity on crmentity.crmid=vendor.vendorid where vendor.email = '".$from."'";
-	$res = $db->query($sql,true,"Error: "."<BR>$query");
-	$numRows = $db->num_rows($res);
-	if($numRows > 0)
-		return array('type'=>"Vendor",'id'=>$db->query_result($res,0,"vendorid"));
-*/
 	return 0;
 }
 
