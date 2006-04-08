@@ -57,9 +57,9 @@ function runEmailCommand(com,id) {
 				    case 'delete_msg':
 					var nm = "ndeleted_td_"+id;
                 			var el = $(nm);
-                			var el_sub = document.getElementById("ndeleted_subject_"+id);
-                			var el_date = document.getElementById("ndeleted_date_"+id);
-                			var el_from = document.getElementById("ndeleted_from_"+id);
+                			var el_sub = $("ndeleted_subject_"+id);
+                			var el_date = $("ndeleted_date_"+id);
+                			var el_from = $("ndeleted_from_"+id);
                 			tmp = el_sub.innerHTML;
                 			el_sub.innerHTML = "<s>"+tmp+"</s>";
                 			el_sub.id = "deleted_subject_"+id;
@@ -76,9 +76,9 @@ function runEmailCommand(com,id) {
 				    case 'undelete_msg':
 					var nm = "deleted_td_"+id;
                 			var el = $(nm);
-                			var el_sub = document.getElementById("deleted_subject_"+id);
-                			var el_date = document.getElementById("deleted_date_"+id);
-                			var el_from = document.getElementById("deleted_from_"+id);
+                			var el_sub = $("deleted_subject_"+id);
+                			var el_date = $("deleted_date_"+id);
+                			var el_from = $("deleted_from_"+id);
 
                 			tmp = el_sub.innerHTML;
                 			t1 = tmp.indexOf("<s>");
