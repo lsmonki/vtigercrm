@@ -49,11 +49,11 @@ var command;
 var id;
 function runEmailCommand(com,id) {
 	$("status").style.display="block";
-	$("status").innerHTML = "Please Wait";
 	command=com;
 	id=id;
+	alert(id);
 	new Ajax.Request(
-                '/index.php',
+                'index.php',
                 {queue: {position:'front', scope: 'command', limit:1},
                         method: 'post',
                         postBody: 'module=Webmails&action=body&command='+command+'&mailid='+id+'&mailbox=<?php echo $_REQUEST["mailbox"];?>',
@@ -128,7 +128,6 @@ function runEmailCommand(com,id) {
 
 				}
 				$("status").style.display="none";
-				$("status").innerHTML = "Processing Request";
                         }
                 }
         );
