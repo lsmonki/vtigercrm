@@ -96,7 +96,7 @@ $block["Email Information"][] = array("Subject:"=>array("value"=>$subject));
 //$block["Email Information"][] = array("Related To:"=>array("value"=>$email->relationship['id']));
 //$block["Email Information"][] = array("Email Body:"=>array("ui"=>19,,"value"=>'<iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&login_username='.$login_username.'&secretkey='.$secretkey.'&imapServerAddress='.$imapServerAddress.'&mailbox='.$mailbox.'" width="100%" height="350">'.$body.'body</iframe>'));
 
-$block["Email Information"][] = array("Email Body:"=>array("ui"=>82,"value"=>$body));
+$block["Email Information"][] = array("Email Body:"=>array("ui"=>82,"value"=>'<iframe src="index.php?module=Webmails&action=body&mailid='.$mailid.'&mailbox='.$mailbox.'" width="100%" height="100%" frameborder="0">You must enabled iframes</iframe>'));
 
 
 echo '<input type="hidden" name="mailid" value="'.$mailid.'">';
