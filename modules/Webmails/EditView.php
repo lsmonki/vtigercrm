@@ -6,6 +6,16 @@ require_once('modules/Emails/Forms.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 require_once("include/fckeditor/fckeditor.php");
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+
+if($_REQUEST["record"] && $_REQUEST["record"] != "") {$mailid=$_REQUEST["record"];} else {$mailid=$_REQUEST["mailid"];}
+
+if($mailid == "") {
+	?>
+		<script type="text/javascript">window.location = "index.php?module=Emails&action=EditView&return_action=index&return_module=Webmails&parenttab=<?php echo $_REQUEST['parenttab'];?>";</script>
+	<?
+}
+
 
 global $log;
 global $app_strings;
@@ -64,11 +74,11 @@ $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
 $ssltype=$temprow["ssltype"];
 $sslmeth=$temprow["sslmeth"];
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+
 
 $mbox = @imap_open("\{$imapServerAddress/$mail_protocol/$ssltype/$sslmeth}$mailbox", $login_username, $secretkey) or die("Connection to server failed");
 		
-$webmail = new Webmail($mbox,$_REQUEST["mailid"]);
+$webmail = new Webmail($mbox,$mailid);
 $webmail->loadMail();
 $focus->column_fields['description'] = strip_tags($webmail->body);
 $focus->column_fields['subject'] = $webmail->subject;
@@ -107,6 +117,7 @@ $block["Email Information"][1][] = array(array(21),array("To:"),array("to_list")
 $block["Email Information"][1][] = array(array(21),array("CC:"),array("cc_list"),array($cc));
 
 $block["Email Information"][3][] = array(array(1),array("Subject:"),array("subject"),array($webmail->subject));
+
 $block["Email Information"][3][] = array(array(1),array("BCC:"),array("bcc_list"),array($bcc));
 $block["Email Information"][4][] = array(array(19),array("Body :"),array("email_body"),array($body));
 
