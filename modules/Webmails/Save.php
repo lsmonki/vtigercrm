@@ -42,6 +42,8 @@ if(isset($_REQUEST["email_body"]))
 else {
 	$email->loadMail();
 	$msgData = $email->body;
+	$subject = $email->subject;
+	$imported=true;
 }
 if($email->relationship != 0)
 {
@@ -63,7 +65,30 @@ $focus->column_fields["description"]=strip_tags($tmpBody);
 $focus->save("Emails");
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
-$return_action='ListView';
+$return_action='DetailView';
+
+
+// check for relationships
+if(!isset($_REQUEST["email_body"])) {
+    $return_id = $focus->id;
+    $return_module='Emails';
+    $return_action='DetailView';
+    $tables = array("account"=>array("email1","email2"),"contactdetails"=>array("email"),"leaddetails"=>array("email"));
+    $ids = array("accountid","contactid","leadid");
+    $i=0;
+    foreach($tables as $key=>$value) {
+	for($j=0;$j<count($tables[$key]);$j++) {
+		$q = "SELECT ".$ids[$i]." AS id FROM ".$key." WHERE ".$tables[$key][$j]."='".$email->from."'";
+		$rs = $adb->query($q);
+		if($adb->num_rows($rs) > 0) {
+			$entity = $adb->fetch_array($rs);
+			$q = "INSERT INTO seactivityrel (crmid,activityid) VALUES ('".$entity["id"]."','".$focus->id."')";
+			$rs = $adb->query($q);
+		}
+	}
+	$i++;
+    }
+}
 
 if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	require_once("sendmail.php");
@@ -74,7 +99,7 @@ if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	$who = $adb->query_result($res,0,'first_name')." ".$adb->query_result($res,0,'last_name');
 	sendmail($to_address,$cc_address,$bcc_address,$emailaddr,$who,$subject,$msgData);
 } else
-	header("Location: index.php?action=$return_action&module=$return_module&mailid=$return_id");
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 
 return;
 ?>

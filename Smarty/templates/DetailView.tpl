@@ -141,6 +141,9 @@
                                                                 <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
                                                                 {/if}
 
+                                                        {if $MODULE eq 'Webmails'}
+                                                                <input title="Add to CRM" class="small" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
+                                                        {/if}
                                                         {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
                                                                 {if $SENDMAILBUTTON eq 'permitted'}
                                                                 <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.module.value='Emails';this.form.email_directing_module.value='{$REDIR_MOD}';this.form.return_action.value='DetailView';this.form.action.value='EditView';" type="submit" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
