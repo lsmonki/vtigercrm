@@ -1,3 +1,5 @@
+<form name="Reply" method="POST" action="index.php">
+<input type="hidden" name="send_mail">
 <?php
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
