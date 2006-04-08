@@ -1,3 +1,4 @@
+<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <form name="Reply" method="POST" action="index.php">
 <input type="hidden" name="send_mail">
 <?php
@@ -7,7 +8,6 @@ require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
-require_once("include/fckeditor/fckeditor.php");
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 if($_REQUEST["record"] && $_REQUEST["record"] != "") {$mailid=$_REQUEST["record"];} else {$mailid=$_REQUEST["mailid"];}
@@ -167,6 +167,20 @@ $log->info("Email detail view");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+
+?>
+<script type="text/javascript" defer="1">
+window.onload = function () {
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "email_body" ) ;
+oFCKeditor.BasePath  = "include/fckeditor/" ;
+oFCKeditor.Height = 550;
+oFCKeditor.Width = "100%";
+oFCKeditor.ReplaceTextarea() ;
+}
+</script>
+<?
+
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
@@ -185,10 +199,6 @@ $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 //$smarty->assign("ENTITY_ID", $_REQUEST["record"]);
 $smarty->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
-
-// FCKeditor
-
-
 $tabid = getTabid("Webmails");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

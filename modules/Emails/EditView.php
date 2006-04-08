@@ -1,3 +1,4 @@
+<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
@@ -319,5 +320,14 @@ if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else
 	$smarty->display("CreateView.tpl");
-
 ?>
+<script type="text/javascript" defer="1">
+window.onload = function () {
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "description" ) ;
+oFCKeditor.BasePath  = "include/fckeditor/" ;
+oFCKeditor.Height = 550;
+oFCKeditor.Width = "100%";
+oFCKeditor.ReplaceTextarea() ;
+}
+</script>
