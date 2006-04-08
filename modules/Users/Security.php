@@ -69,6 +69,7 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (25,'Reports',0,22,'Reports',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (26,'Campaigns',0,23,'Campaigns',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (27,'Portal',0,24,'Portal',null,null,1)");
+ $this->db->query("INSERT INTO tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)");
 
 // Populate the blocks table
 $this->db->query("insert into blocks values (1,2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0)");
