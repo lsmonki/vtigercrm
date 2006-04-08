@@ -104,7 +104,6 @@ function check_tags() {
 check_tags();
 </script>
 <?
-echo $at;
 }
 
 $block["Email Information"][] = array("From:"=>array("value"=>"<a href='mailto:".$from."'>".$from."</a>"),"Date &amp; Time Sent:"=>array("value"=>$date));
