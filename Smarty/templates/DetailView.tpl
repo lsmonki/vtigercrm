@@ -143,6 +143,8 @@
 
                                                         {if $MODULE eq 'Webmails'}
                                                                 <input title="Add to CRM" class="small" onclick="window.location='index.php?module={$MODULE}&action=Save&mailid={$ID}';return false;" type="submit" name="addtocrm" value="Add to CRM">&nbsp;
+                                                                <input title="Reply to Sender" class="small" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=single&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to Sender">&nbsp;
+                                                                <input title="Reply to All" class="small" onclick="window.location='index.php?module={$MODULE}&action=EditView&mailid={$ID}&reply=all&return_action=DetailView&return_module=Webmails&return_id={$ID}';return false;" type="submit" name="replytosender" value="Reply to All">&nbsp;
                                                         {/if}
                                                         {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
                                                                 {if $SENDMAILBUTTON eq 'permitted'}
