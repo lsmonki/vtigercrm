@@ -21,8 +21,8 @@ $mailid=$_REQUEST["mailid"];
 $num=$_REQUEST["num"];
 $email = new Webmail($mbox,$mailid);
 $attachments=$email->downloadAttachments();
-
-$save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
+global $root_directory;
+$save_path=$root_directory.'/modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 if(!is_dir($user_dir))
 	mkdir($user_dir);
