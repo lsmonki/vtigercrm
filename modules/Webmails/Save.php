@@ -65,7 +65,7 @@ $focus->column_fields["description"]=strip_tags($tmpBody);
 $focus->save("Emails");
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
-$return_action='DetailView';
+$return_action='ListView';
 
 
 // check for relationships
@@ -98,6 +98,7 @@ if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	$emailaddr = $adb->query_result($res,0,'email1');
 	$who = $adb->query_result($res,0,'first_name')." ".$adb->query_result($res,0,'last_name');
 	sendmail($to_address,$cc_address,$bcc_address,$emailaddr,$who,$subject,$msgData);
+	header("Location: index.php?action=$return_action&module=$return_module");
 } else
 	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 

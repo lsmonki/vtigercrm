@@ -66,30 +66,24 @@ function sendmail($to_list,$cc_list,$bcc_list,$from,$fromname,$subject,$body)
 	$mail->AltBody = strip_tags($tmpBody);
 
 	//header("Location: index.php?action=index&module=Webmails");
-	echo '<table>';
 	for($i=0;$i<count($to_list);$i++) {
 		if($to_list[$i] != ""){
 			$mail->AddAddress($to_list[$i]);
-			echo '<tr><td><font color="red">Added TO: '.$to_list[$i].'</font></td></tr>';
 		}
 	}
 	for($i=0;$i<count($cc_list);$i++) {
 		if($cc_list[$i] != ""){
 			$mail->AddCC($cc_list[$i]);
-			echo '<tr><td><font color="red">Added CC: '.$cc_list[$i].'</font></td></tr>';
 		}
 	}
 	for($i=0;$i<count($bcc_list);$i++) {
 		if($bcc_list[$i] != ""){
 			$mail->AddBCC($bcc_list[$i]);
-			echo '<tr><td><font color="red">Added BCC: '.$bcc_list[$i].'</font></td></tr>';
 		}
 	}
 	$mail->AddBCC = $from;
 	if(!$mail->Send())
 		echo $mail->ErrorInfo;
 
-	echo '</table>';
-	echo "<br><a href='index.php?module=Webmails&action=index'>Back to webmails</a>";
 }
 ?>
