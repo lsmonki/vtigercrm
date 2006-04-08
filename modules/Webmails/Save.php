@@ -88,8 +88,10 @@ if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	$who = $adb->query_result($res,0,'first_name')." ".$adb->query_result($res,0,'last_name');
 	sendmail($to_address,$cc_address,$bcc_address,$emailaddr,$who,$subject,$msgData);
 	header("Location: index.php?action=$return_action&module=$return_module");
-} else
-	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+} else {
+	if($_POST["ajax"] != "true")
+		header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 
+}
 
 return;
 ?>

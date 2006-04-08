@@ -30,7 +30,7 @@
 								<input type="hidden" name="subject" value="<?php echo $webmail->subject;?>">
 								<input title="Save" class="small" onclick="this.form.action.value='EditView';this.form.reply.value='single';return true;" type="submit" name="button" value="  Reply  " >
 								<input title="Save" class="small" onclick="this.form.action.value='EditView';this.form.reply.value='all';return true;" type="submit" name="button" value="  Reply To All  " >
-								<input title="Save" class="small" onclick="this.form.action.value='Save';return true;" type="submit" name="button" value="  Add to Vtiger  " >
+								<input title="Save" class="small" onclick="add_to_vtiger(<?php echo $num;?>);return false;" type="submit" name="button" value="  Add to Vtiger  " >
 								</form>
                         				</td>
                 				</tr>

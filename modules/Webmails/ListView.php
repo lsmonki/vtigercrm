@@ -1,3 +1,18 @@
+<script type="text/javascript">
+function add_to_vtiger(mid) {
+	$("status").style.display="block";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position:'front', scope: 'command', limit:1},
+                        method: 'post',
+                        postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
+                        onComplete: function(t) {
+				$("status").style.display="none";
+			}
+		}
+	);
+}
+</script>
 <?php
 global $current_user;
 require_once('Smarty_setup.php');
