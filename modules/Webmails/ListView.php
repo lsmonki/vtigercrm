@@ -5,7 +5,7 @@ require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
-require_once('modules/CustomView/CustomView.php');
+//require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/MailParse.php");
 
@@ -26,6 +26,8 @@ $showbody=$temprow["showbody"];
 <script language="Javascript" type="text/javascript" src="modules/Webmails/js/ajax_connection.js"></script>
 <script language="Javascript" type="text/javascript" src="modules/Webmails/js/script.js"></script>
 <script language="JavaScript" type="text/javascript" src="general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
+
 <script type="text/Javascript">
 var box_refresh=<?php echo $box_refresh;?>;
 var timer = window.onload=window.setTimeout("refresh_list()",box_refresh);
@@ -38,92 +40,103 @@ function refresh_list() {
 	timer = window.setTimeout("refresh_list()",box_refresh);
 }
 
-function allDone(content) {
-	return;
-}
-function runEmailCommand(command,id) {
-        var aConnection;
-        var opts = new Array();
-        aConnection = new AjaxConnection();
-        aConnection.uri="index.php?module=Webmails&action=body&command="+command+"&mailid="+id+"&mailbox=<?php echo $_REQUEST["mailbox"];?>";        aConnection.setUid("<?php echo $_SESSION['authenticated_user_id'];?>");
-        aConnection.connect("allDone");
+var command;
+var id;
+function runEmailCommand(com,id) {
+	command=com;
+	id=id;
+	new Ajax.Request(
+                '/index.php',
+                {queue: {position:'front', scope: 'command', limit:1},
+                        method: 'post',
+                        postBody: 'module=Webmails&action=body&command='+command+'&mailid='+id+'&mailbox=<?php echo $_REQUEST["mailbox"];?>',
+                        onComplete: function(t) {
+				resp = t.responseText;
+				if(resp.match(/ajax failed/)) {return;}
+				switch(command) {
+				    case 'delete_msg':
+					var nm = "ndeleted_td_"+id;
+                			var el = $(nm);
+                			var el_sub = document.getElementById("ndeleted_subject_"+id);
+                			var el_date = document.getElementById("ndeleted_date_"+id);
+                			var el_from = document.getElementById("ndeleted_from_"+id);
+                			tmp = el_sub.innerHTML;
+                			el_sub.innerHTML = "<s>"+tmp+"</s>";
+                			el_sub.id = "deleted_subject_"+id;
+                			tmp = el_date.innerHTML;
+                			el_date.innerHTML = "<s>"+tmp+"</s>";
+                			el_date.id = "deleted_date_"+id;
 
-        if(command == "delete_msg") {
-                var el = document.getElementById("ndeleted_td_"+id);
-                var el_sub = document.getElementById("ndeleted_subject_"+id);
-                var el_date = document.getElementById("ndeleted_date_"+id);
-                var el_from = document.getElementById("ndeleted_from_"+id);
-                tmp = el_sub.innerHTML;
-                el_sub.innerHTML = "<s>"+tmp+"</s>";
-                el_sub.id = "deleted_subject_"+id;
+                			tmp = el_from.innerHTML;
+                			el_from.innerHTML = "<s>"+tmp+"</s>";
+                			el_from.id = "deleted_from_"+id;
+                			el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="undel" id="del_img_'+id+'"></a>&nbsp;';
+                			el.id = "deleted_td_"+id;
+				    break;
+				    case 'undelete_msg':
+					var nm = "deleted_td_"+id;
+                			var el = $(nm);
+                			var el_sub = document.getElementById("deleted_subject_"+id);
+                			var el_date = document.getElementById("deleted_date_"+id);
+                			var el_from = document.getElementById("deleted_from_"+id);
 
-                tmp = el_date.innerHTML;
-                el_date.innerHTML = "<s>"+tmp+"</s>";
-                el_date.id = "deleted_date_"+id;
+                			tmp = el_sub.innerHTML;
+                			t1 = tmp.indexOf("<s>");
+                			t2 = tmp.indexOf("<\/s>");
+                			tmp1 = tmp.substr((t1+3),(t2-3));
+                			el_sub.innerHTML = tmp1;
+                			el_sub.id="ndeleted_subject_"+id;
 
-                tmp = el_from.innerHTML;
-                el_from.innerHTML = "<s>"+tmp+"</s>";
-                el_from.id = "deleted_from_"+id;
+                			tmp = el_date.innerHTML;
+                			t1 = tmp.indexOf("<s>");
+               				t2 = tmp.indexOf("<\/s>");
+                			tmp1 = tmp.substr((t1+3),(t2-3));
+                			el_date.innerHTML = tmp1;
+                			el_date.id="ndeleted_date_"+id;
 
-                el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="undel" id="del_img_'+id+'"></a>&nbsp;';
-                el.id = "deleted_td_"+id;
-        }
+                			tmp = el_from.innerHTML;
+                			t1 = tmp.indexOf("<s>");
+                			t2 = tmp.indexOf("<\/s>");
+                			tmp1 = tmp.substr((t1+3),(t2-3));
+                			el_from.innerHTML = tmp1;
+                			el_from.id="ndeleted_from_"+id;
 
-        if(command == "undelete_msg") {
-                var el = document.getElementById("deleted_td_"+id);
-                var el_sub = document.getElementById("deleted_subject_"+id);
-                var el_date = document.getElementById("deleted_date_"+id);
-                var el_from = document.getElementById("deleted_from_"+id);
+                			el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="ndel_img_'+id+'"></a>&nbsp;';
+                			el.id="ndeleted_td_"+id;
+				    break;
+				    case 'clear_flag':
+					var nm = "clear_td_"+id;
+                			var el = $(nm);
+                			var tmp = el.innerHTML;
+                			el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
+                			el.id = "set_td_"+id;
+				    break;
+				    case 'set_flag':
+					var nm = "set_td_"+id;
+                			var el = $(nm);
+                			var tmp = el.innerHTML;
+                			el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
+                			el.id = "clear_td_"+id;
+				    break;
 
-                tmp = el_sub.innerHTML;
-                t1 = tmp.indexOf("<s>");
-                t2 = tmp.indexOf("<\/s>");
-                tmp1 = tmp.substr((t1+3),(t2-3));
-                el_sub.innerHTML = tmp1;
-                el_sub.id="ndeleted_subject_"+id;
-
-                tmp = el_date.innerHTML;
-                t1 = tmp.indexOf("<s>");
-                t2 = tmp.indexOf("<\/s>");
-                tmp1 = tmp.substr((t1+3),(t2-3));
-                el_date.innerHTML = tmp1;
-                el_date.id="ndeleted_date_"+id;
-
-                tmp = el_from.innerHTML;
-                t1 = tmp.indexOf("<s>");
-                t2 = tmp.indexOf("<\/s>");
-                tmp1 = tmp.substr((t1+3),(t2-3));
-                el_from.innerHTML = tmp1;
-                el_from.id="ndeleted_from_"+id;
-
-                el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="ndel_img_'+id+'"></a>&nbsp;';
-                el.id="ndeleted_td_"+id;
-        }
-        if(command == "clear_flag") {
-                var el = document.getElementById("clear_td_"+id);
-                var tmp = el.innerHTML;
-                el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
-                el.id = "set_td_"+id;
-        }
-        if(command == "set_flag") {
-                var el = document.getElementById("set_td_"+id);
-                var tmp = el.innerHTML;
-                el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
-                el.id = "clear_td_"+id;
-        }
+				}
+                        }
+                }
+        );
 }
 function changeMbox(el) {
 	destination = el.options[el.selectedIndex].value;
-	if (destination) location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+
-				destination+"&start=1&viewname=20";
+	if (destination) location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+destination+"&start=1&viewname=20";
 }
 </script>
 <?
+/*
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+*/
 //<<<<<customview>>>>>
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
