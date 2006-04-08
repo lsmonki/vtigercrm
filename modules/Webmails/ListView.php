@@ -61,54 +61,9 @@ function runEmailCommand(com,id) {
 				if(resp.match(/ajax failed/)) {return;}
 				switch(command) {
 				    case 'delete_msg':
-					var nm = "ndeleted_td_"+id;
-                			var el = $(nm);
-                			var el_sub = $("ndeleted_subject_"+id);
-                			var el_date = $("ndeleted_date_"+id);
-                			var el_from = $("ndeleted_from_"+id);
-                			tmp = el_sub.innerHTML;
-                			el_sub.innerHTML = "<s>"+tmp+"</s>";
-                			el_sub.id = "deleted_subject_"+id;
-                			tmp = el_date.innerHTML;
-                			el_date.innerHTML = "<s>"+tmp+"</s>";
-                			el_date.id = "deleted_date_"+id;
-
-                			tmp = el_from.innerHTML;
-                			el_from.innerHTML = "<s>"+tmp+"</s>";
-                			el_from.id = "deleted_from_"+id;
-                			el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="undel" id="del_img_'+id+'"></a>&nbsp;';
-                			el.id = "deleted_td_"+id;
-				    break;
-				    case 'undelete_msg':
-					var nm = "deleted_td_"+id;
-                			var el = $(nm);
-                			var el_sub = $("deleted_subject_"+id);
-                			var el_date = $("deleted_date_"+id);
-                			var el_from = $("deleted_from_"+id);
-
-                			tmp = el_sub.innerHTML;
-                			t1 = tmp.indexOf("<s>");
-                			t2 = tmp.indexOf("<\/s>");
-                			tmp1 = tmp.substr((t1+3),(t2-3));
-                			el_sub.innerHTML = tmp1;
-                			el_sub.id="ndeleted_subject_"+id;
-
-                			tmp = el_date.innerHTML;
-                			t1 = tmp.indexOf("<s>");
-               				t2 = tmp.indexOf("<\/s>");
-                			tmp1 = tmp.substr((t1+3),(t2-3));
-                			el_date.innerHTML = tmp1;
-                			el_date.id="ndeleted_date_"+id;
-
-                			tmp = el_from.innerHTML;
-                			t1 = tmp.indexOf("<s>");
-                			t2 = tmp.indexOf("<\/s>");
-                			tmp1 = tmp.substr((t1+3),(t2-3));
-                			el_from.innerHTML = tmp1;
-                			el_from.id="ndeleted_from_"+id;
-
-                			el.innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="ndel_img_'+id+'"></a>&nbsp;';
-                			el.id="ndeleted_td_"+id;
+					var parent = $("row_"+id).parentNode;
+					var node = $("row_"+id);
+					parent.removeChild(node);
 				    break;
 				    case 'clear_flag':
 					var nm = "clear_td_"+id;
@@ -333,11 +288,6 @@ if (is_array($list)) {
  	}
 	$boxes .= '</select>';
 }
-$navigationOutput .= '<td size="10%"><form method="POST" name="expungeForm"> <input type="hidden" name="expunge" value="1">';
-$navigationOutput .= '<input type="hidden" name="mailbox" value="'.$mailbox.'">';
-$navigationOutput .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-$navigationOutput .= '<td align="right"><a href="javascript:document.expungeForm.submit();" >Expunge Mailbox</a>';
-$navigationOutput .= '</form></td>';
 $navigationOutput .= '<td size="100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 $navigationOutput .= $boxes;
 $navigationOutput .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';

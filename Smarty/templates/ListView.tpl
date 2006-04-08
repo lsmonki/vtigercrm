@@ -325,7 +325,7 @@ rBox">
 			         {/foreach}
 			      </tr>
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
-			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
+			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
 				 <td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
 				 {foreach item=data from=$entity}	
 				 <td>{$data}</td>

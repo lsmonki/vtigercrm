@@ -30,8 +30,10 @@ if(isset($_POST["command"])) {
 	$command = $_POST["command"];
 	if($command == "expunge")
 		imap_expunge($mbox);
-	if($command == "delete_msg")
+	if($command == "delete_msg") {
 		 $email->delete();
+		 imap_expunge($mbox);
+	}
 	if($command == "undelete_msg")
 		 $email->unDeleteMsg();
 	if($command == "set_flag")
