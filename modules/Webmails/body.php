@@ -41,7 +41,8 @@ if(isset($_POST["command"])) {
 	if($command == "clear_flag")
 		 $email->delFlag();
 } else {
-	echo ($email->body);
-}
+	echo $email->body;
+} 
 imap_close($mbox);
+
 ?>

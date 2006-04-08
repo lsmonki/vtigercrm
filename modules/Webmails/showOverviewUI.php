@@ -47,7 +47,7 @@
 					<td id="cellTabAttachments_<?php echo $num; ?>" class="dvtSelectedCell" align=center nowrap><a href="javascript:void(0);" onClick="switchClass('cellTabBody_<?php echo $num; ?>','off');switchClass('cellTabAttachments_<?php echo $num; ?>','on');gshow('showAttachmentsUI_<?php echo $num; ?>');ghide('showBodyUI_<?php echo $num; ?>');">General Information</a></td>
 					<?php if($showbody == "yes") {$extra_style="";} else {$extra_style="";} ?>
 						<td class="dvtTabCache" style="width:10px;<?php echo $extra_style;?>" nowrap>&nbsp;</td>
-						<td style="<?php echo $extra_style;?>" id="cellTabBody_<?php echo $num; ?>" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:void(0);" onClick="switchClass('cellTabBody_<?php echo $num; ?>','on');switchClass('cellTabAttachments_<?php echo $num; ?>','off');ghide('showAttachmentsUI_<?php echo $num; ?>');gshow('showBodyUI_<?php echo $num; ?>');">Body</a></td> 
+						<td style="<?php echo $extra_style;?>" id="cellTabBody_<?php echo $num; ?>" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:void(0);" onClick="switchClass('cellTabBody_<?php echo $num; ?>','on');switchClass('cellTabAttachments_<?php echo $num; ?>','off');ghide('showAttachmentsUI_<?php echo $num; ?>');gshow('showBodyUI_<?php echo $num; ?>');showBody(<?php echo $num; ?>);">Body</a></td> 
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>
@@ -76,23 +76,7 @@
 					</td>
 				</tr>
 					<td valign=top>
-					<?
-					if($showbody == "yes") {
-						$webmail->loadMail();
-						if(preg_match("/<style(.*)/i",$webmail->body) || preg_match("/<html(.*)/i",$webmail->body) ||preg_match("/<a (.*)/i",$webmail->body) || preg_match("/<img(.*)/i",$webmail->body))
-							echo '<iframe src="index.php?module=Webmails&action=body&mailid='.$num.'&mailbox='.$mailbox.'" width="100%" height="210">'.$tmp.'</iframe>';
-						else {
-							echo '<div style="overflow:auto;height:210px;width:100%">';
-							echo br2nl(($webmail->body));
-							echo '</div>';
-						}
-					} else {
-							echo '<div style="overflow:auto;height:210px">';
-							echo 'You must enable body views in your email settings';
-							echo 'to see the body of emails in the Quick View window';
-							echo '</div>';
-					}
-					?>
+						<div style="width:100%" id="body_<?php echo $num; ?>">&nbsp Loading... &nbsp;</div>
 					</td>
 				</tr>
 				</table>

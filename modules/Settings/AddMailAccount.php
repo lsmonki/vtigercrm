@@ -72,10 +72,6 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 			if(strtolower($temprow['sslmeth']) == "novalidate-cert")
 				$xtpl->assign("NOVALIDATECERT", "CHECKED");
 
-			if(strtolower($temprow['showbody']) == "yes")
-				$xtpl->assign("SHOWBODY", "CHECKED");
-			if(strtolower($temprow['showbody']) == "no")
-				$xtpl->assign("NOSHOWBODY", "CHECKED");
 		}
 	}
 }	

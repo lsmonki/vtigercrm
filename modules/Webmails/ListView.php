@@ -1,3 +1,7 @@
+<?php
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
+?>
 <script type="text/javascript">
 function add_to_vtiger(mid) {
 	$("status").style.display="block";
@@ -11,6 +15,10 @@ function add_to_vtiger(mid) {
 			}
 		}
 	);
+}
+function showBody(mid) {
+	var el = $("body_"+mid);
+	el.innerHTML = '<iframe src="index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>" width="100%" height="210">You must enabled iframes</iframe>';
 }
 </script>
 <?php
@@ -108,8 +116,6 @@ function changeMbox(el) {
 </script>
 <?
 
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
 $viewname="20";
 
 // CUSTOM VIEW
