@@ -171,6 +171,10 @@ $elist = fullMailList($mbox);
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
+if($start > 1) {
+	$skip_num = (($start - 1) * $mails_per_page);
+	$start_message = ($numEmails - $skip_num);
+}
 if(!isset($start_message) || $start_message=="") {$start_message=$numEmails;}
 if(isset($_REQUEST["start"]) && $_REQUEST["viewname"]=="20") {
 	if($_REQUEST["start"] != 1)
