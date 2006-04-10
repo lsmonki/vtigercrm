@@ -61,7 +61,7 @@ class jpgraph {
 		// create the plotarea layout
         $title =& Image_Graph::factory('title', array('Title',10));
     	$plotarea =& Image_Graph::factory('plotarea',array(
-                    'category',
+                    'axis',
                     'axis'
                 ));
         $footer =& Image_Graph::factory('title', array('Footer',8));
@@ -195,17 +195,19 @@ class jpgraph {
 			$color = array('Closed Lost'=>'#FF9900','Closed Won'=>'#009933', $other=>'#0066CC');
 			$index = 0;
 			$datasets = array();
+			$xlabels = array();
 			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($stages as $stage) {
 				// Now create a bar plot
 				$datasets[$index] = & Image_Graph::factory('dataset');
-				foreach($datax[$stage] as $x => $y) {
+				foreach($datax[$stage] as $i => $y) {
+				  	$x = 1+2*$i;
 				    $datasets[$index]->addPoint(
-				        $months[$x],
+				        $x,
 				        $y,
 				        array(
-				            'url' => $aTargets[$stage][$x],
-				            'alt' => $aAlts[$stage][$x]
+				            'url' => $aTargets[$stage][$i],
+				            'alt' => $aAlts[$stage][$i]
 				        )
 				    );
 				}
@@ -214,6 +216,12 @@ class jpgraph {
 				$fills->addColor($color[$stage]);
 
 				$index++;
+			}
+			for($i=0;$i<count($months); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $months[$i];
+			  $xlabels[$x+1] = '';
 			}
 			
 			// compute maximum value because of grace jpGraph parameter not supported
@@ -258,11 +266,20 @@ class jpgraph {
 			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$title->setText($titleStr);
 
-			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
-			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
 
 			// Setup X-axis
-			$yaxis->setFontSize(8);
+			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($months));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
 
 			// set grid
 			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
@@ -271,6 +288,7 @@ class jpgraph {
 
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
+			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
 			$yaxis->forceMaximum($maximum * 1.1);
 
 			// Setup the Y-axis to be displayed in the bottom of the
@@ -280,9 +298,8 @@ class jpgraph {
 
 			// Then fix the tick marks
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$yaxis->setFontSize(8);
 			$yaxis->setDataPreprocessor($valueproc);
-			// Fix X-Axis tick marks inside
-			$xaxis->setTickOptions(0,5);
 			// Arrange Y-Axis tick marks inside
 			$yaxis->setLabelInterval(1000);
 			$yaxis->setTickOptions(-5,0);
@@ -369,7 +386,7 @@ class jpgraph {
 		// create the plotarea layout
         $title =& Image_Graph::factory('title', array('Test',10));
     	$plotarea =& Image_Graph::factory('plotarea',array(
-                    'category',
+                    'axis',
                     'axis',
                     'horizontal'
                 ));
@@ -516,22 +533,31 @@ class jpgraph {
 			//now build the bar plots for each user across the sales stages
 			$color = array('Closed Lost'=>'FF9900','Closed Won'=>'009933', $other=>'0066CC');
 			$index = 0;
+			$xlabels = array();
 			$datasets = array();
 			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($stages as $stage) {
 				// Now create a bar pot
 				$datasets[$index] = & Image_Graph::factory('dataset');
-				foreach($datax[$stage] as $x => $y) {
+				foreach($datax[$stage] as $i => $y) {
+				  	$x = 1+2*$i;
 				    $datasets[$index]->addPoint(
-				        $datay[$legend[$x]],
+				        //$datay[$legend[$x]],
+				        $x,
 				        $y,
 				        array(
-				            'url' => $aTargets[$stage][$x],
-				            'alt' => $aAlts[$stage][$x],
+				            'url' => $aTargets[$stage][$i],
+				            'alt' => $aAlts[$stage][$i],
 				            'target' => '_blank'
 				        )
 				    );
 				}
+			for($i=0;$i<count($legend); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $legend[$i];
+			  $xlabels[$x+1] = '';
+			}
 
 				// Set fill colors for bars
 				$fills->addColor("#".$color[$stage]);
@@ -579,18 +605,30 @@ class jpgraph {
 			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$title->setText($titlestr);
 
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
+
 			// Setup X-axis
 			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
-			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
-			$yaxis->setFontSize(8);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($legend));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
 			$xaxis->setInverted(true);
-			$yaxis->setAxisIntersection('max');
 			
 			// set grid
 			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
 			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// Then fix the tick marks
+			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			$yaxis->setFontSize(8);
+			$yaxis->setAxisIntersection('max');
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
 			$yaxis->setDataPreprocessor($valueproc);
 			$yaxis->setLabelInterval(1000);
@@ -613,10 +651,6 @@ class jpgraph {
 			$marker->setFontColor('white');
 			$marker->setFontSize(8);
 			$gbplot->setMarker($marker);
-
-
-			// The fix the tick marks
-			$xaxis->setTickOptions(0,5);
 
 			// Finally setup the title
 			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
@@ -679,7 +713,7 @@ class jpgraph {
 		$graph->setFont($font);
         $title =& Image_Graph::factory('title', array('Test',10));
     	$plotarea =& Image_Graph::factory('plotarea',array(
-                    'category',
+                    'axis',
                     'axis',
                     'horizontal'
                 ));
@@ -816,17 +850,19 @@ class jpgraph {
 			$colors = color_generator(count($user_id),'#D50100','#002222');
 			$index = 0;
 			$datasets = array();
+			$xlabels = array();
 			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($user_id as $the_id) {
 				// Now create a bar pot
 				$datasets[$index] = & Image_Graph::factory('dataset');
-				foreach($datay[$the_id] as $x => $y) {
+				foreach($datay[$the_id] as $i => $y) {
+				    $x = 1+2*$i;
 				    $datasets[$index]->addPoint(
-				        $legend[$x],
+				        $x,
 				        $y,
 				        array(
-				            'url' => $aTargets[$the_id][$x],
-				            'alt' => $aAlts[$the_id][$x]
+				            'url' => $aTargets[$the_id][$i],
+				            'alt' => $aAlts[$the_id][$i]
 				        )
 				    );
 				}
@@ -835,6 +871,12 @@ class jpgraph {
 				$fills->addColor($colors[$index]);
 
 				$index++;
+			}
+			for($i=0;$i<count($legend); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $legend[$i];
+			  $xlabels[$x+1] = '';
 			}
 			
 			// compute maximum value because of grace jpGraph parameter not supported
@@ -875,22 +917,35 @@ class jpgraph {
 			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$title->setText($titlestr);
 
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
+
+		
 			// Setup X-axis
 			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($legend));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
+			$xaxis->setInverted(true);
+
+			// Setup Y-axis
 			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
 			$yaxis->setFontSize(8);
-			// Invert X-axis and put Y-axis at bottom
-			$xaxis->setInverted(true);
 			$yaxis->setAxisIntersection('max');
-			
-			// set grid
-			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
-			$gridY->setLineColor('#E5E5E5@0.5');
-
 
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
 			$yaxis->forceMaximum($maximum * 1.1);
+			
+			// set grid
+			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
+			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// First make the labels look right
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
@@ -899,9 +954,6 @@ class jpgraph {
 			$yaxis->setTickOptions(-5,0);
 			$yaxis->setLabelInterval(500,2);
 			$yaxis->setTickOptions(-2,0,2);
-
-			// The fix the tick marks
-			$xaxis->setTickOptions(0,5);
 			
 			// eliminate zero values
 			$gbplot->setDataSelector(Image_Graph::factory('Image_Graph_DataSelector_NoZeros'));
