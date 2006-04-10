@@ -192,8 +192,9 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$key = array_rand($comboFieldArray['sales_stage_dom']);
-	$opp->column_fields["sales_stage"] = $comboFieldArray['sales_stage_dom'][$key];
+	$comboSalesStageArray = Array ("Closed Won", "Prospecting");
+	$key = array_rand($comboSalesStageArray);
+	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
 //      $key = array_rand($app_list_strings['opportunity_type_dom']);
 //      $opp->opportunity_type = $app_list_strings['opportunity_type_dom'][$key];
