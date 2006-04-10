@@ -62,8 +62,12 @@ else
 			$root_password = $_REQUEST['root_password'];
 			$create_conn = @mysql_connect($db_hostname,$root_user,$root_password);
 			if(mysql_select_db($db_name,$create_conn))
-				@mysql_drop_db($db_name,$create_conn);
-			$dbstatus = @mysql_create_db($db_name,$create_conn);
+			{
+				$query = "drop database ".$db_name;
+				@mysql_query($query);
+			}
+			$query = "create database ".$db_name;
+			$dbstatus = @mysql_query($query);
 			if(!$dbstatus)
 			{
 				$mysql_createddb_status = 'false';
@@ -86,6 +90,7 @@ else
 		}
 	}
 }
+$conn = @mysql_pconnect($db_hostname,$db_username,$db_password);
 
 if($mysql_status == 'true' && $mysqlconn_status == 'false')
 {
