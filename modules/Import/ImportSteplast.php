@@ -65,17 +65,28 @@ if ( isset($_REQUEST['message']))
 	<br>
 
 	<table width="100%" border=1>
-	   <tr>
-		<td>
-		   <br>
+	
+	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable">
+	<tr><br><br><br>
+		<td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall"> Import <?php echo $_REQUEST['modulename']; ?> </td>
+	</tr>
+		<tr bgcolor="#ECECEC"><td colspan="2">&nbsp;</td></tr>
+		<tr bgcolor="#ECECEC">
+			<td align="left"  style="padding-left:40px;" colspan="2">
+				<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp; 
+				<span class="genHeaderSmall">Mapping Results </span>
+			</td>
+		</tr>	
+	  <tr bgcolor="#ECECEC">
+		<td style="padding-left:140px;">
 		   <?php 
 			echo $_REQUEST['message']; 
 		   ?>
-		   <br>
-		   <br>
+		   
+		   <br><br><br>
 		</td>
 	   </tr>
-	</table>
+
 	<?php 
 }
 ?>
@@ -90,7 +101,7 @@ if ( isset($_REQUEST['message']))
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
    <tr>
-	<td align="right"><input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  "></td>
+<br>	<td align="right"><input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  "></td>
         <td></td>
    </tr>
 </table>
@@ -100,20 +111,22 @@ if ( isset($_REQUEST['message']))
 	<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
 		<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
                 <input type="hidden" name="action" value="Import">
-                <input type="hidden" name="step" value="1">
+                <input type="hidden" name="step" value="2">
                 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
                 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
                 <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
    <tr>
 	<td align="right">
-		<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
-		<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
+		<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
+		<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
 	</td>
         <td></td>
    </tr>
 </table>
 </form>
 
+	  </table>	 
+	</table>
 <?php
 
 $currentModule = "Import";
@@ -127,7 +140,8 @@ $import_modules_array = Array(
 				"Contacts"=>"Contact",
 				"Potentials"=>"Potential",
 				"Leads"=>"Lead",
-				"Accounts"=>"Account"
+				"Accounts"=>"Account",
+				"Products"=>"Product" 
 			     );
 
 foreach($import_modules_array as $module_name => $object_name)
