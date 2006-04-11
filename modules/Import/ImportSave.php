@@ -139,6 +139,11 @@ foreach ($rows1 as $row)
 					$custTabName = 'potentialscf';
 				}
 
+				else if ( $_REQUEST['module'] == 'Products')
+				{
+					$columns = 'productid';
+					$custTabName = 'productscf';
+				}
 				$noofrows = $adb->num_rows($custresult);
 				$values='"'.$focus->id.'"';
 				for($j=0; $j<$noofrows; $j++)
@@ -186,7 +191,7 @@ if($end >= $totalnoofrows)
 	$imported_records = $ii - $skip_required_count;
 	if($imported_records == $ii)
 		$skip_required_count = 0;
-	$message= urlencode($mod_strings['LBL_SUCCESS']."<BR>$imported_records ". $_REQUEST['return_module']." ".$mod_strings['LBL_SUCCESSFULLY']."<br>$skip_required_count " .  $mod_strings['LBL_RECORDS_SKIPPED'] );
+	 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $imported_records" ."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count " );
 }
 else
 {
