@@ -200,7 +200,8 @@ global $log;
 			else
 			{
 		//		$this->println("checkconnect using old connection");
-				 $log->debug('checkconnect using old connection');
+				/*** Delibrately commented as per Richie's advice(printed frequently)***/
+				// $log->debug('checkconnect using old connection');
 			}
 	}
 
