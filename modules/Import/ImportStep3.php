@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
@@ -32,6 +32,7 @@ require_once('modules/Import/ImportMap.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('modules/Import/ImportProduct.php');
+require_once('include/utils/CommonUtils.php');
 
 @session_unregister('column_position_to_field');
 @session_unregister('totalrows');
@@ -76,7 +77,7 @@ require_once($theme_path.'layout_utils.php');
 
 
 
-$log->info($mod_strings['LBL_MODULE_NAME']." Upload Step 3");
+$log->info($mod_strings['LBL_MODULE_NAME']." Upload Step 2");
 
 if (!is_uploaded_file($_FILES['userfile']['tmp_name']) )
 {
@@ -132,11 +133,13 @@ $rows = $ret_value['rows'];
 
 $ret_field_count = $ret_value['field_count'];
 //echo 'my return field count i s ' .$ret_field_count;
-$xtpl=new XTemplate ('modules/Import/ImportStep3.html');
+//$xtpl=new XTemplate ('modules/Import/ImportStep3.html');
 
-$xtpl->assign("TMP_FILE", $tmp_file_name );
+$smarty =  new vtigerCRM_Smarty;
 
-$xtpl->assign("SOURCE", $_REQUEST['source'] );
+$smarty->assign("TMP_FILE", $tmp_file_name );
+
+$smarty->assign("SOURCE", $_REQUEST['source'] );
 
 $source_to_name = array( 'outlook'=>$mod_strings['LBL_MICROSOFT_OUTLOOK'],
 'act'=>$mod_strings['LBL_ACT'],
@@ -145,19 +148,20 @@ $source_to_name = array( 'outlook'=>$mod_strings['LBL_MICROSOFT_OUTLOOK'],
 'other'=>$mod_strings['LBL_CUSTOM'],
 );
 
-$xtpl->assign("SOURCE_NAME", $source_to_name[$_REQUEST['source']] );
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty->assign("SOURCE_NAME", $source_to_name[$_REQUEST['source']] );
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 
-$xtpl->assign("THEME", $theme);
+$smarty->assign("THEME", $theme);
 
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$xtpl->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);
+$smarty->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);
+$smarty->assign("HASHEADER", $has_header);
 
 
 if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
@@ -183,13 +187,18 @@ else if ( $_REQUEST['module'] == 'Products')
 
 
 
-//if ($has_header)
-//{
-//	$firstrow = array_shift($rows);
-//} 
-//else
-//{
+	$total_num_rows=sizeof($rows);	
 	$firstrow = $rows[0];
+	if($total_num_rows >1 )
+	{
+		$secondrow = $rows[1];
+	}		
+	if($total_num_rows >2)
+	{
+		$thirdrow = $rows[2];
+	}
+	
+	
 //}
 
 $field_map = $outlook_contacts_field_map;
@@ -265,7 +274,7 @@ else if ($_REQUEST['source'] == 'salesforce')
 }
 else if ($_REQUEST['source'] == 'outlook')
 {
-	$xtpl->assign("IMPORT_FIRST_CHECKED", " CHECKED");
+	$smarty->assign("IMPORT_FIRST_CHECKED", " CHECKED");
 	if ($_REQUEST['module'] == 'Contacts')
 	{
 		$field_map = $outlook_contacts_field_map;
@@ -282,18 +291,18 @@ $start_at = 0;
 
 if ( $has_header)
 {
-	$xtpl->parse("main.table.toprow.headercell");
+	//$smarty->parse("main.table.toprow.headercell");
 	$add_one = 0;
 	$start_at = 1;
 } 
 
 for($row_count = $start_at; $row_count < count($rows); $row_count++ )
 {
-	$xtpl->assign("ROWCOUNT", $row_count + $add_one);
-	$xtpl->parse("main.table.toprow.topcell");
+	$smarty->assign("ROWCOUNT", $row_count + $add_one);
+	//$smarty->parse("main.table.toprow.topcell");
 }
 
-$xtpl->parse("main.table.toprow");
+//$xtpl->parse("main.table.toprow");
 
 $list_string_key = strtolower($_REQUEST['module']);
 $list_string_key .= "_import_fields";
@@ -315,7 +324,7 @@ $cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 {
 
-	$xtpl->assign("COLCOUNT", $field_count + 1);
+	$smarty->assign("COLCOUNT", $field_count + 1);
 	$suggest = "";
 
 	if ($has_header && isset( $field_map[$firstrow[$field_count]] ) )
@@ -357,90 +366,73 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 //echo 'xxxxxxxxxxxxxxxxxxxx';
 //print_r($focus->importable_fields);
 //print_r($focus->column_fields);
-/*
-	$xtpl->assign("SELECTFIELD", getFieldSelect(	$focus->importable_fields,
-							$requiredfieldval,
-							$focus1->required_fields,
-							$suggest,
-							$focus1->column_fields,
-							$tablename
-						   ));
-*/
-	$xtpl->assign("SELECTFIELD", getFieldSelect(	$focus->importable_fields,
+
+	$smarty->assign("FIRSTROW",$firstrow);
+	$smarty->assign("SECONDROW",$secondrow);
+	$smarty->assign("THIRDROW",$thirdrow);
+	$smarty_array[$field_count + 1] = getFieldSelect(	$focus->importable_fields,
 							$field_count,//requiredfieldval,
 							$focus1->required_fields,
 							$suggest,
 							$translated_column_fields,
 							$tablename
-						   ));
+						   );
+	$smarty->assign("SELECTFIELD",$smarty_array);
 
-/*		getFieldSelect(	$focus->importable_fields,
-				$field_count,
-				$focus->required_fields,
-				$suggest,
-				$translated_column_fields,
-				$_REQUEST['module']
-				));
-*/
-	$xtpl->parse("main.table.row.headcell");
+	//$xtpl->parse("main.table.row.headcell");
 
 	$pos = 0;
 
 	foreach ( $rows as $row ) 
 	{
-		if ($cnt%2==0)
-			$xtpl->assign("ROWCLASS","evenListRow");
-		else
-			$xtpl->assign("ROWCLASS","oddListRow");
 		
 		if( isset($row[$field_count]) && $row[$field_count] != '')
 		{
-			$xtpl->assign("CELL",htmlspecialchars($row[$field_count]));
-			$xtpl->parse("main.table.row.cell");
+			$smarty->assign("CELL",htmlspecialchars($row[$field_count]));
+//			$smarty->parse("main.table.row.cell");
 		} 
 		else
 		{
-			$xtpl->parse("main.table.row.cellempty");
+//			$smarty->parse("main.table.row.cellempty");
 		}
 		
 		$cnt++;
 	}
 
-	$xtpl->parse("main.table.row");
+//	$xtpl->parse("main.table.row");
 
 }
 
-$xtpl->parse("main.table");
+$smarty->assign("ROW", $row);
+//$xtpl->parse("main.table");
 
 $module_key = "LBL_".strtoupper($_REQUEST['module'])."_NOTE_";
 
 for ($i = 1;isset($mod_strings[$module_key.$i]);$i++)
 {
-	$xtpl->assign("NOTETEXT", $mod_strings[$module_key.$i]);
-	$xtpl->parse("main.note");
+	$smarty->assign("NOTETEXT", $mod_strings[$module_key.$i]);
+	//$xtpl->parse("main.note");
 }
 
 
 
 if($has_header)
 {
-	$xtpl->assign("HAS_HEADER", 'on');
+	$smarty->assign("HAS_HEADER", 'on');
 } 
 else
 {
-	$xtpl->assign("HAS_HEADER", 'off');
+	$smarty->assign("HAS_HEADER", 'off');
 }
 
 
-$xtpl->assign("MODULE", $_REQUEST['module']);
-//$xtpl->assign("JAVASCRIPT", get_validate_import_fields_js($focus->required_fields,$translated_column_fields) );
+$smarty->assign("MODULE", $_REQUEST['module']);
 
-$xtpl->assign("JAVASCRIPT2", get_readonly_js() );
+$category = getParenttab();
+$smarty->assign('CATEGORY' , $category);
 
+$smarty->assign("JAVASCRIPT2", get_readonly_js() );
 
-$xtpl->parse("main");
-
-$xtpl->out("main");
-
+$smarty->display('ImportStep2.tpl');
 
 ?>
