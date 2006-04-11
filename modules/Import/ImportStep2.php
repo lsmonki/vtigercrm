@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
@@ -29,6 +29,7 @@ require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
 require_once('modules/Import/ImportProduct.php');
+require_once('include/utils/CommonUtils.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -47,10 +48,14 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info($mod_strings['LBL_MODULE_NAME'] . " Upload Step 1");
 
-$xtpl=new XTemplate ('modules/Import/ImportStep2.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMP", $import_mod_strings);
+$smarty = new vtigerCRM_Smarty;
+
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMP", $import_mod_strings);
+
+$category = getParenttab();
+$smarty->assign("CATEGORY", $category);
 
 if ( $_REQUEST['module'] == 'Contacts')
 {
@@ -79,31 +84,32 @@ else
  exit;
 }
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 
-$xtpl->assign("THEME", $theme);
+$smarty->assign("THEME", $theme);
 
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$xtpl->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);
+$smarty->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE_NAME']);
 
-$xtpl->assign("MODULE", $_REQUEST['module']);
+$smarty->assign("MODULE", $_REQUEST['module']);
 
 // see if the source starts with 'custom' 
 // if so, pull off the id, load that map, and get the name
 if ($_REQUEST['source'] == "outlook")
 {
-	$xtpl->assign("SOURCE", $_REQUEST['source']);
-	$xtpl->assign("SOURCE_NAME","Outlook ");
-	$xtpl->assign("HAS_HEADER_CHECKED"," CHECKED");
+	$smarty->assign("SOURCE", $_REQUEST['source']);
+	$smarty->assign("SOURCE_NAME","Outlook ");
+	$smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
 } 
 else if ($_REQUEST['source'] == "act")
 {
-	$xtpl->assign("SOURCE", $_REQUEST['source']);
-	$xtpl->assign("SOURCE_NAME","ACT! ");
-	$xtpl->assign("HAS_HEADER_CHECKED"," CHECKED");
+	$smarty->assign("SOURCE", $_REQUEST['source']);
+	$smarty->assign("SOURCE_NAME","ACT! ");
+	$smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
 }
 else if ( strncasecmp("custom:",$_REQUEST['source'],7) == 0)
 {
@@ -114,22 +120,22 @@ else if ( strncasecmp("custom:",$_REQUEST['source'],7) == 0)
 
 	$adb->println($import_map_seed->toString());
 
-	$xtpl->assign("SOURCE_ID", $import_map_seed->id);
-	$xtpl->assign("SOURCE_NAME", $import_map_seed->name);
-	$xtpl->assign("SOURCE", "custom");
+	$smarty->assign("SOURCE_ID", $import_map_seed->id);
+	$smarty->assign("SOURCE_NAME", $import_map_seed->name);
+	$smarty->assign("SOURCE", "custom");
 
 	if ($import_map_seed->has_header)
 	{
-		$xtpl->assign("HAS_HEADER_CHECKED"," CHECKED");
+		$smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
 	}
 }
 else
 {
-	$xtpl->assign("HAS_HEADER_CHECKED"," CHECKED");
-	$xtpl->assign("SOURCE", $_REQUEST['source']);
+	$smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
+	$smarty->assign("SOURCE", $_REQUEST['source']);
 }
 
-$xtpl->assign("JAVASCRIPT", get_validate_upload_js());
+$smarty->assign("JAVASCRIPT", get_validate_upload_js());
 
 $lang_key = '';
 
@@ -150,18 +156,15 @@ else
 	$lang_key = "CUSTOM";
 }
 
-$xtpl->assign("INSTRUCTIONS_TITLE",$mod_strings["LBL_IMPORT_{$lang_key}_TITLE"]);
+$smarty->assign("INSTRUCTIONS_TITLE",$mod_strings["LBL_IMPORT_{$lang_key}_TITLE"]);
 
 for ($i = 1; isset($mod_strings["LBL_{$lang_key}_NUM_$i"]);$i++)
 {
-$xtpl->assign("STEP_NUM",$mod_strings["LBL_NUM_$i"]);
-$xtpl->assign("INSTRUCTION_STEP",$mod_strings["LBL_{$lang_key}_NUM_$i"]);
-$xtpl->parse("main.instructions.step");
+$smarty->assign("STEP_NUM",$mod_strings["LBL_NUM_$i"]);
+$smarty->assign("INSTRUCTION_STEP",$mod_strings["LBL_{$lang_key}_NUM_$i"]);
+
 }
-$xtpl->parse("main.instructions");
 
-$xtpl->parse("main");
-
-$xtpl->out("main");
+$smarty->display("ImportStep1.tpl");
 
 ?>
