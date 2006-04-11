@@ -71,7 +71,7 @@
 		<td class="sep1" style="width:1px"></td>
 		<td nowrap style="width:50%;padding:10px">
 		{if $MODULE ne 'Notes' && $MODULE ne 'Emails'}
-			<a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> |
+			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> |
 		{/if}
 		<a href="index.php?module={$MODULE}&action=Export&all=1">Export {$MODULE}</a>
 		</td>
