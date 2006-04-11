@@ -1058,11 +1058,29 @@ $log->debug("type is ".$type);
   {
     global $adb;
     $result = Array();
-    foreach($this->tab_name_index as $table_name=>$index)
+    $table_list = Array();
+    $table_index = Array();
+    $table_list = array_keys($this->tab_name_index);
+    $table_index = array_values($this->tab_name_index);
+    $detailview_query = "select ";
+    $j=0;
+    for($i=1;$i<count($table_list);$i++)
     {
-      $result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
+	if($j != 0)
+	{
+		$detailview_query .= ", ";
+	}
+	$detailview_query .= $table_list[$i].".*";
+	$j++;
     }
-
+    $detailview_query .=  ", ".$table_list[0].". * from ".$table_list[0];
+    for($i=1;$i<count($table_list);$i++)
+    {
+	$detailview_query .= " left join ".$table_list[$i]." on ".$table_list[$i].".".$table_index[$i]." = ";
+	$detailview_query .= $table_list[0].".".$table_index[0];
+    }
+    $detailview_query .= " where ".$table_index[0]." = ".$record;
+    $result = $adb->query($detailview_query);
     $tabid = getTabid($module);
     $sql1 =  "select * from field where tabid=".$tabid;
     $result1 = $adb->query($sql1);
@@ -1073,14 +1091,12 @@ $log->debug("type is ".$type);
       $tablename = $adb->query_result($result1,$i,"tablename");
       $fieldname = $adb->query_result($result1,$i,"fieldname");
 
-      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+      $fld_value = $adb->query_result($result,0,$fieldcolname);
       $this->column_fields[$fieldname] = $fld_value;
 				
     }
     $this->column_fields["record_id"] = $record;
     $this->column_fields["record_module"] = $module;
-		
-    //	print_r($this->column_fields);
 		
   }
 
