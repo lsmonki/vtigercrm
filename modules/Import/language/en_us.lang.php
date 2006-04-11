@@ -50,7 +50,7 @@ $mod_strings = Array(
 'LBL_NEXT'=>'Next',
 'LBL_BACK'=>'Back',
 'LBL_STEP_2_TITLE'=>'Step 2 of 4: Upload Export File',
-'LBL_HAS_HEADER'=>'Has Header:',
+'LBL_HAS_HEADER'=>'Has Header',
 
 'LBL_NUM_1'=>'1.',
 'LBL_NUM_2'=>'2.',
@@ -103,6 +103,9 @@ $mod_strings = Array(
 'LBL_CUSTOM_NUM_3'=>'Save the file in a <b>CSV</b> or <b>Comma Separated Values</b> format',
 
 'LBL_STEP_3_TITLE'=>'Step 3 of 4: Confirm Fields and Import',
+'LBL_STEP_1'=>'Step 1 of 3 : ',
+'LBL_STEP_1_TITLE'=>'Select the .CSV File',
+'LBL_STEP_1_TEXT'=> ' vtiger CRM supports importing records from .csv (<b> Comma Seperated Values</b> ) files. To start import, browse to locate the .CSV file and click on the Next button to Continue.',
 
 'LBL_SELECT_FIELDS_TO_MAP'=>'In the list below, select the fields in your import file that should be imported into each field in the system. When you are finished, click <b>Import Now</b>',
 
@@ -127,9 +130,9 @@ $mod_strings = Array(
 'LBL_NOT_SAME_NUMBER'=>'There were not the same number of fields per line in your file',
 'LBL_NO_LINES'=>'There were no lines in your import file',
 'LBL_FILE_ALREADY_BEEN_OR'=>'The import file has already been processed or does not exist',
-'LBL_SUCCESS'=>'Success:',
+'LBL_SUCCESS'=>'Success! ',
 'LBL_SUCCESSFULLY'=>'Succesfully Imported',
-'LBL_LAST_IMPORT_UNDONE'=>'Your last import was undone',
+'LBL_LAST_IMPORT_UNDONE'=>'Your Last Import Was Undone',
 'LBL_NO_IMPORT_TO_UNDO'=>'There was no import to undo.',
 'LBL_FAIL'=>'Fail:',
 'LBL_RECORDS_SKIPPED'=>'records skipped because they were missing one or more required fields',
@@ -138,6 +141,9 @@ $mod_strings = Array(
 'LBL_IMPORT_MORE'=>'Import More',
 'LBL_FINISHED'=>'Finished',
 'LBL_UNDO_LAST_IMPORT'=>'Undo Last Import',
+
+'LBL_SUCCESS_1' => 'No. of Records Successfully Imported : ',
+'LBL_SKIPPED_1' => 'No. of Records Skipped as they were missing one or more required fields : ',
 
 //Added for patch2 - Products Import Notes
 'LBL_PRODUCTS_NOTE_1'=>'Product Name must be mapped',
