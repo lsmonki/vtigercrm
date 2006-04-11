@@ -20,6 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
@@ -118,6 +119,7 @@ require_once('include/CustomFieldUtil.php');
 $custFldArray = getCustomFieldArray($_REQUEST['module']);
 p("IMP 4: custFldArray");
 p($custFldArray);
+
 //Initializing  an empty Array to store the custom field Column Name and Value
 $resCustFldArray = Array();
 
@@ -128,11 +130,12 @@ foreach ($_REQUEST as $name=>$value)
 	p("name=".$name." value=".$value);
 	// only look for var names that start with "colnum"
 	if ( strncasecmp( $name, "colnum", 6) != 0 )
-	{
+	{	
 		continue;
 	}
 	if ($value == "-1")
 	{
+		
 		continue;
 	}
 
@@ -160,8 +163,8 @@ foreach ($_REQUEST as $name=>$value)
 		p("user_field SET=".$user_field);
 		// now mark that we've seen this field
 		$field_to_pos[$user_field] = $pos;
-
 		$col_pos_to_field[$pos] = $user_field;
+		
 	}
 }
 
