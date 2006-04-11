@@ -28,7 +28,7 @@ DEFINE("FF_FONT1",'Verdana');
 
 /**This function is used to get the font name when a language code is given
 * Param $locale - language code
-* Return type string
+* Return type string - font name
 */
 function calculate_font_name($locale)
 
@@ -52,9 +52,11 @@ function calculate_font_name($locale)
 	return FF_FONT1;
 }
 
-/**This function is used to generate the color format.
-* Param $count - language code
-* Return type string
+/**This function is used to generate the n colors.
+* Param $count - number of colors to generate
+* Param $start - value of first color
+* Param $step - color increment to apply
+* Return type array - array of n colors values
 */
 
 function color_generator($count = 1, $start = '33CCFF', $step = '221133')
@@ -76,6 +78,36 @@ function color_generator($count = 1, $start = '33CCFF', $step = '221133')
 			if($colors[$j] > 0xFF) $colors[$j] -= 0xFF;
 		}
 	}
+	return $result;
+}
+
+/**This function is used to define the optimum spacin for tick marks on an axis
+* Param $max - maximum value of axis
+* Return type array - array of 2 values major and minor spacing
+*/
+
+function get_tickspacing($max = 10)
+{
+	$result = array(1,1);
+	
+	// normalize $max to get value between 1 and 10
+	$coef = pow(10,floor(log10($max)));
+	$normalized = $max / $coef;
+	
+	if($normalized < 1.5){
+		$result[0] = 0.2;
+		$result[1] = 0.1;
+	}
+	elseif($normalized < 5){
+		$result[0] = 0.5;
+		$result[1] = 0.1;
+	}
+	elseif($normalized < 10){
+		$result[0] = 1.0;
+		$result[1] = 0.5;
+	}
+	$result[0] *= $coef;
+	$result[1] *= $coef;
 	return $result;
 }
 ?>

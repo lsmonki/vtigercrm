@@ -290,6 +290,7 @@ class jpgraph {
 			// all the way to the end of the plot area
 			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
 			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
 
 			// Setup the Y-axis to be displayed in the bottom of the
 			// graph. We also finetune the exact layout of the title,
@@ -301,9 +302,9 @@ class jpgraph {
 			$yaxis->setFontSize(8);
 			$yaxis->setDataPreprocessor($valueproc);
 			// Arrange Y-Axis tick marks inside
-			$yaxis->setLabelInterval(1000);
+			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
-			$yaxis->setLabelInterval(500,2);
+			$yaxis->setLabelInterval($ticks[1],2);
 			$yaxis->setTickOptions(-2,0,2);
 			$yaxis->setLabelOption('position','inside');
 
@@ -625,20 +626,21 @@ class jpgraph {
 			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
 			$gridY->setLineColor('#E5E5E5@0.5');
 
-			// Then fix the tick marks
+			// Add some grace to y-axis so the bars doesn't go
+			// all the way to the end of the plot area
 			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
+
+			// Then fix the tick marks
 			$yaxis->setFontSize(8);
 			$yaxis->setAxisIntersection('max');
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
 			$yaxis->setDataPreprocessor($valueproc);
-			$yaxis->setLabelInterval(1000);
+			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
-			$yaxis->setLabelInterval(500,2);
+			$yaxis->setLabelInterval($ticks[1],2);
 			$yaxis->setTickOptions(-2,0,2);
-
-			// Add some grace to y-axis so the bars doesn't go
-			// all the way to the end of the plot area
-			$yaxis->forceMaximum($maximum * 1.1);
 			
 			// eliminate zero values
 			$gbplot->setDataSelector(Image_Graph::factory('Image_Graph_DataSelector_NoZeros'));
@@ -942,6 +944,7 @@ class jpgraph {
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
 			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
 			
 			// set grid
 			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
@@ -950,9 +953,9 @@ class jpgraph {
 			// First make the labels look right
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
 			$yaxis->setDataPreprocessor($valueproc);
-			$yaxis->setLabelInterval(1000);
+			$yaxis->setLabelInterval($ticks[0]);
 			$yaxis->setTickOptions(-5,0);
-			$yaxis->setLabelInterval(500,2);
+			$yaxis->setLabelInterval($ticks[1],2);
 			$yaxis->setTickOptions(-2,0,2);
 			
 			// eliminate zero values

@@ -15,6 +15,8 @@ require_once('include/utils/GraphUtils.php');
 include_once ('Image/Graph.php');
 include_once ('Image/Canvas.php');
 
+//$tmp_dir=$root_directory."cache/images/";
+
 /** Function to render the Horizontal Graph
         * Portions created by vtiger are Copyright (C) vtiger.
         * All Rights Reserved.
@@ -150,11 +152,12 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	// Add some grace to y-axis so the bars doesn't go
 	// all the way to the end of the plot area
 	$yaxis->forceMaximum(round(($max * 1.1) + 0.5));
+	$ticks = get_tickspacing($max);
 
 	// First make the labels look right
-	$yaxis->setLabelInterval(1);
+	$yaxis->setLabelInterval($ticks[0]);
 	$yaxis->setTickOptions(5,0);
-	$yaxis->setLabelInterval(0.5,2);
+	$yaxis->setLabelInterval($ticks[1],2);
 	$yaxis->setTickOptions(2,0,2);
 	
 	// Create the xaxis labels
