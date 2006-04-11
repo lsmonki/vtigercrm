@@ -358,11 +358,11 @@ class User extends SugarBean {
 		// now fill in the fields.
 		foreach($this->column_fields as $field)
 		{
-			$this->log->info($field);
+			//$this->log->info($field);
 			
 			if(isset($row[$field]))
 			{
-				$this->log->info("=".$row[$field]);
+				$this->log->debug("=".$row[$field]);
 	
 				$this->$field = $row[$field];
 			}
