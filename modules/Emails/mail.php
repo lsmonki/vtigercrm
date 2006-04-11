@@ -132,8 +132,15 @@ function addSignature($contents, $fromname)
 }
 
 /**	Function to set all the Mailer properties
-  *	$mail -- reference of the mail object
-  *	other parameters are same as passed in send_mail function
+  *	$mail 		-- reference of the mail object
+  *	$subject	-- subject of the email you want to send
+  *	$contents	-- body of the email you want to send
+  *	$from_email	-- from email id which will be displayed in the mail
+  *	$from_name	-- from name which will be displayed in the mail
+  *	$to_email 	-- to email address 
+  *	$attachment	-- whether we want to attach the currently selected file or all files.
+  				[values = current,all] - optional
+  *	$emailid	-- id of the email object which will be used to get the attachments - optional
   */
 function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='')
 {
@@ -285,7 +292,7 @@ function setCCAddress($mail,$cc_mod,$cc_val)
 	}
 }
 
-/**	Function to send the mail which will be called after set all the mal object values
+/**	Function to send the mail which will be called after set all the mail object values
   *	$mail -- reference of the mail object
   */
 function MailSend($mail)
@@ -340,10 +347,11 @@ function getParentMailId($parentmodule,$parentid)
 	return $mailid;
 }
 
-/**	Function to parse the mail error and return the correct error
+/**	Function to parse and get the mail error
   *	$mail -- reference of the mail object
   *	$mail_status -- status of the mail which is sent or not
   *	$to -- the email address to whom we sent the mail and failes
+  *	return -- Mail error occured during the mail sending process
   */
 function getMailError($mail,$mail_status,$to)
 {
@@ -382,8 +390,9 @@ function getMailError($mail,$mail_status,$to)
 	return $error_msg;
 }
 
-/**	Function to get the mail status string(string of all mail status) and return the error status only as a encoded string
+/**	Function to get the mail status string (string of sent mail status)
   *	$mail_status_str -- concatenated string with all the error messages with &&& seperation
+  *	return - the error status as a encoded string
   */
 function getMailErrorString($mail_status_str)
 {
@@ -411,8 +420,9 @@ function getMailErrorString($mail_status_str)
 	return $mail_error_str;
 }
 
-/**	Function to parse the error string and return the display message
+/**	Function to parse the error string
   *	$mail_error_str -- base64 encoded string which contains the mail sending errors as concatenated with &&&
+  *	return - Error message to display
   */
 function parseEmailErrorString($mail_error_str)
 {

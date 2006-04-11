@@ -148,6 +148,10 @@ if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&$mail_error_status&viewname=$return_viewname");
 
+/**	Function to get all the comments for a troubleticket
+  *	@param int $ticketid -- troubleticket id
+  *	return all the comments as a sequencial string which are related to this ticket
+**/
 function getTicketComments($ticketid)
 {
 	global $adb;

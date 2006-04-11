@@ -8,72 +8,81 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+
+/**	Function to get the list of tickets for the currently loggedin user
+**/
+ 
 function getMyTickets()
 {
-global $current_user;
-global $theme;
-global $current_language;
-global $adb;
-$current_module_strings = return_module_language($current_language, 'HelpDesk');
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+	global $current_user;
+	global $theme;
+	global $current_language;
+	global $adb;
+	$current_module_strings = return_module_language($current_language, 'HelpDesk');
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
 
-$search_query="select troubletickets.ticketid, parent_id, priority, troubletickets.status, category, troubletickets.title, troubletickets.description, update_log, version_id,
-		crmentity.createdtime, crmentity.modifiedtime, 
-		contactdetails.firstname, contactdetails.lastname, 
-		account.accountid, account.accountname, 
-		users.user_name from 
-		troubletickets 
-			inner join crmentity on crmentity.crmid = troubletickets.ticketid 
-			inner join users on users.id = crmentity.smownerid 
-			left join contactdetails on troubletickets.parent_id = contactdetails.contactid 
-			left join account on account.accountid = troubletickets.parent_id 
-			left join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid 
-		where crmentity.smownerid = ".$current_user->id." and crmentity.deleted = 0 and troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
+	$search_query="select troubletickets.ticketid, parent_id, priority, troubletickets.status, category, troubletickets.title, troubletickets.description, update_log, version_id,
+	crmentity.createdtime, crmentity.modifiedtime, 
+	contactdetails.firstname, contactdetails.lastname, 
+	account.accountid, account.accountname, 
+	users.user_name from 
+	troubletickets 
+	inner join crmentity on crmentity.crmid = troubletickets.ticketid 
+	inner join users on users.id = crmentity.smownerid 
+	left join contactdetails on troubletickets.parent_id = contactdetails.contactid 
+	left join account on account.accountid = troubletickets.parent_id 
+	left join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid 
+	where crmentity.smownerid = ".$current_user->id." and crmentity.deleted = 0 and troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
 
-$resultcount = $adb->num_rows($adb->query($search_query));
-if($resultcount > 0)
-{
-	$tktresult = $adb->limitquery($search_query,0,5);
-	$title=array();
-	$title[]='myTickets.gif';
-	$title[]=$current_module_strings['LBL_MY_TICKETS'];
-	$title[]='home_mytkt';
-
-	$header=array();
-	$header[]=$current_module_strings['LBL_TICKET_ID'];
-	$header[]=$current_module_strings['LBL_SUBJECT'];
-	$header[]=$current_module_strings['Related To'];
-	$header[]=$current_module_strings['LBL_STATUS'];
-	$header[]=$current_module_strings['LBL_CREATED_DATE'];
-	$header[]=$current_module_strings['LBL_ASSIGNED_TO'];
-
-	$noofrows = $adb->num_rows($tktresult);
-	for ($i=0; $i<$adb->num_rows($tktresult); $i++)
+	$resultcount = $adb->num_rows($adb->query($search_query));
+	if($resultcount > 0)
 	{
-		$value=array();
-		$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-		$value[]=$ticketid;
-		$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+		$tktresult = $adb->limitquery($search_query,0,5);
+		$title=array();
+		$title[]='myTickets.gif';
+		$title[]=$current_module_strings['LBL_MY_TICKETS'];
+		$title[]='home_mytkt';
 
-		$parent_id = $adb->query_result($tktresult,$i,"parent_id");
-		$parent_name = '';
-		if($parent_id != '' && $parent_id != NULL)
+		$header=array();
+		$header[]=$current_module_strings['LBL_TICKET_ID'];
+		$header[]=$current_module_strings['LBL_SUBJECT'];
+		$header[]=$current_module_strings['Related To'];
+		$header[]=$current_module_strings['LBL_STATUS'];
+		$header[]=$current_module_strings['LBL_CREATED_DATE'];
+		$header[]=$current_module_strings['LBL_ASSIGNED_TO'];
+
+		$noofrows = $adb->num_rows($tktresult);
+		for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 		{
-			$parent_name = getParentLink($parent_id);
-		}
+			$value=array();
+			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
+			$value[]=$ticketid;
+			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
 
-		$value[]=$parent_name;
-		$value[]=$adb->query_result($tktresult,$i,"status");
-		$value[]=getDisplayDate($adb->query_result($tktresult,$i,"createdtime"));
-		$value[]=$adb->query_result($tktresult,$i,"user_name");
-		$entries[$ticketid]=$value;
+			$parent_id = $adb->query_result($tktresult,$i,"parent_id");
+			$parent_name = '';
+			if($parent_id != '' && $parent_id != NULL)
+			{
+				$parent_name = getParentLink($parent_id);
+			}
+
+			$value[]=$parent_name;
+			$value[]=$adb->query_result($tktresult,$i,"status");
+			$value[]=getDisplayDate($adb->query_result($tktresult,$i,"createdtime"));
+			$value[]=$adb->query_result($tktresult,$i,"user_name");
+			$entries[$ticketid]=$value;
+		}
+		$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+		if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
+			return $values;
 	}
-	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
-		return $values;
 }
-}
+
+/**	Function to get the parent (Account or Contact) link
+  *	@param int $parent_id -- parent id of the ticket (accountid or contactid)
+  *	return string $parent_name -- return the parent name as a link
+**/
 function getParentLink($parent_id)
 {
 	global $adb;

@@ -26,6 +26,11 @@ if ($download == "1")
 	$fileContent = imap_fetchbody($mbox,$msgno,$file+2);
 }
 
+/**     Function to download the File
+ *	@param string $strFileType - File Type
+ *	@param string $strFileName - File Name
+ *	@param string $fileContents- File contents
+**/
 function downloadFile($strFileType,$strFileName,$fileContent) 
 {
 	$ContentType = "application/octet-stream";
