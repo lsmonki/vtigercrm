@@ -38,6 +38,20 @@
 	line-height: 12px;
 	color: #ABABAB;
 }
+#PopupLay{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    text-align:left;
+    width:500px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+    padding:5px;
+    display:none;
+    position:absolute;
+    left:100px;
+    top:100px;
+}
+
 .hdrNameBg {
 
 	background:url(images/topBg.gif);
@@ -1753,3 +1767,4 @@ padding:0px 10px 0px 10px;
 .txtRed{
 	color:red;
 }	
+
