@@ -102,7 +102,7 @@
                         <input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
 		</td>
 	</tr>
-	<tr bgcolor="#ECECEC">
+{*	<tr bgcolor="#ECECEC">
 		
 		<td align="right" valign="top" width="25%"><b>Delimeter : </b></td>
 
@@ -111,7 +111,7 @@
                </td>
 	</tr>
 			
-{*	<tr bgcolor="#ECECEC">
+	<tr bgcolor="#ECECEC">
 		<td align="right" valign="top">	
 		  <b>Use Data Source :</b>
 		</td>
