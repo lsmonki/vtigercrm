@@ -26,6 +26,7 @@ require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 
 global $app_strings;
+global $moduleList;
 global $adb;
 global $vtlog;
 
@@ -72,6 +73,14 @@ if(isset($metriclists))
 $oddRow = true;
 foreach($metriclists as $metriclist)
 {
+	if(!in_array($metriclist['module'], $moduleList)) {
+		$sub_module = $metriclist['module'];
+		if($sub_module == 'Vendor' || $sub_module == 'PriceBook') {
+			$metriclist['module'] = 'Products&smodule='.strtoupper($sub_module);
+		} else if ($sub_module == 'SalesOrder') {
+			$metriclist['module'] = 'Orders&smodule=SO';
+		}
+	}
 	$metric_fields = array(
 		'ID' => $metriclist['id'],
 		'NAME' => $metriclist['name'],
