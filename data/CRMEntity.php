@@ -1079,7 +1079,7 @@ $log->debug("type is ".$type);
 	$detailview_query .= " left join ".$table_list[$i]." on ".$table_list[$i].".".$table_index[$i]." = ";
 	$detailview_query .= $table_list[0].".".$table_index[0];
     }
-    $detailview_query .= " where ".$table_index[0]." = ".$record;
+    $detailview_query .= " where ".$table_list[0].".".$table_index[0]." = ".$record;
     $result = $adb->query($detailview_query);
     $tabid = getTabid($module);
     $sql1 =  "select * from field where tabid=".$tabid;
