@@ -202,6 +202,11 @@ if($image_error=="false")
 	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
 	if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
+
+	//Send notification mail to the assigned to owner about the contact creation
+	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
+		$status = sendNotificationToOwner('Contacts',&$focus);
+
 	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
 
 }

@@ -175,9 +175,10 @@ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'annualrevenue','account',1,'71','annual_revenue','Annual Revenue',1,0,0,100,16,9,1,'I~O',1,null,'ADV')");
  //Added field emailoptout for accounts -- after 4.2 patch2
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,9,1,'C~O',1,null,'ADV')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,18,9,1,'V~M',1,null,'BAS')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,9,2,'T~O',1,null,'BAS')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,19,9,2,'T~O',1,null,'BAS')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,19,9,1,'V~M',1,null,'BAS')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,20,9,2,'T~O',1,null,'BAS')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,21,9,2,'T~O',1,null,'BAS')");
 
 
 
@@ -287,8 +288,9 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'emailoptout','contactdetails',1,'56','emailoptout','Email Opt Out',1,0,0,100,21,4,1,'C~O',1,null,'ADV')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,22,4,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')");
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,24,4,2,'T~O',1,null,'BAS')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,25,4,2,'T~O',1,null,'BAS')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'notify_owner','contactdetails',1,'56','notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,null,'ADV')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,25,4,2,'T~O',1,null,'BAS')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,26,4,2,'T~O',1,null,'BAS')");
 
 //Block4 -- End
 

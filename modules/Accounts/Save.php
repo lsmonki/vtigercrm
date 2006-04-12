@@ -96,7 +96,13 @@ $local_log->debug("Saved record with id of ".$return_id);
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+//Send notification mail to the assigned to owner about the account creation
+if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
+	$status = sendNotificationToOwner('Accounts',&$focus);
+
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
+
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {

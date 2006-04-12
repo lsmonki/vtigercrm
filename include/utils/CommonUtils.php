@@ -1572,5 +1572,80 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 	return $form_data;
 }
 
+/**	Function to send the Notification mail to the assigned to owner about the entity creation or updation
+  *	@param string $module -- module name
+  *	@param object $focus  -- reference of the object
+**/
+function sendNotificationToOwner($module,$focus)
+{
+	require_once("modules/Emails/mail.php");
+	global $current_user;
+
+	$ownername = getUserName($focus->column_fields['assigned_user_id']);
+	$ownermailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
+
+	if($module == 'Contacts')
+	{
+		$objectname = $focus->column_fields['lastname'].' '.$focus->column_fields['firstname'];
+		$mod_name = 'Contact';
+		$object_column_fields = array(
+						'lastname'=>'Last Name',
+						'firstname'=>'First Name',
+						'leadsource'=>'Lead Source',
+						'department'=>'Department',
+						'description'=>'Description',
+					     );
+	}
+	if($module == 'Accounts')
+	{
+		$objectname = $focus->column_fields['accountname'];
+		$mod_name = 'Account';
+		$object_column_fields = array(
+						'accountname'=>'Account Name',
+						'rating'=>'Rating',
+						'industry'=>'Industry',
+						'accounttype'=>'Account Type',
+						'description'=>'Description',
+					     );
+	}
+	if($module == 'Potentials')
+	{
+		$objectname = $focus->column_fields['potentialname'];
+		$mod_name = 'Potential';
+		$object_column_fields = array(
+						'potentialname'=>'Potential Name',
+						'amount'=>'Amount',
+						'closingdate'=>'Expected Close Date',
+						'opportunity_type'=>'Opportunity Type',
+						'description'=>'Description',
+			      		     );
+	}	
+	
+	$description = 'Dear '.$ownername.',<br><br>';
+
+	if($focus->mode == 'edit')
+	{
+		$subject = 'Regarding '.$mod_name.' updation - '.$objectname;
+		$description .= 'The '.$mod_name.' has been updated.';
+	}
+	else
+	{
+		$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
+		$description .= 'The '.$mod_name.' has been assigned to you.';
+	}
+	$description .= 'The '.$mod_name.' details are:<br><br>';
+	$description .= $mod_name.' Id : '.$focus->id.'<br>';
+
+	foreach($object_column_fields as $fieldname => $fieldlabel)
+	{
+		$description .= $fieldlabel.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+	}
+
+	$description .= '<br><br>Thanks <br>'.$current_user->user_name;
+	$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
+
+	return $status;
+}
+
 
 ?>

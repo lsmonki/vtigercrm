@@ -200,6 +200,9 @@ $mod_strings = Array(
 'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
 'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
 
+//Added after 5Alpha5
+'Notify Owner'=>'Notify Owner',
+
 );
 
 ?>

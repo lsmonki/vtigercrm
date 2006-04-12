@@ -150,6 +150,10 @@ $mod_strings = Array(
 //Added after 4.2 patch 2
 'Email Opt Out'=>'Email Opt Out',
 'LBL_EMAIL_OPT_OUT'=>'Email Opt Out:',
+
+//Added after 5Alpha5
+'Notify Owner'=>'Notify Owner',
+
 );
 
 ?>
