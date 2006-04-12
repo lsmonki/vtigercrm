@@ -8,77 +8,45 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Rss/Rss.php');
 
-global $app_strings;
-global $app_list_strings;
-global $mod_strings;
-$current_module_strings = return_module_language($current_language, 'Rss');
-global $urlPrefix;
 $log = LoggerManager::getLogger('rss_save');
-global $currentModule;
-global $image_path;
-global $theme;
 
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-
-// focus_list is the means of passing data to a ListView.
-global $focus_list;
-
-if(isset($_REQUEST["rssurl"]))
+if(isset($_REQUEST["record"]))
+{
+	global $adb;
+	$query = 'update rss set starred=0';
+	$adb->query($query);
+	$query = 'update rss set starred=1 where rssid ='.$_REQUEST["record"]; 
+	$adb->query($query);
+	echo $_REQUEST["record"];
+}
+elseif(isset($_REQUEST["rssurl"]))
 {
 	$newRssUrl = $_REQUEST["rssurl"];
 	$rsscategory = $_REQUEST["rsscategory"];
-	$setstarred = $_REQUEST["setstarred"];
 	
-	if($setstarred != 1)
-	{
-		$setstarred = 0;
-	}
+	$setstarred = 0;
 	$oRss = new vtigerRSS();
 	if($oRss->setRSSUrl($newRssUrl))
 	{
-        	if($oRss->saveRSSUrl($newRssUrl,$setstarred,$rsscategory) == false)
+			$result = $oRss->saveRSSUrl($newRssUrl,$setstarred,$rsscategory);
+        	if($result == false)
         	{
-			echo "<font color='red'><b>Unable to save the RSS Feed URL</b></font><br>" ;
+				echo "Unable to save the RSS Feed URL" ;
         	}else
         	{
-			$jscript = "window.opener.location.href=window.opener.location.href;
-				    window.self.close();";
+				echo $result;
         	}
 	}else
 	{
-		echo "<font color='red'><b>Not a valid RSS Feed URL</b></font><br>" ;
+		echo "Not a valid RSS Feed URL" ;
 
 	}
 }
-function getRsscategory_html()
-{
-	$oRss = new vtigerRSS();
-	$rsscategory = $oRss->getRsscategory();
-	//print_r($rsscategory);
-	if(isset($rsscategory)) 
-	{
-		for($i=0;$i<count($rsscategory);$i++)
-		{
-			$shtml .= "<option value=\"$rsscategory[$i]\">$rsscategory[$i]</option>";
-		}
-	}
-	return $shtml;
-}
-$save_rss_form=new XTemplate ("modules/Rss/Popup.html");
-$save_rss_form->assign("MOD", $mod_strings);
-$save_rss_form->assign("APP", $app_strings);
-$save_rss_form->assign("IMAGE_PATH",$image_path);
-$save_rss_form->assign("THEME_PATH",$theme_path);
-$save_rss_form->assign("JAVASCRIPT",$jscript);
-$save_rss_form->assign("RSS_CATEGORY",getRsscategory_html());
-$save_rss_form->parse("main");
-$save_rss_form->out("main");
+
 ?>

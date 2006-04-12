@@ -29,7 +29,15 @@ global $theme;
 global $cache_dir;
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
+global $adb;
 
+$oRss = new vtigerRSS();
+if(isset($_REQUEST[folders]) && $_REQUEST[folders] == 'true')
+{
+	require_once("modules/".$currentModule."/Forms.php");
+	echo get_rssfeeds_form();
+	die;
+}
 if(isset($_REQUEST[record]))
 {
 	$recordid = $_REQUEST[record];
@@ -43,7 +51,6 @@ $rss_form->assign("IMAGEPATH",$image_path);
 //<<<<<<<<<<<<<<lastrss>>>>>>>>>>>>>>>>>>//
 //$url = 'http://forums/rss.php?name=forums&file=rss';
 //$url = 'http://forums/weblog_rss.php?w=202';
-$oRss = new vtigerRSS();
 if(isset($_REQUEST[record]))
 {
     $recordid = $_REQUEST[record];
@@ -56,32 +63,30 @@ if(isset($_REQUEST[record]))
         	$rss_html = "<strong>No RSS Feeds are selected</strong>";
 	}
 	$rss_form->assign("TITLE",gerRssTitle($recordid));
+	$rss_form->assign("ID",$recordid);
 }else
 {
+	$rss_form->assign("TITLE",gerRssTitle());
 	$rss_html = $oRss->getStarredRssHTML();
+	$query = "select rssid from rss where starred=1";
+	$result = $adb->query($query);
+	$recordid = $adb->query_result($result,0,'rssid');
+	$rss_form->assign("ID",$recordid);
+	$rss_form->assign("DEFAULT",'yes');
 }
 if($currentModule == "Rss")
 {
 	require_once("modules/".$currentModule."/Forms.php");
 	if (function_exists('get_rssfeeds_form'))
 	{
-		$rss_form->assign("RSSFEEDS_TITLE","<img src='".$image_path."rssroot.gif' align='absmiddle'/>&nbsp;<a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add RSS Feed</a>");
+		$rss_form->assign("RSSCATEG", $oRss->getRsscategory_html());
 		$rss_form->assign("RSSFEEDS", get_rssfeeds_form());
 	}
 }
-
-
 $rss_form->assign("RSSDETAILS",$rss_html);
 //<<<<<<<<<<<<<<lastrss>>>>>>>>>>>>>>>>>>//
-
-$rss_form->display("Rss.tpl");
-function gerRssTitle($id)
-{
-	global $adb;
-	$query = 'select * from rss where rssid ='.$id;	 
-	$result = $adb->query($query);	
-	$title = $adb->query_result($result,0,'rsstitle');
-	return $title;
-	
-}
+if(isset($_REQUEST['directmode']) && $_REQUEST['directmode'] == 'ajax')
+	$rss_form->display("RssFeeds.tpl");
+else
+	$rss_form->display("Rss.tpl");
 ?>

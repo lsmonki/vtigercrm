@@ -53,8 +53,8 @@ function verify_data(form) {
         }
         return true;
 }
-function display(url,list)
+function display(url,id)
 {
-	document.getElementById('rsstitle').innerHTML = list;
+	document.getElementById('rsstitle').innerHTML = document.getElementById(id).innerHTML;
 	document.getElementById('mysite').src = url;
 }
