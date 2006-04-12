@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 
 function show_error_import($message)
 {
@@ -40,25 +40,26 @@ function show_error_import($message)
 
 	$log->info("Upload Error");
 
-	$xtpl=new XTemplate ('modules/Import/error.html');
-	$xtpl->assign("MOD", $mod_strings);
-	$xtpl->assign("APP", $app_strings);
+//	$xtpl=new XTemplate ('modules/Import/error.html');
+
+	$smarty =  new vtigerCRM_Smarty;
+	$smarty->assign("MOD", $mod_strings);
+	$smarty->assign("APP", $app_strings);
 
 
-	if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 
-	if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 
-	$xtpl->assign("THEME", $theme);
+	$smarty->assign("THEME", $theme);
 
-	$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+	$smarty->assign("IMAGE_PATH", $image_path);
+	$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-	$xtpl->assign("MODULE", $_REQUEST['module']);
-	$xtpl->assign("MESSAGE", $message);
+	$smarty->assign("MODULE", $_REQUEST['module']);
+	$smarty->assign("MESSAGE", $message);
 
-	$xtpl->parse("main");
-
-	$xtpl->out("main");
+	$smarty->display('Importerror.tpl');
 }
 
 ?>
