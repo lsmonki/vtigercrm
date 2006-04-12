@@ -1,4 +1,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
+<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script>
 {literal}
@@ -157,7 +159,7 @@ function ajachangeresponse(response)
 function SavePickList(fieldname,module)
 {
 	show('status');
-	hide('editdiv');
+	Effect.Puff(document.getElementById('editdiv'),{duration:2});
 	var ajaxObj = new Ajax(ajachangeresponse);
 	var body = document.getElementById("picklist_values").value;
 	urlstring ='action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body;
@@ -182,7 +184,7 @@ function ajaxnotifyresponse(response)
 {
 	hide("status");
 	document.getElementById("editdiv").innerHTML=response.responseText;	
-	show("editdiv");
+	Effect.Grow('editdiv');
 }
 </script>
 {/literal}
