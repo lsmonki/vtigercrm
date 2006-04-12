@@ -486,7 +486,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  {
 			  $fldvalue = '';
 		  }
-		  if($fldvalue=='') $fldvalue ="''";
+		  if($fldvalue=='') $fldvalue ="null";
 		  if($insertion_mode == 'edit')
 		  {
 			  //code by shankar starts
