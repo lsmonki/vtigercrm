@@ -3,7 +3,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td class="genHeaderSmall" align="left" width="40%">{$MOD.LBL_EDIT_PICKLIST} {$FIELDNAME}</td>
-	<td align="right" width="60%"><a href="javascript:hide('editdiv');"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0"></a></td>
+	<td align="right" width="60%"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0" onclick="hide('editdiv');"></td>
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
 	<tr>
