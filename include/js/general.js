@@ -1344,11 +1344,13 @@ function fnvshobj(obj,Lay){
     tagName.style.left= leftSide + 'px';
     tagName.style.top= topSide + 'px';
     tagName.style.visibility = 'visible';
+    tagName.style.display = 'block';
 }
 
 function fninvsh(Lay){
     var tagName = document.getElementById(Lay);
     tagName.style.visibility = 'hidden';
+    tagName.style.display = 'none';
 }
 
 function fnvshNrm(Lay){
