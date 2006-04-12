@@ -1694,3 +1694,62 @@ padding:0px 10px 0px 10px;
         background-color:#D7D7D7;
 }
 
+
+/*  IMPORT LEADS */
+
+.leadTable{
+	border:3px solid #CCCCCC;
+	border-collapse:collapse;
+}
+
+.leadTable tr td{
+	border:0px solid #CCCCCC;
+}
+
+.genHeaderGray{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+	color: #888888;
+	font-weight:bold;
+}
+
+.genHeaderGrayBig{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	line-height: 16px;
+	color: #888888;
+	font-weight:bold;
+}
+
+.importBox{
+	width:125px;
+	border:1px solid #666666;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+#imLead{
+	width:100%;
+	overflow:auto;
+	position:relative;
+	border:1px solid #666666;
+	height:175px;
+	scrollbar-base-color: #9999cc;
+	scrollbar-arrow-color: white;
+	scrollbar-track-color: #cccccc;
+	scrollbar-shadow-color: black;
+	scrollbar-lightshadow-color: black;
+	scrollbar-darkshadow-color: gray;
+	scrollbar-highlight-color: white;
+	scrollbar-3dlight-color: black;
+}
+
+.txtGreen{
+	color:green;
+	
+}
+
+.txtRed{
+	color:red;
+}	
