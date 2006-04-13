@@ -372,7 +372,7 @@ function setProductDetails($ivHeader,$ivData)
     $this->SetFont('');
     //Data
     $fill=0;
-    	foreach($ivData as $key=>$value)
+    	if($ivData) foreach($ivData as $key=>$value)
 	{
     		$this->Cell(38,6,$value['productname'],0,0,'L',0);
 		$this->Cell(38,6,$value['qty'],0,0,'L',0);
