@@ -258,7 +258,7 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
                          'crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V'),
 			
 		   Array('activity:status:taskstatus:Activities_Status:V',
-                         'activity:activitytype::Activities_Type:V',
+                         'activity:activitytype:activitytype:Activities_Type:V',
                          'activity:subject:subject:Activities_Subject:V',
                          'cntactivityrel:contactid:contact_id:Activities_Contact_Name:I',
                          'seactivityrel:crmid:parent_id:Activities_Related_To:V',
