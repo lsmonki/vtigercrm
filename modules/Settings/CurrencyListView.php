@@ -40,6 +40,7 @@ do
  	$currency[] = $currency_element; 
 	$cnt++;
 }while($temprow = $adb->fetch_array($result));
+$smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("CURRENCY_LIST",$currency);
 $smarty->display('CurrencyListView.tpl');
