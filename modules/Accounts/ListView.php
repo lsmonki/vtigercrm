@@ -63,34 +63,10 @@ $groupid = $oCustomView->getGroupId($currentModule);
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
+	$where = getWhereCondition($currentModule);
 	// we have a query
 	$url_string .="&query=true";
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='accountscf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-		$column[$i]=$adb->query_result($result,$i,'columnname');
-		$fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-		if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-		if(isset($customfield[$i]) && $customfield[$i] != '')
-		{
-			if($uitype[$i] == 56)
-				$str = " accountscf.".$column[$i]." = 1";
-			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-				$str = " accountscf.".$column[$i]." = '".$customfield[$i]."'";
-			else
-				$str = " accountscf.".$column[$i]." like '$customfield[$i]%'";
-			array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-		}
-	}
-	//upto this added for Custom Field
 	$log->info("Here is the where clause for the list view: $where");
-
 }
 if($viewid != 0)
 {
@@ -242,6 +218,10 @@ $smarty->assign("CATEGORY",$category);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','accountname','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);

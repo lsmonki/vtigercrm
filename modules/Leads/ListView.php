@@ -50,15 +50,8 @@ $focus = new Lead();
 $smarty = new vtigerCRM_Smarty;
 $other_text=Array();
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
-else
-	$order_by = (($_SESSION['LEADS_ORDER_BY'] != '')?($_SESSION['LEADS_ORDER_BY']):($focus->default_order_by));
-
-if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
-else
-	$sorder = (($_SESSION['LEADS_SORT_ORDER'] != '')?($_SESSION['LEADS_SORT_ORDER']):($focus->default_sort_order));
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
 
 $_SESSION['LEADS_ORDER_BY'] = $order_by;
 $_SESSION['LEADS_SORT_ORDER'] = $sorder;
@@ -83,9 +76,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where = getWhereCondition($currentModule);
 	// we have a query
 	$url_string .="&query=true";
-
 	$log->info("Here is the where clause for the list view: $where");
-
 }
 
 //<<<<cutomview>>>>>>>
