@@ -1288,13 +1288,13 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 	{
 		if($label == '')
 		{
-			$returndata[$mod_strings[$curBlock]]=array_merge($returndata[$mod_strings[$curBlock]],$editview_arr[$blockid]);
+			$returndata[$mod_strings[$curBlock]]=array_merge((array)$returndata[$mod_strings[$curBlock]],(array)$editview_arr[$blockid]);
 		}
 		else
 		{
 			$curBlock = $label;
 			if(is_array($editview_arr[$blockid]))
-				$returndata[$mod_strings[$label]]=array_merge($returndata[$mod_strings[$label]],$editview_arr[$blockid]);
+				$returndata[$mod_strings[$label]]=array_merge((array)$returndata[$mod_strings[$label]],(array)$editview_arr[$blockid]);
 		}
 	}
 	return $returndata;	
