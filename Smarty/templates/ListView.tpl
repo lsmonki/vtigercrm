@@ -54,11 +54,11 @@ function callSearch(searchtype)
 
 				<tr>
 					{if $MODULE eq 'Activities'}
-                                                <td style="padding-right:0px"><a href="#" id="showSubMenu"  onMouseOver="moveMe('subMenu');showhide('subMenu');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+                                                <td style="padding-right:0px"><a href="#" id="showSubMenu"  onMouseOver="moveMe('subMenu');searchshowhide('subMenu');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
                                         {else}
                                         <td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
                                         {/if}
-					 <td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');showhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
+					 <td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');searchshowhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
 					<td style="padding-right:0px"><a href="#" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="Chat..." title="Chat..." border=0></a>
                     			 </td>	
 				</tr>
@@ -137,9 +137,9 @@ y:0.90;z-index:50"></div>
 rBox">
                                         <tr>
                                                 <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" title="Basic Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span></td>
+                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="searchshowhide('basicSearchdiv');searchshowhide('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span></td>
 
-                                                <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
+                                                <td valign=top nowrap><a href="#" onClick="searchshowhide('searchAcc')">[X] Close</a></td>
                                         </tr>
                                         </table>
 
@@ -181,8 +181,8 @@ rBox">
                                         <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHdrBox">
                                         <tr>
                                                 <td><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch')">Go to Basic Search</a></span></td>
-                                                <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
+                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="searchshowhide('basicSearchdiv');searchshowhide('advSearch')">Go to Basic Search</a></span></td>
+                                                <td valign=top nowrap><a href="#" onClick="searchshowhide('searchAcc')">[X] Close</a></td>
                                         </tr>
 
                                         </table>

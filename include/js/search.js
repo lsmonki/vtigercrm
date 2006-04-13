@@ -1,4 +1,4 @@
-function showhide(argg)
+function searchshowhide(argg)
 {
     var x=document.getElementById(argg).style
     if (x.display=="none")
