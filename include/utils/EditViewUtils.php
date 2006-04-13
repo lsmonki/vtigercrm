@@ -828,8 +828,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		$currencyid=fetchCurrency($current_user->id);
-		$currency=getCurrencySymbol($currencyid);
-		$rate = getConversionRate($currencyid,$currency);
+		$rate_symbol = getCurrencySymbolandCRate($currencyid);
+		$rate = $rate_symbol['rate'];
+		$currency= $rate_symbol['symbol'];
 		$editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';
 		if($value!='')
 		        $fieldvalue[] = convertFromDollar($value,$rate);
@@ -1216,44 +1217,13 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 * Return type is an object array
 */
 
-function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_type='')
+function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 {
 	global $adb;
 	$editview_arr = Array();
 
-	global $current_user;
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	global $current_user,$mod_strings;
 	
-	if ($info_type != '')
-	{
-		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
-        	{
-
-                	$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and info_type = '".$info_type."' order by sequence";
-        	}
-        	else
-        	{
-                	$profileList = getCurrentUserProfileList();
-
-			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and info_type = '".$info_type."' and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by sequence";
-		}
-	}
-	else
-	{
-		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
-        	{
-
-                	$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 order by sequence";
-        	}
-        	else
-        	{
-                	$profileList = getCurrentUserProfileList();
-
-			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by sequence";
-		}
-	}
-
-        $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
@@ -1273,11 +1243,12 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 		$uitype = $adb->query_result($result,$i,"uitype");	
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+		$block = $adb->query_result($result,$i,"block");
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
 		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-		$editview_arr[]=$custfld;
+		$editview_arr[$block][]=$custfld;
 		if ($mvAdd_flag == true)
 		$mvAdd_flag = false;
 		$i++;
@@ -1288,27 +1259,46 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid,$info_ty
 			$uitype = $adb->query_result($result,$i,"uitype");	
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+			$block = $adb->query_result($result,$i,"block");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);			
-			$editview_arr[]=$custfld;
+			$editview_arr[$block][]=$custfld;
 		}
 	}
-	for ($i=0,$j=0;$i<count($editview_arr);$i=$i+2,$j++)
-        {
-                $key1=$editview_arr[$i];
-                if(is_array($editview_arr[$i+1]))
-                {
-                        $key2=$editview_arr[$i+1];
-                }
+	foreach($editview_arr as $headerid=>$editview_value)
+	{
+		$editview_data = Array();
+		for ($i=0,$j=0;$i<count($editview_value);$i=$i+2,$j++)
+		{
+			$key1=$editview_value[$i];
+			if(is_array($editview_value[$i+1]))
+			{
+				$key2=$editview_value[$i+1];
+			}
+			else
+			{
+				$key2 =array();
+			}
+			$editview_data[$j]=array(0 => $key1,1 => $key2);
+		}
+		$editview_arr[$headerid] = $editview_data;
+	}
+	foreach($block_label as $blockid=>$label)
+	{
+		if($label == '')
+		{
+			$returndata[$mod_strings[$curBlock]]=array_merge($returndata[$mod_strings[$curBlock]],$editview_arr[$blockid]);
+		}
 		else
 		{
-			$key2 =array();
+			$curBlock = $label;
+			if(is_array($editview_arr[$blockid]))
+				$returndata[$mod_strings[$label]]=array_merge($returndata[$mod_strings[$label]],$editview_arr[$blockid]);
 		}
-                $return_data[$j]=array(0 => $key1,1 => $key2);
-        }
-        return $return_data;	
-		
+	}
+	return $returndata;	
+	
 }
 
 /** This function returns the data type of the fields, with field label, which is used for javascript validation.
