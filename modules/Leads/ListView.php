@@ -80,36 +80,7 @@ $smarty->assign("CHANGE_OWNER",$change_owner);
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	if($_REQUEST['searchtype']=='advance')
-	{
-		$adv_string='';
-		if(isset($_REQUEST['search_cnt']))
-		$tot_no_criteria = $_REQUEST['search_cnt'];
-		if($_REQUEST['matchtype'] == 'all')
-			$matchtype = "or";
-		else
-			$matchtype = "and";
-		
-		for($i=0; $i<=$tot_no_criteria; $i++)
-		{
-			if($i == $tot_no_criteria-1)
-			$matchtype= "";
-			
-			$table_colname = 'Fields'.$i;
-			$search_condition = 'Condition'.$i;
-			$search_value = 'Srch_value'.$i;
-
-			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
-			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
-			$srch_val = $_REQUEST[$search_value];
-			$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
-		}
-		$where=$adv_string;
-	}
-	else
-	{
- 		$where=Search($currentModule);
-	}
+	$where = getWhereCondition($currentModule);
 	// we have a query
 	$url_string .="&query=true";
 
