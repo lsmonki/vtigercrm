@@ -31,8 +31,9 @@ global $log;
 $focus = new Account();
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
-$curr_symbol=getCurrencySymbol($currencyid);
-$rate = getConversionRate($currencyid,$curr_symbol);
+$rate_symbol = getCurrencySymbolandCRate($currencyid);
+$rate = $rate_symbol['rate'];
+$curr_symbol = $rate_symbol['symbol'];
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
