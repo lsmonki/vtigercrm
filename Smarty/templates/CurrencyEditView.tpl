@@ -9,6 +9,10 @@
  * All Rights Reserved.
 *
  ********************************************************************************/ *}
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+        {include file='SettingsMenu.tpl'}
+<td width="75%" valign="top">
 <form action="index.php" method="post" name="index" id="form">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action" value="index">
@@ -37,7 +41,7 @@
 					<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 					<table width="100%"  border="0" cellspacing="0" cellpadding="10">
 						<tr>
-							<td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url({$IMAGE_PATH}noimage.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
+							<td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url(include/images/noimage.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
 							<td colspan="2" class="genHeaderBig" width="75%">Currency<br />
 							<hr /> </td>
 						</tr>
@@ -89,7 +93,9 @@
 	</tr>
 </table>
 </form>
-
+</td>
+</tr>
+</table>
 <script>
         function validate() {ldelim}
                 if (!emptyCheck("currency_name","Currency Name","text")) return false
@@ -101,3 +107,4 @@
 
         {rdelim}
 </script>
+{include file='SettingsSubMenu.tpl'}
