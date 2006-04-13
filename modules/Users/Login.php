@@ -95,7 +95,7 @@ function set_focus() {
 		<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
 		<tr>
 			<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha5" title="Alpha5"></td>
+			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha6" title="Alpha6"></td>
 		</tr>
 		</table>
 		
@@ -109,9 +109,9 @@ function set_focus() {
 		<tr>
 			<td valign=top width=60% height="250" class="loginBillBoard">
 				<div align=left style="padding:20px">
-				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha5</span><br><br>
+				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha6</span><br><br>
 				
-				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications. <br><br>
+				vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications. If you find a better product ,then use the other one!<br><br>
 				
 				<b>New in Alpha 6</b> <br>
 				<li>New-look Mail Client</li>
