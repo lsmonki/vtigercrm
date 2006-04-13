@@ -120,7 +120,23 @@ function set_focus() {
 		                <li>Performance Optimizations</li>
 			        <li>ImageGraph Usage instead of
 				Jpgraph with PHP5 for Dashboards</li>	 		
-		                <li>Migration from 4.2.3 to Alpha5</li>	 		
+		                <li>Migration from 4.2.3 to Alpha5</li>	 	
+				<br>	
+				<br>	
+			
+	How was the vtiger-experience?
+				<br>	
+				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
+				<br>	
+				<li><a href='http://www.bloglines.com'</li>bloglines </a>
+				<br>	
+				<li><a href='http://technorati.com/' </a>technorati</li>
+				<br>	
+				<li><a href='http://digg.com/' </a>digg</li>
+				<br>	
+				<li><a href='http://www.blogger.com' </a>blogger</li>
+				<br>	
+				
 				
 				</div>
 			
