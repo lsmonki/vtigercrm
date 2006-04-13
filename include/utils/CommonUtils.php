@@ -670,32 +670,19 @@ function convertFromDollar($amount,$crate){
                 return $amount * $crate;
         }
 
-/** This function returns the conversion rate for a given currency.
+/** This function returns the conversion rate and currency symbol
+  * in array format for a given id.
   * param $id - currency id.
-    * param $symbol - currency symbol.
-      */
-      
-function getConversionRate($id,$symbol)
-{
-        global $adb;
-        $sql1 = "select * from currency_info where id=".$id." and currency_symbol='".$symbol."'" ;
-        $result = $adb->query($sql1);
-        $rate = $adb->query_result($result,0,"conversion_rate");
-        return $rate;
-}
-
-/** This function returns the conversion rate for a given currency.
-  * param $id - currency id.
-  * param $symbol - currency symbol.
   */
       
-function getCurrencySymbol($id)
+function getCurrencySymbolandCRate($id)
 {
         global $adb;
-        $sql1 = "select * from currency_info where id=".$id;
+        $sql1 = "select conversion_rate,currency_symbol from currency_info where id=".$id;
         $result = $adb->query($sql1);
-        $curr_symbol = $adb->query_result($result,0,"currency_symbol");
-        return $curr_symbol;
+	$rate_symbol['rate'] = $adb->query_result($result,0,"conversion_rate");
+	$rate_symbol['symbol'] = $adb->query_result($result,0,"currency_symbol");
+	return $rate_symbol;
 }
 
 /** This function returns the terms and condition from the database.
@@ -807,7 +794,7 @@ function make_clickable($text)
 
 function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 {
-        global $adb;
+        global $adb,$current_user;
         global $mod_strings;
         global $log;
         $tabid = getTabid($module);
@@ -818,75 +805,63 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
         $prev_header = "";
-        for($i=0; $i<$noofrows; $i++)
-        {
-		$block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
-		$block_label = $adb->query_result($result,$i,"blocklabel");
-                if($block_title !='')
-                {
-                        $prev_header = $block_title;
-
-                        if($disp_view == "detail_view")
-                        {
-                                if($block_label=='LBL_RELATED_PRODUCTS')
-                                {
-					$getBlockInfo=getProductDetailsBlockInfo($mode,$module);
-                                }
-                                else
-				 {
-                                        $getBlockInfo=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
-                                }
-                        }
-                        else
+	$blockid_list ='(';
+	for($i=0; $i<$noofrows; $i++)
+	{
+		$blockid = $adb->query_result($result,$i,"blockid");
+		if($i != 0)
+			$blockid_list .= ', ';
+		$blockid_list .= $blockid;
+		$block_label[$blockid] = $adb->query_result($result,$i,"blocklabel");
+	}
+	$blockid_list .= ')';
+	//retreive the profileList from database
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	if($disp_view == "detail_view")
+	{
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql = "select field.* from field where field.tabid=".$tabid." and field.block in $blockid_list and field.displaytype in (1,2) order by block,sequence";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  andprofile2field.profileid in ".$profileList." group by field.fieldid order by block,sequence";
+		}
+		$result = $adb->query($sql);
+		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
+	}
+	else
+	{
+		if ($info_type != '')
+		{
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0)
 			{
-				if($block_label=='LBL_RELATED_PRODUCTS')
-                                {
-					$getBlockInfo=getProductDetailsBlockInfo($mode,$module);
-                                }
-				else
-				{
-                                	$getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
-				}
-                        }
-
-                        if(is_array($getBlockInfo))
-                        {
-                                $block_detail[$block_title] = $getBlockInfo;
-                        }
-                }
-                else
-                {
-                        if($disp_view == "detail_view")
-                        {
-                                $k=sizeof($block_detail[$prev_header]);
-                                $temp_headerless_arr=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
-                                foreach($temp_headerless_arr as $td_val=>$tr_val)
-                                {
-                                        $block_detail[$prev_header][$k]=$tr_val;
-                                        $k++;
-                                }
-
-                        }
-                        else
-                        {
-                                $k=sizeof($block_detail[$prev_header]);
-                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid,$info_type);
-                                foreach($temp_headerless_arr as $td_val=>$tr_val)
-				{
-                                        $block_detail[$prev_header][$k]=$tr_val;
-                                        $k++;
-                                }
-
-
-
-                        }
-
-                }
-
-        }
-        return $block_detail;
-}
-
+				$sql = "select field.* from field where field.tabid=".$tabid." and field.block in ".$blockid_list ." and field.displaytype=1 and info_type = '".$info_type."' order by block,sequence";
+			}
+			else
+			{
+				$profileList = getCurrentUserProfileList();
+				$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 and info_type = '".$info_type."' and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by block,sequence";
+			}
+		}
+		else
+		{
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+			{
+				$sql = "select field.* from field where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 order by block,sequence";
+			}
+			else
+			{
+				$profileList = getCurrentUserProfileList();
+				$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by block,sequence";
+			}
+		}
+		$result = $adb->query($sql);
+                $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label);	
+	}
+	return $getBlockInfo;
+}	
 /**
  * This function is used to get the display type.
  * Takes the input parameter as $mode - edit  (mostly)
