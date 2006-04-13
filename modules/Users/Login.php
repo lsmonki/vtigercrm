@@ -124,21 +124,15 @@ function set_focus() {
 				<br>	
 				<br>	
 			
-	How was the vtiger-experience?
+	Your vtiger-experience was ...
 				<br>	
 				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
-				<br>	
-				<li><a href='http://www.bloglines.com'</li>bloglines </a>
-				<br>	
-				<li><a href='http://technorati.com/' </a>technorati</li>
-				<br>	
-				<li><a href='http://digg.com/' </a>digg</li>
-				<br>	
-				<li><a href='http://www.blogger.com' </a>blogger</li>
-				<br>	
-				
-				
+				<li><a href='http://www.bloglines.com'>bloglines </a></li>
+				<li><a href='http://technorati.com/'>technorati</a></li>
+				<li><a href='http://digg.com/'>digg</a></li>
+				<li><a href='http://www.blogger.com'>blogger</a></li>
 				</div>
+				
 			
 			</td>
 			<td valign=top>
