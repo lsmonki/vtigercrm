@@ -1698,18 +1698,18 @@ border:0px solid #000000;
 .forwardBg{
     font-family:Arial, Helvetica, sans-serif;
     font-size:12px;
-color:#000000;
+	color:#000000;
       background-image:url(images/rssforward.gif);
       background-position:top left;
       background-repeat:repeat-x;
-height:27px;
-padding:0px 10px 0px 10px;
+	height:27px;
+	padding:0px 10px 0px 10px;
         vertical-align:middle;
         background-color:#D7D7D7;
 }
 
 
-/*  IMPORT LEADS */
+/*  IMPORT MODULE STYLE  */
 
 .leadTable{
 	border:3px solid #CCCCCC;
@@ -1767,4 +1767,47 @@ padding:0px 10px 0px 10px;
 .txtRed{
 	color:red;
 }	
+
+/* WEB MAIL */
+a.webMnu{
+	font-size:11px;
+	color:#0070BA;
+	text-decoration:underline;
+}
+a.webMnu:Hover {
+	font-size:11px;
+	color:#0070BA;
+	text-decoration:underline;
+}
+
+.mailHdr{
+	height:32px;
+	background-image:url(../../design/images/rssframeHdr.gif);
+	background-repeat:repeat-x;
+	background-position:top left;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	font-weight:bold;
+	text-align:left;
+	padding-left:5px;
+	color:#FFFFFF;
+	vertical-align:middle;
+	border:0px solid #000000;
+}
+
+.classWebBtn{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	font-weight:normal;
+	font-size:10px;
+	background-color:#DBDBDB;
+	border-bottom:2px solid #999999;
+	border-right:2px solid #999999;
+	border-top:2px solid #F5F5F5;
+	border-left:2px solid #F5F5F5;
+	color:#000000;
+	text-align:center;
+}
+
+/*  END OF WEB MAIL */
 
