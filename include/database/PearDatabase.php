@@ -88,7 +88,7 @@ class PearDatabase{
 
 	function startTransaction()
 	{
-		$this->println("TRANS Started");
+		//$this->println("TRANS Started");
 		$this->checkConnection();
 		$this->database->StartTrans();
 	}
