@@ -11,6 +11,10 @@
  ********************************************************************************/
 
 -->*}
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+        {include file='SettingsMenu.tpl'}
+<td width="75%" valign="top">
 <form action="index.php">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action" value="CurrencyEditView">
@@ -49,3 +53,7 @@
 	</tr>
 </table>
 </form>
+</td>
+</tr>
+</table>
+        {include file='SettingsSubMenu.tpl'}
