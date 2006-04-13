@@ -113,18 +113,16 @@ function set_focus() {
 				
 				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications. <br><br>
 				
-				<b>New in Alpha 5</b> <br>
-				<li>New UI with improved usability</li>
-		                <li>Exposing API docs</li>
-                		<li>Security Document</li>
+				<b>New in Alpha 6</b> <br>
+				<li>New-look Mail Client</li>
+		                <li>Improved API docs</li>
 		                <li>Performance Optimizations</li>
-			        <li>ImageGraph Usage instead of
-				Jpgraph with PHP5 for Dashboards</li>	 		
-		                <li>Migration from 4.2.3 to Alpha5</li>	 	
+			        <li>Sexier Dashboards and Reports</li>	 		
+		                <li>Migration Support</li>	 	
 				<br>	
 				<br>	
 			
-	Your vtiger-experience was ...
+	<font color='red'>Your 'vtiger-xperience' is ... </font>
 				<br>	
 				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
 				<li><a href='http://www.bloglines.com'>bloglines </a></li>
