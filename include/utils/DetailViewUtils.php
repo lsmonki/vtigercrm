@@ -632,8 +632,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{
 		    $currencyid=fetchCurrency($current_user->id);
- 	            $curr_symbol=getCurrencySymbol($currencyid);
-              	    $rate = getConversionRate($currencyid,$curr_symbol);
+		    $rate_symbol = getCurrencySymbolandCRate($currencyid);
+		    $rate = $rate_symbol['rate'];
+		    $curr_symbol = $rate_symbol['symbol'];
 	 	    $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
                     $display_val = $amount_user_specific;	
 		}
@@ -891,29 +892,13 @@ function getRelatedLists($module,$focus)
 * Return type is an array
 */
 
-function getDetailBlockInformation($module, $block,$col_fields,$tabid)
+function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_label)
 {
-	//retreive the tabid	
 	global $adb;
-	#$tabid = getTabid($module);
 	global $current_user;
+	global $mod_strings;
 	$label_data = Array();
 
-	//retreive the profileList from database
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	//Checking for field level security
-	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
-	{	
-				
-		$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) order by sequence";
-	}
-	else
-	{
-		$profileList = getCurrentUserProfileList();
-		$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." group by field.fieldid order by sequence";
-	}
-	
-	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
@@ -923,11 +908,11 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
+		$block = $adb->query_result($result,$i,"block");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$tabid = $adb->query_result($result,$i,"tabid");
-		$output .= '<tr>';
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-		$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+		$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		$i++;
 		if($i<$noofrows)
 		{
@@ -937,29 +922,48 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
+			$block = $adb->query_result($result,$i,"block");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$tabid = $adb->query_result($result,$i,"tabid");
 
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-			$label_data[] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		}
 
 	}
-	for ($i=0,$j=0;$i<count($label_data);$i=$i+2,$j++)
+	foreach($label_data as $headerid=>$value_array)
 	{
-		$keys=array_keys($label_data[$i]);
-                $key1=$keys[0];	
-		if(is_array($label_data[$i+1]))
+		$detailview_data = Array();
+		for ($i=0,$j=0;$i<count($value_array);$i=$i+2,$j++)
 		{
-                	$keys=array_keys($label_data[$i+1]);
-                	$key2=$keys[0];
+			$key2 = null;
+			$keys=array_keys($value_array[$i]);
+			$key1=$keys[0];
+			if(is_array($value_array[$i+1]))
+			{
+				$keys=array_keys($value_array[$i+1]);
+				$key2=$keys[0];
+			}
+			$detailview_data[$j]=array($key1 => $value_array[$i][$key1],$key2 => $value_array[$i+1][$key2]);
 		}
-		$return_data[$j]=array($key1 => $label_data[$i][$key1],$key2 => $label_data[$i+1][$key2]);
+		$label_data[$headerid] = $detailview_data;
 	}
-	return $return_data;
+	foreach($block_label as $blockid=>$label)
+	{
+		if($label == '')
+		{
+			$returndata[$mod_strings[$curBlock]]=array_merge($returndata[$mod_strings[$curBlock]],$label_data[$blockid]);
+		}
+		else
+		{
+			$curBlock = $label;
+			if(is_array($label_data[$blockid]))
+				$returndata[$mod_strings[$label]]=array_merge($returndata[$mod_strings[$label]],$label_data[$blockid]);
+		}
+	}
+	return $returndata;
 
 
 }
-
 
 ?>
