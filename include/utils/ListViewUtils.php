@@ -171,7 +171,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							if($lbl_name =='Amount')
 							{
 								$currencyid=fetchCurrency($current_user->id);
-								$curr_symbol=getCurrencySymbol($currencyid);
+								$rate_symbol=getCurrencySymbolandCRate($currencyid);
+								$curr_symbol = $rate_symbol['symbol'];
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
 
@@ -196,7 +197,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 																	if($name =='Amount' && $relatedlist !='' )
 		{
 			$currencyid=fetchCurrency($current_user->id);
-			$curr_symbol=getCurrencySymbol($currencyid);
+			$rate_symbol=getCurrencySymbolandCRate($currencyid);
+			$curr_symbol = $rate_symbol['symbol'];
 			$name .=': (in '.$curr_symbol.')';
 		}
 
