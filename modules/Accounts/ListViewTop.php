@@ -54,8 +54,9 @@ function getTopAccounts()
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];
 	$currencyid=fetchCurrency($current_user->id);
-        $curr_symbol=getCurrencySymbol($currencyid);
-        $rate = getConversionRate($currencyid,$curr_symbol);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
+	$curr_symbol = $rate_symbol['symbol'];
         $header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.$curr_symbol.')';
 	
 	$entries=array();
