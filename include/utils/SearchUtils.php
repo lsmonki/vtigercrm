@@ -27,19 +27,6 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         global $theme;
         global $app_strings;
         global $mod_strings,$current_user;
-        //Seggregating between module and smodule
-        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
-        {
-                $smodule = 'Vendor';
-        }
-        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
-        {
-                $smodule = 'PriceBook';
-        }
-        else
-        {
-                $smodule = $module;
-        }
 
         $arrow='';
         $qry = getURLstring($focus);
@@ -49,7 +36,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
         //Get the tabid of the module
         //require_once('include/utils/UserInfoUtil.php')
-        $tabid = getTabid($smodule);
+        $tabid = getTabid($module);
         global $profile_id;
         if($profile_id == '')
         {
@@ -414,25 +401,24 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	}
 	return $where_string;
 }								
-
 function getWhereCondition($currentModule)
 {
-
+	
 	if($_REQUEST['searchtype']=='advance')
 	{
 		$adv_string='';
 		if(isset($_REQUEST['search_cnt']))
 		$tot_no_criteria = $_REQUEST['search_cnt'];
 		if($_REQUEST['matchtype'] == 'all')
-		$matchtype = "or";
+			$matchtype = "or";
 		else
-		$matchtype = "and";
-
+			$matchtype = "and";
+		
 		for($i=0; $i<=$tot_no_criteria; $i++)
 		{
 			if($i == $tot_no_criteria-1)
 			$matchtype= "";
-
+			
 			$table_colname = 'Fields'.$i;
 			$search_condition = 'Condition'.$i;
 			$search_value = 'Srch_value'.$i;
@@ -440,16 +426,15 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
-			$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;
+			$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
 		}
 		$where=$adv_string;
 	}
 	else
 	{
-		$where=Search($currentModule);
+ 		$where=Search($currentModule);
 	}
 	return $where;
 
 }
-
 ?>
