@@ -16,10 +16,12 @@ require_once('include/utils/GetParentGroups.php');
 class GetGroupUsers { 
 
 	var $group_users=array();
+	var $group_subgroups=array();
 
-	/** to get all the parent groups of the specified group
+	/** to get all the users and groups of the specified group
 	 * @params $groupId --> Group Id :: Type Integer
-         * @returns updates the parent group in the varibale $parent_groups of the class
+         * @returns the users present in the group in the variable $parent_groups of the class
+         * @returns the sub groups present in the group in the variable $group_subgroups of the class
          */
 	function getAllUsersInGroup($groupid)
 	{
@@ -86,15 +88,34 @@ class GetGroupUsers {
                 for($i=0;$i<$num_rows;$i++)
                 {
 			$now_grp_id=$adb->query_result($result,$i,'containsgroupid');
+			
+
 			$focus = new GetGroupUsers();
 			$focus->getAllUsersInGroup($now_grp_id);
 			$now_grp_users=$focus->group_users;
+			$now_grp_grps=$focus->group_subgroups;
+			if(! array_key_exists($now_grp_id,$this->group_subgroups))
+			{
+				$this->group_subgroups[$now_grp_id]=$now_grp_users;
+			}
+			
+
+
 			foreach($focus->group_users as $temp_user_id)
 			{	
 				if(! in_array($temp_user_id,$this->group_users))
 				{
 					$this->group_users[]=$temp_user_id;
 				}
+			}
+
+			
+			foreach($focus->group_subgroups as $temp_grp_id => $users_array)
+			{
+				if(! array_key_exists($temp_grp_id,$this->group_subgroups))
+				{
+					$this->group_subgroups[$temp_grp_id]=$focus->group_users;
+				}	
 			}
  
                 }
