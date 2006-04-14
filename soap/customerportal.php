@@ -148,6 +148,30 @@ $server->wsdl->addComplexType(
              )
 );
 
+//Added for ticket attachments
+$server->wsdl->addComplexType(
+        'get_ticket_attachments_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'files' => array('filename'=>'xsd:string','filecontents'=>'tns:xsd:string'),
+             )
+);
+
+$server->wsdl->addComplexType(
+        'add_ticket_attachment_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'ticketid' => array('name'=>'ticketid','type'=>'xsd:string'),
+                'filename' => array('name'=>'filename','type'=>'xsd:string'),
+                'filetype' => array('name'=>'filetype','type'=>'xsd:string'),
+                'filesize' => array('name'=>'filesize','type'=>'xsd:string'),
+                'filecontents' => array('name'=>'filecontents','type'=>'xsd:string'),
+             )
+);
 
 
 
@@ -238,6 +262,18 @@ $server->register(
 	'get_picklists',
 	array('id'=>'xsd:string'),
 	array('return'=>'tns:get_picklists_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_ticket_attachments',
+	array('id'=>'xsd:string','ticketid'=>'xsd:string'),
+	array('return'=>'tns:get_ticket_attachments_array'),
+	$NAMESPACE);
+
+$server->register(
+	'add_ticket_attachment',
+	array('ticketid'=>'xsd:string','filename'=>'xsd:string','filetype'=>'xsd:string','filesize'=>'xsd:string','filecontents'=>'xsd:string'),
+	array('return'=>'tns:add_ticket_attachment_array'),
 	$NAMESPACE);
 
 
@@ -625,6 +661,68 @@ function get_picklists($picklist_name)
 	}
 
 	return $picklist_array;
+}
+
+//Added function to get the attachments of the ticket
+function get_ticket_attachments($userid,$ticketid)
+{
+
+	global $adb;
+
+	$query = "select troubletickets.ticketid, attachments.* from troubletickets inner join seattachmentsrel on seattachmentsrel.crmid = troubletickets.ticketid inner join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where troubletickets.ticketid=".$ticketid;
+	$res = $adb->query($query);
+	$noofrows = $adb->num_rows($res);
+
+	for($i=0;$i<$noofrows;$i++)
+	{
+		$filename = $adb->query_result($res,$i,'name');
+		$filepath = getFilePath($adb->query_result($res,$i,'attachmentsid'),$filename);
+
+		$filesize = filesize($filepath.$filename);
+		$fileid = $adb->query_result($res,$i,'attachmentsid');
+		$filetype = $adb->query_result($res,$i,'type');
+
+		$filecontents = base64_encode(file_get_contents($filepath.$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
+
+		$output[$i]['filetype'] = $filetype;
+		$output[$i]['filename'] = $filename;
+		$output[$i]['filesize'] = $filesize;
+		$output[$i]['fileid'] = $fileid;
+		$output[$i]['filecontents'] = $filecontents;
+	}
+
+	return $output;
+}
+
+function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $filecontents)
+{
+	global $adb;
+	global $root_directory;
+
+	$upload_dir = $root_directory.'test/upload/';
+	$new_filename = $ticketid.'_'.$filename;
+
+	$data = base64_decode($filecontents);
+
+	//write a file with the passed content
+	$handle = @fopen($upload_dir.$new_filename,'w');
+	fputs($handle, $data);
+	fclose($handle);	
+
+	//Now store this file information in db and relate with the ticket
+	$attachmentid = $adb->getUniqueID("crmentity");
+	$date_var = date('YmdHis');
+	$description = 'CustomerPortal Attachment';
+
+	$crmquery = "insert into crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."','".$date_var."')";
+	$crmresult = $adb->query($crmquery);
+
+	$attachmentquery = "insert into attachments values(".$attachmentid.",'".$new_filename."','".$description."','".$filetype."')";
+	$attachmentreulst = $adb->query($attachmentquery);
+
+	$relatedquery = $sql1 = "insert into seattachmentsrel values('".$ticketid."','".$attachmentid."')";
+	$relatedresult = $adb->query($relatedquery);
+
 }
 
 /* Begin the HTTP listener service and exit. */ 
