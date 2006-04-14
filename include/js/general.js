@@ -1450,3 +1450,18 @@ function clear_form(form)
 	}
 }
 
+function ActivateCheckBox()
+{
+        var map = document.getElementById("saved_map_checkbox");
+        var source = document.getElementById("saved_source");
+
+        if(map.checked == true)
+        {
+                source.disabled = false;
+        }
+        else
+        {
+                source.disabled = true;
+        }
+}
+
