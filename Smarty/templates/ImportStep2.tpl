@@ -1,5 +1,25 @@
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="include/js/general.js"></script>
+<script>
 
+function getImportSavedMap(impoptions)
+{ldelim}
+	//show('status');
+	var ajaxObj = new Ajax(ajaxImportSavedMapResponse);
+	var mapping = impoptions.options[impoptions.options.selectedIndex].value;
+	var urlstring = "module=Import&mapping="+mapping+"&action=ImportAjax";
+	ajaxObj.process("index.php",urlstring);
+
+{rdelim}
+
+function ajaxImportSavedMapResponse(response)
+{ldelim}
+	//hide('status');
+	document.getElementById('importmapform').innerHTML = response.responseText;
+
+{rdelim}
+
+</script>
 <!-- header - level 2 tabs -->
 
 <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -95,10 +115,10 @@
 	</tr>
 	<tr bgcolor="#ECECEC"><td>&nbsp;</td></tr>
 	<tr bgcolor="#ECECEC">
-		<td align="left" style="padding-left:40px;">
-			<input type="checkbox" name="use" />&nbsp;&nbsp;
+		<td align="left" style="padding-left:40px;" >
+			<input type="checkbox" name="use_saved_mapping" id="saved_map_checkbox" onclick="ActivateCheckBox()" />&nbsp;&nbsp;
 			Use Saved Mapping : &nbsp;&nbsp;&nbsp;
-			<select name="selectamp" class="importBox" ></select> 
+			{$SAVED_MAP_LISTS}
 		</td>
 	</tr>
 	<tr bgcolor="#ECECEC">
@@ -106,44 +126,47 @@
 
 			<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%" >
 			<tr bgcolor="white">
-				<td width="20%" class="lvtCol" align="center"><b>Mapping</b></td>
+				<td width="25%" class="lvtCol" align="center"><b>Mapping</b></td>
 				{if $HASHEADER eq 1}
-					<td width="20%" bgcolor="#E1E1E1"  ><b>Headers :</b></td>
-					<td width="20%" ><b>{$MOD.LBL_ROW} 1</b></td>
-					<td width="20%" ><b>{$MOD.LBL_ROW} 2</b></td>
+					<td width="25%" bgcolor="#E1E1E1"  ><b>Headers :</b></td>
+					<td width="25%" ><b>{$MOD.LBL_ROW} 1</b></td>
+					<td width="25%" ><b>{$MOD.LBL_ROW} 2</b></td>
 				{else}
-					<td width="20%" ><b>{$MOD.LBL_ROW} 1</b></td>
-					<td width="20%" ><b>{$MOD.LBL_ROW} 2</b></td>
-					<td width="20%" ><b>{$MOD.LBL_ROW} 3</b></td>
+					<td width="25%" ><b>{$MOD.LBL_ROW} 1</b></td>
+					<td width="25%" ><b>{$MOD.LBL_ROW} 2</b></td>
+					<td width="25%" ><b>{$MOD.LBL_ROW} 3</b></td>
 				{/if}
 
 			</tr>
-
 			{assign var="Firstrow" value=$FIRSTROW}
 			{assign var="Secondrow" value=$SECONDROW}
-			{assign var="Thirdrow" value=$THIRDROW}
-			{foreach name=iter item=row from=$Firstrow}
+			{assign var="Thirdrow" value=$THIRDROW}				
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			<td width="25%" valign="top">
+				<div id="importmapform">
+					{include file="ImportMap.tpl"}
+				</div>
+			</td>	
+			<td>
+			<table border="0" cellpadding="8" cellspacing="1" width="100%" valign="top">
+			{foreach name=iter item=row1 from=$Firstrow}
 				{assign var="counter" value=$smarty.foreach.iter.iteration}
-				{math assign="num" equation="x - y" x=$counter y=1}
-				<tr bgcolor="white">
-					<td class="lvtCol" align="center">
-						{$SELECTFIELD[$counter]}
-					</td>
+				{math assign="num" equation="x - y" x=$counter y=1}	
+				<tr bgcolor="white" >
 					{if $HASHEADER eq 1}
-					<td  bgcolor="#E1E1E1" >{$row}</td>
-					<td  >{$Secondrow[$num]}</td>
+					<td  bgcolor="#E1E1E1" width="31%">{$row1}</td>
+					<td  width="30%">{$Secondrow[$num]}</td>
 					<td  >{$Thirdrow[$num]}</td>
 					{else}
-					<td   >{$row}</td>
-					<td  >{$Secondrow[$num]}</td>
+					<td  width="31%" >{$row1}</td>
+					<td width="30%" >{$Secondrow[$num]}</td>
 					<td  >{$Thirdrow[$num]}</td>
 					{/if}	
 				</tr>
 
 			{/foreach}
-		</table>
-		</td>
-		</tr>
+			</table></td></tr></table>	
 				<tr bgcolor="#ECECEC">
 						<td align="left" style="padding-left:40px;" >
 								<input type="checkbox" name="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
@@ -152,7 +175,6 @@
 						</td>
 
 				</tr>
-				<tr bgcolor="#ECECEC"><td>&nbsp;</td></tr>
 				<tr bgcolor="#ECECEC"><td><hr /></td></tr>
 				<tr bgcolor="#ECECEC">
 					<td align="right" style="padding-right:40px;" >
@@ -164,9 +186,14 @@
 				</tr>
 				<tr bgcolor="#ECECEC"><td align="right" >&nbsp;</td></tr>
 		</table>
+		</table>
+		</td>
+		</tr>
 	<br />
 <!-- IMPORT LEADS ENDS HERE -->
 </form>
 </td>
 </tr>
 </table>
+
+
