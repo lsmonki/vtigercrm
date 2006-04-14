@@ -721,8 +721,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 			$share_id_grp_members=Array();
 			$share_id_grps=Array();
 			$share_id_grps[]=$share_grpid;
-			$share_id_grp_members['GROUP']=$share_id_grps;
-			$share_id_members[$shareid]=$share_id_grp_members;
+			
 
 			if($share_permission == 1)
 			{
@@ -733,7 +732,20 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 						$focusGrpUsers = new GetGroupUsers();
 						$focusGrpUsers->getAllUsersInGroup($share_grpid);
 						$share_grp_users=$focusGrpUsers->group_users;
+						$share_grp_subgroups=$focusGrpUsers->group_subgroups;
 						$grp_read_per[$share_grpid]=$share_grp_users;
+						foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+						{
+							if(! array_key_exists($subgrpid,$grp_read_per))
+							{
+								$grp_read_per[$subgrpid]=$subgrpusers;	
+							}
+							if(! in_array($subgrpid,$share_id_grps))
+							{
+								$share_id_grps[]=$subgrpid;
+							}
+							
+						}	
 					}
 				}
 				if(! array_key_exists($share_grpid,$grp_write_per))
@@ -742,6 +754,18 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_write_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_write_per))
+						{
+							$grp_write_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}	
+
+					}	
 
 				}
 			}
@@ -753,9 +777,23 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_read_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_read_per))
+						{
+							$grp_read_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}	
+
+					}
 				}
 
 			}
+			$share_id_grp_members['GROUP']=$share_id_grps;
+			$share_id_members[$shareid]=$share_id_grp_members;
 
 		}
 
@@ -774,8 +812,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 			$share_id_grp_members=Array();
 			$share_id_grps=Array();
 			$share_id_grps[]=$share_grpid;
-			$share_id_grp_members['GROUP']=$share_id_grps;
-			$share_id_members[$shareid]=$share_id_grp_members;
+			
 
 			if($share_permission == 1)
 			{
@@ -787,6 +824,19 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 						$focusGrpUsers->getAllUsersInGroup($share_grpid);
 						$share_grp_users=$focusGrpUsers->group_users;
 						$grp_read_per[$share_grpid]=$share_grp_users;
+
+						foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+						{
+							if(! array_key_exists($subgrpid,$grp_read_per))
+							{
+								$grp_read_per[$subgrpid]=$subgrpusers;	
+							}
+							if(! in_array($subgrpid,$share_id_grps))
+							{
+								$share_id_grps[]=$subgrpid;
+							}
+							
+						}	
 					}
 				}
 				if(! array_key_exists($share_grpid,$grp_write_per))
@@ -795,6 +845,18 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_write_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_write_per))
+						{
+								$grp_write_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}
+					
+					}
 
 				}
 			}
@@ -806,9 +868,23 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_read_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_read_per))
+						{
+								$grp_read_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}
+					
+					}
 				}
 
 			}
+			$share_id_grp_members['GROUP']=$share_id_grps;
+			$share_id_members[$shareid]=$share_id_grp_members;
 
 		}
 
@@ -826,8 +902,6 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 			$share_id_grp_members=Array();
 			$share_id_grps=Array();
 			$share_id_grps[]=$share_grpid;
-			$share_id_grp_members['GROUP']=$share_id_grps;
-			$share_id_members[$shareid]=$share_id_grp_members;
 
 			if($share_permission == 1)
 			{
@@ -839,6 +913,19 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 						$focusGrpUsers->getAllUsersInGroup($share_grpid);
 						$share_grp_users=$focusGrpUsers->group_users;
 						$grp_read_per[$share_grpid]=$share_grp_users;
+						foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+						{
+							if(! array_key_exists($subgrpid,$grp_read_per))
+							{
+								$grp_read_per[$subgrpid]=$subgrpusers;	
+							}
+							if(! in_array($subgrpid,$share_id_grps))
+							{
+								$share_id_grps[]=$subgrpid;
+							}
+							
+							
+						}
 					}
 				}
 				if(! array_key_exists($share_grpid,$grp_write_per))
@@ -847,6 +934,18 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_write_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_write_per))
+						{
+							$grp_write_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}
+							
+					}
 
 				}
 			}
@@ -858,9 +957,23 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 					$focusGrpUsers->getAllUsersInGroup($share_grpid);
 					$share_grp_users=$focusGrpUsers->group_users;
 					$grp_read_per[$share_grpid]=$share_grp_users;
+					foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+					{
+						if(! array_key_exists($subgrpid,$grp_read_per))
+						{
+							$grp_read_per[$subgrpid]=$subgrpusers;	
+						}
+						if(! in_array($subgrpid,$share_id_grps))
+						{
+							$share_id_grps[]=$subgrpid;
+						}
+
+					}
 				}
 
 			}
+			$share_id_grp_members['GROUP']=$share_id_grps;
+			$share_id_members[$shareid]=$share_id_grp_members;
 
 		}
 		$mod_share_read_permission['GROUP']=$grp_read_per;
@@ -875,6 +988,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 
 function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_members,$mod_share_read_per,$mod_share_write_per,$def_org_share)
 {
+
 	global $adb;
 	$related_mod_sharing_permission=Array();
 	$mod_share_read_permission=Array();
@@ -908,7 +1022,6 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 			{
 				foreach($shareEntArr as $key=>$shareEntId)
 				{
-						
 					if($shareType == 'ROLE')
 					{
 						if($share_permission == 1)
@@ -986,7 +1099,8 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 						if($share_permission == 1)
 						{
 							if($def_org_share[$share_mod_id] == 3)
-							{	
+							{
+									
 								if(! array_key_exists($shareEntId,$grp_read_per))
 								{
 									if(array_key_exists($shareEntId,$mod_share_read_per['GROUP']))
@@ -1002,6 +1116,15 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 										$focusGrpUsers = new GetGroupUsers();
 										$focusGrpUsers->getAllUsersInGroup($shareEntId);
 										$share_grp_users=$focusGrpUsers->group_users;
+										
+										foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+										{
+											if(! array_key_exists($subgrpid,$grp_read_per))
+											{
+												$grp_read_per[$subgrpid]=$subgrpusers;	
+											}
+
+										}
 
 									}
 
@@ -1026,6 +1149,14 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 										$focusGrpUsers = new GetGroupUsers();
 										$focusGrpUsers->getAllUsersInGroup($shareEntId);
 										$share_grp_users=$focusGrpUsers->group_users;
+										foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+										{
+											if(! array_key_exists($subgrpid,$grp_write_per))
+											{
+												$grp_write_per[$subgrpid]=$subgrpusers;	
+											}
+
+										}
 
 									}
 
@@ -1051,6 +1182,14 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 									$focusGrpUsers = new GetGroupUsers();
 									$focusGrpUsers->getAllUsersInGroup($shareEntId);
 									$share_grp_users=$focusGrpUsers->group_users;
+									foreach($focusGrpUsers->group_subgroups as $subgrpid=>$subgrpusers)
+									{
+										if(! array_key_exists($subgrpid,$grp_read_per))
+										{
+											$grp_read_per[$subgrpid]=$subgrpusers;	
+										}
+
+									}
 
 								}
 
