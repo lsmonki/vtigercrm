@@ -41,15 +41,8 @@ $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
-else
-	$order_by = (($_SESSION['CONTACTS_ORDER_BY'] != '')?($_SESSION['CONTACTS_ORDER_BY']):($focus->default_order_by));
-
-if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
-else
-	$sorder = (($_SESSION['CONTACTS_SORT_ORDER'] != '')?($_SESSION['CONTACTS_SORT_ORDER']):($focus->default_sort_order));
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
 
 $_SESSION['CONTACTS_ORDER_BY'] = $order_by;
 $_SESSION['CONTACTS_SORT_ORDER'] = $sorder;
@@ -63,7 +56,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	$where=Search($currentModule);
+	$where=getWhereCondition($currentModule);
 //Added for Custom Field Search
 $sql="select * from field where tablename='contactscf' order by fieldlabel";
 $result=$adb->query($sql);
@@ -230,9 +223,12 @@ $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigatio
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
-
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("RECORD_COUNTS", $record_string);

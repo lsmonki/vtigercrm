@@ -152,7 +152,28 @@ class Contact extends CRMEntity {
 		$this->column_fields = getColumnFields('Contacts');
 	}
 
-    
+    	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	function getSortOrder()
+	{	
+		if(isset($_REQUEST['sorder'])) 
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['CONTACTS_SORT_ORDER'] != '')?($_SESSION['CONTACTS_SORT_ORDER']):($this->default_sort_order));
+
+		return $sorder;
+	}
+
+	function getOrderBy()
+	{
+		if (isset($_REQUEST['order_by'])) 
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['CONTACTS_ORDER_BY'] != '')?($_SESSION['CONTACTS_ORDER_BY']):($this->default_order_by));
+
+		return $order_by;
+	}	
+	// Mike Crowe Mod --------------------------------------------------------
+
     function getCount($user_name) 
     {
         $query = "select count(*) from contactdetails  inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid where user_name='" .$user_name ."' and crmentity.deleted=0";
