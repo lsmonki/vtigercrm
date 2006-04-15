@@ -346,18 +346,20 @@ function getDefaultSharingAction()
 function getAllDefaultSharingAction()
 {
 	global $adb;
+	$copy=Array();
 	//retreiving the standard permissions	
 	$sql= "select * from def_org_share";
 	$result = $adb->query($sql);
-	$permissionRow=$adb->fetch_array($result);
-	do
-	{
-		for($j=0;$j<count($permissionRow);$j++)
-		{
-			$copy[$permissionRow[1]]=$permissionRow[2];
-		}
+	$num_rows=$adb->num_rows($result);
 
-	}while($permissionRow=$adb->fetch_array($result));
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$tabid=$adb->query_result($result,$i,'tabid');
+		$permission=$adb->query_result($result,$i,'permission');
+		$copy[$tabid]=$permission;
+		
+	}
+
 	return $copy;
 
 }
@@ -4070,6 +4072,28 @@ function getPermittedModuleNames()
 		}	
 	}
 	return $permittedModules;			
+}
+
+
+
+/** Function to recalculate the Sharing Rules for all the users 
+  * This function will recalculate all the sharing rules for all the users in the Organization and will write them in flat files 
+  *
+ */
+function RecalculateSharingRules()
+{
+	global $adb;
+	require_once('modules/Users/CreateUserPrivilegeFile.php');
+	$query="select id from users where deleted=0";
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$id=$adb->query_result($result,$i,'id');	
+		createUserPrivilegesfile($id);
+	        createUserSharingPrivilegesfile($id);
+	}		
+				
 }
 
 ?>
