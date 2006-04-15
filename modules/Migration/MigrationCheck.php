@@ -37,17 +37,17 @@ $newconn = @mysql_connect($new_host_name,$new_mysql_username,$new_mysql_password
 
 if(!$oldconn)
 {
-	echo '<br> Source Database Server can not be connected';
+	echo '<br><br><br>  Source Database Server cannot be connected';
 	$continue1 = 0;
 }
 elseif(!$newconn)
 {
-	echo '<br> New Database Server can not be connected';
+	echo '<br><br><br>  Current working Database Server cannot be connected';
 	$continue1 = 0;
 }
 else
 {
-	echo '<br> Database Servers can be conneted';
+	echo '<br><br><br> Database Servers can be connected. Can proceed with migration';
 	$continue1 = 1;
 }
 
@@ -58,7 +58,7 @@ if($continue1 == 1)
 	//$newdb_exist = @mysql_select_db($new_dbname,$oldconn);
 	if(!$olddb_exist)
 	{
-		echo '<br> Source Database is not exist';
+		echo '<br> Source Database does not exist';
 		$continue2 = 0;
 	}
 	//elseif(!$newdb_exist)
@@ -68,7 +68,7 @@ if($continue1 == 1)
 	//}
 	else
 	{
-		echo '<br> Databases are exist';
+		echo '<br> Required databases exist';
 		$continue2 = 1;
 	}
 }
@@ -81,7 +81,7 @@ if($continue2 == 1)
 
 	if(!$old_tables)
 	{
-		echo '<br> Tables are not exist in Source Database';
+		echo '<br> Tables do not exist in the Source Database';
 		$continue3 = 0;
 	}
 /*	if(!$new_tables)
@@ -92,7 +92,7 @@ if($continue2 == 1)
 */
 	else
 	{
-		echo '<br> Tables are exist in the Database';
+		echo '<br> Tables exist in both the Databases';
 		$continue3 = 1;
 	}
 }
@@ -104,7 +104,7 @@ if($continue3 == 1)
 
 	if($old_host_name == $new_host[0] && $old_mysql_port == $new_host[1] && $old_mysql_username == $new_mysql_username && $old_mysql_password == $new_mysql_password && $old_dbname == $new_dbname)
 	{
-		echo '<br> Two databases are same.';
+		echo '<br> Both the databases are the same.';
 		$continue4 = 1;//change the value to 0 if you don't want to proceed with the same database
 		$same_databases = 1;
 	}
@@ -133,6 +133,9 @@ if($continue1 == 1 && $continue2 == 1 && $continue3 == 1 && $continue4 == 1)
 		<br> MySql Password : '.$old_mysql_password.'
 		<br> DB Name : '.$old_dbname;
 	echo '<br>*************************************************************';
+	echo '';
+	echo '';
+	echo '<br>*************************************************************';
 	echo '<br><b>Current Database Parameters : </b>
 		<br> Host Name : '.$new_host[0].'
 		<br> MySql Port : '.$new_host[1].'
@@ -141,21 +144,16 @@ if($continue1 == 1 && $continue2 == 1 && $continue3 == 1 && $continue4 == 1)
 		<br> DB Name : '.$new_dbname;
 	echo '<br>*************************************************************';
 
-	//echo '<br>================'.$old_version.'==================';
 
 	$conn = new PearDatabase("mysql",$new_host_name,$new_dbname,$new_mysql_username,$new_mysql_password);
 	$conn->connect();
 	if($conn)
 	{
-		//$filename = 'migration_'.$old_version.'_to_'.$latest_version.'.php';
-	        //include("migration/$filename");
-
 		include("modules/Migration/Migration.php");
 		$obj = new Migration('',$conn);
 		$obj->setOldDatabaseParams($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
 		$obj->setNewDatabaseParams($new_host[0],$new_host[1],$new_mysql_username,$new_mysql_password,$new_dbname);
 		$obj->migrate($same_databases);
-		//echo '<pre>';print_r($obj);echo '</pre>';
 	}
 	else
 	{
@@ -165,7 +163,7 @@ if($continue1 == 1 && $continue2 == 1 && $continue3 == 1 && $continue4 == 1)
 }
 else
 {
-	echo '<br>Please check the values.';
+	echo '<br>ERROR!!!!!!Please check the input values, unable to proceed.';
 	include("modules/Migration/MigrationStep1.php");
 }
 

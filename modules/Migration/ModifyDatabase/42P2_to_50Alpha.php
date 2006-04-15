@@ -18,8 +18,8 @@ $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Start
 echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.....</b><br>";
 
 /****************** 5.0(Alpha) dev version 1 Database changes -- Starts*********************/
-//$list =  "<table border=1>";
-//$list .= '<tr width="100%"><td width="20%"><b> Status Object </b></td><td width="10%">Suceess/Failure</td><td width="80%"> Query</td></tr>';
+echo "<table border=1>";
+echo '<tr width="100%"><td width="20%"><b> Status Object </b></td><td width="10%">Suceess/Failure</td><td width="80%"> Query</td></tr>';
 
 //Added the announcement table creation to avoid the error
 $ann_query = "CREATE TABLE `announcement` (
@@ -420,7 +420,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$name = $conn->query_result($res,$i,'name');
 	$role_map_array[$roleid] = $name;
 }
-echo '<pre> List of role :';print_r($role_map_array);echo '</pre>';
+//echo '<pre> List of roles :';print_r($role_map_array);echo '</pre>';
 
 //Before delete the role take a backup array for the table user2role
 $sql = "select * from user2role";
@@ -432,7 +432,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$roleid = $conn->query_result($res,$i,'roleid');
 	$user2role_array[$userid] = $roleid;
 }
-echo '<pre> List of user2role : (userid => roleid)';print_r($user2role_array);echo '</pre>';
+//echo '<pre> List of user2role : (userid => roleid)';print_r($user2role_array);echo '</pre>';
 
 //Delete the role entries
 $sql = "truncate role";
@@ -530,7 +530,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$desc = $conn->query_result($res,$i,'description');
 	$group_map_array[$name] = $desc;
 }
-echo '<pre>List of Groups : ';print_r($group_map_array);echo '</pre>';
+//echo '<pre>List of Groups : ';print_r($group_map_array);echo '</pre>';
 
 
 //Step 2 : form an users2group_map_array array as userid => groupname from users2group table
@@ -543,7 +543,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 	$userid = $conn->query_result($res,$i,'userid');
 	$users2group_map_array[$userid] = $groupname;
 }
-echo '<pre>List of users2group : ';print_r($users2group_map_array);echo '</pre>';
+//echo '<pre>List of users2group : ';print_r($users2group_map_array);echo '</pre>';
 
 //Step 3 : delete all entries from groups table
 $sql = "truncate groups";
@@ -766,7 +766,7 @@ foreach($query_array1 as $query)
 
 
 $conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha starts here.");
-echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha starts here.....</b><br>";
+//echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha starts here.....</b><br>";
 $alter_query_array6 = Array(
 				"ALTER TABLE users ADD column activity_view VARCHAR(25) DEFAULT 'Today' AFTER homeorder",
 				"ALTER TABLE activity ADD column notime CHAR(3) DEFAULT '0' AFTER location"
@@ -1750,7 +1750,7 @@ foreach($alter_query_array18 as $query)
 
 
 
-echo "<br><br><b>Database Modifications for Indexing and some missded tables starts here.....</b><br>";
+//echo "<br><br><b>Database Modifications for Indexing and some missded tables starts here.....</b><br>";
 //Added queries which are for indexing and the missing tables - Mickie - on 06-04-2006
 
 $query_array = Array(
@@ -2528,10 +2528,23 @@ foreach($query_array as $query)
 
 
 $conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha ends here.");
-echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha ends here.....</b><br>";
+//echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha ends here.....</b><br>";
 
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 ends here.");
-echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
+//echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
+
+echo '</table>';
+echo "<br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
+echo '<br><b>Migration has been successfully completed. Data has been moved from your old vtiger to Latest vtigerCRM.';
+echo '<br>Please note down all the failed queries or please copy the whole table and save. This may be useful in future.</b>';
+echo '<br><br><br>';
+
+echo '<div align="center"><a href="index.php"><b> Home </b></a></div>';
+echo '<br><br><br>';
+
+
+
+
 
 
 
@@ -2541,17 +2554,28 @@ function Execute($query)
 	$status = $conn->query($query);
 	if(is_object($status))
 	{
-		//$list .= '<tr width="100%"><td width="20%">'.$status.'</td><td width="10%"><font color="green"> S </font></td><td width="80%">'.$query.'</td></tr>';
-		echo '<br>'.$status.' ==> '.$query;
+		echo '
+			<tr width="100%">
+				<td width="25%" nowrap>'.$status.'</td>
+				<td width="5%"><font color="green"> S </font></td>
+				<td width="70%">'.$query.'</td>
+			</tr>';
+		//echo '<br>'.$status.' ==> '.$query;
 		$success_query_array[] = $query;
 	}
 	else
 	{
-		//$list .= '<tr width="100%"><td width="20%">'.$status.'</td><td width="10%"><font color="red"> F </font></td><td width="80%">'.$query.'</td></tr>';
-		echo '<br><br>'.$status.' ======>  '.$query;
+		echo '
+			<tr width="100%">
+				<td width="25%">'.$status.'</td>
+				<td width="5%"><font color="red"><b> F </b></font></td>
+				<td width="70%">'.$query.'</td>
+			</tr>';
+		//echo '<br><br>'.$status.' ======>  '.$query;
 		$failure_query_array[] = $query;
 	}
 }
+
 //Added on 23-12-2005 which is used to populate the profile2field and def_org_field table entries for the field per tab
 //if we enter a field in field table then we must populate that field in these table for security access
 function populateFieldForSecurity($tabid,$fieldid)
@@ -2569,8 +2593,6 @@ function populateFieldForSecurity($tabid,$fieldid)
 	$def_query = "insert into def_org_field values (".$tabid.",".$fieldid.",0,1)";
 	Execute($def_query);
 }
-//$list .= '</table>';
-//echo $list;
 
 
 ?>
