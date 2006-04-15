@@ -38,6 +38,7 @@ require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('modules/Users/Security.php');
+require_once('modules/Users/CreateUserPrivilegeFile.php');
 
 // load the config_override.php file to provide default user settings
 if (is_file("config_override.php")) {
@@ -121,6 +122,46 @@ function create_default_users() {
 
 	$sql_stmt1 = "insert into user2role values(".$user->id.",'".$role_id."')";
 	$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
+	//Creating the flat files
+	createUserPrivilegesfile($user->id);
+        createUserSharingPrivilegesfile($user->id);
+
+
+	//Creating the Standard User
+    	$user = new User();
+        $user->last_name = 'StandardUser';
+        $user->user_name = 'standarduser';
+        $user->status = 'Active';
+        $user->user_password = $user->encrypt_password('standarduser');
+        $user->tz = 'Europe/Berlin';
+        $user->holidays = 'de,en_uk,fr,it,us,';
+        $user->workdays = '0,1,2,3,4,5,6,';
+        $user->weekstart = '1';
+        $user->namedays = '';
+	$user->date_format = 'yyyy-mm-dd';
+	// added by jeri to populate default image and tagcloud for admin	
+	$user->imagename = '';
+        $user->tagcloud = '';	
+	$user->defhomeview = 'home_metrics';
+        //added by philip for default default admin emailid
+	if($admin_email == '')
+	$std_email ="standarduser@standarduser.com";
+        $user->email = $std_email;
+        $user->save();
+
+	$role_query = "select roleid from role where rolename='standard_user'";
+	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
+	$role_result = $db->query($role_query);
+	$role_id = $db->query_result($role_result,0,"roleid");
+
+	$sql_stmt2 = "insert into user2role values(".$user->id.",'".$role_id."')";
+	$db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
+	//Creating the flat files
+	createUserPrivilegesfile($user->id);
+        createUserSharingPrivilegesfile($user->id);
+
 }
 
 $startTime = microtime();
@@ -144,20 +185,12 @@ foreach ( $modules as $module )
 	$focus->create_tables();
 }
 			
-create_default_users();
 
 // populate users table
-$uid = $db->getUniqueID("users");
-$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
-$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+//$uid = $db->getUniqueID("users");
+//$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
+//$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
-$role_query = "select roleid from role where rolename='standard_user'";
-$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
-$role_result = $db->query($role_query);
-$role_id = $db->query_result($role_result,0,"roleid");
-
-$sql_stmt2 = "insert into user2role values(".$uid.",'".$role_id."')";
-$db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 // create and populate combo tables
 require_once('include/PopulateComboValues.php');
@@ -167,6 +200,8 @@ $combo->create_tables();
 // create and populate custom field tables;
 require_once('include/PopulateCustomFieldTables.php');
 create_custom_field_tables();
+
+create_default_users();
 
 // default report population
 require_once('modules/Reports/PopulateReports.php');
