@@ -192,7 +192,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$comboSalesStageArray = Array ("Closed Won", "Prospecting");
+	$comboSalesStageArray = Array ("Closed Won");
 	$key = array_rand($comboSalesStageArray);
 	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
@@ -759,9 +759,7 @@ for($i=0;$i<5;$i++)
         $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
 	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
 	
-        $helpdesk->column_fields["assigned_user_id"] = $contact_key = array_rand($contact_ids);
-        $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];$assigned_user_id;
-
+        $helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
 	
 	$helpdesk->save("HelpDesk");
 	$helpdesk_ids[] = $helpdesk->id;
