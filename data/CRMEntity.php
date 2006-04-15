@@ -1058,7 +1058,12 @@ $log->debug("type is ".$type);
   {
     global $adb;
     $result = Array();
-    $table_list = Array();
+    foreach($this->tab_name_index as $table_name=>$index)
+    {
+	    $result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
+    }
+    //Integrated&Commented by Minnie -- as common query affecting detailview
+    /*$table_list = Array();
     $table_index = Array();
     $table_list = array_keys($this->tab_name_index);
     $table_index = array_values($this->tab_name_index);
@@ -1080,7 +1085,7 @@ $log->debug("type is ".$type);
 	$detailview_query .= $table_list[0].".".$table_index[0];
     }
     $detailview_query .= " where ".$table_list[0].".".$table_index[0]." = ".$record;
-    $result = $adb->query($detailview_query);
+    $result = $adb->query($detailview_query);*/
     $tabid = getTabid($module);
     $sql1 =  "select * from field where tabid=".$tabid;
     $result1 = $adb->query($sql1);
@@ -1091,7 +1096,7 @@ $log->debug("type is ".$type);
       $tablename = $adb->query_result($result1,$i,"tablename");
       $fieldname = $adb->query_result($result1,$i,"fieldname");
 
-      $fld_value = $adb->query_result($result,0,$fieldcolname);
+      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
       $this->column_fields[$fieldname] = $fld_value;
 				
     }
@@ -1174,9 +1179,9 @@ $log->debug("type is ".$type);
 
 	function process_full_list_query($query)
 	{
-		$this->log->debug("process_full_list_query: query is ".$query);
+		$this->log->debug("CRMEntity:process_full_list_query");
 		$result =& $this->db->query($query, false);
-		$this->log->debug("process_full_list_query: result is ".$result);
+		$this->log->debug("CRMEntity:process_full_list_query: result is ".$result);
 
 
 		if($this->db->getRowCount($result) > 0){
