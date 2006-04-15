@@ -161,11 +161,12 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                                 }
                         }
                         //Added condition to hide the close column in Related Lists
-                        if($name == 'Close' && $relatedlist != '')
+                        //if($name == 'Close' && $relatedlist != '')
+                        if($name == 'Close')
                         {
                                 //$list_header .= '';
                                 // $list_header[] = '';
-			 }
+			}
                         else
                         {
 				$fld_name=$fieldname;
@@ -326,24 +327,25 @@ function getAdvSearchfields($module)
 		$result = $adb->query($sql);
                 $noofrows = $adb->num_rows($result);
 		$block = '';
-		//Added on 14-10-2005 -- added ticket id in list
-                if($module == 'HelpDesk' && $block == 25)
-                {
-                        $module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
-                }
-		//Added to include activity type in activity customview list
-                if($module == 'Activities' && $block == 19)
-                {
-                        $module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
-                }
-
+		
                 for($i=0; $i<$noofrows; $i++)
                 {
                         $fieldtablename = $adb->query_result($result,$i,"tablename");
                         $fieldcolname = $adb->query_result($result,$i,"columnname");
+			$block = $adb->query_result($result,$i,"block");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+				//Added on 14-10-2005 -- added ticket id in list
+                		if($module == 'HelpDesk' && $block == 25)
+                		{
+                        		$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+                		}
+				//Added to include activity type in activity customview list
+                		if($module == 'Activities' && $block == 19)
+                		{
+                        		$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
+                		}
 				if($fieldlabel == "Related To")
 				{
 					$fieldlabel = "Related to";
@@ -410,9 +412,9 @@ function getWhereCondition($currentModule)
 		if(isset($_REQUEST['search_cnt']))
 		$tot_no_criteria = $_REQUEST['search_cnt'];
 		if($_REQUEST['matchtype'] == 'all')
-			$matchtype = "or";
-		else
 			$matchtype = "and";
+		else
+			$matchtype = "or";
 		
 		for($i=0; $i<=$tot_no_criteria; $i++)
 		{
