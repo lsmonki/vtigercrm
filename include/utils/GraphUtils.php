@@ -24,7 +24,7 @@ DEFINE("FF_SIMSUN",'Simsun');
 DEFINE("FF_CHINESE",'Chinese');
 DEFINE("FF_BIG5",'Big5');
 
-DEFINE("FF_FONT1",'Verdana');
+DEFINE("FF_FONT1",'Vera');
 
 /**This function is used to get the font name when a language code is given
 * Param $locale - language code
