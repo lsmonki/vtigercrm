@@ -193,7 +193,7 @@ class CustomView extends CRMEntity{
 		//Added to include activity type in activity customview list
 		if($module == 'Activities' && $block == 19)
 		{
-			$module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
+			$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
 		}
 
 		for($i=0; $i<$noofrows; $i++)
