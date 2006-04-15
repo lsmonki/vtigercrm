@@ -147,5 +147,12 @@ if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST[
 if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
 
 $log->debug("Saved record with id of ".$return_id);
+
+//Creating the Privileges Flat File
+require_once('modules/Users/CreateUserPrivilegeFile.php');
+createUserPrivilegesfile($focus->id);
+createUserSharingPrivilegesfile($focus->id);
+
+
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activitymode");
 ?>
