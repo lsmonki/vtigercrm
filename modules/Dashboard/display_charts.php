@@ -13,7 +13,7 @@
 
 	include("modules/Dashboard/Entity_charts.php");
         include("modules/Dashboard/horizontal_bargraph.php");
-        include("modules/Dashboard/vertical_bargraph.php");
+        //include("modules/Dashboard/vertical_bargraph.php");
         include("modules/Dashboard/pie_graph.php");
 	
 global $tmp_dir;
@@ -160,8 +160,8 @@ $sHTML .= "<tr>
 	   <td height=200>"; 
 
 	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
-
-$sHTML .= "</td>
+//Commented by Minnie -- same content displayed in to graphs
+/*$sHTML .= "</td>
 	</tr>
 	<tr>
 	   <td><hr noshade='noshade' size='1' /></td>
@@ -182,7 +182,7 @@ $sHTML .= "<tr>
 	<tr>
 	   <td height=200>"; 
 
-	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");*/
 
 $sHTML .= "</td>
 	</tr>
@@ -490,7 +490,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                         echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
                     }
 
-				?>
+	?>
 
 			</table>
 	</div></td></tr>
