@@ -153,6 +153,34 @@ class ImportMap extends SugarBean
 		return $obj_arr;
 	}
 
+	function getSavedMappingsList($module)
+	{
+		$query = "SELECT * FROM $this->table_name where module='".$module."'";
+		$result = $this->db->query($query,true," Error: ");
+		$map_lists = array();
+
+		while ($row = $this->db->fetchByAssoc($result,-1,FALSE) )
+		{	
+			$map_lists[$row['id']] = $row['name'];
+		}
+		return $map_lists;
+	}
+	function getSavedMappingContent($mapid)
+	{
+		$query = "SELECT * FROM $this->table_name where id='".$mapid."'";
+		$result = $this->db->query($query,true," Error: ");
+		$mapping_arr = array();
+
+		$pairs = split("&",$this->db->query_result($result,0,'content'));
+		foreach ($pairs as $pair)
+		{
+			list($name,$value) = split("=",$pair);
+			$mapping_arr["$name"] = $value;
+		}
+
+		return $mapping_arr;
+	}
+
 }
 
 
