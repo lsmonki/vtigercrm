@@ -70,7 +70,7 @@ if($focus->is_authenticated())
 	*/
 
 	createUserPrivilegesfile($focus->id);
-        createUserSharingPrivilegesfile($focus->id);	
+        //createUserSharingPrivilegesfile($focus->id);	
 		
 	$_SESSION['authenticated_user_profileid'] = $profileid;
 	setGlobalProfilePermission2Session($profileid);
