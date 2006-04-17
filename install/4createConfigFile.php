@@ -203,7 +203,8 @@ if ($templateHandle && $includeHandle) {
 	echo "<br><table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"><tbody><tr><td align=\"left\">";
 	echo "<h4>Successfully created configuration file (<b>config.inc.php</b>) in :</h4></td>";
 	echo "<td align=\"left\"><font color=\"00CC00\">".$root_directory."</font>\n";
-	echo "</td></tr></table>";
+	echo "</td></tr>";
+	echo "<tr><td> The installation will take at least 3 minutes. Sit back, relax and grab a coffee .....</table>";
 	}
 	else {
 		echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tbody><tr><td align=\"left\">";
