@@ -193,7 +193,7 @@ $sHTML .= "</td>
 $sHTML .= "<tr>
 	   <td><table width=20%  border=0 cellspacing=0 cellpadding=0 align=left>
 	  	 <tr>
-		   <td rowspan=2 valign=top><span class=dashSerial>3</span></td>
+		   <td rowspan=2 valign=top><span class=dashSerial>2</span></td>
  		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
  		 </tr>
    		 <tr>
