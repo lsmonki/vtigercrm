@@ -9,120 +9,95 @@
 *
 ********************************************************************************/
 
-	
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');	
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_LEAD_MAP_CUSTOM_FIELD'], true);
-echo '<br><br>';
-echo $mod_strings['leadCustomFieldDescription'];
-echo '<br><br>';
-
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate('modules/Settings/LeadCustomFieldMapping.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH", $image_path);
 
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","");
+$smarty->assign("RETURN_MODULE","Settings");
+$smarty->assign("RETURN_ACTION","");
 
 function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
-
+	$accountcf=Array();
 	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Accounts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	
-	$combo="<select name='".$leadid."_account'>
-                 <option value='None'>-None-</option>" ;
-	
 	for($i=0;$i<$noofrows;$i++)
 	{
-        	$account_field_id=$adb->query_result($result,$i,"fieldid");
-	        $account_field_label=$adb->query_result($result,$i,"fieldlabel");
+        	$account_field['fieldid']=$adb->query_result($result,$i,"fieldid");
+	        $account_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
 
-		$combo.="<option value='".$account_field_id."'";
-		if($account_field_id==$accountid)
-		{
-			$combo.=" selected";
-		}
-		$combo.=">".$account_field_label."</option>";
-	
+		if($account_field['fieldid']==$accountid)
+			$account_field['selected'] = "selected";
+		$account_cfelement[]=$account_field;
 	}
-	$combo.="</select>";
-	
-	return $combo;
+	$accountcf[$leadid.'_account']=$account_cfelement;
+	return $accountcf;
 }
 
 function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
-
+	$contactcf=Array();
 	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Contacts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
-
-	 $combo="<select name='".$leadid."_contact'>                                                                            <option value='None'>-None-</option>" ;
-
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$contact_field_id=$adb->query_result($result,$i,"fieldid");
-		$contact_field_label=$adb->query_result($result,$i,"fieldlabel");
+		$contact_field['fieldid']=$adb->query_result($result,$i,"fieldid");
+		$contact_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
 	
-		$combo.="<option value='".$contact_field_id."'";
-                if($contact_field_id==$contactid)
-                        $combo.=" selected";
-
-                $combo.=">".$contact_field_label."</option>";
-
+                if($contact_field['fieldid']==$contactid)
+                        $contact_field['selected']="selected";
+		$contact_cfelement[]=$contact_field;
 	}
-	$combo.="</select>";
-        return $combo;
+	$contactcf[$leadid.'_contact'] = $contact_cfelement;
+        return $contactcf;
 }	
 
 function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
-
+	$potentialcf=Array();
 	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Potentials'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
-
-	$combo="<select name='".$leadid."_potential'>                                                                            <option value='None'>-None-</option>" ;	
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$potential_field_id=$adb->query_result($result,$i,"fieldid");
-		$potential_field_label=$adb->query_result($result,$i,"fieldlabel");
-	
-		$combo.="<option value='".$potential_field_id."'";
-		if($potential_field_id==$potentialid)
-			$combo.=" selected";
-		$combo.=">".$potential_field_label."</option>";
+		$potential_field['fieldid']=$adb->query_result($result,$i,"fieldid");
+		$potential_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+
+		if($potential_field['fieldid']==$potentialid)
+			 $potential_field['selected']="selected";
+		$potential_cfelement[]=$potential_field;
 	}
-	$combo.="</select>";
-        return $combo;
+	$potentialcf[$leadid.'_potential']=$potential_cfelement;
+        return $potentialcf;
 }
 $lead_sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Leads'";
 $result = $adb->query($lead_sql);
 $noofrows = $adb->num_rows($result);
 
 $display_val="<table border=0 cellspacing=1 cellpadding=2 width=75%>";
-
+$leadcf=Array();
 for($i=0; $i<$noofrows; $i++)
 {
-	$lead_field_id=$adb->query_result($result,$i,"fieldid");
-	$lead_field_label=$adb->query_result($result,$i,"fieldlabel");
-	$display_val.="<tr><td nowrap class='customdataLabel' width=\"10%\">".$lead_field_label;
-
-	$convert_sql="select * from convertleadmapping where leadfid=".$lead_field_id;
+	$lead_field['fieldid']=$adb->query_result($result,$i,"fieldid");
+	$lead_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+	$convert_sql="select * from convertleadmapping where leadfid=".$lead_field['fieldid'];
 	$convert_result = $adb->query($convert_sql);
 
 	$no_rows = $adb->num_rows($convert_result);
@@ -134,21 +109,13 @@ for($i=0; $i<$noofrows; $i++)
 	
 		
 	}
-		$account_combo=getAccountCustomValues($lead_field_id,$accountid);
-		$contact_combo=getContactCustomValues($lead_field_id,$contactid);
-		$potential_combo=getPotentialCustomValues($lead_field_id,$potentialid);
-		$display_val.="</td>";
-		$display_val.="<td class=\"customdataLabel\" >".$account_combo."</td>";
-		$display_val.="<td class=\"customdataLabel\" >".$contact_combo."</td>";
-		$display_val.="<td class=\"customdataLabel\">".$potential_combo."</td>";
-		$display_val.="</tr>";
-
+	$lead_field['account']=getAccountCustomValues($lead_field['fieldid'],$accountid);
+	$lead_field['contact']=getContactCustomValues($lead_field['fieldid'],$contactid);
+	$lead_field['potential']=getPotentialCustomValues($lead_field['fieldid'],$potentialid);
+	$leadcf[$lead_field['fieldlabel']]= $lead_field;
 }
-	 $display_val.="<table>";
-	if (isset($display_val))
- 	       $xtpl->assign("CUSTOMFIELDMAPPING",$display_val);
+$smarty->assign("CUSTOMFIELDMAPPING",$leadcf);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("CustomFieldMapping.tpl");
 
 ?>
