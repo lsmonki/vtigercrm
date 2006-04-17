@@ -48,22 +48,22 @@ function getListLeadMapping($image_path)
 		$cfmid = $adb->query_result($result,$i,'cfmid');
 
 		$display_val .= '<tr height="20" class="Datafield">';
-		$sql1="select fieldlabel from field where fieldid =".$leadid;
+		$sql1="select fieldlabel from field where fieldid ='".$leadid."'";
 		$result1 = $adb->query($sql1);
 		$leadfield = $adb->query_result($result1,0,'fieldlabel');
 		$display_val .= '<td nowrap width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$leadfield.'</td>';
 		
-		$sql2="select fieldlabel from field where fieldid =".$accountid;
+		$sql2="select fieldlabel from field where fieldid ='".$accountid."'";
 		$result2 = $adb->query($sql2);
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
 		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$accountfield.'</td>';
 		
-		$sql3="select fieldlabel from field where fieldid =".$contactid;
+		$sql3="select fieldlabel from field where fieldid ='".$contactid."'";
 		$result3 = $adb->query($sql3);
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
 		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$contactfield.'</td>';
 		
-		$sql4="select fieldlabel from field where fieldid =".$potentialid;
+		$sql4="select fieldlabel from field where fieldid ='".$potentialid."'";
 		$result4 = $adb->query($sql4);
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
 		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$potentialfield.'</td>';
