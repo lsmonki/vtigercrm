@@ -78,45 +78,34 @@ foreach($pieces as $val)
 		<td style="color:#333399" width="70%"><span
 	style="text-alignment:justify">
 
-Welcome!<br><br>
-Thank you for trying out vtigerCRM 5 Beta  and for making it a part of your experience.<br>
+Welcome to the vtiger family!<br><br>
 This is a product of pure teamwork and passion.
-Every developer and contributor has added value to vtiger either in the
-form of bug reports, bug fixes, feature contributions or for that
-matter, providing the hosting machine or maintenance of the forge. We
-have learnt a lot working with all of you.
- We intend to create something worth
-using, worth using for long.<br><br>
-
-<i>We sincerely hope, we are able to live upto your expectations.</i>
+Every person related to vtiger in one way or the other, has added value to vtiger either in the form of bug reports, bug fixes, feature contributions or for that matter, providing the hosting machine or maintenance of the forge. Together, we intend to create something worth using, worth using for long.<br> We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. <br>
 
 <br>
 <br>
 <bold>vtiger is 100% pure Open Source. <u>You do not have to pay
 anything to use the product. If you do subscribe to the support package though, you will be able
-to get time bound answers to all your queries</u>.We do provide telephone support for paid customers.
-There are no other hidden costs. The support subscription link is as follows :- 
+to get time-bound answers to all your queries</u>.We do provide telephone-support for paid customers only.
+The support subscription link is as follows :- 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
 
 vtiger does not believe in any big dollar marketing campaign hence you
 will not find much advertisement about vtiger from us.
-Whatever you see and hear is purely due to word of mouth. We do believe that <b>YOU</b> can and will make a
-difference.If you feel we have lived upto your expectations, please do consider spreading the word about vtiger by - telling a friend,  setting it up for someone, or blogging about us or in any
-other manner you are comfortable with. Please find mentioned below some information about us that you could utilize
+Whatever you see and hear is purely due to word of mouth. In fact, it is very much possible that you are using this product as someone recommended it to you. We do believe that <b>YOU</b> can and will make a
+difference.If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by anymeans convenient to you.<br>
+Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
 <ul>http://forums.vtiger.com </ul>
 <ul>http://vtiger.fosslabs.com (vtigerforge)</ul> 
 <ul>vtigercrm-developers@lists.vtigercrm.com (Mailing List)</ul>
 <ul>Join Freenode - /join #vtiger (IRC Channel)</ul>
-
-
-<br>
+<ul>http://vtiger.fosslabs.com/cgi-bin/trac.cgi/newticket (Bug Tracker)</ul>
 <br>
 <br>
 Again, thanks for taking out the time to try vtiger! <br><br>
 <b><i>We want you to know that we really appreciate it.</i></b>
 
-<br>
 <br>
 <br>
 <br>
