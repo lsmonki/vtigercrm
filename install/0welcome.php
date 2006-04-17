@@ -79,8 +79,8 @@ foreach($pieces as $val)
 	style="text-alignment:justify">
 
 Welcome to the vtiger family!<br><br>
-This is a product of pure teamwork and passion.
-Every person related to vtiger in one way or the other, has added value to vtiger either in the form of bug reports, bug fixes, feature contributions or for that matter, providing the hosting machine or maintenance of the forge. Together, we intend to create something worth using, worth using for long.<br> We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. <br>
+This is a product of pure teamwork,passion and fanaticism!
+<br>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same<br>
 
 <br>
 <br>
