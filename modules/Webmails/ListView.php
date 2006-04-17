@@ -1,24 +1,37 @@
+<script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
 <?php
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
 ?>
 <script type="text/javascript">
+function load_webmail(mid) {
+	$("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
+	$("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
+	$("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
+	$("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
+	$("body_area").innerHTML = '<iframe src="index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>" width="100%" height="210" frameborder="0">You must enabled iframes</iframe>';
+	tmp = document.getElementsByClassName("previewWindow");
+	for(var i=0;i<tmp.length;i++) {
+		if(tmp[i].style.visibility === "hidden") {
+			tmp[i].style.visibility="visible";
+		}
+	}
+	$("delete_button").innerHTML = '<input type="button" name="Button" value=" Delete "  class="classWebBtn" onclick="runEmailCommand(\'delete_msg\','+mid+');"/>';
+	$("reply_button_all").innerHTML = '<input type="button" name="reply" value=" Reply to All " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=all&return_action=index&return_module=Webmails\';" />';
+	$("reply_button").innerHTML = '<input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=single&return_action=index&return_module=Webmails\';" />';
+}
 function add_to_vtiger(mid) {
-	$("status").style.display="block";
+	//$("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position:'front', scope: 'command', limit:1},
                         method: 'post',
                         postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
                         onComplete: function(t) {
-				$("status").style.display="none";
+				//$("status").style.display="none";
 			}
 		}
 	);
-}
-function showBody(mid) {
-	var el = $("body_"+mid);
-	el.innerHTML = '<iframe src="index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>" width="100%" height="210">You must enabled iframes</iframe>';
 }
 </script>
 <?php
@@ -48,7 +61,7 @@ $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
 $ssltype=$temprow["ssltype"];
 $sslmeth=$temprow["sslmeth"];
-$showbody=$temprow["showbody"];
+$account_name=$temprow["account_name"];
 ?>
 
 <script language="Javascript" type="text/javascript" src="modules/Webmails/js/ajax_connection.js"></script>
@@ -71,7 +84,7 @@ function refresh_list() {
 var command;
 var id;
 function runEmailCommand(com,id) {
-	$("status").style.display="block";
+	//$("status").style.display="block";
 	command=com;
 	id=id;
 	new Ajax.Request(
@@ -87,6 +100,12 @@ function runEmailCommand(com,id) {
 					var parent = $("row_"+id).parentNode;
 					var node = $("row_"+id);
 					parent.removeChild(node);
+					tmp = document.getElementsByClassName("previewWindow");
+					for(var i=0;i<tmp.length;i++) {
+						if(tmp[i].style.visibility === "visible") {
+							tmp[i].style.visibility="hidden";
+						}
+					}
 				    break;
 				    case 'clear_flag':
 					var nm = "clear_td_"+id;
@@ -104,14 +123,13 @@ function runEmailCommand(com,id) {
 				    break;
 
 				}
-				$("status").style.display="none";
+				//$("status").style.display="none";
                         }
                 }
         );
 }
-function changeMbox(el) {
-	destination = el.options[el.selectedIndex].value;
-	if (destination) location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+destination+"&start=1";
+function changeMbox(box) {
+	location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+box;
 }
 </script>
 <?
@@ -157,22 +175,8 @@ $elist = fullMailList($mbox);
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
-if($start > 1) {
-	$skip_num = (($start - 1) * $mails_per_page);
-	$start_message = ($numEmails - $skip_num);
-}
-if(!isset($start_message) || $start_message=="") {$start_message=$numEmails;}
-if(isset($_REQUEST["start"]) && $_REQUEST["viewname"]=="20") {
-	if($_REQUEST["start"] != 1)
-		$start_message=($numEmails)-($_REQUEST["start"]*$mails_per_page);
-	else 
-		$start_message=$numEmails;
-}
-
-if($numEmails>=$mails_per_page && !$_REQUEST["allflag"] == "All")
-	$c=$mails_per_page;
-else
-	$c=$numEmails;
+$start_message=$numEmails;
+$c=$numEmails;
 
 $overview=$elist["overview"];
 ?>
@@ -187,104 +191,100 @@ $overview=$elist["overview"];
 if($numEmails != 0)
 	$navigation_array = getNavigationValues($_REQUEST["start"], $numEmails, $c);
 
+?>
+<script type="text/javascript">
+var webmail = new Array();
+<?
 $mails = array();
 if (is_array($overview)) {
    foreach ($overview as $val) {
 	$mails[$val->msgno] = $val;
+	?>
+	webmail[<?php echo $val->msgno;?>] = new Array();
+	webmail[<?php echo $val->msgno;?>]["from"]="<?php echo addslashes($val->from);?>";
+	webmail[<?php echo $val->msgno;?>]["to"]="<?php echo addslashes($val->to);?>";
+	webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
+	webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
+	<?
    }
 }
+echo "</script>";
 
-$listview_header = array("Info","","","Subject","","Date","","From","","Del","Reply");
+$listview_header = array("Info","Subject","Date","From","Del");
 $listview_entries = array();
-$thread_view = array();
 
 if($numEmails <= 0)
-	$listview_entries[0][] = '<td colspan="10" width="100%" align="center"><b>No Emails In This Folder</b></td>';
+	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
 else {
-$l=1;
-$smTmp=($numEmails);
-    while ($l<$numEmails) {
-  	$num = $mails[$l]->msgno;
-  	$thread_view[$l] = array();
-  	$thread_view[$l]["id"] = $num;
-  	$thread_view[$l]["message_id"] = $mails[$l]->message_id;
-  	$thread_view[$l]["in_reply_to"] = $mails[$l]->in_reply_to;
-  	$thread_view[$l]["subject"] = $mails[$l]->subject;
-	$l++;
-	//$smTmp--;
-    }
 $i=1;
 //print_r($thread_view);
     // Main loop to create listview entries
-    $c=20;
     while ($i<$c) {
   	$num = $mails[$start_message]->msgno;
-  	$flags='<table border=0><tr>';
-
   	// TODO: scan the current db tables to find a
   	// matching email address that will make a good
   	// candidate for record_id
   	// this module will also need to be able to associate to any entity type
   	$record_id='';
 
+	if($mails[$start_message]->subject=="")
+		$mails[$start_message]->subject="(No Subject)";
+
   	// Let's pre-build our URL parameters since it's too much of a pain not to
   	$detailParams = 'record='.$record_id.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
  	$defaultParams = 'parenttab=My Home Page&mailbox='.$mailbox.'&start='.$start.'&viewname='.$viewname;
 
+	$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
   	// Attachment Icons
   	if(getAttachmentDetails($start_message,$mbox))
-		$flags.='<td><img src="modules/Webmails/images/stock_attach.png" border="0" width="14" height="14"></td>';
+		$flags.='<img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14">&nbsp;';
   	else
-		$flags.='<td width="15px" heigh="15px">&nbsp;</td>';
+		$flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
 
   	// read/unread/forwarded/replied
   	if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
-  		$flags.='<td><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="14" height="14"></a></td> ';
+  		$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a>&nbsp;';
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
-		$flags.='<td><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="12" height="12"></td>';
+		$flags.='<img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12">&nbsp;';
   	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
-		$flags.='<td><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="13" height="13"></td>';
+		$flags.='<img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13">&nbsp;';
   	else
-  		$flags.='<td><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="11" height="11"></a></td> ';
+  		$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
   	// Add to Vtiger
   	if($mails[$start_message]->flagged)
-		$flags.='<td id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"></a></td>';
+		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"></a></span>';
   	else 
-		$flags.='<td id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"></a></td>';
+		$flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"></a></span>';
 
-  	$flags.='</tr></table>';
   	
-	if($mails[$start_message]->subject=="")
-		$mails[$start_message]->subject="(No Subject)";
-
   	$tmp=imap_mime_header_decode($mails[$start_message]->from);
   	$from = $tmp[0]->text;
   	$listview_entries[$num] = array();
 
-	$listview_entries[$num][] = '<a onClick="gshow(\'addEmail_'.$num.'\');window.clearTimeout(timer);" href="javascript:void(0)">Quick View</a><td nowrap>'.$flags.'</td>';
+	$listview_entries[$num][] = $flags."</td>";
+	//$listview_entries[$num][] = $flags."</table></td>";
+
   	if ($mails[$start_message]->deleted) {
-        	$listview_entries[$num][] = '<td align="left" width="50%" id="deleted_subject_'.$num.'"><s><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'">'.$mails[$start_message]->subject.'</a></s></td>';
-        	$listview_entries[$num][] = '<td align="left" width="20%" nowrap id="deleted_date_'.$num.'"><s>'.$mails[$start_message]->date.'</s></td>';
-        	$listview_entries[$num][] = '<td align="left" width="25%" id="deleted_from_'.$num.'"><s>'.$from.'</s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="deleted_date_'.$num.'"><s>'.$mails[$start_message]->date.'</s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,30).'</s></td>';
   	} elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
-        	$listview_entries[$num][] = '<td align="left" width="50%"><b><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'" id="ndeleted_subject_'.$num.'">'.$mails[$start_message]->subject.'</a></b></td>';
-        	$listview_entries[$num][] = '<td align="left" width="20%" nowrap id="ndeleted_date_'.$num.'"><b>'.$mails[$start_message]->date.'</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
-        	$listview_entries[$num][] = '<td align="left" width="25%" id="ndeleted_from_'.$num.'"><b>'.$from.'</b></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" ><b><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></b></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="ndeleted_date_'.$num.'"><b>'.$mails[$start_message]->date.'</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
+        	$listview_entries[$num][] = '<td  colspan="1" align="left" id="ndeleted_from_'.$num.'"><b>'.substr($from,0,30).'</b></td>';
   	} else {
-        	$listview_entries[$num][] = '<td align="left" width="50%"><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'" id="ndeleted_subject_'.$num.'">'.$mails[$start_message]->subject.'</a></td>';
-        	$listview_entries[$num][] = '<td align="left" width="20%" nowrap id="ndeleted_date_'.$num.'">'.$mails[$start_message]->date.'</td>';
-        	$listview_entries[$num][] = '<td align="left" width="25%" id="ndeleted_from_'.$num.'">'.$from.'</td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="ndeleted_date_'.$num.'">'.$mails[$start_message]->date.'</td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,30).'</td>';
   	}
 
 	if($mails[$start_message]->deleted)
-  		$listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a>&nbsp;';
+  		$listview_entries[$num][] = '<td colspan="1" nowrap align="center" id="deleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
 	else
-  		$listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a>&nbsp;';
+  		$listview_entries[$num][] = '<td nowrap colspan="1" align="center" id="ndeleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
 
-	$listview_entries[$num][] = '<a href="index.php?module=Webmails&action=EditView&reply=single&mailid='.$num.'&'.$defaultParams.'"><img src="modules/Webmails/images/stock_mail-reply.png" alt="reply" width="14" height="14"  border="0"></a>&nbsp;</td></tr>';
 
-  	require("showOverviewUI.php");
   	$i++;
   	$start_message--;
     }
@@ -300,13 +300,22 @@ $navigationOutput .= '<td size="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
 if (is_array($list)) {
-	$boxes = '<select name="mailbox" onchange="changeMbox(this)">';
+	$boxes = '<select name="mailbox">';
         foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
+		if(preg_match("/trash/i",$tmpval))
+			$img = "webmail_trash.gif";
+		elseif(preg_match("/sent/i",$tmpval))
+			$img = "webmail_uparrow.gif";
+		else
+			$img = "webmail_downarrow.gif";
 		if ($_REQUEST["mailbox"] == $tmpval) {
          		$boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
-		} else
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$numEmails.')</b></li>';
+		} else {
          		$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;</li>';
+		}
  	}
 	$boxes .= '</select>';
 }
@@ -330,6 +339,12 @@ $smarty->assign("SINGLE_MOD",'Webmails');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY","My  Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
-$smarty->display("ListView.tpl");
+$smarty->assign("FOLDER_SELECT", $boxes);
+$smarty->assign("NUM_EMAILS", $numEmails);
+$smarty->assign("MAILBOX", $mailbox);
+$smarty->assign("ACCOUNT", $account_name);
+$smarty->assign("BOXLIST",$folders);
+$smarty->display("Webmails.tpl");
+//$smarty->display("ListView.tpl");
+
 ?>
