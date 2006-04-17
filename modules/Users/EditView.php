@@ -314,7 +314,11 @@ else $smarty->assign("IS_ADMIN", "disabled");
 
 //$smarty->assign("",$focus->getUserListViewHeader());
 
-$smarty->display("UserEditView.tpl");
+
+if ($_REQUEST['mode1'] == 'pref')
+	$smarty->display('MyPrefEditView.tpl');
+else 
+	$smarty->display('UserEditView.tpl');
 
 /*
 echo "<br>";
