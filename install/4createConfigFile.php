@@ -118,7 +118,7 @@ $cache_dir = 'cache/';
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5Beta" title="v5Beta"></td>
 	</tr>
 	</table>
 	
