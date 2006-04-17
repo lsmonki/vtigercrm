@@ -42,7 +42,12 @@
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
+					{if $MODULE eq 'Activities'}
+					<td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView&parenttab={$CATEGORY}&activity_mode={$ACTIVITY_MODE}"><img src="{$IMAGE_PATH}btnL3Add.gif"alt="Create {$ACTIVITY_MODE}..." title="Create {$SINGLE_MOD}..." border=0></a></td>
+					{else}
 					<td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif"alt="Create {$SINGLE_MOD}..." title="Create {$SINGLE_MOD}..." border=0></a></td>
+					{/if}					
+
 					<td style="padding-right:0px"><a href="#"><img src="themes/blue/images/btnL3Search.gif" alt="Search in {$SINGLE_MOD}..." title="Search in {$SINGLE_MOD}..." border=0></a></a></td>
 				</tr>
 				</table>
@@ -94,7 +99,8 @@
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><td><td>&nbsp;</td></tr>
-		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><a href="#" onClick="show('tagdiv')">+addtag</a><div id="tagdiv" style="display:none";>{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv')"></div></td></tr>		 
+		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><a href="#" onClick="show('tagdiv')">+addtag</a><div id="tagdiv" style="display:block";>{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv')"></div></td></tr>
+		 </table>			 
 		 <hr noshade size=1>
 		
 		<!-- Account details tabs -->
@@ -395,61 +401,12 @@
 						<!-- right side relevant info -->
 
 					<!-- Mail Merge-->
-					{if $MERGEBUTTON eq 'permitted'}
 					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
 					<tr>
 					<td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
 						</tr>
 						<tr style="height:25px">
 						<td class="rightMailMergeContent">
-							<table border=0 cellspacing=0 cellpadding=2 width=100%>
-								<tr>
-								<td >
-								<select class=small style="width:100%" name="mergefile">
-									<option>Select template...</option>
-									{html_options options=$TOPTIONS}
-								</select>
-								</td>
-								</tr>
-								<tr>
-								<td >
-  								{*[ <a href="#" onClick="showhide('mailMergeOptions')">Options...</a> ]*}
-								<div id="mailMergeOptions" align=left style="display:none">
-								<input type="checkbox" checked> Include Account Information <br>
-								<input type="checkbox" checked> Include More Information <br>
-								</div>
-								</td>
-								</tr>
-								<tr>
-								<td>
-								{if $MERGEBUTTON eq 'permitted'}
-                                                                <input title="{$APP.LBL_MERGE_BUTTON_TITLE}" accessKey="{$APP.LBL_MERGE_BUTTON_KEY}" class="small" onclick="this.form.action.value='Merge';" type="submit" name="Merge" value="{$APP.LBL_MERGE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-								</td>
-								</tr>
-								</table>
-							</td>
-
-						</tr>
-						</table>
-						<br>
-						{/if}	
-						
-						<!-- Upcoming Activities / Calendar-->
-						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc" class="small">
-						<tr>
-							<td style="border-bottom:1px solid #ddddcc;padding:5px;background-color:#ffffdd;"><b> Upcoming Activities :</b></td>
-						</tr>
-						<tr style="height:25px">
-							<td style="padding:5px" bgcolor="#ffffef">
-								<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
-								<tr><td valign=top >1.</td><td width=100% style="color:#727272"><b>API License renewal </b><br>On 23 Nov 2006 <br> <i>14 months 3 days to go</i></td></tr>
-								<tr><td></td><td style="border-top:1px dotted #e2e2e2"></td></tr>
-								</table>
-							</td>
-						</tr>
-						</table>
-						<br><br>
 						<table border=0 cellspacing=0 cellpadding=0 width=100% >
 						<tr><td>
 						<table width="250" border="0" cellspacing="0" cellpadding="0">
