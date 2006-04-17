@@ -24,6 +24,7 @@ require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 
@@ -91,6 +92,8 @@ if($focus->id != 1)
  $groupids = fetchUserGroupids($focus->id);
 }
 $log->info("User detail view");
+
+$category = getParenttab();
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -260,7 +263,14 @@ $smarty->assign("ADDRESS_COUNTRY", $focus->address_country);
 $smarty->assign("SIGNATURE", nl2br($focus->signature));
 $smarty->assign("MODULE", 'Settings');
 
-$smarty->display("UserDetailView.tpl");
+
+$mode1 = 'pref';
+$smarty->assign("MODE1", $mode1);
+
+if ($category == "Settings")
+        $smarty->display("UserDetailView.tpl");
+else
+        $smarty->display("MyPrefDetailView.tpl");
 
 echo "</td></tr>\n";
 
