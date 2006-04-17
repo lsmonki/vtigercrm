@@ -10,9 +10,7 @@
  ********************************************************************************/
  
 require_once('include/CustomFieldUtil.php');
-require_once('XTemplate/xtpl.php');
-
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
+require_once('Smarty_setup.php');
 
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 
@@ -23,8 +21,33 @@ require_once($theme_path.'layout_utils.php');
 
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
+$smarty = new vtigerCRM_Smarty;
+$cfimagecombo = Array($image_path."text.gif",
+                        $image_path."number.gif",
+                        $image_path."percent.gif",
+                        $image_path."currency.gif",
+                        $image_path."date.gif",
+                        $image_path."email.gif",
+                        $image_path."phone.gif",
+                        $image_path."picklist.gif",
+                        $image_path."url.gif",
+                        $image_path."checkbox.gif",
+                        $image_path."text.gif",
+                        $image_path."picklist.gif");
 
-$xtpl=new XTemplate ('modules/Settings/customfield.html');
+$cftextcombo = Array($mod_strings['Text'],
+                        $mod_strings['Number'],
+                        $mod_strings['Percent'],
+                        $mod_strings['Currency'],
+                        $mod_strings['Date'],
+                        $mod_strings['Email'],
+                        $mod_strings['Phone'],
+                        $mod_strings['PickList'],
+                        $mod_strings['LBL_URL'],
+                        $mod_strings['LBL_CHECK_BOX'],
+                        $mod_strings['LBL_TEXT_AREA'],
+                        $mod_strings['LBL_MULTISELECT_COMBO']
+                        );
 if(isset($fieldid) && $fieldid!='')
 {
 	$mode='edit';
@@ -34,10 +57,7 @@ if(isset($fieldid) && $fieldid!='')
 	$customfield_typename=getCustomFieldTypeName($_REQUEST['uitype']);
 	$fieldtype_lengthvalue=getFldTypeandLengthValue($customfield_typename,$customfield_typeofdata);
 	list($fieldtype,$fieldlength,$decimalvalue)= explode(";",$fieldtype_lengthvalue);
-	$xtpl->assign("LABELVALUE",$customfield_fieldlabel);
-	$xtpl->assign("LENGTHVALUE",$fieldlength);
-	$xtpl->assign("DECIMALVALUE",$decimalvalue);
-	$xtpl->assign("READ","readonly");
+	$readonly = "readonly";
 	if($fieldtype == '7' || $fieldtype == '11')
 	{
 		$query = "select * from ".$customfield_columnname;
@@ -48,23 +68,21 @@ if(isset($fieldid) && $fieldid!='')
 			$fldVal .= $row[$customfield_columnname];
 			$fldVal .= "\n";
 		}
-		$xtpl->assign("PICKLISTVALUE",$fldVal);
+		$smarty->assign("PICKLISTVALUE",$fldVal);
 	}
-	$xtpl->assign("FLDTYPEVALUE", $fieldtype);
-	$xtpl->assign("FLDID", $fieldid);
-	$xtpl->assign("COLUMN",$customfield_columnname);
+	$selectedvalue = $fieldtype;
 }
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("FLD_MODULE", $_REQUEST['fld_module']);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
 	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
-	$xtpl->assign("DUPLICATE_ERROR", $error);
-	$xtpl->assign("LABELVALUE", $_REQUEST["fldlabel"]);
-	$xtpl->assign("LENGTHVALUE", $_REQUEST["fldlength"]);
-	$xtpl->assign("DECIMALVALUE", $_REQUEST["flddecimal"]);
-	$xtpl->assign("PICKLISTVALUE", $_REQUEST["fldPickList"]);
+	$smarty->assign("DUPLICATE_ERROR", $error);
+	$customfield_fieldlabel=$_REQUEST["fldlabel"];
+	$fieldlength=$_REQUEST["fldlength"];
+	$decimalvalue=$_REQUEST["flddecimal"];
+	$fldVal = $_REQUEST["fldPickList"];
 	$typeVal = Array(
 	'Text'=>'0',
 	'Number'=>'1',
@@ -76,12 +94,87 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	'Picklist'=>'7',
 	'URL'=>'8',
 	'MultiSelectCombo'=>'11');
-	$xtpl->assign("FLDTYPEVALUE", $typeVal[$_REQUEST["fldType"]]);
+	$selectedvalue = $typeVal[$_REQUEST["fldType"]];
 }
 elseif($fieldid == '')
 {
-	$xtpl->assign("FLDTYPEVALUE", "0");
+	$selectedvalue = "0";
 }
-$xtpl->parse("main");
-$xtpl->out("main");
+$output = '';
+$combo_output = '';
+for($i=0;$i<count($cftextcombo);$i++)
+{
+        if($selectedvalue == $i)
+                $sel_val = 'selected';
+        else
+                $sel_val = '';
+        $combo_output.= '<option style="background:url('.$cfimagecombo[$i].');background-repeat:no-repeat;background-position:left;padding-left:30px;padding-top:5px;padding-bottom:5px;" '.$sel_val.' onClick="selFieldType('.$i.')" >'.$cftextcombo[$i].'</option>';
+
+}
+$output .= '<form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
+	  <input type="hidden" name="module" value="Settings">
+	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+	  <input type="hidden" name="parenttab" value="Settings">
+          <input type="hidden" name="action" value="AddCustomFieldToDB">
+	  <input type="hidden" name="fieldid" value="'.$fieldid.'">
+	  <input type="hidden" name="column" value="'.$customfield_columnname.'">
+
+	  <div id="orgLay">
+		<table width="100%" border="0" cellpadding="5" cellspacing="0">
+			<tr>
+				<td width="40%" align="left" class="genHeaderSmall">Add Field </td>
+				<td width="60%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			</tr>
+			<tr><td colspan="2"><hr /></td></tr>
+			<tr>
+				<td width="20%" valign=top>
+					<select name="cfcombo" id="cfcombo" class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
+				</td>
+				<td width="80%" align="left" valign="top">
+				<table border="0" cellpadding="5" cellspacing="0" >
+					<tr>
+						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
+						<td width="60%" align="left"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
+					</tr>
+				</table>
+				<div id="lengthdetails">
+				<table border="0" cellspacing="5" cellpadding="0" >
+					<tr>
+						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
+						<td width="60%" align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" "'.$readonly.'" class="txtBox"></td>
+                                        </tr>
+                                </table>
+				</div>
+				<div id="decimaldetails">
+				<table border="0" cellspacing="5" cellpadding="0" >
+					<tr>
+						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
+						<td width="60%" align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" "'.$readonly.'" class="txtBox"></td>
+					</tr>
+				</table>
+				</div>
+				<div id="picklist">
+				<table border="0" cellspacing="5" cellpadding="0" >
+					<tr>
+						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
+						<td width="60%" align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" "'.$readonly.'">'.$fldVal.'</textarea></td>
+						<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
+					</tr>
+				</table>
+				</div>
+			</td>
+		</tr>
+		<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
+		<tr>
+			<td colspan="2" align="center">
+			<input type="submit" name="save" value=" &nbsp; Save &nbsp; " class="classBtn" />&nbsp;&nbsp;
+                        <input type="button" name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh(\'orgLay\');" />
+			</td>
+		</tr>
+		<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
+	  </table>
+	  <input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
+	  </div>
+	  </form>';
+echo $output;
 ?>
