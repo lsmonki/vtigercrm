@@ -20,6 +20,25 @@
 </span>
 
 
+<div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
+<script>
+function ajaxSaveResponse(response)
+{ldelim}
+        document.getElementById("convertleaddiv").innerHTML=response.responseText;
+{rdelim}
+
+function callConvertLeadDiv(id)
+{ldelim}
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring = "module=Leads&action=LeadsAjax&ajxaction=convertlead&record="+id;
+        ajaxObj.process("index.php?",urlstring);
+{rdelim}
+
+Calendar.setup ({ldelim}
+                inputField : "jscal_field", ifFormat : "{$CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+        {rdelim});
+</script>
+
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
 <tr><td>&nbsp;</td>
@@ -180,7 +199,7 @@
                                                         {/if}
                                                         {if $MODULE eq 'Leads'}
                                                                 {if $CONVERTLEAD eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}';this.form.module.value='{$MODULE}'; this.form.action.value='ConvertLead'" type="submit" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
+                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="small" onclick="callConvertLeadDiv('{$ID}');" type="submit" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
                                                                 {/if}
                                                         {/if}
 							</td>
