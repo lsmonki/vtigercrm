@@ -95,7 +95,7 @@ function set_focus() {
 		<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
 		<tr>
 			<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right><img src="include/images/loginAlpha.gif" alt="Alpha6" title="Alpha6"></td>
+			<td align=right><img src="include/images/loginAlpha.gif" alt="Beta" title="Beta"></td>
 		</tr>
 		</table>
 		
@@ -109,11 +109,12 @@ function set_focus() {
 		<tr>
 			<td valign=top width=60% height="250" class="loginBillBoard">
 				<div align=left style="padding:20px">
-				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha6</span><br><br>
+				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Beta</span><br><br>
 				
-				vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications. If you find a better product ,then use the other one!<br><br>
+				vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
 				
-				<b>New in Alpha 6</b> <br>
+				<b>New in Beta</b> <br>
+				
 				<li>New-look Mail Client</li>
 		                <li>Improved API docs</li>
 		                <li>Performance Optimizations</li>
@@ -122,7 +123,7 @@ function set_focus() {
 				<br>	
 				<br>	
 			
-	<font color='red'>Your 'vtiger-xperience' is ... </font>
+	<font color='blue'>Your 'vtiger-xperience' is ... </font>
 				<br>	
 				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
 				<li><a href='http://www.bloglines.com'>bloglines </a></li>
