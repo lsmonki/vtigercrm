@@ -42,10 +42,13 @@ if($ajaxaction == "DETAILVIEW")
 		echo ":#:FAILURE";
 	}
 }
-
 elseif($_REQUEST['ajaxmode'] == 'qcreate')
 {
 	require_once('quickcreate.php');
+}
+elseif($ajaxaction == "convertlead")
+{
+	require_once('modules/Leads/ConvertLead.php');
 }
 else
 {
