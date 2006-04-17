@@ -2089,12 +2089,6 @@ title';
 		    	(2,26,1)");
 				
 
-		//rss feeds
-
-		$this->db->query("insert into rss values(1,'http://finance.yahoo.com/rss/headline?s=IBM','IBM Finblog',0,1,'vtiger Discussions')");	
-		$this->db->query("insert into rss values(2,'http://finance.yahoo.com/rss/headline?s=HPQ','HP Blog',0,0,'vtiger Discussions')");
-		$this->db->query("insert into rss values(3,'http://finance.yahoo.com/rss/headline?s=GM','GM blog',0,0,'vtiger Wiki')");	
-
 		}
 	
 }
