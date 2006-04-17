@@ -29,7 +29,7 @@ $sslmeth=$temprow["sslmeth"];
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 global $mbox;
-$mbox = @imap_open("\{$imapServerAddress/$mail_protocol}$mailbox", $login_username, $secretkey) or die("Connection to server failed");
+$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
 
 $email = new Webmail($mbox, $mailid);
 $from = $email->from;
@@ -48,7 +48,8 @@ $bcc_list = $email->bcc_list_name[0]." &lt;".$email->bcc_list[0]."&gt;";
 for($l=1;$l<count($email->bcc_list);$l++) {
 	$bcc_list .= "; ".$email->bcc_list_name[$l]." &lt;".$email->bcc_list[$l]."&gt;";
 }
-$reply_to = $email->$reply_to_name[0]." &lt;".$email->reply_to[0]."&gt;";
+$reply_to = $from." <".$email->reply_to[0].">";
+
 for($l=1;$l<count($email->reply_to);$l++) {
 	$reply_to .= "; ".$email->reply_to_name[$l]." &lt;".$email->reply_to[$l]."&gt;";
 }

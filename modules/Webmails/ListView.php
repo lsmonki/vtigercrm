@@ -129,7 +129,8 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 
 global $mbox;
-$mbox = @imap_open("\{$imapServerAddress/$mail_protocol}$mailbox", $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
+$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+
 
 function SureRemoveDir($dir) {
    if(!$dh = @opendir($dir)) return;
