@@ -9,16 +9,17 @@
 *
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/Settings/Forms.php');
 
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+/*
 echo '<br>';
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_ADD_MAIL_ACCOUNT'], true);
-echo '<br><br>';
+echo '<br><br>';*/
 
 global $adb;
 global $theme;
@@ -26,59 +27,62 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Settings/AddMailAccount.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$sql = "select * from mail_accounts where account_id=".$_REQUEST['record'];
 	$result = $adb->query($sql);
 	$rowcount = $adb->num_rows($result);
+	
 	if ($rowcount!=0)
 	{
 		while($temprow = $adb->fetchByAssoc($result))
 		{
-			$xtpl->assign("DISPLAYNAME", $temprow['display_name']);
-			$xtpl->assign("EMAIL", $temprow['mail_id']);
-			$xtpl->assign("ACCOUNTNAME", $temprow['account_name']);
-			$xtpl->assign($temprow['mail_protocol'],$temprow['mail_protocol']);
-			$xtpl->assign("SERVERUSERNAME", $temprow['mail_username']);
-			$xtpl->assign("SERVERPASSWORD", $temprow['mail_password']);
-			$xtpl->assign("SERVERNAME", $temprow['mail_servername']);
-			$xtpl->assign("RECORD_ID", $temprow['account_id']);
-			$xtpl->assign("BOX_REFRESH", $temprow['box_refresh']);
-			$xtpl->assign("MAILS_PER_PAGE", $temprow['mails_per_page']);
-			$xtpl->assign("EDIT", "TRUE");
+			$smarty->assign("DISPLAYNAME", $temprow['display_name']);
+			$smarty->assign("EMAIL", $temprow['mail_id']);
+			$smarty->assign("ACCOUNTNAME", $temprow['account_name']);
+			$smarty->assign($temprow['mail_protocol'],$temprow['mail_protocol']);
+			$smarty->assign("SERVERUSERNAME", $temprow['mail_username']);
+			$smarty->assign("SERVERPASSWORD", $temprow['mail_password']);
+			$smarty->assign("SERVERNAME", $temprow['mail_servername']);
+			$smarty->assign("RECORD_ID", $temprow['account_id']);
+			$smarty->assign("BOX_REFRESH", $temprow['box_refresh']);
+			$smarty->assign("MAILS_PER_PAGE", $temprow['mails_per_page']);
+			$smarty->assign("EDIT", "TRUE");
 
 			if(strtolower($temprow['mail_protocol']) == "imap")
-				$xtpl->assign("IMAP", "CHECKED");
+				$smarty->assign("IMAP", "CHECKED");
 			if(strtolower($temprow['mail_protocol']) == "imap2")
-				$xtpl->assign("IMAP2", "CHECKED");
+				$smarty->assign("IMAP2", "CHECKED");
 			if(strtolower($temprow['mail_protocol']) == "imap4")
-				$xtpl->assign("IMAP4", "CHECKED");
+				$smarty->assign("IMAP4", "CHECKED");
 			if(strtolower($temprow['mail_protocol']) == "imap4rev1")
-				$xtpl->assign("IMAP4R1", "CHECKED");
+				$smarty->assign("IMAP4R1", "CHECKED");
 			if(strtolower($temprow['mail_protocol']) == "pop3")
-				$xtpl->assign("POP3", "CHECKED");
+				$smarty->assign("POP3", "CHECKED");
 
 			if(strtolower($temprow['ssltype']) == "notls")
-				$xtpl->assign("NOTLS", "CHECKED");
+				$smarty->assign("NOTLS", "CHECKED");
 			if(strtolower($temprow['ssltype']) == "tls")
-				$xtpl->assign("TLS", "CHECKED");
+				$smarty->assign("TLS", "CHECKED");
 
 			if(strtolower($temprow['sslmeth']) == "validate-cert")
-				$xtpl->assign("VALIDATECERT", "CHECKED");
+				$smarty->assign("VALIDATECERT", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "novalidate-cert")
-				$xtpl->assign("NOVALIDATECERT", "CHECKED");
+				$smarty->assign("NOVALIDATECERT", "CHECKED");
 
 		}
 	}
 }	
 
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","index");
-$xtpl->assign("JAVASCRIPT", get_validate_record_js());
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->assign("RETURN_MODULE","Settings");
+$smarty->assign("RETURN_ACTION","index");
+$smarty->assign("JAVASCRIPT", get_validate_record_js());
+
+$smarty->display('AddMailAccount.tpl');
+
 ?>
