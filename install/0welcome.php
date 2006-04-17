@@ -90,10 +90,10 @@ to get time-bound answers to all your queries</u>.We do provide telephone-suppor
 The support subscription link is as follows :- 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
 
-vtiger does not believe in any big dollar marketing campaign hence you
-will not find much advertisement about vtiger from us.
-Whatever you see and hear is purely due to word of mouth. In fact, it is very much possible that you are using this product as someone recommended it to you. We do believe that <b>YOU</b> can and will make a
-difference.If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by anymeans convenient to you.<br>
+vtiger believes in word of mouth alone. vtiger is nearing 0.30 million downloads, all based on word-of-mouth alone.
+In fact, it is very much possible that you are using this product as someone recommended it to you.
+We do believe that <b>YOU</b> can and will make a
+difference.If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
 Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
 <ul>http://forums.vtiger.com </ul>
@@ -101,6 +101,7 @@ Please find mentioned below some information about us that you could utilize
 <ul>vtigercrm-developers@lists.vtigercrm.com (Mailing List)</ul>
 <ul>Join Freenode - /join #vtiger (IRC Channel)</ul>
 <ul>http://vtiger.fosslabs.com/cgi-bin/trac.cgi/newticket (Bug Tracker)</ul>
+<ul>http://www.flickr.com/photos/41109270@N00/ (The growing vtiger family ...)</ul>
 <br>
 <br>
 Again, thanks for taking out the time to try vtiger! <br><br>
