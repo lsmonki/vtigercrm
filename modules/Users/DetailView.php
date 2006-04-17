@@ -110,6 +110,7 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("USER_NAME", $focus->user_name);
 $smarty->assign("FIRST_NAME", $focus->first_name);
 $smarty->assign("LAST_NAME", $focus->last_name);
+$smarty->assign("CATEGORY", $category);
 $smarty->assign("STATUS", $focus->status);
 $smarty->assign("YAHOO_ID", $focus->yahoo_id);
 $smarty->assign("DATE_FORMAT", $focus->date_format);
