@@ -131,15 +131,14 @@ rename("install/", $renamefile."install/");
 		<table borde=0 cellspacing=0 cellpadding=5 width=100% style="background-color:#EEFFEE; border:1px dashed #ccddcc;">
 		<tr>
 			<td align=center class=small>
-			<b>The database tables are now set up.</b>
+			<b>vtiger is all set to go!</b>
 			<br>Total time taken: <?php echo "$deltaTime"; ?> seconds.
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
 			<li>Your install.php file has been renamed to <?echo $renamefile;?>install.php.txt.
 		<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
-			<li>Your system is now installed and configured for use.  
-			<li>You need to log in for the first time using the "admin" user name and the password you entered in step 2.
+			<li>Please log in using the "admin" user name and the password you entered in step 2.
 			</ul>
 			</div>
 
