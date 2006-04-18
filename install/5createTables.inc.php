@@ -81,7 +81,7 @@ function create_default_users() {
         $user->namedays = '';
 	$user->date_format = 'yyyy-mm-dd';
 	// added by jeri to populate default image and tagcloud for admin	
-	$user->imagename = 'admin.jpeg';
+	$user->imagename = 'shanky.jpg';
         $user->tagcloud = '';	
 	$user->defhomeview = 'home_metrics';
         //added by philip for default default admin emailid
@@ -141,7 +141,7 @@ function create_default_users() {
         $user->namedays = '';
 	$user->date_format = 'yyyy-mm-dd';
 	// added by jeri to populate default image and tagcloud for admin	
-	$user->imagename = '';
+	$user->imagename = 'ela.jpg';
         $user->tagcloud = '';	
 	$user->defhomeview = 'home_metrics';
         //added by philip for default default admin emailid
