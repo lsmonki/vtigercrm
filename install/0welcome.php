@@ -80,7 +80,7 @@ foreach($pieces as $val)
 
 Welcome to the vtiger family!<br><br>
 This is a product of pure teamwork,passion and fanaticism!
-<br>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same<br>
+<br>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same.<br>
 
 <br>
 <br>
@@ -121,7 +121,7 @@ Please find mentioned below some information about us that you could utilize
 
 This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Alpha5 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40. vtiger CRM 5 will not work on mysql 4.0.x versions.vtiger crm can run on a system which has xampp/lampp/wampp already installed in it. Please follow the wizard for the installation procedure regardless of the setup that you have<br>
+				<span style="color:#555555">- vtiger CRM 5.0 Alpha5 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40. <font color='red'><b>vtiger CRM 5 will not work on mysql 4.0.x versions</b></font>.vtiger crm can run on a system which has xampp/lampp/wampp already installed in it. The installation wizard will guide you with the installation regardless of the setup you may have.<br>
 				<br></span>
 <br>
 		</td>
