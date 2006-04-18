@@ -84,16 +84,15 @@ This is a product of pure teamwork,passion and fanaticism!
 
 <br>
 <br>
-<bold>vtiger is 100% pure Open Source. <u>You do not have to pay
-anything to use the product. If you do subscribe to the support package though, you will be able
+<bold>vtiger is 100% pure Open Source. <u>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able
 to get time-bound answers to all your queries</u>.We do provide telephone-support for paid customers only.
 The support subscription link is as follows :- 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
 
-vtiger believes in word of mouth alone. vtiger is nearing 0.30 million downloads, all based on word-of-mouth alone.
-In fact, it is very much possible that you are using this product as someone recommended it to you.
+vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.<br>
+<center>
 We do believe that <b>YOU</b> can and will make a
-difference.If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
+difference.</center>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
 Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
 <ul>http://forums.vtiger.com </ul>
@@ -104,8 +103,7 @@ Please find mentioned below some information about us that you could utilize
 <ul>http://www.flickr.com/photos/41109270@N00/ (The growing vtiger family ...)</ul>
 <br>
 <br>
-Again, thanks for taking out the time to try vtiger! <br><br>
-<b><i>We want you to know that we really appreciate it.</i></b>
+<b><i>Again, thanks for taking out the time to try vtiger! We want you to know that we really appreciate it.</i></b>
 
 <br>
 <br>
