@@ -121,9 +121,8 @@ function set_focus() {
 			        <li>Sexier Dashboards and Reports</li>	 		
 		                <li>Migration Support</li>	 	
 				<br>	
-				<br>	
 			
-	<font color='blue'>Your 'vtiger-xperience' is ... </font>
+	Your 'vtiger-xperience' is ... 
 				<br>	
 				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
 				<li><a href='http://www.bloglines.com'>bloglines </a></li>
