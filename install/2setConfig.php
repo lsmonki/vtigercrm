@@ -370,7 +370,7 @@ function verify_data(form) {
 				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
 			</tr>
 			<tr>
-				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>
+				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
 			</tr>
 			</table>
 
