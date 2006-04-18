@@ -1,9 +1,9 @@
 <!--  USER  SETTINGS PAGE STARTS HERE -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-        	        <span class="lvtHeaderText">Home&gt; Web Mail </span>
-        	        <hr noshade="noshade" size="1" />
+		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">
+        	        <span class="lvtHeaderText">{$CATEGORY} -&gt; {$MODULE} </span>
+        	        <span id="status" style="display:none"><img src="{$IMAGE_PATH}busy.gif"> &nbsp; Executing Command...</span><hr noshade="noshade" size="1" /><br />
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
 	</tr>
@@ -21,7 +21,7 @@
 				<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td colspan="3" style="padding:10px;vertical-align:middle;">
-							<table width="35%" cellpadding="0" cellspacing="0" border="0">
+							<table width="55%" cellpadding="0" cellspacing="0" border="0">
 									<tr>
 											<td>
 												<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
@@ -34,6 +34,14 @@
 											<td>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 												&nbsp;<a href="#" class="webMnu">Settings</a>
+											</td>
+											<td>
+												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+												&nbsp;<a href="javascript:;"  onclick="window.location = window.location+'&show_hidden=true';" class="webMnu">Show Hidden</a>
+											</td>
+											<td>
+												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+												&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">Expunge Mailbox</a>
 											</td>
 									</tr>
 							</table>
@@ -106,7 +114,7 @@
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					  <tr>
 						<td width="75%">
-						  <input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" />&nbsp;
+						  <span id="qualify_button"><input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" /></span>&nbsp;
 						  <span id="reply_button"><input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" /></span>&nbsp;
 						  <span id="reply_button_all"><input type="button" name="reply" value=" Reply to All " class="classWebBtn" /></span>&nbsp;
 						  <input type="button" name="forward" value=" Forward " class="classWebBtn" />&nbsp;

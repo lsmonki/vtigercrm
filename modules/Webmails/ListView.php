@@ -19,16 +19,22 @@ function load_webmail(mid) {
 	$("delete_button").innerHTML = '<input type="button" name="Button" value=" Delete "  class="classWebBtn" onclick="runEmailCommand(\'delete_msg\','+mid+');"/>';
 	$("reply_button_all").innerHTML = '<input type="button" name="reply" value=" Reply to All " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=all&return_action=index&return_module=Webmails\';" />';
 	$("reply_button").innerHTML = '<input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=single&return_action=index&return_module=Webmails\';" />';
+	$("qualify_button").innerHTML = '<input type="button" name="Qualify2" value=" Qualify " onclick="showRelationships('+mid+');" class="classWebBtn" />';
+
+}
+function showRelationships(mid) {
+	// just add to vtiger for now
+	add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
-	//$("status").style.display="block";
+	$("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position:'front', scope: 'command', limit:1},
                         method: 'post',
                         postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
                         onComplete: function(t) {
-				//$("status").style.display="none";
+				$("status").style.display="none";
 			}
 		}
 	);
@@ -52,7 +58,6 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
-//print_r($temprow);
 $login_username= $temprow["mail_username"];
 $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
@@ -62,6 +67,7 @@ $mail_protocol=$temprow["mail_protocol"];
 $ssltype=$temprow["ssltype"];
 $sslmeth=$temprow["sslmeth"];
 $account_name=$temprow["account_name"];
+$show_hidden=$_REQUEST["show_hidden"];
 ?>
 
 <script language="Javascript" type="text/javascript" src="modules/Webmails/js/ajax_connection.js"></script>
@@ -84,7 +90,7 @@ function refresh_list() {
 var command;
 var id;
 function runEmailCommand(com,id) {
-	//$("status").style.display="block";
+	$("status").style.display="block";
 	command=com;
 	id=id;
 	new Ajax.Request(
@@ -96,6 +102,11 @@ function runEmailCommand(com,id) {
 				resp = t.responseText;
 				if(resp.match(/ajax failed/)) {return;}
 				switch(command) {
+				    case 'expunge':
+					// NOTE: we either have to reload the page or count up from the messages that
+					// are deleted and moved or we introduce a bug from invalid mail ids
+					window.location = window.location;
+				    break;
 				    case 'delete_msg':
 					var parent = $("row_"+id).parentNode;
 					var node = $("row_"+id);
@@ -123,7 +134,7 @@ function runEmailCommand(com,id) {
 				    break;
 
 				}
-				//$("status").style.display="none";
+				$("status").style.display="none";
                         }
                 }
         );
@@ -165,10 +176,6 @@ function SureRemoveDir($dir) {
 
 $save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
-if($_REQUEST["expunge"]) {
-	imap_expunge($mbox);
-	SureRemoveDir($user_dir);
-}
 
 $elist = fullMailList($mbox);
 //print_r($elist);
@@ -194,6 +201,7 @@ if($numEmails != 0)
 ?>
 <script type="text/javascript">
 var webmail = new Array();
+var msgCount = "<?php echo $numEmails;?>";
 <?
 $mails = array();
 if (is_array($overview)) {
@@ -217,7 +225,6 @@ if($numEmails <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
 else {
 $i=1;
-//print_r($thread_view);
     // Main loop to create listview entries
     while ($i<$c) {
   	$num = $mails[$start_message]->msgno;
@@ -234,7 +241,13 @@ $i=1;
   	$detailParams = 'record='.$record_id.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
  	$defaultParams = 'parenttab=My Home Page&mailbox='.$mailbox.'&start='.$start.'&viewname='.$viewname;
 
-	$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+	if ($mails[$start_message]->deleted && !$show_hidden)
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+	elseif ($mails[$start_message]->deleted && $show_hidden)
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+	else 
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+
   	// Attachment Icons
   	if(getAttachmentDetails($start_message,$mbox))
 		$flags.='<img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14">&nbsp;';
@@ -263,10 +276,9 @@ $i=1;
   	$listview_entries[$num] = array();
 
 	$listview_entries[$num][] = $flags."</td>";
-	//$listview_entries[$num][] = $flags."</table></td>";
 
   	if ($mails[$start_message]->deleted) {
-        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javscript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="deleted_date_'.$num.'"><s>'.$mails[$start_message]->date.'</s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,30).'</s></td>';
   	} elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
@@ -283,6 +295,7 @@ $i=1;
   		$listview_entries[$num][] = '<td colspan="1" nowrap align="center" id="deleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
 	else
   		$listview_entries[$num][] = '<td nowrap colspan="1" align="center" id="ndeleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
+
 
 
   	$i++;
