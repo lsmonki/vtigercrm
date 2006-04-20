@@ -199,7 +199,7 @@ Calendar.setup ({ldelim}
                                                         {/if}
                                                         {if $MODULE eq 'Leads'}
                                                                 {if $CONVERTLEAD eq 'permitted'}
-                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="small" onclick="callConvertLeadDiv('{$ID}');" type="submit" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
+                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="small" onclick="callConvertLeadDiv('{$ID}');" type="button" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
                                                                 {/if}
                                                         {/if}
 							</td>
