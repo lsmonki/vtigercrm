@@ -15,11 +15,6 @@ function pickColor(color)
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-        {include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 
 <tr>
@@ -373,8 +368,4 @@ function pickColor(color)
 		</tr>
   </table>
 
-</td></tr>
-</table>
-
 {$JAVASCRIPT}
-	{include file = 'SettingsSubMenu.tpl'}
