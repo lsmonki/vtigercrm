@@ -1,4 +1,19 @@
 <!--  USER  SETTINGS PAGE STARTS HERE -->
+<script language="javascript">
+function ajaxgetResponse(response)
+{ldelim}
+	hide("status");
+	document.getElementById("EmailDetails").innerHTML=response.responseText;
+{rdelim}
+
+function getEmailContents(id)
+{ldelim}
+	show("status");
+	var ajaxObj = new Ajax(ajaxgetResponse);
+	var urlstring ="module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record="+id;
+	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+</script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
@@ -29,7 +44,7 @@
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Emails&action=EditView&return_action=DetailView&parenttab=My Home Page" class="webMnu">Compose</a>
+												&nbsp;<a href="javascript:openPopUp('ComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">Compose</a>
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -135,13 +150,8 @@
 			 <tr>
 			   <td>&nbsp;</td>
 			   <td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
-			   		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-						<tr><td width="20%" align="right"><b>From :</b></td><td>&nbsp;</td></tr>
-						<tr><td align="right">CC :</td><td>&nbsp;</td></tr>
-						<tr><td align="right">BCC : </td><td>&nbsp;</td></tr>
-						<tr><td align="right"><b>Subject</b></td><td>&nbsp;</td></tr>
-						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="2">&nbsp;</td></tr>
-					</table>
+			   		<div id="EmailDetails">
+					</div>
 			   </td>
 			   </tr>
                 </table>
@@ -159,4 +169,5 @@
 	</tr>
 </table>
 <!-- END -->
+<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
 
