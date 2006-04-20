@@ -826,7 +826,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  andprofile2field.profileid in ".$profileList." group by field.fieldid order by block,sequence";
+			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList." group by field.fieldid order by block,sequence";
 		}
 		$result = $adb->query($sql);
 		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
