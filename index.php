@@ -295,7 +295,7 @@ if(isset($action) && isset($module))
                 $skipHeaders=true;
                 $skipFooters=true;
         }
-        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
+        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' || $module == 'Calendar')
         {
           $skipSecurityCheck=true;
         }
