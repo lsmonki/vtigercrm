@@ -156,11 +156,15 @@ $mod_strings = Array(
 'LBL_EMAIL_TEMPLATES'=>'Email Templates',
 'LBL_TEMPLATE_NAME'=>'Template Name',
 'LBL_TEMPLATE_HEADER'=>'Template',
+'LBL_TEMPLATE_DETAILS'=>'Template Details',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Communication Templates > Email Templates',
 'LBL_MAILMERGE_TEMPLATES_LIST'=>'> Communication Templates > Mail Merge Templates',
+'LBL_MAILMERGE_TEMPLATES_ATTACHMENT' => '> Communication Templates > Attach Mail Merge Template',
 'LBL_DOWNLOAD_NOW'=>'Download Now',
 'LBL_DOWNLOAD'=>'Download',
+'LBL_SELECT_MODULE'=>'Select Module',
+'LBL_MERGE_FILE'=>'File : ',
 
 
 'LBL_COLON'=>':',
