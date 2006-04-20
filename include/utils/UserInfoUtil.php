@@ -1196,13 +1196,28 @@ function isPermitted($module,$actionname,$record_id='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$permission = "no";
-	if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
+	if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' || $module == 'Calendar')
 	{
 		//These modules dont have security right now
 		$permission = "yes";
 		return $permission;
 
 	}
+	
+	//Checking the Access for the Settings Module
+	if($module == 'Settings')
+	{
+		if(! $is_admin)
+		{
+			$permission = "no";
+		}
+		else
+		{
+			$permission = "yes";
+		}
+		return $permission;
+	}
+
 	//Checking whether the user is admin
 	if($is_admin)
 	{
