@@ -159,8 +159,12 @@ if($errorheader1 == 1 || $errorheader2 == 1)
 //The following function call is used to parse and form a encoded error message and then pass to result page
 $mail_error_str = getMailErrorString($mail_status_str);
 $adb->println("Mail Sending Process has been finished.\n\n");
-
-header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
+if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
+{
+	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	echo $inputs;
+}
+//header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
 
 
 ?>

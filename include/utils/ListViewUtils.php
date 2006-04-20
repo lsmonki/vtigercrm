@@ -681,6 +681,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 	}
 	return $list_block;
+	
 }
 
 /**This function generates the List view entries in a popup list view 
@@ -1313,10 +1314,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						
                                         $value = '<a href="index.php?action=DetailView&module=SalesOrder&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
-                                else
-                                {
-                                        $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
-                                }
+				elseif($module == 'Emails')
+				{
+					$value = '<a href="javascript:getEmailContents(\''.$entity_id.'\')">'.$temp_val.'</a>';
+				}
+                else
+                {
+                   	$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
+                }
 			}
 		}
 		else

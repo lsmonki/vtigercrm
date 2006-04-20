@@ -173,14 +173,15 @@ if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_RE
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-if($file_upload_error)
+/*if($file_upload_error)
 {
         $return_module = 'Emails';
         $return_action = 'EditView';
         $return_id = $email_id.'&upload_error=true&return_module='.$_REQUEST['return_module'].'&return_action='.$_REQUEST['return_action'].'&return_id='.$_REQUEST['return_id'];
 	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
 }
-elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
+else*/
+if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 {
 	include("modules/Emails/mailsend.php");
 }
@@ -193,6 +194,8 @@ else
 	//code added for returning back to the current view after edit from list view
 	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename&viewname=$return_viewname");
+	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	echo $inputs;
+	//header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename&viewname=$return_viewname");
 }
 ?>

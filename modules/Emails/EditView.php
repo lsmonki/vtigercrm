@@ -1,4 +1,3 @@
-<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
@@ -36,13 +35,12 @@ global $current_user;
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
-echo '<br>';
 ?>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<!--table width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
-     <td class="tabStart">&nbsp;&nbsp;</td>
+     <td class="tabStart">&nbsp;&nbsp;</td-->
 <?
 	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
 	{
@@ -65,32 +63,32 @@ echo '<br>';
 			if(stristr($label,"EMAILS"))
 			{
 
-				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+				//echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
 
 				$listView = $filename;
 				$classname = "tabOff";
 			}
 			elseif(stristr($label,$_REQUEST['smodule']))
 			{
-				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				//echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
 				$listView = $filename;
 				$classname = "tabOff";
 			}
 			else
 			{
-				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				//echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
 			}
 			$classname = "tabOff";
 		}
 
 	}
 ?>
-     <td width="100%" class="tabEnd">&nbsp;</td>
+     <!--td width="100%" class="tabEnd">&nbsp;</td>
    </tr>
  </table></td>
  </tr>
  </table>
- <br>
+ <br-->
 <?
 
 
@@ -140,14 +138,11 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Emails",$disp_view,$mode,$focus->column_fields));
-else	
-{
-	$smarty->assign("BASBLOCKS",getBlocks("Emails",$disp_view,$mode,$focus->column_fields,'BAS'));
-}
+
+$details = getBlocks("Emails",$disp_view,$mode,$focus->column_fields);
+$smarty->assign("BLOCKS",$details['Email Information']);
+//echo '<pre>';print_r($details['Email Information']);echo '</pre>';
 	
-$smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Email");
@@ -316,17 +311,14 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if($focus->mode == 'edit')
-	$smarty->display("salesEditView.tpl");
-else
-	$smarty->display("CreateView.tpl");
+$smarty->display("ComposeEmail.tpl");
 ?>
 <script type="text/javascript" defer="1">
 window.onload = function () {
 var oFCKeditor = null;
 oFCKeditor = new FCKeditor( "description" ) ;
 oFCKeditor.BasePath  = "include/fckeditor/" ;
-oFCKeditor.Height = 550;
+oFCKeditor.Height = 500;
 oFCKeditor.Width = "100%";
 oFCKeditor.ReplaceTextarea() ;
 }

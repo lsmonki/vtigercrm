@@ -122,8 +122,11 @@ $smarty->assign("CATEGORY",$category);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-$smarty->assign("BLOCKS", getBlocks("Emails","detail_view",'',$focus->column_fields));
-
+$entries = getBlocks("Emails","detail_view",'',$focus->column_fields);
+if($_REQUEST['mode'] != 'ajax')
+	$smarty->assign("BLOCKS" , $entries);
+else	
+	$smarty->assign("BLOCKS" , $entries['Email Information']);
 $smarty->assign("SINGLE_MOD","Email");
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -144,5 +147,8 @@ $permissionData = $_SESSION['action_permission_set'];
 
 //Constructing the Related Lists from here
 $smarty->assign("MODULE","Emails");
-$smarty->display("DetailView.tpl");
+if($_REQUEST['mode'] != 'ajax')
+	$smarty->display("DetailView.tpl");
+else
+	$smarty->display("EmailDetails.tpl")
 ?>
