@@ -24,7 +24,7 @@
 
     function init() 
     {ldelim}
-        var blankOption = new Option('', '');
+        var blankOption = new Option('--None--', '--None--');
         var allOpts = new Object(0);
         var options = null;
         
@@ -173,7 +173,7 @@
 
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD_TYPE}</b></td></tr>
 								<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));">
-								<OPTION VALUE="0" selected>                            
+								<OPTION VALUE="0" selected>--None--                            
                             		
                         				        <OPTION VALUE="1">{$UMOD.LBL_CONTACT_FIELDS}
                             
@@ -184,7 +184,7 @@
 								</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD}</b></td></tr>
-								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;"></select></td></tr>
+								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;"><option value="0" selected>--None--</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_MERGE_FIELD_VALUE}</b></td></tr>
 
