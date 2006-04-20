@@ -77,8 +77,12 @@ global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
-if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes' && $tab_per_Data[getTabid("Accounts")] == 0 && $tab_per_Data[getTabid("Contacts")] == 0 && $permissionData[getTabid("Accounts")][1] == 0 && $permissionData[getTabid("Contacts")][1] ==0)
+
+if(isPermitted("Leads","ConvertLead") =='yes' && isPermitted("Accounts","EditView") =='yes' && isPermitted("Contacts","EditView"))
+{
 	$smarty->assign("CONVERTLEAD","permitted");
+}
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
