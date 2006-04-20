@@ -34,12 +34,9 @@
 				{$EDIT_BUTTON}
 				{$CHANGE_PW_BUTTON}
 				{$LOGIN_HISTORY_BUTTON}
-				{$LIST_MAILSERVER_BUTTON}
 				{$DUPLICATE_BUTTON}
-				{$TABCUSTOMIZE_BUTTON}
 				{$DELETE_BUTTON}
 				{$LISTROLES_BUTTON}
-				{$CHANGE_HOMEPAGE_BUTTON}
 	</td></tr>
 
 		<tr><td colspan="2">&nbsp;</td></tr>
