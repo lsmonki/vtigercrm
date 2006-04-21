@@ -62,11 +62,11 @@
 		<tr>
 		      <td  width="75%" colspan="2" style="padding-bottom:0px;padding-top:0px; "  >
 			<img src="{$IMAGE_PATH}fp3.gif" width="59" height="40"  align="absmiddle"/>
-				<span class="genHeaderBig">{$UMOD.LBL_UPLOAD_FILE} </span>
+				<span class="genHeaderBig">{$UMOD.LBL_UPLOAD} </span>
 		      </td>
 		</tr>
 		 <tr>
-                      <td align="right" valign="top"><b>{$UMOD.LBL_FILE_MERGE} : </b></td>
+                      <td align="right" valign="top"><b>{$UMOD.LBL_MERGE_FILE}</b></td>
                       <td><input type="file" name="binFile" size="40"  /><br />(Eg - .doc, .rtf files)</td>
 		 </tr>
 		 <tr>
