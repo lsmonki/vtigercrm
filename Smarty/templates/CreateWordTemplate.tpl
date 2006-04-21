@@ -13,7 +13,7 @@
 <input type="hidden" name="action">
 <tr>
 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> {$UMOD.LBL_MAILMERGE_TEMPLATES_ATTACHMENT}</b></span>
+<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> <a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$UMOD.LBL_MAILMERGE_TEMPLATES_ATTACHMENT}</a></b></span>
 <hr noshade="noshade" size="1" />
 </td>
 	<td width="5%" class="showPanelBg">&nbsp;</td>
