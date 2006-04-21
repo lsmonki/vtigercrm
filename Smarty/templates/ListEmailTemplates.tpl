@@ -82,7 +82,7 @@ function massDelete()
 					<td style="border:0px;">&nbsp;</td>
 
 					<td align="right" style="border:0px;">
-						<div align="right"><input type="submit" value="New Template" name="profile"  class="small" onclick="this.form.action.value='createemailtemplate';"/></div>
+						<div align="right"><input type="submit" value="New Template" name="profile"  class="small" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"/></div>
 					</td>
 				</tr>
 				<tr>{*<td colspan="4" style="border:0px;">&nbsp;</td>*}</tr>
@@ -102,9 +102,9 @@ function massDelete()
 				{else}
 					<img src="{$IMAGE_PATH}private.gif" align="absmiddle" />
 				{/if}				
-				&nbsp;<a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$template.templateid}" >{$template.templatename}</a></td>
+				&nbsp;<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" >{$template.templatename}</a></td>
 				<td>{$template.description}</td>
-				<td><a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$template.templateid}">View Sample Email </a></td>
+				<td><a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">View Sample Email </a></td>
 			  	</tr>
 				
 				{/foreach}
