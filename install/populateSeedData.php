@@ -849,15 +849,25 @@ for($i=0;$i<6;$i++)
 
 $adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
 
-$expected_revenue = Array("$250,000","$750,000","$500,000");
-$budget_cost = Array("$25,000","$50,000","$90,000");
-$actual_cost = Array("$23,500","$45,000","$80,000");
+$expected_revenue = Array("250000","750000","500000");
+$budget_cost = Array("25000","50000","90000");
+$actual_cost = Array("23500","45000","80000");
 $num_sent = Array("2000","2500","3000");
 $clo_date = Array('2003-1-2','2004-2-3','2005-4-12');
 
+$expected_response_count = Array("2500","7500","5000");
+$expected_sales_count = Array("25000","50000","90000");
+$expected_roi = Array("23","45","82");
 
+$actual_response_count = Array("250","750","1500");
+$actual_sales_count = Array("1250","5200","2390");
+$actual_roi = Array("21","14","12");
 
-$expected_response = Array(null,null,null);
+$sponsor = Array("Finace","Marketing","Sales");
+$targetsize = Array("210000","13390","187424");
+$targetaudience = Array("Managers","CEOs","Rookies");
+
+//$expected_response = Array(null,null,null);
 for($i=0;$i<count($campaign_name_array);$i++)
 {
 	$campaign = new Campaign();
@@ -872,6 +882,19 @@ for($i=0;$i<count($campaign_name_array);$i++)
 	$campaign->column_fields["closingdate"] = $clo_date[$i];
 	$campaign->column_fields["expectedresponse"] = $expected_response[$i];
 	$campaign->column_fields["assigned_user_id"] = $assigned_user_id;
+	
+	$campaign->column_fields["expectedresponsecount"] = $expected_response_count[$i];
+	$campaign->column_fields["expectedsalescount"] = $expected_sales_count[$i];
+	$campaign->column_fields["expectedroi"] = $expected_roi[$i];
+	$campaign->column_fields["actualresponsecount"] = $actual_response_count[$i];
+	$campaign->column_fields["actualsalescount"] = $actual_sales_count[$i];
+	$campaign->column_fields["actualroi"] = $actual_roi[$i];
+	$campaign->column_fields["sponsor"] = $sponsor[$i];
+	$campaign->column_fields["targetsize"] = $targetsize[$i];
+	$campaign->column_fields["targetaudience"] = $targetaudience[$i];
+
+
+	
 	$campaign->save("Campaigns");
 }
 
