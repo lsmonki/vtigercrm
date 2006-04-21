@@ -87,7 +87,7 @@
 	
 	function cancelForm(frm)
 	{ldelim}
-		frm.action.value='listemailtemplates'
+		frm.action.value='detailviewemailtemplate'
 		frm.submit()
 	{rdelim}
 
@@ -109,9 +109,11 @@
 	<tr>
 		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
 			{if $EMODE eq 'edit'}
-        	        	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > Communication Templates &gt; Editing Email Templates &gt; {$TEMPLATENAME}</b></span>
+        	        	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
+				<a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$TEMPLATEID}"> &gt; Communication Templates &gt; Editing Email Templates &gt; {$TEMPLATENAME}</a></b></span>
 			{else}
-				<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > Communication Templates &gt; Creating Email Templates &gt; New</b> </span>
+				<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
+				<a href="index.php?module=Users&action=listemailtemplates">&gt; Communication Templates &gt; Creating Email Templates &gt; New</a></b> </span>
 			{/if}
             	    <hr noshade="noshade" size="1" />
 		</td>
@@ -222,7 +224,11 @@
 
 		<td align="center">
 			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" />&nbsp;&nbsp;
-			<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" />
+			{if $EMODE eq 'edit'}
+				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" />
+			{else}
+				<input type="button" value="Cancel" class="small" onclick="window.history.back()">
+			{/if}
 		</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -238,6 +244,7 @@
 
 function check4null(form)
 {ldelim}
+
         var isError = false;
         var errorMessage = "";
         // Here we decide whether to submit the form.
@@ -263,6 +270,7 @@ function check4null(form)
                 return false;
         {rdelim}
  return true;
+
 {rdelim}
 
 init();
