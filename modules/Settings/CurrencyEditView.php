@@ -15,12 +15,27 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 $smarty=new vtigerCRM_Smarty;
-
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+{
+        $tempid = $_REQUEST['record'];
+        $sql = "select * from currency_info where id=".$tempid;
+        $result = $adb->query($sql);
+        $currencyResult = $adb->fetch_array($result);
+	$smarty->assign("CURRENCY_NAME",$currencyResult['currency_name']);
+	$smarty->assign("CURRENCY_CODE",$currencyResult['currency_code']);
+	$smarty->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
+	$smarty->assign("CONVERSION_RATE",$currencyResult['conversion_rate']);
+	$smarty->assign("CURRENCY_STATUS",$currencyResult['currency_status']);
+	if($currencyResult['currency_status'] == 'Active')
+		$smarty->assign("ACTSELECT","selected");	
+	else
+		$smarty->assign("INACTSELECT","selected");
+	$smarty->assign("ID",$tempid);
+}
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("PARENTTAB",$_REQUEST['parenttab']);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("RETURN_MODULE","Settings");
-$smarty->assign("RETURN_ACTION","CurrencyListView");
 
 $smarty->display("CurrencyEditView.tpl");
 
