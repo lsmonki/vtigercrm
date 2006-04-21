@@ -362,9 +362,9 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'product','campaign',1,59,'product','Product',1,0,0,100,3,76,1,'V~O',0,5,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')");
- $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')");
- $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'actualcost','campaign',1,'15','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedresponse','campaign',1,'16','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')");
@@ -372,6 +372,12 @@ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field")
 $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')");
 
 $this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')");
+$this->db->query("insert into field values(26,".$this->db->getUniqueID("field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')");
 $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')");
 
