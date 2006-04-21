@@ -1727,20 +1727,29 @@
                 </field>
 		<field name="campaignstatus" type="C" size="255">
                 </field>
-    <field name="expectedrevenue" type="C" size="255">
+		<field name="expectedrevenue" type="I" size="255">
                 </field>
-    <field name="budgetcost" type="C" size="255">
-                    </field>
- <field name="actualcost" type="C" size="255">
-                    </field>
- <field name="expectedresponse" type="C" size="255">
-                    </field>
- <field name="numsent" type="N" size="11.0">
-                    </field>
- <field name="campaignid" type="I" size="11">
-			<KEY/>
-                    </field>
- <field name="closingdate" type="D"></field>
+    		<field name="budgetcost" type="I" size="255">
+                </field>
+ 		<field name="actualcost" type="I" size="255">
+                </field>
+ 		<field name="expectedresponse" type="C" size="255">
+                </field>
+ 		<field name="numsent" type="N" size="11.0">
+                </field>
+ 		<field name="product" type="C" size="255">
+                </field>
+ 		<field name="sponsor" type="C" size="255">
+                </field>
+ 		<field name="targetaudience" type="C" size="255">
+                </field>
+ 		<field name="targetsize" type="I" size="255">
+                </field>
+ 		<field name="campaignid" type="I" size="11">
+		<KEY/>
+                </field>
+ 		<field name="closingdate" type="D">
+		</field>
 
 
 		<opt>Type=InnoDB</opt>
@@ -1754,15 +1763,6 @@
                         <col>campaignid</col>
                 </index>	
         </table>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -7366,56 +7366,6 @@
 	 <index name="Campaignstatus_UK01">
 			
 			<col>campaignstatus</col>
-		</index>
-		<data>
-		</data>
-	</table>
-	
-	<table name="expectedrevenue">
-		<field name="expectedrevenueid" type="I" size="19">
-			<KEY/>
-	<AUTOINCREMENT/>
-		
-		</field>
-		<field name="expectedrevenue" type="C" size="200">
-			<NOTNULL/>
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="presence" type="I" size="1">
-			<NOTNULL/>
-			<DEFAULT value="1"/>
-		</field>
-		<opt>Type=InnoDB</opt> <index name="CampaignExpRev_UK01">
-			<UNIQUE/>
-			<col>expectedrevenue</col>
-		</index>
-		<data>
-		</data>
-	</table>
-	
-	<table name="actualcost">
-		<field name="actualcostid" type="I" size="19">
-			<KEY/>
-	<AUTOINCREMENT/>
-		
-		</field>
-		<field name="actualcost" type="C" size="200">
-			<NOTNULL/>
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="presence" type="I" size="1">
-			<NOTNULL/>
-			<DEFAULT value="1"/>
-		</field>
-		<opt>Type=InnoDB</opt> <index name="CampaignActCst_UK01">
-			<UNIQUE/>
-			<col>actualcost</col>
 		</index>
 		<data>
 		</data>
