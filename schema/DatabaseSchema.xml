@@ -1744,7 +1744,20 @@
  		<field name="targetaudience" type="C" size="255">
                 </field>
  		<field name="targetsize" type="I" size="255">
-                </field>
+		</field>
+	<field name="expectedresponsecount" type="I" size="255">
+	</field>
+	<field name="expectedsalescount" type="I" size="255">
+	</field>
+	<field name="expectedroi" type="I" size="255">
+	</field>
+	<field name="actualresponsecount" type="I" size="255">
+	</field>
+	<field name="actualsalescount" type="I" size="255">
+	</field>
+	<field name="actualroi" type="I" size="255">
+	</field>
+
  		<field name="campaignid" type="I" size="11">
 		<KEY/>
                 </field>
