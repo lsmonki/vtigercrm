@@ -45,8 +45,8 @@ function getMyTickets()
 		$title[]='home_mytkt';
 
 		$header=array();
-		$header[]=$current_module_strings['LBL_TICKET_ID'];
 		$header[]=$current_module_strings['LBL_SUBJECT'];
+		$header[]=$current_module_strings['LBL_TICKET_ID'];
 		$header[]=$current_module_strings['Related To'];
 		$header[]=$current_module_strings['LBL_STATUS'];
 		$header[]=$current_module_strings['LBL_CREATED_DATE'];
@@ -57,8 +57,8 @@ function getMyTickets()
 		{
 			$value=array();
 			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-			$value[]=$ticketid;
 			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+			$value[]=$ticketid;
 
 			$parent_id = $adb->query_result($tktresult,$i,"parent_id");
 			$parent_name = '';
