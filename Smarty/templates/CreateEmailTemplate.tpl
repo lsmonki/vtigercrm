@@ -140,11 +140,11 @@
 
 								</td>
 							<td width="85%" align="left" style="padding-left:10px;">
-								<input name="templatename" type="text" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" value="{$TEMPLATENAME}" />
+								<input name="templatename" type="text" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" value="{$TEMPLATENAME}" tabindex="1"/>
 								<br />
-								<textarea name="description" cols="30" rows="3" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" >{$DESCRIPTION}</textarea>
+								<textarea name="description" cols="30" rows="3" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="2" >{$DESCRIPTION}</textarea>
 								<br />
-								<select name="foldername" class="detailedViewTextBox" tabindex="1" value="{$FOLDERNAME}">
+								<select name="foldername" class="detailedViewTextBox" tabindex="3" value="{$FOLDERNAME}">
 									<option value="Personal">{$UMOD.LBL_PERSONAL}</option>
 									<option value="Public" selected>{$UMOD.LBL_PUBLIC}</option>
 								</select>
@@ -165,7 +165,7 @@
 	                  <tr>
     	                <td width="15%" align="right" bgcolor="#F6F6F6"><b><font color='red'>*</font>{$UMOD.LBL_TEMPLATE_SUBJECT}</b></td>
         	            <td width="60%" style="border-right:1px dashed #CCCCCC;">
-							<input name="subject" type="text" class="detailedViewTextBox" value="{$SUBJECT}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
+							<input name="subject" type="text" class="detailedViewTextBox" value="{$SUBJECT}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="4"/></td>
             	      	<td width="25%" rowspan="3" style="padding:5px;text-align:left;vertical-align:top;">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr><td style="color:#999999;">{$UMOD.LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT}</td></tr>
@@ -174,7 +174,7 @@
 								<tr><td>&nbsp;</td></tr>
 
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD_TYPE}</b></td></tr>
-								<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));">
+								<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));" tabindex="6">
 								<OPTION VALUE="0" selected>--None--                            
                             		
                         				        <OPTION VALUE="1">{$UMOD.LBL_CONTACT_FIELDS}
@@ -186,7 +186,7 @@
 								</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD}</b></td></tr>
-								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;"><option value="0" selected>--None--</select></td></tr>
+								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>--None--</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_MERGE_FIELD_VALUE}</b></td></tr>
 
@@ -208,7 +208,7 @@
 	                  <tr>
 	                    <td  align="right" bgcolor="#F6F6F6" valign="top"><b>{$UMOD.LBL_TEMPLATE_MESSAGE}</b></td>
 	                    <td style="border-right:1px dashed #CCCCCC;" nowrap>
-				<textarea name="body" rows="10" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'">{$BODY}</textarea>
+				<textarea name="body" rows="10" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="5">{$BODY}</textarea>
 			    </td>
 			  </tr>
 
@@ -223,11 +223,11 @@
 	<tr>
 
 		<td align="center">
-			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" />&nbsp;&nbsp;
+			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" tabindex="7"/>&nbsp;&nbsp;
 			{if $EMODE eq 'edit'}
-				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" />
+				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" tabindex="8"/>
 			{else}
-				<input type="button" value="Cancel" class="small" onclick="window.history.back()">
+				<input type="button" value="Cancel" class="small" onclick="window.history.back()" tabindex="8">
 			{/if}
 		</td>
 		<td>&nbsp;</td>
