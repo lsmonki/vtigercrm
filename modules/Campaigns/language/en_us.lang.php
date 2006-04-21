@@ -44,7 +44,13 @@ $mod_strings = Array(
 'TargetSize'=>'TargetSize',
 'Sponsor'=>'Sponsor',
 
+'Expected Sales Count'=>'Expected Sales Count',
+'Expected Response Count'=>'Expected Response Count',
+'Expected ROI'=>'Expected ROI',
 
+'Actual Sales Count'=>'Actual Sales Count',
+'Actual Response Count'=>'Actual Response Count',
+'Actual ROI'=>'Actual ROI',
 
 );
 
