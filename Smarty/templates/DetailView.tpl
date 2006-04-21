@@ -33,6 +33,16 @@ function callConvertLeadDiv(id)
         var urlstring = "module=Leads&action=LeadsAjax&ajxaction=convertlead&record="+id;
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
+function tagvalidate()
+{ldelim}
+	if(document.getElementById('txtbox_tagfields').value != '')
+		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
+	else
+	{ldelim}
+		alert("Please enter a tag");
+		return false;
+	{rdelim}
+{rdelim}
 
 Calendar.setup ({ldelim}
                 inputField : "jscal_field", ifFormat : "{$CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
@@ -117,8 +127,8 @@ Calendar.setup ({ldelim}
 		<div class="small" style="padding:20px" >
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><td><td>&nbsp;</td></tr>
-		 <tr><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><a href="#" onClick="show('tagdiv')">+addtag</a><div id="tagdiv" style="display:block";>{$APP.LBL_TAG_FIELDS} <input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="SaveTag('txtbox_tagfields','{$ID}','{$MODULE}')"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv')"></div></td></tr>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
+		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),hide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a></div><div id="tagdiv" style="display:none";><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv'),show('addtagdiv')"></div></td></tr>
 		 </table>			 
 		 <hr noshade size=1>
 		
