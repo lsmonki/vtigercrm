@@ -292,12 +292,12 @@ $array = Array(
         </tr>
 	
 	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>Tabdata File Permission </strong><br> (Smarty/templates_c)</td>
+                <td valign=top ><strong>Tabdata File Permission </strong><br> (tabdata.php) </td>
                 <td valign=top bgcolor="white"><?php echo (is_writable('./tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
         </tr>
 
 	<tr bgcolor="#fafafa">
-                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (Smarty/templates_c)</td>
+                <td valign=top ><strong>ParentTabdata File Permission </strong><br> (parent_tabdata.php) </td>
                 <td valign=top bgcolor="white"><?php echo (is_writable('./parent_tabdata.php'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not be able to work with the product</font>";?></td>
         </tr>
 
