@@ -49,16 +49,16 @@ $_SESSION['CAMPAIGN_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
+	$where=getWhereCondition($currentModule);
 	
 	$url_string .="&query=true";
 
-	if (isset($_REQUEST['campaignid'])) $campaignid = $_REQUEST['campaignid'];
+/*	if (isset($_REQUEST['campaignid'])) $campaignid = $_REQUEST['campaignid'];
 	if (isset($_REQUEST['campaignname'])) $campaignname = $_REQUEST['campaignname'];
 	if (isset($_REQUEST['campaigntype'])) $campaigntype = $_REQUEST['campaigntype'];
 	if (isset($_REQUEST['campaignstatus'])) $campaignstatus = $_REQUEST['campaignstatus'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-
+*/
 }
 
 //<<<<cutomview>>>>>>>
@@ -113,6 +113,7 @@ if(isset($where) && $where != '')
 {
 	$list_query .= ' and '.$where;
 }
+
 //sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')
 {
@@ -185,6 +186,13 @@ $listview_entries = getListViewEntries($focus,"Campaigns",$list_result,$navigati
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Campaigns","index",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','campaignname','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
+$smarty->assign("ALPHABETICAL", $alphabetical);
+
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
