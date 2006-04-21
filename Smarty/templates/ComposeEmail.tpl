@@ -36,13 +36,16 @@
 	</tr>
 																																										</table>	
 	</td></tr> 
+	{foreach item=row from=$BLOCKS}
+	{foreach item=elements from=$row}
+	{if $elements.2.0 eq 'parent_id'}
 	<tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" width="15%"><b>To : </b></td>
 	<td class="dvtCellLabel" style="padding: 5px;">
- 	<input name="{$BLOCKS.0.1.2.0}" type="hidden" value="{$BLOCKS.0.1.3.1}">
-	<textarea readonly name="parent_name" class=txtBox" cols="50" rows="2">{$BLOCKS.0.1.3.0}</textarea>&nbsp;
+ 	<input name="{$elements.2.0}" type="hidden" value="{$elements.3.1}">
+	<textarea readonly name="parent_name" class=txtBox" cols="50" rows="2">{$elements.3.0}</textarea>&nbsp;
 	<select name="parent_type">
-	{foreach key=labelval item=selectval from=$BLOCKS.0.1.1.0}
+	{foreach key=labelval item=selectval from=$elements.1.0}
 	<option value="{$labelval}" {$selectval}>{$labelval}</option>
     {/foreach}
     </select>
@@ -70,23 +73,29 @@
 	</td>
 	<td class="dvtCellLabel" width="25%">&nbsp;</td>
 	</tr>
+	{elseif $elements.2.0 eq 'subject'}
 	<tr>
-	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$BLOCKS.1.0.1.0}  :</td>
-	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$BLOCKS.1.0.2.0}" value="{$BLOCKS.1.0.3.1}"></td>
+	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
+	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.1}"></td>
 	</tr>
+	{elseif $elements.2.0 eq 'filename'}
 	<tr>
 	
-	<td class="lvtCol" style="padding: 5px;" align="right" nowrap>{$BLOCKS.1.1.1.0}  :</td>
+	<td class="lvtCol" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
 	<td class="dvtCellLabel" style="padding: 5px;">
-	<input name="{$BLOCKS.1.1.2.0}"  type="file" class="small" value="{$BLOCKS.1.1.3.1}"/>
-	<input type="hidden" name="id" value=""/>{$BLOCKS.1.1.3.0}</td>
+	<input name="{$elements.2.0}"  type="file" class="small" value="{$elements.3.1}"/>
+	<input type="hidden" name="id" value=""/>{$elements.3.0}</td>
 	<td class="dvtCellLabel">&nbsp;</td>
 	</tr>
+	{elseif $elements.2.0 eq 'description'}
 	<tr>
 	<td colspan="3" align="center" height="320">
-	<input id="description___Config" value="" style="display: none;" type="hidden"><iframe id="description___Frame" src="include/fckeditor/editor/fckeditor.html?InstanceName=description&amp;Toolbar=Default" frameborder="no" height="400" scrolling="no" width="100%"></iframe><textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$fldvalue}</textarea>
+	<input id="description___Config" value="" style="display: none;" type="hidden"><iframe id="description___Frame" src="include/fckeditor/editor/fckeditor.html?InstanceName=description&amp;Toolbar=Default" frameborder="no" height="400" scrolling="no" width="100%"></iframe><textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$elements.3.0}</textarea>
 	</td>
 	</tr>
+	{/if}
+	{/foreach}
+	{/foreach}
 	<tr>
 
 	<td colspan="3" class="lvtCol" style="padding: 5px;" align="center">
