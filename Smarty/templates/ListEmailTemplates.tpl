@@ -1,6 +1,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-<style type="text/css">@import url(../themes/blue/style.css);</style>
+<style type="text/css">@import url(themes/blue/style.css);</style>
 
 <script>
 function massDelete()
@@ -62,7 +62,8 @@ function massDelete()
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
-        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_EMAIL_TEMPLATES_LIST}</b></span>
+        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
+			 <a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">&gt; {$UMOD.LBL_EMAIL_TEMPLATES_LIST}</a></b></span>
             	    <hr noshade="noshade" size="1" />
 		</td>
 
@@ -103,7 +104,7 @@ function massDelete()
 				{/if}				
 				&nbsp;<a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$template.templateid}" >{$template.templatename}</a></td>
 				<td>{$template.description}</td>
-				<td><a href="#">View sample Email </a></td>
+				<td><a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$template.templateid}">View Sample Email </a></td>
 			  	</tr>
 				
 				{/foreach}
