@@ -12,6 +12,7 @@
 require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/utils/UserInfoUtil.php');
 
 global $mod_strings,$app_strings,$log,$current_user,$theme;
 
@@ -24,13 +25,8 @@ if(isset($_REQUEST['record']))
 	$id = $_REQUEST['record'];
 	$log->debug(" the id is ".$id);
 }
+
 //Retreive lead details from database
-
-$userid = $row["smownerid"];
-
-$log->debug(" the userid is ".$userid);
-$crmid = $adb->getUniqueID("crmentity");
-
 $sql = "SELECT firstname, lastname, company, smownerid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.leadid =".$id;
 $result = $adb->query($sql);
 $row = $adb->fetch_array($result);
@@ -42,8 +38,9 @@ $log->debug(" the lastname is ".$lastname);
 $company = $row["company"];
 $log->debug(" the company is  ".$company);
 $potentialname = $row["company"] ."-";
-
 $log->debug(" the potentialname is ".$potentialname);
+$userid = $row["smownerid"];
+$log->debug(" the userid is ".$userid);
 
 //Retreiving the current user id
 $modified_user_id = $current_user->id;
@@ -76,6 +73,7 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 	<script type="text/javascript" src="jscalendar/lang/calendar-'.$app_strings['LBL_JSCALENDAR_LANG'].'.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
+	<script language="JavaScript" type="text/javascript" src="Lead.js"></script>
 	<form name="ConvertLead" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Leads">
 	<input type="hidden" name="record" value="'.$id.'">
@@ -101,8 +99,11 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 		<tr>
 			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
 			<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'"></td>
-		</tr>
-		<tr>
+		</tr>';
+
+if(isPermitted("Potentials",'EditView') == 'yes')
+{
+$convertlead .='<tr>
 			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_DO_NOT_CREATE_NEW_POTENTIAL'].'</td>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="fnSlide2(\'ch\',\'cc\')"></td>
 		</tr>
@@ -122,6 +123,11 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 								<input name="closedate" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
 								<img src="'.$image_path.'calendar.gif" id="jscal_trigger">
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
+								<script type="text/javascript">
+									Calendar.setup ({
+										inputField : "jscal_field", ifFormat :"'.parse_calendardate($app_strings['NTC_DATE_FORMAT']).'", showsTime : false, button :"jscal_trigger", singleClick : true, step : 1
+									});
+								</script>
 							</td>
 						</tr>
 						<tr>
@@ -135,8 +141,9 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 					</table>
 				</div>
 			</td>
-		</tr>
-		<tr>
+		</tr>';
+}
+$convertlead .='<tr>
 			<td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td>
 		</tr>
 		<tr>
@@ -148,7 +155,5 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 	</table>
 </div></form>';
 echo $convertlead;
-
-//$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 ?>
