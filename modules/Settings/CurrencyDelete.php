@@ -18,7 +18,7 @@ $id = $_REQUEST['record'];
 $sql = "delete from currency_info where id =".$id;
 $adb->query($sql);
 
-header("Location:index.php?module=Settings&action=CurrencyListView");
+header("Location:index.php?module=Settings&action=CurrencyListView&parenttab=".$_REQUEST['parenttab']);
 
 
 ?>
