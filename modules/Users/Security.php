@@ -1903,7 +1903,7 @@ Sincerely,
 name
 title';
 	       
-               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Good received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Goods received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
 
 
 	       $body= ' Dear
