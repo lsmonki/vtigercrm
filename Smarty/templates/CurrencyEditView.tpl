@@ -15,10 +15,9 @@
 <td width="75%" valign="top">
 <form action="index.php" method="post" name="index" id="form">
 <input type="hidden" name="module" value="Settings">
+<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 <input type="hidden" name="action" value="index">
 <input type="hidden" name="record" value="{$ID}">
-<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
-<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
@@ -41,7 +40,7 @@
 					<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 					<table width="100%"  border="0" cellspacing="0" cellpadding="10">
 						<tr>
-							<td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url(include/images/noimage.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
+							<td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url({$IMAGE_PATH}currency.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
 							<td colspan="2" class="genHeaderBig" width="75%">Currency<br />
 							<hr /> </td>
 						</tr>
@@ -64,8 +63,8 @@
 						<tr>
 							<td align="right"><b>{$MOD.LBL_CURRENCY_STATUS}  : </b></td>
 							<td><select name="currency_status" value="{$CURRENCY_STATUS}" class="importBox">
-								<option value="Active" {$SELECT}>{$MOD.LBL_ACTIVE}</option>
-					        	        <option value="Inactive" {$SELECT}>{$MOD.LBL_INACTIVE}</option>
+								<option value="Active" "{$ACTSELECT}">{$MOD.LBL_ACTIVE}</option>
+					        	        <option value="Inactive" "{$INACTSELECT}">{$MOD.LBL_INACTIVE}</option>
 					                    </select>
 							</td>
 						</tr>
@@ -75,7 +74,7 @@
 						<tr>
 							<td colspan="2" align="center">
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='SaveCurrencyInfo'; return validate()" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
-							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='index'; this.form.module.value='Settings'; this.form.return_action.value='index'; this.form.return_module.value='Settings';" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 							</td>
 						</tr>
 					</table>
