@@ -187,7 +187,7 @@ if(isset($ids))
 {
 	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
 }
-if(isPermitted("Leads",8,'') == 'yes') 
+if(isPermitted("Leads","Merge") == 'yes') 
 {
 	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"small\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
