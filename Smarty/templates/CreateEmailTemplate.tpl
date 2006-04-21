@@ -144,10 +144,20 @@
 								<br />
 								<textarea name="description" cols="30" rows="3" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="2" >{$DESCRIPTION}</textarea>
 								<br />
-								<select name="foldername" class="detailedViewTextBox" tabindex="3" value="{$FOLDERNAME}">
-									<option value="Personal">{$UMOD.LBL_PERSONAL}</option>
-									<option value="Public" selected>{$UMOD.LBL_PUBLIC}</option>
-								</select>
+								<select name="foldername" class="detailedViewTextBox" tabind
+ex="3">
+                                                                {foreach item=arr from=$FOLDERNAME}
+
+                                                                 <option value="{$FOLDERNAME}" {$arr}>{$FOLDERNAME}</option>
+
+                                                                        {if $FOLDERNAME == 'Public'}
+                                                                                <option value="Personal">Personal</option>
+                                                                        {else}
+                                                                                <option value="Public">Public</option>
+                                                                        {/if}
+
+                                                                {/foreach}
+                                                                </select>
 							</td>
 						</tr>
 					</table>
