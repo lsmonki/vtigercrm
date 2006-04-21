@@ -1,5 +1,5 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(../themes/blue/style.css);</style>
+<style type="text/css">@import url(themes/blue/style.css);</style>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -9,7 +9,8 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 	   <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
-              <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_EMAIL_TEMPLATE_INFORMATION} &quot;{$TEMPLATENAME}&quot;</b></span>
+              <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
+		<a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">&gt; {$UMOD.LBL_EMAIL_TEMPLATE_INFORMATION} &quot;{$TEMPLATENAME}&quot;</a></b></span>
 	        <hr noshade="noshade" size="1" />
 	   </td>
 		<td width="10%" class="showPanelBg">&nbsp;</td>
@@ -30,7 +31,7 @@
 				<tr><td width="75%" valign="middle" >
 					<img src="{$IMAGE_PATH}ViewTemplate.gif" align="left" />
 					<span class="genHeaderBig">{$TEMPLATENAME}</span><br />
-					<span class="dashMnuUnSel">{$TEMPLATENAME} Template - provided by vtiger CRM Team</span> 
+					<span class="dashMnuUnSel">{$TEMPLATENAME} Template </span> 
 				    </td>
 				    <td width="25%" align="right" valign="bottom"><input type="submit" name="Button" value="Edit this template" class="small" onclick="this.form.action.value='editemailtemplate'"/></td>
 				</tr>
