@@ -1809,3 +1809,106 @@ a.webMnu:Hover {
 
 /*  END OF WEB MAIL */
 
+/* Home Page */
+.MatrixLayer{
+	border:2px solid #CCCCCC;
+	background-color:#FFFFFF;
+	width:30%;
+	position:relative;
+	visibility:visible;
+	margin:10px;
+	height:250px;
+}
+
+.fontBold{
+	font-size:13px;
+	color:#000000;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.style_Gray{
+	color:gray;
+}
+	
+/* End of Home Page */
+
+/* All Menu */
+#allMenu{
+	width:500px;
+	border-top:2px solid #CCCCCC;
+	border-left:2px solid #CCCCCC;
+	border-bottom:2px solid #666666;
+	border-right:2px solid #666666;
+	left:100px;
+	top:100px;
+	display:none;
+	background-color:#CCCCCC;
+	position:absolute;
+}
+
+.allMnuTable{
+	width:100%;
+	border:1px solid #000000;
+	background-color:#FFFFFF;
+}
+
+.allMnuHandle td{
+	height:20px;
+	color:#FFFFFF;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	font-weight:bold;
+	text-decoration:none;
+	background-color:#000066;
+	cursor:move;
+	padding:2px;
+	border-bottom:2px solid #666666;
+}
+
+.allMnuHdr{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-weight:normal;
+	font-size:11px;
+	text-decoration:none;
+	display:block;
+	background-color:#FFFFFF;
+	color:#000099;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+a.allMnu{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-decoration:none;
+	font-weight:normal;
+	display:block;
+	width:125px;
+	height:15px;
+	padding-left:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	background-color:#FFFFFF;
+	border:1px solid #FFFFFF;
+	color:#000033;
+	margin-left:20px;
+}
+
+a.allMnu:Hover{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	text-decoration:none;
+	font-weight:normal;
+	display:block;
+	width:125px;
+	height:15px;
+	padding-left:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	background-color:#ECFFFF;
+	border:1px solid #00CCFF;
+	color:#000033;
+}
+/* End Of All Menu */
+
+
