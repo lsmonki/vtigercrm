@@ -39,6 +39,11 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
+'Product'=>'Product',
+'Target Audience'=>'Target Audience',
+'TargetSize'=>'TargetSize',
+'Sponsor'=>'Sponsor',
+
 
 
 );
