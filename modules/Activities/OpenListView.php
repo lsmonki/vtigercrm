@@ -120,9 +120,9 @@ function getPendingActivities()
 	$title[]='activity_view';
 
 	$header=array();
+	$header[] =$current_module_strings['LBL_LIST_SUBJECT'];
 	$header[] ='Type';
 	$header[] =$current_module_strings['LBL_LIST_CLOSE'];
-	$header[] =$current_module_strings['LBL_LIST_SUBJECT'];
 	$header[] =$current_module_strings['LBL_LIST_CONTACT'];
 	$header[] =$current_module_strings['LBL_LIST_ACCOUNT'];
 	$header[] =$current_module_strings['LBL_LIST_RELATED_TO'];
@@ -222,9 +222,9 @@ function getPendingActivities()
 		// Code by Jaguar Ends
 
 		$entries[$event['id']] = array(
+				'0' => '<a href="index.php?action=DetailView&module='.$event["module"].'&activity_mode='.$activity_type.'&record='.$event["id"].''.$return_url.'" style="'.$font_color.';">'.$event["name"].'</a>',
 				'IMAGE' => '<IMG src="'.$image_path.$event["type"].'s.gif">',
 				'ACTIVITY' => $activity_fields,
-				'NAME' => '<a href="index.php?action=DetailView&module='.$event["module"].'&activity_mode='.$activity_type.'&record='.$event["id"].''.$return_url.'" style="'.$font_color.';">'.$event["name"].'</a>',
 				'CONTACT_NAME' => '<a href="index.php?action=DetailView&module=Contacts&record='.$event['contactid'].''.$return_url.'" style="'.$font_color.';">'.$event['firstname'].' '.$event['lastname'].'</a>',
 				'ACCOUNT_NAME' => '<a href="index.php?action=DetailView&module=Accounts&record='.$event['accountid'].'" style="'.$font_color.';">'.$event['accountname'].'</a>',
 				'PARENT_NAME' => $event['parent'],
