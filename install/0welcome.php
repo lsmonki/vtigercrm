@@ -89,10 +89,10 @@ to get time-bound answers to all your queries</u>.We do provide telephone-suppor
 The support subscription link is as follows :- 
 <ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
 
-vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.<br>
+vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.<br><br><br>
 <center>
 We do believe that <b>YOU</b> can and will make a
-difference.</center>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
+difference.</center><br><br><br>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
 Please find mentioned below some information about us that you could utilize
 <ul>http://blogs.vtiger.com</ul> 
 <ul>http://forums.vtiger.com </ul>
