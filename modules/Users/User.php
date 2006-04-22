@@ -492,13 +492,13 @@ class User extends SugarBean {
 	function getUserListViewHeader()
 	{
 		global $mod_strings;
-		$header_array=array($mod_strings['LBL_LIST_TOOLS'],
-						    $mod_strings['LBL_LIST_NAME'],
+		$header_array=array(
+						    $mod_strings['LBL_LIST_TOOLS'],
 						    $mod_strings['LBL_LIST_USER_NAME'],
-						    $mod_strings['LBL_LIST_DEPARTMENT'],
-						    $mod_strings['LBL_LIST_EMAIL'],
 						    $mod_strings['LBL_USER_ROLE'],
-							$mod_strings['LBL_LIST_ADMIN']);
+						    $mod_strings['LBL_LIST_EMAIL'],
+						    $mod_strings['LBL_LIST_NAME'],
+						    $mod_strings['LBL_LIST_ADMIN']);
 		return $header_array;
 	}
 
@@ -520,7 +520,7 @@ class User extends SugarBean {
 			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
 			$entries[]=$this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name');
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
-			$entries[]=$this->db->query_result($result,$i-1,'department');
+//			$entries[]=$this->db->query_result($result,$i-1,'department');
 			$entries[]=$this->db->query_result($result,$i-1,'email1');
 			$rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$roleinfo[$rolecode][0];
