@@ -13,6 +13,8 @@
 
 
 global $conn;
+global $query_count, $success_query_count, $failure_query_count;
+global $success_query_array, $failure_query_array;
 
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
 echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.....</b><br>";
@@ -1531,7 +1533,7 @@ foreach($alter_query_array as $query)
 	Execute($query);
 }
 
-$update_query2 = "UPDATE field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails'";
+$update_query2 = "UPDATE field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
 Execute($update_query2);
 
 $alter_query = "ALTER TABLE field ADD column info_type varchar(20) default NULL after quickcreatesequence";
@@ -1894,6 +1896,15 @@ $query_array = Array(
   `id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1",
 
+"CREATE TABLE `datashare_module_rel` (
+  `shareid` int(19) NOT NULL,
+  `tabid` int(19) NOT NULL,
+  `relationtype` varchar(200) default NULL,
+  PRIMARY KEY  (`shareid`),
+  KEY `idx_datashare_module_rel_tabid` (`tabid`),
+  CONSTRAINT `fk_datashare_module_rel456` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+
 "CREATE TABLE `datashare_grp2grp` (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
@@ -1931,15 +1942,6 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_grp2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_grp2rs1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_grp2rs36` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
-
-"CREATE TABLE `datashare_module_rel` (
-  `shareid` int(19) NOT NULL,
-  `tabid` int(19) NOT NULL,
-  `relationtype` varchar(200) default NULL,
-  PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_module_rel_tabid` (`tabid`),
-  CONSTRAINT `fk_datashare_module_rel456` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `datashare_relatedmodule_permission` (
@@ -2227,11 +2229,6 @@ $query_array = Array(
 "ALTER TABLE `crmentity` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `crmentity` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
 "ALTER TABLE `crmentity` MODIFY COLUMN `modifiedtime` DATETIME NOT NULL",
-"ALTER TABLE `currency_info` MODIFY COLUMN `currency_name` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `id` INTEGER(11) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `currency_info` ADD COLUMN `conversion_rate` DECIMAL(5,3) DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `currency_status` VARCHAR(25) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `defaultid` VARCHAR(10) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
 "ALTER TABLE `customaction` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL UNIQUE",
 "ALTER TABLE `customaction` MODIFY COLUMN `content` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `customerdetails` MODIFY COLUMN `customerid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2435,6 +2432,11 @@ $query_array = Array(
 "ALTER TABLE `chat_users` ADD KEY `chat_users_IDX2` (`ping`)",
 "ALTER TABLE `contactgrouprelation` ADD KEY `contactgrouprelation_IDX1` (`groupname`)",
 "ALTER TABLE `currency_info` DROP PRIMARY KEY",
+"ALTER TABLE `currency_info` MODIFY COLUMN `currency_name` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `currency_info` ADD COLUMN `id` INTEGER(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST",
+"ALTER TABLE `currency_info` ADD COLUMN `conversion_rate` DECIMAL(5,3) DEFAULT NULL",
+"ALTER TABLE `currency_info` ADD COLUMN `currency_status` VARCHAR(25) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `currency_info` ADD COLUMN `defaultid` VARCHAR(10) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
 "ALTER TABLE `currency_info` ADD PRIMARY KEY ()",
 "ALTER TABLE `def_org_field` ADD KEY `tabid4` (`tabid`)",
 "ALTER TABLE `def_org_share` ADD KEY `fk_def_org_share23` (`permission`)",
@@ -2523,6 +2525,25 @@ foreach($query_array as $query)
 	Execute($query);
 }
 
+//Added on 22-04-06 - to add the Notify Owner field in Contacts and Accounts
+$notify_owner_array = Array(
+	"update field set sequence=26 where tabid=4 and fieldname='modifiedtime'",
+	"update field set sequence=25 where tabid=4 and fieldname='createdtime'",
+	
+	"insert into field values(4,".$conn->getUniqueID("field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
+	"alter table contactdetails add column notify_owner varchar(3) default 0 after reference",
+
+	"update field set sequence=21 where tabid=6 and fieldname='modifiedtime'",
+	"update field set sequence=20 where tabid=6 and fieldname='createdtime'",
+	"update field set sequence=19 where tabid=6 and fieldname='assigned_user_id'",
+	
+	"insert into field values(6,".$conn->getUniqueID("field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
+	"alter table account add column notify_owner varchar(3) default 0 after emailoptout"
+			   );
+foreach($notify_owner_array as $query)
+{
+	Execute($query);
+}
 
 
 
@@ -2537,21 +2558,33 @@ echo '</table>';
 echo "<br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
 echo '<br><b>Migration has been successfully completed. Data has been moved from your old vtiger to Latest vtigerCRM.';
 echo '<br>Please note down all the failed queries or please copy the whole table and save. This may be useful in future.</b>';
+
+
+echo '<br><br>';
+echo '<br> Total Number of Queries executed = '.$query_count;
+echo '<br> Total Number of Success Queries  = '.$success_query_count;
+echo '<br> Total Number of Failure Queries  = '.$failure_query_count;
+//echo '<pre>Success Queries => ';print_r($success_query_array);echo '</pre>';
+//echo '<pre>Failure Queries => ';print_r($failure_query_array);echo '</pre>';
+
+
 echo '<br><br><br>';
 
 echo '<div align="center"><a href="index.php"><b> Home </b></a></div>';
 echo '<br><br><br>';
 
-
-
-
-
+echo '<br>Failed Queries are : <br><br>';
+foreach($failure_query_array as $failed_query)
+	echo '<br><font color="red">'.$failed_query.'</font>';
+echo '<br><br>';
 
 
 function Execute($query)
 {
-	global $conn;
+	global $conn, $query_count, $success_query_count, $failure_query_count, $success_query_array, $failure_query_array;
+
 	$status = $conn->query($query);
+	$query_count++;
 	if(is_object($status))
 	{
 		echo '
@@ -2561,7 +2594,7 @@ function Execute($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		//echo '<br>'.$status.' ==> '.$query;
-		$success_query_array[] = $query;
+		$success_query_array[$success_query_count++] = $query;
 	}
 	else
 	{
@@ -2572,7 +2605,7 @@ function Execute($query)
 				<td width="70%">'.$query.'</td>
 			</tr>';
 		//echo '<br><br>'.$status.' ======>  '.$query;
-		$failure_query_array[] = $query;
+		$failure_query_array[$failure_query_count++] = $query;
 	}
 }
 

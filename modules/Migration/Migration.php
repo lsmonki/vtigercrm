@@ -196,6 +196,13 @@ class Migration
 		echo '<br><br>Note : Please note that for each query the "Object" string will be displayed at the starting of the line if the query executed successfully. If the query fails then "Object" will not be displayed. we can find out the failed queries based on these Object display.';
 		$conn->println("\n\n\nMickie ---- Starts");
 
+		//Added variables to get the queries list and count
+		$query_count = 1;
+		$success_query_count = 1;
+		$failure_query_count = 1;
+		$success_query_array = Array();
+		$failure_query_array = Array();
+
 		//To handle the file includes for each and every version
 		//Here we have to decide which files should be included, where the files will be added newly for every public release
 		//Handle Here -- Mickie
