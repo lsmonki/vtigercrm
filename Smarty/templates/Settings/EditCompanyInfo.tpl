@@ -74,13 +74,13 @@
 	</tr>
 	<tr>
 	<td colspan="2" style="padding: 0px;" width="75%">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
-	<td nowrap align="right" width="25%"><b>{$MOD.LBL_ORGANIZATION_PHONE} : </b></td>
-	<td width="25%"><input name="organization_phone" class="txtBox" value="{$ORGANIZATIONPHONE}" type="text"></td>
+	<td nowrap align="right" width="15%"><b>{$MOD.LBL_ORGANIZATION_PHONE} : </b></td>
+	<td width="40%"><input name="organization_phone" class="txtBox" value="{$ORGANIZATIONPHONE}" type="text"></td>
 
-	<td nowrap align="right" width="25%"><b>{$MOD.LBL_ORGANIZATION_WEBSITE} : </b></td>
-	<td width="25%"><input name="organization_website" class="txtBox" value="{$ORGANIZATIONWEBSITE}" type="text"></td>
+	<td nowrap align="right" width="15%"><b>{$MOD.LBL_ORGANIZATION_WEBSITE} : </b></td>
+	<td width="30%"><input name="organization_website" class="txtBox" value="{$ORGANIZATIONWEBSITE}" type="text"></td>
 	</tr>
 	<tr>
 	<td nowrap align="right"><b>{$MOD.LBL_ORGANIZATION_FAX} : </b></td>
