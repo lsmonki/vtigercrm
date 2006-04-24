@@ -1495,6 +1495,31 @@ function getFilePath($attachmentid,$filename)
 }
 
 /**
+ * This function is used to get the all the modules that have Quick Create Feature.
+ * Returns Tab Name and Tablabel.
+ */
+
+function getQuickCreateModules()
+{
+         global $adb;
+         global $mod_strings;
+
+$qc_query = "select distinct tablabel,tab.name from field inner join tab on tab.tabid = field.tabid where quickcreate=0 order by tab.tablabel";
+$result = $adb->query($qc_query);
+$noofrows = $adb->num_rows($result);
+$qcmodule_array = Array();
+for($i = 0; $i < $noofrows; $i++)
+{
+         $tablabel = $adb->query_result($result,$i,'tablabel');
+         $tabname = $adb->query_result($result,$i,'name');
+         $return_qcmodule[] = $tablabel;
+         $return_qcmodule[] = $tabname;
+}
+        $return_qcmodule = array_chunk($return_qcmodule,2);
+        return $return_qcmodule;
+}
+																					   
+/**
  * This function is used to get the Quick create form field parameters for a given module.
  * Param $module - module name 
  * returns the value in array format
