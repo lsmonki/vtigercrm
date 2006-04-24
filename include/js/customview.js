@@ -27,6 +27,9 @@ function splitValues() {
 
 
 function validate() {
+	 lengthLayer=getObj("lengthdetails")
+        decimalLayer=getObj("decimaldetails")
+        pickListLayer=getObj("picklist")
         var str = getObj("fldLabel").value;
         if (!emptyCheck("fldLabel","Label"))
                 return false
@@ -38,7 +41,7 @@ function validate() {
                 return false;
         }
 
-        if (lengthLayer.style.display=="block") {
+        if (lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))
                         return false
 
@@ -52,7 +55,7 @@ function validate() {
                         return false
         }
 
-        if (decimalLayer.style.display=="block") {
+        if (decimalLayer.style.visibility=="visible") {
                 if (getObj("fldDecimal").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
                         if (!intValidate("fldDecimal","Decimal"))
                                 return false
@@ -63,7 +66,7 @@ function validate() {
                         return false
         }
 var picklistObj=getObj("fldPickList")
-        if (pickListLayer.style.display=="block") {
+        if (pickListLayer.style.visibility=="visible") {
                 if (emptyCheck("fldPickList","Picklist values"))        {
                         var pickListAry=new Array()
                         pickListAry=splitValues()
@@ -144,21 +147,21 @@ function selFieldType(id,scrollLayer,bool) {
 	var decimalLayer=getObj("decimaldetails");
 	var pickListLayer=getObj("picklist");
         if (type=='text') {
-                lengthLayer.style.display="block"
-                decimalLayer.style.display="none"
-                pickListLayer.style.display="none"
+                lengthLayer.style.visibility="visible"
+                decimalLayer.style.visibility="hidden"
+                pickListLayer.style.visibility="hidden"
         } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea') {
-                getObj("lengthdetails").style.display="none"
-                decimalLayer.style.display="none"
-                pickListLayer.style.display="none"
+                getObj("lengthdetails").style.visibility="hidden"
+                decimalLayer.style.visibility="hidden"
+                pickListLayer.style.visibility="hidden"
         } else if (type=='number' || type=='percent' || type=='currency') {
-                lengthLayer.style.display="block"
-                decimalLayer.style.display="block"
-                pickListLayer.style.display="none"
+                lengthLayer.style.visibility="visible"
+                decimalLayer.style.visibility="visible"
+                pickListLayer.style.visibility="hidden"
         } else if (type=='picklist' || type=='multiselectcombo') {
-                lengthLayer.style.display="none"
-                decimalLayer.style.display="none"
-                pickListLayer.style.display="block"
+                lengthLayer.style.visibility="hidden"
+                decimalLayer.style.visibility="hidden"
+                pickListLayer.style.visibility="visible"
         }
 
 
