@@ -30,7 +30,11 @@
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
 	<table border="0" cellpadding="10" cellspacing="0" width="100%">
 	<tbody><tr>
+	{if $ORGANIZATIONLOGONAME neq ''}
+	<td rowspan="11" style="background-image: url(test/logo/{$ORGANIZATIONLOGONAME}); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
+	{else}
 	<td rowspan="11" style="background-image: url(include/images/noimage.gif); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
+	{/if}
 	<td colspan="2" class="genHeaderBig" width="75%">{$ORGANIZATIONNAME}
 	{$ERRORFLAG}
 	<br><hr> </td>
