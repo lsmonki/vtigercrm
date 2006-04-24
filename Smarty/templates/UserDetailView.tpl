@@ -27,6 +27,7 @@
 			<input type="hidden" name="return_action">
 			<input type="hidden" name="return_id">
 			<input type="hidden" name="forumDisplay">
+			<input type="hidden" name="parenttab" value=Settings>	
 
 			<tr valign="center">
 		            <td class="small" valign="center">

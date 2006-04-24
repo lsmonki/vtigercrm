@@ -154,5 +154,5 @@ createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activitymode");
+header("Location: index.php?parenttab=Settings&action=$return_action&module=$return_module&record=$return_id$activitymode");
 ?>

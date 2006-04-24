@@ -37,6 +37,7 @@ function pickColor(color)
 			<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
 			<input type="hidden" name="namedays" value="">			
 			<input type="hidden" name="weekstart" value="1">
+			<input type="hidden" name="parenttab" value=Settings>
 
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">
