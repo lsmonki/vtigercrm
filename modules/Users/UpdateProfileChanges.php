@@ -46,7 +46,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	{
 		$tab_id = $adb->query_result($tab_perr_result,$i,"tabid");
 		$request_var = $tab_id.'_tab';
-		if($tab_id != 3 && $tab_id != 16 && $tab_id != 15)
+		if($tab_id != 3 && $tab_id != 16)
 		{
 			$permission = $_REQUEST[$request_var];
 			if($permission == 'on')
@@ -71,7 +71,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	for($i=0; $i<$num_act_per; $i++)
 	{
 		$tab_id = $adb->query_result($act_perr_result,$i,"tabid");
-		if($tab_id != 16 && $tab_id != 15)
+		if($tab_id != 16)
 		{
 			$action_id = $adb->query_result($act_perr_result,$i,"operation");
 			$action_name = getActionname($action_id);
