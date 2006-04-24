@@ -929,9 +929,10 @@ $update_query_array1 = Array(
 				"update field set block=2 where tabid=2 and block=5",
 				"update field set block=3 where tabid=2 and block=2",
 
-				"update field set block=4 where tabid=4 and block=1",
+				//"update field set block=4 where tabid=4 and block=1",
 				"update field set block=5 where tabid=4 and block=5",
-				"update field set block=6 where tabid=4 and block=4",
+				"update field set block=6 where tabid=4 and block=4",//Modified on 24-04-06
+				"update field set block=4 where tabid=4 and block=1",
 				"update field set block=7 where tabid=4 and block=2",
 				"update field set block=8 where tabid=4 and block=3",
 
@@ -1162,7 +1163,7 @@ $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array8 = Array(
 		"insert into cvcolumnlist values ($cvid,0,'account:accountname:accountname:Accounts_Account_Name:V')",
-		"insert into cvcolumnlist values ($cvid,1,'accountbillads:city:city:Accounts_City:V')",
+		"insert into cvcolumnlist values ($cvid,1,'accountbillads:city:bill_city:Accounts_City:V')",
 		"insert into cvcolumnlist values ($cvid,2,'account:website:website:Accounts_Website:V')",
 		"insert into cvcolumnlist values ($cvid,3,'account:phone:phone:Accounts_Phone:V')",
 		"insert into cvcolumnlist values ($cvid,4,'crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V')"
@@ -1242,11 +1243,11 @@ $res=$conn->query("select cvid from customview where viewname='All' and entityty
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array13 = Array(
-		"insert into cvcolumnlist values ($cvid,0,'activity:status:status:Activities_Status:V')",
+		"insert into cvcolumnlist values ($cvid,0,'activity:status:taskstatus:Activities_Status:V')",
 		"insert into cvcolumnlist values ($cvid,1,'activity:activitytype:activitytype:Activities_Type:V')",
 		"insert into cvcolumnlist values ($cvid,2,'activity:subject:subject:Activities_Subject:V')",
 		"insert into cvcolumnlist values ($cvid,3,'contactdetails:lastname:lastname:Activities_Contact_Name:V')",
-		"insert into cvcolumnlist values ($cvid,4,'seactivityrel:activityid:activityid:Activities_Related_To:V')",
+		"insert into cvcolumnlist values ($cvid,4,'seactivityrel:crmid:parent_id:Activities_Related_To:V')",
 		"insert into cvcolumnlist values ($cvid,5,'activity:date_start:date_start:Activities_Start_Date:D')",
 		"insert into cvcolumnlist values ($cvid,6,'activity:due_date:due_date:Activities_End_Date:D')",
 		"insert into cvcolumnlist values ($cvid,7,'crmentity:smownerid:assigned_user_id:Activities_Assigned_To:V')"
@@ -1533,11 +1534,13 @@ foreach($alter_query_array as $query)
 	Execute($query);
 }
 
-$update_query2 = "UPDATE field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
-Execute($update_query2);
-
 $alter_query = "ALTER TABLE field ADD column info_type varchar(20) default NULL after quickcreatesequence";
 Execute($alter_query);
+
+//$update_query2 = "UPDATE field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
+//changed in 24-04-06 because the reference has not been entered into the field table. 
+$update_query2 = "insert into field values (4,".$conn->getUniqueID("field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
+Execute($update_query2);
 
 $update_query_array4 = Array(
 				"UPDATE field SET info_type = 'BAS'",
@@ -1694,7 +1697,7 @@ foreach($insert_query_array25 as $query)
 
 
 $insert_query_array26 = Array(
-	"insert into field values (7,".$conn->getUniqueID("field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')",
+	"insert into field values (7,".$conn->getUniqueID("field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,13,3,'I~O',1,null,'BAS')",
 	"insert into field values (4,".$conn->getUniqueID("field").",'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array26 as $query)
@@ -2544,6 +2547,58 @@ foreach($notify_owner_array as $query)
 {
 	Execute($query);
 }
+
+//Added for RSS entries
+$rss_insert_query = "insert into field values (24,".$conn->getUniqueID("field").",'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')";
+Execute($rss_insert_query);
+
+//Quick Create Feature added for Vendor & PriceBook
+$quickcreate_query = Array(
+	"UPDATE field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 18 and fieldname = 'vendorname'",
+	"UPDATE field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 18 and fieldname = 'phone'",
+	"UPDATE field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 18 and fieldname = 'email'",
+
+	"UPDATE field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 19 and fieldname = 'bookname'",
+	"UPDATE field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 19 and fieldname = 'active'"
+			  );
+foreach($quickcreate_query as $query)
+{
+	Execute($query);
+}
+
+
+//Added on 24-04-06 to populate customview All for Campaign and webmails modules
+$cvid1 = $conn->getUniqueID("customview");
+$cvid2 = $conn->getUniqueID("customview");
+$customview_query_array = Array(
+	"insert into customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$cvid1.",'All',1,0,'Campaigns')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",0,'campaign:campaignname:campaignname:Campaigns_Campaign_Name:V')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",1,'campaign:campaigntype:campaigntype:Campaigns_Campaign_Type:N')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",2,'campaign:campaignstatus:campaignstatus:Campaigns_Campaign_Status:N')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",3,'campaign:expectedrevenue:expectedrevenue:Campaigns_Expected_Revenue:V')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",4,'campaign:closingdate:closingdate:Campaigns_Expected_Close_Date:D')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",5,'crmentity:smownerid:assigned_user_id:Campaigns_Assigned_To:V')",
+
+
+	"insert into customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$cvid2.",'All',1,0,'Webmails')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid2.",0,'subject:subject:subject:Subject:V')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid2.",1,'from:fromname:fromname:From:N')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid2.",2,'to:tpname:toname:To:N')",
+	"insert into cvcolumnlist (cvid,columnindex,columnname) values (".$cvid2.",3,'body:body:body:Body:V')"
+
+			       );
+foreach($customview_query_array as $query)
+{
+	Execute($query);
+}
+
+
+
+
+
+
+
+
 
 
 
