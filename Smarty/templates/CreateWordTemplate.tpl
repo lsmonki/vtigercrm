@@ -37,7 +37,7 @@
                </tr>
 		<tr>
                       <td align="right" valign="top"><b>{$UMOD.LBL_DESCRIPTION}  : </b></td>
-                      <td><textarea name="txtDescription" class="txtBox" rows="3" value={$textDesc} /></textarea></td>
+                      <td><textarea name="txtDescription" tabindex="1" class="txtBox" rows="3" value={$textDesc} /></textarea></td>
                 </tr>
                 <tr><td colspan="2"  width="75%" style="padding-bottom:0px;" ><hr /> </td></tr>
 
@@ -51,7 +51,7 @@
 		<tr>
                       <td align="right"><b>{$UMOD.LBL_MODULENAMES} : </b></td>
 
-                      <td><select name="target_module" class="txtBox">
+                      <td><select name="target_module" class="txtBox" tabindex="2">
 			<option value="Leads">{$APP.COMBO_LEADS}</option>	
 			<option value="Accounts">{$APP.COMBO_ACCOUNTS}</option>	
 			<option value="Contacts">{$APP.COMBO_CONTACTS}</option>	
@@ -67,12 +67,12 @@
 		</tr>
 		 <tr>
                       <td align="right" valign="top"><b>{$UMOD.LBL_MERGE_FILE}</b></td>
-                      <td><input type="file" name="binFile" size="40"  /><br />(Eg - .doc, .rtf files)</td>
+                      <td><input type="file" name="binFile" size="40" tabindex="3" /><br />(Eg - .doc, .rtf files)</td>
 		 </tr>
 		 <tr>
 		      <td colspan="2"  width="75%" style="border-top:1px dashed #CCCCCC;border-bottom:1px dashed #CCCCCC;"  align="center">
-			<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='add2db';" class="classBtn" />&nbsp;
-			&nbsp;<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="classBtn" />
+			<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" type="submit" tabindex="4" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='add2db';" class="classBtn" />&nbsp;
+			&nbsp;<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" tabindex="5"  onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="classBtn" />
  		      </td>
 		 </tr>
 		 <tr>
