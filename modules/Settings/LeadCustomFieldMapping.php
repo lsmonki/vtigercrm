@@ -42,6 +42,8 @@ function getAccountCustomValues($leadid,$accountid)
 
 		if($account_field['fieldid']==$accountid)
 			$account_field['selected'] = "selected";
+		else
+			$account_field['selected'] = "";
 		$account_cfelement[]=$account_field;
 	}
 	$accountcf[$leadid.'_account']=$account_cfelement;
@@ -62,6 +64,8 @@ function getContactCustomValues($leadid,$contactid)
 	
                 if($contact_field['fieldid']==$contactid)
                         $contact_field['selected']="selected";
+		else
+                        $contact_field['selected'] = "";
 		$contact_cfelement[]=$contact_field;
 	}
 	$contactcf[$leadid.'_contact'] = $contact_cfelement;
@@ -82,6 +86,8 @@ function getPotentialCustomValues($leadid,$potentialid)
 
 		if($potential_field['fieldid']==$potentialid)
 			 $potential_field['selected']="selected";
+		else
+                         $potential_field['selected'] = "";
 		$potential_cfelement[]=$potential_field;
 	}
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
