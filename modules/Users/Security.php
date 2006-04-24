@@ -354,6 +354,10 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
 //Potential Details -- END
 
 
+//Rss entries being added
+ $this->db->query("insert into field values (24,".$this->db->getUniqueID("field").",'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')");
+//End of Rss entries
+
 //campaign entries being added
 
 
