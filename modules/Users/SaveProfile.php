@@ -194,7 +194,7 @@ foreach($modArr as $fld_module => $fld_label)
                 $adb->query($sql11);
 	}
 }
-	$loc = "Location: index.php?action=ListProfiles&module=Users&mode=view&profileid=".$profileid;
+	$loc = "Location: index.php?action=ListProfiles&module=Users&mode=view&parenttab=Settings&profileid=".$profileid;
 	header($loc);
 
 function getPermissionValue($req_per)
