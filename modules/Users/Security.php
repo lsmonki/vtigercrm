@@ -581,9 +581,9 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
 //Vendor Details --START
 //Block44-47
 
-$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'vendorname','vendor',1,'2','vendorname','Vendor Name',1,0,0,100,1,44,1,'V~M',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'phone','vendor',1,'1','phone','Phone',1,0,0,100,3,44,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,44,1,'E~O',1,null,'BAS')");
+$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'vendorname','vendor',1,'2','vendorname','Vendor Name',1,0,0,100,1,44,1,'V~M',0,1,'BAS')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'phone','vendor',1,'1','phone','Phone',1,0,0,100,3,44,1,'V~O',0,2,'BAS')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,44,1,'E~O',0,3,'BAS')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'website','vendor',1,'17','website','Website',1,0,0,100,5,44,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'glacct','vendor',1,'15','glacct','GL Account',1,0,0,100,6,44,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'category','vendor',1,'1','category','Category',1,0,0,100,7,44,1,'V~O',1,null,'BAS')");
@@ -608,8 +608,8 @@ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field")
 //PriceBook Details Start
 //Block48
 
-$this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'bookname','pricebook',1,'2','bookname','Price Book Name',1,0,0,100,1,48,1,'V~M',1,null,'BAS')");
- $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'active','pricebook',1,'56','active','Active',1,0,0,100,3,48,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'bookname','pricebook',1,'2','bookname','Price Book Name',1,0,0,100,1,48,1,'V~M',0,1,'BAS')");
+ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'active','pricebook',1,'56','active','Active',1,0,0,100,3,48,1,'V~O',0,2,'BAS')");
 $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,48,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,48,2,'T~O',1,null,'BAS')");
 
