@@ -46,7 +46,7 @@
 						<table width="35%" style="border:1px dashed #CCCCCC;background-color:#FFFFEC;" cellpadding="5" cellspacing="0">
 							<tr>
 								<td style="padding:5px;" width="5%" >
-								<img src="themes/blue/images/mapping.gif" align="absmiddle" /> </td>
+								<img src="{$IMAGE_PATH}mapping.gif" align="absmiddle" /> </td>
 								<td><span  class="genHeaderSmall">Filed Mapping</span><br />
 								Field Mapping allows you to ....
 								</td>
