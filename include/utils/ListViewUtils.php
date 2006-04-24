@@ -1875,4 +1875,33 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	return $output;
 } 
 
+/**This function return the entity ids that need to be excluded in popup listview for a given record
+Param $currentmodule - modulename of the entity to be selected
+Param $returnmodule - modulename for which the entity is assingned
+Param $recordid - the record id for which the entity is assigned
+Return tyep string.
+*/
+function getRelCheckquery($currentmodule,$returnmodule,$recordid)
+{
+	global $adb;
+	$skip_id = Array();
+	$where_relquery = "";
+
+	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
+	{
+		$query = "select contactid from contpotentialrel where potentialid = ".$recordid;
+		$result = $adb->query($query);
+		if($adb->num_rows($result)!=0)
+		{
+			for($k=0;$k < $adb->num_rows($result);$k++)
+			{
+				$skip_id[]=$adb->query_result($result,$k,"contactid");
+			}
+		$skipids = constructList($skip_id,'INTEGER');
+		$where_relquery = "and contactdetails.contactid not in ".$skipids;
+		}
+	}
+	return $where_relquery;
+}
+
 ?>

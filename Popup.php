@@ -492,8 +492,11 @@ if($currentModule == 'PriceBooks')
 	$query = 'select pricebook.*, pricebookproductrel.productid, pricebookproductrel.listprice, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from pricebook inner join pricebookproductrel on pricebookproductrel.pricebookid = pricebook.pricebookid inner join crmentity on crmentity.crmid = pricebook.pricebookid where pricebookproductrel.productid='.$productid.' and crmentity.deleted=0';
 }
 else
-	$query = getListQuery($currentModule);
-
+{
+        $where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);
+        $query = getListQuery($currentModule,$where_relquery);
+}
+			
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
