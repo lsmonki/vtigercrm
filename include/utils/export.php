@@ -30,8 +30,10 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
 require_once('modules/Products/Product.php');
+require_once('include/utils/UserInfoUtil.php');
 
 global $allow_exports;
+
 session_start();
 
 $current_user = new User();
@@ -46,9 +48,22 @@ if(isset($_SESSION['authenticated_user_id']))
         }
 
 }
+
+//Security Check
+if(isPermitted($_REQUEST['module'],"Export") == "no")
+{
+	$allow_exports="none";
+}
+
 if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) )
 {
-	die("you can't export!");
+
+?>
+	<script language=javascript>
+		alert("you are not permitted to export!");
+		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
+	</script>
+<?php
 }
 
 /**Function convert line breaks to space in description during export 
