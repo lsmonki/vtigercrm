@@ -14,9 +14,26 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // $Id: systemconfig.php,v 1.1 2005/03/14 07:40:50 richie Exp $
 // phpsysinfo release version number
+
+require_once('Smarty_setup.php');
+require_once('include/utils/utils.php');
+
+global $mod_strings;
+global $app_strings;
+global $app_list_strings;
+
 $VERSION = "2.3";
 define('APP_ROOT', dirname(__FILE__));
 set_magic_quotes_runtime(0);
+echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>';
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CMOD", $mod_strings);
+$smarty->display("SettingsMenu.tpl");
+echo '<td>';
 if (!file_exists(APP_ROOT . '/config.php')) {
   echo '<center><b>Error: config.php does not exist.</b></center>';
   exit;
@@ -225,5 +242,6 @@ if ($template == 'xml') {
     require(APP_ROOT .'/includes/system_footer.php');
   }
 }
+echo '</td></tr></table>';
 
 ?>
