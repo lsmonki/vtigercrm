@@ -132,14 +132,14 @@
 		<img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 		</td>
 		<td class="prvPrfBigText">
-		<b> Tabs for "{$PROFILE_NAME}"</b> <br>
-		<font class=small>Select the tabs / modules to be shown  </font> 
+		<b> Standard Privileges for "{$PROFILE_NAME}"</b> <br>
+		<font class=small>Select the standard actions to be permitted  </font> 
 		</td>
 		</tr>
 		</table>
 		</td>
 		<td align=right valign=bottom>
-		<font class=small>12 selected, 9 remaining</font> 
+		&nsbp;
 		</td>
 		</tr>
 		</table>
@@ -199,14 +199,13 @@
 		<img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 		</td>
 		<td class="prvPrfBigText">
-		<b> Tabs for "{$PROFILE_NAME}"</b> <br>
-		<font class=small>Select the tabs / modules to be shown  </font> 
+		<b> Tab Privileges for "{$PROFILE_NAME}"</b> <br>
+		<font class=small>Select the tabs/modules to be permitted  </font> 
 		</td>
 		</tr>
 		</table>
 		</td>
 		<td align=right valign=bottom>
-		<font class=small>12 selected, 9 remaining</font> 
 		</td>
 		</tr>
 		</table>
@@ -263,14 +262,14 @@
 		<img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 		</td>
 		<td class="prvPrfBigText">
-		<b> Tabs for "{$PROFILE_NAME}"</b> <br>
-		<font class=small>Select the tabs / modules to be shown  </font> 
+		<b> Utility Privileges for "{$PROFILE_NAME}"</b> <br>
+		<font class=small>Select the utility actions to be permitted  </font> 
 		</td>
 		</tr>
 		</table>
 		</td>
 		<td align=right valign=bottom>
-		<font class=small>12 selected, 9 remaining</font> 
+		&nbsp;
 		</td>
 		</tr>
 		</table>
@@ -329,8 +328,8 @@
 		<tr>
 		<td valign="top" ><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif" /> </td>
 
-		<td class="prvPrfBigText"><b> Tabs for "{$PROFILE_NAME}"</b> <br />
-		<font class="small">Select the tabs / modules to be shown </font> </td>
+		<td class="prvPrfBigText"><b> Field Privileges for "{$PROFILE_NAME}"</b> <br />
+		<font class="small">Select the fields to be permitted </font> </td>
 		</tr>
 		</table></td>
 		<td align="right" valign="bottom">
