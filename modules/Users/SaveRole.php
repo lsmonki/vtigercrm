@@ -33,6 +33,6 @@ elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	 	
 }
 
-$loc = "Location: index.php?action=listroles&module=Users";
+$loc = "Location: index.php?action=listroles&module=Users&parenttab=Settings";
 header($loc);
 ?>
