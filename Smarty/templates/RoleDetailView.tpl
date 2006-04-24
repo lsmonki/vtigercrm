@@ -60,7 +60,7 @@
 	<td align="left" valign="top" width="70%">
 	<ul style="list-style-type: none;">
 	{foreach item=elements from=$ROLEINFO.profileinfo}
-	<li><a href="index.php?module=Users&action=profilePrivileges&profileid={$elements.0}">{$elements.1}</a></li>
+	<li><a href="index.php?module=Users&action=profilePrivileges&profileid={$elements.0}&mode=view">{$elements.1}</a></li>
 	{/foreach}	
 	</ul>
 	</td>
