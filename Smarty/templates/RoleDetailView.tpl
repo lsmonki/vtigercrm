@@ -31,7 +31,7 @@
 	<tr>
 	<td style="border-bottom: 1px dashed rgb(204, 204, 204); padding-right: 10px;" align="left" width="30%"><b>{$ROLE_NAME}</b></td>
 	<td style="border-bottom: 1px dashed rgb(204, 204, 204);" align="right" width="70%">
-	<input title="Edit" accessKey="C" class="small" onclick="this.form.action.value=\'createrole\'" type="submit" name="Edit" value="Edit Role">
+	<input title="Edit" accessKey="C" class="small" onclick="this.form.action.value=\'createrole\'" type="submit" name="Edit" value="Edit Role">&nbsp;<input title="Delete" accessKey="D" class="small" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="Delete Role">
 	</td>
 	</tr>
 	<tr>
@@ -98,5 +98,21 @@
 </td>
 </tr>
 </table>
+	
 	{include file='SettingsSubMenu.tpl'}
+<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
+<script>
+	function DeleteRole(roleid)
+	{ldelim}
+    		//show("an_busy");
+    		var ajaxObj = new Ajax(ajaxSaveResponse);
+    		var urlstring = "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid;
+    		ajaxObj.process("index.php?",urlstring);
+	{rdelim}
+	
+	function ajaxSaveResponse(response)
+	{ldelim}
+   		document.getElementById("tempdiv").innerHTML=response.responseText;
+	{rdelim}
+</script>
 
