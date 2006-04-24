@@ -1,4 +1,7 @@
 <script language="JavaScript" type="text/javascript" src="modules/Rss/Rss.js"></script>
+<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script>
 {literal}
 
@@ -6,7 +9,6 @@ function ajaxSetDefault(response)
 {
 	hide('status');
 	getrssfolders();
-	//window.location = "index.php?module=Rss&action=ListView&record="+response.responseText;
 }
 function GetRssFeedList(id)
 {
@@ -33,9 +35,10 @@ function SaveRssFeeds()
 {
 	show('status');	
 	var ajaxObj = new Ajax(ajaxRssSaveResponse);
-	var rssurl = document.getElementById('rssurl').value;
+	rssurl = document.getElementById('rssurl').value;
+	rssurl = rssurl.replace(/&/gi,"##amp##");
 	var category = document.getElementById('rsscategory')[document.getElementById('rsscategory').selectedIndex].value;
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rssurl='+rssurl+'&rsscategory='+category;
+	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rsscategory='+category+'&rssurl='+rssurl;
 	ajaxObj.process("index.php?",urlstring);
 }
 function ajaxRssSaveResponse(response)
@@ -51,8 +54,7 @@ function ajaxRssSaveResponse(response)
 		GetRssFeedList(response.responseText);
 		getrssfolders();
 		document.getElementById('rssurl').value = '';
-		fninvsh('PopupLay');	
-		//window.location = "index.php?module=Rss&action=ListView&record="+response.responseText;
+		Effect.Puff('PopupLay');
 	}
 		
 }

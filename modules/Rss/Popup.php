@@ -27,9 +27,8 @@ if(isset($_REQUEST["record"]))
 }
 elseif(isset($_REQUEST["rssurl"]))
 {
-	$newRssUrl = $_REQUEST["rssurl"];
+	$newRssUrl = str_replace('##amp##','&',$_REQUEST["rssurl"]);
 	$rsscategory = $_REQUEST["rsscategory"];
-	
 	$setstarred = 0;
 	$oRss = new vtigerRSS();
 	if($oRss->setRSSUrl($newRssUrl))

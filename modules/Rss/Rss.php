@@ -122,28 +122,6 @@ class vtigerRSS extends CRMEntity
 			}
 		}
 	}
-/*
-	function getStarredRssFolder()
-	{
-
-		global $adb;
-		global $image_path;
-
-		$sSQL = "select * from rss where starred=1";
-		$result = $adb->query($sSQL);
-		while($allrssrow = $adb->fetch_array($result))
-		{
-			$shtml .= "<tr id='feed_".$allrssrow[rssid]."'>";
-			$shtml .= "<td width=\"15\">
-				<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','0')\"></td>";
-			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".substr($allrssrow['rsstitle'],0,15)."...</a></td><td><a href=\"javascript:DeleteRssFeeds('$allrssrow[rssid]');\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
-			$shtml .= "</tr>";
-		}
-		return $shtml;
-
-	}
-*/
-
 	function getCRMRssFeeds()
 	{
 		global $adb;
@@ -157,11 +135,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','0')\"></td>";
+					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\"></td>";
+					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 				\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
@@ -185,11 +163,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','0')\"></td>";
+					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{		
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\"></td>";
+					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
 			$shtml .= "</tr>";
@@ -418,10 +396,10 @@ class vtigerRSS extends CRMEntity
 			$shtml .= "<td width=\"15\">";
 			if($allrssrow["starred"] == 1)
 			{
-				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\">";
+				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}else
 			{
-				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onclick=\"star('$allrssrow[rssid]','1')\">";
+				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}
 					   $shtml .= "</td>";
 			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"javascript:DeleteRssFeeds('$allrssrow[rssid]');\"><img src=\"".$image_path."del.gif\"  border=\"0\" align=\"absmiddle\"></a></td>";
