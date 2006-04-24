@@ -78,7 +78,7 @@ class vtigerRSS extends CRMEntity
 			foreach($this->rss_object as $key=>$item)
 			{
 				$i = $i + 1;	   
-				$shtml .= "<tr class='prvPrfHoverOff' onmouseover=\"this.className='prvPrfHoverOn'\" onmouseout=\"this.className='prvPrfHoverOff'\"><td><a href=\"javascript:display('".$item[link]."','feedlist_".$i."')\"; id='feedlist_".$i."' class=\"rssNews\">".$item[title]."</a></td><td>".$this->rss_title."</td><td>&nbsp;</td></tr>";
+				$shtml .= "<tr class='prvPrfHoverOff' onmouseover=\"this.className='prvPrfHoverOn'\" onmouseout=\"this.className='prvPrfHoverOff'\"><td><a href=\"javascript:display('".$item[link]."','feedlist_".$i."')\"; id='feedlist_".$i."' class=\"rssNews\">".$item[title]."</a></td><td>".$this->rss_title."</td></tr>";
 				if($i == 10)
 				{
 					return $shtml;
@@ -288,9 +288,8 @@ class vtigerRSS extends CRMEntity
 		}
 		$starredhtml  = "<table class='rssTable' cellspacing='0' cellpadding='0'>
 						<tr>
-       	                <th width='65%'>Subject</th>
-           	            <th width='20%'>Sender</th>
-               	        <th width='15%'>Date</th>
+       	                <th width='75%'>Subject</th>
+           	            <th width='25%'>Sender</th>
                    	    </tr>".$starredhtml."</table>";
 
 		return $starredhtml;
@@ -336,9 +335,8 @@ class vtigerRSS extends CRMEntity
 		}
 		$starredhtml  = "<table class='rssTable' cellspacing='0' cellpadding='0'>
 						<tr>
-       	                <th width='65%'>Subject</th>
-           	            <th width='20%'>Sender</th>
-               	        <th width='15%'>Date</th>
+       	                <th width='75%'>Subject</th>
+           	            <th width='25%'>Sender</th>
                    	    </tr>".$starredhtml."</table>";
 
 		return $starredhtml;
