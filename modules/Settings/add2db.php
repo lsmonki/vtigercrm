@@ -136,12 +136,12 @@ require_once('include/utils/utils.php');
 
 		if($savelogo=="true")
 		{
-			header("Location: index.php?module=Settings&action=OrganizationConfig");
+			header("Location: index.php?parenttab=Settings&module=Settings&action=OrganizationConfig");
 		}
 		elseif($savelogo=="false")
 		{
 		
-    		header("Location: index.php?module=Settings&action=EditCompanyDetails&flag=".$error_flag);
+    		header("Location: index.php?parenttab=Settings&module=Settings&action=EditCompanyDetails&flag=".$error_flag);
 		}
 	
 
