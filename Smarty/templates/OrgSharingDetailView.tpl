@@ -60,8 +60,8 @@
 							<input type="hidden" name="parenttab" value="Settings">
 							<tr>
 								<td class="genHeaderSmall" height="25" valign="middle">Global Access Privileges</td>
-								<td align="right"><input class=small titlr="Recalculate"  type="submit" name="recalculate" value="Recalculate" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')"></td>	
-								<td align="right"><input class=small title="Edit" accessKey="C" type="submit" name="Edit" value={$CMOD.LBL_EDIT_PERMISSIONS}></td>
+								<td align="right"><input class=small titlr="Recalculate"  type="submit" name="recalculate" value="Recalculate" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')">	
+	&nbsp;<input class=small title="Edit" accessKey="C" type="submit" name="Edit" value={$CMOD.LBL_EDIT_PERMISSIONS}></td>
 								
 							</tr>
 							<tr><td colspan="2"></td></tr>

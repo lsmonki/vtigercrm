@@ -39,6 +39,6 @@ for($i=0; $i<$num_rows; $i++)
 			
 		}
 }
-$loc = "Location: index.php?action=OrgSharingDetailView&module=Users";
+$loc = "Location: index.php?action=OrgSharingDetailView&module=Users&parenttab=Settings";
 header($loc);
 ?>

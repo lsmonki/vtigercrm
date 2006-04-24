@@ -21,6 +21,7 @@
 	<form action="index.php" method="post" name="def_org_share" id="form">
 	<input type="hidden" name="module" value="Users">
 	<input type="hidden" name="action" value="SaveOrgSharing">
+	<input type="hidden" name="parenttab" value="Settings">
 	<tr>
 	<td class="genHeaderSmall" height="25" valign="middle">Global Access Privileges</td>
 	<td align="right"><input class="small" title="Save" accessKey="C" type="submit" name="Save" value="{$CMOD.LBL_SAVE_PERMISSIONS}"></td>

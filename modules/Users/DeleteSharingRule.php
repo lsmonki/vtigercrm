@@ -13,5 +13,5 @@ global $adb;
 $shareid =  $_REQUEST['shareid'];
 deleteSharingRule($shareid);
 
-header("Location: index.php?module=Users&action=OrgSharingDetailView");
+header("Location: index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings");
 ?>

@@ -58,6 +58,6 @@ elseif($mode == 'edit')
 
 
 
-$loc = "Location: index.php?action=OrgSharingDetailView&module=Users";
+$loc = "Location: index.php?action=OrgSharingDetailView&module=Users&parenttab=Settings";
 header($loc);
 ?>

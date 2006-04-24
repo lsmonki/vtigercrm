@@ -100,6 +100,7 @@ foreach($grpDetails as $groupid=>$groupname)
 		}	
             $output.='<form name="newGroupForm" action="index.php" method="post">
                     <input type="hidden" name="module" value="Users">
+		    <input type="hidden" name="parenttab" value="Settings">	
                     <input type="hidden" name="action" value="SaveSharingRule">
                     <input type="hidden" name="sharing_module" value="'.$sharing_module.'">
                     <input type="hidden" name="shareId" value="'.$shareid.'">
