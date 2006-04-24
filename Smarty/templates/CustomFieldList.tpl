@@ -64,12 +64,12 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
 			<table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
 				<tr>
 					<td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" >
-						<img src="images/picklistEditor.gif" align="left" />
+						<img src="{$IMAGE_PATH}mapping.gif" align="left" />
 					</td>
 					<td style="padding:5px;border-bottom:2px dotted #AAAAAA;">
 						<span class="genHeaderGrayBig">Custom Field Settings</span>
 						<br />
-						<span class="big">Feature Explanation......</span>
+						<span class="big">Create and Manage user defined fields......</span>
 						{*<textarea rows=20 cols=70 id="test"></textarea>*}
 					</td>
 				</tr>
