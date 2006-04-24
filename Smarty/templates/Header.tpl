@@ -54,16 +54,11 @@
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
 			
-			{foreach  key=maintabs item=detail from=$HEADERS}
-				{if $maintabs eq $CATEGORY}
-					<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
-					<option>Quick create...{$maintabs}</option>
-					{foreach  key=number item=module from=$detail}
-						<option value="{$module}">New -{$module}</option>
-					{/foreach}
-					</select>
-				{/if}
+				<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
+			{foreach  item=detail from=$QCMODULE}
+					<option value="{$detail.1}">New -{$detail.0}</option>
 			{/foreach}
+				</select>
 			</td>
 		</tr>
 
