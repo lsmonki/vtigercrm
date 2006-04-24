@@ -47,6 +47,6 @@ require_once('include/utils/utils.php');
 
 		$adb->query($update_sql);
 	}
-	 header("Location: index.php?module=Settings&action=ListLeadCustomFieldMapping&parenttab=Settings");
+	 header("Location: index.php?action=ListLeadCustomFieldMapping&module=Settings&parenttab=Settings");
 	
 ?>
