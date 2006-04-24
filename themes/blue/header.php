@@ -62,6 +62,9 @@ $smarty->assign("HEADERS",$header_array);
 $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGEPATH",$image_path);
 
+$qc_modules = getQuickCreateModules();
+$smarty->assign("QCMODULE", $qc_modules);
+
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 $smarty->assign("MODULE_NAME", $currentModule);
