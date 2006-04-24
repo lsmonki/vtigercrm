@@ -144,8 +144,8 @@
 								<br />
 								<textarea name="description" cols="30" rows="3" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="2" >{$DESCRIPTION}</textarea>
 								<br />
-								<select name="foldername" class="detailedViewTextBox" tabind
-ex="3">
+								{if $EMODE eq 'edit'}
+									<select name="foldername" class="detailedViewTextBox" tabindex="3">
                                                                 {foreach item=arr from=$FOLDERNAME}
 
                                                                  <option value="{$FOLDERNAME}" {$arr}>{$FOLDERNAME}</option>
@@ -158,6 +158,12 @@ ex="3">
 
                                                                 {/foreach}
                                                                 </select>
+								{else}
+									<select name="foldername" class="detailedViewTextBox" tabindex="3" value="{$FOLDERNAME}">
+                	                                                        <option value="Personal">{$UMOD.LBL_PERSONAL}</option>
+                        	                                                <option value="Public" selected>{$UMOD.LBL_PUBLIC}</option>
+        	                                                        </select>
+								{/if}
 							</td>
 						</tr>
 					</table>
@@ -200,7 +206,7 @@ ex="3">
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_MERGE_FIELD_VALUE}</b></td></tr>
 
-								<tr><td><input type="text"  id="mergeFieldValue" name="variable" value="variable" class="detailedViewTextBoxOn" /></td></tr>
+								<tr><td><input type="text"  id="mergeFieldValue" name="variable" value="variable" class="detailedViewTextBoxOn" tabindex="8"/></td></tr>
 								<tr><td style="color:#999999;">({$UMOD.LBL_COPY_AND_PASTE_MERGE_FIELD})</td></tr>
 							</table>
 							<script>
@@ -233,11 +239,11 @@ ex="3">
 	<tr>
 
 		<td align="center">
-			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" tabindex="7"/>&nbsp;&nbsp;
+			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" tabindex="9"/>&nbsp;&nbsp;
 			{if $EMODE eq 'edit'}
-				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" tabindex="8"/>
+				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" tabindex="10"/>
 			{else}
-				<input type="button" value="Cancel" class="small" onclick="window.history.back()" tabindex="8">
+				<input type="button" value="Cancel" class="small" onclick="window.history.back()" tabindex="10">
 			{/if}
 		</td>
 		<td>&nbsp;</td>
