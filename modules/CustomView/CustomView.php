@@ -795,6 +795,7 @@ class CustomView extends CRMEntity{
 
 	function getAdvComparator($comparator,$value)
 	{
+		global $adb;
 /*		fLabels['e'] = 'equals';
 		fLabels['n'] = 'not equal to';
 		fLabels['s'] = 'starts with';
@@ -828,15 +829,15 @@ class CustomView extends CRMEntity{
 		}
 		if($comparator == "s")
 		{
-			$rtvalue = " like ".PearDatabase::quote($value."%");
+			$rtvalue = " ".$adb->getLike()." ".PearDatabase::quote($value."%");
 		}
 		if($comparator == "c")
 		{
-			$rtvalue = " like ".PearDatabase::quote("%".$value."%");
+			$rtvalue = " ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
 		}
 		if($comparator == "k")
 		{
-			$rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+			$rtvalue = " not ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
 		}
 		if($comparator == "l")
 		{
@@ -1104,7 +1105,7 @@ class CustomView extends CRMEntity{
                 {
                         $listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
 
-                        $query = "select count(*) count ".$listviewquery;
+                        $query = "select count(*) as count ".$listviewquery;
                         
 			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
                         $advfiltersql = $this->getCVAdvFilterSQL($viewid);

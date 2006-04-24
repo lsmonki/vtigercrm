@@ -79,7 +79,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" quotescf.".$column[$i]." = 1";
 		else
-	                $str=" quotescf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" quotescf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -88,23 +88,23 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($potentialname) && $potentialname != "")
 	{
-		array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote("%".$potentialname."%"));
+		array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".PearDatabase::quote("%".$potentialname."%"));
 		$url_string .= "&potentialname=".$potentialname;
 	}
 	if(isset($accountname) && $accountname != "")
 	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote("%".$accountname."%"));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote("%".$accountname."%"));
 		$url_string .= "&accountname=".$accountname;
 	}
 
 	if(isset($quotestage) && $quotestage != "")
 	{
-		array_push($where_clauses, "quotes.quotestage like ".PearDatabase::quote("%".$quotestage."%"));
+		array_push($where_clauses, "quotes.quotestage ".$adb->getLike()." ".PearDatabase::quote("%".$quotestage."%"));
 		$url_string .= "&quotestage=".$quotestage;
 	}
 	

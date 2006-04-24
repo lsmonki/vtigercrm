@@ -130,11 +130,11 @@ class CRMEntity extends SugarBean
 
   function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
   {
-    $date_var = date('YmdHis');
     // global $current_user;
     global $adb;
     //global $root_directory;
 	global $vtlog;
+    $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
 
     $ownerid = $user_id;
 		
@@ -156,7 +156,7 @@ $vtlog->logthis("module is ".$module,'info');
 	$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
     $adb->query($sql);
 
-	$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+	$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$date_var.",".$date_var.")";
     $adb->query($sql1);
 
     //$this->id = $current_id;
@@ -176,12 +176,12 @@ $vtlog->logthis("module is ".$module,'info');
 
   function insertIntoAttachment($id,$module)
   {
-    $date_var = date('YmdHis');
     global $current_user;
     global $adb;
     global $root_directory;
     global $upload_badext;
 
+    $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
     $ownerid = $this->column_fields['assigned_user_id'];
     $adb->println("insertattach ownerid=".$ownerid." mod=".$module);
     $adb->println($this->column_fields);	
@@ -226,7 +226,7 @@ $vtlog->logthis("module is ".$module,'info');
 	$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
       $adb->query($sql);
 
-	$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+	$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$date_var.",".$date_var.")";
       $adb->query($sql1);
 
       //$this->id = $current_id;
@@ -261,7 +261,7 @@ $vtlog->logthis("module is ".$module,'info');
     global $current_user;
     global $vtlog;	
                 
-    $date_var = date('YmdHis');
+    $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
     if($_REQUEST['assigntype'] == 'T')
     {
       $ownerid= 0;
@@ -284,7 +284,7 @@ $vtlog->logthis("module is =".$module,'info');
     if($this->mode == 'edit')
     {
 	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$date_var." where crmid=".$this->id;
 			
       $adb->query($sql);
     }
@@ -325,7 +325,7 @@ $vtlog->logthis("module is =".$module,'info');
 		else
 		{
       $description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
+      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$date_var.",".$date_var.")";
       $adb->query($sql);
       $this->id = $current_id;
                 }
@@ -611,9 +611,10 @@ $vtlog->logthis("module is =".$module,'info');
 			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
 			  if($sales_stage != $_REQUEST['sales_stage'])
 			  {
-				  $date_var = date('YmdHis');
+    				  $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
 				  //$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
-				  $sql = "insert into potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
+				  $id = $adb->getUniqueID('potstagehistory');
+				  $sql = "insert into potstagehistory values($id,".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$date_var.")";
 				  $adb->query($sql);
 			  }
 		  }
@@ -742,8 +743,9 @@ $vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  
 	else
 		$ownertype = 'customer';
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+	$comment = $adb->quote($_REQUEST['comments']);
+	$id = $adb->getUniqueID("ticketcomments_commentid");
+	$sql = "insert into ticketcomments values(".$id.",".$this->id.",".$comment.",'".$current_user->id."','".$ownertype."','".$current_time."')";
         $adb->query($sql);
 }
 function insertIntoFAQCommentTable($table_name, $module)
@@ -754,8 +756,9 @@ $vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$
 
         $current_time = date('Y-m-d H:i:s');
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+	$comment = $adb->quote($_REQUEST['comments']);
+	$id = $adb->getUniqueID("faqcomments_commentid");
+	$sql = "insert into faqcomments values(".$id.",".$this->id.",".$comment.",'".$current_time."')";
 	$adb->query($sql);
 }
 function insertIntoReminderTable($table_name,$module,$recurid)
@@ -817,7 +820,7 @@ $vtlog->logthis("type is ".$type,'debug');
 	{
 		$activity_id=$this->id;
 
-		$sql='select min(recurringdate) min_date,max(recurringdate) max_date,recurringtype from recurringevents where activityid='. $activity_id.' group by activityid';
+		$sql='select min(recurringdate) AS min_date, max(recurringdate) AS max_date, recurringtype from recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
 		
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -886,7 +889,7 @@ $vtlog->logthis("type is ".$type,'debug');
 				$tdate=$date_array[$k];
 				if($tdate <= $end_date)
 				{
-					$max_recurid_qry = 'select max(recurringid) recurid  from recurringevents;';
+					$max_recurid_qry = 'select max(recurringid) AS recurid from recurringevents;';
 					$result = $adb->query($max_recurid_qry);
 					$noofrows = $adb->num_rows($result);
 					for($i=0; $i<$noofrows; $i++)
@@ -894,7 +897,7 @@ $vtlog->logthis("type is ".$type,'debug');
 						$recur_id = $adb->query_result($result,$i,"recurid");
 					}
 					$current_id =$recur_id+1;
-					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
+					$recurring_insert = "insert into recurringevents values (".$adb->quote($current_id).','.$adb->quote($this->id).','.$adb->quote($tdate).','.$adb->quote($type).')';
 					$adb->query($recurring_insert);
 					if($_REQUEST['set_reminder'] == 'Yes')
 					{

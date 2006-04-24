@@ -1189,9 +1189,10 @@ function end_session($user_name)
 function add_contacts_matching_email_address(&$output_list, $email_address, &$seed_contact)	
 {
   //global $log;
+	global $adb;
 	$safe_email_address = addslashes($email_address);
 	
-	$where = "email1 like '$safe_email_address' OR email2 like '$safe_email_address'";
+	$where = "email1 ".$adb->getLike()." '$safe_email_address' OR email2 ".$adb->getLike()." '$safe_email_address'";
 	$response = $seed_contact->get_list("first_name,last_name,primary_address_city", $where, 0);
 	$contactList = $response['list'];
 	
@@ -1306,8 +1307,9 @@ function contact_by_email($email_address)
 function contact_by_search($name) 
 { 
 //	global $log;
+	global $adb;
 	$seed_contact = new Contact();
-	$where = "first_name like '$name%' OR last_name like '$name%' OR email1 like '$name%' OR email2 like '$name%'";
+	$where = "first_name ".$adb->getLike()." '$name%' OR last_name ".$adb->getLike()." '$name%' OR email1 ".$adb->getLike()." '$name%' OR email2 ".$adb->getLike()." '$name%'";
 	$response = $seed_contact->get_list("first_name, last_name", $where, 0);
 	$contactList = $response['list'];
 	//$row_count = $response['row_count'];
@@ -1661,6 +1663,7 @@ function send_mail_for_password($mailid)
 
 function retrievereportsto($reports_to,$user_id,$account_id)
 {
+	global $adb;
   if($reports_to=="")
     {
         return null;
@@ -1695,7 +1698,7 @@ if($tok) {
 
 
 // to do handle smartly handle the manager name
-     $query = "select contactdetails.contactid as contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and contactdetails.firstname like '".$first_name ."' and contactdetails.lastname like '" .$last_name ."'";
+     $query = "select contactdetails.contactid as contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and contactdetails.firstname ".$adb->getLike()." '".$first_name ."' and contactdetails.lastname ".$adb->getLike()." '" .$last_name ."'";
 
 
 
@@ -1972,8 +1975,9 @@ function delete_task($user_name,$id)
 function retrieve_task($name) 
 { 
 //	global $log;
+	global $adb;
 	$task = new Task();
-	$where = "name like '$name%'";
+	$where = "name ".$adb->getLike()." '$name%'";
 	$response = $task->get_list("name", $where, 0);
 	$taskList = $response['list'];
 	$output_list = Array();
@@ -2218,8 +2222,9 @@ function delete_calendar($user_name,$id)
 
 function retrieve_calendar($name) 
 { 
+	global $adb;
 	$task = new Task();
-	$where = "name like '$name%'";
+	$where = "name ".$adb->getLike()." '$name%'";
 	$response = $task->get_list("name", $where, 0);
 	$taskList = $response['list'];
 	$output_list = Array();

@@ -78,7 +78,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" invoicecf.".$column[$i]." = 1";
 		else
-	                $str=" invoicecf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" invoicecf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -87,12 +87,12 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "invoice.subject like ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "invoice.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($salesorder) && $salesorder != "")
 	{
-		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote("%".$salesorder."%"));
+		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".PearDatabase::quote("%".$salesorder."%"));
 		$url_string .= "&salesorder=".$salesorder;
 	}
 	

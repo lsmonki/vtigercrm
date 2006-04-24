@@ -97,7 +97,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" leadscf.".$column[$i]." = 1";
 		else
-	                $str=" leadscf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" leadscf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -106,15 +106,15 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 
 	if(isset($lastname) && $lastname != ""){
-		array_push($where_clauses, "leaddetails.lastname like '$lastname%'");
+		array_push($where_clauses, "leaddetails.lastname ".$adb->getLike()." '$lastname%'");
 		$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != ""){
-	 	array_push($where_clauses, "leaddetails.firstname like '$firstname%'");
+	 	array_push($where_clauses, "leaddetails.firstname ".$adb->getLike()." '$firstname%'");
 		$url_string .= "&firstname=".$firstname;
 	}
 	if(isset($company) && $company != ""){
-		array_push($where_clauses, "leaddetails.company like '$company%'");
+		array_push($where_clauses, "leaddetails.company ".$adb->getLike()." '$company%'");
 		$url_string .= "&company=".$company;
 	}
 	if(isset($leadsource) && $leadsource != ""){
@@ -126,19 +126,19 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		$url_string .= "&industry=".$industry;
 	}
 	if(isset($phone) && $phone != ""){
-		array_push($where_clauses, "leadaddress.phone like '%$phone%'");
+		array_push($where_clauses, "leadaddress.phone ".$adb->getLike()." '%$phone%'");
 		$url_string .= "&phone=".$phone;
 	}
 	if(isset($fax) && $fax != ""){
-		array_push($where_clauses, "leadaddress.fax like '%$fax%'");
+		array_push($where_clauses, "leadaddress.fax ".$adb->getLike()." '%$fax%'");
 		$url_string .= "&fax=".$fax;
 	}
 	if(isset($email) && $email != ""){
-		array_push($where_clauses, "leaddetails.email like '$email%'");
+		array_push($where_clauses, "leaddetails.email ".$adb->getLike()." '$email%'");
 		$url_string .= "&email=".$email;
 	}
 	if(isset($mobile) && $mobile != ""){
-		array_push($where_clauses, "leadaddress.mobile like '%$mobile%'");
+		array_push($where_clauses, "leadaddress.mobile ".$adb->getLike()." '%$mobile%'");
 		$url_string .= "&mobile=".$mobile;
 	}
 	if(isset($leadstatus) && $leadstatus != ""){
@@ -150,23 +150,23 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		$url_string .= "&rating=".$rating;
 	}
 	if(isset($address_street) && $address_street != ""){
-		array_push($where_clauses, "leadaddress.lane like '$address_street%'");
+		array_push($where_clauses, "leadaddress.lane ".$adb->getLike()." '$address_street%'");
 		$url_string .= "&address_street=".$address_street;
 	}
 	if(isset($address_city) && $address_city != ""){
-		array_push($where_clauses, "leadaddress.city like '$address_city%'");
+		array_push($where_clauses, "leadaddress.city ".$adb->getLike()." '$address_city%'");
 		$url_string .= "&address_city=".$address_city;
 	}
 	if(isset($address_state) && $address_state != ""){
-		array_push($where_clauses, "leadaddress.state like '$address_state%'");
+		array_push($where_clauses, "leadaddress.state ".$adb->getLike()." '$address_state%'");
 		$url_string .= "&address_state=".$address_state;
 	}
 	if(isset($address_postalcode) && $address_postalcode != ""){
-		array_push($where_clauses, "leadaddress.code like '$address_postalcode%'");
+		array_push($where_clauses, "leadaddress.code ".$adb->getLike()." '$address_postalcode%'");
 		$url_string .= "&address_postalcode=".$address_postalcode;
 	}
 	if(isset($address_country) && $address_country != ""){
-		array_push($where_clauses, "leadaddress.country like '$address_country%'");
+		array_push($where_clauses, "leadaddress.country ".$adb->getLike()." '$address_country%'");
 		$url_string .= "&address_country=".$address_country;
 	}
 	if(isset($current_user_only) && $current_user_only != ""){

@@ -65,7 +65,9 @@ class ReportRun extends CRMEntity
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			if($querycolumns == "")
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." '".$selectedfields[2]."'";
+		// mysql my need quotes around the alias I'm not sure
+		//		$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." as '".$selectedfields[2]."'";
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." as ".$selectedfields[2]."";
 			}else
 			{
 				$columnslist[$fieldcolname] = $querycolumns;
@@ -91,15 +93,15 @@ class ReportRun extends CRMEntity
 		{
 			if($this->primarymodule == "HelpDesk")
 			{
-				$querycolumn = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', crmentityRelHelpDesk.setype 'Entity_type'";
+				$querycolumn = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then contactdetailsRelHelpDesk.lastname End"." AS \"".$selectedfields[2]."\", crmentityRelHelpDesk.setype AS Entity_type";
 			}
 			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
 			{
-				$querycolumn = "case crmentityRelProducts.setype when 'Accounts' then accountRelProducts.accountname when 'Leads' then leaddetailsRelProducts.lastname when 'Potentials' then potentialRelProducts.potentialname End"." '".$selectedfields[2]."', crmentityRelProducts.setype 'Entity_type'";
+				$querycolumn = "case crmentityRelProducts.setype when 'Accounts' then accountRelProducts.accountname when 'Leads' then leaddetailsRelProducts.lastname when 'Potentials' then potentialRelProducts.potentialname End"." AS \"".$selectedfields[2]."\", crmentityRelProducts.setype AS Entity_type";
 			}
 			if($this->primarymodule == "Activities" || $this->secondarymodule == "Activities")
 			{
-				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'Orders' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
+				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'Orders' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." AS \"".$selectedfields[2]."\", crmentityRelActivities.setype AS Entity_type";
 			}
 		}
 		/*if($fieldname == "contact_id")
@@ -173,7 +175,7 @@ class ReportRun extends CRMEntity
 	function getAdvComparator($comparator,$value)
         {
 
-		global $vtlog;
+		global $adb, $vtlog;
 
 		if($comparator == "e")
                 {
@@ -197,15 +199,15 @@ class ReportRun extends CRMEntity
                 }
                 if($comparator == "s")
                 {
-                        $rtvalue = " like ".PearDatabase::quote($value."%");
+                        $rtvalue = " ".$adb->getLike()." ".PearDatabase::quote($value."%");
                 }
                 if($comparator == "c")
                 {
-                        $rtvalue = " like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
                 }
                 if($comparator == "k")
                 {
-                        $rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " not ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
                 }
                 if($comparator == "l")
                 {
@@ -296,7 +298,7 @@ class ReportRun extends CRMEntity
 			{
 				if($datefilter == "custom")
                                 {
-                                        if($startdate != "0000-00-00" && $enddate != "0000-00-00")
+                                        if($startdate && $startdate != "0000-00-00" && $enddate && $enddate != "0000-00-00")
                                         {
                                                 $selectedfields = explode(":",$fieldcolname);
                                                 $stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";
@@ -1469,19 +1471,19 @@ class ReportRun extends CRMEntity
 					$fieldlist = explode(":",$fieldcolname);
 					if($fieldlist[4] == 2)
 					{
-					  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") AS ".$fieldlist[3];
 					}
 					if($fieldlist[4] == 3)
 					{
-					  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") AS ".$fieldlist[3];
 					}
 					if($fieldlist[4] == 4)
 					{
-					  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") AS ".$fieldlist[3];
 					}
 					if($fieldlist[4] == 5)
 					{
-					  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") AS ".$fieldlist[3];
 					}
 			}
 		}

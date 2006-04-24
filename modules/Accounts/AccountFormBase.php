@@ -26,6 +26,7 @@ class AccountFormBase{
 function checkForDuplicates($prefix){
 	require_once('include/formbase.php');
 	require_once('modules/Accounts/Account.php');
+	global $adb;
 	$focus = new Account();
 	if(!checkRequired($prefix, array_keys($focus->required_fields))){
 		return null;
@@ -33,15 +34,15 @@ function checkForDuplicates($prefix){
 	$query = '';
 	$baseQuery = 'select id, name, website, billing_address_city  from accounts where deleted!=1 and (';
 	if(isset($_POST[$prefix.'name']) && !empty($_POST[$prefix.'name'])){
-	$query = $baseQuery ."  name like ".PearDatabase::quote('%'.$_POST[$prefix.'name'].'%');	
-        //$query = $baseQuery ."  name like '%".PearDatabase::quote($_POST[$prefix.'name'])."%'";
+	$query = $baseQuery ."  name ".$adb->getLike()." ".PearDatabase::quote('%'.$_POST[$prefix.'name'].'%');	
+        //$query = $baseQuery ."  name ".$adb->getLike()." '%".PearDatabase::quote($_POST[$prefix.'name'])."%'";
 	}
 	if(isset($_POST[$prefix.'website']) && !empty($_POST[$prefix.'website'])){	
 		if(empty($query)){
-                  //			$query = $baseQuery ."  website like '".PearDatabase::quote($_POST[$prefix.'website'])."%'";
-	$query = $baseQuery ."  website like ".PearDatabase::quote($_POST[$prefix.'website'].'%');
+                  //			$query = $baseQuery ."  website ".$adb->getLike()." '".PearDatabase::quote($_POST[$prefix.'website'])."%'";
+	$query = $baseQuery ."  website ".$adb->getLike()." ".PearDatabase::quote($_POST[$prefix.'website'].'%');
 		}else {
-			$query .= "or website like '".$_POST[$prefix.'website']."%'";
+			$query .= "or website ".$adb->getLike()." '".$_POST[$prefix.'website']."%'";
 		}
 	}
 	if(!empty($query)){

@@ -35,8 +35,9 @@ class PearDatabase{
 	var $lastmysqlrow = -1;
 	var $enableSQLlog = false;
 
-	function isMySQL() { return dbType=='mysql'; }
-	function isOracle() { return dbType=='oci8'; }
+	function isMySQL() { return $this->dbType=='mysql'; }
+	function isOracle() { return $this->dbType=='oci8'; }
+	function isPostgres() { return $this->dbType=='pgsql'; }
 	
 	function println($msg)
 	{
@@ -59,8 +60,9 @@ class PearDatabase{
 	
 	function setDatabaseType($type){
 		$this->dbType = $type;
+		$this->like = $this->isPostgres() ? 'ilike' : 'like';
 	}
-	
+
 	function setUserName($name){
 		$this->userName = $name;
 	}
@@ -86,6 +88,10 @@ class PearDatabase{
 	
 	function getDataSourceName(){
 		return 	$this->dbType. "://".$this->userName.":".$this->userPassword."@". $this->dbHostName . "/". $this->dbName;
+	}
+
+	function getLike(){
+		return $this->like;
 	}
 
 	function startTransaction()
@@ -258,7 +264,14 @@ global $vtlog;
 	{
 		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename);
 		$this->checkConnection();
-		$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+		if($this->isPostgres()) {
+			$fp = fopen($filename, "r");
+			$filecontent = fread($fp, filesize($filename));
+			$result = $this->database->UpdateBlob($tablename, $colname, $filecontent, $id);
+			fclose($fp);
+		} else {
+			$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+		}
 		$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename." status=".$result);
 		return $result;
 	}
@@ -663,9 +676,9 @@ global $vtlog;
 		}
 		
 		$this->database = ADONewConnection($this->dbType);
-		//$this->database->debug = true;
+		$this->database->debug = true;
 		
-		$this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
+		$this->database->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
 		$this->database->LogSQL($this->enableSQLlog);
 		//$this->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 		//$this->println("ADODB type=".$this->dbType." host=".$this->dbHostName." dbname=".$this->dbName." user=".$this->userName." password=".$this->userPassword);		
@@ -924,11 +937,11 @@ function formatDate($datetime)
 	return $date;
 }
 
-function getDBDateString($datecolname)
+function getDBDateString($datecolname, $format='Y-m-d, H:i:s')
 {
 	$this->checkConnection();
 	$db = &$this->database;
-	$datestr = $db->SQLDate("Y-m-d, H:i:s" ,$datecolname);
+	$datestr = $db->SQLDate($format ,$datecolname);
 	return $datestr;	
 }
 

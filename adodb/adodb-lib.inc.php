@@ -933,18 +933,19 @@ function _adodb_debug_execute(&$zthis, $sql, $inputarr)
 	
 	$dbt = $zthis->databaseType;
 	if (isset($zthis->dsnType)) $dbt .= '-'.$zthis->dsnType;
-	if ($inBrowser) {
-		if ($ss) {
-			$ss = '<code>'.htmlspecialchars($ss).'</code>';
+/*
+		if ($inBrowser) {
+			if ($ss) {
+				$ss = '<code>'.htmlspecialchars($ss).'</code>';
+			}
+			if ($zthis->debug === -1)
+				ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
+			else 
+				ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
+		} else {
+			ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
 		}
-		if ($zthis->debug === -1)
-			ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
-		else 
-			ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
-	} else {
-		ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
-	}
-
+// */
 	$qID = $zthis->_query($sql,$inputarr);
 	
 	/* 
@@ -957,6 +958,17 @@ function _adodb_debug_execute(&$zthis, $sql, $inputarr)
 			if ($err = $zthis->ErrorNo()) ADOConnection::outp($err.': '.$emsg);
 		}
 	} else if (!$qID) {
+		if ($inBrowser) {
+			if ($ss) {
+				$ss = '<code>'.htmlspecialchars($ss).'</code>';
+			}
+			if ($zthis->debug === -1)
+				ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
+			else 
+				ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
+		} else {
+			ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
+		}
 		ADOConnection::outp($zthis->ErrorNo() .': '. $zthis->ErrorMsg());
 	}
 	

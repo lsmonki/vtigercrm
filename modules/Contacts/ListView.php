@@ -96,7 +96,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if($uitype[$i] == 56)
 			$str=" contactscf.".$column[$i]." = 1";
 		else
-	        	$str=" contactscf.".$column[$i]." like '$customfield[$i]%'";
+	        	$str=" contactscf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -105,15 +105,15 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 
 	if(isset($lastname) && $lastname != "") {
-			array_push($where_clauses, "contactdetails.lastname like ".PearDatabase::quote($lastname.'%')."");
+			array_push($where_clauses, "contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($lastname.'%')."");
 			$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != "") {
-			array_push($where_clauses, "contactdetails.firstname like ".PearDatabase::quote($firstname.'%')."");
+			array_push($where_clauses, "contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($firstname.'%')."");
 			$url_string .= "&firstname=".$firstname;
 	}
 	if(isset($accountname) && $accountname != "")	{
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
+			array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($accountname.'%')."");
 			$url_string .= "&accountname=".$accountname;
 	}
 	if(isset($leadsource) && $leadsource != "") {
@@ -125,39 +125,39 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$url_string .= "&donotcall=".$donotcall;
 	}
 	if(isset($phone) && $phone != "") {
-			array_push($where_clauses, "(contactdetails.phone like ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.mobile like ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.fax like ".PearDatabase::quote('%'.$phone.'%').")");
+			array_push($where_clauses, "(contactdetails.phone ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.mobile ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.fax ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%').")");
 			$url_string .= "&phone=".$phone;
 	}
 	if(isset($email) && $email != "") {
-			array_push($where_clauses, "(contactdetails.email like ".PearDatabase::quote($email.'%').")");
+			array_push($where_clauses, "(contactdetails.email ".$adb->getLike()." ".PearDatabase::quote($email.'%').")");
 			$url_string .= "&email=".$email;
 	}
 	if(isset($yahooid) && $yahooid != "") {
-			array_push($where_clauses, "contactdetails.yahooid like ".PearDatabase::quote($yahooid.'%')."");
+			array_push($where_clauses, "contactdetails.yahooid ".$adb->getLike()." ".PearDatabase::quote($yahooid.'%')."");
 			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($assistant) && $assistant != "") {
-			array_push($where_clauses, "contactsubdetails.assistant like ".PearDatabase::quote($assistant.'%')."");
+			array_push($where_clauses, "contactsubdetails.assistant ".$adb->getLike()." ".PearDatabase::quote($assistant.'%')."");
 			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($mailingstreet) && $mailingstreet != "") {
-			array_push($where_clauses, "(contactaddress.mailingstreet like ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet like ".PearDatabase::quote($mailingstreet.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingstreet ".$adb->getLike()." ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet ".$adb->getLike()." ".PearDatabase::quote($mailingstreet.'%').")");
 			$url_string .= "&mailingstreet=".$mailingstreet;
 	}
 	if(isset($mailingcity) && $mailingcity != "") {
-			array_push($where_clauses, "(contactaddress.mailingcity like ".PearDatabase::quote($mailingcity.'%')." OR contactaddress.othercity like ".PearDatabase::quote($mailingcity.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingcity ".$adb->getLike()." ".PearDatabase::quote($mailingcity.'%')." OR contactaddress.othercity ".$adb->getLike()." ".PearDatabase::quote($mailingcity.'%').")");
 			$url_string .= "&mailingcity=".$mailingcity;
 	}
 	if(isset($mailingstate) && $mailingstate != "") {
-			array_push($where_clauses, "(contactaddress.mailingstate like ".PearDatabase::quote($mailingstate.'%')." OR contactaddress.otherstate like ".PearDatabase::quote($mailingstate.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingstate ".$adb->getLike()." ".PearDatabase::quote($mailingstate.'%')." OR contactaddress.otherstate ".$adb->getLike()." ".PearDatabase::quote($mailingstate.'%').")");
 			$url_string .= "&mailingstate=".$mailingstate;
 	}
 	if(isset($mailingzip) && $mailingzip != "") {
-			array_push($where_clauses, "(contactaddress.mailingzip like ".PearDatabase::quote($mailingzip.'%')." OR contactaddress.otherzip like ".PearDatabase::quote($mailingzip.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingzip ".$adb->getLike()." ".PearDatabase::quote($mailingzip.'%')." OR contactaddress.otherzip ".$adb->getLike()." ".PearDatabase::quote($mailingzip.'%').")");
 			$url_string .= "&mailingzip=".$mailingzip;
 	}
 	if(isset($mailingcountry) && $mailingcountry != "") {
-			array_push($where_clauses, "(contactaddress.mailingcountry like ".PearDatabase::quote($mailingcountry.'%')." OR contactaddress.othercountry like ".PearDatabase::quote($mailingcountry.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingcountry ".$adb->getLike()." ".PearDatabase::quote($mailingcountry.'%')." OR contactaddress.othercountry ".$adb->getLike()." ".PearDatabase::quote($mailingcountry.'%').")");
 			$url_string .= "&mailingcountry=".$mailingcountry;
 	}
 	if(isset($current_user_only) && $current_user_only != "") {

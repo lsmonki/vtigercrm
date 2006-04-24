@@ -37,7 +37,7 @@ if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
         $xtpl->assign("SMODULE",$_REQUEST['smodule']);
 	$smodule = $_REQUEST['smodule'];
 	$url_string = '&smodule=VENDOR';
-	$search_query .= " and vendor_id=''";
+	$search_query .= " and vendor_id is null";
 }
 
 
@@ -68,20 +68,20 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($productname) && $productname !='')
 	{
-		$search_query .= " and productname like '".$productname."%'";
+		$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&productname=".$productname;
 		$xtpl->assign("PRODUCT_NAME", $productname);
 	}
 	
 	if (isset($productcode) && $productcode !='')
 	{
-		$search_query .= " and productcode like '%".$productcode."%'";
+		$search_query .= " and productcode ".$adb->getLike()." '%".$productcode."%'";
 		$url_string .= "&productcode=".$productcode;
 		$xtpl->assign("PRODUCT_CODE", $productcode);
 	}
 	if (isset($unitprice) && $unitprice !='')
 	{
-	 	$search_query .= " and unit_price like '%".$unitprice."%'";
+	 	$search_query .= " and unit_price ".$adb->getLike()." '%".$unitprice."%'";
 		$url_string .= "&unitprice=".$unitprice;
 		$xtpl->assign("UNITPRICE", $unitprice);
 	}

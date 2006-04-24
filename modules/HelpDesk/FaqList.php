@@ -41,14 +41,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($category) && $category !='')
 	{
-	 	$search_query .= " and faq.category like '".$category."%'";
+	 	$search_query .= " and faq.category ".$adb->getLike()." '".$category."%'";
 		$query_val .= "&category=".$category;
 		$xtpl->assign("CATEGORY", $category);
 	}
 
 	if (isset($question) && $question !='')
 	{
-		$search_query .= " and faq.question like '".$question."%'";
+		$search_query .= " and faq.question ".$adb->getLike()." '".$question."%'";
 		$query_val .= "&question=".$question;
 		$xtpl->assign("QUESTION", $question);
 	}
@@ -58,12 +58,12 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$date_criteria = $_REQUEST['date_crit'];
 		if($date_criteria == 'is')
 		{ 
-	 		$search_query .= " and faq.date_created like '".$date."%'";
+	 		$search_query .= " and faq.date_created ".$adb->getLike()." '".$date."%'";
 			$xtpl->assign("IS", 'selected');
 		}
 		if($date_criteria == 'isnot')
 		{ 
-	 		$search_query .= " and faq.date_created not like '".$date."%'";
+	 		$search_query .= " and faq.date_created not ".$adb->getLike()." '".$date."%'";
 			$xtpl->assign("ISNOT", 'selected');
 		}
 		if($date_criteria == 'before')

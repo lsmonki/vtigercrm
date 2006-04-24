@@ -21,6 +21,7 @@ $idval=$_REQUEST['user_id'];
 
 global $adb;
 $storearray = explode(";",$idlist);
+$storearray = array_filter($storearray);
 
 $date_var = date('YmdHis');
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')

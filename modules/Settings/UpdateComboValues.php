@@ -34,8 +34,10 @@ for($i = 0; $i < $count; $i++)
 	{
 		if($custom)
 			$query = "insert into ".$tableName." values('".$pickArray[$i]."')";
-		else
-			$query = "insert into ".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+		else {
+			$id = $adb->getUniqueID($tableName);
+			$query = "insert into ".$tableName." values($id,'".$pickArray[$i]."',".$i.",1)";
+		}
 
                 $adb->query($query);
 	}

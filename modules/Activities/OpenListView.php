@@ -55,24 +55,22 @@ $later = date("Y-m-d", strtotime("$today + 7 days"));
 		 account.accountid, 
 		 account.accountname, 
 		 recurringevents.recurringtype,
-		 recurringevents.recurringdate, 
-		 GREATEST(recurringevents.recurringdate,activity.date_start) as sort_date
+		 recurringevents.recurringdate
 		 FROM activity 
 		 INNER JOIN crmentity ON crmentity.crmid = activity.activityid 
 		 LEFT JOIN cntactivityrel ON cntactivityrel.activityid = activity.activityid 
 		 LEFT JOIN contactdetails ON contactdetails.contactid = cntactivityrel.contactid 
 		 LEFT JOIN seactivityrel ON seactivityrel.activityid = activity.activityid 
 		 LEFT OUTER JOIN account ON account.accountid = contactdetails.accountid 
-		 LEFT OUTER JOIN recurringevents ON recurringevents.activityid = activity.activityid 
+		 LEFT OUTER JOIN recurringevents ON recurringevents.activityid = activity.activityid AND recurringevents.recurringdate <= '$later'
 		 INNER JOIN salesmanactivityrel ON salesmanactivityrel.activityid = activity.activityid 
 		 WHERE crmentity.deleted=0 
-		 AND ( activity.status is NULL || activity.status != 'Completed' ) 
-		 AND ( activity.eventstatus is NULL ||  activity.eventstatus != 'Held') 
-		 AND ( activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' )
+		 AND ( activity.status is NULL OR activity.status != 'Completed' ) 
+		 AND ( activity.eventstatus is NULL OR  activity.eventstatus != 'Held') 
+		 AND ( activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' )
 		 AND ( date_start <= '$later' OR recurringevents.recurringdate <= '$later' )
 		 AND salesmanactivityrel.smid ='{$current_user->id}'
-		 HAVING sort_date <= '$later'
-		 ORDER BY sort_date, activity.time_start";
+		 ORDER BY GREATEST(recurringevents.recurringdate,activity.date_start), activity.time_start";
 
 //$list_query = getListQuery("Activities",$where);
 //echo $list_query."<h3>END</h3>";

@@ -36,17 +36,17 @@ $smodule = $_REQUEST["secondarymodule"];
 //<<<<<<<reportmodules>>>>>>>>>
 
 //<<<<<<<report>>>>>>>>>
-$reportname = $_REQUEST["reportName"];
-$reportdescription = $_REQUEST["reportDesc"];
-$reporttype = $_REQUEST["reportType"];
-$folderid = $_REQUEST["folder"];
+$reportname = $adb->quote($_REQUEST["reportName"]);
+$reportdescription = $adb->quote($_REQUEST["reportDesc"]);
+$reporttype = $adb->quote($_REQUEST["reportType"]);
+$folderid = $adb->quote($_REQUEST["folder"]);
 //<<<<<<<report>>>>>>>>>
 
 //<<<<<<<standarfilters>>>>>>>>>
 $stdDateFilterField = $_REQUEST["stdDateFilterField"];
 $stdDateFilter = $_REQUEST["stdDateFilter"];
-$startdate = $_REQUEST["startdate"];
-$enddate = $_REQUEST["enddate"];
+$startdate = $adb->database->DBTimeStamp($_REQUEST["startdate"]);
+$enddate = $adb->database->DBTimeStamp($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>
@@ -117,7 +117,7 @@ if($reportid == "")
 		       if($genQueryId != "")
 		       {
 				$ireportsql = "insert into report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
-				$ireportsql .= " values (".$genQueryId.",".$folderid.",'".$reportname."','".$reportdescription."','".$reporttype."',".$genQueryId.",'CUSTOM')";
+				$ireportsql .= " values (".$genQueryId.",".$folderid.",".$reportname.",".$reportdescription.",".$reporttype.",".$genQueryId.",'CUSTOM')";
 				$ireportresult = $adb->query($ireportsql);
 				$vtlog->logthis("Reports :: Save->Successfully saved report","info");
 			       	if($ireportresult!=false)
@@ -148,7 +148,7 @@ if($reportid == "")
 					//<<<<step3 reportsortcol>>>>>>>
 
 					//<<<<step5 standarfilder>>>>>>>
-					$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$genQueryId.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
+					$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$genQueryId.",'".$stdDateFilterField."','".$stdDateFilter."',".$startdate.",".$enddate.")";
 					$ireportmoduleresult = $adb->query($ireportmodulesql);
 					$vtlog->logthis("Reports :: Save->Successfully saved reportdatefilter","info");
 					//<<<<step5 standarfilder>>>>>>>
@@ -214,9 +214,9 @@ if($reportid == "")
 		}
 		
 		$ireportsql = "update report set";
-		$ireportsql .= " REPORTNAME='".$reportname."',";
-		$ireportsql .= " DESCRIPTION='".$reportdescription."',";
-		$ireportsql .= " REPORTTYPE='".$reporttype."'";
+		$ireportsql .= " REPORTNAME=".$reportname.",";
+		$ireportsql .= " DESCRIPTION=".$reportdescription.",";
+		$ireportsql .= " REPORTTYPE=".$reporttype."";
 		$ireportsql .= " where REPORTID=".$reportid;
 		$ireportresult = $adb->query($ireportsql);
 		$vtlog->logthis("Reports :: Save->Successfully saved report","info");
@@ -254,7 +254,7 @@ if($reportid == "")
 			//echo $idelreportsortcolsql;
 
 			//<<<<step5 standarfilder>>>>>>>
-			$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
+			$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."',".$startdate.",".$enddate.")";
 			$ireportmoduleresult = $adb->query($ireportmodulesql);
 			$vtlog->logthis("Reports :: Save->Successfully saved reportdatefilter","info");
 			//<<<<step5 standarfilder>>>>>>>

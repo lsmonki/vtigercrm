@@ -27,23 +27,23 @@ require_once('include/utils.php');
 		$contact_id_name=$lead_id."_contact";			
 		$potential_id_name=$lead_id."_potential";			
 		
-		$account_id_val=$_REQUEST[$account_id_name];
-		$contact_id_val=$_REQUEST[$contact_id_name];
-		$potential_id_val=$_REQUEST[$potential_id_name];
+		$account_id_val = (int) $_REQUEST[$account_id_name];
+		$contact_id_val = (int) $_REQUEST[$contact_id_name];
+		$potential_id_val = (int) $_REQUEST[$potential_id_name];
 
 		if($account_id_val=="None")
 		{
-			$account_id_val="";
+			$account_id_val="null";
 		}
 		if($contact_id_val=="None")
 		{
-			$contact_id_val="";
+			$contact_id_val="null";
 		}
 		if($potential_id_val =="None")	
 		{
-			$potential_id_val="";
+			$potential_id_val="null";
 		}
-		$update_sql="update convertleadmapping set accountfid='".$account_id_val."',contactfid='".$contact_id_val."',potentialfid='".$potential_id_val."' where leadfid=".$lead_id;
+		$update_sql="update convertleadmapping set accountfid=".$account_id_val.",contactfid=".$contact_id_val.",potentialfid=".$potential_id_val." where leadfid=".$lead_id;
 
 		$adb->query($update_sql);
 	}

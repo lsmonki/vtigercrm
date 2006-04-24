@@ -65,14 +65,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	if(isset($question) && $question != "")
 	{
-		array_push($where_clauses, "faq.question like '%".$question."%'");
+		array_push($where_clauses, "faq.question ".$adb->getLike()." '%".$question."%'");
 		$url_string .= "&question=".$question;
 		$search_form->assign("QUESTION", $question);
 
 	}
 	if(isset($faqcategories) && $faqcategories != "")
 	{
-		array_push($where_clauses, "faq.category like '%".$faqcategories."%'"); 
+		array_push($where_clauses, "faq.category ".$adb->getLike()." '%".$faqcategories."%'"); 
 		$url_string .= "&faqcategories=".$faqcategories;
 		$search_form->assign("FAQCATEGORIES", $faqcategories);
 

@@ -23,7 +23,7 @@ for($i=0; $i<$num_rows; $i++)
 	if($tabid != 8 && $tab_id != 14 && $tab_id != 15 && $tab_id != 18 && $tab_id != 19 && $tab_id != 16 & $tab_id != 22)
 	{
 		$reqval = $tabid.'_per';	
-		$permission=$_REQUEST[$reqval];
+		$permission = (int) $_REQUEST[$reqval];
 		$sql7="update def_org_share set permission=".$permission." where tabid=".$tabid." and ruleid=".$ruleid;
 		//echo $sql7;
 		//echo '<BR>';

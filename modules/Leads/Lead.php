@@ -211,7 +211,7 @@ return $exists;
 		{
           
   $query = $this->constructCustomQueryAddendum() . ", 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country, leadaddress.phone phone, users.user_name, users.status user_status
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city AS city, leadaddress.state AS state,leadaddress.code AS code,leadaddress.country AS country, leadaddress.phone AS phone, users.user_name, users.status AS user_status
                         FROM ".$this->entity_table."
                         INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
@@ -228,7 +228,7 @@ return $exists;
 		else
 		{
                   $query = "SELECT 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status AS user_status FROM ".$this->entity_table."
                         INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
                         LEFT JOIN leadsubdetails
@@ -260,7 +260,7 @@ return $exists;
 	function get_activities($id)
 	{
           // First, get the list of IDs.
-	    $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
+	    $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( activity.status is NULL or activity.status != 'Completed' ) and (  activity.eventstatus is NULL or  activity.eventstatus != 'Held')";
           //include('modules/Leads/RenderRelatedListUI.php');
           renderRelatedTasks($query,$id);
         }
@@ -309,9 +309,9 @@ return $exists;
 
   function get_attachments($id)
   {
-		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' AS ActivityType, notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= "select attachments.description title ,'Attachments' ActivityType, attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+                $query .= "select attachments.description AS title ,'Attachments' AS ActivityType, attachments.name AS filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
     renderRelatedAttachments($query,$id);
   }

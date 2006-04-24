@@ -312,8 +312,8 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
  $query = $this->constructCustomQueryAddendum() .",                                potential.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM potential
                                 INNER JOIN crmentity
                                 ON crmentity.crmid=potential.potentialid
@@ -325,8 +325,8 @@ return $exists;
 		{
                   	$query = "SELECT
                                 potential.*,
-                                account.accountname account_name,
-                                users.user_name assigned_user_name
+                                account.accountname AS account_name,
+                                users.user_name AS assigned_user_name
                                 FROM potential inner join crmentity on crmentity.crmid=potential.potentialid                                LEFT JOIN users
                                 ON crmentity.smcreatorid=users.id
                                 LEFT JOIN account on potential.accountid=account.accountid  LEFT JOIN potentialscf on potentialscf.potentialid=potential.potentialid where crmentity.deleted=0 ";
@@ -612,7 +612,7 @@ return $exists;
 	function get_activities($id)
 	{
           //$query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
+	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL or activity.status != 'Completed' ) and (  activity.eventstatus is NULL or  activity.eventstatus != 'Held')";
           //include('modules/Potentials/RenderRelatedListUI.php');
           renderRelatedActivities($query,$id);
 	}
@@ -648,9 +648,9 @@ return $exists;
 
 	function get_attachments($id)
 	{
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' AS ActivityType, notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+                $query .= "select attachments.description AS title ,'Attachments' AS ActivityType, attachments.name AS filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
 		renderRelatedAttachments($query,$id);
 	}
@@ -690,9 +690,10 @@ return $exists;
 		do not include any $this-> because this is called on without having the class instantiated
 	*/
 	function build_generic_where_clause ($the_query_string) {
+		global $adb;
 	$where_clauses = Array();
 	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "potentialname like '$the_query_string%'");
+	array_push($where_clauses, "potentialname ".$adb->getLike()." '$the_query_string%'");
 
 	$the_where = "";
 	foreach($where_clauses as $clause)

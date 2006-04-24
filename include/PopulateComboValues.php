@@ -28,13 +28,14 @@ class PopulateComboValues
           $i=0;
           foreach ($values as $val => $cal)
           {
+		$id = $adb->getUniqueID($tableName);  // horrible assumption on the name of the sequence for this table
             if($val != '')
             {
-              $adb->query("insert into ".$tableName. " values('','".$val."',".$i.",1)");
+              $adb->query("insert into ".$tableName. " values($id,'".$val."',".$i.",1)");
             }
             else
             {
-              $adb->query("insert into ".$tableName. " values('','--None--',".$i.",1)");
+              $adb->query("insert into ".$tableName. " values($id,'--None--',".$i.",1)");
             }
             $i++;
           }

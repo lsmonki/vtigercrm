@@ -25,7 +25,8 @@ $returnmodule=$_REQUEST['return_module'];
 $storearray = explode(";",$idlist);
 foreach($storearray as $id)
 {
-	$sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
+	if('' == $id) continue;
+	$sql="update crmentity set deleted=1 where crmid='" .$id ."'";
 	$result = $adb->query($sql);
 }
 if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))

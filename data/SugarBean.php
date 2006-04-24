@@ -185,6 +185,7 @@ class SugarBean
 		if ($id == -1) {
 			$id = $this->id;
 		}
+		if('' == $id) return null;
 // GS porting crmentity
 $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 //		$query = "SELECT * FROM $this->table_name WHERE ID = '$id'";

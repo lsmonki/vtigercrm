@@ -77,7 +77,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 			if($uitype[$i] == 56)
                                 $str=" salesordercf.".$column[$i]." = 1";
                         else
-			        $str=" salesordercf.".$column[$i]." like '$customfield[$i]%'";
+			        $str=" salesordercf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];
@@ -87,22 +87,22 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($subject) && $subject !='')
 	{
-		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
-		//$search_query .= " and productname like '".$productname."%'";
+		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".PearDatabase::quote($subject.'%'));
+		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&subject=".$subject;
 	}
 	
 	if (isset($accountname) && $accountname !='')
 	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
-		//$search_query .= " and productcode like '".$productcode."%'";
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($accountname.'%'));
+		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&accountname=".$accountname;
 	}
 
 	if (isset($quotename) && $quotename !='')
 	{
-		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
-		 //$search_query .= " and commissionrate like '".$commissionrate."%'";
+		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".PearDatabase::quote($quotename.'%'));
+		 //$search_query .= " and commissionrate ".$adb->getLike()." '".$commissionrate."%'";
 		 $url_string .= "&quotename=".$quotename;
 	}
 	

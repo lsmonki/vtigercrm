@@ -99,9 +99,9 @@ class Product extends CRMEntity {
 	function get_attachments($id)
         {
 	
-		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query = "select notes.title,'Notes      ' AS ActivityType, notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;	
+                $query .= "select attachments.description AS title ,'Attachments' AS ActivityType, attachments.name AS filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified, attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
 		renderRelatedAttachments($query,$id);
         }
@@ -158,7 +158,7 @@ class Product extends CRMEntity {
 	}
 	function product_novendor()
 	{
-		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id=''";
+		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id is null";
 		$result=$this->db->query($query);
 		return $this->db->num_rows($result);
 	}
@@ -215,27 +215,29 @@ class Product extends CRMEntity {
 	
 	function create_export_query(&$order_by, &$where)
 	{
+		global $adb;
+
 		if($this->checkIfCustomTableExists())
 		{
 
 			$query = $this->constructCustomQueryAddendum() . 
 				",    
 				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
+			products.productname AS productname,
+			products.productcode AS productcode,
+			products.productcategory AS productcategory,
+			products.manufacturer AS manufacturer,
+			products.product_description AS product_description,
+			products.qty_per_unit AS qty_per_unit,
+			products.unit_price AS unit_price,
+			products.weight AS weight,
+			products.pack_size AS pack_size, "
+			.$adb->getDBDateString('products.start_date', 'Y-M-D')." AS start_date, "
+			.$adb->getDBDateString('products.expiry_date', 'Y-M-D')." AS expiry_date,
+			products.cost_factor AS cost_factor,
+			products.commissionrate AS commissionrate,
+			products.commissionmethod AS commissionmethod,
+			products.discontinued AS discontinued,
 			products.sales_start_date AS sales_start_date,
 			products.sales_end_date AS sales_end_date,
 			products.usageunit AS usageunit,
@@ -260,22 +262,22 @@ class Product extends CRMEntity {
 		else
 		{
 			$query = "SELECT
-				products.productid productid,
-			products.productname productname,
-			products.productcode productcode,
-			products.productcategory productcategory,
-			products.manufacturer manufacturer,
-			products.product_description product_description,
-			products.qty_per_unit qty_per_unit,
-			products.unit_price unit_price,
-			products.weight weight,
-			products.pack_size pack_size,
-			DATE_FORMAT(products.start_date, '%Y-%M-%D') AS start_date,
-			DATE_FORMAT(products.expiry_date, '%Y-%M-%D') AS expiry_date,
-			products.cost_factor cost_factor,
-			products.commissionrate commissionrate,
-			products.commissionmethod commissionmethod,
-			products.discontinued discontinued,
+				products.productid AS productid,
+			products.productname AS productname,
+			products.productcode AS productcode,
+			products.productcategory AS productcategory,
+			products.manufacturer AS manufacturer,
+			products.product_description AS product_description,
+			products.qty_per_unit AS qty_per_unit,
+			products.unit_price AS unit_price,
+			products.weight AS weight,
+			products.pack_size AS pack_size, "
+			.$adb->getDBDateString('products.start_date', 'Y-M-D')." AS start_date, "
+			.$adb->getDBDateString('products.expiry_date', 'Y-M-D')." AS expiry_date,
+			products.cost_factor AS cost_factor,
+			products.commissionrate AS commissionrate,
+			products.commissionmethod AS commissionmethod,
+			products.discontinued AS discontinued,
 			products.sales_start_date AS sales_start_date,
 			products.sales_end_date AS sales_end_date,
 			products.usageunit AS usageunit,

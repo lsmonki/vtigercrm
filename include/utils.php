@@ -397,6 +397,8 @@ function return_session_value_or_default($varname, $default)
   */
 function append_where_clause(&$where_clauses, $variable_name, $SQL_name = null)
 {
+	global $adb;
+
 	if($SQL_name == null)
 	{
 		$SQL_name = $variable_name;
@@ -404,7 +406,7 @@ function append_where_clause(&$where_clauses, $variable_name, $SQL_name = null)
 
 	if(isset($_REQUEST[$variable_name]) && $_REQUEST[$variable_name] != "")
 	{
-		array_push($where_clauses, "$SQL_name like '$_REQUEST[$variable_name]%'");
+		array_push($where_clauses, "$SQL_name ".$adb->getLike()." '$_REQUEST[$variable_name]%'");
 	}
 }
 
@@ -2412,13 +2414,15 @@ $vtlog->logthis("in getColumnFields ".$module,'info');
 	global $adb;
 	$column_fld = Array();
         $tabid = getTabid($module);
-	$sql = "select * from field where tabid=".$tabid;
-        $result = $adb->query($sql);
-        $noofrows = $adb->num_rows($result);
-	for($i=0; $i<$noofrows; $i++)
-	{
-		$fieldname = $adb->query_result($result,$i,"fieldname");
-		$column_fld[$fieldname] = ''; 
+	if($tabid) {
+		$sql = "select * from field where tabid=".$tabid;
+		$result = $adb->query($sql);
+		$noofrows = $adb->num_rows($result);
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$fieldname = $adb->query_result($result,$i,"fieldname");
+			$column_fld[$fieldname] = ''; 
+		}
 	}
 	return $column_fld;	
 }
@@ -3146,8 +3150,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					elseif($module == 'Quotes' && $name == 'Potential Name')
 					{
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
-						$potential_name = getPotentialName($potential_id);
-						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+						if('' != $potential_id) {
+							$potential_name = getPotentialName($potential_id);
+							$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+						}
 					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
                                         {
@@ -3748,8 +3754,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 }
 
 
-function getListQuery($module,$where='')
+function getListQuery($module,$where='',$distincton='')
 {
+	if($distincton) {
+		$distincton = "DISTINCT ON ($distincton)";
+	}
+
 	if($module == "HelpDesk")
 	{
 		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
@@ -3777,7 +3787,7 @@ function getListQuery($module,$where='')
 	}
         if($module == "Notes")
         {
-		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
+		$query="select $distincton crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
         }
         if($module == "Calls")
         {
@@ -3785,7 +3795,22 @@ function getListQuery($module,$where='')
         }
 	if($module == "Contacts")
         {
-                $query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
+                $query = "SELECT crmentity.crmid, crmentity.smownerid,
+				contactdetails.*, contactaddress.*,
+				contactsubdetails.*, contactscf.*,
+				account.accountname
+			from contactdetails
+				INNER JOIN contactaddress
+					ON contactdetails.contactid=contactaddress.contactaddressid
+				INNER JOIN contactsubdetails
+					ON contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid
+				INNER JOIN contactscf
+					ON contactdetails.contactid = contactscf.contactid
+				INNER JOIN crmentity
+					ON crmentity.crmid=contactdetails.contactid
+				LEFT JOIN account
+					ON account.accountid = contactdetails.accountid
+			WHERE crmentity.deleted=0";
 		//$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
         }
 	if($module == "Meetings")
@@ -3794,7 +3819,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Activities")
         {
-		$query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where  ;
+		$query = " select $distincton crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where  ;
 		//included by Jaguar
         }
 	if($module == "Emails")
@@ -4209,7 +4234,11 @@ function getDBInsertDateValue($value)
 	}
 		
 	//echo $display_date;
-	$insert_date=$y.'-'.$m.'-'.$d;
+	if(!$y && !$m && !$d) {
+		$insert_date = '';
+	} else {
+		$insert_date=$y.'-'.$m.'-'.$d;
+	}
 	return $insert_date;
 }
 

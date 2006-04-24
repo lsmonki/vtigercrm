@@ -425,6 +425,7 @@ function updateUsers2GroupMapping($groupname,$userid)
   global $adb;
   $sqldelete = "delete from users2group where userid = '" .$userid ."'";
   $result_delete = $adb->query($sqldelete);
+  if($groupname == '') return;
   $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
   $result = $adb->query($sql);
 }
@@ -442,6 +443,7 @@ function insertUser2RoleMapping($roleid,$userid)
 function insertUsers2GroupMapping($groupname,$userid)
 {
   global $adb;
+  if($groupname == '') return;
   $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
   $adb->query($sql);
 }
@@ -527,6 +529,7 @@ function substituteTokens($filename,$globals)
 function insert2LeadGroupRelation($leadid,$groupname)
 {
 global $adb;
+  if($groupname == '') return;
   $sql = "insert into leadgrouprelation values (" .$leadid .",'".$groupname."')";
   $adb->query($sql);
 
@@ -536,6 +539,7 @@ function updateLeadGroupRelation($leadid,$groupname)
  global $adb;
   $sqldelete = "delete from leadgrouprelation where leadid=".$leadid;
   $adb->query($sqldelete);
+  if($groupname == '') return;
   $sql = "insert into leadgrouprelation values (".$leadid .",'" .$groupname ."')";  
   $adb->query($sql);
 
@@ -545,6 +549,7 @@ function updateTicketGroupRelation($ticketid,$groupname)
  global $adb;
   $sqldelete = "delete from ticketgrouprelation where ticketid=".$ticketid;
   $adb->query($sqldelete);
+  if($groupname == '') return;
   $sql = "insert into ticketgrouprelation values (".$ticketid .",'" .$groupname ."')";  
   $adb->query($sql);
 
@@ -553,6 +558,7 @@ function updateTicketGroupRelation($ticketid,$groupname)
 function insert2ActivityGroupRelation($activityid,$groupname)
 {
 global $adb;
+  if($groupname == '') return;
   $sql = "insert into activitygrouprelation values (" .$activityid .",'".$groupname."')";
   $adb->query($sql);
 
@@ -561,6 +567,7 @@ global $adb;
 function insert2TicketGroupRelation($ticketid,$groupname)
 {
 global $adb;
+  if($groupname == '') return;
   $sql = "insert into ticketgrouprelation values (" .$ticketid .",'".$groupname."')";
   $adb->query($sql);
 

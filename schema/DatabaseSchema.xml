@@ -915,7 +915,6 @@
 		</field>
 
        		<field name="date_start" type="D">      
-			<NOTNULL/>
                         </field>                        
 		<field name="due_date" type="D">      
                         </field>                        
@@ -2028,18 +2027,6 @@
 		<opt>Type=InnoDB</opt> <index name="SeTicketsRel_IDX0">
 			<col>ticketid</col>
 		</index>
-		
-		<data>
-		</data>
-	</table>
-
-
-
-	<table name="seticketsrel" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_SeTicketsRel1 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
-		
-		<opt>Type=InnoDB</opt>
 		
 		<data>
 		</data>
@@ -4077,13 +4064,6 @@
 
 	<table name="quotes" alter="true">
 	<constraint>ADD CONSTRAINT fk_Quotes2 FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
-	<table name="quotes" alter="true">
-	<constraint>ADD CONSTRAINT fk_Quotes3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>

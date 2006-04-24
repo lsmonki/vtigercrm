@@ -25,7 +25,6 @@ if (is_file('../install_lock')) {
 }
 
 require_once('include/utils.php');
-include('vtigerversion.php');
 
 session_start();
 
@@ -40,6 +39,9 @@ if (isset($_REQUEST['db_password']))
 
 if (isset($_REQUEST['db_name']))
   $db_name = $_REQUEST['db_name'];
+
+if (isset($_REQUEST['db_type']))
+  $db_type = $_REQUEST['db_type'];
 
 if (isset($_REQUEST['db_drop_tables']))
   $db_drop_tables = $_REQUEST['db_drop_tables'];
@@ -149,7 +151,7 @@ if($templateHandle) {
       $buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
       $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
       $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
-      $buffer = str_replace( "_DBC_TYPE_", "mysql", $buffer);
+      $buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
       
       $buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
       
@@ -200,6 +202,7 @@ else {
               <input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
               <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
               <input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+              <input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($db_type)) echo "$db_type"; ?>" />
               <input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
               <input type="hidden" class="dataInput" name="db_create" value="<?php if (isset($db_create)) echo "$db_create"; ?>" />
               <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />

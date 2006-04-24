@@ -73,14 +73,10 @@ if (isset($_REQUEST['ftppassword']))
 if (isset($_REQUEST['dbtype']))
 	$dbtype	= $_REQUEST['dbtype'];
 
-//Checking for mysql connection parameters
+//Checking for mysql or pgsql connection parameters
 $mysql_status = '';
 $mysql_db_status = '';
-if($dbtype != 'mysql' || $dbtype =='') {
-	$mysql_status = 'true';
-	$mysql_db_status = 'true';
-}
-else {
+if($dbtype == 'mysql') {
 	$conn = @mysql_pconnect($db_hostname,$db_username,$db_password);
 	if(!$conn)
 		$mysql_status = 'false';
@@ -94,6 +90,19 @@ else {
 			$mysql_db_status = 'false';
 		}
 	}
+} elseif($dbtype == 'pgsql') {
+	$host = explode(':', $db_hostname);
+	$conn = @pg_connect("host=".$host[0]." port=".$host[1]." user=$db_username password=$db_password dbname=$db_name");
+	if(!$conn) {
+		$mysql_status = 'false';
+		$mysql_db_status = 'false';
+	} else {
+		$mysql_status = 'true';
+		$mysql_db_status = 'true';
+	}
+} else {
+	$mysql_status = 'true';
+	$mysql_db_status = 'true';
 }
 ?>
 
@@ -203,6 +212,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
              <input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
              <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
              <input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+	     <input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($dbtype)) echo "$dbtype"; ?>" />
              <input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
              <input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
              <input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
@@ -236,6 +246,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($dbtype)) echo "$dbtype"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
 			<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
 			<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
@@ -260,6 +271,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($dbtype)) echo "$dbtype"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
 			<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
 			<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
@@ -368,6 +380,7 @@ if($mysql_status == 'false')
 		<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 		<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 		<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+		<input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($dbtype)) echo "$dbtype"; ?>" />
 		<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
 		<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
 		<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
@@ -438,6 +451,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 			<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
 			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+			<input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($dbtype)) echo "$dbtype"; ?>" />
 			<input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
 			<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
 			<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />

@@ -340,14 +340,27 @@ function verify_data(form) {
             <tr>
               <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
               <td align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
-              <input type="hidden" name="dbtype" value="
-              <?php
-                if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
-                        echo $dbconfig['db_type'];
-                elseif(isset($databasetype) && $databasetype != '')
-                        echo $databasetype;
-              ?>">
             </tr>
+		<?php if(function_exists('mysql_connect') && function_exists('pg_connect')) : ?>
+	    <tr>
+	      <td nowrap bgcolor="#F5F5F5"><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
+	      <td align="left">
+	        <select class="dataInput" name="dbtype">
+		  <option value="mysql" <?php echo $dbconfig['db_type'] == 'mysql' ? 'selected' : '' ?>>MySQL</option>
+		  <option value="pgsql" <?php echo $dbconfig['db_type'] == 'pgsql' ? 'selected' : '' ?>>Postgresql</option>
+	        </select>
+	      </td>
+	    </tr>
+		<?php elseif(function_exists('mysql_connect')) : ?>
+			<input type="hidden" name="dbtype" value="mysql" />
+		<?php elseif(function_exists('pg_connect')) : ?>
+			<input type="hidden" name="dbtype" value="pgsql" />
+		<?php else : ?>
+	   <tr>
+	      <td nowrap bgcolor="#F5F5F5"><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
+	      <td align="left" class="dataInput">ERROR: none detected</td>
+	   </tr>
+		<?php endif ?>
           </table>
               <!-- tr>
                <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>

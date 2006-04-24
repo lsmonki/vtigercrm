@@ -29,13 +29,14 @@ require_once('modules/Home/language/en_us.lang.php');
 global $mod_strings;
 
 function build_account_where_clause ($the_query_string) {
+	global $adb;
 	$where_clauses = Array();
 
-	array_push($where_clauses, "accountname like '$the_query_string%'");
+	array_push($where_clauses, "accountname ".$adb->getLike()." '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "fax like '%$the_query_string%'");
-		array_push($where_clauses, "phone like '%$the_query_string%'");
+		array_push($where_clauses, "otherphone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "fax ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "phone ".$adb->getLike()." '%$the_query_string%'");
 	}
 	
 	$the_where = "";
@@ -51,18 +52,19 @@ function build_account_where_clause ($the_query_string) {
 }
 
 function build_contact_where_clause ($the_query_string) {
+	global $adb;
 	$where_clauses = Array();
 
-	array_push($where_clauses, "lastname like '$the_query_string%'");
-	array_push($where_clauses, "firstname like '$the_query_string%'");
-	array_push($where_clauses, "contactsubdetails.assistant like '$the_query_string%'");
+	array_push($where_clauses, "lastname ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "firstname ".$adb->getLike()." '$the_query_string%'");
+	array_push($where_clauses, "contactsubdetails.assistant ".$adb->getLike()." '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone like '%$the_query_string%'");
-		array_push($where_clauses, "mobile like '%$the_query_string%'");
-		array_push($where_clauses, "homephone like '%$the_query_string%'");
-		array_push($where_clauses, "otherphone like '%$the_query_string%'");
-		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
-		array_push($where_clauses, "assistant_phone like '%$the_query_string%'");
+		array_push($where_clauses, "phone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "mobile ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "homephone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "otherphone ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "phone_fax ".$adb->getLike()." '%$the_query_string%'");
+		array_push($where_clauses, "assistant_phone ".$adb->getLike()." '%$the_query_string%'");
 	}
 	
 	$the_where = "";
@@ -78,9 +80,10 @@ function build_contact_where_clause ($the_query_string) {
 }
 
 function build_opportunity_where_clause ($the_query_string) {
+	global $adb;
 	$where_clauses = Array();
 
-	array_push($where_clauses, "potentialname like '$the_query_string%'");
+	array_push($where_clauses, "potentialname ".$adb->getLike()." '$the_query_string%'");
 
 	$the_where = "";
 	foreach($where_clauses as $clause)
@@ -95,10 +98,11 @@ function build_opportunity_where_clause ($the_query_string) {
 }
 /*
 function build_case_where_clause ($the_query_string) {
+	global $adb;
 	$where_clauses = Array();
 
-	array_push($where_clauses, "cases.name like '$the_query_string%'");
-	if (is_numeric($the_query_string)) array_push($where_clauses, "cases.number like '$the_query_string%'");
+	array_push($where_clauses, "cases.name ".$adb->getLike()." '$the_query_string%'");
+	if (is_numeric($the_query_string)) array_push($where_clauses, "cases.number ".$adb->getLike()." '$the_query_string%'");
 
 	$the_where = "";
 	foreach($where_clauses as $clause)

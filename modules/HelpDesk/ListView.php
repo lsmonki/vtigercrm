@@ -81,7 +81,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 			if($uitype[$i] == 56)
 				$str=" ticketcf.".$column[$i]." = 1";
 			else
-		                $str=" ticketcf.".$column[$i]." like '$customfield[$i]%'";
+		                $str=" ticketcf.".$column[$i]." ".$adb->getLike()." '$customfield[$i]%'";
 	                array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 	        }
@@ -92,14 +92,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if(isset($name) && $name != "")
 	{
 		if($_REQUEST['button'] == 'Search')
-			array_push($where_clauses, "troubletickets.title like '%".$name."%'");
+			array_push($where_clauses, "troubletickets.title ".$adb->getLike()." '%".$name."%'");
 		else
-			array_push($where_clauses, "troubletickets.title like '".$name."%'");
+			array_push($where_clauses, "troubletickets.title ".$adb->getLike()." '".$name."%'");
 		$url_string .= "&ticket_title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != "")
 	{
-		array_push($where_clauses, "(contactdetails.firstname like".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contact_name.'%').")");
+		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()."".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($contact_name.'%').")");
 		$url_string .= "&contact_name=".$contact_name;
 
 	}
@@ -124,11 +124,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$format_date = getDBInsertDateValue($date);
 		if($date_criteria == 'is')
 		{
-			array_push($where_clauses, "crmentity.createdtime like '%".$format_date."%'");
+			array_push($where_clauses, "crmentity.createdtime ".$adb->getLike()." '%".$format_date."%'");
 		}
 		if($date_criteria == 'isnot')
 		{
-			array_push($where_clauses, "crmentity.createdtime not like '".$format_date."%'");
+			array_push($where_clauses, "crmentity.createdtime not ".$adb->getLike()." '".$format_date."%'");
 		}
 		if($date_criteria == 'before')
 		{
@@ -358,7 +358,7 @@ if(isset($where) && $where != '')
            $defaultcv_criteria = $_REQUEST['viewname'];
        }
 
-  	$list_query .= " and priority like "."'%" .$defaultcv_criteria ."%'";
+  	$list_query .= " and priority ".$adb->getLike()." "."'%" .$defaultcv_criteria ."%'";
 	$viewname = $_REQUEST['viewname'];
   	$view_script = "<script language='javascript'>
 		function set_selected()

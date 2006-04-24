@@ -25,7 +25,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'edit')
 }
 else
 {
-	$sql1 = "insert into role values('','".$rolename."','')";
+	$sql1 = "insert into role (name) values('".$rolename."')";
 	$adb->query($sql1);
 
 	//Retreiving the profileid

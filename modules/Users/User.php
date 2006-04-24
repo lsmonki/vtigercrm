@@ -478,7 +478,11 @@ class User extends SugarBean {
 	{
 		global $mod_strings;
 		
-		$query = "SELECT user_name from users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
+		if('' == $this->id) {
+			$query = "SELECT user_name from users where user_name='$this->user_name' AND deleted=0";
+		} else {
+			$query = "SELECT user_name from users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
+		}
 		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
 		$dup_users = $this->db->fetchByAssoc($result);
 		
