@@ -36,6 +36,12 @@ foreach($field_module as $fld_module)
 	$noofrows = $adb->num_rows($fieldListResult);
 	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid);
 }
+
+if($_REQUEST['fld_module'] != '')
+	$smarty->assign("DEF_MODULE",$_REQUEST['fld_module']);
+else
+	$smarty->assign("DEF_MODULE",'Leads');
+
 //Standard PickList Fields
 function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 {

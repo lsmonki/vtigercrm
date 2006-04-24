@@ -19,6 +19,7 @@
 		<form action="index.php" method="post" name="new" id="form">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="parenttab" value="Settings">
+		<input type="hidden" name="fld_module" id="fld_module">
 		{if $MODE neq 'view'}
 		<input type="hidden" name="action" value="UpdateDefaultFieldLevelAccess">
 		{else}
@@ -48,7 +49,11 @@
 				
 				<select name="selectmodule" style="width: 200px; font-size: 10px;" onChange="changemodules(this)">
 				{foreach item=module from=$FIELD_INFO}
-				<option>{$module}</option>
+				{if $module == $DEF_MODULE}
+					<option selected>{$module}</option>
+				{else}		
+					<option>{$module}</option>
+				{/if}
 				{/foreach}
 				</select>
 				
@@ -65,7 +70,7 @@
 				<td style="padding: 10px;" colspan="2">
 					
 					{foreach key=module item=info from=$FIELD_LISTS}
-					{if $module == 'Leads'}
+					{if $module == $DEF_MODULE}
 					<div id="{$module}_fields" style="display:block">	
 					{else}
 					<div id="{$module}_fields" style="display:none">	
@@ -127,13 +132,14 @@
 </tr>
 </table>
 	{include file='SettingsSubMenu.tpl'}
-{literal}
 <script>
-var def_field='Leads_fields';
+var def_field='{$DEF_MODULE}_fields';
+{literal}
 function changemodules(selectmodule)
 {
 	hide(def_field);
 	module=selectmodule.options[selectmodule.options.selectedIndex].value;
+	document.getElementById('fld_module').value = module; 
 	def_field = module+"_fields";
 	show(def_field);
 }

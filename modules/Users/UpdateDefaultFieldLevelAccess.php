@@ -45,7 +45,7 @@ foreach($field_module as $fld_module)
 
 	}
 }
-$loc = "Location: index.php?action=DefaultFieldPermissions&module=Users&fld_module=".$fld_module;
+$loc = "Location: index.php?action=DefaultFieldPermissions&module=Users&fld_module=".$_REQUEST['fld_module'];
 header($loc);
 
 ?>

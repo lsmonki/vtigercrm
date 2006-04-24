@@ -22,7 +22,6 @@ global $app_list_strings;
 
 $smarty = new vtigerCRM_Smarty;
 
-//echo get_module_title("Users", $_REQUEST['fld_module'].': '.$mod_strings['LBL_FIELD_LEVEL_ACCESS'], true);
 
 global $adb;
 global $theme;
@@ -40,6 +39,11 @@ foreach($field_module as $fld_module)
 	$noofrows = $adb->num_rows($fieldListResult);
 	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid);
 }
+
+if($_REQUEST['fld_module'] != '')
+	$smarty->assign("DEF_MODULE",$_REQUEST['fld_module']);
+else
+	$smarty->assign("DEF_MODULE",'Leads');
 
 //Standard PickList Fields
 function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
