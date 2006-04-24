@@ -73,7 +73,7 @@
 	<td width="25%">{$ORGANIZATIONPHONE}</td>
 
 	<td nowrap align="right" width="25%"><b>{$MOD.LBL_ORGANIZATION_WEBSITE} : </b></td>
-	<td width="25%"><a href="http://{$ORGANIZATIONWEBSITE}">{$ORGANIZATIONWEBSITE}</a></td>
+	<td width="25%"><a href="http://{$ORGANIZATIONWEBSITE}" TARGET="_blank">{$ORGANIZATIONWEBSITE}</a></td>
 	</tr>
 	<tr>
 	<td nowrap align="right"><b>{$MOD.LBL_ORGANIZATION_FAX} : </b></td>
