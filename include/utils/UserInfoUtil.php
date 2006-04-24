@@ -179,7 +179,7 @@ function getTabsPermission($profileid)
         }
         else
         {
-                $sql = "select * from profile2tab where profileid=" .$profileid." and tabid not in(15)";
+                $sql = "select * from profile2tab where profileid=" .$profileid;
                 $result = $adb->query($sql);
                 $tab_perr_array = Array();
                 $num_rows = $adb->num_rows($result);
@@ -187,7 +187,7 @@ function getTabsPermission($profileid)
                 {
                         $tabid= $adb->query_result($result,$i,'tabid');
                         $tab_per= $adb->query_result($result,$i,'permissions');
-                        if($tabid != 3 && $tabid != 16 && $tab_id != 15)
+                        if($tabid != 3 && $tabid != 16)
                         {
                                 $tab_perr_array[$tabid] = $tab_per;
                         }
@@ -211,7 +211,7 @@ function getTabsActionPermission($profileid)
 	global $adb;
 	$check = Array();
 	$temp_tabid = Array();	
-	$sql1 = "select * from profile2standardpermissions where profileid=".$profileid." and tabid not in(15,16) order by(tabid)";
+	$sql1 = "select * from profile2standardpermissions where profileid=".$profileid." and tabid not in(16) order by(tabid)";
 	//echo $sql1.'<BR>';
 	$result1 = $adb->query($sql1);
         $num_rows1 = $adb->num_rows($result1);
@@ -1270,6 +1270,7 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 	//Checking for Action Permission
+	//echo '******* '.$actionid.'  *********** '.$profileActionPermission[$tabid][$actionid];
 	if($profileActionPermission[$tabid][$actionid] != 0)
 	{
 		$permission = "no";
