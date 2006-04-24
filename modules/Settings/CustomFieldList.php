@@ -16,7 +16,6 @@ global $mod_strings;
 $smarty=new vtigerCRM_Smarty;
 $fld_module = $_REQUEST['fld_module'];
 $smarty->assign("MODULE",$fld_module);
-//echo '<pre>';print_r(getCFListEntries($fld_module));echo '</pre>';
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 $smarty->assign("MOD",$mod_strings);
 global $theme;
