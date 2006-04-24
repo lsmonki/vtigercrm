@@ -56,7 +56,7 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (13,'HelpDesk',0,11,'HelpDesk',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (14,'Products',0,8,'Products',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (1,'Dashboard',0,12,'Dashboards',null,null,1)");
- $this->db->query("INSERT INTO tab VALUES (15,'Faq',2,14,'Faq',null,null,1)");
+ $this->db->query("INSERT INTO tab VALUES (15,'Faq',0,14,'Faq',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (16,'Events',2,13,'Events',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (17,'Calendar',0,2,'Calendar',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (18,'Vendors',0,15,'Vendors',null,null,1)");
@@ -885,7 +885,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile1_id.",23,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",24,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",25,0)");
-        $this->db->query("insert into profile2tab values (".$profile1_id.",26,0)");
+       		$this->db->query("insert into profile2tab values (".$profile1_id.",26,0)");
+       		$this->db->query("insert into profile2tab values (".$profile1_id.",27,0)");
 
 		//Inserting into profile2tab
 		$this->db->query("insert into profile2tab values (".$profile2_id.",1,0)");
@@ -910,7 +911,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile2_id.",23,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",24,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",25,0)");
-        $this->db->query("insert into profile2tab values (".$profile2_id.",26,0)");
+        	$this->db->query("insert into profile2tab values (".$profile2_id.",26,0)");
+       		$this->db->query("insert into profile2tab values (".$profile2_id.",27,0)");
 
 		$this->db->query("insert into profile2tab values (".$profile3_id.",1,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",2,0)");
@@ -934,7 +936,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile3_id.",23,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",24,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",25,0)");
-        $this->db->query("insert into profile2tab values (".$profile3_id.",26,0)");
+        	$this->db->query("insert into profile2tab values (".$profile3_id.",26,0)");
+       		$this->db->query("insert into profile2tab values (".$profile3_id.",27,0)");
         
 
 		$this->db->query("insert into profile2tab values (".$profile4_id.",1,0)");
@@ -960,6 +963,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile4_id.",24,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",25,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",26,0)");
+		$this->db->query("insert into profile2tab values (".$profile4_id.",27,0)");
 		//Inserting into profile2standardpermissions  Adminsitrator
 		
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",2,0,0)");
