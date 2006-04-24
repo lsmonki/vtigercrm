@@ -25,15 +25,15 @@ $smarty = new vtigerCRM_Smarty;
 $cfimagecombo = Array($image_path."text.gif",
                         $image_path."number.gif",
                         $image_path."percent.gif",
-                        $image_path."currency.gif",
+                        $image_path."cfcurrency.gif",
                         $image_path."date.gif",
                         $image_path."email.gif",
                         $image_path."phone.gif",
-                        $image_path."picklist.gif",
+                        $image_path."cfpicklist.gif",
                         $image_path."url.gif",
                         $image_path."checkbox.gif",
                         $image_path."text.gif",
-                        $image_path."picklist.gif");
+                        $image_path."cfpicklist.gif");
 
 $cftextcombo = Array($mod_strings['Text'],
                         $mod_strings['Number'],
@@ -127,54 +127,46 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 			</tr>
 			<tr><td colspan="2"><hr /></td></tr>
 			<tr>
-				<td width="20%" valign=top>
-					<select name="cfcombo" id="cfcombo" class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
+				<td>
+					<table>
+						<tr><td>
+							<select name="cfcombo" id="cfcombo" class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
+						</td></tr>
+					</table>
 				</td>
-				<td width="80%" align="left" valign="top">
-				<table border="0" cellpadding="5" cellspacing="0" >
-					<tr>
-						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
-						<td width="60%" align="left"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
-					</tr>
-				</table>
-				<div id="lengthdetails">
-				<table border="0" cellspacing="5" cellpadding="0" >
-					<tr>
-						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-						<td width="60%" align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" "'.$readonly.'" class="txtBox"></td>
-                                        </tr>
-                                </table>
-				</div>
-				<div id="decimaldetails">
-				<table border="0" cellspacing="5" cellpadding="0" >
-					<tr>
-						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
-						<td width="60%" align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" "'.$readonly.'" class="txtBox"></td>
-					</tr>
-				</table>
-				</div>
-				<div id="picklist">
-				<table border="0" cellspacing="5" cellpadding="0" >
-					<tr>
-						<td class="dataLabel" nowrap="nowrap" width="40%" align="right"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-						<td width="60%" align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" "'.$readonly.'">'.$fldVal.'</textarea></td>
-						<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
-					</tr>
-				</table>
-				</div>
-			</td>
-		</tr>
-		<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
-		<tr>
-			<td colspan="2" align="center">
-			<input type="submit" name="save" value=" &nbsp; Save &nbsp; " class="classBtn" />&nbsp;&nbsp;
-                        <input type="button" name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh(\'orgLay\');" />
-			</td>
-		</tr>
-		<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
-	  </table>
-	  <input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
-	  </div>
-	  </form>';
+				<td>
+					<table>
+						<tr>
+							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
+							<td align="left"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
+						</tr>
+						<tr id="lengthdetails">
+							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
+							<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'""'.$readonly.'" class="txtBox"></td>
+						</tr>
+						<tr id="decimaldetails">
+							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
+							<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" "'.$readonly.'" class="txtBox"></td>
+						</tr>
+						<tr id="picklist">
+							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
+							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" "'.$readonly.'">'.$fldVal.'</textarea></td>
+							<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" name="save" value=" &nbsp; Save &nbsp; " class="classBtn" />&nbsp;&nbsp;
+					<input type="button" name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh(\'orgLay\');" />
+				</td>
+			</tr>
+			<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
+		</table>
+		<input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
+	</div>
+	</form>';
 echo $output;
 ?>
