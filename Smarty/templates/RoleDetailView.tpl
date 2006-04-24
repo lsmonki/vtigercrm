@@ -79,7 +79,8 @@
 	</tr>
 	</tbody></table>
 
-<td colspan="2" style="border-top:1px solid #CCCCCC;">&nbsp;</td>
+</td>
+<td colspan="2">&nbsp;</td>
 </tr>
 </table>
 </form>
