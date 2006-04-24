@@ -1263,7 +1263,7 @@ $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array14 = Array(
 		"insert into cvcolumnlist values ($cvid,0,'activity:subject:subject:Emails_Subject:V')",
-		"insert into cvcolumnlist values ($cvid,1,'seactivityrel:activityid:activityid:Emails_Related_To:I')",
+		"insert into cvcolumnlist values ($cvid,1,'seactivityrel:crmid:parent_id:Emails_Related_To:I')",
 		"insert into cvcolumnlist values ($cvid,2,'activity:date_start:date_start:Emails_Date_Sent:D')",
 		"insert into cvcolumnlist values ($cvid,3,'crmentity:smownerid:assigned_user_id:Emails_Assigned_To:V')"
 			     );
@@ -1667,8 +1667,8 @@ Execute($insert_query9);
 
 $insert_query_array24 = Array(
 	"insert into field values(26,".$conn->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'N~O',0,5,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,3,76,1,'N~O',0,5,'BAS')",
+	"insert into field values(26,".$conn->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
+	"insert into field values(26,".$conn->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,3,76,1,'V~O',0,5,'BAS')",
 	"insert into field values(26,".$conn->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
 	"insert into field values(26,".$conn->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'V~O',1,null,'BAS')",
 	"insert into field values(26,".$conn->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'V~O',1,null,'BAS')",
@@ -2407,7 +2407,7 @@ $query_array = Array(
 "ALTER TABLE `users` MODIFY COLUMN `user_preferences` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `users` MODIFY COLUMN `homeorder` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL'",
 "ALTER TABLE `users` ADD COLUMN `currency_id` INTEGER(19) NOT NULL DEFAULT '1'",
-"ALTER TABLE `users` ADD COLUMN `defhomeview` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `users` ADD COLUMN `defhomeview` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT 'home_metrics'",
 "ALTER TABLE `users2group` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `users2group` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `users_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
@@ -2592,7 +2592,29 @@ foreach($customview_query_array as $query)
 	Execute($query);
 }
 
+//To populate the comboStrings for Campaigns module which are added newly
+require_once('include/ComboStrings.php');
+global $combo_strings;
 
+$comboTables = Array('campaigntype','campaignstatus','expectedrevenue','actualcost','expectedresponse');
+foreach ($comboTables as $tablename)
+{
+	$values = $combo_strings[$tablename."_dom"];
+	$i=0;
+	foreach ($values as $val => $cal)
+	{
+		if($val != '')
+		{
+			$conn->query("insert into ".$tablename. " values(null,'".$val."',".$i.",1)");
+		}
+		else
+		{
+			$conn->query("insert into ".$tablename. " values(null,'--None--',".$i.",1)");
+		}
+		$i++;
+	}
+
+}
 
 
 
