@@ -29,7 +29,7 @@
 						<tbody>
 							<tr>
 								<td class="lvtCol" width="5%">#</td>
-							        <td class="lvtCol" width="35%">Field Lable </td>
+							        <td class="lvtCol" width="35%">Field Label </td>
 							        <td class="lvtCol" width="50%">Field Type </td>
 								<td class="lvtCol" width="10%">Tools</td>
 							</tr>
