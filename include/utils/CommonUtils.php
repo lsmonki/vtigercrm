@@ -1512,8 +1512,11 @@ for($i = 0; $i < $noofrows; $i++)
 {
          $tablabel = $adb->query_result($result,$i,'tablabel');
          $tabname = $adb->query_result($result,$i,'name');
-         $return_qcmodule[] = $tablabel;
-         $return_qcmodule[] = $tabname;
+	 if(isPermitted($tabname,'EditView','') == 'yes')
+	 {
+         	$return_qcmodule[] = $tablabel;
+	        $return_qcmodule[] = $tabname;
+	}	
 }
         $return_qcmodule = array_chunk($return_qcmodule,2);
         return $return_qcmodule;
