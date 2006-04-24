@@ -99,11 +99,11 @@ function constructGroupMemberArray($member_array)
 			$groupId=createGroup($groupName,$groupMemberArray,$description);
 			//Inserting into role Table
 			//$roleId = createRole($rolename,$parentRoleId,$profile_array);
-			 $loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId; 	 
+			 $loc = "Location: index.php?action=".$returnaction."&parenttab=Settings&module=Users&groupId=".$groupId; 	 
 		}
 		else
 		{
-			$loc = "Location: index.php?action=createnewgroup&module=Users&groupname=".$groupName."&desc=".$description."&error=true";
+			$loc = "Location: index.php?action=createnewgroup&parenttab=Settings&module=Users&groupname=".$groupName."&desc=".$description."&error=true";
 		}
 
 
