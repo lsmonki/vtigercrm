@@ -10,6 +10,7 @@
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="action" value="CreateProfile1">
+<input type="hidden" name="parenttab" value="Settings">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_PROFILES}</b></span>
@@ -30,18 +31,18 @@
 <tr>
 <td align="right" width="50%" style="padding-right:10px;">{$CMOD.LBL_NEW_PROFILE_NAME}</td>
 
-<td width="50%" align="left" style="padding-left:10px;"><input type="text" name="profile_name" id="pobox" value="{$PROFILE_NAME}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"/></td>
+<td width="50%" align="left" style="padding-left:10px;"><input type="text" name="profile_name" id="pobox" value="" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"/></td>
 </tr>
 <tr>
 <td align="right" style="padding-right:10px;">{$CMOD.LBL_DESCRIPTION}</td>
-<td align="left" style="padding-left:10px;"><textarea name="profile_description" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">{$PROFILE_DESCRIPTION}</textarea></td>
+<td align="left" style="padding-left:10px;"><textarea name="profile_description" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></textarea></td>
 </tr>
 <tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 <tr>
 
 <td colspan="2" align="right">
 <input type="button" value=" &lsaquo; Back " name="back" disabled />&nbsp;&nbsp;
-<input type="submit" value=" Next &rsaquo; " accessKey="N" class="button" name="Next"/>&nbsp;&nbsp;
+<input type="submit" value=" Next &rsaquo; " accessKey="N" class="button" name="Next" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 <input type="button" value=" Cancel " name="Cancel" onClick="window.history.back()";/>
 
 </td>
@@ -64,4 +65,18 @@
 </tr>
 </table>
 	{include file='SettingsSubMenu.tpl'}
-
+<script>
+function rolevalidate()
+{ldelim}
+    var profilename = document.getElementById('pobox').value;
+    profilename = profilename.replace(/ /gi,'',profilename);
+    if(profilename != '')
+        return true;
+    else
+    {ldelim}
+        alert('Enter The Profile name');
+        document.getElementById('pobox').focus();
+        return false;
+    {rdelim}
+{rdelim}
+</script>

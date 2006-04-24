@@ -34,6 +34,7 @@
 	</table>
 	<form action="index.php" method="post" name="new" id="form">
 	<input type="hidden" name="module" value="Users">		
+	<input type="hidden" name="parenttab" value="Settings">
 	<input type="hidden" name="action" value="{$ACTION}">		
 	<input type="hidden" name="mode" value="{$MODE}">	
 	<input type="hidden" name="profileid" value="{$PROFILEID}">

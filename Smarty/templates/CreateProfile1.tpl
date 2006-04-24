@@ -12,6 +12,7 @@
 <input type="hidden" name="profile_description" value="{$PROFILE_DESCRIPTION}">
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="action" value="profilePrivileges">
+<input type="hidden" name="parenttab" value="Settings">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_PROFILES}</b></span>

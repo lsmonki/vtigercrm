@@ -10,6 +10,7 @@
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="mode" value="create">
 <input type="hidden" name="action" value="CreateProfile">
+<input type="hidden" name="parenttab" value="Settings">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_PROFILES}</b></span>
