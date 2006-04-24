@@ -10,28 +10,18 @@
 ********************************************************************************/
 
 	
-require_once('XTemplate/xtpl.php');
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
+require_once('Smarty_setup.php');
+global $mod_strings,$app_strings,$adb,$theme;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_LEAD_MAP_CUSTOM_FIELD'], true);
-echo '<br><br>';
-echo $mod_strings['leadCustomFieldDescription'];
-echo '<br><br>';
-
-global $adb;
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
-$xtpl=new XTemplate('modules/Settings/ListLeadCustomFieldMapping.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-
-$xtpl->assign("RETURN_MODULE","Settings");
-$xtpl->assign("RETURN_ACTION","");
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("RETURN_MODULE","Settings");
+$smarty->assign("RETURN_ACTION","");
 
 function getListLeadMapping($image_path)
 {
@@ -51,40 +41,36 @@ function getListLeadMapping($image_path)
 		$sql1="select fieldlabel from field where fieldid ='".$leadid."'";
 		$result1 = $adb->query($sql1);
 		$leadfield = $adb->query_result($result1,0,'fieldlabel');
-		$display_val .= '<td nowrap width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$leadfield.'</td>';
-		
+		$label['leadlabel'] = $leadfield;
 		$sql2="select fieldlabel from field where fieldid ='".$accountid."'";
 		$result2 = $adb->query($sql2);
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
-		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$accountfield.'</td>';
+		$label['accountlabel'] = $accountfield;
 		
 		$sql3="select fieldlabel from field where fieldid ='".$contactid."'";
 		$result3 = $adb->query($sql3);
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
-		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$contactfield.'</td>';
-		
+		$label['contactlabel'] = $contactfield;
 		$sql4="select fieldlabel from field where fieldid ='".$potentialid."'";
 		$result4 = $adb->query($sql4);
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
-		$display_val .= '<td width="20%" valign="top" style="padding:0px 3px 0px 3px;">'.$potentialfield.'</td>';
+		$label['potentiallabel'] = $potentialfield;
 		if($accountfield !=''&& $contactfield !='' && $potentialfield!='')
 		{	
-			$display_val .= '<td width="10%" valign="top" style="padding:0px 3px 0px 3px;"><a href="javascript:confirmdelete(\'index.php?action=DeleteLeadCustomFieldMapping&module=Settings&id='.$cfmid.'&return_module=Settings&return_action=ListCustomFieldMapping\')">delete</a></td></tr>';
+			$label['del']='<a href="javascript:confirmdelete(\'index.php?action=DeleteLeadCustomFieldMapping&module=Settings&id='.$cfmid.'&return_module=Settings&return_action=ListCustomFieldMapping\')">delete</a>';
 		}else
 		{
-			$display_val .='<td width="10%" valign="top" style="padding:0px 3px 0px 3px;"> </td></tr>';
+			$label['del']= '';
 		}
-		
+		$mapping[]=$label;
 	}
-	return $display_val;
+	return $mapping;
 }
 
 $display_fields = getListLeadMapping($image_path);
-
 	if (isset($display_fields))
- 	       $xtpl->assign("CUSTOMFIELDMAPPING",$display_fields);
+ 	       $smarty->assign("CUSTOMFIELDMAPPING",$display_fields);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("ListLeadCustomFieldMapping.tpl");
 
 ?>
