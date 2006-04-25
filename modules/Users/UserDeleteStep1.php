@@ -34,7 +34,7 @@ $output ='<div id="DeleteLay">
 	<td colspan="3">&nbsp;</td>
 </tr>
 <tr>
-	<td width="50%"><b>User to be Deteted</b></td>
+	<td width="50%"><b>User to be Deleted</b></td>
 	<td width="2%"><b>:</b></td>
 	<td width="48%"><b>'.$delete_user_name.'</b></td>
 </tr>
