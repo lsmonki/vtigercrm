@@ -100,7 +100,7 @@
 																{/if}	
 																<input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
      {if $secondvalue neq ''}
-	<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
+	<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Group
      {/if}									
 	<span id="assign_user" style="{$style_user}">
         <select name="assigned_user_id">

@@ -261,7 +261,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$log->debug("Has a Group, get the Radio button");
 			$GROUP_SELECT_OPTION .= '<input
 				type="radio" name="assigntype" value="T"'.$team_checked.'
-				onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'];
+				onclick="toggleAssignType(this.value)">'.$app_strings['LBL_GROUP'];
 		}
 
 		$GROUP_SELECT_OPTION .='<br><span
