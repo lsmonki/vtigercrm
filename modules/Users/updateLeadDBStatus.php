@@ -17,6 +17,7 @@ $idlist= $_REQUEST['idlist'];
 $leadstatusval = $_REQUEST['leadval'];
 $idval=$_REQUEST['user_id'];
 $viewid = $_REQUEST['viewname'];
+$return_module = $_REQUEST['return_module'];
 global $current_user;
 global $adb;
 $storearray = explode(";",$idlist);
@@ -40,6 +41,6 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 		$result1 = $adb->query($query);
 	}
 }
-header("Location: index.php?module=Leads&action=LeadsAjax&file=ListView&ajax=changestate&viewname=".$viewid);
+header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate&viewname=".$viewid);
 ?>
 
