@@ -634,7 +634,17 @@ class CustomView extends CRMEntity{
 	{
 		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
 		{
+			// BUG this doesn't work with non equilvalent comparisons
+			$org_value = $value;
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value));
+			// hack to get "assigned to" to check group name as well
+			if($_REQUEST['module'] == 'Activities' || $_REQUEST['module'] == 'Emails') {
+				$value = '(('.$value.' AND NOT '.$tablename.".".$fieldname.$this->getAdvComparator($comparator, 0).') OR activitygrouprelation.groupname'.$this->getAdvComparator($comparator, $org_value).')';
+			} else if($_REQUEST['module'] == 'HelpDesk') {
+				$value = '(('.$value.' AND NOT '.$tablename.".".$fieldname.$this->getAdvComparator($comparator, 0).') OR ticketgrouprelation.groupname'.$this->getAdvComparator($comparator, $org_value).')';
+			} else if($_REQUEST['module'] == 'Leads') {
+				$value = '(('.$value.' AND NOT '.$tablename.".".$fieldname.$this->getAdvComparator($comparator, 0).') OR leadgrouprelation.groupname'.$this->getAdvComparator($comparator, $org_value).')';
+			}
 		}else if($fieldname == "parentid")
 		{
 			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value));
