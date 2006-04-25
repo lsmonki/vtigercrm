@@ -27,6 +27,7 @@
 	<tr>
 		<td colspan="4" align="center">
 	<input name="save" value=" &nbsp;Save&nbsp; " class="classBtn" type="button" onClick="fetchSaveNotify('{$NOTIFY_DETAILS.id}')">
+	<input name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" type="button" onClick="hide('editdiv');">
 		</td>
 	</tr>
 	<tr><td colspan="4" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
