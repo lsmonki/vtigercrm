@@ -2048,57 +2048,7 @@ class appointment extends tutos_base {
 			}
 			unset($o);
 		}
-		//}
-		//
 
-		/*    #
-			# First query ( non repeating appointments )
-			#
-			$q = "SELECT * FROM ". $this->tablename." WHERE ";
-			$q .= " (";
-			if(!is_admin($current_user))
-			{
-			$q .= " ( ";
-			}
-			$q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-			$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-			$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-			if(!is_admin($current_user))
-			{
-			$q .= " ) AND ( creator = '".$current_user->id."' ) ";
-			}
-			$q .= " )";
-			$q .= " ORDER by a_start";
-
-			//print("GS --> allowed ".is_admin($current_user)." q=".$q);
-			# always at the end of query
-			# check_dbacl( $q, $current_user->id);
-
-			// srini cal appoint 
-			$r = $this->db->query($q);
-			$n = $this->db->getRowCount($r);
-			$a = 0;
-			//print("GS --> ".$n." q=".$q);
-			while ( $a < $n ) 
-			{	
-
-				$o = &new appointment();
-				$result = mysql_fetch_assoc($r);
-				//$o->read_result($r,$a);
-				$o->read_result($result);
-				$a++;
-				if ( $o->see_ok() ) 
-				{ */
-					/* Get all participants */
-					/*    //$o->read_participants();
-					//print("GS --> see");
-					$obj->callist[$o->id] = &$o;
-				}
-				unset($o);
-			}
-		//$r->free();
-
-					 */
 		$x = new DateTime();
 		$x->setDateTimeTS($from->ts);
 
@@ -2114,72 +2064,100 @@ class appointment extends tutos_base {
 			$ymd .= $pre ."'". Date("j/n",$x->getTimeStamp()) ."'";
 			$x->addDays(1);
 		}
-		#
-		# Second query ( repeating appointments w/o end )
-		#
-		/*    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-		      $q .= " r_ignore = 1 AND (";
-		      $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-		      $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-		      $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-		      $q .= " OR ( repeat = 4 )";
-		      $q .= " ) AND ( a_start <= ". $x2 ." )";
-		      $q .= "";
-		      $q .= " ORDER by a_start";
-
- 		*/
-		# always at the end of query
-		#   check_dbacl( $q, $current_user->id);
-
-		#   $r = $obj->dbconn->Exec($q);
-		#   $n = $r->numrows();
-		#   $a = 0;
-		#   while ( $a < $n ) {
-		#     $o = &new appointment($obj->dbconn);
-		#     $o->read_result($r,$a);
-		#     $a++;
-		#     if ( $o->see_ok() ) { 
-			/* Get all participants */
-		#       $o->read_participants();
-		#       $obj->callist[$o->id] = &$o;
-		#     }
-		#     unset($o);
-		#   }
-		#   $r->free();
-
-		#
-		# Third query ( repeating appointments with end )
-		#
-		/*   $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-		     $q .= " r_ignore = 0 AND (";
-		     $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-		     $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-		     $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-		     $q .= " OR ( repeat = 4 )";
-		     $q .= ") AND ( (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-		     $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-		     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-		     $q .= ")";
-		     $q .= " ORDER by a_start";
-		 */
-		#   $r = $obj->dbconn->Exec($q);
-		#   $n = $r->numrows();
-		#   $a = 0;
-		#   while ( $a < $n ) {
-		#     $o = &new appointment($obj->dbconn);
-		#     $o->read_result($r,$a);
-		#     $a++;
-		#     if ( $o->see_ok() ) { 
-			/* Get all participants */
-		#       $o->read_participants();
-		#       $obj->callist[$o->id] = &$o;
-		#     }
-		#     unset($o);
-		#   }
-		#   $r->free();
 
 		return;	
 	}
+
+  /** faster version of readCal which caches it's results and only returns the
+   * number of events on a given day
+   */
+   function scanCal($from, $to) {
+   	static $res = null;
+	global $msg, $current_user;
+
+	$from = date("Y-m-d", $from);
+	$to = date("Y-m-d", $to);
+
+	if(!is_null($res)) return $res[$from];
+
+	$res = array();
+
+	$q = "SELECT activity.date_start, count(*) AS count
+		FROM activity
+			INNER JOIN crmentity
+				ON activity.activityid = crmentity.crmid
+			INNER JOIN salesmanactivityrel
+				ON salesmanactivityrel.activityid=activity.activityid
+		WHERE activity.activitytype in ('Call','Meeting')
+			AND activity.date_start < '". $to ."'
+			AND activity.date_start >= '". $from."'
+			AND (activity.date_start like (activity.due_date)
+				OR (activity.date_start != null ))
+			AND crmentity.smownerid ='".$current_user->id."'
+			AND salesmanactivityrel.smid = '".$current_user->id."'
+		 	AND crmentity.deleted = 0
+		GROUP BY activity.date_start";
+	$r = $this->db->query($q);
+	$n = $this->db->getRowCount($r);
+	for($i=0; $i<$n; $i++) {
+		$date = $this->db->query_result($r, $i, 'date_start');
+		$count = $this->db->query_result($r, $i, 'count');
+		$res[$date] = $count;
+	}
+
+	$q = "SELECT activity.date_start, count(*) AS count
+		FROM activity
+			INNER JOIN crmentity
+				ON activity.activityid = crmentity.crmid
+			INNER JOIN recurringevents
+				ON activity.activityid = recurringevents.activityid
+			INNER JOIN salesmanactivityrel
+				ON salesmanactivityrel.activityid = activity.activityid
+		WHERE activity.activitytype in ('Call','Meeting')
+			AND recurringdate < '". $to ."'
+			AND recurringdate >= '". $from."'
+			AND crmentity.smownerid ='".$current_user->id."'
+			AND salesmanactivityrel.smid = '".$current_user->id."'
+		 	AND crmentity.deleted = 0
+			AND crmentity.deleted = 0
+		GROUP BY activity.date_start";
+	$r = $this->db->query($q);
+	$n = $this->db->getRowCount($r);
+	for($i=0; $i<$n; $i++) {
+		$date = $this->db->query_result($r, $i, 'date_start');
+		$count = $this->db->query_result($r, $i, 'count');
+		$res[$date] += $count;
+	}
+
+	$q = "SELECT activity.date_start, count(*) AS count
+		FROM activity
+			INNER JOIN crmentity
+				ON activity.activityid = crmentity.crmid
+			INNER JOIN salesmanactivityrel
+				ON salesmanactivityrel.activityid=activity.activityid
+			INNER JOIN activitygrouprelation
+				ON activitygrouprelation.activityid=activity.activityid
+			INNER JOIN users2group
+				ON users2group.groupname=activitygrouprelation.groupname
+		WHERE activity.activitytype in ('Call','Meeting')
+			AND activity.date_start < '". $to ."'
+			AND activity.date_start >= '". $from."'
+			AND (activity.date_start like (activity.due_date)
+				OR (activity.date_start != null ))
+			AND crmentity.smownerid=0
+			AND users2group.userid=".$current_user->id."
+		 	AND crmentity.deleted = 0
+		GROUP BY activity.date_start";
+	$r = $this->db->query($q);
+	$n = $this->db->getRowCount($r);
+	for($i=0; $i<$n; $i++) {
+		$date = $this->db->query_result($r, $i, 'date_start');
+		$count = $this->db->query_result($r, $i, 'count');
+		$res[$date] += $count;
+	}
+	return $res[$from];
+   }
+
   /**
    * get the help index
    */

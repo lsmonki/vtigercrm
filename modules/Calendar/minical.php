@@ -139,6 +139,9 @@ $ts = mktime(12,0,0,$m,1,$y);
 $today=Date("Ymd",time());
 
 /* Back to last weekstart before ts */
+$te = $ts + 86400*31;
+$app = new appointment();
+$app->scanCal($ts, $te);
 while ( Date("w",$ts) != $current_user->weekstart ) {
   $ts -= 86400;
 }
@@ -203,10 +206,7 @@ if ($xm == $m )
 	$to->setDateTimeTS($ts - 12 * 3600);
 	#$to->addDays(7);
 
-	$pref->callist = array();
-	$app = new appointment();
-	$app->readCal($pref,$from,$to);
-	// appointment::readCal($pref,$from,$to);
+	$app_count = $app->scanCal($ts, $te);
 
 	$dd = new DateTime();
 	# $d = strftime($lang['DateFormatStr'],$ts);
@@ -214,7 +214,7 @@ if ($xm == $m )
 	$d = $dd->getDate();
 	$tref = Date("Ymd",$ts);
 	$eventclass=$col;
-	if(count($pref->callist)!=0)
+	if($app_count > 0)
 	{
 		//Classes are provided when events are created  - Jaguar
 		if($col == "today")
