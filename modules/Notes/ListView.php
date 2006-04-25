@@ -35,8 +35,14 @@ global $app_strings,$mod_strings,$list_max_entries_per_page;
 $log = LoggerManager::getLogger('note_list');
 
 global $currentModule,$image_path,$theme;
-
-$category = getParentTab();
+if($_REQUEST['parenttab'] != '')
+{
+	$category = $_REQUEST['parenttab'];
+}
+else
+{
+	$category = getParentTab();	
+}	
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Notes");
