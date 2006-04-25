@@ -117,6 +117,7 @@
 function validate() {
 	if (!emptyCheck("server","ftp Server Name","text")) return false
 		if (!emptyCheck("server_username","ftp User Name","text")) return false
+				if (!emptyCheck("server_password","ftp Password","text")) return false
 			return true;
 
 }
