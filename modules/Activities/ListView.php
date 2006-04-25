@@ -57,7 +57,7 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
+$smarty->assign("CHANGE_OWNER",getUserslist());
 $where = "";
 
 $url_string = ''; // assigning http url string
