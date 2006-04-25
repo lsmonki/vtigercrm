@@ -263,7 +263,9 @@ class jpgraph {
 			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+				$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
+			
 			$title->setText($titleStr);
 
 			// Create the xaxis labels
@@ -916,7 +918,8 @@ class jpgraph {
 			$font->setColor($font_color);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			//$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
 			$title->setText($titlestr);
 
 			// Create the xaxis labels
@@ -1173,8 +1176,10 @@ class jpgraph {
 			$gbplot->setFillStyle($fills);
 
 			// Setup title
-			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$title->setText($titlestr);
+//			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+	$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total;
+
+$title->setText($titlestr);
 
 			// format the data values
 			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
