@@ -233,11 +233,12 @@ function get_usersid($table_name,$column_name,$search_string)
 				$where .= " or ";
 			}
 		}
-		$where.=")";
+		$where.=" or groups.groupname like '%".$search_string."%')";
 	}
 	else
 	{
-		$where="$table_name.$column_name =''";
+		//$where="$table_name.$column_name =''";
+		$where="groups.groupname like '%".$search_string."%' ";
 	}	
 	return $where;	
 }
@@ -428,7 +429,15 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
-			$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
+			if($tab_col == "crmentity.smownerid")
+			{
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'users.user_name')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'groups.groupname')." )".$matchtype;	
+			}
+			else
+			{
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
+			}
 		}
 		$where=$adv_string;
 	}
