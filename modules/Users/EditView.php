@@ -54,6 +54,13 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 	$focus->user_name = "";
+	$mode='create';
+	$password='<tr>
+	   		   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Password</td>
+		       <td width="30%"><input name="new_password" type="password" tabindex="1" size="25" maxlength="25"></td>
+			   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Confirm Password</td>
+			   <td width="30%"><input name="confirm_new_password" type="password" tabindex="2" size="25" maxlength="75"></td>
+			  </tr>';
 }
 
 global $theme;
@@ -151,7 +158,6 @@ $DATE_FORMAT_SELECT_OPTION .= ' </select>';
 $smarty->assign("DATE_FORMAT", $DATE_FORMAT_SELECT_OPTION);
 
 if (is_admin($current_user)) {
-	//$status  = "<td width='20%' class='dataLabel'><FONT class='required'>".$app_strings['LBL_REQUIRED_SYMBOL']."</FONT>".$mod_strings['LBL_STATUS']."</td>\n";
 	$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' tabindex='1'";
 	if (isset($default_user_name)
 		&& $default_user_name != ""
@@ -320,34 +326,4 @@ if ($_REQUEST['mode1'] == 'pref')
 else 
 	$smarty->display('UserEditView.tpl');
 
-/*
-echo "<br>";
-if(is_admin($current_user) && ! isset($focus->id))
-{
-        include ('modules/Calendar/user_new.php');
-}
-else
-{
-        #require_once('modules/Calendar/Authenticate.php');
-        #$a = $current_user->uid;
-        #echo $a;
-        #include ('modules/Calendar/user_new.php?id=$a');
-
-}
-echo "<table width=\"100%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\"><tr>\n";
-echo "    <td align=\"left\"></td>\n";
-echo "      <td align=\"left\">\n";
-echo "             <table cellpadding=\"0\" cellspacing=\"5\" border=\"0\">";
-echo "            <tr>";
-echo "                 <td><input title=\"$app_strings[LBL_SAVE_BUTTON_TITLE]\" tabindex=\'5\' accessKey=\"$app_strings[LBL_SAVE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Save'; return verify_data(EditView)\" type=\"submit\" name=\"button\" value=\"  $app_strings[LBL_SAVE_BUTTON_LABEL]  \" ></td>\n";
-echo "              <td><input title=\"$app_strings[LBL_CANCEL_BUTTON_TITLE]\" tabindex='5' accessKey=\"$app_strings[LBL_CANCEL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='$RETURN_ACTION'; this.form.module.value='$RETURN_MODULE'; this.form.record.value='$RETURN_ID'\" type=\"submit\" name=\"button\" value=\"  $app_strings[LBL_CANCEL_BUTTON_LABEL]  \"></td>\n";
-echo "          </tr></table>\n";
-echo "     </td>\n";
-echo "    <td align=\"left\"></td>\n";
-echo " </tr></table>\n";
-
-echo "</form>";
-echo get_set_focus_js();
-echo get_validate_record_js();
-*/
 ?>
