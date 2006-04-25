@@ -4274,6 +4274,9 @@ function getDBInsertDateValue($value)
 
 function getDisplayCurrency()
 {
+	static $disp_curr = '';
+	if($disp_curr) return $disp_curr;
+
 	global $adb;
 	$sql1 = "select * from currency_info";
 	$result = $adb->query($sql1);
@@ -4285,6 +4288,9 @@ function getDisplayCurrency()
 
 function getCurrencySymbol()
 {
+	static $curr_symbol = '';
+	if($curr_symbol) return $curr_symbol;
+
 	global $adb;
 	$sql1 = "select * from currency_info";
 	$result = $adb->query($sql1);
