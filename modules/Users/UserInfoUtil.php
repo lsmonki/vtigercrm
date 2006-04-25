@@ -79,45 +79,39 @@ function fetchUserGroups($userid)
 	return $groupname;
 }
 
-function getAllTabsPermission($profileid)
+function loadAllPerms()
 {
-	global $adb,$MAX_TAB_PER;
-	$sql = "select * from profile2tab where profileid=" .$profileid ;
+	global $adb;
+	static $persistPermArray = Array();
+
+	if($persistPermArray) return $persistPermArray;
+
+	$sql = "select tabid, permissions, profileid from profile2tab";
 	$result = $adb->query($sql);
-	$tab_perr_array = Array();
-	if($MAX_TAB_PER !='')
-	{
-		$tab_perr_array = array_fill(0,$MAX_TAB_PER,0);
-	}
 	$num_rows = $adb->num_rows($result);
 	for($i=0; $i<$num_rows; $i++)
 	{
-		$tabid= $adb->query_result($result,$i,'tabid');
-		$tab_per= $adb->query_result($result,$i,'permissions');
-		$tab_perr_array[$tabid] = $tab_per;
-	}		
-	return $tab_perr_array; 
+		$tabid = $adb->query_result($result, $i, 'tabid');
+		$tab_per = $adb->query_result($result, $i, 'permissions');
+		$profileid = $adb->query_result($result, $i, 'profileid');
+		$persistPermArray[$profileid][$tabid] = $tab_per;
+	}
+	return $persistPermArray;
+}
 
+function getAllTabsPermission($profileid)
+{
+	$perm = loadAllPerms();
+	return $perm[$profileid]; 
 }
 
 function getTabsPermission($profileid)
 {
-	global $adb;
-	$sql = "select * from profile2tab where profileid=" .$profileid ;
-	$result = $adb->query($sql);
-	$tab_perr_array = Array();
-	$num_rows = $adb->num_rows($result);
-	for($i=0; $i<$num_rows; $i++)
-	{
-		$tabid= $adb->query_result($result,$i,'tabid');
-		$tab_per= $adb->query_result($result,$i,'permissions');
-		if($tabid != 1 && $tabid != 3 && $tabid != 16 && $tab_id != 15 && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
-		{
-			$tab_perr_array[$tabid] = $tab_per;
-		}
-	}		
+	$perm = loadAllPerms();
+	$tab_perr_array = $perm[$profileid];
+	foreach( array(1,3,16,15,17,18,19,22) as $tabid )
+		$tab_perr_array[$tabid] = 0; 
 	return $tab_perr_array; 
-
 }
 
 function getTabsActionPermission($profileid)
