@@ -16,5 +16,5 @@ $del_id =  $_REQUEST['groupId'];
 //Updating the user2 role table
 deleteGroup($del_id);
 
-header("Location: index.php?action=listgroups&module=Users");
+header("Location: index.php?action=listgroups&module=Users&parenttab=Settings");
 ?>
