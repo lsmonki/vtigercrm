@@ -43,9 +43,9 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		{/if}
 		
-		<a href="index.php?module=Users&action=profilePrivileges&return_action=ListProfiles&mode=edit&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
+		<a href="index.php?module=Users&parenttab=Settings&action=profilePrivileges&return_action=ListProfiles&mode=edit&profileid={$LIST_ENTRIES[entries].profileid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
 		&nbsp;</td>
-		<td nowrap><a href="index.php?module=Users&action=profilePrivileges&mode=view&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</a></td>
+		<td nowrap><a href="index.php?module=Users&parenttab=Settings&action=profilePrivileges&mode=view&profileid={$LIST_ENTRIES[entries].profileid}">{$LIST_ENTRIES[entries].profilename}</a></td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
 		<tr>
 	{/section}	
