@@ -87,7 +87,7 @@ function constructGroupMemberArray($member_array)
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
 
-		$loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId;
+		$loc = "Location: index.php?action=".$returnaction."&module=Users&parenttab=Settings&groupId=".$groupId;
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
