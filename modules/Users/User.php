@@ -512,20 +512,25 @@ class User extends SugarBean {
 		$entries_list = array();
 		$roleinfo = getAllRoleDetails();
 		
-		//echo '<pre>'; print_r($roleinfo['H1']); '</pre>';
 		for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
 		{
 			$entries=array();
 			$id=$this->db->query_result($result,$i-1,'id');
 			$entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
-			$entries[]=$this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name');
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
-//			$entries[]=$this->db->query_result($result,$i-1,'department');
-			$entries[]=$this->db->query_result($result,$i-1,'email1');
-			$rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
-			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$roleinfo[$rolecode][0];
+
+                        $rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
+                        $entries[]='<a href="index.php?action=RoleDetailView&module=Users&roleid='.$rolecode.'">'.$roleinfo[
+$rolecode][0];
+
+			$entries[]='<a href="mailto:'.$this->db->query_result($result,$i-1,'email1').'">'.$this->db->query_result($result,$i-1,'email1').' </a>';
+
+			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name').'</a>';
+
 			$entries[]=$this->db->query_result($result,$i-1,'is_admin');
+
 			$entries_list[]=$entries;
+													
 		}
 		return $entries_list;
 	}
