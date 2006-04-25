@@ -401,6 +401,7 @@ function getNavigationValues($display, $noofrows, $limit)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
+	$tabname = getParentTab();
 	global $adb,$current_user;
 	global $app_strings;
 	$noofrows = $adb->num_rows($list_result);
@@ -607,13 +608,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
 							$account_name = getAccountName($account_id);
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}else
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 					}
 					elseif(( $module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
