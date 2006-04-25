@@ -103,7 +103,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	{
 		require_once('include/database/PearDatabase.php');
 		$db = new PearDatabase();
-		$temp_result = Array();
+		$user_array = Array();
 		// Including deleted users for now.
 		if (empty($status)) {
 				$query = "SELECT id, user_name from users";
@@ -131,16 +131,14 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 
 		if ($add_blank==true){
 			// Add in a blank row
-			$temp_result[''] = '';
+			$user_array[''] = '';
 		}
 
 		// Get the id and the name.
 		while($row = $db->fetchByAssoc($result))
 		{
-			$temp_result[$row['id']] = $row['user_name'];
+			$user_array[$row['id']] = $row['user_name'];
 		}
-
-		$user_array = &$temp_result;
 	}
 
 	return $user_array;
@@ -2435,15 +2433,20 @@ $vtlog->logthis("in getColumnFields ".$module,'info');
 
 function getUserName($userid)
 {
-global $vtlog;
-$vtlog->logthis("in getUserName ".$userid,'info');  
+	static $cache = array();
+	if(isset($cache[$userid])) return $cache[$userid];
+
+	global $vtlog;
+	$vtlog->logthis("in getUserName ".$userid,'info');  
 
 	global $adb;
+	$user_name = '';
 	if($userid != '')
 	{
 		$sql = "select user_name from users where id=".$userid;
 		$result = $adb->query($sql);
 		$user_name = $adb->query_result($result,0,"user_name");
+		$cache[$userid] = $user_name;
 	}
 	return $user_name;	
 }
@@ -2626,40 +2629,13 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 }
         }
 
-	//modified for customview 27/5 - $app_strings change to $mod_strings
-	foreach($focus->list_fields as $name=>$tableinfo)
-	{
-		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
-		//added for customview 27/5
-		if($oCv)
-                {
-                        if(isset($oCv->list_fields_name))
-                        {
-                                $fieldname = $oCv->list_fields_name[$name];
-                        }else
-                        {
-                                $fieldname = $focus->list_fields_name[$name];
-                        }
-                }else
-		{
-			$fieldname = $focus->list_fields_name[$name];
-		}
-
-		//Getting the Entries from Profile2 field table
-		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-		$result = $adb->query($query);
-
-		//Getting the Entries from def_org_field table
-		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-		$result_def = $adb->query($query1);
-
-
-		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-		{
-
+	$names = get_field_list($focus, $oCv, $tabid);
+	foreach($names as $fieldname=>$data) {
+		list($name, $is_column) = $data;
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
-				foreach($focus->list_fields[$name] as $tab=>$col)
+
+			if($focus->list_fields[$name]) foreach($focus->list_fields[$name] as $tab=>$col)
 				{
 					if(in_array($col,$focus->sortby_fields))
 					{
@@ -2717,7 +2693,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						$name .=': (in '.$curr_symbol.')';
 					}
                                         else
-                                        {       if($app_strings[$name])
+				{
+					if($app_strings[$name])
                                                 {
                                                         $name = $app_strings[$name];
                                                 }
@@ -2726,8 +2703,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                                         $name = $mod_strings[$name];
                                                 }
                                         }
-
-				}
 			}
 			//Added condition to hide the close column in Related Lists
 			if($name == $app_strings['Close'] && $relatedlist != '')
@@ -2976,6 +2951,58 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
+function get_field_list($focus, $oCv, $tabid)
+{
+        static $names = null, $last_tabid = null;
+        if(!is_null($names) && $tabid == $last_tabid) return $names;
+
+        $names = null;
+        $last_tabid = $tabid;
+
+        foreach($focus->list_fields as $name=>$tableinfo)
+        {
+                $fieldname = $focus->list_fields_name[$name];
+
+                //added for customview 27/5
+                if($oCv && isset($oCv->list_fields_name)) {
+                        $fieldname = $oCv->list_fields_name[$name];
+                }
+                if($fieldname == '') {
+                        foreach($tableinfo as $tablename=>$colname);
+                        $fieldname = $colname;
+                        $is_column = true;
+                } else {
+                        $is_column = false;
+                }
+                $fieldnames[] = $fieldname;
+                $namelist[$fieldname] = array($name, $is_column);
+        }
+
+        $fieldnamelist = implode($fieldnames, '\', \'');
+
+        global $profile_id, $adb;
+        if($profile_id == '')
+        {
+                global $current_user;
+                $profile_id = fetchUserProfileId($current_user->id);
+        }
+
+        $query = "select distinct field.fieldname from field inner join profile2field on field.fieldid=profile2field.fieldid inner join def_org_field on field.fieldid=def_org_field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname in ('".$fieldnamelist."') and profile2field.visible = 0 and def_org_field.visible = 0";
+        $result = $adb->query($query);
+        $noofrows = $adb->num_rows($result);
+        for($j=0; $j<$noofrows; $j++) {
+                $visible_fields[] = $adb->query_result($result, $j, 'fieldname');
+        }
+
+        foreach($fieldnames as $fieldname) {
+                if(is_null($visible_fields) || in_array($fieldname, $visible_fields)) {
+                        $names[$fieldname] = $namelist[$fieldname];
+                }
+        }
+
+        return $names;
+}
+
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
@@ -3025,44 +3052,18 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
 		}
 		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		foreach($focus->list_fields as $name=>$tableinfo)
-		{
-			$fieldname = $focus->list_fields_name[$name];
+		$names = get_field_list($focus, $oCv, $tabid);
 			
-			//added for customview 27/5
-			if($oCv)
-                        {
-                                if(isset($oCv->list_fields_name))
-                                {
-                                        $fieldname = $oCv->list_fields_name[$name];
-                                }
-                        }
 
-			global $profile_id;
-			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-			$result = $adb->query($query);
+		foreach($names as $fieldname=>$data) {
+			list($name, $is_column) = $data;
 
-
-			//Getting the Entries from def_org_field table
-			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-			$result_def = $adb->query($query1);
-
-			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-			{
-				if($fieldname == '')
-				{
-					$table_name = '';
-					$column_name = '';
-					foreach($tableinfo as $tablename=>$colname)
+			if($is_column)
 					{
-						$table_name=$tablename;
-						$column_name = $colname;
-					}
-					$value = $adb->query_result($list_result,$i-1,$colname);
+				$value = $adb->query_result($list_result,$i-1,$fieldname);
 				}
 				else
 				{
-
 					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
@@ -3071,6 +3072,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						if ($name=='Related to')
 							$value=getRelatedTo($module,$list_result,$i-1);
 						if($name=='Contact Name')
+
 						{
 							$first_name = $adb->query_result($list_result,$i-1,"firstname");
 							$last_name = $adb->query_result($list_result,$i-1,"lastname");
@@ -3091,6 +3093,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 						}
 						if ($name == 'Close')
+
 						{
 							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 							{
@@ -3105,6 +3108,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                                 else
                                                                 $evt_status='&eventstatus=Held';
 								if(isPermitted("Activities",1,$activityid) == 'yes')
+
                         					{
                                                                 	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
 								}
@@ -3112,7 +3116,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								{
 									$value = "";
 								}
-								
 							}
 						}
 					}
@@ -3165,15 +3168,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                         {
                                                $value = getGroupName($entity_id, $module);
                                        }
-					else
-					{
+				       else
+				       {
+					       list($uitype, $colname) = get_uitype_colname($tabid, $fieldname);
+					       $list_result_count = $i-1;
 
-						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-						$field_result = $adb->query($query);
-						$list_result_count = $i-1;
-
-						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
-					}
+					       $value = getValue($uitype, $colname,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
+				       }
 				}
 				//Added condition to hide the close symbol in Related Lists
 //				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
@@ -3191,8 +3192,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
 				}
 			}
-
-		}
 
 		if($returnset=='')
 			$returnset = '&return_module='.$module.'&return_action=index';
@@ -3226,6 +3225,31 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	return $list_header;
 }
 
+function get_uitype_colname($tabid, $fieldname)
+{
+	static $last_tabid, $res = null;
+
+	if(!is_null($res) && $last_tabid == $tabid) {
+		return $res[$fieldname];
+	}
+
+	global $adb;
+	$last_tabid = $tabid;
+	$res = null;
+
+	$query = "select uitype, columnname, fieldname from field where tabid=".$tabid;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++) {
+		$uitype = $adb->query_result($result,$i,"uitype");
+
+		$colname = $adb->query_result($result,$i,"columnname");
+		$thisfieldname = $adb->query_result($result,$i,"fieldname");
+		$res[$thisfieldname] = array($uitype, $colname);
+	}
+
+	return $res[$fieldname];
+}
 
 function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
 {
@@ -3316,11 +3340,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
                                         }
 					else
 					{
-						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-						$field_result = $adb->query($query);
+						list($uitype, $colname) = get_uitype_colname($tabid, $fieldname);
 						$list_result_count = $i-1;
 
-						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+						$value = getValue($uitype, $colname,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
 					}
 
 				}
@@ -3334,12 +3357,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	return $list_header;
 }
 
-function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='')
+function getValue($uitype, $colname, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='')
 {
 	global $adb;
-	$uitype = $adb->query_result($field_result,0,"uitype");
-	
-	$colname = $adb->query_result($field_result,0,"columnname");
 	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
 
 	if(strlen($temp_val) > 40)
