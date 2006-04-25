@@ -60,7 +60,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $groupid = $oCustomView->getGroupId($currentModule);
 //<<<<<customview>>>>>
-
+$smarty->assign("CHANGE_OWNER",getUserslist());
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	$where = getWhereCondition($currentModule);
