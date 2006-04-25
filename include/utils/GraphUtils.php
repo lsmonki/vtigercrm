@@ -92,6 +92,12 @@ function get_tickspacing($max = 10)
 	
 	// normalize $max to get value between 1 and 10
 	$coef = pow(10,floor(log10($max)));
+	if($coef == 0)
+	{
+		$data=0;
+		echo "<h3> No data available with the specified time period</h3>";
+		return $data;
+	}
 	$normalized = $max / $coef;
 	
 	if($normalized < 1.5){
