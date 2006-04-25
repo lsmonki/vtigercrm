@@ -148,6 +148,9 @@ echo $list;
 
 function getParentLink($parent_id)
 {
+	static $res = array();
+	if(isset($res[$parent_id])) return $res[$parent_id];
+
 	global $adb;
 
 	$sql = "select setype from crmentity where crmid=".$parent_id;
@@ -156,8 +159,9 @@ function getParentLink($parent_id)
 	if($parent_module == 'Contacts')
 	{
 		$sql = "select firstname,lastname from contactdetails where contactid=".$parent_id;
-		$parentname = $adb->query_result($adb->query($sql),0,'firstname');
-		$parentname .= ' '.$adb->query_result($adb->query($sql),0,'lastname');
+		$result = $adb->query($sql);
+		$parentname = $adb->query_result($result,0,'firstname');
+		$parentname .= ' '.$adb->query_result($result,0,'lastname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 	if($parent_module == 'Accounts')
@@ -167,6 +171,7 @@ function getParentLink($parent_id)
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 
+	$res[$parent_id] = $parent_name;
 	return $parent_name;
 }
 
