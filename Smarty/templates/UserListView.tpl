@@ -27,7 +27,11 @@
 {/if}
 </td>
 <td align="center" width="25%">{$RECORD_COUNTS}</td>
-<td nowrap>{$NAVIGATION}</td>
+<td nowrap>
+	<table border=0 cellspacing=0 cellpadding=0 class="small">
+             <tr>{$NAVIGATION}</tr>
+        </table>
+</td>
 </tr>
 <tr><td colspan="4">&nbsp;</td></tr>
 <tr><td colspan="4"><div id="scrollTab">
