@@ -65,48 +65,7 @@ function togglePotFields(form)
 
 }
 
-function changeStatus(obj,divid)
-{
-	x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
 
-	idstring = "";
-	if ( x == undefined)
-	{
-	
-		if (document.massdelete.selected_id.checked)
-		{
-			document.massdelete.idlist.value=document.massdelete.selected_id.value;
-		}
-		else 
-		{
-			alert("Please select atleast one entity ");
-			return false;
-		}
-	}
-	else
-	{
-		xx = 0;
-		for(i = 0; i < x ; i++)
-		{
-			if(document.massdelete.selected_id[i].checked)
-			{
-				idstring = document.massdelete.selected_id[i].value +";"+idstring
-			xx++	
-			}
-		}
-		if (xx != 0)
-		{
-			document.massdelete.idlist.value=idstring;
-		}
-		else
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
-	}
-	fnvshobj(obj,divid);
-}
 
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;
