@@ -1532,11 +1532,24 @@ for($i = 0; $i < $noofrows; $i++)
 function QuickCreate($module)
 {
     global $adb;
+    global $current_user;
     global $mod_strings;
 
 $tabid = getTabid($module);
+
+//Adding Security Check
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+           if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+           {
+                 $quickcreate_query = "select * from field where quickcreate=0 and tabid = ".$tabid." order by quickcreatesequence";
+           }
+           else
+           {
+                 $profileList = getCurrentUserProfileList();
+                 $quickcreate_query = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and quickcreate=0 and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by quickcreatesequence";
+           }
+																					     
 $category = getParentTab();
-$quickcreate_query = "select * from field where quickcreate=0 and tabid = ".$tabid." order by quickcreatesequence";
 $result = $adb->query($quickcreate_query);
 $noofrows = $adb->num_rows($result);
 $fieldName_array = Array();
