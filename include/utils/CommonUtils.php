@@ -1649,6 +1649,16 @@ function sendNotificationToOwner($module,$focus)
 
 	return $status;
 }
-
-
+function getUserslist()
+{
+	global $adb;
+	$result=$adb->query("select * from users");
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+	       $useridlist[$i]=$adb->query_result($result,$i,'id');
+	       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
+	}
+	$change_owner = get_select_options_with_id($usernamelist,'admin');
+	return $change_owner;
+}
 ?>
