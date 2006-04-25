@@ -444,7 +444,7 @@ function addImage( $logo_name, $location=array('10','10','0','0') ) {
     $x1 = $location[0];
     $y1 = $location[1];
     $stretchx = $location[2];
-    $stretchx = $location[3];
+    $stretchy = $location[3];
     $this->Image('test/logo/'.$logo_name,$x1,$y1,$stretchx,$stretchy);
 }
 
