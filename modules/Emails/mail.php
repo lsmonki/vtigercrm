@@ -88,7 +88,8 @@ function getUserEmailId($name,$val)
 	if($val != '')
 	{
 		//$sql = "select email1, email2, yahoo_id from users where ".$name." = '".$val."'";
-		$sql = "select email1, email2, yahoo_id from users where ".$name." = ".PearDatabase::quote($val);
+		//done to resolve the PHP5 specific behaviour
+		$sql = "select email1, email2, yahoo_id from users where ".$name." = ".$adb->quote($val);
 		$res = $adb->query($sql);
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')
