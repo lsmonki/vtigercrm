@@ -866,15 +866,21 @@ function getTabname($tabid)
 
 function getTabid($module)
 {
-	global $vtlog;
+	global $adb, $vtlog;
+	static $res = null;
 	$vtlog->logthis("module  is ".$module,'info');  
         
-        global $adb;
-	$sql = "select tabid from tab where name='".$module."'";
-	$result = $adb->query($sql);
-	$tabid=  $adb->query_result($result,0,"tabid");
-	return $tabid;
+	if(!is_null($res)) return $res[$module];
 
+	$sql = "select tabid, name from tab";
+	$result = $adb->query($sql);
+	$tab_count = $adb->num_rows($result);
+	for($i=0; $i<$tab_count; $i++) {
+		$tabid = $adb->query_result($result,$i,"tabid");
+		$tabname = $adb->query_result($result, $i, "name");
+		$res[$tabname] = $tabid;
+	}
+	return $res[$module];
 }
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype)
