@@ -1881,6 +1881,7 @@ Param $returnmodule - modulename for which the entity is assingned
 Param $recordid - the record id for which the entity is assigned
 Return tyep string.
 */
+
 function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 {
 	global $adb;
@@ -1890,6 +1891,14 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
 	{
 		$query = "select contactid from contpotentialrel where potentialid = ".$recordid;
+	}
+	elseif($currentmodule=="Contacts" && $returnmodule == "Vendors")
+	{
+		$query = "select contactid from vendorcontactrel where vendorid = ".$recordid;
+	}
+
+	if($query !='')
+	{
 		$result = $adb->query($query);
 		if($adb->num_rows($result)!=0)
 		{
@@ -1897,8 +1906,8 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 			{
 				$skip_id[]=$adb->query_result($result,$k,"contactid");
 			}
-		$skipids = constructList($skip_id,'INTEGER');
-		$where_relquery = "and contactdetails.contactid not in ".$skipids;
+			$skipids = constructList($skip_id,'INTEGER');
+			$where_relquery = "and contactdetails.contactid not in ".$skipids;
 		}
 	}
 	return $where_relquery;
