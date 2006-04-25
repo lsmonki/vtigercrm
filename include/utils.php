@@ -2342,7 +2342,7 @@ function getQuoteName($quote_id)
 global $vtlog;
 $vtlog->logthis("in getQuoteName ".$quote_id,'info');  
         global $adb;
-        $sql = "select * from quotes where quoteid=".$quote_id;
+        $sql = "select * from quotes where quoteid='".$quote_id."'";
         $result = $adb->query($sql);
         $quote_name = $adb->query_result($result,0,"subject");
         return $quote_name;
@@ -2375,7 +2375,7 @@ function getSoName($so_id)
 global $vtlog;
 $vtlog->logthis("in getSoName ".$so_id,'info');  
         global $adb;
-        $sql = "select * from salesorder where salesorderid=".$so_id;
+        $sql = "select * from salesorder where salesorderid='".$so_id."'";
         $result = $adb->query($sql);
         $so_name = $adb->query_result($result,0,"subject");
         return $so_name;
