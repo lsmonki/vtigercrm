@@ -41,15 +41,14 @@ class PearDatabase{
 	
 	function println($msg)
 	{
-		require_once('include/logging.php');
-		$log1 =& LoggerManager::getLogger('VT');
+		global $vtlog;
 		if(is_array($msg))
 		{
-			$log1->fatal("PearDatabse ->".print_r($msg,true));
+			$vtlog->logthis("PearDatabse ->".print_r($msg,true), 'info');
 		}
 		else
 		{
-			$log1->fatal("PearDatabase ->".$msg);
+			$vtlog->logthis("PearDatabase ->".$msg, 'info');
 		}
 		return $msg;
 	}
@@ -149,27 +148,16 @@ class PearDatabase{
 	
 	function checkError($msg='', $dieOnError=false)
 	{
-		/*if($this->database->ErrorNo())
-		{
-			if($this->dieOnError || $dieOnError)
-			{
-         	 		$this->println("ADODB error ".$this->database->ErrorNo());	
-				die ($msg."ADODB error ".$this->database->ErrorNo());
-				
-			}else{
-				$this->log->error("MySQL error ".mysql_errno().": ".mysql_error());
-			}
-			return true;
-		}*/
-		
+		global $vtlog;
+
 		if($this->dieOnError || $dieOnError)
 		{
-         		$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
+         		$vtlog->logthis("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg(), 'fatal');	
 			die ($msg."ADODB error ".$msg."->".$this->database->ErrorMsg());
 		}
 		else
 		{
-			$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
+			$vtlog->logthis("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg(), 'error');
 
 		}
 		return false;
