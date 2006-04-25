@@ -4034,11 +4034,15 @@ function getActionname($actionid)
 
 function getUserId($record)
 {
+	static $cache = array();
+	if(isset($cache[$record])) return $cache[$record];
+
 	global $vtlog;
 	$vtlog->logthis("in getUserId ".$record,'info');  
 
 	global $adb;
-        $user_id=$adb->query_result($adb->query("select * from crmentity where crmid = ".$record),0,'smownerid');
+        $user_id=$adb->query_result($adb->query("select smownerid from crmentity where crmid = ".$record),0,'smownerid');
+	$cache[$record] = $user_id;
 	return $user_id;	
 }
 
