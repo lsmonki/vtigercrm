@@ -17,6 +17,7 @@
 <form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="action" value="Save">
+<input type="hidden" name="parenttab" value="{$CATEGORY}">
 <input type="hidden" name="cvmodule" value="{$CVMODULE}">
 <input type="hidden" name="return_module" value="{$RETURN_MODULE}">
 <input type="hidden" name="record" value="{$CUSTOMVIEWID}">
