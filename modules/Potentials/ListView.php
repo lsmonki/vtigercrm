@@ -96,7 +96,7 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
+$smarty->assign("CHANGE_OWNER",getUserslist());
 
 if(isPermitted('Potentials',2,'') == 'yes')
 {
