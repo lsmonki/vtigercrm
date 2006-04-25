@@ -15,6 +15,7 @@ global $adb;
 $cvid = $_REQUEST["record"];
 $module = $_REQUEST["dmodule"];
 $smodule = $REQUEST["smodule"];
+$parenttab = $_REQUEST["parenttab"];
 
 if(isset($cvid) && $cvid != '')
 {
@@ -27,5 +28,5 @@ if(isset($smodule) && $smodule != '')
 	$smodule_url = "&smodule=".$smodule;
 }
 
-header("Location: index.php?action=index&module=$module".$smodule_url);
+header("Location: index.php?action=index&parenttab=$parenttab&module=$module".$smodule_url);
 ?>
