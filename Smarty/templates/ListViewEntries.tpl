@@ -16,13 +16,12 @@
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return massMail()"/>
-                                        {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
+                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -86,13 +85,12 @@
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
-                                        {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
+                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >

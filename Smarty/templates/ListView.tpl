@@ -278,13 +278,12 @@ rBox">
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
-                                        {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
+                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -344,13 +343,12 @@ rBox">
                                              <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
-                                        {elseif $button_check eq 'c_owner'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changeowner')"/>
                                         {elseif $button_check eq 'c_status'}
-                                             <input class="small" type="button" value="{$button_label}" onclick="return changeStatus(this,'changestatus')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
                                         {/if}
 
                                  {/foreach}
+                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >
@@ -370,42 +368,16 @@ rBox">
 		       </td>
 		   </tr>
 	    </table>
+
    </form>	
 {$SELECT_SCRIPT}
 	</div>
-<table border=0 cellspacing=0 cellpadding=0 width=100% >
-						<tr><td align = "right" style="padding-right:20px">
-						<table width="250" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-						<td colspan="3"><img src="{$IMAGE_PATH}cloud_top.gif" width=250 height=38 alt=""></td>
-						</tr>
-						<tr>
-						<td width="16" height="10"><img src="{$IMAGE_PATH}cloud_top_left.gif" width="16" height="10"></td>
-						<td width="221" height="10"><img src="{$IMAGE_PATH}tagcloud_03.gif" width="221" height="10"></td>
-						<td width="13" height="10"><img src="{$IMAGE_PATH}cloud_top_right.gif" width="13" height="10"></td>
-						</tr>
-						<tr>
-						<td class="cloudLft"></td>
-						<td>
-						<span id="tagfields"></span>
-						</td>
-						<td class="cloudRht"></td>
-						</tr>
-						<tr>
-						<td width="16" height="13"><img src="{$IMAGE_PATH}cloud_btm_left.gif" width="16" height="13"></td>
-						<td width="221" height="13"><img src="{$IMAGE_PATH}cloud_btm_bdr.gif" width="221" height="13"></td>
-						<td width="13" height="13"><img src="{$IMAGE_PATH}cloud_btm_right.gif" width="13" height="13"></td>
-						</tr>
-						</table>
-						
-						</td></tr>
-						</table>
+
      </td>
    </tr>
 </table>
-<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
+<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;">Processing Request...</div>
 
-{if $MODULE eq 'Leads'}
 
 <div id="changeowner" class="statechange">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -437,6 +409,7 @@ rBox">
 </div>
 
 
+{if $MODULE eq 'Leads'}
 <div id="changestatus" class="statechange">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
@@ -465,32 +438,36 @@ rBox">
 </tr>
 </table>
 </div>
+{/if}
 <script>
 {literal}
 function ajaxChangeStatus(statusname)
 {
-	fninvsh('changestatus');
-	fninvsh('changeowner');
 	show("status");
 	var ajaxObj = new Ajax(ajaxSaveResponse);
 	var viewid = document.massdelete.viewname.value;
 	var idstring = document.massdelete.idlist.value;
 	if(statusname == 'status')
 	{
+		fninvsh('changestatus');
 		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
+		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+url+"&viewname="+viewid+"&idlist="+idstring;
 	}
 	else if(statusname == 'owner')
 	{
+		fninvsh('changeowner');
 		var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		
+{/literal}
+		var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
+{literal}
+
 	}
 	
-	
-	var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+url+"&viewname="+viewid+"&idlist="+idstring;
 	ajaxObj.process("index.php?",urlstring);
 }
 </script>
 {/literal}
-{/if}
 
 {if $MODULE eq 'Contacts'}
 {literal}
@@ -504,14 +481,4 @@ function modifyimage(divid,imagename)
 {/literal}
 {/if}
 
-<script>
-var data = "module={$MODULE}&action={$MODULE}Ajax&ajxaction=GETTAGCLOUD";
-var ajaxObj = new Ajax(ajaxTagCloudResp);
-ajaxObj.process("index.php?",data);
-function ajaxTagCloudResp(response)
-{ldelim}
-	var item = response.responseText;
-	getObj('tagfields').innerHTML = item;
-	
-{rdelim}
-</script>
+
