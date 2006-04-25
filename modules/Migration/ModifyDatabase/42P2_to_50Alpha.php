@@ -1761,7 +1761,7 @@ foreach($alter_query_array18 as $query)
 $query_array = Array(
 
 "ALTER TABLE `accountgrouprelation` DROP INDEX `fk_accountgrouprelation2`",
-"ALTER TABLE `accountscf` DROP COLUMN `cf_356`",
+//"ALTER TABLE `accountscf` DROP COLUMN `cf_356`",
 "ALTER TABLE `activity` DROP INDEX `status`",
 "ALTER TABLE `attachments` DROP INDEX `attachmentsid`",
 "ALTER TABLE `carrier` DROP INDEX `carrier_UK0`",
@@ -1781,9 +1781,9 @@ $query_array = Array(
 "ALTER TABLE `freetagged_objects` DROP INDEX `object_id_index`",
 "ALTER TABLE `groups` DROP INDEX `groupname`",
 "ALTER TABLE `invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
-"ALTER TABLE `leadscf` DROP COLUMN `cf_354`",
-"ALTER TABLE `leadscf` DROP COLUMN `cf_358`",
-"ALTER TABLE `leadscf` DROP COLUMN `cf_360`",
+//"ALTER TABLE `leadscf` DROP COLUMN `cf_354`",
+//"ALTER TABLE `leadscf` DROP COLUMN `cf_358`",
+//"ALTER TABLE `leadscf` DROP COLUMN `cf_360`",
 "ALTER TABLE `pogrouprelation` DROP INDEX `fk_productgrouprelation2`",
 "ALTER TABLE `potential` DROP INDEX `potentialid`",
 "ALTER TABLE `potentialgrouprelation` DROP INDEX `fk_potentialgrouprelation2`",
@@ -2616,7 +2616,42 @@ foreach ($comboTables as $tablename)
 
 }
 
+$update_query3 = "update currency_info set conversion_rate=1, currency_status='Active', defaultid='-11' where id=1";
+Execute($update_query3);
 
+//Added to get the conversion rate and update for all records
+//include("modules/Migration/ModifyDatabase/updateCurrency.php");
+?>
+<script>
+	function ajaxSaveResponse(response)
+	{
+		//alert(response.responseText);
+		alert("Currency Changes has been made Successfully");
+	}
+
+	if(!confirm("Are you using Dollar $ as Currency?"))
+	{
+		getConversionRate('');
+	}
+
+	function getConversionRate(err)
+	{
+		var crate = prompt(err+"\nPlease enter the conversion rate of your currency");
+
+		if(crate != 0 && crate > 0)
+		{
+			var ajaxObj = new Ajax(ajaxSaveResponse);
+			url = 'module=Migration&action=updateCurrency&ajax=1&crate='+crate;
+			ajaxObj.process("index.php?",url);
+		}
+		else
+		{
+			//alert("Please give valid conversion rate ( > 0)");
+			getConversionRate("Please give valid conversion rate ( > 0)");
+		}
+	}
+</script>
+<?php
 
 
 
