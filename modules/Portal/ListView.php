@@ -19,7 +19,7 @@ global $mod_strings;
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Portal');
 global $adb;
-
+	
 $query="select * from portal";
 $result=$adb->query($query);
 $no_of_portals=$adb->num_rows($result);
@@ -34,6 +34,18 @@ for($i=0 ; $i<$no_of_portals; $i++)
 	$portal_info[]=$portal_array;
 }
 $smarty = new vtigerCRM_Smarty;
+$portal_def = Array();
+if($_REQUEST['portalid'] != '') 
+{
+	$query="select * from portal where portalid =".$_REQUEST['portalid'];
+}else
+{
+	$query="select * from portal";
+}
+	$result=$adb->query($query);
+	$portal_def [] = $adb->query_result($result,0,'portalurl');
+	$portal_def [] = $adb->query_result($result,0,'portalid');
+	$smarty->assign("DEFPORTAL_DETAILS", $portal_def);
 
 $smarty->assign("IMAGEPATH", $image_path);
 $smarty->assign("MOD", $mod_strings);

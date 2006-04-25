@@ -17,8 +17,15 @@ $portal_inputs='';
 if(isset($_REQUEST['portalurl']) && $_REQUEST['portalurl']!='')
 {
 	$result=SavePortal($_REQUEST['portalname'],$_REQUEST['portalurl']);
-	if($result == 'true')
-	$portal_inputs.="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
+	if($result != '')
+	{	
+		$portal_inputs.="<script>";
+		$portal_inputs.="var location_portal = window.opener.location.href;";
+		$portal_inputs.="location_array = location_portal.split('&portalid=');";
+		$portal_inputs.="location_portal = location_array[0]+'&portalid=".$result."';";
+		$portal_inputs.="window.opener.location.href = location_portal;";
+		$portal_inputs.="window.self.close();</script>";
+	}
 }
 
 	
@@ -41,6 +48,6 @@ $portal_name=$_REQUEST['portalname'];
 $portal_url=$_REQUEST['portalurl'];
 $query="insert into portal values(".$portalid.",'".$portal_name."','".$portal_url."',0)";
 $result=$adb->query($query);
-return true;
+return $portalid;
 }
 ?>
