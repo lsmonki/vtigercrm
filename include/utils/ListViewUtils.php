@@ -1317,7 +1317,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($module == 'Emails')
 				{
-					$value = '<a href="javascript:getEmailContents(\''.$entity_id.'\')">'.$temp_val.'</a>';
+					$value = '<a href="javascript:;"onClick="getEmailContents(\''.$entity_id.'\'),setSubject(\''.$temp_val.'\')">'.$temp_val.'</a>';
 				}
                 else
                 {
