@@ -66,7 +66,6 @@ $smarty->assign("SINGLE_MOD","Quotes");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Quotes",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -83,9 +82,6 @@ if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
-//Security check for related list
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $smarty->assign("CONVERTMODE",'quotetoinvoice');
 $smarty->assign("MODULE", $currentModule);
 
