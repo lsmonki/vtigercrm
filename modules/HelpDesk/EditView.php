@@ -98,6 +98,10 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

@@ -86,6 +86,8 @@ if(isPermitted("HelpDesk",8,'') == 'yes')
         $smarty->assign("TOPTIONS",$optionString);
 }
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE","HelpDesk");
 $smarty->display("DetailView.tpl");
