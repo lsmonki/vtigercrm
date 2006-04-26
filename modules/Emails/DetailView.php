@@ -140,6 +140,10 @@ if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
 if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+	
 //Constructing the Related Lists from here
 $smarty->assign("MODULE","Emails");
 if($_REQUEST['mode'] != 'ajax')

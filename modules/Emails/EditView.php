@@ -311,6 +311,9 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 $smarty->display("ComposeEmail.tpl");
 ?>
 <script type="text/javascript" defer="1">
