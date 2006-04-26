@@ -68,14 +68,8 @@ $smarty->assign("CUSTOMFIELD", $cust_fld);
 
 $val = isPermitted("Leads",1,$_REQUEST['record']);
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
-
-//Security check for Convert Lead Button
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 
 
 if(isPermitted("Leads","ConvertLead") =='yes' && isPermitted("Accounts","EditView") =='yes' && isPermitted("Contacts","EditView"))
