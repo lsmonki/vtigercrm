@@ -79,5 +79,8 @@ if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
 if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");	
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+	
 $smarty->display("DetailView.tpl");
 ?>
