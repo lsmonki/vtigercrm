@@ -71,7 +71,6 @@ $smarty->assign("SINGLE_MOD","Contact");
 $smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Contacts",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -102,9 +101,6 @@ if(isPermitted("Contacts",8,'') == 'yes')
 }
 
 //Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
