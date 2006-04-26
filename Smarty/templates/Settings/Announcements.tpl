@@ -63,6 +63,7 @@ function Announcement()
 	<td align="right" valign="top">&nbsp;</td>
 	<td align="center">
 	<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="javascript:Announcement();" type="button">
+	<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="window.history.back()" type="button">
 	</td>
 	</tr>
 	</tbody></table>
