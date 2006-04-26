@@ -134,16 +134,11 @@ $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 $smarty->assign("ID", $_REQUEST['record']);
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 
 //Constructing the Related Lists from here
 $smarty->assign("MODULE","Emails");
