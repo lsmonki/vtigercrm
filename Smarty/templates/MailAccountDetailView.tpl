@@ -26,7 +26,7 @@
 			<input type="hidden" name="module" value="Settings">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">
-			<input type="hidden" name="record" value="{$RECORD_ID}">
+			<input type="hidden" name="record" value="{$ID}">
 		       {* <input type="hidden" name="edit" value="{$EDIT}">*}
 			<input type="hidden" name="return_module" value="Settings">
 			<input type="hidden" name="return_action" value="index">
@@ -39,7 +39,7 @@
                             <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
                                 <tr>
                                     <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record=1"><b>My Details</a></b></td>
+                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record={$ID}"><b>My Details</a></b></td>
                                     <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><b>My Mail Server Details </b></td>
 		                    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                                 </tr>
