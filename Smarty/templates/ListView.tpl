@@ -403,6 +403,7 @@ rBox">
 	<td colspan="3" align="center">
 	&nbsp;&nbsp;
 	<input type="button" name="button" class="small" value="Update Owner" onClick="ajaxChangeStatus('owner')">
+	<input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('changeowner')">
 </td>
 </tr>
 </table>
