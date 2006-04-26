@@ -2619,6 +2619,10 @@ foreach ($comboTables as $tablename)
 $update_query3 = "update currency_info set conversion_rate=1, currency_status='Active', defaultid='-11' where id=1";
 Execute($update_query3);
 
+$update_query4 = "update relatedlists set label='Purchase Order' where tabid=18 and name='get_purchase_orders'";
+Execute($update_query4);
+
+
 //Added to get the conversion rate and update for all records
 //include("modules/Migration/ModifyDatabase/updateCurrency.php");
 ?>
