@@ -39,7 +39,7 @@
 				<tr>
 				    <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 			            <td width="75" align="center" nowrap="nowrap" class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')"><b>My Details</b></td>
-                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><a href="index.php?action=MailAccountDetailView&module=Settings&record={$RECORD_ID}"> <b>My Mail Server Details </a></b></td>
+                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><a href="index.php?action=ListMailAccount&module=Settings&record={$ID}"> <b>My Mail Server Details </a></b></td>
                    	<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                    		</tr>
 	
