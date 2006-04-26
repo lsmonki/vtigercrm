@@ -182,7 +182,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 function Search($module)
 {
 
-		
+	$url_string='';	
 	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
         {
                 $search_column=$_REQUEST['search_field'];
@@ -207,8 +207,8 @@ function Search($module)
                 else //Global Search
                 {
                 }
-		
-		return $where;
+		$url_string = "&search_field=".$search_column."&search_text=".$search_string."&searchtype=BasicSearch";
+		return $where."#@@#".$url_string;
         }
 
 }
@@ -410,14 +410,14 @@ function getWhereCondition($currentModule)
 	if($_REQUEST['searchtype']=='advance')
 	{
 		$adv_string='';
+		$url_string='';
 		if(isset($_REQUEST['search_cnt']))
 		$tot_no_criteria = $_REQUEST['search_cnt'];
 		if($_REQUEST['matchtype'] == 'all')
 			$matchtype = "and";
 		else
 			$matchtype = "or";
-		
-		for($i=0; $i<=$tot_no_criteria; $i++)
+		for($i=0; $i<$tot_no_criteria; $i++)
 		{
 			if($i == $tot_no_criteria-1)
 			$matchtype= "";
@@ -429,6 +429,7 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
+			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			if($tab_col == "crmentity.smownerid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'users.user_name')." or";	
@@ -439,7 +440,7 @@ function getWhereCondition($currentModule)
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
 			}
 		}
-		$where=$adv_string;
+		$where=$adv_string."#@@#".$url_string."&searchtype=advance&search_cnt=".$tot_no_criteria."&matchtype=".$_REQUEST['matchtype'];
 	}
 	else
 	{
