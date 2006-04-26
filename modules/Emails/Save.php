@@ -129,7 +129,7 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 function checkIfContactExists($mailid)
 {
 	global $adb;
-	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= ".PearDatabase::quote($mailid);
+	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= ".$adb->quote($mailid);
 	$result = $adb->query($sql);
 	$numRows = $adb->num_rows($result);
 	if($numRows > 0)
