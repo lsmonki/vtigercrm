@@ -58,7 +58,6 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($_REQUEST['record']));
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("HelpDesk",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -90,10 +89,6 @@ if(isPermitted("HelpDesk",8,'') == 'yes')
 
 $smarty->assign("MODULE","HelpDesk");
 $smarty->display("DetailView.tpl");
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $focus->id = $_REQUEST['record'];
 
 
