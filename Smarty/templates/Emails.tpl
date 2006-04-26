@@ -5,7 +5,10 @@ function ajaxgetResponse(response)
 	hide("status");
 	document.getElementById("EmailDetails").innerHTML=response.responseText;
 {rdelim}
-
+function setSubject(subject)
+{ldelim}
+document.getElementById("subjectsetter").innerHTML=subject
+{rdelim}
 function getEmailContents(id)
 {ldelim}
 	show("status");
@@ -64,10 +67,10 @@ function getEmailContents(id)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b>All Mails</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Inbox</a>&nbsp;<b>(121)</b>
+										<a href="#" class="webMnu">Inbox</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Sent</a>&nbsp;<b>(21)</b>
+										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="#" class="webMnu">Trash</a>&nbsp;
@@ -76,10 +79,10 @@ function getEmailContents(id)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Qualified Mails</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Inbox</a>&nbsp;<b>(221)</b>
+										<a href="#" class="webMnu">Inbox</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Sent</a>&nbsp;<b>(521)</b>
+										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="#" class="webMnu">Trash</a>&nbsp;
@@ -129,7 +132,7 @@ function getEmailContents(id)
 			 </tr>
 			 <tr>
 			   <td>&nbsp;</td>
-			   <td class="mailHdr">Network world : WiFiTech Introduces new gen WiFi Router </td>
+			   <td class="subHdr" id="subjectsetter"> </td>
 			   </tr>
 			 <tr>
 			   <td>&nbsp;</td>
