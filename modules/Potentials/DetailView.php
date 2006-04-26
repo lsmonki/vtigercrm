@@ -69,7 +69,6 @@ $smarty->assign("SINGLE_MOD","Potential");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("Potentials",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
@@ -79,10 +78,6 @@ if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
 $smarty->display("DetailView.tpl");
