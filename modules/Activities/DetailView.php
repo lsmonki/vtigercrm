@@ -135,6 +135,9 @@ if(isPermitted("Activities",1,$_REQUEST['record']) == 'yes')
 if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
   
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 $smarty->assign("MODULE","Activities");
 $smarty->display("DetailView.tpl");
 
