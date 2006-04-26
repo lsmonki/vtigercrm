@@ -175,6 +175,9 @@ if (isset($focus->parent_type) && $focus->parent_type != "") {
 }
 if ($focus->parent_type == "Account") $smarty->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

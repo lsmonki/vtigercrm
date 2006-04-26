@@ -103,6 +103,8 @@ if(isPermitted("Notes",1,$_REQUEST['record']) == 'yes')
 if(isPermitted("Notes",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE", $module);
 $smarty->display("DetailView.tpl");
