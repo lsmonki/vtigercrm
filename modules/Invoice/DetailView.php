@@ -67,7 +67,6 @@ $smarty->assign("SINGLE_MOD", "Invoice");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -75,11 +74,6 @@ $smarty->assign("CREATEPDF","permitted");
 
 if(isPermitted("Invoice",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
-
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('Invoice',$focus));
