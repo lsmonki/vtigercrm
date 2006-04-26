@@ -60,7 +60,7 @@ function getEmailContents(id)
                   <tr>
                     <td width="28%" bgcolor="#949494"><span class="subHdr"><b>Email Folders</b></span> </td>
                     <td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><strong>Mails in All mails &gt; Inpox </strong></td>
+					 <td width="60%" class="subHdr"><strong>Mails </strong></td>
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
