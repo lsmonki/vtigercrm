@@ -45,7 +45,6 @@ $smarty->assign("SINGLE_MOD","Campaign");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Campaigns",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -58,9 +57,6 @@ $smarty->assign("ID", $_REQUEST['record']);
 
 $smarty->assign("MODULE","Campaigns");
 $smarty->display("DetailView.tpl");
-//Security check for related list
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $focus->id = $_REQUEST['record'];
 
 ?>
