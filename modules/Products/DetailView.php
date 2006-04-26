@@ -50,7 +50,6 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","Product");
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Products",1,$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -62,9 +61,6 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 
 //Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
 $smarty->assign("MODULE", $module);
 $smarty->display("DetailView.tpl");
 
