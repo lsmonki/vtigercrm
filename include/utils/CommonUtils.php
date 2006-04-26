@@ -1674,4 +1674,28 @@ function getUserslist()
 	$change_owner = get_select_options_with_id($usernamelist,'admin');
 	return $change_owner;
 }
+
+
+/**
+  *	Function to Check for Security whether the Buttons are permitted in List/Edit/Detail View of all Modules
+  *	@param string $module -- module name
+  *	Returns an array with permission as Yes or No
+**/
+function Button_Check($module)
+{
+        $permit_arr = array ('EditView' => '',
+                             'index' => '',
+                             'Import' => '',
+                             'Export' => '' );
+
+          foreach($permit_arr as $action => $perr)
+          {
+                 $tempPer=isPermitted($module,$action,'');
+                 $permit_arr[$action] = $tempPer;
+          }
+
+	  return $permit_arr;
+
+}
+
 ?>
