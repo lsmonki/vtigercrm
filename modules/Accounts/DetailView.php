@@ -94,6 +94,9 @@ if(isPermitted("Accounts",8,'') == 'yes')
 }
 
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 $smarty->assign("MODULE","Accounts");
 $smarty->display("DetailView.tpl");
 ?>
