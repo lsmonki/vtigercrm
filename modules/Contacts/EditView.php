@@ -208,6 +208,9 @@ if($errormessage!="")
         $smarty->assign("ERROR_MESSAGE",$errormessage);
 }
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
 else

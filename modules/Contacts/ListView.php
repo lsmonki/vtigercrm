@@ -236,6 +236,9 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("SINGLE_MOD", 'Contact');
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

@@ -104,6 +104,9 @@ if(isPermitted("Contacts",8,'') == 'yes')
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 $smarty->assign("MODULE","Contacts");
 $smarty->display("DetailView.tpl");
 ?>
