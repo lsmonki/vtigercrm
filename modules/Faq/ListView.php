@@ -71,7 +71,10 @@ $other_text ['del'] = $app_strings[LBL_MASS_DELETE];
 $list_query = getListQuery("Faq");
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
 }
 if(isset($where) && $where != '')
 {

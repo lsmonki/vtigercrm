@@ -54,11 +54,9 @@ $_SESSION['PURCHASEORDER_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
 	// we have a query
-	$url_string .="&query=true";
-
+	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
 }
 

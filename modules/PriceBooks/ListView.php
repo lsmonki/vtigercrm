@@ -52,14 +52,11 @@ $_SESSION['PRICEBOOK_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-	
-	$url_string .="&query=true";
-	if (isset($_REQUEST['bookname'])) $bookname = $_REQUEST['bookname'];
-        if (isset($_REQUEST['active'])) $active = $_REQUEST['active'];
-
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
-
+				
 }
 
 //<<<<cutomview>>>>>>>

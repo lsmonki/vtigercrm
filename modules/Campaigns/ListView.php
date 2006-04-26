@@ -49,16 +49,10 @@ $_SESSION['CAMPAIGN_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=getWhereCondition($currentModule);
-	
-	$url_string .="&query=true";
-
-/*	if (isset($_REQUEST['campaignid'])) $campaignid = $_REQUEST['campaignid'];
-	if (isset($_REQUEST['campaignname'])) $campaignname = $_REQUEST['campaignname'];
-	if (isset($_REQUEST['campaigntype'])) $campaigntype = $_REQUEST['campaigntype'];
-	if (isset($_REQUEST['campaignstatus'])) $campaignstatus = $_REQUEST['campaignstatus'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-*/
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
 }
 
 //<<<<cutomview>>>>>>>

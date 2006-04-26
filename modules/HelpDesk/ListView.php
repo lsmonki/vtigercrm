@@ -53,18 +53,11 @@ $_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-	$url_string .="&query=true";
-
-	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
-	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
-	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
-	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
-	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
-	if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
-	if (isset($_REQUEST['date'])) $date = $_REQUEST['date'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
+				
 }
 
 //<<<<cutomview>>>>>>>

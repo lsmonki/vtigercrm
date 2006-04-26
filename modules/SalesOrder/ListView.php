@@ -52,10 +52,13 @@ $_SESSION['SALESORDER_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
+
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
 	
-	$url_string .="&query=true";
-	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+/*	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
         if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
         if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
 
@@ -90,7 +93,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$where .= " and ";
 		$where .= $clause;
 	}
-
+*/
 	$log->info("Here is the where clause for the list view: $where");
  
 

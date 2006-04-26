@@ -54,16 +54,9 @@ $_SESSION['QUOTES_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
 	// we have a query
-	$url_string .="&query=true";
-	
-	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-	if (isset($_REQUEST['potentialname'])) $potentialname = $_REQUEST['potentialname'];
-	if (isset($_REQUEST['quotestage'])) $quotestage = $_REQUEST['quotestage'];
-	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-	
+	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
 
 }

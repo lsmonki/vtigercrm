@@ -58,22 +58,10 @@ $_SESSION['PRODUCTS_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-	
-	$url_string .="&query=true";
-	
-	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
-        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
-	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
-        if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
-        if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
-        if (isset($_REQUEST['productcategory'])) $productcategory = $_REQUEST['productcategory'];
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];
-        if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
-        if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
-
-	$log->info("Here is the where clause for the list view: $where");
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+        // we have a query
+        $url_string .="&query=true".$ustring;
+        $log->info("Here is the where clause for the list view: $where");
 }
 
 //<<<<cutomview>>>>>>>

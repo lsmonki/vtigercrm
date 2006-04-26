@@ -56,15 +56,13 @@ $_SESSION['POTENTIALS_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
 	// we have a query
-	$url_string .="&query=true";
-
-	//Call for search function - Jaguar
-	$where=Search($currentModule);
-
-
+	$url_string .="&query=true".$ustring;
+	$log->info("Here is the where clause for the list view: $where");
+				
 	//Added for Custom Field Search
-	$sql="select * from field where tablename='potentialscf' order by fieldlabel";
+/*	$sql="select * from field where tablename='potentialscf' order by fieldlabel";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
@@ -86,8 +84,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 	}
 
-	$log->info("Here is the where clause for the list view: $where");
-
+*/
 }
 
 //<<<<cutomview>>>>>>>

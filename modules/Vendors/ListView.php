@@ -51,14 +51,9 @@ $_SESSION['VENDORS_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-	
-	$url_string .="&query=true";
-
-	if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
-        if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
-        if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
-	
+	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+	// we have a query
+	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
 
 }
