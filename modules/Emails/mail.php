@@ -119,7 +119,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = $adb->query_result($adb->query("select signature from users where user_name=".PearDatabase::quote($fromname)),0,"signature");
+	$sign = $adb->query_result($adb->query("select signature from users where user_name=".$adb->quote($fromname)),0,"signature");
 	if($sign != '')
 	{
 		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
@@ -339,7 +339,7 @@ function getParentMailId($parentmodule,$parentid)
 	if($parentid != '')
 	{
 	        //$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
-	        $query = 'select * from '.$tablename.' where '. $idname.' = '.PearDatabase::quote($parentid);
+	        $query = 'select * from '.$tablename.' where '. $idname.' = '.$adb->quote($parentid);
 	        $mailid = $adb->query_result($adb->query($query),0,$first_email);
 		$mailid2 = $adb->query_result($adb->query($query),0,$second_email);
 	}

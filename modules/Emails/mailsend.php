@@ -103,7 +103,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	{
 		$temp=$realid[$j];
 		//$myquery='Select columnname from field where fieldid='.$temp;
-		$myquery='Select columnname from field where fieldid='.PearDatabase::quote($temp);
+		$myquery='Select columnname from field where fieldid='.$adb->quote($temp);
 		$fresult=$adb->query($myquery);			
 		if ($pmodule=='Contacts')
 		{
