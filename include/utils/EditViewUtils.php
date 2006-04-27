@@ -37,6 +37,8 @@ require_once('include/utils/CommonUtils.php'); //new
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name)
 {
+	global $log;
+	$log->debug("Entering getOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $maxlength.",". $col_fields.",".$generatedtype.",".$module_name.") method ...");
 	global $adb,$log;
 	global $theme;
 	global $mod_strings;
@@ -776,7 +778,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="90%" colspan="3"><input name="parent_id" type="hidden" value="'.$parent_id.'"><textarea readonly name="parent_name" cols="70" rows="2">'.$parent_name.'</textarea>&nbsp;<select name="parent_type" >';
 		$custfld .= '<OPTION value="Contacts" selected>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
 		$custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
-		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'$log->debug("Exiting getOutputHtml method ..."); return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_$log->debug("Exiting getOutputHtml method ..."); return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';$log->debug("Exiting getOutputHtml method ..."); return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		$editview_label[] = array(	 
 				$app_strings['COMBO_CONTACTS']=>$contact_selected,
 				$app_strings['COMBO_ACCOUNTS']=>$account_selected,
@@ -960,6 +962,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$final_arr[]=$editview_label;
 	$final_arr[]=$editview_fldname;
 	$final_arr[]=$fieldvalue;
+	$log->debug("Exiting getOutputHtml method ...");
 	return $final_arr;
 }
 
@@ -973,6 +976,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
 	global $log;
+	$log->debug("Entering getConvertSoToInvoice(".$focus.",".$so_focus.",".$soid.") method ...");
         $log->info("in getConvertSoToInvoice ".$soid);
 
 	$focus->column_fields['salesorder_id'] = $soid;
@@ -995,10 +999,11 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 	$focus->column_fields['bill_country'] = $so_focus->column_fields['bill_country'];
 	$focus->column_fields['ship_country'] = $so_focus->column_fields['ship_country'];
 	$focus->column_fields['bill_pobox'] = $so_focus->column_fields['bill_pobox'];
-    $focus->column_fields['ship_pobox'] = $so_focus->column_fields['ship_pobox'];
+	$focus->column_fields['ship_pobox'] = $so_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $so_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
 
+	$log->debug("Exiting getConvertSoToInvoice method ...");
 	return $focus;
 
 }
@@ -1014,6 +1019,7 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 {
 	global $log;
+	$log->debug("Entering getConvertQuoteToInvoice(".$focus.",".$quote_focus.",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToInvoice ".$quoteid);
 
 	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
@@ -1029,10 +1035,11 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 	$focus->column_fields['bill_country'] = $quote_focus->column_fields['bill_country'];
 	$focus->column_fields['ship_country'] = $quote_focus->column_fields['ship_country'];
 	$focus->column_fields['bill_pobox'] = $quote_focus->column_fields['bill_pobox'];
-    $focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
+	$focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $quote_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
 
+	$log->debug("Exiting getConvertQuoteToInvoice method ...");
 	return $focus;
 
 }
@@ -1047,6 +1054,7 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
 	global $log;
+	$log->debug("Entering getConvertQuoteToSoObject(".$focus.",".$quote_focus.",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToSoObject ".$quoteid);
 
         $focus->column_fields['quote_id'] = $quoteid;
@@ -1070,6 +1078,7 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 		$focus->column_fields['description'] = $quote_focus->column_fields['description'];
         $focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
 
+	$log->debug("Exiting getConvertQuoteToSoObject method ...");
         return $focus;
 
 }
@@ -1084,6 +1093,8 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 
 function getAssociatedProducts($module,$focus,$seid='')
 {
+	global $log;
+	$log->debug("Entering getAssociatedProducts(".$module.",".$focus.",".$seid=''.") method ...");
 	global $adb;
 	$output = '';
 	global $theme;
@@ -1161,6 +1172,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
 	}
+	$log->debug("Exiting getAssociatedProducts method ...");
 	return $product_Detail;
 
 }
@@ -1174,6 +1186,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 function getNoOfAssocProducts($module,$focus,$seid='')
 {
+	global $log;
+	$log->debug("Entering getNoOfAssocProducts(".$module.",".$focus.",".$seid=''.") method ...");
 	global $adb;
 	$output = '';
 	if($module == 'Quotes')
@@ -1204,6 +1218,7 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
+	$log->debug("Exiting getNoOfAssocProducts method ...");
 	return $num_rows;
 }
 
@@ -1219,6 +1234,8 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 {
+	global $log;
+	$log->debug("Entering getBlockInformation(".$module.",". $result.",". $col_fields.",".$tabid.",".$block_label.") method ...");
 	global $adb;
 	$editview_arr = Array();
 
@@ -1297,6 +1314,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 				$returndata[$mod_strings[$label]]=array_merge((array)$returndata[$mod_strings[$label]],(array)$editview_arr[$blockid]);
 		}
 	}
+	$log->debug("Exiting getBlockInformation method ...");
 	return $returndata;	
 	
 }
@@ -1309,6 +1327,8 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label)
 
 function split_validationdataArray($validationData)
 {
+	global $log;
+	$log->debug("Entering split_validationdataArray(".$validationData.") method ...");
 	$fieldName = '';
 	$fieldLabel = '';
 	$fldDataType = '';
@@ -1346,6 +1366,7 @@ function split_validationdataArray($validationData)
 	$data['fieldname'] = $fieldName;
 	$data['fieldlabel'] = $fieldLabel;
 	$data['datatype'] = $fldDataType;
+	$log->debug("Exiting split_validationdataArray method ...");
 	return $data;
 }
 
