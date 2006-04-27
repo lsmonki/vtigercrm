@@ -27,7 +27,6 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
-require_once('include/utils/UserInfoUtil.php');
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
 
@@ -50,7 +49,7 @@ if($_REQUEST['ajax'] == '')
 		$cur_mod = $sec_arr[$filename];
 		$cur_tabid = getTabid($cur_mod);
 
-		if(isPermitted($cur_mod,'','') == 'yes')
+		if($tab_per_Data[$cur_tabid] == 0)
 		{
 			list($lbl,$sname,$title)=split("_",$label);
 			if(stristr($label,"EMAILS"))
@@ -119,7 +118,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 // Buttons and View options
-if(isPermitted('Emails','Delete','') == 'yes')
+if(isPermitted('Emails',2,'') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
@@ -232,5 +231,6 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->display("Emails.tpl");
+	$smarty->display("Emails.tpl");
+
 ?>
