@@ -1,4 +1,24 @@
-{foreach item=row from=$BLOCKS}	
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+ <tr>
+			   <td>&nbsp;</td>
+			   <td class="forwardBg">
+			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+					  <tr>
+						<td width="75%">
+						  <input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" />&nbsp;
+						  <input type="button" name="reply" value=" Reply " class="classWebBtn" />&nbsp;
+						  <input type="button" name="forward" value=" Forward " class="classWebBtn" />&nbsp;
+						  <input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
+						</td>
+						<td width="25%" align="right"><input type="button" name="Button" value=" Delete "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
+					  </tr>
+					</table>
+				</td>
+			   </tr>
+			 <tr>
+			   <td>&nbsp;</td>
+			   <td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
+				{foreach item=row from=$BLOCKS}	
 {foreach item=elements key=title from=$row}	
 {if $title eq 'Subject'}
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -14,3 +34,7 @@
 {/if}
 {/foreach}
 {/foreach}
+			   </td>
+			   </tr>
+
+</table>

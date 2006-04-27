@@ -1,5 +1,10 @@
 <!--  USER  SETTINGS PAGE STARTS HERE -->
 <script language="javascript">
+function ajaxSaveResponse(response)
+{ldelim}
+	hide("status");
+	document.getElementById("email_con").innerHTML=response.responseText;
+{rdelim}
 function ajaxgetResponse(response)
 {ldelim}
 	hide("status");
@@ -16,7 +21,31 @@ function getEmailContents(id)
 	var urlstring ="module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record="+id;
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
+{literal}
+function DeleteEmail(id)
+{
+	if(confirm("Are you sure you want to delete ?"))
+		{	
+			show("status");
+			var ajaxObj = new Ajax(ajaxDelResponse);
+			var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+id;
+		    	ajaxObj.process("index.php?",urlstring);
+		}
+		else
+		{
+			return false;
+		}
+}
+function ajaxDelResponse(response)
+{
+	hide("status");
+	document.getElementById("EmailDetails").innerHTML='';
+	document.getElementById("subjectsetter").innerHTML='';
+	document.getElementById("email_con").innerHTML=response.responseText;
+}
+{/literal}
 </script>
+<script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
@@ -79,7 +108,7 @@ function getEmailContents(id)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Qualified Mails</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Inbox</a>&nbsp;<b></b>
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">Inbox</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
@@ -91,8 +120,10 @@ function getEmailContents(id)
 					</td>
                     <td>&nbsp;</td>
                     <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+					<form name="massdelete" method="POST">
+					<input name="idlist" type="hidden">
                       <tr>
-                        <td width="25%"><input type="button" name="Button2" value=" Delete "  class="classWebBtn"/> &nbsp;
+                        <td width="25%"><input type="button" name="Button2" value=" Delete "  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
                           <input type="button" name="Qualify" value=" Qualify " class="classWebBtn" />
                         </td>
                         <td width="75%" align="right">
@@ -106,57 +137,25 @@ function getEmailContents(id)
                   <tr>
                     <td>&nbsp;</td>
                     <td style="padding:1px;" align="left">
-						<div id="rssScroll">
-						<table class="rssTable" cellspacing="0" cellpadding="0">
-	                      <tr>
-    	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  /></th>
-							{foreach item=element from=$LISTHEADER}
-                	        <th>{$element}</th>
-							{/foreach}
-                    	  </tr>
-						  {foreach item=row from=$LISTENTITY}
-	                      <tr onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
-    	                    <td><input type="checkbox" name="checkbox2" value="checkbox" /></td>
-						  	{foreach item=row_values from=$row}
-                	        <td><b>{$row_values}</b></td>
-							{/foreach}
-                    	  </tr>
-						  {/foreach}
-                    </table>
-					</div>
+						<div id="email_con">
+						{include file="EmailContents.tpl"}
+						</div>
 				</td>
              </tr>
 			 <tr>
 			 	<td></td>
 				<td height="5"></td>
 			 </tr>
+			</form>	
 			 <tr>
 			   <td>&nbsp;</td>
 			   <td class="subHdr" id="subjectsetter"> </td>
 			   </tr>
-			 <tr>
-			   <td>&nbsp;</td>
-			   <td class="forwardBg">
-			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-					  <tr>
-						<td width="75%">
-						  <input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" />&nbsp;
-						  <input type="button" name="reply" value=" Reply " class="classWebBtn" />&nbsp;
-						  <input type="button" name="forward" value=" Forward " class="classWebBtn" />&nbsp;
-						  <input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
-						</td>
-						<td width="25%" align="right"><input type="button" name="Button" value=" Delete "  class="classWebBtn"/></td>
-					  </tr>
-					</table>
-				</td>
-			   </tr>
-			 <tr>
-			   <td>&nbsp;</td>
-			   <td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
-			   		<div id="EmailDetails">
-					</div>
-			   </td>
-			   </tr>
+			   <tr><td colspan="2">
+			   <div id="EmailDetails">
+				{include file="EmailDetails.tpl"}
+				</div>
+				</td></tr>
                 </table>
 				</td>
 				<td bgcolor="#EBEBEB" width="8"></td>
