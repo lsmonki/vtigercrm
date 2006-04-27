@@ -1878,7 +1878,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$output = '<td>';
+	$output = '<td align="right" style="padding="5px;">';
 	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
 	if(($navigation_array['prev']) != 0)
 	{
