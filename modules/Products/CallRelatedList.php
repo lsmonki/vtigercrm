@@ -40,6 +40,7 @@ $smarty->assign("CATEGORY",$category);
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("SINGLE_MOD","Product");
 $smarty->display("RelatedLists.tpl");
 
