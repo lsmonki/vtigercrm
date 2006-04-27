@@ -1872,4 +1872,232 @@ function Button_Check($module)
 
 }
 
+/**
+  *	Function to Check whether the User is allowed to delete a particular record from listview of each module using   
+  *	mass delete button.
+  *	@param string $module -- module name
+  *	@param array $ids_list -- Record id 
+  *	Returns the Record Names of each module that is not permitted to delete
+**/
+function getEntityName($module, $ids_list)
+{
+	$list = implode(",",$ids_list);
+	global $adb;
+	global $log;
+	$log->debug("Entering getEntityName(".$module.") method ...");
+		
+	switch ($module)
+	{
+		case "Accounts" : $query = "select accountname from account where accountid in (".$list.")";
+				  $result = $adb->query($query);
+				  $numrows = $adb->num_rows($result);
+				  $account_name = array();	
+				  	for ($i = 0; $i < $numrows; $i++)
+				  	{
+				 		$acc_id = $ids_list[$i];
+						$account_name[$acc_id] = $adb->query_result($result,$i,'accountname');
+				  	}
+					return $account_name;
+					break;
+
+		  case "Leads" :  $query = "select concat(firstname,' ',lastname) as leadname from leaddetails where leadid in (".$list.")";
+				  $result = $adb->query($query);
+				  $numrows = $adb->num_rows($result);
+				  $lead_name = array();
+					for($i = 0; $i < $numrows; $i++)
+					{
+						$lead_id = $ids_list[$i];
+						$lead_name[$lead_id] = $adb->query_result($result,$i,'leadname');
+					}	
+								
+					return $lead_name;
+					break;
+		
+	       case "Contacts" : $query = "select concat(firstname,' ',lastname) as contactname from contactdetails where contactid in (".$list.")"; 
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $contact_name = array();
+					for($i=0; $i < $numrows; $i++)
+					{
+						$cont_id = $ids_list[$i];
+						$contact_name[$cont_id] = $adb->query_result($result,$i,'contactname');
+					}
+					
+					return $contact_name;
+					break;
+
+	    case "Potentials"  : $query = "select potentialname from potential where potentialid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $potential_name = array();
+					for($i=0; $i < $numrows; $i++)
+					{
+						$pot_id = $ids_list[$i];
+						$potential_name[$pot_id] = $adb->query_result($result,$i,'potentialname');
+					}
+					
+					return $potential_name;
+					break;
+
+	        case "Quotes"  : $query = "select subject from quotes where quoteid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $quote_subject = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$quote_id = $ids_list[$i];
+						$quote_subject[$quote_id] = $adb->query_result($result,$i,'subject'); 
+				 	}
+					
+					return $quote_subject;
+					break;	
+
+	    case "SalesOrder"  : $query = "select subject from salesorder where salesorderid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $so_subject = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$so_id = $ids_list[$i];
+						$so_subject[$so_id] = $adb->query_result($result,$i,'subject'); 
+				 	}
+					
+					return $so_subject;
+					break;
+	
+	       case "Invoice"  : $query = "select subject from invoice where invoiceid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $inv_subject = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$inv_id = $ids_list[$i];
+						$inv_subject[$inv_id] = $adb->query_result($result,$i,'subject'); 
+				 	}
+					
+					return $inv_subject;
+					break;
+		
+	      case "Products"  : $query = "select productname from products where productid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $product_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$prod_id = $ids_list[$i];
+						$product_name[$prod_id] = $adb->query_result($result,$i,'productname'); 
+				 	}
+					
+					return $product_name;
+					break;
+
+	   case "PriceBooks"  :  $query = "select bookname from pricebook where pricebookid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $pbook_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$pbook_id = $ids_list[$i];
+						$pbook_name[$pbook_id] = $adb->query_result($result,$i,'bookname'); 
+				 	}
+					
+					return $pbook_name;
+					break;
+
+	        case "Notes"  :  $query = "select title from notes where notesid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $notes_title = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$note_id = $ids_list[$i];
+						$notes_title[$note_id] = $adb->query_result($result,$i,'title'); 
+				 	}
+					
+					return $notes_title;
+					break;
+		
+	  case "Activities"  :  $query = "select subject from activity where activityid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $activity_subject = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$act_id = $ids_list[$i];
+						$activity_subject[$act_id] = $adb->query_result($result,$i,'subject'); 
+				 	}
+					
+					return $activity_subject;
+					break;
+
+	    case "Campaigns"  :  $query = "select campaignname from campaign where campaignid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $campaign_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$cmpn_id = $ids_list[$i];
+						$campaign_name[$cmpn_id] = $adb->query_result($result,$i,'campaignname'); 
+				 	}
+					
+					return $campaign_name;
+					break;
+
+	          case "Faq"  :  $query = "select question from faq where id in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $faq_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$faq_id = $ids_list[$i];
+						$faq_name[$faq_id] = $adb->query_result($result,$i,'question'); 
+				 	}
+					
+					return $faq_name;
+					break;
+		
+	      case "Vendors"  :  $query = "select vendorname from vendor where vendorid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $vendor_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$ven_id = $ids_list[$i];
+						$vendor_name[$ven_id] = $adb->query_result($result,$i,'vendorname'); 
+				 	}
+					
+					return $vendor_name;
+					break;
+
+	case "PurchaseOrder"  :  $query = "select subject from purchaseorder where purchaseorderid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $po_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$po_id = $ids_list[$i];
+						$po_name[$po_id] = $adb->query_result($result,$i,'subject'); 
+				 	}
+					
+					return $po_name;
+					break;
+
+	     case "HelpDesk"  :  $query = "select title from troubletickets where ticketid in (".$list.")";
+				 $result = $adb->query($query);
+				 $numrows = $adb->num_rows($result);
+				 $ticket_name = array();		    	
+					for($i=0; $i < $numrows; $i++)
+					{
+						$tick_id = $ids_list[$i];
+						$ticket_name[$tick_id] = $adb->query_result($result,$i,'title'); 
+				 	}
+					
+					return $ticket_name;
+					break;
+	}
+	$log->debug("Exiting getEntityName method ...");
+}
+
+
+
 ?>
