@@ -67,12 +67,12 @@ $smarty->assign("SINGLE_MOD","PurchaseOrder");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if(isPermitted("PurchaseOrder",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("PurchaseOrder","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 $smarty->assign("CREATEPDF","permitted");
 	
-if(isPermitted("PurchaseOrder",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("PurchaseOrder","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
