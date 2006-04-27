@@ -34,7 +34,7 @@ $related_array = getRelatedLists("Potentials",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
