@@ -87,14 +87,15 @@ if($viewid != 0)
 // Buttons and View options
 //Modified by Raju
 //raju
-if(isPermitted('Leads',2,'') == 'yes')
+if(isPermitted('Leads','Delete','') == 'yes')
 {
 	$other_text['del'] =	$app_strings[LBL_MASS_DELETE];	
 
 }
-$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+if(isPermitted('Emails','EditView','') == 'yes')
+	$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
 
-if(isPermitted('Leads',1,'') == 'yes')
+if(isPermitted('Leads','EditView','') == 'yes')
 {
 	$other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
 	$other_text['c_status'] = $app_strings[LBL_CHANGE_STATUS];

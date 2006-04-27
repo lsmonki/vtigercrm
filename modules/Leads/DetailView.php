@@ -66,9 +66,9 @@ $smarty->assign("BLOCKS", getBlocks("Leads","detail_view",'',$focus->column_fiel
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
 
-$val = isPermitted("Leads",1,$_REQUEST['record']);
+$val = isPermitted("Leads","EditView",$_REQUEST['record']);
 
-if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 
@@ -81,10 +81,10 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 
-if(isPermitted("Leads",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Leads","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
-if(isPermitted("Emails",1,'') == 'yes')
+if(isPermitted("Emails","EditView",'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
@@ -92,7 +92,7 @@ if(isPermitted("Emails",1,'') == 'yes')
 	$smarty->assign("SENDMAILBUTTON","permitted");
 }
 
-if(isPermitted("Leads",8,'') == 'yes') 
+if(isPermitted("Leads","Merge",'') == 'yes') 
 {
 	$smarty->assign("MERGEBUTTON","permitted");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
