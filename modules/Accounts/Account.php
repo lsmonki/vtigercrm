@@ -284,7 +284,7 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and account.accountid=".$id;
+		$query = "select users.user_name,groups.groupname, crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
 		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
@@ -301,7 +301,7 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 and account.accountid=".$id;
+		$query = "select users.user_name,groups.groupname,crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
 		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
@@ -319,7 +319,8 @@ class Account extends CRMEntity {
 
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and salesorder.accountid = ".$id;
+		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname ,users.user_name,groups.groupname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and salesorder.accountid = ".$id;
+		
 		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_tickets($id)
