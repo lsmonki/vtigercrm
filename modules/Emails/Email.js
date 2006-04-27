@@ -21,8 +21,6 @@ function massDelete()
 {
 
         x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-
         idstring = "";
 
         if ( x == undefined)
@@ -63,8 +61,8 @@ function massDelete()
 		{	
 			show("status");
 			var ajaxObj = new Ajax(ajaxSaveResponse);
-			var urlstring ="module=Users&action=massdelete&return_module=Emails&viewname="+viewid+"&idlist="+idstring;
-		    ajaxObj.process("index.php?",urlstring);
+			var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+idstring;
+		    	ajaxObj.process("index.php?",urlstring);
 		}
 		else
 		{
