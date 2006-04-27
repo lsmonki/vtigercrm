@@ -37,12 +37,6 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         //Get the tabid of the module
         //require_once('include/utils/UserInfoUtil.php')
         $tabid = getTabid($module);
-        global $profile_id;
-        if($profile_id == '')
-        {
-                global $current_user;
-                $profile_id = fetchUserProfileId($current_user->id);
-        }
         //added for customview 27/5
         if($oCv)
         {
@@ -318,58 +312,73 @@ function BasicSearch($module,$search_field,$search_string)
 	}
 	return $where;
 }
-function getAdvSearchfields($module)
-        {
-                global $adb;
-                $tabid = getTabid($module);
-                global $profile_id;
 
-                $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
+function getAdvSearchfields($module)
+{
+	global $adb;
+	global $current_user;	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
+	$tabid = getTabid($module);
+
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+	{
+		$sql = "select * from field ";
+		$sql.= " where field.tabid=".$tabid." and";
+		$sql.= " field.displaytype in (1,2)";
+		$sql.= " order by block,sequence";
+	}
+	else
+	{
+		$profileList = getCurrentUserProfileList();
+		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
 		$sql.= " where field.tabid=".$tabid." and";
 		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
-		$sql.= " and profile2field.profileid=".$profile_id." order by block,sequence";
+		$sql.= " and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by block,sequence";
+	}
 
-		$result = $adb->query($sql);
-                $noofrows = $adb->num_rows($result);
-		$block = '';
-		
-                for($i=0; $i<$noofrows; $i++)
-                {
-                        $fieldtablename = $adb->query_result($result,$i,"tablename");
-                        $fieldcolname = $adb->query_result($result,$i,"columnname");
-			$block = $adb->query_result($result,$i,"block");
-			$fieldtype = explode("~",$fieldtype);
-			$fieldtypeofdata = $fieldtype[0];
-                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-				//Added on 14-10-2005 -- added ticket id in list
-                		if($module == 'HelpDesk' && $block == 25)
-                		{
-                        		$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
-                		}
-				//Added to include activity type in activity customview list
-                		if($module == 'Activities' && $block == 19)
-                		{
-                        		$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
-                		}
-				if($fieldlabel == "Related To")
-				{
-					$fieldlabel = "Related to";
-				}
-				if($fieldlabel == "Start Date & Time")
-                                {
-                                        $fieldlabel = "Start Date";
-					  if($module == 'Activities' && $block == 19)
-				               $module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
 
-                                }
-                        $fieldlabel1 = str_replace(" ","_",$fieldlabel);
-			if ($i==0)
+	$result = $adb->query($sql);
+	$noofrows = $adb->num_rows($result);
+	$block = '';
+
+	for($i=0; $i<$noofrows; $i++)
+	{
+		$fieldtablename = $adb->query_result($result,$i,"tablename");
+		$fieldcolname = $adb->query_result($result,$i,"columnname");
+		$block = $adb->query_result($result,$i,"block");
+		$fieldtype = explode("~",$fieldtype);
+		$fieldtypeofdata = $fieldtype[0];
+		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+		//Added on 14-10-2005 -- added ticket id in list
+		if($module == 'HelpDesk' && $block == 25)
+		{
+			$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+		}
+		//Added to include activity type in activity customview list
+		if($module == 'Activities' && $block == 19)
+		{
+			$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
+		}
+		if($fieldlabel == "Related To")
+		{
+			$fieldlabel = "Related to";
+		}
+		if($fieldlabel == "Start Date & Time")
+		{
+			$fieldlabel = "Start Date";
+			if($module == 'Activities' && $block == 19)
+				$module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
+
+		}
+		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+		if ($i==0)
 			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
-			else
+		else
 			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
-                }
-                return $OPTION_SET;
-        }
+	}
+	return $OPTION_SET;
+}
 
 function getcriteria_options()
 {
