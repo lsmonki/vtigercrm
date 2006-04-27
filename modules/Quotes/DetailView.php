@@ -66,19 +66,19 @@ $smarty->assign("SINGLE_MOD","Quotes");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if(isPermitted("Quotes",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Quotes","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 	
 $smarty->assign("CREATEPDF","permitted");
 
-if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("SalesOrder","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("CONVERTSALESORDER","permitted");
 
-if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("CONVERTINVOICE","permitted");
 
-if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Quotes","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
