@@ -63,6 +63,11 @@ else
 $_SESSION['FAQ_ORDER_BY'] = $order_by;
 $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+
+if($viewid != 0)
+{
+        $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
+}
 if(isPermitted('Faq','Delete','') == 'yes')
 $other_text ['del'] = $app_strings[LBL_MASS_DELETE]; 
 
@@ -81,6 +86,19 @@ if(isset($where) && $where != '')
 	$list_query .= ' and '.$where;
 }
 
+
+$view_script = "<script language='javascript'>
+function set_selected()
+{
+	len=document.massdelete.viewname.length;
+	for(i=0;i<len;i++)
+	{
+		if(document.massdelete.viewname[i].value == '$viewid')
+		document.massdelete.viewname[i].selected = true;
+	}
+}
+	set_selected();
+	</script>";
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Faq',$order_by);
@@ -106,6 +124,11 @@ $smarty->assign("SINGLE_MOD",'Note');
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
+if($viewnamedesc['viewname'] == 'All')
+{
+	$smarty->assign("ALL", 'All');
+}
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -127,6 +150,9 @@ $end_rec = $navigation_array['end_val'];
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
+if($viewid !='')
+$url_string .= "&viewname=".$viewid;
+
 //Retreive the List View Table Header
 $listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
@@ -134,14 +160,21 @@ $smarty->assign("LISTHEADER", $listview_header);
 $listview_header_search = getSearchListHeaderValues($focus,"Faq",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq");
+$smarty->assign("SELECT_SCRIPT", $view_script);
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','question','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+$smarty->assign("VIEWID", $viewid);
 $smarty->assign("SINGLE_MOD" ,'Faq');
 
 $check_button = Button_Check($module);
