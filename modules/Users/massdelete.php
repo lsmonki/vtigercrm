@@ -12,23 +12,38 @@
  ********************************************************************************/
 
 
-
-
-
-
-
 require_once('include/database/PearDatabase.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/CommonUtils.php');
+
 $idlist = $_REQUEST['idlist'];
 $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
 
+$ids_list = array();
 foreach($storearray as $id)
 {
-	$sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
-	$result = $adb->query($sql);
+        if(isPermitted($returnmodule,'Delete',$id) == 'yes')
+        {
+                $sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
+                $result = $adb->query($sql);
+        }
+        else
+        {
+                $ids_list[] = $id;
+        }
 }
+$ret = getEntityName($returnmodule,$ids_list);
+if(count($ret) > 0)
+{
+       $errormsg = implode(',',$ret);
+}else
+{
+       $errormsg = '';
+}
+
 if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 {
 	$smod = "&smodule=".$_REQUEST['smodule'];
