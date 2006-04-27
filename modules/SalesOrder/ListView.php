@@ -107,7 +107,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 // Buttons and View options
-if(isPermitted('SalesOrder',2,'') == 'yes')
+if(isPermitted('SalesOrder','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }

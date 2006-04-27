@@ -70,15 +70,15 @@ $smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
 
-if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("SalesOrder","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 $smarty->assign("CREATEPDF","permitted");
 
-if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("CONVERTINVOICE","permitted");
 
-if(isPermitted("SalesOrder",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("SalesOrder","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $smarty->assign("MODULE", $module);
