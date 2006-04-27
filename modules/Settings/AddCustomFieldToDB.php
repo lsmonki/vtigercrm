@@ -124,6 +124,10 @@ else
 	{
 		$tableName='invoicecf';
 	}
+	elseif($fldmodule == 'Campaigns')
+	{
+		$tableName='campaignscf';
+	}
 	//Assigning the uitype
 	$fldlength=$_REQUEST['fldLength'];
 	$uitype='';
@@ -242,7 +246,7 @@ else
         {
 		if($_REQUEST['fieldid'] == '')
 		{
-			$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'ADV')";
+			$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'BAS')";
 			$adb->query($query);
 			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 		}
