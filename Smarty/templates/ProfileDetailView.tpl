@@ -17,14 +17,16 @@
 	
 	<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
 	<tr>
-	<td colspan="2" class="calDayHourCell">Details of Profile </td>
-
-	</tr>
+															<td width="5%" style="border-bottom:1px dashed #CCCCCC;">
+																	<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
+															</td>
+															<td style="border-bottom:1px dashed #CCCCCC;"> 
+																	<span class="genHeaderGrayBig">Detail View of Profile</span><br>
+																	<span	class="genHeaderSmall">{$PROFILE_NAME}</span>
+															</td>
+													</tr>
 	<tr>
-	<td>
-	<table border="0" cellspacing="0" cellpadding="0" width="100%">
-	<tr>
-	<td><table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<td colspan="2"><table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr class="small">
 	<td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif" /></td>
 	<td class="prvPrfTopBg" width="100%" ></td>
@@ -70,7 +72,7 @@
 		<td class="small" style="padding-left:10px" align="right"></td>
 		</tr>
 		</table></td>
-		<td align="right" valign="bottom"><font class="small">2 enabled, 0 disabled</font> </td>
+		<td align="right" valign="bottom">&nbsp; </td>
 
 		</tr>
 		</table>
@@ -137,8 +139,8 @@
 		</tr>
 		</table>
 		</td>
-		<td align=right valign=bottom>
-		&nbsp;
+		<td align=right valign=bottom>&nbsp;
+		
 		</td>
 		</tr>
 		</table>
@@ -204,8 +206,8 @@
 		</tr>
 		</table>
 		</td>
-		<td align=right valign=bottom>
-		&nbsp;
+		<td align=right valign=bottom>&nbsp;
+		
 		</td>
 		</tr>
 		</table>
@@ -268,8 +270,8 @@
 		</tr>
 		</table>
 		</td>
-		<td align=right valign=bottom>
-		&nbsp;
+		<td align=right valign=bottom>&nbsp;
+		
 		</td>
 		</tr>
 		</table>
@@ -406,12 +408,8 @@
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
-	<input type="submit" value=" Edit " name="edit"/>&nbsp;&nbsp;
-	{ if $PROFILEID != 1 && $PROFILEID != 2 && $PROFILEID != 3 && $PROFILEID != 4 }
-	
-		<input type="button" value=" Delete " name="Delete" onClick="DeleteProfile('{$PROFILEID}')"/>&nbsp;&nbsp;
-	{/if}
-	<input type="button" value=" Cancel " name="Cancel" onClick="window.history.back();"/>
+	<input type="submit" value=" Edit " name="edit" class="classBtn"/>&nbsp;&nbsp;
+	<input type="button" value=" Cancel " name="Cancel" onClick="window.history.back();" class="classBtn"/>
 
 	</td>
 	</tr>
@@ -429,25 +427,7 @@
 </td>
 </tr>
 </table>
-<div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
-<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;vertical-align:center;left:887px;top:0px;height:17px;">Processing Request...</div>
 	{include file='SettingsSubMenu.tpl'}
-
-<script>
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("tempdiv").innerHTML=response.responseText;
-{rdelim}
-
-function DeleteProfile(profileid)
-{ldelim}
-	show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring = "module=Users&action=UsersAjax&file=ProfileDeleteStep1&profileid="+profileid;
-	ajaxObj.process("index.php?",urlstring);
-{rdelim}
-</script>
 
 <script language="javascript" type="text/javascript">
 var Selected_div= 'global_privileges';

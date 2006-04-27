@@ -15,73 +15,71 @@
 <input type="hidden" name="mode" value="edit">
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_CREATE_NEW_GROUP}</b></span>
-<hr noshade="noshade" size="1"/>
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-
-	<table align="center" border="0" cellpadding="5" cellspacing="0" width="75%">
-	<tbody><tr>
-	<td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td>
-	</tr>
 	<tr>
-	<td style="border-bottom: 1px dashed rgb(204, 204, 204); padding-right: 10px;" align="left" width="30%"><b>{$ROLE_NAME}</b></td>
-	<td style="border-bottom: 1px dashed rgb(204, 204, 204);" align="right" width="70%">
-	<input title="Edit" accessKey="C" class="small" onclick="this.form.action.value=\'createrole\'" type="submit" name="Edit" value="Edit Role">&nbsp;<input title="Delete" accessKey="D" class="small" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="Delete Role">
-	</td>
+		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
+        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > Role of {$ROLE_NAME} </b></span>
+            	    <hr noshade="noshade" size="1" />
+		</td>
 	</tr>
+	<tr><td>&nbsp;</td></tr>
 	<tr>
-	<td style="padding-right: 10px;" align="right">&nbsp;</td>
-	<td>&nbsp;</td>
+		<td width="95%" style="padding-left:20px;" valign="top">	  <table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
+          <tr>
+            <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGE_PATH}roles.gif" align="absmiddle" /> </td>
+            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$ROLE_NAME} Role</span><br />
+                <span class="big">Detail view of {$ROLE_NAME} Role</span> </td>
+          </tr>
+          <tr><td colspan="2">&nbsp;</td></tr>
+           <tr>
+            <td colspan="2" >
+					<table width="100%" cellpadding="5" cellspacing="0" border="0" >
+							<tr>
+									<td colspan="4" class="detailedViewHeader"><b>Group Details</b></td>
+							</tr>
+							<tr>
+							  <td class="dvtCellLabel" width="5%">&nbsp;</td>
+							  <td class="dvtCellLabel" align="right" width="25%"><b>Role Name :</b></td>
+							  <td class="dvtCellInfo" align="left" width="25%">{$ROLE_NAME}</td>
+							  <td class="dvtCellInfo" width="45%">&nbsp;</td>
+					  </tr>
+					  <tr><td colspan="4"  class="dvtCellInfo">&nbsp;</td></tr>
+					   <tr>
+                  <td colspan="4"  class="detailedViewHeader"><b>Member List</b></td>
+                </tr>
+               
+				<tr>
+						<td class="dvtCellLabel" align="left"><img src="{$IMAGE_PATH}profile_icon.gif" align="top"></td>
+						<td class="dvtCellLabel" align="right" valign="top"><b>Associated profiles :</b></td>
+						<td colspan="2" align="left" class="dvtCellInfo">
+								{foreach item=elements from=$ROLEINFO.profileinfo}
+										<a href="index.php?module=Users&action=profilePrivileges&parenttab=Settings&profileid={$elements.0}&mode=view">{$elements.1}</a><br>
+								{/foreach}	
+						</td>
+				</tr>
+				{if $ROLEINFO.userinfo.0 neq ''}
+				 <tr>
+						<td class="dvtCellLabel" align="left"><img src="{$IMAGE_PATH}user_icon.gif" align="top"></td>
+						<td class="dvtCellLabel" align="right" valign="top"><b>Associated Users :</b></td>
+						<td colspan="2" align="left" class="dvtCellInfo">
+								{foreach item=elements from=$ROLEINFO.userinfo}
+										<a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$elements.0}">{$elements.1}</a><br>
+								{/foreach}	
+						</td>
+				</tr>
+				{/if}
+				 <tr><td colspan="4"  class="dvtCellInfo">&nbsp;</td></tr>
+                 <tr>
+                  <td colspan="4"  class="dvtCellInfo" align="center">
+				  	<!-- <input title="Back" accessKey="C" class="classBtn" onclick="window.history.back();" type="button" name="New" value=" <  Back " > &nbsp; -->
+					 <input value="   Edit   " title="Edit" accessKey="E" class="classBtn" type="submit" name="Edit" >
+                    &nbsp;
+					<input title="Delete" accessKey="D" class="classBtn" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="Delete">
+				</td>
+                </tr>
+          <tr><td colspan="2">&nbsp;</td></tr>
+        </table></td>
+		
 	</tr>
-	<tr>
-	<td colspan="2" style="border-bottom: 1px solid rgb(204, 204, 204); padding-right: 10px;" align="right" valign="top">
-	<div style="overflow: auto; position: relative; left: 10px; top: 0px; width: 100%; height: 225px; text-align: left;">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody>
-	
-	<tr>
-	<td align="right" valign="top" width="30%"><b>Associated Users :</b></td>
-	<td align="left" valign="top" width="70%">
-	<ul style="list-style-type: none;">
-	{foreach item=elements from=$ROLEINFO.userinfo}
-	<li><a href="index.php?module=Users&action=DetailView&record={$elements.0}">{$elements.1}</a></li>
-	{/foreach}	
-	</ul>
-	</td>
-	</tr>
-	
-	<tr>
-	<td align="right" valign="top" width="30%"><b>Associated profiles :</b></td>
-	<td align="left" valign="top" width="70%">
-	<ul style="list-style-type: none;">
-	{foreach item=elements from=$ROLEINFO.profileinfo}
-	<li><a href="index.php?module=Users&action=profilePrivileges&profileid={$elements.0}&mode=view">{$elements.1}</a></li>
-	{/foreach}	
-	</ul>
-	</td>
-	</tr>
-	
-	</tbody>
-	</table>
-	</div>
-	</td>
-
-	</tr>
-	<tr>
-	<td colspan="2" style="border-top: 1px solid rgb(204, 204, 204);" align="center">
-	<input title="Cancel" accessKey="C" class="small" onclick="window.history.back()" type="button" name="Cancel" value=" &lsaquo; Back">	
-	</td>
-	</tr>
-	</tbody></table>
-
-</td>
-<td colspan="2">&nbsp;</td>
-</tr>
 </table>
 </form>
 </td>
