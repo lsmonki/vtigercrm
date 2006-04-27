@@ -203,6 +203,8 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
