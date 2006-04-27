@@ -23,6 +23,7 @@
 $mod_strings = Array(
 // Added in release 5.0
 'LBL_CAMPAIGN_INFORMATION'=>'Campaign Information',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 
 'Campaign Name'=>'Campaign Name',
