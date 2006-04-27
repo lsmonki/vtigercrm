@@ -23,6 +23,8 @@ $table_col_array=array('account.accountname','contactdetails.firstname,contactde
 
 function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
+	global $log;
+	$log->debug("Entering getSearchListHeaderValues(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
         global $adb;
         global $theme;
         global $app_strings;
@@ -168,6 +170,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         }
                 }
         }
+	$log->debug("Exiting getSearchListHeaderValues method ...");	
         return $search_header;
 
 }
@@ -175,7 +178,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 function Search($module)
 {
-
+	global $log;
+        $log->debug("Entering Search(".$module.") method ...");
 	$url_string='';	
 	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
         {
@@ -203,6 +207,7 @@ function Search($module)
                 }
 		$url_string = "&search_field=".$search_column."&search_text=".$search_string."&searchtype=BasicSearch";
 		return $where."#@@#".$url_string;
+		$log->debug("Exiting Search method ...");
         }
 
 }
@@ -210,6 +215,8 @@ function Search($module)
 function get_usersid($table_name,$column_name,$search_string)
 {
 
+	global $log;
+        $log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
 	$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
 	$user_result=$adb->query($user_qry);
@@ -234,11 +241,14 @@ function get_usersid($table_name,$column_name,$search_string)
 		//$where="$table_name.$column_name =''";
 		$where="groups.groupname like '%".$search_string."%' ";
 	}	
+	$log->debug("Exiting get_usersid method ...");
 	return $where;	
 }
 
 function getValuesforColumns($column_name,$search_string)
 {
+	global $log;
+	$log->debug("Entering getValuesforColumns(".$column_name.",".$search_string.") method ...");
 	global $column_array,$table_col_array;
 	for($i=0; $i<count($column_array);$i++)
 	{
@@ -268,12 +278,14 @@ function getValuesforColumns($column_name,$search_string)
 			break 1;
 		}
 	}
-	
+	$log->debug("Exiting getValuesforColumns method ...");
 	return $where;
 }
 
 function BasicSearch($module,$search_field,$search_string)
 {
+	 global $log;
+         $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	global $column_array,$table_col_array;
 
@@ -310,11 +322,14 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 		}
 	}
+	$log->debug("Exiting BasicSearch method ...");
 	return $where;
 }
 
 function getAdvSearchfields($module)
 {
+	global $log;
+        $log->debug("Entering getAdvSearchfields(".$module.") method ...");
 	global $adb;
 	global $current_user;	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -377,16 +392,22 @@ function getAdvSearchfields($module)
 		else
 			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
 	}
+	$log->debug("Exiting getAdvSearchfields method ...");
 	return $OPTION_SET;
 }
 
 function getcriteria_options()
 {
+	global $log;
+	$log->debug("Entering getcriteria_options() method ...");
 	$CRIT_OPT = "<option value=\'cts\'>Contains</option><option value=\'dcts\'>does not Contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>Begins With</option><option value=\'ewt\'>Ends With</option>";
+	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
 function getSearch_criteria($criteria,$searchstring,$searchfield)
 {
+	global $log;
+	$log->debug("Entering getSearch_criteria(".$criteria.",".$searchstring.",".$searchfield.") method ...");
 	$where_string = '';
 	switch($criteria)
 	{
@@ -415,10 +436,13 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 			break;
 
 	}
+	$log->debug("Exiting getSearch_criteria method ...");
 	return $where_string;
 }								
 function getWhereCondition($currentModule)
 {
+	global $log;
+       $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
 	
 	if($_REQUEST['searchtype']=='advance')
 	{
@@ -464,6 +488,7 @@ function getWhereCondition($currentModule)
 	{
  		$where=Search($currentModule);
 	}
+	$log->debug("Exiting getWhereCondition method ...");
 	return $where;
 
 }
