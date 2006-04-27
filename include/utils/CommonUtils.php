@@ -31,8 +31,19 @@
  * Contributor(s): ______________________________________..
  */
 function is_admin($user) {
-	if ($user->is_admin == 'on') return true;
-	else return false;
+	global $log;
+	$log->debug("Entering is_admin(".$user.") method ...");
+	
+	if ($user->is_admin == 'on')
+	{
+		$log->debug("Exiting is_admin method ..."); 
+		return true;
+	}
+	else
+	{
+		$log->debug("Exiting is_admin method ...");
+		 return false;
+	}
 }
 
 /**
@@ -46,6 +57,9 @@ function is_admin($user) {
  * Contributor(s): ______________________________________..
  */
 function get_select_options (&$option_list, $selected, $advsearch='false') {
+	global $log;
+	$log->debug("Entering get_select_options (".$option_list.",".$selected.",".$advsearch.") method ...");
+	$log->debug("Exiting get_select_options  method ...");
 	return get_select_options_with_id($option_list, $selected, $advsearch);
 }
 
@@ -59,6 +73,9 @@ function get_select_options (&$option_list, $selected, $advsearch='false') {
  * Contributor(s): ______________________________________..
  */
 function get_select_options_with_id (&$option_list, $selected_key, $advsearch='false') {
+	global $log;
+	$log->debug("Entering get_select_options_with_id (".$option_list.",".$selected_key.",".$advsearch.") method ...");
+	$log->debug("Exiting get_select_options_with_id  method ...");
 	return get_select_options_with_id_separate_key($option_list, $option_list, $selected_key, $advsearch);
 }
 
@@ -68,6 +85,9 @@ function get_select_options_with_id (&$option_list, $selected_key, $advsearch='f
  * The values are the display strings.
  */
 function get_select_options_array (&$option_list, $selected_key, $advsearch='false') {
+	global $log;
+	$log->debug("Entering get_select_options_array (".$option_list.",".$selected_key.",".$advsearch.") method ...");
+	$log->debug("Exiting get_select_options_array  method ...");
         return get_options_array_seperate_key($option_list, $option_list, $selected_key, $advsearch);
 }
 
@@ -82,6 +102,8 @@ function get_select_options_array (&$option_list, $selected_key, $advsearch='fal
  * Contributor(s): ______________________________________..
  */
 function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key, $advsearch='false') {
+	global $log;
+	$log->debug("Entering get_options_array_seperate_key (".$label_list.",".$key_list.",".$selected_key.",".$advsearch.") method ...");
 	global $app_strings;
 	if($advsearch=='true')
 	$select_options = "\n<OPTION value=''>--NA--</OPTION>";
@@ -110,6 +132,7 @@ function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key
 	}
 	$select_options = preg_replace($pattern, $replacement, $select_options);
 
+	$log->debug("Exiting get_options_array_seperate_key  method ...");
 	return $options;
 }
 
@@ -121,6 +144,8 @@ function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key
 
 function get_select_options_with_id_separate_key(&$label_list, &$key_list, $selected_key, $advsearch='false')
 {
+	global $log;
+    $log->debug("Entering get_select_options_with_id_separate_key(".$label_list.",".$key_list.",".$selected_key.",".$advsearch.") method ...");
     global $app_strings;
     if($advsearch=='true')
     $select_options = "\n<OPTION value=''>--NA--</OPTION>";
@@ -143,6 +168,7 @@ function get_select_options_with_id_separate_key(&$label_list, &$key_list, $sele
         $select_options .= "\n<OPTION ".$selected_string."value='$html_value'>$label_list[$option_key]</OPTION>";
     }
     $select_options = preg_replace($pattern, $replacement, $select_options);
+    $log->debug("Exiting get_select_options_with_id_separate_key method ...");
     return $select_options;
 
 }
@@ -155,6 +181,8 @@ function get_select_options_with_id_separate_key(&$label_list, &$key_list, $sele
  * Contributor(s): ______________________________________..
  */
 function parse_calendardate($local_format) {
+	global $log;
+	$log->debug("Entering parse_calendardate(".$local_format.") method ...");
 	global $current_user;
 	if($current_user->date_format == 'dd-mm-yyyy')
 	{
@@ -168,6 +196,7 @@ function parse_calendardate($local_format) {
 	{
 		$dt_popup_fmt = "%Y-%m-%d";
 	}
+	$log->debug("Exiting parse_calendardate method ...");
 	return $dt_popup_fmt;
 	//return "%Y-%m-%d";
 }
@@ -179,11 +208,14 @@ function parse_calendardate($local_format) {
  */
 
 function from_html($string, $encode=true){
+	global $log;
+	$log->debug("Entering from_html(".$string.",".$encode.") method ...");
         global $toHtml;
         //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
         if($encode && is_string($string)){
                 $string = str_replace(array_values($toHtml), array_keys($toHtml), $string);
         }
+	$log->debug("Exiting from_html method ...");
         return $string;
 }
 
@@ -193,10 +225,13 @@ function from_html($string, $encode=true){
  */
 function fetchCurrency($id)
 {
+	global $log;
+	$log->debug("Entering fetchCurrency(".$id.") method ...");
         global $adb;
         $sql = "select currency_id from users where id=" .$id;
         $result = $adb->query($sql);
         $currencyid=  $adb->query_result($result,0,"currency_id");
+	$log->debug("Exiting fetchCurrency method ...");
         return $currencyid;
 }
 
@@ -207,11 +242,14 @@ function fetchCurrency($id)
  */
 function getCurrencyName($currencyid)
 {
+	global $log;
+	$log->debug("Entering getCurrencyName(".$currencyid.") method ...");
         global $adb;
         $sql1 = "select * from currency_info where id=".$currencyid;
         $result = $adb->query($sql1);
         $currencyname = $adb->query_result($result,0,"currency_name");
         $curr_symbol = $adb->query_result($result,0,"currency_symbol");
+	$log->debug("Exiting getCurrencyName method ...");
         return $currencyname.' : '.$curr_symbol;
 }
 
@@ -224,10 +262,13 @@ function getCurrencyName($currencyid)
 
 function get_group_options()
 {
+	global $log;
+	$log->debug("Entering get_group_options() method ...");
 	global $adb,$noof_group_rows;;
 	$sql = "select groupname from groups";
 	$result = $adb->query($sql);
 	$noof_group_rows=$adb->num_rows($result);
+	$log->debug("Exiting get_group_options method ...");
 	return $result;
 }
 
@@ -239,8 +280,10 @@ function get_group_options()
 
 function getTabid($module)
 {
+	global $log;
+	$log->debug("Entering getTabid(".$module.") method ...");
 
- if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
 	{
 		include('tabdata.php');
 		$tabid= $tab_info_array[$module];
@@ -248,13 +291,13 @@ function getTabid($module)
 	else
 	{	
 
-        global $log;
         $log->info("module  is ".$module);
         global $adb;
 	$sql = "select tabid from tab where name='".$module."'";
 	$result = $adb->query($sql);
 	$tabid=  $adb->query_result($result,0,"tabid");
 	}
+	$log->debug("Exiting getTabid method ...");
 	return $tabid;
 
 }
@@ -268,11 +311,13 @@ function getTabid($module)
 function getSalesEntityType($crmid)
 {
 	global $log;
+	$log->debug("Entering getSalesEntityType(".$crmid.") method ...");
 	$log->info("in getSalesEntityType ".$crmid);
 	global $adb;
 	$sql = "select * from crmentity where crmid=".$crmid;
         $result = $adb->query($sql);
 	$parent_module = $adb->query_result($result,0,"setype");
+	$log->debug("Exiting getSalesEntityType method ...");
 	return $parent_module;
 }
 
@@ -284,8 +329,9 @@ function getSalesEntityType($crmid)
 
 function getAccountName($account_id)
 {
-global $log;
-$log->info("in getAccountName ".$account_id);
+	global $log;
+	$log->debug("Entering getAccountName(".$account_id.") method ...");
+	$log->info("in getAccountName ".$account_id);
 
 	global $adb;
 	if($account_id != '')
@@ -294,6 +340,7 @@ $log->info("in getAccountName ".$account_id);
         	$result = $adb->query($sql);
 		$accountname = $adb->query_result($result,0,"accountname");
 	}
+	$log->debug("Exiting getAccountName method ...");
 	return $accountname;
 }
 
@@ -305,14 +352,16 @@ $log->info("in getAccountName ".$account_id);
 
 function getProductName($product_id)
 {
+	global $log;
+	$log->debug("Entering getProductName(".$product_id.") method ...");
 
-global $log;
-$log->info("in getproductname ".$product_id);
+	$log->info("in getproductname ".$product_id);
 
 	global $adb;
 	$sql = "select productname from products where productid=".$product_id;
         $result = $adb->query($sql);
 	$productname = $adb->query_result($result,0,"productname");
+	$log->debug("Exiting getProductName method ...");
 	return $productname;
 }
 
@@ -325,6 +374,7 @@ $log->info("in getproductname ".$product_id);
 function getPotentialName($potential_id)
 {
 	global $log;
+	$log->debug("Entering getPotentialName(".$potential_id.") method ...");
 	$log->info("in getPotentialName ".$potential_id);
 
 	global $adb;
@@ -335,6 +385,7 @@ function getPotentialName($potential_id)
         	$result = $adb->query($sql);
 		$potentialname = $adb->query_result($result,0,"potentialname");
 	}
+	$log->debug("Exiting getPotentialName method ...");
 	return $potentialname;
 }
 
@@ -346,8 +397,9 @@ function getPotentialName($potential_id)
 
 function getContactName($contact_id)
 {
-global $log;
-$log->info("in getContactName ".$contact_id);
+	global $log;
+	$log->debug("Entering getContactName(".$contact_id.") method ...");
+	$log->info("in getContactName ".$contact_id);
 
         global $adb;
         $sql = "select * from contactdetails where contactid=".$contact_id;
@@ -355,6 +407,7 @@ $log->info("in getContactName ".$contact_id);
         $firstname = $adb->query_result($result,0,"firstname");
         $lastname = $adb->query_result($result,0,"lastname");
         $contact_name = $lastname.' '.$firstname;
+	$log->debug("Exiting getContactName method ...");
         return $contact_name;
 }
 
@@ -366,12 +419,14 @@ $log->info("in getContactName ".$contact_id);
 
 function getVendorName($vendor_id)
 {
-global $log;
-$log->info("in getVendorName ".$vendor_id);
+	global $log;
+	$log->debug("Entering getVendorName(".$vendor_id.") method ...");
+	$log->info("in getVendorName ".$vendor_id);
         global $adb;
         $sql = "select * from vendor where vendorid=".$vendor_id;
         $result = $adb->query($sql);
         $vendor_name = $adb->query_result($result,0,"vendorname");
+	$log->debug("Exiting getVendorName method ...");
         return $vendor_name;
 }
 
@@ -383,12 +438,14 @@ $log->info("in getVendorName ".$vendor_id);
 
 function getQuoteName($quote_id)
 {
-global $log;
-$log->info("in getQuoteName ".$quote_id);
+	global $log;
+	$log->debug("Entering getQuoteName(".$quote_id.") method ...");
+	$log->info("in getQuoteName ".$quote_id);
         global $adb;
         $sql = "select * from quotes where quoteid=".$quote_id;
         $result = $adb->query($sql);
         $quote_name = $adb->query_result($result,0,"subject");
+	$log->debug("Exiting getQuoteName method ...");
         return $quote_name;
 }
 
@@ -400,12 +457,14 @@ $log->info("in getQuoteName ".$quote_id);
 
 function getPriceBookName($pricebookid)
 {
-global $log;
-$log->info("in getPriceBookName ".$pricebookid);
+	global $log;
+	$log->debug("Entering getPriceBookName(".$pricebookid.") method ...");
+	$log->info("in getPriceBookName ".$pricebookid);
         global $adb;
         $sql = "select * from pricebook where pricebookid=".$pricebookid;
         $result = $adb->query($sql);
         $pricebook_name = $adb->query_result($result,0,"bookname");
+	$log->debug("Exiting getPriceBookName method ...");
         return $pricebook_name;
 }
 
@@ -415,14 +474,14 @@ $log->info("in getPriceBookName ".$pricebookid);
   */
 function getPoName($po_id)
 {
-
-global $log;
+	global $log;
+	$log->debug("Entering getPoName(".$po_id.") method ...");
         $log->info("in getPoName ".$po_id);
-
         global $adb;
         $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
         $result = $adb->query($sql);
         $po_name = $adb->query_result($result,0,"subject");
+	$log->debug("Exiting getPoName method ...");
         return $po_name;
 }
 /**
@@ -433,12 +492,14 @@ global $log;
 
 function getSoName($so_id)
 {
-        global $log;
-$log->info("in getSoName ".$so_id);
+	global $log;
+	$log->debug("Entering getSoName(".$so_id.") method ...");
+	$log->info("in getSoName ".$so_id);
 	global $adb;
         $sql = "select * from salesorder where salesorderid=".$so_id;
         $result = $adb->query($sql);
         $so_name = $adb->query_result($result,0,"subject");
+	$log->debug("Exiting getSoName method ...");
         return $so_name;
 }
 
@@ -450,8 +511,9 @@ $log->info("in getSoName ".$so_id);
 
 function getGroupName($id, $module)
 {
+	global $log;
+	$log->debug("Entering getGroupName(".$id.",".$module.") method ...");
 	$group_info = Array();
-        global $log;
         $log->info("in getGroupName, entityid is ".$id.'  module is    '.$module);
         global $adb;
         if($module == 'Leads')
@@ -501,6 +563,7 @@ function getGroupName($id, $module)
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
         $group_info[] = $adb->query_result($result,0,"groupid");
+	$log->debug("Exiting getGroupName method ...");
         return $group_info;
 
 }
@@ -514,8 +577,9 @@ function getGroupName($id, $module)
      
 function getUserName($userid)
 {
-global $log;
-$log->info("in getUserName ".$userid);
+	global $log;
+	$log->debug("Entering getUserName(".$userid.") method ...");
+	$log->info("in getUserName ".$userid);
 
 	global $adb;
 	if($userid != '')
@@ -524,6 +588,7 @@ $log->info("in getUserName ".$userid);
 		$result = $adb->query($sql);
 		$user_name = $adb->query_result($result,0,"user_name");
 	}
+	$log->debug("Exiting getUserName method ...");
 	return $user_name;	
 }
 
@@ -534,6 +599,8 @@ $log->info("in getUserName ".$userid);
    
 function getURLstring($focus)
 {
+	global $log;
+	$log->debug("Entering getURLstring(".$focus.") method ...");
 	$qry = "";
 	foreach($focus->column_fields as $fldname=>$val)
 	{
@@ -558,6 +625,7 @@ function getURLstring($focus)
 	{
 		$qry .="&query=true";
 	}
+	$log->debug("Exiting getURLstring method ...");
 	return $qry;
 
 }
@@ -568,6 +636,8 @@ function getURLstring($focus)
     
 function getDisplayDate($cur_date_val)
 {
+	global $log;
+	$log->debug("Entering getDisplayDate(".$cur_date_val.") method ...");
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
 	if($dat_fmt == '')
@@ -596,6 +666,7 @@ function getDisplayDate($cur_date_val)
 		{
 			$display_date = $display_date.' '.$date_value[1];
 		}
+	$log->debug("Exiting getDisplayDate method ...");
 	return $display_date;
  			
 }
@@ -607,6 +678,7 @@ function getDisplayDate($cur_date_val)
 function getNewDisplayDate()
 {
 	global $log;
+	$log->debug("Entering getNewDisplayDate() method ...");
         $log->info("in getNewDisplayDate ");
 
 	global $current_user;
@@ -632,6 +704,7 @@ function getNewDisplayDate()
 	}
 		
 	//echo $display_date;
+	$log->debug("Exiting getNewDisplayDate method ...");
 	return $display_date;
 }
 
@@ -641,7 +714,8 @@ function getNewDisplayDate()
     
 function getDisplayCurrency()
 {
-        global $adb;
+	global $log;
+	$log->debug("Entering getDisplayCurrency() method ...");
         $curr_array = Array();
         $sql1 = "select * from currency_info where currency_status='Active'";
         $result = $adb->query($sql1);
@@ -653,6 +727,7 @@ function getDisplayCurrency()
                 $curr_symbol = $adb->query_result($result,$i,"currency_symbol");
                 $curr_array[$curr_id] = $curr_name.' : '.$curr_symbol;
         }
+	$log->debug("Exiting getDisplayCurrency method ...");
         return $curr_array;
 }
 
@@ -662,17 +737,22 @@ function getDisplayCurrency()
       */
       
 function convertToDollar($amount,$crate){
-                return $amount / $crate;
-
-        }
+	global $log;
+	$log->debug("Entering convertToDollar(".$amount.",".$crate.") method ...");
+	$log->debug("Exiting convertToDollar method ...");
+        return $amount / $crate;
+}
 
 /** This function returns the amount converted from dollar.
   * param $amount - amount to be converted.
     * param $crate - conversion rate.
       */
 function convertFromDollar($amount,$crate){
-                return $amount * $crate;
-        }
+	global $log;
+	$log->debug("Entering convertFromDollar(".$amount.",".$crate.") method ...");
+	$log->debug("Exiting convertFromDollar method ...");
+        return $amount * $crate;
+}
 
 /** This function returns the conversion rate and currency symbol
   * in array format for a given id.
@@ -681,11 +761,14 @@ function convertFromDollar($amount,$crate){
       
 function getCurrencySymbolandCRate($id)
 {
+	global $log;
+	$log->debug("Entering getCurrencySymbolandCRate(".$id.") method ...");
         global $adb;
         $sql1 = "select conversion_rate,currency_symbol from currency_info where id=".$id;
         $result = $adb->query($sql1);
 	$rate_symbol['rate'] = $adb->query_result($result,0,"conversion_rate");
 	$rate_symbol['symbol'] = $adb->query_result($result,0,"currency_symbol");
+	$log->debug("Exiting getCurrencySymbolandCRate method ...");
 	return $rate_symbol;
 }
 
@@ -695,10 +778,13 @@ function getCurrencySymbolandCRate($id)
 	    
 function getTermsandConditions()
 {
+	global $log;
+	$log->debug("Entering getTermsandConditions() method ...");
         global $adb;
         $sql1 = "select * from inventory_tandc";
         $result = $adb->query($sql1);
         $tandc = $adb->query_result($result,0,"tandc");
+	$log->debug("Exiting getTermsandConditions method ...");
         return $tandc;
 }
 
@@ -713,6 +799,8 @@ function getTermsandConditions()
     
 function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 {
+	global $log;
+	$log->debug("Entering getReminderSelectOption(".$start.",".$end.",".$fldname.",".$selvalue=''.") method ...");
 	global $mod_strings;
 	global $app_strings;
 	
@@ -726,6 +814,7 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 		$def_sel = "";
 	}
 	$OPTION_FLD .="</SELECT>";
+	$log->debug("Exiting getReminderSelectOption method ...");
 	return $OPTION_FLD;
 }
 
@@ -737,12 +826,14 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 function getListPrice($productid,$pbid)
 {
 	global $log;
+	$log->debug("Entering getListPrice(".$productid.",".$pbid.") method ...");
         $log->info("in getListPrice productid ".$productid);
 
 	global $adb;
 	$query = "select listprice from pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
 	$result = $adb->query($query);
 	$lp = $adb->query_result($result,0,'listprice');
+	$log->debug("Exiting getListPrice method ...");
 	return $lp;
 }
 
@@ -751,9 +842,12 @@ function getListPrice($productid,$pbid)
   */
       
 function br2nl($str) {
+   global $log;
+   $log->debug("Entering br2nl(".$str.") method ...");
    $str = preg_replace("/(\r\n)/", " ", $str);
    $str = preg_replace("/'/", " ", $str);
    $str = preg_replace("/\"/", " ", $str);
+   $log->debug("Exiting br2nl method ...");
    return $str;
 }
 
@@ -763,6 +857,8 @@ function br2nl($str) {
 
 function make_clickable($text)
 {
+   global $log;
+   $log->debug("Entering make_clickable(".$text.") method ...");
    $text = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $text);
    // pad it with a space so we can match things at the start of the 1st line.
    $ret = ' ' . $text;
@@ -788,6 +884,7 @@ function make_clickable($text)
    //remove comma, fullstop at the end of url
    $ret = preg_replace("#,\"|\.\"|\)\"|\)\.\"|\.\)\"#", "\"", $ret);
 
+   $log->debug("Exiting make_clickable method ...");
    return($ret);
 }
 /**
@@ -798,9 +895,10 @@ function make_clickable($text)
 
 function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 {
+	global $log;
+	$log->debug("Entering getBlocks(".$module.",".$disp_view.",".$mode.",".$col_fields.",".$info_type.") method ...");
         global $adb,$current_user;
         global $mod_strings;
-        global $log;
         $tabid = getTabid($module);
         $block_detail = Array();
         $getBlockinfo = "";
@@ -864,6 +962,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$result = $adb->query($sql);
                 $getBlockInfo=getBlockInformation($module,$result,$col_fields,$tabid,$block_label);	
 	}
+	$log->debug("Exiting getBlocks method ...");
 	return $getBlockInfo;
 }	
 /**
@@ -874,10 +973,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 
 function getView($mode)
 {
+	global $log;
+	$log->debug("Entering getView(".$mode.") method ...");
         if($mode=="edit")
-        $disp_view = "edit_view";
+	        $disp_view = "edit_view";
         else
-        $disp_view = "create_view";
+	        $disp_view = "create_view";
+	$log->debug("Exiting getView method ...");
         return $disp_view;
 }
 /**
@@ -888,6 +990,8 @@ function getView($mode)
 
 function getBlockId($tabid,$label)
 {
+	global $log;
+	$log->debug("Entering getBlockId(".$tabid.",".$label.") method ...");
         global $adb;
         $blockid = '';
         $query = "select blockid from blocks where tabid=$tabid and blocklabel = '$label'";
@@ -897,6 +1001,7 @@ function getBlockId($tabid,$label)
         {
                 $blockid = $adb->query_result($result,0,"blockid");
         }
+	$log->debug("Exiting getBlockId method ...");
         return $blockid;
 }
 
@@ -908,6 +1013,8 @@ function getBlockId($tabid,$label)
 
 function getHeaderArray()
 {
+	global $log;
+	$log->debug("Entering getHeaderArray() method ...");
 	global $adb;
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -946,6 +1053,7 @@ function getHeaderArray()
 				$relatedtabs[$parenttab] = $subtabs;
 		}
 	}
+	$log->debug("Exiting getHeaderArray method ...");
 	return $relatedtabs;
 }
 
@@ -957,6 +1065,8 @@ function getHeaderArray()
 
 function getParentTabName($parenttabid)
 {
+	global $log;
+	$log->debug("Entering getParentTabName(".$parenttabid.") method ...");
 	global $adb;
 	if (file_exists('parent_tabdata.php') && (filesize('parent_tabdata.php') != 0))
 	{
@@ -969,6 +1079,7 @@ function getParentTabName($parenttabid)
 		$result = $adb->query($sql);
 		$parent_tabname=  $adb->query_result($result,0,"parenttab_label");
 	}
+	$log->debug("Exiting getParentTabName method ...");
 	return $parent_tabname;
 }
 
@@ -981,6 +1092,8 @@ function getParentTabName($parenttabid)
 
 function getParentTabFromModule($module)
 {
+	global $log;
+	$log->debug("Entering getParentTabFromModule(".$module.") method ...");
 	global $adb;
 	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0) && file_exists('parent_tabdata.php') && (filesize('parent_tabdata.php') != 0))
 	{
@@ -994,6 +1107,7 @@ function getParentTabFromModule($module)
 				$parent_tabname= $parent_tab_info_array[$parid];
 			}
 		}
+		$log->debug("Exiting getParentTabFromModule method ...");
 		return $parent_tabname;
 	}
 	else
@@ -1001,6 +1115,7 @@ function getParentTabFromModule($module)
 		$sql = "select parenttab.* from parenttab inner join parenttabrel on parenttabrel.parenttabid=parenttab.parenttabid inner join tab on tab.tabid=parenttabrel.tabid where tab.name='".$module."'";
 		$result = $adb->query($sql);
 		$tab =  $adb->query_result($result,0,"parenttab_label");
+		$log->debug("Exiting getParentTabFromModule method ...");
 		return $tab;
 	}
 }
@@ -1013,12 +1128,16 @@ function getParentTabFromModule($module)
 
 function getParentTab()
 {
+    global $log;	
+    $log->debug("Entering getParentTab() method ...");
     if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] !='')
     {
+     	       $log->debug("Exiting getParentTab method ...");
                return $_REQUEST['parenttab'];
     }
     else
     {
+		$log->debug("Exiting getParentTab method ...");
                 return getParentTabFromModule($_REQUEST['module']);
     }
 
@@ -1032,6 +1151,8 @@ function getParentTab()
 
 function updateInfo($id)
 {
+    global $log;
+    $log->debug("Entering updateInfo(".$id.") method ...");
 
     global $adb;
     global $app_strings;
@@ -1052,6 +1173,7 @@ function updateInfo($id)
     else
         $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAYS_AGO']." (".$date.")";
 
+    $log->debug("Exiting updateInfo method ...");
     return $update_info;
 }
 
@@ -1064,7 +1186,9 @@ function updateInfo($id)
 
 function getProductImages($id)
 {
-    global $adb;
+	global $log;
+	$log->debug("Entering getProductImages(".$id.") method ...");
+	global $adb;
 	$image_lists=array();
 	$script_images=array();
 	$script = '<script>var ProductImages = new Array(';
@@ -1079,7 +1203,10 @@ function getProductImages($id)
 	}
 	$script .=implode(',',$script_images).');</script>';
 	if($imagename != '')
+	{
+		$log->debug("Exiting getProductImages method ...");
 		return $script;
+	}
 }	
 
 /**
@@ -1090,8 +1217,9 @@ function getProductImages($id)
 
 function SaveImage($_FILES,$module,$id,$mode)
 {
-	global $adb;
 	global $log;
+	$log->debug("Entering SaveImage(".$_FILES.",".$module.",".$id.",".$mode.") method ...");
+	global $adb;
 	$uploaddir = $root_directory."test/".$module."/" ;//set this to which location you need to give the contact image
 	$log->info("The Location to Save the Contact Image is ".$uploaddir);
 	$file_path_name = $_FILES['imagename']['name'];
@@ -1191,6 +1319,7 @@ function SaveImage($_FILES,$module,$id,$mode)
 	'errormessage'=>$errormessage,
 	'saveimage'=>$saveimage,
 	'mode'=>$mode);
+	$log->debug("Exiting SaveImage method ...");
 	return $return_value;
 }
 
@@ -1202,6 +1331,8 @@ function SaveImage($_FILES,$module,$id,$mode)
 
 function file_exist_fn($filename,$exist)
 {
+	global $log;
+	$log->debug("Entering file_exist_fn(".$filename.",".$exist.") method ...");
 	global $uploaddir;
 
 	if(!isset($exist))
@@ -1236,11 +1367,13 @@ function file_exist_fn($filename,$exist)
 		$testfilename = file_exist_fn($filename_val,$exist);
 		if($testfilename!="")
 		{
+			$log->debug("Exiting file_exist_fn method ...");
 			return $testfilename;
 		}
 	}	
 	else
 	{
+		$log->debug("Exiting file_exist_fn method ...");
 		return $filename;
 	}
 }
@@ -1252,6 +1385,8 @@ function file_exist_fn($filename,$exist)
 
 function UserCount()
 {
+	global $log;
+	$log->debug("Entering UserCount() method ...");
 	global $adb;
 	$result=$adb->query("select * from users where deleted =0;");
 	$user_count=$adb->num_rows($result);
@@ -1259,6 +1394,7 @@ function UserCount()
 	$nonadmin_count = $adb->num_rows($result);
 	$admin_count = $user_count-$nonadmin_count;
 	$count=array('user'=>$user_count,'admin'=>$admin_count,'nonadmin'=>$nonadmin_count);
+	$log->debug("Exiting UserCount method ...");
 	return $count;
 }
 
@@ -1271,15 +1407,21 @@ function UserCount()
 
 function mkdirs($dir, $mode = 0777, $recursive = true)
 {
+	global $log;
+	$log->debug("Entering mkdirs(".$dir.",".$mode.",".$recursive.") method ...");
 	if( is_null($dir) || $dir === "" ){
+		$log->debug("Exiting mkdirs method ...");
 		return FALSE;
 	}
 	if( is_dir($dir) || $dir === "/" ){
+		$log->debug("Exiting mkdirs method ...");
 		return TRUE;
 	}
 	if( mkdirs(dirname($dir), $mode, $recursive) ){
+		$log->debug("Exiting mkdirs method ...");
 		return mkdir($dir, $mode);
 	}
+	$log->debug("Exiting mkdirs method ...");
 	return FALSE;
 }
 
@@ -1288,11 +1430,14 @@ function mkdirs($dir, $mode = 0777, $recursive = true)
  */
 function DefHomeView()
 {
+		global $log;
+		$log->debug("Entering DefHomeView() method ...");
 		global $adb;
 		global $current_user;
 		$query="select defhomeview from users where id = ".$current_user->id;
 		$result=$adb->query($query);
 		$defaultview=$adb->query_result($result,0,'defhomeview');
+		$log->debug("Exiting DefHomeView method ...");
 		return $defaultview;
 
 }
@@ -1304,6 +1449,8 @@ function DefHomeView()
  */
 function setObjectValuesFromRequest($focus)
 {
+	global $log;
+	$log->debug("Entering setObjectValuesFromRequest(".$focus.") method ...");
 	if(isset($_REQUEST['record']))
 	{
 		$focus->id = $_REQUEST['record'];
@@ -1320,6 +1467,7 @@ function setObjectValuesFromRequest($focus)
 			$focus->column_fields[$fieldname] = $value;
 		}
 	}
+	$log->debug("Exiting setObjectValuesFromRequest method ...");
 }
 
  /**
@@ -1330,7 +1478,8 @@ function setObjectValuesFromRequest($focus)
 
 function create_tab_data_file()
 {
-        global $log;
+	global $log;
+	$log->debug("Entering create_tab_data_file() method ...");
         $log->info("creating tabdata file");
         global $adb;
         $sql = "select * from tab";
@@ -1379,12 +1528,13 @@ if (file_exists($filename)) {
                 echo "The file $filename is not writable";
         }
 
-                          }
-			else
-			{
-		echo "The file $filename does not exist";
-		return;
-			}
+}
+else
+{
+	echo "The file $filename does not exist";
+	$log->debug("Exiting create_tab_data_file method ...");
+	return;
+}
 }
 
 
@@ -1397,6 +1547,7 @@ if (file_exists($filename)) {
 function create_parenttab_data_file()
 {
 	global $log;
+	$log->debug("Entering create_parenttab_data_file() method ...");
 	$log->info("creating parent_tabdata file");
 	global $adb;
 	$sql = "select parenttabid,parenttab_label from parenttab order by sequence";
@@ -1470,6 +1621,7 @@ function create_parenttab_data_file()
 	else
 	{
 		echo "The file $filename does not exist";
+		$log->debug("Exiting create_parenttab_data_file method ...");
 		return;
 	}
 }
@@ -1482,6 +1634,8 @@ function create_parenttab_data_file()
 */
 function getFilePath($attachmentid,$filename)
 {
+	global $log;
+	$log->debug("Entering getFilePath(".$attachmentid.",".$filename.") method ...");
 	global $adb;
 	global $root_directory;
 
@@ -1495,6 +1649,7 @@ function getFilePath($attachmentid,$filename)
 	else
 		$filepath = $root_directory.'test/upload/';
 
+	$log->debug("Exiting getFilePath method ...");
 	return $filepath;
 }
 
@@ -1505,6 +1660,8 @@ function getFilePath($attachmentid,$filename)
 
 function getQuickCreateModules()
 {
+	global $log;
+	$log->debug("Entering getQuickCreateModules() method ...");
          global $adb;
          global $mod_strings;
 
@@ -1523,6 +1680,7 @@ for($i = 0; $i < $noofrows; $i++)
 	}	
 }
         $return_qcmodule = array_chunk($return_qcmodule,2);
+	$log->debug("Exiting getQuickCreateModules method ...");
         return $return_qcmodule;
 }
 																					   
@@ -1535,6 +1693,8 @@ for($i = 0; $i < $noofrows; $i++)
 
 function QuickCreate($module)
 {
+	global $log;
+	$log->debug("Entering QuickCreate(".$module.") method ...");
     global $adb;
     global $current_user;
     global $mod_strings;
@@ -1589,6 +1749,7 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 }
 	$form_data['form'] = $return_data;
 	$form_data['data'] = $fieldName_array;
+	$log->debug("Exiting QuickCreate method ...");
 	return $form_data;
 }
 
@@ -1598,6 +1759,8 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 **/
 function sendNotificationToOwner($module,$focus)
 {
+	global $log;
+	$log->debug("Entering sendNotificationToOwner(".$module.",".$focus.") method ...");
 	require_once("modules/Emails/mail.php");
 	global $current_user;
 
@@ -1664,10 +1827,13 @@ function sendNotificationToOwner($module,$focus)
 	$description .= '<br><br>Thanks <br>'.$current_user->user_name;
 	$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
 
+	$log->debug("Exiting sendNotificationToOwner method ...");
 	return $status;
 }
 function getUserslist()
 {
+	global $log;
+	$log->debug("Entering getUserslist() method ...");
 	global $adb;
 	$result=$adb->query("select * from users");
 	for($i=0;$i<$adb->num_rows($result);$i++)
@@ -1676,6 +1842,7 @@ function getUserslist()
 	       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
 	}
 	$change_owner = get_select_options_with_id($usernamelist,'admin');
+	$log->debug("Exiting getUserslist method ...");
 	return $change_owner;
 }
 
@@ -1687,6 +1854,8 @@ function getUserslist()
 **/
 function Button_Check($module)
 {
+	global $log;
+	$log->debug("Entering Button_Check(".$module.") method ...");
         $permit_arr = array ('EditView' => '',
                              'index' => '',
                              'Import' => '',
@@ -1698,6 +1867,7 @@ function Button_Check($module)
                  $permit_arr[$action] = $tempPer;
           }
 
+	$log->debug("Exiting Button_Check method ...");
 	  return $permit_arr;
 
 }
