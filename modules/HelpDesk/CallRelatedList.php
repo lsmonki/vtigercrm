@@ -42,5 +42,6 @@ $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$currentmodule);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->display("RelatedLists.tpl");
 ?>
