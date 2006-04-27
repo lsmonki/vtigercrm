@@ -1496,7 +1496,7 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid left join users on users.id=crmentity.smownerid where crmentity.deleted=0".$where;
+		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid left join campaigngrouprelation on campaign.campaignid=campaigngrouprelation.campaignid left join groups on groups.groupname=campaigngrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
