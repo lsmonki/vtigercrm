@@ -18,9 +18,18 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
-
+if(isset($_REQUEST['parent_profile']) && $_REQUEST['parent_profile'] != '')
+	$smarty->assign("PARENT_PROFILE",$_REQUEST['parent_profile']);
+if(isset($_REQUEST['radio_button']) && $_REQUEST['radio_button'] != '')
+	$smarty->assign("RADIO_BUTTON",$_REQUEST['radio_button']);
+if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '')
+	$smarty->assign("PROFILE_NAME",$_REQUEST['profile_name']);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
 	$smarty->assign("MODE",$_REQUEST['mode']);
+if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '')
+	$smarty->assign("PROFILENAME",$_REQUEST['profile_name']);
+if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '')	
+	$smarty->assign("PROFILEDESC",$_REQUEST['profile_description']);
 if(isset($_REQUEST['profileid']) && $_REQUEST['profileid'] != '')
 {
 	global $adb;	
