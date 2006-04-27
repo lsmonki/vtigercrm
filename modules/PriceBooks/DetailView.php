@@ -45,10 +45,10 @@ $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
-if(isPermitted("PriceBooks",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("PriceBooks","PriceBookEditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("PriceBooks",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("PriceBooks","DeletePriceBook",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $smarty->assign("IMAGE_PATH", $image_path);

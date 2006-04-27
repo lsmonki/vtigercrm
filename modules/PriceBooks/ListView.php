@@ -65,8 +65,8 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
-$other_text['del'] = $app_strings[LBL_MASS_DELETE];
+if(isPermitted('PriceBooks','DeletePriceBook','') == 'yes')
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');
