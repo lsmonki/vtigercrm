@@ -176,12 +176,26 @@ class CustomView extends CRMEntity{
 	{
 		global $adb;
 		$tabid = getTabid($module);
-		global $profile_id;
+		global $current_user;
+	        require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
-		$sql.= " where field.tabid=".$tabid." and field.block in (".$block.") and";
-		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
-		$sql.= " and profile2field.profileid=".$profile_id." order by sequence";
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql = "select * from field ";
+			$sql.= " where field.tabid=".$tabid." and field.block in (".$block.") and";
+			$sql.= " field.displaytype in (1,2)";
+			$sql.= " order by sequence";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
+			$sql.= " where field.tabid=".$tabid." and field.block in (".$block.") and";
+			$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
+			$sql.= " and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by sequence";
+		}	
+
+
 
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -262,7 +276,10 @@ class CustomView extends CRMEntity{
 	{
 		global $adb;
 		$tabid = getTabid($module);
-		global $profile_id;
+
+		global $current_user;
+        	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
 
 		foreach($this->module_list[$module] as $key=>$blockid)
 		{
@@ -270,11 +287,23 @@ class CustomView extends CRMEntity{
 		}
 		$blockids = implode(",",$blockids);
 
-		$sql = "select * from field inner join tab on tab.tabid = field.tabid
-			inner join profile2field on profile2field.fieldid=field.fieldid
-			where field.tabid=".$tabid." and field.block in (".$blockids.") 
-			and (field.uitype =5 or field.displaytype=2) 
-			and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
+
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql = "select * from field inner join tab on tab.tabid = field.tabid ";
+			$sql.= " where field.tabid=".$tabid." and field.block in (".$blockids.")
+                        and (field.uitype =5 or field.displaytype=2) ";
+			$sql.= " order by field.sequence";
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$sql = "select * from field inner join tab on tab.tabid = field.tabid innerjoin  profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
+			$sql.= " where field.tabid=".$tabid." and field.block in (".$blockids.") and (field.uitype =5 or field.displaytype=2)";
+			$sql.= " and profile2field.visible=0";
+			$sql.= " and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by field.sequence";
+		}			
+
 
 		$result = $adb->query($sql);
 
