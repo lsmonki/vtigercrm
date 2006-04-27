@@ -34,7 +34,8 @@ $module_array=Array('Leads'=>'Leads',
                         'PurchaseOrder'=>'PurchaseOrder',
                         'SalesOrder'=>'SalesOrder',
                         'Quotes'=>'Quotes',
-                        'Invoice'=>'Invoice'
+                        'Invoice'=>'Invoice',
+			'Campaigns'=>'Campaigns'
                         );
 	$smarty->assign("MODULES",$module_array);
 if($_REQUEST['ajax'] != 'true')
