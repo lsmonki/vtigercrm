@@ -43,7 +43,7 @@ function sensex_info()
 {rdelim}
 </script>
 
-		{include file='Buttons_List.tpl'}	
+		{include file='Buttons_List1.tpl'}	
 
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
