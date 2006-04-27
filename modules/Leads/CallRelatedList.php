@@ -50,6 +50,7 @@ $smarty->assign("SINGLE_MOD","Lead");
 $smarty->assign("REDIR_MOD","leads");
 $smarty->assign("MODULE", $currentmodule);
 $smarty->assign("ID",$RECORD );
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->display("RelatedLists.tpl");
 
 ?>
