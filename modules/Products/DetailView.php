@@ -60,6 +60,8 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 //Security check for related list
 $smarty->assign("MODULE", $module);
 $smarty->display("DetailView.tpl");
