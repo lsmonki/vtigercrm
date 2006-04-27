@@ -38,7 +38,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 if(isset($focus->name))
-
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("NAME", $focus->name);
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
