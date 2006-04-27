@@ -70,11 +70,11 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 
-if(isPermitted("Potentials",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Potentials","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
-if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("CONVERTINVOICE","permitted");
-if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Potentials","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $check_button = Button_Check($module);

@@ -95,7 +95,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 
-if(isPermitted('Potentials',2,'') == 'yes')
+if(isPermitted('Potentials','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
