@@ -56,6 +56,10 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("NAME", $focus->name);
 
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
+
 $smarty->assign("MODULE", $module);
 $smarty->assign("SINGLE_MOD","PriceBook");
 $smarty->display("DetailView.tpl");
