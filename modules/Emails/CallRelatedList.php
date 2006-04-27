@@ -38,5 +38,6 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD","Email");
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->display("RelatedLists.tpl");
 ?>
