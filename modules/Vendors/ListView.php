@@ -32,6 +32,14 @@ $smarty->assign("CATEGORY",$category);
 $focus = new Vendor();
 $other_text = Array();
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
 if (!isset($where)) $where = "";
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
