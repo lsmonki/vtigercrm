@@ -41,6 +41,15 @@ else
 
 $focus = new Faq();
 $other_text = Array();
+
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
 $url_string = ''; 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Faq");
