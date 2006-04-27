@@ -37,6 +37,8 @@
 				{$LOGIN_HISTORY_BUTTON}
 				{$DUPLICATE_BUTTON}
 				{$DELETE_BUTTON}
+				{$LIST_MAILSERVER_BUTTON}
+                                {$CHANGE_HOMEPAGE_BUTTON}
 				{$LISTROLES_BUTTON}
 	</td></tr>
 
