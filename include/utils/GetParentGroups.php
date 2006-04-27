@@ -20,7 +20,8 @@ class GetParentGroups {
          */
 	function getAllParentGroups($groupId)
 	{
-		global $adb;
+		global $adb,$log;
+		$log->debug("Entering getAllParentGroups(".$groupid.") method...");
 		$query="select groupid from group2grouprel where containsgroupid=".$groupId;
 		$adb->query($query);
 		$result=$adb->query($query);
@@ -37,7 +38,7 @@ class GetParentGroups {
 				}
 			}
 		}
-
+		$log->debug("Exiting getAllParentGroups method...");
 	}
 }
 
