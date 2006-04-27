@@ -45,10 +45,10 @@ $smarty->assign("SINGLE_MOD","Campaign");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if(isPermitted("Campaigns",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Campaigns","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Campaigns",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Campaigns","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $smarty->assign("IMAGE_PATH", $image_path);

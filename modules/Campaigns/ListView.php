@@ -69,7 +69,7 @@ if($viewid != 0)
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 // Buttons and View options
-if(isPermitted('Campaigns',2,'') == 'yes')
+if(isPermitted('Campaigns','Delete','') == 'yes')
 {
         $other_text ['del']=$app_strings[LBL_MASS_DELETE];
 }
