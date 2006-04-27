@@ -88,6 +88,8 @@ $smarty->assign("MODULE", $currentModule);
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('Quotes',$focus));
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 $smarty->display("DetailView.tpl");
 
 ?>
