@@ -16,6 +16,8 @@
 
 function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 {
+	global $log;
+	$log->debug("Entering DeleteEntity(".$module.",".$return_module.",".$focus.",".$record.",".$return_id.") method ...");
 	global $adb;
 
 	switch($module):
@@ -301,6 +303,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$record;
         	$adb->query($sql_recentviewed);
 	}
-
+	$log->debug("Entering DeleteEntity method ...");
 }
 ?>
