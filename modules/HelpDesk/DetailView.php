@@ -58,19 +58,20 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($_REQUEST['record']));
 
-if(isPermitted("HelpDesk",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("HelpDesk","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("HelpDesk",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("HelpDesk","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 //Added button for Convert the ticket to FAQ
-$smarty->assign("CONVERTASFAQ","permitted");
+if(isPermitted("Faq","EditView",'') == 'yes')
+	$smarty->assign("CONVERTASFAQ","permitted");
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
-if(isPermitted("HelpDesk",8,'') == 'yes')
+if(isPermitted("HelpDesk","Merge",'') == 'yes')
 {
 	$smarty->assign("MERGEBUTTON","permitted");
         require_once('include/utils/UserInfoUtil.php');
