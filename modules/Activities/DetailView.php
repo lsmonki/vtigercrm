@@ -129,10 +129,10 @@ $smarty->assign("SINGLE_MOD", "Activity");
 //get Description Information
 
 $permissionData = $_SESSION['action_permission_set'];
-if(isPermitted("Activities",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Activities","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Activities","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
   
 $check_button = Button_Check($module);
