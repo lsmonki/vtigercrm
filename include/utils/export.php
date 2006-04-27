@@ -72,7 +72,10 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 */
 function br2nl_vt($str) 
 {
+	global $log;
+	$log->debug("Entering br2nl_vt(".$str.") method ...");
 	$str = preg_replace("/(\r\n)/", " ", $str);
+	$log->debug("Exiting br2nl_vt method ...");
 	return $str;
 }
 
@@ -82,6 +85,8 @@ function br2nl_vt($str)
 */
 function export_all($type)
 {
+	global $log;
+	$log->debug("Entering export_all(".$type.") method ...");
 	$contact_fields = Array();
 	$account_fields = Array();
 	global $adb;
@@ -173,6 +178,7 @@ function export_all($type)
 		$line .= "\"\r\n";
 		$content .= $line;
 	}
+	$log->debug("Exiting export_all method ...");
 	return $content;
 	
 }
