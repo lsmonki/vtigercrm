@@ -490,10 +490,14 @@ function getGroupName($id, $module)
         {
                $sql = "select ticketgrouprelation.groupname,groups.groupid from ticketgrouprelation inner join groups on groups.groupname=ticketgrouprelation.groupname where ticketgrouprelation.ticketid=".$id;
         }
+	elseif($module == 'Campaigns')
+	{
+	       $sql = "select campaigngrouprelation.groupname,groups.groupid from campaigngrouprelation inner join groups on groups.groupname=campaigngrouprelation.groupname where campaigngrouprelation.campaignid=".$id;
+        }
         elseif($module == 'Activities' || $module == 'Emails' || $module == 'Events')
         {
                $sql = "select activitygrouprelation.groupname,groups.groupid from activitygrouprelation inner join groups on groups.groupname=activitygrouprelation.groupname where activitygrouprelation.activityid=".$id;
-        }
+	}
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
         $group_info[] = $adb->query_result($result,0,"groupid");
