@@ -25,7 +25,8 @@ class GetGroupUsers {
          */
 	function getAllUsersInGroup($groupid)
 	{
-		global $adb;
+		global $adb,$log;
+		$log->debug("Entering getAllUsersInGroup(".$groupid.") method...");
 		//Retreiving from the user2grouptable
 		$query="select * from users2group where groupid=".$groupid;
 		$result = $adb->query($query);
@@ -119,7 +120,7 @@ class GetGroupUsers {
 			}
  
                 }
-		
+		$log->debug("Exiting getAllUsersInGroup method...");	
 	
 	}
 
