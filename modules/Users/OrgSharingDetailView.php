@@ -15,7 +15,7 @@ global $app_strings;
 global $app_list_strings;
 
 echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Security", "Default Organisation Sharing Privileges", true);
+echo get_module_title("Security", $mod_strings['LBL_ORG_SHARING_PRIVILEGES_HEADER'], true);
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -31,7 +31,7 @@ $output .= '<br><input title="Edit" accessKey="C" class="button" type="submit" n
 $output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
 $output .= '<tr>';
 $output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</b></td>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Access Privilege</b></td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ACCESS_PRIVILEGE'].'</b></td>';
 $output .=  '</tr>';
 
 $row=1;

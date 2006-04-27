@@ -243,7 +243,7 @@ $the_form .= <<<EOQ
 		<input name='potentialname' id="quick_potentialname" type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
 		<input name='account_name' type="text" id="account_name"  value="" readonly>
-		<input name="account_id" id="quick_account_id"  type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
+		<input name="account_id" id="quick_account_id"  type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="$app_strings[LBL_CHANGE_BUTTON_LABEL]" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
 		<br>
 
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>($current_user->date_format)</em></font><br>

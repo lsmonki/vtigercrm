@@ -3178,7 +3178,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				//Added condition to hide the close symbol in Related Lists
 //				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
-				if($name == 'Close' && $relatedlist != '')
+				if($name == $app_strings['Close'] && $relatedlist != '')
 				{
 					$list_header .= '';
 				}
@@ -4537,23 +4537,23 @@ function getDetailAssociatedProducts($module,$focus)
 	$output = '';
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
 	$output .=  '<tr><td  class="formBorder">';
-	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
+	$output .= '<div style="padding:2 0 2 0"><strong>'.$app_strings['LBL_PRODUCT_DETAILS'].'</strong></div> <div id="productList">';
     $output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">';
     $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
-    $output .= '<td width="20%" style="padding:3px;">Product</td>';
+    $output .= '<td width="20%" style="padding:3px;">'.$app_strings['LBL_PRODUCT'].'</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
     if($module != 'Orders')
     {
-    	$output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
+    	$output .= '<td width="12%" style="padding:3px;">'.$app_strings['LBL_QTY_IN_STOCK'].'</td>';
     	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
     }	
-    $output .= '<td width="12%" style="padding:3px;">Qty</td>';
+    $output .= '<td width="12%" style="padding:3px;">'.$app_strings['LBL_QTY'].'</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="15%" style="padding:3px;">Unit Price</td>';
+    $output .= '<td width="15%" style="padding:3px;">'.$app_strings['LBL_UNIT_PRICE'].'</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="16%" style="padding:3px;">List Price</td>';
+    $output .= '<td width="16%" style="padding:3px;">'.$app_strings['LBL_LIST_PRICE'].'</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td style="padding:3px;"><div align="center">Total</div></td>';
+    $output .= '<td style="padding:3px;"><div align="center">'.$app_strings['LBL_TOTAL'].'</div></td>';
     $output .=  '</tr>';
     $output .=  '<tr id="tableheadline">';
     $output .=  '<td colspan="11" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -4640,22 +4640,22 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
         $output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
-      	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
+      	$output .= '<td><div align="right"><b>'.$app_strings['LBL_SUB_TOTAL'].':</b></div></td>';
         $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
         $output .= '</tr>';
         $output .= '<tr>'; 
 	$output .=  '<td>&nbsp;</td>';
-        $output .= '<td><div align="right"><b>Tax:</b></div></td>';
+        $output .= '<td><div align="right"><b>'.$app_strings['LBL_TAX'].':</b></div></td>';
         $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
       $output .= '</tr>';
       $output .= '<tr>'; 
       $output .= '<td>&nbsp;</td>';
-      $output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
+      $output .= '<td><div align="right"><b>'.$app_strings['LBL_ADJUSTMENT'].':</b></div></td>';
       $output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
       $output .= '</tr>';
       $output .= '<tr>'; 
       $output .= '<td>&nbsp;</td>';
-      $output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
+      $output .= '<td><div align="right"><b>'.$app_strings['LBL_GRAND_TOTAL'].':</b></div></td>';
       $output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
     $output .= '</tr>';
     $output .= '</table>';

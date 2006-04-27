@@ -211,6 +211,8 @@ $mod_strings = Array(
 
 //Added fields in OrgSharingDetailsView.php
 'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
+'LBL_ORG_SHARING_PRIVILEGES_HEADER' => 'Setup: Organisation Sharing Privileges',
+'LBL_ACCESS_PRIVILEGE' =>'Access Privilege',
 'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
 'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
 'LBL_READ_ONLY'=>'Public: Read Only',

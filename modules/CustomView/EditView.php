@@ -48,6 +48,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("MODULE",$cv_module);
+$xtpl->assign("MODULENAME",$app_strings[$cv_module]);
 $xtpl->assign("CVMODULE", $cv_module);
 $xtpl->assign("CUSTOMVIEWID",$recordid);
 $xtpl->assign("DATAFORMAT",$current_user->date_format);

@@ -129,9 +129,9 @@ $the_form .= <<<EOQ
 
 			<input type="hidden" name="due_date" value="">
 
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
+		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>{$mod_strings['LBL_LIST_SUBJECT']}:<br>
 		<input name='subject' id='task_subject' type="text" value=""><br>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
+		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>{$mod_strings['LBL_LIST_DUE_DATE']}:<br>
 		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; 
 		<input name="time_start" id='task_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
 		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br><br>
@@ -164,27 +164,27 @@ $the_form .= <<<EOQ
 
 			
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
+		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>{$mod_strings['LBL_LIST_SUBJECT']}:<br>
 		<input name='subject' id='event_subject' type="text" value=""><br>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
+		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>{$mod_strings['LBL_LIST_DUE_DATE']}:<br>
 		<input name="date_start" id="jscal_field_event_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp; 
 		<input name="time_start" id='event_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
 		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br>
-		Activity Type<br>
+		{$mod_strings['Activity Type']}:<br>
 		<select name='activitytype'>
 EOQ;
 
 $the_form .= get_select_options_with_id($comboFieldArray['activitytype_dom'], "");
 $the_form .= <<<EOQ
                 </select><br>
-		Duration<br>
+		{$mod_strings['Duration']}:<br>
 		<input name="duration_hours" type="text" size="2" value="1">&nbsp;
 		<select name='duration_minutes'>
 EOQ;
 
 $the_form .= get_select_options_with_id($comboFieldArray['duration_minutes_dom'], "");
 $the_form .= <<<EOQ
-                </select>(hours/minutes)<br>	
+                </select>({$mod_strings['LBL_HOURS']}/{$mod_strings['LBL_MINUTES']})<br>	
 		<br>
 		<input title="${app_strings['LBL_SAVE_BUTTON_TITLE']}" accessKey="${app_strings['LBL_SAVE_BUTTON_KEY']}" class="button" type="submit" name="button" value="${app_strings['LBL_SAVE_BUTTON_LABEL']}" >
 		</form>
