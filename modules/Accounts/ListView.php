@@ -45,6 +45,15 @@ $focus = new Account();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
+					
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
@@ -184,7 +193,7 @@ while($row = $adb->fetch_array($list_result))
 }
 if(isset($ids))
 {
-	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
+	$smarty->assign("ALLIDS", implode($ids,";"));
 }
 if(isPermitted("Accounts","Merge") == 'yes') 
 {
