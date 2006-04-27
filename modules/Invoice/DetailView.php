@@ -67,12 +67,12 @@ $smarty->assign("SINGLE_MOD", "Invoice");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 $smarty->assign("CREATEPDF","permitted");
 
-if(isPermitted("Invoice",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Invoice","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 //Get the associated Products and then display above Terms and Conditions
