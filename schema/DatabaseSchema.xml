@@ -1727,38 +1727,38 @@
                 </field>
 		<field name="campaignstatus" type="C" size="255">
                 </field>
-		<field name="expectedrevenue" type="I" size="255">
+		<field name="expectedrevenue" type="I" size="19">
                 </field>
-    		<field name="budgetcost" type="I" size="255">
+    		<field name="budgetcost" type="I" size="19">
                 </field>
- 		<field name="actualcost" type="I" size="255">
+ 		<field name="actualcost" type="I" size="19">
                 </field>
  		<field name="expectedresponse" type="C" size="255">
                 </field>
  		<field name="numsent" type="N" size="11.0">
                 </field>
- 		<field name="product" type="C" size="255">
+ 		<field name="product_id" type="I" size="19">
                 </field>
  		<field name="sponsor" type="C" size="255">
                 </field>
  		<field name="targetaudience" type="C" size="255">
                 </field>
- 		<field name="targetsize" type="I" size="255">
+ 		<field name="targetsize" type="I" size="19">
 		</field>
-	<field name="expectedresponsecount" type="I" size="255">
+	<field name="expectedresponsecount" type="I" size="19">
 	</field>
-	<field name="expectedsalescount" type="I" size="255">
+	<field name="expectedsalescount" type="I" size="19">
 	</field>
-	<field name="expectedroi" type="I" size="255">
+	<field name="expectedroi" type="I" size="19">
 	</field>
-	<field name="actualresponsecount" type="I" size="255">
+	<field name="actualresponsecount" type="I" size="19">
 	</field>
-	<field name="actualsalescount" type="I" size="255">
+	<field name="actualsalescount" type="I" size="19">
 	</field>
-	<field name="actualroi" type="I" size="255">
+	<field name="actualroi" type="I" size="19">
 	</field>
 
- 		<field name="campaignid" type="I" size="11">
+ 		<field name="campaignid" type="I" size="19">
 		<KEY/>
                 </field>
  		<field name="closingdate" type="D">
@@ -1777,10 +1777,26 @@
                 </index>	
         </table>
 
+	<table name="campaignscf">
+		<field name="campaignid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 
+	<table name="campaignscf" alter="true">
 
+		<constraint>ADD CONSTRAINT fk_CampaignsCF FOREIGN KEY (campaignid) REFERENCES campaign(campaignid)  ON DELETE CASCADE </constraint>
 
+		<opt>Type=InnoDB</opt>
+
+		<data>
+		</data>
+	</table>
 
 	<table name="campaigncontrel">
                 <field name="campaignid" type="I" size="19">
@@ -2698,6 +2714,42 @@
 		</data>
 	</table>
 	
+
+	<table name="campaigngrouprelation">
+		<field name="campaignid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>
+		<opt>Type=InnoDB</opt>
+
+		<index name="campaigngrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="campaigngrouprelation" alter="true">
+
+		<constraint>ADD CONSTRAINT fk_campaigngrouprelation1 FOREIGN KEY (campaignid) REFERENCES campaign(campaignid) ON DELETE CASCADE</constraint>
+
+		<opt>Type=InnoDB</opt>
+
+		<data>
+		</data>
+	</table>
+
+	<table name="campaigngrouprelation" alter="true">
+
+		<constraint>ADD CONSTRAINT fk_campaigngrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+
+		<opt>Type=InnoDB</opt>
+
+		<data>
+		</data>
+	</table>
+
 	
 	<table name="sogrouprelation">
 		<field name="salesorderid" type="I" size="19">
