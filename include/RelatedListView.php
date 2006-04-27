@@ -193,7 +193,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	while($row = $adb->fetch_array($result))
 	{
 		$entries = Array();
-		if($row['activitytype'] == 'Notes')
+		if(trim($row['activitytype']) == 'Notes')
 		{
 			$module = 'Notes';
 			$editaction = 'EditView';
@@ -205,7 +205,6 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 			$editaction = 'upload';
 			$deleteaction = 'deleteattachments';
 		}
-
 		if($row['createdtime'] != '0000-00-00 00:00:00')
 		{
 			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
@@ -219,7 +218,6 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		}
 
 		$entries[] = $created_date;
-
 		if($module == 'Notes')
 		{
 			$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$row['title'].'</a>';
