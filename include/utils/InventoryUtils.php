@@ -17,6 +17,8 @@
 
 function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
 {
+	global $log;
+	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$focus.",".$num_of_products.",".$associated_prod.") method ...");
 	
 	$productDetails = Array();
 	$productBlock = Array();
@@ -47,6 +49,7 @@ function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',
 		$productBlock[] = Array(Array());
 		
 	}
+	$log->debug("Exiting getProductDetailsBlockInfo method ...");
 	return $productBlock;
 }
 
@@ -62,9 +65,10 @@ function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',
 
 function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 {
+	global $log;
+	$log->debug("Entering updateStk(".$product_id.",".$qty.",".$mode.",".$ext_prod_arr.",".$module.") method ...");
 	global $adb;
 	global $current_user;
-	global $log;
 
 	$log->debug("Inside updateStk function, module=".$module);
 	$log->debug("Product Id = $product_id & Qty = $qty");
@@ -126,6 +130,7 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 			else
 				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
 	}
+	$log->debug("Exiting updateStk method ...");
 }
 
 /**
@@ -141,9 +146,10 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 
 function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 {
+	global $log;
+	$log->debug("Entering sendPrdStckMail(".$product_id.",".$upd_qty.",".$prod_name.",".$qtyinstk.",".$qty.",".$module.") method ...");
 	global $current_user;
 	global $adb;
-	global $log;
 	$reorderlevel = getPrdReOrderLevel($product_id);
 	$log->debug("Inside sendPrdStckMail function, module=".$module);
 	$log->debug("Prd reorder level ".$reorderlevel);
@@ -192,6 +198,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 
 		$mail_status = send_mail($module,$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
 	}
+	$log->debug("Exiting sendPrdStckMail method ...");
 }
 
 /**This function is used to get the quantity in stock of a given product
@@ -200,10 +207,13 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 */
 function getPrdQtyInStck($product_id)
 {
+	global $log;
+	$log->debug("Entering getPrdQtyInStck(".$product_id.") method ...");
 	global $adb;
 	$query1 = "select qtyinstock from products where productid=".$product_id;
 	$result=$adb->query($query1);
 	$qtyinstck= $adb->query_result($result,0,"qtyinstock");
+	$log->debug("Exiting getPrdQtyInStck method ...");
 	return $qtyinstck;
 }
 
@@ -214,10 +224,13 @@ function getPrdQtyInStck($product_id)
 
 function getPrdReOrderLevel($product_id)
 {
+	global $log;
+	$log->debug("Entering getPrdReOrderLevel(".$product_id.") method ...");
 	global $adb;
 	$query1 = "select reorderlevel from products where productid=".$product_id;
 	$result=$adb->query($query1);
 	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
+	$log->debug("Exiting getPrdReOrderLevel method ...");
 	return $reorderlevel;
 }
 
@@ -228,10 +241,13 @@ function getPrdReOrderLevel($product_id)
 
 function getPrdHandler($product_id)
 {
+	global $log;
+	$log->debug("Entering getPrdHandler(".$product_id.") method ...");
 	global $adb;
 	$query1 = "select handler from products where productid=".$product_id;
 	$result=$adb->query($query1);
 	$handler= $adb->query_result($result,0,"handler");
+	$log->debug("Exiting getPrdHandler method ...");
 	return $handler;
 }
 
