@@ -30,6 +30,15 @@ $category = getParentTab();
 $other_text = Array();
 $url_string = ''; // assigning http url string
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
+
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
@@ -161,7 +170,7 @@ while($row = $adb->fetch_array($list_result))
 }
 if(isset($ids))
 {
-	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
+	$smarty->assign("ALLIDS", implode($ids,";"));
 }
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
