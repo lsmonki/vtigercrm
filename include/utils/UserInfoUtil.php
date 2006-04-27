@@ -4112,4 +4112,34 @@ function RecalculateSharingRules()
 				
 }
 
+//Code added by Minnie for campaigngroup relation -- start
+
+/** Function to add campaign group relation
+  * @param $campaignid -- Campaign Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+  */
+function insert2CampaignGroupRelation($campaignid,$groupname)
+{
+	global $adb;
+	$sql = "insert into campaigngrouprelation values (" .$campaignid .",'".$groupname."')";
+	$adb->query($sql);
+
+}
+
+/** Function to update campaign group relation
+  * @param $campaignid -- Campaign Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+  */
+function updateCampaignGroupRelation($campaignid,$groupname)
+{
+	global $adb;
+	$sqldelete = "delete from campaigngrouprelation where campaignid=".$campaignid;
+	$adb->query($sqldelete);
+	$sql = "insert into campaigngrouprelation values (".$campaignid .",'" .$groupname ."')";
+	$adb->query($sql);
+}
+
+//end					   
 ?>
