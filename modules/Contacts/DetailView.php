@@ -71,12 +71,12 @@ $smarty->assign("SINGLE_MOD","Contact");
 $smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
-if(isPermitted("Contacts",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Contacts",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Contacts","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
-if(isPermitted("Emails",1,'') == 'yes')
+if(isPermitted("Emails","EditView",'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
@@ -84,7 +84,7 @@ if(isPermitted("Emails",1,'') == 'yes')
 	$smarty->assign("SENDMAILBUTTON","permitted");
 }
 
-if(isPermitted("Contacts",8,'') == 'yes')
+if(isPermitted("Contacts","Merge",'') == 'yes')
 {
 	$smarty->assign("MERGEBUTTON","permitted");
 	require_once('include/utils/UserInfoUtil.php');
