@@ -73,10 +73,10 @@ $smarty->assign("SINGLE_MOD","Faq");
 $smarty->assign("MODULE","Faq");
 
 $smarty->assign("ID", $_REQUEST['record']);
-if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Faq","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Faq","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");	
 
 $check_button = Button_Check($module);

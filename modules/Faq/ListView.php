@@ -63,7 +63,7 @@ else
 $_SESSION['FAQ_ORDER_BY'] = $order_by;
 $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-if(isPermitted('Faq',2,'') == 'yes')
+if(isPermitted('Faq','Delete','') == 'yes')
 $other_text ['del'] = $app_strings[LBL_MASS_DELETE]; 
 
 
