@@ -138,10 +138,10 @@ $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 $smarty->assign("ID", $_REQUEST['record']);
 
-if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Emails","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Emails","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
