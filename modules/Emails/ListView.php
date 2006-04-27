@@ -27,6 +27,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('include/utils/UserInfoUtil.php');
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
 
@@ -49,7 +50,7 @@ if($_REQUEST['ajax'] == '')
 		$cur_mod = $sec_arr[$filename];
 		$cur_tabid = getTabid($cur_mod);
 
-		if($tab_per_Data[$cur_tabid] == 0)
+		if(isPermitted($cur_mod,'','') == 'yes')
 		{
 			list($lbl,$sname,$title)=split("_",$label);
 			if(stristr($label,"EMAILS"))
