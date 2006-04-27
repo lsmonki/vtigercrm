@@ -25,6 +25,7 @@ require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
 
 global $log;
@@ -56,7 +57,7 @@ $sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?mod
 		$cur_mod = $sec_arr[$filename];
 		$cur_tabid = getTabid($cur_mod);
 
-		if($tab_per_Data[$cur_tabid] == 0)
+		if(isPermitted($cur_mod,'','') == 'yes')
 		{
 
 			list($lbl,$sname,$title)=split("_",$label);
