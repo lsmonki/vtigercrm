@@ -24,7 +24,10 @@
 function ajaxSaveResponse(response)
 {ldelim}
 	hide("status");
-	document.getElementById("ListViewContents").innerHTML=response.responseText;
+	result = response.responseText.split('&#&#&#'); 
+	document.getElementById("ListViewContents").innerHTML= result[2];
+	if(result[1] != '')
+		alert(result[1]);	
 {rdelim}
 
 function callSearch(searchtype)
