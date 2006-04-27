@@ -50,10 +50,10 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","Product");
 
-if(isPermitted("Products",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Products","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Products",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Products","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $smarty->assign("IMAGE_PATH", $image_path);

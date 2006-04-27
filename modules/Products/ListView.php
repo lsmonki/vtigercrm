@@ -77,7 +77,7 @@ if($viewnamedesc['viewname'] == 'All')
 	$smarty->assign("ALL", 'All');
 }
 
-if(isPermitted('Products',2,'') == 'yes')
+if(isPermitted('Products','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
