@@ -43,6 +43,8 @@
   
 function return_name(&$row, $first_column, $last_column)
 {
+	global $log;
+	$log->debug("Entering return_name(".$row.",".$first_column.",".$last_column.") method ...");
 	$first_name = "";
 	$last_name = "";
 	$full_name = "";
@@ -72,31 +74,42 @@ function return_name(&$row, $first_column, $last_column)
 		$full_name .= $last_name;
 	}
 
+	$log->debug("Exiting return_name method ...");
 	return $full_name;
 }
 
 //login utils
 function get_languages()
 {
+	global $log;
+	$log->debug("Entering get_languages() method ...");
 	global $languages;
+	$log->debug("Exiting get_languages method ...");
 	return $languages;
 }
 
 //seems not used
 function get_language_display($key)
 {
+	global $log;
+	$log->debug("Entering get_language_display(".$key.") method ...");
 	global $languages;
+	$log->debug("Exiting get_language_display method ...");
 	return $languages[$key];
 }
 
 function get_assigned_user_name(&$assigned_user_id)
 {
+	global $log;
+	$log->debug("Entering get_assigned_user_name(".$assigned_user_id.") method ...");
 	$user_list = &get_user_array(false,"");
 	if(isset($user_list[$assigned_user_id]))
 	{
+		$log->debug("Exiting get_assigned_user_name method ...");
 		return $user_list[$assigned_user_id];
 	}
 
+	$log->debug("Exiting get_assigned_user_name method ...");
 	return "";
 }
 
@@ -104,6 +117,7 @@ function get_assigned_user_name(&$assigned_user_id)
 function get_user_array($add_blank=true, $status="Active", $assigned_user="",$private="")
 {
 	global $log;
+	$log->debug("Entering get_user_array(".$add_blank.",". $status.",".$assigned_user.",".$private.") method ...");
 	global $current_user;
 	if(isset($current_user) && $current_user->id != '')
 	{
@@ -111,7 +125,6 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	}
 	static $user_array = null;
-	global $log;
 	$module=$_REQUEST['module'];
 
 	if($user_array == null)
@@ -158,12 +171,16 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		$user_array = &$temp_result;
 	}
 
+	$log->debug("Exiting get_user_array method ...");
 	return $user_array;
 }
 
 function clean($string, $maxLength)
 {
+	global $log;
+	$log->debug("Entering clean(".$string.",". $maxLength.") method ...");
 	$string = substr($string, 0, $maxLength);
+	$log->debug("Exiting clean method ...");
 	return escapeshellcmd($string);
 }
 
@@ -176,7 +193,10 @@ function clean($string, $maxLength)
  */
 function safe_map($request_var, & $focus, $always_copy = false)
 {
+	global $log;
+	$log->debug("Entering safe_map(".$request_var.",".$focus.",".$always_copy.") method ...");
 	safe_map_named($request_var, $focus, $request_var, $always_copy);
+	$log->debug("Exiting safe_map method ...");
 }
 
 /**
@@ -189,10 +209,12 @@ function safe_map($request_var, & $focus, $always_copy = false)
 function safe_map_named($request_var, & $focus, $member_var, $always_copy)
 {
 	global $log;
+	$log->debug("Entering safe_map_named(".$request_var.",".$focus.",".$member_var.",".$always_copy.") method ...");
 	if (isset($_REQUEST[$request_var]) && ($always_copy || is_null($focus->$member_var))) {
 		$log->debug("safe map named called assigning '{$_REQUEST[$request_var]}' to $member_var");
 		$focus->$member_var = $_REQUEST[$request_var];
 	}
+	$log->debug("Exiting safe_map_named method ...");
 }
 
 /** This function retrieves an application language file and returns the array of strings included in the $app_list_strings var.
@@ -203,6 +225,8 @@ function safe_map_named($request_var, & $focus, $member_var, $always_copy)
 
 function return_app_list_strings_language($language)
 {
+	global $log;
+	$log->debug("Entering return_app_list_strings_language(".$language.") method ...");
 	global $app_list_strings, $default_language, $log, $translation_string_prefix;
 	$temp_app_list_strings = $app_list_strings;
 	$language_used = $language;
@@ -218,6 +242,7 @@ function return_app_list_strings_language($language)
 	if(!isset($app_list_strings))
 	{
 		$log->fatal("Unable to load the application language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_app_list_strings_language method ...");
 		return null;
 	}
 
@@ -225,6 +250,7 @@ function return_app_list_strings_language($language)
 	$return_value = $app_list_strings;
 	$app_list_strings = $temp_app_list_strings;
 
+	$log->debug("Exiting return_app_list_strings_language method ...");
 	return $return_value;
 }
 
@@ -235,6 +261,8 @@ function return_app_list_strings_language($language)
  * If you are using the current language, do not call this function unless you are loading it for the first time */
 function return_application_language($language)
 {
+	global $log;
+	$log->debug("Entering return_application_language(".$language.") method ...");
 	global $app_strings, $default_language, $log, $translation_string_prefix;
 	$temp_app_strings = $app_strings;
 	$language_used = $language;
@@ -250,6 +278,7 @@ function return_application_language($language)
 	if(!isset($app_strings))
 	{
 		$log->fatal("Unable to load the application language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_application_language method ...");
 		return null;
 	}
 
@@ -265,6 +294,7 @@ function return_application_language($language)
 	$return_value = $app_strings;
 	$app_strings = $temp_app_strings;
 
+	$log->debug("Exiting return_application_language method ...");
 	return $return_value;
 }
 
@@ -275,11 +305,14 @@ function return_application_language($language)
  * If you are in the current module, do not call this function unless you are loading it for the first time */
 function return_module_language($language, $module)
 {
+	global $log;
+	$log->debug("Entering return_module_language(".$language.",". $module.") method ...");
 	global $mod_strings, $default_language, $log, $currentModule, $translation_string_prefix;
 
 	if($currentModule == $module && isset($mod_strings) && $mod_strings != null)
 	{
 		// We should have already loaded the array.  return the current one.
+		$log->debug("Exiting return_module_language method ...");
 		return $mod_strings;
 	}
 
@@ -297,6 +330,7 @@ function return_module_language($language, $module)
 	if(!isset($mod_strings))
 	{
 		$log->fatal("Unable to load the module($module) language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_module_language method ...");
 		return null;
 	}
 
@@ -312,6 +346,7 @@ function return_module_language($language, $module)
 	$return_value = $mod_strings;
 	$mod_strings = $temp_mod_strings;
 
+	$log->debug("Exiting return_module_language method ...");
 	return $return_value;
 }
 
@@ -322,6 +357,8 @@ function return_module_language($language, $module)
  * If you are using the current language, do not call this function unless you are loading it for the first time */
 function return_mod_list_strings_language($language,$module)
 {
+	global $log;
+	$log->debug("Entering return_mod_list_strings_language(".$language.",".$module.") method ...");
 	global $mod_list_strings, $default_language, $log, $currentModule,$translation_string_prefix;
 
 	$language_used = $language;
@@ -329,6 +366,7 @@ function return_mod_list_strings_language($language,$module)
 
 	if($currentModule == $module && isset($mod_list_strings) && $mod_list_strings != null)
 	{
+		$log->debug("Exiting return_mod_list_strings_language method ...");
 		return $mod_list_strings;
 	}
 
@@ -337,12 +375,14 @@ function return_mod_list_strings_language($language,$module)
 	if(!isset($mod_list_strings))
 	{
 		$log->fatal("Unable to load the application list language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_mod_list_strings_language method ...");
 		return null;
 	}
 
 	$return_value = $mod_list_strings;
 	$mod_list_strings = $temp_mod_list_strings;
 
+	$log->debug("Exiting return_mod_list_strings_language method ...");
 	return $return_value;
 }
 
@@ -353,6 +393,8 @@ function return_mod_list_strings_language($language,$module)
  */
 function return_theme_language($language, $theme)
 {
+	global $log;
+	$log->debug("Entering return_theme_language(".$language.",". $theme.") method ...");
 	global $mod_strings, $default_language, $log, $currentModule, $translation_string_prefix;
 
 	$language_used = $language;
@@ -368,6 +410,7 @@ function return_theme_language($language, $theme)
 	if(!isset($theme_strings))
 	{
 		$log->fatal("Unable to load the theme($theme) language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_theme_language method ...");
 		return null;
 	}
 
@@ -380,6 +423,7 @@ function return_theme_language($language, $theme)
 		}
 	}
 
+	$log->debug("Exiting return_theme_language method ...");
 	return $theme_strings;
 }
 
@@ -392,11 +436,15 @@ function return_theme_language($language, $theme)
 */
 function return_session_value_or_default($varname, $default)
 {
+	global $log;
+	$log->debug("Entering return_session_value_or_default(".$varname.",". $default.") method ...");
 	if(isset($_SESSION[$varname]) && $_SESSION[$varname] != "")
 	{
+		$log->debug("Exiting return_session_value_or_default method ...");
 		return $_SESSION[$varname];
 	}
 
+	$log->debug("Exiting return_session_value_or_default method ...");
 	return $default;
 }
 
@@ -412,6 +460,8 @@ function return_session_value_or_default($varname, $default)
   */
 function append_where_clause(&$where_clauses, $variable_name, $SQL_name = null)
 {
+	global $log;
+	$log->debug("Entering append_where_clause(".$where_clauses.",".$variable_name.",".$SQL_name.") method ...");
 	if($SQL_name == null)
 	{
 		$SQL_name = $variable_name;
@@ -421,6 +471,7 @@ function append_where_clause(&$where_clauses, $variable_name, $SQL_name = null)
 	{
 		array_push($where_clauses, "$SQL_name like '$_REQUEST[$variable_name]%'");
 	}
+	$log->debug("Exiting append_where_clause method ...");
 }
 
 /**
@@ -434,6 +485,7 @@ function append_where_clause(&$where_clauses, $variable_name, $SQL_name = null)
 function generate_where_statement($where_clauses)
 {
 	global $log;
+	$log->debug("Entering generate_where_statement(".$where_clauses.") method ...");
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -443,6 +495,7 @@ function generate_where_statement($where_clauses)
 	}
 
 	$log->info("Here is the where clause for the list view: $where");
+	$log->debug("Exiting generate_where_statement method ...");
 	return $where;
 }
 
@@ -456,7 +509,9 @@ function generate_where_statement($where_clauses)
 */
 function create_guid()
 {
-    $microTime = microtime();
+	global $log;
+	$log->debug("Entering create_guid() method ...");
+        $microTime = microtime();
 	list($a_dec, $a_sec) = explode(" ", $microTime);
 
 	$dec_hex = sprintf("%x", $a_dec* 1000000);
@@ -478,22 +533,28 @@ function create_guid()
 	$guid .= $sec_hex;
 	$guid .= create_guid_section(6);
 
+	$log->debug("Exiting create_guid method ...");
 	return $guid;
 
 }
 
 function create_guid_section($characters)
 {
+	global $log;
+	$log->debug("Entering create_guid_section(".$characters.") method ...");
 	$return = "";
 	for($i=0; $i<$characters; $i++)
 	{
 		$return .= sprintf("%x", rand(0,15));
 	}
+	$log->debug("Exiting create_guid_section method ...");
 	return $return;
 }
 
 function ensure_length(&$string, $length)
 {
+	global $log;
+	$log->debug("Entering ensure_length(".$string.",". $length.") method ...");
 	$strlen = strlen($string);
 	if($strlen < $length)
 	{
@@ -503,12 +564,16 @@ function ensure_length(&$string, $length)
 	{
 		$string = substr($string, 0, $length);
 	}
+	$log->debug("Exiting ensure_length method ...");
 }
 
 function microtime_diff($a, $b) {
-   list($a_dec, $a_sec) = explode(" ", $a);
-   list($b_dec, $b_sec) = explode(" ", $b);
-   return $b_sec - $a_sec + $b_dec - $a_dec;
+	global $log;
+	$log->debug("Entering microtime_diff(".$a.",". $b.") method ...");
+	list($a_dec, $a_sec) = explode(" ", $a);
+	list($b_dec, $b_sec) = explode(" ", $b);
+	$log->debug("Exiting microtime_diff method ...");
+	return $b_sec - $a_sec + $b_dec - $a_dec;
 }
 
 
@@ -519,6 +584,8 @@ function microtime_diff($a, $b) {
  * Contributor(s): ______________________________________..
  */
 function get_theme_display($theme) {
+	global $log;
+	$log->debug("Entering get_theme_display(".$theme.") method ...");
 	global $theme_name, $theme_description;
 	$temp_theme_name = $theme_name;
 	$temp_theme_description = $theme_description;
@@ -533,6 +600,7 @@ function get_theme_display($theme) {
 	$theme_name = $temp_theme_name;
 	$theme_description = $temp_theme_description;
 
+	$log->debug("Exiting get_theme_display method ...");
 	return $return_theme_value;
 }
 
@@ -543,6 +611,8 @@ function get_theme_display($theme) {
  * Contributor(s): ______________________________________..
  */
 function get_themes() {
+	global $log;
+	$log->debug("Entering get_themes() method ...");
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
            if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree" && $file != "Aqua" && $file != "nature" && $file != "orange") {
@@ -570,6 +640,7 @@ function get_themes() {
    }
 
    ksort($filelist);
+   $log->debug("Exiting get_themes method ...");
    return $filelist;
 }
 
@@ -582,6 +653,8 @@ function get_themes() {
  * Contributor(s): ______________________________________..
  */
 function get_clear_form_js () {
+global $log;
+$log->debug("Entering get_clear_form_js () method ...");
 $the_script = <<<EOQ
 <script type="text/javascript" language="JavaScript">
 <!-- Begin
@@ -596,6 +669,7 @@ function clear_form(form) {
 </script>
 EOQ;
 
+$log->debug("Exiting get_clear_form_js  method ...");
 return $the_script;
 }
 
@@ -608,6 +682,8 @@ return $the_script;
  * Contributor(s): ______________________________________..
  */
 function get_set_focus_js () {
+global $log;
+$log->debug("Entering set_focus() method ...");
 //TODO Clint 5/20 - Make this function more generic so that it can take in the target form and field names as variables
 $the_script = <<<EOQ
 <script type="text/javascript" language="JavaScript">
@@ -633,6 +709,7 @@ function set_focus() {
 </script>
 EOQ;
 
+$log->debug("Exiting get_set_focus_js  method ...");
 return $the_script;
 }
 
@@ -649,6 +726,8 @@ return $the_script;
  * Contributor(s): ______________________________________..
  */
 function array_csort() {
+   global $log;
+   $log->debug("Entering array_csort() method ...");
    $args = func_get_args();
    $marray = array_shift($args);
    $i = 0;
@@ -668,12 +747,15 @@ function array_csort() {
    $msortline .= "\$marray));";
 
    eval($msortline);
+   $log->debug("Exiting array_csort method ...");
    return $marray;
 }
 
 
 function set_default_config(&$defaults)
 {
+	global $log;
+	$log->debug("Entering set_default_config(".$defaults.") method ...");
 
 	foreach ($defaults as $name=>$value)
 	{
@@ -682,6 +764,7 @@ function set_default_config(&$defaults)
 			$GLOBALS[$name] = $value;
 		}
 	}
+	$log->debug("Exiting set_default_config method ...");
 }
 
 $toHtml = array(
@@ -693,10 +776,13 @@ $toHtml = array(
 );
 
 function to_html($string, $encode=true){
+	global $log;
+	$log->debug("Entering to_html(".$string.",".$encode.") method ...");
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
         $string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
         }
+	$log->debug("Exiting to_html method ...");
         return $string;
 }
 
@@ -704,6 +790,8 @@ function to_html($string, $encode=true){
 //it seems the fun ction is not used
 function get_assigned_user_or_group_name($id,$module)
 {
+	global $log;
+	$log->debug("Entering get_assigned_user_or_group_name(".$id.",".$module.") method ...");
 	global $adb;
 
 	//it might so happen that an entity is assigned to a group but at that time the group has no members. even in this case, the query should return a valid value and not just blank
@@ -725,23 +813,28 @@ function get_assigned_user_or_group_name($id,$module)
 
 	$result = $adb->query($sql);
 	$tempval = $adb->fetch_row($result);
+	$log->debug("Exiting get_assigned_user_or_group_name method ...");
 	return $tempval[0];
 }
 
 function getTabname($tabid)
 {
 	global $log;
+	$log->debug("Entering getTabname(".$tabid.") method ...");
         $log->info("tab id is ".$tabid);
         global $adb;
 	$sql = "select tablabel from tab where tabid='".$tabid."'";
 	$result = $adb->query($sql);
 	$tabname=  $adb->query_result($result,0,"tablabel");
+	$log->debug("Exiting getTabname method ...");
 	return $tabname;
 
 }
 
 function getTabModuleName($tabid)
 {
+	global $log;
+	$log->debug("Entering getTabModuleName(".$tabid.") method ...");
 	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0))
         {
                 include('tabdata.php');
@@ -756,6 +849,7 @@ function getTabModuleName($tabid)
         $result = $adb->query($sql);
         $tabname=  $adb->query_result($result,0,"name");
 	}
+	$log->debug("Exiting getTabModuleName method ...");
         return $tabname;
 }
 
@@ -763,7 +857,8 @@ function getTabModuleName($tabid)
 function getColumnFields($module)
 {
 	global $log;
-$log->info("in getColumnFields ".$module);
+	$log->debug("Entering getColumnFields(".$module.") method ...");
+	$log->info("in getColumnFields ".$module);
 	global $adb;
 	$column_fld = Array();
         $tabid = getTabid($module);
@@ -775,13 +870,15 @@ $log->info("in getColumnFields ".$module);
 		$fieldname = $adb->query_result($result,$i,"fieldname");
 		$column_fld[$fieldname] = ''; 
 	}
+	$log->debug("Exiting getColumnFields method ...");
 	return $column_fld;	
 }
 
 function getUserEmail($userid)
 {
-global $log;
-$log->info("in getUserEmail ".$userid);
+	global $log;
+	$log->debug("Entering getUserEmail(".$userid.") method ...");
+	$log->info("in getUserEmail ".$userid);
 
         global $adb;
         if($userid != '')
@@ -790,13 +887,15 @@ $log->info("in getUserEmail ".$userid);
                 $result = $adb->query($sql);
                 $email = $adb->query_result($result,0,"email1");
         }
+	$log->debug("Exiting getUserEmail method ...");
         return $email;
 }		
 //outlook security
 function getUserId_Ol($username)
 {
-global $log;
-$log->info("in getUserId_Ol ".$username);
+	global $log;
+	$log->debug("Entering getUserId_Ol(".$username.") method ...");
+	$log->info("in getUserId_Ol ".$username);
 
 	global $adb;
 	$sql = "select id from users where user_name='".$username."'";
@@ -805,11 +904,12 @@ $log->info("in getUserId_Ol ".$username);
 	if($num_rows > 0)
 	{
 		$user_id = $adb->query_result($result,0,"id");
-    }
-    else
-    {
-	    $user_id = 0;
-    }    	
+    	}
+	else
+	{
+		$user_id = 0;
+	}
+	$log->debug("Exiting getUserId_Ol method ...");
 	return $user_id;
 }	
 //outlook security
@@ -817,6 +917,7 @@ $log->info("in getUserId_Ol ".$username);
 function getActionid($action)
 {
 	global $log;
+	$log->debug("Entering getActionid(".$action.") method ...");
 	global $adb;
 	$log->info("get Actionid ".$action);
 
@@ -825,6 +926,7 @@ function getActionid($action)
         $result =$adb->query($query);
         $actionid=$adb->query_result($result,0,'actionid');
 	$log->info("action id selected is ".$actionid );
+	$log->debug("Exiting getActionid method ...");
 	return $actionid;
 }
 
@@ -833,12 +935,14 @@ function getActionid($action)
 function getActionname($actionid)
 {
 	global $log;
+	$log->debug("Entering getActionname(".$actionid.") method ...");
 	global $adb;
 
 	$actionname='';
 	$query="select * from actionmapping where actionid=".$actionid;
 	$result =$adb->query($query);
 	$actionname=$adb->query_result($result,0,"actionname");
+	$log->debug("Exiting getActionname method ...");
 	return $actionname;
 }
 
@@ -846,15 +950,19 @@ function getActionname($actionid)
 function getUserId($record)
 {
 	global $log;
+	$log->debug("Entering getUserId(".$record.") method ...");
         $log->info("in getUserId ".$record);
 
 	global $adb;
         $user_id=$adb->query_result($adb->query("select * from crmentity where crmid = ".$record),0,'smownerid');
+	$log->debug("Exiting getUserId method ...");
 	return $user_id;	
 }
 
 function getRecordOwnerId($record)
 {
+	global $log;
+	$log->debug("Entering getRecordOwnerId(".$record.") method ...");
 
 	global $adb;
 	$ownerArr=Array();
@@ -916,6 +1024,7 @@ function getRecordOwnerId($record)
 		$ownerArr['Groups']=$groupid;
 
 	}	
+	$log->debug("Exiting getRecordOwnerId method ...");
 	return $ownerArr;
 
 }
@@ -923,7 +1032,8 @@ function getRecordOwnerId($record)
 
 function insertProfile2field($profileid)
 {
-	 global $log;
+	global $log;
+	$log->debug("Entering insertProfile2field(".$profileid.") method ...");
         $log->info("in insertProfile2field ".$profileid);
 
 	global $adb;
@@ -936,10 +1046,13 @@ function insertProfile2field($profileid)
                  $field_id = $adb->query_result($fld_result,$i,'fieldid');
                  $adb->query("insert into profile2field values (".$profileid.",".$tab_id.",".$field_id.",0,1)");
 	}
+	$log->debug("Exiting insertProfile2field method ...");
 }
 
 function insert_def_org_field()
 {
+	global $log;
+	$log->debug("Entering insert_def_org_field() method ...");
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->query("select * from field where generatedtype=1 and displaytype in (1,2)");
@@ -950,11 +1063,13 @@ function insert_def_org_field()
                  $field_id = $adb->query_result($fld_result,$i,'fieldid');
                  $adb->query("insert into def_org_field values (".$tab_id.",".$field_id.",0,1)");
 	}
+	$log->debug("Exiting insert_def_org_field() method ...");
 }
 
 function getProfile2FieldList($fld_module, $profileid)
 {
-	 global $log;
+	global $log;
+	$log->debug("Entering getProfile2FieldList(".$fld_module.",". $profileid.") method ...");
         $log->info("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid);
 
 	global $adb;
@@ -962,6 +1077,7 @@ function getProfile2FieldList($fld_module, $profileid)
 	
 	$query = "select profile2field.visible,field.* from profile2field inner join field on field.fieldid=profile2field.fieldid where profile2field.profileid=".$profileid." and profile2field.tabid=".$tabid;
 	$result = $adb->query($query);
+	$log->debug("Exiting getProfile2FieldList method ...");
 	return $result;
 }
 
@@ -970,7 +1086,8 @@ function getProfile2FieldList($fld_module, $profileid)
 function getProfile2FieldPermissionList($fld_module, $profileid)
 {
 	global $log;
-    $log->info("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid);
+	$log->debug("Entering getProfile2FieldPermissionList(".$fld_module.",". $profileid.") method ...");
+        $log->info("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid);
 
 	global $adb;
 	$tabid = getTabid($fld_module);
@@ -982,13 +1099,15 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
     {
 		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"));
 	}	
+	$log->debug("Exiting getProfile2FieldPermissionList method ...");
 	return $return_data;
 }
 
 function getProfile2AllFieldList($mod_array,$profileid)
 {
 	global $log;
-    $log->info("in getProfile2AllFieldList profile id is " .$profileid);
+     $log->debug("Entering getProfile2AllFieldList(".$mod_array.",".$profileid.") method ...");
+     $log->info("in getProfile2AllFieldList profile id is " .$profileid);
 
 	global $adb;
 	$profilelist=array();
@@ -997,6 +1116,7 @@ function getProfile2AllFieldList($mod_array,$profileid)
 		$profilelist[key($mod_array)]=getProfile2FieldPermissionList(key($mod_array), $profileid);
 		next($mod_array);
 	}
+	$log->debug("Exiting getProfile2AllFieldList method ...");
 	return $profilelist;	
 }
 
@@ -1005,6 +1125,7 @@ function getProfile2AllFieldList($mod_array,$profileid)
 function getDefOrgFieldList($fld_module)
 {
 	global $log;
+	$log->debug("Entering getDefOrgFieldList(".$fld_module.") method ...");
         $log->info("in getDefOrgFieldList ".$fld_module);
 
 	global $adb;
@@ -1012,11 +1133,14 @@ function getDefOrgFieldList($fld_module)
 	
 	$query = "select def_org_field.visible,field.* from def_org_field inner join field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid;
 	$result = $adb->query($query);
+	$log->debug("Exiting getDefOrgFieldList method ...");
 	return $result;
 }
 
 function getQuickCreate($tabid,$actionid)
 {
+	global $log;
+	$log->debug("Entering getQuickCreate(".$tabid.",".$actionid.") method ...");
 	$module=getTabModuleName($tabid);
 	$actionname=getActionname($actionid);
         $QuickCreateForm= 'true';
@@ -1026,12 +1150,14 @@ function getQuickCreate($tabid,$actionid)
 	{
                 $QuickCreateForm= 'false';
 	}	
+	$log->debug("Exiting getQuickCreate method ...");
 	return $QuickCreateForm;
 
 }
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
 	global $log;
+	$log->debug("Entering ChangeStatus(".$status.",".$activityid.",".$activity_mode=''.") method ...");
         $log->info("in ChangeStatus ".$status. ' activityid is  '.$activityid);
 
         global $adb;
@@ -1044,11 +1170,14 @@ function ChangeStatus($status,$activityid,$activity_mode='')
                 $query = "Update activity set eventstatus='".$status."' where activityid = ".$activityid;
         }
         $adb->query($query);
+	$log->debug("Exiting ChangeStatus method ...");
  }
 
 
 function getDBInsertDateValue($value)
 {
+	global $log;
+	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
 	if($dat_fmt == '')
@@ -1070,26 +1199,30 @@ function getDBInsertDateValue($value)
 	}
 		
 	$insert_date=$y.'-'.$m.'-'.$d;
+	$log->debug("Exiting getDBInsertDateValue method ...");
 	return $insert_date;
 }
 
 function getUnitPrice($productid)
 {
 	global $log;
+	$log->debug("Entering getUnitPrice(".$productid.") method ...");
         $log->info("in getUnitPrice productid ".$productid);
 
         global $adb;
         $query = "select unit_price from products where productid=".$productid;
         $result = $adb->query($query);
         $up = $adb->query_result($result,0,'unit_price');
+	$log->debug("Exiting getUnitPrice method ...");
         return $up;
 }
 
 
 function upload_product_image_file($mode,$id)
 {
-	global $root_directory;
 	global $log;
+	$log->debug("Entering upload_product_image_file(".$mode.",".$id.") method ...");
+	global $root_directory;
         $log->debug("Inside upload_product_image_file. The id is ".$id);
 	$uploaddir = $root_directory ."/test/product/";
 
@@ -1129,14 +1262,16 @@ function upload_product_image_file($mode,$id)
 		$upload_status = "no";
                 $ret_array["status"] = $upload_status;
 	}
+	$log->debug("Exiting upload_product_image_file method ...");
 	return $ret_array;		
 
 }
 
 function getProductImageName($id,$deleted_array='')
 {
-	global $adb;
 	global $log;
+	$log->debug("Entering getProductImageName(".$id.",".$deleted_array=''.") method ...");
+	global $adb;
 	$image_array=array();	
 	$query = "select imagename from products where productid=".$id;
 	$result = $adb->query($query);
@@ -1148,24 +1283,32 @@ function getProductImageName($id,$deleted_array='')
 		$resultant_image = array();
 		$resultant_image=array_merge(array_diff($image_array,$deleted_array));
 		$imagelists=implode('###',$resultant_image);	
+		$log->debug("Exiting getProductImageName method ...");
 		return	$imagelists;
 	}
 	else
+	{
+		$log->debug("Exiting getProductImageName method ...");
 		return $image_name;	
+	}
 }
 function getContactImageName($id)
 {
+	global $log;
+	$log->debug("Entering getContactImageName(".$id.") method ...");
         global $adb;
-        global $log;
         $query = "select imagename from contactdetails where contactid=".$id;
         $result = $adb->query($query);
         $image_name = $adb->query_result($result,0,"imagename");
         $log->debug("Inside getContactImageName. The image_name is ".$image_name);
+	$log->debug("Exiting getContactImageName method ...");
         return $image_name;
 
 }
 function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,$prod_total)
 {
+	global $log;
+	$log->debug("Entering updateSubTotal(".$module.",".$tablename.",".$colname.",".$colname1.",".$entid_fld.",".$entid.",".$prod_total.") method ...");
         global $adb;
         //getting the subtotal
         $query = "select ".$colname.",".$colname1." from ".$tablename." where ".$entid_fld."=".$entid;
@@ -1179,9 +1322,12 @@ function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,
         //updating the subtotal
         $sub_query = "update ".$tablename." set ".$colname."=".$subtot_upd.",".$colname1."=".$gdtot_upd." where ".$entid_fld."=".$entid;
         $adb->query($sub_query);
+	$log->debug("Exiting updateSubTotal method ...");
 }
 function getInventoryTotal($return_module,$id)
 {
+	global $log;
+	$log->debug("Entering getInventoryTotal(".$return_module.",".$id.") method ...");
 	global $adb;
 	if($return_module == "Potentials")
 	{
@@ -1205,23 +1351,30 @@ function getInventoryTotal($return_module,$id)
 		$qty = 1;
 		$total = $total+($qty*$listprice);
 	}
+	$log->debug("Exiting getInventoryTotal method ...");
 	return $total;
 }
 
 function updateProductQty($product_id, $upd_qty)
 {
+	global $log;
+	$log->debug("Entering updateProductQty(".$product_id.",". $upd_qty.") method ...");
 	global $adb;
 	$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
         $adb->query($query);
+	$log->debug("Exiting updateProductQty method ...");
 
 }
 
 function get_account_info($parent_id)
 {
+	global $log;
+	$log->debug("Entering get_account_info(".$parent_id.") method ...");
         global $adb;
         $query = "select accountid from potential where potentialid=".$parent_id;
         $result = $adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting get_account_info method ...");
         return $accountid;
 }
 
@@ -1230,55 +1383,73 @@ function get_account_info($parent_id)
 
 function get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid)
 {
+	global $log;
+	$log->debug("Entering get_quickcreate_form(".$fieldlabel.",".$uitype.",".$fieldname.",".$tabid.") method ...");
 	$return_field ='';
 	switch($uitype)	
 	{
 		case 1: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 2: $return_field .=get_textmanField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 6: $return_field .=get_textdateField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 11: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 13: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;	
 			break;
 		case 15: $return_field .=get_textcomboField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;	
 			break;
 		case 16: $return_field .=get_textcomboField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;	
 			break;
 		case 17: $return_field .=get_textwebField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 19: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;	
 			break;
 		case 22: $return_field .=get_textmanField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 23: $return_field .=get_textdateField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 50: $return_field .=get_textaccField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 51: $return_field .=get_textaccField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 55: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 63: $return_field .=get_textdurationField($fieldlabel,$fieldname,$tabid);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 		case 71: $return_field .=get_textField($fieldlabel,$fieldname);
+			$log->debug("Exiting get_quickcreate_form method ...");
 			return $return_field;
 			break;
 	}
@@ -1286,6 +1457,8 @@ function get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid)
 		
 function get_textmanField($label,$name,$tid)
 {
+	global $log;
+	$log->debug("Entering get_textmanField(".$label.",".$name.",".$tid.") method ...");
 	$form_field='';
 	if($tid == 9)
 	{
@@ -1293,6 +1466,7 @@ function get_textmanField($label,$name,$tid)
 		$form_field .= '<font color="red">*</font>';
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="'.$name.'" id="QCK_T_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		$log->debug("Exiting get_textmanField method ...");
 		return $form_field;	
 	}
 	if($tid == 16)
@@ -1301,6 +1475,7 @@ function get_textmanField($label,$name,$tid)
 		$form_field .= '<font color="red">*</font>';
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="'.$name.'" id="QCK_E_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		$log->debug("Exiting get_textmanField method ...");
 		return $form_field;	
 	}
 	else
@@ -1309,6 +1484,7 @@ function get_textmanField($label,$name,$tid)
 		$form_field .= '<font color="red">*</font>';
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		$log->debug("Exiting get_textmanField method ...");
 		return $form_field;	
 	}	
 	
@@ -1316,23 +1492,29 @@ function get_textmanField($label,$name,$tid)
 
 function get_textwebField($label,$name)
 {
+	global $log;
+	$log->debug("Entering get_textwebField(".$label.",".$name.") method ...");
 
 	$form_field='';
 	$form_field .='<td>';
 	$form_field .= $label.':<br>http://<br>';
 	$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+	$log->debug("Exiting get_textwebField method ...");
 	return $form_field;
 	
 }
 
 function get_textField($label,$name)
 {
+	global $log;
+	$log->debug("Entering get_textField(".$label.",".$name.") method ...");	
 	$form_field='';
 	if($name == "amount")
 	{
 		$form_field .='<td>';
 		$form_field .= $label.':(U.S Dollar:$)<br>';
 		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		$log->debug("Exiting get_textField method ...");
 		return $form_field;
 	}
 	else
@@ -1341,6 +1523,7 @@ function get_textField($label,$name)
 		$form_field .='<td>';
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		$log->debug("Exiting get_textField method ...");
 		return $form_field;
 	}
 	
@@ -1348,6 +1531,8 @@ function get_textField($label,$name)
 
 function get_textaccField($label,$name,$tid)
 {
+	global $log;
+	$log->debug("Entering get_textaccField(".$label.",".$name.",".$tid.") method ...");
 	
 	global $app_strings;
 
@@ -1359,6 +1544,7 @@ function get_textaccField($label,$name,$tid)
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="account_name" type="text" size="20" maxlength="" id="account_name" value="" readonly><br>';
 		$form_field .='<input name="account_id" id="QCK_'.$name.'" type="hidden" value="">&nbsp;<input title="'.$app_strings[LBL_CHANGE_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CHANGE_BUTTON_KEY].'" type="button" tabindex="3" class="button" value="'.$app_strings[LBL_CHANGE_BUTTON_LABEL].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		$log->debug("Exiting get_textaccField method ...");
 		return $form_field;
 	}
 	else
@@ -1367,12 +1553,15 @@ function get_textaccField($label,$name,$tid)
 		$form_field .= $label.':<br>';
 		$form_field .='<input name="account_name" type="text" size="20" maxlength="" value="" readonly><br>';
 		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="hidden" value="">&nbsp;<input title="'.$app_strings[LBL_CHANGE_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CHANGE_BUTTON_KEY].'" type="button" tabindex="3" class="button" value="'.$app_strings[LBL_CHANGE_BUTTON_LABEL].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		$log->debug("Exiting get_textaccField method ...");
 		return $form_field;
 	}	
 		
 }
 function get_textcomboField($label,$name)
 {
+	global $log;
+	$log->debug("Entering get_textcomboField(".$label.",".$name.") method ...");
 	$form_field='';
 	if($name == "sales_stage")
 	{
@@ -1386,6 +1575,7 @@ function get_textcomboField($label,$name)
 		$form_field .='<select name="'.$name.'">';
 		$form_field .=get_select_options_with_id($comboFieldArray['sales_stage_dom'], "");
 		$form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
 		return $form_field;
 		
 	}
@@ -1398,6 +1588,7 @@ function get_textcomboField($label,$name)
 		$form_field .='<select name="'.$name.'">';
 		$form_field .=get_select_options_with_id($comboFieldArray['productcategory_dom'], "");
 		$form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
 		return $form_field;	
 		
 	}
@@ -1410,6 +1601,7 @@ function get_textcomboField($label,$name)
 		$form_field .='<select name="'.$name.'">';
 		$form_field .=get_select_options_with_id($comboFieldArray['ticketpriorities_dom'], "");
 		$form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
 		return $form_field;
 	}
 	if($name == "activitytype")
@@ -1422,6 +1614,7 @@ function get_textcomboField($label,$name)
 		$form_field .='<select name="'.$name.'">';
 		$form_field .=get_select_options_with_id($comboFieldArray['activitytype_dom'], "");
 		$form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
 		return $form_field;
 		
 		
@@ -1435,6 +1628,7 @@ function get_textcomboField($label,$name)
                 $form_field .='<select name="'.$name.'">';
                 $form_field .=get_select_options_with_id($comboFieldArray['eventstatus_dom'], "");
                 $form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
                 return $form_field;
 
 
@@ -1448,6 +1642,7 @@ function get_textcomboField($label,$name)
                 $form_field .='<select name="'.$name.'">';
                 $form_field .=get_select_options_with_id($comboFieldArray['taskstatus_dom'], "");
                 $form_field .='</select></td>';
+		$log->debug("Exiting get_textcomboField method ...");
                 return $form_field;
         }
 
@@ -1458,6 +1653,8 @@ function get_textcomboField($label,$name)
 
 function get_textdateField($label,$name,$tid)
 {
+	global $log;
+	$log->debug("Entering get_textdateField(".$label.",".$name.",".$tid.") method ...");
 	global $theme;
 	global $app_strings;
 	global $current_user;
@@ -1478,6 +1675,7 @@ function get_textdateField($label,$name,$tid)
 		$form_field .='<font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font><br>';
 		$form_field .='<input name="'.$name.'"  size="12" maxlength="10" id="QCK_'.$name.'" type="text" value="">&nbsp';
 	       	$form_field .='<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger"></td>';
+		$log->debug("Exiting get_textdateField method ...");
 		return $form_field;
 			
 	}
@@ -1489,6 +1687,7 @@ function get_textdateField($label,$name,$tid)
 		$form_field .='<input name="'.$name.'" id="QCK_T_'.$name.'" tabindex="2" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
 		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_date_start">&nbsp';
 		$form_field.='<input name="time_start" id="task_time_start" tabindex="1" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		$log->debug("Exiting get_textdateField method ...");
 		return $form_field;	
 	}
 	if($tid == 16)
@@ -1499,6 +1698,7 @@ function get_textdateField($label,$name,$tid)
 		$form_field .='<input name="'.$name.'" id="QCK_E_'.$name.'" tabindex="2" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
 		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp';
 		$form_field.='<input name="time_start" id="event_time_start" tabindex="1" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		$log->debug("Exiting get_textdateField method ...");
 		return $form_field;	
 	}
 	
@@ -1510,6 +1710,7 @@ function get_textdateField($label,$name,$tid)
 		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
 		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp';
 		$form_field.='<input name="time_start" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		$log->debug("Exiting get_textdateField method ...");
 		return $form_field;	
 	}
 	
@@ -1518,6 +1719,8 @@ function get_textdateField($label,$name,$tid)
 
 function get_textdurationField($label,$name,$tid)
 {
+	global $log;
+	$log->debug("Entering get_textdurationField(".$label.",".$name.",".$tid.") method ...");
 	$form_field='';
 	if($tid == 16)
 	{
@@ -1532,6 +1735,7 @@ function get_textdurationField($label,$name,$tid)
 		$form_field .='<select name="duration_minutes">';
 		$form_field .=get_select_options_with_id($comboFieldArray['duration_minutes_dom'], "");
 		$form_field .='</select><br>(hours/minutes)<br></td>';
+		$log->debug("Exiting get_textdurationField method ...");
 		return $form_field;
 	}	
 }
@@ -1539,6 +1743,8 @@ function get_textdurationField($label,$name,$tid)
 //Added to get the parents list as hidden for Emails -- 09-11-2005
 function getEmailParentsList($module,$id)
 {
+	global $log;
+	$log->debug("Entering getEmailParentsList(".$module.",".$id.") method ...");
         global $adb;
 	if($module == 'Contacts')
 		$focus = new Contact();
@@ -1557,6 +1763,7 @@ function getEmailParentsList($module,$id)
         $hidden .= '<input type="hidden" name="emailids" value="'.$id.'@'.$fieldid.'|">';
         $hidden .= '<input type="hidden" name="pmodule" value="'.$module.'">';
 
+	$log->debug("Exiting getEmailParentsList method ...");
 	return $hidden;
 }
 
@@ -1566,6 +1773,8 @@ function getEmailParentsList($module,$id)
   */
 function getPoStatus($po_id)
 {
+	global $log;
+	$log->debug("Entering getPoStatus(".$po_id.") method ...");
 
 	global $log;
         $log->info("in getPoName ".$po_id);
@@ -1574,6 +1783,7 @@ function getPoStatus($po_id)
         $sql = "select postatus from purchaseorder where purchaseorderid=".$po_id;
         $result = $adb->query($sql);
         $po_status = $adb->query_result($result,0,"postatus");
+	$log->debug("Exiting getPoStatus method ...");
         return $po_status;
 }
 
@@ -1584,11 +1794,14 @@ function getPoStatus($po_id)
   */
 function addToProductStock($productId,$qty)
 {
+	global $log;
+	$log->debug("Entering addToProductStock(".$productId.",".$qty.") method ...");
 	global $adb;
 	$qtyInStck=getProductQtyInStock($productId);
 	$updQty=$qtyInStck + $qty;
 	$sql = "UPDATE products set qtyinstock=$updQty where productid=".$productId;
 	$adb->query($sql);
+	$log->debug("Exiting addToProductStock method ...");
 	
 }
 /** This Function returns the current product quantity in stock.
@@ -1597,10 +1810,13 @@ function addToProductStock($productId,$qty)
   */
 function getProductQtyInStock($product_id)
 {
+	global $log;
+	$log->debug("Entering getProductQtyInStock(".$product_id.") method ...");
         global $adb;
         $query1 = "select qtyinstock from products where productid=".$product_id;
         $result=$adb->query($query1);
         $qtyinstck= $adb->query_result($result,0,"qtyinstock");
+	$log->debug("Exiting getProductQtyInStock method ...");
         return $qtyinstck;
 
 
@@ -1612,16 +1828,22 @@ function getProductQtyInStock($product_id)
   */
 function getDateFromDateAndtime($date_time)
 {
-    $result = explode(" ",$date_time);
-    return $result;
+	global $log;
+	$log->debug("Entering getDateFromDateAndtime(".$date_time.") method ...");
+	$result = explode(" ",$date_time);
+	$log->debug("Exiting getDateFromDateAndtime method ...");
+	return $result;
 }
 
 
 function getBlockTableHeader($header_label)
 {
+	global $log;
+	$log->debug("Entering getBlockTableHeader(".$header_label.") method ...");
 	global $mod_strings;
 	$label = $mod_strings[$header_label];
 	$output = $label;
+	$log->debug("Exiting getBlockTableHeader method ...");
 	return $output;
 
 }
@@ -1635,6 +1857,8 @@ function getBlockTableHeader($header_label)
  */
 function getTableNameForField($module,$fieldname)
 {
+	global $log;
+	$log->debug("Entering getTableNameForField(".$module.",".$fieldname.") method ...");
 	global $adb;
 	$tabid = getTabid($module);
 
@@ -1647,11 +1871,14 @@ function getTableNameForField($module,$fieldname)
 		$tablename = $adb->query_result($res,0,'tablename');
 	}
 
+	$log->debug("Exiting getTableNameForField method ...");
 	return $tablename;
 }
 
 function getParentRecordOwner($tabid,$parModId,$record_id)
 {
+	global $log;
+	$log->debug("Entering getParentRecordOwner(".$tabid.",".$parModId.",".$record_id.") method ...");
 	$parentRecOwner=Array();
 	$parentTabName=getTabname($parModId);
 	$relTabName=getTabname($tabid);
@@ -1661,108 +1888,142 @@ function getParentRecordOwner($tabid,$parModId,$record_id)
 	{
 		$parentRecOwner=getRecordOwnerId($ent_id);	
 	}
+	$log->debug("Exiting getParentRecordOwner method ...");
 	return $parentRecOwner;
 }
 
 function getPotentialsRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getPotentialsRelatedAccounts(".$record_id.") method ...");
 	global $adb;
 	$query="select accountid from potential where potentialid=".$record_id;
 	$result=$adb->query($query);
 	$accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getPotentialsRelatedAccounts method ...");
 	return $accountid;
 }
 
 function getEmailsRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getEmailsRelatedAccounts(".$record_id.") method ...");
 	global $adb;
 	$query = "select seactivityrel.crmid from seactivityrel inner join crmentity on crmentity.crmid=seactivityrel.crmid where crmentity.setype='Accounts' and activityid=".$record_id;
 	$result = $adb->query($query);
 	$accountid=$adb->query_result($result,0,'crmid');
+	$log->debug("Exiting getEmailsRelatedAccounts method ...");
 	return $accountid;
 }
 
 function getEmailsRelatedLeads($record_id)
 {
+	global $log;
+	$log->debug("Entering getEmailsRelatedLeads(".$record_id.") method ...");
 	global $adb;
 	$query = "select seactivityrel.crmid from seactivityrel inner join crmentity on crmentity.crmid=seactivityrel.crmid where crmentity.setype='Leads' and activityid=".$record_id;
 	$result = $adb->query($query);
 	$leadid=$adb->query_result($result,0,'crmid');
+	$log->debug("Exiting getEmailsRelatedLeads method ...");
 	return $leadid;
 }
 
 function getHelpDeskRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getHelpDeskRelatedAccounts(".$record_id.") method ...");
 	global $adb;
         $query="select parent_id from troubletickets inner join crmentity on crmentity.crmid=troubletickets.parent_id where ticketid=".$record_id." and crmentity.setype='Accounts'";
         $result=$adb->query($query);
         $accountid=$adb->query_result($result,0,'parent_id');
+	$log->debug("Exiting getHelpDeskRelatedAccounts method ...");
         return $accountid;
 }
 
 
 function getQuotesRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getQuotesRelatedAccounts(".$record_id.") method ...");
 	global $adb;
         $query="select accountid from quotes where quoteid=".$record_id;
         $result=$adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getQuotesRelatedAccounts method ...");
         return $accountid;
 }
 
 
 function getQuotesRelatedPotentials($record_id)
 {
+	global $log;
+	$log->debug("Entering getQuotesRelatedPotentials(".$record_id.") method ...");
 	global $adb;
         $query="select potentialid from quotes where quoteid=".$record_id;
         $result=$adb->query($query);
         $potid=$adb->query_result($result,0,'potentialid');
+	$log->debug("Exiting getQuotesRelatedPotentials method ...");
         return $potid;
 }
 
 function getSalesOrderRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedAccounts(".$record_id.") method ...");
 	global $adb;
         $query="select accountid from salesorder where salesorder=".$record_id;
         $result=$adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getSalesOrderRelatedAccounts method ...");
         return $accountid;
 }
 
 
 function getSalesOrderRelatedPotentials($record_id)
 {
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedPotentials(".$record_id.") method ...");
 	global $adb;
         $query="select potentialid from salesorder where salesorder=".$record_id;
         $result=$adb->query($query);
         $potid=$adb->query_result($result,0,'potentialid');
+	$log->debug("Exiting getSalesOrderRelatedPotentials method ...");
         return $potid;
 }
 
 function getSalesOrderRelatedQuotes($record_id)
 {
+	global $log;
+	$log->debug("Entering getSalesOrderRelatedQuotes(".$record_id.") method ...");
 	global $adb;
         $query="select quoteid from salesorder where salesorder=".$record_id;
         $result=$adb->query($query);
         $qtid=$adb->query_result($result,0,'quoteid');
+	$log->debug("Exiting getSalesOrderRelatedQuotes method ...");
         return $qtid;
 }
 
 function getInvoiceRelatedAccounts($record_id)
 {
+	global $log;
+	$log->debug("Entering getInvoiceRelatedAccounts(".$record_id.") method ...");
 	global $adb;
         $query="select accountid from invoice where invoiceid=".$record_id;
         $result=$adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
+	$log->debug("Exiting getInvoiceRelatedAccounts method ...");
         return $accountid;
 }
 
 function getInvoiceRelatedSalesOrder($record_id)
 {
+	global $log;
+	$log->debug("Entering getInvoiceRelatedSalesOrder(".$record_id.") method ...");
 	global $adb;
         $query="select salesorderid from invoice where invoiceid=".$record_id;
         $result=$adb->query($query);
         $soid=$adb->query_result($result,0,'salesorderid');
+	$log->debug("Exiting getInvoiceRelatedSalesOrder method ...");
         return $soid;
 }
 
@@ -1774,6 +2035,8 @@ function getInvoiceRelatedSalesOrder($record_id)
  */
 function get_days_n_dates($st,$en)
 {
+	global $log;
+	$log->debug("Entering get_days_n_dates(".$st.",".$en.") method ...");
         $stdate_arr=explode("-",$st);
         $endate_arr=explode("-",$en);
 
@@ -1787,6 +2050,7 @@ function get_days_n_dates($st,$en)
         if(!isset($day_date))
                 $day_date=0;
         $nodays_dates=array($days,$day_date);
+	$log->debug("Exiting get_days_n_dates method ...");
         return $nodays_dates; //passing no of days , days in between the days
 }//function end
 
@@ -1798,6 +2062,8 @@ function get_days_n_dates($st,$en)
  */
 function start_end_dates($period)
 {
+	global $log;
+	$log->debug("Entering start_end_dates(".$period.") method ...");
         $st_thisweek= date("Y-m-d",mktime(0,0,0,date("n"),(date("j")-date("w")),date("Y")));
         if($period=="tweek")
         {
@@ -1865,6 +2131,7 @@ function start_end_dates($period)
         else
                 $height="250";
         $datevalues=array($st_date,$end_date,$period_type,$width,$height);
+	$log->debug("Exiting start_end_dates method ...");
         return $datevalues;
 }//function ends
 
@@ -1877,6 +2144,8 @@ function start_end_dates($period)
  */
 function Graph_n_table_format($period_type,$date_value)
 {
+	global $log;
+	$log->debug("Entering Graph_n_table_format(".$period_type.",".$date_value.") method ...");
         $date_val=explode("-",$date_value);
         if($period_type=="month")   //to get the table format dates
         {
@@ -1894,29 +2163,35 @@ function Graph_n_table_format($period_type,$date_value)
                 $graph_format=$table_format;
         }
         $values=array($graph_format,$table_format);
+	$log->debug("Exiting Graph_n_table_format method ...");
         return $values;
 }
 
 
 function getImageCount($id)
 {
+	global $log;
+	$log->debug("Entering getImageCount(".$id.") method ...");
 	global $adb;
 	$image_lists=array();
 	$query="select imagename from products where productid=".$id;
 	$result=$adb->query($query);
 	$imagename=$adb->query_result($result,0,'imagename');
 	$image_lists=explode("###",$imagename);
+	$log->debug("Exiting getImageCount method ...");
 	return count($image_lists);
 
 }
 function getUserImageName($id)
 {
-	global $adb;
 	global $log;
+	$log->debug("Entering getUserImageName(".$id.") method ...");
+	global $adb;
 	$query = "select imagename from users where id=".$id;
 	$result = $adb->query($query);
 	$image_name = $adb->query_result($result,0,"imagename");
 	$log->debug("Inside getUserImageName. The image_name is ".$image_name);
+	$log->debug("Exiting getUserImageName method ...");
 	return $image_name;
 
 }
@@ -1924,8 +2199,9 @@ function getUserImageName($id)
 
 function getUserImageNames()
 {
-	global $adb;
 	global $log;
+	$log->debug("Entering getUserImageNames() method ...");
+	global $adb;
 	$query = "select imagename from users where deleted=0";
 	$result = $adb->query($query);
 	$image_name=array();
@@ -1936,7 +2212,10 @@ function getUserImageNames()
 	}
 	$log->debug("Inside getUserImageNames.");
 	if(count($image_name) > 0)
+	{
+		$log->debug("Exiting getUserImageNames method ...");
 		return $image_name;
+	}
 }
 
 
