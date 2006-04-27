@@ -143,7 +143,7 @@ if(isPermitted("Emails","EditView",$_REQUEST['record']) == 'yes')
 
 if(isPermitted("Emails","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
-
+$smarty->assign("ID",$focus->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
