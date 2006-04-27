@@ -97,10 +97,10 @@ if ( isset($focus->filename) && $focus->filename != '')
 $smarty->assign("SINGLE_MOD","Note");
 
 $permissionData = $_SESSION['action_permission_set'];
-if(isPermitted("Notes",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Notes","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Notes",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $check_button = Button_Check($module);

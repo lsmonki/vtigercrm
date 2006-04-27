@@ -83,7 +83,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$log->info("Here is the where clause for the list view: $where");
 
 }
-if(isPermitted('Notes',2,'') == 'yes')
+if(isPermitted('Notes','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
