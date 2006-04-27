@@ -302,6 +302,10 @@ function BasicSearch($module,$search_field,$search_string)
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);
 			}
+			elseif($table_name == "activity" && $column_name == "status")
+			{
+				$where="$table_name.$column_name like '%".$search_string."%' or activity.eventstatus like '%".$search_string."%'";
+			}
 			else if(in_array($column_name,$column_array))
 			{
 				$where = getValuesforColumns($column_name,$search_string);
@@ -434,6 +438,11 @@ function getWhereCondition($currentModule)
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'users.user_name')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'groups.groupname')." )".$matchtype;	
+			}
+			elseif($tab_col == "activity.status")
+			{
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'activity.status')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'activity.eventstatus')." )".$matchtype;	
 			}
 			else
 			{
