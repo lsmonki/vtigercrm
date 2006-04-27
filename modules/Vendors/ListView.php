@@ -66,7 +66,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 // Buttons and View options
-if(isPermitted('Vendors',2,'') == 'yes')
+if(isPermitted('Vendors','DeleteVendor','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }

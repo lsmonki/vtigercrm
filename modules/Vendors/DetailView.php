@@ -43,9 +43,9 @@ $smarty->assign("BLOCKS", getBlocks("Vendors","detail_view",'',$focus->column_fi
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
-if(isPermitted("Vendors",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Vendors","VendorEditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
-if(isPermitted("Vendors",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Vendors","DeleteVendor",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 
