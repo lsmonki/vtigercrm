@@ -77,6 +77,8 @@ if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 
 $smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
