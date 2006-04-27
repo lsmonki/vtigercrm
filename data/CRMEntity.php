@@ -727,6 +727,10 @@ class CRMEntity extends SugarBean
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
 			  }
+			  elseif($module == 'Campaigns' && $table_name == 'campaign')
+			  {
+				  updateCampaignGroupRelation($this->id,$groupname);
+			  }
 			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
 				 if($table_name == 'activity')
@@ -775,6 +779,10 @@ class CRMEntity extends SugarBean
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'Campaigns' && $table_name == 'campaign')
+			  {
+				  updateCampaignGroupRelation($this->id,$groupname);
 			  }
 			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
@@ -832,6 +840,10 @@ class CRMEntity extends SugarBean
 		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'troubletickets') 
 		  {
 			  insert2TicketGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'campaign')
+		  {
+			  insert2CampaignGroupRelation($this->id,$groupname);
 		  }
 
 	  }
