@@ -34,6 +34,14 @@ $focus = new SalesOrder();
 $other_text = Array();
 $url_string = ''; // assigning http url string
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
