@@ -18,6 +18,9 @@ if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 
 
 $smarty = new vtigerCRM_Smarty;
+$smarty->assign("PARENTPROFILEID", $parentProfileId);
+$smarty->assign("RADIOBUTTON", $_REQUEST['radiobutton']);
+
 $secondaryModule='';
 $mode='';
 $output ='';
