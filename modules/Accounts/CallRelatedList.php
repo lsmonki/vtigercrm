@@ -32,7 +32,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists("Accounts",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
