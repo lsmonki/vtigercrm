@@ -40,6 +40,14 @@ $focus = new Contact();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
@@ -191,7 +199,7 @@ while($row = $adb->fetch_array($list_result))
 }
 if(isset($ids))
 {
-	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
+	$smarty->assign("ALLIDS", implode($ids,";"));
 }
 if(isPermitted("Contacts","Merge") == 'yes') 
 {
