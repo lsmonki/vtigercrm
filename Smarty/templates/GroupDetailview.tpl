@@ -1,81 +1,107 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
+	<tr>
+			{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<form action="index.php" method="post" name="new" id="form">
+	<form action="index.php" method="post" name="new" id="form">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="createnewgroup">
 <input type="hidden" name="groupId" value="{$GROUPID}">
 <input type="hidden" name="mode" value="edit">
 <input type="hidden" name="parenttab" value="Settings">
-<tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_GROUP_MEMBERS_LIST}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+    <tr>
+      <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
+          <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_GROUP_MEMBERS_LIST}</b> </span>
+          <hr noshade="noshade" size="1" />
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="95%" style="padding-left:20px;" valign="top"><table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
+          <tr>
+            <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGEPATH}groups.gif" width="48" height="48" align="absmiddle" /> </td>
+            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$GROUPINFO.0.groupname} Group</span><br />
+                <span class="big">Detail view of {$GROUPINFO.0.groupname} Group</span> </td>
+          </tr>
+          <tr>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="2" ><table width="100%" cellpadding="5" cellspacing="0" border="0" >
+                <tr>
+                  <td colspan="4" class="detailedViewHeader"><b>Group Details</b></td>
+                </tr>
+                <tr>
+                  <td class="dvtCellLabel" width="5%">&nbsp;</td>
+				  <td class="dvtCellLabel" align="right" width="25%"><b>Group Name :</b></td>
+                  <td class="dvtCellInfo" align="left" width="25%">{$GROUPINFO.0.groupname}</td>
+                  <td class="dvtCellInfo" width="45%">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td class="dvtCellLabel" width="5%">&nbsp;</td>
+				  <td class="dvtCellLabel" align="right"><b>Description :</b></td>
+                  <td colspan="2" align="left" class="dvtCellInfo">{$GROUPINFO.0.description}</td>
+                </tr>
+                <tr>
+                  <td colspan="4"  class="dvtCellInfo">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="4"  class="detailedViewHeader"><b>Member List</b></td>
+                </tr>
+                <tr>
+                  	{foreach key=type item=details from=$GROUPINFO.1} 
+							{if $details.0 neq ''}		
+                      	  	<tr>
+								{if $type == "User"}
+								<td class="dvtCellLabel" valign="top" align="left" width="5%">
+										<img src="{$IMAGEPATH}user_icon.gif" align="absmiddle">
+								</td>
+								{/if}
+								{if $type == "Role" }
+								<td class="dvtCellLabel" valign="top" align="left" width="5%">
+										<img src="{$IMAGEPATH}roles_icon.gif" align="absmiddle">
+								</td>
+								{/if}
+								{if $type == "Role and Subordinates" }
+								<td class="dvtCellLabel" valign="top" align="left" width="5%">
+										<img src="{$IMAGEPATH}roles_icon.gif" align="absmiddle">
+								</td>
+								{/if}
+								{if $type == "Group" }
+								<td class="dvtCellLabel" valign="top" align="left" width="5%">
+										<img src="{$IMAGEPATH}groups_icon.gif" align="absmiddle">
+								</td>
+								{/if}
+								<td class="dvtCellLabel" valign="top" align="right" width="15%"><b>{$type} : </b></td>
+                          		<td class="dvtCellInfo" width="45%" colspan="2">
+									{foreach item=element from=$details}
+											<a href="index.php?module=Users&action={$element.memberaction}&{$element.actionparameter}={$element.memberid}">{$element.membername}</a><br />
+									{/foreach}
+                              </td>
+                        </tr>
+						{/if}
+						{/foreach}	
+                 <tr>
+                  <td colspan="4"  class="dvtCellInfo" align="center">
+				  	<!-- <input title="Back" accessKey="C" class="classBtn" onclick="window.history.back();" type="button" name="New" value=" <  Back " > &nbsp; -->
+					 <input value="   Edit   " title="Edit" accessKey="E" class="classBtn" type="submit" name="Edit" >
+                    &nbsp;<input value=" Delete " title="Delete" accessKey="D" class="classBtn" type="button" name="Delete" onClick="deletegroup('{$GROUPID}','{$GROUP_NAME}')";>	
+				</td>
+                </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+      </table></td>
+    </tr>
+  </table></td>
 </tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-	
-	<table align="center" border="0" cellpadding="5" cellspacing="0" width="75%">
-	<tbody><tr><td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
-	<tr>
-	<td style="padding-right: 10px;" align="center"></td>
-	<td align="left">
-	<input title="Back" accessKey="C" class="button" onclick="window.history.back();" type="button" name="New" value=" <  Back " >
-	<input value="   Edit   " title="Edit" accessKey="E" class="button" type="submit" name="Edit" >&nbsp;&nbsp;
-	<input value=" Delete " title="Delete" accessKey="D" class="button" type="button" name="Delete" onClick="deletegroup('{$GROUPID}','{$GROUP_NAME}')";>&nbsp;&nbsp;
-	</td>
-	</tr>
-	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
-	<tr>
-	<td style="padding-right: 10px;" align="right" width="30%"><b>Group Name : </b></td>
-	<td align="left" width="70%">{$GROUPINFO.0.groupname}</td>
-	</tr>
-	<tr>
-	
-	<td style="padding-right: 10px;" align="right"><b>Description : </b></td>
-	<td>{$GROUPINFO.0.description}</td>
-	</tr>
-	<tr>
-	<td style="padding-right: 10px;" align="right">&nbsp;</td>
-	<td>&nbsp;</td>
-	</tr>
-	
-	<tr>
-	
-	<td style="border-bottom: 1px solid rgb(204, 204, 204); padding-right: 10px;" align="right" valign="top"><b>Member List : </b></td>
-	<td style="border-bottom: 1px solid rgb(204, 204, 204); text-align: left;">
-	<div style="overflow: auto; position: relative; left: 10px; top: 0px; width: 100%; height: 225px; text-align: left;">
-	
-	{foreach key=type item=details from=$GROUPINFO.1} 
-		{if $details.0 neq ''}		
-		<li><b style="margin: 0pt; padding: 0pt; font-weight: bold;">{$type}</b>
-		<ul style="list-style-type: none;">
-		{foreach item=element from=$details}
-			<li><a href="index.php?module=Users&action={$element.memberaction}&{$element.actionparameter}={$element.memberid}">{$element.membername}</a></li>
-		{/foreach}
-		</ul>
-		</li>
-		{/if}
-	{/foreach}	
-	
-	</div>
-	</td>
-	</tr>
-	</tbody></table>
-	
-</td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
+</table></from>
 </td>
 </tr>
 </table>

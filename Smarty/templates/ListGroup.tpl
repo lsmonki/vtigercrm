@@ -5,7 +5,7 @@
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+<table width="95%" border="0" cellpadding="0" cellspacing="0"  align="center">
 <form action="index.php" method="post" name="new" id="form">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="createnewgroup">
@@ -14,41 +14,49 @@
 <tr>
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_GROUP_NAME}</b></span>
-<hr noshade="noshade" size="1" />
+<hr noshade="noshade" size="1" /><br>
 </td>
 </tr>
 <tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-	
-	<table width="100%" cellpadding="3" cellspacing="0" >
-	<tr><td colspan="2">&nbsp;</td></tr>
+<td valign="top" class="leadTable" style="padding:20px; ">
+<table width="100%" cellpadding="5" cellspacing="0" >
 	<tr>
-	<td colspan="2" align="left">&nbsp;</td>
-	<td align="right"><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Group"/></td>
+		<td style="border-bottom:1px dashed #CCCCCC;" width="50%">
+			<img src="{$IMAGE_PATH}groups.gif" align="absmiddle">&nbsp;<span class="genHeaderGrayBig">{$CMOD.LBL_GROUP_NAME}</span>
+		</td>
+		<td style="border-bottom:1px dashed #CCCCCC;" width="50%" align="right">
+			<input title="New" accessKey="C" class="classBtn" type="submit" name="New" value="New Group"/>
+		</td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
-	
 	<tr>
-	<td class="detailedViewHeader" width="15%"><b>{$LIST_HEADER.0}</b></td>
-	<td class="detailedViewHeader" width="35%"><b>{$LIST_HEADER.1}</b></td>
-	<td class="detailedViewHeader" width="50%"><b>{$LIST_HEADER.2}</b></td>
+		<td colspan="2" >
+			<table width="100%" border="0" cellpadding="5" cellspacing="1" class="small" style="background-color: rgb(204, 204, 204);">
+                          <tbody>
+                            <tr>
+                              <td class="lvtCol" width="35%">{$LIST_HEADER.1}</td>
+                              <td class="lvtCol" width="50%">{$LIST_HEADER.2}</td>
+							  <td class="lvtCol" width="15%">{$LIST_HEADER.0}</td>
+                            </tr>
+							{section name=entries loop=$LIST_ENTRIES}
+                            <tr  class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
+                              <td ><a href="index.php?module=Users&action=GroupDetailView&parenttab=Settings&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</a></td>
+                              <td >{$LIST_ENTRIES[entries].description}</td>
+							  <td align="center" >
+							  	<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}">
+								<img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0" align="absmiddle"></a>&nbsp;|	
+								<a href="#" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";><img src="{$IMAGE_PATH}delete.gif" border="0" align="absmiddle"></a>
+							</td>
+                            </tr>
+							{/section}	
+                          </tbody>
+                        </table>
+			</td>
 	</tr>
-	
-	{section name=entries loop=$LIST_ENTRIES}
-		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
-		<td nowrap>&nbsp;
-		<img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";>
-		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
-		&nbsp;</td>
-		<td nowrap><a href="index.php?module=Users&action=GroupDetailView&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</a></td>
-		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
-		<tr>
-	{/section}	
-			
-	</table>
+</table>
 
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
+
 </tr>
 </table>
 </td>
@@ -68,3 +76,21 @@ function deletegroup(id,groupname)
 </script>
 	{include file='SettingsSubMenu.tpl'}
 
+<!-- 
+
+<td class="detailedViewHeader" width="15%"><b>{$LIST_HEADER.0}</b></td>
+	<td class="detailedViewHeader" width="35%"><b>{$LIST_HEADER.1}</b></td>
+	<td class="detailedViewHeader" width="50%"><b>{$LIST_HEADER.2}</b></td>
+	</tr>
+	
+	{section name=entries loop=$LIST_ENTRIES}
+		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
+		<td nowrap>&nbsp;
+		<img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";>
+		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
+		&nbsp;</td>
+		<td nowrap><a href="index.php?module=Users&action=GroupDetailView&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</a></td>
+		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>
+		<tr>
+	{/section}	
+ -->

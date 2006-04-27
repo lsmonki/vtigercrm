@@ -123,7 +123,7 @@ function validate()
 <input type="hidden" name="groupId" value="{$GROUPID}">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 <tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
+<td class="showPanelBg" valign="top" width="100%" style="padding-left:20px; "><br />
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_CREATE_NEW_GROUP}</b></span>
 <hr noshade="noshade" size="1"/>
 </td>
@@ -131,52 +131,54 @@ function validate()
 <tr>
 <td width="75%" style="padding-left:20px;" valign="top">
 
-	<table align="center" border="0" cellpadding="5" cellspacing="0" width="90%">
+	<table align="center" border="0" cellpadding="5" cellspacing="0" width="100%" class="leadTable">
 	<tbody>
 	<tr>
-	<td colspan="2">&nbsp;</td>
+			<td align="left" style="padding:10px;border-bottom:1px dashed #CCCCCC;" colspan="3">
+					<img src="{$IMAGE_PATH}groups.gif" align="absmiddle">
+					<span class="genHeaderGray">{$CMOD.LBL_CREATE_NEW_GROUP}</span>
+			</td>
 	</tr>
 	<tr>
-	<td width="20%">&nbsp;</td>
+	<td width="10%"></td>
+	<td width="10%">&nbsp;</td>
 	<td width="80%">&nbsp;</td>
 	</tr>
 	<tr>
-	<td style="padding-right: 10px;" align="right" width="20%">Group Name</td>
+	<td align="right"><img src="{$IMAGE_PATH}one.gif" align="absmiddle"> </td>
+	<td style="padding-right: 10px;" align="right" width="20%">
+			<b>Group Name :</b></td>
 	<td style="padding-left: 10px;" align="left" width="80%">
-	<input name="groupName" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" type="text" value="{$GROUPNAME}">
+	<input name="groupName" class="importBox" style="width:40%;" type="text" value="{$GROUPNAME}">
 	</td>
 	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
 	<tr>
-	<td style="padding-right: 10px;" align="right">Description</td>
+	<td align="right"><img src="{$IMAGE_PATH}two.gif" align="absmiddle"></td>
+	<td style="padding-right: 10px;" align="right" valign="top">
+			<b>Description : </b></td>
 	<td style="padding-left: 10px;" align="left">
-	<textarea name="description"  class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'">{$DESCRIPTION}</textarea>
+	<textarea name="description"  class="txtBox" style="width:40%;" >{$DESCRIPTION}</textarea>
 	</td>
-	
 	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
 	<tr>
-	<td colspan=2>
-		<table align="center" border="0" cellpadding="0" cellspacing="0" width="90%">
-		<tbody>
-		<tr>
-		<td style="padding-right: 10px;" align="right">Filters</td>
-		<td>
-		<select id="memberType" name="memberType" onchange="showOptions()">
-		<option value="groups" selected>Groups</option>
-		<option value="roles">Roles</option>
-		<option value="rs">Roles and Subordinates</option>
-		<option value="users">Users</option>
-		</select>
-		</td><td>
-		<input type="text" name="findStr">
-    	<input type="button" name="Find" value="Find" class="button" onClick="showOptions()">
+		<td align="right"><img src="{$IMAGE_PATH}three.gif" align="absmiddle"></td>
+		<td style="padding-right: 10px;" align="right">
+			<b>Filters : </b></td>
+		<td><select id="memberType" name="memberType" onchange="showOptions()">
+          <option value="groups" selected>Groups</option>
+          <option value="roles">Roles</option>
+          <option value="rs">Roles and Subordinates</option>
+          <option value="users">Users</option>
+        </select>&nbsp;&nbsp;
+		<input type="text" name="findStr">&nbsp;
+          <input type="button" name="Find" value="Find" class="classBtn" onClick="showOptions()">
 		</td>
-		</tr>
-		</tbody>
-		</table>
-	</td>
 	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
 	<tr>
-	<td	colspan="2">
+	<td	colspan="3">
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="75%">
 	<tbody>
 	<tr>
@@ -186,8 +188,8 @@ function validate()
 	<input type="hidden" name="selectedColumnsString"/>
 	</td>
 	<td align="center">
-	<input type="button" name="Button" value=" Add &rsaquo; " onClick="addColumn()"/><br /><br />
-	<input type="button" name="Button1" value=" &lsaquo; Remove " onClick="delColumn()"/>
+	<input type="button" name="Button" value="&nbsp;&rsaquo;&rsaquo;&nbsp;" onClick="addColumn()" class="classBtn"/><br /><br />
+	<input type="button" name="Button1" value="&nbsp;&lsaquo;&lsaquo;&nbsp;" onClick="delColumn()" class="classBtn"/>
 	</td>
 	<td align="center"><b>Selected Member</b><br>
 	<select id="selectedColumns" name="selectedColumns" multiple size="10" style="width:200px; ">
@@ -202,22 +204,17 @@ function validate()
 	</tr>
 
 	<tr>
-	<td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td>
+	<td colspan="3" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td>
 	</tr>
 	<tr>
-	<td colspan="2" align="right"> &nbsp;&nbsp;
-	
-	<input type="submit" class="button" name="add" value="Add Group" onClick="return validate()">
+	<td colspan="3" align="center"> 	
+	<input type="submit" class="classBtn" name="add" value="Add Group" onClick="return validate()">
 	&nbsp;&nbsp;
-    <input type="button" class="button" name="cancel" value="Cancel" onClick="window.history.back()">
+    <input type="button" class="classBtn" name="cancel" value="Cancel" onClick="window.history.back()">
 	</td>
-	</tr>
-	<tr>
-	<td colspan="2" style="border-top: 1px solid rgb(204, 204, 204);">&nbsp;</td>
 	</tr>
 	</tbody></table>
 
-<td colspan="2" style="border-top:1px solid #CCCCCC;">&nbsp;</td>
 </tr>
 </table>
 </form>
