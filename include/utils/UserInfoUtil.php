@@ -23,10 +23,13 @@ global $log;
  */
 function getMailServerInfo($user)
 {
+	global $log;
+	$log->debug("Entering getMailServerInfo(".$user.") method ...");
 	global $adb;
 	//$sql= "select rolename from user2role where userid='" .$userid ."'";
    $sql = "select * from mail_accounts where status=1 and user_id=".$user->id;
         $result = $adb->query($sql);
+	$log->debug("Exiting getMailServerInfo method ...");
 	return $result;
 }
 
@@ -36,11 +39,14 @@ function getMailServerInfo($user)
  */
 function fetchUserRole($userid)
 {
+	global $log;
+	$log->debug("Entering fetchUserRole(".$userid.") method ...");
 	global $adb;
 	//$sql= "select rolename from user2role where userid='" .$userid ."'";
 	$sql = "select roleid from user2role where userid='" .$userid ."'";
         $result = $adb->query($sql);
 	$roleid=  $adb->query_result($result,0,"roleid");
+	$log->debug("Exiting fetchUserRole method ...");
 	return $roleid;
 }
 
@@ -50,6 +56,8 @@ function fetchUserRole($userid)
  */
 function fetchUserProfileId($userid)
 {
+	global $log;
+	$log->debug("Entering fetchUserProfileId(".$userid.") method ...");
 	global $adb;
 	$sql = "select roleid from user2role where userid=" .$userid;
         $result = $adb->query($sql);
@@ -59,6 +67,7 @@ function fetchUserProfileId($userid)
 	$sql1 = "select profileid from role2profile where roleid='" .$roleid."'";
         $result1 = $adb->query($sql1);
 	$profileid=  $adb->query_result($result1,0,"profileid");
+	$log->debug("Exiting fetchUserProfileId method ...");
 	return $profileid;
 }
 
@@ -69,10 +78,13 @@ function fetchUserProfileId($userid)
 */
 function fetchUserGroupids($userid)
 {
+	global $log;
+	$log->debug("Entering fetchUserGroupids(".$userid.") method ...");
 	global $adb;
         $focus = new GetUserGroups();
         $focus->getAllUserGroups($userid);
         $groupidlists = implode(",",$focus->user_groups);
+	$log->debug("Exiting fetchUserGroupids method ...");
         return $groupidlists;
 		
 }
@@ -82,6 +94,8 @@ function fetchUserGroupids($userid)
  */
 function loadAllPerms()
                 {
+	global $log;
+	$log->debug("Entering loadAllPerms() method ...");
         global $adb,$MAX_TAB_PER;
         global $persistPermArray;
 
@@ -110,6 +124,7 @@ function loadAllPerms()
                         $persistPermArray[$profileid][$tabid] = $tab_per;
                 }
         }
+	$log->debug("Exiting loadAllPerms method ...");
 }
 
 /** Function to get all the tab permission for the specified profile
@@ -123,6 +138,8 @@ function loadAllPerms()
  */
 function getAllTabsPermission($profileid)
 {
+	global $log;
+	$log->debug("Entering getAllTabsPermission(".$profileid.") method ...");
 	global $persistPermArray;
         global $adb,$MAX_TAB_PER;
         // Mike Crowe Mod --------------------------------------------------------
@@ -130,6 +147,7 @@ function getAllTabsPermission($profileid)
         {
                 if ( count($persistPermArray) == 0 )
                         loadAllPerms();
+		$log->debug("Exiting getAllTabsPermission method ...");
                 return $persistPermArray[$profileid];
         }
         else
@@ -148,6 +166,7 @@ function getAllTabsPermission($profileid)
                         $tab_per= $adb->query_result($result,$i,'permissions');
                         $tab_perr_array[$tabid] = $tab_per;
                 }
+		$log->debug("Exiting getAllTabsPermission method ...");
                 return $tab_perr_array;
         }
         // Mike Crowe Mod ---------------------------------------------------------------- 
@@ -165,6 +184,8 @@ function getAllTabsPermission($profileid)
  */
 function getTabsPermission($profileid)
 {
+	global $log;
+	$log->debug("Entering getTabsPermission(".$profileid.") method ...");
 	global $persistPermArray;
         global $adb;
         // Mike Crowe Mod -------------------------------------------------------
@@ -175,6 +196,7 @@ function getTabsPermission($profileid)
                 $tab_perr_array = $persistPermArray;
                 foreach( array(1,3,16,15) as $tabid )
                         $tab_perr_array[$tabid] = 0;
+		$log->debug("Exiting getTabsPermission method ...");
                 return $tab_perr_array;
         }
         else
@@ -192,6 +214,7 @@ function getTabsPermission($profileid)
                                 $tab_perr_array[$tabid] = $tab_per;
                         }
                 }
+		$log->debug("Exiting getTabsPermission method ...");
                 return $tab_perr_array;
         } 
 
@@ -208,6 +231,8 @@ function getTabsPermission($profileid)
  */
 function getTabsActionPermission($profileid)
 {
+	global $log;
+	$log->debug("Entering getTabsActionPermission(".$profileid.") method ...");
 	global $adb;
 	$check = Array();
 	$temp_tabid = Array();	
@@ -228,11 +253,8 @@ function getTabsActionPermission($profileid)
 		$per_id = $adb->query_result($result1,$i,'permissions');
 		$access[$action_id] = $per_id;
 		$check[$tab_id] = $access;	
-
-
 	}
-
- 	
+	$log->debug("Exiting getTabsActionPermission method ...");
 	return $check;
 }
 
@@ -248,6 +270,8 @@ function getTabsActionPermission($profileid)
 
 function getTabsUtilityActionPermission($profileid)
 {
+	global $log;
+	$log->debug("Entering getTabsUtilityActionPermission(".$profileid.") method ...");
 
 	global $adb;
 	$check = Array();
@@ -273,6 +297,7 @@ function getTabsUtilityActionPermission($profileid)
 
 	}
 
+	$log->debug("Exiting getTabsUtilityActionPermission method ...");
 	return $check;
 
 }
@@ -288,6 +313,8 @@ function getTabsUtilityActionPermission($profileid)
 
 function getDefaultSharingEditAction()
 {
+	global $log;
+	$log->debug("Entering getDefaultSharingEditAction() method ...");
 	global $adb;
 	//retreiving the standard permissions	
 	$sql= "select * from def_org_share where editstatus=0";
@@ -302,6 +329,7 @@ function getDefaultSharingEditAction()
 
 	}while($permissionRow=$adb->fetch_array($result));
 
+	$log->debug("Exiting getDefaultSharingEditAction method ...");
 	return $copy;
 
 }
@@ -316,6 +344,8 @@ function getDefaultSharingEditAction()
   */
 function getDefaultSharingAction()
 {
+	global $log;
+	$log->debug("Entering getDefaultSharingAction() method ...");
 	global $adb;
 	//retreiving the standard permissions	
 	$sql= "select * from def_org_share where editstatus in(0,1)";
@@ -329,6 +359,7 @@ function getDefaultSharingAction()
 		}
 
 	}while($permissionRow=$adb->fetch_array($result));
+	$log->debug("Exiting getDefaultSharingAction method ...");
 	return $copy;
 
 }
@@ -345,6 +376,8 @@ function getDefaultSharingAction()
   */
 function getAllDefaultSharingAction()
 {
+	global $log;
+	$log->debug("Entering getAllDefaultSharingAction() method ...");
 	global $adb;
 	$copy=Array();
 	//retreiving the standard permissions	
@@ -360,6 +393,7 @@ function getAllDefaultSharingAction()
 		
 	}
 
+	$log->debug("Exiting getAllDefaultSharingAction method ...");
 	return $copy;
 
 }
@@ -370,6 +404,8 @@ function getAllDefaultSharingAction()
 */
 function setPermittedTabs2Session($profileid)
 {
+  global $log;
+  $log->debug("Entering setPermittedTabs2Session(".$profileid.") method ...");
   global $adb;
   $sql = "select tabid from profile2tab where profileid=" .$profileid ." and permissions =0" ;
   $result = $adb->query($sql);
@@ -387,7 +423,7 @@ function setPermittedTabs2Session($profileid)
   }while($tabPermission=$adb->fetch_array($result));
   
   $_SESSION['tab_permission_set']=$copy;
-  
+  $log->debug("Exiting setPermittedTabs2Session method ...");
 }
 
 /* Deprecated Function. To be removed
@@ -396,6 +432,8 @@ function setPermittedTabs2Session($profileid)
 */
 function setPermittedActions2Session($profileid)
 {
+  global $log;	
+  $log->debug("Entering setPermittedActions2Session(".$profileid.") method ...");
   global $adb;
   $check = Array(); 	
   $sql1 = "select tabid from profile2tab where profileid=" .$profileid ." and permissions =0" ;
@@ -445,6 +483,7 @@ function setPermittedActions2Session($profileid)
   }			
   	
  $_SESSION['action_permission_set']=$check;
+ $log->debug("Entering setPermittedActions2Session method ...");
 }
 
 /* Deprecated Function. To be removed
@@ -453,6 +492,8 @@ function setPermittedActions2Session($profileid)
 */
 function setPermittedDefaultSharingAction2Session($profileid)
 {
+	global $log;
+	$log->debug("Entering setPermittedDefaultSharingAction2Session(".$profileid.") method ...");
 	global $adb;
 	//retreiving the standard permissions	
 	//$sql= "select default_org_sharingrule.* from default_org_sharingrule inner join profile2tab on profile2tab.tabid = default_org_sharingrule.tabid where profile2tab.permissions =0 and profile2tab.profileid=".$profileid;
@@ -469,7 +510,7 @@ function setPermittedDefaultSharingAction2Session($profileid)
 	}while($permissionRow=$adb->fetch_array($result));
 
 	$_SESSION['defaultaction_sharing_permission_set']=$copy;
-
+	$log->debug("Entering setPermittedDefaultSharingAction2Session method ...");
 }
 
 
@@ -483,6 +524,8 @@ function setPermittedDefaultSharingAction2Session($profileid)
 
 function createRole($roleName,$parentRoleId,$roleProfileArray)
 {
+	global $log;
+	$log->debug("Entering createRole(".$roleName.",".$parentRoleId.",".$roleProfileArray.") method ...");
 	global $adb;
 	$parentRoleDetails=getRoleInformation($parentRoleId);
 	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
@@ -506,6 +549,7 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
                 }
         }
 
+	$log->debug("Exiting createRole method ...");
 	return $roleId;
 
 }
@@ -518,6 +562,8 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
  */
 function updateRole($roleId,$roleName,$roleProfileArray)
 {
+	global $log;
+	$log->debug("Entering updateRole(".$roleId.",".$roleName.",".$roleProfileArray.") method ...");
 	global $adb;
 	$sql1 = "update role set rolename='".$roleName."' where roleid='".$roleId."'";
         $adb->query($sql1);
@@ -532,7 +578,7 @@ function updateRole($roleId,$roleName,$roleProfileArray)
                         insertRole2ProfileRelation($roleId,$profileId);
                 }
         }
-	
+	$log->debug("Exiting updateRole method ...");
 	
 }
 
@@ -543,9 +589,12 @@ function updateRole($roleId,$roleName,$roleProfileArray)
  */
 function insertRole2ProfileRelation($roleId,$profileId)
 {
+	global $log;
+	$log->debug("Entering insertRole2ProfileRelation(".$roleId.",".$profileId.") method ...");
 	global $adb;
 	$query="insert into role2profile values('".$roleId."',".$profileId.")";
 	$adb->query($query);	
+	$log->debug("Exiting insertRole2ProfileRelation method ...");
 	
 }
 
@@ -557,10 +606,14 @@ function insertRole2ProfileRelation($roleId,$profileId)
 */
 function createNewGroup($groupName,$groupDescription)
 {
-  global $adb;
-  $sql = "insert into groups(name,description) values('" .$groupName ."','". $groupDescription ."')";
-  $result = $adb->query($sql); 
-  header("Location: index.php?module=Users&action=listgroups");
+	global $log;
+	$log->debug("Entering createNewGroup(".$groupName.",".$groupDescription.") method ...");
+	global $adb;
+	$sql = "insert into groups(name,description) values('" .$groupName ."','". $groupDescription ."')";
+	$result = $adb->query($sql); 
+	$log->debug("Exiting createNewGroup method ...");
+	header("Location: index.php?module=Users&action=listgroups");
+	
 }
 
 
@@ -571,11 +624,14 @@ function createNewGroup($groupName,$groupDescription)
 */
 function fetchTabId($moduleName)
 {
-  global $adb;
-  $sql = "select id from tabu where name ='" .$moduleName ."'";
-  $result = $adb->query($sql); 
-  $tabid =  $adb->query_result($result,0,"id");
-  return $tabid;
+	global $log;
+	$log->debug("Entering fetchTabId(".$moduleName.") method ...");
+	global $adb;
+	$sql = "select id from tabu where name ='" .$moduleName ."'";
+	$result = $adb->query($sql); 
+	$tabid =  $adb->query_result($result,0,"id");
+	$log->debug("Exiting fetchTabId method ...");
+	return $tabid;
 
 }
 
@@ -586,6 +642,8 @@ function fetchTabId($moduleName)
 */
 function populatePermissions4NewRole($parentroleName,$roleName)
 {
+	global $log;
+	$log->debug("Entering populatePermissions4NewRole(".$parentroleName.",".$roleName.") method ...");
   global $adb;
   //fetch the permissions for the parent role
   $referenceValues = fetchTabReferenceEntityValues($parentroleName);
@@ -605,6 +663,7 @@ function populatePermissions4NewRole($parentroleName,$roleName)
     //echo $sql_insert;
     $adb->query($sql_insert);
   }
+	$log->debug("Exiting populatePermissions4NewRole method ...");
   
 }
 
@@ -615,10 +674,13 @@ function populatePermissions4NewRole($parentroleName,$roleName)
 */
 function fetchTabReferenceEntityValues($parentrolename)
 {
+	global $log;
+	$log->debug("Entering fetchTabReferenceEntityValues(".$parentrolename.") method ...");
   global $adb;
   $sql = "select tabid,module_permission,description from role2tab where rolename='" .$parentrolename ."'"; 
   //echo $sql;
   $result=$adb->query($sql);
+$log->debug("Exiting fetchTabReferenceEntityValues method ...");
   return $result;
 
 }
@@ -631,9 +693,12 @@ function fetchTabReferenceEntityValues($parentrolename)
 */
 function fetchActionReferenceEntityValues($parentrolename)
 {
+	global $log;
+$log->debug("Entering fetchActionReferenceEntityValues(".$parentrolename.") method ...");
   global $adb;
   $sql = "select tabid,actionname,action_permission,description from role2action where rolename='" .$parentrolename ."'"; 
     $result=$adb->query($sql);
+$log->debug("Exiting fetchActionReferenceEntityValues method ...");
   return $result;
 }
 
@@ -644,11 +709,14 @@ function fetchActionReferenceEntityValues($parentrolename)
  */
 function fetchRoleId($rolename)
 {
+global $log;
+$log->debug("Entering fetchRoleId(".$rolename.") method ...");
 
   global $adb;
   $sqlfetchroleid = "select roleid from role where rolename='".$rolename ."'";
   $resultroleid = $adb->query($sqlfetchroleid);
   $role_id = $adb->query_result($resultroleid,0,"roleid");
+$log->debug("Exiting fetchRoleId method ...");
   return $role_id;
 }
 
@@ -659,6 +727,8 @@ function fetchRoleId($rolename)
  */
 function updateUser2RoleMapping($roleid,$userid)
 {
+global $log;
+$log->debug("Entering updateUser2RoleMapping(".$roleid.",".$userid.") method ...");
   global $adb;
   //Check if row already exists
   $sqlcheck = "select * from user2role where userid=".$userid;
@@ -670,6 +740,7 @@ function updateUser2RoleMapping($roleid,$userid)
   }	
   $sql = "insert into user2role(userid,roleid) values(" .$userid .",'" .$roleid ."')";
   $result = $adb->query($sql);
+	$log->debug("Exiting updateUser2RoleMapping method ...");
 
 }
 
@@ -681,11 +752,14 @@ function updateUser2RoleMapping($roleid,$userid)
  */
 function updateUsers2GroupMapping($groupname,$userid)
 {
+global $log;
+$log->debug("Entering updateUsers2GroupMapping(".$groupname.",".$userid.") method ...");
   global $adb;
   $sqldelete = "delete from users2group where userid = '" .$userid ."'";
   $result_delete = $adb->query($sqldelete);
   $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
   $result = $adb->query($sql);
+  $log->debug("Exiting updateUsers2GroupMapping method ...");
 }
 
 /** Function to add user to role mapping 
@@ -695,10 +769,13 @@ function updateUsers2GroupMapping($groupname,$userid)
  */
 function insertUser2RoleMapping($roleid,$userid)
 {
+global $log;
+$log->debug("Entering insertUser2RoleMapping(".$roleid.",".$userid.") method ...");
 
   global $adb;	
   $sql = "insert into user2role(userid,roleid) values('" .$userid ."','" .$roleid ."')";
  $adb->query($sql); 
+$log->debug("Exiting insertUser2RoleMapping method ...");
 
 }
 
@@ -709,9 +786,12 @@ function insertUser2RoleMapping($roleid,$userid)
  */
 function insertUsers2GroupMapping($groupname,$userid)
 {
+global $log;
+$log->debug("Entering insertUsers2GroupMapping(".$groupname.",".$userid.") method ...");
   global $adb;
   $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
   $adb->query($sql);
+$log->debug("Exiting insertUsers2GroupMapping method ...");
 }
 
 /** Function to get the word template resultset 
@@ -721,9 +801,12 @@ function insertUsers2GroupMapping($groupname,$userid)
  */
 function fetchWordTemplateList($module)
 {
+global $log;
+$log->debug("Entering fetchWordTemplateList(".$module.") method ...");
   global $adb;
   $sql_word = "select templateid, filename from wordtemplates where module ='".$module."'" ; 
   $result=$adb->query($sql_word);
+$log->debug("Exiting fetchWordTemplateList method ...");
   return $result;
 }
 
@@ -736,9 +819,12 @@ function fetchWordTemplateList($module)
  */
 function fetchEmailTemplateInfo($templateName)
 {
+global $log;
+$log->debug("Entering fetchEmailTemplateInfo(".$templateName.") method ...");
 	global $adb;
         $sql= "select * from emailtemplates where templatename='" .$templateName ."'";
         $result = $adb->query($sql);
+$log->debug("Exiting fetchEmailTemplateInfo method ...");
         return $result;
 }
 
@@ -749,7 +835,8 @@ function fetchEmailTemplateInfo($templateName)
  */
 function substituteTokens($filename,$globals)
 {
-	global $log;
+global $log;
+$log->debug("Entering substituteTokens(".$filename.",".$globals.") method ...");
 	$log->debug("in substituteTokens method  with filename ".$filename.' and content globals as '.$globals);
 
 	global $root_directory;
@@ -766,6 +853,7 @@ function substituteTokens($filename,$globals)
     if (!$dump = file ($filename))
 	 {
 		 $log->debug("not able to create the file or get access to the file with filename ".$filename." so returning 0");
+		 $log->debug("Exiting substituteTokens method ...");
      		 return 0;
     	 }	
 
@@ -786,6 +874,7 @@ function substituteTokens($filename,$globals)
     }
 
 	$log->debug("the replacedString  is ".$replacedString);
+	$log->debug("Exiting substituteTokens method ...");
 	return $replacedString;
 }
 
@@ -796,9 +885,12 @@ function substituteTokens($filename,$globals)
  */
 function insert2LeadGroupRelation($leadid,$groupname)
 {
+	global $log;
+	$log->debug("Entering insert2LeadGroupRelation(".$leadid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into leadgrouprelation values (" .$leadid .",'".$groupname."')";
   $adb->query($sql);
+	$log->debug("Exiting insert2LeadGroupRelation method ...");
 
 }
 
@@ -809,11 +901,14 @@ global $adb;
  */
 function updateLeadGroupRelation($leadid,$groupname)
 {
+global $log;
+$log->debug("Entering updateLeadGroupRelation(".$leadid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from leadgrouprelation where leadid=".$leadid;
   $adb->query($sqldelete);
   $sql = "insert into leadgrouprelation values (".$leadid .",'" .$groupname ."')";  
   $adb->query($sql);
+  $log->debug("Exiting updateLeadGroupRelation method ...");
 
 }
 
@@ -824,9 +919,12 @@ function updateLeadGroupRelation($leadid,$groupname)
  */
 function insert2AccountGroupRelation($accountid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2AccountGroupRelation(".$accountid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into accountgrouprelation values (" .$accountid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2AccountGroupRelation method ...");
 
 }
 
@@ -838,11 +936,14 @@ global $adb;
 
 function updateAccountGroupRelation($accountid,$groupname)
 {
+global $log;
+$log->debug("Entering updateAccountGroupRelation(".$accountid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from accountgrouprelation where accountid=".$accountid;
   $adb->query($sqldelete);
   $sql = "insert into accountgrouprelation values (".$accountid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updateAccountGroupRelation method ...");
 
 }
 
@@ -853,9 +954,12 @@ function updateAccountGroupRelation($accountid,$groupname)
  */
 function insert2ContactGroupRelation($contactid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2ContactGroupRelation(".$contactid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into contactgrouprelation values (" .$contactid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2ContactGroupRelation method ...");
 
 }
 
@@ -867,11 +971,14 @@ global $adb;
 
 function updateContactGroupRelation($contactid,$groupname)
 {
+global $log;
+$log->debug("Entering updateContactGroupRelation(".$contactid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from contactgrouprelation where contactid=".$contactid;
   $adb->query($sqldelete);
   $sql = "insert into contactgrouprelation values (".$contactid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updateContactGroupRelation method ...");
 
 }
 /** Function to add Potential group relation
@@ -881,9 +988,12 @@ function updateContactGroupRelation($contactid,$groupname)
  */
 function insert2PotentialGroupRelation($potentialid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2PotentialGroupRelation(".$potentialid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into potentialgrouprelation values (" .$potentialid .",'".$groupname."')";
   $adb->query($sql);
+  $log->debug("Exiting insert2PotentialGroupRelation method ...");
 
 }
 
@@ -895,11 +1005,14 @@ global $adb;
 
 function updatePotentialGroupRelation($potentialid,$groupname)
 {
+global $log;
+$log->debug("Entering updatePotentialGroupRelation(".$potentialid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from potentialgrouprelation where potentialid=".$potentialid;
   $adb->query($sqldelete);
   $sql = "insert into potentialgrouprelation values (".$potentialid .",'" .$groupname ."')";
   $adb->query($sql);
+  $log->debug("Exiting updatePotentialGroupRelation method ...");
 
 }
 
@@ -910,9 +1023,12 @@ function updatePotentialGroupRelation($potentialid,$groupname)
  */
 function insert2QuoteGroupRelation($quoteid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2QuoteGroupRelation(".$quoteid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into quotegrouprelation values (" .$quoteid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2QuoteGroupRelation method ...");
 
 }
 
@@ -924,11 +1040,14 @@ global $adb;
 
 function updateQuoteGroupRelation($quoteid,$groupname)
 {
+global $log;
+$log->debug("Entering updateQuoteGroupRelation(".$quoteid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from quotegrouprelation where quoteid=".$quoteid;
   $adb->query($sqldelete);
   $sql = "insert into quotegrouprelation values (".$quoteid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updateQuoteGroupRelation method ...");
 
 }
 /** Function to add Salesorder group relation
@@ -938,9 +1057,12 @@ function updateQuoteGroupRelation($quoteid,$groupname)
  */
 function insert2SoGroupRelation($salesorderid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2SoGroupRelation(".$salesorderid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into sogrouprelation values (" .$salesorderid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2SoGroupRelation method ...");
 
 }
 
@@ -952,11 +1074,14 @@ global $adb;
 
 function updateSoGroupRelation($salesorderid,$groupname)
 {
+global $log;
+$log->debug("Entering updateSoGroupRelation(".$salesorderid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from sogrouprelation where salesorderid=".$salesorderid;
   $adb->query($sqldelete);
   $sql = "insert into sogrouprelation values (".$salesorderid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updateSoGroupRelation method ...");
 
 }
 
@@ -967,9 +1092,12 @@ function updateSoGroupRelation($salesorderid,$groupname)
  */
 function insert2InvoiceGroupRelation($invoiceid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2InvoiceGroupRelation(".$invoiceid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into invoicegrouprelation values (" .$invoiceid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2InvoiceGroupRelation method ...");
 
 }
 
@@ -981,11 +1109,14 @@ global $adb;
 
 function updateInvoiceGroupRelation($invoiceid,$groupname)
 {
+global $log;
+$log->debug("Entering updateInvoiceGroupRelation(".$invoiceid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from invoicegrouprelation where invoiceid=".$invoiceid;
   $adb->query($sqldelete);
   $sql = "insert into invoicegrouprelation values (".$invoiceid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updateInvoiceGroupRelation method ...");
 
 }
 
@@ -996,9 +1127,12 @@ function updateInvoiceGroupRelation($invoiceid,$groupname)
  */
 function insert2PoGroupRelation($poid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2PoGroupRelation(".$poid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into pogrouprelation values (" .$poid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2PoGroupRelation method ...");
 
 }
 
@@ -1010,11 +1144,14 @@ global $adb;
 
 function updatePoGroupRelation($poid,$groupname)
 {
+global $log;
+$log->debug("Entering updatePoGroupRelation(".$poid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from pogrouprelation where purchaseorderid=".$poid;
   $adb->query($sqldelete);
   $sql = "insert into pogrouprelation values (".$poid .",'" .$groupname ."')";
   $adb->query($sql);
+$log->debug("Exiting updatePoGroupRelation method ...");
 
 }
 
@@ -1026,11 +1163,14 @@ function updatePoGroupRelation($poid,$groupname)
  */
 function updateTicketGroupRelation($ticketid,$groupname)
 {
+global $log;
+$log->debug("Entering updateTicketGroupRelation(".$ticketid.",".$groupname.") method ...");
  global $adb;
   $sqldelete = "delete from ticketgrouprelation where ticketid=".$ticketid;
   $adb->query($sqldelete);
   $sql = "insert into ticketgrouprelation values (".$ticketid .",'" .$groupname ."')";  
   $adb->query($sql);
+$log->debug("Exiting updateTicketGroupRelation method ...");
 
 }
 
@@ -1042,9 +1182,12 @@ function updateTicketGroupRelation($ticketid,$groupname)
  */
 function insert2ActivityGroupRelation($activityid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2ActivityGroupRelation(".$activityid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into activitygrouprelation values (" .$activityid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2ActivityGroupRelation method ...");
 
 }
 
@@ -1056,9 +1199,12 @@ global $adb;
  */
 function insert2TicketGroupRelation($ticketid,$groupname)
 {
+global $log;
+$log->debug("Entering insert2TicketGroupRelation(".$ticketid.",".$groupname.") method ...");
 global $adb;
   $sql = "insert into ticketgrouprelation values (" .$ticketid .",'".$groupname."')";
   $adb->query($sql);
+$log->debug("Exiting insert2TicketGroupRelation method ...");
 
 }
 
@@ -1069,11 +1215,14 @@ global $adb;
  */
 function updateActivityGroupRelation($activityid,$groupname)
 {
+global $log;
+$log->debug("Entering updateActivityGroupRelation(".$activityid.",".$groupname.") method ...");
 	global $adb;
   $sqldelete = "delete from activitygrouprelation where activityid=".$activityid;
   $adb->query($sqldelete);
   $sql = "insert into activitygrouprelation values (".$activityid .",'" .$groupname ."')";  
   $adb->query($sql);
+  $log->debug("Exiting updateActivityGroupRelation method ...");
 
 }
 
@@ -1086,6 +1235,8 @@ function updateActivityGroupRelation($activityid,$groupname)
 */
 function getFieldList($fld_module, $profileid)
 {
+	global $log;
+	$log->debug("Entering getFieldList(".$fld_module.",". $profileid.") method ...");
         global $adb;
         if($fld_module == "Accounts")
         {
@@ -1094,6 +1245,7 @@ function getFieldList($fld_module, $profileid)
         $query = "select * from profile2field where profileid =".$profileid." and tabid=".$tabid;
         //echo $query;
         $result = $adb->query($query);
+	$log->debug("Exiting getFieldList method ...");
         return $result;
 }
 
@@ -1105,6 +1257,8 @@ function getFieldList($fld_module, $profileid)
 */
 function getFieldVisibilityArray($fld_module, $profileid)
 {
+	global $log;
+	$log->debug("Entering getFieldVisibilityArray(".$fld_module.",". $profileid.") method ...");
 	global $adb;
         if($fld_module == "Accounts")
         {
@@ -1120,6 +1274,7 @@ function getFieldVisibilityArray($fld_module, $profileid)
 		$fld_name = $adb->query_result($fieldListResult,$i,"fieldname");
 		$fldVisbArray[$fld_name] = $adb->query_result($fieldListResult,$i,"visible");	
 	}
+	$log->debug("Exiting getFieldVisibilityArray method ...");
 	return $fldVisbArray;	
 	
 }
@@ -1132,6 +1287,8 @@ function getFieldVisibilityArray($fld_module, $profileid)
 */
 function getFieldReadOnlyArray($fld_module, $profileid)
 {
+	global $log;
+	$log->debug("Entering getFieldReadOnlyArray(".$fld_module.",". $profileid.") method ...");
 	global $adb;
         if($fld_module == "Accounts")
         {
@@ -1148,6 +1305,7 @@ function getFieldReadOnlyArray($fld_module, $profileid)
 		$fldReadOnlyArray[$fld_name] = $adb->query_result($fieldListResult,$i,"readonly");	
 	}
 	
+	$log->debug("Exiting getFieldReadOnlyArray method ...");
 	return $fldReadOnlyArray;	
 }
 
@@ -1159,10 +1317,13 @@ function getFieldReadOnlyArray($fld_module, $profileid)
  */
 function getRoleName($roleid)
 {
+	global $log;
+	$log->debug("Entering getRoleName(".$roleid.") method ...");
 	global $adb;
 	$sql1 = "select * from role where roleid='".$roleid."'";
 	$result = $adb->query($sql1);
 	$rolename = $adb->query_result($result,0,"rolename");
+	$log->debug("Exiting getRoleName method ...");
 	return $rolename;	
 }
 
@@ -1173,10 +1334,13 @@ function getRoleName($roleid)
  */
 function getProfileName($profileid)
 {
+	global $log;
+	$log->debug("Entering getProfileName(".$profileid.") method ...");
 	global $adb;
 	$sql1 = "select * from profile where profileid=".$profileid;
 	$result = $adb->query($sql1);
 	$profilename = $adb->query_result($result,0,"profilename");
+	$log->debug("Exiting getProfileName method ...");
 	return $profilename;	
 }
 
@@ -1189,6 +1353,8 @@ function getProfileName($profileid)
  */
 function isPermitted($module,$actionname,$record_id='')
 {
+	global $log;
+	$log->debug("Entering isPermitted(".$module.",".$actionname.",".$record_id.") method ...");
 
 	global $adb;
 	global $current_user;
@@ -1200,6 +1366,7 @@ function isPermitted($module,$actionname,$record_id='')
 	{
 		//These modules dont have security right now
 		$permission = "yes";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 
 	}
@@ -1215,6 +1382,7 @@ function isPermitted($module,$actionname,$record_id='')
 		{
 			$permission = "yes";
 		}
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 
@@ -1222,6 +1390,7 @@ function isPermitted($module,$actionname,$record_id='')
 	if($is_admin)
 	{
 		$permission ="yes";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 	//Retreiving the Tabid and Action Id	
@@ -1233,6 +1402,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if($profileTabsPermission[$tabid] ==0)
         	{	
                 	$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
                 	return $permission;
         	}
 		else
@@ -1249,6 +1419,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if($actionid == 3 || $actionid == 4)
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 
 		}
@@ -1259,6 +1430,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if($actionid == 3 || $actionid == 4 || $actionid ==0 || $actionid ==1)
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 
 		}
@@ -1267,6 +1439,7 @@ function isPermitted($module,$actionname,$record_id='')
 	if($profileTabsPermission[$tabid] !=0)
 	{
 		$permission = "no";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 	//Checking for Action Permission
@@ -1274,12 +1447,14 @@ function isPermitted($module,$actionname,$record_id='')
 	if($profileActionPermission[$tabid][$actionid] != 0)
 	{
 		$permission = "no";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 	//Checking and returning true if recorid is null
 	if($record_id == '')
 	{
 		$permission = "yes";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 
@@ -1289,6 +1464,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendor'  || $module == 'PriceBook')
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;			
 		}
 	}
@@ -1310,6 +1486,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if($current_user->id == $recOwnId)
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
 		//Checking if the Record Owner is the Subordinate User
@@ -1318,6 +1495,7 @@ function isPermitted($module,$actionname,$record_id='')
 			if(in_array($recOwnId,$userids))
 			{
 				$permission='yes';
+				$log->debug("Exiting isPermitted method ...");
 				return $permission;
 			}
 
@@ -1331,6 +1509,7 @@ function isPermitted($module,$actionname,$record_id='')
 		if(in_array($recOwnId,$current_user_groups))
 		{
 			$permission='yes';
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}	 
 	}	
@@ -1342,16 +1521,19 @@ function isPermitted($module,$actionname,$record_id='')
 		{
 
 			$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
 		elseif($actionid == 2)
 		{
 			$permission = "no";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
 		else
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
 	}
@@ -1360,11 +1542,13 @@ function isPermitted($module,$actionname,$record_id='')
 		if($actionid == 2)
 		{
 			$permission = "no";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
 		else
 		{
 			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;
 		}
 	}
@@ -1372,6 +1556,7 @@ function isPermitted($module,$actionname,$record_id='')
 	{
 
 		$permission = "yes";
+		$log->debug("Exiting isPermitted method ...");
 		return $permission;
 	}
 	elseif($others_permission_id == 3)
@@ -1380,11 +1565,13 @@ function isPermitted($module,$actionname,$record_id='')
 		if($actionid == 3 || $actionid == 4)
 		{
 			$permission = isReadPermittedBySharing($module,$tabid,$actionid,$record_id);
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
 		elseif($actionid ==0 || $actionid ==1)
 		{
 			$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
+			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
 	}
@@ -1393,6 +1580,7 @@ function isPermitted($module,$actionname,$record_id='')
 		$permission = "yes";	
 	}			
 
+	$log->debug("Exiting isPermitted method ...");
 	return $permission;
 
 }
@@ -1406,6 +1594,8 @@ function isPermitted($module,$actionname,$record_id='')
  */
 function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 {
+	global $log;
+	$log->debug("Entering isReadPermittedBySharing(".$module.",".$tabid.",".$actionid.",".$record_id.") method ...");
 	global $adb;
 	global $current_user;
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -1430,6 +1620,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 			if(in_array($ownerid,$userids))
 			{
 				$sharePer='yes';
+				$log->debug("Exiting isReadPermittedBySharing method ...");
 				return $sharePer;		
 			}
 
@@ -1442,6 +1633,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 			if(in_array($ownerid,$userids))
 			{
 				$sharePer='yes';
+				$log->debug("Exiting isReadPermittedBySharing method ...");
 				return $sharePer;		
 			}
 
@@ -1454,6 +1646,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 		if(array_key_exists($ownerid,$read_grp_per))
 		{
 			$sharePer='yes';
+			$log->debug("Exiting isReadPermittedBySharing method ...");
 			return $sharePer;
 		}
 	}
@@ -1486,6 +1679,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 						if(in_array($rel_owner_id,$userids))
 						{
 							$sharePer='yes';
+							$log->debug("Exiting isReadPermittedBySharing method ...");
 							return $sharePer;
 						}
 
@@ -1497,6 +1691,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 						if(in_array($rel_owner_id,$userids))
 						{
 							$sharePer='yes';
+							$log->debug("Exiting isReadPermittedBySharing method ...");
 							return $sharePer;
 						}
 
@@ -1509,6 +1704,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 					if(array_key_exists($rel_owner_id,$read_related_grp_per))
 					{
 						$sharePer='yes';
+						$log->debug("Exiting isReadPermittedBySharing method ...");
 						return $sharePer;
 					}
 
@@ -1516,6 +1712,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 			}		
 		}
 	}
+	$log->debug("Exiting isReadPermittedBySharing method ...");
 	return $sharePer;
 }
 
@@ -1530,6 +1727,8 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
  */
 function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 {
+	global $log;
+	$log->debug("Entering isReadWritePermittedBySharing(".$module.",".$tabid.",".$actionid.",".$record_id.") method ...");
 	global $adb;
 	global $current_user;	
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -1554,6 +1753,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 			if(in_array($ownerid,$userids))
 			{
 				$sharePer='yes';
+				$log->debug("Exiting isReadWritePermittedBySharing method ...");
 				return $sharePer;		
 			}
 
@@ -1565,6 +1765,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 			if(in_array($ownerid,$userids))
 			{
 				$sharePer='yes';
+				$log->debug("Exiting isReadWritePermittedBySharing method ...");
 				return $sharePer;		
 			}
 
@@ -1577,6 +1778,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 		if(array_key_exists($ownerid,$write_grp_per))
 		{
 			$sharePer='yes';
+			$log->debug("Exiting isReadWritePermittedBySharing method ...");
 			return $sharePer;
 		}
 	}	
@@ -1608,6 +1810,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 						if(in_array($rel_owner_id,$userids))
 						{
 							$sharePer='yes';
+							$log->debug("Exiting isReadWritePermittedBySharing method ...");
 							return $sharePer;
 						}
 
@@ -1619,6 +1822,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 						if(in_array($rel_owner_id,$userids))
 						{
 							$sharePer='yes';
+							$log->debug("Exiting isReadWritePermittedBySharing method ...");
 							return $sharePer;
 						}
 
@@ -1631,6 +1835,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 					if(array_key_exists($rel_owner_id,$write_related_grp_per))
 					{
 						$sharePer='yes';
+						$log->debug("Exiting isReadWritePermittedBySharing method ...");
 						return $sharePer;
 					}
 
@@ -1639,6 +1844,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 		}
 	}
 	
+	$log->debug("Exiting isReadWritePermittedBySharing method ...");
 	return $sharePer;
 }
 
@@ -1651,6 +1857,8 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
  */
 function isAllowed_Outlook($module,$action,$user_id,$record_id)
 {
+	global $log;
+	$log->debug("Entering isAllowed_Outlook(".$module.",".$action.",".$user_id.",".$record_id.") method ...");
 
 	$permission = "no";
 	if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
@@ -1747,6 +1955,7 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 			$permission = "no";
 		}		
 	}
+	$log->debug("Exiting isAllowed_Outlook method ...");
 	return $permission;
 
 }
@@ -1758,6 +1967,8 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
  */
 function setGlobalProfilePermission2Session($profileid)
 {
+	global $log;
+	$log->debug("Entering setGlobalProfilePermission2Session(".$profileid.") method ...");
   global $adb;
   $sql = "select * from profile2globalpermissions where profileid=".$profileid ;
   $result = $adb->query($sql);
@@ -1771,6 +1982,7 @@ function setGlobalProfilePermission2Session($profileid)
   }	 
 
   $_SESSION['global_permission_set']=$copy;
+	$log->debug("Exiting setGlobalProfilePermission2Session method ...");
   
 }
 
@@ -1783,6 +1995,8 @@ function setGlobalProfilePermission2Session($profileid)
  */
 function getProfileGlobalPermission($profileid)
 {
+global $log;
+$log->debug("Entering getProfileGlobalPermission(".$profileid.") method ...");
   global $adb;
   $sql = "select * from profile2globalpermissions where profileid=".$profileid ;
   $result = $adb->query($sql);
@@ -1795,6 +2009,7 @@ function getProfileGlobalPermission($profileid)
 	$copy[$act_id] = $per_id;
   }	 
 
+	$log->debug("Exiting getProfileGlobalPermission method ...");
    return $copy;
   
 }
@@ -1806,6 +2021,8 @@ function getProfileGlobalPermission($profileid)
  */
 function getProfileTabsPermission($profileid)
 {
+global $log;
+$log->debug("Entering getProfileTabsPermission(".$profileid.") method ...");
   global $adb;
   $sql = "select * from profile2tab where profileid=".$profileid ;
   $result = $adb->query($sql);
@@ -1818,6 +2035,7 @@ function getProfileTabsPermission($profileid)
 	$copy[$tab_id] = $per_id;
   }	 
 
+$log->debug("Exiting getProfileTabsPermission method ...");
    return $copy;
   
 }
@@ -1833,6 +2051,8 @@ function getProfileTabsPermission($profileid)
  */
 function getProfileActionPermission($profileid)
 {
+global $log;
+$log->debug("Entering getProfileActionPermission(".$profileid.") method ...");
 	global $adb;
 	$check = Array();
 	$temp_tabid = Array();	
@@ -1858,6 +2078,7 @@ function getProfileActionPermission($profileid)
 	}
 
  	
+$log->debug("Exiting getProfileActionPermission method ...");
 	return $check;
 }
 
@@ -1873,6 +2094,8 @@ function getProfileActionPermission($profileid)
  */
 function getProfileAllActionPermission($profileid)
 {
+global $log;
+$log->debug("Entering getProfileAllActionPermission(".$profileid.") method ...");
 	global $adb;
 	$actionArr=getProfileActionPermission($profileid);
 	$utilArr=getTabsUtilityActionPermission($profileid);
@@ -1885,6 +2108,7 @@ function getProfileAllActionPermission($profileid)
 		}
 		$actionArr[$tabid]=$act_tab_arr;
 	}
+$log->debug("Exiting getProfileAllActionPermission method ...");
 	return $actionArr;
 }
 
@@ -1895,6 +2119,8 @@ function getProfileAllActionPermission($profileid)
  */
 function createProfile($profilename,$parentProfileId,$description)
 {
+global $log;
+$log->debug("Entering createProfile(".$profilename.",".$parentProfileId.",".$description.") method ...");
 	global $adb;
 	//Inserting values into Profile Table
 	$sql1 = "insert into profile values('','".$profilename."','".$description."')";
@@ -1968,6 +2194,7 @@ function createProfile($profilename,$parentProfileId,$description)
 		$sql11="insert into profile2field values(".$current_profile_id.", ".$tab_id.", ".$fieldid.", ".$permissions." ,".$readonly.")";
 		$adb->query($sql11);	
 	}
+	$log->debug("Exiting createProfile method ...");
 }
 
 /** Function to delete profile 
@@ -1976,6 +2203,8 @@ function createProfile($profilename,$parentProfileId,$description)
  */
 function deleteProfile($prof_id,$transfer_profileid='')
 {
+	global $log;
+$log->debug("Entering deleteProfile(".$prof_id.",".$transfer_profileid.") method ...");
 	global $adb;
 	//delete from profile2global permissions
 	$sql4 = "delete from profile2globalpermissions where profileid=".$prof_id;
@@ -2028,7 +2257,8 @@ function deleteProfile($prof_id,$transfer_profileid='')
 
 	//delete from profile table;
 	$sql9 = "delete from profile where profileid=".$prof_id;
-	$adb->query($sql9);	
+	$adb->query($sql9);
+	$log->debug("Exiting deleteProfile method ...");	
 
 }
 
@@ -2037,6 +2267,8 @@ function deleteProfile($prof_id,$transfer_profileid='')
  */
 function getAllRoleDetails()
 {
+global $log;
+$log->debug("Entering getAllRoleDetails() method ...");
 	global $adb;
 	$role_det = Array();
 	$query = "select * from role";
@@ -2078,6 +2310,7 @@ function getAllRoleDetails()
 		$role_det[$roleid]=$each_role_det;	
 		
 	}
+	$log->debug("Exiting getAllRoleDetails method ...");
 	return $role_det;
 }
 
@@ -2087,6 +2320,8 @@ function getAllRoleDetails()
  */
 function getAllProfileInfo()
 {
+	global $log;
+	$log->debug("Entering getAllProfileInfo() method ...");
 	global $adb;
 	$query="select * from profile";
 	$result = $adb->query($query);
@@ -2099,6 +2334,7 @@ function getAllProfileInfo()
 		$prof_details[$profileid]=$profilename;
 		
 	}
+	$log->debug("Exiting getAllProfileInfo method ...");
 	return $prof_details;	
 }
 
@@ -2109,6 +2345,8 @@ function getAllProfileInfo()
  */
 function getRoleInformation($roleid)
 {
+	global $log;
+	$log->debug("Entering getRoleInformation(".$roleid.") method ...");
 	global $adb;
 	$query = "select * from role where roleid='".$roleid."'";
 	$result = $adb->query($query);
@@ -2124,6 +2362,7 @@ function getRoleInformation($roleid)
 	$roleDet[]=$immediateParent;
 	$roleInfo=Array();
 	$roleInfo[$roleid]=$roleDet;
+	$log->debug("Exiting getRoleInformation method ...");
 	return $roleInfo;	
 }
 
@@ -2135,6 +2374,8 @@ function getRoleInformation($roleid)
  */
 function getRoleRelatedProfiles($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleRelatedProfiles(".$roleId.") method ...");
 	global $adb;
 	$query = "select role2profile.*,profile.profilename from role2profile inner join profile on profile.profileid=role2profile.profileid where roleid='".$roleId."'";
 	$result = $adb->query($query);
@@ -2144,6 +2385,7 @@ function getRoleRelatedProfiles($roleId)
 	{
 		$roleRelatedProfiles[$adb->query_result($result,$i,'profileid')]=$adb->query_result($result,$i,'profilename');
 	}	
+	$log->debug("Exiting getRoleRelatedProfiles method ...");
 	return $roleRelatedProfiles;	
 }
 
@@ -2155,6 +2397,8 @@ function getRoleRelatedProfiles($roleId)
  */
 function getRoleUsers($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleUsers(".$roleId.") method ...");
 	global $adb;
 	$query = "select user2role.*,users.user_name from user2role inner join users on users.id=user2role.userid where roleid='".$roleId."'";
 	$result = $adb->query($query);
@@ -2164,6 +2408,7 @@ function getRoleUsers($roleId)
 	{
 		$roleRelatedUsers[$adb->query_result($result,$i,'userid')]=$adb->query_result($result,$i,'user_name');
 	}
+	$log->debug("Exiting getRoleUsers method ...");
 	return $roleRelatedUsers;
 	
 
@@ -2178,6 +2423,8 @@ function getRoleUsers($roleId)
 
 function getRoleUserIds($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleUserIds(".$roleId.") method ...");
 	global $adb;
 	$query = "select user2role.*,users.user_name from user2role inner join users on users.id=user2role.userid where roleid='".$roleId."'";
 	$result = $adb->query($query);
@@ -2187,6 +2434,7 @@ function getRoleUserIds($roleId)
 	{
 		$roleRelatedUsers[]=$adb->query_result($result,$i,'userid');
 	}
+	$log->debug("Exiting getRoleUserIds method ...");
 	return $roleRelatedUsers;
 	
 
@@ -2199,6 +2447,8 @@ function getRoleUserIds($roleId)
  */
 function getRoleAndSubordinateUsers($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleAndSubordinateUsers(".$roleId.") method ...");
 	global $adb;
 	$roleInfoArr=getRoleInformation($roleId);
 	$parentRole=$roleInfoArr[$roleId][1];
@@ -2210,6 +2460,7 @@ function getRoleAndSubordinateUsers($roleId)
 	{
 		$roleRelatedUsers[$adb->query_result($result,$i,'userid')]=$adb->query_result($result,$i,'user_name');
 	}
+	$log->debug("Exiting getRoleAndSubordinateUsers method ...");
 	return $roleRelatedUsers;
 	
 
@@ -2223,6 +2474,8 @@ function getRoleAndSubordinateUsers($roleId)
  */
 function getRoleAndSubordinateUserIds($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleAndSubordinateUserIds(".$roleId.") method ...");
 	global $adb;
 	$roleInfoArr=getRoleInformation($roleId);
 	$parentRole=$roleInfoArr[$roleId][1];
@@ -2234,6 +2487,7 @@ function getRoleAndSubordinateUserIds($roleId)
 	{
 		$roleRelatedUsers[]=$adb->query_result($result,$i,'userid');
 	}
+	$log->debug("Exiting getRoleAndSubordinateUserIds method ...");
 	return $roleRelatedUsers;
 	
 
@@ -2246,6 +2500,8 @@ function getRoleAndSubordinateUserIds($roleId)
  */
 function getRoleAndSubordinatesInformation($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleAndSubordinatesInformation(".$roleId.") method ...");
 	global $adb;
 	$roleDetails=getRoleInformation($roleId);
 	$roleInfo=$roleDetails[$roleId];
@@ -2268,6 +2524,7 @@ function getRoleAndSubordinatesInformation($roleId)
 		$roleInfo[$roleid]=$roleDet;
 		
 	}
+	$log->debug("Exiting getRoleAndSubordinatesInformation method ...");
 	return $roleInfo;	
 
 }
@@ -2280,6 +2537,8 @@ function getRoleAndSubordinatesInformation($roleId)
  */
 function getRoleAndSubordinatesRoleIds($roleId)
 {
+	global $log;
+	$log->debug("Entering getRoleAndSubordinatesRoleIds(".$roleId.") method ...");
 	global $adb;
 	$roleDetails=getRoleInformation($roleId);
 	$roleInfo=$roleDetails[$roleId];
@@ -2295,6 +2554,7 @@ function getRoleAndSubordinatesRoleIds($roleId)
 		$roleInfo[]=$roleid;
 		
 	}
+	$log->debug("Exiting getRoleAndSubordinatesRoleIds method ...");
 	return $roleInfo;	
 
 }
@@ -2305,6 +2565,8 @@ function getRoleAndSubordinatesRoleIds($roleId)
  */
 function deleteRole($roleId,$transferRoleId)
 {
+	global $log;
+	$log->debug("Entering deleteRole(".$roleId.",".$transferRoleId.") method ...");
         global $adb;
         $roleInfo=getRoleAndSubordinatesInformation($roleId);
         foreach($roleInfo as $roleid=>$roleDetArr)
@@ -2336,6 +2598,7 @@ function deleteRole($roleId,$transferRoleId)
 
 
         }
+	$log->debug("Exiting deleteRole method ...");
 
 }
 
@@ -2344,6 +2607,8 @@ function deleteRole($roleId,$transferRoleId)
  */
 function deleteRoleRelatedSharingRules($roleId)
 {
+	global $log;
+	$log->debug("Entering deleteRoleRelatedSharingRules(".$roleId.") method ...");
         global $adb;
         $dataShareTableColArr=Array('datashare_grp2role'=>'to_roleid',
                                     'datashare_grp2rs'=>'to_roleandsubid',
@@ -2373,6 +2638,7 @@ function deleteRoleRelatedSharingRules($roleId)
                 }
 
         }
+	$log->debug("Exiting deleteRoleRelatedSharingRules method ...");
 }
 
 /** Function to delete the group related sharing rules
@@ -2380,6 +2646,8 @@ function deleteRoleRelatedSharingRules($roleId)
  */
 function deleteGroupRelatedSharingRules($grpId)
 {
+	global $log;
+	$log->debug("Entering deleteGroupRelatedSharingRules(".$grpId.") method ...");
 
         global $adb;
         $dataShareTableColArr=Array('datashare_grp2grp'=>'share_groupid::to_groupid',
@@ -2408,6 +2676,7 @@ function deleteGroupRelatedSharingRules($grpId)
                 }
 
         }
+	$log->debug("Exiting deleteGroupRelatedSharingRules method ...");
 }
 
 
@@ -2417,6 +2686,8 @@ function deleteGroupRelatedSharingRules($grpId)
  */
 function getAllUserName()
 {
+	global $log;
+	$log->debug("Entering getAllUserName() method ...");
 	global $adb;
 	$query="select * from users where deleted=0";
 	$result = $adb->query($query);
@@ -2429,6 +2700,7 @@ function getAllUserName()
 		$user_details[$userid]=$username;
 		
 	}
+	$log->debug("Exiting getAllUserName method ...");
 	return $user_details;
 
 }
@@ -2440,6 +2712,8 @@ function getAllUserName()
  */
 function getAllGroupName()
 {
+	global $log;
+	$log->debug("Entering getAllGroupName() method ...");
 	global $adb;
 	$query="select * from groups";
 	$result = $adb->query($query);
@@ -2452,6 +2726,7 @@ function getAllGroupName()
 		$group_details[$grpid]=$grpname;
 		
 	}
+	$log->debug("Exiting getAllGroupName method ...");
 	return $group_details;
 
 }
@@ -2462,6 +2737,8 @@ function getAllGroupName()
  */
 function getAllGroupInfo()
 {
+	global $log;
+	$log->debug("Entering getAllGroupInfo() method ...");
 	global $adb;
 	$query="select * from groups";
 	$result = $adb->query($query);
@@ -2478,6 +2755,7 @@ function getAllGroupInfo()
 		$group_details[$grpid]=$grpInfo;
 		
 	}
+	$log->debug("Exiting getAllGroupInfo method ...");
 	return $group_details;
 
 }
@@ -2489,7 +2767,9 @@ function getAllGroupInfo()
   * @returns $groupId -- Group Id :: Type integer 
  */
 function createGroup($groupName,$groupMemberArray,$description)
-{
+{	
+	global $log;
+	$log->debug("Entering createGroup(".$groupName.",".$groupMemberArray.",".$description.") method ...");
 	global $adb;
 	$groupId=$adb->getUniqueId("groups");
 	//Insert into group table
@@ -2524,6 +2804,7 @@ function createGroup($groupName,$groupMemberArray,$description)
 	{
 		insertGroupToUserRelation($groupId,$userId);
 	}
+	$log->debug("Exiting createGroup method ...");
 	return $groupId;	
 }
 
@@ -2534,9 +2815,12 @@ function createGroup($groupName,$groupMemberArray,$description)
  */
 function insertGroupToGroupRelation($groupId,$containsGroupId)
 {
+	global $log;
+	$log->debug("Entering insertGroupToGroupRelation(".$groupId.",".$containsGroupId.") method ...");
 	global $adb;
 	$query="insert into group2grouprel values(".$groupId.",".$containsGroupId.")";
 	$adb->query($query);
+	$log->debug("Exiting insertGroupToGroupRelation method ...");
 }
 
 
@@ -2546,9 +2830,12 @@ function insertGroupToGroupRelation($groupId,$containsGroupId)
  */
 function insertGroupToRoleRelation($groupId,$roleId)
 {
+	 global $log;
+	$log->debug("Entering insertGroupToRoleRelation(".$groupId.",".$roleId.") method ...");
 	global $adb;
 	$query="insert into group2role values(".$groupId.",'".$roleId."')";
 	$adb->query($query);
+	$log->debug("Exiting insertGroupToRoleRelation method ...");
 }
 
 
@@ -2558,9 +2845,12 @@ function insertGroupToRoleRelation($groupId,$roleId)
  */
 function insertGroupToRsRelation($groupId,$rsId)
 {
+	global $log;
+	$log->debug("Entering insertGroupToRsRelation(".$groupId.",".$rsId.") method ...");
 	global $adb;
 	$query="insert into group2rs values(".$groupId.",'".$rsId."')";
 	$adb->query($query);
+	$log->debug("Exiting insertGroupToRsRelation method ...");
 }
 
 /** Function to insert group to user relation 
@@ -2569,9 +2859,12 @@ function insertGroupToRsRelation($groupId,$rsId)
  */
 function insertGroupToUserRelation($groupId,$userId)
 {
+	global $log;
+	$log->debug("Entering insertGroupToUserRelation(".$groupId.",".$userId.") method ...");
 	global $adb;
 	$query="insert into users2group values(".$groupId.",".$userId.")";
 	$adb->query($query);
+	$log->debug("Exiting insertGroupToUserRelation method ...");
 }
 
 
@@ -2582,6 +2875,8 @@ function insertGroupToUserRelation($groupId,$userId)
  */
 function getGroupInfo($groupId)
 {
+	global $log;
+	$log->debug("Entering getGroupInfo(".$groupId.") method ...");
 	global $adb;
 	$groupDetailArr=Array();
 	$groupMemberArr=Array();
@@ -2598,6 +2893,7 @@ function getGroupInfo($groupId)
 	$groupDetailArr[]=$groupMemberArr;
 
 	//Returning the Group Detail Array
+	$log->debug("Exiting getGroupInfo method ...");
 	return $groupDetailArr;
 	 
 
@@ -2609,12 +2905,15 @@ function getGroupInfo($groupId)
  */
 function fetchGroupName($groupId)
 {
+	global $log;
+	$log->debug("Entering fetchGroupName(".$groupId.") method ...");
 
 	global $adb;
 	//Retreving the group Info
 	$query="select * from groups where groupid=".$groupId;
 	$result = $adb->query($query);
 	$groupName=$adb->query_result($result,0,'groupname');
+	$log->debug("Exiting fetchGroupName method ...");
 	return $groupName;
 	
 }
@@ -2629,6 +2928,8 @@ function fetchGroupName($groupId)
  */
 function getGroupMembers($groupId)
 {
+	global $log;
+	$log->debug("Entering getGroupMembers(".$groupId.") method ...");
 	$groupMemberArr=Array();
 	$roleGroupArr=getGroupRelatedRoles($groupId);
 	$rsGroupArr=getGroupRelatedRoleSubordinates($groupId);
@@ -2640,6 +2941,7 @@ function getGroupMembers($groupId)
 	$groupMemberArr['rs']=$rsGroupArr;
 	$groupMemberArr['users']=$userGroupArr;
 	
+	$log->debug("Exiting getGroupMembers method ...");
 	return($groupMemberArr);
 }
 
@@ -2650,6 +2952,8 @@ function getGroupMembers($groupId)
  */
 function getGroupRelatedRoles($groupId)
 {
+	global $log;	
+	$log->debug("Entering getGroupRelatedRoles(".$groupId.") method ...");
 	global $adb;
 	$roleGroupArr=Array();
 	$query="select * from group2role where groupid=".$groupId;
@@ -2660,6 +2964,7 @@ function getGroupRelatedRoles($groupId)
 		$roleId=$adb->query_result($result,$i,'roleid');
 		$roleGroupArr[]=$roleId;
 	}
+	$log->debug("Exiting getGroupRelatedRoles method ...");
 	return $roleGroupArr;	
 			
 }
@@ -2672,6 +2977,8 @@ function getGroupRelatedRoles($groupId)
  */
 function getGroupRelatedRoleSubordinates($groupId)
 {
+	global $log;
+	$log->debug("Entering getGroupRelatedRoleSubordinates(".$groupId.") method ...");
 	global $adb;
 	$rsGroupArr=Array();
 	$query="select * from group2rs where groupid=".$groupId;
@@ -2682,6 +2989,7 @@ function getGroupRelatedRoleSubordinates($groupId)
 		$roleSubId=$adb->query_result($result,$i,'roleandsubid');
 		$rsGroupArr[]=$roleSubId;
 	}
+	$log->debug("Exiting getGroupRelatedRoleSubordinates method ...");
 	return $rsGroupArr;
 }
 
@@ -2693,6 +3001,8 @@ function getGroupRelatedRoleSubordinates($groupId)
  */
 function getGroupRelatedGroups($groupId)
 {
+	global $log;
+	$log->debug("Entering getGroupRelatedGroups(".$groupId.") method ...");
 	global $adb;
 	$groupGroupArr=Array();
 	$query="select * from group2grouprel where groupid=".$groupId;
@@ -2703,6 +3013,7 @@ function getGroupRelatedGroups($groupId)
 		$relGroupId=$adb->query_result($result,$i,'containsgroupid');
 		$groupGroupArr[]=$relGroupId;
 	}
+	$log->debug("Exiting getGroupRelatedGroups method ...");
 	return $groupGroupArr;	
 			
 }
@@ -2714,6 +3025,8 @@ function getGroupRelatedGroups($groupId)
  */
 function getGroupRelatedUsers($groupId)
 {
+	global $log;
+	$log->debug("Entering getGroupRelatedUsers(".$groupId.") method ...");
 	global $adb;
 	$userGroupArr=Array();
 	$query="select * from users2group where groupid=".$groupId;
@@ -2724,6 +3037,7 @@ function getGroupRelatedUsers($groupId)
 		$userId=$adb->query_result($result,$i,'userid');
 		$userGroupArr[]=$userId;
 	}
+	$log->debug("Exiting getGroupRelatedUsers method ...");
 	return $userGroupArr;	
 			
 }
@@ -2736,6 +3050,8 @@ function getGroupRelatedUsers($groupId)
  */
 function updateGroup($groupId,$groupName,$groupMemberArray,$description)
 {
+	global $log;
+	$log->debug("Entering updateGroup(".$groupId.",".$groupName.",".$groupMemberArray.",".$description.") method ...");
 	global $adb;
 	$query="update groups set groupname='".$groupName."',description='".$description."' where groupid=".$groupId;
 	$adb->query($query);
@@ -2774,7 +3090,7 @@ function updateGroup($groupId,$groupName,$groupMemberArray,$description)
 	{
 		insertGroupToUserRelation($groupId,$userId);
 	}
-		
+	$log->debug("Exiting updateGroup method ...");	
 
 }
 
@@ -2783,6 +3099,8 @@ function updateGroup($groupId,$groupName,$groupMemberArray,$description)
  */
 function deleteGroup($groupId)
 {
+	global $log;
+	$log->debug("Entering deleteGroup(".$groupId.") method ...");	
 	global $adb;
 	deleteGroupRelatedSharingRules($groupId);		
 	$query="delete from groups where groupid=".$groupId;
@@ -2792,6 +3110,7 @@ function deleteGroup($groupId)
 	deleteGroupRelatedRoles($groupId);
 	deleteGroupRelatedRolesAndSubordinates($groupId);
 	deleteGroupRelatedUsers($groupId);
+	$log->debug("Exiting deleteGroup method ...");
 
 }
 
@@ -2800,9 +3119,12 @@ function deleteGroup($groupId)
  */
 function deleteGroupRelatedGroups($groupId)
 {
+	global $log;
+	$log->debug("Entering deleteGroupRelatedGroups(".$groupId.") method ...");
 	global $adb;
 	$query="delete from group2grouprel where groupid=".$groupId;
 	$adb->query($query);
+	$log->debug("Exiting deleteGroupRelatedGroups method ...");
 }
 
 
@@ -2811,9 +3133,12 @@ function deleteGroupRelatedGroups($groupId)
  */
 function deleteGroupRelatedRoles($groupId)
 {
+	global $log;
+	$log->debug("Entering deleteGroupRelatedRoles(".$groupId.") method ...");
 	global $adb;
 	$query="delete from group2role where groupid=".$groupId;
 	$adb->query($query);
+	$log->debug("Exiting deleteGroupRelatedRoles method ...");
 }
 
 
@@ -2822,9 +3147,12 @@ function deleteGroupRelatedRoles($groupId)
  */
 function deleteGroupRelatedRolesAndSubordinates($groupId)
 {
+	global $log;
+	$log->debug("Entering deleteGroupRelatedRolesAndSubordinates(".$groupId.") method ...");
 	global $adb;
 	$query="delete from group2rs where groupid=".$groupId;
 	$adb->query($query);
+	$log->debug("Exiting deleteGroupRelatedRolesAndSubordinates method ...");
 }
 
 
@@ -2833,9 +3161,12 @@ function deleteGroupRelatedRolesAndSubordinates($groupId)
  */
 function deleteGroupRelatedUsers($groupId)
 {
+	global $log;
+	$log->debug("Entering deleteGroupRelatedUsers(".$groupId.") method ...");
 	global $adb;
 	$query="delete from users2group where groupid=".$groupId;
 	$adb->query($query);
+	$log->debug("Exiting deleteGroupRelatedUsers method ...");
 }
 
 /** This function returns the Default Organisation Sharing Action Name
@@ -2844,10 +3175,13 @@ function deleteGroupRelatedUsers($groupId)
   */
 function getDefOrgShareActionName($share_action_id)
 {
+	global $log;
+	$log->debug("Entering getDefOrgShareActionName(".$share_action_id.") method ...");
 	global $adb;
 	$query="select * from org_share_action_mapping where share_action_id=".$share_action_id;
 	$result=$adb->query($query);
 	$share_action_name=$adb->query_result($result,0,"share_action_name");
+	$log->debug("Exiting getDefOrgShareActionName method ...");
 	return $share_action_name;		
 
 
@@ -2864,6 +3198,8 @@ function getDefOrgShareActionName($share_action_id)
   */
 function getModuleSharingActionArray($tabid)
 {
+	global $log;
+	$log->debug("Entering getModuleSharingActionArray(".$tabid.") method ...");
 	global $adb;
 	$share_action_arr=Array();
 	$query = "select org_share_action_mapping.share_action_name,org_share_action2tab.share_action_id from org_share_action2tab inner join org_share_action_mapping on org_share_action2tab.share_action_id=org_share_action_mapping.share_action_id where org_share_action2tab.tabid=".$tabid;
@@ -2875,6 +3211,7 @@ function getModuleSharingActionArray($tabid)
 		$share_action_id=$adb->query_result($result,$i,"share_action_id");
 		$share_action_arr[$share_action_id] = $share_action_name;
 	}
+	$log->debug("Exiting getModuleSharingActionArray method ...");
 	return $share_action_arr;
 	
 }
@@ -2893,6 +3230,8 @@ function getModuleSharingActionArray($tabid)
   */
 function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$toEntityId,$sharePermission)
 {
+	global $log;
+	$log->debug("Entering addSharingRule(".$tabid.",".$shareEntityType.",".$toEntityType.",".$shareEntityId.",".$toEntityId.",".$sharePermission.") method ...");
 	
 	global $adb;
 	$shareid=$adb->getUniqueId("datashare_module_rel");
@@ -2954,6 +3293,7 @@ function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$to
 	$query1 = "insert into datashare_module_rel values(".$shareid.",".$tabid.",'".$type_string."')";
 	$adb->query($query1);		
 	$adb->query($query);	
+	$log->debug("Exiting addSharingRule method ...");
 	return $shareid;	
 	
 }
@@ -2974,6 +3314,8 @@ function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$to
   */
 function updateSharingRule($shareid,$tabid,$shareEntityType,$toEntityType,$shareEntityId,$toEntityId,$sharePermission)
 {
+	global $log;
+	$log->debug("Entering updateSharingRule(".$shareid.",".$tabid.",".$shareEntityType.",".$toEntityType.",".$shareEntityId.",".$toEntityId.",".$sharePermission.") method ...");
 	
 	global $adb;
 	$query2="select * from datashare_module_rel where shareid=".$shareid;
@@ -3041,6 +3383,7 @@ function updateSharingRule($shareid,$tabid,$shareEntityType,$toEntityType,$share
 	$query1 = "update datashare_module_rel set relationtype='".$type_string."' where shareid=".$shareid;
 	$adb->query($query1);		
 	$adb->query($query);	
+	$log->debug("Exiting updateSharingRule method ...");
 	return $shareid;	
 	
 }
@@ -3052,6 +3395,8 @@ function updateSharingRule($shareid,$tabid,$shareEntityType,$toEntityType,$share
   */
 function deleteSharingRule($shareid)
 {
+	global $log;
+	$log->debug("Entering deleteSharingRule(".$shareid.") method ...");
 	global $adb;
 	$query2="select * from datashare_module_rel where shareid=".$shareid;
 	$res=$adb->query($query2);
@@ -3065,6 +3410,7 @@ function deleteSharingRule($shareid)
 	//deleting the releated module sharing permission
 	$query5="delete from datashare_relatedmodule_permission where shareid=".$shareid;
 	$adb->query($query5);
+	$log->debug("Exiting deleteSharingRule method ...");
 	
 }
 
@@ -3082,6 +3428,8 @@ function deleteSharingRule($shareid)
   */
 function getDataShareTableandColumnArray()
 {
+	global $log;
+	$log->debug("Entering getDataShareTableandColumnArray() method ...");
 	$dataShareTableColArr=Array('datashare_grp2grp'=>'share_groupid::to_groupid',
 				    'datashare_grp2role'=>'share_groupid::to_roleid',
 				    'datashare_grp2rs'=>'share_groupid::to_roleandsubid',
@@ -3091,6 +3439,7 @@ function getDataShareTableandColumnArray()
 				    'datashare_rs2grp'=>'share_roleandsubid::to_groupid',
 				    'datashare_rs2role'=>'share_roleandsubid::to_roleid',
 				    'datashare_rs2rs'=>'share_roleandsubid::to_roleandsubid');
+	$log->debug("Exiting getDataShareTableandColumnArray method ...");
 	return $dataShareTableColArr;	
 					
 }
@@ -3104,10 +3453,13 @@ function getDataShareTableandColumnArray()
  */ 
 function getDSTableColumns($tableName)
 {
+	global $log;
+	$log->debug("Entering getDSTableColumns(".$tableName.") method ...");
 	$dataShareTableColArr=getDataShareTableandColumnArray();
 	
 	$dsTableCols=$dataShareTableColArr[$tableName];
 	$dsTableColsArr=explode('::',$dsTableCols);	
+	$log->debug("Exiting getDSTableColumns method ...");
 	return $dsTableColsArr;	
 					
 }
@@ -3127,6 +3479,8 @@ function getDSTableColumns($tableName)
  */
 function getDataShareTableName()
 {
+	global $log;
+	$log->debug("Entering getDataShareTableName() method ...");
 	$dataShareTableColArr=Array('GRP::GRP'=>'datashare_grp2grp',
 				    'GRP::ROLE'=>'datashare_grp2role',
 				    'GRP::RS'=>'datashare_grp2rs',
@@ -3136,6 +3490,7 @@ function getDataShareTableName()
 				    'RS::GRP'=>'datashare_rs2grp',
 				    'RS::ROLE'=>'datashare_rs2role',
 				    'RS::RS'=>'datashare_rs2rs');
+	$log->debug("Exiting getDataShareTableName method ...");
 	return $dataShareTableColArr;	
 					
 }
@@ -3147,8 +3502,11 @@ function getDataShareTableName()
  */
 function getDSTableNameForType($typeString)
 {
+	global $log;
+	$log->debug("Entering getDSTableNameForType(".$typeString.") method ...");
 	$dataShareTableColArr=getDataShareTableName();
 	$tableName=$dataShareTableColArr[$typeString];
+	$log->debug("Exiting getDSTableNameForType method ...");
 	return $tableName;	
 					
 }
@@ -3159,6 +3517,8 @@ function getDSTableNameForType($typeString)
  */
 function getEntityTypeFromCol($colName)
 {
+	global $log;
+	$log->debug("Entering getEntityTypeFromCol(".$colName.") method ...");
 
         if($colName == 'share_groupid' || $colName == 'to_groupid')
         {
@@ -3173,6 +3533,7 @@ function getEntityTypeFromCol($colName)
                 $entity_type='rs';
         }
 	
+	$log->debug("Exiting getEntityTypeFromCol method ...");
 	return $entity_type;
 
 }
@@ -3184,6 +3545,8 @@ function getEntityTypeFromCol($colName)
  */
 function getEntityDisplayLink($entityType,$entityid)
 {
+	global $log;
+	$log->debug("Entering getEntityDisplayLink(".$entityType.",".$entityid.") method ...");
 	if($entityType == 'groups')
 	{
 		$groupNameArr = getGroupInfo($entityid); 
@@ -3199,6 +3562,7 @@ function getEntityDisplayLink($entityType,$entityid)
 		$roleName=getRoleName($entityid);	
 		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
 	}
+	$log->debug("Exiting getEntityDisplayLink method ...");
 	return $display_out;
 	
 }
@@ -3211,8 +3575,9 @@ function getEntityDisplayLink($entityType,$entityid)
  */
 function getSharingRuleInfo($shareId)
 {
-	global $adb;
 	global $log;
+	$log->debug("Entering getSharingRuleInfo(".$shareId.") method ...");
+	global $adb;
 	$shareRuleInfoArr=Array();
 	$query="select * from datashare_module_rel where shareid=".$shareId;
 	$result=$adb->query($query);
@@ -3249,6 +3614,7 @@ function getSharingRuleInfo($shareId)
 	$shareRuleInfoArr[]=$to_id;
 	$shareRuleInfoArr[]=$permission;
 		
+	$log->debug("Exiting getSharingRuleInfo method ...");
 	return $shareRuleInfoArr;	
 		
 	
@@ -3262,6 +3628,8 @@ function getSharingRuleInfo($shareId)
 
 function getRelatedSharingModules($tabid)
 {
+	global $log;
+	$log->debug("Entering getRelatedSharingModules(".$tabid.") method ...");
 	global $adb;
 	$relatedSharingModuleArray=Array();
 	$query="select * from datashare_relatedmodules where tabid=".$tabid;
@@ -3274,6 +3642,7 @@ function getRelatedSharingModules($tabid)
 		$relatedSharingModuleArray[$rel_tabid]=$ds_relmod_id;
 		
 	}
+	$log->debug("Exiting getRelatedSharingModules method ...");
 	return $relatedSharingModuleArray;
 	
 }
@@ -3291,10 +3660,13 @@ function getRelatedSharingModules($tabid)
 
 function addRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$sharePermission)
 {
+	global $log;
+	$log->debug("Entering addRelatedModuleSharingPermission(".$shareid.",".$tabid.",".$relatedtabid.",".$sharePermission.") method ...");
 	global $adb;
 	$relatedModuleSharingId=getRelatedModuleSharingId($tabid,$relatedtabid);	
 	$query="insert into datashare_relatedmodule_permission values(".$shareid.", ".$relatedModuleSharingId.", ".$sharePermission.")" ;
 	$result=$adb->query($query);
+	$log->debug("Exiting addRelatedModuleSharingPermission method ...");
 }
 
 /** This function is to update the related module sharing permission for a particulare Sharing Rule 
@@ -3309,10 +3681,13 @@ function addRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$shareP
 
 function updateRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$sharePermission)
 {
+	global $log;
+	$log->debug("Entering updateRelatedModuleSharingPermission(".$shareid.",".$tabid.",".$relatedtabid.",".$sharePermission.") method ...");
 	global $adb;
 	$relatedModuleSharingId=getRelatedModuleSharingId($tabid,$relatedtabid);
 	$query="update datashare_relatedmodule_permission set permission=".$sharePermission." where shareid=".$shareid." and datashare_relatedmodule_id=".$relatedModuleSharingId;		
 	$result=$adb->query($query);
+	$log->debug("Exiting updateRelatedModuleSharingPermission method ...");
 }
 
 /** This function is to retreive the Related Module Sharing Id
@@ -3324,10 +3699,13 @@ function updateRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$sha
 
 function getRelatedModuleSharingId($tabid,$related_tabid)
 {
+	global $log;
+	$log->debug("Entering getRelatedModuleSharingId(".$tabid.",".$related_tabid.") method ...");
 	global $adb;
 	$query="select datashare_relatedmodule_id from datashare_relatedmodules where tabid=".$tabid." and relatedto_tabid=".$related_tabid ;
 	$result=$adb->query($query);
 	$relatedModuleSharingId=$adb->query_result($result,0,'datashare_relatedmodule_id');
+	$log->debug("Exiting getRelatedModuleSharingId method ...");
 	return $relatedModuleSharingId;
 	
 }
@@ -3344,6 +3722,8 @@ function getRelatedModuleSharingId($tabid,$related_tabid)
   */
 function getRelatedModuleSharingPermission($shareid)
 {
+	global $log;
+	$log->debug("Entering getRelatedModuleSharingPermission(".$shareid.") method ...");
 	global $adb;
 	$relatedSharingModulePermissionArray=Array();
 	$query="select datashare_relatedmodules.*,datashare_relatedmodule_permission.permission from datashare_relatedmodules inner join datashare_relatedmodule_permission on datashare_relatedmodule_permission.datashare_relatedmodule_id=datashare_relatedmodules.datashare_relatedmodule_id where datashare_relatedmodule_permission.shareid=".$shareid;
@@ -3357,6 +3737,7 @@ function getRelatedModuleSharingPermission($shareid)
 		
 	
 	}
+	$log->debug("Exiting getRelatedModuleSharingPermission method ...");
 	return $relatedSharingModulePermissionArray;	
 	
 }
@@ -3370,6 +3751,8 @@ function getRelatedModuleSharingPermission($shareid)
   */
 function getUserProfile($userId)
 {
+	global $log;
+	$log->debug("Entering getUserProfile(".$userId.") method ...");
 	global $adb;
 	$roleId=fetchUserRole($userId);
 	$profArr=Array();	
@@ -3382,6 +3765,7 @@ function getUserProfile($userId)
         	$profileid=  $adb->query_result($result1,$i,"profileid");
 		$profArr[]=$profileid;
 	}
+		$log->debug("Exiting getUserProfile method ...");
         return $profArr;	
 	
 }
@@ -3394,6 +3778,8 @@ function getUserProfile($userId)
   */
 function getCombinedUserGlobalPermissions($userId)
 {
+	global $log;
+	$log->debug("Entering getCombinedUserGlobalPermissions(".$userId.") method ...");
 	global $adb;
 	$profArr=getUserProfile($userId);
 	$no_of_profiles=sizeof($profArr);
@@ -3425,6 +3811,7 @@ function getCombinedUserGlobalPermissions($userId)
 
 	}
 			
+	$log->debug("Exiting getCombinedUserGlobalPermissions method ...");
 	return $userGlobalPerrArr;
 
 }
@@ -3437,6 +3824,8 @@ function getCombinedUserGlobalPermissions($userId)
   */
 function getCombinedUserTabsPermissions($userId)
 {
+	global $log;
+	$log->debug("Entering getCombinedUserTabsPermissions(".$userId.") method ...");
 	global $adb;
 	$profArr=getUserProfile($userId);
 	$no_of_profiles=sizeof($profArr);
@@ -3467,6 +3856,7 @@ function getCombinedUserTabsPermissions($userId)
 		}
 
 	}
+	$log->debug("Exiting getCombinedUserTabsPermissions method ...");
 	return $userTabPerrArr;
 
 }
@@ -3479,6 +3869,8 @@ function getCombinedUserTabsPermissions($userId)
  */
 function getCombinedUserActionPermissions($userId)
 {
+	global $log;
+	$log->debug("Entering getCombinedUserActionPermissions(".$userId.") method ...");
 	global $adb;
 	$profArr=getUserProfile($userId);
 	$no_of_profiles=sizeof($profArr);
@@ -3512,6 +3904,7 @@ function getCombinedUserActionPermissions($userId)
 		}
 
 	}
+	$log->debug("Exiting getCombinedUserActionPermissions method ...");
 	return $actionPerrArr;
 
 }
@@ -3523,6 +3916,8 @@ function getCombinedUserActionPermissions($userId)
  */
 function getParentRole($roleId)
 {
+	global $log;
+	$log->debug("Entering getParentRole(".$roleId.") method ...");
 	$roleInfo=getRoleInformation($roleId);
 	$parentRole=$roleInfo[$roleId][1];
 	$tempParentRoleArr=explode('::',$parentRole);
@@ -3534,6 +3929,7 @@ function getParentRole($roleId)
 			$parentRoleArr[]=$role_id;
 		}
 	}
+	$log->debug("Exiting getParentRole method ...");
 	return $parentRoleArr;
 	
 }
@@ -3545,6 +3941,7 @@ function getParentRole($roleId)
  */
 function getRoleSubordinates($roleId)
 {
+	$log->debug("Entering getRoleSubordinates(".$roleId.") method ...");
 	global $adb;
 	$roleDetails=getRoleInformation($roleId);
 	$roleInfo=$roleDetails[$roleId];
@@ -3561,6 +3958,7 @@ function getRoleSubordinates($roleId)
 		$roleSubordinates[]=$roleid;
 		
 	}
+	$log->debug("Exiting getRoleSubordinates method ...");
 	return $roleSubordinates;	
 
 }
@@ -3576,6 +3974,8 @@ function getRoleSubordinates($roleId)
  */
 function getSubordinateRoleAndUsers($roleId)
 {
+	global $log;
+	$log->debug("Entering getSubordinateRoleAndUsers(".$roleId.") method ...");
 	global $adb;
 	$subRoleAndUsers=Array();
 	$subordinateRoles=getRoleSubordinates($roleId);
@@ -3585,12 +3985,15 @@ function getSubordinateRoleAndUsers($roleId)
 		$subRoleAndUsers[$subRoleId]=$userArray;
 
 	}
+	$log->debug("Exiting getSubordinateRoleAndUsers method ...");
 	return $subRoleAndUsers;	
 		
 }
 
 function getCurrentUserProfileList()
 {
+	global $log;
+	$log->debug("Entering getCurrentUserProfileList() method ...");
         global $current_user;
         require('user_privileges/user_privileges_'.$current_user->id.'.php');
         $profList ='(';
@@ -3605,6 +4008,7 @@ function getCurrentUserProfileList()
                 $i++;
         }
         $profList .=')';
+	$log->debug("Exiting getCurrentUserProfileList method ...");
         return $profList;
 
 }
@@ -3612,6 +4016,8 @@ function getCurrentUserProfileList()
 
 function getCurrentUserGroupList()
 {
+	global $log;
+	$log->debug("Entering getCurrentUserGroupList() method ...");
         global $current_user;
         require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$grpList='';
@@ -3630,11 +4036,14 @@ function getCurrentUserGroupList()
         	}
         	$grpList .=')';
 	}
+	$log->debug("Exiting getCurrentUserGroupList method ...");
        	 return $grpList;
 }
 
 function getSubordinateUsersList()
 {
+	global $log;
+	$log->debug("Entering getSubordinateUsersList() method ...");
         global $current_user;
 	$user_array=Array();
         require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -3653,12 +4062,15 @@ function getSubordinateUsersList()
         	}
 	}
 	$subUserList = constructList($user_array,'INTEGER');	
+	$log->debug("Exiting getSubordinateUsersList method ...");
        	return $subUserList;
 
 }
 
 function getReadSharingUsersList($module)
 {
+	global $log;
+	$log->debug("Entering getReadSharingUsersList(".$module.") method ...");
 	global $adb;
 	global $current_user;
 	$user_array=Array();
@@ -3672,11 +4084,14 @@ function getReadSharingUsersList($module)
 		$user_array[]=$user_id;
 	}
 	$shareUserList=constructList($user_array,'INTEGER');
+	$log->debug("Exiting getReadSharingUsersList method ...");
 	return $shareUserList;
 }
 
 function getReadSharingGroupsList($module)
 {
+	global $log;
+	$log->debug("Entering getReadSharingGroupsList(".$module.") method ...");
 	global $adb;
 	global $current_user;
 	$grp_array=Array();
@@ -3690,11 +4105,14 @@ function getReadSharingGroupsList($module)
 		$grp_array[]=$grp_id;
 	}
 	$shareGrpList=constructList($grp_array,'INTEGER');
+	$log->debug("Exiting getReadSharingGroupsList method ...");
 	return $shareGrpList;
 }
 
 function getWriteSharingGroupsList($module)
 {
+	global $log;
+	$log->debug("Entering getWriteSharingGroupsList(".$module.") method ...");
 	global $adb;
 	global $current_user;
 	$grp_array=Array();
@@ -3708,11 +4126,14 @@ function getWriteSharingGroupsList($module)
 		$grp_array[]=$grp_id;
 	}
 	$shareGrpList=constructList($grp_array,'INTEGER');
+	$log->debug("Exiting getWriteSharingGroupsList method ...");
 	return $shareGrpList;
 }
 
 function constructList($array,$data_type)
 {
+	global $log;
+	$log->debug("Entering constructList(".$array.",".$data_type.") method ...");
 	$list="";
 	if(sizeof($array) > 0)
 	{
@@ -3736,11 +4157,14 @@ function constructList($array,$data_type)
 		}
 		$list.=")";
 	}
+	$log->debug("Exiting constructList method ...");
 	return $list;	
 }
 
 function getListViewSecurityParameter($module)
 {
+	global $log;
+	$log->debug("Entering getListViewSecurityParameter(".$module.") method ...");
 	global $adb;
 	global $current_user;
 
@@ -3952,11 +4376,14 @@ function getListViewSecurityParameter($module)
 
 		$sec_query .=") ";
 	}
+	$log->debug("Exiting getListViewSecurityParameter method ...");
 	return $sec_query;	
 }
 
 function get_current_user_access_groups($module)
 {
+	global $log;
+	$log->debug("Entering get_current_user_access_groups(".$module.") method ...");
 	global $adb,$noof_group_rows;
 	$current_user_group_list=getCurrentUserGroupList();
 	$sharing_write_group_list=getWriteSharingGroupsList($module);
@@ -3975,6 +4402,7 @@ function get_current_user_access_groups($module)
 	}
 	$result = $adb->query($query);
 	$noof_group_rows=$adb->num_rows($result);
+	$log->debug("Exiting get_current_user_access_groups method ...");
 	return $result;	
 }
 /** Function to get the Group Id for a given group groupname
@@ -3984,10 +4412,13 @@ function get_current_user_access_groups($module)
 
 function getGrpId($groupname)
 {
+	global $log;
+	$log->debug("Entering getGrpId(".$groupname.") method ...");
 	global $adb;
 	
 	$result = $adb->query("select groupid from groups where groupname='".$groupname."'");
 	$groupid = $adb->query_result($result,0,'groupid');
+	$log->debug("Exiting getGrpId method ...");
 	return $groupid;
 }
 
@@ -4000,6 +4431,8 @@ function getGrpId($groupname)
  */
 function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 {
+	global $log;
+	$log->debug("Entering getFieldVisibilityPermission(".$fld_module.",". $userid.",". $fieldname.") method ...");
 
 	global $adb;
 	global $current_user;
@@ -4008,8 +4441,11 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 	require('user_privileges/user_privileges_'.$userid.'.php');
 
 	if($is_admin)
-	{                                                                                                                                  return 0;
-	}                                                                                                                          else
+	{
+		$log->debug("Exiting getFieldVisibilityPermission method ...");
+		return 0;
+	}
+	else
 	{
 		//get profile list using userid
 		$profilelist = getCurrentUserProfileList();
@@ -4020,6 +4456,7 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 		$query="select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in".$profilelist." and field.fieldname='".$fieldname."' group by field.fieldid";
 		$result = $adb->query($query);
 
+		$log->debug("Exiting getFieldVisibilityPermission method ...");
 		return $adb->query_result($result,"0","visible");
 	}
 }
@@ -4030,6 +4467,8 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
  */
 function getFieldModuleAccessArray()
 {
+	global $log;
+	$log->debug("Entering getFieldModuleAccessArray() method ...");
 
 	$fldModArr=Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
                 'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
@@ -4049,6 +4488,7 @@ function getFieldModuleAccessArray()
                 'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
               );
 
+	$log->debug("Exiting getFieldModuleAccessArray method ...");
 	return $fldModArr;
 }
 
@@ -4058,6 +4498,8 @@ function getFieldModuleAccessArray()
  */
 function getPermittedModuleNames()
 {
+	global $log;
+	$log->debug("Entering getPermittedModuleNames() method ...");
 	global $current_user;
 	$permittedModules=Array();
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -4087,6 +4529,7 @@ function getPermittedModuleNames()
 			
 		}	
 	}
+	$log->debug("Exiting getPermittedModuleNames method ...");
 	return $permittedModules;			
 }
 
@@ -4098,6 +4541,8 @@ function getPermittedModuleNames()
  */
 function RecalculateSharingRules()
 {
+	global $log;
+	$log->debug("Entering RecalculateSharingRules() method ...");
 	global $adb;
 	require_once('modules/Users/CreateUserPrivilegeFile.php');
 	$query="select id from users where deleted=0";
@@ -4108,7 +4553,8 @@ function RecalculateSharingRules()
 		$id=$adb->query_result($result,$i,'id');	
 		createUserPrivilegesfile($id);
 	        createUserSharingPrivilegesfile($id);
-	}		
+	}	
+	$log->debug("Exiting RecalculateSharingRules method ...");	
 				
 }
 
@@ -4121,9 +4567,12 @@ function RecalculateSharingRules()
   */
 function insert2CampaignGroupRelation($campaignid,$groupname)
 {
+	global $log;
+	$log->debug("Entering insert2CampaignGroupRelation(".$campaignid.",".$groupname.") method ...");
 	global $adb;
 	$sql = "insert into campaigngrouprelation values (" .$campaignid .",'".$groupname."')";
 	$adb->query($sql);
+	$log->debug("Exiting insert2CampaignGroupRelation method ...");
 
 }
 
@@ -4134,11 +4583,14 @@ function insert2CampaignGroupRelation($campaignid,$groupname)
   */
 function updateCampaignGroupRelation($campaignid,$groupname)
 {
+	global $log;
+	$log->debug("Entering updateCampaignGroupRelation(".$campaignid.",".$groupname.") method ...");
 	global $adb;
 	$sqldelete = "delete from campaigngrouprelation where campaignid=".$campaignid;
 	$adb->query($sqldelete);
 	$sql = "insert into campaigngrouprelation values (".$campaignid .",'" .$groupname ."')";
 	$adb->query($sql);
+	$log->debug("Exiting updateCampaignGroupRelation method ...");
 }
 
 //end					   
