@@ -71,13 +71,13 @@ $smarty->assign("CATEGORY",$category);
 
 
 $permissionData = $_SESSION['action_permission_set'];
-if(isPermitted("Accounts",1,$_REQUEST['record']) == 'yes')
+if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Accounts",2,$_REQUEST['record']) == 'yes')
+if(isPermitted("Accounts","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
-if(isPermitted("Accounts",8,'') == 'yes')
+if(isPermitted("Accounts","Merge",'') == 'yes')
 {
 	$smarty->assign("MERGEBUTTON","permitted");
 	require_once('include/utils/UserInfoUtil.php');

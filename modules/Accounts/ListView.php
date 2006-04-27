@@ -73,11 +73,14 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
-if(isPermitted('Accounts',2,'') == 'yes')
+if(isPermitted('Accounts','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-		$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+if(isPermitted('Emails','EditView','') == 'yes')
+{
+	$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
+}		
 if(isset($CActionDtls))
 {
 	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];
