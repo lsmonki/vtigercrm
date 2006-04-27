@@ -36,6 +36,14 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $other_text = Array();
 
+if($_REQUEST['errormsg'] != '')
+{
+        $errormsg = $_REQUEST['errormsg'];
+        $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
+}else
+{
+        $smarty->assign("ERROR","");
+}
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
 $focus = new Product();
