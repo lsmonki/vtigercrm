@@ -165,8 +165,11 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 			}
                         else
                         {
-				$fld_name=$fieldname;
-                                $search_header[$fld_name]=$name;
+				if($fieldname!='parent_id')
+				{
+					$fld_name=$fieldname;
+                                	$search_header[$fld_name]=$name;
+				}
                         }
                 }
         }
