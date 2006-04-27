@@ -1144,10 +1144,6 @@ class CustomView extends CRMEntity{
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,products.* ".$listviewquery;
 			}
-			else if($module == "Campaigns")
-			{
-				$query = "select users.user_name,".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
-			}
 			else if($module == "Vendors")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
