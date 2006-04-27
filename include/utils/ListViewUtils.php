@@ -36,6 +36,8 @@ require_once('include/utils/CommonUtils.php'); //new
 */
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
+	global $log;
+	$log->debug("Entering getListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
 	global $adb;
 	global $theme;
 	global $app_strings;
@@ -213,6 +215,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
      }
+	$log->debug("Exiting getListViewHeader method ...");
 	return $list_header;
 }
 
@@ -227,6 +230,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='')
 {
+	global $log;
+	$log->debug("Entering getSearchListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.") method ...");
 	global $adb;
 	global $theme;
 	global $app_strings;
@@ -310,6 +315,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 			$list_header[]=$name;
 		}
 	}	
+	$log->debug("Exiting getSearchListViewHeader method ...");
 	return $list_header;
 
 }
@@ -324,6 +330,8 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 //code contributed by raju for improved pagination
 function getNavigationValues($display, $noofrows, $limit)
 {
+	global $log;
+	$log->debug("Entering getNavigationValues(".$display.",".$noofrows.",".$limit.") method ...");
 	$navigation_array = Array();   
 	global $limitpage_navigation;
 	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
@@ -336,6 +344,7 @@ function getNavigationValues($display, $noofrows, $limit)
 		$navigation_array['current'] =1;
 		$navigation_array['allflag'] ='Normal';
 		$navigation_array['verylast'] =1;
+		$log->debug("Exiting getNavigationValues method ...");
 		return $navigation_array;
 	}
 	$start = ((($display * $limit) - $limit)+1);
@@ -380,6 +389,7 @@ function getNavigationValues($display, $noofrows, $limit)
 	$navigation_array['current'] = $display;
 	$navigation_array['allflag'] ='All';
 	$navigation_array['verylast'] =$paging;
+	$log->debug("Exiting getNavigationValues method ...");
 	return $navigation_array;
 }
 
@@ -401,6 +411,8 @@ function getNavigationValues($display, $noofrows, $limit)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
+	global $log;
+	$log->debug("Entering getListViewEntries(".$focus.",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".$oCv.") method ...");
 	$tabname = getParentTab();
 	global $adb,$current_user;
 	global $app_strings;
@@ -681,6 +693,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$list_block[$entity_id] = $list_header;
 
 	}
+	$log->debug("Exiting getListViewEntries method ...");
 	return $list_block;
 	
 }
@@ -700,6 +713,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
 {
+	global $log;
+	$log->debug("Entering getSearchListViewEntries(".$focus.",". $module.",".$list_result.",".$navigation_array.") method ...");
 	global $adb,$theme,$current_user;
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '';
@@ -833,6 +848,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		}	
 		$list_block[$entity_id]=$list_header;
 	}
+	$log->debug("Exiting getSearchListViewEntries method ...");
 	return $list_block;
 }
 
@@ -855,6 +871,8 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
+	global $log;
+	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".$focus.",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb;
 	$tabname = getParentTab();
 	$uicolarr=$field_result[$fieldname];
@@ -1266,6 +1284,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$temp_val = str_replace("'",'\"',$temp_val);
 	
+$log->debug("Exiting getValue method ...");
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 			}
@@ -1337,12 +1356,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$value = '<span align="right">'.$value.'</div>';
 	}
 
+	$log->debug("Exiting getValue method ...");
 	return $value; 
 }
 
 
 function getListQuery($module,$where='')
 {
+	global $log;
+	$log->debug("Entering getListQuery(".$module.",".$where.") method ...");
 
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -1513,12 +1535,15 @@ function getListQuery($module,$where='')
 	}
 	*/
 
+	$log->debug("Exiting getListQuery method ...");
 	return $query;
 }
 
 
 function getReadEntityIds($module)
 {
+	global $log;
+	$log->debug("Entering getReadEntityIds(".$module.") method ...");
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -1616,6 +1641,7 @@ function getReadEntityIds($module)
 		}
 	}
 
+	$log->debug("Exiting getReadEntityIds method ...");
 	return $query;
 
 }
@@ -1624,6 +1650,8 @@ function getReadEntityIds($module)
 //parameter $viewid added for customview 27/5
 function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='',$groupid='')
 {
+	global $log;
+	$log->debug("Entering AlphabeticalSearch(".$module.",".$action.",".$fieldname.",".$query.",".$type.",".$popuptype.",".$recordid.",".$return_module.",".$append_url.",".$viewid.",".$groupid.") method ...");
 	if($type=='advanced')
 		$flag='&advanced=true';
 
@@ -1639,12 +1667,15 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	// Mike Crowe Mod --------------------------------------------------------added groupid to url
 		$list .= '<td class="searchAlph" align="center"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
 
+	$log->debug("Exiting AlphabeticalSearch method ...");
 	return $list;
 }
 
 
 function getRelatedToEntity($module,$list_result,$rset)
 {
+	global $log;
+	$log->debug("Entering getRelatedToEntity(".$module.",".$list_result.",".$rset.") method ...");
 
 	global $adb;
 	$seid = $adb->query_result($list_result,$rset,"relatedto");
@@ -1712,6 +1743,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 	{
 		$parent_value = '';
 	}
+	$log->debug("Exiting getRelatedToEntity method ...");
 	return $parent_value;
 
 }
@@ -1720,6 +1752,8 @@ function getRelatedToEntity($module,$list_result,$rset)
 //used in home page listTop files
 function getRelatedTo($module,$list_result,$rset)
 {
+	global $log;
+	$log->debug("Entering getRelatedTo(".$module.",".$list_result.",".$rset.") method ...");
 
         global $adb;
 		global $app_strings;
@@ -1830,6 +1864,7 @@ function getRelatedTo($module,$list_result,$rset)
 		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
 	}
 	//code added by raju ends
+	$log->debug("Exiting getRelatedTo method ...");
         return $parent_value;
 
 
@@ -1838,6 +1873,8 @@ function getRelatedTo($module,$list_result,$rset)
 
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
+	global $log;
+	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -1873,6 +1910,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
 	$output .= '</td>';
+	$log->debug("Exiting getTableHeaderNavigation method ...");
 	return $output;
 } 
 
@@ -1885,6 +1923,8 @@ Return tyep string.
 
 function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 {
+	global $log;
+	$log->debug("Entering getRelCheckquery(".$currentmodule.",".$returnmodule.",".$recordid.") method ...");
 	global $adb;
 	$skip_id = Array();
 	$where_relquery = "";
@@ -1911,6 +1951,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 			$where_relquery = "and contactdetails.contactid not in ".$skipids;
 		}
 	}
+	$log->debug("Exiting getRelCheckquery method ...");
 	return $where_relquery;
 }
 
