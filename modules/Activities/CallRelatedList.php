@@ -33,7 +33,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 
 $related_array = getRelatedLists("Activities", $focus);
