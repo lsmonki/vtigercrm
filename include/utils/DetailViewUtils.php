@@ -231,6 +231,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         }
 	elseif($uitype == 59)
 	{
+		$label_fld[] =$mod_strings[$fieldlabel];
 		$product_id = $col_fields[$fieldname];
 		if($product_id != '')
 		{
