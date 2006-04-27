@@ -37,6 +37,8 @@ require_once('include/utils/CommonUtils.php'); //new
 
 function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid='')
 {
+	global $log;
+	$log->debug("Entering getDetailViewOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $col_fields.",".$generatedtype.",".$tabid.") method ...");
 	global $adb;
 	global $mod_strings;
 	global $app_strings;
@@ -730,6 +732,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[]=$uitype;
+	$log->debug("Exiting getDetailViewOutputHtml method ...");
 	return $label_fld;
 }
 
@@ -741,6 +744,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 function getDetailAssociatedProducts($module,$focus)
 {
+	global $log;
+	$log->debug("Entering getDetailAssociatedProducts(".$module.",".$focus.") method ...");
 	global $adb;
 	global $theme;
 	global $log;
@@ -840,6 +845,7 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '</tr>';
 	$output .= '</table>';
 
+	$log->debug("Exiting getDetailAssociatedProducts method ...");
 	return $output;
 
 }
@@ -852,6 +858,8 @@ function getDetailAssociatedProducts($module,$focus)
 		
 function getRelatedLists($module,$focus)
 {
+	global $log;
+	$log->debug("Entering getRelatedLists(".$module.",".$focus.") method ...");
 	global $adb;
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -882,6 +890,7 @@ function getRelatedLists($module,$focus)
 			$focus_list[$label] = $focus->$function_name($focus->id);
 		}
 	}
+	$log->debug("Exiting getRelatedLists method ...");
 	return $focus_list;
 }
 
@@ -895,6 +904,8 @@ function getRelatedLists($module,$focus)
 
 function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_label)
 {
+	global $log;
+	$log->debug("Entering getDetailBlockInformation(".$module.",". $result.",".$col_fields.",".$tabid.",".$block_label.") method ...");
 	global $adb;
 	global $current_user;
 	global $mod_strings;
@@ -962,6 +973,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 				$returndata[$mod_strings[$label]]=array_merge((array)$returndata[$mod_strings[$label]],(array)$label_data[$blockid]);
 		}
 	}
+	$log->debug("Exiting getDetailBlockInformation method ...");
 	return $returndata;
 
 
