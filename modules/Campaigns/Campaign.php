@@ -29,8 +29,8 @@ class Campaign extends CRMEntity {
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','campaign');
-	var $tab_name_index = Array('crmentity'=>'crmid','campaign'=>'campaignid');
+	var $tab_name = Array('crmentity','campaign','campaignscf');
+	var $tab_name_index = Array('crmentity'=>'crmid','campaign'=>'campaignid','campaignscf'=>'campaignid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('campaignname','smownerid','expectedcost');
@@ -66,8 +66,8 @@ class Campaign extends CRMEntity {
                 $button = '';
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
 
-                $query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.campaignid = '.$id;
-
+		$query = 'SELECT contactdetails.*, crmentity.crmid, users.user_name, groups.groupname, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid left join users on crmentity.smownerid = users.id left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname  where crmentity.deleted=0 and contactdetails.campaignid = '.$id;
+		
                 return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
         }
 	function get_leads($id)
@@ -79,8 +79,8 @@ class Campaign extends CRMEntity {
                 $button = '';
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
 
-                $query = 'SELECT leaddetails.*, crmentity.crmid, crmentity.smownerid from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid  where crmentity.deleted=0 and leaddetails.campaignid = '.$id;
-
+		$query = 'SELECT leaddetails.*, crmentity.crmid, users.user_name, groups.groupname, crmentity.smownerid from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid left join users on crmentity.smownerid = users.id left join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.campaignid = '.$id;
+		
                 return GetRelatedList('Campaigns','Leads',$focus,$query,$button,$returnset);
         }
 
