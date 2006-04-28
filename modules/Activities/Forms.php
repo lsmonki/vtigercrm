@@ -31,6 +31,8 @@
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 function get_validate_record_js () {
+global $log;
+$log->debug("Entering get_validate_record_js()  method ...");
 global $mod_strings;
 global $app_strings;
 
@@ -85,7 +87,7 @@ function verify_data(form,fname,flabel,fdatatype)
 </script>
 
 EOQ;
-
+$log->debug("Exiting get_validate_record_js  method ...");
 return $the_script;
 }
 
@@ -97,6 +99,8 @@ return $the_script;
  * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
+global $log;
+$log->debug("Entering get_new_record_form ()  method ...");
 global $app_strings, $mod_strings, $app_list_strings;
 global $current_user;
 global $theme;
@@ -334,7 +338,7 @@ $qcreate_form.='<script type="text/javascript">
 
 $qcreate_form .= get_left_form_footer();
 $qcreate_form .= get_validate_record_js();
-
+$log->debug("Exiting get_new_record_form method ...");
 return $qcreate_form;
 
 
