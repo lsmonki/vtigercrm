@@ -18,6 +18,8 @@ define("dbname", $dbconfig['db_name']);
 
 function get_structure()
 {
+	global $log;
+        $log->debug("Entering get_structure() method ...");
 	mysql_connect(dbserver, dbuser, dbpass);
 	mysql_select_db(dbname);
 	$tables = mysql_list_tables(dbname);
@@ -47,16 +49,20 @@ function get_structure()
 			}
 		}
 	}
+	$log->debug("Exiting get_structure method ...");
 	return $SQL;
 }
 
 function save_structure($filename, $root_directory)
 {
+	global $log;
+        $log->debug("Entering save_structure(".$filename.",".$root_directory.") method ...");
 	$sql = get_structure();
 	$sql = implode("\r", $sql);
 	$handle = fopen($root_directory.'/'.$filename,"wb") ;
 	fwrite($handle,$sql,9999999999);
 	fclose($handle);
+        $log->debug("Exiting save_structure method ...");
 }
 
 ?>
