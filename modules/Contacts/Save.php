@@ -32,6 +32,8 @@ require_once("modules/Emails/mail.php");
  */
 function makeRandomPassword() 
 {
+	global $log;
+	$log->debug("Entering makeRandomPassword() method ...");
         $salt = "abcdefghijklmnopqrstuvwxyz0123456789";
         srand((double)microtime()*1000000);
         $i = 0;
@@ -42,6 +44,7 @@ function makeRandomPassword()
                 $pass = $pass . $tmp;
                 $i++;
 	}
+$log->debug("Exiting makeRandomPassword method ...");
       return $pass;
 }
 
