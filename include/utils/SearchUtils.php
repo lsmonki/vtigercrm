@@ -390,10 +390,13 @@ function getAdvSearchfields($module)
 
 		}
 		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
-		if ($i==0)
-			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
-		else
-			$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
+		if($fieldlabel != 'Related to')
+		{
+			if ($i==0)
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\' selected>".$fieldlabel."</option>";
+			else
+				$OPTION_SET .= "<option value=\'".$fieldtablename.".".$fieldcolname."\'>".$fieldlabel."</option>";
+		}
 	}
 	$log->debug("Exiting getAdvSearchfields method ...");
 	return $OPTION_SET;
