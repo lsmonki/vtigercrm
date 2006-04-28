@@ -578,5 +578,40 @@ function processSortArrows($html_varName){
 }
 
 
+// as far as I can tell this isn't used anymore, however it is included in listview.php file of every module so I'm going to take advantage of it to put common functionallity in here
+
+global $currentModule;
+
+// ugly, because our module handling sucks
+$currentModule_name = $currentModule;
+$sub_module = (isset($_REQUEST['smodule'])) ? $_REQUEST['smodule'] : "";
+switch($sub_module) {
+	case 'SO':
+		$currentModule_name = 'SalesOrder';
+		break;
+	case 'VENDOR':
+		$currentModule_name = 'Vendor';
+		break;
+	case 'PRICEBOOK':
+		$currentModule_name = 'PriceBook';
+		break;
+}
+
+session_start();
+if (isset($_REQUEST['order_by'])) {
+	$order_by = $_REQUEST['order_by'];
+	$_SESSION["ListViewOrder[$currentModule_name][0]"] = $order_by;
+} elseif ($_SESSION["ListViewOrder[$currentModule_name][0]"] != '') {
+	$order_by = $_SESSION["ListViewOrder[$currentModule_name][0]"];
+}
+
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '') {
+	        $sorder = $_REQUEST['sorder'];
+		        $_SESSION["ListViewOrder[$currentModule_name][1]"] = $sorder;
+} elseif ($_SESSION["ListViewOrder[$currentModule_name][1]"] != '') {
+	        $sorder = $_SESSION["ListViewOrder[$currentModule_name][1]"];
+}
+
 
 ?>

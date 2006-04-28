@@ -21,6 +21,7 @@ require_once('include/utils.php');
 require_once('modules/Faq/Faq.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/uifromdbutil.php');
+require_once('include/ListView/ListView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -33,12 +34,7 @@ require_once($theme_path.'layout_utils.php');
 
 $focus = new Faq();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = ''; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
 
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {

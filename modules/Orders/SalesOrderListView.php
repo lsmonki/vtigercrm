@@ -13,6 +13,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Orders/SalesOrder.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('include/ListView/ListView.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -44,12 +45,7 @@ $comboFieldArray = getComboArray($comboFieldNames);
 */
 $focus = new SalesOrder();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '&smodule=SO'; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {

@@ -46,12 +46,7 @@ global $focus_list;
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '';
-$sorder = 'ASC';
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {

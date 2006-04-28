@@ -13,6 +13,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Products/PriceBook.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('include/ListView/ListView.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -46,12 +47,7 @@ $focus = new PriceBook();
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '&smodule=PRICEBOOK'; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
