@@ -11,11 +11,13 @@
 
 function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 {
-	
+	global $log;
+        $log->debug("Entering ftpBackupFile(".$source_file.", ".$ftpserver.", ".$ftpuser.", ".$ftppassword.") method ...");	
 	// set up basic connection
 	$conn_id = @ftp_connect($ftpserver);
 	if(!$conn_id)
 	{
+		$log->debug("Exiting ftpBackupFile method ...");
 		return;
 	}
 	
@@ -27,6 +29,7 @@ function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 	if(!$login_result)
 	{
 		ftp_close($conn_id);
+		 $log->debug("Exiting ftpBackupFile method ...");
 		return;
 	}
 
@@ -47,6 +50,7 @@ function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 	// check upload status
 	if (!$upload) {
 		ftp_close($conn_id);
+		 $log->debug("Exiting ftpBackupFile method ...");
 		return;
 	}
 	/*
@@ -56,5 +60,6 @@ function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 
 	// close the FTP stream
 	ftp_close($conn_id);
+	 $log->debug("Exiting ftpBackupFile method ...");
 }
 ?>
