@@ -10,6 +10,8 @@
  ********************************************************************************/
 
 function get_calc($image_path) {
+global $log;
+$log->debug("Entering get_calc(".$image_path.") method ...");
 $the_calc = <<<EOQ
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
@@ -81,7 +83,7 @@ $the_calc = <<<EOQ
   </tr>
 </table>
 EOQ;
-
+$log->debug("Exiting get_calc method ...");
 return $the_calc;
 }
 ?>
