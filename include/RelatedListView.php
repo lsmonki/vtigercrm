@@ -98,17 +98,14 @@ $list_result = $adb->query($query);
 $noofrows = $adb->num_rows($list_result);
         
 //Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-        $start = $_REQUEST['start'];
-}
-else
-{
-
+$start_idx = $relatedmodule.'start';
+if(isset($_REQUEST[$start_idx]) && $_REQUEST[$start_idx] != '') {
+        $start = $_REQUEST[$start_idx];
+} else {
         $start = 1;
 }
 //Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+$navigation_array = getRelatedNavigationValues($start, $noofrows, $list_max_entries_per_page, $relatedmodule);
 
 //Retreive the List View Table Header
 if($noofrows == 0)
@@ -118,7 +115,7 @@ if($noofrows == 0)
 else
 {
 	$listview_header = getListViewHeader($focus,$relatedmodule,'','','','relatedlist');//"Accounts");
-	if ($noofrows > 15)
+	if ($navigation_array[$relatedmodule.'end_val'] - $navigation_array[$relatedmodule.'start'] > 15)
 	{
 		$xtpl->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
 		$xtpl->assign('SCROLLSTOP','</div>');
@@ -144,10 +141,25 @@ else
 	//$listview_entries = getListViewEntries1($focus,"Accounts",$list_result,$navigation_array);
 	$xtpl->assign("LISTENTITY", $listview_entries);
 	$xtpl->assign("SELECT_SCRIPT", $view_script);
-	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_qry,$relatedmodule);
+	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_qry,$relatedmodule, 'DetailView', '');
 	//echo $navigationOutput;
 
-	//$xtpl->assign("NAVIGATION", $navigationOutput);
+	$navigationOutput = '
+<table  cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder">
+        <tr height="20">
+                <td class="listFormHeaderLinks">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>'.$navigationOutput.'</tr>
+                        </table>
+                </td>
+        </tr>
+</table>';
+
+
+	if($navigation_array[$relatedmodule.'allflag'] != 'All' || $navigation_array[$relatedmodule.'verylast'] > 1) {
+		// only show if navigation is possible
+		$xtpl->assign("NAVIGATION", $navigationOutput);
+	}
 
 	$xtpl->parse("main");
 	$xtpl->out("main");

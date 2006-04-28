@@ -137,30 +137,42 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$output = '<td align="right">';
 
-	$dir_name=getModuleDirName($module);
-	$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
-	if(($navigation_array['prev']) != 0) {
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+	$record = isset($_REQUEST['record']) ? $_REQUEST['record'] : '';
+	$relmodule = $_REQUEST['module'] == $module ? '' : $module;
+	$start = $relmodule.'start';
+	$end_val = $relmodule.'end_val';
+	$first = $relmodule.'first';
+	$end = $relmodule.'end';
+	$allflag = $relmodule.'allflag';
+	$current = $relmodule.'current';
+	$next = $relmodule.'next';
+	$verylast = $relmodule.'verylast';
+	$prev = $relmodule.'prev';
+	$dir_name = $_REQUEST['module'];
+
+	$output = '<td align="right">';
+	$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'=1&viewname='.$viewid.'&'.$allflag.'='.$navigation_array[$allflag].'" >'.$navigation_array[$allflag].'</a>&nbsp;';
+	if(($navigation_array[$prev]) != 0) {
+		$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'='.$navigation_array[$prev].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	} else {
 		$output .= '<img src="'.$image_path.'start_disabled.gif" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="'.$image_path.'previous_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
 
-	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++) {
-		if ($navigation_array['current']==$i) {
+	for ($i=$navigation_array[$first];$i<=$navigation_array[$end];$i++) {
+		if ($navigation_array[$current]==$i) {
 			$output .='<b>'.$i.'</b>&nbsp;';
 		} else {
-			$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
+			$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
 		}
 	}
 
-	if(($navigation_array['next']) !=0) {
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+	if(($navigation_array[$next]) !=0) {
+		$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'='.$navigation_array[$next].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'='.$navigation_array[$verylast].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	} else {
 		$output .= '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';

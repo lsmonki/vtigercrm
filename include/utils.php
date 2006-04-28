@@ -2485,24 +2485,39 @@ $vtlog->logthis("in getUserId_Ol ".$username,'info');
     }    	
 	return $user_id;
 }	
-//outlook security
+
 function getNavigationValues($display, $noofrows, $limit)
+{
+	return getRelatedNavigationValues($display, $noofrows, $limit, '');
+}
+
+function getRelatedNavigationValues($display, $noofrows, $limit, $relatedmodule)
 {
 	global $limitpage_navigation;
 	if(!isset($limitpage_navigation)) $limitpage_navigation = 5;
 
 	$navigation_array = Array();	
 
-	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All') {
-		$navigation_array['start'] =1;
-		$navigation_array['first'] = 1;
-		$navigation_array['end'] = 1;
-		$navigation_array['prev'] =0;
-		$navigation_array['next'] =0;
-		$navigation_array['end_val'] =$noofrows;
-		$navigation_array['current'] =1;
-		$navigation_array['allflag'] ='Normal';
-		$navigation_array['verylast'] =1;
+	$start_idx = $relatedmodule.'start';
+	$first_idx = $relatedmodule.'first';
+	$end_idx = $relatedmodule.'end';
+	$prev_idx = $relatedmodule.'prev';
+	$next_idx = $relatedmodule.'next';
+	$end_val_idx = $relatedmodule.'end_val';
+	$allflag_idx = $relatedmodule.'allflag';
+	$current_idx = $relatedmodule.'current';
+	$verylast_idx = $relatedmodule.'verylast'; 
+
+	if(isset($_REQUEST[$allflag_idx]) && $_REQUEST[$allflag_idx] == 'All') {
+		$navigation_array[$start_idx] =1;
+		$navigation_array[$first_idx] = 1;
+		$navigation_array[$end_idx] = 1;
+		$navigation_array[$prev_idx] =0;
+		$navigation_array[$next_idx] =0;
+		$navigation_array[$end_val_idx] =$noofrows;
+		$navigation_array[$current_idx] =1;
+		$navigation_array[$allflag_idx] ='Normal';
+		$navigation_array[$verylast_idx] =1;
 		return $navigation_array;
 	} 
 
@@ -2537,15 +2552,15 @@ function getNavigationValues($display, $noofrows, $limit)
 		$next=0;
 	}
 
-	$navigation_array['start'] = $start;
-	$navigation_array['first'] = $first;
-	$navigation_array['end'] = $last;
-	$navigation_array['prev'] = $previous;
-	$navigation_array['next'] = $next;
-	$navigation_array['end_val'] = $end;
-	$navigation_array['current'] = $display;
-	$navigation_array['allflag'] ='All';
-	$navigation_array['verylast'] =$paging;
+	$navigation_array[$start_idx] = $start;
+	$navigation_array[$first_idx] = $first;
+	$navigation_array[$end_idx] = $last;
+	$navigation_array[$prev_idx] = $previous;
+	$navigation_array[$next_idx] = $next;
+	$navigation_array[$end_val_idx] = $end;
+	$navigation_array[$current_idx] = $display;
+	$navigation_array[$allflag_idx] ='All';
+	$navigation_array[$verylast_idx] =$paging;
 	return $navigation_array; 
 }
 
@@ -3034,7 +3049,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                 }
         }
 
-	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	$relmodule = $_REQUEST['module'] == $module || $_REQUEST['module'] == 'Home' ? '' : $module;
+	$start = $relmodule.'start';
+	$end_val = $relmodule.'end_val'; 
+	for ($i=$navigation_array[$start]; $i<=$navigation_array[$end_val]; $i++)
 	{
 		if (($i%2)==0)
 			$list_header .= '<tr height=20 class=evenListRow>';
