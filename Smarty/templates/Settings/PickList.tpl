@@ -102,7 +102,6 @@ function ajachangeresponse(response)
 	<td style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">
 	<span class="genHeaderGrayBig">{$MOD.LBL_PICKLIST_EDITOR}</span><br>
 	
-	<span class="big">picklist Editor allows you to </span>
 	</td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
