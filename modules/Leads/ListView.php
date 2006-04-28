@@ -410,48 +410,16 @@ $list_result = $adb->query($query);
 $noofrows = $adb->num_rows($list_result);
 
 //Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
         $start = $_REQUEST['start'];
-}
-else
-{
-
+} else {
         $start = 1;
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+$start_rec = $navigation_array['start'];
+$end_rec = $navigation_array['end_val'];
 
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header

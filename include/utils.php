@@ -2486,69 +2486,68 @@ $vtlog->logthis("in getUserId_Ol ".$username,'info');
 	return $user_id;
 }	
 //outlook security
-function getNavigationValues($start, $noofrows, $list_max_entries_per_page)
+function getNavigationValues($display, $noofrows, $limit)
 {
+	global $limitpage_navigation;
+	if(!isset($limitpage_navigation)) $limitpage_navigation = 5;
+
 	$navigation_array = Array();	
 
-	require_once('config.php');
-	//Setting the start to end counter
-	$starttoendvaluecounter = $list_max_entries_per_page - 1;
-	//Setting the ending value
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end = $start + $starttoendvaluecounter;
-		if($end > $noofrows)
-		{
-			$end = $noofrows;
-		}
-		$startvalue = 1;
-		$remainder = $noofrows % $list_max_entries_per_page;
-		if($remainder > 0)
-		{
-			$endval = $noofrows - $remainder + 1;
-		}
-		elseif($remainder == 0)
-		{
-			$endval = $noofrows - $starttoendvaluecounter;
-		}
-	}
-	else
-	{
+	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All') {
+		$navigation_array['start'] =1;
+		$navigation_array['first'] = 1;
+		$navigation_array['end'] = 1;
+		$navigation_array['prev'] =0;
+		$navigation_array['next'] =0;
+		$navigation_array['end_val'] =$noofrows;
+		$navigation_array['current'] =1;
+		$navigation_array['allflag'] ='Normal';
+		$navigation_array['verylast'] =1;
+		return $navigation_array;
+	} 
+
+	$start = ((($display * $limit) - $limit)+1);
+	$end = $start + ($limit-1);
+	if($end > $noofrows) {
 		$end = $noofrows;
 	}
-
-
-	//Setting the next and previous value
-	if(isset($start) && $start != '')
-	{
-		$tempnextstartvalue = $start + $list_max_entries_per_page;
-		if($tempnextstartvalue <= $noofrows)
-		{
-
-			$nextstartvalue = $tempnextstartvalue;
+	$paging = ceil ($noofrows / $limit);
+	// Display the navigation
+	if ($display > 1) {
+		$previous = $display - 1;
+	} else {
+		$previous=0;
+	}
+	if ($noofrows != $limit) {
+		$last = $paging;
+		$first = 1;
+		if ($paging > $limitpage_navigation) {
+			$first = $display-floor(($limitpage_navigation/2));
+			if ($first<1) $first=1;
+			$last = ($limitpage_navigation - 1) + $first;
 		}
-		$tempprevvalue = $_REQUEST['start'] - $list_max_entries_per_page;
-		if($tempprevvalue  > 0)
-		{
-			$prevstartvalue = $tempprevvalue;
+		if ($last > $paging ) {
+			$first = $paging - ($limitpage_navigation - 1);
+			$last = $paging;
 		}
 	}
-	else
-	{
-		if($noofrows > $list_max_entries_per_page)
-		{
-			$nextstartvalue = $list_max_entries_per_page + 1;
-		}
+	if ($display < $paging) {
+		$next = $display + 1;
+	} else {
+		$next=0;
 	}
 
 	$navigation_array['start'] = $start;
-	$navigation_array['end'] = $endval;
-	$navigation_array['prev'] = $prevstartvalue;
-	$navigation_array['next'] = $nextstartvalue;
+	$navigation_array['first'] = $first;
+	$navigation_array['end'] = $last;
+	$navigation_array['prev'] = $previous;
+	$navigation_array['next'] = $next;
 	$navigation_array['end_val'] = $end;
-	return $navigation_array;
-
-} 		
+	$navigation_array['current'] = $display;
+	$navigation_array['allflag'] ='All';
+	$navigation_array['verylast'] =$paging;
+	return $navigation_array; 
+}
 
 function getURLstring($focus)
 {
