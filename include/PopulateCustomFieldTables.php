@@ -10,6 +10,9 @@
 require_once('include/database/PearDatabase.php');
 function create_custom_field_tables () 
 {
+		global $log;
+		$log->debug("Entering create_custom_field_tables () method ..."); 
 		global $adb;
+		$log->debug("Exiting create_custom_field_tables method ...");
 }
 ?>
