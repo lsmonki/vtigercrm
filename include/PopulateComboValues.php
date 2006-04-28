@@ -20,6 +20,8 @@ class PopulateComboValues
 
 	function insertComboValues($values, $tableName)
 	{
+		global $log;
+		$log->debug("Entering insertComboValues(".$values.", ".$tableName.") method ...");
 		global $adb;
 		$i=0;
 		foreach ($values as $val => $cal)
@@ -34,10 +36,14 @@ class PopulateComboValues
 			}
 			$i++;
 		}
+		$log->debug("Exiting insertComboValues method ...");
 	}
 
 	function create_tables () 
 	{
+		global $log;
+		$log->debug("Entering create_tables () method ...");
+				
 		global $app_list_strings,$adb;
 		global $combo_strings;
 		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus','invoicestatus','postatus','sostatus','visibility','campaigntype','campaignstatus','expectedresponse');
@@ -46,6 +52,7 @@ class PopulateComboValues
 		{
 			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 		}
+		$log->debug("Exiting create_tables () method ...");
 	}
 }
 ?>
