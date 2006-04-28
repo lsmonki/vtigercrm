@@ -113,7 +113,7 @@ function validate()
 																	<tr><td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
 																	<tr>
 																			<td colspan="2" align="center"> &nbsp;&nbsp;
-																						<input value=" Create " name="Next" type="submit" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
+																						<input value=" Save " name="Next" type="submit" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
 																						<input value=" Cancel " name="Cancel" type="button" class="classBtn" onClick="window.history.back()">
 																			</td>
 																	</tr>
