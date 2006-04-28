@@ -11,6 +11,8 @@
 
 function BuildSearchForm($focus)
 {
+	global $log;
+	$log->debug("Entering BuildSearchForm(".$focus.") method ...");
 	global $current_module_strings,$app_strings,$adb;
     $advanced = (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true');
 
@@ -20,6 +22,7 @@ function BuildSearchForm($focus)
     	print_r($base);
     	print_r($custom);
     	print_r($focus);
+	$log->debug("Exiting BuildSearchForm method ...");
     	return "";
     }
     
@@ -57,11 +60,14 @@ function BuildSearchForm($focus)
     // Now, reset/reload template so partials are scanned
     $search_form->blocks = $search_form->maketree($search_form->filecontents,"main");
     $search_form->scan_globals();
+	$log->debug("Exiting BuildSearchForm method ...");
     return $search_form;
 }
 
 function SearchFieldBlock($tableName,$colidName,$tabsrch, $basic=true,$advanced=false,$block=0,$label="",$fields=array(),$doadvanced=true)
 {
+	global $log;
+	$log->debug("Entering SearchFieldBlock(".$tableName.",".$colidName.",".$tabsrch.",". $basic.",".$advanced.",".$block.",".$label.",".$fields.") method ...");
 	global $sorder, $order_by, $viewid, $currentModule;
 	global $adb,$app_strings,$mod_strings;
 
@@ -251,6 +257,7 @@ Debug::DumpObj($res);
 echo "</div>";
 
 */
+	$log->debug("Exiting SearchFieldBlock method ...");
         return $res;
     }
 }
