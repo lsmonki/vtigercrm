@@ -20,6 +20,8 @@ require_once('include/utils/utils.php');
 function getCustomFieldTypeName($uitype)
 {
 	global $log;
+	$log->debug("Entering getCustomFieldTypeName(".$uitype.") method ...");
+	global $log;
         $log->info("uitype is ".$uitype);
 	$fldname = '';
 	
@@ -75,6 +77,7 @@ function getCustomFieldTypeName($uitype)
 	{
 		$fldname = 'Multi-Select Combo Box';
 	}
+$log->debug("Exiting getCustomFieldTypeName method ...");
 	return $fldname;
 }
 
@@ -85,6 +88,8 @@ function getCustomFieldTypeName($uitype)
  */
 function getCustomFieldArray($module)
 {
+	global $log;
+	$log->debug("Entering getCustomFieldArray(".$module.") method ...");
 	global $adb;
 	$custquery = "select * from field where tablename='".$module."'";
 	$custresult = $adb->query($custquery);
@@ -95,6 +100,7 @@ function getCustomFieldArray($module)
 		$colName=$adb->query_result($custresult,$i,"column_name");
 		$custFldArray[$colName] = $i;
 	}
+	$log->debug("Exiting getCustomFieldArray method ...");
 	return $custFldArray;
 	
 }
@@ -107,6 +113,8 @@ function getCustomFieldArray($module)
  */
 function getCustomFieldTrans($module, $trans_array)
 {
+	global $log;
+	$log->debug("Entering getCustomFieldTrans(".$module.",". $trans_array.") method ...");
 	global $adb;
 	$tab_id = getTabid($module);	
 	$custquery = "select columnname,fieldlabel from field where generatedtype=2 and tabid=".$tab_id;
@@ -119,6 +127,7 @@ function getCustomFieldTrans($module, $trans_array)
 		$fldLbl = $adb->query_result($custresult,$i,"fieldlabel");
 		$trans_array[$colName] = $fldLbl;
 	}	
+	$log->debug("Exiting getCustomFieldTrans method ...");
 }
 
 
@@ -131,10 +140,13 @@ function getCustomFieldTrans($module, $trans_array)
  */
 function getCustomFieldData($tab,$id,$datatype)
 {
+	global $log;
+	$log->debug("Entering getCustomFieldData(".$tab.",".$id.",".$datatype.") method ...");
 	global $adb;
 	$query = "select * from field where tabid=".$tab." and fieldid=".$id;
 	$result = $adb->query($query);
 	$return_data=$adb->fetch_array($result);
+	$log->debug("Exiting getCustomFieldData method ...");
 	return $return_data[$datatype];
 }
 
@@ -148,6 +160,8 @@ function getCustomFieldData($tab,$id,$datatype)
  */
 function getFldTypeandLengthValue($label,$typeofdata)
 {
+	global $log;
+	$log->debug("Entering getFldTypeandLengthValue(".$label.",".$typeofdata.") method ...");
 	if($label == 'Text')
 	{
 		$types = explode("~",$typeofdata);
@@ -206,6 +220,7 @@ function getFldTypeandLengthValue($label,$typeofdata)
         {
                 $fieldtype = '11';
         }
+	$log->debug("Exiting getFldTypeandLengthValue method ...");
 	return $fieldtype;
 }
 ?>
