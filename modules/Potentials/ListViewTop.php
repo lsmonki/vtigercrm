@@ -21,6 +21,8 @@
  ********************************************************************************/
 function getTopPotentials()
 {
+	$log = LoggerManager::getLogger('top opportunity_list');
+	$log->debug("Entering getTopPotentials() method ...");
 	require_once("data/Tracker.php");
 	require_once('modules/Potentials/Opportunity.php');
 	require_once('include/logging.php');
@@ -31,7 +33,6 @@ function getTopPotentials()
 	global $current_language;
 	global $current_user;
 	$current_module_strings = return_module_language($current_language, "Potentials");
-	$log = LoggerManager::getLogger('top opportunity_list');
 
 	$title=array();
 	$title[]='myTopOpenPotentials.gif';
@@ -73,6 +74,9 @@ function getTopPotentials()
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 
 	if ( ($display_empty_home_blocks && count($open_potentials_list) == 0 ) || (count($open_potentials_list)>0) )
+	{
+		$log->debug("Exiting getTopPotentials method ...");
 		return $values;		
+	}
 }
 ?>
