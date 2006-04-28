@@ -155,27 +155,33 @@ class Contact extends CRMEntity {
     	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
 	{	
+		global $log;
+                $log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
 			$sorder = $_REQUEST['sorder'];
 		else
 			$sorder = (($_SESSION['CONTACTS_SORT_ORDER'] != '')?($_SESSION['CONTACTS_SORT_ORDER']):($this->default_sort_order));
-
+		$log->debug("Exiting getSortOrder method ...");
 		return $sorder;
 	}
 
 	function getOrderBy()
 	{
+		global $log;
+	        $log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $_REQUEST['order_by'];
 		else
 			$order_by = (($_SESSION['CONTACTS_ORDER_BY'] != '')?($_SESSION['CONTACTS_ORDER_BY']):($this->default_order_by));
-
+		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
 
     function getCount($user_name) 
     {
+	global $log;
+	$log->debug("Entering getCount(".$user_name.") method ...");
         $query = "select count(*) from contactdetails  inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid where user_name='" .$user_name ."' and crmentity.deleted=0";
 
         $result = $this->db->query($query,true,"Error retrieving contacts count");
@@ -183,20 +189,27 @@ class Contact extends CRMEntity {
         $row = $this->db->fetchByAssoc($result, 0);
 
     
-            return $row["count(*)"];
+	$log->debug("Exiting getCount method ...");
+        return $row["count(*)"];
     }       
 
         function get_contacts1($user_name,$email_address)
     {   
+	global $log;
+	$log->debug("Entering get_contacts1(".$user_name.",".$email_address.") method ...");
       $query = "select users.user_name,groups.groupname, contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id   from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid  left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid where user_name='" .$user_name ."' and crmentity.deleted=0  and contactdetails.email like '%" .$email_address ."%' limit 50";
     
+	$log->debug("Exiting get_contacts1 method ...");
       return $this->process_list_query1($query);
     }
 
     function get_contacts($user_name,$from_index,$offset)
     {   
+	global $log;
+	$log->debug("Entering get_contacts(".$user_name.",".$from_index.",".$offset.") method ...");
       $query = "select users.user_name,groups.groupname,contactdetails.department department, contactdetails.phone office_phone, contactdetails.fax fax, contactsubdetails.assistant assistant_name, contactsubdetails.otherphone other_phone, contactsubdetails.homephone home_phone,contactsubdetails.birthday birthdate, contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id, contactaddress.mailingcity as primary_address_city,contactaddress.mailingstreet as primary_address_street, contactaddress.mailingcountry as primary_address_country,contactaddress.mailingstate as primary_address_state, contactaddress.mailingzip as primary_address_postalcode,   contactaddress.othercity as alt_address_city,contactaddress.otherstreet as alt_address_street, contactaddress.othercountry as alt_address_country,contactaddress.otherstate as alt_address_state, contactaddress.otherzip as alt_address_postalcode  from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname left join users on crmentity.smownerid=users.id where user_name='" .$user_name ."' and crmentity.deleted=0 limit " .$from_index ."," .$offset;
       
+	$log->debug("Exiting get_contacts method ...");
       return $this->process_list_query1($query);
     }
 
@@ -204,6 +217,8 @@ class Contact extends CRMEntity {
 
     function process_list_query1($query)
     {
+	global $log;
+	$log->debug("Entering process_list_query1(".$query.") method ...");
 	  
         $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
         $list = Array();
@@ -240,6 +255,7 @@ class Contact extends CRMEntity {
         $response['previous_offset'] = $previous_offset;
 
 
+	$log->debug("Exiting process_list_query1 method ...");
         return $response;
     }
 
@@ -252,6 +268,7 @@ class Contact extends CRMEntity {
 	function get_opportunities($id)
 	{
 		global $log;
+		$log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Potential();
@@ -270,6 +287,7 @@ class Contact extends CRMEntity {
 		$query = 'select users.user_name,groups.groupname,contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname left join users on users.id=crmentity.smownerid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
 		
 		if($this->column_fields['account_id'] != 0)
+		$log->debug("Exiting get_opportunities method ...");
 		return GetRelatedList('Contacts','Potentials',$focus,$query,$button,$returnset);
 	}
 	
@@ -281,7 +299,8 @@ class Contact extends CRMEntity {
 	*/
 	function get_activities($id)
 	{
-     	global $log;
+	     	global $log;
+                $log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 
     	$focus = new Activity();
@@ -298,13 +317,15 @@ class Contact extends CRMEntity {
 		$log->info("Activity Related List for Contact Displayed");
 
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname  where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and ( activity.eventstatus is NULL || activity.eventstatus != 'Held') and ( activity.eventstatus is NULL || activity.eventstatus != 'Not Held' )";  //recurring type is added in Query -Jaguar
-
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
 
 	}
 
 	function get_history($id)
 	{
+		global $log;
+		$log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
 			activity.activitytype, contactdetails.contactid, contactdetails.firstname,
 			contactdetails.lastname, crmentity.modifiedtime,
@@ -321,7 +342,7 @@ class Contact extends CRMEntity {
 				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
 				and cntactivityrel.contactid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
-
+		$log->debug("Entering get_history method ...");
 		return getHistory('Contacts',$query,$id);
 	}
 	
@@ -329,7 +350,7 @@ class Contact extends CRMEntity {
 	{
 		global $log;
 		global $app_strings;
-
+		$log->debug("Entering get_tickets(".$id.") method ...");
 		$focus = new HelpDesk();
 
 		$button = '<td valign="bottom" align="right"><input title="New Ticket" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
@@ -337,12 +358,14 @@ class Contact extends CRMEntity {
 
 		$query = "select crmentity.crmid, troubletickets.title, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, troubletickets.status, troubletickets.priority, crmentity.smownerid from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on contactdetails.contactid=troubletickets.parent_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where crmentity.deleted=0 and contactdetails.contactid=".$id;
 		$log->info("Ticket Related List for Contact Displayed");
+		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
 	}
 
 	function get_attachments($id)
 	{
 		global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select notes.title,'Notes      '  ActivityType,
 			notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified,
 			seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid,
@@ -367,11 +390,14 @@ class Contact extends CRMEntity {
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
 	  	$log->info("Notes&Attachmenmts for Contact Displayed");
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Contacts',$query,$id);
 	  }
 	 
 	 function get_quotes($id)
 	 {	
+		global $log;
+                $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');		
 		$focus = new Quote();
@@ -383,11 +409,14 @@ class Contact extends CRMEntity {
 		}
 		$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 		$query = "select crmentity.*, quotes.*,potential.potentialname,contactdetails.lastname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join contactdetails on contactdetails.contactid=quotes.contactid left outer join potential on potential.potentialid=quotes.potentialid  left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and contactdetails.contactid=".$id;
+		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
 	  }
 	 
 	 function get_salesorder($id)
 	 {	
+		 global $log;
+                $log->debug("Entering get_salesorder(".$id.") method ...");
 		 require_once('modules/SalesOrder/SalesOrder.php');
 		 global $app_strings;
 		 $focus = new SalesOrder();
@@ -401,12 +430,14 @@ class Contact extends CRMEntity {
 		 $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
 		 $query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, contactdetails.lastname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join contactdetails on contactdetails.contactid=salesorder.contactid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and salesorder.contactid = ".$id;
+		$log->debug("Exiting get_salesorder method ...");
 		 return GetRelatedList('Contacts','SalesOrder',$focus,$query,$button,$returnset);
 	 }
 	 
 	 function get_products($id)
 	 {
-		 
+		 global $log;
+		$log->debug("Entering get_products(".$id.") method ...");
 		 global $app_strings;
 		 require_once('modules/Products/Product.php');
 		 $focus = new Product();
@@ -420,11 +451,14 @@ class Contact extends CRMEntity {
 		 $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
 		 $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,contactdetails.lastname from products inner join crmentity on crmentity.crmid = products.productid left outer join contactdetails on contactdetails.contactid = products.contactid where contactdetails.contactid = '.$id.' and crmentity.deleted = 0';
+		$log->debug("Exiting get_products method ...");
 		 return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
 	 }
 	 
 	 function get_purchase_orders($id)
 	 {
+		global $log;
+		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		 global $app_strings;
 		 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 		 $focus = new Order();
@@ -439,6 +473,7 @@ class Contact extends CRMEntity {
 		 $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
 		 $query = "select crmentity.*, purchaseorder.*,vendor.vendorname,contactdetails.lastname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left outer join contactdetails on contactdetails.contactid=purchaseorder.contactid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and purchaseorder.contactid=".$id;
+		$log->debug("Exiting get_purchase_orders method ...");
 		 return GetRelatedList('Contacts','PurchaseOrder',$focus,$query,$button,$returnset);
 	 }
 
@@ -450,6 +485,7 @@ class Contact extends CRMEntity {
 	function get_emails($id)
 	{
 		global $log;
+		$log->debug("Entering get_emails(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Email();
@@ -465,6 +501,7 @@ class Contact extends CRMEntity {
 		$log->info("Email Related List for Contact Displayed");
 
 		$query = 'select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = '.$id.'  and activity.activitytype="Emails" and crmentity.deleted = 0';
+		$log->debug("Exiting get_emails method ...");
 		return GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
 	}
 
@@ -475,6 +512,7 @@ class Contact extends CRMEntity {
         function create_export_query(&$order_by, &$where)
         {
 		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		if($this->checkIfCustomTableExists('contactscf'))
 		{
 	   $query =  $this->constructCustomQueryAddendum('contactscf','Contacts') .",
@@ -504,6 +542,7 @@ class Contact extends CRMEntity {
 				where crmentity.deleted=0 and users.status='Active' ";
 		}
                  $log->info("Export Query Constructed Successfully");
+		$log->debug("Exiting create_export_query method ...");
 		return $query;
         }
 
@@ -511,6 +550,8 @@ class Contact extends CRMEntity {
 //Used By vtigerCRM Word Add-In
 function getColumnNames()
 {
+	global $log;
+	$log->debug("Entering getColumnNames() method ...");
 	$sql1 = "select fieldlabel from field where tabid=4 and block <> 4";
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
@@ -521,6 +562,7 @@ function getColumnNames()
 	$custom_fields[$i] = strtoupper($custom_fields[$i]);
 	}
 	$mergeflds = $custom_fields;
+	$log->debug("Exiting getColumnNames method ...");
 	return $mergeflds;
 }
 //End 
@@ -528,6 +570,8 @@ function getColumnNames()
 //Used By vtigerCRM Outlook Add-In
 function get_searchbyemailid($username,$emailaddress)
 {
+	global $log;
+	$log->debug("Entering get_searchbyemailid(".$username.",".$emailaddress.") method ...");
 	$query = "select contactdetails.lastname as last_name,contactdetails.firstname as first_name,
 						contactdetails.contactid as id, contactdetails.salutation as salutation, 
 						contactdetails.email as email1,contactdetails.title as title,
@@ -539,11 +583,14 @@ function get_searchbyemailid($username,$emailaddress)
 						left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid 
 						where user_name='" .$username ."' and crmentity.deleted=0  and contactdetails.email like '%".$emailaddress."%'";
 						
+	$log->debug("Exiting get_searchbyemailid method ...");
 	return $this->process_list_query1($query);
 }
 
 function get_contactsforol($user_name)
 {
+	global $log;
+	$log->debug("Entering get_contactsforol(".$user_name.") method ...");
 	$query = "select contactdetails.department department, contactdetails.phone, 
 						contactdetails.fax, contactsubdetails.assistant assistant_name,
 						contactsubdetails.assistantphone,  
@@ -566,6 +613,7 @@ function get_contactsforol($user_name)
 						left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid 
 						where users.user_name='" .$user_name ."' and crmentity.deleted=0";
 						
+	$log->debug("Exiting get_contactsforol method ...");
 	return $query;
 }
 //End
