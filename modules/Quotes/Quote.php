@@ -116,32 +116,40 @@ class Quote extends CRMEntity {
 
 	function get_salesorder($id)
 	{
+		global $log;
+		$log->debug("Entering get_salesorder(".$id.") method ...");
 		require_once('modules/SalesOrder/SalesOrder.php');
-        $focus = new SalesOrder();
+	        $focus = new SalesOrder();
  
 		$button = '';
 
 		$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and salesorder.quoteid = ".$id;
+		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	
 	function get_activities($id)
 	{	
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Activities/Activity.php');
-        $focus = new Activity();
+	        $focus = new Activity();
 
 		$button = '';
 
 		$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Quotes','Activities',$focus,$query,$button,$returnset);
 	}
 	function get_history($id)
 	{
+		global $log;
+		$log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT activity.activityid, activity.subject, activity.status,
 				activity.eventstatus, activity.activitytype, contactdetails.contactid,
 				contactdetails.firstname,	contactdetails.lastname, crmentity.modifiedtime,
@@ -159,6 +167,7 @@ class Quote extends CRMEntity {
 	 	        	and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
+		$log->debug("Exiting get_history method ...");
 		return getHistory('Quotes',$query,$id);	
 	}
 }
