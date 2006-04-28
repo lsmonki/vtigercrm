@@ -35,7 +35,9 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
+	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+		global $log;
+		$log->debug("Entering outcome_by_month(".$date_start.",". $date_end.",". $user_id.") method ...");
 		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings,$current_user, $log, $charset, $tmp_dir;
 		global $theme;
 		include_once ('Image/Graph.php');
@@ -348,6 +350,7 @@ class jpgraph {
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap";
+		$log->debug("Exiting outcome_by_month method ...");
 		return $return;
 	}
 
@@ -363,8 +366,10 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+		global $log;
+		$log->debug("Entering lead_source_by_outcome(".$datay.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
+		global $app_strings,$lang_crm, $current_module_strings,$charset, $tmp_dir;
 		global $theme;
 
 		include_once ('Image/Graph.php');
@@ -680,6 +685,7 @@ class jpgraph {
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap";
+		$log->debug("Exiting lead_source_by_outcome method ...");
 		return $return;
 	}
 
@@ -690,8 +696,10 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false){
+		global $log;
+		$log->debug("Entering pipeline_by_sales_stage(".$datax.",".$date_start.",".$date_end.",".$user_id.",".$cache_file_name.",".$refresh.") method ...");
+		global $app_strings,$lang_crm, $current_module_strings, $charset, $tmp_dir;
 		global $theme;
 		include_once ('Image/Graph.php');
 		include_once ('Image/Canvas.php');
@@ -998,6 +1006,7 @@ class jpgraph {
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap";
+		$log->debug("Exiting pipeline_by_sales_stage method ...");
 		return $return;
 	}
 
@@ -1010,7 +1019,9 @@ class jpgraph {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true) {
+	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true){
+		global $log;
+		$log->debug("Entering pipeline_by_lead_source(".$legends.") method ...");
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
 
@@ -1106,6 +1117,7 @@ class jpgraph {
 			$log->debug($count);
 			$log->debug("total is: $total");
 			if ($total == 0) {
+$log->debug("Exiting pipeline_by_lead_source method ...");
 				return ($current_module_strings['ERR_NO_OPPS']);
 			}
 
@@ -1222,6 +1234,7 @@ $title->setText($titlestr);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap";
+		$log->debug("Exiting pipeline_by_lead_source method ...");
 		return $return;
 
 	}
@@ -1237,24 +1250,30 @@ $title->setText($titlestr);
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
-function save_image_map($filename,$image_map) {
+function save_image_map($filename,$image_map)
+{
+	global $log;
+	$log->debug("Entering save_image_map(".$filename.",".$image_map.") method ...");
 	// save the image map to file
 	$log =& LoggerManager::getLogger('save_image_file');
 
 	if (!$handle = fopen($filename, 'w')) {
 		$log->debug("Cannot open file ($filename)");
+		$log->debug("Exiting save_image_map method ...");
 		return;
 	}
 
 	// Write $somecontent to our opened file.
 	if (fwrite($handle, $image_map) === FALSE) {
 	   $log->debug("Cannot write to file ($filename)");
+	   $log->debug("Exiting save_image_map method ...");
 	   return false;
 	}
 
 	$log->debug("Success, wrote ($image_map) to file ($filename)");
 
 	fclose($handle);
+	$log->debug("Exiting save_image_map method ...");
 	return true;
 
 }
