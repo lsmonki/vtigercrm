@@ -60,6 +60,8 @@ class Campaign extends CRMEntity {
 
 	function get_contacts($id)
         {
+		global $log;
+		$log->debug("Entering get_contacts(".$id.") method ...");
                 global $mod_strings;
 
                 $focus = new Contact();
@@ -67,11 +69,13 @@ class Campaign extends CRMEntity {
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
 
 		$query = 'SELECT contactdetails.*, crmentity.crmid, users.user_name, groups.groupname, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid left join users on crmentity.smownerid = users.id left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname  where crmentity.deleted=0 and contactdetails.campaignid = '.$id;
-		
+		$log->debug("Exiting get_contacts method ...");
                 return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
         }
 	function get_leads($id)
         {
+		global $log;
+                $log->debug("Entering get_leads(".$id.") method ...");
                 global $mod_strings;
 
                 $focus = new Lead();
@@ -80,7 +84,7 @@ class Campaign extends CRMEntity {
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
 
 		$query = 'SELECT leaddetails.*, crmentity.crmid, users.user_name, groups.groupname, crmentity.smownerid from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid left join users on crmentity.smownerid = users.id left join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.campaignid = '.$id;
-		
+		$log->debug("Exiting get_leads method ...");
                 return GetRelatedList('Campaigns','Leads',$focus,$query,$button,$returnset);
         }
 
