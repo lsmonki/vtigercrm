@@ -21,6 +21,8 @@
  ********************************************************************************/
 function getTopAccounts()
 {
+	$log = LoggerManager::getLogger('top accounts_list');
+	$log->debug("Entering getTopAccounts() method ...");
 	require_once("data/Tracker.php");
 	require_once('modules/Potentials/Opportunity.php');
 	require_once('include/logging.php');
@@ -30,7 +32,6 @@ function getTopAccounts()
 	global $current_language;
 	global $current_user;
 	$current_module_strings = return_module_language($current_language, "Accounts");
-	$log = LoggerManager::getLogger('top accounts_list');
 
 	$list_query = 'select account.accountid, account.accountname, account.tickersymbol, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
 	$list_result=$adb->query($list_query);
@@ -75,6 +76,7 @@ function getTopAccounts()
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	if ( ($display_empty_home_blocks && count($open_accounts_list) == 0 ) || (count($open_accounts_list)>0) )
+	$log->debug("Exiting getTopAccounts method ...");
 		return $values;
 }
 ?>
