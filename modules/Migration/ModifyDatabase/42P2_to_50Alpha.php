@@ -1662,29 +1662,40 @@ Execute($insert_query7);
 
 $insert_query8 = "insert into blocks values(76,26,'LBL_CAMPAIGN_INFORMATION',1,0,0,0,0,0)";
 Execute($insert_query8);
-$insert_query9 = "insert into blocks values(77,26,'LBL_DESCRIPTION_INFORMATION',2,0,0,0,0,0)";
+$insert_query8 = "insert into blocks values (77,26,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)";
+Execute($insert_query8);
+$insert_query9 = "insert into blocks values(78,26,'LBL_DESCRIPTION_INFORMATION',3,0,0,0,0,0)";
 Execute($insert_query9);
 
 $insert_query_array24 = Array(
-	"insert into field values(26,".$conn->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,3,76,1,'V~O',0,5,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'V~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'V~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'actualcost','campaign',1,'15','actualcost','Actual Cost',1,0,0,100,8,76,1,'V~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'expectedresponse','campaign',1,'16','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,13,76,2,'T~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,14,76,2,'T~O',1,null,'BAS')",
-	"insert into field values(26,".$conn->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,77,1,'V~O',1,null,'BAS')"
+	"insert into field values (26,".$conn->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'product_id','campaign',1,59,'product_id','Product',1,0,0,100,3,76,1,'I~O',0,5,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'expectedresponse','campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'sponsor','campaign',1,'1','sponsor','Sponsor',1,0,0,100,12,76,1,'V~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')",
+	"insert into field values (26,".$conn->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,78,1,'V~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array24 as $query)
 {
 	Execute($query);
 }
-
 
 $insert_query_array25 = Array(
 	"insert into relatedlists values (".$conn->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)",
@@ -1705,41 +1716,76 @@ foreach($insert_query_array26 as $query)
 	Execute($query);
 }
 
-
-$create_query24 = "CREATE TABLE `campaign` (
-  `campaignname` varchar(255) NOT NULL default '',
-  `campaigntype` varchar(255) default NULL,
-  `campaignstatus` varchar(255) default NULL,
-  `expectedrevenue` decimal(11,3) default NULL,
-  `budgetcost` decimal(11,3) default NULL,
-  `actualcost` decimal(11,3) default NULL,
-  `expectedresponse` decimal(10,0) default NULL,
-  `numsent` decimal(11,0) default NULL,
-  `campaignid` int(7) default NULL,
-  `closingdate` date default NULL,
-  PRIMARY KEY  (`campaignname`),
-  KEY `idx_campaignid` (`campaignid`),
-  KEY `idx_campaignname` (`campaignname`)
-) ENGINE=InnoDB";
+$create_query24 = "
+CREATE TABLE `campaign` (
+   `campaignname` varchar(255) default NULL,
+   `campaigntype` varchar(255) default NULL,
+   `campaignstatus` varchar(255) default NULL,
+   `expectedrevenue` int(19) default NULL,
+   `budgetcost` int(19) default NULL,
+   `actualcost` int(19) default NULL,
+   `expectedresponse` varchar(255) default NULL,
+   `numsent` decimal(11,0) default NULL,
+   `product_id` int(19) default NULL,
+   `sponsor` varchar(255) default NULL,
+   `targetaudience` varchar(255) default NULL,
+   `targetsize` int(19) default NULL,
+   `expectedresponsecount` int(19) default NULL,
+   `expectedsalescount` int(19) default NULL,
+   `expectedroi` int(19) default NULL,
+   `actualresponsecount` int(19) default NULL,
+   `actualsalescount` int(19) default NULL,
+   `actualroi` int(19) default NULL,
+   `campaignid` int(19) NOT NULL,
+   `closingdate` date default NULL,
+    PRIMARY KEY  (`campaignid`),
+    KEY `idx_campaignstatus` (`campaignstatus`),
+    KEY `idx_campaignname` (`campaignname`),
+    KEY `idx_campaignid` (`campaignid`)
+) ENGINE=InnoDB
+		  ";
 Execute($create_query24);
+
+
 
 $create_query25 = "CREATE TABLE `campaigncontrel` (
   `campaignid` int(19) NOT NULL default '0',
   `contactid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
   KEY `CampaignContRel_IDX1` (`contactid`),
-  CONSTRAINT `fk_CampaignContRel2` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE
+  CONSTRAINT `fk_CampaignContRel2` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_CampaignContRel1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 Execute($create_query25);
+
+$create_table_query = "
+CREATE TABLE `campaigngrouprelation` (
+       `campaignid` int(19) NOT NULL,
+       `groupname` varchar(100) default NULL,
+	PRIMARY KEY  (`campaignid`),
+	KEY `campaigngrouprelation_IDX1` (`groupname`),
+	CONSTRAINT `fk_campaigngrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE,
+	CONSTRAINT `fk_campaigngrouprelation1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
+) ENGINE=InnoDB";
+Execute($create_table_query);
+
 
 $create_query26 = "CREATE TABLE `campaignleadrel` (
   `campaignid` int(19) NOT NULL default '0',
   `leadid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
-  KEY `CampaignLeadRel_IDX1` (`leadid`),
-  CONSTRAINT `fk_CampaignLeadRel2` FOREIGN KEY (`leadid`) REFERENCES `leaddetails` (`leadid`) ON DELETE CASCADE
+  KEY `CampaignLeadRel_IDX1` (`leadid`,`campaignid`),
+  CONSTRAINT `fk_CampaignLeadRel1234` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_CampaignLeadRel2423` FOREIGN KEY (`leadid`) REFERENCES `leaddetails` (`leadid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 Execute($create_query26);
+
+$create_table_query1 = "CREATE TABLE `campaignscf` (
+  `campaignid` int(19) NOT NULL default '0',
+   PRIMARY KEY  (`campaignid`),
+   CONSTRAINT `fk_CampaignsCF` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
+) ENGINE=InnoDB";
+Execute($create_table_query1);
 
 $alter_query_array18 = Array(
 				"alter table leaddetails add column campaignid int(19) default NULL after leadid",
@@ -1884,7 +1930,7 @@ $query_array = Array(
   `presence` int(1) NOT NULL default '1',
   PRIMARY KEY  (`campaignstatusid`),
   KEY `Campaignstatus_UK01` (`campaignstatus`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE `campaigntype` (
   `campaigntypeid` int(19) NOT NULL auto_increment,
@@ -1893,7 +1939,7 @@ $query_array = Array(
   `presence` int(1) NOT NULL default '1',
   PRIMARY KEY  (`campaigntypeid`),
   UNIQUE KEY `Campaigntype_UK01` (`campaigntype`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE `currency_info_seq` (
   `id` int(11) NOT NULL
@@ -2055,7 +2101,7 @@ $query_array = Array(
   `presence` int(1) NOT NULL default '1',
   PRIMARY KEY  (`expectedresponseid`),
   UNIQUE KEY `CampaignExpRes_UK01` (`expectedresponse`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
 "CREATE TABLE `expectedrevenue` (
   `expectedrevenueid` int(19) NOT NULL auto_increment,
@@ -2202,13 +2248,6 @@ $query_array = Array(
 "ALTER TABLE `blocks` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
 "ALTER TABLE `blocks` MODIFY COLUMN `sequence` INTEGER(10) DEFAULT NULL",
 "ALTER TABLE `blocks` MODIFY COLUMN `show_title` INTEGER(2) DEFAULT NULL",
-"ALTER TABLE `campaign` MODIFY COLUMN `campaignname` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT NULL UNIQUE",
-"ALTER TABLE `campaign` MODIFY COLUMN `campaignstatus` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT NULL UNIQUE",
-"ALTER TABLE `campaign` MODIFY COLUMN `expectedrevenue` VARCHAR(255) DEFAULT NULL",
-"ALTER TABLE `campaign` MODIFY COLUMN `budgetcost` VARCHAR(255) DEFAULT NULL",
-"ALTER TABLE `campaign` MODIFY COLUMN `actualcost` VARCHAR(255) DEFAULT NULL",
-"ALTER TABLE `campaign` MODIFY COLUMN `expectedresponse` VARCHAR(255) DEFAULT NULL",
-"ALTER TABLE `campaign` MODIFY COLUMN `campaignid` INTEGER(11) NOT NULL PRIMARY KEY",
 "ALTER TABLE `chat_msg` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
 "ALTER TABLE `chat_msg` MODIFY COLUMN `chat_from` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
 "ALTER TABLE `chat_msg` MODIFY COLUMN `chat_to` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
@@ -2419,11 +2458,6 @@ $query_array = Array(
 "ALTER TABLE `activity` ADD KEY `status1` (`status`, `eventstatus`)",
 "ALTER TABLE `attachments` ADD KEY `attachmentsid1` (`attachmentsid`)",
 "ALTER TABLE `blocks` ADD KEY `block_tabid` (`tabid`)",
-"ALTER TABLE `campaign` DROP PRIMARY KEY",
-"ALTER TABLE `campaign` ADD PRIMARY KEY (`campaignid`)",
-"ALTER TABLE `campaign` ADD KEY `idx_campaignstatus` (`campaignstatus`)",
-"ALTER TABLE `campaignleadrel` DROP INDEX CampaignLeadRel_IDX1",
-"ALTER TABLE `campaignleadrel` ADD INDEX `CampaignLeadRel_IDX1` (`leadid`, `campaignid`)",
 "ALTER TABLE `carrier` ADD UNIQUE KEY `carrier_UK01` (`carrier`)",
 "ALTER TABLE `chat_msg` ADD KEY `chat_msg_IDX0` (`chat_from`)",
 "ALTER TABLE `chat_msg` ADD KEY `chat_msg_IDX1` (`chat_to`)",
@@ -2496,8 +2530,6 @@ $query_array = Array(
 "ALTER TABLE `users2group` ADD KEY `fk_users2group2` (`userid`)",
 "ALTER TABLE `accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
 "ALTER TABLE `accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation123` FOREIGN KEY (`accountid`) REFERENCES `account` (`accountid`) ON DELETE CASCADE",
-"ALTER TABLE `campaigncontrel` ADD CONSTRAINT `fk_CampaignContRel1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE",
-"ALTER TABLE `campaignleadrel` ADD CONSTRAINT `fk_CampaignLeadRel1234` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE",
 "ALTER TABLE `contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
 "ALTER TABLE `contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation123` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
 "ALTER TABLE `customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `customview` (`cvid`) ON DELETE CASCADE",
@@ -2596,7 +2628,7 @@ foreach($customview_query_array as $query)
 require_once('include/ComboStrings.php');
 global $combo_strings;
 
-$comboTables = Array('campaigntype','campaignstatus','expectedrevenue','actualcost','expectedresponse');
+$comboTables = Array('campaigntype','campaignstatus','expectedresponse');
 foreach ($comboTables as $tablename)
 {
 	$values = $combo_strings[$tablename."_dom"];
