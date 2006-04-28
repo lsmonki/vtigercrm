@@ -28,30 +28,41 @@ class UploadFile
 
         function UploadFile ($field_name)
         {
+		global $log;
+		$log->debug("Entering UploadFile (".$field_name.") method ...");
 		$this->field_name = $field_name;
+		$log->debug("Exiting UploadFile method ...");
         }
 
 	function get_url($stored_file_name,$bean_id)
 	{
+		global $log;
+		$log->debug("Entering get_url(".$stored_file_name.",".$bean_id.") method ...");
 		global $site_URL;
 		global $upload_dir;
                 //echo $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
                 //echo $_ENV['HOSTNAME'] .':' .$_SERVER["SERVER_PORT"].'/'.$upload_dir.$bean_id.$stored_file_name;
+		$log->debug("Exiting get_url method ...");
                 return 'http://'.$_ENV['HOSTNAME'] .':' .$_SERVER["SERVER_PORT"].'/'.$upload_dir.$bean_id.$stored_file_name;
                 //return $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
 	}
 
 	function duplicate_file($old_id, $new_id, $file_name)
 	{
+		global $log;
+		$log->debug("Entering duplicate_file(".$old_id.", ".$new_id.", ".$file_name.") method ...");
 		global $root_directory;
 		global $upload_dir;
                 $source = $root_directory.'/'.$upload_dir.$old_id.$file_name;
                 $destination = $root_directory.'/'.$upload_dir.$new_id.$file_name;
 		copy( $source,$destination);
+		$log->debug("Exiting duplicate_file method ...");
 	}
 	
 	function confirm_upload()
 	{
+		global $log;
+		$log->debug("Eentering confirm_upload() method ...");
 		global $root_directory;
 		global $upload_dir;
 		global $upload_maxsize;
@@ -60,6 +71,7 @@ class UploadFile
 
 		if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name']) )
 		{
+			$log->debug("Exiting confirm_upload method ...");
 			return false;
 		}
 		else if ($_FILES[$this->field_name]['size'] > $upload_maxsize)
@@ -74,17 +86,22 @@ class UploadFile
 		}
 
 		$this->stored_file_name = $this->create_stored_filename();
-
+		$log->debug("Exiting confirm_upload method ...");
 		return true;
 	}
 
 	function get_stored_file_name()
 	{
+		global $log;
+		$log->debug("Entering get_stored_file_name() method ...");
+		$log->debug("Exiting get_stored_file_name method ...");
 		return $this->stored_file_name;
 	}
 
 	function create_stored_filename()
 	{
+		global $log;
+		$log->debug("Entering create_stored_filename() method ...");
 		global $upload_badext;
                 $stored_file_name = $_FILES[$this->field_name]['name'];
 
@@ -96,12 +113,14 @@ class UploadFile
 		{
                         $stored_file_name .= ".txt";
                 }
-
+		$log->debug("Exiting create_stored_filename method ...");
 		return $stored_file_name;
 	}
 
 	function final_move($bean_id)
 	{
+		global $log;
+		$log->debug("Entering final_move(".$bean_id.") method ...");
 		global $root_directory;
 		global $upload_dir;
 
@@ -113,7 +132,7 @@ class UploadFile
                 {
 			die ("ERROR: can't move_uploaded_file to $destination");
                 }
-
+		$log->debug("Exiting final_move method ...");
                 return true;
 
 
@@ -121,8 +140,11 @@ class UploadFile
 
 	function unlink_file($bean_id,$file_name)
         {
+		global $log;
+		$log->debug("Entering unlink_file(".$bean_id.",".$file_name.") method ...");
                 global $root_directory;
 		global $upload_dir;
+		$log->debug("Exiting unlink_file method ...");
                 return unlink($root_directory."/".$upload_dir.$bean_id.$file_name);
         }
 
