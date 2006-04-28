@@ -141,6 +141,8 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Function to get the activity details for mail body
 function getActivityDetails($description)
 {
+	global $log;
+	$log->debug("Entering getActivityDetails(".$description.") method ...");
 	global $adb;
 
 	$reply = (($_REQUEST['mode'] == 'edit')?'Replied':'Created');
@@ -156,6 +158,7 @@ function getActivityDetails($description)
 	$list .= '<br>Contact : '.$_REQUEST['contact_name'];
 	$list .= '<br><br> Description : '.$description;
 
+	$log->debug("Exiting getActivityDetails method ...");
 	return $list;
 }
 ?>
