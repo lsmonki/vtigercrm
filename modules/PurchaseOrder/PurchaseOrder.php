@@ -116,6 +116,8 @@ class Order extends CRMEntity {
 */
 	function get_activities($id)
 	{
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Activities/Activity.php');
 		$focus = new Activity();
@@ -125,6 +127,7 @@ class Order extends CRMEntity {
 		$returnset = '&return_module=PurchaseOrder&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
 	}
 
@@ -134,6 +137,8 @@ class Order extends CRMEntity {
 */
 	function get_history($id)
 	{
+		global $log;
+		$log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,
 				activity.* ,seactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime,
 				crmentity.createdtime, crmentity.description, users.user_name
@@ -150,6 +155,7 @@ class Order extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
+		$log->debug("Exiting get_history method ...");
 		return getHistory('PurchaseOrder',$query,$id);
 	}
 
@@ -159,6 +165,8 @@ class Order extends CRMEntity {
 */
 	function get_attachments($id)
 	{
+		global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
@@ -190,6 +198,7 @@ class Order extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
 	}
 
