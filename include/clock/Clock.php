@@ -10,6 +10,8 @@
  ********************************************************************************/
 
 function get_world_clock($image_path) {
+global $log;
+log->debug("Entering get_world_clock(".$image_path.") method ...");
 $the_clock = <<<EOQ
 
 <style type="text/css">
@@ -453,7 +455,7 @@ if (get_cookie("timezone")==null || get_cookie("timezone")==false || get_cookie(
 </script>
 </div>
 EOQ;
-
+$log->debug("Exiting get_world_clock method ...");
 return $the_clock;
 }
 ?>
