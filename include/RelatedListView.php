@@ -4,6 +4,8 @@ require_once("include/utils/utils.php");
 
 function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$edit_val='',$del_val='')
 {
+	$log = LoggerManager::getLogger('account_list');
+	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".$focus.",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
 
 	require_once('Smarty_setup.php');
 	require_once("data/Tracker.php");
@@ -18,7 +20,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	global $list_max_entries_per_page;
 	global $urlPrefix;
 
-	$log = LoggerManager::getLogger('account_list');
 
 	global $currentModule;
 	global $theme;
@@ -153,12 +154,15 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		}
 		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries);
 		$navigationOutput = getTableHeaderNavigation($navigation_array, $url_qry,$relatedmodule);
+		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;
 	}
 }
 
 function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 {
+	global $log;
+	$log->debug("Entering getAttachmentsAndNotes(".$parentmodule.",".$query.",".$id.",".$sid.") method ...");
 	global $theme;
 
 	$list = '<script>
@@ -251,12 +255,15 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 	if($entries_list !='')
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
+	$log->debug("Exiting getAttachmentsAndNotes method ...");
 	return $return_data;
 
 }
 
 function getHistory($parentmodule,$query,$id)
 {
+	global $log;
+	$log->debug("Entering getHistory(".$parentmodule.",".$query.",".$id.") method ...");
 	$parentaction = $_REQUEST['action'];
 	global $theme;
 	$theme_path="themes/".$theme."/";
@@ -487,12 +494,15 @@ function getHistory($parentmodule,$query,$id)
 
 		$list .= '</table>';
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
+		$log->debug("Exiting getHistory method ...");
 		return $return_data; 
 	}
 }
 
 function getPriceBookRelatedProducts($query,$focus,$returnset='')
 {
+	global $log;
+	$log->debug("Entering getPriceBookRelatedProducts(".$query.",".$focus.",".$returnset.") method ...");
 	require_once('Smarty_setup.php');
 	global $adb;
 	global $app_strings;
@@ -578,6 +588,7 @@ for($i=0; $i<$num_rows; $i++)
 		if($num_rows>0)
 		{
 			$return_data = array('header'=>$header,'entries'=>$entries_list);
+			$log->debug("Exiting getPriceBookRelatedProducts method ...");
 			return $return_data; 
 		}
 }
