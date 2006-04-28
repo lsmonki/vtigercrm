@@ -33,6 +33,8 @@
 
 
 function get_validate_record_js () {
+global $log;
+$log->debug("Entering get_validate_record_js () method ...");
 global $mod_strings;
 global $app_strings;
 
@@ -71,9 +73,8 @@ function verify_data(form) {
 
 // end hiding contents from old browsers  -->
 </script>
-
 EOQ;
-
+$log->debug("Exiting get_validate_record_js method ...");
 return $the_script;
 }
 
@@ -84,6 +85,8 @@ return $the_script;
  * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
+global $log;
+$log->debug("Entering get_new_record_form () method ...");
 global $mod_strings;
 global $app_strings;
 global $current_user;
@@ -200,6 +203,7 @@ $qcreate_form.='<script type="text/javascript">
 		</script>';
 
 $qcreate_form .= get_left_form_footer();
+$log->debug("Exiting get_new_record_form  method ...");
 return $qcreate_form;
 
 
