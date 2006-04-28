@@ -86,14 +86,17 @@ class Event extends SugarBean {
 
     function getCount($user_name) 
     {
+	global $log;
+	$log->debug("Entering getCount(".$user_name.") method ...");
         $query = "select count(*) from tasks inner join users on users.id=tasks.assigned_user_id where user_name='" .$user_name ."' and tasks.deleted=0";
 
 //       echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");
         $rows_found =  $this->db->getRowCount($result);
         $row = $this->db->fetchByAssoc($result, 0);
+	
 
-    
+        $log->debug("Exiting getCount method ...");
         return $row["count(*)"];
     }       
 
