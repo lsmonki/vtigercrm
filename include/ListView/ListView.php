@@ -45,7 +45,10 @@ class ListView {
  * Contributor(s): ______________________________________.
 */
 function setDisplayHeaderAndFooter($bool){
+	global $log;
+	$log->debug("Entering setDisplayHeaderAndFooter(".$bool.") method ...");
 		$this->display_header_and_footer = $bool;
+	$log->debug("Exiting setDisplayHeaderAndFooter method ...");
 }
 
 /**initializes ListView
@@ -54,6 +57,8 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function ListView(){
+	global $log;
+	$log->debug("Entering ListView() method ...");
  	
  	
 	if(!$this->initialized){
@@ -70,7 +75,7 @@ function setDisplayHeaderAndFooter($bool){
 			$this->local_image_path = 'themes/'.$theme.'/images';
 		}
 		$this->log = LoggerManager::getLogger('listView_'.$this->local_current_module);
-		
+		$log->debug("Exiting ListView method ...");
 	}	
 }
 /**sets how many records should be displayed per page in the list view
@@ -79,11 +84,17 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function setRecordsPerPage($count){
+	global $log;
+	$log->debug("Entering setRecordsPerPage(".$count.") method ...");
 	$this->records_per_page = $count;	
+	$log->debug("Exiting setRecordsPerPage method ...");
 }
 /**sets the header title */
  function setHeaderTitle($value){
+	global $log;
+	$log->debug("Entering setHeaderTitle(".$value.") method ...");
 	$this->header_title = $value;	
+	$log->debug("Exiting setHeaderTitle method ...");
 }
 /**sets the header text this is text thats appended to the header table and is usually used for the creation of buttons
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -91,7 +102,10 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function setHeaderText($value){
+	global $log;
+	$log->debug("Entering setHeaderText(".$value.") method ...");
 	$this->header_text = $value;	
+	$log->debug("Exiting setHeaderText method ...");
 }
 /**sets the path for the XTemplate HTML file to be used this is only needed to be set if you are allowing ListView to create the XTemplate
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -99,7 +113,10 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function setXTemplatePath($value){
+	global $log;
+	$log->debug("Entering setXTemplatePath(".$value.") method ...");
 	$this->xTemplatePath= $value;	
+	$log->debug("Exiting setXTemplatePath method ...");
 }
 
 /**this is a helper function for allowing ListView to create a new XTemplate it groups parameters that should be set into a single function
@@ -108,11 +125,14 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function initNewXTemplate($XTemplatePath, &$modString, $imagePath = null){
+	global $log;
+	$log->debug("Entering initNewXTemplate(".$XTemplatePath.",".$modString.",". $imagePath = null.") method ...");
 	$this->setXTemplatePath($XTemplatePath);
 	if(isset($modString))
 		$this->setModStrings($modString);
 	if(isset($imagePath))
-		$this->setImagePath($imagePath);	
+		$this->setImagePath($imagePath);
+	$log->debug("Exiting initNewXTemplate method ...");	
 }
 
 
@@ -122,6 +142,8 @@ function setDisplayHeaderAndFooter($bool){
  * Contributor(s): ______________________________________.
 */
  function setQuery($where, $limit, $orderBy, $varName, $allowOrderByOveride= true){
+	global $log;
+	$log->debug("Entering setQuery(".$where.",". $limit.",". $orderBy.",". $varName.",". $allowOrderByOveride.") method ...");
 	$this->query_where = $where;
 	if($this->getSessionVariable("query", "where") != $where){
 		$this->querey_where_has_changed = true;
@@ -131,6 +153,7 @@ function setDisplayHeaderAndFooter($bool){
 	$this->query_limit = $limit;
 	if(!$allowOrderByOveride){
 		$this->query_orderby = $orderBy;
+		$log->debug("Exiting setQuery method ...");
 		return;
  	}
 	$sortBy = $this->getSessionVariable($varName, "ORDER_BY") ;
@@ -172,7 +195,7 @@ function setDisplayHeaderAndFooter($bool){
 	}else {
 		$this->query_orderby = "";	
 	}
-	
+	$log->debug("Exiting setQuery method ...");
 	
 	
 	
@@ -180,6 +203,9 @@ function setDisplayHeaderAndFooter($bool){
 }
 
 function displayArrow(){
+	global $log;
+	$log->debug("Entering displayArrow() method ...");
+	 $log->debug("Exiting displayArrow method ...");
 	
 }
 
@@ -189,8 +215,11 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setTheme($theme){
+	global $log;
+	$log->debug("Entering setTheme(".$theme.") method ...");
 	$this->local_theme = $theme;
 	if(isset($this->xTemplate))$this->xTemplate->assign("THEME", $this->local_theme );
+	$log->debug("Exiting setTheme method ...");
 }
 
 /**sets the AppStrings used only use if it is different from the global
@@ -199,9 +228,12 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setAppStrings(&$app_strings){
+	global $log;
+	$log->debug("Entering setAppStrings(".$app_strings.") method ...");
 	unset($this->local_app_strings);
 	$this->local_app_strings = $app_strings;
 	if(isset($this->xTemplate))$this->xTemplate->assign("APP", $this->local_app_strings );
+	$log->debug("Exiting setAppStrings method ...");
 }
 
 /**sets the ModStrings used 
@@ -210,9 +242,12 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setModStrings(&$mod_strings){
+	global $log;
+	$log->debug("Entering setModStrings(".$mod_strings.") method ...");
 	unset($this->local_module_strings);
 	$this->local_mod_strings = $mod_strings;
 	if(isset($this->xTemplate))$this->xTemplate->assign("MOD", $this->local_mod_strings );
+	$log->debug("Exiting setModStrings method ...");
 }
 
 /**sets the ImagePath used
@@ -221,11 +256,14 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setImagePath($image_path){
+	global $log;
+	$log->debug("Entering setImagePath(".$image_path.") method ...");
 	$this->local_image_path = $image_path;
 	if(empty($this->local_image_path)){
 		$this->local_image_path = 'themes/'.$this->local_theme.'/images';
 	}
 	if(isset($this->xTemplate))$this->xTemplate->assign("IMAGE_PATH", $this->local_image_path );
+	$log->debug("Exiting setImagePath method ...");
 }
 
 /**sets the currentModule only use if this is different from the global
@@ -234,10 +272,14 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setCurrentModule($currentModule){
+	global $log;
+	$log->debug("Entering setCurrentModule(".$currentModule.") method ...");
 	unset($this->local_current_module);
 	$this->local_current_module = $currentModule;
 	$this->log = LoggerManager::getLogger('listView_'.$this->local_current_module);
-	if(isset($this->xTemplate))$this->xTemplate->assign("MODULE_NAME", $this->local_current_module );	
+	if(isset($this->xTemplate))$this->xTemplate->assign("MODULE_NAME", $this->local_current_module );
+	$log->debug("Exiting setCurrentModule method ...");
+
 }
 
 /**INTERNAL FUNCTION creates an XTemplate DO NOT CALL THIS THIS IS AN INTERNAL FUNCTION
@@ -246,6 +288,8 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function createXTemplate(){
+	global $log;
+	$log->debug("Entering createXTemplate() method ...");
  	if(!isset($this->xTemplate)){
 		if(isset($this->xTemplatePath)){
 			$this->xTemplate = new XTemplate ($this->xTemplatePath);
@@ -258,6 +302,7 @@ function displayArrow(){
 			$log->error("NO XTEMPLATEPATH DEFINED CANNOT CREATE XTEMPLATE");
 		}
  	}
+	$log->debug("Exiting createXTemplate method ...");
 }
 
 /**sets the XTemplate telling ListView to use newXTemplate as its current XTemplate
@@ -266,7 +311,10 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setXTemplate(&$newXTemplate){
+	global $log;
+	$log->debug("Entering setXTemplate(".$newXTemplate.") method ...");
 	$this->xTemplate = $newXTemplate;
+	$log->debug("Exiting setXTemplate method ...");
 }
 
 /**returns the XTemplate
@@ -274,7 +322,10 @@ function displayArrow(){
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
 */
- function getXTemplate(){
+ function getXTemplate(){	
+	global $log;
+	$log->debug("Entering getXTemplate() method ...");
+	$log->debug("Exiting getXTemplate method ...");
 	return $this->xTemplate;	
 }
 
@@ -284,11 +335,14 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function xTemplateAssign($name, $value){
+		global $log;
+		$log->debug("Entering xTemplateAssign(".$name.",". $value.") method ...");
  	
 		if(!isset($this->xTemplate)){
 			$this->createXTemplate();	
 		}
  		$this->xTemplate->assign($name, $value);
+		 $log->debug("Exiting xTemplateAssign method ...");
 		
 }
 
@@ -298,13 +352,17 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function getOffset($localVarName){
+	global $log;
+	$log->debug("Entering getOffset(".$localVarName.") method ...");
  	if($this->querey_where_has_changed){
  		$this->setSessionVariable($localVarName,"offset", 0);
  	}
 	$offset = $this->getSessionVariable($localVarName,"offset");
 	if(isset($offset)){
+		$log->debug("Exiting getOffset method ...");
 		return $offset;
 	}
+		$log->debug("Exiting getOffset method ...");
 	return 0;	
 }
 
@@ -314,7 +372,10 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setOffset($localVarName, $value){
+		global $log;
+		$log->debug("Entering setOffset(".$localVarName.",". $value.") method ...");
 		$this->setSessionVariable($localVarName, "offset", $value);
+		$log->debug("Exiting setOffset method ...");
 }
 
 /**INTERNAL FUNCTION sets a session variable
@@ -323,12 +384,18 @@ function displayArrow(){
  * Contributor(s): ______________________________________.
 */
  function setSessionVariable($localVarName,$varName, $value){
+		global $log;
+		$log->debug("Entering setSessionVariable(".$localVarName.",".$varName.",". $value.") method ...");
 		$_SESSION[$this->local_current_module."_".$localVarName."_".$varName] = $value;
+		$log->debug("Exiting setSessionVariable method ...");
 }
 
 function setUserVariable($localVarName,$varName, $value){
+		global $log;
+		$log->debug("Entering setUserVariable(".$localVarName.",".$varName.",". $value.") method ...");
 		global $current_user;
 		$current_user->setPreference($this->local_current_module."_".$localVarName."_".$varName, $value);
+		$log->debug("Exiting setUserVariable method ...");
 }
 
 /**INTERNAL FUNCTION returns a session variable first checking the querey for it then checking the session
@@ -337,12 +404,16 @@ function setUserVariable($localVarName,$varName, $value){
  * Contributor(s): ______________________________________.
 */
  function getSessionVariable($localVarName,$varName){
+		global $log;
+		$log->debug("Entering getSessionVariable(".$localVarName.",".$varName.") method ...");
 		if(isset($_REQUEST[$this->getSessionVariableName($localVarName, $varName)])){
 			$this->setSessionVariable($localVarName,$varName,$_REQUEST[$this->getSessionVariableName($localVarName, $varName)]); 		
 		}
 		 if(isset($_SESSION[$this->getSessionVariableName($localVarName, $varName)])){
+			$log->debug("Exiting getSessionVariable method ...");
 		 	return $_SESSION[$this->getSessionVariableName($localVarName, $varName)];	
 		 }
+		 $log->debug("Exiting getSessionVariable method ...");
 		 return "";
 }
 
@@ -361,6 +432,9 @@ function setUserVariable($localVarName,$varName, $value){
  * Contributor(s): ______________________________________..
  */
 function getSessionVariableName($localVarName,$varName){
+	global $log;
+	$log->debug("Entering getSessionVariableName(".$localVarName.",".$varName.") method ...");
+	$log->debug("Exiting getSessionVariableName method ...");
 	return $this->local_current_module."_".$localVarName."_".$varName;
 }
 
@@ -379,6 +453,8 @@ function getSessionVariableName($localVarName,$varName){
 	 * Contributor(s): ______________________________________..
  */
  function processSugarBean($xtemplateSection, $html_varName, $seed){
+	global $log;
+	$log->debug("Entering processSugarBean(".$xtemplateSection.",". $html_varName.",". $seed.") method ...");
 	$current_offset = $this->getOffset($html_varName);
 	$response = $seed->get_list($this->query_orderby, $this->query_where, $current_offset, $this->query_limit);
 	$list = $response['list'];
@@ -386,6 +462,7 @@ function getSessionVariableName($localVarName,$varName){
 	$next_offset = $response['next_offset'];
 	$previous_offset = $response['previous_offset'];
 	$this->processListNavigation( $xtemplateSection,$html_varName, $current_offset, $next_offset, $previous_offset, $row_count);
+	$log->debug("Exiting processSugarBean method ...");
 	return $list;
 }
 
@@ -401,6 +478,8 @@ function getSessionVariableName($localVarName,$varName){
  * Contributor(s): ______________________________________..
  */
  function processListNavigation( $xtemplateSection, $html_varName, $current_offset, $next_offset, $previous_offset, $row_count ){
+	global $log;
+	$log->debug("Entering processListNavigation(".$xtemplateSection.",". $html_varName.",". $current_offset.",". $next_offset.",". $previous_offset.",". $row_count.") method ...");
 	global $current_user;
 	global $allow_exports;
 	$start_record = $current_offset + 1;
@@ -483,7 +562,7 @@ function getSessionVariableName($localVarName,$varName){
 			$this->xTemplate->assign("EXPORT_LINK", "&nbsp;[ ".$export_link." ]");
 		}
 		$this->xTemplate->parse($xtemplateSection.".list_nav_row");
-			
+		$log->debug("Exiting processListNavigation method ...");	
 	}	
 }
 /**
@@ -498,6 +577,8 @@ function getSessionVariableName($localVarName,$varName){
  * Contributor(s): ______________________________________..
  */
  function processListRows(&$data,$xtemplateSection, $html_varName){
+	global $log;
+	$log->debug("Entering processListRows(".$data.",".$xtemplateSection.",". $html_varName.") method ...");
 	$oddRow = true;
 	foreach($data as $aItem)
 	{
@@ -518,6 +599,7 @@ function getSessionVariableName($localVarName,$varName){
 		$this->xTemplate->parse($xtemplateSection.".row");
 	}
 	$this->xTemplate->parse($xtemplateSection);	
+	$log->debug("Exiting processListRows method ...");
 }
 /**
 
@@ -535,6 +617,8 @@ function getSessionVariableName($localVarName,$varName){
 	 * Contributor(s): ______________________________________..
  */
  function processListView($seed, $xTemplateSection, $html_varName){
+	global $log;
+	$log->debug("Entering processListView(".$seed.",". $xTemplateSection.",". $html_varName.") method ...");
 	if(!isset($this->xTemplate))
 		$this->createXTemplate();
 	$isSugarBean = is_subclass_of($seed, "SugarBean");
@@ -554,6 +638,7 @@ function getSessionVariableName($localVarName,$varName){
 		echo get_form_footer();
 	if($isSugarBean )
 		echo "</td></tr>\n</table>\n";
+	$log->debug("Exiting processListView method ...");
 		
 	//if(isset($_SESSION['validation'])){
 	//	print base64_decode('PGEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nPlBPV0VSRUQmbmJzcDtCWSZuYnNwO1NVR0FSQ1JNPC9hPg==');
@@ -562,6 +647,8 @@ function getSessionVariableName($localVarName,$varName){
 }
 
 function processSortArrows($html_varName){
+	global $log;
+	$log->debug("Entering processSortArrows(".$html_varName.") method ...");
 	$orderBy = $this->getSessionVariable($html_varName, "ORDER_BY_LAST");
 	$desc = $this->getSessionVariable($html_varName, $orderBy.'_desc');
 	$imgArrow = "&nbsp;<img border='0' src='".$this->local_image_path."/arrow_down.gif' >";
@@ -572,7 +659,8 @@ function processSortArrows($html_varName){
 		$this->xTemplateAssign('amount_arrow', $imgArrow);		
 	else{
 		$this->xTemplateAssign($orderBy.'_arrow', $imgArrow);
-	}	
+	}
+	$log->debug("Exiting processSortArrows method ...");	
 }
 
 }
