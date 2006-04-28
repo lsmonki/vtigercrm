@@ -33,6 +33,8 @@ require_once('include/utils/utils.php'); //new
  * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
+global $log;
+$log->debug("Entering get_new_record_form () method ...");
 global $mod_strings;
 global $app_strings;
 global $current_user;
@@ -144,6 +146,7 @@ $qcreate_form.='<script type="text/javascript">
 
 $qcreate_form .= get_left_form_footer();
 
+$log->debug("Exiting get_new_record_form  method ...");
 return $qcreate_form;
 
 
