@@ -32,6 +32,8 @@ define('UPLOAD_FOLDER', $upload_dir);
 class File {
 	function File ($id='',$name='',$module='Notes')
 	{
+		global $log;
+		$log->debug("Entering File (".$id.",".$name.",".$module.") method ...");
 		$this->id = $id;
 		$this->name = $name;
 		$this->module = $module;
@@ -42,6 +44,7 @@ class File {
 		* All Rights Reserved.
 		* Contributor(s): SugarCRM Inc. */
 		$this->folder = '/'.UPLOAD_FOLDER;
+		$log->debug("Exiting File method ...");
 		/** END CONTRIBUTION */
 	}
 
@@ -50,6 +53,8 @@ class File {
 	*/
 	function Upload ($fieldname)
 	{
+		global $log;
+		$log->debug("Entering Upload (".$fieldname.") method ...");
 		global $root_directory;
 		/** BEGIN CONTRIBUTION
 		* Date: 09/08/04
@@ -59,6 +64,7 @@ class File {
 		global $upload_badext;
 		/** END CONTRIBUTION */
 		if (!isset ($_FILES[$fieldname]) || empty ($_FILES[$fieldname]['tmp_name'])) {
+			$log->debug("Exiting Upload method ...");
 			return true; // uploading an empty file can't fail...
 		}
 		$this->name = $_FILES[$fieldname]['name'];
@@ -81,7 +87,10 @@ class File {
 			if (!is_dir($this->folder))
 			{
 				if (mkdir($root_directory.$this->folder, 0755))
+				{
+					$log->debug("Exiting Upload method ...");
 					return move_uploaded_file($_FILES[$fieldname]['tmp_name'], $dest);
+				}
 				else
 				{
 					// how to handle such error ?
@@ -89,24 +98,32 @@ class File {
 				}
 			}
 		}
+		$log->debug("Exiting Upload method ...");
 		return true;
 	}
 
 
 	function SetID ($id)
 	{
+		global $log;
+		$log->debug("Entering SetID (".$id.") method ...");
 		global $root_directory;
 		if (empty ($this->name))
+		{	$log->debug("Exiting SetID method ...");
 			return;
+		}
 		if (empty ($id))
 			die ("id empty");
 		$this->id = $id;
 		$path = $root_directory.$this->folder;
 		rename ($path.$this->name,$path.$id.$this->name);
+		$log->debug("Exiting SetID method ...");
 	}
 
 	function URL ()
 	{
+		global $log;
+		$log->debug("Entering URL () method ...");
 		/** VTIGER CRM CONTRIBUTION BEGINS
 		*/
 		$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'];
@@ -116,6 +133,7 @@ class File {
 		*/		
 
 		//global $site_URL;
+		$log->debug("Exiting URL method ...");
 		return $web_root.$this->folder.$this->id.rawurlencode($this->name);
 	}
 
@@ -126,7 +144,10 @@ class File {
 	* Contributor(s): SugarCRM Inc. */
 	function Delete ($old_file)
 	{
+		global $log;
+		$log->debug("Entering Delete (".$old_file.") method ...");
 		global $root_directory, $upload_dir;
+		$log->debug("Exiting Delete method ...");
 		return unlink($root_directory . "/" . $upload_dir . $old_file);
 	}
 	/* END CONTRIBUTION */
