@@ -3941,6 +3941,7 @@ function getParentRole($roleId)
  */
 function getRoleSubordinates($roleId)
 {
+	global $log;
 	$log->debug("Entering getRoleSubordinates(".$roleId.") method ...");
 	global $adb;
 	$roleDetails=getRoleInformation($roleId);
