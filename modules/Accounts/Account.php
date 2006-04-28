@@ -122,22 +122,26 @@ class Account extends CRMEntity {
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
-	{	
+	{
+		global $log;
+                $log->debug("Entering getSortOrder() method ...");	
 		if(isset($_REQUEST['sorder'])) 
 			$sorder = $_REQUEST['sorder'];
 		else
 			$sorder = (($_SESSION['ACCOUNTS_SORT_ORDER'] != '')?($_SESSION['ACCOUNTS_SORT_ORDER']):($this->default_sort_order));
-
+		$log->debug("Exiting getSortOrder() method ...");
 		return $sorder;
 	}
 
 	function getOrderBy()
 	{
+		global $log;
+                $log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $_REQUEST['order_by'];
 		else
 			$order_by = (($_SESSION['ACCOUNTS_ORDER_BY'] != '')?($_SESSION['ACCOUNTS_ORDER_BY']):($this->default_order_by));
-
+		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
@@ -150,6 +154,8 @@ class Account extends CRMEntity {
 	 */
 	function get_contacts($id)
 	{	
+		global $log;
+                $log->debug("Entering get_contacts(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Contact();
@@ -162,7 +168,7 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid ,users.user_name from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and contactdetails.accountid = '.$id;
-
+		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
 	}
 
@@ -173,6 +179,8 @@ class Account extends CRMEntity {
 	 */
 	function get_opportunities($id)
 	{
+		global $log;
+                $log->debug("Entering get_opportunities(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Potential();
@@ -185,6 +193,7 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 and potential.accountid= '.$id ;
+		$log->debug("Exiting get_opportunities method ...");
 
 		return GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
 	}
@@ -196,6 +205,8 @@ class Account extends CRMEntity {
 	 */
 	function get_activities($id)
 	{
+		global $log;
+                $log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Activity();
@@ -209,12 +220,15 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' &&  activity.eventstatus = 'Planned')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 
 	}
 
 	function get_history($id)
 	{
+		global $log;
+                $log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
 			activity.activitytype, contactdetails.contactid, contactdetails.firstname,
 			contactdetails.lastname, crmentity.modifiedtime, crmentity.createdtime,
@@ -231,11 +245,14 @@ class Account extends CRMEntity {
 				and (activity.status='Completed' or activity.status = 'Deferred'  or (activity.eventstatus != 'Planned' and activity.eventstatus !=''))
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+		$log->debug("Exiting get_history method ...");
 		return getHistory('Accounts',$query,$id);
 	}
 
 	function get_attachments($id)
 	{
+		 global $log;
+                 $log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
@@ -266,11 +283,13 @@ class Account extends CRMEntity {
 				inner join users on crm2.smcreatorid= users.id
 				where crmentity.crmid=".$id."
 				order by createdtime desc";
-
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Accounts',$query,$id);
 	}
 	function get_quotes($id)
 	{
+		global $log;
+                $log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');
 
@@ -285,10 +304,13 @@ class Account extends CRMEntity {
 
 
 		$query = "select users.user_name,groups.groupname, crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
+		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
 	{
+		global $log;
+                $log->debug("Entering get_invoices(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Invoice/Invoice.php');
 
@@ -302,10 +324,13 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = "select users.user_name,groups.groupname,crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
+		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
 	{
+		global $log;
+                $log->debug("Entering get_salesorder(".$id.") method ...");
 		require_once('modules/SalesOrder/SalesOrder.php');
 		global $app_strings;
 
@@ -320,11 +345,13 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname ,users.user_name,groups.groupname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and salesorder.accountid = ".$id;
-		
+		$log->debug("Exiting get_salesorder method ...");		
 		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_tickets($id)
 	{
+		global $log;
+                $log->debug("Entering get_tickets(".$id.") method ...");
 		global $app_strings;
 
 		$focus = new HelpDesk();
@@ -347,11 +374,14 @@ class Account extends CRMEntity {
 		}
 		$query .= " union all ";
 		$query .= "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join contactdetails on contactdetails.contactid = troubletickets.parent_id left join account on account.accountid=contactdetails.accountid left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where account.accountid =".$id;
+		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
 
 	function get_products($id)
 	{
+		global $log;
+                $log->debug("Entering get_products(".$id.") method ...");
 		require_once('modules/Products/Product.php');
 		global $app_strings;
 
@@ -368,12 +398,15 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join account on account.accountid = seproductsrel.crmid  where account.accountid = '.$id.' and crmentity.deleted = 0';
+		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
 	}
 
 
 	function create_export_query(&$order_by, &$where)
 	{
+		global $log;
+                $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		if($this->checkIfCustomTableExists('accountscf'))
 		{
 
@@ -419,7 +452,7 @@ class Account extends CRMEntity {
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
-
+		$log->debug("Exiting create_export_query method ...");
 		return $query;
 	}
 
@@ -427,6 +460,8 @@ class Account extends CRMEntity {
 	//Used By vtigerCRM Word Plugin
 	function getColumnNames_Acnt()
 	{
+		global $log;
+                $log->debug("Entering getColumnNames_Acnt() method ...");
 		$sql1 = "select fieldlabel from field where tabid=6";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
@@ -437,6 +472,7 @@ class Account extends CRMEntity {
 			$custom_fields[$i] = strtoupper($custom_fields[$i]);
 		}
 		$mergeflds = $custom_fields;
+		$log->debug("Exiting getColumnNames_Acnt method ...");
 		return $mergeflds;
 	}
 
