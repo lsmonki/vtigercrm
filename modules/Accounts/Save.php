@@ -107,7 +107,9 @@ header("Location: index.php?action=$return_action&module=$return_module&parentta
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
-$log->info("save customfields invoked");
+	global $log;
+	$log->debug("Entering save_customfields(".$entity_id.") method ...");
+	$log->info("save customfields invoked");
 	global $adb;
 	$dbquery="select * from customfields where module='Accounts'";
         /*
@@ -197,6 +199,7 @@ $log->info("save customfields invoked");
 		}
 		
 	}
+	$log->debug("Exiting save_customfields method ...");
 	// commented by srini - PATCH for saving accounts
 	/*else
 	{
