@@ -22,6 +22,8 @@
 
 function getPendingActivities()
 {
+	global $log;
+        $log->debug("Entering getPendingActivities() method ...");
 	require_once('XTemplate/xtpl.php');
 	require_once("data/Tracker.php");
 	require_once("include/utils/utils.php");
@@ -233,10 +235,13 @@ function getPendingActivities()
 				);
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$log->debug("Exiting getPendingActivities method ...");
 		return $values;
 }
 function getActivityview($activity_view)	
 {	
+	global $log;
+	$log->debug("Entering getActivityview(".$activity_view.") method ...");
 	$today = date("Y-m-d", time());
 
 	if($activity_view == 'Today')
@@ -279,6 +284,7 @@ function getActivityview($activity_view)
 	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
 	$ACTIVITY_VIEW_SELECT_OPTION .= '</select>';
 	
+	$log->debug("Exiting getActivityview method ...");
 	return $ACTIVITY_VIEW_SELECT_OPTION;
 }
 ?>
