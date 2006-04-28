@@ -119,6 +119,8 @@ class Potential extends CRMEntity {
 
 	function create_list_query($order_by, $where)
 	{
+		global $log;
+		$log->debug("Entering create_list_query(".$order_by.",". $where.") method ...");
 		// Determine if the account name is present in the where clause.
 		$account_required = ereg("accounts\.name", $where);
 
@@ -145,12 +147,15 @@ class Potential extends CRMEntity {
 
 
 
+		$log->debug("Exiting create_list_query method ...");
 		return $query;
 	}
 
 
 	function create_export_query($order_by, $where)
 	{
+		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
 
 		if($this->checkIfCustomTableExists('potentialscf'))
 		{
@@ -175,6 +180,7 @@ class Potential extends CRMEntity {
 					LEFT JOIN account on potential.accountid=account.accountid  LEFT JOIN potentialscf on potentialscf.potentialid=potential.potentialid where crmentity.deleted=0 ";
 		}	
 
+		$log->debug("Exiting create_export_query method ...");
 		return $query;
 
 	}
@@ -188,6 +194,8 @@ class Potential extends CRMEntity {
 	 */
 	function get_contacts($id)
 	{
+		global $log;
+		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 
 		$focus = new Contact();
@@ -203,6 +211,7 @@ class Potential extends CRMEntity {
 
 		$query = 'select contactdetails.accountid, users.user_name,groups.groupname,potential.potentialid, potential.potentialname, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, contactdetails.title, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from potential inner join contpotentialrel on contpotentialrel.potentialid = potential.potentialid inner join contactdetails on contpotentialrel.contactid = contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname left join users on crmentity.smownerid=users.id where potential.potentialid = '.$id.' and crmentity.deleted=0';
 		
+		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
 	}
 
@@ -213,6 +222,8 @@ class Potential extends CRMEntity {
 	 */
 	function get_activities($id)
 	{
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 
 		$focus = new Activity();
@@ -228,6 +239,7 @@ class Potential extends CRMEntity {
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join potential on potential.potentialid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Potentials','Activities',$focus,$query,$button,$returnset);
 
 	}
@@ -235,6 +247,8 @@ class Potential extends CRMEntity {
 
 	function get_products($id)
 	{
+		global $log;
+		$log->debug("Entering get_products(".$id.") method ...");
 		require_once('modules/Products/Product.php');
 		global $app_strings;
 
@@ -255,10 +269,13 @@ class Potential extends CRMEntity {
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join potential on potential.potentialid = seproductsrel.crmid  where potential.potentialid = '.$id.' and crmentity.deleted = 0';
+		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Potentials','Products',$focus,$query,$button,$returnset);
 	}
 	function get_stage_history($id)
 	{	
+		 global $log;
+		$log->debug("Entering get_stage_history(".$id.") method ...");
 		global $theme;
 		$theme_path="themes/".$theme."/";
 		$image_path=$theme_path."images/";
@@ -367,10 +384,13 @@ class Potential extends CRMEntity {
 		}
 
 		$query = 'select potstagehistory.*, potential.potentialname from potstagehistory inner join potential on potential.potentialid = potstagehistory.potentialid inner join crmentity on crmentity.crmid = potential.potentialid where crmentity.deleted = 0 and potential.potentialid = '.$id;
+	 $log->debug("Exiting get_stage_history method ...");
 	}
 
 	function get_history($id)
 	{
+		 global $log;
+		$log->debug("Entering get_history(".$id.") method ...");
 		$query = "SELECT activity.activityid, activity.subject, activity.status,
 			activity.eventstatus, activity.activitytype, contactdetails.contactid,
 			contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
@@ -388,11 +408,14 @@ class Potential extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
+		$log->debug("Exiting get_history method ...");
 		return getHistory('Potentials',$query,$id);
 	}
 
 	function get_attachments($id)
 	{
+		 global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
@@ -425,11 +448,14 @@ class Potential extends CRMEntity {
 				where crmentity.crmid=".$id."
 				order by createdtime desc";
 
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Potentials',$query,$id);
 	}
 
 	function get_quotes($id)
 	{
+		 global $log;
+		$log->debug("Entering get_quotes(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');
 
@@ -445,10 +471,13 @@ class Potential extends CRMEntity {
 
 
 		$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and potential.potentialid=".$id;
+		$log->debug("Exiting get_quotes method ...");
 		return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
 	{
+		global $log;
+		$log->debug("Entering get_salesorder(".$id.") method ...");
 		require_once('modules/SalesOrder/SalesOrder.php');
 		global $mod_strings;
 		global $app_strings;
@@ -465,6 +494,7 @@ class Potential extends CRMEntity {
 
 
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, potential.potentialname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join potential on potential.potentialid=salesorder.potentialid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and potential.potentialid = ".$id;
+		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 
 	}
