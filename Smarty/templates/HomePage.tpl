@@ -5,11 +5,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/dragdrop.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/controls.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/slider.js"></script>
-
 <script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
-
-
-
 <script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
 
 
@@ -51,8 +47,8 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		
             <td style="padding-right:0px"><a href="#"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="Show World Clock..." title="Show World Clock..." border=0 onClick="fnvshobj(this,'wclock')"></a></a></td>
             <td style="padding-right:0px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="Open Calculator..." title="Open Calculator..." border=0 onClick="fnvshobj(this,'calc')"></a></a></td>
-		<td nowrap="nowrap" width="50">&nbsp;</td>
-		<td style="padding-right: 0px;"><a href="#" onclick="fnvshobj(this,'allMenu')"><img src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="Open All Menu..." title="Open All Menu..." border="0"></a></td>
+			<td nowrap="nowrap" width="50">&nbsp;</td>
+			<td style="padding-right: 0px;"><a href="#" onClick="fnvshobj(this,'allMenu')"><img src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="Open All Menu..." title="Open All Menu..." border="0"></a></td>
 		
 			</tr>
 			</table>
@@ -132,87 +128,69 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	</td></tr>                                
         </table>
 </div>
-
 </div>
 </td>
+
+<td width="25%" valign="top" style="padding:5px;">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	<td width="13" height="38"><img src="{$IMAGE_PATH}upcoming_left.gif" align="top"  /></td>
+	<td width="100%" background="{$IMAGE_PATH}upcomingEvents.gif" style="background-repeat:repeat-x; ">&nbsp;</td>
+	<td width="14" height="38" align="left"><img src="{$IMAGE_PATH}upcoming_right.gif" align="top"  /></td>
+	</tr>		
+	<tr>
+	<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
+	<table width="100%" border="0" cellpadding="5" cellspacing="0">
+	<tr>
+	<td width="75%" colspan="2"><b class="fontBold">Upcoming Events</b><br />23 Events For Today</td>
+	<td width="25%" valign="top" align="right"><img src="{$IMAGE_PATH}up.gif" align="absmiddle" /></td>
+	</tr>
+	<tr><td colspan="3" height="10"></td></tr>															
+	{foreach item=entries from=$ACTIVITIES.0.Entries}
+	<tr>
+	<td align="right" width="15%">{$entries.IMAGE}</td>
+	<td align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />1 800 800 8000</td>
+	</tr>
+	{/foreach}
+	<tr><td colspan="3" height="10"></td></tr>
+	</table>
+	</td>
+	</tr>
+	</table><br />
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
+	<tr>
+	<td width="14" height="70" background="{$IMAGE_PATH}pending_left.gif" ></td>
+	<td width="90%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
+	<b class="fontBold">Pending Events</b><br />
+	7 Events in Past 10 days</td>
+	<td width="15" height="70" background="{$IMAGE_PATH}pending_right.gif" valign="bottom">
+	<img src="{$IMAGE_PATH}up.gif" align="top" />&nbsp;</td>
+	</tr>		
+	<tr>
+	<td colspan="3" bgcolor="#FEF7C1" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
+	<table width="100%" border="0" cellpadding="5" cellspacing="0">
+	<tr>
+	<td colspan="3" height="10"></td>
+	</tr>
+	{foreach item=entries from=$ACTIVITIES.1.Entries}
+	<tr>
+	<td align="right" width="15%">{$entries.IMAGE}</td>
+	<td align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />1 800 800 8000</td>
+	</tr>
+	{/foreach}
+	<tr>
+	<td colspan="3" height="10"></td>
+	</tr>
+	</table></td>
+	</tr>
+	</table>
+
+</td>
+
 </tr>
 </table>
 
-{* Quick Access Functionality *}
-<div id="allMenu" onmouseover="fnvshNrm('allMenu');">
-		<table cellpadding="5" cellspacing="0" class="allMnuTable" >
-				<tr class="allMnuHandle">
-						<td colspan="2" id="AllHandle">Jump To</td>
-						<td align="right" style="padding-right:5px;">
-							<a href="javascript:fninvsh('allMenu');"><img src="{$IMAGE_PATH}close_all.gif"  border="0"/></a></td>
-				</tr>
-				<tr>
-						<td valign="top">
-
-								<span class="allMnuHdr">Home</span>
-										<a href="#" class="allMnu">Home</a>
-										<a href="#" class="allMnu">Activities</a>
-										<a href="#" class="allMnu">Calander</a>
-										<a href="#" class="allMnu">Email</a>
-								<span class="allMnuHdr">Sales</span>
-
-										<a href="#" class="allMnu">Leads</a>
-										<a href="#" class="allMnu">Accounts</a>
-										<a href="#" class="allMnu">Contacts</a>
-										<a href="#" class="allMnu">Potentials</a>
-										<a href="#" class="allMnu">Quotes</a>
-										<a href="#" class="allMnu">Sales Order</a>
-
-										<a href="#" class="allMnu">Invoice</a>
-										<a href="#" class="allMnu">Campaigns</a>
-										<a href="#" class="allMnu">Products</a>
-										<a href="#" class="allMnu">Price Books</a>
-										<a href="#" class="allMnu">Notes</a>
-						</td>
-
-						<td valign="top">
-								<span class="allMnuHdr">Support</span>
-										<a href="#" class="allMnu">Help Desk</a>
-										<a href="#" class="allMnu">Faq</a>
-										<a href="#" class="allMnu">Accounts</a>
-										<a href="#" class="allMnu">Contacts</a>
-
-										<a href="#" class="allMnu">Products</a>
-										<a href="#" class="allMnu">Notes</a>
-								<span class="allMnuHdr">Analytics</span>
-										<a href="#" class="allMnu">Dashboard</a>
-										<a href="#" class="allMnu">Reports</a>
-								<span class="allMnuHdr">Inventory</span>
-
-										<a href="#" class="allMnu">Products</a>
-										<a href="#" class="allMnu">Vendors</a>
-										<a href="#" class="allMnu">Price Books</a>
-										<a href="#" class="allMnu">PurchaseOrder</a>
-										<a href="#" class="allMnu">SalesOrder</a>
-										<a href="#" class="allMnu">Quotes</a>
-
-										<a href="#" class="allMnu">Invoice</a>
-						</td>
-						<td valign="top">
-								<span class="allMnuHdr">Tools</span>
-										<a href="#" class="allMnu">Rss</a>
-										<a href="#" class="allMnu">Portal</a>
-										<a href="#" class="allMnu">Notes</a>
-
-								<span class="allMnuHdr">Settings</span>
-										<a href="#" class="allMnu">Settings</a>
-						</td>
-				</tr>
-		</table>
-</div>
-
 {literal}
-<script>
-	var AllMnuHandle = document.getElementById("AllHandle");
-	var AllMnuRoot   = document.getElementById("allMenu");
-	Drag.init(AllMnuHandle, AllMnuRoot);
-</script>
-
 <script  language="javascript">
 		Sortable.create("MainMatrix",
         {constraint:false,tag:'div',overlap:'horizontal',
