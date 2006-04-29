@@ -2098,6 +2098,22 @@ function getEntityName($module, $ids_list)
 	$log->debug("Exiting getEntityName method ...");
 }
 
+function getAllParenttabmoduleslist()
+{
+        global $adb;
+        $resultant_array = Array();
+        $query = 'select name,tablabel,parenttab_label from parenttabrel inner join tab on parenttabrel.tabid = tab.tabid in
+ner join parenttab on parenttabrel.parenttabid = parenttab.parenttabid order by parenttab.sequence';
+        $result = $adb->query($query);
+        for($i=0;$i<$adb->num_rows($result);$i++)
+        {
+                $parenttabname = $adb->query_result($result,$i,'parenttab_label');
+                $modulename = $adb->query_result($result,$i,'name');
+                $tablabel = $adb->query_result($result,$i,'tablabel');
+                $resultant_array[$parenttabname][] = Array($modulename,$tablabel);
+        }
+        return $resultant_array;
+}
 
 
 ?>
