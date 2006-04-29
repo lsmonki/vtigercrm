@@ -1356,6 +1356,7 @@ function fninvsh(Lay){
 function fnvshNrm(Lay){
     var tagName = document.getElementById(Lay);
     tagName.style.visibility = 'visible';
+    tagName.style.display = 'block';
 }
 
 
