@@ -285,7 +285,7 @@ function ajaxQCreateResponse(response)
 </script>
 
 
-{* Begining of Slide Menu *}
+{* Begining of Slide Menu 
 
 <div id="mnuSlide">
 <table border="0" cellpadding="0" cellspacing="0">
@@ -300,7 +300,28 @@ function ajaxQCreateResponse(response)
        <td width="8" valign="top">
        <div id="mnuKey" onclick="fnSlide1('slidemenu','slide')" ><img src="{$IMAGEPATH}/jump.gif" style="opacity:.7;"></div>
        </td>
-       </tr>
+       </tr>*}
+
+{* Quick Access Functionality *}
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onmouseover="fnvshNrm('allMenu');">
+	<table cellpadding="5" cellspacing="0" class="allMnuTable" >
+	<tr>
+		<td valign="top">
+		{assign var="parentno" value=0}
+		{foreach name=parenttablist key=parenttab item=details from=$QUICKACCESS}
+			<span class="allMnuHdr">{$parenttab}</span>
+			{foreach name=modulelist item=modules from=$details}
+       		{math assign="num" equation="x + y" x=$parentno y=1}
+			{math assign="loopvalue" equation="x % y" x=$num y=14}
+			{assign var="parentno" value=$num}
+			{if $loopvalue eq '0'}
+				</td><td valign="top">
+			{/if}
+			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$modules.1}</a>
+		{/foreach}
+		{/foreach}
+		</td>
+	</tr>
 </table>
 </div>
 
