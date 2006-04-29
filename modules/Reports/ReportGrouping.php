@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
@@ -29,41 +29,40 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
-$report_group=new XTemplate('modules/Reports/ReportGrouping.html');
+$report_group=new vtigerCRM_Smarty;
 $report_group->assign("MOD", $mod_strings);
 $report_group->assign("APP", $app_strings);
 $report_group->assign("IMAGE_PATH",$image_path);
 
 if(isset($_REQUEST["record"]))
 {
+	$reportid = $_REQUEST["record"];
+	$oReport = new Reports($reportid);
+	$list_array = $oReport->getSelctedSortingColumns($reportid);
 
-$reportid = $_REQUEST["record"];
-$oReport = new Reports($reportid);
-$list_array = $oReport->getSelctedSortingColumns($reportid);
+	$BLOCK1 = getPrimaryColumns_GroupingHTML($oReport->primodule,$list_array[0]);
+	$BLOCK1 .= getSecondaryColumns_GroupingHTML($oReport->secmodule,$list_array[0]);
+	$report_group->assign("BLOCK1",$BLOCK1);
 
-$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule,$list_array[0]);
-$BLOCK1 .= getSecondaryColumns_GroupingHTML($secondarymodule,$list_array[0]);
-$report_group->assign("BLOCK1",$BLOCK1);
+	$BLOCK2 = getPrimaryColumns_GroupingHTML($oReport->primodule,$list_array[1]);
+	$BLOCK2 .= getSecondaryColumns_GroupingHTML($oReport->secmodule,$list_array[1]);
+	$report_group->assign("BLOCK2",$BLOCK2);
 
-$BLOCK2 = getPrimaryColumns_GroupingHTML($primarymodule,$list_array[1]);
-$BLOCK2 .= getSecondaryColumns_GroupingHTML($secondarymodule,$list_array[1]);
-$report_group->assign("BLOCK2",$BLOCK2);
+	$BLOCK3 = getPrimaryColumns_GroupingHTML($oReport->primodule,$list_array[2]);
+	$BLOCK3 .= getSecondaryColumns_GroupingHTML($oReport->secmodule,$list_array[2]);
+	$report_group->assign("BLOCK3",$BLOCK3);
 
-$BLOCK3 = getPrimaryColumns_GroupingHTML($primarymodule,$list_array[2]);
-$BLOCK3 .= getSecondaryColumns_GroupingHTML($secondarymodule,$list_array[2]);
-$report_group->assign("BLOCK3",$BLOCK3);
-
-$sortorder = $oReport->ascdescorder;
+	$sortorder = $oReport->ascdescorder;
 
 }else
 {
-$primarymodule = $_REQUEST["primarymodule"];
-$secondarymodule = $_REQUEST["secondarymodule"];
-$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule);
-$BLOCK1 .= getSecondaryColumns_GroupingHTML($secondarymodule);
-$report_group->assign("BLOCK1",$BLOCK1);
-$report_group->assign("BLOCK2",$BLOCK1);
-$report_group->assign("BLOCK3",$BLOCK1);
+	$primarymodule = $_REQUEST["primarymodule"];
+	$secondarymodule = $_REQUEST["secondarymodule"];
+	$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule);
+	$BLOCK1 .= getSecondaryColumns_GroupingHTML($secondarymodule);
+	$report_group->assign("BLOCK1",$BLOCK1);
+	$report_group->assign("BLOCK2",$BLOCK1);
+	$report_group->assign("BLOCK3",$BLOCK1);
 }
 
 
@@ -190,7 +189,6 @@ $shtml =  "<option value='Ascending'>Ascending</option>
 	   <option selected value='Descending'>Descending</option>";
 }
 $report_group->assign("ASCDESC3",$shtml);
+$report_group->display("ReportGrouping.tpl");
 
-$report_group->parse("main");
-$report_group->out("main");
 ?>

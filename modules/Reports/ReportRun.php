@@ -71,7 +71,6 @@ class ReportRun extends CRMEntity
 				$columnslist[$fieldcolname] = $querycolumns;
 			}
 		}
-		//print_r($columnslist);
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $columnslist;		
 	}
@@ -79,14 +78,6 @@ class ReportRun extends CRMEntity
 	function getEscapedColumns($selectedfields)
 	{
 		$fieldname = $selectedfields[3];
-		/*if($fieldname == "assigned_user_id")
-		{
-			$querycolumn = "usersRel.user_name"." ".$selectedfields[2];
-		}*/
-		/*if($fieldname == "account_id")
-		{
-			$querycolumn = "accountRel.accountname"." ".$selectedfields[2];
-		}*/
 		if($fieldname == "parent_id")
 		{
 			if($this->primarymodule == "HelpDesk")
@@ -102,22 +93,6 @@ class ReportRun extends CRMEntity
 				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'PurchaseOrder' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
 			}
 		}
-		/*if($fieldname == "contact_id")
-		{
-			$querycolumn = "contactdetailsRel.lastname"." ".$selectedfields[2];
-		}*/
-		/*if($fieldname == "vendor_id")
-		{
-			$querycolumn = "vendorRel.name"." ".$selectedfields[2];
-		}
-		if($fieldname == "potential_id")
-                {
-                        $querycolumn = "potentialRel.potentialname"." ".$selectedfields[2];
-                }
-		if($fieldname == "assigned_user_id1")
-                {
-                        $querycolumn = "usersRel1.user_name"." ".$selectedfields[2];
-                }*/
 		return $querycolumn;
 	}
 	
@@ -584,7 +559,6 @@ class ReportRun extends CRMEntity
 			$datevalue[1] = "";
 			}
 
-			//$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 			return $datevalue;
 	}
 
@@ -632,7 +606,6 @@ class ReportRun extends CRMEntity
 		global $adb;
 		global $modules;
 		global $log;
-		//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 	
 		$sreportsortsql = "select reportsortcol.* from report"; 
 		$sreportsortsql .= " inner join reportsortcol on report.reportid = reportsortcol.reportid"; 
@@ -961,7 +934,6 @@ class ReportRun extends CRMEntity
 	function getReportsQuery($module)
 	{
 		global $log;
-		//echo $this->secondarymodule."<br>";
 		if($module == "Leads")
 		{
 			$query = "from leaddetails 
@@ -991,6 +963,7 @@ class ReportRun extends CRMEntity
 			$query = "from contactdetails
 				inner join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
 				inner join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
+				inner join customerdetails on customerdetails.customerid = contactdetails.contactid
 				inner join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
 				inner join contactscf on contactdetails.contactid = contactscf.contactid 
 				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
@@ -1220,7 +1193,7 @@ class ReportRun extends CRMEntity
 				for ($x=0; $x<$y; $x++)
 				{
 					$fld = $adb->field_name($result, $x);
-					$header .= "<td class='rptHead'>".str_replace($modules," ",$fld->name)."</td>";
+					$header .= "<td class='rptCellLabel'>".str_replace($modules," ",$fld->name)."</td>";
 				}
 				
 				$noofrows = $adb->num_rows($result);
@@ -1308,37 +1281,23 @@ class ReportRun extends CRMEntity
 				$arr_val[] = $arraylists;
 				}while($custom_field_values = $adb->fetch_array($result));
 				
-				
-				$totalhtml = '
-				<tr>
-				<td colspan='.($y+1).' class="rptTotal">'.$mod_strings['LBL_GRAND_TOTAL'].': '.$noofrows.' Records</td>
-				</tr>';
-				
-				$sHTML = '<html>
-				<head></head>
-				<body>
-				 <table cellpadding="0" cellspacing="0" border="0" class="rptTable">
-				 <tr>
-				 	<td class="rptTitle" colspan="'.$y.'">'.$this->reportname.'</td>
-				 </tr>
+				 $sHTML ='<table cellpadding="5" cellspacing="0" align="center" class="rptTable">
 				  <tr>'. 
 				   $header
 				  .'<!-- BEGIN values -->
 				  <tr>'. 
 				   $valtemplate
-				  .'</tr>'
-				  .$totalhtml.
-				'</table>
-				</body>
-				</html>';
+				  .'</tr>
+				</table>';
 				//<<<<<<<<construct HTML>>>>>>>>>>>>
-				return $sHTML;
+				$return_data[] = $sHTML;
+				$return_data[] = $noofrows;
+				return $return_data;
 			}
 		}elseif($outputformat == "PDF")
 		{
 			
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
-			//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
 
@@ -1346,8 +1305,6 @@ class ReportRun extends CRMEntity
 			{
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
-				
-				//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 				
 				do
 				{
@@ -1373,14 +1330,13 @@ class ReportRun extends CRMEntity
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
 			if(isset($this->totallist))
 			{
-				//print_r($this->totallist);
 				if($sSQL != "")
 				{
 					$result = $adb->query($sSQL);
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 
-					$coltotalhtml .= "<table width='60%' cellpadding='0' cellspacing='0' border='0' class='formOuterBorder'><tr><td class='rptHead'>Totals</td><td class='rptHead'>SUM</td><td class='rptHead'>AVG</td><td class='rptHead'>MIN</td><td class='rptHead'>MAX</td></tr>";
+					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>Totals</td><td class='rptCellLabel'>SUM</td><td class='rptCellLabel'>AVG</td><td class='rptCellLabel'>MIN</td><td class='rptCellLabel'>MAX</td></tr>";
 
 					foreach($this->totallist as $key=>$value)
 					{
@@ -1436,7 +1392,6 @@ class ReportRun extends CRMEntity
 						$coltotalhtml .= '<tr>';
 					}
 
-//					print_r($keyhdr);
 					$coltotalhtml .= "</table>";
 				}
 			}			

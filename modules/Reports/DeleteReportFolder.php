@@ -8,29 +8,20 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 global $adb;
 
 $local_log =& LoggerManager::getLogger('index');
-$focus = new Reports();
-
 $rfid = $_REQUEST['record'];
-
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Reports";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-else $return_action = "index";
-
 if($rfid != "")
 {
 	$sql .= "delete from reportfolder where folderid=".$rfid;
 	$result = $adb->query($sql);
 	if($result!=false)
 	{
-		header("Location: index.php?action=$return_action&module=$return_module");
+		header("Location: index.php?action=ReportsAjax&mode=ajax&file=ListView&module=Reports");
 	}else
 	{
 		include('themes/'.$theme.'/header.php');

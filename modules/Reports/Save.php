@@ -190,13 +190,13 @@ if($reportid == "")
 			</ul></B></font> <br>" ;
 			echo $errormessage;
 		}
-		header("Location: index.php?action=SaveAndRun&module=Reports&record=$genQueryId");
+		echo '<script>window.opener.location.href =window.opener.location.href;self.close();</script>';
 	}
 }else
 {
 	if($reportid != "")
 	{
-	       if($selectedcolumnstring != "")
+		if($selectedcolumnstring != "")
 		{
 			$idelcolumnsql = "delete from selectcolumn where queryid=".$reportid;
 			$idelcolumnsqlresult = $adb->query($idelcolumnsql);
@@ -212,7 +212,7 @@ if($reportid == "")
 				}
 			}
 		}
-		
+
 		$ireportsql = "update report set";
 		$ireportsql .= " REPORTNAME='".$reportname."',";
 		$ireportsql .= " DESCRIPTION='".$reportdescription."',";
@@ -268,29 +268,29 @@ if($reportid == "")
 				$ireportsummarysql = "insert into reportsummary (REPORTSUMMARYID,SUMMARYTYPE,COLUMNNAME) values (".$reportid.",".$i.",'".$columnstototal[$i]."')";
 				$ireportsummaryresult = $adb->query($ireportsummarysql);
 			}
-			 $log->info("Reports :: Save->Successfully saved reportsummary");
+			$log->info("Reports :: Save->Successfully saved reportsummary");
 			//<<<<step4 columnstototal>>>>>>>
 
 
 			//<<<<step5 advancedfilter>>>>>>>
 
-                        $idelrelcriteriasql = "delete from relcriteria where queryid=".$reportid;
-                        $idelrelcriteriasqlresult = $adb->query($idelrelcriteriasql);
+			$idelrelcriteriasql = "delete from relcriteria where queryid=".$reportid;
+			$idelrelcriteriasqlresult = $adb->query($idelrelcriteriasql);
 
-                        for ($i=0;$i<count($adv_filter_col);$i++)
-                        {
-                                $irelcriteriasql = "insert into relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (".$reportid.",".$i.",'".$adv_filter_col[$i]."','".$adv_filter_option[$i]."','".$adv_filter_value[$i]."')";
-                                $irelcriteriaresult = $adb->query($irelcriteriasql);
-                        }
-                        $log->info("Reports :: Save->Successfully saved relcriteria");
+			for ($i=0;$i<count($adv_filter_col);$i++)
+			{
+				$irelcriteriasql = "insert into relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (".$reportid.",".$i.",'".$adv_filter_col[$i]."','".$adv_filter_option[$i]."','".$adv_filter_value[$i]."')";
+				$irelcriteriaresult = $adb->query($irelcriteriasql);
+			}
+			$log->info("Reports :: Save->Successfully saved relcriteria");
 			//<<<<step5 advancedfilter>>>>>>>
 
 		}else
 		{
 			include('themes/'.$theme.'/header.php');
 			$errormessage = "<font color='red'><B>Error Message<ul>
-			<li><font color='red'>Error while inserting the record</font>
-			</ul></B></font> <br>" ;
+				<li><font color='red'>Error while inserting the record</font>
+				</ul></B></font> <br>" ;
 			echo $errormessage;
 		}
 	}else
@@ -301,6 +301,6 @@ if($reportid == "")
 		</ul></B></font> <br>" ;
 		echo $errormessage;
 	}
-	header("Location: index.php?action=SaveAndRun&module=Reports&record=$reportid");
+	echo '<script>window.opener.location.href =window.opener.location.href;self.close();</script>';
 }
 ?>

@@ -8,8 +8,8 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
+require_once('Smarty_setup.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
@@ -29,7 +29,7 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
-$report_column_tot=new XTemplate('modules/Reports/ReportColumnsTotal.html');
+$report_column_tot=new vtigerCRM_Smarty;
 $report_column_tot->assign("MOD", $mod_strings);
 $report_column_tot->assign("APP", $app_strings);
 $report_column_tot->assign("IMAGE_PATH",$image_path);
@@ -39,16 +39,14 @@ if(isset($_REQUEST["record"]))
         $recordid = $_REQUEST["record"];
         $oReport = new Reports($recordid);
         $BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
-	$report_column_tot->assign("BLOCK1",$BLOCK1);
+		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }else
 {
         $primarymodule = $_REQUEST["primarymodule"];
         $secondarymodule = $_REQUEST["secondarymodule"];
         $oReport = new Reports();
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
-	$report_column_tot->assign("BLOCK1",$BLOCK1);
+		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }
-
-$report_column_tot->parse("main");
-$report_column_tot->out("main");
+$report_column_tot->display('ReportColumnsTotal.tpl');
 ?>

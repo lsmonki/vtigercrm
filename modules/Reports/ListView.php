@@ -8,8 +8,8 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
+require_once('Smarty_setup.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
@@ -31,26 +31,40 @@ global $currentModule;
 global $image_path;
 global $theme;
 
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
-$list_report_form=new XTemplate ('modules/Reports/ListView.html');
+$list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
-
+$list_report_form->assign("APPLIST", $app_list_strings);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 
-//report creation button
-$newrpt_button = '<input type="button" class="button" name="newReport" value="'.$mod_strings[LBL_REP_BUTTON].'" onclick=invokeAction("newReport") >';
-//report folder creation button
-$newrpt_fldr_button = '<input type="button" class="button" name="newReportFolder" value="'.$mod_strings[LBL_REP_FOLDER_BUTTON].'" onclick=invokeAction("newReportFolder") >';
-
+$list_report_form->assign("CATEGORY",getParentTab());
+$list_report_form->assign("MODULE",$currentModule);
 $list_report_form->assign("NEWRPT_BUTTON",$newrpt_button);
 $list_report_form->assign("NEWRPT_FLDR_BUTTON",$newrpt_fldr_button);
 $repObj = new Reports ();
-$list_report_form->assign("REPT_FLDR_BLK",$repObj->sgetRptFldr());
-$list_report_form->assign("JAVASCRIPT","<script language='Javascript'>".$repObj->sgetJsRptFldr()."</script>");
-$list_report_form->parse("main");
-$list_report_form->out("main");
+$list_report_form->assign("REPT_FLDR",$repObj->sgetRptFldr('SAVED'));
+$cusFldrDtls = Array();
+$cusFldrDtls = $repObj->sgetRptFldr('CUSTOMIZED');
+$list_report_form->assign("REPT_CUSFLDR",$cusFldrDtls);
+foreach($cusFldrDtls as $entries)
+{
+	$fldrids_lists [] =$entries['id'];
+}
+if(count($fldrids_lists) > 0)
+	$list_report_form->assign("FOLDE_IDS",implode(',',$fldrids_lists));
+$list_report_form->assign("REPT_MODULES",getReportsModuleList());
+$list_report_form->assign("REPT_FOLDERS",$repObj->sgetRptFldr());
+if($_REQUEST['mode'] == 'ajax')
+	$list_report_form->display("ReportsCustomize.tpl");
+elseif($_REQUEST['mode'] == 'ajaxdelete')
+	$list_report_form->display("ReportContents.tpl");
+else
+	$list_report_form->display("Reports.tpl");
 
 ?>

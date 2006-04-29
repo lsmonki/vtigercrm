@@ -23,7 +23,7 @@ global $report_modules;
 global $related_modules;
 global $profileList;
 
-$profileList = getCurrentUserProfileList();
+//$profileList = getCurrentUserProfileList();
 $adv_filter_options = array("e"=>"equals",
 		            "n"=>"not equal to",
 			    "s"=>"starts with",
@@ -39,7 +39,7 @@ $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products',
 			'HelpDesk','Quotes','PurchaseOrder','Invoice','Activities'
 		       );
 
-$related_modules = Array('Leads'=>Array(''),
+$related_modules = Array('Leads'=>Array(),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','PurchaseOrder'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
@@ -153,51 +153,45 @@ class Reports extends CRMEntity{
  *  contains HTML 
  */
 	
-	function sgetRptFldr()
+	function sgetRptFldr($mode='')
 	{
 
 		global $adb;
 		global $log;
-
+		$returndata = Array();
 		$sql = "select * from reportfolder order by folderid";
 		$result = $adb->query($sql);
 		$reportfldrow = $adb->fetch_array($result);
-		$x = 0;
-        do
+		if($mode != '')
 		{
-			$reporttempid = $reportfldrow["folderid"]."RptFldr";
-			$reporttempidjs[$x] = "'".$reportfldrow["folderid"]."RptFldr'";
-
-			$shtml .= "<br><table width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
-			<tr>
-			    <td width=\"15\" nowrap>
-				<div align=\"center\">
-					<a href=\"javascript:toggleReports('".$reporttempid."')\"><img id=\"".$reporttempid."img\" src=\"".$image_path."collapse.gif\" border=\"0\" align=\"absmiddle\"></a>
-				</div>
-			  	</td>
-			  	<td height=\"20\" class=\"uline\">
-					<a class=\"relListHead\" href=\"javascript:toggleReports('".$reporttempid."')\">".$reportfldrow["foldername"]."</a>";
-				    if($reportfldrow["state"]=="SAVED")
-					{
-						$shtml .="";
-					}else
-					{
-						$shtml .="&nbsp;&nbsp;[ <a href=\"index.php?module=Reports&action=NewReportFolder&record=".$reportfldrow["folderid"] ."\" class=\"link\">Edit Folder</a>
-						<span class=\"sep\">|</span>
-						<a onclick=\"return window.confirm('Are you sure?');\" href=\"index.php?module=Reports&action=DeleteReportFolder&record=".$reportfldrow["folderid"] ."\" class=\"link\">Del Folder</a> ]";
-					}
-					$shtml .="
-			   	</td>
-			 </tr>
-			</table>";
-			$shtml .= $this->sgetRptsforFldr($reportfldrow["folderid"]);
-			$x = $x + 1;
-
-		}while($reportfldrow = $adb->fetch_array($result));
-		$this->srptfldridjs = implode(",",$reporttempidjs);
+			do
+			{
+				if($reportfldrow["state"] == $mode)
+				{
+					$details = Array();	
+					$details['state'] = $reportfldrow["state"]; 
+					$details['id'] = $reportfldrow["folderid"]; 
+					$details['name'] = $reportfldrow["foldername"]; 
+					$details['description'] = $reportfldrow["description"]; 
+					$details['details'] = $this->sgetRptsforFldr($reportfldrow["folderid"]);
+					$returndata[] = $details;
+				}
+			}while($reportfldrow = $adb->fetch_array($result));
+		}else
+		{
+			do
+			{
+				$details = Array();	
+				$details['state'] = $reportfldrow["state"]; 
+				$details['id'] = $reportfldrow["folderid"]; 
+				$details['name'] = $reportfldrow["foldername"]; 
+				$details['description'] = $reportfldrow["description"]; 
+				$returndata[] = $details;
+			}while($reportfldrow = $adb->fetch_array($result));
+		}
 
 		$log->info("Reports :: ListView->Successfully returned report folder HTML");
-		return $shtml;
+		return $returndata;
 	}
 
 /** Function to get the Reports inside each modules
@@ -212,6 +206,7 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 		global $mod_strings;
+		$returndata = Array();
 		
 		require_once('include/utils/UserInfoUtil.php');
 		
@@ -221,72 +216,23 @@ class Reports extends CRMEntity{
 		$report = $adb->fetch_array($result);
 		if(count($report)>0)
 		{
-			$srptdetails .= '<div id="'.$rpt_fldr_id.'RptFldr" style="display:block">
-				<table width="95%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-				  <td width="15">&nbsp;</td>
-				  <td>
-				    <table border="0" width="100%" cellspacing="0" cellpadding="0" class="formOuterBorder">
-					  <tr>
-						<td width="15%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;"></td>
-						<td width="30%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Report Name</td>
-						<td width="55%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Description</td>
-					  </tr>';
-					  $rowcnt = 1;
-					  $count_flag = 0;
 					  do
 					  {
-					/*	if(isPermitted($report['primarymodule'],'index') == "yes" && (isPermitted($report['secondarymodules'],'index')== "yes" || $report['secondarymodules'] == ''))
-						{*/
-							$count_flag = 1;
-							if ($rowcnt%2 == 0)
-							$srptdetails .= '<tr class="evenListRow">';
-							else
-							$srptdetails .= '<tr class="oddListRow">';
-
-							$srptdetails .= '<td height="21" style="padding:0px 3px 0px 3px;">
-							<div align="center">';
-							if($report["customizable"]==1)
-							{
-								$srptdetails .= '<a class="link" href="index.php?module=Reports&action=NewReport1&record='.$report["reportid"] .'&primarymodule='.$report["primarymodule"].'&secondarymodule='.$report["secondarymodules"].'">Customize</a>';
-							}
-
-							if($report["state"] !="SAVED")
-							{
-								$srptdetails .=  "&nbsp;<span class=\"sep\">|</span>&nbsp;<a class=\"link\" onclick=\"return window.confirm('Are you sure?');\" href=\"index.php?module=Reports&action=Delete&record=".$report["reportid"]."\">Del</a>";
-							}
-							$srptdetails .='</div>
-							</td>
-							<td  height="21" style="padding:0px 3px 0px 3px;" nowrap><a class="link" href="index.php?module=Reports&action=SaveAndRun&record='.$report["reportid"].'">'.$report["reportname"].'</a></td>
-							<td  height="21" style="padding:0px 3px 0px 3px;">'.$report["description"].'</td>
-							</tr>';
-							$rowcnt++;
-					//	}
+						  	$report_details = Array();
+							$report_details ['customizable'] = $report["customizable"];
+							$report_details ['reportid'] = $report["reportid"];
+							$report_details ['primarymodule'] = $report["primarymodule"];
+							$report_details ['secondarymodules'] = $report["secondarymodules"];
+							$report_details ['state'] = $report["state"];
+							$report_details ['description'] = $report["description"];
+							$report_details ['reportname'] = $report["reportname"];
+							
+							$returndata []=$report_details; 
 					  }while($report = $adb->fetch_array($result));
-				/*	  if($count_flag == 0)	
-					  {
-						$srptdetails .= "<tr><td colspan=3 align='center'>".$mod_strings['LBL_NO_PERMISSION']."</td></tr>";	
-					   }
-*/
-				    	$srptdetails .= '</table>
-				    		</td>
-				  			</tr>
-							</table>
-							</div>';
-		}else
-		{
-			$srptdetails .= '<div id="'.$rpt_fldr_id.'RptFldr" style="display:block">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			  <tr>
-			    <td width="15"></td>
-			    <td height="21">No reports in this folder</td>
-			  </tr>
-			</table>
-			</div>';
 		}
 	
 		$log->info("Reports :: ListView->Successfully returned report details HTML");
-		return $srptdetails;
+		return $returndata;
 	}
 
 /** Function to get the array of ids
@@ -504,7 +450,6 @@ class Reports extends CRMEntity{
 
 		$tabid = getTabid($module);
 		global $profile_id;
-	
 		foreach($this->module_list[$module] as $key=>$blockid)
 		{
 			$blockids[] = $blockid;
@@ -846,9 +791,7 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $modules;
 		global $log;
-
-		$ssql = "select relcriteria.* from report inner join selectquery on relcriteria.queryid = report.queryid";
-		$ssql.= " left join relcriteria on relcriteria.queryid = selectquery.queryid";
+		$ssql = 'select relcriteria.* from report inner join relcriteria on relcriteria.queryid = report.queryid left join selectquery on relcriteria.queryid = selectquery.queryid';
 		$ssql.= " where report.reportid =".$reportid." order by relcriteria.columnindex";
 
 		$result = $adb->query($ssql);
@@ -897,17 +840,17 @@ class Reports extends CRMEntity{
 
 	function sgetColumntoTotal($primarymodule,$secondarymodule)
 	{
-		$shtml = $this->sgetColumnstoTotalHTML($primarymodule,0);
+		$options = Array();
+		$options []= $this->sgetColumnstoTotalHTML($primarymodule,0);
 		if($secondarymodule != "")
 		{
 			$secondarymodule = explode(":",$secondarymodule);
 			for($i=0;$i < count($secondarymodule) ;$i++)
 			{
-				$shtml .= $this->sgetColumnstoTotalHTML($secondarymodule[$i],($i+1));
+				$options []= $this->sgetColumnstoTotalHTML($secondarymodule[$i],($i+1));
 			}
 		}
-		
-		return $shtml;
+		return $options;
 	}
 	
 /** Function to get the selected columns of total fields in Reports
@@ -921,7 +864,7 @@ class Reports extends CRMEntity{
 	{
 		global $adb;
 		global $log;
-
+		$options = Array();
 		if($reportid != "")
 		{
 			$ssql = "select reportsummary.* from reportsummary inner join report on report.reportid = reportsummary.reportsummaryid where report.reportid=".$reportid;
@@ -937,18 +880,18 @@ class Reports extends CRMEntity{
 				}while($reportsummaryrow = $adb->fetch_array($result));
 			}
 		}	
-		$shtml = $this->sgetColumnstoTotalHTML($primarymodule,0);
+		$options []= $this->sgetColumnstoTotalHTML($primarymodule,0);
 		if($secondarymodule != "")
 		{
 			$secondarymodule = explode(":",$secondarymodule);
 			for($i=0;$i < count($secondarymodule) ;$i++)
 			{
-				$shtml .= $this->sgetColumnstoTotalHTML($secondarymodule[$i],($i+1));
+				$options []= $this->sgetColumnstoTotalHTML($secondarymodule[$i],($i+1));
 			}
 		}
 		
 		$log->info("Reports :: Successfully returned sgetColumntoTotalSelected");
-		return $shtml;
+		return $options;
 	}
 
 
@@ -979,22 +922,14 @@ class Reports extends CRMEntity{
 		}
 		$result = $adb->query($ssql);
 		$columntototalrow = $adb->fetch_array($result);
-                $n = 0;
+		$options_list = Array();	
 		do
 		{
 			$typeofdata = explode("~",$columntototalrow["typeofdata"]);
-
-  		      if($typeofdata[0] == "N" || $typeofdata[0] == "I")
+		
+  		    if($typeofdata[0] == "N" || $typeofdata[0] == "I")
 			{
-				
-				if(($n % 2) == 0)
-				{
-					$shtml .= '<tr class="evenListRow">';
-				}else
-				{
-					$shtml .= '<tr class="oddListRow">';
-				}
-
+				$options = Array();
 				if(isset($this->columnssummary))
 				{
 					$selectedcolumn = "";
@@ -1017,72 +952,101 @@ class Reports extends CRMEntity{
       				          }
 
 $columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
-					$shtml .= '<td nowrap height="21" style="padding:0px 3px 0px 3px;">'.$columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'].'</td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">';
-
+					$options []= $columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'];
 						if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
 					    {
-					    $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';					    }else
+					    $options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';					    
+						}else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
+						    $options []=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
 					    }
-					    $shtml .=  '</div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">'; 
 					    if($selectedcolumn1[3] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_AVG:3")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
+						   $options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
+						    $options []=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="">';
 					    }
 
-					    $shtml .=  '</div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">';  
 					    if($selectedcolumn1[4] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_MIN:4")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
+						   $options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
+						    $options []=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4" type="checkbox" value="">';
 					    }
 
-					    $shtml .=  '</div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">'; 
 					    if($selectedcolumn1[5] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_MAX:5")
 					    {
-						   $shtml .=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
+						   $options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
 					    }else
 					    {
-						    $shtml .=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
+						    $options []=  '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="">';
 					    }
-	
-					    $shtml .=  '</div></td>
-					</tr>';
-					$n = $n + 1;
-					
 				}else
 				{
-					$shtml .= '<td nowrap height="21" style="padding:0px 3px 0px 3px;">'.$columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'].'</td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">
-					    </div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						     <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="" >
-					    </div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">  
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4"type="checkbox" value="" >
-					    </div></td>
-					    <td height="21" style="padding:0px 3px 0px 3px;"><div align="center"> 
-						    <input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="" >	
-					    </div></td>
-					</tr>';
-					$n = $n + 1;
+					$options []= $columntototalrow['tablabel'].' - '.$columntototalrow['fieldlabel'];
+					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
+					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="" >';
+					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4"type="checkbox" value="" >';
+					$options [] ='<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MAX:5" type="checkbox" value="" >';	
 				}
+				$options_list [] = $options;
 			}
 		}while($columntototalrow = $adb->fetch_array($result));
 		
 		$log->info("Reports :: Successfully returned sgetColumnstoTotalHTML");
-		return $shtml;
+		return $options_list;
 	}
+}
+
+/** Function to get the primary module list in reports
+ *  This function generates the list of primary modules in reports
+ *  and returns an array of permitted modules 
+ */
+
+function getReportsModuleList()
+{
+	global $adb;
+	global $app_list_strings;
+	global $report_modules;	
+	global $mod_strings;
+	$modules = Array();
+	foreach($app_list_strings['moduleList'] as $key=>$value)
+	{
+		for($i=0;$i<count($report_modules);$i++)
+		{
+			if($key == $report_modules[$i])
+			{
+				if(isPermitted($key,'index') == "yes")
+				{
+					$count_flag = 1;
+					$modules [] = $value;
+				}
+			}
+		}
+		
+	}
+	return $modules;
+}
+/** Function to get the Related module list in reports
+ *  This function generates the list of secondary modules in reports
+ *  and returns the related module as an Array 
+ */
+
+function getReportRelatedModules($module)
+{
+	global $app_list_strings;
+	global $related_modules;
+	global $mod_strings;
+	$optionhtml = Array();
+	foreach($related_modules[$module] as $rel_modules)
+	{
+		if(isPermitted($rel_modules,'index') == "yes")
+		{
+			$optionhtml []= $rel_modules;		
+		}	
+	}
+	return $optionhtml;
 }
 ?>

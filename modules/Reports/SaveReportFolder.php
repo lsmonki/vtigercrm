@@ -18,16 +18,11 @@ $local_log =& LoggerManager::getLogger('index');
 $focus = new Reports();
 
 $rfid = $_REQUEST['record'];
-$mode = $_REQUEST['mode'];
-$foldername = addslashes($_REQUEST["folderName"]);
-$folderdesc = addslashes($_REQUEST["folderDesc"]);
-//echo $id.$mode."1".$foldername."2".$folderdesc;
-
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Reports";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-else $return_action = "index";
-
+$mode = $_REQUEST['savemode'];
+$foldername = addslashes($_REQUEST["foldername"]);
+$folderdesc = addslashes($_REQUEST["folderdesc"]);
+$foldername = str_replace('*amp*','&',$foldername);
+$folderdesc = str_replace('*amp*','&',$folderdesc);
 if($mode=="Save")
 {
 	if($rfid=="")
@@ -38,7 +33,7 @@ if($mode=="Save")
 		$result = $adb->query($sql);
 		if($result!=false)
 		{
-			header("Location: index.php?action=$return_action&module=$return_module");
+			header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
 		}else
 		{
 			include('themes/'.$theme.'/header.php');
@@ -59,7 +54,7 @@ if($mode=="Save")
 		$result = $adb->query($sql);
 		if($result!=false)
 		{
-			header("Location: index.php?action=$return_action&module=$return_module");
+			header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
 		}else
 		{
 			include('themes/'.$theme.'/header.php');

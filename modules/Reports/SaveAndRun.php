@@ -18,13 +18,13 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("modules/Reports/ReportRun.php");
 require_once('include/utils/utils.php');
-include('themes/'.$theme.'/header.php');
+require_once('Smarty_setup.php');
 
 global $adb;
 global $mod_strings;
 
 $reportid = $_REQUEST["record"];
-
+$folderid = $_REQUEST["folderid"];
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 $startdate = $_REQUEST["startdate"];
@@ -45,74 +45,145 @@ $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 $totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
 if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
 {
-?>
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script type="text/javascript" language="JavaScript">
-    function goToURL( url )
-    {
-        document.location.href = url;
-    }
-</script>
-<?php
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, false);  
-?>
-<br>
-<form name="NewReport" action="index.php" method="POST">
-    <table width="90%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-        <tr>
-          <td class="formSecHeader"><?php echo $mod_strings['LBL_FILTER_OPTIONS'];?>:</td>
-        </tr>
-        <tr>
-          <td>    
-		<?php include("modules/Reports/StandardFilter.php");?>
-          </td>
-        </tr>
-    </table>
-<!--Code given by Ceaser for Reports Standard Filter    -->
-<SCRIPT LANGUAGE=JavaScript>
-function CrearEnlace(tipo,id){
-return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;
 
-}
-</SCRIPT>
-<!--end of code given by Ceaser-->
-    <input type="hidden" name="booleanoperator" value="5"/>
-    <input type="hidden" name="record" value="<?php echo $reportid?>"/>
-    <input type="hidden" name="reload" value=""/>    
-    <input type="hidden" name="module" value="Reports"/>
-    <input type="hidden" name="action" value="SaveAndRun"/>
-<br>
-    <table align='center' border="0" cellspacing="2" cellpadding="2">
-        <tr><td>
-<!--Code for Reports Filter by Ceaser-->
-	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL(CrearEnlace('CreatePDF',<?php echo $reportid; ?>));" title="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>">
+	$list_report_form = new vtigerCRM_Smarty;
+	$ogReport->getSelectedStandardCriteria($reportid);
 
-	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>" class="button" type="button" onClick="goToURL(CrearEnlace('CreateXL',<?php echo $reportid; ?>));" title="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>">
-<!--end of code by Ceaser-->
-            <input value="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>">
+	$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
+	$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
+	$list_report_form->assign("BLOCK1",$BLOCK1);
+	$BLOCKJS = $ogReport->getCriteriaJS();
+	$list_report_form->assign("BLOCKJS",$BLOCKJS);
 
-	    <input value="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>" class="button" type="submit" title="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>"/>
+	$BLOCKCRITERIA = $ogReport->getSelectedStdFilterCriteria($ogReport->stdselectedfilter);
+	$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
 
-        </td></tr>        
-    </table>    
-<br>   
-<table> 
-<tr>
-    <td class='bodyText'>
-        <?php echo $sshtml; ?><br>
-		<?php echo $totalhtml; ?>
-    </td>
-</tr>
-</table>    
-    <input type="hidden" name="dlgType" value="saveAs"/>
-    <input type="hidden" name="reportName"/>
-    <input type="hidden" name="reportDesc"/>
-    <input type="hidden" name="folder"/>
-</form>
-<br>
-<?
+	$startdate = $ogReport->startdate;
+	$list_report_form->assign("STARTDATE",$startdate);	
+
+	$enddate = $ogReport->enddate;
+	$list_report_form->assign("ENDDATE",$enddate);
+
+	$list_report_form->assign("MOD", $mod_strings);
+	$list_report_form->assign("APP", $app_strings);
+	$list_report_form->assign("IMAGE_PATH", $image_path);
+	$list_report_form->assign("REPORTID", $reportid);
+	$list_report_form->assign("REPORTNAME", $ogReport->reportname);
+	$list_report_form->assign("REPORTHTML", $sshtml);
+	$list_report_form->assign("REPORTTOTHTML", $totalhtml);
+	$list_report_form->assign("FOLDERID", $folderid);
+	if($_REQUEST['mode'] != 'ajax')
+	{
+		$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));
+		include('themes/'.$theme.'/header.php');
+		$list_report_form->display('ReportRun.tpl');
+	}
+	else
+	{
+		$list_report_form->display('ReportRunContents.tpl');
+	}
 }
 else
 {
 	echo $mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule;
 }
+function getPrimaryStdFilterHTML($module,$selected="")
+{
+	global $app_list_strings;
+	global $ogReport;
+	global $current_language;
+
+        $mod_strings = return_module_language($current_language,$module);
+
+	$result = $ogReport->getStdCriteriaByModule($module);
+	
+	if(isset($result))
+	{
+		foreach($result as $key=>$value)
+		{
+			if(isset($mod_strings[$value]))
+			{
+				if($key == $selected)
+				{
+					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				}
+			}else
+			{
+				if($key == $selected)
+				{
+					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				}
+			}
+		}
+	}
+	
+	return $shtml;
+}
+
+function getSecondaryStdFilterHTML($module,$selected="")
+{
+	global $app_list_strings;
+	global $ogReport;
+	global $current_language;
+
+	if($module != "")
+        {
+        	$secmodule = explode(":",$module);
+        	for($i=0;$i < count($secmodule) ;$i++)
+        	{
+			$result = $ogReport->getStdCriteriaByModule($secmodule[$i]);
+			$mod_strings = return_module_language($current_language,$secmodule[$i]);
+        		if(isset($result))
+        		{
+                		foreach($result as $key=>$value)
+                		{
+                        		if(isset($mod_strings[$value]))
+                                        {
+						if($key == $selected)
+						{
+							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+						}
+					}else
+					{
+						if($key == $selected)
+						{
+							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+						}
+					}
+                		}
+        		}
+		
+		}
+	}
+	return $shtml;
+}
+function getReportsinFolder($folderid)
+{
+	global $adb;
+	$query = 'select reportid,reportname from report where folderid='.$folderid;
+	$result = $adb->query($query);
+	$reports_array = Array();
+	for($i=0;$i < $adb->num_rows($result);$i++)	
+    {
+		$reportid = $adb->query_result($result,$i,'reportid');
+		$reportname = $adb->query_result($result,$i,'reportname');
+		$reports_array[$reportid] = $reportname; 
+	}
+	if(count($reports_array) > 0)
+		return $reports_array;
+	else
+		return false;
+}
+?>

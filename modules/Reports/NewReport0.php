@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
@@ -27,90 +27,21 @@ global $image_path;
 global $theme;
 global $focus_list;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_CREATE_REPORT'], true);
-echo "\n<BR>\n";
 
-
-/** Function to get the primary module list in reports
- *  This function generates the list of primary modules in reports
- *  and returns the module in a combo HTML values
- */
-
-function getPrimaryModuleList()
-{
-	global $adb;
-	global $app_list_strings;
-	global $report_modules;	
-	global $mod_strings;
-
-	$count_flag = 0;
-	foreach($app_list_strings['moduleList'] as $key=>$value)
-	{
-		for($i=0;$i<count($report_modules);$i++)
-		{
-			if($key == $report_modules[$i])
-			{
-				if(isPermitted($key,'index') == "yes")
-				{
-					$count_flag = 1;
-					$shtml .= "<option value=\"$key\">$value</option>";
-				}
-			}
-		}
-		
-	}
-	if($count_flag == 0)
-	{
-			$shtml .= "<option value=\"\">".$mod_strings['LBL_NO_PERMISSION']."</option>";
-	}
-	return $shtml;
-}
-
-/** Function to get the Related module list in reports
- *  This function generates the list of secondary modules in reports
- *  and returns the related module in a combo HTML values
- */
-
-function getRelatedModuleList()
-{
-	global $app_list_strings;
-	global $related_modules;
-	global $mod_strings;
-
-	foreach($related_modules as $key_module=>$rel_modules)
-	{
-		if(isPermitted($key_module,'index') == "yes")
-		{
-			$shtml .= "<select id='".$key_module."relatedmodule' name='".$key_module."relatedmodule[]' class='select' style='width:150;'>";
-			$shtml .= "<option value=''>--None--</option>";
-		
-		$optionhtml = "";
-		foreach($rel_modules as $rep_key=>$rep_value)
-		{
-			if($rep_value != '')
-			{
-				if(isPermitted($rep_value,'index') == "yes")
-				{
-					$optionhtml .= "<option value='".$rep_value."'>".$app_list_strings['moduleList'][$rep_value]."</option>";		
-				}	
-			}
-		}
-			$shtml .= $optionhtml."</select>";
-		}
-	}
-	
-	return $shtml;
-}
-
-$primary_module_html = getPrimaryModuleList();
-$related_module_html = getRelatedModuleList();
-$list_report_form=new XTemplate ('modules/Reports/NewReport0.html');
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+$list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
-$list_report_form->assign("PRIMARYMODULE",$primary_module_html);
-$list_report_form->assign("RELATEDMODULES",$related_module_html);
+if($_REQUEST['reportmodule'] != '')
+{
+	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['reportmodule']));
+	$list_report_form->assign("REP_MODULE",$_REQUEST['reportmodule']);
+}
+$repObj = new Reports ();
+$list_report_form->assign("REP_FOLDERS",$repObj->sgetRptFldr());
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->assign("ERROR_MSG", $mod_strings['LBL_NO_PERMISSION']);
-$list_report_form->parse("main");
-$list_report_form->out("main");
+$list_report_form->display("ReportsStep0.tpl");
 ?>

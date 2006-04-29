@@ -8,9 +8,10 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Reports/Reports.php');
+
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
+$folderid = $_REQUEST['folderid'];
 
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 {
@@ -18,23 +19,20 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 	$id_array = explode(':',$_REQUEST['idlist']);
 	for($i = 0;$i < count($id_array)-1;$i++)
 	{
-		DeleteReport($id_array[$i]);	
+		ChangeFolder($id_array[$i],$folderid);	
 	}
-	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
+	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }elseif(isset($_REQUEST['record']) && $_REQUEST['record']!= '')
 {
 	$id = $_REQUEST["record"];
-	DeleteReport($id);	
+	ChangeFolder($id,$folderid);	
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }
 
-function DeleteReport($reportid)
+function ChangeFolder($reportid,$folderid)
 {
 	global $adb;
-	$idelreportsql = "delete from selectquery where queryid=".$reportid;
-	$idelreportsqlresult = $adb->query($idelreportsql);
-
-	$ireportsql = "delete from report where reportid=".$reportid;
-    $ireportsqlresult = $adb->query($ireportsql);
+	$imovereportsql = "update report set folderid=".$folderid." where reportid=".$reportid;
+	$imovereportsqlresult = $adb->query($imovereportsql);
 }
 ?>

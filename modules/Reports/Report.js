@@ -141,25 +141,8 @@ function invokeAction( actionName )
         goToURL( "?module=Reports&action=NewReport0&return_module=Reports&return_action=index" );
         return;
     }    
-    if( actionName == "newReportFolder" )
-    {
-        goToURL( "?module=Reports&action=NewReportFolder&return_module=Reports&return_action=index" );
-        return;
-    }    
     goToURL( "/crm/ScheduleReport.do?step=showAllSchedules" );
 } 
-function showRelatedModules(currmodule) 
-        {
-            for (i=0;i<getObj("primarymodule").length;i++) 
-            {
-                var moduleopt=getObj("primarymodule")[i].value
-                if (currmodule==i) 
-                    getObj(moduleopt+"relatedmodule").style.display="block"
-                else
-                    getObj(moduleopt+"relatedmodule").style.display="none"
-            }
-        }
-        
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
@@ -339,15 +322,16 @@ function saveReport( dlgType )
        if( !emptyCheck( "reportName", "Report Name" ) )
        return false;    
                 
-        var repNameObj = getOpenerObj( "reportName" );
-        var repDescObj = getOpenerObj( "reportDesc" );
-        var folderObj = getOpenerObj( "folder" );
-        var actionObj = getOpenerObj( "actionItem" );
-        var formObj = getOpenerObj( "NewReport" );
+        var repNameObj = getObj( "reportName" );
+        var repDescObj = getObj( "reportDesc" );
+        var folderObj = getObj( "folder" );
+        var actionObj = getObj( "actionItem" );
+        var formObj = getObj( "NewReport" );
+		alert(repNameObj+'=='+repDescObj+'=='+folderObj+'=='+actionObj+'=='+formObj);
         if( dlgType == "save" )
         {
-           formObj = getOpenerObj( "NewReport" );
-            if( getOpenerObj( 'reportId' ) != null )
+           formObj = getObj( "NewReport" );
+            if( getObj( 'reportId' ) != null )
             {
                 formObj.removeChild( getOpenerObj( 'reportId' ) );
             }
@@ -366,4 +350,191 @@ function saveReport( dlgType )
         window.self.close();
         return false;
     }   
-		
+		function switchToStep( num )
+        {
+            if( num == 1 )
+            {
+                document.StepOne.submit();
+            }
+        }
+        
+        function hideTabs()
+        {
+	    var objreportType = getObj('reportType');
+            if(objreportType[0].checked == true)
+            {
+		divarray = new Array('step1','step2','step4','step5');
+            }
+            else
+            {
+		divarray = new Array('step1','step2','step3','step4','step5');
+            }
+        }
+        
+        function showSaveDialog()
+        {    
+            url = "index.php?module=Reports&action=SaveReport";
+            window.open(url,"Save_Report","width=550,height=350,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
+        }
+    
+        function saveAndRunReport()
+        {
+            if(selectedColumnsObj.options.length == 0)
+            {
+                alert("Selected Columns cannot be empty");
+                return false;
+            }
+
+	    		formSelectColumnString();
+            if( trim(getObj( 'record' ).value) == "" )
+            {
+				saveReport( 'save' );
+            }
+            else
+            {
+		    	document.NewReport.submit();
+            }
+        }       
+        
+        function saveAsNewAndRunReport()
+        {
+            formSelectColumnString();
+            showSaveDialog();
+        }       
+        
+        function cancelWizard()
+        {
+	    document.location.href = "index.php?module=Reports&action=index";		
+        }       
+        function updateYAxisFields( colToTotalField, value, bool )
+        {
+        }
+        
+        function updateXAxisFields( value, label )
+        {
+        }
+        
+        function displayStep( num )
+        {
+            if( num == 3 || num == 6 )
+            {
+		var typeObj = getObj( 'reportType' );
+                if( typeObj[0].checked == true )
+                {
+                    return;
+                }
+            }
+            
+            for( i=1; i <= 5; i++ )
+            {
+                var stepId = "step" + i;
+                var tabId = "tab" + i;
+                if( i != num )
+                {                    
+                    getObj( stepId ).style.display = "none";
+                }
+                else
+                {
+                    getObj( stepId ).style.display = "block";
+                }
+            }            
+        }
+
+function changeSteps1() 
+{
+	if(getObj('step5').style.display != 'none')
+	{
+		saveAndRunReport();
+	}else
+	{
+		for(i = 0; i < divarray.length ;i++)
+		{
+			if(getObj(divarray[i]).style.display != 'none')
+			{
+				hide(divarray[i]);
+				show(divarray[i+1]);
+				tableid = divarray[i]+'label';
+				newtableid = divarray[i+1]+'label';
+				getObj(tableid).className = 'lvtCol'; 
+				getObj(newtableid).className = 'lvtSel';
+				break;
+			}
+
+		}
+	}
+}
+function changeStepsback1() 
+{
+	if(getObj('step1').style.display != 'none')
+	{
+		window.history.back();
+	}else
+	{
+		for(i = 0; i < divarray.length ;i++)
+		{
+			if(getObj(divarray[i]).style.display != 'none')
+			{
+				hide(divarray[i]);
+				show(divarray[i-1]);
+				tableid = divarray[i]+'label';
+				newtableid = divarray[i-1]+'label';
+				getObj(tableid).className = 'lvtCol'; 
+				getObj(newtableid).className = 'lvtSel';
+				break;
+			}
+
+		}
+	}
+}
+function saveAndRunReport()
+{
+	if(selectedColumnsObj.options.length == 0)
+	{
+		alert("Selected Columns cannot be empty");
+		return false;
+	}
+	formSelectColumnString();
+	document.NewReport.submit();
+}
+function changeSteps()
+{
+	if(getObj('step1').style.display != 'none')
+	{
+		if (trim(NewRep.reportname.value) == "")
+		{
+			alert("Missing Folder Name");
+		}else
+		{
+			hide('step1');
+			show('step2');
+			getObj('back_rep').disabled = false;
+			getObj('step1label').className = 'lvtCol'; 
+			getObj('step2label').className = 'lvtSel';
+		}
+	}
+	else
+	{
+		document.NewRep.submit();
+	}
+}
+function changeStepsback()
+{
+	hide('step2');
+	show('step1');
+	getObj('back_rep').disabled = true
+	getObj('step1label').className = 'lvtSel'; 
+	getObj('step2label').className = 'lvtCol';
+}
+function editReport(id)
+{
+	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport1&record='+id;
+	fnPopupWin(arg);
+}
+function CreateReport(module)
+{
+	var arg ='index.php?module=Reports&action=ReportsAjax&file=NewReport0&reportmodule='+module;
+	fnPopupWin(arg);
+}
+function fnPopupWin(winName){
+	window.open(winName, "ReportWindow","width=740px,height=620px");
+}

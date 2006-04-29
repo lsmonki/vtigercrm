@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
@@ -29,7 +29,7 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
-$report_column=new XTemplate('modules/Reports/ReportColumns.html');
+$report_column=new vtigerCRM_Smarty;
 $report_column->assign("MOD", $mod_strings);
 $report_column->assign("APP", $app_strings);
 $report_column->assign("IMAGE_PATH",$image_path);
@@ -126,7 +126,6 @@ function getSecondaryColumnsHTML($module)
         return $shtml;
 }
 
-$report_column->parse("main");
-$report_column->out("main");
+$report_column->display("ReportColumns.tpl");
 ?>
 

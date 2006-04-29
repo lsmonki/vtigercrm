@@ -8,13 +8,12 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
 require_once('include/database/PearDatabase.php');
+require_once('Smarty_setup.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -29,10 +28,13 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
-$report_type=new XTemplate('modules/Reports/ReportType.html');
-$report_type->assign("MOD", $mod_strings);
-$report_type->assign("APP", $app_strings);
-$report_type->assign("IMAGE_PATH",$image_path);
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+$list_report_form = new vtigerCRM_Smarty;
+$list_report_form->assign("MOD", $mod_strings);
+$list_report_form->assign("APP", $app_strings);
+$list_report_form->assign("IMAGE_PATH",$image_path);
 if(isset($_REQUEST["record"]))
 {
         $recordid = $_REQUEST["record"];
@@ -42,27 +44,6 @@ if(isset($_REQUEST["record"]))
 {
         $selectedreporttype = "tabular";
 }
-if($selectedreporttype == "tabular")
-{
-   $shtml = '<input checked type="radio" name="reportType" value="tabular" onclick="hideTabs( true )">';
-}else
-{
-   $shtml = '<input type="radio" name="reportType" value="tabular" onclick="hideTabs( true )">';
-}
-
-$report_type->assign("REPORT_TAB_TYPE",$shtml);
-
-if($selectedreporttype == "summary")
-{
-   $sumhtml = '<input type="radio" checked name="reportType" value="summary" onclick="hideTabs( false )">';
-}else
-{
-   $sumhtml = '<input type="radio" name="reportType" value="summary" onclick="hideTabs( false )">';
-}
-
-$report_type->assign("REPORT_SUM_TYPE",$sumhtml);
-
-$report_type->parse("main");
-
-$report_type->out("main");
+$list_report_form->assign("REPORT_TYPE",$selectedreporttype);
+$list_report_form->display("ReportsType.tpl");
 ?>
