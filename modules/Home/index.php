@@ -63,8 +63,10 @@ foreach ( explode(",",$home_section_order) as $section )
 		case 'OLV':
 	if(isPermitted('Activities','index') == "yes")
 	{
-		include("modules/Activities/OpenListView.php") ;
-		$home_values[]= getPendingActivities();
+		$activities = Array();
+                include("modules/Activities/OpenListView.php") ;
+                $activities[] = getPendingActivities(0);
+                $activities[] = getPendingActivities(1);
 	}
             break;
         case 'ALVT':
@@ -156,6 +158,7 @@ $t=Date("Ymd");
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
+$smarty->assign("ACTIVITIES",$activities);
 $smarty->display("HomePage.tpl");
 
 function getLoginHistory()
