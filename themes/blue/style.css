@@ -2130,8 +2130,81 @@ level2Sel{
 	padding:5px;
 }
 
-	
 
+/* For Report HTML Generation*/
+.rptCellLabel {
+    background-color:#f6f6f6;
+    padding-right:10px;
+    border-right: 1px solid #DDDDDD;
+    border-bottom:1px solid #eaeaea;
+    color:#737373;
+    white-space:nowrap;
+}
+.rptTable {
+    border-left: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    border-top: 1px solid #DDDDDD;
+}
+.rptTitle, .rptHead, .rptData, .rptGrpHead, .rptGrp1Total, .rptGrp2Total, .rptTotal {
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+height: 20px;
+padding: 4px;
+         border-right: 1px solid #DDDDDD;
+         border-bottom: 1px solid #DDDDDD;
+background: #DDDDDD;
+}
+.rptTitle {
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+background: #2C527C;
+color: #FFF;
+}
+.rptGrpHead {
+background: #FFF;
+            border-bottom: 1px solid #FFF;
+            border-top: 1px solid #DDDDDD;
+            font-weight: normal;
+}
 
-	
-	
+.rptData {
+            background: #FFF;
+                    font-weight: normal;
+}
+.rptGrp1Total {
+            background: #E3F4F4;
+}
+.rptGrp2Total {
+            background: #F1FBEC;
+}
+.rptTotal {
+            background: #FFF7DD;
+}
+.rptEmptyGrp {
+            background: #FFF;
+                    border-right: 1px solid #DDDDDD;
+}
+.statechange
+{
+    position:absolute;
+    visibility:hidden;
+    left:10px;
+    top:20px;
+    width:300px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+}
+#PopupLay{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    text-align:left;
+    width:500px;
+    border:3px solid #CCCCCC;
+    background-color:#FFFFFF;
+    padding:5px;
+    display:none;
+    position:absolute;
+    left:100px;
+    top:100px;
+}
