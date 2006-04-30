@@ -1292,6 +1292,7 @@ class ReportRun extends CRMEntity
 				//<<<<<<<<construct HTML>>>>>>>>>>>>
 				$return_data[] = $sHTML;
 				$return_data[] = $noofrows;
+				$return_data[] = $sSQL;
 				return $return_data;
 			}
 		}elseif($outputformat == "PDF")

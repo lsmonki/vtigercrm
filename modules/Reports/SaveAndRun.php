@@ -48,6 +48,9 @@ if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule
 
 	$list_report_form = new vtigerCRM_Smarty;
 	$ogReport->getSelectedStandardCriteria($reportid);
+	require_once('modules/DashBoard/ReportsCharts.php');
+	$image = get_graph_by_type('Report','Report',$primarymodule,'',$sshtml[2]);
+	$list_report_form->assign("GRAPH", $image);
 
 	$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
 	$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
