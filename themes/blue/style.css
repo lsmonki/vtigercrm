@@ -2212,3 +2212,13 @@ level2Sel{
     left:100px;
     top:100px;
 }
+
+#folderLay{
+    width:175px;
+    background-color:#CCCCCC;
+    border:1px solid #DDDDDD;
+    padding-top:5px;
+    position:absolute;
+    display:none;
+}
+
