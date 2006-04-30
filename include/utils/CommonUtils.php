@@ -715,6 +715,7 @@ function getNewDisplayDate()
 function getDisplayCurrency()
 {
 	global $log;
+	global $adb;
 	$log->debug("Entering getDisplayCurrency() method ...");
         $curr_array = Array();
         $sql1 = "select * from currency_info where currency_status='Active'";
@@ -2098,21 +2099,36 @@ function getEntityName($module, $ids_list)
 	$log->debug("Exiting getEntityName method ...");
 }
 
+
 function getAllParenttabmoduleslist()
 {
         global $adb;
+	global $current_user;
         $resultant_array = Array();
-        $query = 'select name,tablabel,parenttab_label from parenttabrel inner join tab on parenttabrel.tabid = tab.tabid in
-ner join parenttab on parenttabrel.parenttabid = parenttab.parenttabid order by parenttab.sequence';
+        $query = 'select name,tablabel,parenttab_label,tab.tabid from parenttabrel inner join tab on parenttabrel.tabid = tab.tabid inner join parenttab on parenttabrel.parenttabid = parenttab.parenttabid order by parenttab.sequence';
         $result = $adb->query($query);
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         for($i=0;$i<$adb->num_rows($result);$i++)
         {
                 $parenttabname = $adb->query_result($result,$i,'parenttab_label');
                 $modulename = $adb->query_result($result,$i,'name');
                 $tablabel = $adb->query_result($result,$i,'tablabel');
-                $resultant_array[$parenttabname][] = Array($modulename,$tablabel);
+		$tabid = $adb->query_result($result,$i,'tabid');
+		if($is_admin)
+		{
+			$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
+		}	
+		elseif($profileGlobalPermission[2]==0 || $profileGlobalPermission[1]==0 || $profileTabsPermission[$tabid]==0)		     {
+                	$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
+		}
         }
-        return $resultant_array;
+	
+	if($is_admin)
+	{
+               	$resultant_array['Settings'][] = Array('Settings','Settings');
+	}			
+
+	        return $resultant_array;
 }
 
 
