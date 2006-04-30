@@ -57,12 +57,13 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	global $adb;
 	global $days,$date_array,$period_type;
 
-	$where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
+	//$where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
 	$query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
 
 	$result=$adb->query($query);
+	
 	$no_of_rows=$adb->num_rows($result);
 	$mod_count_array=array();
 	$mod_name_array=array();
@@ -261,7 +262,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	else
 	{
 		$data=0;
-		echo "<h3> The data is not available with the specified time period</h3>";
+		return "<h3> The data is not available with the specified time period</h3>";
 	}
 	return $data;
 }
