@@ -2138,6 +2138,7 @@ level2Sel{
     border-right: 1px solid #DDDDDD;
     border-bottom:1px solid #eaeaea;
     color:#737373;
+    font-weight: bold;
     white-space:nowrap;
 }
 .rptTable {
@@ -2145,45 +2146,48 @@ level2Sel{
     border-bottom: 1px solid #DDDDDD;
     border-top: 1px solid #DDDDDD;
 }
-.rptTitle, .rptHead, .rptData, .rptGrpHead, .rptGrp1Total, .rptGrp2Total, .rptTotal {
+.rptTitle, .rptHead, .rptData, .rptGrpHead{
     font-family: Verdana, Arial, Helvetica, Sans-serif;
     font-size: 11px;
-    font-weight: bold;
-height: 20px;
-padding: 4px;
-         border-right: 1px solid #DDDDDD;
-         border-bottom: 1px solid #DDDDDD;
-background: #DDDDDD;
+	text-align:left;
+    font-weight: normal;
+	height: 20px;
+	padding: 4px;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+	background: #DDDDDD;
+}
+.rptGrp1Total, .rptGrp2Total, .rptTotal {
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    font-size: 11px;
+	text-align:center;
+    font-weight: normal;
+    background: #FFF;
+	height: 20px;
+	padding: 4px;
+    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
 }
 .rptTitle {
     border-right: 1px solid #333;
     border-bottom: 1px solid #333;
-background: #2C527C;
-color: #FFF;
+	background: #2C527C;
+	color: #FFF;
 }
 .rptGrpHead {
-background: #FFF;
-            border-bottom: 1px solid #FFF;
-            border-top: 1px solid #DDDDDD;
-            font-weight: normal;
+	background: #FFF;
+    border-bottom: 1px solid #FFF;
+    border-top: 1px solid #DDDDDD;
+    font-weight: normal;
 }
 
 .rptData {
             background: #FFF;
-                    font-weight: normal;
-}
-.rptGrp1Total {
-            background: #E3F4F4;
-}
-.rptGrp2Total {
-            background: #F1FBEC;
-}
-.rptTotal {
-            background: #FFF7DD;
+            font-weight: normal;
 }
 .rptEmptyGrp {
             background: #FFF;
-                    border-right: 1px solid #DDDDDD;
+            border-right: 1px solid #DDDDDD;
 }
 .statechange
 {

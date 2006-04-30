@@ -1356,37 +1356,37 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
 						$arraykey = trim($value).'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
 						$arraykey = trim($value).'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
 						$arraykey = trim($value).'_MAX';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+							$coltotalhtml .= '<td class="rptTotal">'.$keyhdr[$arraykey].'</td>';
 						}else
 						{
-							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
 						$coltotalhtml .= '<tr>';
