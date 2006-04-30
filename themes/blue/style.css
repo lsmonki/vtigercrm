@@ -1955,16 +1955,12 @@ a.alpha:Hover{
 	border-left:2px solid #CCCCCC;
 	border-bottom:2px solid #666666;
 	border-right:2px solid #666666;
-	right:300px;
-	bottom:100px;
+	left:300px;
+	top:100px;
 	background-color:#CCCCCC;
 	position:absolute;
 	z-index:1000001;
 	display:none;
-}
-
-body > div#allMenu {
-    position: fixed;
 }
 
 
