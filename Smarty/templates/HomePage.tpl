@@ -106,7 +106,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
           <td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
           </tr>
           <tr>
-          <td colspan="2" align="center"><img src="cache/images/pie_2082672713_leadsource_96954858.png" width="280" height="170" align="absmiddle" /></td>
+          <td colspan="2" align="center"><img src="cache/images/pie_2082672713_leadsource_96954858.png" width="200" height="170" align="absmiddle" /></td>
           </tr>
 	<tr><td colspan="2" style="border-top:1px solid #666666;padding-right:30px;" align="right" >
 	Total : <b>340</b>
@@ -121,7 +121,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
           <td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
           </tr>
           <tr>
-          <td colspan="2" align="center"><img src="cache/images/hor_2082672713_leadstatus_96954858.png" width="240" height="170" align="absmiddle" /></td>
+          <td colspan="2" align="center"><img src="cache/images/hor_2082672713_leadstatus_96954858.png" width="200" height="170" align="absmiddle" /></td>
           </tr>
 	<tr><td colspan="2" style="border-top:1px solid #666666;padding-right:30px;" align="right" >
 	Total : <b>340</b>
