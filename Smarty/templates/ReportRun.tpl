@@ -156,10 +156,10 @@ function ReportInfor()
 	
 	if(startdatevalue != '' && enddatevalue=='')
 	{
-		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"  of  "'+stdDateFiltervalue+'"  (from  '+startdatevalue+' )';
+		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (from  '+startdatevalue+' )';
 	}else if(startdatevalue == '' && enddatevalue !='')
 	{
-		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"  of  "'+stdDateFiltervalue+'"  (  till  '+enddatevalue+')';
+		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (  till  '+enddatevalue+')';
 	}else if(startdatevalue == '' && enddatevalue =='')
 	{
 		var reportinfr = 'No filter Selected';
