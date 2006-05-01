@@ -73,6 +73,7 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
+	$log->debug("Entering save_customfields(".$entity_id.") method ...");
 	 $log->debug("save custom field invoked ".$entity_id);
 	global $adb;
 	$dbquery="select * from customfields where module='Leads'";
@@ -146,5 +147,6 @@ function save_customfields($entity_id)
 		}
 		
 	}
+	$log->debug("Exiting save_customfields method ...");	
 }
 ?>
