@@ -154,6 +154,8 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 **/
 function getTicketComments($ticketid)
 {
+	global $log;
+	$log->debug("Entering getTicketComments(".$ticketid.") method ...");
 	global $adb;
 
 	$commentlist = '';
@@ -170,6 +172,7 @@ function getTicketComments($ticketid)
 	if($commentlist != '')
 		$commentlist = '<br><br> The comments are : '.$commentlist;
 
+	$log->debug("Exiting getTicketComments method ...");
 	return $commentlist;
 }
 ?>
