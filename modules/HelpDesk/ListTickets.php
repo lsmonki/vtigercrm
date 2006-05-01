@@ -14,6 +14,8 @@
  
 function getMyTickets()
 {
+	global $log;
+	$log->debug("Entering getMyTickets() method ...");
 	global $current_user;
 	global $theme;
 	global $current_language;
@@ -75,8 +77,13 @@ function getMyTickets()
 		}
 		$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 		if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
+		{
+			$log->debug("Exiting getMyTickets method ...");
 			return $values;
+		}
+		$log->debug("Exiting getMyTickets method ...");
 	}
+	$log->debug("Exiting getMyTickets method ...");
 }
 
 /**	Function to get the parent (Account or Contact) link
@@ -85,6 +92,8 @@ function getMyTickets()
 **/
 function getParentLink($parent_id)
 {
+	global $log;
+	$log->debug("Entering getParentLink(".$parent_id.") method ...");
 	global $adb;
 
 	$sql = "select setype from crmentity where crmid=".$parent_id;
@@ -104,6 +113,7 @@ function getParentLink($parent_id)
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 
+	$log->debug("Exiting getParentLink method ...");
 	return $parent_name;
 }
 ?>
