@@ -22,6 +22,8 @@
 
 function getNewLeads()
 {
+	global $log;
+	$log->debug("Entering getNewLeads() method ...");
 	require_once('XTemplate/xtpl.php');
 	require_once("data/Tracker.php");
 	require_once("include/utils/utils.php");
@@ -119,10 +121,13 @@ function getNewLeads()
 		$entries[$lead_fields['LEAD_ID']]=$value;
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$log->debug("Exiting getNewLeads method ...");
 		return $values;
 }
 function getLeadView($lead_view)	
 {	
+	global $log;
+	$log->debug("Entering getLeadView(".$lead_view.") method ...");
 	$today = date("Y-m-d", time());
 
 	if($lead_view == 'Today')
@@ -150,6 +155,7 @@ function getLeadView($lead_view)
 	$LEAD_VIEW_SELECT_OPTION .= '</option>';
 	$LEAD_VIEW_SELECT_OPTION .= '</select>';
 	
+	$log->debug("Exiting getLeadView method ...");
 	return $LEAD_VIEW_SELECT_OPTION;
 }
 ?>
