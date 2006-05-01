@@ -145,6 +145,7 @@ if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_acti
 else $return_action = "DetailView";
 if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST['return_id'];
 if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
+if(isset($_POST['parenttab'])) $parenttab = $_POST['parenttab'];
 
 $log->debug("Saved record with id of ".$return_id);
 
@@ -153,6 +154,5 @@ require_once('modules/Users/CreateUserPrivilegeFile.php');
 createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
-
-header("Location: index.php?parenttab=Settings&action=$return_action&module=$return_module&record=$return_id$activitymode");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab$activitymode");
 ?>
