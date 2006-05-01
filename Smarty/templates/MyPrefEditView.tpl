@@ -27,7 +27,7 @@ function pickColor(color)
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="record" value="{$ID}">
 			<input type="hidden" name="mode" value="register">
-			<input type='hidden' name='parenttab' value='Settings'>
+			<input type='hidden' name='parenttab' value="{$PARENTTAB}">
 			<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
 			<input type="hidden" name="action">
 			<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
@@ -48,7 +48,7 @@ function pickColor(color)
 				<tr>
 				    <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 			            <td width="75" align="center" nowrap="nowrap" class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')"><b>My Details</b></td>
-                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" ><a href="index.php?action=AddMailAccount&module=Settings"><b>My Mail Server Details </a></b></td>
+                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" ><a href="index.php?action=AddMailAccount&module=Settings&record={$ID}"><b>My Mail Server Details </a></b></td>
 	                   	<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                    		</tr>
 	
@@ -78,29 +78,28 @@ function pickColor(color)
 						<input type="text" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"{$USERNAME_READONLY} /></td>
 				        <td width="25%" class="dvtCellLabel" align="right">Admin</td>
 				        <td width="25%" class="dvtCellInfo">
-						<input type="checkbox" name="is_admin" DISABLED {$IS_ADMIN}>
+						<input type="checkbox" name="is_admin" {$DISABLED} {$IS_ADMIN}>
 					</td>
                                     </tr>
                                     <tr>
                                         <td class="dvtCellLabel" align="right">First Name</td>
                                         <td width="30%" class="dvtCellInfo" nowrap>
 						<input type="text" name="first_name" value='{$FIRST_NAME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-                                        <td width="25%" align="right" class="dvtCellLabel">My Group Name </td>
-                                        <td width="25%" class="dvtCellInfo">{$GROUPASSIGNED}</td>
-                                    </tr>
-                                    <tr>
                                         <td class="dvtCellLabel" align="right">
 						<span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_LAST_NAME}</td>
                                         <td class="dvtCellInfo">
 						<input type="text" name="last_name" value='{$LAST_NAME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+                                    </tr>
+                                    <tr>
                                         <td class="dvtCellLabel" align="right">
 						<span class="style1"><font color='red'>*</font></span>My Role</td>
                                         <td class="dvtCellInfo">{$USER_ROLE}</td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>E-Mail Id</td>
+                                   	 <td class="dvtCellInfo"><input type="text" name="email1" value='{$EMAIL1}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
                                     </tr>
 
                                     <tr>
-                                        <td class="dvtCellLabel" align="right">Password</td>
-                                        <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>
+                                   {*   <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>*}
                                         <td class="dvtCellLabel" align="right">
 						<span class="style1"><font color='red'>*</font></span>My Status</td>
 				 		{$USER_STATUS_OPTIONS}
