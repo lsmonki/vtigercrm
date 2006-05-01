@@ -58,7 +58,7 @@ $crmid = $adb->getUniqueID("crmentity");
 function getInsertValues($type,$type_id)
 {
 	global $id,$adb,$log;
-
+	$log->debug("Entering getInsertValues(".$type.",".$type_id.") method ...");
 	$sql_convert_lead="select * from convertleadmapping ";
 	$convert_result = $adb->query($sql_convert_lead);
 	$noofrows = $adb->num_rows($convert_result);
@@ -66,7 +66,7 @@ function getInsertValues($type,$type_id)
 	for($i=0;$i<$noofrows;$i++)
 	{
 		$flag="false";
-		 $log->info("In convertleadmapping function");
+	 	$log->info("In convertleadmapping function");
 		$lead_id=$adb->query_result($convert_result,$i,"leadfid");  
 		//Getting the relatd customfields for Accounts/Contact/potential from convertleadmapping table	
 		$account_id_val=$adb->query_result($convert_result,$i,"accountfid");
@@ -135,6 +135,7 @@ function getInsertValues($type,$type_id)
 	 $log->debug("columns to be inserted are ".$type_insert_column);
         $log->debug("columns to be inserted are ".$insert_value);
 	$values = array ($type_insert_column,$insert_value);
+	$log->debug("Exiting getInsertValues method ...");
 	return $values;	
 }
 //function Ends
@@ -142,7 +143,7 @@ function getInsertValues($type,$type_id)
 function getRelatedNotesAttachments($id,$accountid)
 {
 	global $adb,$log,$id;
-
+	$log->debug("Entering getRelatedNotesAttachments(".$id.",".$accountid.") method ...");
 	
 	$sql_lead_notes	="select * from senotesrel where crmid=".$id;
 	$lead_notes_result = $adb->query($sql_lead_notes);
@@ -176,13 +177,14 @@ function getRelatedNotesAttachments($id,$accountid)
                 $sql_insert_account_attachment="insert into seattachmentsrel(crmid,attachmentsid) values (".$accountid.",".$lead_related_attachment_id.")";                        
                 $adb->query($sql_insert_account_attachment);
         }
+	$log->debug("Exiting getRelatedNotesAttachments method ...");
 	
 }
 
 function getRelatedActivities($accountid,$contact_id)
 {
 	global $adb,$log,$id;	
-	
+	$log->debug("Entering getRelatedActivities(".$accountid.",".$contact_id.") method ...");
 	$sql_lead_activity="select * from seactivityrel where crmid=".$id;
 	$lead_activity_result = $adb->query($sql_lead_activity);
         $noofrows = $adb->num_rows($lead_activity_result);
@@ -213,7 +215,7 @@ function getRelatedActivities($accountid,$contact_id)
 			 $sql_insert_account_activity="insert into seactivityrel(crmid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";                                                                                     $adb->query($sql_insert_account_activity);
 		}
         }
-
+	$log->debug("Exiting getRelatedActivities method ...");
 	
 }
 
