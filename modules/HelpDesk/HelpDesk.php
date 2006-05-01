@@ -80,8 +80,10 @@ class HelpDesk extends CRMEntity {
 	function HelpDesk() 
 	{
 		$this->log =LoggerManager::getLogger('helpdesk');
+		$this->log->debug("Entering HelpDesk() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('HelpDesk');
+		$this->log->debug("Exiting HelpDesk method ...");
 	}
 
 	/**     Function to form the query to get the list of activities
@@ -91,6 +93,8 @@ class HelpDesk extends CRMEntity {
         **/
 	function get_activities($id)
 	{
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
 		global $mod_strings;
 		global $app_strings;
 		require_once('modules/Activities/Activity.php');
@@ -101,6 +105,7 @@ class HelpDesk extends CRMEntity {
 		$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
 		$query = "SELECT activity.*, crmentity.crmid, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, recurringevents.recurringtype, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
 	}
 
@@ -108,10 +113,13 @@ class HelpDesk extends CRMEntity {
 	 */
 	function Get_Ticket_History()
 	{
+		global $log;
+		$log->debug("Entering Get_Ticket_History() method ...");
 	        global $mod_strings;
 	        echo '<br><br>';
 	        echo get_form_header($mod_strings['LBL_TICKET_HISTORY'],"", false);
         	include("modules/HelpDesk/TicketHistory.php");
+		$log->debug("Exiting Get_Ticket_History method ...");
 	}
 
 	/**	Function to form the query to get the list of attachments and notes
@@ -121,6 +129,8 @@ class HelpDesk extends CRMEntity {
 	**/
 	function get_attachments($id)
 	{
+		global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
 			attachments.type  FileType,crm2.modifiedtime lastmodified,
 			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
@@ -146,6 +156,7 @@ class HelpDesk extends CRMEntity {
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('HelpDesk',$query,$id);
 	}
 
@@ -158,8 +169,10 @@ class HelpDesk extends CRMEntity {
 					     ) 
 				where $i = 0,1,..n which are all made for the ticket
 	**/
-         function get_ticket_comments_list($ticketid)
-	 {
+	function get_ticket_comments_list($ticketid)
+	{
+		global $log;
+		$log->debug("Entering get_ticket_comments_list(".$ticketid.") method ...");
 		 $sql = "select * from ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
 		 $result = $this->db->query($sql);
 		 $noofrows = $this->db->num_rows($result);
@@ -179,6 +192,7 @@ class HelpDesk extends CRMEntity {
 			 $output[$i]['owner'] = $name;
 			 $output[$i]['createdtime'] = $this->db->query_result($result,$i,"createdtime");
 		 }
+		$log->debug("Exiting get_ticket_comments_list method ...");
 		 return $output;
 	 }
 		
@@ -189,6 +203,8 @@ class HelpDesk extends CRMEntity {
 	**/
 	function get_user_tickets_list($user_name,$id,$where='',$match='')
 	{
+		global $log;
+		$log->debug("Entering get_user_tickets_list(".$user_name.",".$id.",".$where.",".$match.") method ...");
 
 		$this->db->println("where ==> ".$where);
 
@@ -232,6 +248,7 @@ class HelpDesk extends CRMEntity {
 		}
 
 		$query .= " order by crmentity.crmid desc";
+		$log->debug("Exiting get_user_tickets_list method ...");
 		return $this->process_list_query($query);
 	}
 
@@ -248,6 +265,8 @@ class HelpDesk extends CRMEntity {
 	**/
 	function process_list_query($query)
 	{
+		global $log;
+		$log->debug("Entering process_list_query(".$query.") method ...");
 	  
    		$result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
 		$list = Array();
@@ -278,6 +297,7 @@ class HelpDesk extends CRMEntity {
 	        $response['next_offset'] = $next_offset;
         	$response['previous_offset'] = $previous_offset;
 
+		$log->debug("Exiting process_list_query method ...");
 	        return $response;
 	}
 
@@ -286,6 +306,8 @@ class HelpDesk extends CRMEntity {
 	**/
 	function getColumnNames_Hd()
 	{
+		global $log;
+		$log->debug("Entering getColumnNames_Hd() method ...");
 		$sql1 = "select fieldlabel from field where tabid=13 and block <> 6 ";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
@@ -296,6 +318,7 @@ class HelpDesk extends CRMEntity {
 			$custom_fields[$i] = strtoupper($custom_fields[$i]);
 		}
 		$mergeflds = $custom_fields;
+		$log->debug("Exiting getColumnNames_Hd method ...");
 		return $mergeflds;
 	}
 
@@ -305,6 +328,8 @@ class HelpDesk extends CRMEntity {
 	**/
 	function getCommentInformation($ticketid)
 	{
+		global $log;
+		$log->debug("Entering getCommentInformation(".$ticketid.") method ...");
 		global $adb;
 		global $mod_strings;
 		$sql = "select * from ticketcomments where ticketid=".$ticketid;
@@ -312,7 +337,10 @@ class HelpDesk extends CRMEntity {
 		$noofrows = $adb->num_rows($result);
 
 		if($noofrows == 0)
+		{
+			$log->debug("Exiting getCommentInformation method ...");
 			return '';
+		}
 
 		$list .= '<div style="overflow: scroll;height:200;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
@@ -336,6 +364,7 @@ class HelpDesk extends CRMEntity {
 		}
 		$list .= '</div>';
 
+		$log->debug("Exiting getCommentInformation method ...");
 		return $list;
 	}
 
@@ -343,12 +372,15 @@ class HelpDesk extends CRMEntity {
 	 *      @param  int    $id   - Ticket id
 	 *      @return string $customername - The contact name
 	**/
-	function getCustomerName($id)
+function getCustomerName($id)
 	{
+		global $log;
+		$log->debug("Entering getCustomerName(".$id.") method ...");
         	global $adb;
 	        $sql = "select * from portalinfo inner join troubletickets on troubletickets.parent_id = portalinfo.id where troubletickets.ticketid=".$id;
         	$result = $adb->query($sql);
 	        $customername = $adb->query_result($result,0,'user_name');
+		$log->debug("Exiting getCustomerName method ...");
         	return $customername;
 	}
 
