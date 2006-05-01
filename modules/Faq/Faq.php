@@ -84,9 +84,11 @@ class Faq extends CRMEntity {
 	var $default_sort_order = 'DESC';
 
 	function Faq() {
-		$this->log =LoggerManager::getLogger('account');
+		$this->log =LoggerManager::getLogger('faq');
+		$this->log->debug("Entering Faq() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Faq');
+		$this->log->debug("Exiting Faq method ...");
 	}
 
 	/**     Function to get the list of comments for the given FAQ id
@@ -95,13 +97,18 @@ class Faq extends CRMEntity {
         **/	
 	function getFAQComments($faqid)
 	{
+		global $log;
+		$log->debug("Entering getFAQComments(".$faqid.") method ...");
 		global $mod_strings;
 		$sql = "select * from faqcomments where faqid=".$faqid;
 		$result = $this->db->query($sql);
 		$noofrows = $this->db->num_rows($result);
 
 		if($noofrows == 0)
+		{
+			$log->debug("Exiting getFAQComments method ...");
 			return '';
+		}
 
 		$list .= '<div style="overflow: scroll;height:150;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
@@ -116,6 +123,7 @@ class Faq extends CRMEntity {
 			}
 		}
 		$list .= '</div>';
+		$log->debug("Exiting getFAQComments method ...");
 		return $list;
 	}
 	
