@@ -254,16 +254,22 @@ imap_close($mbox);
 
 function get_mime_type(&$structure) 
 {
+	global $log;
+	$log->debug("Entering get_mime_type(".$structure.") method ...");
   $primary_mime_type = array("TEXT", "MULTIPART","MESSAGE", "APPLICATION", "AUDIO","IMAGE", "VIDEO", "OTHER");
   if($structure->subtype) {
+	$log->debug("Exiting get_mime_type method ...");
     return $primary_mime_type[(int) $structure->type] . '/' .$structure->subtype;
   }
+	$log->debug("Exiting get_mime_type method ...");
   return "TEXT/PLAIN";
 }
 
 
 function get_part($stream, $msg_number, $mime_type, $structure = false,$part_number    = false) 
 {
+	 global $log;
+        $log->debug("Entering get_part(".$stream.", ".$msg_number.", ".$mime_type.", ".$structure.",".$part_number.") method ...");
  
     if(!$structure) {
     $structure = imap_fetchstructure($stream, $msg_number);
@@ -275,10 +281,13 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
       }
       $text = imap_fetchbody($stream, $msg_number, $part_number);
       if($structure->encoding == 3) {
+	$log->debug("Exiting get_part method ...");
         return imap_base64($text);
       } else if($structure->encoding == 4) {
+	$log->debug("Exiting get_part method ...");
         return imap_qprint($text);
       } else {
+	$log->debug("Exiting get_part method ...");
         return $text;
       }
     }
@@ -291,11 +300,13 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
         }
         $data = get_part($stream, $msg_number, $mime_type, $sub_structure,$prefix .    ($index + 1));
         if($data) {
+		$log->debug("Exiting get_part method ...");
           return $data;
         }
       } // END OF WHILE
     } // END OF MULTIPART
   } // END OF STRUTURE
+  $log->debug("Exiting get_part method ...");
   return false;
 } // END OF FUNCTION
 
@@ -327,6 +338,8 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
 
 
  function transformHTML($str) {
+  global $log;
+        $log->debug("Entering transformHTML(".$str.") method ...");
    if ((strpos($str,"<HTML") < 0) || (strpos($str,"<html")    < 0)) {
   		$makeHeader = "<html><head><meta http-equiv=\"Content-Type\"    content=\"text/html; charset=iso-8859-1\"></head>\n";
    	if ((strpos($str,"<BODY") < 0) || (strpos($str,"<body")    < 0)) {
@@ -338,6 +351,7 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
    } else {
    	$str = "<meta http-equiv=\"Content-Type\" content=\"text/html;    charset=iso-8859-1\">\n". $str;
    }
+        $log->debug("Exiting transformHTML method ...");
    	return $str;
  }
    
