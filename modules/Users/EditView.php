@@ -320,6 +320,7 @@ else $smarty->assign("IS_ADMIN", "disabled");
 
 //$smarty->assign("",$focus->getUserListViewHeader());
 
+$smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
 
 if ($_REQUEST['mode1'] == 'pref')
 	$smarty->display('MyPrefEditView.tpl');
