@@ -256,7 +256,6 @@
 {$JAVASCRIPT}
 
 <div id="roleLay">
-<form name="checkpwd" >
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
 		<td width="50%" align="left" class="genHeaderSmall">Change Password </td>
@@ -286,7 +285,6 @@
 	</tr>
 	<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	</table>
-</form>		
 </div>
 <script>
 {literal}
@@ -304,8 +302,6 @@ function checkPassword(record)
 	}
 	else
 		alert("Password Matches");
-	document.checkpwd.action = "index.php?action=chng_pwd&module=Users&record="+record;
-	document.checkpwd.submit();
 }
 {/literal}
 
