@@ -117,7 +117,10 @@ $stage = $HTTP_POST_VARS['Stage'];
 //echo $description;
 function deleteFile($filename)
 {
+	global $log;
+	$log->debug("Entering deleteFile(".$filename.") method ...");
    unlink($filename);	
+	$log->debug("Exiting deleteFile method ...");
 }
 
 
@@ -202,6 +205,8 @@ deleteFile($filename);
 
 function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leadsrc,$industry,$annualrevenue,$licensekey,$phone,$mobile,$fax,$email,$yahooid,$website,$leadstatus,$rating,$empct)
 {
+  global $log;
+  $log->debug("Entering insert2DB(".$salutation.",".$firstname.",".$lastname.",".$company.",".$designation.",".$leadsrc.",".$industry.",".$annualrevenue.",".$licensekey.",".$phone.",".$mobile.",".$fax.",".$email.",".$yahooid.",".$website.",".$leadstatus.",".$rating.",".$empct.") method ...");
   $id = create_guid();
   $date_entered = date('YmdHis');
   $date_modified = date('YmdHis');
@@ -212,6 +217,7 @@ function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leads
   $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id',".$adb->formatString('leads','date_entered',$date_entered).",".$adb->formatString('leads','date_modified',$date_modified).",'$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
 
   $result = $adb->query($sql);
+  $log->debug("Exiting insert2DB method ...");
   return $id;	
 
 }
