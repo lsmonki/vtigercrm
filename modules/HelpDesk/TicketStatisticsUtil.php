@@ -16,10 +16,13 @@ require_once('include/database/PearDatabase.php');
 **/
 function getTotalNoofTickets()
 {
+	global $log;
+	$log->debug("Entering getTotalNoofTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0";
 	$result = $adb->query($query);
 	$totTickets = $adb->query_result($result,0,"totalticketcount");
+	$log->debug("Exiting getTotalNoofTickets method ...");
 	return $totTickets;
 }
 
@@ -28,10 +31,13 @@ function getTotalNoofTickets()
 **/
 function getTotalNoofOpenTickets()
 {
+	global $log;
+	$log->debug("Entering getTotalNoofOpenTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalopenticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status !='Closed'";
 	$result = $adb->query($query);
 	$totOpenTickets = $adb->query_result($result,0,"totalopenticketcount");
+	$log->debug("Exiting getTotalNoofOpenTickets method ...");
 	return $totOpenTickets;
 }
 
@@ -40,10 +46,13 @@ function getTotalNoofOpenTickets()
 **/
 function getTotalNoofClosedTickets()
 {
+	global $log;
+	$log->debug("Entering getTotalNoofClosedTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalclosedticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status ='Closed'";
 	$result = $adb->query($query);
 	$totClosedTickets = $adb->query_result($result,0,"totalclosedticketcount");
+	$log->debug("Exiting getTotalNoofClosedTickets method ...");
 	return $totClosedTickets;
 }
 
@@ -55,6 +64,8 @@ function getTotalNoofClosedTickets()
 **/
 function outBar($val,$image_path,$singleUnit) 
 {
+	global $log;
+	$log->debug("Entering outBar(".$val.",".$image_path.",".$singleUnit.") method ...");
 	$scale = round($val*$singleUnit);
 	if($scale < 1 && $scale > 0)
 	{
@@ -63,6 +74,7 @@ function outBar($val,$image_path,$singleUnit)
         $out = '<img src='.$image_path.'bl_bar.jpg height=10 width='. $scale .'%>';
         $out .= str_pad($val, (3-strlen(strval($val)))*12 + strlen(strval($val)), "&nbsp;&nbsp;", STR_PAD_LEFT);
 
+	$log->debug("Exiting outBar method ...");
 	return $out;
 }
 
@@ -73,6 +85,8 @@ function outBar($val,$image_path,$singleUnit)
 **/
 function showPriorities($image_path, $singleUnit)
 {
+	global $log;
+	$log->debug("Entering showPriorities(".$image_path.",". $singleUnit.") method ...");
 	global $adb;
 	global $mod_strings;
 	$prresult = getFromDB("ticketpriorities");
@@ -105,6 +119,7 @@ function showPriorities($image_path, $singleUnit)
 		$prOut .= '</tr>';
 		
 	}
+	$log->debug("Exiting showPriorities method ...");
 	return $prOut;
 }
 
@@ -115,6 +130,8 @@ function showPriorities($image_path, $singleUnit)
 **/
 function showCategories($image_path, $singleUnit)
 {
+	global $log;
+	$log->debug("Entering showCategories(".$image_path.",". $singleUnit.") method ...");
 	global $adb;
 	global $mod_strings;
 	$prresult = getFromDB("ticketcategories");
@@ -147,6 +164,7 @@ function showCategories($image_path, $singleUnit)
 		$prOut .= '</tr>';
 		
 	}
+	$log->debug("Exiting showCategories method ...");
 	return $prOut;
 		
 	
@@ -159,6 +177,8 @@ function showCategories($image_path, $singleUnit)
 **/
 function showUserBased($image_path, $singleUnit)
 {
+	global $log;
+	$log->debug("Entering showUserBased(".$image_path.",". $singleUnit.") method ...");
 	global $adb;
 	global $mod_strings;
 	$prresult = getFromDB("users");
@@ -192,6 +212,7 @@ function showUserBased($image_path, $singleUnit)
 		$prOut .= '</tr>';
 		
 	}
+	$log->debug("Exiting showUserBased method ...");
 	return $prOut;
 		
 	
@@ -203,9 +224,12 @@ function showUserBased($image_path, $singleUnit)
 **/
 function getFromDB($tableName)
 {
+	global $log;
+	$log->debug("Entering getFromDB(".$tableName.") method ...");
 	global $adb;
 	$query = "select * from ".$tableName;
 	$result = $adb->query($query);
+	$log->debug("Exiting getFromDB method ...");
 	return $result;
 }
 
@@ -217,6 +241,8 @@ function getFromDB($tableName)
 **/
 function getTicketCount($mode, $priority_val, $critColName)
 {
+	global $log;
+	$log->debug("Entering getTicketCount(".$mode.",". $priority_val.",". $critColName.") method ...");
 	if($critColName == "smownerid")
 	{
 		$table_name = 'crmentity';
@@ -241,6 +267,7 @@ function getTicketCount($mode, $priority_val, $critColName)
 	}
 	$result = $adb->query($query);
 	$nooftickets = $adb->query_result($result,0,"count");
+	$log->debug("Exiting getTicketCount method ...");
 	return $nooftickets;
 }
 
