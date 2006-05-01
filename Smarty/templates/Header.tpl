@@ -27,7 +27,7 @@
 		<td class=small nowrap>
 		<table border=0 cellspacing=0 cellpadding=0>
 		 <tr>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}">My Preferences</a></td>
+		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">My Preferences</a></td>
 		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">Logout</a> ({$CURRENT_USER})</td>
 		 </tr>
 		</table>
