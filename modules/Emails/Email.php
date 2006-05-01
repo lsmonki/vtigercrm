@@ -79,8 +79,11 @@ class Email extends CRMEntity {
 
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
+		$this->log->debug("Entering Email() method ...");
+		$this->log = LoggerManager::getLogger('email');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Emails');
+		$this->log->debug("Exiting Email method ...");
 	}
 
 	var $new_schema = true;
@@ -93,6 +96,7 @@ class Email extends CRMEntity {
 	function get_contacts($id)
 	{
 		global $log;
+		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $mod_strings;
 		global $app_strings;
 
@@ -103,6 +107,7 @@ class Email extends CRMEntity {
 
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where cntactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
 		$log->info("Contact Related List for Email is Displayed");
+		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
 	}
 	
@@ -113,6 +118,8 @@ class Email extends CRMEntity {
 	*/
 	function get_users($id)
 	{
+		global $log;
+		$log->debug("Entering get_users(".$id.") method ...");
 		global $adb;
 		global $mod_strings;
 		global $app_strings;
@@ -164,6 +171,7 @@ class Email extends CRMEntity {
 
 		if($entries_list != '')
 			$return_data = array("header"=>$header, "entries"=>$entries);
+		$log->debug("Exiting get_users method ...");
 		return $return_data;
 	}
 
@@ -173,6 +181,7 @@ class Email extends CRMEntity {
 	function get_attachments($id)
 	{
 		global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
 			attachments.type  FileType,crm2.modifiedtime lastmodified,
 			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
@@ -198,6 +207,7 @@ class Email extends CRMEntity {
 		where crmentity.crmid=".PearDatabase::quote($id);
 		
 		$log->info("Notes&Attachments Related List for Email is Displayed");
+		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Emails',$query,$id);
 	}
 
@@ -205,9 +215,12 @@ class Email extends CRMEntity {
           * Returns a list of the Emails to be exported
           */
 	function create_export_query(&$order_by, &$where)
-        {
+	{
+		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		$query = 'SELECT activity.activityid, activity.subject, activity.activitytype, attachments.name as filename, crmentity.description as email_content FROM activity inner join crmentity on crmentity.crmid=activity.activityid left join seattachmentsrel on activity.activityid=seattachmentsrel.crmid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where activity.activitytype="Emails" and crmentity.deleted=0';
 
+		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }
         
@@ -216,8 +229,11 @@ class Email extends CRMEntity {
 	*/  
 	function set_emails_contact_invitee_relationship($email_id, $contact_id)
 	{
+		global $log;
+		$log->debug("Entering set_emails_contact_invitee_relationship(".$email_id.",". $contact_id.") method ...");
 		$query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
 		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+		$log->debug("Exiting set_emails_contact_invitee_relationship method ...");
 	}
      
 	/**
@@ -225,8 +241,11 @@ class Email extends CRMEntity {
 	*/
 	function set_emails_se_invitee_relationship($email_id, $contact_id)
 	{
+		global $log;
+		$log->debug("Entering set_emails_se_invitee_relationship(".$email_id.",". $contact_id.") method ...");
 		$query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
 		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+		$log->debug("Exiting set_emails_se_invitee_relationship method ...");
 	}
      
 	/**
@@ -234,8 +253,11 @@ class Email extends CRMEntity {
 	*/    
 	function set_emails_user_invitee_relationship($email_id, $user_id)
 	{
+		global $log;
+		$log->debug("Entering set_emails_user_invitee_relationship(".$email_id.",". $user_id.") method ...");
 		$query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
 		$this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
+		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
 	}        
 
 
