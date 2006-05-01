@@ -60,12 +60,16 @@ class PriceBook extends CRMEntity {
 
 	function PriceBook() {
 		$this->log =LoggerManager::getLogger('pricebook');
+		$this->log->debug("Entering PriceBook() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('PriceBooks');
+		$this->log->debug("Exiting PriceBook method ...");
 	}
 
 	function get_pricebook_products($id)
 	{
+		global $log;
+		$log->debug("Entering get_pricebook_products(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Products/Product.php');	
 		$focus = new Product();
@@ -75,10 +79,13 @@ class PriceBook extends CRMEntity {
 		$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
+		$log->debug("Exiting get_pricebook_products method ...");
 		return getPriceBookRelatedProducts($query,$focus,$returnset);
 	}
 	function get_pricebook_noproduct($id)
-        {
+	{
+		global $log;
+		$log->debug("Entering get_pricebook_noproduct(".$id.") method ...");
 		 
 		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";                                                                                                  $result = $this->db->query($query);
 		$no_count = $this->db->num_rows($result);
@@ -88,19 +95,23 @@ class PriceBook extends CRMEntity {
 			$result_pb = $this->db->query($pb_query);
 			if($no_count == $this->db->num_rows($result_pb))
 			{
+				$log->debug("Exiting get_pricebook_noproduct method ...");
 				return false;
 			}
 			elseif($this->db->num_rows($result_pb) == 0)
 			{
+				$log->debug("Exiting get_pricebook_noproduct method ...");
 				return true;
 			}
 			elseif($this->db->num_rows($result_pb) < $no_count)
 			{
+				$log->debug("Exiting get_pricebook_noproduct method ...");
 				return true;
 			}
 		}
 		else
 		{
+			$log->debug("Exiting get_pricebook_noproduct method ...");
 			return false;
 		}
 	}
