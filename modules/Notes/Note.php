@@ -88,20 +88,25 @@ class Note extends CRMEntity {
 
 	function Note() {
 		$this->log = LoggerManager::getLogger('notes');
+		$this->log->debug("Entering Note() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Notes');
+		$this->log->debug("Exiting Note method ...");
 	}
 
 	var $new_schema = true;
 
-        function create_export_query(&$order_by, &$where)
-        {
+	function create_export_query(&$order_by, &$where)
+	{
+		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
              $query = "SELECT
                                         notes.*,
                                         contactdetails.firstname,
                                         contactdetails.lastname
                                         FROM notes
                                         LEFT JOIN contactdetails ON notes.contact_id=contactdetails.contactid inner join crmentity on crmentity.crmid=notes.notesid and crmentity.deleted=0 ";
+		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }
 
