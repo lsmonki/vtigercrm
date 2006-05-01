@@ -144,30 +144,38 @@ class Lead extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
-	function Lead() {
+	function Lead()	{
 		$this->log = LoggerManager::getLogger('lead');
+		$this->log->debug("Entering Lead() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Leads');
+		$this->log->debug("Exiting Lead method ...");
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
 	{	
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
 			$sorder = $_REQUEST['sorder'];
 		else
 			$sorder = (($_SESSION['LEADS_SORT_ORDER'] != '')?($_SESSION['LEADS_SORT_ORDER']):($this->default_sort_order));
 
+		$log->debug("Exiting getSortOrder method ...");
 		return $sorder;
 	}
 
 	function getOrderBy()
 	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $_REQUEST['order_by'];
 		else
 			$order_by = (($_SESSION['LEADS_ORDER_BY'] != '')?($_SESSION['LEADS_ORDER_BY']):($this->default_order_by));
 
+		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
@@ -176,6 +184,8 @@ class Lead extends CRMEntity {
 
 	function create_export_query(&$order_by, &$where)
 	{
+		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		if($this->checkIfCustomTableExists('leadscf'))
 		{
 
@@ -219,6 +229,7 @@ class Lead extends CRMEntity {
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
 
+		$log->debug("Exiting create_export_query method ...");
 		return $query;
 	}
 
@@ -228,6 +239,8 @@ class Lead extends CRMEntity {
 	*/
 function get_activities($id)
 {
+	global $log;
+	$log->debug("Entering get_activities(".$id.") method ...");
 	global $app_strings;
 
 	$focus = new Activity();
@@ -243,6 +256,7 @@ function get_activities($id)
 
 	// First, get the list of IDs.
 	$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
+	$log->debug("Exiting get_activities method ...");
 	return  GetRelatedList('Leads','Activities',$focus,$query,$button,$returnset);
 }
 
@@ -250,6 +264,8 @@ function get_activities($id)
 	*/
 function get_emails($id)
 {
+		
+	$log->debug("Entering get_emails(".$id.") method ...");
 	global $mod_strings;
 	require_once('include/RelatedListView.php');
 
@@ -265,11 +281,14 @@ function get_emails($id)
 	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
 	$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on  users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
+	$log->debug("Exiting get_emails method ...");
 	return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
 }
 
 function get_history($id)
 {
+	global $log;
+	$log->debug("Entering get_history(".$id.") method ...");
 	$query = "SELECT activity.activityid, activity.subject, activity.status,
 		activity.eventstatus, activity.activitytype, contactdetails.contactid,
 		contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
@@ -287,11 +306,14 @@ function get_history($id)
 			and seactivityrel.crmid=".$id;
 	//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
+	$log->debug("Exiting get_history method ...");
 	return getHistory('Leads',$query,$id);
 }
 
 function get_attachments($id)
 {
+	global $log;
+	$log->debug("Entering get_attachments(".$id.") method ...");
 	// Armando Lüscher 18.10.2005 -> §visibleDescription
 	// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 	// Inserted inner join users on crm2.smcreatorid= users.id
@@ -324,11 +346,14 @@ function get_attachments($id)
 			where crmentity.crmid=".$id."
 			order by createdtime desc";
 
+	$log->debug("Exiting get_attachments method ...");
 	return getAttachmentsAndNotes('Leads',$query,$id);
 }
 	
 function get_products($id)
 {
+	global $log;
+	$log->debug("Entering get_products(".$id.") method ...");
 	require_once('modules/Products/Product.php');
 	global $mod_strings;
 	global $app_strings;
@@ -344,18 +369,24 @@ function get_products($id)
 	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
 	$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join leaddetails on leaddetails.leadid = seproductsrel.crmid  where leaddetails.leadid = '.$id.' and crmentity.deleted = 0';
+	$log->debug("Exiting get_products method ...");
 	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
 }
 
 	function get_lead_field_options($list_option)
 	{
+		global $log;
+		$log->debug("Entering get_lead_field_options(".$list_option.") method ...");
 		$comboFieldArray = getComboArray($this->combofieldNames);
+		$log->debug("Exiting get_lead_field_options method ...");
 		return $comboFieldArray[$list_option];
 	}
 	
 //Used By vtigerCRM Word Plugin
 function getColumnNames_Lead()
 {
+	global $log;
+	$log->debug("Entering getColumnNames_Lead() method ...");
 	$sql1 = "select fieldlabel from field where tabid=7";
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
@@ -366,6 +397,7 @@ function getColumnNames_Lead()
    	$custom_fields[$i] = strtoupper($custom_fields[$i]);
 	}
 	$mergeflds = $custom_fields;
+	$log->debug("Exiting getColumnNames_Lead method ...");
 	return $mergeflds;
 }
 //End
