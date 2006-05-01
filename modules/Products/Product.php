@@ -89,12 +89,16 @@ class Product extends CRMEntity {
 
 	function Product() {
 		$this->log =LoggerManager::getLogger('product');
+		$this->log->debug("Entering Product() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Products');
+		$this->log->debug("Exiting Product method ...");
 	}
 
 	function get_attachments($id)
-        {
+	{
+		global $log;
+		$log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crmentity.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crmentity.smcreatorid= users.id
@@ -126,17 +130,23 @@ class Product extends CRMEntity {
 			inner join users on crmentity.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
 
+		$log->debug("Exiting get_attachments method ...");
         	return getAttachmentsAndNotes('Products',$query,$id);
 		}
 
 	function get_opportunities($id)
-        {
+	{
+		global $log;
+		$log->debug("Entering get_opportunities(".$id.") method ...");
 		$query = 'select potential.potentialid, potential.potentialname, potential.potentialtype,  products.productid, products.productname, products.qty_per_unit, products.unit_price, products.expiry_date from potential inner join products on potential.productid = products.productid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 and products.productid='.$id;
+		$log->debug("Exiting get_opportunities method ...");
           renderRelatedPotentials($query);
         }
 
 	function get_tickets($id)
 	{
+		global $log;
+		$log->debug("Entering get_tickets(".$id.") method ...");
 		global $mod_strings;
 		require_once('modules/HelpDesk/HelpDesk.php');
 		$focus = new HelpDesk();
@@ -146,12 +156,15 @@ class Product extends CRMEntity {
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join products on products.productid=troubletickets.product_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
+		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
 	}
 
 
 	function get_activities($id)
 	{
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 	
 	require_once('modules/Activities/Activity.php');	
@@ -164,10 +177,13 @@ class Product extends CRMEntity {
 
 
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
 	}
 	function get_quotes($id)
- 	{
+	{
+		global $log;
+		$log->debug("Entering get_quotes(".$id.") method ...");	
 		global $app_strings;
 		require_once('modules/Quotes/Quote.php');	
 		$focus = new Quote();
@@ -177,10 +193,13 @@ class Product extends CRMEntity {
 
 
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and quotesproductrel.productid=".$id;
+		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_purchase_orders($id)
 	{
+		global $log;
+		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
 		$focus = new Order();
@@ -190,10 +209,13 @@ class Product extends CRMEntity {
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
+		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
 	{
+		global $log;
+		$log->debug("Entering get_salesorder(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/SalesOrder/SalesOrder.php');
         $focus = new SalesOrder();
@@ -202,10 +224,13 @@ class Product extends CRMEntity {
 		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 and products.productid = ".$id;
+		$log->debug("Exiting get_salesorder method ...");
 		return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
 	{
+		global $log;
+		$log->debug("Entering get_invoices(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Invoice/Invoice.php');
 		$focus = new Invoice();
@@ -215,10 +240,13 @@ class Product extends CRMEntity {
 
 
 		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
+		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_product_pricebooks($id)
 	{     
+		global $log;
+		$log->debug("Entering get_product_pricebooks(".$id.") method ...");
 		global $mod_strings;
 		require_once('modules/PriceBooks/PriceBook.php');
 		$focus = new PriceBook();
@@ -227,19 +255,25 @@ class Product extends CRMEntity {
 
 
 		$query = 'select crmentity.crmid, pricebook.*,pricebookproductrel.productid as prodid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id; 
+		$log->debug("Exiting get_product_pricebooks method ...");
 		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
 	}
 
 	function product_novendor()
 	{
+		global $log;
+		$log->debug("Entering product_novendor() method ...");
 		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id=''";
 		$result=$this->db->query($query);
+		$log->debug("Exiting product_novendor method ...");
 		return $this->db->num_rows($result);
 	}
 	
 	
 	function create_export_query(&$order_by, &$where)
 	{
+		global $log;
+		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		if($this->checkIfCustomTableExists('productcf'))
 		{
 
@@ -333,6 +367,7 @@ class Product extends CRMEntity {
                 if(!empty($order_by))
                         $query .= " ORDER BY $order_by";
 
+		$log->debug("Exiting create_export_query method ...");
                 return $query;
 
 	}
