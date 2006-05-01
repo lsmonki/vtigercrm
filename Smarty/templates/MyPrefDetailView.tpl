@@ -1,4 +1,5 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/slider.js"></script>
@@ -20,6 +21,7 @@
                         <input type="hidden" name="record" value="{$ID}">
                         <input type="hidden" name="isDuplicate" value=false>
                         <input type="hidden" name="action">
+                        <input type="hidden" name="parenttab" value="{$PARENTTAB}">
                         <input type="hidden" name="category" value="{$CATEGORY}">
                         <input type="hidden" name="mode1" value={$MODE1}>
                         <input type="hidden" name="user_name" value="{$USER_NAME}">
@@ -39,7 +41,7 @@
 				<tr>
 				    <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 			            <td width="75" align="center" nowrap="nowrap" class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')"><b>My Details</b></td>
-                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><a href="index.php?action=ListMailAccount&module=Settings&record={$ID}"> <b>My Mail Server Details </a></b></td>
+                    		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><a href="index.php?action=AddMailAccount&module=Settings&record={$ID}"> <b>My Mail Server Details </a></b></td>
                    	<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                    		</tr>
 	
@@ -62,13 +64,16 @@
                                     <tr>
                                       <td colspan="4" align="left">
 						{$EDIT_BUTTON}
+						&nbsp;
+					 	<input name="pass" type="button" class="samll" id="pass" value=" Change Password"  onclick="fnvshobj(this,'roleLay');"/>
+					{*	{$CHANGE_PW_BUTTON}*}
 					</td>
                                     </tr>
            			    <tr>
                                     	  <td colspan="4" class="detailedViewHeader"><b>My Details </b> </td>
                                     </tr>
                                     <tr>
-                                      	<td class="dvtCellLabel" align="right" width="25%">User Name</td>
+                                      	<td class="dvtCellLabel" align="right" width="25%"><span class="style1"><font color='red'>*</font></span>User Name</td>
                                         <td width="30%"  class="dvtCellInfo">{$USER_NAME}</td>
 				        <td width="25%" class="dvtCellLabel" align="right">Admin</td>
 				        <td width="25%" class="dvtCellInfo">
@@ -82,16 +87,17 @@
                                         <td width="25%" class="dvtCellInfo">{$GROUPASSIGNED}</td>
                                     </tr>
                                     <tr>
-                                        <td class="dvtCellLabel" align="right">Last Name </td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>Last Name </td>
                                         <td class="dvtCellInfo">{$LAST_NAME}</td>
-                                        <td class="dvtCellLabel" align="right">My Role </td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>My Role </td>
                                         <td class="dvtCellInfo">{$ROLEASSIGNED}</td>
                                     </tr>
 
                                     <tr>
-                                        <td class="dvtCellLabel" align="right">Password</td>
-                                        <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>
-                                        <td class="dvtCellLabel" align="right">My Status </td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>E-Mail Id</td>
+					<td class="dvtCellInfo">{$EMAIL1}</td>
+                                {*        <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>*}
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>My Status </td>
                                         <td class="dvtCellInfo">{$STATUS}</td>
                                     </tr>
                                     <tr><td colspan="4">&nbsp;</td></tr>
@@ -249,3 +255,58 @@
 
 {$JAVASCRIPT}
 
+<div id="roleLay">
+<form name="checkpwd" >
+	<table width="100%" border="0" cellpadding="5" cellspacing="0">
+	<tr>
+		<td width="50%" align="left" class="genHeaderSmall">Change Password </td>
+		<td width="50%" align="right"><a href="javascript:fninvsh('roleLay');"><img src="themes/blue/images/close.gif" border="0"  align="absmiddle" /></a></td>
+	</tr>
+	<tr><td colspan="2"><hr /></td></tr>
+	<tr>
+		<td align="right"><b>Enter Current Password :</b></td>
+		<td align="left"><input type="password" id="currentPass" class="importBox" /></td>
+	</tr>
+	<tr>
+		<td align="right"><b>Enter New Password :</b></td>
+		<td align="left"><input type="password" id="newPass" name="newPass" class="importBox" /></td>
+	</tr>
+	<tr>
+		<td align="right"><b>Confirm New Password :</b></td>
+		<td align="left"><input type="password" id="confirmPass"  name="confirmPass" class="importBox" /></td>
+	</tr>
+	<tr>
+		<td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center">
+		<input type="button" name="save" value=" &nbsp;Save&nbsp; " class="classBtn" onclick="checkPassword({$ID})" />&nbsp;&nbsp;
+		<input type="button" name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh('roleLay');" />
+		</td>
+	</tr>
+	<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
+	</table>
+</form>		
+</div>
+<script>
+{literal}
+function checkPassword(record)
+{
+	var old_pwd = getObj("currentPass").value;
+	alert(old_pwd);
+	var new_pwd = getObj("newPass").value;
+	alert(new_pwd);
+	var conf_pwd = getObj("confirmPass").value;
+	alert(conf_pwd);
+	if(new_pwd != conf_pwd)
+	{
+		alert("Password Mismatch")
+	}
+	else
+		alert("Password Matches");
+	document.checkpwd.action = "index.php?action=chng_pwd&module=Users&record="+record;
+	document.checkpwd.submit();
+}
+{/literal}
+
+</script>
