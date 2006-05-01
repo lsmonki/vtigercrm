@@ -33,6 +33,8 @@ require_once('include/ComboUtil.php');
  */
 function get_new_record_form () 
 {
+	global $log;
+	$log->debug("Entering get_new_record_form () method ...");
 	global $mod_strings;
 	global $app_strings;
 	global $app_list_strings;
@@ -146,7 +148,7 @@ function get_new_record_form ()
 			</script>';
 
 	$qcreate_form .= get_left_form_footer();
-
+	$log->debug("Exiting get_new_record_form method ...");
 	return $qcreate_form;
 }
 
