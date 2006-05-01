@@ -7,10 +7,6 @@
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-        {include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 
@@ -25,7 +21,7 @@
 			<input type="hidden" name="module" value="Settings">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">
-			<input type="hidden" name="record" value="{$RECORD_ID}">
+			<input type="hidden" name="record" value="{$ID}">
 		        <input type="hidden" name="edit" value="{$EDIT}">
 			<input type="hidden" name="return_module" value="Settings">
 			<input type="hidden" name="return_action" value="index">
@@ -38,7 +34,7 @@
                             <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
                                 <tr>
                                     <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record=1"><b>My Details</a></b></td>
+                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record={$ID}"><b>My Details</a></b></td>
                                     <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><b>My Mail Server Details </b></td>
 		                    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                                 </tr>
@@ -120,7 +116,7 @@
        <tr>
            <td class="dvtCellLabel" align="right">Refresh Timeout </td>
            <td class="dvtCellInfo">
-		<select name="box_refresh">
+		<select value="{$BOX_REFRESH}">
 			<option value="60000">1 minute
 			<option value="120000">2 minutes
 			<option value="240000">3 minutes
@@ -140,7 +136,7 @@
            <td colspan="3" align="center">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='SaveMailAccount'; return verify_data(EditView)" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " >
 			&nbsp;&nbsp;
-	        <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='ListMailAccount'; this.form.module.value='Settings'; this.form.return_action.value='index'; this.form.return_module.value='Settings';" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	        <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='DetailView'; this.form.module.value='Users'; this.form.record.value='{$ID}'" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}"></td>
            </td>
        </tr>
        <tr><td colspan="3" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
@@ -156,8 +152,5 @@
 </form>
 </td></tr>
 </table>
-</td></tr>
-</table>
 
 {$JAVASCRIPT}
-	{include file="SettingsSubMenu.tpl"}					
