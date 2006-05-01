@@ -66,12 +66,16 @@ class Vendor extends CRMEntity {
 
 	function Vendor() {
 		$this->log =LoggerManager::getLogger('vendor');
+		$this->log->debug("Entering Vendor() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Vendors');
+		$this->log->debug("Exiting Vendor method ...");
 	}
 
 	function get_products($id)
 	{
+		global $log;
+		$log->debug("Entering get_products(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Products/Product.php');
 		$focus = new Product();
@@ -81,10 +85,13 @@ class Vendor extends CRMEntity {
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.vendorname from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
+		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
 	}
 	function get_purchase_orders($id)
 	{
+		global $log;
+		$log->debug("Entering get_purchase_orders(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/PurchaseOrder/PurchaseOrder.php');
 		$focus = new Order();
@@ -94,10 +101,13 @@ class Vendor extends CRMEntity {
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
 		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
+		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
 	function get_contacts($id)
 	{
+		global $log;
+		$log->debug("Entering get_contacts(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/Contacts/Contact.php');
 		$focus = new Contact();
@@ -106,6 +116,7 @@ class Vendor extends CRMEntity {
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid,vendorcontactrel.vendorid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  inner join vendorcontactrel on vendorcontactrel.contactid=contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
+		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
 
 	}
