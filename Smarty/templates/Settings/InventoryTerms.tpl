@@ -30,11 +30,17 @@
 
 	<td bgcolor="#ebebeb" width="7"></td>
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
-	<td rowspan="4" style="background-image: url(include/images/noimage.gif); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
+	<td rowspan="4" bgcolor="#ffffff" width="30%" valign="bottom" background="{$IMAGE_PATH}Inventory_top.gif" style="background-position:top right;background-repeat:no-repeat;">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+						<td background="{$IMAGE_PATH}Inventory_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="350">&nbsp;</td>
+				</tr>
+		</table>
+	</td>
 	{if $INV_TERMS_MODE eq 'view'}
-	<td colspan="2" style="padding-top: 0px;" align="right" width="75%">
+	<td colspan="2" style="padding-top: 0px;" align="right" width="70%">
 	<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='OrganizationTermsandConditions';this.form.inv_terms_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}"><br><hr>
 	</td>
 	{else}	
