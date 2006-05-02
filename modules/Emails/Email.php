@@ -105,7 +105,7 @@ class Email extends CRMEntity {
 		$button = '';
 		$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
 
-		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where cntactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
+		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where cntactivityrel.activityid='.$adb->quote($id).' and crmentity.deleted=0';
 		$log->info("Contact Related List for Email is Displayed");
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
@@ -126,7 +126,7 @@ class Email extends CRMEntity {
 
 		$id = $_REQUEST['record'];
 
-		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.PearDatabase::quote($id);
+		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$adb->quote($id);
 		$result=$adb->query($query);   
 
 		$noofrows = $adb->num_rows($result);
@@ -193,7 +193,7 @@ class Email extends CRMEntity {
 			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
 			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".PearDatabase::quote($id);
+		where crmentity.crmid=".$adb->quote($id);
 		$query .= ' union all ';
 		$query .= "select attachments.description title ,'Attachments'  ActivityType,
 			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
@@ -204,7 +204,7 @@ class Email extends CRMEntity {
 			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".PearDatabase::quote($id);
+		where crmentity.crmid=".$adb->quote($id);
 		
 		$log->info("Notes&Attachments Related List for Email is Displayed");
 		$log->debug("Exiting get_attachments method ...");

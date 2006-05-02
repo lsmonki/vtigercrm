@@ -76,7 +76,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 	break;
 	case Emails:
-		$sql='delete from seactivityrel where activityid='.PearDatabase::quote($record);
+		$sql='delete from seactivityrel where activityid='.$adb->quote($record);
 		$adb->query($sql);
 	break;
 	case HelpDesk:

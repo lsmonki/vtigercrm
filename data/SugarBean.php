@@ -119,7 +119,7 @@ class SugarBean
 				/*else
 					$query = $query.", ";
 	
-				$query = $query.$field."='".PearDatabase::quote(from_html($this->$field,$isUpdate))."'";
+				$query = $query.$field."='".$adb->quote(from_html($this->$field,$isUpdate))."'";
 				*/
 				if($isUpdate)
 				{
@@ -439,7 +439,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$where_clause .= " AND ";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";
@@ -506,7 +506,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$where_clause .= " or";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";

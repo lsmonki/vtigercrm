@@ -154,7 +154,7 @@ class ReportRun extends CRMEntity
                 {
                         if(trim($value) != "")
 			{
-				$rtvalue = " = ".PearDatabase::quote($value);
+				$rtvalue = " = ".$adb->quote($value);
 			}else
 			{
 				$rtvalue = " is NULL";
@@ -164,7 +164,7 @@ class ReportRun extends CRMEntity
                 {
                         if(trim($value) != "")
 			{
-				$rtvalue = " <> ".PearDatabase::quote($value);
+				$rtvalue = " <> ".$adb->quote($value);
 			}else
 			{
 				$rtvalue = " is NOT NULL";
@@ -172,31 +172,31 @@ class ReportRun extends CRMEntity
                 }
                 if($comparator == "s")
                 {
-                        $rtvalue = " like ".PearDatabase::quote($value."%");
+                        $rtvalue = " like ".$adb->quote($value."%");
                 }
                 if($comparator == "c")
                 {
-                        $rtvalue = " like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " like ".$adb->quote("%".$value."%");
                 }
                 if($comparator == "k")
                 {
-                        $rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+                        $rtvalue = " not like ".$adb->quote("%".$value."%");
                 }
                 if($comparator == "l")
                 {
-                        $rtvalue = " < ".PearDatabase::quote($value);
+                        $rtvalue = " < ".$adb->quote($value);
                 }
                 if($comparator == "g")
 								{
-                        $rtvalue = " > ".PearDatabase::quote($value);
+                        $rtvalue = " > ".$adb->quote($value);
                 }
                 if($comparator == "m")
                 {
-                        $rtvalue = " <= ".PearDatabase::quote($value);
+                        $rtvalue = " <= ".$adb->quote($value);
                 }
                 if($comparator == "h")
                 {
-                        $rtvalue = " >= ".PearDatabase::quote($value);
+                        $rtvalue = " >= ".$adb->quote($value);
                 }
 
 		 $log->info("ReportRun :: Successfully returned getAdvComparator");

@@ -24,7 +24,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		if($id != '')
 		{
 			$record = $_REQUEST["parentid"];
-			$sql = "insert into seactivityrel values (". PearDatabase::quote($id).",".PearDatabase::quote($_REQUEST["parentid"]) .")";
+			$sql = "insert into seactivityrel values (". $adb->quote($id).",".$adb->quote($_REQUEST["parentid"]) .")";
 			$adb->query($sql);
 		}
 	}
@@ -34,7 +34,7 @@ elseif (isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$record = $_REQUEST["parid"];
 	//$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-	$sql = "insert into seactivityrel values (". PearDatabase::quote($_REQUEST["entityid"]).",".PearDatabase::quote($_REQUEST["parid"]) .")";
+	$sql = "insert into seactivityrel values (". $adb->quote($_REQUEST["entityid"]).",".$adb->quote($_REQUEST["parid"]) .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 }
@@ -45,7 +45,7 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
 	//$sql = "insert into salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
-	$sql = "insert into salesmanactivityrel values (".PearDatabase::quote($_REQUEST["user_id"]).",".PearDatabase::quote($_REQUEST["record"]).")";
+	$sql = "insert into salesmanactivityrel values (".$adb->quote($_REQUEST["user_id"]).",".$adb->quote($_REQUEST["record"]).")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 }

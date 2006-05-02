@@ -37,7 +37,7 @@ function sendmail($to_list,$cc_list,$bcc_list,$from,$fromname,$subject,$body)
 		$mail->Subject = "Re: ".$subject;
 
 
-	//$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from).),0,"signature")).'</font>';
+	//$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".$adb->quote($from).),0,"signature")).'</font>';
 
         $mail->Body = $body;
 	$mail->IsSMTP();

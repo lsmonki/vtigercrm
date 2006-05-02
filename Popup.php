@@ -184,15 +184,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		if (isset($_REQUEST['title'])) $title = $_REQUEST['title'];
 
 		if(isset($lastname) && $lastname != "") {
-			array_push($where_clauses, "contactdetails.lastname like ".PearDatabase::quote($lastname.'%')."");
+			array_push($where_clauses, "contactdetails.lastname like ".$adb->quote($lastname.'%')."");
 			$url_string .= "&lastname=".$lastname;
 		}
 		if(isset($firstname) && $firstname != "") {
-			array_push($where_clauses, "contactdetails.firstname like ".PearDatabase::quote($firstname.'%')."");
+			array_push($where_clauses, "contactdetails.firstname like ".$adb->quote($firstname.'%')."");
 			$url_string .= "&firstname=".$firstname;
 		}
 		if(isset($title) && $title != "")       {
-			array_push($where_clauses, "contactdetails.title like ".PearDatabase::quote("%".$title.'%')."");
+			array_push($where_clauses, "contactdetails.title like ".$adb->quote("%".$title.'%')."");
 			$url_string .= "&title=".$title;
 		}
 		if(isset($current_user_only) && $current_user_only != "") {
@@ -209,16 +209,16 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		if (isset($_REQUEST['address_city'])) $address_city = $_REQUEST['address_city'];
 
 		if(isset($name) && $name != ""){
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
+			array_push($where_clauses, "account.accountname like ".$adb->quote($name."%"));
 			$url_string .= "&name=".$name;
 		}
-		if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-		if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
+		if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".$adb->quote("%".$website."%"));
+		if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".$adb->quote("%".$phone."%")." OR account.otherphone like ".$adb->quote("%".$phone."%")." OR account.fax like ".$adb->quote("%".$phone."%").")");
 		if(isset($address_city) && $address_city != ""){
-			array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote("%".$address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
+			array_push($where_clauses, "(accountbillads.city like ".$adb->quote("%".$address_city."%")." OR accountshipads.city like ".$adb->quote($address_city."%").")");
 			$url_string .= "&address_city=".$address_city;
 		}
-		if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
+		if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".$adb->quote($ownership."%"));
 		if(isset($current_user_only) && $current_user_only != ""){
 			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 			$url_string .= "&current_user_only=".$current_user_only;
@@ -254,11 +254,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		if (isset($_REQUEST['account_name'])) $accountname = $_REQUEST['account_name'];
 
 		if(isset($name) && $name != "") {
-			array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote($name.'%')."");
+			array_push($where_clauses, "potential.potentialname like ".$adb->quote($name.'%')."");
 			$url_string .= "&name=".$name;
 		}
 		if(isset($accountname) && $accountname != "") {
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote('%'.$accountname.'%')."");
+			array_push($where_clauses, "account.accountname like ".$adb->quote('%'.$accountname.'%')."");
 			$url_string .= "&account_name=".$accountname;
 		}
 		if(isset($current_user_only) && $current_user_only != "") {
@@ -276,18 +276,18 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
 		if(isset($subject) && $subject != "")
 		{
-			array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($subject."%"));
+			array_push($where_clauses, "quotes.subject like ".$adb->quote($subject."%"));
 			$url_string .= "&subject=".$subject;
 		}
 		if(isset($accountname) && $accountname != "")
 		{
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote("%".$accountname."%"));
+			array_push($where_clauses, "account.accountname like ".$adb->quote("%".$accountname."%"));
 			$url_string .= "&accountname=".$accountname;
 		}
 
 		if(isset($quotestage) && $quotestage != "")
 		{
-			array_push($where_clauses, "quotes.quotestage like ".PearDatabase::quote("%".$quotestage."%"));
+			array_push($where_clauses, "quotes.quotestage like ".$adb->quote("%".$quotestage."%"));
 			$url_string .= "&quotestage=".$quotestage;
 		}
 
@@ -359,18 +359,18 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$where_clauses = Array();
 		if(isset($subject) && $subject != '')
 		{
-			array_push($where_clauses, "purchaseorder.subject like ".PearDatabase::quote($subject."%"));
+			array_push($where_clauses, "purchaseorder.subject like ".$adb->quote($subject."%"));
 			$url_string .= "&subject=".$subject;
 
 		}
 		if(isset($vendorname) && $vendorname != "")
 		{
-			array_push($where_clauses, "vendor.vendorname like ".PearDatabase::quote("%".$vendorname."%"));
+			array_push($where_clauses, "vendor.vendorname like ".$adb->quote("%".$vendorname."%"));
 			$url_string .= "&vendorname=".$vendorname;
 		}
 		if(isset($trackingno) && $trackingno != "")
 		{
-			array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$trackingno."%"));
+			array_push($where_clauses, "purchaseorder.tracking_no like ".$adb->quote("%".$trackingno."%"));
 			$url_string .= "&trackingno=".$trackingno;
 		}
 	}
@@ -387,19 +387,19 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 		if (isset($subject) && $subject !='')
 		{
-			array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
+			array_push($where_clauses, "salesorder.subject like ".$adb->quote($subject.'%'));
 			$url_string .= "&subject=".$subject;
 		}	
 
 		if (isset($accountname) && $accountname !='')
 		{
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
+			array_push($where_clauses, "account.accountname like ".$adb->quote($accountname.'%'));
 			$url_string .= "&accountname=".$accountname;
 		}
 
 		if (isset($quotename) && $quotename !='')
 		{
-			array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
+			array_push($where_clauses, "quotes.subject like ".$adb->quote($quotename.'%'));
 			$url_string .= "&quotename=".$quotename;
 		}
 
@@ -432,21 +432,21 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		if (isset($vendorname) && $vendorname !='')
 		{
-			array_push($where_clauses, "vendorname like ".PearDatabase::quote($vendorname.'%'));
+			array_push($where_clauses, "vendorname like ".$adb->quote($vendorname.'%'));
 			//$search_query .= " and productname like '".$productname."%'";
 			$url_string .= "&vendorname=".$vendorname;
 		}
 
 		if (isset($companyname) && $companyname !='')
 		{
-			array_push($where_clauses, "company_name like ".PearDatabase::quote($companyname.'%'));
+			array_push($where_clauses, "company_name like ".$adb->quote($companyname.'%'));
 			//$search_query .= " and productcode like '".$productcode."%'";
 			$url_string .= "&companyname=".$companyname;
 		}
 
 		if (isset($category) && $category !='')
 		{
-			array_push($where_clauses, "category like ".PearDatabase::quote($category.'%'));
+			array_push($where_clauses, "category like ".$adb->quote($category.'%'));
 			//$search_query .= " and productcode like '".$productcode."%'";
 			$url_string .= "&category=".$category;
 		}
@@ -466,7 +466,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "".PearDatabase::quote($val)."";
+			$where .= "".$adb->quote($val)."";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}
