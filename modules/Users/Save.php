@@ -81,13 +81,13 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 /*	if (!$focus->verify_data()) {
 		header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
 		exit;
-	}
-	else {	
+	}*/
+	if ($focus->verify_data()) {	
 		$focus->save("Users");
 //		include('modules/Calendar/user_ins.php');
 //		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
-	}*/
+	}
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
 	/*	
 		//changing fourm password	
