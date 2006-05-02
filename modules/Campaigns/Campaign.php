@@ -36,15 +36,16 @@ class Campaign extends CRMEntity {
 	var $sortby_fields = Array('campaignname','smownerid','expectedcost');
 
 	var $list_fields = Array(
-	'Campaign ID'=>Array('crmentity'=>'crmid'),
-	'Campaign Name'=>Array('campaign'=>'campaignname'),	  			
-	'Expected Cost'=>Array('campaign'=>'expectedcost')
-	);
+					'Campaign ID'=>Array('crmentity'=>'crmid'),
+					'Campaign Name'=>Array('campaign'=>'campaignname'),
+					'Campaign Type'=>Array('campaign'=>'campaigntype'),
+					'Campaign Status'=>Array('campaign'=>'campaignstatus'),
+				);
 
 	var $list_fields_name = Array(
-	'Campaign ID'=>'',
-	'Campaign Name'=>'campaignname',	  			
-	'Expected Cost'=>'expectedcost');	  			
+					'Campaign ID'=>'',
+					'Campaign Name'=>'campaignname',
+				     );	  			
 
 	var $list_link_field= 'campaignname';
 	//Added these variables which are used as default order by and sortorder in ListView

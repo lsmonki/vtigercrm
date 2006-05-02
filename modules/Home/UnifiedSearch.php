@@ -86,17 +86,18 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("MODULE",$module);
 		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
 		$smarty->assign("SINGLE_MOD",$module);
-		$smarty->assign("SEARCH_CRITERIA"," -- Search results for <b>".$search_val."</b>");
 
 		$listquery = getListQuery($module);
 
 		if($search_module != '')//This is for Tag search
 		{
 			$where = getTagWhere($search_val,$current_user->id);
+			$search_msg = " -- Tag search for <b>".$search_val."</b>";
 		}
 		else			//This is for Global search
 		{
 			$where = getUnifiedWhere($listquery,$module,$search_val);
+			$search_msg = " -- Search results for <b>".$search_val."</b>";
 		}
 
 		if($where != '')
@@ -128,6 +129,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("DISPLAYHEADER", $display_header);
 		$smarty->assign("HEADERCOUNT", count($listview_header));
 
+		$smarty->assign("SEARCH_CRITERIA",$search_msg);
 		$smarty->assign("MODULES_LIST", $object_array);
 
 		$smarty->display("GlobalListView.tpl");

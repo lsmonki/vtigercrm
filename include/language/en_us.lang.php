@@ -772,6 +772,8 @@ $app_strings = Array(
 'LBL_DAY_AGO'=>'day ago',
 'LBL_DAYS_AGO'=>'days ago',
 
+//Added after 5.0 Alpha5
+'Campaign Name'=>'Campaign Name',
 );
 
 
