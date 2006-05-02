@@ -105,7 +105,7 @@
 <input type="hidden" name="templateid" value="{$TEMPLATEID}">
 
 <!-- EMAIL TEMPLATE PAGE STARTS HERE -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%" class="small">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
 			{if $EMODE eq 'edit'}
@@ -126,14 +126,14 @@
 			  <tr>
 
 				<td colspan="2">
-					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 						<tr>
 						  <td width="5%" valign="top" align="right" nowrap>
 								<img src="{$IMAGE_PATH}ViewTemplate.gif" align="left" />
 							</td>
 								<td width="5%" valign="top" align="right" nowrap>
 									<b><font color='red'>*</font>{$UMOD.LBL_TEMPLATE_NAME}</b><br />
-									<br /><br />
+									<br />
 									<b>Description:</b><br />
 									<br /><br />
 									<b><font color='red'>*</font>Folder:</b>
@@ -176,14 +176,14 @@
 			  </tr>
 			  <tr>
 			    <td colspan="2" style="border:2px solid #CCCCCC;">
-					<table width="100%" border="0" cellpadding="5" cellspacing="0">
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 
 	                  <tr>
     	                <td width="15%" align="right" bgcolor="#F6F6F6"><b><font color='red'>*</font>{$UMOD.LBL_TEMPLATE_SUBJECT}</b></td>
         	            <td width="60%" style="border-right:1px dashed #CCCCCC;">
 							<input name="subject" type="text" class="detailedViewTextBox" value="{$SUBJECT}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" tabindex="4"/></td>
             	      	<td width="25%" rowspan="3" style="padding:5px;text-align:left;vertical-align:top;">
-							<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 								<tr><td style="color:#999999;">{$UMOD.LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT}</td></tr>
 
 								<tr><td><b><u>Available Merge Fields</u></b></td></tr>
