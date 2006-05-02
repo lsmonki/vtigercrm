@@ -493,12 +493,12 @@ class User extends SugarBean {
 	{
 		global $mod_strings;
 		$header_array=array(
-						    $mod_strings['LBL_LIST_TOOLS'],
 						    $mod_strings['LBL_LIST_USER_NAME'],
 						    $mod_strings['LBL_USER_ROLE'],
 						    $mod_strings['LBL_LIST_EMAIL'],
 						    $mod_strings['LBL_LIST_NAME'],
-						    $mod_strings['LBL_LIST_ADMIN']);
+						    $mod_strings['LBL_LIST_ADMIN'],
+							$mod_strings['LBL_LIST_TOOLS']);
 		return $header_array;
 	}
 
@@ -517,14 +517,6 @@ class User extends SugarBean {
 			$entries=array();
 			$id=$this->db->query_result($result,$i-1,'id');
 			
-			if($this->db->query_result($result,$i-1,'user_name') == 'admin' || $this->db->query_result($result,$i-1,'user_name') == 'standarduser' )
-			{
-			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
-	                }
-		        else
-			  
-	    	              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'edit.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'del.gif" border="0"  alt="Delete" title="Delete"/></a>';
-			
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 
                         $rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
@@ -535,6 +527,13 @@ class User extends SugarBean {
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name').'</a>';
 
 			$entries[]=$this->db->query_result($result,$i-1,'is_admin');
+			if($this->db->query_result($result,$i-1,'user_name') == 'admin' || $this->db->query_result($result,$i-1,'user_name') == 'standarduser' )
+			{
+			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
+	                }
+		        else
+			  
+	    	              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
 
 			$entries_list[]=$entries;
 													
