@@ -4,6 +4,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/slider.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/prototype_fade.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/effectspack.js"></script>
+<script language="javascript" type="text/javascript" src="include/js/general.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -11,8 +12,6 @@
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr><td class="detailedViewHeader" align="left"><b>{$MOD.LBL_USER_MANAGEMENT}</b></td></tr>
-	
 	<tr><td class="padTab" align="left">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form">
@@ -29,34 +28,51 @@
 			<input type="hidden" name="forumDisplay">
 			<input type="hidden" name="parenttab" value=Settings>	
 
+			<tr>
+					<td style="border-bottom:1px dashed #CCCCCC;">
+							<table width="100%" cellpadding="5" cellspacing="0" border="0">
+									<tr>
+											<td colspan="2" style="padding:5px;">
+													<span class="lvtHeaderText">
+													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
+															 > {$MOD.LBL_USER_MANAGEMENT}</b></span>
+															<hr noshade="noshade" size="1" />
+											</td>
+									  </tr>
+									<tr>
+											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
+											<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
+												<b class="small">Detail View of {$FIRST_NAME} {$LAST_NAME}</b>
+											</td>
+									</tr>
+							</table>
+					</td>
+			</tr>
+			<tr><td>&nbsp;</td></tr>
 			<tr valign="center">
-		            <td class="small" valign="center">
-				{$USER_IMAGE}
-				{$EDIT_BUTTON}
+			        <td class="small" align="center">
+					{$EDIT_BUTTON}
 				{$CHANGE_PW_BUTTON}
 				{$LOGIN_HISTORY_BUTTON}
 				{$DUPLICATE_BUTTON}
 				{$DELETE_BUTTON}
 				{$LIST_MAILSERVER_BUTTON}
-                                {$CHANGE_HOMEPAGE_BUTTON}
+				{$CHANGE_HOMEPAGE_BUTTON}	
 				{$LISTROLES_BUTTON}
 	</td></tr>
 
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">
-	
-		<div id="contents">
-		<div id="fadedtabs">
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="99%">
 		  
 		  <tr>
 			<td>
 			  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
-			  <tr id="tabs">
+			  <tr >
 			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
-			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab1" id="current"><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></a></td>
-				    <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab2"><b>{$UMOD.LBL_USER_MORE_INFN}</b></a></td>
-				    <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a onclick="new EffectPack.TabToggle(this);" href="#tab3"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></a></td>
+			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onClick="fnVis('mnuTab')"><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
+				    <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onClick="fnVis('mnuTab1')"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
+				    <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onClick="fnVis('mnuTab2')"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
 				    <td class="dvtTabCache" nowrap="nowrap" width="10">&nbsp;</td>
 			  </tr>
 			  </table>
@@ -64,11 +80,11 @@
 		  </tr>
 		  <tr>
 		  	<td align="left" valign="top">
-			<div id="tab1" class="tabset_content">
+			<div id="mnuTab">
 				<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr><td height="35">&nbsp;</td></tr>
 				<tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
   		    	<tr>
 				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_INFORMATION}</b></td>
 				</tr>  
@@ -81,9 +97,9 @@
 				{if $MODE eq 'edit'}
 				<tr>
 				<td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_PASSWORD} </td>
-			    <td class="dvtCellInfo" width="20%"><input type="text" name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+			    <td class="dvtCellInfo" width="20%"><input  name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
-			    <td class="dvtCellInfo" width="20%"><input type="text" name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+			    <td class="dvtCellInfo" width="20%"><input name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			    </tr>
 				{/if}	
 			    <tr>
@@ -122,11 +138,11 @@
 				</td></tr>
 				</table>
 			</div>
-			<div id="tab2" class="tabset_content">
+			<div id="mnuTab1" >
 			  	<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr><td height="35">&nbsp;</td></tr>
 				<tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 				<tr>
 				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
 				</tr>  
@@ -178,11 +194,11 @@
 				</td></tr>
 				</table>
 			</div>
-		  	<div id="tab3" class="tabset_content">
+		  	<div id="mnuTab2" >
  			    <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 			    <tr><td height="35">&nbsp;</td></tr>
 			    <tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 				<tr>
 				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
 				</tr>  
@@ -227,17 +243,9 @@
 	        <tr><td>&nbsp;</td></tr>
 			
 	  </table>
-</div>
-<script type="text/javascript">
-contents = document.getElementsByClassName('tabset_content');
-for(var i = 1; i < contents.length; i++)
-{ldelim}
-	contents[i].style.display = 'none';
-{rdelim}
-//to set the slider to the default size
-document.getElementById('handle1').style.left='45px';
-</script>
-</div>
+
+
+
 </td></tr>
 </table>
 </form>
