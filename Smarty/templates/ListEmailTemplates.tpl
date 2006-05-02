@@ -71,30 +71,32 @@ function massDelete()
 	</tr>
 	<tr>
 		<td width="90%" style="padding-left:20px;" valign="top">
-			<table width="100%" cellpadding="3" cellspacing="0" class="prdTab" >
+			<table width="100%" cellpadding="3" cellspacing="0" border="0" class="small" >
 			<form  name="massdelete" method="POST">
     			<input name="idlist" type="hidden">
     			<input name="module" type="hidden" value="Users">
     			<input name="action" type="hidden" value="deleteemailtemplate">
 				<tr><td colspan="4" style="border:0px;">&nbsp;</td></tr>
 				<tr>
-					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="small" /></td>
+					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="classBtn" /></td>
 					<td style="border:0px;">&nbsp;</td>
 
 					<td align="right" style="border:0px;">
-						<div align="right"><input type="submit" value="New Template" name="profile"  class="small" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"/></div>
+						<div align="right"><input type="submit" value="New Template" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"/></div>
 					</td>
 				</tr>
 				<tr>{*<td colspan="4" style="border:0px;">&nbsp;</td>*}</tr>
-				<tr>
-				  <th width="5%"  style="border-top:1px solid #CCCCCC;height:30px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id") ></th>
-				  <th width="20%" style="border-top:1px solid #CCCCCC; "><b>{$UMOD.LBL_TEMPLATE_HEADER}</b></th>
+				<tr><td colspan="4">
+					<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
+						<tr>
+				  <th width="5%" class="lvtCol" ><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id") ></th>
+				  <th width="20%" class="lvtCol"><b>{$UMOD.LBL_TEMPLATE_HEADER}</b></th>
 
-				  <th width="50%" style="border-top:1px solid #CCCCCC; "><b>{$UMOD.LBL_DESCRIPTION}</b></th>
-				  <th width="25%" style="border-top:1px solid #CCCCCC; "><b>{$UMOD.LBL_TEMPLATE_TOOLS}</b></th>
+				  <th width="50%" class="lvtCol"><b>{$UMOD.LBL_DESCRIPTION}</b></th>
+				  <th width="25%" class="lvtCol"><b>{$UMOD.LBL_TEMPLATE_TOOLS}</b></th>
 			  </tr>
 				{foreach item=template from=$TEMPLATES}
-				<tr onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOut'">
+				<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
 				<td><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall") /></td>
 				<td nowrap>
 				{if $template.foldername == "Public"}
@@ -108,6 +110,9 @@ function massDelete()
 			  	</tr>
 				
 				{/foreach}
+				<tr>
+					</table>
+				</td></tr>
 				<tr>
 				  <td colspan="3" style="border:0px">
 
