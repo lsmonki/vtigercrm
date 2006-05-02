@@ -32,8 +32,14 @@
 	<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="10" class="small">
                 <tr>
-                      <td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url(include/images/noimage.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
-                      <td colspan="2" class="genHeaderSmall" width="75%"><img src="{$IMAGE_PATH}fp1.gif" width="59" height="40" align="absmiddle" />{$UMOD.LBL_TEMPLATE_DETAILS} </td>
+                     <td rowspan="11" bgcolor="#ffffff" width="30%" valign="bottom" background="{$IMAGE_PATH}MailMerge_top.gif" style="background-position:top right;background-repeat:no-repeat;">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+						<td background="{$IMAGE_PATH}MailMerge_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="150">&nbsp;</td>
+				</tr>
+		</table>
+	</td>
+                      <td colspan="2" class="genHeaderSmall" width="70%"><img src="{$IMAGE_PATH}fp1.gif" width="59" height="40" align="absmiddle" />{$UMOD.LBL_TEMPLATE_DETAILS} </td>
                </tr>
 		<tr>
                       <td align="right" valign="top"><b>{$UMOD.LBL_DESCRIPTION}  : </b></td>
