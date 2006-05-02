@@ -71,44 +71,48 @@ function massDelete()
 	</tr>
 	<tr>
 		<td width="90%" style="padding-left:20px;" valign="top">
-			<table width="100%" cellpadding="3" cellspacing="0" class="prdTab" >
-			<form  name="massdelete" method="POST">
+			  <form  name="massdelete" method="POST">
     			<input name="idlist" type="hidden">
     			<input name="module" type="hidden" value="Users">
     			<input name="action" type="hidden" value="deletewordtemplate">
-				<tr><td colspan="4" style="border:0px;">&nbsp;</td></tr>
+			<table width="100%" cellpadding="3" cellspacing="0" class="small" >
+			   
+				<tr><td colspan="6" style="border:0px;">&nbsp;</td></tr>
 				<tr>
-					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="small" /></td>
+					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="classBtn" /></td>
 					<td style="border:0px;">&nbsp;</td>
 
-					<td align="right" colspan="333" style="border:0px;">
-						<div align="right" ><input type="submit" value="New Template" name="profile"  class="small" onclick="this.form.action.value='upload';"/></div>
+					<td align="right" colspan="3" style="border:0px;">
+						<div align="right" ><input type="submit" value="New Template" name="profile"  class="classBtn" onclick="this.form.action.value='upload';"/></div>
 					</td>
 				</tr>
-				<tr>{*<td colspan="4" style="border:0px;">&nbsp;</td>*}</tr>
+				<tr>{*<td colspan="6" style="border:0px;">&nbsp;</td>*}</tr>
 				<tr>
-				  <th width="5%"  style="border-top:1px solid #CCCCCC;height:30px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id") ></th>
-				  <th width="20%" style="border-top:1px solid #CCCCCC; " nowrap><b>{$UMOD.LBL_FILE}</b></th>
-
-				  <th width="50%" style="border-top:1px solid #CCCCCC; " nowrap><b>{$UMOD.LBL_DESCRIPTION}</b></th>
-				  <th width="25%" style="border-top:1px solid #CCCCCC; " nowrap><b>{$UMOD.LBL_MODULENAMES}</b></th>
-				  <th width="25%" style="border-top:1px solid #CCCCCC; " nowrap><b>{$UMOD.LBL_DOWNLOAD}</b></th>
-				  <th width="25%" style="border-top:1px solid #CCCCCC; " nowrap><b>{$UMOD.LBL_FILE_TYPE}</b></th>
-			  </tr>
-				{foreach item=template from=$WORDTEMPLATES}
-				<tr onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOut'">
-				<td><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall") /></td>
-				<td nowrap>{$template.filename}</td>
-				<td nowrap>{$template.description}</td>
-				<td nowrap>{$template.module}</td>
-				<td nowrap><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD_NOW}</a></td>
-				<td nowrap>{$template.filetype}</td>	
-			  	</tr>
-				
-				{/foreach}
-			</form>	
-			</table>
-			
+				<td colspan="6">
+					<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
+						<tr>
+						  <th width="5%" class="lvtCol" ><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id") ></th>
+						  <th width="20%" nowrap class="lvtCol"><b>{$UMOD.LBL_FILE}</b></th>
+						  <th width="50%" nowrap class="lvtCol"><b>{$UMOD.LBL_DESCRIPTION}</b></th>
+						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_MODULENAMES}</b></th>
+						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_DOWNLOAD}</b></th>
+						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_FILE_TYPE}</b></th>
+					  </tr>
+						{foreach item=template from=$WORDTEMPLATES}
+						<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
+							<td><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall") /></td>
+							<td nowrap>{$template.filename}</td>
+							<td nowrap>{$template.description}</td>
+							<td nowrap>{$template.module}</td>
+							<td nowrap><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD_NOW}</a></td>
+							<td nowrap>{$template.filetype}</td>	
+				  	</tr>
+					{/foreach}
+				</table>
+			</td>
+		</tr>	
+	</table>
+			</form>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
