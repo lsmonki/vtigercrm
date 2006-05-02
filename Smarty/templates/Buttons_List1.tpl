@@ -52,7 +52,7 @@
 	
 	
 	{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' }
-	<td class="sep1" style="width:1px"></td>
+	<td class="sep1" style="width:1px;padding-right:1px"></td>
 	<td nowrap style="width:50%;padding:10px">
 	   	{if $CHECK.Import eq 'yes' && $CHECK.Export eq 'yes'}	
 			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> |	
