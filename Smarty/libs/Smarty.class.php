@@ -138,7 +138,7 @@ class Smarty
      *
      * @var boolean
      */
-    var $compile_check   =  true;
+    var $compile_check   =  false;
 
     /**
      * This forces templates to compile every time. Useful for development
@@ -157,7 +157,7 @@ class Smarty
      * </ul>
      * @var integer
      */
-    var $caching         =  0;
+    var $caching         =  1;
 
     /**
      * The name of the directory for cache files.
@@ -175,7 +175,7 @@ class Smarty
      *
      * @var integer
      */
-    var $cache_lifetime  =  3600;
+    var $cache_lifetime  =  5;
 
     /**
      * Only used when $caching is enabled. If true, then If-Modified-Since headers
@@ -185,7 +185,7 @@ class Smarty
      *
      * @var boolean
      */
-    var $cache_modified_check = false;
+    var $cache_modified_check = true;
 
     /**
      * This determines how Smarty handles "<?php ... ?>" tags in templates.
