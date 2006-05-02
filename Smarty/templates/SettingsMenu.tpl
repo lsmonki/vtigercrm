@@ -10,8 +10,8 @@
 <td>
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top','user');">
 
-<tr><td width="95%"><a href="#" class="lftMnuHdr">{$MOD.LBL_USER_MANAGEMENT}</a></td>
-<td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}/downArrow.gif" border="0" /></a></td>
+<tr><td width="95%"><a href="javascript:;" class="lftMnuHdr">{$MOD.LBL_USER_MANAGEMENT}</a></td>
+<td width="5%"><a href="javascript:;" class="lftMnuHdr"><img src="{$IMAGE_PATH}/downArrow.gif" border="0" /></a></td>
 </tr>
 </table>
 
@@ -24,12 +24,12 @@
 	<a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
 	<a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a>
 	<a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ASSIGN_MODULE_OWNERS}</a>
-	<a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
+	<a href="index.php?module=Users&action=Announcements&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ANNOUNCEMENT}</a>
 </div></div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top2','studio');">
-<tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_STUDIO}</a></td>
-<td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
+<tr><td width="95%"><a href="javascript:;" class="lftMnuHdr" >{$MOD.LBL_STUDIO}</a></td>
+<td width="5%"><a href="javascript:;" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 
 <div id="top2">
@@ -40,8 +40,8 @@
 </div></div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top3','comm')" >
-<tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_COMMUNICATION_TEMPLATES}</a></td>
-<td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
+<tr><td width="95%"><a href="javascript:;" class="lftMnuHdr" >{$MOD.LBL_COMMUNICATION_TEMPLATES}</a></td>
+<td width="5%"><a href="javascript:;" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 
 <div id="top3">		
@@ -55,8 +55,8 @@
 </div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top4','config')">
-<tr><td width="95%"><a href="#" class="lftMnuHdr" >{$MOD.LBL_CONFIGURATION}</a></td>
-<td width="5%"><a href="#" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
+<tr><td width="95%"><a href="javascript:;" class="lftMnuHdr" >{$MOD.LBL_CONFIGURATION}</a></td>
+<td width="5%"><a href="javascript:;" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 <div id="top4">
 <div id="config" style="height:135px;">
