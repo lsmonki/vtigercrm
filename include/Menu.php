@@ -25,7 +25,8 @@ global $app_strings;
 global $moduleList;
 
 require_once('include/utils/utils.php');
-$permissionData = $_SESSION['action_permission_set'];
+require_once('include/utils/UserInfoUtil.php');
+
 
 $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Leads'=> $app_strings['LNK_NEW_LEAD'],
@@ -74,7 +75,7 @@ foreach($module_menu_array as $module1 => $label)
 	if(in_array($module_display, $moduleList))
 	{
 	
-		if($permissionData[$tabid][1] ==0)
+		if(isPermitted($module_display,'EditView') == 'yes')
 		{
 			$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
 			$module_menu[$i] = $tempArray;
