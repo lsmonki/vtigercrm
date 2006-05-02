@@ -90,7 +90,7 @@
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_NAME} </td>
-				<td class="dvtCellInfo">{$USER_NAME}</td>
+				<td class="dvtCellInfo">{$USER_NAME}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
         	    <td class="dvtCellInfo"><input type="checkbox" name="is_admin" DISABLED {$IS_ADMIN}/></td>
 				</tr>
@@ -104,34 +104,34 @@
 				{/if}	
 			    <tr>
 			    <td class="dvtCellLabel" align="right">{$UMOD.LBL_FIRST_NAME} </td>
-			    <td class="dvtCellInfo">{$FIRST_NAME}</td>
+			    <td class="dvtCellInfo">{$FIRST_NAME}&nbsp;</td>
 			    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_LAST_NAME}</td>
-			    <td class="dvtCellInfo">{$LAST_NAME}</td>
+			    <td class="dvtCellInfo">{$LAST_NAME}&nbsp;</td>
 			 	</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_ROLE}</td>
-				<td class="dvtCellInfo">{$ROLEASSIGNED}</td>							      <td class="dvtCellLabel" align="right">{$UMOD.LBL_GROUP_NAME}</td>
-				<td class="dvtCellInfo">{$GROUPASSIGNED}</td>
+				<td class="dvtCellInfo">{$ROLEASSIGNED}&nbsp;</td>							      <td class="dvtCellLabel" align="right">{$UMOD.LBL_GROUP_NAME}</td>
+				<td class="dvtCellInfo">{$GROUPASSIGNED}&nbsp;</td>
 			    </tr>
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
-				<td class="dvtCellInfo">{$EMAIL1}</td>
+				<td class="dvtCellInfo">{$EMAIL1}&nbsp;</td>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
 
-				<td class="dvtCellInfo">{$STATUS}</td>
+				<td class="dvtCellInfo">{$STATUS}&nbsp;</td>
 				</tr>
 				<tr><td colspan="4" class="dvtCellInfo" height="30">&nbsp;</td></tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ACTIVITY_VIEW}</td>
-				<td class="dvtCellInfo">{$ACTIVITY_VIEW}</td>
+				<td class="dvtCellInfo">{$ACTIVITY_VIEW}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_LEAD_VIEW}</td>
-				<td span class="dvtCellInfo">{$LEAD_VIEW}</td>
+				<td span class="dvtCellInfo">{$LEAD_VIEW}&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_COLOR}</td>
-				<td class="dvtCellInfo">{$COLORASSIGNED}</td>
+				<td class="dvtCellInfo">{$COLORASSIGNED}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
-                <td span class="dvtCellInfo">{$CURRENCY_NAME}</td>
+                <td span class="dvtCellInfo">{$CURRENCY_NAME}&nbsp;</td>
 				</tr>
 				<tr><td colspan="4" height="30">&nbsp;</td></tr>
 				</table>
@@ -148,46 +148,45 @@
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_TITLE}</td>
-				<td class="dvtCellInfo">{$TITLE}</td>
+				<td class="dvtCellInfo">{$TITLE}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OFFICE_PHONE}</td>
-         		<td class="dvtCellInfo">{$PHONE_WORK}</td>
+         		<td class="dvtCellInfo">{$PHONE_WORK}&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right" width="20%">{$UMOD.LBL_DEPARTMENT}</td>
-				<td class="dvtCellInfo" width="20%">{$DEPARTMENT}</td>
+				<td class="dvtCellInfo" width="20%">{$DEPARTMENT}&nbsp;</td>
 				<td class="dvtCellLabel" width="20%" align="right">{$UMOD.LBL_MOBILE_PHONE}</td>
-				<td class="dvtCellInfo" width="20%">{$PHONE_MOBILE}</td>
+				<td class="dvtCellInfo" width="20%">{$PHONE_MOBILE}&nbsp;</td>
 			    </tr>
 			    <tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_REPORTS_TO}</td>
 				<td class="dvtCellInfo" width="20%">{$REPORTS_TO_NAME}{$REPORTS_TO_ID}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OTHER_PHONE}</td>
-				<td class="dvtCellInfo">{$PHONE_OTHER}</td>
+				<td class="dvtCellInfo">{$PHONE_OTHER}&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OTHER_EMAIL}</td>
-				<td class="dvtCellInfo">{$EMAIL2}</td>
+				<td class="dvtCellInfo">{$EMAIL2}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_FAX}</td>
-				<td class="dvtCellInfo">{$PHONE_FAX}</td>
+				<td class="dvtCellInfo">{$PHONE_FAX}&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_YAHOO_ID}</td>
-				<td class="dvtCellInfo">{$YAHOO_ID}</td>
+				<td class="dvtCellInfo">{$YAHOO_ID}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
-				<td class="dvtCellInfo">{$PHONE_HOME}</td>
+				<td class="dvtCellInfo">{$PHONE_HOME}&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_DATE_FORMAT}</td>
-				<td class="dvtCellInfo" width="30%">{$DATE_FORMAT}</td>
+				<td class="dvtCellInfo" width="30%">{$DATE_FORMAT}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">&nbsp;</td>
 				<td class="dvtCellInfo">&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_SIGNATURE}</td>
-				<td class="dvtCellInfo">{$SIGNATURE}</td>
+				<td class="dvtCellInfo">{$SIGNATURE}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_NOTES}</td>
-				<td span class="dvtCellInfo">{$DESCRIPTION}
-				</td>
+				<td span class="dvtCellInfo">{$DESCRIPTION}&nbsp;</td>
 				</tr>
 				<tr><td colspan="4" height="30">&nbsp;</td></tr>
 				</table>
@@ -204,31 +203,31 @@
 				</tr>  
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADDRESS}</td>
-				<td class="dvtCellInfo">{$ADDRESS_STREET}</td>
+				<td class="dvtCellInfo">{$ADDRESS_STREET}&nbsp;</td>
 				<td class="dvtCellInfo" >&nbsp;</td>
 				<td class="dvtCellInfo">&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right" width="20%">{$UMOD.LBL_CITY}</td>
-				<td class="dvtCellInfo" width="20%">{$ADDRESS_CITY}</td>
+				<td class="dvtCellInfo" width="20%">{$ADDRESS_CITY}&nbsp;</td>
 				<td class="dvtCellInfo" width="20%">&nbsp;</td>
 				<td class="dvtCellInfo" width="20%">&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_STATE}</td>
-				<td class="dvtCellInfo">{$ADDRESS_STATE}</td>
+				<td class="dvtCellInfo">{$ADDRESS_STATE}&nbsp;</td>
 				<td class="dvtCellInfo">&nbsp;</td>
 				<td class="dvtCellInfo">&nbsp;</td>
 				</tr>
 				<tr>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_POSTAL_CODE}</td>
-				<td class="dvtCellInfo">{$ADDRESS_POSTALCODE}</td>
+				<td class="dvtCellInfo">{$ADDRESS_POSTALCODE}&nbsp;</td>
 			    <td class="dvtCellInfo">&nbsp;</td>
 			    <td class="dvtCellInfo">&nbsp;</td>
 				</tr>
 				<tr>
 			    <td class="dvtCellLabel" align="right">{$UMOD.LBL_COUNTRY}</td>
-			    <td class="dvtCellInfo">{$ADDRESS_COUNTRY}</td>
+			    <td class="dvtCellInfo">{$ADDRESS_COUNTRY}&nbsp;</td>
 			    <td class="dvtCellInfo" >&nbsp;</td>
 			    <td class="dvtCellInfo">&nbsp;</td>
 			    </tr>
