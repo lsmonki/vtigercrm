@@ -72,7 +72,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	$search_val = $_REQUEST['query_string'];
 	$search_module = $_REQUEST['search_module'];
 
-	getComboList($search_module);
+	getSearchModulesComboList($search_module);
 
 	foreach($object_array as $module => $object_name)
 	{
@@ -85,7 +85,8 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("IMAGE_PATH",$image_path);
 		$smarty->assign("MODULE",$module);
 		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
-		$smarty->assign("SINGLE_MOD",'Account');
+		$smarty->assign("SINGLE_MOD",$module);
+		$smarty->assign("SEARCH_CRITERIA"," -- Search results for <b>".$search_val."</b>");
 
 		$listquery = getListQuery($module);
 
@@ -137,7 +138,12 @@ else {
 	echo "<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>".$mod_strings['ERR_ONE_CHAR']."</em>";
 }
 
-
+/**	Function to get the where condition for a module based on the field table entries
+  *	@param  string $listquery  -- ListView query for the module 
+  *	@param  string $module     -- module name
+  *	@param  string $search_val -- entered search string value
+  *	@return string $where      -- where condition for the module based on field table entries
+  */
 function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
@@ -163,6 +169,12 @@ function getUnifiedWhere($listquery,$module,$search_val)
 
 	return $where;
 }
+
+/**	Function to get the Tags where condition
+  *	@param  string $search_val -- entered search string value
+  *	@param  string $current_user_id     -- current user id
+  *	@return string $where      -- where condition with the list of crmids, will like crmentity.crmid in (1,3,4,etc.,)
+  */
 function getTagWhere($search_val,$current_user_id)
 {
 	require_once('include/freetag/freetag.class.php');
@@ -184,7 +196,12 @@ function getTagWhere($search_val,$current_user_id)
 
 	return $where;
 }
-function getComboList($search_module)
+
+
+/**	Function to get the the List of Searchable Modules as a combo list which will be displayed in right corner under the Header
+  *	@param  string $search_module -- search module, this module result will be shown defaultly 
+  */
+function getSearchModulesComboList($search_module)
 {
 	global $object_array;
 
