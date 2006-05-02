@@ -1,12 +1,12 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 <tr>
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 <!-- EMAIL TEMPLATE PAGE STARTS HERE -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%" class="small">
 	<tr>
 	   <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
               <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
@@ -27,7 +27,7 @@
 		    
 			<tr><td colspan="2">&nbsp;</td></tr>
 			<tr><td colspan="2">
-			    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+			    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 				<tr><td width="75%" valign="middle" >
 					<img src="{$IMAGE_PATH}ViewTemplate.gif" align="left" />
 					<span class="genHeaderBig">{$TEMPLATENAME}</span><br />
@@ -45,7 +45,7 @@
 			  
 			  <tr>
 			    <td colspan="2" style="border:2px solid #CCCCCC;">
-				<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 			          <tr>
 			
     	                		<td width="25%" align="right" bgcolor="#F6F6F6"><b>{$UMOD.LBL_FOLDER}</b></td>
