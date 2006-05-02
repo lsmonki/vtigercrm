@@ -35,6 +35,7 @@ require_once('modules/Invoice/Invoice.php');
 require_once('modules/Campaigns/Campaign.php');
 require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
+require_once('modules/CustomView/CustomView.php');
 
 require_once('Smarty_setup.php');
 global $mod_strings;
@@ -88,8 +89,19 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
 		$smarty->assign("SINGLE_MOD",$module);
 
+	
 		$listquery = getListQuery($module);
+		//Avoided the modules Faq and PriceBooks. we should remove this if when change the customview function
+		$oCustomView = '';
+		if($module != 'Faq' && $module != 'PriceBooks')
+		{
+			//Added to get the default 'All' customview query
+			$oCustomView = new CustomView($module);
+			$viewid = $oCustomView->getViewId($module);
 
+			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+		}
+		
 		if($search_module != '')//This is for Tag search
 		{
 			$where = getTagWhere($search_val,$current_user->id);
@@ -112,8 +124,8 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		//Here we can change the max list entries per page per module
 		$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
 
-		$listview_header = getListViewHeader($focus,$module);
-		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","EditView","Delete","");
+		$listview_header = getListViewHeader($focus,$module,"","","","",$oCustomView);
+		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
 
 		//Do not display the Header if there are no entires in listview_entries
 		if(count($listview_entries) > 0)
