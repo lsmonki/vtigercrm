@@ -78,7 +78,7 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	if (!isset($_POST['deleted'])) $focus->deleted = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $focus->homeorder = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 	
-	if (!$focus->verify_data()) {
+/*	if (!$focus->verify_data()) {
 		header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
 		exit;
 	}
@@ -87,7 +87,7 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 //		include('modules/Calendar/user_ins.php');
 //		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
-	}
+	}*/
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
 	/*	
 		//changing fourm password	
