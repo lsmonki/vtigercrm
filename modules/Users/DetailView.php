@@ -132,24 +132,24 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& $default_user_name == $focus->user_name
 		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true	) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB' \" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB' \" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 	
  //global $AUTHCFG;
  	//if (strtoupper($AUTHCFG['authType']) == 'SQL') {
-		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
+		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='classBtn' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 		$smarty->assign('CHANGE_PW_BUTTON',$buttons);
 	//}
 	
-	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
+	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
 	$smarty->assign('LOGIN_HISTORY_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='ListMailAccount'\" type='submit' name='ListMailServerAccount' value=' ".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_LABEL']." '>";
+	$buttons = "<input title='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='ListMailAccount'\" type='submit' name='ListMailServerAccount' value=' ".$mod_strings['LBL_LIST_MAILSERVER_BUTTON_LABEL']." '>";
 	$smarty->assign('LIST_MAILSERVER_BUTTON',$buttons);
-	$buttons = "<input title='".$mod_strings['LBL_CHANGE_HOMEPAGE_TITLE']."' class='small' align='center' onclick=\"this.form.return_module.value='Users';  this.form.return_action.value='DetailView';  this.form.action.value='EditHomeOrder';  this.form.record.value='$focus->id';\"  type='submit' name='EditHomeOrder'  value='  ".$mod_strings['LBL_CHANGE_HOMEPAGE_LABEL']."  '>";
+	$buttons = "<input title='".$mod_strings['LBL_CHANGE_HOMEPAGE_TITLE']."' class='classBtn' align='center' onclick=\"this.form.return_module.value='Users';  this.form.return_action.value='DetailView';  this.form.action.value='EditHomeOrder';  this.form.record.value='$focus->id';\"  type='submit' name='EditHomeOrder'  value='  ".$mod_strings['LBL_CHANGE_HOMEPAGE_LABEL']."  '>";
 	$smarty->assign('CHANGE_HOMEPAGE_BUTTON',$buttons);
 
 	
@@ -165,25 +165,25 @@ else
 */
 if (is_admin($current_user)) 
 {
-	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
+	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
 	$smarty->assign('DUPLICATE_BUTTON',$buttons);
 	
 	//done so that only the admin user can see the customize tab button
 	if($_REQUEST['record'] == $current_user->id)
 	{
-		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
+		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
 		$smarty->assign('TABCUSTOMIZE_BUTTON',$buttons);
 	}
 	if($_REQUEST['record'] != $current_user->id)
 	{
-		$buttons = "<input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '>";
+		$buttons = "<input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '>";
 		$smarty->assign('DELETE_BUTTON',$buttons);
 	}
 
         //$buttons .= "<input title='".$app_strings['LBL_ROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_ROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='ListPermissions'\" type='submit' name='ListPermissions' value=' ".$app_strings['LBL_ROLES_BUTTON_LABEL']." '></td>\n";
 	if($_SESSION['authenticated_user_roleid'] == 'administrator')
 	{
-		$buttons = "<input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='small' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '>";
+		$buttons = "<input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '>";
 		$smarty->assign('LISTROLES_BUTTON',$buttons);
 	}
 
