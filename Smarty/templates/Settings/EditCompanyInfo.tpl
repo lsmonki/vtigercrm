@@ -1,11 +1,11 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 <tr>
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%" class="small">
 <td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
 <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_CONFIGURATION} > {$MOD.LBL_COMPANY_INFO}</b></span>
 <hr noshade="noshade" size="1" />
@@ -18,7 +18,7 @@
  	<input type="hidden" name="return_module" value="Settings">
  	<input type="hidden" name="parenttab" value="Settings">
     <input type="hidden" name="return_action" value="OrganizationConfig">
-	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" class="small">
 	<tbody><tr>
 	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="7"><img src="{$IMAGE_PATH}top_left.jpg" align="top"></td>
 	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif; height: 6px;" bgcolor="#ebebeb"></td>
@@ -28,7 +28,7 @@
 
 	<td bgcolor="#ebebeb" width="7"></td>
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
 	{if $ORGANIZATIONLOGONAME neq ''}
 	<td rowspan="11" style="background-image: url(test/logo/{$ORGANIZATIONLOGONAME}); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
@@ -74,7 +74,7 @@
 	</tr>
 	<tr>
 	<td colspan="2" style="padding: 0px;" width="75%">
-	<table border="0" cellpadding="5" cellspacing="0" width="100%">
+	<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
 	<td nowrap align="right" width="15%"><b>{$MOD.LBL_ORGANIZATION_PHONE} : </b></td>
 	<td width="40%"><input name="organization_phone" class="txtBox" value="{$ORGANIZATIONPHONE}" type="text"></td>
