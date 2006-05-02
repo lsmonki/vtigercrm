@@ -30,10 +30,10 @@
 <tr>
 	<td bgcolor="#EBEBEB" width="7"></td>
 	<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
-		<table width="100%"  border="0" cellspacing="0" cellpadding="10">
+		<table width="100%"  border="0" cellspacing="0" cellpadding="10" class="small">
                 <tr>
                       <td rowspan="11" bgcolor="#FFFFFF"  width="25%" style="background-image:url(include/images/noimage.gif);background-position:center;background-repeat:no-repeat; " >&nbsp;</td>
-                      <td colspan="2" class="genHeaderBig" width="75%"><img src="{$IMAGE_PATH}fp1.gif" width="59" height="40" align="absmiddle" />{$UMOD.LBL_TEMPLATE_DETAILS} </td>
+                      <td colspan="2" class="genHeaderSmall" width="75%"><img src="{$IMAGE_PATH}fp1.gif" width="59" height="40" align="absmiddle" />{$UMOD.LBL_TEMPLATE_DETAILS} </td>
                </tr>
 		<tr>
                       <td align="right" valign="top"><b>{$UMOD.LBL_DESCRIPTION}  : </b></td>
@@ -44,7 +44,7 @@
 		<tr>
 			<td  width="75%" colspan="2"  >
 				<img src="{$IMAGE_PATH}fp2.gif" width="59" height="40"  align="left"/>
-				<span class="genHeaderBig">{$UMOD.LBL_SELECT_MODULE}</span><br />
+				<span class="genHeaderSmall">{$UMOD.LBL_SELECT_MODULE}</span><br />
 				 Select a module to assign this Template
 			</td>
 		</tr>
@@ -62,7 +62,7 @@
 		<tr>
 		      <td  width="75%" colspan="2" style="padding-bottom:0px;padding-top:0px; "  >
 			<img src="{$IMAGE_PATH}fp3.gif" width="59" height="40"  align="absmiddle"/>
-				<span class="genHeaderBig">{$UMOD.LBL_UPLOAD} </span>
+				<span class="genHeaderSmall">{$UMOD.LBL_UPLOAD} </span>
 		      </td>
 		</tr>
 		 <tr>
