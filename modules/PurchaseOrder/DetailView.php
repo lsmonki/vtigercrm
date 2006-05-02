@@ -26,7 +26,7 @@ require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings,$app_strings,$theme,$profile_id;
+global $mod_strings,$app_strings,$theme;
 
 $focus = new Order();
 
