@@ -190,19 +190,20 @@ rBox">
         </td>
 </tr>
 </table>
-</div>
 </form>
+</div>
+
 <br>
 			
 
 {*<!-- Contents -->*}
-<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+<table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 
-	<td class="showPanelBg" valign=top width=100%>
+	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	   <!-- PUBLIC CONTENTS STARTS-->
-	   <div id="ListViewContents" class="small" style="padding:20px">
+	   <div id="ListViewContents" class="small" style="width:100%;position:relative;">
      <form name="massdelete" method="POST">
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
