@@ -39,6 +39,7 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 global $mod_strings;
 
+$total_record_count = 0;
 //echo get_module_title("", "Search Results", true); 
 if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
 
@@ -129,11 +130,20 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("DISPLAYHEADER", $display_header);
 		$smarty->assign("HEADERCOUNT", count($listview_header));
 
-		$smarty->assign("SEARCH_CRITERIA",$search_msg);
+		$total_record_count = $total_record_count + $noofrows;
+
+		$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
 		$smarty->assign("MODULES_LIST", $object_array);
 
 		$smarty->display("GlobalListView.tpl");
 	}
+
+	//Added to display the Total record count
+?>
+	<script>
+		document.getElementById("global_search_total_count").innerHTML = "Total Number of Records : <b><?php echo $total_record_count; ?></b>";
+	</script>
+<?php
 
 }
 else {
@@ -234,7 +244,7 @@ function getSearchModulesComboList($search_module)
 		</script>
 		 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		     <tr>
-		        <td>&nbsp;</td>
+		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
 		        <td nowrap align="right">Show Results in &nbsp;
 		                <select name="global_search_module" onChange="displayModuleList(this);">
 		                        <option value="All">All</option>
