@@ -35,10 +35,16 @@
 	<tr>
 	<td bgcolor="#ebebeb" width="7"></td>
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
-	<td rowspan="8" style="background-image: url(include/images/noimage.gif); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
-	<td colspan="2" class="genHeaderBig" width="75%">Mail Server (SMTP) - Settings{$ERROR_MSG}<br><hr> </td>
+	<td rowspan="8" bgcolor="#ffffff" width="30%" valign="bottom" background="{$IMAGE_PATH}MailServer_top.gif" style="background-position:top right;background-repeat:no-repeat;">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+						<td background="{$IMAGE_PATH}MailServer_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="150">&nbsp;</td>
+				</tr>
+		</table>
+	</td>
+	<td colspan="2" class="genHeaderBig" width="70%">Mail Server (SMTP) - Settings{$ERROR_MSG}<br><hr> </td>
 	</tr>
 	{if $EMAILCONFIG_MODE neq 'edit'}	
 	<tr><td colspan="2" style="padding-top: 0px;" align="right" width="75%">
