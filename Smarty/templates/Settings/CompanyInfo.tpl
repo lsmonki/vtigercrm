@@ -28,7 +28,7 @@
 
 	<td bgcolor="#ebebeb" width="7"></td>
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
 	<td rowspan="11" style="background-image: url({$ORGANIZATIONLOGOPATH}/{$ORGANIZATIONLOGONAME}); background-position: center; background-repeat: no-repeat;" bgcolor="#ffffff" width="25%">&nbsp;</td>
 	<td colspan="2" class="genHeaderBig" width="75%">{$ORGANIZATIONNAME}<br><hr> 
@@ -67,7 +67,7 @@
 	</tr>
 	<tr>
 	<td colspan="2" style="padding: 0px;" width="75%">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%">
+	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
 	<tbody><tr>
 	<td nowrap align="right" width="25%"><b>{$MOD.LBL_ORGANIZATION_PHONE} : </b></td>
 	<td width="25%">{$ORGANIZATIONPHONE}</td>
