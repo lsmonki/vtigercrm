@@ -119,7 +119,7 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 	  <input type="hidden" name="fieldid" value="'.$fieldid.'">
 	  <input type="hidden" name="column" value="'.$customfield_columnname.'">
 
-	  <div id="orgLay">
+	  <div id="orgLay" style="display:block;">
 		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 			<tr>
 				<td width="40%" align="left" class="genHeaderSmall">Add Field </td>
