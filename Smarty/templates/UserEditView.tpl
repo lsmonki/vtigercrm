@@ -18,7 +18,24 @@ function pickColor(color)
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr><td class="detailedViewHeader" align="left"><b>{$MOD.LBL_USER_MANAGEMENT}</b></td></tr>
+	<tr><td align="left">
+			<table width="100%" cellpadding="5" cellspacing="0" border="0">
+									<tr>
+											<td colspan="2" style="padding:5px;">
+													<span class="lvtHeaderText">
+													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
+															 > {$MOD.LBL_USER_MANAGEMENT}</b></span>
+															<hr noshade="noshade" size="1" />
+											</td>
+									  </tr>
+									<tr>
+											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
+											<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
+												<b class="small">Edit View of {$FIRST_NAME} {$LAST_NAME}</b>
+											</td>
+									</tr>
+							</table>
+	</td></tr>
 	
 	<tr><td class="padTab" align="left">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -61,7 +78,7 @@ function pickColor(color)
 			             <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 				        <tr><td height="35">&nbsp;</td></tr>
 					<tr><td align="left">
-					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
   		                           <tr>
 					           <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
 					   </tr>  
@@ -121,7 +138,7 @@ function pickColor(color)
 					  <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 					   <tr><td height="35">&nbsp;</td></tr>
 					   <tr><td align="left">
-					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 					     <tr>
 						        <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
 					     </tr>  
@@ -188,7 +205,7 @@ function pickColor(color)
  						     <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
 						       <tr><td height="35">&nbsp;</td></tr>
 						       <tr><td align="left">
-							   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center">
+							   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 						       <tr>
 							   	<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
 						       </tr>  
