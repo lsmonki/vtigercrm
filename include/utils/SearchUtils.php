@@ -448,7 +448,9 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 function getWhereCondition($currentModule)
 {
 	global $log;
-       $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
+	global $column_array,$table_col_array;
+
+        $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
 	
 	if($_REQUEST['searchtype']=='advance')
 	{
@@ -472,6 +474,7 @@ function getWhereCondition($currentModule)
 			$tab_col = str_replace('\'','',stripslashes($_REQUEST[$table_colname]));
 			$srch_cond = str_replace('\'','',stripslashes($_REQUEST[$search_condition]));
 			$srch_val = $_REQUEST[$search_value];
+			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
 			if($tab_col == "crmentity.smownerid")
 			{
@@ -483,6 +486,10 @@ function getWhereCondition($currentModule)
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'activity.status')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'activity.eventstatus')." )".$matchtype;	
 			}
+			elseif(in_array($column_name,$column_array))
+                        {
+                                $adv_string .= getValuesforColumns($column_name,$search_string)." ".$matchtype;
+                        }
 			else
 			{
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
