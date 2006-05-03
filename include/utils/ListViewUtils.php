@@ -1525,15 +1525,7 @@ function getListQuery($module,$where='')
 			$query .= $sec_parameter;	
 		}
 	}
-	//Appending the Security parameters by DON
-	/*
-	global $others_permission_id;
-	global $current_user;	
-	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module!= 'Vendor' && $module != 'PriceBook')
-	{
-		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
-	}
-	*/
+	
 
 	$log->debug("Exiting getListQuery method ...");
 	return $query;
