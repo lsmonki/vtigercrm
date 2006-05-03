@@ -266,7 +266,6 @@ function getHistory($parentmodule,$query,$id)
 	global $app_strings;
 
 	//Appending the security parameter
-	global $others_permission_id;
 	global $current_user;
 	$rel_tab_id = getTabid("Activities");
 
