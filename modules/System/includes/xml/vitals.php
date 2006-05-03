@@ -79,7 +79,7 @@ function html_vitals ()
 	 . "  </tr>\n"
 	 . "  <tr>\n"
 	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['dversion'] . "</font></td>\n"
-	 . "    <td><img width=\"16\" height=\"16\" alt=\"\" src=\"" . $webpath . "images/" . $XPath->getData("/phpsysinfo/Vitals/Distroicon") . "\">&nbsp;<font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Distro") . "</font></td>\n"
+	 . "    <td><img width=\"16\" height=\"16\" alt=\"\" src=\"". getcwd()."/modules/System/images/" . $XPath->getData("/phpsysinfo/Vitals/Distroicon") . "\">&nbsp;<font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Distro") . "</font></td>\n"
 	 . "  </tr>\n"
 	 . "  <tr>\n"
 	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['uptime'] . "</font></td>\n"
