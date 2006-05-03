@@ -12,7 +12,12 @@
 
 require_once('Smarty_setup.php'); 
 require_once('include/database/PearDatabase.php');
- 
+
+global $adb;
+global $log;
+
+$log->info("Inside Email Templates List View");
+
    $sql = "select * from emailtemplates order by templateid DESC";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
@@ -49,6 +54,9 @@ do
   $return_data[]=$templatearray;
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
+
+$log->info("Exiting Email Templates List View");
+
 $smarty->assign("TEMPLATES",$return_data);
 $smarty->display("ListEmailTemplates.tpl");
 
