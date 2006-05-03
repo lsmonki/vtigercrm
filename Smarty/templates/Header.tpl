@@ -56,7 +56,7 @@
 			
 				<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
 			{foreach  item=detail from=$QCMODULE}
-					<option value="{$detail.1}">New -{$detail.0}</option>
+					<option value="{$detail.1}">{$APP[$detail.0]}</option>
 			{/foreach}
 				</select>
 			</td>
