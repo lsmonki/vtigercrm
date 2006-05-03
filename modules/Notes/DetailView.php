@@ -96,7 +96,6 @@ if ( isset($focus->filename) && $focus->filename != '')
 
 $smarty->assign("SINGLE_MOD","Note");
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Notes","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
