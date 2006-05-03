@@ -6,7 +6,7 @@
 {title}
 </div>
 
-<div class="boxcontent">
+<div class="boxcontent" dir="{text_dir}">
 {content}
 </div>
 

@@ -9,7 +9,7 @@
      </tr>
 
      <tr class="boxbody">
-      <td>{content}</td>
+      <td dir="{text_dir}">{content}</td>
      </tr>
 
     </table>

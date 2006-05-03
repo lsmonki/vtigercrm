@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: network.php,v 1.8 2003/11/26 19:41:09 webbie Exp $
+// $Id: network.php,v 1.13 2005/12/31 17:25:26 bigmichi1 Exp $
 
 //
 // xml_network()
@@ -29,11 +29,11 @@ function xml_network () {
     $_text = "  <Network>\n";
     while (list($dev, $stats) = each($net)) {
         $_text .= "    <NetDevice>\n"
-               .  "      <Name>" . trim($dev) . "</Name>\n"
-               .  "      <RxBytes>" . $stats['rx_bytes'] . "</RxBytes>\n"
-               .  "      <TxBytes>" . $stats['tx_bytes'] . "</TxBytes>\n"
-               .  "      <Errors>" . $stats['errs'] . "</Errors>\n"
-               .  "      <Drops>" . $stats['drop'] . "</Drops>\n"
+               .  "      <Name>" . htmlspecialchars(trim($dev), ENT_QUOTES) . "</Name>\n"
+               .  "      <RxBytes>" . htmlspecialchars($stats['rx_bytes'], ENT_QUOTES) . "</RxBytes>\n"
+               .  "      <TxBytes>" . htmlspecialchars($stats['tx_bytes'], ENT_QUOTES) . "</TxBytes>\n"
+               .  "      <Errors>" . htmlspecialchars($stats['errs'], ENT_QUOTES) . "</Errors>\n"
+               .  "      <Drops>" . htmlspecialchars($stats['drop'], ENT_QUOTES) . "</Drops>\n"
                .  "    </NetDevice>\n";
     }
     $_text .= "  </Network>\n";
@@ -48,26 +48,46 @@ function html_network () {
     global $XPath;
     global $text;
 
-    $_text = '<table border="0" width="90%" align="center">'
-           . '<tr><td align="left" valign="top"><font size="-1"><b>' . $text['device'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['received'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['sent'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['errors'] . '</b></font></td>';
-
-    for ($i=1, $max = sizeof($XPath->getDataParts('/phpsysinfo/Network')); $i < $max; $i++) {
+    $textdir = direction();
+    
+    $_text = "<table border=\"0\" width=\"100%\" align=\"center\">\n"
+           . "  <tr>\n"
+	   . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['device'] . "</b></font></td>\n"
+           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['received'] . "</b></font></td>\n"
+           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['sent'] . "</b></font></td>\n"
+           . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['errors'] . "</b></font></td>\n"
+	   . "  </tr>\n";
+	   
+    for ($i=1, $max = sizeof($XPath->getDataParts("/phpsysinfo/Network")); $i < $max; $i++) {
         if ($XPath->match("/phpsysinfo/Network/NetDevice[$i]/Name")) {
-            $_text .= "\t<tr>\n";
-            $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Name") . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/RxBytes") / 1024) . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/TxBytes") / 1024) . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Errors") . '/' . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Drops") . "</font></td>\n";
-            $_text .= "\t</tr>\n";
+            $_text .= "  <tr>\n";
+            $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Name") . "</font></td>\n";
+            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/RxBytes") / 1024) . "</font></td>\n";
+            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/TxBytes") / 1024) . "</font></td>\n";
+            $_text .= "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Errors") . '/' . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Drops") . "</font></td>\n";
+            $_text .= "  </tr>\n";
         }
-
     }
-    $_text .= '</table>';
+    $_text .= "</table>";
 
     return $_text;
 }
 
+function wml_network() {
+    global $XPath;
+    global $text;
+
+    $_text = "<card id=\"network\" title=\"" . $text['network'] . "\">\n";
+    for ($i=1, $max = sizeof($XPath->getDataParts("/phpsysinfo/Network")); $i < $max; $i++) {
+        if ($XPath->match("/phpsysinfo/Network/NetDevice[$i]/Name")) {
+          $_text .= "<p>" . $text['device'] . ": " . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Name") . "<br/>"
+		  . "- U: " . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/TxBytes") / 1024) . "<br/>"
+	          . "- D: " . format_bytesize($XPath->getData("/phpsysinfo/Network/NetDevice[$i]/RxBytes") / 1024) . "<br/>"
+		  . "- E: " . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Errors") . '/' . $XPath->getData("/phpsysinfo/Network/NetDevice[$i]/Drops") . "</p>\n";
+	}
+    }
+    $_text .= "</card>\n";
+    
+    return $_text;
+}
 ?>

@@ -17,11 +17,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.Darwin.inc.php,v 1.18 2004/08/25 03:04:56 webbie Exp $
+// $Id: class.Darwin.inc.php,v 1.26 2006/04/15 21:42:20 bigmichi1 Exp $
+if (!defined('IN_PHPSYSINFO')) {
+    die("No Hacking");
+}
 
-require('./includes/os/class.BSD.common.inc.php');
+require_once(APP_ROOT . '/includes/os/class.BSD.common.inc.php');
 
-echo "<p align=center><b>Note: The Darwin version of phpSysInfo is work in progress, some things currently don't work</b></p>";
+$error->addError("WARN", "The Darwin version of phpSysInfo is work in progress, some things currently don't work");
 
 class sysinfo extends bsd_common {
   var $cpu_regexp;
@@ -31,6 +34,7 @@ class sysinfo extends bsd_common {
   function sysinfo () {
     // $this->cpu_regexp = "CPU: (.*) \((.*)-MHz (.*)\)";
     // $this->scsi_regexp1 = "^(.*): <(.*)> .*SCSI.*device";
+    $this->cpu_regexp2 = "/(.*) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)/";
   } 
 
   function grab_key ($key) {
@@ -67,7 +71,10 @@ class sysinfo extends bsd_common {
     $results['cpuspeed'] = round($this->grab_key('hw.cpufrequency') / 1000000); // return cpu speed - Mhz
     $results['busspeed'] = round($this->grab_key('hw.busfrequency') / 1000000); // return bus speed - Mhz
     $results['cache'] = round($this->grab_key('hw.l2cachesize') / 1024); // return l2 cache
-    
+
+    if (($this->grab_key('hw.model') == "PowerMac3,6") && ($results['cpus'] == "2")) { $results['model'] = 'Dual G4 - (PowerPC 7450)';} // is Dual G4
+    if (($this->grab_key('hw.model') == "PowerMac7,2") && ($results['cpus'] == "2")) { $results['model'] = 'Dual G5 - (PowerPC 970)';} // is Dual G5
+
     return $results;
   } 
   // get the pci device information out of ioreg
@@ -103,7 +110,7 @@ class sysinfo extends bsd_common {
   } 
 
   function memory () {
-    $s = $this->grab_key('hw.physmem');
+    $s = $this->grab_key('hw.memsize');
 
     $results['ram'] = array();
 
@@ -202,6 +209,9 @@ class sysinfo extends bsd_common {
           continue 2;
           break;
       } 
+      if (hide_mount($ar_buf[5])) {
+        continue;
+      }													
 
       $results[$j] = array();
 
@@ -218,7 +228,7 @@ class sysinfo extends bsd_common {
   } 
   
   function distroicon () {
-    $result = 'Darwin.gif';
+    $result = 'Darwin.png';
     return($result);
   }
 

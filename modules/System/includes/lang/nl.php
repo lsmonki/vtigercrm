@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: nl.php,v 1.15 2004/08/30 15:51:26 webbie Exp $
+// $Id: nl.php,v 1.19 2005/12/31 17:25:02 bigmichi1 Exp $
 
 if (PHP_OS == 'WINNT') {
   $text['locale']         = 'dutch'; // (windows) 
@@ -83,7 +83,7 @@ $text['template']       = 'Opmaak-model';
 $text['language']       = 'Taal';
 $text['submit']         = 'Toepassen';
 $text['created']        = 'Gegenereerd door';
-$text['gen_time']       = 'op %d %B %Y, om %H:%M:%S';
+$text['gen_time']       = 'op %d %B %Y, om %H:%M';
 
 $text['days']           = 'dagen';
 $text['hours']          = 'uren';
@@ -96,11 +96,15 @@ $text['s_value']        = 'Waarde';
 $text['s_min']          = 'Min';
 $text['s_max']          = 'Max';
 $text['s_div']          = 'Div';
-$text['hysteresis']     = 'Hysteresis';
+$text['hysteresis']     = 'Hysterie';
 $text['s_limit']        = 'Limiet';
-$text['s_label']        = 'Label';
+$text['s_label']        = 'Omschrijving';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

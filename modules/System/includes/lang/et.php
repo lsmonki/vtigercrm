@@ -17,31 +17,31 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: et.php,v 1.13 2004/08/30 15:51:26 webbie Exp $
+// $Id: et.php,v 1.17 2006/02/07 16:55:36 bigmichi1 Exp $
 
-$text['title']          = 'S&uuml;steemi Informatsioon';
+$text['title']          = 'S&uuml;steemi informatsioon';
 
 $text['vitals']         = 'System Vital';
 $text['hostname']       = 'Kanooniline masinanimi';
 $text['ip']             = 'Vastav IP';
-$text['kversion']       = 'Kernel Versioon';
-$text['dversion']       = 'Distro Name';
+$text['kversion']       = 'Kerneli versioon';
+$text['dversion']       = 'Distro nimi';
 $text['uptime']         = 'Masin elus juba';
 $text['users']          = 'Hetkel kasutajaid';
 $text['loadavg']        = 'Koormuse keskmised';
 
-$text['hardware']       = 'Riistvara Informatsioon';
+$text['hardware']       = 'Riistvara informatsioon';
 $text['numcpu']         = 'Protsessoreid';
 $text['cpumodel']       = 'Mudel';
 $text['cpuspeed']       = 'Taktsagedus MHz';
-$text['busspeed']       = 'BUS Speed';
+$text['busspeed']       = 'Siinikiirus';
 $text['cache']          = 'Vahem&auml;lu suurus';
-$text['bogomips']       = 'S&uuml;steemi Bogomips';
+$text['bogomips']       = 'S&uuml;steemi BogoMIPS';
 
-$text['pci']            = 'PCI Seadmed';
-$text['ide']            = 'IDE Seadmed';
-$text['scsi']           = 'SCSI Seadmed';
-$text['usb']            = 'USB Seadmed';
+$text['pci']            = 'PCI-seadmed';
+$text['ide']            = 'IDE-seadmed';
+$text['scsi']           = 'SCSI-seadmed';
+$text['usb']            = 'USB-seadmed';
 
 $text['netusage']       = 'V&otilde;rguteenuse kasutamine';
 $text['device']         = 'Seade';
@@ -72,29 +72,33 @@ $text['none']           = 'puudub';
 
 $text['capacity']       = 'H&otilde;ivatus';
   
-$text['template']       = 'Template';
+$text['template']       = 'Mall';
 $text['language']       = 'Keel';
 $text['submit']         = 'Kehtesta';
-$text['created']        = 'Looja: ';
+$text['created']        = 'Looja:';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'p&auml;eva';
 $text['hours']          = 'tundi';
 $text['minutes']        = 'minutit';
   
-$text['temperature']    = 'Temperature';
-$text['voltage']        = 'Voltage';
-$text['fans']           = 'Fans';
-$text['s_value']        = 'Value';
+$text['temperature']    = 'Temperatuur';
+$text['voltage']        = 'Pinge';
+$text['fans']           = 'Ventilaatorid';
+$text['s_value']        = 'V&auml;&auml;rtus';
 $text['s_min']          = 'Min';
 $text['s_max']          = 'Max';
 $text['s_div']          = 'Div';
-$text['hysteresis']     = 'Hysteresis';
-$text['s_limit']        = 'Limit';
+$text['hysteresis']     = 'H&uuml;sterees';
+$text['s_limit']        = 'Limiit';
 $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + rakendused';
+$text['buffers']	= 'Puhvrid';
+$text['cached']		= 'Vahem&auml;lus';
 
 ?>

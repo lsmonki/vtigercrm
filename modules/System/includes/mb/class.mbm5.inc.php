@@ -24,8 +24,8 @@
 // need more csv logs to make it better.
 //
 class mbinfo {
-    var buf_label;
-    var buf_value;
+    var $buf_label;
+    var $buf_value;
 
   function temperature() {
     $results = array();

@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: is.php,v 1.11 2004/08/30 15:51:26 webbie Exp $
+// $Id: is.php,v 1.14 2005/12/31 17:25:02 bigmichi1 Exp $
 
 $text['title']          = 'Kerfisupplýsingar';
 
@@ -77,7 +77,7 @@ $text['language']       = 'Tungumál';
 $text['submit']         = 'Senda';
 $text['created']        = 'Búið til af';
 $text['locale']         = 'is_IS';
-$text['gen_time']       = 'þann %d.%m.%Y kl. %R';
+$text['gen_time']       = 'þann %d.%m.%Y kl. %H:%M';
 
 $text['days']           = 'dagar';
 $text['hours']          = 'klukkustundir';
@@ -96,5 +96,9 @@ $text['s_label']        = 'Nafn mælis';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

@@ -47,8 +47,8 @@ $text['usb']            = 'Устройства USB';
 
 $text['netusage']       = 'Использование сети';
 $text['device']         = 'Устройство';
-$text['received']       = 'Послано';
-$text['sent']           = 'Получино';
+$text['received']       = 'Получено';
+$text['sent']           = 'Отправлено';
 $text['errors']         = 'Ошибок';
 
 $text['connections']    = 'Установленные сетевые соединения';
@@ -81,7 +81,7 @@ $text['language']       = 'Язык';
 $text['submit']         = 'Применить';
 $text['created']        = 'Создано';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'дней';
 $text['hours']          = 'hours';
@@ -100,5 +100,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

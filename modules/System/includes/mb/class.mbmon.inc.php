@@ -19,7 +19,7 @@
 
 // This class was created by Z. Frombach ( zoltan at frombach dot com )
 
-// $Id: class.mbmon.inc.php,v 1.3 2004/10/30 08:09:28 webbie Exp $
+// $Id: class.mbmon.inc.php,v 1.4 2005/11/22 15:08:29 bigmichi1 Exp $
 
 class mbinfo {
 	var $lines;
@@ -36,9 +36,14 @@ class mbinfo {
       if (preg_match('/^(TEMP\d*)\s*:\s*(.*)$/D', $line, $data)) {
         if ($data[2]<>'0') {
           $results[$i]['label'] = $data[1];
-          $results[$i]['value'] = $data[2];
           $results[$i]['limit'] = '70.0';
-          $results[$i]['percent'] = $results[$i]['value'] * 100 / $results[$i]['limit'];
+	  if($data[2] > 250) {
+	    $results[$i]['value'] = 0;
+	    $results[$i]['percent'] = 0;
+	  } else {
+            $results[$i]['value'] = $data[2];
+            $results[$i]['percent'] = $results[$i]['value'] * 100 / $results[$i]['limit'];
+	  }
           $i++;
         }
       }

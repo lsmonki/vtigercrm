@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: lt.php,v 1.14 2004/10/06 05:51:55 webbie Exp $
+// $Id: lt.php,v 1.16 2005/12/31 17:25:02 bigmichi1 Exp $
 
 $charset                = 'utf-8';
 
@@ -101,5 +101,9 @@ $text['s_label']        = 'Pavadinimas';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'aps./min';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

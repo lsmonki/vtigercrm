@@ -12,8 +12,46 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// $Id: class.Linux.inc.php,v 1.37 2004/10/13 08:13:29 webbie Exp $
+// $Id: class.Linux.inc.php,v 1.73 2006/04/22 14:35:57 bigmichi1 Exp $
+
+if (!defined('IN_PHPSYSINFO')) {
+    die("No Hacking");
+}
+
+require_once(APP_ROOT . '/includes/os/class.BSD.common.inc.php');
+
 class sysinfo {
+  var $inifile = "distros.ini";
+  var $icon = "unknown.png";
+  var $distro = "unknown";
+
+    var $parser;
+  // get the distro name and icon when create the sysinfo object
+  function sysinfo() {
+  
+    $this->parser = new Parser();
+    $this->parser->df_param = 'P';
+  
+   $list = @parse_ini_file(APP_ROOT . "/" . $this->inifile, true);
+   if (!$list) {
+    return;
+   }
+   foreach ($list as $section => $distribution) {
+    if (!isset($distribution["Files"])) {
+     continue;
+    } else {
+     foreach (explode(";", $distribution["Files"]) as $filename) {
+      if (file_exists($filename)) {
+       $buf = rfts( $filename );
+       $this->icon = isset($distribution["Image"]) ? $distribution["Image"] : $this->icon;
+       $this->distro = isset($distribution["Name"]) ? $distribution["Name"] . " " . trim($buf) : trim($buf);
+       break 2;
+      }
+     }
+    }
+   }
+  }
+
   // get our apache SERVER_NAME or vhost
   function vhostname () {
     if (! ($result = getenv('SERVER_NAME'))) {
@@ -23,12 +61,11 @@ class sysinfo {
   } 
   // get our canonical hostname
   function chostname () {
-    if ($fp = fopen('/proc/sys/kernel/hostname', 'r')) {
-      $result = trim(fgets($fp, 4096));
-      fclose($fp);
-      $result = gethostbyaddr(gethostbyname($result));
+    $result = rfts( '/proc/sys/kernel/hostname', 1 );
+    if ( $result == "ERROR" ) {
+      $result = "N.A.";
     } else {
-      $result = 'N.A.';
+      $result = gethostbyaddr( gethostbyname( trim( $result ) ) );
     } 
     return $result;
   } 
@@ -41,31 +78,25 @@ class sysinfo {
   } 
 
   function kernel () {
-    if ($fd = fopen('/proc/version', 'r')) {
-      $buf = fgets($fd, 4096);
-      fclose($fd);
-
+    $buf = rfts( '/proc/version', 1 );
+    if ( $buf == "ERROR" ) {
+      $result = "N.A.";
+    } else {
       if (preg_match('/version (.*?) /', $buf, $ar_buf)) {
         $result = $ar_buf[1];
 
         if (preg_match('/SMP/', $buf)) {
           $result .= ' (SMP)';
         } 
-      } else {
-        $result = 'N.A.';
       } 
-    } else {
-      $result = 'N.A.';
     } 
     return $result;
   } 
   
   function uptime () {
-    $fd = fopen('/proc/uptime', 'r');
-    $ar_buf = split(' ', fgets($fd, 4096));
-    fclose($fd);
-
-    $result = trim($ar_buf[0]);
+    $buf = rfts( '/proc/uptime', 1 );
+    $ar_buf = split( ' ', $buf );
+    $result = trim( $ar_buf[0] );
 
     return $result;
   } 
@@ -76,22 +107,47 @@ class sysinfo {
     return $result;
   } 
 
-  function loadavg () {
-    if ($fd = fopen('/proc/loadavg', 'r')) {
-      $results = split(' ', fgets($fd, 4096));
-      fclose($fd);
+  function loadavg ($bar = false) {
+    $buf = rfts( '/proc/loadavg' );
+    if( $buf == "ERROR" ) {
+      $results['avg'] = array('N.A.', 'N.A.', 'N.A.');
     } else {
-      $results = array('N.A.', 'N.A.', 'N.A.');
+      $results['avg'] = preg_split("/\s/", $buf, 4);
+      unset($results['avg'][3]);	// don't need the extra values, only first three
     } 
+    if ($bar) {
+      $buf = rfts( '/proc/stat', 1 );
+      if( $buf != "ERROR" ) {
+	sscanf($buf, "%*s %Ld %Ld %Ld %Ld", $ab, $ac, $ad, $ae);
+	// Find out the CPU load
+	// user + sys = load 
+	// total = total
+	$load = $ab + $ac + $ad;	// cpu.user + cpu.sys
+	$total = $ab + $ac + $ad + $ae;	// cpu.total
+
+	// we need a second value, wait 1 second befor getting (< 1 second no good value will occour)
+	sleep(1);
+	$buf = rfts( '/proc/stat', 1 );
+	sscanf($buf, "%*s %Ld %Ld %Ld %Ld", $ab, $ac, $ad, $ae);
+	$load2 = $ab + $ac + $ad;
+	$total2 = $ab + $ac + $ad + $ae;
+	$results['cpupercent'] = (100*($load2 - $load)) / ($total2 - $total);
+      }
+    }
     return $results;
   } 
 
   function cpu_info () {
-    $results = array();
-    $ar_buf = array();
+    $bufr = rfts( '/proc/cpuinfo' );
 
-    if ($fd = fopen('/proc/cpuinfo', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
+    if ( $bufr != "ERROR" ) {
+      $bufe = explode("\n", $bufr);
+
+      $results = array('cpus' => 0, 'bogomips' => 0);
+      $ar_buf = array();
+      
+      foreach( $bufe as $buf ) {
+       if(trim($buf) != "") {
         list($key, $value) = preg_split('/\s+:\s+/', trim($buf), 2); 
         // All of the tags here are highly architecture dependant.
         // the only way I could reconstruct them for machines I don't
@@ -156,9 +212,47 @@ class sysinfo {
             $results['cpus'] = $value;
             break;
         } 
+       }
       } 
-      fclose($fd);
     } 
+
+    // sparc64 specific code follows
+    // This adds the ability to display the cache that a CPU has
+    // Originally made by Sven Blumenstein <bazik@gentoo.org> in 2004
+    // Modified by Tom Weustink <freshy98@gmx.net> in 2004
+    $sparclist = array('SUNW,UltraSPARC@0,0', 'SUNW,UltraSPARC-II@0,0', 'SUNW,UltraSPARC@1c,0', 'SUNW,UltraSPARC-IIi@1c,0', 'SUNW,UltraSPARC-II@1c,0');
+    foreach ($sparclist as $name) {
+      $buf = rfts( '/proc/openprom/' . $name . '/ecache-size',1 , 32, false );
+      if( $buf != "ERROR" ) {
+        $results['cache'] = base_convert($buf, 16, 10)/1024 . ' KB';
+      }
+    }
+    // sparc64 specific code ends
+
+    // XScale detection code
+    if ( $results['cpus'] == 0 ) {
+      foreach( $bufe as $buf ) {
+       if($buf != "\n") {
+         list($key, $value) = preg_split('/\s+:\s+/', trim($buf), 2);
+	 switch($key) {
+	   case 'Processor':
+	    $results['cpus'] += 1;
+	    $results['model'] = $value;
+	    break;
+          case 'BogoMIPS': //BogoMIPS are not BogoMIPS on this CPU, it's the speed, no BogoMIPS available
+            $results['cpuspeed'] = $value;
+            break;
+          case 'I size':
+	    $results['cache'] = $value;
+	    break;
+	  case 'D size':
+	    $results['cache'] += $value;
+	    break;
+	 }
+       }
+      }
+      $results['cache'] = $results['cache'] / 1024 . " KB";
+    }
 
     $keys = array_keys($results);
     $keys2be = array('model', 'cpuspeed', 'cache', 'bogomips', 'cpus');
@@ -174,21 +268,11 @@ class sysinfo {
   function pci () {
     $results = array();
 
-    if ($_results = execute_program('lspci')) {
-      $lines = split("\n", $_results);
-      for ($i = 0, $max = sizeof($lines); $i < $max; $i++) {
-        list($addr, $name) = explode(' ', trim($lines[$i]), 2);
-
-        if (!preg_match('/bridge/i', $name) && !preg_match('/USB/i', $name)) {
-          // remove all the version strings
-          $name = preg_replace('/\(.*\)/', '', $name);
-          $results[] = $addr . ' ' . $name;
-        } 
-      } 
-    } elseif ($fd = fopen('/proc/pci', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
+    if( !$results = $this->parser->parse_lspci() ) {
+      $bufr = rfts( '/proc/pci' );
+      foreach( $bufr as $buf ) {
         if (preg_match('/Bus/', $buf)) {
-          $device = 1;
+          $device = true;
           continue;
         } 
 
@@ -198,7 +282,7 @@ class sysinfo {
           if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
             $results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
           } 
-          $device = 0;
+          $device = false;
         } 
       } 
     } 
@@ -208,27 +292,32 @@ class sysinfo {
 
   function ide () {
     $results = array();
+    $bufd = gdc( '/proc/ide' );
 
-    $handle = opendir('/proc/ide');
-
-    while ($file = readdir($handle)) {
+    foreach( $bufd as $file ) {
       if (preg_match('/^hd/', $file)) {
         $results[$file] = array(); 
-        // Check if device is CD-ROM (CD-ROM capacity shows as 1024 GB)
-        if ($fd = fopen("/proc/ide/$file/media", 'r')) {
-          $results[$file]['media'] = trim(fgets($fd, 4096));
+	$buf = rfts("/proc/ide/" . $file . "/media", 1 );
+        if ( $buf != "ERROR" ) {
+          $results[$file]['media'] = trim($buf);
           if ($results[$file]['media'] == 'disk') {
             $results[$file]['media'] = 'Hard Disk';
-          } 
-
-          if ($results[$file]['media'] == 'cdrom') {
+	    $buf = rfts( "/proc/ide/" . $file . "/capacity", 1, 4096, false);
+	    if( $buf == "ERROR" ) {
+		$buf = rfts( "/sys/block/" . $file . "/size", 1, 4096, false);
+	    }
+	    if ( $buf != "ERROR" ) {
+    	        $results[$file]['capacity'] = trim( $buf );
+    	    } 
+          } elseif ($results[$file]['media'] == 'cdrom') {
             $results[$file]['media'] = 'CD-ROM';
+	    unset($results[$file]['capacity']);
           } 
-          fclose($fd);
         } 
 
-        if ($fd = fopen("/proc/ide/$file/model", 'r')) {
-          $results[$file]['model'] = trim(fgets($fd, 4096));
+	$buf = rfts( "/proc/ide/" . $file . "/model", 1 );
+        if ( $buf != "ERROR" ) {
+          $results[$file]['model'] = trim( $buf );
           if (preg_match('/WDC/', $results[$file]['model'])) {
             $results[$file]['manufacture'] = 'Western Digital';
           } elseif (preg_match('/IBM/', $results[$file]['model'])) {
@@ -238,20 +327,10 @@ class sysinfo {
           } else {
             $results[$file]['manufacture'] = 'Unknown';
           } 
-
-          fclose($fd);
         } 
-
-        if ($fd = fopen("/proc/ide/$file/capacity", 'r')) {
-          $results[$file]['capacity'] = trim(fgets($fd, 4096));
-          if ($results[$file]['media'] == 'CD-ROM') {
-            unset($results[$file]['capacity']);
-          } 
-          fclose($fd);
-        } 
+	
       } 
     } 
-    closedir($handle);
 
     asort($results);
     return $results;
@@ -264,14 +343,20 @@ class sysinfo {
     $dev_rev = '';
     $dev_type = '';
     $s = 1;
+    $get_type = 0;
 
-    if ($fd = fopen('/proc/scsi/scsi', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
+    $bufr = execute_program('lsscsi', '-c', false);
+    if( is_null( $bufr )) {
+	$bufr = rfts( '/proc/scsi/scsi' );
+    }
+    if ( $bufr != "ERROR" ) {
+      $bufe = explode("\n", $bufr);
+      foreach( $bufe as $buf ) {
         if (preg_match('/Vendor/', $buf)) {
           preg_match('/Vendor: (.*) Model: (.*) Rev: (.*)/i', $buf, $dev);
           list($key, $value) = split(': ', $buf, 2);
           $dev_str = $value;
-          $get_type = 1;
+          $get_type = true;
           continue;
         } 
 
@@ -280,7 +365,7 @@ class sysinfo {
           $results[$s]['model'] = "$dev[1] $dev[2] ($dev_type[1])";
           $results[$s]['media'] = "Hard Disk";
           $s++;
-          $get_type = 0;
+          $get_type = false;
         } 
       } 
     } 
@@ -290,26 +375,36 @@ class sysinfo {
 
   function usb () {
     $results = array();
-    $devstring = 0;
     $devnum = -1;
 
-    if ($fd = fopen('/proc/bus/usb/devices', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
-        if (preg_match('/^T/', $buf)) {
-          $devnum += 1;
+    $bufr = execute_program('lsusb', '', false);
+    if( is_null( $bufr )) {
+	$bufr = rfts( '/proc/bus/usb/devices' );
+        if ( $bufr != "ERROR" ) {
+    	    $bufe = explode("\n", $bufr);
+	    foreach( $bufe as $buf ) {
+        	if (preg_match('/^T/', $buf)) {
+            	    $devnum += 1;
+    		    $results[$devnum] = "";
+        	} elseif (preg_match('/^S:/', $buf)) {
+            	    list($key, $value) = split(': ', $buf, 2);
+            	    list($key, $value2) = split('=', $value, 2);
+    		    if (trim($key) != "SerialNumber") {
+            		$results[$devnum] .= " " . trim($value2);
+            		$devstring = 0;
+    		    }
+        	} 
+            }
         } 
-        if (preg_match('/^S/', $buf)) {
-          $devstring = 1;
-        } 
-
-        if ($devstring) {
-          list($key, $value) = split(': ', $buf, 2);
-          list($key, $value2) = split('=', $value, 2);
-          $results[$devnum] .= " " . trim($value2);
-          $devstring = 0;
-        } 
-      } 
-    } 
+    } else {
+	$bufe = explode( "\n", $bufr );
+	foreach( $bufe as $buf ) {
+	    $device = preg_split("/ /", $buf, 7);
+	    if( isset( $device[6] ) && trim( $device[6] ) != "" ) {
+		$results[$devnum++] = trim( $device[6] );
+	    }
+	}
+    }
     return $results;
   } 
 
@@ -324,8 +419,10 @@ class sysinfo {
   function network () {
     $results = array();
 
-    if ($fd = fopen('/proc/net/dev', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
+    $bufr = rfts( '/proc/net/dev' );
+    if ( $bufr != "ERROR" ) {
+      $bufe = explode("\n", $bufr);
+      foreach( $bufe as $buf ) {
         if (preg_match('/:/', $buf)) {
           list($dev_name, $stats_list) = preg_split('/:/', $buf, 2);
           $stats = preg_split('/\s+/', trim($stats_list));
@@ -344,22 +441,24 @@ class sysinfo {
           $results[$dev_name]['errs'] = $stats[2] + $stats[10];
           $results[$dev_name]['drop'] = $stats[3] + $stats[11];
         } 
-      } 
-    } 
+      }
+    }
     return $results;
   } 
 
   function memory () {
-    if ($fd = fopen('/proc/meminfo', 'r')) {
-      $results['ram'] = array();
-      $results['swap'] = array();
-      $results['devswap'] = array();
+    $results['ram'] = array();
+    $results['swap'] = array();
+    $results['devswap'] = array();
 
-      while ($buf = fgets($fd, 4096)) {
+    $bufr = rfts( '/proc/meminfo' );
+    if ( $bufr != "ERROR" ) {
+      $bufe = explode("\n", $bufr);
+      foreach( $bufe as $buf ) {
         if (preg_match('/^MemTotal:\s+(.*)\s*kB/i', $buf, $ar_buf)) {
           $results['ram']['total'] = $ar_buf[1];
         } else if (preg_match('/^MemFree:\s+(.*)\s*kB/i', $buf, $ar_buf)) {
-          $results['ram']['free'] = $ar_buf[1];
+          $results['ram']['t_free'] = $ar_buf[1];
         } else if (preg_match('/^Cached:\s+(.*)\s*kB/i', $buf, $ar_buf)) {
           $results['ram']['cached'] = $ar_buf[1];
         } else if (preg_match('/^Buffers:\s+(.*)\s*kB/i', $buf, $ar_buf)) {
@@ -370,145 +469,49 @@ class sysinfo {
           $results['swap']['free'] = $ar_buf[1];
         } 
       } 
-      $results['ram']['shared'] = 0;
-      $results['ram']['used'] = $results['ram']['total'] - $results['ram']['free'];
-      $results['swap']['used'] = $results['swap']['total'] - $results['swap']['free'];
-      fclose($fd);
-      $swaps = file ('/proc/swaps');
-      $swapdevs = split("\n", $swaps);
 
-      for ($i = 1; $i < (sizeof($swapdevs) - 1); $i++) {
-        $ar_buf = preg_split('/\s+/', $swapdevs[$i], 6);
-
-        $results['devswap'][$i - 1] = array();
-        $results['devswap'][$i - 1]['dev'] = $ar_buf[0];
-        $results['devswap'][$i - 1]['total'] = $ar_buf[2];
-        $results['devswap'][$i - 1]['used'] = $ar_buf[3];
-        $results['devswap'][$i - 1]['free'] = ($results['devswap'][$i - 1]['total'] - $results['devswap'][$i - 1]['used']);
-        $results['devswap'][$i - 1]['percent'] = round(($ar_buf[3] * 100) / $ar_buf[2]);
-      } 
-      // I don't like this since buffers and cache really aren't
-      // 'used' per say, but I get too many emails about it.
-      $results['ram']['t_used'] = $results['ram']['used'];
-      $results['ram']['t_free'] = $results['ram']['total'] - $results['ram']['t_used'];
+      $results['ram']['t_used'] = $results['ram']['total'] - $results['ram']['t_free'];
       $results['ram']['percent'] = round(($results['ram']['t_used'] * 100) / $results['ram']['total']);
+      $results['swap']['used'] = $results['swap']['total'] - $results['swap']['free'];
       $results['swap']['percent'] = round(($results['swap']['used'] * 100) / $results['swap']['total']);
-    } else {
-      $results['ram'] = array();
-      $results['swap'] = array();
-      $results['devswap'] = array();
-    } 
+      
+      // values for splitting memory usage
+      if (isset($results['ram']['cached']) && isset($results['ram']['buffers'])) {
+        $results['ram']['app'] = $results['ram']['t_used'] - $results['ram']['cached'] - $results['ram']['buffers'];
+	$results['ram']['app_percent'] = round(($results['ram']['app'] * 100) / $results['ram']['total']);
+	$results['ram']['buffers_percent'] = round(($results['ram']['buffers'] * 100) / $results['ram']['total']);
+	$results['ram']['cached_percent'] = round(($results['ram']['cached'] * 100) / $results['ram']['total']);
+      }
+
+      $bufr = rfts( '/proc/swaps' );
+      if ( $bufr != "ERROR" ) {
+        $swaps = explode("\n", $bufr);
+        for ($i = 1; $i < (sizeof($swaps)); $i++) {
+	  if( trim( $swaps[$i] ) != "" ) {
+            $ar_buf = preg_split('/\s+/', $swaps[$i], 6);
+            $results['devswap'][$i - 1] = array();
+            $results['devswap'][$i - 1]['dev'] = $ar_buf[0];
+            $results['devswap'][$i - 1]['total'] = $ar_buf[2];
+            $results['devswap'][$i - 1]['used'] = $ar_buf[3];
+            $results['devswap'][$i - 1]['free'] = ($results['devswap'][$i - 1]['total'] - $results['devswap'][$i - 1]['used']);
+            $results['devswap'][$i - 1]['percent'] = round(($ar_buf[3] * 100) / $ar_buf[2]);
+	  }
+        } 
+      }
+    }
     return $results;
   } 
 
   function filesystems () {
-    $df = execute_program('df', '-kP');
-    $mounts = split("\n", $df);
-    $fstype = array();
-
-    if ($fd = fopen('/proc/mounts', 'r')) {
-      while ($buf = fgets($fd, 4096)) {
-        list($dev, $mpoint, $type) = preg_split('/\s+/', trim($buf), 4);
-        $fstype[$mpoint] = $type;
-        $fsdev[$dev] = $type;
-      } 
-      fclose($fd);
-    } 
-
-    for ($i = 1, $max = sizeof($mounts); $i < $max; $i++) {
-      $ar_buf = preg_split('/\s+/', $mounts[$i], 6);
-
-      $results[$i - 1] = array();
-
-      $results[$i - 1]['disk'] = $ar_buf[0];
-      $results[$i - 1]['size'] = $ar_buf[1];
-      $results[$i - 1]['used'] = $ar_buf[2];
-      $results[$i - 1]['free'] = $ar_buf[3];
-      $results[$i - 1]['percent'] = round(($results[$i - 1]['used'] * 100) / $results[$i - 1]['size']) . '%';
-      $results[$i - 1]['mount'] = $ar_buf[5];
-      ($fstype[$ar_buf[5]]) ? $results[$i - 1]['fstype'] = $fstype[$ar_buf[5]] : $results[$i - 1]['fstype'] = $fsdev[$ar_buf[0]];
-    } 
-    return $results;
+    return $this->parser->parse_filesystems();
   } 
 
   function distro () {
-   if ($fd = fopen('/etc/debian_version', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = 'Debian ' . trim($buf);
-   } elseif ($fd = fopen('/etc/SuSE-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/mandrake-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/fedora-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/redhat-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/gentoo-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/slackware-version', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/eos-version', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/trustix-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/arch-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } elseif ($fd = fopen('/etc/cobalt-release', 'r')) {
-      $buf = fgets($fd, 1024);
-      fclose($fd);
-      $result = trim($buf);
-   } else {
-      $result = 'N.A.';
-   }
-   return $result;
+   return $this->distro;
   }
 
   function distroicon () {   
-   if (file_exists('/etc/debian_version')) {
-      $result = 'Debian.gif';
-   } elseif (file_exists('/etc/SuSE-release')) {
-      $result = 'Suse.gif';
-   } elseif (file_exists('/etc/mandrake-release')) {
-      $result = 'Mandrake.gif';
-   } elseif (file_exists('/etc/fedora-release')) {
-      $result = 'Fedora.gif';
-   } elseif (file_exists('/etc/redhat-release')) {
-      $result = 'Redhat.gif';
-   } elseif (file_exists('/etc/gentoo-release')) {
-      $result = 'Gentoo.gif';
-   } elseif (file_exists('/etc/slackware-version')) {
-      $result = 'Slackware.gif';
-   } elseif (file_exists('/etc/eos-version')) {
-      $result = 'free-eos.gif';
-   } elseif (file_exists('/etc/trustix-release')) {
-      $result = 'Trustix.gif';
-   } elseif (file_exists('/etc/arch-release')) {
-      $result = 'Arch.gif';
-   } elseif (file_exists('/etc/cobalt-release')) {
-      $result = 'Cobalt.gif';
-   } else {
-      $result = 'xp.gif';
-   }
-   return $result;
+   return $this->icon;
   }
 
 } 

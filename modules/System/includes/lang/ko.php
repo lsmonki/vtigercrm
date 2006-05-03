@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: ko.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
+// $Id: ko.php,v 1.13 2005/12/31 17:25:02 bigmichi1 Exp $
 // Translated by Sungkook KIM - ace@aceteam.org
 
 $charset                = 'euc-kr';
@@ -80,7 +80,7 @@ $text['language']       = '언어';
 $text['submit']         = '적용';
 $text['created']        = '만든이';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = '일';
 $text['hours']          = '시';
@@ -99,5 +99,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

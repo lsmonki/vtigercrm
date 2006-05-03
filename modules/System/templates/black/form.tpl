@@ -1,3 +1,4 @@
+{errors}
 <center><h1>{title}</h1></center>
 
 <table width="100%" align="center" cellpadding="0" cellspacing="2">
@@ -30,7 +31,7 @@
 
 <table width="100%" cellpadding="0" cellspacing="2">
  <tr>
-  <td width="67%" valign="top">
+  <td width="55%" valign="top">
    {mbtemp}
    <table cellpadding="0" cellspacing="0">
    <tr><td height="8"></td></tr>
@@ -38,7 +39,7 @@
    {mbfans}
   </td>
 
-  <td width="33%" valign="top">
+  <td width="45%" valign="top">
    {mbvoltage}
   </td>
  </tr>

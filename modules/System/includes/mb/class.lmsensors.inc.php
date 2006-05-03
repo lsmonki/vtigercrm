@@ -17,57 +17,67 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.lmsensors.inc.php,v 1.12 2004/10/30 08:09:27 webbie Exp $
+// $Id: class.lmsensors.inc.php,v 1.17 2006/01/25 19:26:50 bigmichi1 Exp $
+if (!defined('IN_PHPSYSINFO')) {
+    die("No Hacking");
+}
+
+require_once(APP_ROOT . "/includes/common_functions.php");
 
 class mbinfo {
-    var $lines;
+  var $lines;
 
+  function mbinfo() {
+   $lines = execute_program("sensors", "");
+   // Martijn Stolk: Dirty fix for misinterpreted output of sensors, 
+   // where info could come on next line when the label is too long.
+   $lines = str_replace(":\n", ":", $lines);
+   $lines = str_replace("\n\n", "\n", $lines);
+   $this->lines = explode("\n", $lines);
+  }
+  
   function temperature() {
     $ar_buf = array();
     $results = array();
 
-    if (!isset($this->lines)) {
-        $this->lines = execute_program("sensors", "");
-    }
-
-    // Martijn Stolk: Dirty fix for misinterpreted output of sensors, 
-    // where info could come on next line when the label is too long.
     $sensors_value = $this->lines;
-    $sensors_value = preg_replace("/:\n/", ":", $sensors_value);
-    $sensors_value = explode("\n", $sensors_value);
 
     foreach($sensors_value as $line) {
       $data = array();
-      if (ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data))
-        ;
-      else
-        ereg("(.*):(.*)\((.*)=(.*)\)(.*)", $line, $data);
-
-      $temp = substr(rtrim($data[2]), -1);
-      switch ($temp) {
-        case "C";
-        case "F":
-          array_push($ar_buf, $line);
-          break;
+      if (ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data)) ;
+      elseif (ereg("(.*):(.*)\((.*)=(.*)\)(.*)", $line, $data)) ;
+      else (ereg("(.*):(.*)", $line, $data));
+      if (count($data) > 1) {
+        $temp = substr(trim($data[2]), -1);
+        switch ($temp) {
+          case "C";
+          case "F":
+            array_push($ar_buf, $line);
+            break;
+        }
       }
     }
 
     $i = 0;
     foreach($ar_buf as $line) {
+      unset($data);
       if (ereg("(.*):(.*).C[ ]*\((.*)=(.*).C,(.*)=(.*).C\)(.*)\)", $line, $data)) ;
       elseif (ereg("(.*):(.*).C[ ]*\((.*)=(.*).C,(.*)=(.*).C\)(.*)", $line, $data)) ;
-      else
-        ereg("(.*):(.*).C[ ]*\((.*)=(.*).C\)(.*)", $line, $data);
+      elseif (ereg("(.*):(.*).C[ ]*\((.*)=(.*).C\)(.*)", $line, $data)) ;
+      else (ereg("(.*):(.*).C", $line, $data));
 
-      $alarm = substr(trim($data[7]), 0, 5);
-
-      $results[$i]['label'] = trim($data[1]);
+      $results[$i]['label'] = $data[1];
       $results[$i]['value'] = trim($data[2]);
-      $results[$i]['limit'] = trim($data[4]);
-      $results[$i]['percent'] = trim($data[6]);
-      if ($results[$i]['limit'] < $results[$i]['percent']) {
-        $results[$i]['limit'] = $results[$i]['percent'];
+      if ( trim( $data[2] ) > trim( $data[6] ) ) {
+        $results[$i]['limit'] = "+75";
+        $results[$i]['perce'] = "+75";
+      } else {
+        $results[$i]['limit'] = isset($data[4]) ? trim($data[4]) : "+75";
+        $results[$i]['perce'] = isset($data[6]) ? trim($data[6]) : "+75";
       }
+      if ($results[$i]['limit'] < $results[$i]['perce']) {	 	
+         $results[$i]['limit'] = $results[$i]['perce'];	 	
+       }      
       $i++;
     }
 
@@ -79,36 +89,40 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    if (!isset($this->lines)) {
-        $this->lines = execute_program("sensors", "");
-    }
-
     $sensors_value = $this->lines;
 
     foreach($sensors_value as $line) {
       $data = array();
-      ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data);
-      $temp = explode(" ", trim($data[2]));
-      if (count($temp) == 1)
-        $temp = explode("\xb0", trim($data[2]));
-      switch ($temp[1]) {
-        case "RPM":
-          array_push($ar_buf, $line);
-          break;
+      if (ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data));
+      elseif (ereg("(.*):(.*)\((.*)=(.*)\)(.*)", $line, $data));
+      else ereg("(.*):(.*)", $line, $data);
+
+      if (count($data) > 1) {
+        $temp = explode(" ", trim($data[2]));
+        if (count($temp) == 1)
+          $temp = explode("\xb0", trim($data[2]));
+	if(isset($temp[1])) {
+          switch ($temp[1]) {
+            case "RPM":
+              array_push($ar_buf, $line);
+              break;
+          }
+	}
       }
     }
 
     $i = 0;
     foreach($ar_buf as $line) {
+      unset($data);
       if (ereg("(.*):(.*) RPM  \((.*)=(.*) RPM,(.*)=(.*)\)(.*)\)", $line, $data));
-      else
-        ereg("(.*):(.*) RPM  \((.*)=(.*) RPM,(.*)=(.*)\)(.*)", $line, $data);
-      $alarm = substr(trim($data[7]), 0, 5);
+      elseif (ereg("(.*):(.*) RPM  \((.*)=(.*) RPM,(.*)=(.*)\)(.*)", $line, $data));
+      elseif (ereg("(.*):(.*) RPM  \((.*)=(.*) RPM\)(.*)", $line, $data));
+      else ereg("(.*):(.*) RPM", $line, $data);
 
       $results[$i]['label'] = trim($data[1]);
       $results[$i]['value'] = trim($data[2]);
-      $results[$i]['min'] = trim($data[4]);
-      $results[$i]['div'] = trim($data[6]);
+      $results[$i]['min'] = isset($data[4]) ? trim($data[4]) : 0;
+      $results[$i]['div'] = isset($data[6]) ? trim($data[6]) : 0;
       $i++;
     }
 
@@ -120,39 +134,41 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    if (!isset($this->lines)) {
-        $this->lines = execute_program("sensors", "");
-    }
-
     $sensors_value = $this->lines;
 
     foreach($sensors_value as $line) {
       $data = array();
-      ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data);
-      $temp = explode(" ", trim($data[2]));
-      if (count($temp) == 1)
-        $temp = explode("\xb0", trim($data[2]));
-      switch ($temp[1]) {
-        case "V":
-          array_push($ar_buf, $line);
-          break;
+      if (ereg("(.*):(.*)\((.*)=(.*),(.*)=(.*)\)(.*)", $line, $data));
+      else ereg("(.*):(.*)", $line, $data);
+      
+      if (count($data) > 1) {
+        $temp = explode(" ", trim($data[2]));
+        if (count($temp) == 1)
+          $temp = explode("\xb0", trim($data[2]));
+        if (isset($temp[1])) {
+          switch ($temp[1]) {
+            case "V":
+              array_push($ar_buf, $line);
+              break;
+	  }
+        }
       }
     }
 
     $i = 0;
     foreach($ar_buf as $line) {
+      unset($data);
       if (ereg("(.*):(.*) V  \((.*)=(.*) V,(.*)=(.*) V\)(.*)\)", $line, $data));
-      else
-        ereg("(.*):(.*) V  \((.*)=(.*) V,(.*)=(.*) V\)(.*)", $line, $data);
-      $alarm = substr(trim($data[7]), 0, 5);
-
-      $results[$i]['label'] = trim($data[1]);
-      $results[$i]['value'] = trim($data[2]);
-      $results[$i]['min'] = trim($data[4]);
-      $results[$i]['max'] = trim($data[6]);
-      $i++;
+      elseif (ereg("(.*):(.*) V  \((.*)=(.*) V,(.*)=(.*) V\)(.*)", $line, $data));
+      else ereg("(.*):(.*) V$", $line, $data);
+      if(isset($data[1])) {
+        $results[$i]['label'] = trim($data[1]);
+        $results[$i]['value'] = trim($data[2]);
+        $results[$i]['min'] = isset($data[4]) ? trim($data[4]) : 0;
+        $results[$i]['max'] = isset($data[6]) ? trim($data[6]) : 0;
+        $i++;
+      }
     }
-
     return $results;
   }
 }

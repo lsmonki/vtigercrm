@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: big5.php,v 1.13 2004/08/30 15:51:25 webbie Exp $
+// $Id: big5.php,v 1.16 2005/12/31 17:25:02 bigmichi1 Exp $
 //
 $charset                = 'big5';
 $text['title']          = '系統資訊';
@@ -80,7 +80,7 @@ $text['language']       = '語言';
 $text['submit']         = '確定';
 $text['created']        = '產生由';
 $text['locale']         = 'zh_TW.Big5';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = '天';
 $text['hours']          = '小時';
@@ -99,5 +99,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: filesystems.php,v 1.12 2004/10/29 06:49:33 webbie Exp $
+// $Id: filesystems.php,v 1.27 2006/04/22 14:35:57 bigmichi1 Exp $
 
 //
 // xml_filesystems()
@@ -25,29 +25,29 @@
 function xml_filesystems () {
     global $sysinfo;
     global $show_mount_point;
-
+    
     $fs = $sysinfo->filesystems();
 
     $_text = "  <FileSystem>\n";
     for ($i=0, $max = sizeof($fs); $i < $max; $i++) {
-        $sum['size'] += $fs[$i]['size'];
-        $sum['used'] += $fs[$i]['used'];
-        $sum['free'] += $fs[$i]['free'];
         $_text .= "    <Mount>\n";
-
-        $_text .= "      <MountPointID>" . $i . "</MountPointID>\n";
+        $_text .= "      <MountPointID>" . htmlspecialchars($i, ENT_QUOTES) . "</MountPointID>\n";
 
         if ($show_mount_point) {
-          $_text .= "      <MountPoint>" . $fs[$i]['mount'] . "</MountPoint>\n";
+          $_text .= "      <MountPoint>" . htmlspecialchars($fs[$i]['mount'], ENT_QUOTES) . "</MountPoint>\n";
         }
 
-        $_text .= "      <Type>" . $fs[$i]['fstype'] . "</Type>\n"
-                . "      <Device>" . $fs[$i]['disk'] . "</Device>\n"
-                . "      <Percent>" . $fs[$i]['percent'] . "</Percent>\n"
-                . "      <Free>" . $fs[$i]['free'] . "</Free>\n"
-                . "      <Used>" . $fs[$i]['used'] . "</Used>\n"
-                . "      <Size>" . $fs[$i]['size'] . "</Size>\n"
-                . "    </Mount>\n";
+        $_text .= "      <Type>" . htmlspecialchars($fs[$i]['fstype'], ENT_QUOTES) . "</Type>\n"
+                . "      <Device><Name>" . htmlspecialchars($fs[$i]['disk'], ENT_QUOTES) . "</Name></Device>\n"
+                . "      <Percent>" . htmlspecialchars($fs[$i]['percent'], ENT_QUOTES) . "</Percent>\n"
+                . "      <Free>" . htmlspecialchars($fs[$i]['free'], ENT_QUOTES) . "</Free>\n"
+                . "      <Used>" . htmlspecialchars($fs[$i]['used'], ENT_QUOTES) . "</Used>\n"
+                . "      <Size>" . htmlspecialchars($fs[$i]['size'], ENT_QUOTES) . "</Size>\n";
+	if (isset($fs[$i]['options']))
+	    $_text .= "      <Options>" . htmlspecialchars($fs[$i]['options'], ENT_QUOTES) . "</Options>\n";
+	if( isset( $fs[$i]['inodes'] ) )
+	    $_text .= "      <Inodes>" . htmlspecialchars( $fs[$i]['inodes'], ENT_QUOTES ) . "</Inodes>\n";
+        $_text  .= "    </Mount>\n";
     }
     $_text .= "  </FileSystem>\n";
     return $_text;
@@ -61,67 +61,102 @@ function html_filesystems () {
     global $text;
     global $show_mount_point;
     
+    $textdir = direction();
+    
+    $sum = array("size" => 0, "used" => 0, "free" => 0);
+
+    $counted_devlist = array();
     $scale_factor = 2;
 
-    $_text  = '<table border="0" width="90%" align="center">';
-    $_text .= '<tr>';
+    $_text  = "<table border=\"0\" width=\"100%\" align=\"center\">\n";
+    $_text .= "  <tr>\n";
 
     if ($show_mount_point) {
-      $_text .= '<td align="left" valign="top"><font size="-1"><b>' . $text['mount'] . '</b></font></td>';
+      $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['mount'] . "</b></font></td>\n";
     }
 
-    $_text .= '<td align="left" valign="top"><font size="-1"><b>' . $text['type'] . '</b></font></td>'
-           . '<td align="left" valign="top"><font size="-1"><b>' . $text['partition'] . '</b></font></td>'
-           . '<td align="left" valign="top"><font size="-1"><b>' . $text['percent'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['free'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['used'] . '</b></font></td>'
-           . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>';
+    $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['type'] . "</b></font></td>\n"
+            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['partition'] . "</b></font></td>\n"
+            . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['percent'] . "</b></font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['free'] . "</b></font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['used'] . "</b></font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><b>" . $text['size'] . "</b></font></td>\n  </tr>\n";
 
     for ($i=1, $max = sizeof($XPath->getDataParts('/phpsysinfo/FileSystem')); $i < $max; $i++) {
         if ($XPath->match("/phpsysinfo/FileSystem/Mount[$i]/MountPointID")) {
-            $sum['size'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size");
-            $sum['used'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used");
-            $sum['free'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free");
-
-            $_text .= "\t<tr>\n";
+	  if (!$XPath->match("/phpsysinfo/FileSystem/Mount[$i]/Options") || !stristr($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Options"), "bind")) {
+	    if (!in_array($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name"), $counted_devlist)) {
+              $sum['size'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size");
+              $sum['used'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used");
+              $sum['free'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free");
+	      if (PHP_OS != "WINNT")
+	        $counted_devlist[] = $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name");
+	      else
+	        $counted_devlist[] = $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint");
+	    }
+	  }
+            $_text .= "  <tr>\n";
 
             if ($show_mount_point) {
-              $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint") . "</font></td>\n";
+              $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint") . "</font></td>\n";
             }
-            $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type") . "</font></td>\n";
-            $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device") . "</font></td>\n";
-            $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">";
-
-            $_text .= create_bargraph($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Percent"), $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Percent"), $scale_factor, $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type"));
-
-            $_text .= "&nbsp;" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Percent") . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free")) . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used")) . "</font></td>\n";
-            $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size")) . "</font></td>\n";
-            $_text .= "\t</tr>\n";
+            $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type") . "</font></td>\n"
+                    . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name") . "</font></td>\n"
+                    . "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">"
+                    . create_bargraph($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used"), $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size"), $scale_factor, $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Type"))
+                    . "&nbsp;" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Percent") . "%";
+		    if( $XPath->match( "/phpsysinfo/FileSystem/Mount[$i]/Inodes" ) )
+	    $_text .= " (" . $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Inodes") . "%)";
+	    $_text .= "</font></td>\n"
+                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free")) . "</font></td>\n"
+                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used")) . "</font></td>\n"
+                    . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size")) . "</font></td>\n"
+                    . "  </tr>\n";
         }
     }
 
-    $_text .= '<tr>';
+    $_text .= "  <tr>\n";
 
     if ($show_mount_point) {
-      $_text .= '<td colspan="3" align="right" valign="top"><font size="-1"><i>' . $text['totals'] . ' :&nbsp;&nbsp;</i></font></td>';
+      $_text .= "  <td colspan=\"3\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
     } else {
-      $_text .= '<td colspan="2" align="right" valign="top"><font size="-1"><i>' . $text['totals'] . ' :&nbsp;&nbsp;</i></font></td>';
+      $_text .= "  <td colspan=\"2\" align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\"><i>" . $text['totals'] . " :&nbsp;&nbsp;</i></font></td>\n";
     }
 
-    $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">";
+    $_text .= "    <td align=\"" . $textdir['left'] . "\" valign=\"top\"><font size=\"-1\">"
+            . create_bargraph($sum['used'], $sum['size'], $scale_factor)
+            . "&nbsp;" . round(100 / $sum['size'] *  $sum['used']) . "%" .  "</font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['free']) . "</font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['used']) . "</font></td>\n"
+            . "    <td align=\"" . $textdir['right'] . "\" valign=\"top\"><font size=\"-1\">" . format_bytesize($sum['size']) . "</font></td>\n  </tr>\n"
+            . "</table>\n";
 
-    $sum_percent = round(($sum['used'] * 100) / $sum['size']);
-    $_text .= create_bargraph($sum_percent, $sum_percent, $scale_factor);
+    return $_text;
+}
 
-    $_text .= "&nbsp;" . $sum_percent . "%" .  "</font></td>\n";
+function wml_filesystem() {
+    global $XPath;
+    global $text;
+    global $show_mount_point;
 
-    $_text .= '<td align="right" valign="top"><font size="-1">' . format_bytesize($sum['free']) . '</font></td>'
-           . '<td align="right" valign="top"><font size="-1">' . format_bytesize($sum['used']) . '</font></td>'
-           . '<td align="right" valign="top"><font size="-1">' . format_bytesize($sum['size']) . '</font></td></tr>'
-           . '</table>';
+    $_text = "<card id=\"filesystem\" title=\"" . $text['fs'] . "\">\n";
 
+    for ($i = 1; $i < sizeof($XPath->getDataParts('/phpsysinfo/FileSystem')); $i++) {
+      if ($XPath->match("/phpsysinfo/FileSystem/Mount[$i]/MountPointID")) {
+        $_text .= "<p>\n";
+        if ($show_mount_point) {
+          $_text .= $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/MountPoint") . "<br/>\n";
+        } else {
+	  $_text .= $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Device/Name") . "<br/>\n";
+	}
+	$_text .= "- " . $text['free'] . ": " . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free")) . "<br/>\n"
+               . "- " . $text['used'] . ": " . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used")) . "<br/>\n"
+               . "- " . $text['size'] . ": " . format_bytesize($XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size")) . "<br/>\n"
+               . "</p>\n";
+      }
+    }
+    
+    $_text .= "</card>\n";
     return $_text;
 }
 ?>

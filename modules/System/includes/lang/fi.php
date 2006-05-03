@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: fi.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
+// $Id: fi.php,v 1.13 2005/12/31 17:25:02 bigmichi1 Exp $
 
 // Finnish language file by Jani 'Japala' Ponkko
 
@@ -79,7 +79,7 @@ $text['language']       = 'Kieli';
 $text['submit']         = 'Valitse';
 $text['created']        = 'Luonut';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'p&auml;iv&auml;&auml;';
 $text['hours']          = 'tuntia';
@@ -98,5 +98,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

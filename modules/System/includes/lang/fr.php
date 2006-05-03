@@ -17,11 +17,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: fr.php,v 1.16 2004/09/01 18:00:21 webbie Exp $
+// $Id: fr.php,v 1.21 2006/02/11 11:20:51 bigmichi1 Exp $
 
-$text['locale']         = 'fr_FR';
-
-$text['title']          = 'Information Syst&egrave;me ';
+$text['title']          = 'Informations Syst&egrave;me ';
 
 $text['vitals']         = 'Syst&egrave;me';
 $text['hostname']       = 'Nom d\'h&ocirc;te cannonique';
@@ -32,18 +30,16 @@ $text['uptime']         = 'Uptime';
 $text['users']          = 'Utilisateurs';
 $text['loadavg']        = 'Charge syst&egrave;me';
 
-$text['hardware']       = 'Information Mat&eacute;riel';
+$text['hardware']       = 'Informations Mat&eacute;riel';
 $text['numcpu']         = 'Processeurs';
 $text['cpumodel']       = 'Mod&egrave;le';
-$text['cpuspeed']       = 'Fr&eacute;quence';
-$text['busspeed']       = 'BUS Speed';
+$text['mhz']            = 'Fr&eacute;quence';
 $text['cache']          = 'Taille Cache';
 $text['bogomips']       = 'Bogomips';
-
+$text['usb']            = 'P&eacute;riph. USB';
 $text['pci']            = 'P&eacute;riph. PCI';
 $text['ide']            = 'P&eacute;riph. IDE';
 $text['scsi']           = 'P&eacute;riph. SCSI';
-$text['usb']            = 'P&eacute;riph. USB';
 
 $text['netusage']       = 'R&eacute;seau';
 $text['device']         = 'P&eacute;riph&eacute;rique';
@@ -62,7 +58,7 @@ $text['partition']      = 'Partition';
 $text['percent']        = 'Utilisation';
 $text['type']           = 'Type';
 $text['free']           = 'Libre';
-$text['used']           = 'Utilis&eacute;';
+$text['used']           = 'Occup&eacute;';
 $text['size']           = 'Taille';
 $text['totals']         = 'Totaux';
 
@@ -78,7 +74,8 @@ $text['template']       = 'Mod&egrave;le ';
 $text['language']       = 'Langue ';
 $text['submit']         = 'Valider';
 $text['created']        = 'Cr&eacute;&eacute; par';
-$text['gen_time']       = 'le %e/%m/%Y &agrave; %R';
+$text['locale']         = 'fr_FR';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'jours';
 $text['hours']          = 'heures';
@@ -87,15 +84,19 @@ $text['minutes']        = 'minutes';
 $text['temperature']    = 'Temp&eacute;rature';
 $text['voltage']        = 'Voltage';
 $text['fans']           = 'Ventilateurs';
-$text['s_value']        = 'Valeur';
+$text['s_value']        = 'valeur';
 $text['s_min']          = 'Min';
 $text['s_max']          = 'Max';
 $text['s_div']          = 'Div';
-$text['hysteresis']     = 'Hysteresis';
+$text['hysteresis']     = 'Hyst&eacute;r&eacute;sis';
 $text['s_limit']        = 'Limite';
 $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= '- Kernel + applications';
+$text['buffers']	= '- Buffers';
+$text['cached']		= '- Cached';
 
 ?>

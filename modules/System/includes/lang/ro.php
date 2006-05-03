@@ -78,7 +78,7 @@ $text['language']       = 'Limba';
 $text['submit']         = 'Actualizeaza';
 $text['created']        = 'Creat de';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'zile';
 $text['hours']          = 'ore';
@@ -97,5 +97,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

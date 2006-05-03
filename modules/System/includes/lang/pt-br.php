@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: pt-br.php,v 1.6 2004/08/30 15:51:26 webbie Exp $
+// $Id: pt-br.php,v 1.9 2005/12/31 17:25:02 bigmichi1 Exp $
 //
 // Tradutor: Marcílio Cunha Marinho Maia, 29/03/2003 às 04:34 (Goiânia-GO,Brasil)
 // E-mail: marcilio@nextsolution.com.br Web: http://www.nextsolution.com.br
@@ -83,7 +83,7 @@ $text['language']       = 'Língua';
 $text['submit']         = 'Entrar';
 $text['created']        = 'Criado por';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'Dias';
 $text['hours']          = 'Horas';
@@ -102,5 +102,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
 
 ?>

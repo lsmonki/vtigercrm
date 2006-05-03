@@ -1,3 +1,4 @@
+{errors}
 <div class="title">
 {title}
 </div>
@@ -8,12 +9,17 @@
    {vitals}
    <br>
    {network}
-   <br>
-   {memory}
   </td>
 
   <td width="50%" valign="top">
    {hardware}
+  </td>
+ </tr>
+
+ <tr>
+  <td colspan="2">
+   <br>
+   {memory}
   </td>
  </tr>
 
@@ -28,7 +34,7 @@
 
 <table width="100%" cellpadding="0" cellspacing="2">
  <tr>
-  <td width="67%" valign="top">
+  <td width="55%" valign="top">
    {mbtemp}
    <table>
    <tr><td height="8"></td></tr>
@@ -36,7 +42,7 @@
    {mbfans}
   </td>
  
-  <td width="33%" valign="top">
+  <td width="45%" valign="top">
    {mbvoltage}
   </td>
  </tr>

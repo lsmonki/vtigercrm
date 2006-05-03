@@ -17,29 +17,34 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: vitals.php,v 1.14 2004/10/13 08:13:30 webbie Exp $
+// $Id: vitals.php,v 1.27 2005/12/31 17:25:26 bigmichi1 Exp $
 
 // xml_vitals()
 
 function xml_vitals ()
 {
   global $sysinfo;
-  $ar_buf = $sysinfo->loadavg();
+  global $loadbar;
 
-  for ($i = 0; $i < 3; $i++) {
-    $load_avg .= $ar_buf[$i] . ' ';
+  $load_avg = "";
+  $ar_buf = ($loadbar ? $sysinfo->loadavg($loadbar) : $sysinfo->loadavg());
+
+  for ($i = 0; $i < count($ar_buf['avg']); $i++) {
+    $load_avg .= $ar_buf['avg'][$i] . ' ';
   } 
 
   $_text = "  <Vitals>\n"
-   . "    <Hostname>" . $sysinfo->chostname() . "</Hostname>\n"
-   . "    <IPAddr>" . $sysinfo->ip_addr() . "</IPAddr>\n"
-   . "    <Kernel>" . $sysinfo->kernel() . "</Kernel>\n"
-   . "    <Distro>" . $sysinfo->distro() . "</Distro>\n"
-   . "    <Distroicon>" . $sysinfo->distroicon() . "</Distroicon>\n"
-   . "    <Uptime>" . $sysinfo->uptime() . "</Uptime>\n"
-   . "    <Users>" . $sysinfo->users() . "</Users>\n"
-   . "    <LoadAvg>" . trim($load_avg) . "</LoadAvg>\n"
-   . "  </Vitals>\n";
+   . "    <Hostname>" . htmlspecialchars($sysinfo->chostname(), ENT_QUOTES) . "</Hostname>\n"
+   . "    <IPAddr>" . htmlspecialchars($sysinfo->ip_addr(), ENT_QUOTES) . "</IPAddr>\n"
+   . "    <Kernel>" . htmlspecialchars($sysinfo->kernel(), ENT_QUOTES) . "</Kernel>\n"
+   . "    <Distro>" . htmlspecialchars($sysinfo->distro(), ENT_QUOTES) . "</Distro>\n"
+   . "    <Distroicon>" . htmlspecialchars($sysinfo->distroicon(), ENT_QUOTES) . "</Distroicon>\n"
+   . "    <Uptime>" . htmlspecialchars($sysinfo->uptime(), ENT_QUOTES) . "</Uptime>\n"
+   . "    <Users>" . htmlspecialchars($sysinfo->users(), ENT_QUOTES) . "</Users>\n"
+   . "    <LoadAvg>" . htmlspecialchars(trim($load_avg), ENT_QUOTES) . "</LoadAvg>\n";
+   if (isset($ar_buf['cpupercent']))
+     $_text .= "   <CPULoad>" . htmlspecialchars(round($ar_buf['cpupercent'], 2), ENT_QUOTES) . "</CPULoad>";
+   $_text .= "  </Vitals>\n";
   return $_text;
 } 
 
@@ -47,35 +52,72 @@ function xml_vitals ()
 
 function html_vitals ()
 {
+  global $webpath;
   global $XPath;
   global $text;
 
-  $min = $XPath->getData('/phpsysinfo/Vitals/Uptime') / 60;
-  $hours = $min / 60;
-  $days = floor($hours / 24);
-  $hours = floor($hours - ($days * 24));
-  $min = floor($min - ($days * 60 * 24) - ($hours * 60));
+  $textdir = direction();
+  $scale_factor = 2;
+  $loadbar = "";
+  $uptime = "";
+  
+  if($XPath->match("/phpsysinfo/Vitals/CPULoad"))
+    $loadbar = "<br/>" . create_bargraph($XPath->getData("/phpsysinfo/Vitals/CPULoad"), 100, $scale_factor) . "&nbsp;" . $XPath->getData("/phpsysinfo/Vitals/CPULoad") . "%";
 
-  if ($days != 0) {
-    $uptime = "$days " . $text['days'] . " ";
-  } 
-
-  if ($hours != 0) {
-    $uptime .= "$hours " . $text['hours'] . " ";
-  } 
-  $uptime .= "$min " . $text['minutes'];
-
-  $_text = '<table border="0" width="90%" align="center">'
-   . '<tr><td valign="top"><font size="-1">' . $text['hostname'] . '</font></td><td><font size="-1">' . $XPath->getData('/phpsysinfo/Vitals/Hostname') . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['ip'] . '</font></td><td><font size="-1">' . $XPath->getData('/phpsysinfo/Vitals/IPAddr') . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['kversion'] . '</font></td><td><font size="-1">' . $XPath->getData('/phpsysinfo/Vitals/Kernel') . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['dversion'] . '</font></td><td><img width="16" height="16" alt="" src="images/' . $XPath->getData('phpsysinfo/Vitals/Distroicon') . '">&nbsp;<font size="-1">' . $XPath->getData('phpsysinfo/Vitals/Distro') . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['uptime'] . '</font></td><td><font size="-1">' . $uptime . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['users'] . '</font></td><td><font size="-1">' . $XPath->getData('/phpsysinfo/Vitals/Users') . '</font></td></tr>'
-   . '<tr><td valign="top"><font size="-1">' . $text['loadavg'] . '</font></td><td><font size="-1">' . $XPath->getData('/phpsysinfo/Vitals/LoadAvg') . '</font></td></tr>'
-   . '</table>';
+  $_text = "<table border=\"0\" width=\"100%\" align=\"center\">\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['hostname'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Hostname") . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['ip'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/IPAddr") . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['kversion'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Kernel") . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['dversion'] . "</font></td>\n"
+	 . "    <td><img width=\"16\" height=\"16\" alt=\"\" src=\"" . $webpath . "images/" . $XPath->getData("/phpsysinfo/Vitals/Distroicon") . "\">&nbsp;<font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Distro") . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['uptime'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . uptime($XPath->getData('/phpsysinfo/Vitals/Uptime')) . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['users'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/Users") . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "  <tr>\n"
+	 . "    <td valign=\"top\"><font size=\"-1\">" . $text['loadavg'] . "</font></td>\n"
+	 . "    <td><font size=\"-1\">" . $XPath->getData("/phpsysinfo/Vitals/LoadAvg") . $loadbar . "</font></td>\n"
+	 . "  </tr>\n"
+	 . "</table>\n";
 
   return $_text;
 } 
 
+function wml_vitals ()
+{
+  global $XPath;
+  global $text;
+  
+  $_text = "<card id=\"vitals\" title=\"" . $text['vitals']  . "\">\n"
+         . "<p>" . $text['hostname'] . ":<br/>\n"
+ 	 . "- " . $XPath->getData("/phpsysinfo/Vitals/Hostname") . "</p>\n"
+	 . "<p>" . $text['ip'] . ":<br/>\n"
+	 . "- " . $XPath->getData("/phpsysinfo/Vitals/IPAddr") . "</p>\n"
+	 . "<p>" . $text['kversion'] . ":<br/>\n"
+	 . "- " . $XPath->getData("/phpsysinfo/Vitals/Kernel") . "</p>\n"
+	 . "<p>" . $text['uptime'] . ":<br/>\n"
+	 . "- " . uptime($XPath->getData('/phpsysinfo/Vitals/Uptime')) . "</p>"
+	 . "<p>" . $text['users'] . ":<br/>"
+	 . "- " . $XPath->getData("/phpsysinfo/Vitals/Users") . "</p>"
+	 . "<p>" . $text['loadavg'] . ":<br/>"
+	 . "- " . $XPath->getData("/phpsysinfo/Vitals/LoadAvg") . "</p>"
+	 . "</card>\n";
+
+  return $_text;
+}
 ?>

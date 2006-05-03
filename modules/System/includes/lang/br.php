@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: br.php,v 1.12 2004/08/30 15:51:25 webbie Exp $
+// $Id: br.php,v 1.15 2005/12/31 17:25:02 bigmichi1 Exp $
 // Translated by Álvaro Reguly - alvaro at reguly dot net
 //
 $text['title']          = 'Informações do Sistema';
@@ -78,7 +78,7 @@ $text['language']       = 'Língua';
 $text['submit']         = 'Enviar';
 $text['created']        = 'Criado por';
 $text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'on %b %d, %Y at %I:%M %p';
 
 $text['days']           = 'dias';
 $text['hours']          = 'horas';
@@ -97,4 +97,9 @@ $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';
+
+$text['app']		= 'Kernel + applications';
+$text['buffers']	= 'Buffers';
+$text['cached']		= 'Cached';
+
 ?>
