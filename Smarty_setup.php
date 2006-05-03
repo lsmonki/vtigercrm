@@ -16,4 +16,3 @@ class vtigerCRM_Smarty extends Smarty{
 }
 
 ?>
-
