@@ -12,11 +12,9 @@ require_once('modules/Webmails/Webmail.php');
 global $log;
 global $app_strings;
 global $mod_strings;
-
 if($_REQUEST["record"]) {$mailid=$_REQUEST["record"];} else {$mailid=$_REQUEST["mailid"];}
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
-
 $login_username= $temprow["mail_username"];
 $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
@@ -29,8 +27,10 @@ $sslmeth=$temprow["sslmeth"];
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 global $mbox;
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error())
 
+echo ' after  in DetailView ';
 $email = new Webmail($mbox, $mailid);
 $from = $email->from;
 $subject=$email->subject;

@@ -77,7 +77,8 @@ $mail_protocol=$temprow["mail_protocol"];
 $ssltype=$temprow["ssltype"];
 $sslmeth=$temprow["sslmeth"];
 
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
 $webmail = new Webmail($mbox,$mailid);
 $webmail->loadMail();
 $focus->column_fields['description'] = strip_tags($webmail->body);

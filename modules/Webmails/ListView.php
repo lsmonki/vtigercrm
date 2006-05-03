@@ -76,8 +76,8 @@ $show_hidden=$_REQUEST["show_hidden"];
 <script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
 
 <script type="text/Javascript">
-var box_refresh=<?php echo $box_refresh;?>;
-var timer = window.onload=window.setTimeout("refresh_list()",box_refresh);
+//var box_refresh=<?php echo $box_refresh;?>;
+//var timer = window.onload=window.setTimeout("refresh_list()",box_refresh);
 function reset_timer() {
 	timer = window.setTimeout("refresh_list()",box_refresh);
 }
@@ -158,8 +158,9 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 
 global $mbox;
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
 
+$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
 
 function SureRemoveDir($dir) {
    if(!$dh = @opendir($dir)) return;
@@ -178,7 +179,6 @@ $save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
 $elist = fullMailList($mbox);
-//print_r($elist);
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
@@ -256,13 +256,15 @@ $i=1;
 
   	// read/unread/forwarded/replied
   	if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
-  		$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a>&nbsp;';
+		{
+  		$flags.='<a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a>&nbsp;';
+	}
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 		$flags.='<img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12">&nbsp;';
   	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
 		$flags.='<img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13">&nbsp;';
   	else
-  		$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
+  		$flags.='<a href="xindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
   	// Add to Vtiger
   	if($mails[$start_message]->flagged)
