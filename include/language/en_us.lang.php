@@ -260,6 +260,8 @@ $app_strings = Array(
 
 'LNK_NEW_CONTACT'=>'New Contact',
 
+'LNK_NEW_CAMPAIGN'=>'New Campaign',
+
 'LNK_NEW_LEAD'=>'New Lead',
 
 'LNK_NEW_ACCOUNT'=>'New Account',
