@@ -23,10 +23,6 @@ global $entityDel;
 global $display;
 global $category;
 require_once('include/utils/utils.php');
-//if (substr(phpversion(), 0, 1) == "5") {
-// while using php5, in graphs we get illegal exception
- //       ini_set("zend.ze1_compatibility_mode", "1");
-//}
 
 if (version_compare(phpversion(), '5.0') < 0) {
     eval('
@@ -37,76 +33,7 @@ if (version_compare(phpversion(), '5.0') < 0) {
   }
 
 global $currentModule;
-function fetchPermissionDataForTabList()
-{
-  $permittedTabs = $_SESSION['tab_permission_set'];
-  $i=0;$j=0;
-  
-  while($i<count($permittedTabs))
-  {
-    $modulesPermitted[$j++]=  $permittedTabs[$i];
-    $i++;
-  }
-  return $modulesPermitted;
-}
 
-
-
-function fetchPermissionData($module,$action)
-{
-
-	global $theme,$display;
-	global $others_permission_id;
-	global $others_view;
-	global $others_create_edit;
-	global $others_delete;
-	global $current_user;
-        
-	global $tabid;
-	global $actionid;
-	global $profile_id;
-
-	require_once('include/utils/UserInfoUtil.php');
-	$tabid = getTabid($module);
-
-	$actionid = getActionid($action);
-	$profile_id = $_SESSION['authenticated_user_profileid'];
-	$tab_per_Data = getAllTabsPermission($profile_id);
-
-	$permissionData = $_SESSION['action_permission_set'];
-	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
-	$others_permission_id = $defSharingPermissionData[$tabid];
-	
-}
-
-//we have to do this as there is no UI page for Delete. Hence, when the user clicks delete, it gets stuck halfway and the page looks ugly because the theme is not set
-function checkDeletePermission($tabid)
-{
-	global $entityDel;
-	$action ="Delete";
-	$actionid = 2;	
-	$permissionData = $_SESSION['action_permission_set'];
-	$i = 0;
-	//keep searching till Delete method is found in the array
-	while($i<count($permissionData))
-	{
-		if($permissionData[$i][0] == $tabid  &&  $permissionData[$i][1] == $actionid)
-		{
-			$actionpermissionvalue=$permissionData[$i][2];
-			if($actionpermissionvalue == 0)
-			{
-				//if 0, then the delete button should be shown
-				$entityDel = true;
-			}
-			else
-			{
-				$entityDel = false;
-			}
-		}
-		$i++;
-	}
-
-}
  function stripslashes_checkstrings($value){
         if(is_string($value)){
                 return stripslashes($value);
@@ -553,7 +480,6 @@ if(!$skipSecurityCheck)
 		$display = isPermitted($module,$action);
 	}
 	$seclog->debug('########### Pemitted ---> '.$display.'  ##############');
-	fetchPermissionData($module,$action);
 }
 else
 {
