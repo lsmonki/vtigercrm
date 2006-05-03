@@ -24,7 +24,7 @@ function pickColor(color)
 											<td colspan="2" style="padding:5px;">
 													<span class="lvtHeaderText">
 													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-															 > {$MOD.LBL_USER_MANAGEMENT}</b></span>
+															 > {$MOD.LBL_USER_MANAGEMENT} > User</b></span>
 															<hr noshade="noshade" size="1" />
 											</td>
 									  </tr>
