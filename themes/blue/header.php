@@ -49,6 +49,7 @@ require_once("include/calculator/Calc.php");
 
 
 global $currentModule;
+global $app_strings;
 global $app_list_strings;
 global $moduleList;
 global $theme;
@@ -64,6 +65,7 @@ $smarty->assign("IMAGEPATH",$image_path);
 
 $qc_modules = getQuickCreateModules();
 $smarty->assign("QCMODULE", $qc_modules);
+$smarty->assign("APP", $app_strings);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
