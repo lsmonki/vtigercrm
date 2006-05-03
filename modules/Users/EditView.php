@@ -99,8 +99,11 @@ if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
         $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
         $RETURN_ID = $_REQUEST['return_id'];
 }
+if($mode == 'edit')
+	$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js1());
+else	
+	$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("USER_NAME", $focus->user_name);
