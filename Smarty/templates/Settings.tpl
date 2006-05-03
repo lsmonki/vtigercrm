@@ -1,9 +1,9 @@
 <style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 <tr>
 		{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="small">
 <tr>
 
 <td class="detailedViewHeader" align="left"><b>{$MOD.LBL_USER_MANAGEMENT}</b></td>
@@ -75,6 +75,7 @@
 
 <td width="25%"><a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings"><img src="{$IMAGE_PATH}block.gif" alt="{$MOD.LBL_FIELD_ORDERING_DESC}" title="{$MOD.LBL_FIELD_ORDERING_DESC}"  border="0" /></a><br />
 <a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" alt="{$MOD.LBL_FIELD_ORDERING_DESC}" title="{$MOD.LBL_FIELD_ORDERING_DESC}">{$MOD.LBL_FIELD_ORDERING}</a> </td>
+<td width="25%">&nbsp;</td>
 </tr>
 
 <tr>
@@ -103,16 +104,14 @@
 
 <td width="25%"><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings"><img src="{$IMAGE_PATH}notification.gif" alt="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}" title="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}"  border="0" /></a><br />
 <a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings" alt="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}" title="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}">{$MOD.NOTIFICATIONSCHEDULERS}</a> </td>
-
+<td width="25%"><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" border="0" /></a><br />
+<a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}">{$MOD.INVENTORYNOTIFICATION}</a></td>
 </tr>
 <tr><td colspan="4" height="30px;">&nbsp;</td></tr>
 <tr>
-
-<td width="25%"><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" border="0" /></a><br />
-<a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}">{$MOD.INVENTORYNOTIFICATION}</a></td>
-
-<td><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img src="{$IMAGE_PATH}terms.gif" alt="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" title="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" border="0"/></a><br />
+<td width="25%"><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img src="{$IMAGE_PATH}terms.gif" alt="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" title="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" border="0"/></a><br />
 <a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" title="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}">{$MOD.INVENTORYTERMSANDCONDITIONS}</a> </td>
+<td width="25%">&nbsp;</td><td width="25%">&nbsp;</td><td width="25%">&nbsp;</td>
 </tr>
 
 <td>&nbsp;</td>
