@@ -38,7 +38,6 @@ function pickColor(color)
 	</td></tr>
 	
 	<tr><td class="padTab" align="left">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="record" value="{$ID}">
@@ -55,6 +54,7 @@ function pickColor(color)
 			<input type="hidden" name="namedays" value="">			
 			<input type="hidden" name="weekstart" value="1">
 			<input type="hidden" name="parenttab" value=Settings>
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">
