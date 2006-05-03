@@ -50,6 +50,9 @@ echo ""
 echo "installing vtigercrm5_beta apache service"
 echo ""
 echo ""
+echo "Starting  vtigercrm5_beta apache service after sleeping for 20 seconds"
+echo ""
+%SLEEP_STR% -n 20 127.0.0.1>nul
 bin\apache -k install -n vtigercrm5_beta -f conf\httpd.conf
 echo ""
 echo "Starting  vtigercrm5_beta apache service"
