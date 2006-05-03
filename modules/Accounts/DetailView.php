@@ -70,7 +70,6 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
