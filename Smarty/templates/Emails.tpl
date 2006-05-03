@@ -76,11 +76,11 @@ function ajaxDelResponse(response)
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:openPopUp('ComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">Compose</a>
+												&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">Compose</a>
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="#" class="webMnu">Settings</a>
+												&nbsp;<a href="index.php?module=Settings&action=ListMailAccount" class="webMnu">Settings</a>
 											</td>
 									</tr>
 							</table>
@@ -96,7 +96,7 @@ function ajaxDelResponse(response)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b>All Mails</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Inbox</a>&nbsp;<b></b>
+										<a href="index.php?module=Webmails&action=index" class="webMnu">Inbox</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
