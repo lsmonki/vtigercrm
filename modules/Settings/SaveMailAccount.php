@@ -12,7 +12,7 @@ require_once("include/database/PearDatabase.php");
 
 global $current_user;
 $displayname=$_REQUEST['displayname'];
-$user_id = $current_user->id;
+$userid = $current_user->id;
 $email=$_REQUEST['email'];
 $account_name=$_REQUEST['account_name'];
 $mailprotocol=$_REQUEST['mailprotocol'];
@@ -33,7 +33,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 
 if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 {
-	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', showbody='no' where account_id = '".$id."'";
+	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', showbody='no' where user_id = '".$id."'";
 }
 else
 {
@@ -43,5 +43,5 @@ else
 
 $adb->query($sql);
 
-header("Location:index.php?module=Settings&action=ListMailAccount");
+header("Location:index.php?module=Settings&action=AddMailAccount&record=$userid");
 ?>
