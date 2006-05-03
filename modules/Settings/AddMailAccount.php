@@ -34,7 +34,7 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$sql = "select * from mail_accounts where account_id=".$_REQUEST['record'];
+	$sql = "select * from mail_accounts where user_id=".$_REQUEST['record'];
 	$result = $adb->query($sql);
 	$rowcount = $adb->num_rows($result);
 	
@@ -43,6 +43,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 		while($temprow = $adb->fetchByAssoc($result))
 		{
 			$smarty->assign("DISPLAYNAME", $temprow['display_name']);
+			$smarty->assign("ID", $temprow['user_id']);
 			$smarty->assign("EMAIL", $temprow['mail_id']);
 			$smarty->assign("ACCOUNTNAME", $temprow['account_name']);
 			$smarty->assign($temprow['mail_protocol'],$temprow['mail_protocol']);
