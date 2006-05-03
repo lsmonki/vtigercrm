@@ -100,23 +100,25 @@ else
   if($errorCode == 4)
   {
    include('themes/'.$theme.'/header.php');
-    $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
-    echo $errormessage;
     include "upload.php";
+   // $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
+    echo "<script>alert('Please Specify a File to Merge')</script>";
   }
   else if($errorCode == 2)
   {
-    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
     include('themes/'.$theme.'/header.php');
-    echo $errormessage;
     include "upload.php";
+    //$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
+	echo "<script>alert('Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file')</script>";	
+    //echo $errormessage;
     //echo $errorCode;
   }
   else if($errorCode == 3)
   {
    include('themes/'.$theme.'/header.php');
-    echo "Problems in file upload. Please try again! <br>";
     include "upload.php";
+    echo "<script>alert('Problems in file upload. Please try again!')</script>";
+	
   }
   
 }
