@@ -12,7 +12,8 @@ require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
-
+global $adb;
+global $log;
 global $mod_strings;
 global $app_strings;
 global $current_language;
@@ -20,6 +21,8 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+
+$log->info("Inside Email Template Detail View");
 
 $smarty = new vtigerCRM_smarty;
 
@@ -33,6 +36,7 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
+	$log->info("The templateid is set");
 	$tempid = $_REQUEST['templateid'];
 	$sql = "select * from emailtemplates where templateid=".$tempid;
 	$result = $adb->query($sql);
