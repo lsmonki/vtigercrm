@@ -28,7 +28,6 @@ if ($_REQUEST['module'] == 'Products' ||
 	$_REQUEST['module'] == 'Accounts' ||
 	$_REQUEST['module'] == 'Leads')
 {
-	$permissionData = $_SESSION['action_permission_set'];
 	if(isPermitted($_REQUEST['module'],'Import') == 0)
 	{
 ?>
@@ -54,7 +53,6 @@ if  ( $allow_exports=='all' ||
 	{
 		if($_REQUEST['module'] != 'Activities')
 		{
-			$permissionData = $_SESSION['action_permission_set'];
 			if(isPermitted($_REQUEST['module'],'Export') == 'yes')
 			{
 ?>
