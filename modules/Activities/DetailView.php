@@ -128,7 +128,6 @@ $smarty->assign("SINGLE_MOD", "Activity");
 
 //get Description Information
 
-$permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Activities","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
