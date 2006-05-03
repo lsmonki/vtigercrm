@@ -65,8 +65,7 @@
                                       <td colspan="4" align="left">
 						{$EDIT_BUTTON}
 						&nbsp;
-					 	<input name="pass" type="button" class="samll" id="pass" value=" Change Password"  onclick="fnvshobj(this,'roleLay');"/>
-					{*	{$CHANGE_PW_BUTTON}*}
+						{$CHANGE_PW_BUTTON}
 					</td>
                                     </tr>
            			    <tr>
@@ -95,7 +94,7 @@
 
                                     <tr>
                                         <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>E-Mail Id</td>
-					<td class="dvtCellInfo">{$EMAIL1}</td>
+					<td class="dvtCellInfo"><a href="mailto:{$EMAIL1}" target="_blank">{$EMAIL1}</a></td>
                                 {*        <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>*}
                                         <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>My Status </td>
                                         <td class="dvtCellInfo">{$STATUS}</td>
@@ -254,7 +253,7 @@
 
 
 {$JAVASCRIPT}
-
+{*
 <div id="roleLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
@@ -305,4 +304,4 @@ function checkPassword(record)
 }
 {/literal}
 
-</script>
+</script>*}
