@@ -23,8 +23,7 @@ define('IN_PHPSYSINFO', true);
 ini_set('magic_quotes_runtime', 'off');
 ini_set('register_globals', 'off');
 // ini_set('display_errors','on');
-define('APP_ROOT', dirname(__FILE__));
-echo $APP_ROOT;
+define('APP_ROOT', getcwd().'/modules/System');
 require_once(APP_ROOT . '/includes/class.error.inc.php');
 $error = new Error;
 
@@ -94,7 +93,7 @@ if ($template == 'random') {
 
 if ($template != 'xml' && $template != 'wml') {
   // figure out if the template exists
- $template = basename(APP_ROOT .'/templates/' . $template); 
+ $template = basename(APP_ROOT .'/templates/' . $template);
   if (!file_exists(APP_ROOT . "/templates/" . $template)) {
     // use default if not exists.
     $template = $default_template;

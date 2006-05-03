@@ -39,7 +39,7 @@ $default_template='classic';
 // hide language and template picklist
 // false = display picklist
 // true = do not display picklist
-$hide_picklist = false;
+$hide_picklist = true;
 
 // define the motherboard monitoring program here
 // we support four programs so far
