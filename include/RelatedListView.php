@@ -75,16 +75,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	
 
 
-	/*
-	global $others_permission_id;
-	$rel_tab_id = getTabid($relatedmodule);
-	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
-	$others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
-	if($others_rel_permission_id == 3 && $relatedmodule != 'Notes' && $relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook') //Security fix by Don
-	{
-		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
-	}
-	*/
+	
 
 	if(isset($where) && $where != '')
 	{
