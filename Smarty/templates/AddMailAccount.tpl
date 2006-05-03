@@ -127,7 +127,7 @@
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>
-           <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>Email's per Page </td>
+           <td class="dvtCellLabel" align="right">Email's per Page </td>
            <td class="dvtCellInfo"><input type="text" name="mails_per_page" value="{$MAILS_PER_PAGE}" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
