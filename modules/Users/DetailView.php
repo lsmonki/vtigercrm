@@ -141,7 +141,7 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	
  //global $AUTHCFG;
  	//if (strtoupper($AUTHCFG['authType']) == 'SQL') {
-		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='classBtn' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=165,resizable=no,scrollbars=no, toolbar=no, titlebar=no\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
+		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='classBtn' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=165,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=100, top=126, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 		$smarty->assign('CHANGE_PW_BUTTON',$buttons);
 	//}
 	
