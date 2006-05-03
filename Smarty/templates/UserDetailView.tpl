@@ -115,7 +115,7 @@
 			    </tr>
 				<tr>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
-				<td class="dvtCellInfo">{$EMAIL1}&nbsp;</td>
+				<td class="dvtCellInfo"><a href="mailto:{$EMAIL1}" target="_blank">{$EMAIL1}</a>&nbsp;</td>
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
 
 				<td class="dvtCellInfo">{$STATUS}&nbsp;</td>
