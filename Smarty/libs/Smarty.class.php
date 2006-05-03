@@ -1212,7 +1212,7 @@ class Smarty
                                 header('HTTP/1.1 304 Not Modified');
 
                         } else {
-                            header('Last-Modified: '.$_gmt_mtime);
+                            @header('Last-Modified: '.$_gmt_mtime);
                             echo $_smarty_results;
                         }
                     } else {
@@ -1231,7 +1231,7 @@ class Smarty
             } else {
                 $this->_cache_info['template'][$resource_name] = true;
                 if ($this->cache_modified_check && $display) {
-                    header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+                    @header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
                 }
             }
         }
