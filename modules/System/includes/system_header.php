@@ -52,7 +52,7 @@ if (file_exists(APP_ROOT . "/templates/$template/$template.css")) {
 echo "</head>\n";
 
 if (file_exists(APP_ROOT . "/templates/$template/images/$template" . "_background.gif")) {
-  echo "<body background="modules/System/templates/" . $webpath . "templates/" . $template . "/images/" . $template . "_background.gif\">";
+  echo "<body background='modules/System/templates/' . $webpath . 'templates/' . $template . '/images/' . $template . '_background.gif\'>";
 } else {
   echo "<body>\n";
 }

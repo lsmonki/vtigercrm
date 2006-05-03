@@ -30,9 +30,9 @@ if (!$hide_picklist) {
 
   $update_form = "<form method=\"POST\" action=\"" . $_SERVER['PHP_SELF'] . "\">\n" . "\t" . $text['template'] . ":&nbsp;\n" . "\t<select name=\"template\">\n";
 
-  $dir = opendir('modules/System/templates/');
+  $dir = opendir(getcwd().'/modules/System/templates/');
   while (false !== ($file = readdir($dir))) {
-    if ($file != 'CVS' && $file[0] != '.' && is_dir('modules/System/templates/' . $file)) {
+    if ($file != 'CVS' && $file[0] != '.' && is_dir((getcwd().'/modules/System/templates/' . $file)) ){
       $filelist[] = $file;
     } 
   } 
@@ -63,16 +63,15 @@ if (!$hide_picklist) {
 
   unset($filelist);
 
-  $dir = opendir(APP_ROOT . '/includes/lang/');
+  $dir = opendir(getcwd().'/modules/System/includes/lang/');
   while (false !== ($file = readdir($dir))) {
-    if ($file[0] != '.' && is_file('includes/lang/' . $file) && eregi("\.php$", $file)) {
+    if ($file[0] != '.' && is_file(getcwd().'/modules/System/includes/lang/' . $file) && eregi("\.php$", $file)) {
       $filelist[] = eregi_replace('.php', '', $file);
     } 
   } 
   closedir($dir);
 
   asort($filelist);
-
   while (list ($key, $val) = each ($filelist)) {
     if ($_COOKIE['lng'] == $val) {
       $update_form .= "\t\t<option value=\"$val\" SELECTED>$val</option>\n";
@@ -98,10 +97,10 @@ if (!$hide_picklist) {
 
 echo "\n<hr>\n";
 
-echo "<table width=\"100%\">\n  <tr>\n";
-echo "<td align=\"" . $direction['left'] . "\"><font size=\"-1\">" . $text['created'] . '&nbsp;<a href="http://phpsysinfo.sourceforge.net" target="_blank">phpSysInfo-' . $VERSION . '</a> ' . strftime ($text['gen_time'], time()) . "</font></td>\n";
-echo "<td align=\"" . $direction['right'] . "\"><font size=\"-1\">" . round( ( array_sum( explode( " ", microtime() ) ) - $startTime ), 4 ). " sec</font></td>\n";
-echo "  </tr>\n</table>\n";
+//echo "<table width=\"100%\">\n  <tr>\n";
+//echo "<td align=\"" . $direction['left'] . "\"><font size=\"-1\">" . $text['created'] . '&nbsp;<a href="http://phpsysinfo.sourceforge.net" target="_blank">phpSysInfo-' . $VERSION . '</a> ' . strftime ($text['gen_time'], time()) . "</font></td>\n";
+//echo "<td align=\"" . $direction['right'] . "\"><font size=\"-1\">" . round( ( array_sum( explode( " ", microtime() ) ) - $startTime ), 4 ). " sec</font></td>\n";
+//echo "  </tr>\n</table>\n";
 
 echo "\n<br>\n</body>\n</html>\n";
 
