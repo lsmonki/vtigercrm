@@ -76,7 +76,7 @@ class ImportMap extends SugarBean
         {
 		$query_arr = array('assigned_user_id'=>$owner_id,'name'=>$name);
 
-		$this->retrieve_by_string_fields($query_arr, false);
+		//$this->retrieve_by_string_fields($query_arr, false);
 
                 $result = 1;
                 $this->assigned_user_id = $owner_id;

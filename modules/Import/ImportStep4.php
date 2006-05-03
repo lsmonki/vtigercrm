@@ -153,7 +153,6 @@ foreach ($_REQUEST as $name=>$value)
 
 	}
 
-	
 	p("user_field=".$user_field." if=".$focus->importable_fields[$user_field]);
 	
 	// match up the "official" field to the user 
@@ -164,7 +163,6 @@ foreach ($_REQUEST as $name=>$value)
 		// now mark that we've seen this field
 		$field_to_pos[$user_field] = $pos;
 		$col_pos_to_field[$pos] = $user_field;
-		
 	}
 }
 
@@ -270,17 +268,18 @@ if(($START+$RECORDCOUNT) > $totalnoofrows)
 
 if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows)
 {
-		$rows1 = Array();
-		for($j=$START;$j<$START+$RECORDCOUNT;$j++)
-		{
-			$rows1[] = $datarows[$j];
-		}
-		$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
+	$rows1 = Array();
+	for($j=$START;$j<$START+$RECORDCOUNT;$j++)
+	{
+		$rows1[] = $datarows[$j];
+	}
 
-if($START != 0)
-	echo '<b>'.$res.'</b>';
+	$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
 
-		$count = $_REQUEST['count'];
+	if($START != 0)
+		echo '<b>'.$res.'</b>';
+
+	$count = $_REQUEST['count'];
 }
 else
 {
@@ -300,11 +299,8 @@ if ( isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on'
 
 	if( $has_header)
 	{
-
-
 		foreach($col_pos_to_field as $pos=>$field_name)
 		{
-	
 			if ( isset($firstrow[$pos]) &&  isset( $field_name))
 			{
 				$header_to_field[ $firstrow[$pos] ] = $field_name;
@@ -323,10 +319,8 @@ if ( isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on'
 
 	$mapping_file = new ImportMap();
 
-	$query_arr = array('assigned_user_id'=>$current_user->id,'name'=>$mapping_file_name);
-
-	
-	$mapping_file->retrieve_by_string_fields($query_arr, false);
+	//$query_arr = array('assigned_user_id'=>$current_user->id,'name'=>$mapping_file_name);
+	//$mapping_file->retrieve_by_string_fields($query_arr, false);
 
 	$result = $mapping_file->save_map( $current_user->id,
 					$mapping_file_name,
