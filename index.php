@@ -556,7 +556,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		";
 
 	echo $copyrightstatement;
-	if($action != "about_us" && $action != "vtchat")
+	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword")
 	{
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<table width=20% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
