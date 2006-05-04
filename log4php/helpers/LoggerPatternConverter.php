@@ -43,7 +43,7 @@ $GLOBALS['log4php.LoggerPatternConverter.spaces'] = array(" ", "  ", "    ", "  
  * converting a logging event in a converter specific manner.</p>
  * 
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.13 $
  * @package log4php
  * @subpackage helpers
  * @abstract
