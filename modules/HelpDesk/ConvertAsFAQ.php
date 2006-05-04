@@ -31,7 +31,7 @@ foreach($ticket_faq_mapping_fields as $ticket_column => $faq_column)
 	$focus->column_fields[$faq_column] = $adb->query_result($res,0,$ticket_column);
 }
 
-$focus->save("FAQ");
+$focus->save("Faq");
 
 if($focus->id != '')
 {
