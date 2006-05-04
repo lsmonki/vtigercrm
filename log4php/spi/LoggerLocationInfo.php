@@ -33,7 +33,7 @@ define('LOG4PHP_LOGGER_LOCATION_INFO_NA',  'NA');
  * The internal representation of caller location information.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.5 $
  * @package log4php
  * @subpackage spi
  * @since 0.3

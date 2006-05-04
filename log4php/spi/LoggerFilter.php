@@ -73,7 +73,7 @@ define('LOG4PHP_LOGGER_FILTER_DENY',    -1);
  * Linux ipchains. 
  * 
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.4 $
  * @package log4php
  * @subpackage spi
  */

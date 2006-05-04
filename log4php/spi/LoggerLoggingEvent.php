@@ -33,7 +33,7 @@ require_once(LOG4PHP_DIR . '/LoggerNDC.php');
  * The internal representation of logging event.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.16 $
  * @package log4php
  * @subpackage spi 
  */
