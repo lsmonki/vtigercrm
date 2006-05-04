@@ -35,7 +35,7 @@ require_once(LOG4PHP_DIR . '/helpers/LoggerOptionConverter.php');
  *
  * @author  VxR <vxr@vxr.it>
  * @author  Sergio Strampelli <sergio@ascia.net> 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.15 $
  * @package log4php
  * @abstract
  */

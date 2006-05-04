@@ -30,7 +30,7 @@ require_once(LOG4PHP_DIR . '/LoggerLevel.php');
  * The root logger.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.9 $
  * @package log4php
  * @see Logger
  */

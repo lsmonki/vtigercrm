@@ -28,7 +28,7 @@ require_once(LOG4PHP_DIR . '/LoggerManager.php');
  * Main class for logging operations  
  *
  * @author       VxR <vxr@vxr.it>
- * @version      $Revision: 1.1 $
+ * @version      $Revision: 1.9 $
  * @package log4php
  */
 class Logger extends LoggerCategory {

@@ -25,7 +25,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__));
  * Abstract class that defines output logs strategies.
  *
  * @author  VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.14 $
  * @package log4php
  * @abstract
  */

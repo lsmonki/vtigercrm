@@ -91,7 +91,7 @@ $GLOBALS['log4php.LoggerNDC.maxDepth'] = LOGGER_NDC_HT_SIZE;
  *
  *  
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.5 $
  * @package log4php 
  * @since 0.3
  */

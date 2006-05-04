@@ -47,7 +47,7 @@ require_once(LOG4PHP_DIR . '/LoggerDefaultCategoryFactory.php');
  * themselves to the previously created provision node.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.20 $
  * @package log4php
  */
 class LoggerHierarchy {
