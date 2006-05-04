@@ -70,7 +70,7 @@ define ('LOG4PHP_LOGGER_LAYOUT_RELATIVE_TIME_DATE_FORMAT', 'RELATIVE');
  * - {@link $dateFormat} (string) set date format. See php {@link PHP_MANUAL#date} function for details.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.12 $
  * @package log4php
  * @subpackage layouts
  */
