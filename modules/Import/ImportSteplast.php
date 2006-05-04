@@ -64,70 +64,64 @@ if ( isset($_REQUEST['message']))
 	?>
 	<br>
 
-	<table width="100%" border=1>
-	
-	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable">
-	<tr><br><br><br>
-		<td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall"> Import <?php echo $_REQUEST['modulename']; ?> </td>
-	</tr>
-		<tr bgcolor="#ECECEC"><td colspan="2">&nbsp;</td></tr>
-		<tr bgcolor="#ECECEC">
-			<td align="left"  style="padding-left:40px;" colspan="2">
-				<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp; 
-				<span class="genHeaderSmall">Mapping Results </span>
-			</td>
-		</tr>	
-	  <tr bgcolor="#ECECEC">
-		<td style="padding-left:140px;">
-		   <?php 
-			echo $_REQUEST['message']; 
-		   ?>
-		   
-		   <br><br><br>
+	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="leadTable small">
+	   <tr>
+		<td bgcolor="#FFFFFF" height="50" valign="middle" align="left" class="genHeaderSmall" colspan="2">
+			 Import <?php echo $_REQUEST['modulename']; ?> 
 		</td>
 	   </tr>
-
+	   <tr bgcolor="#ECECEC"><td colspan="2">&nbsp;</td></tr>
+	   <tr bgcolor="#ECECEC">
+		<td align="left"  style="padding-left:40px;width:75%;" >
+			<span class="genHeaderGray">Step 3 of 3 : </span>&nbsp; 
+			<span class="genHeaderSmall">Mapping Results </span>
+		</td>
+		<td rowspan="2" width="25%" valign="top">
+			<table width="100%" border="0" cellpadding="5" cellspacing="0" >
+			   <tr>
+				<td align="center" valign="top">
+				   <form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+					<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+					<input type="hidden" name="action" value="Import">
+					<input type="hidden" name="step" value="2">
+					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
+					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
+					<input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
+					<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
+					<br><br>
+					<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
+				   </form>
+				</td>
+			   </tr>
+			   <tr>
+				<td align="center" valign="top">
+				   <form name="Import" method="POST" action="index.php">
+					<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+					<input type="hidden" name="action" value="Import">
+					<input type="hidden" name="step" value="undo">
+					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
+					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
+					<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
+					<input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  ">
+				   </form>
+				</td>
+			   </tr>
+			</table>
+		</td>
+	   </tr>	
+	   <tr bgcolor="#ECECEC">
+		<td style="padding-left:140px;">
+			<?php 
+				echo $_REQUEST['message']; 
+			?>
+			<br><br><br>
+		</td>
+	   </tr>
+	</table>
 	<?php 
 }
-?>
-<br>
-<form name="Import" method="POST" action="index.php">
-<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-<input type="hidden" name="action" value="Import">
-<input type="hidden" name="step" value="undo">
-<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-<input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
 
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-   <tr>
-<br>	<td align="right"><input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  "></td>
-        <td></td>
-   </tr>
-</table>
-</form>
-
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-	<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
-		<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-                <input type="hidden" name="action" value="Import">
-                <input type="hidden" name="step" value="2">
-                <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-                <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-                <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
-   <tr>
-	<td align="right">
-		<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
-		<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
-	</td>
-        <td></td>
-   </tr>
-</table>
-</form>
-
-	  </table>	 
-	</table>
-<?php
+echo "<br><br>";
 
 $currentModule = "Import";
 
@@ -167,9 +161,20 @@ foreach($import_modules_array as $module_name => $object_name)
 		}
 
 		if($module_name == 'Accounts' && $implict_account==true)
-			echo get_form_header('','<b>Newly created Accounts</b>', false);
+			$display_header_msg = "Newly created Accounts";
 		else
-			echo get_form_header('','<b>Last Imported '.$module_name.'</b>', false);
+			$display_header_msg = "Last Imported  $module_name";
+		
+		//Display the Header Message	
+		echo "
+			<table width='100%' border='0' cellpadding='5' cellspacing='0'>
+			   <tr>
+				<td class='dvtCellLabel' align='left'>
+					<b>Last Imported  $module_name </b>
+				</td>
+			   </tr>
+			</table>
+		      ";
 
 		$smarty = new vtigerCRM_Smarty;
 
