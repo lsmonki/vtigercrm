@@ -138,7 +138,7 @@ class Smarty
      *
      * @var boolean
      */
-    var $compile_check   =  false;
+    var $compile_check   =  true;
 
     /**
      * This forces templates to compile every time. Useful for development
