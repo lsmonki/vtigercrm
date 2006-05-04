@@ -26,7 +26,7 @@ if (!defined('LOG4PHP_DIR')) define('LOG4PHP_DIR', dirname(__FILE__) . '/..');
  * Subclass this abstract class in order to render objects as strings.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.3 $
  * @package log4php
  * @subpackage or
  * @abstract

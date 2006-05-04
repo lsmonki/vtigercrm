@@ -32,7 +32,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
  * Map class objects to an {@link LoggerObjectRenderer}.
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.4 $
  * @package log4php
  * @subpackage or
  * @since 0.3
