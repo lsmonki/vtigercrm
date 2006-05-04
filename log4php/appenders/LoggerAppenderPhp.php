@@ -35,7 +35,7 @@ require_once(LOG4PHP_DIR . '/LoggerLog.php');
  * - <b>level &gt;= ERROR</b> mapped to E_USER_ERROR  
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.11 $
  * @package log4php
  * @subpackage appenders
  */ 

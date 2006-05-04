@@ -40,7 +40,7 @@ define('LOG4PHP_LOGGER_APPENDER_CONSOLE_STDERR', 'php://stderr');
  * <p>This appender requires a layout.</p>  
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.11 $
  * @package log4php
  * @subpackage appenders
  */

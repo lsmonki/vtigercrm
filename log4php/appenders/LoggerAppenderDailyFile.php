@@ -34,7 +34,7 @@ require_once(LOG4PHP_DIR . '/appenders/LoggerAppenderFile.php');
  * before {@link $file} param.</p>
  *
  * @author Abel Gonzalez <agonzalez@lpsz.org>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.7 $
  * @package log4php
  * @subpackage appenders
  */                      
