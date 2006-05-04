@@ -35,7 +35,7 @@ require_once(LOG4PHP_DIR . '/spi/LoggerFilter.php');
  * behaviour.</p>
  *
  * @author VxR <vxr@vxr.it>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.4 $
  * @package log4php
  * @subpackage varia
  * @since 0.3
