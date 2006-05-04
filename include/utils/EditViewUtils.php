@@ -721,7 +721,25 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$result=$adb->query($querystr);
 					$temp=$adb->query_result($result,0,'columnname');
 					$temp1=br2nl($myfocus->column_fields[$temp]);
-					$parent_name.=$fullname.'<'.$temp1.'>; ';
+
+					//Modified to display the entities in red which don't have email id
+					if(strlen($temp_parent_name) > 150)
+					{
+						$parent_name .= '<br>';
+						$temp_parent_name = '';
+					}
+
+					if($temp1 != '')
+					{
+						$parent_name .= $fullname.'&lt;'.$temp1.'&gt;; ';
+						$temp_parent_name .= $fullname.'&lt;'.$temp1.'&gt;; ';
+					}
+					else
+					{
+						$parent_name .= "<b style='color:red'>".$fullname.'&lt;'.$temp1.'&gt;; '."</b>";
+						$temp_parent_name .= "<b style='color:red'>".$fullname.'&lt;'.$temp1.'&gt;; '."</b>";
+					}
+
 				}
 			}
 		}
