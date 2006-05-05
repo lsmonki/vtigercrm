@@ -33,7 +33,7 @@
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Settings&action=ListMailAccount" class="webMnu">Settings</a>
+												&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">Settings</a>
 											</td>
 											<td>
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
