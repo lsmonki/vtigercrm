@@ -28,6 +28,7 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
+global $current_user;
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
 
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=Webmails&action=index&parenttab=parenttab=My Home Page'=>'Emails'); 
@@ -227,6 +228,7 @@ $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basi
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("USERID", $current_user->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
