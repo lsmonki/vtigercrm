@@ -2,7 +2,7 @@
 
 
 /*
-V4.81 3 May 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
+V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
          Contributed by Ross Smith (adodb@netebb.com). 
   Released under both BSD license and Lesser GPL library license.
   Whenever there is any discrepancy between the two licenses,
@@ -26,7 +26,7 @@ V4.81 3 May 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reser
 */
 
 if (!defined('_ADODB_LAYER')) {
-	require realpath(dirname(__FILE__) . '/../adodb.inc.php');
+	require_once realpath(dirname(__FILE__) . '/../adodb.inc.php');
 }
 
 if (defined('ADODB_SESSION')) return 1;

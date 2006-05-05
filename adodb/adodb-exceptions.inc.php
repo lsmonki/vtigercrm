@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version V4.81 3 May 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
+ * @version V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim@natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license.
  * Whenever there is any discrepancy between the two licenses,
  * the BSD license will take precedence.
@@ -45,10 +45,8 @@ var $database = '';
 		}
 	
 		$this->dbms = $dbms;
-		if ($thisConnection) {
-			$this->host = $thisConnection->host;
-			$this->database = $thisConnection->database;
-		}
+		$this->host = $thisConnection->host;
+		$this->database = $thisConnection->database;
 		$this->fn = $fn;
 		$this->msg = $errmsg;
 				

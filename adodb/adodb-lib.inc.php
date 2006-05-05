@@ -7,7 +7,7 @@ global $ADODB_INCLUDED_LIB;
 $ADODB_INCLUDED_LIB = 1;
 
 /* 
- @version V4.81 3 May 2006 (c) 2000-2006 John Lim (jlim\@natsoft.com.my). All rights reserved.
+ @version V4.72 21 Feb 2006 (c) 2000-2006 John Lim (jlim\@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -933,18 +933,19 @@ function _adodb_debug_execute(&$zthis, $sql, $inputarr)
 	
 	$dbt = $zthis->databaseType;
 	if (isset($zthis->dsnType)) $dbt .= '-'.$zthis->dsnType;
-	if ($inBrowser) {
-		if ($ss) {
-			$ss = '<code>'.htmlspecialchars($ss).'</code>';
+/*
+		if ($inBrowser) {
+			if ($ss) {
+				$ss = '<code>'.htmlspecialchars($ss).'</code>';
+			}
+			if ($zthis->debug === -1)
+				ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
+			else 
+				ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
+		} else {
+			ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
 		}
-		if ($zthis->debug === -1)
-			ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
-		else 
-			ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
-	} else {
-		ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
-	}
-
+// */
 	$qID = $zthis->_query($sql,$inputarr);
 	
 	/* 
@@ -957,6 +958,17 @@ function _adodb_debug_execute(&$zthis, $sql, $inputarr)
 			if ($err = $zthis->ErrorNo()) ADOConnection::outp($err.': '.$emsg);
 		}
 	} else if (!$qID) {
+		if ($inBrowser) {
+			if ($ss) {
+				$ss = '<code>'.htmlspecialchars($ss).'</code>';
+			}
+			if ($zthis->debug === -1)
+				ADOConnection::outp( "<br />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<br />\n",false);
+			else 
+				ADOConnection::outp( "<hr />\n($dbt): ".htmlspecialchars($sqlTxt)." &nbsp; $ss\n<hr />\n",false);
+		} else {
+			ADOConnection::outp("-----\n($dbt): ".$sqlTxt."\n-----\n",false);
+		}
 		ADOConnection::outp($zthis->ErrorNo() .': '. $zthis->ErrorMsg());
 	}
 	
