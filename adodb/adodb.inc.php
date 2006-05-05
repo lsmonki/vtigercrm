@@ -14,7 +14,7 @@
 /**
 	\mainpage 	
 	
-	 @version V4.81 3 May 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
+	 @version V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. You can choose which license
 	you prefer.
@@ -171,7 +171,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V4.81 3 May 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V4.72 21 Feb 2006  (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -314,6 +314,7 @@
 	var $_evalAll = false;
 	var $_affected = false;
 	var $_logsql = false;
+
 	
 	/**
 	 * Constructor
@@ -553,7 +554,6 @@
 
 	function q(&$s)
 	{
-		#if (!empty($this->qNull)) if ($s == 'null') return $s;
 		$s = $this->qstr($s,false);
 	}
 	
@@ -747,7 +747,7 @@
 				$this->_transOK = false;
 				if ($this->debug) ADOConnection::outp("Smart Commit failed");
 			} else
-				if ($this->debug) ADOConnection::outp("Smart Commit occurred");
+				if (false) ADOConnection::outp("Smart Commit occurred");
 		} else {
 			$this->_transOK = false;
 			$this->RollbackTrans();
@@ -865,7 +865,7 @@
 	{
 		if ($this->debug) {
 			global $ADODB_INCLUDED_LIB;
-			if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+			if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 			$this->_queryID = _adodb_debug_execute($this, $sql,$inputarr);
 		} else {
 			$this->_queryID = @$this->_query($sql,$inputarr);
@@ -896,6 +896,7 @@
 		$rs->connection = &$this; // Pablo suggestion
 		$rs->Init();
 		if (is_array($sql)) $rs->sql = $sql[0];
+		//New memory copy of input created here -mikefedyk
 		else $rs->sql = $sql;
 		if ($rs->_numOfRows <= 0) {
 		global $ADODB_COUNTRECS;
@@ -1462,7 +1463,7 @@
 	function Replace($table, $fieldArray, $keyCol, $autoQuote=false, $has_autoinc=false)
 	{
 		global $ADODB_INCLUDED_LIB;
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		
 		return _adodb_replace($this, $table, $fieldArray, $keyCol, $autoQuote, $has_autoinc);
 	}
@@ -1529,7 +1530,7 @@
       } 
       
       global $ADODB_INCLUDED_CSV;
-      if (empty($ADODB_INCLUDED_CSV)) include(ADODB_DIR.'/adodb-csvlib.inc.php');
+      if (empty($ADODB_INCLUDED_CSV)) include_once(ADODB_DIR.'/adodb-csvlib.inc.php');
       
       $f = $this->_gencachename($sql.serialize($inputarr),false);
       adodb_write_file($f,''); // is adodb_write_file needed?
@@ -1581,7 +1582,7 @@
 		} 
 		
 		global $ADODB_INCLUDED_CSV;
-		if (empty($ADODB_INCLUDED_CSV)) include(ADODB_DIR.'/adodb-csvlib.inc.php');
+		if (empty($ADODB_INCLUDED_CSV)) include_once(ADODB_DIR.'/adodb-csvlib.inc.php');
 		
 		$f = $this->_gencachename($sql.serialize($inputarr),false);
 		adodb_write_file($f,''); // is adodb_write_file needed?
@@ -1656,7 +1657,7 @@
 			$sqlparam = $sql;
 			
 		global $ADODB_INCLUDED_CSV;
-		if (empty($ADODB_INCLUDED_CSV)) include(ADODB_DIR.'/adodb-csvlib.inc.php');
+		if (empty($ADODB_INCLUDED_CSV)) include_once(ADODB_DIR.'/adodb-csvlib.inc.php');
 		
 		$md5file = $this->_gencachename($sql.serialize($inputarr),true);
 		$err = '';
@@ -1787,7 +1788,7 @@
 		}
 		//********************************************************//
 
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		return _adodb_getupdatesql($this,$rs,$arrFields,$forceUpdate,$magicq,$force);
 	}
 
@@ -1807,7 +1808,7 @@
 			$force = $ADODB_FORCE_TYPE;
 			
 		}
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		return _adodb_getinsertsql($this,$rs,$arrFields,$magicq,$force);
 	}
 	
@@ -1957,48 +1958,6 @@
 		}
 	}
 
-	function &GetActiveRecordsClass($class, $table,$whereOrderBy=false,$bindarr=false, $primkeyArr=false)
-	{
-	global $_ADODB_ACTIVE_DBS;
-	
-		$save = $this->SetFetchMode(ADODB_FETCH_NUM);
-		if (empty($whereOrderBy)) $whereOrderBy = '1=1';
-		$rows = $this->GetAll("select * from ".$table.' WHERE '.$whereOrderBy,$bindarr);
-		$this->SetFetchMode($save);
-		
-		$false = false;
-		
-		if ($rows === false) {	
-			return $false;
-		}
-		
-		
-		if (!isset($_ADODB_ACTIVE_DBS)) {
-			include(ADODB_DIR.'/adodb-active-record.inc.php');
-		}	
-		if (!class_exists($class)) {
-			ADOConnection::outp("Unknown class $class in GetActiveRcordsClass()");
-			return $false;
-		}
-		$arr = array();
-		foreach($rows as $row) {
-		
-			$obj =& new $class($table,$primkeyArr,$this);
-			if ($obj->ErrorMsg()){
-				$this->_errorMsg = $obj->ErrorMsg();
-				return $false;
-			}
-			$obj->Set($row);
-			$arr[] =& $obj;
-		}
-		return $arr;
-	}
-	
-	function &GetActiveRecords($table,$where=false,$bindarr=false,$primkeyArr=false)
-	{
-		$arr =& $this->GetActiveRecordsClass('ADODB_Active_Record', $table, $where, $bindarr, $primkeyArr);
-		return $arr;
-	}
 	
 	/**
 	 * Close Connection
@@ -2063,7 +2022,6 @@
 			
 			return false;
 		}
-	
 		
 	/**
 	 * @param ttype can either be 'VIEW' or 'TABLE' or false. 
@@ -2464,7 +2422,7 @@
 	function &PageExecute($sql, $nrows, $page, $inputarr=false, $secs2cache=0) 
 	{
 		global $ADODB_INCLUDED_LIB;
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		if ($this->pageExecuteCountRows) $rs =& _adodb_pageexecute_all_rows($this, $sql, $nrows, $page, $inputarr, $secs2cache);
 		else $rs =& _adodb_pageexecute_no_last_page($this, $sql, $nrows, $page, $inputarr, $secs2cache);
 		return $rs;
@@ -2536,7 +2494,7 @@
 	//==============================================================================================	
 	// DATE AND TIME FUNCTIONS
 	//==============================================================================================	
-	if (!defined('ADODB_DATE_VERSION')) include(ADODB_DIR.'/adodb-time.inc.php');
+	include_once(ADODB_DIR.'/adodb-time.inc.php');
 	
 	//==============================================================================================	
 	// CLASS ADORecordSet
@@ -2647,7 +2605,7 @@
 			$size=0, $selectAttr='',$compareFields0=true)
 	{
 		global $ADODB_INCLUDED_LIB;
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		return _adodb_getmenu($this, $name,$defstr,$blank1stItem,$multiple,
 			$size, $selectAttr,$compareFields0);
 	}
@@ -2674,7 +2632,7 @@
 			$size=0, $selectAttr='')
 	{
 		global $ADODB_INCLUDED_LIB;
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		return _adodb_getmenu_gp($this, $name,$defstr,$blank1stItem,$multiple,
 			$size, $selectAttr,false);
 	}
@@ -3189,7 +3147,6 @@
 		}
 		return $lnumrows;
 	}
-	
 	
 	/**
 	 * @return the current row in the recordset. If at EOF, will return the last row. 0-based.
@@ -3921,6 +3878,7 @@
 		case 'oracle': $drivername = 'oci8'; break;
 		case 'access': if ($perf) $drivername = ''; break;
 		case 'db2'   : break;
+		case 'odbc_db2': $drivername = 'db2'; break;
 		case 'sapdb' : break;
 		default:
 			$drivername = 'generic';
@@ -3953,7 +3911,7 @@
 		$path = ADODB_DIR."/datadict/datadict-$drivername.inc.php";
 
 		if (!file_exists($path)) {
-			ADOConnection::outp("Dictionary driver '$path' not available");
+			ADOConnection::outp("Database driver '$path' not available");
 			return $false;
 		}
 		include_once($path);
@@ -3999,7 +3957,7 @@
 	function adodb_backtrace($printOrArr=true,$levels=9999)
 	{
 		global $ADODB_INCLUDED_LIB;
-		if (empty($ADODB_INCLUDED_LIB)) include(ADODB_DIR.'/adodb-lib.inc.php');
+		if (empty($ADODB_INCLUDED_LIB)) include_once(ADODB_DIR.'/adodb-lib.inc.php');
 		return _adodb_backtrace($printOrArr,$levels);
 	}
 
