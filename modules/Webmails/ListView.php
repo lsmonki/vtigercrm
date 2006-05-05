@@ -341,8 +341,11 @@ $navigationOutput .= '<td align="right">Viewing Messages: <b>'.($start_message+$
 
 imap_close($mbox);
 //print_r($listview_entries);
+global $current_user;
+
 $smarty = new vtigerCRM_Smarty;
 
+$smarty->assign("USERID", $current_user->id);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
