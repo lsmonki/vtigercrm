@@ -1032,19 +1032,19 @@
 			<key />
 			<notnull />
 			<default value="0" />
+			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
+			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="contpotentialrel_potentialid_idx">
 			<col>potentialid</col>
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
 		</index>
 		<index name="contpotentialrel_contactid_idx">
 			<col>contactid</col>
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -1095,6 +1095,7 @@
 		<field name="contactid" type="I" size="19">
 			<notnull />
 			<default value="0" />
+			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
@@ -1104,7 +1105,6 @@
 
 		<index name="cntactivityrel_contactid_idx">
 			<col>contactid</col>
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -1141,19 +1141,19 @@
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
+			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
+			<constraint>REFERENCES notes(notesid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="crmentitynotesrel_notesid_idx">
 			<col>notesid</col>
-			<constraint>REFERENCES notes(notesid) ON DELETE CASCADE</constraint>
 		</index>
 		<index name="crmentitynotesrel_crmid_idx">
 			<col>crmid</col>
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -1161,6 +1161,7 @@
 	<table name="troubletickets">
 		<field name="ticketid" type="I" size="19">
 			<key />
+			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100" />
 		<field name="parent_id" type="C" size="100" />
@@ -1179,7 +1180,6 @@
 
 		<index name="troubletickets_ticketid_idx">
 			<col>ticketid</col>
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		</index>
 		<index name="troubletickets_status_idx">
 			<col>status</col>
