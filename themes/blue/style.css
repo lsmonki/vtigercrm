@@ -1203,7 +1203,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(../../design/images/rssHeader.gif);
+	background-image:url(images/rssHeader.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -1215,7 +1215,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(../../design/images/rssdelete.gif);
+	background-image:url(images/rssdelete.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -1264,7 +1264,7 @@ a.submenu:Hover{
 
 .frameHdr{
 	height:32px;
-	background-image:url(../../design/images/rssframeHdr.gif);
+	background-image:url(images/rssframeHdr.gif);
 	background-repeat:repeat-x;
 	background-position:top left;
 	font-family:Arial, Helvetica, sans-serif;
@@ -1281,7 +1281,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#000000;
-	background-image:url(../../design/images/rssforward.gif);
+	background-image:url(images/rssforward.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -1871,7 +1871,7 @@ a.webMnu:Hover{
 
 .mailHdr{
 	height:32px;
-	background-image:url(../../design/images/rssframeHdr.gif);
+	background-image:url(images/rssframeHdr.gif);
 	background-repeat:repeat-x;
 	background-position:top left;
 	font-family:Arial, Helvetica, sans-serif;
