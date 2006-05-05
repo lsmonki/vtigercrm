@@ -68,24 +68,25 @@ function ajaxDelResponse(response)
 				<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td colspan="3" style="padding:10px;vertical-align:middle;">
-							<table width="35%" cellpadding="0" cellspacing="0" border="0">
-									<tr>
-											<td>
-												<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
-												&nbsp;<a href="#" class="webMnu" >Check Mail</a>
-											</td>
-											<td>
-												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">Compose</a>
-											</td>
-											<td>
-												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Settings&action=ListMailAccount" class="webMnu">Settings</a>
-											</td>
-									</tr>
-							</table>
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td width="10%" >
+						<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
+						&nbsp;<a href="#" class="webMnu" >Check Mail</a>
 					</td>
-                  </tr>
+					<td width="10%">
+						<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
+						&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">Compose</a>
+					</td>
+					<td width="10%">
+						<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+						&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">Settings</a>
+					</td>
+					<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
+				</tr>
+			</table>
+		</td>
+                </tr>
                   <tr>
                     <td width="28%" bgcolor="#949494"><span class="subHdr"><b>Email Folders</b></span> </td>
                     <td width="2%">&nbsp;</td>
@@ -93,28 +94,34 @@ function ajaxDelResponse(response)
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b>All Mails</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">INBOX</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Webmails&action=index" class="webMnu">Inbox</a>&nbsp;<b></b>
+										<a href="index.php?module=Webmails&action=index" class="webMnu">Qualified Mails (As Contacts)</a>&nbsp;<b></b>
 								</li>
-								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
+								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Webmails&action=index" class="webMnu">My Mails</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Trash</a>&nbsp;
+										<a href="#" class="webMnu">....</a>&nbsp;
 								</li>
 							</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Qualified Mails</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Sent Mails</b>
 							<ul style="list-style-type:none;">
-								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">Inbox</a>&nbsp;<b></b>
+								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Contacts</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Sent</a>&nbsp;<b></b>
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Accounts</a>&nbsp;<b></b>
 								</li>
+								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Leads</a>&nbsp;
+								</li>
+							</ul><br />
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Trash</b>
+							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Trash</a>&nbsp;
+										<a href="#" class="webMnu">Junk Mails</a>&nbsp;<b></b>
 								</li>
 							</ul>
 					</td>
@@ -149,7 +156,7 @@ function ajaxDelResponse(response)
 			</form>	
 			 <tr>
 			   <td>&nbsp;</td>
-			   <td class="subHdr" id="subjectsetter"> </td>
+			   <td class="mailHdr" id="subjectsetter"> </td>
 			   </tr>
 			   <tr><td colspan="2">
 			   <div id="EmailDetails">
