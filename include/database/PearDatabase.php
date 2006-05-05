@@ -664,7 +664,7 @@ global $vtlog;
 		}
 		
 		$this->database = ADONewConnection($this->dbType);
-		$this->database->debug = true;
+		//$this->database->debug = true;
 		
 		$this->database->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
 		$this->database->LogSQL($this->enableSQLlog);
