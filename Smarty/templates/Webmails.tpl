@@ -21,28 +21,29 @@
 				<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td colspan="3" style="padding:10px;vertical-align:middle;">
-							<table width="55%" cellpadding="0" cellspacing="0" border="0">
+							<table width="100%" cellpadding="0" cellspacing="0" border="0">
 									<tr>
-											<td>
+											<td width="10%">
 												<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
 												&nbsp;<a href="javascript:window.location = window.location;" class="webMnu" >Check Mail</a>
 											</td>
-											<td>
+											<td width="10%">
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
 												&nbsp;<a href="index.php?module=Emails&action=EditView&return_action=DetailView&parenttab=My Home Page" class="webMnu">Compose</a>
 											</td>
-											<td>
+											<td width="10%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 												&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">Settings</a>
 											</td>
-											<td>
+											<td width="12%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 												&nbsp;<a href="javascript:;"  onclick="window.location = window.location+'&show_hidden=true';" class="webMnu">Show Hidden</a>
 											</td>
-											<td>
+											<td width="18%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 												&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">Expunge Mailbox</a>
 											</td>
+					<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
 									</tr>
 							</table>
 					</td>
@@ -54,7 +55,7 @@
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b>{$ACCOUNT}</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">My Mails</b>
 							<ul style="list-style-type:none;">
 
 
@@ -67,6 +68,25 @@
 
 
 							</ul><br />
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Sent Mails</b>
+							<ul style="list-style-type:none;">
+								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Contacts</a>&nbsp;<b></b>
+								</li>
+								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Accounts</a>&nbsp;<b></b>
+								</li>
+								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Leads</a>&nbsp;
+								</li>
+							</ul><br />
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Trash</b>
+							<ul style="list-style-type:none;">
+								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="#" class="webMnu">Junk Mails</a>&nbsp;<b></b>
+								</li>
+							</ul>
+
 					</td>
                     <td>&nbsp;</td>
                     <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
