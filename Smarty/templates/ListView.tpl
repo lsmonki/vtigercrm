@@ -17,7 +17,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 {if $MODULE eq 'Contacts'}
-<div id="dynloadarea" style=float:left;position:absolute;left:350px;top:150px;></div>
+<div id="dynloadarea" style="float:left;position:absolute;left:350px;top:150px;"></div>
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">
@@ -37,16 +37,38 @@ function callSearch(searchtype)
         search_type_val=document.basicSearch.searchtype.value;
         search_txt_val=document.basicSearch.search_text.value;
 
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring = '';
+        elements=document.basicSearch;
+	for(ii = 0 ; ii < elements.length; ii++)
+	{ldelim}
+	if(elements[ii].name != 'action')
+		urlstring = urlstring+''+elements[ii].name+'='+elements[ii].value+'&';
+	else
+		urlstring = urlstring+'file=index&';
+	{rdelim}
+	var no_rows = document.basicSearch.search_cnt.value;
+	for(jj = 0 ; jj < no_rows; jj++)
+	{ldelim}
+		var sfld_name = getObj("Fields"+jj);
+		var scndn_name= getObj("Condition"+jj);
+		var srchvalue_name = getObj("Srch_value"+jj);
+		urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
+		urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
+		urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+	{rdelim}
+	urlstring = urlstring +'action={$MODULE}Ajax&ajax=true';	
+	ajaxObj.process("index.php?",urlstring);
 {rdelim}
 
 </script>
 
 		{include file='Buttons_List.tpl'}
 	
-<div id="subMenuBg" class="subMenu" style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacit
+<div id="subMenuBg"  style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacit
 y:0.90;z-index:50"></div>
 <div id="subMenu" style="z-index:1;display:none;position:absolute;">
-<table border=0 cellspacing=0 cellpadding=0 width=100px align=center class="moduleSearch">
+<table border=0 cellspacing=0 cellpadding=0 width="100px" align=center class="moduleSearch">
   <tr>
    <td class=small>
        <table cellspacing="2" cellpadding="2" border="0">
@@ -61,119 +83,85 @@ y:0.90;z-index:50"></div>
   </tr>
 </table>
 </div>
-
-{*<!-- Search  in Module -->*}
-<div id="searchAcc" style="z-index:1;display:none;position:absolute;">
+<!-- SIMPLE SEARCH -->
+<div id="searchAcc" style="z-index:1;display:block;position:relative;">
 <form name="basicSearch" action="index.php">
-<table border=0 cellspacing=0 cellpadding=0 width=640px align=center class="moduleSearch">
-<tr>
-        <td class=small>
-
-                <table border=0 cellspacing=0 cellpadding=2 width=100%>
-                <tr>
-                        <td >
-
-                                {*<!-- Basic Search -->*}
-                                <div id="basicSearchdiv">
-                                        <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHd
-rBox">
-                                        <tr>
-                                                <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" title="Basic Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="searchshowhide('basicSearchdiv');searchshowhide('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span></td>
-
-                                                <td valign=top nowrap><a href="#" onClick="searchshowhide('searchAcc')">[X] Close</a></td>
-                                        </tr>
-                                        </table>
-
-                                        <table border=0 cellspacing=0 cellpadding=5 align=center>
-                                        <tr>
-                                        <td nowrap>Search {$MODULE} for </td>
-                                        <td><input type="text" style="width:150px" class=small name="search_text"></td>
-
-                                        <td>in</td>
-                                        <td>
-						<select name ="search_field">
-						 {html_options  options=$SEARCHLISTHEADER }
-						</select>
-                                                <input type="hidden" name="searchtype" value="BasicSearch">
-                                                <input type="hidden" name="module" value="{$MODULE}">
-                                                <input type="hidden" name="parenttab" value="{$CATEGORY}">
-						<input type="hidden" name="action" value="index">
-                                                <input type="hidden" name="query" value="true">
-						<input type="hidden" name="search_cnt">
-
-
-                                        </td>
-                                        <td><input type="submit" class=small value="Search now" onClick="callSearch('Basic');"></td>
-                                        </tr>
-                                        </table>
-
-                                        <table border=0 cellspacing=0 cellpadding=0 width=100%>
-
-                                        <tr>
-						{$ALPHABETICAL}
-                                        </tr>
-                                        </table>
-
-
-                                </div>
-                                {*<!-- Advanced Search -->*}
-
-                                <div id="advSearch" style="display:none;">
-                                        <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHdrBox">
-                                        <tr>
-                                                <td><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="searchshowhide('basicSearchdiv');searchshowhide('advSearch')">Go to Basic Search</a></span></td>
-                                                <td valign=top nowrap><a href="#" onClick="searchshowhide('searchAcc')">[X] Close</a></td>
-                                        </tr>
-
-                                        </table>
-                                        <div align=center>
-                                        <div class="advSearch" align=left>
-
-					<table class="searchHd rBox" border="0" cellpadding="2" cellspacing="0" width="100%">
-					<tr>
-					<td nowrap class="small"><input name="matchtype" type="radio" value="all">&nbsp;Match All of the Following</td>
-					<td class="small"><input name="matchtype" type="radio" value="any" checked>&nbsp;Match Any of the Following</td>
-					<td>&nbsp;</td>
-					</tr>
-					<tr>
-					<td colspan="3" bgcolor="#FFFFFF" style="border:1px solid #CCCCCC;">
-					<div id="fixed" style="position:relative;top:0px;left:0px;width:95%;height:95px;overflow:auto;" class="padTab">
+<table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
+	<tr>
+		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="Basic Search" title="Basic Search" border=0>&nbsp;<b>Search {$MODULE} for</b></td>
+		<td width="25%" class="dvtCellLabel"><input type="text"  class="txtBox" name="search_text"></td>
+		<td width="25%" class="dvtCellLabel"><b>In</b>&nbsp;
+			<select name ="search_field" class="txtBox">
+			 {html_options  options=$SEARCHLISTHEADER }
+			</select>
+                        <input type="hidden" name="searchtype" value="BasicSearch">
+                        <input type="hidden" name="module" value="{$MODULE}">
+                        <input type="hidden" name="parenttab" value="{$CATEGORY}">
+			<input type="hidden" name="action" value="index">
+                        <input type="hidden" name="query" value="true">
+			<input type="hidden" name="search_cnt">
+		</td>
+		<td width="35%" class="dvtCellLabel">
+			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" Search Now ">&nbsp;
+			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span>	
+							</td>
+	</tr>
+	<tr>
+		<td colspan="4" align="center" class="dvtCellLabel">
+			<table border=0 cellspacing=0 cellpadding=0 width=100%>
+				<tr>
+                                                {$ALPHABETICAL}
+                                </tr>
+                        </table>
+		</td>
+	</tr>
+</table>
+</div>
+<!-- ADVANCED SEARCH -->
+<div id="advSearch" style="display:none;">
+		<table  cellspacing=0 cellpadding=5 width=80% style="border-top:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" class="small" align="center">
+			<tr>
+					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
+					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;Match All of the Following</b></td>
+					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;Match Any of the Following</b></td>
+					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">Go to Basic Search</a></span></td>
+			</tr>
+		</table>
+		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">
+			<tr>
+				<td colspan="3"align="center" class="dvtCellLabel">
+				<div id="fixed" style="position:relative;width:90%;height:125px;overflow:auto;border:1px solid #CCCCCC;" class="padTab small">
 					<table width="95%"  border="0" cellpadding="5" cellspacing="0" id="adSrc" align="left">
 					<tr  class="dvtCellInfo">
-					<td width="31%"><select name="Fields0" class="detailedViewTextBox">
-					{$FIELDNAMES}
-					</select>
-					</td>
-					<td width="32%"><select name="Condition0" class="detailedViewTextBox">
-					{$CRITERIA}
-					</select>
-					</td>
-					<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
+						<td width="31%"><select name="Fields0" class="detailedViewTextBox">
+						{$FIELDNAMES}
+						</select>
+						</td>
+						<td width="32%"><select name="Condition0" class="detailedViewTextBox">
+							{$CRITERIA}
+						</select>
+						</td>
+						<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
 					</tr>
-					</table>
-					</div>	
-					</td>
-					</tr>
-					<tr>
-
-					<td><input type="button" name="more" value="More" onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')">
-					&nbsp;&nbsp;
-					<input name="button" type="button" value="Fewer" onclick="delRow()"></td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					</tr>
-					</table>
-                                        </div>
-                                        </div>
-                                        <table border=0 cellspacing=0 cellpadding=5 width=100%>
-                                        <tr><td align=center><input type="submit" class=small value="Search now" onClick="callSearch('Basic');totalnoofrows();"></td></tr></table>
-
-
-                                </div>				
-
-				 {*<!-- Searching UI -->*}
+				</table>
+				</div>	
+			</td>
+		</tr>
+		<tr>
+			<td class="dvtCellLabel"><input type="button" name="more" value=" More " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="classBtn">&nbsp;&nbsp;
+				<input name="button" type="button" value=" Fewer " onclick="delRow()" class="classBtn"></td>
+			<td class="dvtCellLabel">&nbsp;</td>
+			<td class="dvtCellLabel">&nbsp;</td>
+			</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=80% style="border-bottom:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" align="center">
+		<tr>
+			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" Search Now " onClick="totalnoofrows();callSearch('Basic');">
+			</td>
+		</tr>
+	</table>
+</div>		
+{*<!-- Searching UI -->*}
                                 <div id="searchingUI" style="display:none;">
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
@@ -192,9 +180,6 @@ rBox">
 </table>
 </form>
 </div>
-
-<br>
-			
 
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
@@ -227,13 +212,13 @@ rBox">
 
                                  {/foreach}
                                              <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
-                                 </td>
+                    </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
 					     <tr>{$NAVIGATION}</tr>
 					</table>
-                                 </td>
+                    </td>
 				 <td width=100% align="right">
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
@@ -256,7 +241,7 @@ rBox">
 					</tr>
 				   </table>
 				 </td>	
-               		      </tr>
+       		       </tr>
 			 </table>
                          <div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
@@ -292,7 +277,7 @@ rBox">
 
                                  {/foreach}
                                              <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
-                                 </td>
+                    </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >
 				    <table border=0 cellspacing=0 cellpadding=0 class="small">
@@ -307,7 +292,7 @@ rBox">
 				   </table>
 				 </td>
 			      </tr>
-              		 </table>
+       		    </table>
 		       </td>
 		   </tr>
 	    </table>

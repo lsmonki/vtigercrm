@@ -1236,11 +1236,11 @@ function fnAddSrch(option_values,criteria_values){
 
     var colthree = row.insertCell(2);
 
-    colone.innerHTML="<select name='Fields"+count+"' class='detailedViewTextBox'>"+option_values+"</select>";
+    colone.innerHTML="<select id='Fields"+count+"' name='Fields"+count+"' class='detailedViewTextBox'>"+option_values+"</select>";
 
-    coltwo.innerHTML="<select name='Condition"+count+"' class='detailedViewTextBox'>"+criteria_values+"</select> ";
+    coltwo.innerHTML="<select id='Condition"+count+"' name='Condition"+count+"' class='detailedViewTextBox'>"+criteria_values+"</select> ";
 
-    colthree.innerHTML="<input type='text' name='Srch_value"+count+"' class='detailedViewTextBox'>";
+    colthree.innerHTML="<input type='text' id='Srch_value"+count+"' name='Srch_value"+count+"' class='detailedViewTextBox'>";
 
 }
 
