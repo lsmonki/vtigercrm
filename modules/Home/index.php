@@ -145,6 +145,7 @@ function getActivityType($id)
 	return $acti_type;
 
 }
+
 $query="select tagcloud from users where id=".$current_user->id;
 $result=$adb->query($query);
 $tagcloud_js=$adb->query_result($result,0,'tagcloud');
@@ -156,6 +157,8 @@ $current_module_strings = return_module_language($current_language, 'Calendar');
 
 $t=Date("Ymd");
 $smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("APP",$app_strings);
+$smarty->assign("MOD",$mod_strings);
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->assign("ACTIVITIES",$activities);
