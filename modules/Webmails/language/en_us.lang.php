@@ -1,4 +1,22 @@
 <?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.17 2005/03/28 06:31:38 rank Exp $
+ * Description:  Defines the English language pack for the Account module.
+ ********************************************************************************/
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Emails',
 'LBL_MODULE_TITLE'=>'Emails: Home',
@@ -14,16 +32,40 @@ $mod_strings = Array(
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'LBL_DATE_SENT'=>'Date Sent:',
-'LBL_SUBJECT'=>'Subject:',
+'LBL_SUBJECT'=>'Subject :',
 'LBL_BODY'=>'Body:',
 'LBL_DATE_AND_TIME'=>'Date & Time Sent:',
-'LBL_DATE'=>'Date Sent:',
+'LBL_DATE'=>'Date :',
 'LBL_TIME'=>'Time Sent:',
-'LBL_SUBJECT'=>'Subject:',
 'LBL_BODY'=>'Body:',
 'LBL_CONTACT_NAME'=>' Contact Name: ',
 'LBL_EMAIL'=>'Email:',  
 'LBL_COLON'=>':',
+'LBL_TO'=>'To :',
+'LBL_CHK_MAIL'=>'Check Mail',
+'LBL_COMPOSE'=>'Compose',
+'LBL_SETTINGS'=>'Settings',
+'LBL_EMAIL_FOLDERS'=>'Email Folders',
+'LBL_INBOX'=>'Inbox',
+'LBL_SENT_MAILS'=>'Sent Mails',
+'LBL_TRASH'=>'Trash',
+'LBL_JUNK_MAILS'=>'Junk Mails',
+'LBL_TO_LEADS'=>'To Leads',
+'LBL_TO_CONTACTS'=>'To Contacts',
+'LBL_TO_ACCOUNTS'=>'To Accounts',
+'LBL_MY_MAILS'=>'My Mails',
+'LBL_QUAL_CONTACT'=>'Qualified Mails (As Contacts)',
+'LBL_MAILS'=>'Mails',
+'LBL_QUALIFY_BUTTON'=>'Qualify',
+'LBL_REPLY_BUTTON'=>'Reply',
+'LBL_FORWARD_BUTTON'=>'Forward',
+'LBL_DOWNLOAD_ATTCH_BUTTON'=>'Download Attachments',
+'LBL_FROM'=>'From :',
+'LBL_CC'=>'CC :',
+'LBL_REPLY_TO_SENDER'=>'Reply to Sender',
+'LBL_REPLY_ALL'=>'Reply All',
+'LBL_SHOW_HIDDEN'=>'Show Hidden',
+'LBL_EXPUNGE_MAILBOX'=>'Expunge Mailbox',
 
 'NTC_REMOVE_INVITEE'=>'Are you sure you want to remove this recipient from the email?',
 'LBL_INVITEE'=>'Recipients',
