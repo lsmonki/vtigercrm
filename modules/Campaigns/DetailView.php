@@ -26,7 +26,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-global $app_strings,$mod_strings,$theme,;
+global $app_strings,$mod_strings,$theme;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
