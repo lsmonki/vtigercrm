@@ -1,0 +1,645 @@
+<?php
+include_once 'modules/Calendar/addEventUI.php';
+require_once('include/database/PearDatabase.php');
+require_once('include/utils/CommonUtils.php');
+/*To construct calendar subtabs
+*/
+function calendar_layout(& $param_arr)
+{
+	$cal_header = array ();
+	$cal_header['view'] = $param_arr['view'];
+	$cal_header['IMAGE_PATH'] = $param_arr['IMAGE_PATH'];
+        $cal_header['calendar'] = $param_arr['calendar'];
+       	get_cal_header_tab($cal_header);
+	$subheader = "";
+	$subheader .=<<<EOQ
+		<tr>
+			<td colspan="8" class="tabBorder">
+				<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+					<tr>
+						<td>
+							<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
+								<tr>
+									<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
+									<td class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')" align="center" nowrap="nowrap" width="75"><b>Events</b></td>
+									<td class="dvtUnSelectedCell" style="width: 100px;" id="mi" onclick="fnLoadValues('mi','pi','mnuTab2','mnuTab')" align="center" nowrap="nowrap"><b>Todos</b></td>
+									<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="border-left: 1px solid rgb(204, 204, 204); border-right: 1px solid rgb(204, 204, 204); border-bottom: 1px solid rgb(204, 204, 204);" align="left" bgcolor="#ffffff" valign="top">
+						<!-- Events Layer Starts Here -->
+						<div style="display: block;" id="mnuTab">
+EOQ;
+	echo $subheader;
+	get_cal_header_data($param_arr);
+	$div = "<div id='toggleDiv'></div>";
+	echo $div;
+	getHourView($param_arr);
+	
+	
+	
+}
+
+
+/*To construct calendar headertabs
+*/
+function get_cal_header_tab(& $header)
+{
+	global $mod_strings;
+	$tabhtml = "";
+	$count = 1;
+	$tabhtml .= "<br><table class='small calHdr' align='center' border='0' cellpadding='5' cellspacing='0' width='90%'><tr>";
+        $links = array ('day','week','month','year');
+	foreach ($links as $link)
+	{
+		if ($header['view'] == $link)
+		{
+			$class = 'calSel';
+			$anchor = $mod_strings["LBL_".$header['calendar']->getCalendarView($link)];
+		}
+		else
+		{
+			$class = 'calUnSel';
+			$anchor = "<a href='index.php?module=Calendar&action=index&view=".$link."".$header['calendar']->date_time->get_date_str()."'>".$mod_strings["LBL_".$header['calendar']->getCalendarView($link)]."</a>";
+		}
+	
+		if($count == 1)
+			$tabhtml .= "<td style='border-left: 1px solid rgb(102, 102, 102);' class=".$class.">".$anchor."</td>";
+		else
+			$tabhtml .= "<td class=".$class.">".$anchor."</td>";
+		$count++;
+	}
+	$tabhtml .= "<td width='30%'>
+			<table border='0' cellpadding='0' cellspacing='0'>
+			<tr>
+				<td>".get_previous_cal($header)."
+				</td>";
+	$tabhtml .= "<td class='calendarNav'>".display_date($header['view'],$header['calendar']->date_time)."</td>";
+	$tabhtml .= "<td>".get_next_cal($header)."
+		     </td></tr>
+		</tbody></table>
+		</td>";
+	$tabhtml .= "<td width='2%'><a href='#'><img src='".$header['IMAGE_PATH']."btnL3Calendar.gif' alt='Open Calendar...' title='Open Calendar...' align='middle' border='0'></a></td>";
+	$tabhtml .= "<td><a href='#'><img src='".$header['IMAGE_PATH']."webmail_settings.gif' alt='Settings' title='Settings' align='middle' border='0'></a></td>";
+	$tabhtml .= "<td class='calTitle'>&nbsp;</td>";	
+	$tabhtml .= "</tr>";
+	echo $tabhtml;
+}
+
+/*To display events/todos detail in calendar header
+*/
+//use getPendingActivities() method of Activities/OpenListView.php to get pending activities
+function get_cal_header_data(& $cal_arr)
+{
+	$headerdata = "";
+	$headerdata .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tr><td colspan='3'>&nbsp;</td></tr>
+			<tr>
+				<td class='tabSelected' style='border: 1px solid rgb(102, 102, 102);' align='center' width='10%'>
+					<a onClick='gshow(\"addEvent\")' href='javascript:void(0)'>Add Event</a>
+					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
+				</td>
+				<td align='center' width='65%'>";
+	$headerdata .= get_event_todo_info($cal_arr,'listcnt'); 
+	$headerdata .= "	</td>
+				<td align='right' width='25%'><b>View : </b>";
+	$view_options = getEventViewOption($cal_arr);
+	$headerdata .=$view_options."
+				</td>
+			</tr>
+		</table>";
+	echo $headerdata;	
+}
+/*To get View Combo box
+*/
+function getEventViewOption(& $cal)
+{
+	$view = "<select name='view' class='importBox' id='viewBox' onchange='fnRedirect(\"".$cal['calendar']->view."\",\"".$cal['calendar']->date_time->hour."\",\"".$cal['calendar']->date_time->day."\",\"".$cal['calendar']->date_time->month."\",\"".$cal['calendar']->date_time->year."\")'>";
+	$view .="<option value='hourview' selected='selected'>Hour View</option>
+		<option value='listview'>List View</option>
+		</select>";
+	return $view;
+}
+
+/*link to previous day/week/month/year view
+*/
+function get_previous_cal(& $cal)
+{
+        global $mod_strings;
+	$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0'></a>";
+	return $link;
+}
+
+/*link to next day/week/month view
+*/
+function get_next_cal(& $cal)
+{
+        global $mod_strings;
+        $link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0'></a>";
+	return $link;
+
+}
+
+/*To display date info in calendar header
+*/
+function display_date($view,$date_time)
+{
+	if ($view == 'day')
+        {
+		//$label = $date_time->getdayofWeek()." ";
+		$label = $date_time->get_Date()." ";
+		$label .= $date_time->getmonthName()." ";
+		$label .= $date_time->year;
+		return $label;
+        }
+	elseif ($view == 'week')
+        {
+                $week_start = $date_time->getThisweekDaysbyIndex(0);
+                $week_end = $date_time->getThisweekDaysbyIndex(6);
+                $label = $week_start->get_Date()." ";
+                $label .= $week_start->getmonthName()." ";
+                $label .= $week_start->year;
+                $label .= " - ";
+                $label .= $week_end->get_Date()." ";
+                $label .= $week_end->getmonthName()." ";
+                $label .= $week_end->year;
+		return $label;
+        }
+
+	elseif ($view == 'month')
+	{
+		$label = $date_time->getmonthName()." ";
+		$label .= $date_time->year;
+		return $label;
+        }
+	elseif ($view == 'year')
+	{
+		return $date_time->year;
+        }
+
+}
+
+/*To get day/week/month events hourview
+*/
+function getHourView(& $view,$type = 'default' )
+{
+	if($view['view'] == 'day')
+	{
+		get_dayview_layout($view,$type);
+	}
+	elseif($view['view'] == 'week')
+	{
+		 get_weekview_layout($view,$type);
+	}
+	elseif($view['view'] == 'month')
+	{
+		 get_monthview_layout($view,$type);
+	}
+	elseif($view['view'] == 'year')
+	{
+		 get_yearview_layout($view,$type);
+	}
+	else
+	{
+		die("view:".$view['view']." is not defined");
+	}
+}
+
+/*To get day/week/month events listview
+*/
+function getListView(& $cal,$mode='')
+{
+	if($cal['calendar']->view == 'day')
+	{
+		$start_date = $end_date = $cal['calendar']->date_time->get_formatted_date();
+		$activity_list = getEventList($cal, $start_date, $end_date,$mode);
+		if($mode != '')
+		{
+			return $activity_list;
+		}
+		constructListView($activity_list);
+	}
+	elseif($cal['calendar']->view == 'week')
+	{
+		$start_date = $cal['calendar']->slices[0];
+		$end_date = $cal['calendar']->slices[6];
+		$activity_list = getEventList($cal, $start_date, $end_date,$mode);
+		if($mode != '')
+                {
+                        return $activity_list;
+                }
+		constructListView($activity_list);
+	}
+	elseif($cal['calendar']->view == 'month')
+        {
+		$start_date = $cal['calendar']->date_time->getThismonthDaysbyIndex(0);
+		$end_date = $cal['calendar']->date_time->getThismonthDaysbyIndex($cal['calendar']->date_time->daysinmonth - 1);
+		$activity_list = getEventList($cal, $start_date->get_formatted_date(), $end_date->get_formatted_date(),$mode);
+		if($mode != '')
+                {
+                        return $activity_list;
+                }
+		constructListView($activity_list);
+        }
+	elseif($cal['calendar']->view == 'year')
+        {
+		//$activity_list = getEventList($cal);
+        }
+	else
+        {
+		die("view:".$cal['calendar']->view." is not defined");
+        }
+	
+}
+
+function get_dayview_layout(& $cal,$type)
+{
+	$day_start_hour = $cal['calendar']->day_start_hour;
+	$day_end_hour = $cal['calendar']->day_end_hour;
+        $dayview_hours = $day_end_hour - $day_start_hour;
+	$dayview_layout = '';
+	$dayview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
+                <div id="hrView_'.$type.'">
+                        <table border="0" cellpadding="10" cellspacing="0" width="98%">';
+        for($i=0;$i<=$dayview_hours;$i++)
+        {
+		if($cal['calendar']->hour_format == 'am/pm')
+		{
+			if($i == 12)
+			{
+				$hour = $i;
+				$sub_str = 'pm';
+			}
+			elseif($i>12)
+			{
+				$hour = $i - 12;
+				$sub_str = 'pm';
+			}
+			else
+			{
+				$hour = $i;
+				$sub_str = 'am';
+			}
+			
+		}
+		else
+		{
+			$hour = $i;
+                        $sub_str = ':00';
+		}
+		$dayview_layout .= '<tr>
+					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%">
+						<span class="genHeaderBig">'.$hour.'</span>
+						<span class="genHeaderGray">'.$sub_str.'</span>
+					</td>
+					<td style="border-bottom: 1px solid rgb(204, 204, 204);" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" height="65">
+			                	<div id="'.$hour.''.$sub_str.'" style="display: none;">
+							<a onClick="gshow(\'addEvent\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+						</div>
+					</td>';
+		/*get events/tasks that has current date as starting time
+			*/
+		//$dayview_layout .= 
+		$dayview_layout .='		
+				    </tr>';
+	}
+	$dayview_layout .= '<tr><td style="border-right: 1px solid rgb(102, 102, 102);">&nbsp;</td><td>&nbsp;</td></tr>
+                                    <tr><td colspan="2">&nbsp;</td></tr>
+                                    </table>';
+	echo $dayview_layout;		
+}
+
+function get_weekview_layout(& $cal,$type)
+{
+        $day_start_hour = $cal['calendar']->day_start_hour;
+        $day_end_hour = $cal['calendar']->day_end_hour;
+        $dayview_hours = $day_end_hour - $day_start_hour;
+	$weekview_layout = '';
+        $weekview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
+		<div id="hrView_'.$type.'" style = "padding:5px">
+                        <table border="0" cellpadding="10" cellspacing="0" width="98%" class="calDayHour" style="background-color: #dadada">';
+	for ($col=0;$col<=7;$col++)
+        {
+        	if($col==0)
+                {
+                	$weekview_layout .= '<tr>';
+                	$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>&nbsp;</td>';
+		}
+		else
+		{
+			$cal['slice'] = $cal['calendar']->week_array[$cal['calendar']->slices[$col-1]];
+			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
+			$day = $date->getdayofWeek_inshort();
+			$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>';
+			$weekview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
+			$weekview_layout .= $date->get_Date().' - '.$day;
+			$weekview_layout .= "</a>";
+			$weekview_layout .= '</td>';
+		}
+	}
+	$weekview_layout .= '</tr></table>';
+	$weekview_layout .= '<table border="0" cellpadding="10" cellspacing="1" width="98%" class="calDayHour" style="background-color: #dadada">';
+	for($i=0;$i<=$dayview_hours;$i++)
+	{
+		$weekview_layout .= '<tr>';
+		for ($column=1;$column<=1;$column++)
+        	{
+        	       	if($cal['calendar']->hour_format == 'am/pm')
+                	{
+                       		if($i == 12)
+                       		{
+                               		$hour = $i;
+	                               	$sub_str = 'pm';
+	                        }
+        	       	        elseif($i>12)
+                        	{
+                       	        	$hour = $i - 12;
+	                       	        $sub_str = 'pm';
+	                        }
+        	       	        else
+                        	{
+                       	        	$hour = $i;
+	                       	        $sub_str = 'am';
+        	                }
+
+       	        	}
+       			else
+           		{
+                       		$hour = $i;
+                        	$sub_str = ':00';
+       	        	}
+
+			$weekview_layout .= '<td style="border-top: 1px solid rgb(239, 239, 239); background-color: rgb(234, 234, 234); height: 40px;" valign="top" width="12%">';
+			$weekview_layout .=$hour.''.$sub_str;
+	                $weekview_layout .= '</td>';
+		}
+		for ($column=0;$column<=6;$column++)
+		{
+			/*$weekview_layout .= '<td class="cellNormal" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" style="height: 40px;" bgcolor="white" valign="top" width="12%">
+                                                <div id="'.$hour.''.$sub_str.'" style="display: none;" valign="bottom">
+                                                        <a onClick="gshow(\'addEvent\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+                                                </div>
+                                        </td>';*/
+			$weekview_layout .= '<td class="cellNormal" onclick="gshow(\'addEvent\')" onmouseover="this.className=\'cellNormalHover\'" onmouseout="this.className=\'cellNormal\'" style="height: 40px;" bgcolor="white" valign="top" width="12%">';
+			$weekview_layout .= '</td>';
+		}
+		$weekview_layout .= '</tr>';
+	}
+	$weekview_layout .= '</table></div>';
+	echo $weekview_layout;
+		
+}
+	
+function get_monthview_layout(& $cal,$type)
+{
+	$count = 0;
+        if ($cal['calendar']->month_array[$cal['calendar']->slices[35]]->start_time->month != $cal['calendar']->date_time->month) {
+                $rows = 5;
+        } else {
+                $rows = 6;
+        }
+	
+	$monthview_layout = '';
+	$monthview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
+		<div id="hrView_'.$type.'" style = "padding:5px">
+		<table class="calDayHour" style="background-color: rgb(218, 218, 218);" border="0" cellpadding="5" cellspacing="1" width="100%"><tr>';
+	for ($i = 0; $i < 7; $i ++)
+	{
+		$first_row = $cal['calendar']->month_array[$cal['calendar']->slices[$i]];
+		$monthview_layout .= '<td class="lvtCol" bgcolor="blue" valign="top" width="12%">'.$first_row->start_time->getdayofWeek().'</td>';
+	}
+	$monthview_layout .= '</tr></table>';
+	$monthview_layout .= '<table border=0 cellspacing=1 cellpadding=5 width=100% class="calDayHour" style="background-color: #dadada">';
+	for ($i = 0; $i < $rows; $i ++)
+	{
+	        $monthview_layout .= '<tr>';
+		for ($j = 0; $j < 7; $j ++)
+                {
+			$monthview_layout .= '<td class="dvtCellLabel">';
+			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
+			$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
+			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
+			{
+				$monthview_layout .= $cal['slice']->start_time->get_Date();
+			}
+			$monthview_layout .= '</a></td>';
+			$count++;
+		}
+		$monthview_layout .= '</tr>';
+		$monthview_layout .= '<tr>';
+		for ($j = 0; $j < 7; $j ++)
+		{
+			//$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
+			$monthview_layout .= '<td onClick="gshow(\'addEvent\')" onMouseOver="this.className=\'cellNormalHover\'" onMouseOut="this.className=\'cellNormal\'" bgcolor="white" height="90" valign="top" width="200">';//style="height:40px" width=12% valign=top>';
+		        /*$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
+			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth()) 			      {
+				$monthview_layout .= $cal['slice']->start_time->get_Date();
+                        }
+			$monthview_layout .= '</a>
+					<!--div valign=bottom align=right onclick="gshow(\'addEvent\')"  onMouseOut="ghide(\'12pm\')"  width=10%>+</div-->';
+			$monthview_layout .= '</td>';
+			$count++;*/
+		}
+		$monthview_layout .= '</tr>';
+	}
+	$monthview_layout .= '</table></div>';
+	echo $monthview_layout;
+		
+}
+
+function get_yearview_layout(& $cal,$type)
+{
+}
+
+function getEventList(& $calendar,$start_date,$end_date,$info='')
+{
+	$Entries = Array();
+	global $adb,$current_user;
+	
+	$query = "select groups.groupname ,users.user_name,activity.activitytype,activity.subject,crmentity.smownerid,seactivityrel.crmid,cntactivityrel.contactid ,crmentity.crmid,activity.* from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.activitytype != 'Task') and (activity.date_start between '".$start_date."' and '".$end_date."' or activity.due_date between '".$start_date."' and '".$end_date."' or recurringevents.recurringdate between '".$start_date."' and '".$end_date."')";
+	if($info != '')
+	{
+		$pending_query = $query." and (activity.eventstatus = 'Planned') and crmentity.smownerid = ".$current_user->id." GROUP BY crmentity.crmid ORDER BY activity.date_start,activity.time_start ASC";
+		$res = $adb->query($pending_query);
+		$pending_rows = $adb->num_rows($res);
+	}
+	$query .= " and crmentity.smownerid = ".$current_user->id." GROUP BY crmentity.crmid ORDER BY activity.date_start,activity.time_start ASC";
+	$result = $adb->query($query);
+	$rows = $adb->num_rows($result);
+	if($info != '')
+        {
+		return Array('totalevent'=>$rows,'pendingevent'=>$pending_rows);
+        }
+	for($i=0;$i<$rows;$i++)
+	{
+		$element = Array();
+		$element['no'] = $i+1;
+		$image_tag = "";
+		$contact_data = "";
+		$more_link = "";
+		$duration_hour = $adb->query_result($result,$i,"duration_hours");
+                $duration_min = $adb->query_result($result,$i,"duration_minutes");
+		$start_time = $adb->query_result($result,$i,"time_start");
+		$end_time = '';
+		if($calendar['calendar']->hour_format == 'am/pm')
+		{
+			//echo $start_time;
+			if($start_time>'12:00')
+			{
+				$time = explode(":",$start_time);
+				$hour = $time[0] - 12;
+				$min = $time[1];
+				$start_time = $hour.":".$min."pm";
+				$end_min = $min+$duration_min;
+				$end_hour = $hour+$duration_hour;
+				if($end_min>60)
+				{
+					$end_min = $end_min - 60;
+					$end_hour = $end_hour + 1;
+				}
+				if($end_min == 0)
+					$end_min = "00";
+				$end_time = $end_hour.":".$end_min."pm";
+				//echo $start_time;
+			}
+			else
+			{
+				$time = explode(":",$start_time);
+                                $hour = $time[0];
+                                $min = $time[1];
+				$start_time = $start_time."am";
+				$end_min = $min+$duration_min;
+                                $end_hour = $hour+$duration_hour;
+				if($end_min>60)
+                                {
+                                        $end_min = $end_min - 60;
+                                        $end_hour = $end_hour + 1;
+                                }
+				if($end_hour>'12')
+				{
+					$hour = $end_hour - 12;
+					if($end_min == 0)
+	                                        $end_min = "00";
+					$end_time = $end_hour.":".$end_min."pm";
+				}
+				else
+				{
+					if($end_min == 0)
+	                                        $end_min = "00";
+				 	$end_time  = $end_hour.":".$end_min."am";
+				}
+				
+			}
+			$element['starttime'] = $start_time;
+			$element['endtime'] = $end_time;
+		}
+		else
+		{
+			$time = explode(":",$start_time);
+                        $hour = $time[0];
+                        $min = $time[1];
+			$end_min = $min+$duration_min;
+                        $end_hour = $hour+$duration_hour;
+			if($end_min>60)
+                        {
+                                $end_min = $end_min - 60;
+                                $end_hour = $end_hour + 1;
+                        }
+			if($end_min == 0)
+	                        $end_min = "00";
+			$end_time  = $end_hour.":".$end_min;
+			$element['starttime'] = $start_time;
+			$element['endtime'] = $end_time;
+		}
+		$contact_id = $adb->query_result($result,$i,"contactid");
+		$id = $adb->query_result($result,$i,"activityid");
+		$subject = $adb->query_result($result,$i,"subject");
+		if($contact_id != '')
+		{
+			$contactname = getContactName($contact_id);
+			$contact_data = "<b>".$contactname."</b>,";
+		}
+		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Events' class='webMnu'>[More...]</a>";
+		$type = $adb->query_result($result,$i,"activitytype");
+		if($type == 'Call')
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
+		if($type == 'Meeting')
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
+        	$element['eventtype'] = $image_tag;
+		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
+	        $element['action'] = $rows["conversion_rate"];
+        	$element['status'] = $adb->query_result($result,$i,"eventstatus");
+		//echo '<pre>';print_r($element);echo '</pre>';
+	$Entries[] = $element;
+	}
+	//echo '<pre>';print_r($Entries);echo '</pre>';
+	return $Entries;
+}
+
+function getTodosList($cal, $check)
+{
+	$todo = Array('totaltodo' => 10,'pendingtodo' => 5);
+	return $todo;
+}
+
+function get_event_todo_info(& $cal, $mode)
+{
+	$event_todo = Array();
+	$event_todo['event']=getListView($cal, $mode);
+	$event_todo['todo'] = getTodosList($cal, $mode);
+	$event_todo_info = "";
+	$event_todo_info .= "Total Events : ".$event_todo['event']['totalevent'];
+	if($event_todo['event']['pendingevent'] != null)
+		 $event_todo_info .= ", ".$event_todo['event']['pendingevent']." Pending";
+	$event_todo_info .=" / ";
+	$event_todo_info .="Total Todos : ".$event_todo['todo']['totaltodo'];
+	if($event_todo['todo']['pendingtodo'] != null)
+		$event_todo_info .= ", ".$event_todo['todo']['pendingtodo']." Pending";
+	
+	return $event_todo_info;
+}
+
+function constructListView($entry_list)
+{
+	$list_view = "";
+	$header = Array('0'=>'#',
+                        '1'=>'Start Time',
+                        '2'=>'End Time',
+                        '3'=>'Event Type',
+                        '4'=>'Event Details',
+                        '5'=>'Actions',
+                        '6'=>'Current Status',
+                        );
+        $header_width = Array('0'=>'5',
+                              '1'=>'10',
+                              '2'=>'10',
+                              '3'=>'10',
+                              '4'=>'40',
+                              '5'=>'10',
+                              '6'=>'15',
+                             );
+	$list_view .="<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
+                        <tr>";
+        for($i=0;$i<count($header);$i++)
+        {
+                $list_view .="<td class='lvtCol' width='".$header_width[$i]."'>".$header[$i]."</td>";
+        }
+        $list_view .="</tr>";
+	for($i=0;$i<count($entry_list);$i++)
+        {
+		$list_view .="<tr class='lvtColData' onmouseover='this.className=\"lvtColDataHover\"' onmouseout='this.className=\"lvtColData\"' bgcolor='white'>";
+		foreach($entry_list[$i] as $key=>$entry)
+        	{
+                	 $list_view .="<td>".$entry."</td>";
+	        }
+        	$list_view .="</tr>";
+	}
+	$list_view .="</table>";
+	echo $list_view;
+}
+
+		
+?>
