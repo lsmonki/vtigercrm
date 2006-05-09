@@ -16,12 +16,12 @@
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					  <tr>
 						<td width="75%">
-						  <input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" />&nbsp;
-						  <input type="button" name="reply" value=" Reply " class="classWebBtn" />&nbsp;
-						  <input type="button" name="forward" value=" Forward " class="classWebBtn" />&nbsp;
-						  <input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
+						  <input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="classWebBtn" />&nbsp;
+						  <input type="button" name="reply" value=" {$MOD.LBL_REPLY_BUTTON} " class="classWebBtn" />&nbsp;
+						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" />&nbsp;
+						  <input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
 						</td>
-						<td width="25%" align="right"><input type="button" name="Button" value=" Delete "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
+						<td width="25%" align="right"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
 					  </tr>
 					</table>
 				</td>
@@ -33,9 +33,9 @@
 {foreach item=elements key=title from=$row}	
 {if $title eq 'Subject'}
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr><td width="20%" align="right"><b>From :</b></td><td width="2%">&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td align="right">CC :</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td align="right"><b>Subject  :</b></td><td>&nbsp;</td><td>{$BLOCKS.3.Subject.value}</td></tr>
+	<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td width="2%">&nbsp;</td><td>&nbsp;</td></tr>
+	<tr><td align="right">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$BLOCKS.3.Subject.value}</td></tr>
 	<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 </table>
 {elseif $title eq 'Description'}
