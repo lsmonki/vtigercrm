@@ -260,3 +260,53 @@ function formSelectColumnString()
         }
         document.SharingForm.sharedid.value = selectedColStr;
 }
+
+function ajaxCalSaveResponse(response)
+{
+        document.getElementById("hrView_default").style.display = "none";
+        document.getElementById("toggleDiv").innerHTML=response.responseText;
+}
+
+function fnRedirect(view,hour,day,month,year){
+        var ajaxObj = new Ajax(ajaxCalSaveResponse);
+        var tagName =  document.getElementById('viewBox');
+        var OptionData = tagName.options[tagName.selectedIndex].value;
+        if(OptionData == 'hourview'){
+                var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
+        }
+        else if(OptionData == 'listview'){
+                var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
+        }
+        ajaxObj.process("index.php?",urlstring);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
