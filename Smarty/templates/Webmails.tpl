@@ -36,23 +36,23 @@
 									<tr>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:window.location = window.location;" class="webMnu" >Check Mail</a>
+												&nbsp;<a href="javascript:window.location = window.location;" class="webMnu" >{$MOD.LBL_CHK_MAIL}</a>
 											</td>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Emails&action=EditView&return_action=DetailView&parenttab=My Home Page" class="webMnu">Compose</a>
+												&nbsp;<a href="index.php?module=Emails&action=EditView&return_action=DetailView&parenttab=My Home Page" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 											</td>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">Settings</a>
+												&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 											</td>
 											<td width="12%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:;"  onclick="window.location = window.location+'&show_hidden=true';" class="webMnu">Show Hidden</a>
+												&nbsp;<a href="javascript:;"  onclick="window.location = window.location+'&show_hidden=true';" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
 											</td>
 											<td width="18%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">Expunge Mailbox</a>
+												&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>
 											</td>
 					<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
 									</tr>
@@ -60,13 +60,13 @@
 					</td>
                   </tr>
                   <tr>
-                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>Email Folders</b></span> </td>
+                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
                     <td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><strong>Mails in {$ACCOUNT} &gt; {$MAILBOX} </strong></td>
+					 <td width="60%" class="subHdr"><strong>{$MOD.LBL_MAILS} {$ACCOUNT} &gt; {$MAILBOX} </strong></td>
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">My Mails</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>
 							<ul style="list-style-type:none;">
 
 
@@ -79,22 +79,22 @@
 
 
 							</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Sent Mails</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Contacts</a>&nbsp;<b></b>
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Accounts</a>&nbsp;<b></b>
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 								</li>
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">To Leads</a>&nbsp;
+										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;
 								</li>
 							</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">Trash</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">Junk Mails</a>&nbsp;<b></b>
+										<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
 								</li>
 							</ul>
 
@@ -102,12 +102,12 @@
                     <td>&nbsp;</td>
                     <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td width="45%"><input type="button" name="Button2" value=" Move To "  class="classWebBtn"/> {$FOLDER_SELECT}&nbsp;
+                        <td width="45%"><input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn"/> {$FOLDER_SELECT}&nbsp;
                         </td>
                         <td width="75%" align="right">
-							<font color="#000000">Search:</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
+							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
 							<select name="optionSel" class="importBox"><option selected>in Subject</option></select>&nbsp;
-							<input type="button" name="find" value=" Find " class="classWebBtn" />
+							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" />
 						</td>
                       </tr>
                     </table></td>
@@ -145,13 +145,13 @@
 			   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 					  <tr>
 						<td width="75%">
-						  <span id="qualify_button"><input type="button" name="Qualify2" value=" Qualify " class="classWebBtn" /></span>&nbsp;
-						  <span id="reply_button"><input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" /></span>&nbsp;
-						  <span id="reply_button_all"><input type="button" name="reply" value=" Reply to All " class="classWebBtn" /></span>&nbsp;
-						  <input type="button" name="forward" value=" Forward " class="classWebBtn" />&nbsp;
-						  <input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
+						  <span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="classWebBtn" /></span>&nbsp;
+						  <span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="classWebBtn" /></span>&nbsp;
+						  <span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="classWebBtn" /></span>&nbsp;
+						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" />&nbsp;
+						  <input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
 						</td>
-						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" Delete "  class="classWebBtn" /></span></td>
+						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" /></span></td>
 					  </tr>
 					</table>
 				</td>
@@ -160,10 +160,10 @@
 			   <td>&nbsp;</td>
 			   <td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
 			   		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-						<tr><td width="20%" align="right"><b>From :</b></td><td id="from_addy">&nbsp;</td></tr>
-						<tr><td width="20%" align="right"><b>To :</b></td><td id="to_addy">&nbsp;</td></tr>
-						<tr><td align="right"><b>Subject</b></td><td id="webmail_subject"></td></tr>
-						<tr><td align="right"><b>Date</b></td><td id="webmail_date"></td></tr>
+						<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td id="from_addy">&nbsp;</td></tr>
+						<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td id="to_addy">&nbsp;</td></tr>
+						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
+						<tr><td align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td></tr>
 						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="2">&nbsp;</td></tr>
 					</table>
 			   <span id="body_area" style="width:95%">&nbsp;</span></td>
