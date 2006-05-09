@@ -46,9 +46,11 @@ $app_strings = Array(
 
 'LBL_CHARSET'=>'ISO-8859-1',
 
-'LBL_BROWSER_TITLE'=>'vtiger CRM - Commercial Open Source CRM',
+'LBL_BROWSER_TITLE'=>'vtiger CRM 5 - Commercial Open Source CRM',
 
 'LBL_MY_ACCOUNT'=>'My Account',
+
+'LBL_MY_PREFERENCES'=>'My Preferences',
 
 'LBL_ADMIN'=>'Admin',
 
@@ -101,6 +103,8 @@ $app_strings = Array(
 'LBL_DELETE_BUTTON_TITLE'=>'Delete [Alt+D]',
 
 'LBL_DELETE_BUTTON'=>'Delete',
+
+'LBL_FIND_BUTTON'=>'Find',
 
 'LBL_CONVERT_BUTTON_TITLE'=>'Convert [Alt+C]',
 
