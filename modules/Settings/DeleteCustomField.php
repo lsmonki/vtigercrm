@@ -73,5 +73,5 @@ if($uitype == 15)
 $deltablequery = 'drop table '.$colName;
 $adb->query($deltablequery);
 }
-header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module);
+header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module."&parenttab=Settings");
 ?>
