@@ -9,11 +9,8 @@
 *
  ********************************************************************************/
 //Code Added by Minnie -Starts
- include_once $calpath .'webelements.p3';
- include_once $calpath .'permission.p3';
  require_once('include/database/PearDatabase.php');
 
- require_once('modules/Calendar/preference.pinc');
 global $calpath,$callink;
 global $mod_strings;
 global $theme;
