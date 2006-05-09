@@ -26,8 +26,8 @@ $mod_strings = Array(
 'LBL_NOTES_LIST2'=>'If Current MySQL Exist in different Machine then enter the (Source) Dump filename with the full Path.',
 'LBL_NOTES_DUMP_PROCESS'=>'To take Database dump please execute the following command
 			   <br><b>mysqldump --user="mysql_username"  --password="mysql-password" -h "hostname"  --port="mysql_port" "database_name" > dump_filename</b>
-			   <br>add <b>SET_FOREIGN_KEY_CHECKS = 0;</b> -- at the start of the dump file
-			   <br>add <b>SET_FOREIGN_KEY_CHECKS = 1;</b> -- at the end of the dump file',
+			   <br>add <b>SET FOREIGN_KEY_CHECKS = 0;</b> -- at the start of the dump file
+			   <br>add <b>SET FOREIGN_KEY_CHECKS = 1;</b> -- at the end of the dump file',
 'LBL_NOTES_LIST3'=>'Give the MySQL path like <b>/home/crm/vtigerCRM4_5/mysql</b>',
 'LBL_NOTES_LIST4'=>'Give the Dump filename with full Path like <b>/home/fullpath/4_2_dump.txt</b>',
 
