@@ -1768,7 +1768,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
+		$custfld .= '<td valign="top" class="dataField"><a href="mapme.php?id='.$col_fields['record_id'].'" target="_blank">'.$col_fields[$fieldname].'</a></td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
 	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{

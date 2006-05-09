@@ -168,6 +168,7 @@ $xtpl->assign("ADDRESS_STATE", $focus->address_state);
 $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("SIGNATURE", nl2br($focus->signature));
+$xtpl->assign("MAP_START", nl2br($focus->map_source));
 $xtpl->parse("user_info");
 $xtpl->out("user_info");
 

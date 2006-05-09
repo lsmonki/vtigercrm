@@ -94,6 +94,7 @@ class User extends SugarBean {
 		,"email1"
 		,"email2"
 		,"signature"
+		,"map_source"
 		,"yahoo_id"
 		,"address_street"
 		,"address_city"

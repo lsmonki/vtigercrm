@@ -99,6 +99,15 @@ $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("SIGNATURE", $focus->signature);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
+$map_options = array('--None--', 'Home', 'Work');
+$map_start_options = '<select name="map_source">';
+foreach($map_options as $option) {
+	$selected = $focus->map_source == $option ? 'selected="selected"' : '';
+	$map_start_options .= '<option value="'.$option.'" '.$selected.'>'.$option.'</option>';
+}
+$map_start_options .= '</select>';
+$xtpl->assign("MAP_START_OPTIONS", $map_start_options);
+
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
 		
                

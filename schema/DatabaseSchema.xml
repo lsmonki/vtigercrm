@@ -49,6 +49,7 @@
 		<field name="workdays" type="C" size="30" />
 		<field name="weekstart" type="I" size="11" />
 		<field name="date_format" type="C" size="30" />
+		<field name="map_source" type="C" size="10" />
 		<field name="deleted" type="I" size="1">
 			<notnull />
 			<default value="0" />

@@ -287,6 +287,9 @@ $mod_strings = Array(
 
 //Added for patch2
 'LBL_FILE_INFORMATION'=>'File Information',
+
+
+'LBL_MAP_START'=>'Map Start',
 );
 
 ?>
