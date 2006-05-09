@@ -13,7 +13,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>{$CURRENT_USER} - {$CATEGORY} - {$MODULE_NAME} - vtiger CRM 5</title>
+	<title>{$CURRENT_USER} - {$CATEGORY} - {$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
@@ -38,8 +38,8 @@
 		<td class=small nowrap>
 		<table border=0 cellspacing=0 cellpadding=0>
 		 <tr>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">My Preferences</a></td>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">Logout</a> ({$CURRENT_USER})</td>
+		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
+		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
 		 </tr>
 		</table>
 		</td>
