@@ -148,7 +148,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($fieldname == 'terms_conditions')//for default Terms & Conditions
 		{
-			if($focus->mode=='edit') $value=getTermsandConditions();
+			$value=getTermsandConditions();
 		}
 
 		$editview_label[]=$mod_strings[$fieldlabel];
