@@ -114,6 +114,12 @@
 	font-size: 11px;
 }
 
+.level2textSel{
+	font-weight:bold;
+	color:#000000;
+}
+	
+
 .tabLiner {
 	background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
 	padding:0px;
