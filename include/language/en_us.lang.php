@@ -423,9 +423,25 @@ $app_strings = Array(
 
 'LBL_ADD_ITEM'=>'Add',
 
+//Added for version 5
 
+'LBL_CALENDAR_TITLE'=>'Open Calendar...',
+'LBL_CALENDAR_ALT'=>'Open Calendar...',
 
+'LBL_CALCULATOR_TITLE'=>'Open Calculator...',
+'LBL_CALCULATOR_ALT'=>'Open Calculator...',
 
+'LBL_CLOCK_TITLE'=>'Show World Clock...',
+'LBL_CLOCK_ALT'=>'Show World Clock...',
+
+'LBL_ALL_MENU_TITLE'=>'Open All Menu...',
+'LBL_ALL_MENU_ALT'=>'Open All Menu...',
+
+'LBL_CHAT_TITLE'=>'Chat...',
+'LBL_CHAT_ALT'=>'Chat...',
+
+'LBL_SEARCH_TITLE'=>'Search in ',
+'LBL_SEARCH_ALT'=>'Search in ',
 
 
 // Added fields for Related Field Display Informations in Detail View of All Modules
