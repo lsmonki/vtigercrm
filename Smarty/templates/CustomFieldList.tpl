@@ -13,7 +13,6 @@
 function ajaxSaveResponse(response)
 {ldelim}
         document.getElementById("cfList").innerHTML=response.responseText;
-        //document.getElementById("test").value=response.responseText;
 {rdelim}
 function getCustomFieldList(customField)
 {ldelim}
@@ -44,6 +43,12 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
 
+function CustomFieldMapping()
+{ldelim}
+        document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
+        document.form.submit();
+{rdelim}
+
 </script>
 <div id="createcf" style="display:block;position:absolute;top:175px;left:275px;"></div>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -70,27 +75,10 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
 						<span class="genHeaderGrayBig">Custom Field Settings</span>
 						<br />
 						<span class="big">Create and Manage user defined fields......</span>
-						{*<textarea rows=20 cols=70 id="test"></textarea>*}
 					</td>
 				</tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
-				<tr>
-					<td align="right"><img src="{$IMAGE_PATH}one.gif" /></td>
-					<td><b class="lvtHeaderText">Select Module</b></td>
-				</tr>
-				<tr>
-					<form name="selectModule">
-					<td>&nbsp;</td>
-					<td>
-						Select the CRM module to show CustomFields :
-						<select name="pick_module" class="importBox" onChange="getCustomFieldList(this)">
-        	                                	{foreach key=sel_value item=value from=$MODULES}
-                	                                	<option value="{$sel_value}">{$value}</option>
-							{/foreach}
-						</select>
-					</td>
-					</form>
-				</tr>
+				{include file="CustomFieldCombo.tpl"}
 				<tr><td colspan="2">&nbsp;</td></tr>
 				<tr><td colspan ="2">
 				

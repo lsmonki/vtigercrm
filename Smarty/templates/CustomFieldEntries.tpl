@@ -16,12 +16,11 @@
 				</tr>
 				<tr>
 					<td>
-						<form action="index.php" method="post" name="new" id="form">
+						<form action="index.php" method="post" name="form">
 						<input type="hidden" name="fld_module" value="{$MODULE}">
 						<input type="hidden" name="module" value="Settings">
 						<input type="hidden" name="parenttab" value="Settings">
 						<input type="hidden" name="mode">
-						<input type="hidden" name="action">
 						<table width="95%" border="0" cellpadding="5" cellspacing="0">
 							<tr><td align="right"><input type="button" value=" New Custom Field " onClick="getCreateCustomFieldForm('{$MODULE}','','','')" class="classBtn"/></td></tr>
 						</table>
@@ -51,13 +50,10 @@
 								Field Mapping allows you to ....
 								</td>
 							</tr>
-							<tr><td colspan="2" align="right"><input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="classBtn" onclick="this.form.action.value='LeadCustomFieldMapping';" type="submit" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}"></td></tr>
+							<tr><td colspan="2" align="right"><input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="classBtn" onclick="CustomFieldMapping();" type="button" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}"></td></tr>
 						</table> 
 						{/if}
 					</form>
 					</td>
 				</tr></table>
-{*<div id="orgLay" style="top:175px;left:275px; ">
-	{include file='CreateCustomField.tpl'}
-</div>*}
 
