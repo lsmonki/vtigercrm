@@ -17,6 +17,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+ require('include/ListView/ListView.php');
 
 if (is_file('../install_lock')) {
     header("Location: ../index.php");
