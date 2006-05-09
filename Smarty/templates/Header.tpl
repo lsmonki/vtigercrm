@@ -85,7 +85,7 @@
 				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
 			</td>
 			<td style="background-color:#cccccc">
-				<input type="submit" class="searchBtn" value="Find" alt="Find" title="Find">
+				<input type="submit" class="searchBtn" value="{$APP.LBL_FIND_BUTTON}" alt="Find" title="Find">
 			</td>
 			</form>
 		   </tr>
