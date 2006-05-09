@@ -26,12 +26,27 @@ $mod_strings = Array(
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_PHONE'=>'Phone:',
 'LBL_EMAIL_ADDRESS'=>'Email:',
+'LBL_TOTAL'=>'Total : ',
+
+'LBL_MY_HOME'=>'My Home',
+'LBL_MODIFIED_TIME'=>'Modified Time',
+'LBL_LOGIN_ID'=>'ID',
+'LBL_MODIFIED_BY'=>'Modified By',
+'LBL_TYPE'=>'Type',
 
 'LBL_PIPELINE_FORM_TITLE'=>'My Pipeline',
 
 'ERR_ONE_CHAR'=>'Please enter at least one letter or number for your search ...',
 
 'LBL_OPEN_TASKS'=>'My Open Tasks',
+
+'LBL_LEADS_BY_SOURCE'=>'Leads By Source',
+'LBL_LEADS_BY_STATUS'=>'Leads By Status',
+
+'LBL_UPCOMING_EVENTS'=>'Upcoming Events',
+'LBL_PENDING_EVENTS'=>'Pending Events',
+
+
 );
 
 ?>
