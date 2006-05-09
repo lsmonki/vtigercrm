@@ -1178,8 +1178,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 
 					$temp_val = str_replace("'",'\"',$temp_val);
-			
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+
+					//Added to avoid the error when select SO from Invoice through AjaxEdit
+					if($module == 'SalesOrder')
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'","'.$_REQUEST['form'].'"); window.close()\'>'.$temp_val.'</a>';
+					else
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "detailview")
                                 {
