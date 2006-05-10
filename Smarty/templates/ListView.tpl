@@ -111,7 +111,7 @@ y:0.90;z-index:50"></div>
 </table>
 </div>
 <!-- SIMPLE SEARCH -->
-<div id="searchAcc" style="z-index:1;display:block;position:relative;">
+<div id="searchAcc" style="z-index:1;display:none;position:relative;">
 <form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
 	<tr>
