@@ -357,6 +357,8 @@ $mod_strings = Array(
 
 'LBL_EVENT_FIELD_ACCESS'=>'Event Field Access',
 
+'LBL_CAMPAIGN_FIELD_ACCESS'=>'Campaign Field Access',
+
 'LBL_DELETE_DEMO_DATA'=>'Delete Demo Data',
 
 'LBL_DELETE_DEMO_DATA_INFO'=>'- Delete the Demo Data which is created at the time of installation',
