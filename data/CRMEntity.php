@@ -89,6 +89,9 @@ class CRMEntity extends SugarBean
 
 				if($_REQUEST['module'] != 'Emails')
 				{
+					if(!$parentid) {
+						$parentid = $adb->getUniqueID('seactivityrel');
+					}
 					$mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
 					$adb->query($mysql);
 				}
@@ -382,7 +385,7 @@ class CRMEntity extends SugarBean
 		else
 		{
 			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
+			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
 			$adb->query($sql);
 			$this->id = $current_id;
 		}

@@ -2062,56 +2062,51 @@ title';
 		$this->db->query("insert into moduleowners values(".getTabid($mod).",1)");
 	}
 	//added by jeri for category view from db
-	$this->db->query("insert into parenttab values
-			(1,'My Home Page',1,0),
-			(2,'Marketing',2,0),
-			(3,'Sales',3,0),
-			(4,'Support',4,0),
-			(5,'Analytics',5,0),
-			(6,'Inventory',6,0),
-			(7,'Tools',7,0),
-			(8,'Settings',8,0)
-		    	");
+	$this->db->query("insert into parenttab values (1,'My Home Page',1,0)");
+	$this->db->query("insert into parenttab values (2,'Marketing',2,0)");
+	$this->db->query("insert into parenttab values (3,'Sales',3,0)");
+	$this->db->query("insert into parenttab values (4,'Support',4,0)");
+	$this->db->query("insert into parenttab values (5,'Analytics',5,0)");
+	$this->db->query("insert into parenttab values (6,'Inventory',6,0)");
+	$this->db->query("insert into parenttab values (7,'Tools',7,0)");
+	$this->db->query("insert into parenttab values (8,'Settings',8,0)");
 
-	$this->db->query("insert into parenttabrel values
-			(1,9,2),
-			(1,17,3),
-			(1,10,4),
-    			(1,3,1),
-		    	(3,7,1),
-			(3,6,2),
-			(3,4,3),
-    			(3,2,4),
-	    		(3,20,5),
-	    		(3,22,6),
-	    		(3,23,7),
-	    		(3,14,8),
-	    		(3,19,9),
-	    		(3,8,10),
-	   		(4,13,1),
-	    		(4,15,2),
-	    		(4,6,3),
-	    		(4,4,4),
-		   	(4,14,5),
-			(4,8,6),
-			(5,1,1),
-			(5,25,2),
-		    	(6,14,1),
-	 	   	(6,18,2),
-		    	(6,19,3),
-		    	(6,21,4),
-		    	(6,22,5),
-		    	(6,20,6),
-	    		(6,23,7),
-		    	(7,24,1),
-			(7,27,2),
-	    		(7,8,3),
-		    	(2,26,1),
-		    	(2,6,2),
-		    	(2,4,3)");
-				
-
-		}
+	$this->db->query("insert into parenttabrel values (1,9,2)");
+	$this->db->query("insert into parenttabrel values (1,17,3)");
+	$this->db->query("insert into parenttabrel values (1,10,4)");
+	$this->db->query("insert into parenttabrel values (1,3,1)");
+	$this->db->query("insert into parenttabrel values (3,7,1)");
+	$this->db->query("insert into parenttabrel values (3,6,2)");
+	$this->db->query("insert into parenttabrel values (3,4,3)");
+	$this->db->query("insert into parenttabrel values (3,2,4)");
+	$this->db->query("insert into parenttabrel values (3,20,5)");
+	$this->db->query("insert into parenttabrel values (3,22,6)");
+	$this->db->query("insert into parenttabrel values (3,23,7)");
+	$this->db->query("insert into parenttabrel values (3,14,8)");
+	$this->db->query("insert into parenttabrel values (3,19,9)");
+	$this->db->query("insert into parenttabrel values (3,8,10)");
+	$this->db->query("insert into parenttabrel values (4,13,1)");
+	$this->db->query("insert into parenttabrel values (4,15,2)");
+	$this->db->query("insert into parenttabrel values (4,6,3)");
+	$this->db->query("insert into parenttabrel values (4,4,4)");
+	$this->db->query("insert into parenttabrel values (4,14,5)");
+	$this->db->query("insert into parenttabrel values (4,8,6)");
+	$this->db->query("insert into parenttabrel values (5,1,1)");
+	$this->db->query("insert into parenttabrel values (5,25,2)");
+	$this->db->query("insert into parenttabrel values (6,14,1)");
+	$this->db->query("insert into parenttabrel values (6,18,2)");
+	$this->db->query("insert into parenttabrel values (6,19,3)");
+	$this->db->query("insert into parenttabrel values (6,21,4)");
+	$this->db->query("insert into parenttabrel values (6,22,5)");
+	$this->db->query("insert into parenttabrel values (6,20,6)");
+	$this->db->query("insert into parenttabrel values (6,23,7)");
+	$this->db->query("insert into parenttabrel values (7,24,1)");
+	$this->db->query("insert into parenttabrel values (7,27,2)");
+	$this->db->query("insert into parenttabrel values (7,8,3)");
+	$this->db->query("insert into parenttabrel values (2,26,1)");
+	$this->db->query("insert into parenttabrel values (2,6,2)");
+	$this->db->query("insert into parenttabrel values (2,4,3)");
 	
+	}
 }
 ?>

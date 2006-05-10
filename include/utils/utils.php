@@ -1198,7 +1198,11 @@ function getDBInsertDateValue($value)
 		list($y,$m,$d) = split('-',$value);
 	}
 		
-	$insert_date=$y.'-'.$m.'-'.$d;
+	if(!$y && !$m && !$d) {
+		$insert_date = '';
+	} else {
+		$insert_date=$y.'-'.$m.'-'.$d;
+	}
 	$log->debug("Exiting getDBInsertDateValue method ...");
 	return $insert_date;
 }

@@ -213,6 +213,11 @@ require_once('modules/CustomView/PopulateCustomView.php');
 create_tab_data_file();
 create_parenttab_data_file();
 
+// ensure required sequences are created (adodb creates them as needed, but if
+// creation occurs within a transaction we get problems
+$db->getUniqueID("crmentity");
+$db->getUniqueID("seactivityrel");
+
 // populate the db with seed data
 if ($db_populate) {
         eecho ("Populate seed data into $db_name");

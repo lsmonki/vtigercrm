@@ -417,8 +417,8 @@ function PopulateReportFolder($fldrname,$fldrdescription)
 {
 	global $adb;
 	$sql = "INSERT INTO reportfolder ";
-	$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) ";
-	$sql .= "VALUES (null,'".$fldrname."','".$fldrdescription."','SAVED')";
+	$sql .= "(FOLDERNAME,DESCRIPTION,STATE) ";
+	$sql .= "VALUES ('".$fldrname."','".$fldrdescription."','SAVED')";
 	$result = $adb->query($sql);
 }
 

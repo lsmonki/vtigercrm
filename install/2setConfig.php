@@ -139,6 +139,15 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
 		!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
 		}
+
+		// determine database options
+		$db_options = array();
+		if(function_exists('mysql_connect')) {
+			$db_options['mysql'] = 'MySQL';
+		}
+		if(function_exists('pg_connect')) {
+			$db_options['pgsql'] = 'Postgres';
+		}
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -293,9 +302,19 @@ function verify_data(form) {
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><select name="dbtype">
-			   <option value="mysql" selected="selected">MySQL</option>
-			   </select>
+               <td width="75%" bgcolor="white" align="left">
+		<?php if(!$db_options) : ?>
+			No Database Support Deteched
+		<?php elseif(count($db_options) == 1) : ?>
+			<?php list($dbtype, $label) = each($db_options); ?>
+			<input type="hidden" name="dbtype" value="<?php echo $dbtype ?>"><?php echo $label ?>
+		<?php else : ?>
+			<select name="dbtype">
+			<?php foreach($db_options as $dbtype => $label) : ?>
+				<option value="<?php echo $dbtype ?>"><?php echo $label ?></option>
+			<?php endforeach ?>
+			</select>
+		<?php endif ?>
 			   </td>
             </tr>
 			<tr>

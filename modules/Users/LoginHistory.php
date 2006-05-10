@@ -60,7 +60,7 @@ class LoginHistory extends SugarBean {
 	/** Records the Login info */
 	function user_login(&$usname,&$usip,&$intime)
 	{
-		$query = "Insert into loginhistory values (null,'$usname','$usip',null,".$this->db->formatDate($intime).",'Signedin')";
+		$query = "Insert into loginhistory (user_name, user_ip, logout_time, login_time, status) values ('$usname','$usip',null,".$this->db->formatDate($intime).",'Signedin')";
 		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 		

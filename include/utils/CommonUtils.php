@@ -1681,7 +1681,7 @@ function getQuickCreateModules()
 			 'Contacts'=>'LNK_NEW_CONTACT',
 			 'Vendors'=>'LNK_NEW_VENDOR'); 	
 
-$qc_query = "select distinct tablabel,tab.name from field inner join tab on tab.tabid = field.tabid where quickcreate=0 order by tab.tablabel";
+$qc_query = "select distinct tab.tablabel,tab.name from field inner join tab on tab.tabid = field.tabid where quickcreate=0 order by tab.tablabel";
 $result = $adb->query($qc_query);
 $noofrows = $adb->num_rows($result);
 $qcmodule_array = Array();
