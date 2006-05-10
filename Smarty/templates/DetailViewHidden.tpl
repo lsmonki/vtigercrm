@@ -38,7 +38,7 @@
 	<input type="hidden" name="return_module">
 	<input type="hidden" name="parenttab" value="{$CATEGORY}">
 	<input type="hidden" name="return_action">
-	<input type="hidden" name="return_id" value="{$ID}">
+	<input type="hidden" name="return_id">
 	<input type="hidden" name="reports_to_id">
 	<input type="hidden" name="opportunity_id">
 	<input type="hidden" name="contact_id" value="{$ID}">
@@ -76,7 +76,7 @@
 	<input type="hidden" name="action">
 	<input type="hidden" name="return_module">
 	<input type="hidden" name="return_action">
-	<input type="hidden" name="return_id" value="{$ID}">
+	<input type="hidden" name="return_id">
 	<input type="hidden" name="lead_id" value="{$ID}">
 	<input type="hidden" name="parent_id" value="{$ID}">
 	<input type="hidden" name="email_directing_module">
