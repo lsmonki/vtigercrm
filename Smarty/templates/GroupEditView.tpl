@@ -135,7 +135,11 @@ function validate()
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 <tr>
 <td class="showPanelBg" valign="top" width="100%" style="padding-left:20px; "><br />
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_CREATE_NEW_GROUP}</b></span>
+{if $MODE eq 'edit'}
+	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_EDIT_GROUP}</b></span>
+{else}
+	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_CREATE_NEW_GROUP}</b></span>
+{/if}	
 <hr noshade="noshade" size="1"/>
 </td>
 </tr>
@@ -147,7 +151,11 @@ function validate()
 	<tr>
 			<td align="left" style="padding:10px;border-bottom:1px dashed #CCCCCC;" colspan="3">
 					<img src="{$IMAGE_PATH}groups.gif" align="absmiddle">
-					<span class="genHeaderGray">{$CMOD.LBL_CREATE_NEW_GROUP}</span>
+					{if $MODE eq 'edit'}
+						<span class="genHeaderGray">{$CMOD.LBL_EDIT_GROUP}</span>
+					{else}
+						<span class="genHeaderGray">{$CMOD.LBL_CREATE_NEW_GROUP}</span>
+					{/if}
 			</td>
 	</tr>
 	<tr>
@@ -158,7 +166,7 @@ function validate()
 	<tr>
 	<td align="right"><img src="{$IMAGE_PATH}one.gif" align="absmiddle"> </td>
 	<td style="padding-right: 10px;" align="right" width="20%">
-			<b>Group Name :</b></td>
+			<b>{$CMOD.LBL_GROUP_NAME} {$CMOD.LBL_COLON}</b></td>
 	<td style="padding-left: 10px;" align="left" width="80%">
 	<input name="groupName" class="importBox" style="width:40%;" type="text" value="{$GROUPNAME}">
 	</td>
@@ -167,7 +175,7 @@ function validate()
 	<tr>
 	<td align="right"><img src="{$IMAGE_PATH}two.gif" align="absmiddle"></td>
 	<td style="padding-right: 10px;" align="right" valign="top">
-			<b>Description : </b></td>
+			<b>{$CMOD.LBL_DESCRIPTION} {$CMOD.LBL_COLON} </b></td>
 	<td style="padding-left: 10px;" align="left">
 	<textarea name="description"  class="txtBox" style="width:40%;" >{$DESCRIPTION}</textarea>
 	</td>
@@ -176,15 +184,15 @@ function validate()
 	<tr>
 		<td align="right"><img src="{$IMAGE_PATH}three.gif" align="absmiddle"></td>
 		<td style="padding-right: 10px;" align="right">
-			<b>Filters : </b></td>
+			<b>{$APP.LBL_VIEW} </b></td>
 		<td><select id="memberType" name="memberType" onchange="showOptions()">
-          <option value="groups" selected>Groups</option>
-          <option value="roles">Roles</option>
-          <option value="rs">Roles and Subordinates</option>
-          <option value="users">Users</option>
+          <option value="groups" selected>{$CMOD.LBL_GROUPS}</option>
+          <option value="roles">{$CMOD.LBL_ROLES}</option>
+          <option value="rs">{$CMOD.LBL_ROLES_SUBORDINATES}</option>
+          <option value="users">{$MOD.LBL_USERS}</option>
         </select>&nbsp;&nbsp;
 		<input type="text" name="findStr">&nbsp;
-          <input type="button" name="Find" value="Find" class="classBtn" onClick="showOptions()">
+          <input type="button" name="Find" value="{$APP.LBL_FIND_BUTTON}" class="classBtn" onClick="showOptions()">
 		</td>
 	</tr>
 	<tr><td colspan="3">&nbsp;</td></tr>
@@ -193,7 +201,7 @@ function validate()
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="75%">
 	<tbody>
 	<tr>
-	<td align="center"><b>Member Available</b><br>
+	<td align="center"><b>{$CMOD.LBL_MEMBER_AVLBL}</b><br>
 	<select id="availList" name="availList" multiple size="10" style="width:200px; ">
 	</select>
 	<input type="hidden" name="selectedColumnsString"/>
@@ -202,7 +210,7 @@ function validate()
 	<input type="button" name="Button" value="&nbsp;&rsaquo;&rsaquo;&nbsp;" onClick="addColumn()" class="classBtn"/><br /><br />
 	<input type="button" name="Button1" value="&nbsp;&lsaquo;&lsaquo;&nbsp;" onClick="delColumn()" class="classBtn"/>
 	</td>
-	<td align="center"><b>Selected Member</b><br>
+	<td align="center"><b>{$CMOD.LBL_MEMBER_SELECTED}</b><br>
 	<select id="selectedColumns" name="selectedColumns" multiple size="10" style="width:200px; ">
   	{foreach item=element from=$MEMBER}
 	<option value="{$element.0}">{$element.1}</option>
@@ -219,9 +227,13 @@ function validate()
 	</tr>
 	<tr>
 	<td colspan="3" align="center"> 	
-	<input type="submit" class="classBtn" name="add" value="Add Group" onClick="return validate()">
+	{if $MODE eq 'edit'}
+		<input type="submit" class="classBtn" name="add" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " onClick="return validate()">
+	{else}
+		<input type="submit" class="classBtn" name="add" value="{$CMOD.LBL_ADD_GROUP_BUTTON}" onClick="return validate()">
+	{/if}
 	&nbsp;&nbsp;
-    <input type="button" class="classBtn" name="cancel" value="Cancel" onClick="window.history.back()">
+	<input type="button" class="classBtn" name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="window.history.back()">
 	</td>
 	</tr>
 	</tbody></table>

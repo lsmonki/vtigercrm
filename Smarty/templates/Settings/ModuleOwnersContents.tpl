@@ -32,8 +32,8 @@
 	
 	<tr>
 	<th style="border-top: 1px solid rgb(204, 204, 204); height: 30px;" width="10%"><b>#</b></th>
-	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>Module</b></th>
-	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>Owned By </b></th>
+	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>{$MOD.LBL_MODULE}</b></th>
+	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>{$MOD.LBL_OWNER} </b></th>
 	</tr>
 	{if $MODULE_MODE neq 'edit'}
 	{foreach name=modulelists item=modules from=$USER_LIST}

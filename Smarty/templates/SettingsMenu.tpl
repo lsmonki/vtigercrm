@@ -83,4 +83,4 @@
 </table>
 </div>
 </td>
-<td width="1%" class="dock"><img src="{$IMAGE_PATH}/rhtArrow.gif" class="imgDoc" alt="Expand/Close Menu" title="Expand/Close Menu" onclick="fnSlide('slideMnu','one')" /></td>
+<td width="1%" class="dock"><img src="{$IMAGE_PATH}/rhtArrow.gif" class="imgDoc" alt="{$MOD.LBL_EXPAND_CLOSE_MENU}" title="{$MOD.LBL_EXPAND_CLOSE_MENU}" onclick="fnSlide('slideMnu','one')" /></td>

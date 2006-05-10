@@ -89,11 +89,11 @@ function massDelete()
     			<input name="action" type="hidden" value="deleteemailtemplate">
 				<tr><td colspan="4" style="border:0px;">&nbsp;</td></tr>
 				<tr>
-					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="classBtn" /></td>
+					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="classBtn" /></td>
 					<td style="border:0px;">&nbsp;</td>
 
 					<td align="right" style="border:0px;">
-						<div align="right"><input type="submit" value="New Template" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"/></div>
+						<div align="right"><input type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='createemailtemplate';this.form.parenttab.value='Settings';"/></div>
 					</td>
 				</tr>
 				<tr>{*<td colspan="4" style="border:0px;">&nbsp;</td>*}</tr>
@@ -117,7 +117,7 @@ function massDelete()
 				{/if}				
 				&nbsp;<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" >{$template.templatename}</a></td>
 				<td>{$template.description}</td>
-				<td><a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">View Sample Email </a></td>
+				<td><a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">{$UMOD.LNK_SAMPLE_EMAIL}</a></td>
 			  	</tr>
 				
 				{/foreach}
@@ -133,7 +133,7 @@ function massDelete()
 					
 				  </td>
 				  <td style="border:0px">
-				  	<div align="right"><a href="#">Go to Page Top</a></div>
+				  	<div align="right"><a href="#">{$UMOD.LNK_GO_TO_TOP}</a></div>
 				  </td>
 			  	</tr>
 			</form>	

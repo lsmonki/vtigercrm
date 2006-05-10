@@ -35,15 +35,22 @@ function pickColor(color)
 											<td colspan="2" style="padding:5px;">
 													<span class="lvtHeaderText">
 													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-															 > {$MOD.LBL_USER_MANAGEMENT} > User</b></span>
+															 > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
 															<hr noshade="noshade" size="1" />
 											</td>
 									  </tr>
 									<tr>
 											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
-											<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
-												<b class="small">Edit View of {$FIRST_NAME} {$LAST_NAME}</b>
+										{if $MODE eq 'edit'}
+												<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
+												<b class="small">{$UMOD.LBL_EDIT_VIEW} {$FIRST_NAME} {$LAST_NAME}</b>
 											</td>
+										{else}
+												<td width="95%"><span class="genHeaderGrayBig">{$UMOD.LBL_NEW_USER_BUTTON_LABEL}</span><br>
+												<b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
+											</td>
+										{/if}
+											
 									</tr>
 							</table>
 	</td></tr>
@@ -91,39 +98,43 @@ function pickColor(color)
 					<tr><td align="left">
 					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
   		                           <tr>
+						{if $MODE eq 'edit'}
+					           <td colspan="4" class="detailedViewHeader"><b>{$APP.LBL_EDIT} {$UMOD.LBL_USER_INFORMATION}</b></td>
+						{else}
 					           <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
+						{/if}	
 					   </tr>  
 				<tr>
-				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_NAME} </td>
+				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_NAME} </td>
 				    <td class="dvtCellInfo"><input type="text" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"{$USERNAME_READONLY} /></td>
 				     <td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
                                      <td class="dvtCellInfo"><input type="checkbox" name="is_admin" {$DISABLED} {$IS_ADMIN}/></td>
 				</tr>
 				{if $MODE neq 'edit'}
 				<tr>
-				    <td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_PASSWORD} </td>
+				    <td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_PASSWORD} </td>
 				    <td class="dvtCellInfo" width="20%"><input name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-				    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
+				    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
 				    <td class="dvtCellInfo" width="20%"><input name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			        </tr>
 				{/if}	
 			        <tr>
 				    <td class="dvtCellLabel" align="right">{$UMOD.LBL_FIRST_NAME} </td>
 				    <td class="dvtCellInfo"><input type="text" name="first_name" value='{$FIRST_NAME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_LAST_NAME}</td>
+				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_LAST_NAME}</td>
 				    <td class="dvtCellInfo"><input type="text" name="last_name" value='{$LAST_NAME}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 				 </tr>
 				 <tr>
-				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_ROLE}</td>
+				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_ROLE}</td>
 				    <td class="dvtCellInfo">{$USER_ROLE}</td>
 
 
-				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
+				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_EMAIL}</td>
                                     <td class="dvtCellInfo"><input type="text" name="email1" value='{$EMAIL1}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			         </tr>
 				 <tr>
 
-				  <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
+				  <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_STATUS}</td>
 				 {$USER_STATUS_OPTIONS}
 				<td class="dvtCellInfo" colspan="2" >&nbsp;</td>	
 				 </tr>
@@ -135,7 +146,7 @@ function pickColor(color)
 				    <td span class="dvtCellInfo">{$LEAD_VIEW}</td>
 				 </tr>
 				 <tr>
-				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_COLOR}</td>
+				   <td class="dvtCellLabel" align="right">{$UMOD.LBL_COLOR}</td>
 					<td>&nbsp;&nbsp;{$CAL_COLOR}</td>
 				    <td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
                                     <td span class="dvtCellInfo">{$CURRENCY_NAME}</td>
@@ -151,7 +162,11 @@ function pickColor(color)
 					   <tr><td align="left">
 					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 					     <tr>
-						        <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
+						{if $MODE eq 'edit'}
+					           <td colspan="4" class="detailedViewHeader"><b>{$APP.LBL_EDIT} {$UMOD.LBL_USER_INFORMATION}</b></td>
+						{else}
+					           <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
+						{/if}	
 					     </tr>  
 					     <tr>
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_TITLE}</td>
@@ -218,7 +233,11 @@ function pickColor(color)
 						       <tr><td align="left">
 							   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
 						       <tr>
-							   	<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
+							{if $MODE eq 'edit'}
+					           		<td colspan="4" class="detailedViewHeader"><b>{$APP.LBL_EDIT} {$UMOD.LBL_USER_INFORMATION}</b></td>
+							{else}
+					           		<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_NEW_FORM_TITLE}</b></td>
+							{/if}	
 						       </tr>  
 						       <tr>
 							   <td class="dvtCellLabel" align="right">{$UMOD.LBL_ADDRESS}</td>
@@ -262,8 +281,8 @@ function pickColor(color)
 							        <tr><td>&nbsp;</td></tr>
 							        <tr>
 							            <td><div align="center">
-								    <input title="Save [Alt+S]" accesskey="S" class="small"  name="button" value="  Save  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="submit" />
-								    <input title="Cancel [Alt+X]" accesskey="X" class="small" name="button" value="  Cancel  " onclick="window.history.back()" style="width: 70px;" type="button" />
+								    <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="submit" />
+								    <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
 								        </div></td>
 								</tr>
 							  </table>

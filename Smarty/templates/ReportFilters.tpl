@@ -18,8 +18,8 @@
 <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td colspan="2">
-	<span class="genHeaderGray">Filters</span><br>
-	Select Flters to Streamline Report Data
+	<span class="genHeaderGray">{$MOD.LBL_FILTERS}</span><br>
+	{$MOD.LBL_SELECT_FILTERS_TO_STREAMLINE_REPORT_DATA}
 	<hr>
 	</td>
 	</tr>
@@ -28,7 +28,7 @@
 		<tbody>
 		<tr>
 		<td class="detailedViewHeader" colspan="2" width="60%">
-		<b>Standard Filter</b>
+		<b>{$MOD.LBL_STANDARD_FILTER}</b>
 		</td>
 		<td class="detailedViewHeader" width="20%">&nbsp;</td>
 		<td class="detailedViewHeader" width="20%">&nbsp;</td>
@@ -63,7 +63,7 @@
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		</tr>
-		<tr><td colspan="2" class="detailedViewHeader"><b>Advanced Filter</b>
+		<tr><td colspan="2" class="detailedViewHeader"><b>{$MOD.LBL_ADVANCED_FILTER}</b>
 		</td>
 		<td class="detailedViewHeader">&nbsp;</td>
 		<td class="detailedViewHeader">&nbsp;</td>

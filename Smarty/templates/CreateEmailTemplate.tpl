@@ -121,10 +121,10 @@
 		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
 			{if $EMODE eq 'edit'}
         	        	<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
-				<a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$TEMPLATEID}"> &gt; Communication Templates &gt; Editing Email Templates &gt; {$TEMPLATENAME}</a></b></span>
+				<a href="index.php?module=Users&action=detailviewemailtemplate&templateid={$TEMPLATEID}"> &gt; {$MOD.LBL_COMMUNICATION_TEMPLATES} &gt; {$MOD.LBL_EDIT} {$MOD.EMAILTEMPLATES} &gt; {$TEMPLATENAME}</a></b></span>
 			{else}
 				<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
-				<a href="index.php?module=Users&action=listemailtemplates">&gt; Communication Templates &gt; Creating Email Templates &gt; New</a></b> </span>
+				<a href="index.php?module=Users&action=listemailtemplates">&gt; {$MOD.LBL_COMMUNICATION_TEMPLATES} &gt; {$MOD.LBL_CREATE_EMAIL_TEMPLATES} &gt; {$MOD.NEW}</a></b> </span>
 			{/if}
             	    <hr noshade="noshade" size="1" />
 		</td>
@@ -145,9 +145,9 @@
 								<td width="5%" valign="top" align="right" nowrap>
 									<b><font color='red'>*</font>{$UMOD.LBL_TEMPLATE_NAME}</b><br />
 									<br />
-									<b>Description:</b><br />
+									<b>{$UMOD.LBL_DESCRIPTION}{$UMOD.LBL_COLON}</b><br />
 									<br /><br />
-									<b><font color='red'>*</font>Folder:</b>
+									<b><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font>{$UMOD.LBL_FOLDER}{$UMOD.LBL_COLON}</b>
 
 								</td>
 							<td width="85%" align="left" style="padding-left:10px;">
@@ -162,9 +162,9 @@
                                                                  <option value="{$FOLDERNAME}" {$arr}>{$FOLDERNAME}</option>
 
                                                                         {if $FOLDERNAME == 'Public'}
-                                                                                <option value="Personal">Personal</option>
+                                                                                <option value="Personal">{$UMOD.LBL_PERSONAL}</option>
                                                                         {else}
-                                                                                <option value="Public">Public</option>
+                                                                                <option value="Public">{$UMOD.LBL_PUBLIC}</option>
                                                                         {/if}
 
                                                                 {/foreach}
@@ -197,12 +197,12 @@
 							<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 								<tr><td style="color:#999999;">{$UMOD.LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT}</td></tr>
 
-								<tr><td><b><u>Available Merge Fields</u></b></td></tr>
+								<tr><td><b><u>{$UMOD.LBL_AVAILABLE_MERGE_FIELDS}</u></b></td></tr>
 								<tr><td>&nbsp;</td></tr>
 
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD_TYPE}</b></td></tr>
 								<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));" tabindex="6">
-								<OPTION VALUE="0" selected>--None--                            
+								<OPTION VALUE="0" selected>{$APP.LBL_NONE}                            
                             		
                         				        <OPTION VALUE="1">{$UMOD.LBL_CONTACT_FIELDS}
                             
@@ -213,7 +213,7 @@
 								</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD}</b></td></tr>
-								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>--None--</select></td></tr>
+								<tr><td><select class="detailedViewTextBox" id="mergeFieldSelect" onchange="document.getElementById('mergeFieldValue').value=this.options[this.selectedIndex].value;" tabindex="7"><option value="0" selected>{$APP.LBL_NONE}</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
 								<tr><td><b>{$UMOD.LBL_MERGE_FIELD_VALUE}</b></td></tr>
 
@@ -250,11 +250,11 @@
 	<tr>
 
 		<td align="center">
-			<input type="submit" value="Save" class="small" onclick="this.form.action.value='saveemailtemplate'" tabindex="9"/>&nbsp;&nbsp;
+			<input type="submit" value="{$APP.LBL_SAVE_BUTTON_LABEL}" class="small" onclick="this.form.action.value='saveemailtemplate'" tabindex="9"/>&nbsp;&nbsp;
 			{if $EMODE eq 'edit'}
-				<input type="submit" value="Cancel" class="small" onclick="cancelForm(this.form)" tabindex="10"/>
+				<input type="submit" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="small" onclick="cancelForm(this.form)" tabindex="10"/>
 			{else}
-				<input type="button" value="Cancel" class="small" onclick="window.history.back()" tabindex="10">
+				<input type="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="small" onclick="window.history.back()" tabindex="10">
 			{/if}
 		</td>
 		<td>&nbsp;</td>

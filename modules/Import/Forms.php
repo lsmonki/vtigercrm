@@ -188,7 +188,7 @@ echo '<br> translated fields : ';print_r($translated_fields);
 	require_once('include/database/PearDatabase.php');
 	global $adb;
 
-	$output = "<select name=\"colnum" . $colnum ."\">\n";
+	$output = "<select id=\"colnum" . $colnum ."\" name=\"colnum" . $colnum ."\">\n";
 	$output .= "<option value=\"-1\">". $mod_strings['LBL_DONT_MAP'] . "</option>";
 
 	$count = 0;

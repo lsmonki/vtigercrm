@@ -90,11 +90,11 @@ function massDelete()
 			   
 				<tr><td colspan="6" style="border:0px;">&nbsp;</td></tr>
 				<tr>
-					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="Delete" onclick="return massDelete();" class="classBtn" /></td>
+					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="classBtn" /></td>
 					<td style="border:0px;">&nbsp;</td>
 
 					<td align="right" colspan="3" style="border:0px;">
-						<div align="right" ><input type="submit" value="New Template" name="profile"  class="classBtn" onclick="this.form.action.value='upload';"/></div>
+						<div align="right" ><input type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='upload';"/></div>
 					</td>
 				</tr>
 				<tr>{*<td colspan="6" style="border:0px;">&nbsp;</td>*}</tr>

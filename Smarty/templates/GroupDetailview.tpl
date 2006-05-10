@@ -35,8 +35,8 @@
       <td width="95%" style="padding-left:20px;" valign="top"><table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
           <tr>
             <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGEPATH}groups.gif" width="48" height="48" align="absmiddle" /> </td>
-            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$GROUPINFO.0.groupname} Group</span><br />
-                <span class="big">Detail view of {$GROUPINFO.0.groupname} Group</span> </td>
+            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$GROUPINFO.0.groupname} {$APP.LBL_GROUP}</span><br />
+                <span class="big">{$CMOD.LBL_DETAIL_VIEW} {$GROUPINFO.0.groupname} {$APP.LBL_GROUP}</span> </td>
           </tr>
           <tr>
             <td colspan="2">&nbsp;</td>
@@ -44,24 +44,24 @@
           <tr>
             <td colspan="2" ><table width="100%" cellpadding="5" cellspacing="0" border="0" >
                 <tr>
-                  <td colspan="4" class="detailedViewHeader"><b>Group Details</b></td>
+                  <td colspan="4" class="detailedViewHeader"><b>{$CMOD.LBL_GROUP_DETAILS}</b></td>
                 </tr>
                 <tr>
                   <td class="dvtCellLabel" width="5%">&nbsp;</td>
-				  <td class="dvtCellLabel" align="right" width="25%"><b>Group Name :</b></td>
+				  <td class="dvtCellLabel" align="right" width="25%"><b>{$CMOD.LBL_GROUP_NAME} {$CMOD.LBL_COLON}</b></td>
                   <td class="dvtCellInfo" align="left" width="25%">{$GROUPINFO.0.groupname}</td>
                   <td class="dvtCellInfo" width="45%">&nbsp;</td>
                 </tr>
                 <tr>
                   <td class="dvtCellLabel" width="5%">&nbsp;</td>
-				  <td class="dvtCellLabel" align="right"><b>Description :</b></td>
+				  <td class="dvtCellLabel" align="right"><b>{$CMOD.LBL_DESCRIPTION} {$CMOD.LBL_COLON}</b></td>
                   <td colspan="2" align="left" class="dvtCellInfo">{$GROUPINFO.0.description}</td>
                 </tr>
                 <tr>
                   <td colspan="4"  class="dvtCellInfo">&nbsp;</td>
                 </tr>
                 <tr>
-                  <td colspan="4"  class="detailedViewHeader"><b>Member List</b></td>
+                  <td colspan="4"  class="detailedViewHeader"><b>{$CMOD.LBL_MEMBER_LIST}</b></td>
                 </tr>
                 <tr>
                   	{foreach key=type item=details from=$GROUPINFO.1} 
@@ -87,7 +87,7 @@
 										<img src="{$IMAGEPATH}groups_icon.gif" align="absmiddle">
 								</td>
 								{/if}
-								<td class="dvtCellLabel" valign="top" align="right" width="15%"><b>{$type} : </b></td>
+								<td class="dvtCellLabel" valign="top" align="right" width="15%"><b>{$type} {$CMOD.LBL_COLON} </b></td>
                           		<td class="dvtCellInfo" width="45%" colspan="2">
 									{foreach item=element from=$details}
 											<a href="index.php?module=Users&action={$element.memberaction}&{$element.actionparameter}={$element.memberid}">{$element.membername}</a><br />
@@ -99,8 +99,8 @@
                  <tr>
                   <td colspan="4"  class="dvtCellInfo" align="center">
 				  	<!-- <input title="Back" accessKey="C" class="classBtn" onclick="window.history.back();" type="button" name="New" value=" <  Back " > &nbsp; -->
-					 <input value="   Edit   " title="Edit" accessKey="E" class="classBtn" type="submit" name="Edit" >
-                    &nbsp;<input value=" Delete " title="Delete" accessKey="D" class="classBtn" type="button" name="Delete" onClick="deletegroup('{$GROUPID}','{$GROUP_NAME}')";>	
+					 <input value="   {$APP.LBL_EDIT_BUTTON_LABEL}   " title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" type="submit" name="Edit" >
+                    &nbsp;<input value=" {$APP.LBL_DELETE_BUTTON_LABEL} " title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="classBtn" type="button" name="Delete" onClick="deletegroup('{$GROUPID}','{$GROUP_NAME}')";>	
 				</td>
                 </tr>
             </table></td>

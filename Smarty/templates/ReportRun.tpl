@@ -43,11 +43,11 @@
 	<td style="border-left: 1px solid rgb(109, 109, 109);"></td>
 	<td style="padding: 10px; text-align: left;" width="70%">
 	<span class="genHeaderGrayBig">{$REPORTNAME}</span>&nbsp;&nbsp;
-	( <a href="javascript:;" onClick="editReport('{$REPORTID}');">Customize Report </a> )<br>
-	<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt; Back to Reports</a>
+	( <a href="javascript:;" onClick="editReport('{$REPORTID}');">{$MOD.LBL_CUSTOMIZE_REPORT}</a> )<br>
+	<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
 	</td>
 	<td style="border-left: 1px solid rgb(109, 109, 109); padding: 10px;" width="30%">
-	<b>Select another Report : </b><br>
+	<b>{$MOD.LBL_SELECT_ANOTHER_REPORT} : </b><br>
 	<select name="another_report" class="detailedViewTextBox" onChange="selectReport()">
 	{foreach key=report_in_fld_id item=report_in_fld_name from=$REPINFOLDER}
 	{if $report_in_fld_id neq $REPORTID}
@@ -70,8 +70,8 @@
 <table class="reportGenarateTable" align="center" cellpadding="0" cellspacing="0" width="90%">
 	<tbody><tr><td colspan="4">&nbsp;</td></tr>
 	<tr>
-	<td>Select Column :&nbsp;</td>
-	<td>Select Time :&nbsp;</td>
+	<td>{$MOD.LBL_SELECT_COLUMN} :&nbsp;</td>
+	<td>{$MOD.LBL_SELECT_TIME} :&nbsp;</td>
 	<td>{$MOD.LBL_SF_STARTDATE} :&nbsp;</td>
 	<td>{$MOD.LBL_SF_ENDDATE} :&nbsp;</td>
 	</tr>

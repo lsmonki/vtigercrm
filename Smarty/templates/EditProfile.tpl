@@ -34,8 +34,8 @@
 																	<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
 															</td>
 															<td style="border-bottom:1px dashed #CCCCCC;"> 
-																	<span class="genHeaderGrayBig">Profile Privileges</span><br>
-																	<span	class="genHeaderSmall">Step 3 Of 3</span>
+																	<span class="genHeaderGrayBig">{$CMOD.LBL_PROFILE_PRIVILEGES}</span><br>
+																	<span	class="genHeaderSmall">{$CMOD.LBL_STEP_3_3}</span>
 															</td>
 													</tr>
 													{else}
@@ -47,7 +47,7 @@
 																	<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
 															</td>
 															<td style="border-bottom:1px dashed #CCCCCC;"> 
-																	<span class="genHeaderGrayBig">Profile Privileges</span><br>
+																	<span class="genHeaderGrayBig">{$CMOD.LBL_PROFILE_PRIVILEGES}</span><br>
 																	<span	class="genHeaderSmall">{$PROFILE_NAME}</span>
 															</td>
 													</tr>
@@ -81,11 +81,11 @@
 <!-- tabs -->
 																																<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 																																		<tr>
-																																				<td width="20%" id="prvPrfTab1" class="prvPrfSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');">Global Privileges</td>
-																																				<td width="20%" id="prvPrfTab2" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('tab_privileges','prvPrfTab2');">Tab Privileges</td>
-																																				<td width="20%" id="prvPrfTab3" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('standard_privileges','prvPrfTab3');">Standard Privileges</td>
-																																				<td width="20%" id="prvPrfTab4" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('field_privileges','prvPrfTab4');">Field Privileges</td>
-																																				<td width="20%" id="prvPrfTab5" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('utility_privileges','prvPrfTab5');">Utilities</td>
+																																				<td width="20%" id="prvPrfTab1" class="prvPrfSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');">{$CMOD.LBL_GLOBAL_PRIVILEGES}</td>
+																																				<td width="20%" id="prvPrfTab2" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('tab_privileges','prvPrfTab2');">{$CMOD.LBL_TAB_PRIVILEGES}</td>
+																																				<td width="20%" id="prvPrfTab3" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('standard_privileges','prvPrfTab3');">{$CMOD.LBL_STANDARD_PRIVILEGES}</td>
+																																				<td width="20%" id="prvPrfTab4" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('field_privileges','prvPrfTab4');">{$CMOD.LBL_FIELD_PRIVILEGES}</td>
+																																				<td width="20%" id="prvPrfTab5" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('utility_privileges','prvPrfTab5');">{$CMOD.LBL_UTILITIES}</td>
 																																		</tr>
 																																</table>
 																																<div id="global_privileges" style="display:block;">
@@ -99,8 +99,8 @@
 																																											<table border="0" cellspacing="0" cellpadding="2" class="small">
 																																													<tr>
 																																															<td valign="top"><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"/> </td>
-																																															<td class="prvPrfBigText"><b> Global Privileges for "{$PROFILE_NAME}"</b> <br />
-																																																	<font class="small">Select the options below to change global privileges </font> </td>
+																																															<td class="prvPrfBigText"><b> {$CMOD.LBL_GLOBAL_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
+																																																	<font class="small">{$CMOD.LBL_GLOBAL_MESG_OPTION} </font> </td>
 																																															<td class="small" style="padding-left:10px" align="right"></td>
 																																													</tr>
 																																											</table>
@@ -124,22 +124,22 @@
 																																															<table border="0" cellspacing="0" cellpadding="2" width="100%" class="small">
 																																																	<tr id="gva">
 																																																			<td valign="top">{$GLOBAL_PRIV.0}</td>
-																																																					<td ><b>View all</b> </td>
+																																																					<td ><b>{$CMOD.LBL_VIEW_ALL}</b> </td>
 																																																	</tr>
 																																																	<tr >
 																																																			<td valign="top"></td>
-<td width="100%" >Allows "{$PROFILE_NAME}" to view all information / modules of vtiger CRM</td>
+<td width="100%" >{$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_VIEW}</td>
 </tr>
 <tr>
 <td>&nbsp;</td>
 </tr>
 <tr>
 <td valign="top">{$GLOBAL_PRIV.1}</td>
-<td ><b>Edit all</b> </td>
+<td ><b>{$CMOD.LBL_EDIT_ALL}</b> </td>
 </tr>
 <tr>
 <td valign="top"></td>
-<td > Allows "{$PROFILE_NAME}" to edit all information / modules of vtiger CRM</td>
+<td > {$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_VIEW}</td>
 </tr>
 </table>
 </td>
@@ -165,8 +165,8 @@
 <img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 </td>
 <td class="prvPrfBigText">
-<b> Standard Privileges for "{$PROFILE_NAME}"</b> <br>
-<font class=small>Select the standard actions to be permitted  </font> 
+<b> {$CMOD.LBL_STANDARD_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br>
+<font class=small>{$CMOD.LBL_STD_MESG_OPTION} </font> 
 </td>
 </tr>
 </table>
@@ -192,10 +192,10 @@
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
 
 <tr>
-<td>Entity</td>
-<td>Create/Edit</td>
-<td>Delete</td>
-<td>View</td>
+<td>{$CMOD.LBL_ENTITY}</td>
+<td>{$CMOD.LBL_CREATE_EDIT}</td>
+<td>{$CMOD.LBL_DELETE}</td>
+<td>{$CMOD.LBL_VIEW}</td>
 </tr>
 
 {foreach item=value from=$STANDARD_PRIV}
@@ -232,8 +232,8 @@
 <img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 </td>
 <td class="prvPrfBigText">
-<b> Tab Privileges for "{$PROFILE_NAME}"</b> <br>
-<font class=small>Select the tabs/modules to be permitted  </font> 
+<b> {$CMOD.LBL_TAB_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br>
+<font class=small>{$CMOD.LBL_TAB_MESG_OPTION}  </font> 
 </td>
 </tr>
 </table>
@@ -295,8 +295,8 @@
 <img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
 </td>
 <td class="prvPrfBigText">
-<b> Utility Privileges for "{$PROFILE_NAME}"</b> <br>
-<font class=small>Select the utility actions to be permitted  </font> 
+<b> {$CMOD.LBL_UTILITY_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br>
+<font class=small>{$CMOD.LBL_UTILITY_MESG_OPTION} </font> 
 </td>
 </tr>
 </table>
@@ -361,8 +361,8 @@
 <tr>
 <td valign="top" ><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif" /> </td>
 
-<td class="prvPrfBigText"><b> Field Privileges for "{$PROFILE_NAME}"</b> <br />
-<font class="small">Select the fields to be permitted </font> </td>
+<td class="prvPrfBigText"><b> {$CMOD.LBL_FIELD_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
+<font class="small">{$CMOD.LBL_FIELD_MESG_OPTION} </font> </td>
 </tr>
 </table></td>
 <td align="right" valign="bottom">
@@ -439,14 +439,14 @@
 																			<tr>
 																				<td colspan="2" align="center">
 																					{if $MODE neq "edit"}
-																					<input type="submit" value=" &lsaquo; Back " name="back" onclick="this.form.action.value='CreateProfile1'" class="classBtn" />&nbsp;&nbsp;
+																					<input type="submit" value=" &lsaquo; {$APP.LBL_BACK} " name="back" onclick="this.form.action.value='CreateProfile1'" class="classBtn" />&nbsp;&nbsp;
 																					{/if}
 																					{if $ACTION eq 'SaveProfile'}
-																					<input type="submit" value=" Finish " name="save" class="classBtn"/>&nbsp;&nbsp;
+																					<input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="classBtn"/>&nbsp;&nbsp;
 																					{else}
-																					<input type="submit" value=" Save " name="save" class="classBtn"/>&nbsp;&nbsp;
+																					<input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="classBtn"/>&nbsp;&nbsp;
 																					{/if}
-																					<input type="button" value=" Cancel " name="Cancel" class="classBtn"onClick="window.history.back();" />
+																					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="classBtn"onClick="window.history.back();" />
 																			</td>
 																	</tr>
 																	

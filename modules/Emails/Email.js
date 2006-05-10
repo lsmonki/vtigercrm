@@ -22,7 +22,6 @@ function massDelete()
 
         x = document.massdelete.selected_id.length;
         idstring = "";
-
         if ( x == undefined)
         {
 
@@ -62,14 +61,19 @@ function massDelete()
 			show("status");
 			var ajaxObj = new Ajax(ajaxSaveResponse);
 			var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+idstring;
-		    	ajaxObj.process("index.php?",urlstring);
+		    ajaxObj.process("index.php?",urlstring);
 		}
 		else
 		{
 			return false;
 		}
 }
-
+function ShowFolders(folder)
+{
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folder="+folder;
+	ajaxObj.process("index.php?",urlstring);
+}
 
 
 

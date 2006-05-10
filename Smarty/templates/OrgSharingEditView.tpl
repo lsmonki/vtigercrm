@@ -34,7 +34,7 @@
 	<input type="hidden" name="action" value="SaveOrgSharing">
 	<input type="hidden" name="parenttab" value="Settings">
 	<tr>
-	<td class="genHeaderSmall" height="25" valign="middle">Global Access Privileges</td>
+	<td class="genHeaderSmall" height="25" valign="middle">{$CMOD.LBL_GLOBAL_ACCESS_PRIVILEGES}</td>
 	<td align="right"><input class="small" title="Save" accessKey="C" type="submit" name="Save" value="{$CMOD.LBL_SAVE_PERMISSIONS}"></td>
 	</tr>
 	<tr><td colspan="2" height="20">&nbsp;</td></tr>
@@ -55,7 +55,7 @@
 	</tr>
 	<tr><td colspan="2" height="20">&nbsp;</td></tr>
 	<tr>
-	<td align="center" colspan=2><input class="small" title="Cancel" accessKey="C" type="button" name="Cancel" value="Cancel" onClick="window.history.back();"></td>
+	<td align="center" colspan=2><input class="small" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" type="button" name="Cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="window.history.back();"></td>
 	</tr>
 	</form>
 	</tbody>

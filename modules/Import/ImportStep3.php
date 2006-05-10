@@ -440,3 +440,59 @@ $smarty->assign("JAVASCRIPT2", get_readonly_js() );
 $smarty->display('ImportStep2.tpl');
 
 ?>
+<script language="javascript" type="text/javascript">
+function validate_import_map()
+{
+	var tagName;
+	var count = 0;
+	var required_count = 0;
+	var field_count = "<?php echo $field_count; ?>";
+	var required_fields = new Array();
+
+	<?php 
+		foreach($focus->required_fields as $name => $index)
+		{
+			?>
+			required_fields[count] = "<?php echo $name; ?>";
+			count = count + 1;
+			<?php 
+		} 
+	?>		
+	for(loop_count = 0; loop_count<field_count;loop_count++)
+	{
+		tagName = document.getElementById('colnum'+loop_count);
+		optionData = tagName.options[tagName.selectedIndex].value;
+		for(inner_loop = 0; inner_loop<required_fields.length;inner_loop++)
+		{
+			if(optionData == required_fields[inner_loop])
+			{
+				required_count = required_count +1;
+			}
+		}
+	}
+
+	var err_msg = '';
+	if(required_count != required_fields.length)
+	{
+		err_msg = "Please Map All Required Fileds";
+	}
+	else
+	{
+		//This is to check whether the save map name has been given or not when save map check box is checked
+		if(document.getElementById("save_map").checked == true)
+		{
+			if(trim(document.getElementById("save_map_as").value) == '')
+			{
+				err_msg = "Please Enter Save Map Name";
+			}
+		}
+	}
+	if(err_msg != '')
+	{
+		alert(err_msg);
+		return false;
+	}
+	else
+		return true;
+}
+</script>

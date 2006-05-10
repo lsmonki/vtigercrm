@@ -85,13 +85,13 @@
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
 	<tr>
-	<td align="right" width="50%"><b>Folder Name : </b></td>
+	<td align="right" width="50%"><b>{$MOD.LBL_REP_FOLDER_NAME} : </b></td>
 	<td align="left"><input id="folder_name" name="folderName" class="txtBox" type="text"></td>
 	</tr>
 	<input id="folder_id" name="folderId" type="hidden" value=''>
 	<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
 	<tr>
-	<td align="right" width="50%"><b>Folder Description : </b></td>
+	<td align="right" width="50%"><b>{$MOD.LBL_REP_FOLDER_DESC} : </b></td>
 	<td align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
 	</tr>
 	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>

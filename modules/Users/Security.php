@@ -1072,8 +1072,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 
 
-
-        $this->db->query("insert into profile2standardpermissions values (".$profile1_id.",26,0,0)");
+        	$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",26,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",26,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",26,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",26,3,0)");
@@ -1527,7 +1526,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 
 		//Inserting for all tabs
-                $def_org_tabid= Array(2,4,6,7,9,10,13,16,20,21,22,23);
+                $def_org_tabid= Array(2,4,6,7,9,10,13,16,20,21,22,23,26);
 
                 foreach($def_org_tabid as $def_tabid)
                 {
@@ -1560,6 +1559,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2,0)");
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",22,2,0)");
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",26,2,0)");
 
 		//Populating the DataShare Related Modules
 

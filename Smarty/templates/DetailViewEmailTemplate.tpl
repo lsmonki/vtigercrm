@@ -42,9 +42,9 @@
 				<tr><td width="75%" valign="middle" >
 					<img src="{$IMAGE_PATH}ViewTemplate.gif" align="left" />
 					<span class="genHeaderBig">{$TEMPLATENAME}</span><br />
-					<span class="dashMnuUnSel">{$TEMPLATENAME} Template </span> 
+					<span class="dashMnuUnSel">{$TEMPLATENAME} {$UMOD.LBL_TEMPLATE_HEADER} </span> 
 				    </td>
-				    <td width="25%" align="right" valign="bottom"><input type="submit" name="Button" value="Edit this template" class="small" onclick="this.form.action.value='editemailtemplate'"/></td>
+				    <td width="25%" align="right" valign="bottom"><input type="submit" name="Button" value="{$UMOD.LBL_EDIT_TEMPLATE}" class="small" onclick="this.form.action.value='editemailtemplate'"/></td>
 				</tr>
 			    </table>
 			    </td>

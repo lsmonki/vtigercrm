@@ -18,7 +18,7 @@
 		{foreach item=picklistfields from=$picklists}
 		{if $picklistfields neq ''}
 		<td class="lvtCol" width="25%">{$picklistfields.fieldlabel}</td>
-		<td class="lvtCol" width="5%"><a href="javascript:;" onclick="fetchEditPickList('{$MODULE}','{$picklistfields.fieldname}');">Edit</a></td>
+		<td class="lvtCol" width="5%"><a href="javascript:;" onclick="fetchEditPickList('{$MODULE}','{$picklistfields.fieldname}');">{$MOD.LBL_EDIT}</a></td>
 		{else}
 		<td class="lvtCol" colspan="2">&nbsp;</td>
 		{/if}

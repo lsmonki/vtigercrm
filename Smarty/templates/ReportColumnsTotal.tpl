@@ -12,8 +12,8 @@
 <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td colspan="2">
-	<span class="genHeaderGray">Calculations</span><br>
-	Select Columns To Total
+	<span class="genHeaderGray">{$MOD.LBL_CALCULATIONS}</span><br>
+	{$MOD.LBL_SELECT_COLUMNS_TO_TOTAL}
 	<hr>
 	</td>
 	</tr>

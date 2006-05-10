@@ -23,6 +23,7 @@ $mod_strings = Array(
 'LBL_SEARCH_FORM_TITLE'=>'User Search',
 'LBL_LIST_FORM_TITLE'=>'User List',
 'LBL_NEW_FORM_TITLE'=>'New User',
+'LBL_CREATE_NEW_USER'=>'Create New User',
 'LBL_USER'=>'Users:',
 'LBL_LOGIN'=>'Login',
 'LBL_USER_ROLE'=>'Role',
@@ -117,6 +118,7 @@ $mod_strings = Array(
 // Users--listroles.php , createrole.php , ListPermissions.php , editpermissions.php
 
 'LBL_ROLES'=>'Roles',
+'LBL_ROLES_SUBORDINATES'=>'Roles and Subordinates',
 'LBL_ROLE_NAME'=>'Role Name',
 'LBL_CREATE_NEW_ROLE'=>'Create New Role',
 
@@ -130,7 +132,7 @@ $mod_strings = Array(
 'LBL_ENTITY'=>'Entity',
 'LBL_CREATE_EDIT'=>'Create/Edit',
 'LBL_DELETE'=>'Delete',
-'LBL_ALLOW'=>'Allow',
+'LBL_VIEW'=>'View',
 'LBL_LEADS'=>'Leads',
 'LBL_ACCOUNTS'=>'Accounts',
 'LBL_CONTACTS'=>'Contacts',
@@ -157,16 +159,19 @@ $mod_strings = Array(
 'LBL_TEMPLATE_NAME'=>'Template Name',
 'LBL_TEMPLATE_HEADER'=>'Template',
 'LBL_TEMPLATE_DETAILS'=>'Template Details',
+'LBL_EDIT_TEMPLATE'=>'Edit Template',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Communication Templates > Email Templates',
-'LBL_MAILMERGE_TEMPLATES_LIST'=>'> Communication Templates > Mail Merge Templates',
+'LBL_MAILMERGE_TEMPLATES_LIST'=>' > Communication Templates > Mail Merge Templates',
 'LBL_MAILMERGE_TEMPLATES_ATTACHMENT' => '> Communication Templates > Attach Mail Merge Template',
 'LBL_DOWNLOAD_NOW'=>'Download Now',
 'LBL_DOWNLOAD'=>'Download',
 'LBL_SELECT_MODULE'=>'Select Module',
 'LBL_MERGE_FILE'=>'File : ',
+'LBL_MERGE_MSG'=>'Select a module to assign this Template',
 
-
+'LNK_GO_TO_TOP'=>'Go to Page Top',
+'LNK_SAMPLE_EMAIL'=>'View Sample Email',
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
@@ -195,13 +200,21 @@ $mod_strings = Array(
 // Added fields in createnewgroup.php
 'LBL_CREATE_NEW_GROUP'=>'Create New Group',
 'LBL_NEW_GROUP'=>'New Group',
+'LBL_EDIT_GROUP'=>'Edit Group',
 'LBL_GROUP_NAME'=>'Group Name',
+'LBL_GROUP_DETAILS'=>'Group Details',
+'LBL_MEMBER_LIST'=>'Member List',
+'LBL_MEMBER_AVLBL'=>'Member Available',
+'LBL_MEMBER_SELECTED'=>'Selected Member',
 'LBL_DESCRIPTION'=>'Description',
 
 // Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
+'LBL_DETAIL_VIEW'=>'Detail View of',
+'LBL_EDIT_VIEW'=>'Edit View of',
 'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
 'LBL_GROUPS'=>'Groups',
+'LBL_ADD_GROUP_BUTTON'=>'Add Group',
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
 'LBL_NEW_WORD_TEMPLATE'=>'New Template',
 
@@ -226,6 +239,36 @@ $mod_strings = Array(
 'LBL_NEW_PROFILE'=>'New Profile',
 'LBL_NEW_PROFILE_NAME'=>'Profile Name',
 'LBL_PARENT_PROFILE'=>'Parent Profile',
+'LBL_BASIC_PROFILE_DETAILS'=>'Basic details of Profile',
+'LBL_STEP_1_3'=>'Step 1 of 3',
+'LBL_STEP_2_3'=>'Step 2 of 3',
+'LBL_STEP_3_3'=>'Step 3 of 3',
+'LBL_SELECT_BASE_PROFILE'=>'Select Base Profile',
+'LBL_PROFILE_PRIVILEGES'=>'Profile Privileges',
+'LBL_GLOBAL_PRIVILEGES'=>'Global Privileges',
+'LBL_TAB_PRIVILEGES'=>'Tab Privileges',
+'LBL_FIELD_PRIVILEGES'=>'Field Privileges',
+'LBL_STANDARD_PRIVILEGES'=>'Standard Privileges',
+'LBL_UTILITY_PRIVILEGES'=>'Utility Privileges',
+'LBL_UTILITIES'=>'Utilities',
+'LBL_BASE_PROFILE_MESG'=>'I would like to setup a base profile and edit privileges <b>(Recommended)</b>',
+'LBL_BASE_PROFILE'=>'Base Profile:',
+'LBL_OR'=>'OR',
+'LBL_BASE_PROFILE_MESG_ADV'=>'I will choose the privileges from scratch <b>(Advanced Users)</b>',
+'LBL_FOR'=>'for',
+'LBL_GLOBAL_MESG_OPTION'=>'Select the options below to change global privileges',
+'LBL_VIEW_ALL'=>'View all',
+'LBL_EDIT_ALL'=>'Edit all',
+'LBL_ALLOW'=>'Allows',
+'LBL_MESG_VIEW'=>'to view all information / modules of vtiger CRM',
+'LBL_MESG_EDIT'=>'to edit all information / modules of vtiger CRM',
+'LBL_STD_MESG_OPTION'=>'Select the standard actions to be permitted',
+'LBL_TAB_MESG_OPTION'=>'Select the tabs/modules to be permitted',
+'LBL_UTILITY_MESG_OPTION'=>'Select the utility actions to be permitted',
+'LBL_FIELD_MESG_OPTION'=>'Select the fields to be permitted',
+'LBL_FINISH_BUTTON'=>'Finish',
+'LBL_PROFILE_DETAIL_VIEW'=>'Detail View of Profile',
+
 
 //Added fields in createrole.php
 'LBL_HDR_ROLE_NAME'=>'Create New Role:',
@@ -369,7 +412,23 @@ $mod_strings = Array(
 'LBL_USER_LOGIN_ROLE'=>'User Login & Role',
 'LBL_USER_MORE_INFN'=>'More Information',
 'LBL_USER_ADDR_INFN'=>'Address Information',
-'LBL_USER_IMAGE'=>'User Image'
+'LBL_USER_IMAGE'=>'User Image',
+'LBL_USR'=>'Users',
+
+//Added for Access Privileges
+
+'LBL_GLOBAL_FIELDS_MANAGER'=>'Global Fields Manager',
+'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Global Access Privileges',
+'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Access Privileges',
+'LBL_BOTH'=>'Both',
+'LBL_VIEW'=>'view',
+'LBL_RECALCULATE_BUTTON'=>'Recalculate',
+'LBL_ADD_PRIVILEGES_BUTTON'=>'Add Privileges',
+'LBL_CUSTOM_ACCESS_MESG'=>'No Custom Access Rules defined .',
+'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
+'LBL_SELECT_SCREEN'=>'Select the Screen / Module :',
+'LBL_FIELDS_AVLBL'=>'Fields Available in',
+'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown'
 
 
 

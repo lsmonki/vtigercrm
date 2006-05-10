@@ -36,7 +36,7 @@
 			<img src="{$IMAGE_PATH}groups.gif" align="absmiddle">&nbsp;<span class="genHeaderGrayBig">{$CMOD.LBL_GROUP_NAME}</span>
 		</td>
 		<td style="border-bottom:1px dashed #CCCCCC;" width="50%" align="right">
-			<input title="New" accessKey="C" class="classBtn" type="submit" name="New" value="New Group"/>
+			<input title="{$CMOD.LBL_NEW_GROUP}" class="classBtn" type="submit" name="New" value="{$CMOD.LBL_NEW_GROUP}"/>
 		</td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
@@ -55,8 +55,8 @@
                               <td >{$LIST_ENTRIES[entries].description}</td>
 							  <td align="center" >
 							  	<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}">
-								<img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0" align="absmiddle"></a>&nbsp;|	
-								<a href="#" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";><img src="{$IMAGE_PATH}delete.gif" border="0" align="absmiddle"></a>
+								<img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
+								<a href="#" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
 							</td>
                             </tr>
 							{/section}	
@@ -97,8 +97,8 @@ function deletegroup(id,groupname)
 	{section name=entries loop=$LIST_ENTRIES}
 		<tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 		<td nowrap>&nbsp;
-		<img src="{$IMAGE_PATH}del.gif" border="0" height="15" width="15" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";>
-		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="Edit" title="Edit" border="0"></a>
+		<img src="{$IMAGE_PATH}del.gif" alt="{$APP.LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" height="15" width="15" onClick="deletegroup('{$LIST_ENTRIES[entries].groupid}','{$LIST_ENTRIES[entries].groupname}')";>
+		<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&mode=edit&groupId={$LIST_ENTRIES[entries].groupid}"><img src="{$IMAGE_PATH}edit.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0"></a>
 		&nbsp;</td>
 		<td nowrap><a href="index.php?module=Users&action=GroupDetailView&groupId={$LIST_ENTRIES[entries].groupid}">{$LIST_ENTRIES[entries].groupname}</a></td>
 		<td nowrap>{$LIST_ENTRIES[entries].description}&nbsp;</td>

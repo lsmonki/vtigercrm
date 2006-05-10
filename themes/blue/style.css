@@ -2034,14 +2034,14 @@ a.allMnu:Hover{
 
 /* Calendar */
 .calHdr{
-	background-image:url(../images/cal_hdr.jpg);
+	background-image:url(images/cal_hdr.jpg);
 	background-repeat:repeat-x;
 	background-position:left top;
 	height:45px;
 }
 
 .calSel{
-	background-image:url(../images/cal_sel.jpg);
+	background-image:url(images/cal_sel.jpg);
 	background-position:center;
 	background-repeat:no-repeat;
 	text-align:center;
@@ -2060,7 +2060,7 @@ a.allMnu:Hover{
 .calTitle{
 	background-position:right top;
 	background-repeat:no-repeat;
-	background-image:url(../images/cal_title.jpg);
+	background-image:url(images/cal_title.jpg);
 	width:150px;
 }
 
@@ -2072,7 +2072,7 @@ a.allMnu:Hover{
 	padding:10px;
 }
 
-#eventLay{
+.eventLay{
 	background-color:#DBF3FD;
 	position:relative;
 	left:0px;
@@ -2110,6 +2110,19 @@ a.calMnu:Hover{
 #lstView{
 	display:none;
 }	
+
+.calendarNav{
+	font-size:12px;
+	color:#FFFFFF;
+	white-space:nowrap;
+	text-align:center;
+	font-weight:bold;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(images/cal_nav.gif);
+	background-repeat:repeat-x;
+}
+									
 /* End of Calendar */
 
 /* Level 2 Menu Selected*/

@@ -15,14 +15,14 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td colspan="4">
-	<span class="genHeaderGray">Select Columns </span><br>
-	Select columns to Generate report 
+	<span class="genHeaderGray">{$MOD.LBL_SELECT_COLUMNS}</span><br>
+	{$MOD.LBL_SELECT_COLUMNS_TO_GENERATE_REPORTS} 
 	<hr>
 	</td>
 	</tr>
 	<tr>
-	<td colspan="2" height="26"><b>Avaliable Fields</b></td>
-	<td colspan="2"><b>Selected Fields</b></td>
+	<td colspan="2" height="26"><b>{$MOD.LBL_AVAILABLE_FIELDS}</b></td>
+	<td colspan="2"><b>{$MOD.LBL_SELECTED_FIELDS}</b></td>
 	</tr>
 	<tr>
 	<td style="padding-right: 5px;" align="right" width="40%">

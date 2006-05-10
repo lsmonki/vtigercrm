@@ -357,6 +357,8 @@ $mod_strings = Array(
 
 'LBL_EVENT_FIELD_ACCESS'=>'Event Field Access',
 
+'LBL_CAMPAIGN_FIELD_ACCESS'=>'Campaign Field Access',
+
 'LBL_DELETE_DEMO_DATA'=>'Delete Demo Data',
 
 'LBL_DELETE_DEMO_DATA_INFO'=>'- Delete the Demo Data which is created at the time of installation',
@@ -369,6 +371,7 @@ $mod_strings = Array(
 
 'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'- Create and Manage user defined fields',
 
+'LBL_EDIT'=>'Editing',
 
 
 'LBL_PICKLIST_SETTINGS'=>'Picklist Settings',
@@ -570,6 +573,9 @@ $mod_strings = Array(
 'LBL_PICKLIST_AVAILINFO2'=>'are shown below. Click Edit to modify the contents of the list.',
 'LBL_EDIT_PICKLIST'=>'Edit Pick List',
 'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
+'LBL_SELECT_MODULE'=>'Select Module',
+'LBL_SELECT_CRM_MODULE'=>'Select the CRM module',
+'LBL_EDIT'=>'Edit',
 );
 
 

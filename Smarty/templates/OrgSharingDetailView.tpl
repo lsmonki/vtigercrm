@@ -37,8 +37,8 @@
 			  <tr>
 				<td bgcolor="#ebebeb" width="7"></td>
 				<td style="padding-left: 10px; height: 20px; vertical-align: middle;" bgcolor="#ececec">
-						view :&nbsp;<a href="javascript:show('customdiv');show('globaldiv');">Both</a>&nbsp;|&nbsp;<a href="javascript:hide('customdiv');show('globaldiv');" >Global Access Privileges</a>&nbsp;|&nbsp;
-						<a href="javascript:show('customdiv');hide('globaldiv');">Custom Access Privileges</a>
+						{$CMOD.LBL_VIEW} :&nbsp;<a href="javascript:show('customdiv');show('globaldiv');">{$CMOD.LBL_BOTH}</a>&nbsp;|&nbsp;<a href="javascript:hide('customdiv');show('globaldiv');" >{$CMOD.LBL_GLOBAL_ACCESS_PRIVILEGES}</a>&nbsp;|&nbsp;
+						<a href="javascript:show('customdiv');hide('globaldiv');">{$CMOD.LBL_CUSTOM_ACCESS_PRIVILEGES}</a>
 				</td>
 
 				<td bgcolor="#ebebeb" width="8"></td>
@@ -71,8 +71,8 @@
 							<input type="hidden" name="parenttab" value="Settings">
 							<tr>
 								<td class="genHeaderSmall" height="25" valign="middle">Global Access Privileges</td>
-								<td align="right"><input class=small titlr="Recalculate"  type="submit" name="recalculate" value="Recalculate" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')">	
-	&nbsp;<input class=small title="Edit" accessKey="C" type="submit" name="Edit" value={$CMOD.LBL_EDIT_PERMISSIONS}></td>
+								<td align="right"><input class=small title="{$CMOD.LBL_RECALCULATE_BUTTON}"  type="submit" name="recalculate" value="{$CMOD.LBL_RECALCULATE_BUTTON}" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')">	
+	&nbsp;<input class=small type="submit" name="Edit" value={$CMOD.LBL_EDIT_PERMISSIONS}></td>
 								
 							</tr>
 							<tr><td colspan="2"></td></tr>
@@ -132,7 +132,7 @@
 				<table border="0" cellpadding="3" cellspacing="0" width="100%">
 				<tbody>
 				<tr>
-					<td class="genHeaderSmall" colspan="2" height="25" valign="middle">Custom Access Privileges</td>
+					<td class="genHeaderSmall" colspan="2" height="25" valign="middle">{$CMOD.LBL_CUSTOM_ACCESS_PRIVILEGES}</td>
 				</tr>
 				<tr><td colspan="2"></td></tr>
 				<tr>
@@ -149,7 +149,7 @@
 							<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
 							<b>{$modulename}</b>&nbsp; 
 							</td>
-							<td align="right" colspan=2><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}','create','{$elements.0}')"></td>
+							<td align="right" colspan=2><input title="New" class="small" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv('{$modulename}','create','{$elements.0}')"></td>
 						</tr>
 					  	<tr>
 							<th class="lvtCol" nowrap width="9%">Rule No.</th>
@@ -183,9 +183,9 @@
 				  	</tr>
 				  	<tr>
 				  		<td colspan="2" style="padding: 20px;" bgcolor="#ffffff" align="center">
-						No Custom Access Rules defined . 
+						{$CMOD.LBL_CUSTOM_ACCESS_MESG} 
 						<a href="javascript:onClick=callEditDiv('{$modulename}','create','')">Click here</a>
-						to create a new Rule
+						{$CMOD.LBL_CREATE_RULE_MESG}
 					    </td>
 				  	</tr>
 					</tbody>

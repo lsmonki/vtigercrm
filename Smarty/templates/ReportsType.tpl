@@ -12,8 +12,8 @@
 <table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td colspan="2">
-	<span class="genHeaderGray">Report Type </span><br>
-	Select  the report	type	below							
+	<span class="genHeaderGray"> {$MOD.LBL_REPORT_TYPE} </span><br>
+	{$MOD.LBL_SELECT_REPORT_TYPE_BELOW}							
 	<hr>
 	</td>
 	</tr>
@@ -27,9 +27,9 @@
 	{else}
 	<input type="radio" name="reportType" value="tabular" onclick="hideTabs()">
 	{/if}
-	<b>Tabular Format</b></td>
+	<b> {$MOD.LBL_TABULAR_FORMAT}</b></td>
 	</tr><tr><td style="padding-left: 25px;" align="left" valign="top" width="75%">
-	Tabular reports are the simplest and fastest way to get a listing of your data.	
+	 {$MOD.LBL_TABULAR_REPORTS_ARE_SIMPLEST}	
 	</td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
@@ -43,9 +43,9 @@
 	{else}
 	<input type="radio" name="reportType" value="summary" onclick="hideTabs()">
 	{/if}
-	<b>Summary Report</b></td>
+	<b> {$MOD.LBL_SUMMARY_REPORT}</b></td>
 	</tr><tr><td style="padding-left: 25px;" align="left" valign="top" width="75%">
-	Summary reports allow you to view your data along with subtotals and other summary information.	
+	 {$MOD.LBL_SUMMARY_REPORT_VIEW_DATA_WITH_SUBTOTALS}
 	</td>
 	</tr>
 	<tr><td colspan="2" height="183">&nbsp;</td></tr>

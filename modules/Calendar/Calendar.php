@@ -133,7 +133,15 @@ class Calendar
                 }
 		
 		$activities = Array();
-		$activities = Appointment::read_appointment($current_user->id,$this->date_time,$end_datetime);
+		$activities = Appointment::readAppointment($current_user->id,$this->date_time,$end_datetime);
+		if(!empty($activities))
+		{
+			foreach($activities as $key=>$value)
+			{
+				if($this->view == 'day')
+					array_push($this->day_slice[$value->formatted_datetime]->activities,  $value);
+			}
+		}
 		
 	}
 	

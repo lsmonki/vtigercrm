@@ -41,8 +41,8 @@
 																	<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
 															</td>
 															<td style="border-bottom:1px dashed #CCCCCC;"> 
-																	<span class="genHeaderGrayBig">Select Base Profile</span><br>
-																	<span	class="genHeaderSmall">Step 2 Of 3</span>
+																	<span class="genHeaderGrayBig">{$CMOD.LBL_SELECT_BASE_PROFILE}</span><br>
+																	<span	class="genHeaderSmall">{$CMOD.LBL_STEP_2_3}</span>
 															</td>
 													</tr>
 											</table>
@@ -56,11 +56,11 @@
 															<input name="radiobutton" type="radio"  value="baseprofile" />
 															{/if}
 															</td>
-															<td width="90%" align="left" style="padding-left:10px;">I would like to setup a base profile and edit privileges <b>(Recommened)</b></td>
+															<td width="90%" align="left" style="padding-left:10px;">{$CMOD.LBL_BASE_PROFILE_MESG}</td>
 													</tr>
 													<tr>
 															<td align="right"  style="padding-right:10px;">&nbsp;</td>
-															<td align="left" style="padding-left:10px;">Base Profile:
+															<td align="left" style="padding-left:10px;">{$CMOD.LBL_BASE_PROFILE}
 																	<select name="parentprofile" class="importBox">
 																		{foreach item=combo from=$PROFILE_LISTS}
 																				{if $PARENT_PROFILE eq $combo.1}
@@ -73,7 +73,7 @@
 															</td>
 													</tr>
 													<tr><td colspan="2">&nbsp;</td></tr>
-													<tr><td align="center" colspan="2"><b>(&nbsp;OR&nbsp;)</b></td></tr>
+													<tr><td align="center" colspan="2"><b>(&nbsp;{$CMOD.LBL_OR}&nbsp;)</b></td></tr>
 													<tr><td colspan="2">&nbsp;</td></tr>
 													<tr>
 															<td align="right" style="padding-right:10px;">
@@ -83,14 +83,14 @@
 															<input name="radiobutton" type="radio" value="newprofile" />
 															{/if}
 															</td>
-															<td  align="left" style="padding-left:10px;">I will choose the privileges from scratch <b>(Advanced Users)</b></td>
+															<td  align="left" style="padding-left:10px;">{$CMOD.LBL_BASE_PROFILE_MESG_ADV}</td>
 													</tr>
 													<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 													<tr>
 															<td colspan="2" align="right">
-																	<input type="Submit" value=" &lsaquo; Back " name="back" onclick="this.form.action.value='CreateProfile';"  class="classBtn"/>&nbsp;&nbsp;
-																	<input type="Submit" value=" Next &rsaquo; " accessKey="N"  name="Next" class="classBtn"/>&nbsp;&nbsp;
-																	<input type="button" value=" Cancel " name="Cancel" class="classBtn"/>
+																	<input type="Submit" value=" &lsaquo; {$APP.LBL_BACK} " name="back" onclick="this.form.action.value='CreateProfile';"  class="classBtn"/>&nbsp;&nbsp;
+																	<input type="Submit" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="classBtn"/>&nbsp;&nbsp;
+																	<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" class="classBtn"/>
 															</td>
 													</tr>
 											</table>

@@ -58,12 +58,7 @@
 	<td class="lvtCol" style="padding: 5px;" align="right" width="15%"><b>To : </b></td>
 	<td class="dvtCellLabel" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$elements.3.1}">
-		{assign var=str_len value=$elements.3.0|count_characters:true}
-		{assign var=div_height value="35"}
-		{if $str_len gt 700}
-			{assign var=div_height value="50"}
-		{/if}
-		<div name="parent_name" style="width:97%;height:{$div_height}px;overflow:auto;background-color:white;padding:5px;border:1px solid #666666;">{$elements.3.0}</div>
+		<textarea id="parent_name" cols="50">{$elements.3.0}</textarea>
 	</td>
 	<td class="dvtCellLabel" style="padding: 5px;" align="left">
 		<select name="parent_type">
@@ -72,9 +67,8 @@
 			{/foreach}
 		</select>
 		&nbsp;
-
 		<span class="lvtCol" style="padding: 3px;">
-		<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
+		<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
 		</span><span class="lvtCol" style="padding: 3px;"><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>

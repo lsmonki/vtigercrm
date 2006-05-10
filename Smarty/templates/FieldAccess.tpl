@@ -46,7 +46,7 @@
 		<td bgcolor="#ebebeb">	
 			<table border="0" cellpadding="3" cellspacing="0" width="100%">
 			<tbody><tr>
-			<td class="genHeaderSmall" height="25" valign="middle">Global Fields Manager</td>
+			<td class="genHeaderSmall" height="25" valign="middle">{$CMOD.LBL_GLOBAL_FIELDS_MANAGER}</td>
 			<td align="right">&nbsp;</td>
 			</tr>
 			<tr><td colspan="2"></td></tr>
@@ -56,7 +56,7 @@
 				<table border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tbody><tr bgcolor="#ffffff">
 				<td style="padding: 10px;" align="left">
-				<b>Select the Screen / Module :</b>
+				<b>{$CMOD.LBL_SELECT_SCREEN}</b>
 				
 				<select name="selectmodule" style="width: 200px; font-size: 10px;" onChange="changemodules(this)">
 				{foreach item=module from=$FIELD_INFO}
@@ -88,8 +88,8 @@
 					{/if}	
 					<table class="small" border="0" cellpadding="5" cellspacing="0" width="100%">
 	                <tbody><tr><td colspan="4" style="border-bottom: 1px dashed rgb(204, 204, 204);">
-					<b>Fields Available in {$module} </b><br>
-	  				Select or De-Select fields to be shown
+					<b>{$CMOD.LBL_FIELDS_AVLBL} {$module} </b><br>
+	  				 {$CMOD.LBL_FIELDS_SELECT_DESELECT}
 				    </td></tr>
 					<tr><td colspan="4">&nbsp;</td></tr>
 					
@@ -112,7 +112,7 @@
 				</td>
  				</tr>
 				<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);padding:10px;" bgcolor="white" align="center">
-				<input name="Cancel" value=" Cancel " class="classBtn" type="button" onClick="window.history.back();">
+				<input name="Cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" type="button" onClick="window.history.back();">
 				</td></tr>
 				</tbody>
 				</table>

@@ -145,6 +145,10 @@ $listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigat
 $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','bookname','true','basic',"","","","",$viewid);
+$fieldnames = getAdvSearchfields($module);
+$criteria = getcriteria_options();
+$smarty->assign("CRITERIA", $criteria);
+$smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);

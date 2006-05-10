@@ -40,7 +40,6 @@
 	{$HIDDEN_PARENTS_LIST}
 {elseif $MODULE eq 'Potentials'}
         <input type="hidden" name="potential_id" value="{$id}">
-        <input type="hidden" name="contact_id" value="{$id}">
 {elseif $MODULE eq 'Quotes'}
         <input type="hidden" name="quoteid" value="{$id}">
 {elseif $MODULE eq 'SalesOrder'}
