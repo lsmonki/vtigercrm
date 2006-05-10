@@ -66,8 +66,8 @@ function validate()
 																		<td class="genHeaderSmall" style="padding-right: 10px;" align="right" nowrap valign="top" width="15%">
 																				<img src="{$IMAGE_PATH}one.gif" align="absmiddle">
 																		 </td>
-																		<td align="left" nowrap="nowrap" width="85%"><b>Role Name</b><br>
-																					Specify a name for new role :&nbsp;
+																		<td align="left" nowrap="nowrap" width="85%"><b>{$CMOD.LBL_ROLE_NAME}</b><br>
+																					{$CMOD.LBL_SPECIFY_ROLE_NAME}&nbsp;
 																					<input type="text" name="roleName" class="importBox"  value="{$ROLENAME}">
 																		</td>
 																</tr>
@@ -76,7 +76,7 @@ function validate()
 																		<td class="genHeaderSmall" style="padding-right: 10px;" align="right" nowrap valign="top">
 																				<img src="{$IMAGE_PATH}two.gif" align="absmiddle">
 																		 </td>
-																		<td><b>Assign Profile(s)</b><br>Select the Profiles below and click on assign button </td>
+																		<td><b>{$CMOD.LBL_ASSIGN_PROFILE}</b><br>{$CMOD.LBL_PROFILE_SELECT_TEXT}</td>
 																</tr>
 																<tr>
 																		<td class="genHeaderSmall" style="padding-right: 10px;" align="right" valign="top">&nbsp;</td>
@@ -88,7 +88,7 @@ function validate()
 																				<table align="center" border="0" cellpadding="0" cellspacing="0" width="75%">
 																					<tbody>
 																							<tr>
-																									<td align="center"><b>Profiles Available</b><br>
+																									<td align="center"><b>{$CMOD.LBL_PROFILES_AVLBL}</b><br>
 																												<select id="availList" name="availList" size="10" multiple style="width: 150px;">
 																												{foreach item=element from=$PROFILELISTS}
 																														<option value="{$element.0}">{$element.1}</option>
@@ -101,7 +101,7 @@ function validate()
 																												<br><br>
 																												<input type="button" name="Button1" value="&nbsp;&lsaquo;&lsaquo;&nbsp;" class="classBtn" onClick="delColumn()">
 																									</td>
-																									<td align="center"><b>Assigned Profiles </b><br>
+																									<td align="center"><b>{$CMOD.LBL_ASSIGN_PROFILES}</b><br>
 																												<select id="selectedColumns" name="selectedColumns" multiple size="10" style="width: 150px;">
 																												{foreach item=element from=$SELPROFILELISTS}
 																													<option value="{$element.0}">{$element.1}</option>
@@ -119,13 +119,13 @@ function validate()
 																</tr>
 																	<tr>
 																			<td align="right" nowrap><img src="{$IMAGE_PATH}three.gif" align="absmiddle"></td>
-																			<td><b>Reports to Role</b><br>{$PARENTNAME}</td>
+																			<td><b>{$CMOD.LBL_REPORTS_TO_ROLE}</b><br>{$PARENTNAME}</td>
 																	</tr>
 																	<tr><td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
 																	<tr>
 																			<td colspan="2" align="center"> &nbsp;&nbsp;
-																						<input value=" Save " name="Next" type="submit" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
-																						<input value=" Cancel " name="Cancel" type="button" class="classBtn" onClick="window.history.back()">
+																						<input value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="Next" type="submit" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
+																						<input value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" type="button" class="classBtn" onClick="window.history.back()">
 																			</td>
 																	</tr>
 																	
