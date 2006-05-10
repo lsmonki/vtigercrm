@@ -39,8 +39,9 @@
 																		<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
 																</td>
 																<td style="border-bottom:1px dashed #CCCCCC;"> 
-																		<span class="genHeaderGrayBig">Basic details of Profile</span><br>
-																		<span	class="genHeaderSmall">Step 1 Of 3</span>
+																		<span class="genHeaderGrayBig">{$CMOD.LBL_BASIC_PROFILE_DETAILS}</span><br>
+																		<span	class="genHeaderSmall">{$CMOD.LBL_STEP_1_3}</span>
+
 																</td>
 														</tr>
 													</table>
@@ -48,7 +49,7 @@
 															<tr><td colspan="2">&nbsp;</td></tr>
 															<tr>
 																	<td align="right" width="25%" style="padding-right:10px;">
-																			<b style="color:#FF0000;font-size:16px;">*</b>&nbsp;<b>{$CMOD.LBL_NEW_PROFILE_NAME} : </b></td>
+																			<b style="color:#FF0000;font-size:16px;">{$APP.LBL_REQUIRED_SYMBOL}</b>&nbsp;<b>{$CMOD.LBL_NEW_PROFILE_NAME} : </b></td>
 																	<td width="75%" align="left" style="padding-left:10px;">
 																			<input type="text" name="profile_name" id="pobox" value="{$PROFILENAME}" class="txtBox" /></td>
 															</tr>
@@ -60,9 +61,9 @@
 															<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 															<tr>
 																	<td colspan="2" align="right">
-																					<input type="button" value=" &lsaquo; Back " name="back" class="classBtnDisable" disabled />&nbsp;&nbsp;
-																					<input type="submit" value=" Next &rsaquo; " accessKey="N" class="classBtn" name="Next" onClick="return rolevalidate();"/>&nbsp;&nbsp;
-																					<input type="button" value=" Cancel " name="Cancel" onClick="window.history.back()"; class="classBtn"/>
+																					<input type="button" value=" &lsaquo; {$APP.LBL_BACK} " name="back" class="classBtnDisable" disabled />&nbsp;&nbsp;
+																					<input type="submit" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " class="classBtn" name="Next" onClick="return rolevalidate();"/>&nbsp;&nbsp;
+																					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back()"; class="classBtn"/>
 																	</td>
 															</tr>
 															
