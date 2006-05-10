@@ -28,7 +28,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > Role of {$ROLE_NAME} </b></span>
+        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_USER_ROLE} of {$ROLE_NAME} </b></span>
             	    <hr noshade="noshade" size="1" />
 		</td>
 	</tr>
@@ -37,30 +37,30 @@
 		<td width="95%" style="padding-left:20px;" valign="top">	  <table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
           <tr>
             <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGE_PATH}roles.gif" align="absmiddle" /> </td>
-            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$ROLE_NAME} Role</span><br />
-                <span class="big">Detail view of {$ROLE_NAME} Role</span> </td>
+            <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$ROLE_NAME} {$CMOD.LBL_USER_ROLE}</span><br />
+                <span class="big">{$CMOD.LBL_DETAIL_VIEW} {$ROLE_NAME} {$CMOD.LBL_USER_ROLE}</span> </td>
           </tr>
           <tr><td colspan="2">&nbsp;</td></tr>
            <tr>
             <td colspan="2" >
 					<table width="100%" cellpadding="5" cellspacing="0" border="0" >
 							<tr>
-									<td colspan="4" class="detailedViewHeader"><b>Group Details</b></td>
+									<td colspan="4" class="detailedViewHeader"><b>{$CMOD.LBL_GROUP_DETAILS}</b></td>
 							</tr>
 							<tr>
 							  <td class="dvtCellLabel" width="5%">&nbsp;</td>
-							  <td class="dvtCellLabel" align="right" width="25%"><b>Role Name :</b></td>
+							  <td class="dvtCellLabel" align="right" width="25%"><b>{$CMOD.LBL_ROLE_NAME} :</b></td>
 							  <td class="dvtCellInfo" align="left" width="25%">{$ROLE_NAME}</td>
 							  <td class="dvtCellInfo" width="45%">&nbsp;</td>
 					  </tr>
 					  <tr><td colspan="4"  class="dvtCellInfo">&nbsp;</td></tr>
 					   <tr>
-                  <td colspan="4"  class="detailedViewHeader"><b>Member List</b></td>
+                  <td colspan="4"  class="detailedViewHeader"><b>{$CMOD.LBL_MEMBER_LIST}</b></td>
                 </tr>
                
 				<tr>
 						<td class="dvtCellLabel" align="left"><img src="{$IMAGE_PATH}profile_icon.gif" align="top"></td>
-						<td class="dvtCellLabel" align="right" valign="top"><b>Associated profiles :</b></td>
+						<td class="dvtCellLabel" align="right" valign="top"><b>{$CMOD.LBL_ASSOCIATED_PROFILES}</b></td>
 						<td colspan="2" align="left" class="dvtCellInfo">
 								{foreach item=elements from=$ROLEINFO.profileinfo}
 										<a href="index.php?module=Users&action=profilePrivileges&parenttab=Settings&profileid={$elements.0}&mode=view">{$elements.1}</a><br>
@@ -70,7 +70,7 @@
 				{if $ROLEINFO.userinfo.0 neq ''}
 				 <tr>
 						<td class="dvtCellLabel" align="left"><img src="{$IMAGE_PATH}user_icon.gif" align="top"></td>
-						<td class="dvtCellLabel" align="right" valign="top"><b>Associated Users :</b></td>
+						<td class="dvtCellLabel" align="right" valign="top"><b>{$CMOD.LBL_ASSOCIATED_USERS}</b></td>
 						<td colspan="2" align="left" class="dvtCellInfo">
 								{foreach item=elements from=$ROLEINFO.userinfo}
 										<a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$elements.0}">{$elements.1}</a><br>
@@ -82,9 +82,9 @@
                  <tr>
                   <td colspan="4"  class="dvtCellInfo" align="center">
 				  	<!-- <input title="Back" accessKey="C" class="classBtn" onclick="window.history.back();" type="button" name="New" value=" <  Back " > &nbsp; -->
-					 <input value="   Edit   " title="Edit" accessKey="E" class="classBtn" type="submit" name="Edit" >
+					 <input value="  {$APP.LBL_EDIT_BUTTON_LABEL}  " title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" type="submit" name="Edit" >
                     &nbsp;
-					<input title="Delete" accessKey="D" class="classBtn" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="Delete">
+					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="classBtn" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">
 				</td>
                 </tr>
           <tr><td colspan="2">&nbsp;</td></tr>

@@ -67,7 +67,7 @@
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td align="left" valign="top" colspan="2">&nbsp;</td></tr>
 				   <tr bgcolor="#ECECEC">
-					<td align="right" valign="top" width="25%"><b>File Location : </b></td>
+					<td align="right" valign="top" width="25%"><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
 						<input type="file" name="userfile"  size="40"   />&nbsp;
                 			        <input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}

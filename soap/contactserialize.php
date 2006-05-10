@@ -1467,6 +1467,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email_subject = str_replace("'", "''", $email_subject);
 	
 	//fixed subject issue 9/6/05
+	$email->column_fields[activitytype]='Emails';
 	$email->column_fields[subject]=$email_subject;
 	$email->column_fields[assigned_user_id] = $user_id;
 	$email->column_fields[date_start] = $date_sent;

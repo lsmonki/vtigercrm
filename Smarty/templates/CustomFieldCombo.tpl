@@ -11,13 +11,13 @@
 
 <tr>
 	<td align="right"><img src="{$IMAGE_PATH}one.gif" /></td>
-	<td><b class="lvtHeaderText">Select Module</b></td>
+	<td><b class="lvtHeaderText">{$MOD.LBL_SELECT_MODULE}</b></td>
 </tr>
 <tr>
 	<form name="selectModule">
         <td>&nbsp;</td>
 	<td>
-	        Select the CRM module to show CustomFields :
+	        {$MOD.LBL_SELECT_CF_TEXT}
                 <select name="pick_module" class="importBox" onChange="getCustomFieldList(this)">
 			{foreach key=sel_value item=value from=$MODULES}
 				{if $MODULE eq $sel_value}

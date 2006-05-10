@@ -28,7 +28,7 @@
 	<tr bgcolor="#ECECEC"><td colspan="2" align="left" valign="top">&nbsp;</td></tr>
 	<tr bgcolor="#ECECEC">
 		<td colspan="2" align="left" valign="top" style="padding-left:40px;">
-			<span class="genHeaderSmall">Import Error:</span> 
+			<span class="genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MOD.LBL_ERROR}</span> 
 		</td>
 	</tr>
 	

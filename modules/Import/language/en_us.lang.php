@@ -112,7 +112,7 @@ $mod_strings = Array(
 'LBL_DATABASE_FIELD'=>'Database Field',
 'LBL_HEADER_ROW'=>'Header Row',
 'LBL_ROW'=>'Row',
-'LBL_SAVE_AS_CUSTOM'=>'Save as Custom Mapping:',
+'LBL_SAVE_AS_CUSTOM'=>'Save as Custom Mapping :',
 'LBL_CONTACTS_NOTE_1'=>'Either Last Name or Full Name must be mapped.',
 'LBL_CONTACTS_NOTE_2'=>'If Full Name is mapped, then First Name and Last Name are ignored.',
 'LBL_CONTACTS_NOTE_3'=>'If Full Name is mapped, then the data in Full Name will be split into First Name and Last Name when inserted into the database.',
@@ -147,7 +147,19 @@ $mod_strings = Array(
 
 //Added for patch2 - Products Import Notes
 'LBL_PRODUCTS_NOTE_1'=>'Product Name must be mapped',
-'LBL_PRODUCTS_NOTE_2'=>'Before import please check whether a single column has been mapped twice'
+'LBL_PRODUCTS_NOTE_2'=>'Before import please check whether a single column has been mapped twice',
+
+//Added for version 5
+'LBL_FILE_LOCATION'=>'File Location :',
+'LBL_STEP_2_3'=>'Step 2 of 3 :',
+'LBL_LIST_MAPPING'=>'List & Mapping',
+'LBL_STEP_2_MSG'=>'The following tables shows the imported',
+'LBL_STEP_2_MSG1'=>'and other details.',
+'LBL_STEP_2_TXT'=>'To map the fields, Select the corresponding in combo boxes for each',
+'LBL_USE_SAVED_MAPPING'=>'Use Saved Mapping :',
+'LBL_MAPPING'=>'Mapping',
+'LBL_HEADERS'=>'Headers :'
+
 
 );
 

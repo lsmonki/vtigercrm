@@ -77,14 +77,14 @@ function ajaxImportSavedMapResponse(response)
 				   </tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="left"  style="padding-left:40px;">
-						<span class="genHeaderGray">Step 2 of 3 : </span>&nbsp; 
-						<span class="genHeaderSmall">{$MODULE} List &amp; Mapping </span>
+						<span class="genHeaderGray">{$MOD.LBL_STEP_2_3} </span>&nbsp; 
+						<span class="genHeaderSmall">{$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="left" style="padding-left:40px;"> 
-					   The following tables shows the imported {$MODULE} and other details. 
-					   To map the fields, Select the corresponding in combo boxes for each {$MODULE}. 
+					   {$MOD.LBL_STEP_2_MSG} {$MODULE} {$MOD.LBL_STEP_2_MSG1} 
+					   {$MOD.LBL_STEP_2_TXT} {$MODULE}. 
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC">
@@ -93,16 +93,16 @@ function ajaxImportSavedMapResponse(response)
 				   <tr bgcolor="#ECECEC">
 					<td align="left" style="padding-left:40px;" >
 						<input type="checkbox" name="use_saved_mapping" id="saved_map_checkbox" onclick="ActivateCheckBox()" />&nbsp;&nbsp;
-						Use Saved Mapping : &nbsp;&nbsp;&nbsp;{$SAVED_MAP_LISTS}
+						{$MOD.LBL_USE_SAVED_MAPPING}&nbsp;&nbsp;&nbsp;{$SAVED_MAP_LISTS}
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC">
 					<td  align="left"style="padding-left:40px;padding-right:40px;">
 						<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%" >
 						   <tr bgcolor="white">
-							<td width="25%" class="lvtCol" align="center"><b>Mapping</b></td>
+							<td width="25%" class="lvtCol" align="center"><b>{$MOD.LBL_MAPPING}</b></td>
 							{if $HASHEADER eq 1}
-							<td width="25%" bgcolor="#E1E1E1"  ><b>Headers :</b></td>
+							<td width="25%" bgcolor="#E1E1E1"  ><b>{$MOD.LBL_HEADERS}</b></td>
 							<td width="25%" ><b>{$MOD.LBL_ROW} 1</b></td>
 							<td width="25%" ><b>{$MOD.LBL_ROW} 2</b></td>
 							{else}
@@ -147,17 +147,17 @@ function ajaxImportSavedMapResponse(response)
 				   </tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="left" style="padding-left:40px;" >
-						<input type="checkbox" id="save_map" name="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
-						Save above Mapping  as : &nbsp;&nbsp;&nbsp;
-						<input type="text" readonly id="save_map_as" name="save_map_as" value="" class="importBox" >
+						<input type="checkbox" name="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
+						{$MOD.LBL_SAVE_AS_CUSTOM} &nbsp;&nbsp;&nbsp;
+						<input type="text" readonly name="save_map_as" value="" class="importBox" >
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td><hr /></td></tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="right" style="padding-right:40px;" >
-						<input type="submit" name="button"  value=" &nbsp;&lsaquo; Back &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='2'; return true;" />
+						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='2'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; Import Now &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='4'; return validate_import_map()" />
+						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='4'; return verify_data(Import)" />
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td align="right" >&nbsp;</td></tr>

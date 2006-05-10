@@ -170,6 +170,8 @@ $mod_strings = Array(
 
 'FieldType'=>'Field Type',
 
+'FieldLabel'=>'Field Label',
+
 'Delete'=>'Del',
 
 'NEW'=>'New',
@@ -357,8 +359,6 @@ $mod_strings = Array(
 
 'LBL_EVENT_FIELD_ACCESS'=>'Event Field Access',
 
-'LBL_CAMPAIGN_FIELD_ACCESS'=>'Campaign Field Access',
-
 'LBL_DELETE_DEMO_DATA'=>'Delete Demo Data',
 
 'LBL_DELETE_DEMO_DATA_INFO'=>'- Delete the Demo Data which is created at the time of installation',
@@ -369,26 +369,29 @@ $mod_strings = Array(
 
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings',
 
-'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'- Create and Manage user defined fields',
+'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Create and Manage user defined fields...',
 
-'LBL_EDIT'=>'Editing',
+'LBL_SELECT_MODULE'=>'Select Module',
+
+'LBL_SELECT_CF_TEXT'=>'Select the CRM module to show CustomFields :',
+
 
 
 'LBL_PICKLIST_SETTINGS'=>'Picklist Settings',
 
 'LBL_EDIT_PICKLIST_VALUES'=>' - Edit values of Picklist fields',
 
-
+'LBL_EDIT'=>'Editing',
 
 'LBL_COMMUNICATION_TEMPLATES'=>'Communication Templates',
 
-'LBL_CREATE_EMAIL_TEMPLATES'=>' - Create Email Templates',
+'LBL_CREATE_EMAIL_TEMPLATES'=>'Creating Email Template',
 
 'LBL_UPLOAD_MSWORD_TEMPLATES'=>' - Upload MS Word Templates for Mail Merge',
 
 'LBL_SCHEDULE_EMAIL_NOTIFICATION'=>' - Schedule Email Notifications',
 
-
+'LBL_EXPAND_CLOSE_MENU'=>'Expand/Close Menu',
 
 'LBL_CONFIGURATION'=>'Configuration',
 
@@ -545,6 +548,7 @@ $mod_strings = Array(
 'LBL_CONTACT_FIELD'=>'Contact Field',
 'LBL_POTENTIAL_FIELD'=>'Potential Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
+'LBL_FIELD_MAPPING'=>'Field Mapping',
 'LBL_LEAD_FIELD'=>'Lead Field',
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
@@ -572,10 +576,7 @@ $mod_strings = Array(
 'LBL_PICKLIST_AVAILINFO1'=>'The picklists available in',
 'LBL_PICKLIST_AVAILINFO2'=>'are shown below. Click Edit to modify the contents of the list.',
 'LBL_EDIT_PICKLIST'=>'Edit Pick List',
-'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
-'LBL_SELECT_MODULE'=>'Select Module',
-'LBL_SELECT_CRM_MODULE'=>'Select the CRM module',
-'LBL_EDIT'=>'Edit',
+'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.'
 );
 
 

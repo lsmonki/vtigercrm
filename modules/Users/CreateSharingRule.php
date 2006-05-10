@@ -106,7 +106,7 @@ foreach($grpDetails as $groupid=>$groupname)
                     <input type="hidden" name="shareId" value="'.$shareid.'">
                     <input type="hidden" name="mode" value="'.$mode.'">
 		
-		<div id="orgLay">
+		<div id="orgLay" style="display:block;">
 		<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
 		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$sharing_module.' - Add Custom Privilege Rule</td>

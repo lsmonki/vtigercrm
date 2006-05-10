@@ -72,9 +72,9 @@ function CustomFieldMapping()
 						<img src="{$IMAGE_PATH}mapping.gif" align="left" />
 					</td>
 					<td style="padding:5px;border-bottom:2px dotted #AAAAAA;">
-						<span class="genHeaderGrayBig">Custom Field Settings</span>
+						<span class="genHeaderGrayBig">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</span>
 						<br />
-						<span class="big">Create and Manage user defined fields......</span>
+						<span class="big">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</span>
 					</td>
 				</tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
