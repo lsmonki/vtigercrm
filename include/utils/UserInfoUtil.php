@@ -347,7 +347,7 @@ function getDefaultSharingAction()
 	global $log;
 	$log->debug("Entering getDefaultSharingAction() method ...");
 	global $adb;
-	//retreiving the standard permissions	
+	//retreivin the standard permissions	
 	$sql= "select * from def_org_share where editstatus in(0,1)";
 	$result = $adb->query($sql);
 	$permissionRow=$adb->fetch_array($result);
@@ -1573,6 +1573,12 @@ function isPermitted($module,$actionname,$record_id='')
 			$permission = isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id);
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
+		}
+		else
+		{
+			$permission = "yes";
+			$log->debug("Exiting isPermitted method ...");
+			return $permission;
 		}
 	}
 	else
@@ -4334,6 +4340,15 @@ function getListViewSecurityParameter($module)
                 }
 		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
+	}
+	elseif($module == 'Campaigns')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%')";
+
+                        if(sizeof($current_user_groups) > 0)
+                        {
+                              $sec_query .= "  or (crmentity.smownerid in (0) and (groups.groupid in".getCurrentUserGroupList()."))) ";
+			}	
 	}	
 	else
 	{
@@ -4486,7 +4501,8 @@ function getFieldModuleAccessArray()
                 'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
                 'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
                 'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
-                'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
+                'Invoice'=>'LBL_INVOICE_FIELD_ACCESS',
+                'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS'
               );
 
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
