@@ -59,9 +59,9 @@ function ajaxDelResponse(response)
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
+		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
         	        <span class="lvtHeaderText">{$CATEGORY} &gt; {$MODULE} </span>
-        	        <hr noshade="noshade" size="1" />
+            <hr noshade="noshade" size="1" />
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
 	</tr>
@@ -69,121 +69,123 @@ function ajaxDelResponse(response)
 		<td width="95%" style="padding-left:20px;" valign="top">
 			<!-- module Select Table -->
 			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-			  <tr>
-				<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
-				<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
-				<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
-			  </tr>
-			  <tr>
-				<td bgcolor="#EBEBEB" width="7"></td>
-				<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-                  <tr>
-                    <td colspan="3" style="padding:10px;vertical-align:middle;">
-			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
-					<td width="10%" >
-						<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
-						&nbsp;<a href="#" class="webMnu" >{$MOD.LBL_CHK_MAIL}</a>
-					</td>
-					<td width="10%">
-						<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-						&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
-					</td>
-					<td width="10%">
-						<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-						&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
-					</td>
-					<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
+					<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
+					<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
+					<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
 				</tr>
-			</table>
-		</td>
-                </tr>
-                  <tr>
-                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
-                    <td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><strong>{$MOD.LBL_MAILS}</strong></td>
-                  </tr>
-                  <tr>
-                    <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
-							<ul style="list-style-type:none;">
-								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
-								</li>
-								<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
-								</li>
-								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">....</a>&nbsp;
-								</li>
-							</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
-							<ul style="list-style-type:none;">
-								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;<b></b>
-								</li>
-								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
-								</li>
-								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Emails&action=ListView" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;
-								</li>
-							</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_TRASH}</b>
-							<ul style="list-style-type:none;">
-								<li><img src="{$IMAGE_PATH}webmail_trash.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="#" class="webMnu">{$MOD.LBL_JUNK_MAILS}</a>&nbsp;<b></b>
-								</li>
-							</ul>
-					</td>
-                    <td>&nbsp;</td>
-                    <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td bgcolor="#EBEBEB" width="7"></td>
+					<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;">
 					<form name="massdelete" method="POST">
-					<input name="idlist" type="hidden">
-                      <tr>
-                        <td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
-                          <input type="button" name="Qualify" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="classWebBtn" />
-                        </td>
-                        <td width="75%" align="right">
+						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td colspan="3" style="padding:10px;vertical-align:middle;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0">
+										<tr>
+											<td width="10%" >
+											<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
+						&nbsp;<a href="#" class="webMnu" >{$MOD.LBL_CHK_MAIL}</a>
+											</td>
+											<td width="10%">
+											<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
+						&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
+											</td>
+											<td width="10%">
+											<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+						&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
+											</td>
+											<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
+								<td width="2%">&nbsp;</td>
+					 <td width="60%" class="subHdr"><strong>{$MOD.LBL_MAILS}</strong></td>
+							</tr>
+							<tr>
+								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
+								<ul style="list-style-type:none;">
+									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
+										<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
+									</li>
+									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
+									</li>
+								</ul><br />
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+								<ul style="list-style-type:none;">
+									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="javascript:;" onClick="ShowFolders('allmails')" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
+									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="javascript:;" onClick="ShowFolders('Contacts')" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
+									</li>
+									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="javascript:;" onClick="ShowFolders('Accounts')" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
+									</li>
+									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="javascript:;" onClick="ShowFolders('Leads')" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
+									</li>
+									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
+									<a href="javascript:;" onClick="ShowFolders('Users')" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
+									</li>
+								</ul><br />
+								</td>
+								<td>&nbsp;</td>
+								
+								<td class="delBg">
+									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+									<input name="idlist" type="hidden">
+										<tr>
+											<td width="25%"><input type="button" name="Button2" value=" {$MOD.LBL_QUALIFY_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
+											</td>
+											<td width="75%" align="right">
 							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
-							<select name="optionSel" class="importBox"><option selected>in Subject</option></select>&nbsp;
+											<select name="optionSel" class="importBox"><option selected>in Subject</option></select>&nbsp;
 							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" />
-						</td>
-                      </tr>
-                    </table></td>
-                  </tr>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td style="padding:1px;" align="left">
-						<div id="email_con">
-						{include file="EmailContents.tpl"}
-						</div>
-				</td>
-             </tr>
-			 <tr>
-			 	<td></td>
-				<td height="5"></td>
-			 </tr>
-			</form>	
-			 <tr>
-			   <td>&nbsp;</td>
-			   <td class="mailHdr" id="subjectsetter"> </td>
-			   </tr>
-			   <tr><td colspan="2">
-			   <div id="EmailDetails">
-				{include file="EmailDetails.tpl"}
-				</div>
-				</td></tr>
-                </table>
-				</td>
-				<td bgcolor="#EBEBEB" width="8"></td>
-			  </tr>
-			  <tr>
-				<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
-				<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-				<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
-			  </tr>
-		  </table><br />
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td style="padding:1px;" align="left">
+									<div id="email_con">
+									{include file="EmailContents.tpl"}
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td height="5"></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td class="mailHdr" id="subjectsetter">&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>	
+								<td valign="top">
+									<div id="EmailDetails">
+									{include file="EmailDetails.tpl"}
+									</div>
+								</td>
+							</tr>
+						</table>
+						</form>
+					</td>
+					<td bgcolor="#EBEBEB" width="8"></td>
+				</tr>
+				<tr>
+					<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
+					<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
+					<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
+				</tr>
+			</table><br />
 		</td>
 		<td>&nbsp;</td>
 	</tr>
