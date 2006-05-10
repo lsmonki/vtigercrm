@@ -1018,6 +1018,10 @@ function getRecordOwnerId($record)
 		{
 			$query1="select groups.groupid from invoicegrouprelation inner join groups on groups.groupname = invoicegrouprelation.groupname where invoiceid=".$record;
 		}
+		elseif($module == 'Campaigns')
+		{
+			$query1="select groups.groupid from campaigngrouprelation inner join groups on groups.groupname = campaigngrouprelation.groupname where campaignid=".$record;
+		}
 
 		$result1=$adb->query($query1);
 		$groupid=$adb->query_result($result1,0,'groupid');
