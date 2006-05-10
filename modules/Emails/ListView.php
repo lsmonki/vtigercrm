@@ -27,13 +27,12 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
-
 global $current_user;
-$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
+//$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
 
-$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=Webmails&action=index&parenttab=parenttab=My Home Page'=>'Emails'); 
+//$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=Webmails&action=index&parenttab=parenttab=My Home Page'=>'Emails');
 
-if($_REQUEST['ajax'] == '')
+/*if($_REQUEST['ajax'] == '')
 {
 
 	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
@@ -73,7 +72,7 @@ if($_REQUEST['ajax'] == '')
 		}
 
 	}
-}
+}*/
 global $app_strings;
 global $mod_strings;
 
@@ -113,9 +112,10 @@ global $focus_list;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
-$viewid = $oCustomView->getViewId($currentModule);
+$viewid = 20;
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+
 //<<<<<customview>>>>>
 
 // Buttons and View options
@@ -158,19 +158,33 @@ else
 }
 //<<<<<<<<customview>>>>>>>>>
 
-
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
 }
-
+if($_REQUEST['folder'] =='Contacts')
+{
+	$list_query .= "AND seactivityrel.crmid in (select contactid from contactdetails)";
+}
+if($_REQUEST['folder'] =='Accounts')
+{
+	$list_query .= "AND seactivityrel.crmid in (select accountid from account)";	
+}
+if($_REQUEST['folder'] =='Leads')
+{
+	$list_query .= "AND seactivityrel.crmid in (select leadid from leaddetails)";	
+}
+if($_REQUEST['folder'] =='Users')
+{
+	$list_query .= "AND seactivityrel.crmid in (select id from users)";	
+}
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Emails',$order_by);
 	$tablename = (($tablename != '')?($tablename."."):'');
-
-        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+    $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
+
 $list_result = $adb->query($list_query);
 
 //Constructing the list view
@@ -221,7 +235,8 @@ $smarty->assign("LISTHEADER", $listview_header);
 $listview_header = getSearchListHeaderValues($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-$smarty->assign("LISTENTITY", $listview_entries);                                                                          $smarty->assign("SELECT_SCRIPT", $view_script);
+$smarty->assign("LISTENTITY", $listview_entries);                                                  
+$smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
@@ -232,7 +247,9 @@ $smarty->assign("USERID", $current_user->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-
+if($_REQUEST['ajax'] != '')
+	$smarty->display("EmailContents.tpl");
+else
 	$smarty->display("Emails.tpl");
 
 ?>
