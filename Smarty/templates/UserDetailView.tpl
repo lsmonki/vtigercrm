@@ -46,14 +46,14 @@
 											<td colspan="2" style="padding:5px;">
 													<span class="lvtHeaderText">
 													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-															 > {$MOD.LBL_USER_MANAGEMENT}</b></span>
+															 > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
 															<hr noshade="noshade" size="1" />
 											</td>
 									  </tr>
 									<tr>
 											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
 											<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
-												<b class="small">Detail View of {$FIRST_NAME} {$LAST_NAME}</b>
+												<b class="small">{$UMOD.LBL_DETAIL_VIEW} {$FIRST_NAME} {$LAST_NAME}</b>
 											</td>
 									</tr>
 							</table>
@@ -100,34 +100,34 @@
 				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_INFORMATION}</b></td>
 				</tr>  
 				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_NAME} </td>
+				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_NAME} </td>
 				<td class="dvtCellInfo">{$USER_NAME}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
         	    <td class="dvtCellInfo"><input type="checkbox" name="is_admin" DISABLED {$IS_ADMIN}/></td>
 				</tr>
 				{if $MODE eq 'edit'}
 				<tr>
-				<td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_PASSWORD} </td>
+				<td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_PASSWORD} </td>
 			    <td class="dvtCellInfo" width="20%"><input  name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-			    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
+			    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
 			    <td class="dvtCellInfo" width="20%"><input name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 			    </tr>
 				{/if}	
 			    <tr>
 			    <td class="dvtCellLabel" align="right">{$UMOD.LBL_FIRST_NAME} </td>
 			    <td class="dvtCellInfo">{$FIRST_NAME}&nbsp;</td>
-			    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_LAST_NAME}</td>
+			    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_LAST_NAME}</td>
 			    <td class="dvtCellInfo">{$LAST_NAME}&nbsp;</td>
 			 	</tr>
 				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_USER_ROLE}</td>
+				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_ROLE}</td>
 				<td class="dvtCellInfo">{$ROLEASSIGNED}&nbsp;</td>							      <td class="dvtCellLabel" align="right">{$UMOD.LBL_GROUP_NAME}</td>
 				<td class="dvtCellInfo">{$GROUPASSIGNED}&nbsp;</td>
 			    </tr>
 				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_EMAIL}</td>
+				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_EMAIL}</td>
 				<td class="dvtCellInfo"><a href="mailto:{$EMAIL1}" target="_blank">{$EMAIL1}</a>&nbsp;</td>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_STATUS}</td>
+				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_STATUS}</td>
 
 				<td class="dvtCellInfo">{$STATUS}&nbsp;</td>
 				</tr>
@@ -139,7 +139,7 @@
 				<td span class="dvtCellInfo">{$LEAD_VIEW}&nbsp;</td>
 				</tr>
 				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>*</font></span>{$UMOD.LBL_COLOR}</td>
+				<td class="dvtCellLabel" align="right">{$UMOD.LBL_COLOR}</td>
 				<td class="dvtCellInfo">{$COLORASSIGNED}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
                 <td span class="dvtCellInfo">{$CURRENCY_NAME}&nbsp;</td>

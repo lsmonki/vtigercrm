@@ -26,7 +26,7 @@
 					<td colspan="2" style="padding:5px;">
 							<span class="lvtHeaderText">
 							<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-									 > {$MOD.LBL_USER_MANAGEMENT} > Users</b></span>
+									 > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
 									<hr noshade="noshade" size="1" />
 					</td>
 			  </tr>
@@ -36,7 +36,7 @@
 								<tr>
 									<td colspan="2" align="left"><img src="{$IMAGE_PATH}user.gif" align="absmiddle">&nbsp;<span class="genHeaderGray">{$MOD.LBL_USER_MANAGEMENT}</span></td>
 									<td align="right" style="padding:5px; ">
-											<input title='New User [Alt+N]' accessyKey='N' class='classBtn' type='submit' name='button' value='New User' >
+											<input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" class='classBtn' type='submit' name='button' value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" >
 								 	 </td>
 								</tr>
 								<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
@@ -55,7 +55,7 @@
 								<tr><td align="right"><b>{$CMOD.LBL_TOTAL}</b></td>
 								<td  align="left">{$USER_COUNT.user} {$CMOD.LBL_USERS}</td>	
 								</tr>	
-								<tr><td  align="right"><b>{$CMOD.LBL_ADMIN} :	</b></td>
+								<tr><td  align="right"><b>{$CMOD.LBL_ADMIN} {$CMOD.LBL_COLON}</b></td>
 								<td  align="left">{$USER_COUNT.admin} {$CMOD.LBL_USERS}</td>	
 								</tr>	
 								<tr><td  align="right"><b>{$CMOD.LBL_OTHERS}</b></td>
