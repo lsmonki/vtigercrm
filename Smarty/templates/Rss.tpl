@@ -75,7 +75,7 @@ function ajaxRssSaveResponse(response)
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-	<span class="lvtHeaderText">Tools &gt; Rss </span>
+	<span class="lvtHeaderText">{$CATEGORY} &gt; {$MODULE} </span>
 	<hr noshade="noshade" size="1" />
 	</td>
 
@@ -98,7 +98,7 @@ function ajaxRssSaveResponse(response)
 			<tr>
 			
 			<td style="padding:10px;vertical-align:middle;" width="28%">
-			<img src='{$IMAGEPATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');" title='{$APP.LBL_ADD_RSS_FEEDS}'>Add Rss Feed</a>
+			<img src='{$IMAGEPATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
 			</td>
 			<td width="2%">&nbsp;</td>
 			<td width="60%"><img src="{$IMAGEPATH}rssimage.gif" width="176" height="44"  align="right"/></td>
@@ -154,23 +154,23 @@ function ajaxRssSaveResponse(response)
 	<div id="PopupLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
-	<td class="genHeaderSmall" align="left"><img src="{$IMAGEPATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;Add RSS Feed</td>
+	<td class="genHeaderSmall" align="left"><img src="{$IMAGEPATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
 	<td align="right"><a href="javascript:fninvsh('PopupLay');"><img src="{$IMAGEPATH}close.gif" border="0"  align="absmiddle" /></a></td>
 	</tr>
 	<tr><td colspan="2"><hr /></td></tr>
 	<tr>
-	<td align="right" width="30%"><b>Feed :</b></td>
+	<td align="right" width="30%"><b>{$MOD.LBL_FEED}</b></td>
 	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" /></td>
 	</tr>
 	
 	<tr>
-	<td align="right"><b>Category : </b></td>
+	<td align="right"><b>{$MOD.LBL_CATEGORY}</b></td>
 	<td align="left"><select id="rsscategory" class="importBox" style="width:100%">{$RSSCATEG}</select></td>
 	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	<tr>
 	<td	colspan="2" align="center">
-	<input type="button" name="save" value=" &nbsp;Save&nbsp; " class="classBtn" onClick="SaveRssFeeds();"/>&nbsp;&nbsp;
+	<input type="button" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="SaveRssFeeds();"/>&nbsp;&nbsp;
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
