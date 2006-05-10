@@ -118,13 +118,13 @@ function ajachangeresponse(response)
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td align="right"><img src="{$IMAGE_PATH}one.gif"></td>
-	<td><b class="lvtHeaderText">Select Module</b></td>
+	<td><b class="lvtHeaderText">{$MOD.LBL_SELECT_MODULE}</b></td>
 	</tr>
 
 	<tr>
 	<td>&nbsp;</td>
 	<td>
-	Select the CRM module :
+	{$MOD.LBL_SELECT_CRM_MODULE} :
 	<select name="pickmodule" class="importBox" onChange="changeModule(this);">
 	{foreach key=tabid item=module from=$MODULE_LISTS}
 	<option value="{$module}">{$module}</option>
