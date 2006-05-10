@@ -60,7 +60,34 @@ function callSearch(searchtype)
 	urlstring = urlstring +'action={$MODULE}Ajax&ajax=true';	
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
+function alphabetic(url)
+{ldelim}
 
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	
+	url_param = url.split('&');
+	for(plen=0; plen< url_param.length;plen++)
+	{ldelim}
+		url_var=url_param[plen];
+		if(url_var.search(/search_text/gi)!= -1)
+		{ldelim}
+				name_value = url_var.split('=');
+				document.basicSearch.search_text.value = name_value[1];
+		{rdelim}
+		else if(url_var.search(/search_field/gi)!= -1)
+		{ldelim}
+				name_value = url_var.split('=');
+				var oSfield = getObj("search_field");
+				for (os=0; os<oSfield.length;os++)
+				{ldelim}
+					if(oSfield[os].value == name_value[1])
+					oSfield.selectedIndex = os;
+				{rdelim}
+		{rdelim}
+
+ 	{rdelim}
+        ajaxObj.process("index.php?",url);
+{rdelim}
 </script>
 
 		{include file='Buttons_List.tpl'}

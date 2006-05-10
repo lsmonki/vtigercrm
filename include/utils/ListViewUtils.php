@@ -1661,7 +1661,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 
 	for($var='A',$i =1;$i<=26;$i++,$var++)
 	// Mike Crowe Mod --------------------------------------------------------added groupid to url
-		$list .= '<td class="searchAlph" align="center"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
+		$list .= '<td class="searchAlph" align="center"><a href="javascript:;" onclick="alphabetic(\'ajax=true&action='.$module.'Ajax&module='.$module.'&file='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'\')">'.$var.'</a></td>';
 
 	$log->debug("Exiting AlphabeticalSearch method ...");
 	return $list;
