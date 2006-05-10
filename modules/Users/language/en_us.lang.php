@@ -275,6 +275,15 @@ $mod_strings = Array(
 'LBL_TITLE_ROLE_NAME'=>'New Role',
 'LBL_ROLE_NAME'=>'Role Name',
 'LBL_ROLE_PROFILE_NAME'=>'Associate With Profile',
+'LBL_SPECIFY_ROLE_NAME'=>'Specify a name for new role :',
+'LBL_ASSIGN_PROFILE'=>'Assign Profile(s)',
+'LBL_PROFILE_SELECT_TEXT'=>'Select the Profiles below and click on assign button',
+'LBL_PROFILES_AVLBL'=>'Profiles Available',
+'LBL_ASSIGN_PROFILES'=>'Assigned Profiles',
+'LBL_REPORTS_TO_ROLE'=>'Reports to Role',
+'LBL_ASSOCIATED_PROFILES'=>'Associated Profiles :',
+'LBL_ASSOCIATED_USERS'=>'Associated Users :',
+
 
 //Added fields in OrgSharingDetailsView.php
 'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
@@ -429,7 +438,6 @@ $mod_strings = Array(
 'LBL_SELECT_SCREEN'=>'Select the Screen / Module :',
 'LBL_FIELDS_AVLBL'=>'Fields Available in',
 'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown'
-
 
 
 );
