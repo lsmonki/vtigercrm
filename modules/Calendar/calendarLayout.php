@@ -295,15 +295,19 @@ function get_dayview_layout(& $cal,$type)
 						<span class="genHeaderBig">'.$hour.'</span>
 						<span class="genHeaderGray">'.$sub_str.'</span>
 					</td>
-					<td style="border-bottom: 1px solid rgb(204, 204, 204);" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" height="65">
+					<td style="border-bottom: 1px solid rgb(204, 204, 204); width:5%;" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" height="65">
 			                	<div id="'.$hour.''.$sub_str.'" style="display: none;">
 							<a onClick="gshow(\'addEvent\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
 						</div>
-					</td>';
+					</td>
+					<td style="border-bottom: 1px solid rgb(204, 204, 204);">';
+		//echo '<pre>';print_r($cal);echo '</pre>';
+		
+		$dayview_layout .= getEventLayer($cal,$cal['calendar']->slices[$i]);
 		/*get events/tasks that has current date as starting time
 			*/
 		//$dayview_layout .= 
-		$dayview_layout .='		
+		$dayview_layout .=' </td>		
 				    </tr>';
 	}
 	$dayview_layout .= '<tr><td style="border-right: 1px solid rgb(102, 102, 102);">&nbsp;</td><td>&nbsp;</td></tr>
@@ -454,6 +458,47 @@ function get_yearview_layout(& $cal,$type)
 {
 }
 
+
+function getEventLayer(& $cal,$slice)
+{
+	$eventlayer = '';
+	$arrow_img_name = '';
+	$act = $cal['calendar']->day_slice[$slice]->activities;
+	if(!empty($act))
+	{
+		for($i=0;$i<count($act);$i++)
+		{
+			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
+			$subject = $act[$i]->subject;
+			if(strlen($subject)>25)
+				$subject = substr($subject,0,25)."...";
+			$start_hour = $act[$i]->start_time->hour;
+			$account_name = $act[$i]->accountname;
+			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+		$eventlayer .='<div class ="eventLay" id="'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
+					<table border="0" cellpadding="0" cellspacing="0" width="95%">
+						<tr onmouseover="show(\''.$arrow_img_name.'\');" onmouseout="hide(\''.$arrow_img_name.'\');">
+						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
+						<td align="left" width="85%"><span class="fontBold">'.$account_name.'</span><br>
+							'.$start_hour.',<span class="orgTab">'.$subject.'</span>&nbsp;
+							<a href="#" class="webMnu">[More...]</a>
+					
+						</td>
+						<td align="right" width="5%">
+							<div id="'.$arrow_img_name.'" style="display: none;">
+								<a href="#" onclick="fnvshobj(this,\'reportLay\');" onmouseout="fninvsh(\'reportLay\')">
+								<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0"></a>
+							</div>
+						</td>
+						</tr>
+					</table>
+				</div><br>';
+		}
+		return $eventlayer;
+	}
+}
+
+
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
@@ -484,51 +529,93 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
                 $duration_min = $adb->query_result($result,$i,"duration_minutes");
 		$start_time = $adb->query_result($result,$i,"time_start");
 		$end_time = '';
+		list($hour,$min) = explode(":",$start_time);
 		if($calendar['calendar']->hour_format == 'am/pm')
 		{
 			//echo $start_time;
-			if($start_time>'12:00')
+			if($hour>'12')
 			{
-				$time = explode(":",$start_time);
-				$hour = $time[0] - 12;
-				$min = $time[1];
-				$start_time = $hour.":".$min."pm";
+				$hour = $hour - 12;
+				$start_hour = $hour;
+				if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+                                        $start_hour = "0".$start_hour;
+				$start_time = $start_hour.":".$min."pm";
 				$end_min = $min+$duration_min;
 				$end_hour = $hour+$duration_hour;
-				if($end_min>60)
+				if($end_min>=60)
 				{
-					$end_min = $end_min - 60;
-					$end_hour = $end_hour + 1;
+					$end_min = $end_min%60;
+					$end_hour++;
 				}
-				if($end_min == 0)
-					$end_min = "00";
+				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+                                        $end_hour = "0".$end_hour;
+				if($end_min <= 9 && strlen(trim($end_min)) < 2)
+					$end_min = "0".$end_min;
 				$end_time = $end_hour.":".$end_min."pm";
 				//echo $start_time;
 			}
-			else
+			elseif($hour == '12')
 			{
-				$time = explode(":",$start_time);
-                                $hour = $time[0];
-                                $min = $time[1];
-				$start_time = $start_time."am";
+				$start_hour = $hour;
+                                if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+                                        $start_hour = "0".$start_hour;
+				$start_time = $start_hour.":".$min."pm";
 				$end_min = $min+$duration_min;
                                 $end_hour = $hour+$duration_hour;
-				if($end_min>60)
+				if($end_min>=60)
                                 {
-                                        $end_min = $end_min - 60;
-                                        $end_hour = $end_hour + 1;
+                                        $end_min = $end_min%60;
+                                        $end_hour++;
                                 }
 				if($end_hour>'12')
+                                {
+                                        $end_hour = $end_hour - 12;
+					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+	                                        $end_hour = "0".$end_hour;
+                                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
+                                                $end_min = "0".$end_min;
+                                        $end_time = $end_hour.":".$end_min."pm";
+                                }
+                                else
+                                {
+					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+	                                        $end_hour = "0".$end_hour;
+                                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
+                                                $end_min = "0".$end_min;
+                                        $end_time  = $end_hour.":".$end_min."am";
+                                }
+			}
+			else
+			{
+				$start_hour = $hour;
+                                if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+                                        $start_hour = "0".$start_hour;
+				$start_time = $start_hour.":".$min."am";
+				$end_min = $min+$duration_min;
+                                $end_hour = $hour+$duration_hour;
+				if($end_min>=60)
+                                {
+                                        $end_min = $end_min%60;
+                                        $end_hour++;
+                                }
+				if($end_hour>='12')
 				{
-					$hour = $end_hour - 12;
-					if($end_min == 0)
-	                                        $end_min = "00";
+					if($end_hour == '12' && $end_hour > '00')
+						$end_hour = $end_hour;
+					else
+						$end_hour = $end_hour - 12;
+					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+	                                        $end_hour = "0".$end_hour;
+					if($end_min <= 9 && strlen(trim($end_min)) < 2)
+	                                        $end_min = "0".$end_min;
 					$end_time = $end_hour.":".$end_min."pm";
 				}
 				else
 				{
-					if($end_min == 0)
-	                                        $end_min = "00";
+					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+	                                        $end_hour = "0".$end_hour;
+					if($end_min <= 9 && strlen(trim($end_min)) < 2)
+	                                        $end_min = "0".$end_min;
 				 	$end_time  = $end_hour.":".$end_min."am";
 				}
 				
@@ -538,18 +625,19 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		}
 		else
 		{
-			$time = explode(":",$start_time);
-                        $hour = $time[0];
-                        $min = $time[1];
+                        $hour = $hour;
+                        $min = $min;
 			$end_min = $min+$duration_min;
                         $end_hour = $hour+$duration_hour;
-			if($end_min>60)
+			if($end_min>=60)
                         {
-                                $end_min = $end_min - 60;
-                                $end_hour = $end_hour + 1;
+                                $end_min = $end_min%60;
+                                $end_hour++;
                         }
-			if($end_min == 0)
-	                        $end_min = "00";
+			if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+				$end_hour = "0".$end_hour;
+			if($end_min <= 9 && strlen(trim($end_min)) < 2)
+	                        $end_min = "0".$end_min;
 			$end_time  = $end_hour.":".$end_min;
 			$element['starttime'] = $start_time;
 			$element['endtime'] = $end_time;
@@ -557,6 +645,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
+                if(strlen($subject)>25)
+	                $subject = substr($subject,0,25)."...";
 		if($contact_id != '')
 		{
 			$contactname = getContactName($contact_id);
