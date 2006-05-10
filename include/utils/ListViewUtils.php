@@ -1178,12 +1178,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 
 					$temp_val = str_replace("'",'\"',$temp_val);
-
+			
 					//Added to avoid the error when select SO from Invoice through AjaxEdit
 					if($module == 'SalesOrder')
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'","'.$_REQUEST['form'].'"); window.close()\'>'.$temp_val.'</a>';
 					else
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "detailview")
                                 {
@@ -1255,7 +1255,42 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 //added by rdhital/Raju for better emails 
 					elseif($popuptype == "set_return_emails")
 					{
-						if ($module=='Accounts')
+							if ($module=='Accounts')
+					{
+						$accid =$adb->query_result($list_result,$list_result_count,'accountid');
+						//$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
+						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
+                                                if($emailaddress == '')
+                                                        $emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
+
+				$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
+				$queryres = $adb->query($querystr);
+				//Change this index 0 - to get the fieldid based on email1 or email2
+				$fieldid = $adb->query_result($queryres,0,'fieldid');
+
+$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+
+					}
+					elseif ($module=='Contacts' || $module=='Leads')
+					{
+						$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
+						$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
+						$name=$lastname.' '.$firstname;
+						$emailaddress=$adb->query_result($list_result,$list_result_count,"email");
+						if($emailaddress == '')
+							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
+
+				$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
+				$queryres = $adb->query($querystr);
+				//Change this index 0 - to get the fieldid based on email or yahooid
+				$fieldid = $adb->query_result($queryres,0,'fieldid');
+
+				//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
+				$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+
+
+					}
+					/*	if ($module=='Accounts')
 						{
 							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
 							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
@@ -1267,7 +1302,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$name=$lastname.' '.$firstname;
 	
 							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
-						}
+						}*/
 			
 					}
 //code added by raju ends
@@ -1661,7 +1696,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 
 	for($var='A',$i =1;$i<=26;$i++,$var++)
 	// Mike Crowe Mod --------------------------------------------------------added groupid to url
-		$list .= '<td class="searchAlph" align="center"><a href="javascript:;" onclick="alphabetic(\'ajax=true&action='.$module.'Ajax&module='.$module.'&file='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'\')">'.$var.'</a></td>';
+		$list .= '<td class="searchAlph" align="center"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
 
 	$log->debug("Exiting AlphabeticalSearch method ...");
 	return $list;
