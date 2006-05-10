@@ -133,7 +133,8 @@ $mod_strings = Array(
 'LBL_WEBMAILS_TITLE'=>'WebMails',
 'LBL_EMAILS_TITLE'=>'Emails',
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
-
+'LBL_ALLMAILS'=>'All Mails',
+'LBL_TO_USERS'=>'To Users',
 );
 
 ?>
