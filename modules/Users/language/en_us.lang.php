@@ -413,7 +413,23 @@ $mod_strings = Array(
 'LBL_USER_MORE_INFN'=>'More Information',
 'LBL_USER_ADDR_INFN'=>'Address Information',
 'LBL_USER_IMAGE'=>'User Image',
-'LBL_USR'=>'Users'
+'LBL_USR'=>'Users',
+
+//Added for Access Privileges
+
+'LBL_GLOBAL_FIELDS_MANAGER'=>'Global Fields Manager',
+'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Global Access Privileges',
+'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Access Privileges',
+'LBL_BOTH'=>'Both',
+'LBL_VIEW'=>'view',
+'LBL_RECALCULATE_BUTTON'=>'Recalculate',
+'LBL_ADD_PRIVILEGES_BUTTON'=>'Add Privileges',
+'LBL_CUSTOM_ACCESS_MESG'=>'No Custom Access Rules defined .',
+'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
+'LBL_SELECT_SCREEN'=>'Select the Screen / Module :',
+'LBL_FIELDS_AVLBL'=>'Fields Available in',
+'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown'
+
 
 
 );
