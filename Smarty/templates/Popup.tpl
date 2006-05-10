@@ -33,15 +33,13 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
                 		<tr style="background-color:#efefef">
                         		<td >
 						<table border=0 cellspacing=0 cellpadding=2 width=100%>
-		                                 <tr>
-						  <script type="text/javascript" src="include/js/general.js"></script>
-						  <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-                  		                  <input name="module" type="hidden" value="{$RETURN_MODULE}">
-		                                  <input name="action" type="hidden" value="{$RETURN_ACTION}">
-                  		                  <input name="pmodule" type="hidden" value="{$MODULE}">
-					  	  <input type="hidden" name="curr_row" value="{$CURR_ROW}">	
-		                                  <input name="entityid" type="hidden" value="">
-		                                  <input name="idlist" type="hidden" value="">
+		                                <tr>
+		           		                <input name="module" type="hidden" value="{$RETURN_MODULE}">
+		                                <input name="action" type="hidden" value="{$RETURN_ACTION}">
+                  		                <input name="pmodule" type="hidden" value="{$MODULE}">
+										<input type="hidden" name="curr_row" value="{$CURR_ROW}">	
+		                                <input name="entityid" type="hidden" value="">
+		                                <input name="idlist" type="hidden" value="">
 						{if $SELECT eq 'enable'}
 						  <td><input class="small" type="button" value="Add Contacts" onclick="if(SelectAll()) window.close();"/></td>
 						{/if}
