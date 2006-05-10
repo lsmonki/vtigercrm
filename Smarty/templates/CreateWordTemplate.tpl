@@ -62,7 +62,7 @@
 			<td  width="75%" colspan="2"  >
 				<img src="{$IMAGE_PATH}fp2.gif" width="59" height="40"  align="left"/>
 				<span class="genHeaderSmall">{$UMOD.LBL_SELECT_MODULE}</span><br />
-				 Select a module to assign this Template
+				 {$UMOD.LBL_MERGE_MSG}
 			</td>
 		</tr>
 		<tr>
@@ -83,7 +83,7 @@
 		      </td>
 		</tr>
 		 <tr>
-                      <td align="right" valign="top"><b>{$UMOD.LBL_MERGE_FILE}</b></td>
+                      <td align="right" valign="top"><font color="red">{$APP.LBL_REQUIRED_SYMBOL}</font><b>{$UMOD.LBL_MERGE_FILE}</b></td>
                       <td><input type="file" name="binFile" size="40" tabindex="3" /><br />(Eg - .doc, .rtf files)</td>
 		 </tr>
 		 <tr>
