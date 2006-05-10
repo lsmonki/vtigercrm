@@ -147,9 +147,9 @@ function ajaxImportSavedMapResponse(response)
 				   </tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="left" style="padding-left:40px;" >
-						<input type="checkbox" name="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
+						<input type="checkbox" id="save_map" name="save_map" onclick="set_readonly(this.form)" />&nbsp;&nbsp;
 						Save above Mapping  as : &nbsp;&nbsp;&nbsp;
-						<input type="text" readonly name="save_map_as" value="" class="importBox" >
+						<input type="text" readonly id="save_map_as" name="save_map_as" value="" class="importBox" >
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td><hr /></td></tr>
@@ -157,7 +157,7 @@ function ajaxImportSavedMapResponse(response)
 					<td align="right" style="padding-right:40px;" >
 						<input type="submit" name="button"  value=" &nbsp;&lsaquo; Back &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='2'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; Import Now &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='4'; return verify_data(Import)" />
+						<input type="submit" name="button"  value=" &nbsp; Import Now &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='4'; return validate_import_map()" />
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td align="right" >&nbsp;</td></tr>
