@@ -58,7 +58,7 @@
 	<br />
 	{foreachelse}
 	<div align="center"	style="position:relative;width:50%;height:30px;border:1px dashed #CCCCCC;background-color:#FFFFCC;padding:10px;">
-	<a href="javascript:;" onclick="fnvshobj(this,'orgLay');">Click Here</a>&nbsp;to Add New  Group
+	<a href="javascript:;" onclick="fnvshobj(this,'orgLay');">{$MOD.LBL_CLICK_HERE}</a>&nbsp;{$MOD.LBL_TO_ADD_NEW_GROUP}
 	</div>
 	{/foreach}
 	</form>
@@ -66,7 +66,7 @@
 
 <div style="display: none; left: 193px; top: 106px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>Create New :</b></td></tr>
+	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$MOD.LBL_CREATE_NEW} :</b></td></tr>
 	<tr>
 	<td>
 	{foreach item=folder from=$REPT_FOLDERS}
