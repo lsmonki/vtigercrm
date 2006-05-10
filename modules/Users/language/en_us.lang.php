@@ -23,6 +23,7 @@ $mod_strings = Array(
 'LBL_SEARCH_FORM_TITLE'=>'User Search',
 'LBL_LIST_FORM_TITLE'=>'User List',
 'LBL_NEW_FORM_TITLE'=>'New User',
+'LBL_CREATE_NEW_USER'=>'Create New User',
 'LBL_USER'=>'Users:',
 'LBL_LOGIN'=>'Login',
 'LBL_USER_ROLE'=>'Role',
@@ -117,6 +118,7 @@ $mod_strings = Array(
 // Users--listroles.php , createrole.php , ListPermissions.php , editpermissions.php
 
 'LBL_ROLES'=>'Roles',
+'LBL_ROLES_SUBORDINATES'=>'Roles and Subordinates',
 'LBL_ROLE_NAME'=>'Role Name',
 'LBL_CREATE_NEW_ROLE'=>'Create New Role',
 
@@ -157,16 +159,19 @@ $mod_strings = Array(
 'LBL_TEMPLATE_NAME'=>'Template Name',
 'LBL_TEMPLATE_HEADER'=>'Template',
 'LBL_TEMPLATE_DETAILS'=>'Template Details',
+'LBL_EDIT_TEMPLATE'=>'Edit Template',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Communication Templates > Email Templates',
-'LBL_MAILMERGE_TEMPLATES_LIST'=>'> Communication Templates > Mail Merge Templates',
+'LBL_MAILMERGE_TEMPLATES_LIST'=>' > Communication Templates > Mail Merge Templates',
 'LBL_MAILMERGE_TEMPLATES_ATTACHMENT' => '> Communication Templates > Attach Mail Merge Template',
 'LBL_DOWNLOAD_NOW'=>'Download Now',
 'LBL_DOWNLOAD'=>'Download',
 'LBL_SELECT_MODULE'=>'Select Module',
 'LBL_MERGE_FILE'=>'File : ',
+'LBL_MERGE_MSG'=>'Select a module to assign this Template',
 
-
+'LNK_GO_TO_TOP'=>'Go to Page Top',
+'LNK_SAMPLE_EMAIL'=>'View Sample Email',
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
@@ -195,13 +200,21 @@ $mod_strings = Array(
 // Added fields in createnewgroup.php
 'LBL_CREATE_NEW_GROUP'=>'Create New Group',
 'LBL_NEW_GROUP'=>'New Group',
+'LBL_EDIT_GROUP'=>'Edit Group',
 'LBL_GROUP_NAME'=>'Group Name',
+'LBL_GROUP_DETAILS'=>'Group Details',
+'LBL_MEMBER_LIST'=>'Member List',
+'LBL_MEMBER_AVLBL'=>'Member Available',
+'LBL_MEMBER_SELECTED'=>'Selected Member',
 'LBL_DESCRIPTION'=>'Description',
 
 // Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
+'LBL_DETAIL_VIEW'=>'Detail View of',
+'LBL_EDIT_VIEW'=>'Edit View of',
 'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
 'LBL_GROUPS'=>'Groups',
+'LBL_ADD_GROUP_BUTTON'=>'Add Group',
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
 'LBL_NEW_WORD_TEMPLATE'=>'New Template',
 
@@ -399,8 +412,8 @@ $mod_strings = Array(
 'LBL_USER_LOGIN_ROLE'=>'User Login & Role',
 'LBL_USER_MORE_INFN'=>'More Information',
 'LBL_USER_ADDR_INFN'=>'Address Information',
-'LBL_USER_IMAGE'=>'User Image'
-
+'LBL_USER_IMAGE'=>'User Image',
+'LBL_USR'=>'Users'
 
 
 );
