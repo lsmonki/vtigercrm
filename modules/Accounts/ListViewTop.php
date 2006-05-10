@@ -33,7 +33,7 @@ function getTopAccounts()
 	global $current_user;
 	$current_module_strings = return_module_language($current_language, "Accounts");
 
-	$list_query = 'select account.accountid, account.accountname, account.tickersymbol, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
+	$list_query = "select account.accountid, account.accountname, account.tickersymbol, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid='".$current_user->id."' and potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' and potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' group by account.accountid, account.accountname, account.tickersymbol order by amount desc;";
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
 	$noofrows = min($adb->num_rows($list_result),7);
