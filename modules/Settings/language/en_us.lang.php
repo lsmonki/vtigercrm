@@ -570,6 +570,9 @@ $mod_strings = Array(
 'LBL_PICKLIST_AVAILINFO2'=>'are shown below. Click Edit to modify the contents of the list.',
 'LBL_EDIT_PICKLIST'=>'Edit Pick List',
 'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
+'LBL_SELECT_MODULE'=>'Select Module',
+'LBL_SELECT_CRM_MODULE'=>'Select the CRM module',
+'LBL_EDIT'=>'Edit',
 );
 
 
