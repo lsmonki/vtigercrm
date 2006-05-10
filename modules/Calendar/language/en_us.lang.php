@@ -88,6 +88,12 @@ $mod_strings = Array(
 'LBL_PREV_MON' => 'Previous Month',
 'LBL_NEXT_MON' => 'Next Month',
 
+'LBL_YEAR'=>'Year',
+'LBL_YEAR_BUTTON_KEY'=>'Y',
+'LBL_MON_BUTTON_TITLE'=>'Year [Alt+Y]',
+'LBL_PREV_YEAR'=>'Previous Year',
+'LBL_NEXT_YEAR' => 'Next Year',
+
 'LBL_APP_LOCATION' => 'Location',
 'LBL_APP_IGNORE_TIME' => 'ignore above times',
 'LBL_SUBJECT'=>'Subject:',
@@ -126,6 +132,42 @@ $mod_strings = Array(
 "November",
 "December",
 ),
+
+'cal_weekdays_short'=>array(
+"Sun",
+"Mon",
+"Tue",
+"Wed",
+"Thu",
+"Fri",
+"Sat",
+),
+'cal_weekdays_long'=>array(
+"Sunday",
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+),
+'cal_month_short'=>array(
+"",
+"Jan",
+"Feb",
+"Mar",
+"Apr",
+"May",
+"Jun",
+"Jul",
+"Aug",
+"Sep",
+"Oct",
+"Nov",
+"Dec",
+),
+
+
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',
