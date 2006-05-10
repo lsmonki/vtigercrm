@@ -36,7 +36,7 @@
 						<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">&nbsp;
 						<span class="genHeaderGray">{$MOD.LBL_PROFILES}</span>
 				</td>
-				<td align="right" style="border-bottom:1px dashed #CCCCCC;"><input title="New" accessKey="C" class="classBtn" type="submit" name="New" value="New Profile"/></td>
+				<td align="right" style="border-bottom:1px dashed #CCCCCC;"><input title="{$CMOD.LBL_NEW_PROFILE}" class="classBtn" type="submit" name="New" value="{$CMOD.LBL_NEW_PROFILE}"/></td>
 		</tr>
 		<tr><td colspan="3">&nbsp;</td></tr>
 		<tr><td colspan="3">
