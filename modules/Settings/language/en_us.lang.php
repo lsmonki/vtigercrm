@@ -369,6 +369,7 @@ $mod_strings = Array(
 
 'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'- Create and Manage user defined fields',
 
+'LBL_EDIT'=>'Editing',
 
 
 'LBL_PICKLIST_SETTINGS'=>'Picklist Settings',
