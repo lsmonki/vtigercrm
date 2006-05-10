@@ -50,6 +50,11 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
         	$date_data['year'] = $_REQUEST['year'];
 	}
 	$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
+	if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month')
+	{
+		global $current_user;
+		$calendar_arr['calendar']->add_Activities($current_user);
+	}
 	$calendar_arr['view'] = $mysel;
 	if($type == 'hourview')
 	{
