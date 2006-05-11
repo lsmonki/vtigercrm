@@ -158,8 +158,8 @@ $mod_strings = Array(
 'LBL_STEP_2_TXT'=>'To map the fields, Select the corresponding in combo boxes for each',
 'LBL_USE_SAVED_MAPPING'=>'Use Saved Mapping :',
 'LBL_MAPPING'=>'Mapping',
-'LBL_HEADERS'=>'Headers :'
-
+'LBL_HEADERS'=>'Headers :',
+'LBL_ERROR_MULTIPLE'=>'Same fields may be mapped twice. Please check the mapped fields.',
 
 );
 

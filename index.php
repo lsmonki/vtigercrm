@@ -215,13 +215,6 @@ if(isset($action) && isset($module))
  	         header( "Pragma: no-cache" );        
  	}
 
-	if ( $action == "Import" &&
-                isset($_REQUEST['step']) &&
-                $_REQUEST['step'] == '4'  )
-        {
-                $skipHeaders=true;
-                $skipFooters=true;
-        }
         if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' || $module == 'Calendar')
         {
           $skipSecurityCheck=true;
