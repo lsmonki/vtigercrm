@@ -34,7 +34,7 @@
     <tr>
       <td width="95%" style="padding-left:20px;" valign="top"><table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
           <tr>
-            <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGEPATH}groups.gif" width="48" height="48" align="absmiddle" /> </td>
+            <td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" ><img src="{$IMAGE_PATH}groups.gif" width="48" height="48" align="absmiddle" /> </td>
             <td style="padding:5px;border-bottom:2px dotted #AAAAAA;"><span class="genHeaderGrayBig">{$GROUPINFO.0.groupname} {$APP.LBL_GROUP}</span><br />
                 <span class="big">{$CMOD.LBL_DETAIL_VIEW} {$GROUPINFO.0.groupname} {$APP.LBL_GROUP}</span> </td>
           </tr>
@@ -69,22 +69,22 @@
                       	  	<tr>
 								{if $type == "User"}
 								<td class="dvtCellLabel" valign="top" align="left" width="5%">
-										<img src="{$IMAGEPATH}user_icon.gif" align="absmiddle">
+										<img src="{$IMAGE_PATH}user_icon.gif" align="absmiddle">
 								</td>
 								{/if}
 								{if $type == "Role" }
 								<td class="dvtCellLabel" valign="top" align="left" width="5%">
-										<img src="{$IMAGEPATH}roles_icon.gif" align="absmiddle">
+										<img src="{$IMAGE_PATH}roles_icon.gif" align="absmiddle">
 								</td>
 								{/if}
 								{if $type == "Role and Subordinates" }
 								<td class="dvtCellLabel" valign="top" align="left" width="5%">
-										<img src="{$IMAGEPATH}roles_icon.gif" align="absmiddle">
+										<img src="{$IMAGE_PATH}roles_icon.gif" align="absmiddle">
 								</td>
 								{/if}
 								{if $type == "Group" }
 								<td class="dvtCellLabel" valign="top" align="left" width="5%">
-										<img src="{$IMAGEPATH}groups_icon.gif" align="absmiddle">
+										<img src="{$IMAGE_PATH}groups_icon.gif" align="absmiddle">
 								</td>
 								{/if}
 								<td class="dvtCellLabel" valign="top" align="right" width="15%"><b>{$type} {$CMOD.LBL_COLON} </b></td>
