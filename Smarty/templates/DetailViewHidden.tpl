@@ -29,6 +29,7 @@
 	<input type="hidden" name="email_id">
 	<input type="hidden" name="source_module">
 	<input type="hidden" name="entity_id">
+	{$HIDDEN_PARENTS_LIST}
 
 {elseif $MODULE eq 'Contacts'}
 	<input type="hidden" name="module" value="{$MODULE}">
@@ -50,6 +51,7 @@
 	<input type="hidden" name="case_id">
 	<input type="hidden" name="new_reports_to_id">
 	<input type="hidden" name="email_directing_module">
+	{$HIDDEN_PARENTS_LIST}
 {elseif $MODULE eq 'Potentials'}
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="record" value="{$ID}">
