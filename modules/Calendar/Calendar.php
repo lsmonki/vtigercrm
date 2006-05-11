@@ -53,8 +53,8 @@ class Calendar
 			case 'day':
 				$day_start_hour = $this->day_start_hour;
 				$day_end_hour = $this->day_end_hour;
-				$dayview_hours = $day_end_hour - $day_start_hour;
-				for($i=0;$i<=$dayview_hours;$i++)
+				//$dayview_hours = $day_end_hour - $day_start_hour;
+				for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 				{
 					$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($i));
 					$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->hour] = $layout;
@@ -128,20 +128,40 @@ class Calendar
 		if ( $this->view == 'week')
 		{
 			$end_datetime = $this->date_time->get_first_day_of_changed_week('increment');
-                } else {
+                } elseif($this->view == 'month') {
+			$end_datetime = $this->date_time->get_first_day_of_changed_month('increment');
+		} else {
                         $end_datetime = $this->date_time->get_changed_day('increment');
                 }
 		
 		$activities = Array();
-		$activities = Appointment::readAppointment($current_user->id,$this->date_time,$end_datetime);
+		$activities = Appointment::readAppointment($current_user->id,$this->date_time,$end_datetime,$this->view);
+		
 		if(!empty($activities))
 		{
 			foreach($activities as $key=>$value)
 			{
 				if($this->view == 'day')
-					array_push($this->day_slice[$value->formatted_datetime]->activities,  $value);
+				{
+					array_push($this->day_slice[$value->formatted_datetime]->activities, $value);
+				}
+				elseif($this->view == 'week')
+				{
+			
+				}
+				elseif($this->view == 'month')
+				{
+					array_push($this->month_array[$value->formatted_datetime]->activities,$value);
+				}
+				elseif($this->view == 'year')
+				{
+				}
+				else
+					die("view:".$this->view." is not defined");
+
 			}
 		}
+		//echo '<pre>';print_r($this->month_array);echo'</pre>';
 		
 	}
 	
