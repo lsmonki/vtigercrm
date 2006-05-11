@@ -127,15 +127,18 @@ class Calendar
 	{
 		if ( $this->view == 'week')
 		{
+			$start_datetime = $this->date_time->getThisweekDaysbyIndex(0);
 			$end_datetime = $this->date_time->get_first_day_of_changed_week('increment');
                 } elseif($this->view == 'month') {
+			$start_datetime = $this->date_time->getThismonthDaysbyIndex(0);
 			$end_datetime = $this->date_time->get_first_day_of_changed_month('increment');
 		} else {
+			$start_datetime = $this->date_time;
                         $end_datetime = $this->date_time->get_changed_day('increment');
                 }
 		
 		$activities = Array();
-		$activities = Appointment::readAppointment($current_user->id,$this->date_time,$end_datetime,$this->view);
+		$activities = Appointment::readAppointment($current_user->id,$start_datetime,$end_datetime,$this->view);
 		
 		if(!empty($activities))
 		{
