@@ -445,15 +445,17 @@ function validate_import_map()
 {
 	var tagName;
 	var count = 0;
-	var required_count = 0;
 	var field_count = "<?php echo $field_count; ?>";
 	var required_fields = new Array();
+	var required_fields_name = new Array();
+	var seq_string = '';
 
 	<?php 
 		foreach($focus->required_fields as $name => $index)
 		{
 			?>
 			required_fields[count] = "<?php echo $name; ?>";
+			required_fields_name[count] = "<?php echo $translated_column_fields[$name]; ?>";
 			count = count + 1;
 			<?php 
 		} 
@@ -462,37 +464,44 @@ function validate_import_map()
 	{
 		tagName = document.getElementById('colnum'+loop_count);
 		optionData = tagName.options[tagName.selectedIndex].value;
-		for(inner_loop = 0; inner_loop<required_fields.length;inner_loop++)
+
+		if(optionData != -1)
 		{
-			if(optionData == required_fields[inner_loop])
+			tmp = seq_string.indexOf(optionData);
+			if(tmp == -1)
 			{
-				required_count = required_count +1;
+				seq_string = seq_string + optionData;
 			}
+			else
+			{
+				//if a field mapped more than once, alert the user and return
+				alert("'"+tagName.options[tagName.selectedIndex].text+"' has been mapped twice. Please check.");
+				return false;
+			}
+		}
+
+	}
+
+	//check whether the mandatory fields have been mapped.
+	for(inner_loop = 0; inner_loop<required_fields.length;inner_loop++)
+	{
+		if(seq_string.indexOf(required_fields[inner_loop]) == -1)
+		{
+			alert('Please map the mandatory field "'+required_fields_name[inner_loop]+'"');
+			return false;
 		}
 	}
 
-	var err_msg = '';
-	if(required_count != required_fields.length)
+	//This is to check whether the save map name has been given or not when save map check box is checked
+	if(document.getElementById("save_map").checked == true)
 	{
-		err_msg = "Please Map All Required Fileds";
-	}
-	else
-	{
-		//This is to check whether the save map name has been given or not when save map check box is checked
-		if(document.getElementById("save_map").checked == true)
+		if(trim(document.getElementById("save_map_as").value) == '')
 		{
-			if(trim(document.getElementById("save_map_as").value) == '')
-			{
-				err_msg = "Please Enter Save Map Name";
-			}
+			alert("Please Enter Save Map Name");
+			return false;
 		}
 	}
-	if(err_msg != '')
-	{
-		alert(err_msg);
-		return false;
-	}
-	else
-		return true;
+
+	return true;
 }
 </script>
