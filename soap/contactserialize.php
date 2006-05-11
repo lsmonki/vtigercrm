@@ -524,6 +524,55 @@ $server->register(
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
+
+$server->register(
+	'create_vendor_from_webform',
+	array('vendorname'=>'xsd:string',
+		'email'=>'xsd:string', 
+		'phone'=>'xsd:string', 
+		'website'=>'xsd:string'), 
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
+
+
+$server->register(
+	'create_product_from_webform',
+	array('productname'=>'xsd:string',
+		'productcode'=>'xsd:string', 
+		'website'=>'xsd:string'), 
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
+
+
+$server->register(
+	'create_note_from_webform',
+	array('title'=>'xsd:string',
+		'notecontent'=>'xsd:string'), 
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
+
+
+
+$server->register(
+	'create_site_from_webform',
+	array('portalname'=>'xsd:string',
+		'portalurl'=>'xsd:string'), 
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
+
+
+$server->register(
+	'create_rss_from_webform',
+	array('rssurl'=>'xsd:string'),
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+
+
+
 $server->register(
 	'save_faq_comment',
 	array('faqid'=>'xsd:string','comments'=>'xsd:string'),
@@ -2409,6 +2458,128 @@ function retrieve_calendar($name)
 	
 	return $output_list;
 }
+
+
+
+
+
+function create_vendor_from_webform($vendorname,$email,$phone,$website)
+{
+	global $adb;
+	$adb->println("Create New Vendor from Web Form - Starts");
+	require_once("modules/Vendors/Vendor.php");
+
+	$focus = new Vendor();
+	$focus->column_fields['vendorname'] = $vendorname;
+	$focus->column_fields['email'] = $email;
+	$focus->column_fields['phone'] = $phone;
+	$focus->column_fields['website'] = $website;
+
+	$focus->save("Vendors");
+	
+	$focus->retrieve_entity_info($focus->id,"Vendors");
+
+	$adb->println("Create New Vendor from Web Form - Ends");
+
+	if($focus->id != '')
+		return 'Thank you for your interest. Information has been successfully added as Vendor.';
+	else
+		return "Vendor creation failed. Try again";
+}
+
+
+
+function create_product_from_webform($productname,$code,$website)
+{
+	global $adb;
+	$adb->println("called >>>>>>>>>>>>>>>>>>>>>>>");
+	$adb->println("Create New Product from Web Form - Starts");
+	require_once("modules/Products/Product.php");
+
+	$focus = new Product();
+	$focus->column_fields['productname'] = $productname;
+	$focus->column_fields['productcode'] = $code;
+	$focus->column_fields['website'] = $website;
+
+	$adb->println("Values are  --------------->".$productname .'       '.$code .'           '.$website);
+	$focus->save("Products");
+	
+	$focus->retrieve_entity_info($focus->id,"Products");
+
+	$adb->println("Create New Product from Web Form - Ends");
+
+	if($focus->id != '')
+		return 'Thank you for your interest. Information has been successfully added as Product.';
+	else
+		return "Product creation failed. Try again";
+}
+
+
+
+function create_note_from_webform($subject,$desc)
+{
+	global $adb;
+	$adb->println("Create New Note from Web Form - Starts");
+	require_once("modules/Notes/Note.php");
+
+	$focus = new Note();
+	$focus->column_fields['title'] = $subject;
+	$focus->column_fields['notecontent'] = $desc;
+
+	$focus->save("Notes");
+	
+	$focus->retrieve_entity_info($focus->id,"Notes");
+
+	$adb->println("Create New Note from Web Form - Ends");
+
+	if($focus->id != '')
+		return 'Thank you for your interest. Information has been successfully added as Note.';
+	else
+		return "Note creation failed. Try again";
+}
+
+
+
+function create_site_from_webform($name,$url)
+{
+	global $adb;
+	$adb->println("Create New Site from Web Form - Starts");
+	require_once("modules/Portal/Portal.php");
+	$adb->println("name url  >>>>>>>>>>".$name .' >>>>>>>>>>> ' .$url);
+
+	$result = SavePortal($name,$url);
+	
+	$adb->println("Create New Portal from Web Form - Ends");
+
+	if($result != '')
+		return 'Thank you for your interest. Information has been successfully added as Portal';
+	else
+		return "Portal creation failed. Try again";
+}
+
+
+function create_rss_from_webform($url)
+{
+	global $adb;
+	$adb->println("Create New RSS from Web Form - Starts");
+	require_once("modules/Rss/Rss.php");
+
+	$oRss = new vtigerRSS();
+	if($oRss->setRSSUrl($url))
+	{
+		if($oRss->saveRSSUrl($url) == false)
+		{
+			return "RSS creation failed. Try again";
+		}
+		else
+		{
+			return 'Thank you for your interest. Information has been successfully added as RSS.';
+        	}
+
+	}
+}
+
+
 //calendar
 
 //$log->fatal("In soap.php");

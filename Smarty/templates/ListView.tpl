@@ -115,7 +115,7 @@ y:0.90;z-index:50"></div>
 <form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
 	<tr>
-		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="Basic Search" title="Basic Search" border=0>&nbsp;<b>Search {$MODULE} for</b></td>
+		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>Search for</b></td>
 		<td width="25%" class="dvtCellLabel"><input type="text"  class="txtBox" name="search_text"></td>
 		<td width="25%" class="dvtCellLabel"><b>In</b>&nbsp;
 			<select name ="search_field" class="txtBox">
@@ -130,7 +130,7 @@ y:0.90;z-index:50"></div>
 		</td>
 		<td width="35%" class="dvtCellLabel">
 			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" Search Now ">&nbsp;
-			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">Go to Advanced Search</a></span>	
+			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">Go to {$APP.LNK_ADVANCED_SEARCH}</a></span>	
 							</td>
 	</tr>
 	<tr>
@@ -148,10 +148,10 @@ y:0.90;z-index:50"></div>
 <div id="advSearch" style="display:none;">
 		<table  cellspacing=0 cellpadding=5 width=80% style="border-top:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" class="small" align="center">
 			<tr>
-					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
+					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="{$APP.LNK_ADVANCED_SEARCH}" title="{$APP.LNK_ADVANCED_SEARCH}" border=0></td>
 					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;Match All of the Following</b></td>
 					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;Match Any of the Following</b></td>
-					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">Go to Basic Search</a></span></td>
+					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">Go to {$APP.LNK_BASIC_SEARCH}</a></span></td>
 			</tr>
 		</table>
 		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">
@@ -238,7 +238,7 @@ y:0.90;z-index:50"></div>
                                         {/if}
 
                                  {/foreach}
-                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
+                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -303,7 +303,7 @@ y:0.90;z-index:50"></div>
                                         {/if}
 
                                  {/foreach}
-                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
+                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >

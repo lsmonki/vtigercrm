@@ -80,15 +80,17 @@ function showhideRepeat(argg1,argg2)
 
 
 
-function gshow(argg1)
+function gshow(argg1,startdate,enddate,starttime,endtime)
 {
 	var y=document.getElementById(argg1).style;
 	
 	if (y.display=="none") 
 	{
+		document.getElementById("date_start").value = startdate;
+		document.getElementById("due_date").value = enddate;	
+		document.getElementById("time_start").value = starttime;
+		document.getElementById("time_end").value = endtime;
 		y.display="block";
-		
-	
 	}
 }
 
@@ -263,50 +265,20 @@ function formSelectColumnString()
 
 function ajaxCalSaveResponse(response)
 {
-        document.getElementById("hrView_default").style.display = "none";
+	document.getElementById("hrView_default").style.display = "none";
         document.getElementById("toggleDiv").innerHTML=response.responseText;
 }
 
 function fnRedirect(view,hour,day,month,year){
-        var ajaxObj = new Ajax(ajaxCalSaveResponse);
-        var tagName =  document.getElementById('viewBox');
-        var OptionData = tagName.options[tagName.selectedIndex].value;
-        if(OptionData == 'hourview'){
-                var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
-        }
-        else if(OptionData == 'listview'){
-                var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
-        }
-        ajaxObj.process("index.php?",urlstring);
+	var ajaxObj = new Ajax(ajaxCalSaveResponse);
+	var tagName =  document.getElementById('viewBox');
+	var OptionData = tagName.options[tagName.selectedIndex].value;
+	if(OptionData == 'hourview'){
+		var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
+	}
+	else if(OptionData == 'listview'){
+		var urlstring ="module=Calendar&action=CalendarAjax&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&type="+OptionData+"&parenttab=My Home Page&ajax=true";
+	}
+	ajaxObj.process("index.php?",urlstring);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

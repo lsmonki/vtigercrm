@@ -9,7 +9,7 @@
 *
 ********************************************************************************/
 
-
+require_once('modules/Portal/Portal.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -39,15 +39,5 @@ if(isset($_REQUEST['portalurl']) && $_REQUEST['portalurl']!='')
 
 echo $portal_inputs;
 
-function SavePortal($portalname,$portalurl)
-{
 
-global $adb;
-$portalid=$adb->getUniqueID('portal');
-$portal_name=$_REQUEST['portalname'];
-$portal_url=$_REQUEST['portalurl'];
-$query="insert into portal values(".$portalid.",'".$portal_name."','".$portal_url."',0)";
-$result=$adb->query($query);
-return $portalid;
-}
 ?>

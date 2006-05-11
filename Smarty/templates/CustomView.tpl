@@ -10,7 +10,7 @@
 -->
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
-<script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/CustomView/CustomView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
@@ -60,11 +60,11 @@ function mandatoryCheck()
                 var errorMessage = "";
                 if (trim(document.CustomView.viewName.value) == "") {ldelim}
                         isError = true;
-                        errorMessage += "\nView Name";
+                        errorMessage += "\n{$MOD.LBL_VIEW_NAME}";
                 {rdelim}
                 // Here we decide whether to submit the form.
                 if (isError == true) {ldelim}
-                        alert("Missing required fields:" + errorMessage);
+                        alert("{$MOD.Missing_required_fields}:" + errorMessage);
                         return false;
                 {rdelim}
 		
@@ -104,7 +104,7 @@ function mandatoryCheck()
   <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
   <td class="showPanelBg" valign="top" width="100%">
    <div class="small" style="padding: 20px;">
-      <span class="lvtHeaderText">{$MODULE} &gt; New Custom View</span> <br>
+      <span class="lvtHeaderText">{$APP.$MODULE} &gt; {$MOD.New_Custom_View}</span> <br>
       <hr noshade="noshade" size="1">
       <form name="EditView" method="post" enctype="multipart/form-data" action="index.php">
             <table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
@@ -112,10 +112,10 @@ function mandatoryCheck()
               <td align="left" valign="top">
                <table width="100%"  border="0" cellspacing="0" cellpadding="5">
 		<tr>
-		 <td colspan="4" class="detailedViewHeader"><strong>Details</strong></td>
+		 <td colspan="4" class="detailedViewHeader"><strong>{$MOD.Details}</strong></td>
 		</tr>
 		<tr>
-		 <td class="dvtCellInfo" align="right" width="25%"><span class="style1">*</span>View Name </td>
+		 <td class="dvtCellInfo" align="right" width="25%"><span class="style1">*</span>{$MOD.LBL_VIEW_NAME} </td>
 		 <td class="dvtCellInfo" width="25%">
 		  <input class="detailedViewTextBox" type="text" name='viewName' value="{$VIEWNAME}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/>
 		 </td>
@@ -129,12 +129,12 @@ function mandatoryCheck()
 		<tr><td colspan="3">&nbsp;</td></tr>
 		<tr>
 		 <td colspan="4" class="detailedViewHeader">
-		  <b>Select Columns to show in this view </b>
+		  <b>{$MOD.LBL_STEP_2_TITLE} </b>
 		 </td>
 		</tr>
 		<tr class="dvtCellLabel">
 		  <td><select name="column1" id="column1">
-	                <option value="">None</option>
+	                <option value="">{$MOD.LBL_NONE}</option>
 			{foreach item=filteroption key=label from=$CHOOSECOLUMN1}
 				<optgroup label="{$label}" class=\"select\" style=\"border:none\">
 				{foreach item=text from=$filteroption}
@@ -144,7 +144,7 @@ function mandatoryCheck()
           	        {$CHOOSECOLUMN1}
 	              </select></td>
 		   <td><select name="column2" id="column2">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN2}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -154,7 +154,7 @@ function mandatoryCheck()
                         {$CHOOSECOLUMN2}
                       </select></td>
 		   <td><select name="column3" id="column3">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN3}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -164,7 +164,7 @@ function mandatoryCheck()
                         {$CHOOSECOLUMN3}
                       </select></td>
 		   <td><select name="column4" id="column4">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN4}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -177,7 +177,7 @@ function mandatoryCheck()
 		</tr>
 		<tr class="dvtCellInfo">
 		   <td><select name="column5" id="column5">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN5}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -187,7 +187,7 @@ function mandatoryCheck()
                         {$CHOOSECOLUMN5}
                       </select></td>
                    <td><select name="column6" id="column6">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN6}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -197,7 +197,7 @@ function mandatoryCheck()
                         {$CHOOSECOLUMN6}
                       </select></td>
                    <td><select name="column7" id="column7">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN7}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -207,7 +207,7 @@ function mandatoryCheck()
                         {$CHOOSECOLUMN7}
                       </select></td>
                    <td><select name="column8" id="column8">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN8}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -219,7 +219,7 @@ function mandatoryCheck()
 		</tr>
 		<tr class="dvtCellLabel">
 		   <td><select name="column9" id="column9">
-                        <option value="">None</option>
+                        <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN9}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                                 {foreach item=text from=$filteroption}
@@ -238,7 +238,7 @@ function mandatoryCheck()
 		<td align="center">
 		{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}.&nbsp;	
 		  <select id="column{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}" name ="column{math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}" class="detailedViewTextBox">
-		   <option value="">None</option>
+		   <option value="">{$MOD.LBL_NONE}</option>
 		   {foreach item=filteroption key=label from={$CHOOSECOLUMN|cat: {math equation="(x-1)*4+ y" x=$smarty.section.SelectColumn.index y=$smarty.section.Column.index}}}
 		    <optgroup label="{$label}" class=\"select\" style=\"border:none\">
 		    {foreach item=text from=$filteroption}
@@ -258,10 +258,10 @@ function mandatoryCheck()
 		   <tbody><tr>
 		    <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 		    <td width="75" align="center" nowrap="nowrap" class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')">
-		     <b>Simple Filter</b>
+		     <b>{$MOD.LBL_STEP_3_TITLE}</b>
 		    </td>
 		    <td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadValues('mi','pi','mnuTab2','mnuTab')">
-		     <b>Advanced Filter </b>
+		     <b>{$MOD.LBL_STEP_4_TITLE}</b>
 		    </td>
 		    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
 		   </tr>
@@ -275,14 +275,13 @@ function mandatoryCheck()
 		     <table width="100%" cellspacing="0" cellpadding="5" class="dvtContentSpace">
 		      <tr><td>&nbsp;</td></tr>
                       <tr><td class="dvtCellInfo">
-		       Simple Time Filter allows you to select date based on <b>Account Created Time</b> or 
-		       <b>Account Modified Time</b>.<br /><br />
+                      {$MOD.LBL_AF_HDR5}<br /><br />
 		      </td></tr>
                       <tr><td>
 			<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
-			  <tr><td colspan="2" class="detailedViewHeader"><b>Simple Time Filter</b></td></tr>
+			  <tr><td colspan="2" class="detailedViewHeader"><b>{$MOD.Simple_Time_Filter}</b></td></tr>
 			  <tr>
-			     <td width="75%" align="right" class="dvtCellLabel">Select a Column :</td>
+			     <td width="75%" align="right" class="dvtCellLabel">{$MOD.LBL_Select_a_Column} :</td>
 			     <td width="25%" class="dvtCellInfo">
 				<select name="stdDateFilterField" class="select">
 				{foreach item=stdfilter from=$STDFILTERCOLUMNS}
@@ -291,7 +290,7 @@ function mandatoryCheck()
                                 </select>
 			  </tr>
 			  <tr>
-			     <td align="right" class="dvtCellLabel">Select Duration :</td>
+			     <td align="right" class="dvtCellLabel">{$MOD.Select_Duration} :</td>
 			     <td class="dvtCellInfo">
 			        <select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
 				{foreach item=duration from=$STDFILTERCRITERIA}
@@ -301,7 +300,7 @@ function mandatoryCheck()
 			     </td>
 			  </tr>
 			  <tr>
-			     <td align="right" class="dvtCellLabel">Start Date :</td>
+			     <td align="right" class="dvtCellLabel">{$MOD.Start_Date} :</td>
 			     <td width="25%" align=left class="dvtCellInfo">
 			     <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{$STARTDATE}">
 			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start">
@@ -312,7 +311,7 @@ function mandatoryCheck()
 			     </script></td>
 	            	  </tr>
 			  <tr>
-			     <td align="right" class="dvtCellLabel">End Date :</td> 
+			     <td align="right" class="dvtCellLabel">{$MOD.End_Date} :</td> 
   			     <td width="25%" align=left class="dvtCellInfo">
 			     <input name="enddate" id="jscal_field_date_end" type="text" size="10" class="textField" value="{$ENDDATE}">
 			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end">
@@ -337,11 +336,11 @@ function mandatoryCheck()
        </td></tr>
        <tr><td>
 	<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
-	  <tr><td colspan="3" class="detailedViewHeader"><b>Rule</b></td></tr>
+	  <tr><td colspan="3" class="detailedViewHeader"><b>{$MOD.LBL_RULE}</b></td></tr>
 	  
 	  <tr class="dvtCellLabel">
           <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK1}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                 {foreach item=text from=$filteroption}
@@ -349,16 +348,16 @@ function mandatoryCheck()
                 {/foreach}
               {/foreach}
               </select> &nbsp; <select name="fop1" id="fop1">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=criteria from=$FOPTION1}
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval1" id="fval1" type="text" size=30 maxlength=80 value="{$VALUE1}">
-            &nbsp;And</td>
+            &nbsp;{$MOD.LBL_AND}</td>
         </tr>
 	<tr class="dvtCellInfo">
           <td><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK2}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                 {foreach item=text from=$filteroption}
@@ -366,16 +365,16 @@ function mandatoryCheck()
                 {/foreach}
               {/foreach}
               </select> &nbsp; <select name="fop2" id="fop2">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=criteria from=$FOPTION2}
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval2" id="fval2" type="text" size=30 maxlength=80 value="{$VALUE2}">
-            &nbsp;And</td>
+            &nbsp;{$MOD.LBL_AND}</td>
         </tr>
 	<tr class="dvtCellLabel">
           <td><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK3}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                 {foreach item=text from=$filteroption}
@@ -383,16 +382,16 @@ function mandatoryCheck()
                 {/foreach}
               {/foreach}
               </select> &nbsp; <select name="fop3" id="fop3">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=criteria from=$FOPTION3}
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval3" id="fval3" type="text" size=30 maxlength=80 value="{$VALUE3}">
-            &nbsp;And</td>
+            &nbsp;{$MOD.LBL_AND}</td>
         </tr>
 	<tr class="dvtCellInfo">
           <td><select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK4}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                 {foreach item=text from=$filteroption}
@@ -405,11 +404,11 @@ function mandatoryCheck()
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
               </select>&nbsp; <input name="fval4" id="fval4" type="text" size=30 maxlength=80 value="{$VALUE4}">
-            &nbsp;And</td>
+            &nbsp;{$MOD.LBL_AND}</td>
         </tr>
 	<tr class="dvtCellLabel">
           <td><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=filteroption key=label from=$BLOCK5}
                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
                 {foreach item=text from=$filteroption}
@@ -417,7 +416,7 @@ function mandatoryCheck()
                 {/foreach}
               {/foreach}
               </select> &nbsp; <select name="fop5" id="fop5">
-              <option value="">None</option>
+              <option value="">{$MOD.LBL_NONE}</option>
               {foreach item=criteria from=$FOPTION5}
                 <option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
               {/foreach}
@@ -429,7 +428,7 @@ function mandatoryCheck()
 	  <tr class="{cycle values="dvtCellInfo,dvtCellLabel"}">
 	    <td align="left" width="33%">
 	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol{$smarty.section.advancedFilter.index}" onchange="updatefOptions(this, 'fop{$smarty.section.advancedFilter.index}'); class="detailedViewTextBox">
-	      <option value="">None</option>
+	      <option value="">{$MOD.LBL_NONE}</option>
 	      {foreach item=filteroption key=label from=$BLOCK}
 		<optgroup label="{$label}" class=\"select\" style=\"border:none\">
 		{foreach item=text from=$filteroption}
@@ -440,7 +439,7 @@ function mandatoryCheck()
 	    </td>
 	    <td align="left" width="33%">
 	      <select name="fcol{$smarty.section.advancedFilter.index}" id="fcol{$smarty.section.advancedFilter.index}" class="detailedViewTextBox">
-	      <option value="">None</option>
+	      <option value="">{$MOD.LBL_NONE}</option>
 	      {foreach item=criteria from=$FOPTION}
 		<option {$criteria.selected} value={$criteria.value}>{$criteria.text}</option>
 	      {/foreach}

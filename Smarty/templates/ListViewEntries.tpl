@@ -42,6 +42,8 @@
 					</table>
                                  </td>
 				 <td width=100% align="right">
+				 <!-- This if condition is added to hide the Custom View Links in Imported ListView -->
+				 {if $HIDE_CUSTOM_LINKS neq 1}
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
@@ -62,6 +64,7 @@
 						    {/if}	
 					</tr>
 				   </table>
+				 {/if}
 				 </td>	
                		      </tr>
 			 </table>

@@ -228,9 +228,9 @@ $app_strings = Array(
 
 
 
-'LNK_ADVANCED_SEARCH'=>'Advanced',
+'LNK_ADVANCED_SEARCH'=>'Advanced Search',
 
-'LNK_BASIC_SEARCH'=>'Basic',
+'LNK_BASIC_SEARCH'=>'Basic Search',
 
 'LNK_EDIT'=>'edit',
 

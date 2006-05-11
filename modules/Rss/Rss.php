@@ -16,7 +16,7 @@ $image_path=$theme_path."images/";
 
 require_once('data/CRMEntity.php');
 require_once('include/database/PearDatabase.php');
-require_once($theme_path."layout_utils.php");
+//require_once($theme_path."layout_utils.php");
 // Require the xmlParser class
 require_once('include/feedParser/xmlParser.php');
 
@@ -98,9 +98,11 @@ class vtigerRSS extends CRMEntity
 	  * returns true on sucess 
 	  * returns false if fails
 	 */
-	function saveRSSUrl($url,$makestarred,$rsscategory)
+	function saveRSSUrl($url,$makestarred=0,$rsscategory='')
 	{
 		global $adb;
+		if($rsscategory == '')
+			$rsscategory = 'vtiger Discussions';	
 
 		if ($url != "")
 		{

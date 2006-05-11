@@ -59,15 +59,15 @@ global $calpath,$callink;
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3 ><b>Event starts at</b></td></tr>
-				        <tr><td><input type="text" name="time_start" value="12:00 AM" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-                                        <tr><td><input type="text" name="date_start" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+				        <tr><td><input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
+                                        <tr><td><input type="text" name="date_start" id="date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
 					</table>
 				</td>
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td><b>Event ends on</b></td></tr>
-				        <tr><td><input type="text" value="12:00 AM" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-				        <tr><td><input type="text" name="due_date" value="20 Dec 2005" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+				        <tr><td><input type="text" name="time_end" id="time_end" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
+				        <tr><td><input type="text" name="due_date" id="due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
 					</table>
 				</td>
 				</tr>

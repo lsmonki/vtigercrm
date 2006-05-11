@@ -27,6 +27,8 @@ class Appointment
 	var $record;
 	var $image_name;
 	var $formatted_datetime;
+	var $duration_min;
+	var $duration_hour;
 
 	function Appointment()
 	{
@@ -34,11 +36,11 @@ class Appointment
 		$this->participant_state = Array();
 		$this->description = "";
 	}	
-	function readAppointment($userid, &$from_datetime, &$to_datetime)
+	function readAppointment($userid, &$from_datetime, &$to_datetime, $view)
 	{
 		global $current_user,$adb;
 		$shared_ids = getSharedCalendarId($current_user->id,'shared');		
-                $q= "select activity.*,crmentity.*,account.accountname,account.accountid,activitygrouprelation.groupname FROM activity inner join crmentity on activity.activityid = crmentity.crmid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype in ('Call','Meeting') AND ";
+                $q= "select activity.*, crmentity.*, account.accountname,account.accountid,activitygrouprelation.groupname FROM activity inner join crmentity on activity.activityid = crmentity.crmid left join recurringevents on activity.activityid=recurringevents.activityid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype in ('Call','Meeting') AND ";
 
                 if(!is_admin($current_user))
                 {
@@ -52,10 +54,10 @@ class Appointment
                 {
                         $q .= "  ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') or (crmentity.smownerid in ($shared_ids) and salesmanactivityrel.smid in ($shared_ids) and activity.visibility='Public'))";
                 }
-                $q .= " AND crmentity.deleted = 0)";
+                $q .= " AND crmentity.deleted = 0) AND recurringevents.activityid is NULL ";
                 $q .= " ORDER by activity.date_start,activity.time_start";
 
-
+		//echo $q;
 		$r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
@@ -65,18 +67,48 @@ class Appointment
                         $obj = &new Appointment();
                         $result = $adb->fetchByAssoc($r);
                         //echo '<pre>' print_r($result);echo '</pre>';
-                        $obj->readResult($result);
+                        $obj->readResult($result, $view);
 			//$list_arr[$obj->record] = $obj;
                         $a++;
 			$list[] = $obj;
                         unset($obj);
                 }
+		//Get Recurring events
+		$q = "SELECT activity.activityid, activity.subject, activity.activitytype, crmentity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid,activitygrouprelation.groupname from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid";
+
+                $q.=" where ( activity.activitytype in ('Call','Meeting') AND ";
+                if(!is_admin($current_user))
+                {
+                        $q .= " ( ";
+                }
+                $q .= "  (recurringdate < '".$to_datetime->get_formatted_date()."' AND recurringdate >= '".$from_datetime->get_formatted_date(). "') ";
+                if(!is_admin($current_user))
+                {
+			$q .= " ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) or (crmentity.smownerid in ($shared_ids) and salesmanactivityrel.smid in ($shared_ids) and activity.visibility='Public'))";
+                }
+
+                $q .= " AND crmentity.deleted = 0 )" ;
+                $q .= " ORDER by recurringid";
+                $r = $adb->query($q);
+                $n = $adb->getRowCount($r);
+                $a = 0;
+		while ( $a < $n )
+                {
+			$obj = &new Appointment();
+                        $result = $adb->fetchByAssoc($r);
+                        $obj->readResult($result,$view);
+                        $a++;
+			$list[] = $obj;
+                        unset($obj);
+                }
+
+
 		usort($list,'compare');
 		//echo '<pre>';print_r($list);echo '</pre>';
 		return $list;
 	}
 
-	function readResult($act_array)
+	function readResult($act_array, $view)
 	{
 		$format_sthour='';
                 $format_stmin='';
@@ -137,6 +169,8 @@ class Appointment
                 $this->end_time          = new DateTime($end_date_arr,true);
                 $this->subject           = $act_array["subject"];
                 $this->activity_type     = $act_array["activitytype"];
+		$this->duration_hour     = $act_array["duration_hours"];
+		$this->duration_minute   = $act_array["duration_minutes"];
 		if($act_array["activitytype"] == 'Call')
 		{
 			$this->image_name = 'Calls.gif';
@@ -146,7 +180,10 @@ class Appointment
 			$this->image_name = 'Meetings.gif';
 		}
                 $this->record            = $act_array["activityid"];
-		$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
+		if($view == 'day')
+			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
+		else
+			$this->formatted_datetime= $act_array["date_start"];
 		return;
 	}
 	

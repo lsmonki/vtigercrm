@@ -1,12 +1,14 @@
-function searchshowhide(argg)
+function searchshowhide(argg,argg2)
 {
     var x=document.getElementById(argg).style
-    if (x.display=="none")
+    var y=document.getElementById(argg2).style
+    if (x.display=="none" && y.display=="none")
     {
         x.display="block"
    
     }
     else {
+	    y.display="none"
             x.display="none"
           }
 }

@@ -52,7 +52,7 @@ function change(obj,divid)
 function massDelete(module)
 {
         x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
+		var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
@@ -60,7 +60,8 @@ function massDelete(module)
 
                 if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        idstring = document.massdelete.selected_id.value+':';
+                		xx = 1;
                 }
                 else
                 {
