@@ -217,6 +217,7 @@ create_parenttab_data_file();
 // creation occurs within a transaction we get problems
 $db->getUniqueID("crmentity");
 $db->getUniqueID("seactivityrel");
+$db->getUniqueID("freetags");
 
 // populate the db with seed data
 if ($db_populate) {

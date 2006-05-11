@@ -791,7 +791,7 @@ class CRMEntity extends SugarBean
 			  {
 				  if($table_name == 'activity')
                                   {
-			             updateActivityGroupRelation($this->id,'');
+			             updateActivityGroupRelation($this->id,$groupname);
 				  }
 			  }
 			  	
@@ -977,7 +977,7 @@ $log->debug("type is ".$type);
 	{
 		$activity_id=$this->id;
 
-		$sql='select min(recurringdate) min_date,max(recurringdate) max_date,recurringtype from recurringevents where activityid='. $activity_id.' group by activityid';
+		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
 		
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -1046,7 +1046,7 @@ $log->debug("type is ".$type);
 				$tdate=$date_array[$k];
 				if($tdate <= $end_date)
 				{
-					$max_recurid_qry = 'select max(recurringid) recurid  from recurringevents;';
+					$max_recurid_qry = 'select max(recurringid) AS recurid from recurringevents;';
 					$result = $adb->query($max_recurid_qry);
 					$noofrows = $adb->num_rows($result);
 					for($i=0; $i<$noofrows; $i++)
@@ -1054,7 +1054,7 @@ $log->debug("type is ".$type);
 						$recur_id = $adb->query_result($result,$i,"recurid");
 					}
 					$current_id =$recur_id+1;
-					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
+					$recurring_insert = "insert into recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
 					$adb->query($recurring_insert);
 					if($_REQUEST['set_reminder'] == 'Yes')
 					{

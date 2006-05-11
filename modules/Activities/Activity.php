@@ -201,7 +201,7 @@ class Activity extends CRMEntity {
 			$noofrows_recur = $adb->num_rows($recur_result);
 			if($noofrows_recur==0)
 			{
-				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+				$recur_dates_qry="select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid=".$activity_id;
 				$recur_result=$adb->query($recur_dates_qry);
 				$noofrows_recur = $adb->num_rows($recur_result);
 
@@ -251,7 +251,7 @@ class Activity extends CRMEntity {
 				$activity_start_time=time_to_number($act_time_start);	
 				$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
 
-				$activity_owner_qry='select users.user_name,users.id  userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
+				$activity_owner_qry='select users.user_name,users.id AS userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
 				$result_owner=$adb->query($activity_owner_qry);
 
 				while($row_owner = $adb->fetch_array($result_owner))

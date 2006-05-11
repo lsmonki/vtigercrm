@@ -48,7 +48,7 @@ function getUserFldArray($fld_module)
 	global $adb;
 	$user_fld = Array();
 	$tabid = getTabid($fldmodule);
-	$query = "select fieldlabel,generatedtype,columnname,fieldname from field where displaytype = 1 and (tabid = ".getTabid($fld_module)." && uitype IN (15,16)) || (tabid = ".getTabid($fld_module)." && fieldname='salutationtype')";
+	$query = "select fieldlabel,generatedtype,columnname,fieldname from field where displaytype = 1 and (tabid = ".getTabid($fld_module)." AND uitype IN (15,16)) OR (tabid = ".getTabid($fld_module)." AND fieldname='salutationtype')";
 	$result = $adb->query($query);
 	$noofrows = $adb->num_rows($result);
     if($noofrows > 0)

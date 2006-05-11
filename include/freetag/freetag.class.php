@@ -378,7 +378,7 @@ class freetag {
 		}
 		$prefix = $this->_table_prefix;
 
-		$sql = "SELECT DISTINCT tag, raw_tag, tagger_id
+		$sql = "SELECT DISTINCT tag, raw_tag, tagger_id, id
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
 			WHERE object_id = $object_id
 			$tagger_sql
@@ -437,7 +437,7 @@ class freetag {
 		}
 		$sql = "SELECT COUNT(*) as count 
 			FROM ${prefix}freetagged_objects INNER JOIN ${prefix}freetags ON (tag_id = id)
-			WHERE 1 
+			WHERE 1=1 
 			$tagger_sql
 			AND object_id = $object_id
 			AND tag = $normalized_tag
@@ -964,14 +964,12 @@ class freetag {
 		$sql = "SELECT tag, COUNT(object_id) AS quantity
 			FROM ${prefix}freetags INNER JOIN ${prefix}freetagged_objects
 			ON (${prefix}freetags.id = tag_id)
-			WHERE 1
+			WHERE 1=1
 			$tagger_sql
 			GROUP BY tag
-			ORDER BY quantity DESC
-			LIMIT 0, $max
-			";
+			ORDER BY quantity DESC";
         //echo $sql;
-		$rs = $adb->query($sql) or die("Syntax Error: $sql");
+		$rs = $adb->limitQuery($sql, 0, $max) or die("Syntax Error: $sql");
 		while(!$rs->EOF) {
 			$retarr[$rs->fields['tag']] = $rs->fields['quantity'];
 			$rs->MoveNext();

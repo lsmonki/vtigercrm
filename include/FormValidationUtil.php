@@ -17,7 +17,7 @@
 function getDBValidationData($tablearray,$tabid='')
 {
   global $log;
-  $log->debug("Entering getDBValidationData(".$tablearray.",".$tabid=''.") method ...");
+  $log->debug("Entering getDBValidationData(".$tablearray.",".$tabid."='') method ...");
   $sql = '';
   $tab_con = "";
   $numValues = count($tablearray);

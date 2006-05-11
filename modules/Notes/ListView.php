@@ -130,8 +130,6 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-$query .= ' group by notes.notesid';
-
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Notes',$order_by);
