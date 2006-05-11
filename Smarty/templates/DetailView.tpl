@@ -69,7 +69,7 @@ Calendar.setup ({ldelim}
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
-		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),hide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a></div><div id="tagdiv" style="display:block";><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv'),show('addtagdiv')"></div></td></tr>
+		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),hide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv'),show('addtagdiv')"></div></td></tr>
 		 </table>			 
 		 <hr noshade size=1>
 		
