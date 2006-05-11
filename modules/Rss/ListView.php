@@ -47,6 +47,8 @@ $rss_form = new vtigerCRM_Smarty;
 $rss_form->assign("MOD", $mod_strings);
 $rss_form->assign("APP", $app_strings);
 $rss_form->assign("IMAGEPATH",$image_path);
+$rss_form->assign("MODULE", $currentModule);
+$rss_form->assign("CATEGORY", getParenttab());
 
 //<<<<<<<<<<<<<<lastrss>>>>>>>>>>>>>>>>>>//
 //$url = 'http://forums/rss.php?name=forums&file=rss';
