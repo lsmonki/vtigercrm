@@ -21,15 +21,15 @@ require_once('include/utils/utils.php');
 
 global $adv_filter_options;
 
-$adv_filter_options = array("e"=>"equals",
-                            "n"=>"not equal to",
-                            "s"=>"starts with",
-                            "c"=>"contains",
-                            "k"=>"does not contain",
-                            "l"=>"less than",
-                            "g"=>"greater than",
-                            "m"=>"less or equal",
-                            "h"=>"greater or equal"
+$adv_filter_options = array("e"=>"".$mod_strings['equals']."",
+                            "n"=>"".$mod_strings['not_equal_to']."",
+                            "s"=>"".$mod_strings['starts_with']."",
+                            "c"=>"".$mod_strings['contains']."",
+                            "k"=>"".$mod_strings['does_not_contain']."",
+                            "l"=>"".$mod_strings['less_than']."",
+                            "g"=>"".$mod_strings['greater_than']."",
+                            "m"=>"".$mod_strings['less_or_equal']."",
+                            "h"=>"".$mod_strings['greater_or_equal']."",
                             );
 
 class CustomView extends CRMEntity{
@@ -324,33 +324,34 @@ class CustomView extends CRMEntity{
 
 	function getStdFilterCriteria($selcriteria = "")
 	{
+		global $mod_strings; 
 		$filter = array();
 
-		$stdfilter = Array("custom"=>"Custom",
-				"prevfy"=>"Previous FY",
-				"thisfy"=>"Current FY",
-				"nextfy"=>"Next FY",
-				"prevfq"=>"Previous FQ",
-				"thisfq"=>"Current FQ",
-				"nextfq"=>"Next FQ",
-				"yesterday"=>"Yesterday",
-				"today"=>"Today",
-				"tomorrow"=>"Tomorrow",
-				"lastweek"=>"Last Week",
-				"thisweek"=>"Current Week",
-				"nextweek"=>"Next Week",
-				"lastmonth"=>"Last Month",
-				"thismonth"=>"Current Month",
-				"nextmonth"=>"Next Month",
-				"last7days"=>"Last 7 Days",
-				"last30days"=>"Last 30 Days", 
-				"last60days"=>"Last 60 Days",
-				"last90days"=>"Last 90 Days",
-				"last120days"=>"Last 120 Days",
-				"next30days"=>"Next 30 Days",
-				"next60days"=>"Next 60 Days",
-				"next90days"=>"Next 90 Days",
-				"next120days"=>"Next 120 Days"
+		$stdfilter = Array("custom"=>"".$mod_strings['Custom']."",
+				"prevfy"=>"".$mod_strings['Previous FY']."",
+				"thisfy"=>"".$mod_strings['Current FY']."",
+				"nextfy"=>"".$mod_strings['Next FY']."",
+				"prevfq"=>"".$mod_strings['Previous FQ']."",
+				"thisfq"=>"".$mod_strings['Current FQ']."",
+				"nextfq"=>"".$mod_strings['Next FQ']."",
+				"yesterday"=>"".$mod_strings['Yesterday']."",
+				"today"=>"".$mod_strings['Today']."",
+				"tomorrow"=>"".$mod_strings['Tomorrow']."",
+				"lastweek"=>"".$mod_strings['Last Week']."",
+				"thisweek"=>"".$mod_strings['Current Week']."",
+				"nextweek"=>"".$mod_strings['Next Week']."",
+				"lastmonth"=>"".$mod_strings['Last Month']."",
+				"thismonth"=>"".$mod_strings['Current Month']."",
+				"nextmonth"=>"".$mod_strings['Next Month']."",
+				"last7days"=>"".$mod_strings['Last 7 Days']."",
+				"last30days"=>"".$mod_strings['Last 30 Days']."",
+				"last60days"=>"".$mod_strings['Last 60 Days']."",
+				"last90days"=>"".$mod_strings['Last 90 Days']."",
+				"last120days"=>"".$mod_strings['Last 120 Days']."",
+				"next30days"=>"".$mod_strings['Next 30 Days']."",
+				"next60days"=>"".$mod_strings['Next 60 Days']."",
+				"next90days"=>"".$mod_strings['Next 90 Days']."",
+				"next120days"=>"".$mod_strings['Next 120 Days']."",
 					);
 
 				foreach($stdfilter as $FilterKey=>$FilterValue)
