@@ -1,15 +1,15 @@
 <?php
 class DateTime
 {
-	var $second;
-	var $minute;
-	var $hour;
-	var $ms_hour;
+	var $second = '00';
+	var $minute = '00';
+	var $hour = '00';
+	var $z_hour = '00';
 	var $day;
-	var $ms_day;
+	var $z_day;
 	var $week;
 	var $month;
-	var $ms_month;
+	var $z_month;
 	var $year;
 	var $dayofweek;
 	var $dayofyear;
@@ -182,16 +182,16 @@ class DateTime
                 list(
                 $this->minute,
                 $this->hour,
-		$this->ms_hour,
+		$this->z_hour,
                 $this->day,
-		$this->ms_day,
+		$this->z_day,
                 $this->daysinmonth,
                 $this->dayofweek,
                 $this->dayofyear,
                 $is_leap,
                 $this->week,
                 $this->month,
-		$this->ms_month,
+		$this->z_month,
                 $this->year,
                 $this->offset,
 		$this->tz,
@@ -255,11 +255,11 @@ class DateTime
 	}
 	function get_formatted_date()
         {
-                return $this->year."-".$this->ms_month."-".$this->ms_day;
+                return $this->year."-".$this->z_month."-".$this->z_day;
         }
         function get_formatted_time()
         {
-                return $this->ms_hour.":".$this->min;
+                return $this->z_hour.":".$this->min;
         }
 	
 	function get_changed_day($mode)
