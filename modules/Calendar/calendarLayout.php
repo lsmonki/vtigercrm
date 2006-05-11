@@ -94,16 +94,20 @@ function get_cal_header_tab(& $header)
 //use getPendingActivities() method of Activities/OpenListView.php to get pending activities
 function get_cal_header_data(& $cal_arr)
 {
+	//echo '<pre>'; print_r($cal_arr); echo '</pre>';
+	$format = $cal_arr['calendar']->hour_format;
+	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour); 
+	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1));
 	$headerdata = "";
 	$headerdata .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>
 			<tr>
 				<td class='tabSelected' style='border: 1px solid rgb(102, 102, 102);' align='center' width='10%'>
-					<a onClick='gshow(\"addEvent\")' href='javascript:void(0)'>Add Event</a>
+					<a onClick='gshow(\"addEvent\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$hour_startat."\",\"".$hour_endat."\")' href='javascript:void(0)'>Add Event</a>
 					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
 				</td>
 				<td align='center' width='65%'>";
-	$headerdata .= get_event_todo_info($cal_arr,'listcnt'); 
+	$headerdata .= getEventTodoInfo($cal_arr,'listcnt'); 
 	$headerdata .= "	</td>
 				<td align='right' width='25%'><b>View : </b>";
 	$view_options = getEventViewOption($cal_arr);
@@ -188,19 +192,19 @@ function getHourView(& $view,$type = 'default' )
 {
 	if($view['view'] == 'day')
 	{
-		get_dayview_layout($view,$type);
+		getDayViewLayout($view,$type);
 	}
 	elseif($view['view'] == 'week')
 	{
-		 get_weekview_layout($view,$type);
+		 getWeekViewLayout($view,$type);
 	}
 	elseif($view['view'] == 'month')
 	{
-		 get_monthview_layout($view,$type);
+		 getMonthViewLayout($view,$type);
 	}
 	elseif($view['view'] == 'year')
 	{
-		 get_yearview_layout($view,$type);
+		 getYearViewLayout($view,$type);
 	}
 	else
 	{
@@ -255,17 +259,18 @@ function getListView(& $cal,$mode='')
 	
 }
 
-function get_dayview_layout(& $cal,$type)
+function getDayViewLayout(& $cal,$type)
 {
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
-        $dayview_hours = $day_end_hour - $day_start_hour;
+	$format = $cal['calendar']->hour_format;
 	$dayview_layout = '';
 	$dayview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
                 <div id="hrView_'.$type.'">
                         <table border="0" cellpadding="10" cellspacing="0" width="98%">';
-        for($i=0;$i<=$dayview_hours;$i++)
+        for($i=$day_start_hour;$i<=$day_end_hour;$i++)
         {
+		
 		if($cal['calendar']->hour_format == 'am/pm')
 		{
 			if($i == 12)
@@ -290,6 +295,9 @@ function get_dayview_layout(& $cal,$type)
 			$hour = $i;
                         $sub_str = ':00';
 		}
+		$y = $i+1;
+		$hour_startat = convertTime2UserSelectedFmt($format,$i);
+	        $hour_endat = convertTime2UserSelectedFmt($format,$y);
 		$dayview_layout .= '<tr>
 					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%">
 						<span class="genHeaderBig">'.$hour.'</span>
@@ -297,13 +305,13 @@ function get_dayview_layout(& $cal,$type)
 					</td>
 					<td style="border-bottom: 1px solid rgb(204, 204, 204); width:5%;" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" height="65">
 			                	<div id="'.$hour.''.$sub_str.'" style="display: none;">
-							<a onClick="gshow(\'addEvent\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+							<a onClick="gshow(\'addEvent\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
 						</div>
 					</td>
 					<td style="border-bottom: 1px solid rgb(204, 204, 204);">';
 		//echo '<pre>';print_r($cal);echo '</pre>';
 		
-		$dayview_layout .= getEventLayer($cal,$cal['calendar']->slices[$i]);
+		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i]);
 		/*get events/tasks that has current date as starting time
 			*/
 		//$dayview_layout .= 
@@ -316,7 +324,7 @@ function get_dayview_layout(& $cal,$type)
 	echo $dayview_layout;		
 }
 
-function get_weekview_layout(& $cal,$type)
+function getWeekViewLayout(& $cal,$type)
 {
         $day_start_hour = $cal['calendar']->day_start_hour;
         $day_end_hour = $cal['calendar']->day_end_hour;
@@ -346,7 +354,7 @@ function get_weekview_layout(& $cal,$type)
 	}
 	$weekview_layout .= '</tr></table>';
 	$weekview_layout .= '<table border="0" cellpadding="10" cellspacing="1" width="98%" class="calDayHour" style="background-color: #dadada">';
-	for($i=0;$i<=$dayview_hours;$i++)
+	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
@@ -382,11 +390,6 @@ function get_weekview_layout(& $cal,$type)
 		}
 		for ($column=0;$column<=6;$column++)
 		{
-			/*$weekview_layout .= '<td class="cellNormal" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" style="height: 40px;" bgcolor="white" valign="top" width="12%">
-                                                <div id="'.$hour.''.$sub_str.'" style="display: none;" valign="bottom">
-                                                        <a onClick="gshow(\'addEvent\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
-                                                </div>
-                                        </td>';*/
 			$weekview_layout .= '<td class="cellNormal" onclick="gshow(\'addEvent\')" onmouseover="this.className=\'cellNormalHover\'" onmouseout="this.className=\'cellNormal\'" style="height: 40px;" bgcolor="white" valign="top" width="12%">';
 			$weekview_layout .= '</td>';
 		}
@@ -397,7 +400,7 @@ function get_weekview_layout(& $cal,$type)
 		
 }
 	
-function get_monthview_layout(& $cal,$type)
+function getMonthViewLayout(& $cal,$type)
 {
 	$count = 0;
         if ($cal['calendar']->month_array[$cal['calendar']->slices[35]]->start_time->month != $cal['calendar']->date_time->month) {
@@ -405,7 +408,9 @@ function get_monthview_layout(& $cal,$type)
         } else {
                 $rows = 6;
         }
-	
+	$format = $cal['calendar']->hour_format;
+        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour);
+        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1));
 	$monthview_layout = '';
 	$monthview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
 		<div id="hrView_'.$type.'" style = "padding:5px">
@@ -417,6 +422,7 @@ function get_monthview_layout(& $cal,$type)
 	}
 	$monthview_layout .= '</tr></table>';
 	$monthview_layout .= '<table border=0 cellspacing=1 cellpadding=5 width=100% class="calDayHour" style="background-color: #dadada">';
+	$cnt = 0;
 	for ($i = 0; $i < $rows; $i ++)
 	{
 	        $monthview_layout .= '<tr>';
@@ -436,16 +442,12 @@ function get_monthview_layout(& $cal,$type)
 		$monthview_layout .= '<tr>';
 		for ($j = 0; $j < 7; $j ++)
 		{
-			//$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
-			$monthview_layout .= '<td onClick="gshow(\'addEvent\')" onMouseOver="this.className=\'cellNormalHover\'" onMouseOut="this.className=\'cellNormal\'" bgcolor="white" height="90" valign="top" width="200">';//style="height:40px" width=12% valign=top>';
-		        /*$monthview_layout .= '<a href="index.php?module=Calendar&action=index&view='.$cal['slice']->getView().'&'.$cal['slice']->start_time->get_date_str().'">';
-			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth()) 			      {
-				$monthview_layout .= $cal['slice']->start_time->get_Date();
-                        }
-			$monthview_layout .= '</a>
-					<!--div valign=bottom align=right onclick="gshow(\'addEvent\')"  onMouseOut="ghide(\'12pm\')"  width=10%>+</div-->';
+			$temp_date = $cal['calendar']->month_array[$cal['calendar']->slices[$cnt]]->start_time->get_formatted_date();
+			$monthview_layout .= '<td onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" onMouseOver="this.className=\'cellNormalHover\'" onMouseOut="this.className=\'cellNormal\'" bgcolor="white" height="90" valign="top" width="200">';
+			$monthview_layout .= getmonthEventLayer($cal,$cal['calendar']->slices[$cnt]);
 			$monthview_layout .= '</td>';
-			$count++;*/
+			$cnt++;
+
 		}
 		$monthview_layout .= '</tr>';
 	}
@@ -454,12 +456,12 @@ function get_monthview_layout(& $cal,$type)
 		
 }
 
-function get_yearview_layout(& $cal,$type)
+function getYearViewLayout(& $cal,$type)
 {
 }
 
 
-function getEventLayer(& $cal,$slice)
+function getdayEventLayer(& $cal,$slice)
 {
 	$eventlayer = '';
 	$arrow_img_name = '';
@@ -470,9 +472,16 @@ function getEventLayer(& $cal,$slice)
 		{
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
+			$id = $act[$i]->record;
 			if(strlen($subject)>25)
 				$subject = substr($subject,0,25)."...";
-			$start_hour = $act[$i]->start_time->hour;
+			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
+			$format = $cal['calendar']->hour_format;
+			$duration_hour = $act[$i]->duration_hour;
+			$duration_min = $act[$i]->duration_minute;
+			$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
+			$start_hour = $st_end_time['starttime'];
+			$end_hour = $st_end_time['endtime'];
 			$account_name = $act[$i]->accountname;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 		$eventlayer .='<div class ="eventLay" id="'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
@@ -480,8 +489,8 @@ function getEventLayer(& $cal,$slice)
 						<tr onmouseover="show(\''.$arrow_img_name.'\');" onmouseout="hide(\''.$arrow_img_name.'\');">
 						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
 						<td align="left" width="85%"><span class="fontBold">'.$account_name.'</span><br>
-							'.$start_hour.',<span class="orgTab">'.$subject.'</span>&nbsp;
-							<a href="#" class="webMnu">[More...]</a>
+							<b>'.$start_hour.'</b>&nbsp;,<span class="orgTab">'.$subject.'</span>&nbsp;
+							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">[More...]</a>
 					
 						</td>
 						<td align="right" width="5%">
@@ -498,13 +507,63 @@ function getEventLayer(& $cal,$slice)
 	}
 }
 
+function getmonthEventLayer(& $cal,$slice)
+{
+	$eventlayer = '';
+	$arrow_img_name = '';
+	$act = $cal['calendar']->month_array[$slice]->activities;
+	//echo '<pre>';print_r($act);echo '</pre>';
+	if(!empty($act))
+        {
+		$no_of_act = count($act);
+		if($no_of_act>2)
+		{
+			$act_row = 2;
+			$remin_list = $no_of_act - $act_row;
+		}
+		else
+		{
+			$act_row = $no_of_act;
+			$remin_list = null;
+		}
+                for($i=0;$i<$act_row;$i++)
+                {
+                        $arrow_img_name = 'event'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i;
+			$id = $act[$i]->record;
+                        $subject = $act[$i]->subject;
+                        if(strlen($subject)>10)
+                                $subject = substr($subject,0,10)."...";
+			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
+			$format = $cal['calendar']->hour_format;
+                        $duration_hour = $act[$i]->duration_hour;
+                        $duration_min = $act[$i]->duration_minute;
+                        $st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
+                        $start_hour = $st_end_time['starttime'];
+                        $end_hour = $st_end_time['endtime'];
+                        $account_name = $act[$i]->accountname;
+                        $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			$eventlayer .='<div id="'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i.'">
+                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
+                                </div><br>';
+                }
+		if($remin_list != null)
+		{
+			$eventlayer .='<div valign=bottom align=right width=10%>
+					<a href="index.php?module=Calendar&action=index&view='.$cal['calendar']->month_array[$slice]->getView().'&'.$cal['calendar']->month_array[$slice]->start_time->get_date_str().'" class="webMnu">
+					+'.$remin_list.'&nbsp;More</a></div>';
+		}
+                return $eventlayer;
+        }
+
+}
+
 
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
 	global $adb,$current_user;
 	
-	$query = "select groups.groupname ,users.user_name,activity.activitytype,activity.subject,crmentity.smownerid,seactivityrel.crmid,cntactivityrel.contactid ,crmentity.crmid,activity.* from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.activitytype != 'Task') and (activity.date_start between '".$start_date."' and '".$end_date."' or activity.due_date between '".$start_date."' and '".$end_date."' or recurringevents.recurringdate between '".$start_date."' and '".$end_date."')";
+	$query = "select groups.groupname ,users.user_name,activity.activitytype,activity.subject,crmentity.smownerid,seactivityrel.crmid,cntactivityrel.contactid ,crmentity.crmid,activity.* from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.activitytype != 'Task') and (activity.date_start between '".$start_date."' and '".$end_date."' or recurringevents.recurringdate between '".$start_date."' and '".$end_date."')";
 	if($info != '')
 	{
 		$pending_query = $query." and (activity.eventstatus = 'Planned') and crmentity.smownerid = ".$current_user->id." GROUP BY crmentity.crmid ORDER BY activity.date_start,activity.time_start ASC";
@@ -528,120 +587,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$duration_hour = $adb->query_result($result,$i,"duration_hours");
                 $duration_min = $adb->query_result($result,$i,"duration_minutes");
 		$start_time = $adb->query_result($result,$i,"time_start");
-		$end_time = '';
-		list($hour,$min) = explode(":",$start_time);
-		if($calendar['calendar']->hour_format == 'am/pm')
-		{
-			//echo $start_time;
-			if($hour>'12')
-			{
-				$hour = $hour - 12;
-				$start_hour = $hour;
-				if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-                                        $start_hour = "0".$start_hour;
-				$start_time = $start_hour.":".$min."pm";
-				$end_min = $min+$duration_min;
-				$end_hour = $hour+$duration_hour;
-				if($end_min>=60)
-				{
-					$end_min = $end_min%60;
-					$end_hour++;
-				}
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-                                        $end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time = $end_hour.":".$end_min."pm";
-				//echo $start_time;
-			}
-			elseif($hour == '12')
-			{
-				$start_hour = $hour;
-                                if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-                                        $start_hour = "0".$start_hour;
-				$start_time = $start_hour.":".$min."pm";
-				$end_min = $min+$duration_min;
-                                $end_hour = $hour+$duration_hour;
-				if($end_min>=60)
-                                {
-                                        $end_min = $end_min%60;
-                                        $end_hour++;
-                                }
-				if($end_hour>'12')
-                                {
-                                        $end_hour = $end_hour - 12;
-					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-	                                        $end_hour = "0".$end_hour;
-                                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
-                                                $end_min = "0".$end_min;
-                                        $end_time = $end_hour.":".$end_min."pm";
-                                }
-                                else
-                                {
-					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-	                                        $end_hour = "0".$end_hour;
-                                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
-                                                $end_min = "0".$end_min;
-                                        $end_time  = $end_hour.":".$end_min."am";
-                                }
-			}
-			else
-			{
-				$start_hour = $hour;
-                                if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-                                        $start_hour = "0".$start_hour;
-				$start_time = $start_hour.":".$min."am";
-				$end_min = $min+$duration_min;
-                                $end_hour = $hour+$duration_hour;
-				if($end_min>=60)
-                                {
-                                        $end_min = $end_min%60;
-                                        $end_hour++;
-                                }
-				if($end_hour>='12')
-				{
-					if($end_hour == '12' && $end_hour > '00')
-						$end_hour = $end_hour;
-					else
-						$end_hour = $end_hour - 12;
-					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-	                                        $end_hour = "0".$end_hour;
-					if($end_min <= 9 && strlen(trim($end_min)) < 2)
-	                                        $end_min = "0".$end_min;
-					$end_time = $end_hour.":".$end_min."pm";
-				}
-				else
-				{
-					if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-	                                        $end_hour = "0".$end_hour;
-					if($end_min <= 9 && strlen(trim($end_min)) < 2)
-	                                        $end_min = "0".$end_min;
-				 	$end_time  = $end_hour.":".$end_min."am";
-				}
-				
-			}
-			$element['starttime'] = $start_time;
-			$element['endtime'] = $end_time;
-		}
-		else
-		{
-                        $hour = $hour;
-                        $min = $min;
-			$end_min = $min+$duration_min;
-                        $end_hour = $hour+$duration_hour;
-			if($end_min>=60)
-                        {
-                                $end_min = $end_min%60;
-                                $end_hour++;
-                        }
-			if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-				$end_hour = "0".$end_hour;
-			if($end_min <= 9 && strlen(trim($end_min)) < 2)
-	                        $end_min = "0".$end_min;
-			$end_time  = $end_hour.":".$end_min;
-			$element['starttime'] = $start_time;
-			$element['endtime'] = $end_time;
-		}
+		$format = $calendar['calendar']->hour_format;
+		$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
+		$element['starttime'] = $st_end_time['starttime'];
+                $element['endtime'] = $st_end_time['endtime'];
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
@@ -675,7 +624,7 @@ function getTodosList($cal, $check)
 	return $todo;
 }
 
-function get_event_todo_info(& $cal, $mode)
+function getEventTodoInfo(& $cal, $mode)
 {
 	$event_todo = Array();
 	$event_todo['event']=getListView($cal, $mode);
@@ -713,22 +662,190 @@ function constructListView($entry_list)
                              );
 	$list_view .="<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         <tr>";
-        for($i=0;$i<count($header);$i++)
+	$header_rows = count($header);
+        for($i=0;$i<$header_rows;$i++)
         {
                 $list_view .="<td class='lvtCol' width='".$header_width[$i]."'>".$header[$i]."</td>";
         }
         $list_view .="</tr>";
-	for($i=0;$i<count($entry_list);$i++)
-        {
-		$list_view .="<tr class='lvtColData' onmouseover='this.className=\"lvtColDataHover\"' onmouseout='this.className=\"lvtColData\"' bgcolor='white'>";
-		foreach($entry_list[$i] as $key=>$entry)
-        	{
-                	 $list_view .="<td>".$entry."</td>";
-	        }
-        	$list_view .="</tr>";
+	$rows = count($entry_list);
+	if($rows != 0)
+	{
+		for($i=0;$i<count($entry_list);$i++)
+		{
+			$list_view .="<tr class='lvtColData' onmouseover='this.className=\"lvtColDataHover\"' onmouseout='this.className=\"lvtColData\"' bgcolor='white'>";
+			foreach($entry_list[$i] as $key=>$entry)
+			{
+				$list_view .="<td>".$entry."</td>";
+			}
+			$list_view .="</tr>";
+		}
+	}
+	else
+	{
+		$list_view .="<tr style='height: 25px;' bgcolor='white'>";
+                	$list_view .="<td colspan='".$header_rows."'><i>None Scheduled</i></td>";
+                $list_view .="</tr>";
 	}
 	$list_view .="</table>";
 	echo $list_view;
+}
+
+function convertTime2UserSelectedFmt($format,$time)
+{
+	if($format == 'am/pm')
+        {
+		if($time>='12')
+                {
+			if($time == '12')
+				$hour = $time;
+			else
+				$hour = $time - 12;
+			/*if($hour <= 9 && strlen(trim($hour)) < 2)
+                                $hour = "0".$hour;*/
+			$hour = $hour.":00pm";
+		}
+		else
+                {
+                        $hour = $time;
+                        /*if($hour <= 9 && strlen(trim($hour)) < 2)
+                                $hour = "0".$hour;*/
+			$hour = $hour.":00am";
+		}
+		return $hour;
+	}
+	else
+        {
+                $hour = $time;
+		if($hour <= 9 && strlen(trim($hour)) < 2)
+                                $hour = "0".$start_hour;
+		$hour = $hour.":00";
+		return $hour;
+	}
+}
+
+function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$duration_min='')
+{
+	list($hour,$min) = explode(":",$start_time);
+	if($format == 'am/pm')
+        {
+		//echo $start_time;
+                if($hour>'12')
+		{
+			$hour = $hour - 12;
+                        $start_hour = $hour;
+                        if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;
+			$start_time = $start_hour.":".$min."pm";
+                        $end_min = $min+$duration_min;
+                        $end_hour = $hour+$duration_hr;
+                        if($end_min>=60)
+                        {
+	                        $end_min = $end_min%60;
+                                $end_hour++;
+                        }
+                        if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+                                $end_hour = "0".$end_hour;
+                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
+                                $end_min = "0".$end_min;
+                        $end_time = $end_hour.":".$end_min."pm";
+                        //echo $start_time;
+		}
+		elseif($hour == '12')
+		{
+			$start_hour = $hour;
+			if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;
+			$start_time = $start_hour.":".$min."pm";
+			$end_min = $min+$duration_min;
+			$end_hour = $hour+$duration_hr;
+			if($end_min>=60)
+			{
+				$end_min = $end_min%60;
+				$end_hour++;
+			}
+			if($end_hour>'12')
+			{
+				$end_hour = $end_hour - 12;
+				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+					$end_hour = "0".$end_hour;
+				if($end_min <= 9 && strlen(trim($end_min)) < 2)
+					$end_min = "0".$end_min;
+				$end_time = $end_hour.":".$end_min."pm";
+			}
+			else
+			{
+				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+					$end_hour = "0".$end_hour;
+				if($end_min <= 9 && strlen(trim($end_min)) < 2)
+					$end_min = "0".$end_min;
+				$end_time  = $end_hour.":".$end_min."am";
+			}
+		}
+		else
+		{
+			$start_hour = $hour;
+			if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;
+			$start_time = $start_hour.":".$min."am";
+			$end_min = $min+$duration_min;
+			$end_hour = $hour+$duration_hr;
+			if($end_min>=60)
+			{
+				$end_min = $end_min%60;
+				$end_hour++;
+			}
+			if($end_hour>='12')
+			{
+				if($end_hour == '12' && $end_hour > '00')
+					$end_hour = $end_hour;
+				else
+					$end_hour = $end_hour - 12;
+				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+					$end_hour = "0".$end_hour;
+				if($end_min <= 9 && strlen(trim($end_min)) < 2)
+					$end_min = "0".$end_min;
+				$end_time = $end_hour.":".$end_min."pm";
+			}
+			else
+			{
+				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+					$end_hour = "0".$end_hour;
+				if($end_min <= 9 && strlen(trim($end_min)) < 2)
+					$end_min = "0".$end_min;
+				$end_time  = $end_hour.":".$end_min."am";
+			}
+
+		}
+		$return_data = Array(
+					'starttime'=>$start_time,
+					'endtime'  =>$end_time
+				    );
+	}
+	else
+	{
+		$hour = $hour;
+		$min = $min;
+		$end_min = $min+$duration_min;
+		$end_hour = $hour+$duration_hr;
+		if($end_min>=60)
+		{
+			$end_min = $end_min%60;
+			$end_hour++;
+		}
+		if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
+			$end_hour = "0".$end_hour;
+		if($end_min <= 9 && strlen(trim($end_min)) < 2)
+			$end_min = "0".$end_min;
+		$end_time  = $end_hour.":".$end_min;
+		$return_data = Array(
+                                        'starttime'=>$start_time,
+                                        'endtime'  =>$end_time
+                                    );
+	}
+	return $return_data;
+
+
 }
 
 		
