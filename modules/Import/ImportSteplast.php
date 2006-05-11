@@ -89,7 +89,7 @@ if ( isset($_REQUEST['message']))
 					<input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
 					<input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
 					<br><br>
-					<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="return true;">
+					<input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="classBtn" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
 				   </form>
 				</td>
 			   </tr>
