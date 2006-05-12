@@ -107,7 +107,7 @@
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=module from=$detail}
 						{if $module eq $MODULE_NAME}
-							<td class="level2textSel">{$module}</td>
+							<td class="level2textSel"><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$module}</a></td>
 						{else}
 							<td class="level2text"> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$module}</a> </td>
 						{/if}	
