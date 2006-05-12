@@ -63,12 +63,18 @@ $image_path = 'themes/'.$theme.'/images';
 // Start the output
 ////////////////////////////////////////////////////////
 if (!isset($_REQUEST['html'])) {
-	$form =new XTemplate ('modules/Users/Popup_picker.html');
+	if($_REQUEST['popuptype'] != 'set_return_emails')
+		$form =new XTemplate ('modules/Users/Popup_picker.html');
+	else
+		$form =new XTemplate ('modules/Users/Popup_picker_emails.html');
 	$form->assign("POPUPTYPE",$_REQUEST['popuptype']);
 	$log->debug("using file modules/Users/Popup_picker.html");
 }
 else {
-	$form =new XTemplate ('modules/Users/'.$_REQUEST['html'].'.html');
+	if($_REQUEST['popuptype'] != 'set_return_emails')
+		$form =new XTemplate ('modules/Users/'.$_REQUEST['html'].'.html');
+	else
+		$form =new XTemplate ('modules/Users/Popup_picker_emails.html');
 	$log->debug("using file modules/Users/".$_REQUEST['html'].'.html');
 	$log->debug("_REQUEST['html'] is ".$_REQUEST['html']);
 }
@@ -106,6 +112,10 @@ elseif ($_REQUEST['form'] == 'UsersEditView')
 	$the_javascript .= "	window.opener.document.EditView.reports_to_id.value = user_id;\n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
+}
+elseif($_REQUEST['popuptype'] == 'set_return_emails')
+{
+	$the_javascript = "<script type='text/javascript' src='include/js/Mail.js'></script>";	
 }
 else // ($_REQUEST['form'] == 'EditView') 
 {

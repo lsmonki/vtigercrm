@@ -5039,5 +5039,37 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	<table name="emaildetails">
+		<field name="emailid" type="I" size="19">
+			<notnull />
+			<key />
+		</field>
+		<field name="from_email" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="to_email" type="X">
+			<notnull />
+		</field>
+		<field name="cc_email" type="X">
+			<notnull />
+		</field>
+		<field name="bcc_email" type="X">
+			<notnull />
+		</field>
+		<field name="assigned_user_email" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="idlists" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="email_flag" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+	</table>
+
 
 </schema>

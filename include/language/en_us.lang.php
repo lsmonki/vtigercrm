@@ -604,6 +604,7 @@ $app_strings = Array(
 
 'COMBO_HELPDESK'=>'HelpDesk',
 
+'COMBO_USERS'=>'Users',
 
 
 'LBL_SELECT'=>'Select',
