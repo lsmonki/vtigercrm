@@ -72,6 +72,8 @@ if($to_email == '' && $cc == '' && $bcc == '')
 else
 {
 	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
+	
+	$query = 'update emaildetails set cc_email="'.ereg_replace(',','###',$cc).'",bcc_email="'.ereg_replace(',','###',$bcc).'",assigned_user_email="'.$to_email.'",email_flag="SENT" where emailid='.$focus->id;
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
 	{
@@ -80,11 +82,13 @@ else
 	}
 	elseif($mail_status == 1 && $to_email == '')//Mail send success only for CC and BCC but the 'to' email is empty 
 	{
+		$adb->query($query);
 		$errorheader1 = 1;
 		$mail_status_str = "cc_success=0&&&";
 	}
 	else
 	{
+		$adb->query($query);
 		$mail_status_str = $to_email."=".$mail_status."&&&";
 	}
 }
@@ -93,50 +97,64 @@ else
 //Added code from mysendmail.php which is contributed by Raju(rdhital)
 $parentid= $_REQUEST['parent_id'];
 $myids=explode("|",$parentid);
+$all_to_emailids = Array();
 for ($i=0;$i<(count($myids)-1);$i++)
 {
 	$realid=explode("@",$myids[$i]);
 	$nemail=count($realid);
 	$mycrmid=$realid[0];
-	$pmodule=getSalesEntityType($mycrmid);
-	for ($j=1;$j<$nemail;$j++)
+	if($realid[1] == -1)
 	{
-		$temp=$realid[$j];
-		//$myquery='Select columnname from field where fieldid='.$temp;
-		$myquery='Select columnname from field where fieldid='.$adb->quote($temp);
-		$fresult=$adb->query($myquery);			
-		if ($pmodule=='Contacts')
+		//handle the mail send to users
+		$emailadd = $adb->query_result($adb->query("select email1 from users where id=$mycrmid"),0,'email1');
+		$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description'],'','','all',$focus->id);
+		$all_to_emailids []= $emailadd;
+		$mail_status_str .= $emailadd."=".$mail_status."&&&";
+	}
+	else
+	{
+		//Send mail to account or lead or contact based on their ids
+		$pmodule=getSalesEntityType($mycrmid);
+		for ($j=1;$j<$nemail;$j++)
 		{
-			require_once('modules/Contacts/Contact.php');
-			$myfocus = new Contact();
-			$myfocus->retrieve_entity_info($mycrmid,"Contacts");
-		}
-		elseif ($pmodule=='Accounts')
-		{
-			require_once('modules/Accounts/Account.php');
-			$myfocus = new Account();
-			$myfocus->retrieve_entity_info($mycrmid,"Accounts");
-		} 
-		elseif ($pmodule=='Leads')
-		{
-			require_once('modules/Leads/Lead.php');
-			$myfocus = new Lead();
-			$myfocus->retrieve_entity_info($mycrmid,"Leads");
-		}
-		$fldname=$adb->query_result($fresult,0,"columnname");
-		$emailadd=br2nl($myfocus->column_fields[$fldname]);
-
-		if($emailadd != '')
-		{
-			$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description'],'','','all',$focus->id);
-			$mail_status_str .= $emailadd."=".$mail_status."&&&";
-			//added to get remain the EditView page if an error occurs in mail sending
-			if($mail_status != 1)
+			$temp=$realid[$j];
+			$myquery='Select columnname from field where fieldid='.$adb->quote($temp);
+			$fresult=$adb->query($myquery);			
+			if ($pmodule=='Contacts')
 			{
-				$errorheader2 = 1;
+				require_once('modules/Contacts/Contact.php');
+				$myfocus = new Contact();
+				$myfocus->retrieve_entity_info($mycrmid,"Contacts");
 			}
-		}
-	}	
+			elseif ($pmodule=='Accounts')
+			{
+				require_once('modules/Accounts/Account.php');
+				$myfocus = new Account();
+				$myfocus->retrieve_entity_info($mycrmid,"Accounts");
+			} 
+			elseif ($pmodule=='Leads')
+			{
+				require_once('modules/Leads/Lead.php');
+				$myfocus = new Lead();
+				$myfocus->retrieve_entity_info($mycrmid,"Leads");
+			}
+			$fldname=$adb->query_result($fresult,0,"columnname");
+			$emailadd=br2nl($myfocus->column_fields[$fldname]);
+
+			if($emailadd != '')
+			{
+				$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description'],'','','all',$focus->id);
+
+				$all_to_emailids []= $emailadd;
+				$mail_status_str .= $emailadd."=".$mail_status."&&&";
+				//added to get remain the EditView page if an error occurs in mail sending
+				if($mail_status != 1)
+				{
+					$errorheader2 = 1;
+				}
+			}
+		}	
+	}
 }
 
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
@@ -155,7 +173,16 @@ if($errorheader1 == 1 || $errorheader2 == 1)
 		$returnid = $_REQUEST['currentid'];
 	}
 }
-
+else
+{
+	global $adb;
+	$date_var = date('Ymd');
+	$query = 'update activity set date_start ='.$date_var.' where activityid = '.$returnid;
+	$adb->query($query);
+	$toemails = implode('###',$all_to_emailids);
+	$query = 'update emaildetails set email_flag="SENT",to_email="'.$toemails.'" where emailid='.$focus->id;
+	$adb->query($query);
+}
 //The following function call is used to parse and form a encoded error message and then pass to result page
 $mail_error_str = getMailErrorString($mail_status_str);
 $adb->println("Mail Sending Process has been finished.\n\n");

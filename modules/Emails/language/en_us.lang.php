@@ -64,7 +64,8 @@ $mod_strings = Array(
 'LBL_FORWARD_BUTTON'=>'Forward',
 'LBL_DOWNLOAD_ATTCH_BUTTON'=>'Download Attachments',
 'LBL_FROM'=>'From :',
-'LBL_CC'=>'CC :',
+'LBL_CC'=>'Cc :',
+'LBL_BCC'=>'Bcc :',
 
 'NTC_REMOVE_INVITEE'=>'Are you sure you want to remove this recipient from the email?',
 'LBL_INVITEE'=>'Recipients',
@@ -135,6 +136,7 @@ $mod_strings = Array(
 'LBL_MAIL_CONNECT_ERROR_INFO'=>'Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account',
 'LBL_ALLMAILS'=>'All Mails',
 'LBL_TO_USERS'=>'To Users',
+'LBL_TO'=>'To:',
 );
 
 ?>

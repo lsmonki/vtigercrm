@@ -34,11 +34,20 @@ global $mod_strings;
 
 $focus = new Email();
 
+$smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 
 {
+	global $adb;
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-	 $log->info("Entity info successfully retrieved for DetailView.");
+	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
+	$query = 'select from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
+	$result = $adb->query($query);
+    $smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
+	$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
+    $smarty->assign('TO_MAIL',$to_email);	
+    $smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
+    $smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
 	if($focus->column_fields['name'] != '')
 	        $focus->name = $focus->column_fields['name'];		
 	else
@@ -104,9 +113,7 @@ $log->info("Email detail view");
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
-echo '<br>';
 
-$smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
@@ -120,7 +127,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-else $smarty->assign("NAME", "");
+	else $smarty->assign("NAME", "");
 
 $entries = getBlocks("Emails","detail_view",'',$focus->column_fields);
 if($_REQUEST['mode'] != 'ajax')
@@ -135,8 +142,6 @@ $smarty->assign("SINGLE_MOD","Email");
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-
-$smarty->assign("ID", $_REQUEST['record']);
 
 if(isPermitted("Emails","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
