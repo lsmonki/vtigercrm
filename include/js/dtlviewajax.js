@@ -10,7 +10,6 @@
 var globaldtlviewspanid = "";
 var globaleditareaspanid = ""; 
 var globaltxtboxid = "";
-var itsonview=false;
 
 function showHide(showId, hideId)
 {
@@ -20,10 +19,7 @@ function showHide(showId, hideId)
 
 function hndCancel(valuespanid,textareapanid,fieldlabel)
 {
-
   showHide(valuespanid,textareapanid);
-  itsonview=false;
-  return false;
 }
 
 function hndMouseOver(uitype,fieldLabel)
@@ -31,28 +27,10 @@ function hndMouseOver(uitype,fieldLabel)
       var mouseArea="";
       mouseArea="mouseArea_"+ fieldLabel;
       
-      if(itsonview)
-      {
-            return;
-      }
-      
-      show("crmspanid");
       globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
       globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
       globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
-      divObj = getObj('crmspanid'); 
-      crmy = findPosY(getObj(mouseArea));
-      crmx = findPosX(getObj(mouseArea));
-      if(document.all)
-      {
-          divObj.onclick=handleEdit;
-      }
-      else
-      {
-          divObj.setAttribute('onclick','handleEdit();');
-      }
-      divObj.style.left=(crmx+getObj(mouseArea).offsetWidth -divObj.offsetWidth)+"px";
-      divObj.style.top=crmy+"px";
+	handleEdit();
 }
 
 function handleEdit()
@@ -60,8 +38,6 @@ function handleEdit()
      show(globaleditareaspanid) ;
      hide(globaldtlviewspanid);
      getObj(globaltxtboxid).focus();
-     hide('crmspanid');
-     itsonview=true;
      return false;
 }
 
@@ -92,9 +68,8 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      var editArea = "editarea_"+ fieldLabel;
      var txtBox= "txtbox_"+ fieldLabel;
      var popupTxt= "popuptxt_"+ fieldLabel;      
-
+	
      var tagValue = trim(document.getElementById(txtBox).value);
-
      var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
      data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
      show("vtbusy_info");
@@ -151,7 +126,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
           getObj(dtlView).innerHTML = tagValue;
      }
      showHide(dtlView,editArea);  //show,hide
-     itsonview=false;
 }
 
 
