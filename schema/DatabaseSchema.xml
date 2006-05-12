@@ -1833,7 +1833,7 @@
 		<field name="currency_name" type="C" size="100" />
 		<field name="currency_code" type="C" size="100" />
 		<field name="currency_symbol" type="C" size="30" />
-		<field name="conversion_rate" type="N" size="5.3" />
+		<field name="conversion_rate" type="N" size="10.3" />
 		<field name="currency_status" type="C" size="25" />
 		<field name="defaultid" type="C" size="10">
 			<notnull />
