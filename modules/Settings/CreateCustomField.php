@@ -144,12 +144,12 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
 							<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'""'.$readonly.'" class="txtBox"></td>
 						</tr>
-						<tr id="decimaldetails">
+						<tr id="decimaldetails" style="visibility:hidden;">
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
 							<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" "'.$readonly.'" class="txtBox"></td>
 						</tr>
-						<tr id="picklist">
-							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
+						<tr id="picklist" style="visibility:hidden;">
+							<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" "'.$readonly.'">'.$fldVal.'</textarea></td>
 							<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
 						</tr>
