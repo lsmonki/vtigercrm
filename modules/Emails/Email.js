@@ -68,13 +68,3 @@ function massDelete()
 			return false;
 		}
 }
-function ShowFolders(folder)
-{
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folder="+folder;
-	ajaxObj.process("index.php?",urlstring);
-}
-
-
-
-
