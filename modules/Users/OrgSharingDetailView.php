@@ -63,6 +63,9 @@ $custom_access['HelpDesk'] = getSharingRuleList('HelpDesk');
 //Email Sharing
 $custom_access['Emails'] = getSharingRuleList('Emails');
 
+//Campaign Sharing
+$custom_access['Campaigns'] = getSharingRuleList('Campaigns');
+
 //Quotes Sharing
 $custom_access['Quotes'] = getSharingRuleList('Quotes');
 
@@ -74,6 +77,8 @@ $custom_access['SalesOrder'] = getSharingRuleList('SalesOrder');
 
 //Invoice Sharing
 $custom_access['Invoice'] = getSharingRuleList('Invoice');
+
+
 
 $smarty->assign("MODSHARING", $custom_access);
 
