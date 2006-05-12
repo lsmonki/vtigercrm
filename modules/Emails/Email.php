@@ -46,10 +46,6 @@ class Email extends CRMEntity {
 	var $time_start;
   	var $module_id="emailid";
 
-	var $rel_users_table = "salesmanactivityrel";
-	var $rel_contacts_table = "cntactivityrel";
-	var $rel_serel_table = "seactivityrel";
-
 	var $table_name = "activity";
 	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel');
         var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','attachments'=>'attachmentsid');

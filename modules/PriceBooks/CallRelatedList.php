@@ -32,6 +32,13 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 
 $related_array=getRelatedLists("PriceBooks",$focus);
 
+global $mod_strings;
+global $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($focus->name))
@@ -45,6 +52,13 @@ $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD","PriceBook");
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
+$smarty->assign("MOD",$mod_strings);
+$smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");
 
 ?>

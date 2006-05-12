@@ -454,6 +454,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$assigned_user_id = $current_user->id;
 		}
+		if($col_fields['record_id'] != '')
+		{
+			$attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
+			if($col_fields[$fieldname] == '' && $attachmentid != '')
+			{
+				$attachquery = "select * from attachments where attachmentsid=".$attachmentid;
+				$value = $adb->query_result($adb->query($attachquery),0,'name');
+			}
+		}
 		if($value!='')
 			$filename=' [ '.$value. ' ]';
 		$editview_label[]=$mod_strings[$fieldlabel];
@@ -788,6 +797,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
 						$parent_name .= $account_name.'<'.$myemail.'>; ';
 						$account_selected = 'selected';
+					}elseif($parent_module == "Users")
+					{
+						$sql = "select user_name,email1 from users where id=".$mycrmid;
+						$result = $adb->query($sql);
+						$account_name = $adb->query_result($result,0,"user_name");
+						$myemail=$adb->query_result($result,0,"email1");
+						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+						$parent_name .= $account_name.'<'.$myemail.'>; ';
+						$user_selected = 'selected';
 					}
 				}
 			}
@@ -800,7 +818,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[] = array(	 
 				$app_strings['COMBO_CONTACTS']=>$contact_selected,
 				$app_strings['COMBO_ACCOUNTS']=>$account_selected,
-				$app_strings['COMBO_LEADS']=>$lead_selected
+				$app_strings['COMBO_LEADS']=>$lead_selected,
+				$app_strings['COMBO_USERS']=>$user_selected
 				);
 		$fieldvalue[] =$parent_name;
 		$fieldvalue[] = $parent_id;

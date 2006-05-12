@@ -48,15 +48,14 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Email();
 
+global $current_user;
 setObjectValuesFromRequest(&$focus);
-
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
         $file_upload_error = true;
         $_FILES = '';
 }
-
 if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUEST['addbox'] == null)
 {
 	imap_delete($mbox,$_REQUEST['deletebox']);
@@ -149,12 +148,19 @@ function checkIfContactExists($mailid)
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
+$focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
+$focus->column_fields["date_start"]= date('Y-m-d');
 $focus->save("Emails");
-
 $return_id = $focus->id;
 $email_id = $return_id;
-
+$query = 'select emailid from emaildetails where emailid ='.$email_id;
+$result = $adb->query($query);
+if($adb->num_rows($result) > 0)
+	$query = 'update emaildetails set idlists='.$_REQUEST["parent_id"].' where emailid = '.$email_id;
+else
+	$query = 'insert into emaildetails values ('.$email_id.',"","","","","","'.$_REQUEST["parent_id"].'","SAVED")';
+$adb->query($query);	
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button

@@ -282,6 +282,13 @@ function createUserSharingPrivilegesfile($userid)
 			$email_share_write_per=$email_share_per_array['write'];
 			$newbuf .= "\$Emails_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($email_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($email_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$Emails_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($email_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($email_share_write_per['GROUP']).");\n\n";
+
+			//Constructing Campaigns Sharing Rules
+			$campaign_share_per_array=getUserModuleSharingObjects("Campaigns",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
+			$campaign_share_read_per=$campaign_share_per_array['read'];
+			$campaign_share_write_per=$campaign_share_per_array['write'];
+			$newbuf .= "\$Campaigns_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($campaign_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($campaign_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Campaigns_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($campaign_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($campaign_share_write_per['GROUP']).");\n\n";
 	
 
 			//Constructing Quotes Sharing Rules
@@ -1402,7 +1409,7 @@ function populateSharingtmptables($userid)
 	}
 
 	//Populating Values into the tmp sharing tables
-	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Quotes','PurchaseOrder','SalesOrder','Invoice');
+	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice');
 	foreach($sharingArray as $module)
 	{
 		populateSharingPrivileges('USER',$userid,$module,'read');

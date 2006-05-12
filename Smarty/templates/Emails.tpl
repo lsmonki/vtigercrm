@@ -54,7 +54,32 @@ function ajaxDelResponse(response)
 	document.getElementById("subjectsetter").innerHTML='';
 	document.getElementById("email_con").innerHTML=response.responseText;
 }
+
 {/literal}
+function ShowFolders(folderid)
+{ldelim}
+    var ajaxObj = new Ajax(ajaxSaveResponse);
+	switch(folderid)
+	{ldelim}
+		case 1:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_ALLMAILS}';
+			break;
+		case 2:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_CONTACTS}';
+			break;
+		case 3:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_ACCOUNTS}';
+			break;
+		case 4:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_LEADS}';
+			break;
+		case 5:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_USERS}';
+			break;
+	{rdelim}
+    var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folderid="+folderid;
+   	ajaxObj.process("index.php?",urlstring);
+{rdelim}
 </script>
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
@@ -89,7 +114,7 @@ function ajaxDelResponse(response)
 											</td>
 											<td width="10%">
 											<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-						&nbsp;<a href="javascript:openPopUp('xComposeEmail',this,'index.php?module=Emails&action=EmailsAjax&file=EditView','createemailWin',655,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
+						&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 											</td>
 											<td width="10%">
 											<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -103,7 +128,7 @@ function ajaxDelResponse(response)
 							<tr>
                     <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
 								<td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><strong>{$MOD.LBL_MAILS}</strong></td>
+					 <td width="60%" class="subHdr"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
 							</tr>
 							<tr>
 								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
@@ -119,18 +144,18 @@ function ajaxDelResponse(response)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 								<ul style="list-style-type:none;">
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="ShowFolders('allmails')" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
+									<a href="javascript:;" onClick="ShowFolders(1)" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="ShowFolders('Contacts')" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
+									<a href="javascript:;" onClick="ShowFolders(2)" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="ShowFolders('Accounts')" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
+									<a href="javascript:;" onClick="ShowFolders(3)" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="ShowFolders('Leads')" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
+									<a href="javascript:;" onClick="ShowFolders(4)" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="javascript:;" onClick="ShowFolders('Users')" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
+									<a href="javascript:;" onClick="ShowFolders(5)" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 									</li>
 								</ul><br />
 								</td>
@@ -140,7 +165,7 @@ function ajaxDelResponse(response)
 									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 									<input name="idlist" type="hidden">
 										<tr>
-											<td width="25%"><input type="button" name="Button2" value=" {$MOD.LBL_QUALIFY_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
+											<td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
 											</td>
 											<td width="75%" align="right">
 							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
@@ -192,4 +217,13 @@ function ajaxDelResponse(response)
 </table>
 <!-- END -->
 <div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
-
+<script>
+function OpenCompose(id,mode) 
+{ldelim}
+	if(id != '')
+		url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
+	else
+		url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+	openPopUp('xComposeEmail',this,url,'createemailWin',775,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+{rdelim}
+</script>

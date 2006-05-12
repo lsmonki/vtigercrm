@@ -12,6 +12,8 @@
 
 require_once('Smarty_setup.php');
 require_once('modules/Invoice/Invoice.php');
+require_once('include/utils/utils.php');
+
 $focus = new Invoice();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
@@ -22,6 +24,13 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 $log->debug("id is ".$focus->id);
 $log->debug("name is ".$focus->name);
 }
+
+global $mod_strings;
+global $app_strings;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -36,5 +45,12 @@ $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$currentmodule);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
+$smarty->assign("MOD",$mod_strings);
+$smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+
+$check_button = Button_Check($module);
+$smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");
 ?>

@@ -9,17 +9,29 @@
   *
  ********************************************************************************/
 -->*}
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" valign="top">
 <tr>
     <td class="forwardBg">
   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 		<tr>
+						{if $BLOCKS neq ''}
 			<td width="75%">
-						  <input type="button" name="reply" value=" {$MOD.LBL_REPLY_BUTTON} " class="classWebBtn" />&nbsp;
-						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" />&nbsp;
-						  <input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
+						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
+						  <input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+						{foreach item=row from=$BLOCKS}	
+						{foreach item=elements key=title from=$row}	
+						{if $title eq 'Attachment'}
+							{if $elements.value ne ''}
+								<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay')"/>
+							{/if}
+						{/if}
+						{/foreach}
+						{/foreach}
 			</td>
 						<td width="25%" align="right"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
+						{else}
+						<td colspan="2">&nbsp;</td>
+						{/if}
 		</tr>
 		</table>
 	</td>
@@ -30,9 +42,10 @@
 	{foreach item=elements key=title from=$row}	
 		{if $title eq 'Subject'}
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td width="2%">&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td align="right">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$BLOCKS.3.Subject.value}</td></tr>
+	<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
+	<tr><td align="right">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>&nbsp;{$CC_MAIL}</td></tr>
+	<tr><td align="right">{$MOD.LBL_BCC}</td><td>&nbsp;</td><td>&nbsp;{$BCC_MAIL}</td></tr>
+	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$elements.value}</td></tr>
 			<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 		</table>
 		{elseif $title eq 'Description'}
@@ -45,3 +58,20 @@
 	</td>
 </tr>
 </table>
+{foreach item=row from=$BLOCKS}	
+	{foreach item=elements key=title from=$row}	
+	{if $title eq 'Attachment'}
+	<div id="reportLay" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
+		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+		<tr>
+			<td>
+				{$elements.value}
+			</td>
+		</tr>
+		<tr><td style="padding:5px;">&nbsp;</td></tr>
+		</table>
+	</div>
+	{/if}
+	{/foreach}
+{/foreach}
+

@@ -34,65 +34,6 @@ global $app_list_strings;
 global $mod_strings;
 global $current_user;
 
-$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
-$sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
-?>
-<!--table width="100%" border="0" cellspacing="0" cellpadding="0">
- <tr>
-   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-   <tr>
-     <td class="tabStart">&nbsp;&nbsp;</td-->
-<?
-	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
-	{
-		$classname = "tabOff";
-	}
-	else
-	{
-		$classname = "tabOn";
-	}
-	$listView = "ListView.php";
-	foreach($submenu as $label=>$filename)
-	{
-		$cur_mod = $sec_arr[$filename];
-		$cur_tabid = getTabid($cur_mod);
-
-		if(isPermitted($cur_mod,'','') == 'yes')
-		{
-
-			list($lbl,$sname,$title)=split("_",$label);
-			if(stristr($label,"EMAILS"))
-			{
-
-				//echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
-
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			elseif(stristr($label,$_REQUEST['smodule']))
-			{
-				//echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			else
-			{
-				//echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-			}
-			$classname = "tabOff";
-		}
-
-	}
-?>
-     <!--td width="100%" class="tabEnd">&nbsp;</td>
-   </tr>
- </table></td>
- </tr>
- </table>
- <br-->
-<?
-
-
 $focus = new Email();
 $smarty = new vtigerCRM_Smarty();
 
@@ -114,7 +55,16 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-         $log->info("Entity info successfully retrieved for EditView.");
+	$query = 'select idlists,from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
+	$result = $adb->query($query);
+    $smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
+	$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
+    $smarty->assign('TO_MAIL',$to_email);	
+    $smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
+    $smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
+    $smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
+
+    $log->info("Entity info successfully retrieved for EditView.");
 	$focus->name=$focus->column_fields['name'];		
 }
 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
@@ -122,18 +72,8 @@ if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
 	$focus->mode = '';
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
-{
-	$old_id = $_REQUEST['record'];
-        if (! empty($focus->filename) )
-        {
-		$old_id = $focus->id;
-        }
-        $focus->id = "";
-	$focus->mode = "";
-}
-global $theme;
 
+global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -142,8 +82,6 @@ $disp_view = getView($focus->mode);
 
 $details = getBlocks("Emails",$disp_view,$mode,$focus->column_fields);
 $smarty->assign("BLOCKS",$details['Email Information']);
-//echo '<pre>';print_r($details['Email Information']);echo '</pre>';
-	
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Email");
@@ -236,7 +174,6 @@ elseif (is_null($focus->parent_type))
 {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
-
 
 $log->info("Email detail view");
 

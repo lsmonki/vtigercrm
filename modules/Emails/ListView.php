@@ -162,21 +162,21 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
 }
-if($_REQUEST['folder'] =='Contacts')
+if($_REQUEST['folderid'] =='2')
 {
 	$list_query .= "AND seactivityrel.crmid in (select contactid from contactdetails)";
 }
-if($_REQUEST['folder'] =='Accounts')
+if($_REQUEST['folderid'] =='3')
 {
 	$list_query .= "AND seactivityrel.crmid in (select accountid from account)";	
 }
-if($_REQUEST['folder'] =='Leads')
+if($_REQUEST['folderid'] =='4')
 {
 	$list_query .= "AND seactivityrel.crmid in (select leadid from leaddetails)";	
 }
-if($_REQUEST['folder'] =='Users')
+if($_REQUEST['folderid'] =='5')
 {
-	$list_query .= "AND seactivityrel.crmid in (select id from users)";	
+	$list_query .= "AND salesmanactivityrel.smid in (select id from users)";	
 }
 if(isset($order_by) && $order_by != '')
 {

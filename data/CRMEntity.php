@@ -102,8 +102,11 @@ class CRMEntity extends SugarBean
 					{
 						$realid=explode("@",$myids[$i]);
 						$mycrmid=$realid[0];
-
-						$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
+						//added to handle the relationship of emails with users
+						if($realid[1] == -1)
+							$mysql='insert into salesmanactivityrel values('.$mycrmid.','.$actid.')';
+						else	
+							$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
 						$adb->query($mysql);
 					}
 				}

@@ -44,7 +44,7 @@
 	<td colspan="3">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		   <tr>
-			<td width="143"><img src="{$IMAGE_PATH}composeMail.jpg" width="143"></td>
+			<td width="143"><img src="{$IMAGE_PATH}composeMail.jpg"></td>
 			<td background="{$IMAGE_PATH}mailHdr.jpg" style="background-repeat:repeat-x;" width="100%">&nbsp;</td>
 			<td width="86"><img src="{$IMAGE_PATH}mailTitle.jpg"></td>
 		   </tr>
@@ -55,10 +55,10 @@
 	{foreach item=elements from=$row}
 	{if $elements.2.0 eq 'parent_id'}
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right" width="15%"><b>To : </b></td>
+	<td class="lvtCol" style="padding: 5px;" align="right"><b>{$MOD.LBL_TO}</b></td>
 	<td class="dvtCellLabel" style="padding: 5px;">
- 		<input name="{$elements.2.0}" type="hidden" value="{$elements.3.1}">
-		<textarea id="parent_name" cols="50">{$elements.3.0}</textarea>
+ 		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
+		<textarea id="parent_name" cols="70">{$TO_MAIL}</textarea>
 	</td>
 	<td class="dvtCellLabel" style="padding: 5px;" align="left">
 		<select name="parent_type">
@@ -74,23 +74,23 @@
 	</td>
    </tr>
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right">Cc : </td>
+	<td class="lvtCol" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
 	<td class="dvtCellLabel" style="padding: 5px;">
-		<input name="ccmail" class="txtBox" type="text" style="width:99%">&nbsp;
+		<input name="ccmail" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
 	</td>	
-	<td class="dvtCellLabel" width="25%">&nbsp;</td>
+	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
    <tr>
-	<td class="lvtCol" style="padding: 5px;" align="right">Bcc : </td>
+	<td class="lvtCol" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
 	<td class="dvtCellLabel" style="padding: 5px;">
-		<input name="bccmail" class="txtBox" type="text" style="width:99%">&nbsp;
+		<input name="bccmail" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
-	<td class="dvtCellLabel" width="25%">&nbsp;</td>
+	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
-	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.1}"></td>
+	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}"></td>
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
 

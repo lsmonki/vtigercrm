@@ -85,177 +85,167 @@ function set_focus() {
 //  End -->
 </script>
 
-
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr>
-	<td align=center>
-		<br><br>
-		<br><br>
-		
-		<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
-		<tr>
-			<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right><img src="include/images/loginAlpha.gif" alt="Beta" title="Beta"></td>
-		</tr>
-		</table>
-		
-		<table border=0 cellspacing=0 cellpadding=0 width=720 class="loginTopShade">
-		<tr>
-			<td><img src="include/images/loginTopShade.gif"></td>
-		</tr>
-		</table>
-		
-		<table border=0 cellspacing=0 cellpadding=0 width=720 class="loginBg" >
-		<tr>
-			<td valign=top width=60% height="250" class="loginBillBoard">
-				<div align=left style="padding:20px">
-				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Beta</span><br><br>
-				
-				vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
-				
-				<b>New in Beta</b> <br>
-				
-				<li>New-look Mail Client</li>
-		                <li>Improved API docs</li>
-		                <li>Performance Optimizations</li>
-			        <li>Sexier Dashboards and Reports</li>	 		
-		                <li>Migration Support</li>	 	
-				<br>	
-			
-	Your 'vtiger-xperience' is ... 
-				<br>	
-				<li><a href='http://blogs.vtiger.com'>vtiger blogs </a></li>
-				<li><a href='http://www.bloglines.com'>bloglines </a></li>
-				<li><a href='http://technorati.com/'>technorati</a></li>
-				<li><a href='http://digg.com/'>digg</a></li>
-				<li><a href='http://www.blogger.com'>blogger</a></li>
-				</div>
-				
-			
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<td align="center"><br><br><br><br>
+				<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopBg">
+						<tr>
+								<td align=left><img src="include/images/loginVtigerCRM.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+								<td align=right><img src="include/images/loginAlpha.gif" alt="Beta" title="Beta"></td>
+						</tr>
+				</table>
+				<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginTopShade">
+						<tr>
+							<td><img src="include/images/loginTopShade.gif"></td>
+						</tr>
+				</table>
+				<table border="0" cellspacing="0" cellpadding="0" width="720 "class="loginBg small" >
+						<tr>
+							<td valign="top" width="60%" height="250" class="loginBillBoard small">
+									<div align=left style="padding:20px">
+													<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Beta</span><br><br>
+													vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
+													<b>New in Beta</b> <br>
+													<li>New-look Mail Client</li>
+													<li>Improved API docs</li>
+													<li>Performance Optimizations</li>
+													<li>Sexier Dashboards and Reports</li>	 		
+													<li>Migration Support</li><br>	
+															Your 'vtiger-xperience' is ... <br>	
+													<li><a href='http://blogs.vtiger.com' tabindex="6">vtiger blogs </a></li>
+													<li><a href='http://www.bloglines.com' tabindex="7">bloglines </a></li>
+													<li><a href='http://technorati.com/' tabindex="8">technorati</a></li>
+													<li><a href='http://digg.com/' tabindex="9">digg</a></li>
+													<li><a href='http://www.blogger.com' tabindex="10">blogger</a></li>
+										</div>
+							</td>
+							<td valign="top"><br>
+								<!-- sign in -->
+								<table border="0" cellspacing="0" cellpadding="0" width="90%" bgcolor="white" class="small">
+										<tr>
+												<td>
+														<table border="0" cellspacing="0" cellpadding="0" width="100%" class="small">
+																<tr>
+																		<td align=left><img src="include/images/loginSITopLeft.gif"></td>
+																		<td align=right><img src="include/images/loginSITopRight.gif"></td>
+																</tr>
+														</table>
+														<form action="index.php" method="post" name="DetailView" id="form">
+														<input type="hidden" name="module" value="Users">
+														<input type="hidden" name="action" value="Authenticate">
+														<input type="hidden" name="return_module" value="Users">
+														<input type="hidden" name="return_action" value="Login">
+														<table border="0" cellspacing="0" cellpadding="5" align="center" width="90%" class="small">
+																<?php
+																	if( isset($_SESSION['validation'])){
+																?>
+																	<tr>
+																			<td colspan="2"><font color="Red"> <?php echo $current_module_strings['VLD_ERROR']; ?> </font></td>
+																	</tr>
+																<?php
+																}
+																else if(isset($login_error) && $login_error != "")
+																{
+																?>
+																		<tr>
+																				<td colspan="2"><b class="small"><font color="Brown">
+																								<?php echo $login_error ?>
+																								</font>
+																						</b>
+																				 </td>
+																		</tr>
+																<?php
+																	}
+																					
+																	if (isset($_REQUEST['ck_login_language_vtiger'])) {
+																					$display_language = $_REQUEST['ck_login_language_vtiger'];
+																					}
+																					else {
+																					$display_language = $default_language;
+																					}
+																					
+																					if (isset($_REQUEST['ck_login_theme_vtiger'])) {
+																					$display_theme = $_REQUEST['ck_login_theme_vtiger'];
+																					}
+																					else {
+																					$display_theme = $default_theme;
+																					}
+																					
+																					?>
+																			<tr>
+																				<td colspan="2" class="loginSignin" style="border-bottom: 1px solid rgb(153, 153, 153); padding: 10px;" align="left">
+																							Sign in
+																				</td>
+																		</tr>
+																		<tr>
+																				<td class="small" align="right">
+																						<?php echo $current_module_strings['LBL_USER_NAME'] ?>
+																				</td>
+																				<td class="small">
+																						<input class="textbox" type="text"  name="user_name"   value="<?php echo $login_user_name ?>" tabindex="1">
+																				</td>
+																	</tr>
+																	<tr>
+																				<td class="small" align="right">
+																							<?php echo $current_module_strings['LBL_PASSWORD'] ?>
+																				</td>
+																				<td class="small">
+																							<input class="textbox" type="password" size='20' name="user_password"  value="<?php echo $login_password ?>" tabindex="2">
+																				</td>
+																	</tr>
+																	<tr>
+																				<td class="small" align="right" style="background-color:#f5f5f5">
+																						<?php echo $current_module_strings['LBL_THEME'] ?>
+																				</td>
+																				<td class="small" style="background-color:#f5f5f5">
+																							<select class='small' name='login_theme' style="width:120px;" tabindex="3">
+																									<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
+																							</select>
+																				</td>
+																	</tr>
+																	<tr>
+																				<td class="small" align="right" style="background-color:#f5f5f5">
+																							<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
+																				</td>
+																				<td class="small" style="background-color:#f5f5f5">
+																							<select class='small' name='login_language' style="width:120px;" tabindex="4">
+																										<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+																								</select>
+																				  </td>
+																	 </tr>
+																	<tr>
+																			<td></td>
+																			<td>
+																				<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>"  type="image" src="include/images/loginBtnSignin.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5">
+																				
+																			 </td>
+																	  </tr>
+															</table>
+														</form>	
+														<table border="0" cellspacing="0" cellpadding="0" width="100%">
+															<tr>
+																<td align=left><img src="include/images/loginSIBottomLeft.gif"></td>
+																<td align=right><img src="include/images/loginSIBottomRight.gif"></td>
+															</tr>
+														</table>
+												</td>
+										</tr>
+								</table>
+							</td>
+					</tr>
+				</table>
+					<table border="0" cellspacing="0" cellpadding="0" width="720" class="loginBottomBg">
+						<tr>
+									<td align="left"><img src="include/images/loginBottomBg.gif"></td>
+						</tr>
+					</table>
+					<table border="0" cellspacing="0" cellpadding="0" width="720" >
+							<tr>
+									<td align="left"><img src="include/images/loginBottomURL.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+						    </tr>
+					</table>
 			</td>
-			<td valign=top>
-			<br>
-			<!-- sign in -->
-				<table border=0 cellspacing=0 cellpadding=0 width=90% bgcolor=white>
-				<tr>
-					<td>
-						<table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td align=left><img src="include/images/loginSITopLeft.gif"></td><td align=right><img src="include/images/loginSITopRight.gif"></td></tr></table>
-					
-
-						<table border=0 cellspacing=0 cellpadding=5 align=center width=90%>
-<form action="index.php" method="post" name="DetailView" id="form">
-
-			<input type="hidden" name="module" value="Users">
-			<input type="hidden" name="action" value="Authenticate">
-			<input type="hidden" name="return_module" value="Users">
-			<input type="hidden" name="return_action" value="Login">
-<?php
-if( isset($_SESSION['validation'])){
-?>
-		<tr>
-		<td><font color="Red"> <?php echo $current_module_strings['VLD_ERROR']; ?> </font></td>
 		</tr>
-<?php
-}
-else if(isset($login_error) && $login_error != "")
-{
-?>
-		<tr>
-		<td><b><font color="Brown">
-		</tr>
-		 <?php echo $login_error ?>
-                 </font></b></td>
-                 </tr>
-<?php
-}
-
-if (isset($_REQUEST['ck_login_language_vtiger'])) {
-	$display_language = $_REQUEST['ck_login_language_vtiger'];
-}
-else {
-	$display_language = $default_language;
-}
-
-if (isset($_REQUEST['ck_login_theme_vtiger'])) {
-	$display_theme = $_REQUEST['ck_login_theme_vtiger'];
-}
-else {
-	$display_theme = $default_theme;
-}
-
-?>
-	<tr>
-	<td colspan="2" class="loginSignin" style="border-bottom: 1px solid rgb(153, 153, 153); padding: 10px;" align="left">
-		Sign in
-	</td>
-	</tr>
-	<tr>
-	<td class=small align=right>
-	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
-		</td>
-		<td class=small>
-		<input class=textbox type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
-		</td>
-	</tr>
-	<tr>
-	<td class=small align=right>
-	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
-	</b></td><td class=small>
-	<input class=textbox type="password" size='20' name="user_password" class=textbox value="<?php echo $login_password ?>">
-	</td>
-	</tr>
-	<tr>
-	<td class=small align=right style="background-color:#f5f5f5">
-	<?php echo $current_module_strings['LBL_THEME'] ?>
-	</b></td><td class=small style="background-color:#f5f5f5">
-		<select class='small' name='login_theme' style="width:120px;">
-		<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
-		</select>
-	</td>
-	</tr>
-	<tr>
-	<td class=small align=right style="background-color:#f5f5f5">
-	<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
-	</b>
-	</td>
-	<td class=small style="background-color:#f5f5f5">
-	
-	<select class='small' name='login_language' style="width:120px;">
-	<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
-	</select>
-	</td>
-	</tr>
-	<tr>
-	<td></td>
-	<td>
-	<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="image" src="include/images/loginBtnSignin.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
-	</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td>
-	</tr>
-	</table>
-		
-					<table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td align=left><img src="include/images/loginSIBottomLeft.gif"></td><td align=right><img src="include/images/loginSIBottomRight.gif"></td><tr></table>
-	</td>
-	</form>
-</tr>
 </table>
-				
-            </td>
-          </tr>
-          </table>
-<table border=0 cellspacing=0 cellpadding=0 width=720 class="loginBottomBg">
-		<tr>
-			<td align=left><img src="include/images/loginBottomBg.gif"></td>
-		</tr>
-		</table>
-	  
-<table border=0 cellspacing=0 cellpadding=0 width=720 >
-		<tr>
-			<td align=left><img src="include/images/loginBottomURL.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		</tr>
-		</table>
 
-	</td>
-</table></td>
-</tr>
-</table>
 

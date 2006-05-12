@@ -493,7 +493,7 @@ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'357','parent_id','Related To',1,0,0,100,1,22,1,'I~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,5,21,1,'V~M',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,23,1,'V~M',0,1,'BAS')");
-	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,1,23,1,'V~O',1,null,'BAS')");
+	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,2,23,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,24,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,9,1,23,'T~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,22,'T~O',1,null,'BAS')");

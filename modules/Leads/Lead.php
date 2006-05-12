@@ -264,7 +264,7 @@ function get_activities($id)
 	*/
 function get_emails($id)
 {
-		
+	global $log;	
 	$log->debug("Entering get_emails(".$id.") method ...");
 	global $mod_strings;
 	require_once('include/RelatedListView.php');

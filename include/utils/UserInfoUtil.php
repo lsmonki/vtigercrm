@@ -4345,12 +4345,16 @@ function getListViewSecurityParameter($module)
 	}
 	elseif($module == 'Campaigns')
 	{
-		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%')";
 
-                        if(sizeof($current_user_groups) > 0)
-                        {
-                              $sec_query .= "  or (crmentity.smownerid in (0) and (groups.groupid in".getCurrentUserGroupList()."))) ";
-			}	
+		$sec_query .= " and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (crmentity.smownerid in (0) and (";
+
+		if(sizeof($current_user_groups) > 0)
+		{
+			$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+		}
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
+
+			
 	}	
 	else
 	{

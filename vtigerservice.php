@@ -23,6 +23,14 @@ if(isset($_REQUEST['service']))
 	{
 		include("soap/webforms.php");
 	}
+	elseif($_REQUEST['service'] == "firefox")
+	{
+		include("soap/contactserialize.php");
+	}
+	elseif($_REQUEST['service'] == "thunderbird")
+	{
+		include("soap/contactserialize.php");
+	}
 	else
 	{
 		echo "No Service Configured for $_REQUEST[service]";

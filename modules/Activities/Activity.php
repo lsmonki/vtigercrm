@@ -205,8 +205,6 @@ class Activity extends CRMEntity {
 				$recur_result=$adb->query($recur_dates_qry);
 				$noofrows_recur = $adb->num_rows($recur_result);
 
-			}
-
 			while($row = $adb->fetch_array($result))
 			{
 
@@ -216,16 +214,17 @@ class Activity extends CRMEntity {
 
 				if(is_admin($current_user))
 				{
-					$entries[] = $row['last_name'].' '.$row['first_name'];
+					$entries[] = '<a href="index.php?module=Users&action=DetailView&parenttab=Settings&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['last_name'].' '.$row['first_name'].'</a>';
+					$entries[] = '<a href="index.php?module=Users&action=DetailView&parenttab=Settings&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['user_name'].'</a>';
 				}
 				else
 				{
 					$entries[] = $row['last_name'].' '.$row['first_name'];
+					$entries[] = $row['user_name'];
 				}	
 
-				$entries[] = $row['user_name'];
 
-				$entries[] = $row['email1'];
+				$entries[] = '<a href="mailto:'.$row["email1"].'"]">'.$row['email1'].'</a>';
 				if($email == '')	$email = $row['email2'];
 				if($email == '')	$email = $row['yahoo_id'];
 				$entries[] = $row['phone_home'];
@@ -238,7 +237,17 @@ class Activity extends CRMEntity {
 					$list .= '<a href="index.php?module=Users&action=EditView&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  | ';
 				}
 
+			// To display the dates for the Group calendar starts -Jaguar
+			$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
+			$recur_result=$adb->query($recur_dates_qry);
+			$noofrows_recur = $adb->num_rows($recur_result);
+			if($noofrows_recur==0)
+			{
+				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+				$recur_result=$adb->query($recur_dates_qry);
+				$noofrows_recur = $adb->num_rows($recur_result);
 
+			}
 				//Added for Group Calendar -Jaguar
 
 

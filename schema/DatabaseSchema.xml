@@ -1785,7 +1785,7 @@
 		<field name="currency_name" type="C" size="100" />
 		<field name="currency_code" type="C" size="100" />
 		<field name="currency_symbol" type="C" size="30" />
-		<field name="conversion_rate" type="N" size="5.3" />
+		<field name="conversion_rate" type="N" size="10.3" />
 		<field name="currency_status" type="C" size="25" />
 		<field name="defaultid" type="C" size="10">
 			<notnull />
@@ -5036,5 +5036,37 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	<table name="emaildetails">
+		<field name="emailid" type="I" size="19">
+			<notnull />
+			<key />
+		</field>
+		<field name="from_email" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="to_email" type="X">
+			<notnull />
+		</field>
+		<field name="cc_email" type="X">
+			<notnull />
+		</field>
+		<field name="bcc_email" type="X">
+			<notnull />
+		</field>
+		<field name="assigned_user_email" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="idlists" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="email_flag" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+	</table>
+
 
 </schema>

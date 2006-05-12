@@ -75,8 +75,8 @@ function getTopAccounts()
 		$entries[$account['accountid']]=$value;	
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-	if ( ($display_empty_home_blocks && count($open_accounts_list) == 0 ) || (count($open_accounts_list)>0) )
 	$log->debug("Exiting getTopAccounts method ...");
+	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;
 }
 ?>

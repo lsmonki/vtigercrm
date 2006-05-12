@@ -71,7 +71,7 @@ function getNewLeads()
 	$list_result = $adb->query($list_query);
 	$noofrows = $adb->num_rows($list_result);
 	$open_lead_list =array();
-	if (count($list_result)>0)
+	if ($noofrows > 0)
 		for($i=0;$i<$noofrows,$i<5;$i++) 
 		{
 			$open_lead_list[] = Array('leadname' => $adb->query_result($list_result,$i,'firstname').' '.$adb->query_result($list_result,$i,'lastname'),
@@ -122,6 +122,7 @@ function getNewLeads()
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	$log->debug("Exiting getNewLeads method ...");
+	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;
 }
 function getLeadView($lead_view)	
