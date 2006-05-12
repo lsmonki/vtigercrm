@@ -157,7 +157,7 @@ class Smarty
      * </ul>
      * @var integer
      */
-    var $caching         =  1;
+    var $caching         =  0;
 
     /**
      * The name of the directory for cache files.
@@ -175,7 +175,7 @@ class Smarty
      *
      * @var integer
      */
-    var $cache_lifetime  =  5;
+    var $cache_lifetime  =  180;
 
     /**
      * Only used when $caching is enabled. If true, then If-Modified-Since headers
@@ -185,7 +185,7 @@ class Smarty
      *
      * @var boolean
      */
-    var $cache_modified_check = true;
+    var $cache_modified_check = false;
 
     /**
      * This determines how Smarty handles "<?php ... ?>" tags in templates.
