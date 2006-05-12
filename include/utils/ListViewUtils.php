@@ -1253,25 +1253,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
                                 }
 //added by rdhital/Raju for better emails 
-					elseif($popuptype == "set_return_emails")
+				elseif($popuptype == "set_return_emails")
+				{	
+					if ($module=='Accounts')
 					{
-							if ($module=='Accounts')
-					{
+						$name = $adb->query_result($list_result,$list_result_count,'accountname');
 						$accid =$adb->query_result($list_result,$list_result_count,'accountid');
 						//$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
 						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
-                                                if($emailaddress == '')
-                                                        $emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
+						if($emailaddress == '')
+							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
 
-				$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
-				$queryres = $adb->query($querystr);
-				//Change this index 0 - to get the fieldid based on email1 or email2
-				$fieldid = $adb->query_result($queryres,0,'fieldid');
+						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uit
+							ype=13;";
+						$queryres = $adb->query($querystr);
+						//Change this index 0 - to get the fieldid based on email1 or email2
+						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'
+								.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
 
-					}
-					elseif ($module=='Contacts' || $module=='Leads')
+					}elseif ($module=='Contacts' || $module=='Leads')
 					{
 						$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
 						$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
@@ -1280,32 +1282,18 @@ $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
 
-				$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
-				$queryres = $adb->query($querystr);
-				//Change this index 0 - to get the fieldid based on email or yahooid
-				$fieldid = $adb->query_result($queryres,0,'fieldid');
+						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uit
+							ype=13;";
+						$queryres = $adb->query($querystr);
+						//Change this index 0 - to get the fieldid based on email or yahooid
+						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-				//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
-				$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+						//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
 
 
 					}
-					/*	if ($module=='Accounts')
-						{
-							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
-							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
-						}
-						elseif ($module=='Contacts' || $module=='Leads')
-						{
-							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
-							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
-							$name=$lastname.' '.$firstname;
-	
-							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
-						}*/
-			
-					}
-//code added by raju ends
+				}	
 				elseif($popuptype == "specific_vendor_address")
 				{
 					require_once('modules/Vendors/Vendor.php');
@@ -1423,7 +1411,7 @@ function getListQuery($module,$where='')
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account  inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ";
+		$query = "select crmentity.crmid, account.accountname,account.email1,account.email2,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account  inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
@@ -1492,7 +1480,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Emails")
         {
-		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
+		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
