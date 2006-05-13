@@ -35,64 +35,74 @@ if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
 if (isset($_REQUEST['ftppassword'])) $ftppassword= $_REQUEST['ftppassword'];
 if (isset($_REQUEST['dbtype'])) $dbtype	= $_REQUEST['dbtype'];
 
-//Checking for mysql connection parameters
+// db_type_status - is there a db type?
+// db_exist_status - does the database exist?
+// db_server_status - does the db server connection exist?
+// db_created_status - did we create a database?
 
-$mysql_status = '';
-$mysql_db_status = '';
-if($dbtype != 'mysql' || $dbtype =='')
+//Checking for database connection parameters
+if($dbtype == '')
 {
-	$mysql_status = 'false';
-	$mysql_db_status = 'false';
+	$db_type_status = false;
 }
 else
 {
-	$mysql_status = 'true';
-	$conn = @mysql_pconnect($db_hostname,$db_username,$db_password);
-	if(!$conn)
+	$conn = &NewADOConnection($dbtype);
+	$db_type_status = true;
+	if($conn->Connect($db_hostname,$db_username,$db_password))
 	{
-		$mysqlconn_status = 'false';
-	}else
-	{
-		$mysqlconn_status = 'true';
-		$version = explode('-',mysql_get_server_info($conn));
-		$mysql_server_version=$version[0];
+		$db_server_status = true;
+		if($dbtype=='mysql')
+		{
+			$version = explode('-',mysql_get_server_info($conn));
+			$mysql_server_version=$version[0];
+		}
 		if($_REQUEST['check_createdb'] == 'on')
 		{
+			$mysql_createddb_status = true;
 			$root_user = $_REQUEST['root_user'];
 			$root_password = $_REQUEST['root_password'];
-			$create_conn = @mysql_connect($db_hostname,$root_user,$root_password);
-			if(mysql_select_db($db_name,$create_conn))
+
+			// drop the current database if it exists
+			$dropdb_conn = &NewADOConnection($dbtype);
+			if($dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name))
 			{
 				$query = "drop database ".$db_name;
-				@mysql_query($query);
+				$dropdb_conn->Execute($query);
+				$dropdb_conn->Close();
 			}
+
+			// create the new database
+			$createdb_conn = &NewADOConnection($dbtype);
+			$createdb_conn->Connect($db_hostname, $root_user, $root_password);
 			$query = "create database ".$db_name;
-			$dbstatus = @mysql_query($query);
-			if(!$dbstatus)
-			{
-				$mysql_createddb_status = 'false';
-			}
-			else	
-			{
-				$mysql_db_status = 'true';
-				$mysql_createddb_status = 'true';
-			}
-			@mysql_close($create_conn);	
-		}else
-		{	
-			if(mysql_select_db($db_name,$conn))
-			{
-				$mysql_db_status = 'true';
-			}else
-			{
-				$mysql_db_status = 'false';
-			}
+			$createdb_conn->Execute($query);
+			$createdb_conn->Close();
 		}
+		else
+		{
+			$mysql_createddb_status = false;
+		}
+
+		// test the connection to the database
+		if($conn->Connect($db_hostname, $db_username, $db_password, $db_name))
+		{
+			$db_exist_status = true;
+		}
+		else
+		{
+			$db_exist_status = false;
+		}
+		$conn->Close();
+	}
+	else
+	{
+		$db_server_status = false;
 	}
 }
-$conn = @mysql_pconnect($db_hostname,$db_username,$db_password);
+$conn->Connect($db_hostname, $db_username, $db_password, $db_name);
 
-if($mysql_status == 'true' && $mysqlconn_status == 'false')
+if($db_type_status == true && $db_server_status == false)
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -147,7 +157,7 @@ if($mysql_status == 'true' && $mysqlconn_status == 'false')
 	<!-- Error Messages -->
 	<b><span style="background-color:#ff0000;padding:5px;color:#ffffff;">Unable to connect to database Server. Invalid mySQL Connection Parameters specified</span></b><br><br>
 	This may be due to the following reasons:<br>
-	-  specified database user, password , hostname or port is invalid.<BR>
+	-  specified database user, password, hostname, database type, or port is invalid.<BR>
 	-  specified database user does not have access to connect to the database server from the host
 
 
@@ -167,6 +177,10 @@ if($mysql_status == 'true' && $mysqlconn_status == 'false')
 	<tr>
 	<td noWrap bgcolor="#F5F5F5" width="40%">Password</td>
 	<td bgcolor="White" align="left" nowrap><font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
+	</tr>
+	<tr>
+	<td noWrap bgcolor="#F5F5F5" width="40%">Database Type</td>
+	<td bgcolor="White" align="left" nowrap><font class="dataInput"><?php if (isset($dbtype)) echo "$dbtype"; ?></font></td>
 	</tr>
 	<tr>
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
@@ -231,7 +245,7 @@ if($mysql_status == 'true' && $mysqlconn_status == 'false')
 	</html>
 <?php
 }
-elseif($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19')
+elseif($dbtype == 'mysql' && ($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19'))
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -337,7 +351,7 @@ elseif($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19')
 
 <?php
 }
-elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_createddb_status == 'false')
+elseif($db_type_status == true && $db_server_status ==true && $mysql_createddb_status == false)
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -445,7 +459,7 @@ elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_createddb
 
 <?php
 }
-elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_db_status == 'false')
+elseif($db_type_status == true && $db_server_status ==true && $db_exist_status == false)
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -552,7 +566,7 @@ elseif($mysql_status == 'true' && $mysqlconn_status =='true' && $mysql_db_status
 
 <?php
 }
-elseif($mysql_status == 'true' && $mysqlconn_status == 'true' && ($mysql_db_status == 'true' || $mysql_createddb_status == 'true'))
+elseif($db_type_status == true && $db_server_status == true && ($db_exist_status == true || $mysql_createddb_status == true))
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -619,6 +633,10 @@ elseif($mysql_status == 'true' && $mysqlconn_status == 'true' && ($mysql_db_stat
 	<tr bgcolor="White">
 	<td bgcolor="#F5F5F5" width="40%" noWrap>Password</td>
 	<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
+	</tr>
+	<tr bgcolor="White">
+	<td noWrap bgcolor="#F5F5F5" width="40%">Database Type</td>
+	<td align="left" nowrap> <font class="dataInput"><?php if (isset($dbtype)) echo "$dbtype"; ?></font></td>
 	</tr>
 	<tr bgcolor="White">
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
