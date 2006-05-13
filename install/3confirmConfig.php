@@ -47,6 +47,7 @@ if($dbtype == '')
 }
 else
 {
+	include('adodb/adodb.inc.php');
 	$conn = &NewADOConnection($dbtype);
 	$db_type_status = true;
 	if($conn->Connect($db_hostname,$db_username,$db_password))
