@@ -2471,7 +2471,7 @@ $query_array = Array(
 "ALTER TABLE `currency_info` DROP PRIMARY KEY",
 "ALTER TABLE `currency_info` MODIFY COLUMN `currency_name` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `currency_info` ADD COLUMN `id` INTEGER(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST",
-"ALTER TABLE `currency_info` ADD COLUMN `conversion_rate` DECIMAL(5,3) DEFAULT NULL",
+"ALTER TABLE `currency_info` ADD COLUMN `conversion_rate` DECIMAL(10,3) DEFAULT NULL",
 "ALTER TABLE `currency_info` ADD COLUMN `currency_status` VARCHAR(25) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `currency_info` ADD COLUMN `defaultid` VARCHAR(10) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
 "ALTER TABLE `currency_info` ADD PRIMARY KEY ()",
