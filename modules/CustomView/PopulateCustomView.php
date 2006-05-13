@@ -267,7 +267,7 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
                          'crmentity:smownerid:assigned_user_id:Activities_Assigned_To:V'),
 
 		   Array('activity:subject:subject:Emails_Subject:V',
-				'crmentity:smownerid:assigned_user_id:Emails_Sender:V'
+				'crmentity:smownerid:assigned_user_id:Emails_Sender:V',
                  'activity:date_start:date_start:Emails_Date_Sent:D'),
 		
 		   Array('crmentity:crmid::Invoice_Invoice_Id:I',
