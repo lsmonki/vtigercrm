@@ -1264,8 +1264,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
 
-						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uit
-							ype=13;";
+						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
 						//Change this index 0 - to get the fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
@@ -1282,8 +1281,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
 
-						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uit
-							ype=13;";
+						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
 						//Change this index 0 - to get the fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');

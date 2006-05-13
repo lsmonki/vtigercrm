@@ -107,7 +107,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	{
 		//handle the mail send to users
 		$emailadd = $adb->query_result($adb->query("select email1 from users where id=$mycrmid"),0,'email1');
-		$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description'],'','','all',$focus->id);
+		$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$_REQUEST['description'],'','','all',$focus->id);
 		$all_to_emailids []= $emailadd;
 		$mail_status_str .= $emailadd."=".$mail_status."&&&";
 	}

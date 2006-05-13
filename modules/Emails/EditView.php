@@ -55,15 +55,20 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-	$query = 'select idlists,from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
-	$result = $adb->query($query);
-    $smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
-	$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
-    $smarty->assign('TO_MAIL',$to_email);	
-    $smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
-    $smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
-    $smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
-
+	if(isset($_REQUEST['forward']) && $_REQUEST['forward'] != '')
+	{
+		$focus->mode = '';
+	}else
+	{
+		$query = 'select idlists,from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
+		$result = $adb->query($query);
+		$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
+		$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
+		$smarty->assign('TO_MAIL',$to_email);	
+		$smarty->assign('CC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'cc_email')));	
+		$smarty->assign('BCC_MAIL',ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')));	
+		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
+	}
     $log->info("Entity info successfully retrieved for EditView.");
 	$focus->name=$focus->column_fields['name'];		
 }

@@ -220,10 +220,18 @@ function ShowFolders(folderid)
 <script>
 function OpenCompose(id,mode) 
 {ldelim}
-	if(id != '')
-		url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
-	else
-		url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+	switch(mode)
+		{ldelim}
+		case 'edit':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
+			break;
+		case 'create':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+			break;
+		case 'forward':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
+			break;
+		{rdelim}
 	openPopUp('xComposeEmail',this,url,'createemailWin',775,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
 {rdelim}
 </script>
