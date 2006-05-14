@@ -61,9 +61,9 @@
 				<select name="selectmodule" style="width: 200px; font-size: 10px;" onChange="changemodules(this)">
 				{foreach item=module from=$FIELD_INFO}
 				{if $module == $DEF_MODULE}
-					<option selected>{$module}</option>
+					<option selected value='{$module}'>{$APP.$module}</option>
 				{else}		
-					<option>{$module}</option>
+					<option value='{$module}' >{$APP.$module}</option>
 				{/if}
 				{/foreach}
 				</select>
@@ -88,7 +88,7 @@
 					{/if}	
 					<table class="small" border="0" cellpadding="5" cellspacing="0" width="100%">
 	                <tbody><tr><td colspan="4" style="border-bottom: 1px dashed rgb(204, 204, 204);">
-					<b>{$CMOD.LBL_FIELDS_AVLBL} {$module} </b><br>
+					<b>{$CMOD.LBL_FIELDS_AVLBL} {$APP.$module} </b><br>
 	  				 {$CMOD.LBL_FIELDS_SELECT_DESELECT}
 				    </td></tr>
 					<tr><td colspan="4">&nbsp;</td></tr>
