@@ -154,12 +154,18 @@ class CustomView extends CRMEntity{
 	function getCustomViewCombo($viewid='')
 	{
 		global $adb;
+		global $app_strings;
 		$tabid = getTabid($this->customviewmodule);
 		$ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
 		$ssql .= " where tab.tabid=".$tabid;
 		$result = $adb->query($ssql);
 		while($cvrow=$adb->fetch_array($result))
 		{
+			if($cvrow['viewname'] == 'All')
+			{
+				$cvrow['viewname'] = $app_strings['COMBO_ALL'];
+			}
+														
 			if($cvrow['cvid'] == $viewid)
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
