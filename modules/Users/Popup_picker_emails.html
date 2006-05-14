@@ -86,7 +86,7 @@ function clear_form(form) {
 <!-- BEGIN: row -->
     <tr height=20 class={ROW_COLOR}>
     	<td WIDTH="2" class="blackLine"><IMG SRC="include/images/blank.gif">
-    		<td valign=TOP style="padding:0px 3px 0px 3px;" ><a href="a" LANGUAGE=javascript onclick='set_return_emails("{USER.ID}",-1,"{USER.FIRST_NAME} {USER.LAST_NAME}","{USER.EMAIL1}"); window.close()'>{USER.FIRST_NAME} {USER.LAST_NAME}</a></td>
+    		<td valign=TOP style="padding:0px 3px 0px 3px;" ><a href="a" LANGUAGE=javascript onclick='return set_return_emails("{USER.ID}",-1,"{USER.FIRST_NAME} {USER.LAST_NAME}","{USER.EMAIL1}");'>{USER.FIRST_NAME} {USER.LAST_NAME}</a></td>
     	<td WIDTH="2" class="blackLine"><IMG SRC="include/images/blank.gif">
     		<td valign=TOP style="padding:0px 3px 0px 3px;" >{USER.USER_NAME}</td>
     	<td WIDTH="2" class="blackLine"><IMG SRC="include/images/blank.gif">
