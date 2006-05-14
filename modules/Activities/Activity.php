@@ -195,15 +195,6 @@ class Activity extends CRMEntity {
 			$header[] = $app_strings['LBL_PHONE']; 
 
 
-			// To display the dates for the Group calendar starts -Jaguar
-			$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
-			$recur_result=$adb->query($recur_dates_qry);
-			$noofrows_recur = $adb->num_rows($recur_result);
-			if($noofrows_recur==0)
-			{
-				$recur_dates_qry="select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid=".$activity_id;
-				$recur_result=$adb->query($recur_dates_qry);
-				$noofrows_recur = $adb->num_rows($recur_result);
 
 			while($row = $adb->fetch_array($result))
 			{
@@ -243,7 +234,7 @@ class Activity extends CRMEntity {
 			$noofrows_recur = $adb->num_rows($recur_result);
 			if($noofrows_recur==0)
 			{
-				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id;
 				$recur_result=$adb->query($recur_dates_qry);
 				$noofrows_recur = $adb->num_rows($recur_result);
 
