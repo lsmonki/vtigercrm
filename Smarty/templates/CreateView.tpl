@@ -59,11 +59,11 @@ function sensex_info()
 	     <div class="small" style="padding:20px">
 		
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  Editing {$SINGLE_MOD} Information</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
-			<span class="lvtHeaderText">Creating New {$SINGLE_MOD}</span> <br>
+			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD}</span> <br>
 		 {/if}
 
 		 <hr noshade size=1>
@@ -80,11 +80,11 @@ function sensex_info()
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 
 					{if $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Products'}	
-						<td width=75 style="width:15%" align="center" nowrap="nowrap" class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab')"><b>Basic Information</b></td>
-                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab')"><b>More Information </b></td>
+						<td width=75 style="width:15%" align="center" nowrap="nowrap" class="dvtSelectedCell" id="bi" onclick="fnLoadValues('bi','mi','basicTab','moreTab')"><b>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</b></td>
+                    				<td class="dvtUnSelectedCell" style="width: 100px;" align="center" nowrap="nowrap" id="mi" onclick="fnLoadValues('mi','bi','moreTab','basicTab')"><b>{$APP.LBL_MORE} {$APP.LBL_INFORMATION} </b></td>
                    				<td class="dvtTabCache" style="width:100%" nowrap="nowrap">&nbsp;</td>
 					{else}
-						<td class="dvtSelectedCell" align=center nowrap>Basic Information</td>
+						<td class="dvtSelectedCell" align=center nowrap>{$APP.LBL_BASIC} {$APP.LBL_INFORMATION}</td>
 	                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{/if}
 				   <tr>
