@@ -443,6 +443,9 @@ $app_strings = Array(
 'LBL_SEARCH_TITLE'=>'Search in ',
 'LBL_SEARCH_ALT'=>'Search in ',
 
+'LBL_SEARCH_STRING'=>'Search...',
+
+'COMBO_ALL'=>'Allvvv',
 
 // Added fields for Related Field Display Informations in Detail View of All Modules
 
@@ -702,6 +705,28 @@ $app_strings = Array(
 'PurchaseOrder'=>'Purchase Orders',
 'SalesOrder'=> 'Sales Orders',
 'Invoice'=>'Invoice',
+'Calendar'=>'Calendar',
+'Home'=>'Home',
+'Campaigns'=>'Campaigns',
+'PriceBooks'=>'PriceBooks',
+'Notes'=>'Notes',
+'Faq'=>'Faq',
+'Dashboard'=>'Dashboard',
+'Reports'=>'Reports',
+'Vendors'=>'Vendors',
+'Rss'=>'Rss',
+'Portal'=>'Portal',
+
+//Added language for Parent Tab
+
+'My Home Page'=>'My Home Page',
+'Marketing'=>'Marketing',
+'Sales'=>'Sales',
+'Support'=>'Support',
+'Analytics'=>'Analytics',
+'Inventory'=>'Inventory',
+'Tools'=>'Tools',
+'Settings'=>'Settings',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
