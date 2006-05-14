@@ -55,11 +55,11 @@ function sensex_info()
 		<div class="small" style="padding:20px">
 		
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  Editing {$SINGLE_MOD} Information</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
-			<span class="lvtHeaderText">Creating {$SINGLE_MOD}</span> <br>
+			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD}</span> <br>
 		 {/if}
 
 		 <hr noshade size=1>
@@ -76,13 +76,13 @@ function sensex_info()
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
                                         {if $MODULE eq 'Notes' || $MODULE eq 'Faq'}
-                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
+                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>
                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
                                         {else}
-                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
+                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>
                                         <td class="dvtTabCache" style="width:10px">&nbsp;</td>
                                         {if $OP_MODE neq 'create_view'}
-                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}" onclick="getRelatedLink()">More Information</a></td>
+                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}" onclick="getRelatedLink()">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
                                         {/if}
 
                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -310,7 +310,7 @@ function sensex_info()
 																{/foreach}
 																{/foreach}
 																{if $check eq 0}
-																	{assign var=select_user value='checked'}
+																	{assign var=select_user value='checked'}`
 																	{assign var=style_user value='display:block'}
 																	{assign var=style_group value='display:none'}
 																{else}

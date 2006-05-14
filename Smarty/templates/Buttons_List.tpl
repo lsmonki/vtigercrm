@@ -14,7 +14,7 @@
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$APP.$MODULE}</a></td>
 	<td class="sep1" style="width:1px;padding-right:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -68,18 +68,18 @@
 	<td class="sep1" style="width:1px;padding-right:1px"></td>
 	<td nowrap style="width:50%;padding:10px">
 	   	{if $CHECK.Import eq 'yes' && $CHECK.Export eq 'yes'}	
-			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$MODULE}</a> |	
-	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$MODULE}</a>
+			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> |	
+	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$APP.$MODULE}</a>
 	   	{elseif $CHECK.Import eq 'yes' && $CHECK.Export eq 'no'} 	
-			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$MODULE}</a> 	
+			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> 	
 	   	{elseif $CHECK.Import eq 'no' && $CHECK.Export eq 'yes' } 	
-	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$MODULE}</a>
+	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$APP.$MODULE}</a>
 	   	{/if}	
 	{elseif $MODULE eq 'Notes' || $MODULE eq 'Emails'}	
 		<td class="sep1" style="width:1px"></td>
 		<td nowrap style="width:50%;padding:10px">
 		{if $CHECK.Export eq 'yes'}
-			 <a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$MODULE}</a>
+			 <a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$APP.$MODULE}</a>
 		{/if}
 	</td>
 	{else}

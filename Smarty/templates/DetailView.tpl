@@ -65,7 +65,7 @@ Calendar.setup ({ldelim}
 		<div class="small" style="padding:20px" >
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
 		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),hide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv'),show('addtagdiv')"></div></td></tr>
 		 </table>			 
 		 <hr noshade size=1>
@@ -78,12 +78,12 @@ Calendar.setup ({ldelim}
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 					{if $MODULE eq 'Notes' || $MODULE eq 'Faq' || $MODULE eq 'Webmails' || ($MODULE eq 'Activities' && $ACTIVITY_MODE eq 'Task')}
-					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
+					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{else}
-					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>	
+					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} {$APP.LBL_INFORMATION}</td>	
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">More Information</a></td>
+					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
 
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{/if}

@@ -99,8 +99,16 @@ function massMail(module)
 
 //added by rdhital for better emails
 function set_return_emails(entity_id,email_id,parentname,emailadd){
+	if(emailadd != '')
+	{
 		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
 		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>; ';
+		window.close();
+	}else
+	{
+		alert('The Record '+parentname+' does\'t have email id' );
+		return false;
+	}
 }	
 //added by raju for emails
 

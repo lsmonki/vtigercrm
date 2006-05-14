@@ -1269,8 +1269,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						//Change this index 0 - to get the fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'
-								.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
 					}elseif ($module=='Contacts' || $module=='Leads')
 					{
@@ -1287,7 +1286,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); window.close(); \'>'.$name.'</a>';
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
 
 					}

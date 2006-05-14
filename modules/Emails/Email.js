@@ -27,7 +27,8 @@ function massDelete()
 
                 if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        idstring = document.massdelete.selected_id.value+':';
+						xx = 1;
                 }
                 else
                 {
@@ -68,3 +69,4 @@ function massDelete()
 			return false;
 		}
 }
+

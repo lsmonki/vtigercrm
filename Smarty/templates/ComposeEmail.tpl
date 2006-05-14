@@ -90,7 +90,7 @@
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
-	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}"></td>
+	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}"></td>
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
 
@@ -114,8 +114,8 @@
 
    <tr>
 	<td colspan="3" class="lvtCol" style="padding: 5px;" align="center">
-		<input title="Save [Alt+S]" accessKey="S" class="classBtn" onclick="this.form.action.value='Save';" type="submit" name="button" value="Save" >&nbsp;
-		<input name="send" value=" &nbsp;Send&nbsp; " class="classBtn" type="submit" onclick="this.form.action.value='Save';this.form.send_mail.value='true';">&nbsp;
+		<input title="Save [Alt+S]" accessKey="S" class="classBtn" onclick="return email_validate(this.form,'save');" type="button" name="button" value="Save" >&nbsp;
+		<input name="send" value=" &nbsp;Send&nbsp; " class="classBtn" type="button" onclick="return email_validate(this.form,'send');">&nbsp;
 		<input name="cancel" value=" Cancel " class="classBtn" type="button" onClick="window.close()">
 	</td>
    </tr>
@@ -123,4 +123,32 @@
 </table>
 </form>
 </body>
+{literal}
+<script>
+function email_validate(oform,mode)
+{
+	if(oform.parent_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
+	{
+		alert('No recipients were specified');
+		return false;
+	}
+	if(oform.subject.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
+	{
+		if(email_sub = prompt('You did not specify a subject from this email. If you would like to provide one, please type it now','(no-Subject)'))
+		{
+			oform.subject.value = email_sub;
+		}else
+		{
+			return false;
+		}
+	}
+	if(mode == 'send')
+	{
+		oform.send_mail.value='true';
+	}
+	oform.action.value='Save';
+	oform.submit();
+}
+</script>
+{/literal}
 </html>

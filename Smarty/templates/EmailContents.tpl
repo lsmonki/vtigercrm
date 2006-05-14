@@ -20,8 +20,8 @@
 		{foreach key=id item=row from=$LISTENTITY}
 	    <tr onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
 			<td>
-			<input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
-</td>
+			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
+</span></td>
 			{foreach item=row_values from=$row}
 			<td><b>{$row_values}</b></td>
 			{/foreach}

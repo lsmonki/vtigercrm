@@ -36,21 +36,21 @@ function getEmailContents(id)
 function DeleteEmail(id)
 {
 	if(confirm("Are you sure you want to delete ?"))
-		{	
-			show("status");
-			var ajaxObj = new Ajax(ajaxDelResponse);
-			var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+id;
-		    	ajaxObj.process("index.php?",urlstring);
-		}
-		else
-		{
-			return false;
-		}
+	{	
+		show("status");
+		var ajaxObj = new Ajax(ajaxDelResponse);
+		var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+id;
+	   	ajaxObj.process("index.php?",urlstring);
+	}
+	else
+	{
+		return false;
+	}
 }
 function ajaxDelResponse(response)
 {
 	hide("status");
-	document.getElementById("EmailDetails").innerHTML='';
+	document.getElementById('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
 	document.getElementById("subjectsetter").innerHTML='';
 	document.getElementById("email_con").innerHTML=response.responseText;
 }
