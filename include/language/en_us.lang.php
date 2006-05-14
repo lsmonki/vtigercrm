@@ -700,6 +700,7 @@ $app_strings = Array(
 'Emails'=>'Emails',
 'HelpDesk'=>'HelpDesk',
 'Activities'=>'Activities',
+'Events'=>'Events',
 'Quotes'=>'Quotes',
 'PriceBook'=>'Price Books',
 'PurchaseOrder'=>'Purchase Orders',
