@@ -33,7 +33,7 @@
                                         {/if}
 
                                  {/foreach}
-                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
+                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -105,7 +105,7 @@
                                         {/if}
 
                                  {/foreach}
-                                             <input class="small" type="button" value="Change Owner" onclick="return change(this,'changeowner')"/>
+                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
                                  </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >

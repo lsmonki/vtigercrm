@@ -66,7 +66,7 @@ class Appointment
                 {
                         $obj = &new Appointment();
                         $result = $adb->fetchByAssoc($r);
-                        //echo '<pre>' print_r($result);echo '</pre>';
+                        //echo '<pre>'; print_r($result);echo '</pre>';
                         $obj->readResult($result, $view);
 			//$list_arr[$obj->record] = $obj;
                         $a++;
@@ -180,7 +180,7 @@ class Appointment
 			$this->image_name = 'Meetings.gif';
 		}
                 $this->record            = $act_array["activityid"];
-		if($view == 'day')
+		if($view == 'day' || $view == 'week')
 			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
 		else
 			$this->formatted_datetime= $act_array["date_start"];

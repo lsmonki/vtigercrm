@@ -293,6 +293,8 @@ function getDayViewLayout(& $cal,$type)
 		else
 		{
 			$hour = $i;
+			if($hour <= 9 && strlen(trim($hour)) < 2)
+	                        $hour = "0".$hour;
                         $sub_str = ':00';
 		}
 		$y = $i+1;
@@ -326,9 +328,9 @@ function getDayViewLayout(& $cal,$type)
 
 function getWeekViewLayout(& $cal,$type)
 {
-        $day_start_hour = $cal['calendar']->day_start_hour;
-        $day_end_hour = $cal['calendar']->day_end_hour;
-        $dayview_hours = $day_end_hour - $day_start_hour;
+	$day_start_hour = $cal['calendar']->day_start_hour;
+	$day_end_hour = $cal['calendar']->day_end_hour;
+	$format = $cal['calendar']->hour_format;
 	$weekview_layout = '';
         $weekview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
 		<div id="hrView_'.$type.'" style = "padding:5px">
@@ -356,6 +358,8 @@ function getWeekViewLayout(& $cal,$type)
 	$weekview_layout .= '<table border="0" cellpadding="10" cellspacing="1" width="98%" class="calDayHour" style="background-color: #dadada">';
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
+		$hour_startat = convertTime2UserSelectedFmt($format,$i);
+	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1));
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
         	{
@@ -381,6 +385,8 @@ function getWeekViewLayout(& $cal,$type)
        			else
            		{
                        		$hour = $i;
+				if($hour <= 9 && strlen(trim($hour)) < 2)
+		                        $hour = "0".$hour;
                         	$sub_str = ':00';
        	        	}
 
@@ -390,7 +396,9 @@ function getWeekViewLayout(& $cal,$type)
 		}
 		for ($column=0;$column<=6;$column++)
 		{
-			$weekview_layout .= '<td class="cellNormal" onclick="gshow(\'addEvent\')" onmouseover="this.className=\'cellNormalHover\'" onmouseout="this.className=\'cellNormal\'" style="height: 40px;" bgcolor="white" valign="top" width="12%">';
+			$temp_date = $cal['calendar']->week_array[$cal['calendar']->slices[$column]]->start_time->get_formatted_date();
+
+			$weekview_layout .= '<td class="cellNormal" onclick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" onmouseover="this.className=\'cellNormalHover\'" onmouseout="this.className=\'cellNormal\'" style="height: 40px;" bgcolor="white" valign="top" width="12%">';
 			$weekview_layout .= '</td>';
 		}
 		$weekview_layout .= '</tr>';
@@ -733,7 +741,7 @@ function convertTime2UserSelectedFmt($format,$time)
         {
                 $hour = $time;
 		if($hour <= 9 && strlen(trim($hour)) < 2)
-                                $hour = "0".$start_hour;
+                                $hour = "0".$hour;
 		$hour = $hour.":00";
 		return $hour;
 	}

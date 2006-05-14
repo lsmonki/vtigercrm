@@ -85,11 +85,11 @@ global $calpath,$callink;
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI');ghide('addEventRepeatUI');">Invite</a></td>
+					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventRepeatUI');">Invite</a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI');ghide('addEventInviteUI');ghide('addEventRepeatUI');">Reminder</a></td>
+					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');">Reminder</a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI');">Repeat</a></td>
+					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);">Repeat</a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>

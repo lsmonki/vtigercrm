@@ -77,8 +77,14 @@ class DateTime
 	}
 
 	
-	function getTodayDatetimebyIndex($index)
+	function getTodayDatetimebyIndex($index,$day='', $month='', $year='')
 	{
+		if($day == '')
+		{
+			$day = $this->day;
+			$month = $this->month;
+			$year = $this->year;
+		}
 		$day_array = array();
 		if($index < 0 || $index > 23)
                 {
@@ -86,9 +92,9 @@ class DateTime
                 }
                 $day_array['hour'] = $index;
                 $day_array['min'] = 0;
-                $day_array['day'] = $this->day;
-                $day_array['month'] = $this->month;
-                $day_array['year'] = $this->year;
+                $day_array['day'] = $day;
+                $day_array['month'] = $month;
+                $day_array['year'] = $year;
 		$datetimevalue = new DateTime($day_array,true);
                 return $datetimevalue;
 	}

@@ -12,10 +12,11 @@ class Calendar
 	var $week_slice;
 	var $week_array;
 	var $month_array;
+	var $week_hour_slices = Array();
 	var $slices = Array();
 	/* for dayview */
-	var $day_start_hour=0;
-	var $day_end_hour=23;
+	var $day_start_hour=8;
+	var $day_end_hour=18;
 	var $sharedusers=Array();
 	/*
 	constructor
@@ -51,31 +52,26 @@ class Calendar
 		switch($this->view)
 		{
 			case 'day':
-				$day_start_hour = $this->day_start_hour;
-				$day_end_hour = $this->day_end_hour;
-				//$dayview_hours = $day_end_hour - $day_start_hour;
-				for($i=$day_start_hour;$i<=$day_end_hour;$i++)
+				for($i=0;$i<=23;$i++)
 				{
 					$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($i));
 					$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->hour] = $layout;
 					array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->hour);
 				}
+				//echo '<pre>';print_r($this);echo'</pre>';
 				break;
 			case 'week':
 				$weekview_days = 7;
-				$day_start_hour = $this->day_start_hour;
-                                $day_end_hour = $this->day_end_hour;
-                                $dayview_hours = $day_end_hour - $day_start_hour;
 				for($i=0;$i<$weekview_days;$i++)
 				{
 					$layout = new Layout('day',$this->date_time->getThisweekDaysbyIndex($i));
 					$this->week_array[$layout->start_time->get_formatted_date()] = $layout;
-					/*for($h=0;$h<$dayview_hours;$h++)
+					for($h=0;$h<=23;$h++)
 					{
-                                        	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h));
-						$this->day_slice[$layout->start_time->hour] = $layout;
-						array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->hour);
-					}*/
+                                        	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->z_day,$layout->start_time->z_month,$layout->start_time->z_year));
+						$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->hour] = $hour_list;
+						array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->hour);
+					}
 					array_push($this->slices,  $layout->start_time->get_formatted_date());
 					
 				}
@@ -139,7 +135,6 @@ class Calendar
 		
 		$activities = Array();
 		$activities = Appointment::readAppointment($current_user->id,$start_datetime,$end_datetime,$this->view);
-		
 		if(!empty($activities))
 		{
 			foreach($activities as $key=>$value)
@@ -150,7 +145,7 @@ class Calendar
 				}
 				elseif($this->view == 'week')
 				{
-			
+					array_push($this->week_slice[$value->formatted_datetime]->activities, $value);
 				}
 				elseif($this->view == 'month')
 				{
@@ -164,7 +159,7 @@ class Calendar
 
 			}
 		}
-		//echo '<pre>';print_r($this->month_array);echo'</pre>';
+		//echo '<pre>';print_r($this->week_slice);echo'</pre>';
 		
 	}
 	
