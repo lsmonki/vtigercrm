@@ -96,7 +96,7 @@ require_once('include/Menu.php');
 if($_REQUEST['query_string'] != '')
 	$smarty->assign("QUERY_STRING",$_REQUEST['query_string']);
 else
-	$smarty->assign("QUERY_STRING","Search...");
+	$smarty->assign("QUERY_STRING","$app_strings[LBL_SEARCH_STRING]");
 
 global $module_menu;
 $smarty->display("Header.tpl");
