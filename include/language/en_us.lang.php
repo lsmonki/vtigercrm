@@ -445,7 +445,7 @@ $app_strings = Array(
 
 'LBL_SEARCH_STRING'=>'Search...',
 
-'COMBO_ALL'=>'Allvvv',
+'COMBO_ALL'=>'All',
 
 // Added fields for Related Field Display Informations in Detail View of All Modules
 
