@@ -89,6 +89,11 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_password']))
 	$db_password = $dbconfig['db_password'];
 
+	if (isset($_REQUEST['db_type']))
+	$db_type = $_REQUEST['db_type'];
+	elseif (isset($dbconfig['db_type']))
+	$db_type = $dbconfig['db_type'];
+
 	if (isset($_REQUEST['db_name']))
 	$db_name = $_REQUEST['db_name'];
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
@@ -306,12 +311,12 @@ function verify_data(form) {
 		<?php if(!$db_options) : ?>
 			No Database Support Deteched
 		<?php elseif(count($db_options) == 1) : ?>
-			<?php list($dbtype, $label) = each($db_options); ?>
-			<input type="hidden" name="dbtype" value="<?php echo $dbtype ?>"><?php echo $label ?>
+			<?php list($db_type, $label) = each($db_options); ?>
+			<input type="hidden" name="db_type" value="<?php echo $db_type ?>"><?php echo $label ?>
 		<?php else : ?>
-			<select name="dbtype">
-			<?php foreach($db_options as $dbtype => $label) : ?>
-				<option value="<?php echo $dbtype ?>"><?php echo $label ?></option>
+			<select name="db_type">
+			<?php foreach($db_options as $db_option_type => $label) : ?>
+				<option value="<?php echo $db_option_type ?>" <?php if(isset($db_type) && $db_type == $db_option_type) { echo "SELECTED"; } ?>><?php echo $label ?></option>
 			<?php endforeach ?>
 			</select>
 		<?php endif ?>

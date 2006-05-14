@@ -33,7 +33,7 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
 if (isset($_REQUEST['ftpserver'])) $ftpserver= $_REQUEST['ftpserver'];
 if (isset($_REQUEST['ftpuser'])) $ftpuser = $_REQUEST['ftpuser'];
 if (isset($_REQUEST['ftppassword'])) $ftppassword= $_REQUEST['ftppassword'];
-if (isset($_REQUEST['dbtype'])) $dbtype	= $_REQUEST['dbtype'];
+if (isset($_REQUEST['db_type'])) $db_type	= $_REQUEST['db_type'];
 
 // db_type_status - is there a db type?
 // db_exist_status - does the database exist?
@@ -41,19 +41,19 @@ if (isset($_REQUEST['dbtype'])) $dbtype	= $_REQUEST['dbtype'];
 // db_created_status - did we create a database?
 
 //Checking for database connection parameters
-if($dbtype == '')
+if($db_type == '')
 {
 	$db_type_status = false;
 }
 else
 {
 	include('adodb/adodb.inc.php');
-	$conn = &NewADOConnection($dbtype);
+	$conn = &NewADOConnection($db_type);
 	$db_type_status = true;
 	if($conn->Connect($db_hostname,$db_username,$db_password))
 	{
 		$db_server_status = true;
-		if($dbtype=='mysql')
+		if($db_type=='mysql')
 		{
 			$version = explode('-',mysql_get_server_info($conn));
 			$mysql_server_version=$version[0];
@@ -65,7 +65,7 @@ else
 			$root_password = $_REQUEST['root_password'];
 
 			// drop the current database if it exists
-			$dropdb_conn = &NewADOConnection($dbtype);
+			$dropdb_conn = &NewADOConnection($db_type);
 			if($dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name))
 			{
 				$query = "drop database ".$db_name;
@@ -74,7 +74,7 @@ else
 			}
 
 			// create the new database
-			$createdb_conn = &NewADOConnection($dbtype);
+			$createdb_conn = &NewADOConnection($db_type);
 			$createdb_conn->Connect($db_hostname, $root_user, $root_password);
 			$query = "create database ".$db_name;
 			$createdb_conn->Execute($query);
@@ -181,7 +181,7 @@ if($db_type_status == true && $db_server_status == false)
 	</tr>
 	<tr>
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Type</td>
-	<td bgcolor="White" align="left" nowrap><font class="dataInput"><?php if (isset($dbtype)) echo "$dbtype"; ?></font></td>
+	<td bgcolor="White" align="left" nowrap><font class="dataInput"><?php if (isset($db_type)) echo "$db_type"; ?></font></td>
 	</tr>
 	<tr>
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
@@ -246,7 +246,7 @@ if($db_type_status == true && $db_server_status == false)
 	</html>
 <?php
 }
-elseif($dbtype == 'mysql' && ($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19'))
+elseif($db_type == 'mysql' && ($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19'))
 {
 ?>
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -405,7 +405,7 @@ elseif($db_type_status == true && $db_server_status ==true && $mysql_createddb_s
 	<div style="background-color:#ff0000;color:#ffffff;padding:5px">
 	<b>Unable to Create Database <?php echo $db_name ?></b>
 	</div>
-	<P>Message: The MySQL User "<? echo $root_user ?>" doesn't have permission to Create database. Try changing the Database settings<P></font>
+	<P>Message: The database User "<? echo $root_user ?>" doesn't have permission to Create database. Try changing the Database settings<P></font>
 
 	<br><br>
 	<table border=0 width=100% cellspacing=0 cellpadding=0>
@@ -637,7 +637,7 @@ elseif($db_type_status == true && $db_server_status == true && ($db_exist_status
 	</tr>
 	<tr bgcolor="White">
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Type</td>
-	<td align="left" nowrap> <font class="dataInput"><?php if (isset($dbtype)) echo "$dbtype"; ?></font></td>
+	<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_type)) echo "$db_type"; ?></font></td>
 	</tr>
 	<tr bgcolor="White">
 	<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
