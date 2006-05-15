@@ -37,6 +37,7 @@ if($_REQUEST['mail_error'] != '')
 
 global $app_strings;
 global $mod_strings;
+global $currentModule;
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -49,11 +50,11 @@ $smarty->assign("APP", $app_strings);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
-$smarty->assign("BLOCKS", getBlocks("HelpDesk","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("TICKETID", $_REQUEST['record']);
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD","HelpDesk");
+$smarty->assign("SINGLE_MOD",$app_strings['Ticket']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($_REQUEST['record']));
@@ -90,7 +91,7 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE","HelpDesk");
+$smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];
 

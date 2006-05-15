@@ -30,6 +30,7 @@ $log->debug("name is ".$focus->name);
 
 global $mod_strings;
 global $app_strings;
+global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -42,7 +43,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-$related_array=getRelatedLists("HelpDesk",$focus);
+$related_array=getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -50,7 +51,7 @@ $smarty->assign("CATEGORY",$category);
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD",$currentmodule);
+$smarty->assign("SINGLE_MOD",$app_strings['Ticket']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
