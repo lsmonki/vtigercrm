@@ -129,21 +129,19 @@ if($viewnamedesc['viewname'] == 'All')
 	$smarty->assign("ALL", 'All');
 }
 
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	$where=Search($currentModule);
-	// we have a query
-	$url_string .="&query=true";
-	if (isset($_REQUEST['subject'])) $name = $_REQUEST['subject'];
-	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
-	if(isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-
-	$log->info("Here is the where clause for the list view: $where");
-}
-
 global $email_title;
 $display_title = $mod_strings['LBL_LIST_FORM_TITLE'];
 if($email_title)$display_title = $email_title;
+
+//to get the search field if exists
+if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_text'] != '')
+{
+	if($_REQUEST['search_field'] != 'join')
+		$where = $_REQUEST['search_field'].' like "%'.$_REQUEST['search_text'].'%"';	
+	else
+		$where = '(subject like "%'.$_REQUEST['search_text'].'%" OR users.user_name like "%'.$_REQUEST['search_text'].'%")';	
+}
+
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>

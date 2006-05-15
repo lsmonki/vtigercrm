@@ -445,6 +445,14 @@ $app_strings = Array(
 
 'LBL_SEARCH_STRING'=>'Search...',
 
+'LBL_SEARCH_FOR'=>'Search for',
+'LBL_SEARCH_NOW_BUTTON'=>'Search Now',
+'LBL_GO_TO'=>'Go to',
+'LBL_FEWER_BUTTON'=>'Fewer',
+
+'LBL_ADV_SEARCH_MSG_ANY'=>'Match Any of the Following',
+'LBL_ADV_SEARCH_MSG_ALL'=>'Match All of the Following',
+
 'COMBO_ALL'=>'All',
 
 // Added fields for Related Field Display Informations in Detail View of All Modules
@@ -728,6 +736,36 @@ $app_strings = Array(
 'Inventory'=>'Inventory',
 'Tools'=>'Tools',
 'Settings'=>'Settings',
+
+'LBL_INFORMATION'=>'Information',
+'LBL_MORE'=>'More',
+'LBL_BASIC'=>'Basic',
+'LBL_CREATING'=>'Creating',
+'LBL_EDITING'=>'Editing',
+'LBL_NEW'=>'New',
+
+//Added for Detail/Edit/Related List of all modules
+
+'Lead'=>'Lead',
+'Account'=>'Account',
+'Contact'=>'Contact',
+'Potential'=>'Potential',
+'Product'=>'Product',
+'Email'=>'Email',
+'Activity'=>'Activity',
+'Event'=>'Event',
+'Quote'=>'Quote',
+'PriceBook'=>'PriceBook',
+'PurchaseOrder'=>'Purchase Order',
+'Ticket'=>'Ticket',
+'SalesOrder'=> 'Sales Order',
+'Campaign'=>'Campaign',
+'Note'=>'Note',
+'Dashboard'=>'Dashboard',
+'Report'=>'Report',
+'Vendor'=>'Vendor',
+'Webmail'=>'Webmail',
+
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',

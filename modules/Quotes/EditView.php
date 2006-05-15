@@ -28,7 +28,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings,$mod_strings,$log,$theme;
+global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
 $log->debug("Inside Quote EditView");
 
@@ -94,15 +94,15 @@ $comboFieldArray = getComboArray($comboFieldNames);
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Quotes",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Quotes",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 }
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Quote");
+$smarty->assign("SINGLE_MOD",$app_strings['Quote']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

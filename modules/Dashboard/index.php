@@ -32,22 +32,22 @@ require_once($theme_path.'layout_utils.php');
 require_once('include/logging.php');
 
 $graph_array = Array(
-          "leadsource" => "Leads By Source",
-          "leadstatus" => "Leads By Status",
-          "leadindustry" => "Leads By Industry",
-          "salesbyleadsource" => "Sales by LeadSource",
-          "salesbyaccount" => "Sales by Accounts",
-          "accountindustry" => "Account By Industry",
-          "productcategory" => "Products by Category",
-          "sobyaccounts" => "Sales Order by Accounts",
-          "sobystatus" => "Sales Order by Status",
-          "pobystatus" => "Purchase Order by Status",
-          "quotesbyaccounts" => "Quotes by Accounts",
-          "quotesbystage" => "Quotes by Stage",
-          "invoicebyacnts" => "Invoices by Accounts",
-          "invoicebystatus" => "Invoices by status",
-          "ticketsbystatus" => "Tickets by status",
-          "ticketsbypriority" => "Tickets by Priority",
+          "leadsource" => $mod_strings['leadsource'],
+          "leadstatus" => $mod_strings['leadstatus'],
+          "leadindustry" => $mod_strings['leadindustry'],
+          "salesbyleadsource" => $mod_strings['salesbyleadsource'],
+          "salesbyaccount" => $mod_strings['salesbyaccount'],
+          "accountindustry" => $mod_strings['accountindustry'],
+          "productcategory" => $mod_strings['productcategory'],
+          "sobyaccounts" => $mod_strings['sobyaccounts'],
+          "sobystatus" => $mod_strings['sobystatus'],
+          "pobystatus" => $mod_strings['pobystatus'],
+          "quotesbyaccounts" => $mod_strings['quotesbyaccounts'],
+          "quotesbystage" => $mod_strings['quotesbystage'],
+          "invoicebyacnts" => $mod_strings['invoicebyacnts'],
+          "invoicebystatus" => $mod_strings['invoicebystatus'],
+          "ticketsbystatus" => $mod_strings['ticketsbystatus'],
+          "ticketsbypriority" => $mod_strings['ticketsbypriority'],
           );
           
 $log = LoggerManager::getLogger('dashboard');
@@ -59,7 +59,7 @@ $log = LoggerManager::getLogger('dashboard');
     </tr>
 
     <tr>
-       <td style="padding-left: 10px; padding-right: 10px;" class="moduleName" nowrap="nowrap">Analytics &gt; Dashboard </td>
+       <td style="padding-left: 10px; padding-right: 10px;" class="moduleName" nowrap="nowrap"><? echo $app_strings['Analytics'];?> &gt; <? echo $app_strings['Dashboard'] ?></td>
        <td style="width: 1px;"></td>
        <td class="small" height="30">&nbsp;</td>
     </tr>
@@ -79,7 +79,7 @@ $log = LoggerManager::getLogger('dashboard');
     <td width="20%" nowrap valign="top">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF">
 			<tr><td class="dashMnuSel">
-                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome">Dashboard Home</a>
+                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
                </td></tr>
                <?php 
                  $mnuHTML = "";
@@ -115,7 +115,7 @@ $log = LoggerManager::getLogger('dashboard');
 				 		   <td nowrap><span class="genHeaderSmall"><?echo $mod_strings['LBL_SALES_STAGE_FORM_TITLE']; ?></span></td>
 				 		 </tr>
 					     <tr>
-					       <td><span class="big">Horizontal Bar Chart</span> </td>
+					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 
@@ -138,7 +138,7 @@ $log = LoggerManager::getLogger('dashboard');
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big">Vertical Bar Chart</span> </td>
+					       <td><span class="big"><? echo $mod_strings['LBL_VERT_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>
@@ -161,7 +161,7 @@ $log = LoggerManager::getLogger('dashboard');
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big">Horizontal Bar Chart</span> </td>
+					       <td><span class="big"><? echo $mod_strings['LBL_HORZ_BAR_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>
@@ -184,7 +184,7 @@ $log = LoggerManager::getLogger('dashboard');
 				 		 </tr>
 					     <tr>
 
-					       <td><span class="big">Pie Chart</span> </td>
+					       <td><span class="big"><? echo $mod_strings['LBL_PIE_CHART'];?></span> </td>
 					     </tr>
 					</table>
 				</td>

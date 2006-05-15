@@ -12,6 +12,8 @@
 require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBook.php');
 
+global $currentModule;
+
 $focus = new PriceBook();
 
 $currentmodule = $_REQUEST['module'];
@@ -30,7 +32,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
         $focus->id = "";
 }
 
-$related_array=getRelatedLists("PriceBooks",$focus);
+$related_array=getRelatedLists($currentModule,$focus);
 
 global $mod_strings;
 global $app_strings;
@@ -50,7 +52,7 @@ $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);
-$smarty->assign("SINGLE_MOD","PriceBook");
+$smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);

@@ -15,7 +15,7 @@ require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/HelpDesk/Forms.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings,$mod_strings,$theme;
+global $app_strings,$mod_strings,$theme,$currentModule;
 
 $focus = new HelpDesk();
 $smarty = new vtigerCRM_Smarty();
@@ -39,16 +39,16 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("HelpDesk",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks("HelpDesk",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 }
 
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Ticket");
+$smarty->assign("SINGLE_MOD",$app_strings['Ticket']);
 
 
 $category = getParentTab();

@@ -22,7 +22,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $mod_strings,$app_strings,$theme;
+global $mod_strings,$app_strings,$theme,$currentModule;
 
 $focus = new Lead();
 $smarty = new vtigerCRM_Smarty;
@@ -41,11 +41,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Leads",$disp_view,$mode,$focus->column_fields));	
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
 else
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Leads",$disp_view,$mode,$focus->column_fields,'BAS'));
-	$smarty->assign("ADVBLOCKS",getBlocks("Leads",$disp_view,$mode,$focus->column_fields,'ADV'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
 }
 $smarty->assign("OP_MODE",$disp_view);
 
@@ -91,7 +91,7 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Lead");
+$smarty->assign("SINGLE_MOD",$app_strings['Lead']);
 
 
 $smarty->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));

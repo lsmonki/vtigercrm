@@ -156,10 +156,20 @@ $return_id = $focus->id;
 $email_id = $return_id;
 $query = 'select emailid from emaildetails where emailid ='.$email_id;
 $result = $adb->query($query);
+if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
+	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
+if(isset($_REQUEST["saved_toid"]) && $_REQUEST["saved_toid"]!='')
+	$all_to_ids .= ereg_replace(",","###",$_REQUEST["saved_toid"]);
+	
+$all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
+$all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
 if($adb->num_rows($result) > 0)
-	$query = 'update emaildetails set idlists='.$_REQUEST["parent_id"].' where emailid = '.$email_id;
-else
-	$query = 'insert into emaildetails values ('.$email_id.',"","","","","","'.$_REQUEST["parent_id"].'","SAVED")';
+{
+	$query = 'update emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'" where emailid = '.$email_id;
+}else
+{
+	$query = 'insert into emaildetails values ('.$email_id.',"","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
+}
 $adb->query($query);	
 $focus->retrieve_entity_info($return_id,"Emails");
 

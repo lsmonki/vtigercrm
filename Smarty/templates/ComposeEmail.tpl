@@ -38,6 +38,7 @@
 <input type="hidden" name="return_action" value="{$RETURN_ACTION}">
 <input type="hidden" name="return_viewname" value="{$RETURN_VIEWNAME}">
 <input type="hidden" name="popupaction" value="create">
+<input type="hidden" name="hidden_toid">
 <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
    <tr>
@@ -58,6 +59,7 @@
 	<td class="lvtCol" style="padding: 5px;" align="right"><b>{$MOD.LBL_TO}</b></td>
 	<td class="dvtCellLabel" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
+		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
 		<textarea id="parent_name" cols="70">{$TO_MAIL}</textarea>
 	</td>
 	<td class="dvtCellLabel" style="padding: 5px;" align="left">
@@ -69,7 +71,7 @@
 		&nbsp;
 		<span class="lvtCol" style="padding: 3px;">
 		<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-		</span><span class="lvtCol" style="padding: 3px;"><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+		</span><span class="lvtCol" style="padding: 3px;"><input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.hidden_toid.value='';this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>
    </tr>

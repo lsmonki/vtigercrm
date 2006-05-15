@@ -26,7 +26,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-global $app_strings,$mod_strings,$theme;
+global $app_strings,$mod_strings,$theme,$currentModule;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -38,10 +38,10 @@ $smarty->assign("APP", $app_strings);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
-$smarty->assign("BLOCKS", getBlocks("Campaigns","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD","Campaign");
+$smarty->assign("SINGLE_MOD",$app_strings['Campaign']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
@@ -58,7 +58,7 @@ $smarty->assign("ID", $_REQUEST['record']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE","Campaigns");
+$smarty->assign("MODULE",$app_strings['Campaigns']);
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];
 

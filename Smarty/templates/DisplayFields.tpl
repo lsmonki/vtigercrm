@@ -459,6 +459,8 @@
 						{section name=reminder start=$start max=$end loop=$end step=1 }
 							{if $smarty.section.reminder.index eq $sel_val}
 								{assign var=sel_value value="SELECTED"}
+							{else}
+								{assign var=sel_value value=""}
 							{/if}
 							<OPTION VALUE="{$smarty.section.reminder.index}" "{$sel_value}">{$smarty.section.reminder.index}</OPTION>
 						{/section}

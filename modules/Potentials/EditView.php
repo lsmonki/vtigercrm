@@ -30,7 +30,7 @@ require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
-
+global $currentModule;
 $focus = new Potential();
 $smarty = new vtigerCRM_Smarty();
 
@@ -52,10 +52,10 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 }
 $smarty->assign("OP_MODE",$disp_view);
 $category = getParentTab();
@@ -121,7 +121,7 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Potential");
+$smarty->assign("SINGLE_MOD",$app_strings['Potential']);
 
 
  $potential_tables = Array('potential','crmentity','potentialscf'); 

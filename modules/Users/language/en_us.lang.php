@@ -424,6 +424,15 @@ $mod_strings = Array(
 'LBL_USER_IMAGE'=>'User Image',
 'LBL_USR'=>'Users',
 
+'LBL_MY'=>'My',
+'LBL_MY_DEFAULTS'=>'My Defaults',
+'LBL_MY_DESG'=>'My Designation & Contact Details',
+'LBL_MY_ADDR'=>'My Postal Address',
+'LBL_MY_DETAILS'=>'My Details',
+'LBL_MY_PHOTO'=>'My Photo',
+'LBL_CHANGE_PHOTO'=>'Change Photo...',
+
+
 //Added for Access Privileges
 
 'LBL_GLOBAL_FIELDS_MANAGER'=>'Global Fields Manager',

@@ -57,12 +57,12 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-$smarty->assign("BLOCKS", getBlocks("Quotes","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD","Quotes");
+$smarty->assign("SINGLE_MOD",$app_strings['Quote']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

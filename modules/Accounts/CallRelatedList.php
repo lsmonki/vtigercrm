@@ -48,7 +48,7 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("id",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD","Account");
+$smarty->assign("SINGLE_MOD",$app_strings['Account']);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);

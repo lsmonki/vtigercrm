@@ -13,7 +13,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>{$CURRENT_USER} - {$CATEGORY} - {$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
+	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
@@ -324,7 +324,7 @@ function ajaxQCreateResponse(response)
 		<td valign="top">
 		{assign var="parentno" value=0}
 		{foreach name=parenttablist key=parenttab item=details from=$QUICKACCESS}
-			<span class="allMnuHdr">{$parenttab}</span>
+			<span class="allMnuHdr">{$APP[$parenttab]}</span>
 			{foreach name=modulelist item=modules from=$details}
        		{math assign="num" equation="x + y" x=$parentno y=1}
 			{math assign="loopvalue" equation="x % y" x=$num y=14}
@@ -332,7 +332,7 @@ function ajaxQCreateResponse(response)
 			{if $loopvalue eq '0'}
 				</td><td valign="top">
 			{/if}
-			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$modules.1}</a>
+			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$APP[$modules.1]}</a>
 		{/foreach}
 		{/foreach}
 		</td>

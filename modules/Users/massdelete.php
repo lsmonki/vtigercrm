@@ -21,7 +21,6 @@ $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
-
 $ids_list = array();
 foreach($storearray as $id)
 {
@@ -48,11 +47,24 @@ if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 {
 	$smod = "&smodule=".$_REQUEST['smodule'];
 }
-if($returnmodule!='Faq')
+if($returnmodule == 'Emails')
+{
+	if(isset($_REQUEST['folderid']) && $_REQUEST['folderid'] != '')
+	{
+		$folderid = $_REQUEST['folderid'];
+	}else
+	{
+		$folderid = 1;
+	}
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete&file=ListView");
+}
+elseif($returnmodule!='Faq')
 {
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid);
 }
 else
+{
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView");
+}
 ?>
 

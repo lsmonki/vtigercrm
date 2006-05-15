@@ -93,13 +93,13 @@
                                     <tr>
                                         <td class="dvtCellLabel" align="right">{$UMOD.LBL_FIRST_NAME}</td>
                                         <td width="30%" class="dvtCellInfo" nowrap>{$FIRST_NAME}</td>
-                                        <td width="25%" align="right" class="dvtCellLabel">My {$UMOD.LBL_GROUP_NAME} </td>
+                                        <td width="25%" align="right" class="dvtCellLabel">{$UMOD.LBL_MY} {$UMOD.LBL_GROUP_NAME} </td>
                                         <td width="25%" class="dvtCellInfo">{$GROUPASSIGNED}</td>
                                     </tr>
                                     <tr>
                                         <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_LAST_NAME}</td>
                                         <td class="dvtCellInfo">{$LAST_NAME}</td>
-                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>My {$UMOD.LBL_USER_ROLE}</td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_MY} {$UMOD.LBL_USER_ROLE}</td>
                                         <td class="dvtCellInfo">{$ROLEASSIGNED}</td>
                                     </tr>
 
@@ -107,12 +107,12 @@
                                         <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_EMAIL}</td>
 					<td class="dvtCellInfo"><a href="mailto:{$EMAIL1}" target="_blank">{$EMAIL1}</a></td>
                                 {*        <td width="30%" align=left class="dvtCellInfo"><input name="pass" type="button" class="classBtn" id="pass" value=" Change Now... "  onclick="fnvshobj(this,'roleLay');"/></td>*}
-                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>My {$UMOD.LBL_STATUS}</td>
+                                        <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_MY} {$UMOD.LBL_STATUS}</td>
                                         <td class="dvtCellInfo">{$STATUS}</td>
                                     </tr>
                                     <tr><td colspan="4">&nbsp;</td></tr>
 				    <tr>
-	                                <td colspan="4" class="detailedViewHeader"><b>My Defaults</b> </td>
+	                                <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_MY_DEFAULTS}</b> </td>
                                     </tr>
                                     <tr>
                                         <td class="dvtCellLabel" align="right" width="25%">{$UMOD.LBL_ACTIVITY_VIEW}</td>
@@ -128,7 +128,7 @@
                                     </tr>
                			    <tr><td colspan="4">&nbsp;</td></tr>
    				    <tr>
-                                        <td colspan="4" class="detailedViewHeader"><b>My Designation &amp; Contact Details </b> </td>
+                                        <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_MY_DESG}</b> </td>
                                     </tr>
                                     <tr>
                                         <td class="dvtCellLabel" align="right" width="25%">{$UMOD.LBL_TITLE}</td>
@@ -177,7 +177,7 @@
 
                                     <tr><td colspan="4">&nbsp;</td></tr>
 				    <tr>
-                                        <td colspan="4" class="detailedViewHeader"><b>My Postal Address </b> </td>
+                                        <td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_MY_ADDR} </b> </td>
                                     </tr>
                                     <tr>
                                         <td class="dvtCellLabel" align="right" width="25%">{$UMOD.LBL_ADDRESS}</td>
@@ -209,10 +209,10 @@
 				  <td width="25%" valign="top" style="padding:10px; ">
 	  		<table width="100%" align="center" cellpadding="0" cellspacing="0" border="0">
 				<tr><td height="35">&nbsp;</td></tr>
-				<tr><td class="detailedViewHeader"><b>My Photo</b></td></tr>
+				<tr><td class="detailedViewHeader"><b>{$UMOD.LBL_MY_PHOTO}</b></td></tr>
 				<tr><td align="center"><img src="images/myPreferences.gif" /></td>
 				</tr>
-				<tr><td align="center"><input type="button" value=" Change Photo... " class="classBtn"  onclick="fnvshNrm('chPhoto')"/></td></tr>
+				<tr><td align="center"><input type="button" value=" {$UMOD.LBL_CHANGE_PHOTO} " class="classBtn"  onclick="fnvshNrm('chPhoto')"/></td></tr>
 				<tr>
 					<td align="center">
 	

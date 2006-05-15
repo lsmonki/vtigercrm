@@ -29,6 +29,7 @@ require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
+global $currentModule;
 
 $focus = new Potential();
 $smarty = new vtigerCRM_Smarty;
@@ -62,10 +63,10 @@ $smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-$smarty->assign("BLOCKS", getBlocks("Potentials","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD","Potential");
+$smarty->assign("SINGLE_MOD",$app_strings['Potential']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

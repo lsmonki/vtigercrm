@@ -167,6 +167,23 @@ $mod_strings = Array(
 "Dec",
 ),
 
+'LBL_ADD_EVENT'=>'Add Event',
+'LBL_INVITE'=>'Invite',
+'LBL_REMINDER'=>'Reminder',
+'LBL_REPEAT'=>'Repeat',
+'LBL_EVENTTYPE'=>'Event Type',
+'LBL_EVENTNAME'=>'Event Name',
+'LBL_EVENTSTAT'=>'Event starts at',
+'LBL_EVENTEDAT'=>'Event ends on',
+'LBL_HRVIEW'=>'Hour View',
+'LBL_LISTVIEW'=>'List View',
+'LBL_TOTALEVENTS'=>'Total Events :',
+'LBL_TOTALTODOS'=>'Total Todos :',
+'LBL_EVTDTL'=>'Event Details',
+'LBL_ACTION'=>'Actions',
+'LBL_CURSTATUS'=>'Current Status',
+'LBL_PENDING'=>'Pending',
+
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_last_name' => 'LBL_LIST_LAST_NAME',

@@ -91,31 +91,25 @@ function alphabetic(url)
 </script>
 
 		{include file='Buttons_List.tpl'}
-	
-<div id="subMenuBg"  style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacit
-y:0.90;z-index:50"></div>
-<div id="subMenu" style="z-index:1;display:none;position:absolute;">
-<table border=0 cellspacing=0 cellpadding=0 width="100px" align=center class="moduleSearch">
-  <tr>
-   <td class=small>
-       <table cellspacing="2" cellpadding="2" border="0">
-         <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_EVENT}</a></td>
-         </tr>
-         <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_TASK}</a></td>
-         </tr>
-       </table>
-   </td>
-  </tr>
-</table>
+<!-- Activity createlink layer start  -->
+<div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
+        <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                        <td>
+                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_EVENT}</a>
+                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_TASK}</a>
+                        </td>
+                </tr>
+        </table>
+
 </div>
+<!-- Activity createlink layer end  -->
 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
 <form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
 	<tr>
-		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>Search for</b></td>
+		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>{$APP.LBL_SEARH_FOR}</b></td>
 		<td width="25%" class="dvtCellLabel"><input type="text"  class="txtBox" name="search_text"></td>
 		<td width="25%" class="dvtCellLabel"><b>In</b>&nbsp;
 			<select name ="search_field" class="txtBox">
@@ -129,8 +123,8 @@ y:0.90;z-index:50"></div>
 			<input type="hidden" name="search_cnt">
 		</td>
 		<td width="35%" class="dvtCellLabel">
-			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" Search Now ">&nbsp;
-			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">Go to {$APP.LNK_ADVANCED_SEARCH}</a></span>	
+			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
+			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
 							</td>
 	</tr>
 	<tr>
@@ -149,9 +143,9 @@ y:0.90;z-index:50"></div>
 		<table  cellspacing=0 cellpadding=5 width=80% style="border-top:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" class="small" align="center">
 			<tr>
 					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="{$APP.LNK_ADVANCED_SEARCH}" title="{$APP.LNK_ADVANCED_SEARCH}" border=0></td>
-					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;Match All of the Following</b></td>
-					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;Match Any of the Following</b></td>
-					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">Go to {$APP.LNK_BASIC_SEARCH}</a></span></td>
+					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
+					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
+					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
 			</tr>
 		</table>
 		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">
@@ -175,15 +169,15 @@ y:0.90;z-index:50"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="dvtCellLabel"><input type="button" name="more" value=" More " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="classBtn">&nbsp;&nbsp;
-				<input name="button" type="button" value=" Fewer " onclick="delRow()" class="classBtn"></td>
+			<td class="dvtCellLabel"><input type="button" name="more" value=" {$APP.LBL_MORE} " onClick="fnAddSrch('{$FIELDNAMES}','{$CRITERIA}')" class="classBtn">&nbsp;&nbsp;
+				<input name="button" type="button" value=" {$APP.LBL_FEWER_BUTTON} " onclick="delRow()" class="classBtn"></td>
 			<td class="dvtCellLabel">&nbsp;</td>
 			<td class="dvtCellLabel">&nbsp;</td>
 			</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=80% style="border-bottom:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" align="center">
 		<tr>
-			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" Search Now " onClick="totalnoofrows();callSearch('Basic');">
+			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Basic');">
 			</td>
 		</tr>
 	</table>

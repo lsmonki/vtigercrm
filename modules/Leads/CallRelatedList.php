@@ -29,6 +29,8 @@ $log->debug("name is ".$focus->name);
 global $mod_strings;
 global $app_strings;
 global $theme;
+global $currentModule;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -51,9 +53,9 @@ $parent_email = getEmailParentsList('Leads',$focus->id);
 
 $smarty->assign("id",$focus->id);
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
-$related_array = getRelatedLists("Leads",$focus);
+$related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
-$smarty->assign("SINGLE_MOD","Lead");
+$smarty->assign("SINGLE_MOD",$app_strings['Lead']);
 $smarty->assign("REDIR_MOD","leads");
 $smarty->assign("MODULE", $currentmodule);
 $smarty->assign("ID",$RECORD );

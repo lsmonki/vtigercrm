@@ -12,6 +12,7 @@
 require_once('Smarty_setup.php');
 require_once('modules/Vendors/Vendor.php');
 
+global $currentModule;
 $focus = new Vendor();
 
 $currentmodule = $_REQUEST['module'];
@@ -30,7 +31,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
         $focus->id = "";
 }
 
-$related_array=getRelatedLists("Vendors",$focus);
+$related_array=getRelatedLists($currentModule,$focus);
 
 global $mod_strings;
 global $app_strings;
@@ -50,7 +51,7 @@ $smarty->assign("NAME", $focus->name);
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD","Vendor");
+$smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);

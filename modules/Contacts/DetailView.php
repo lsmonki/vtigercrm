@@ -31,6 +31,7 @@ require_once('include/utils/utils.php');
 global $log;
 global $mod_strings;
 global $app_strings;
+global $currentModule;
 
 $focus = new Contact();
 
@@ -65,9 +66,9 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
 $log->info("Detail Block Informations successfully retrieved.");
-$smarty->assign("BLOCKS", getBlocks("Contacts","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD","Contact");
+$smarty->assign("SINGLE_MOD",$app_strings['Contact']);
 $smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
@@ -107,7 +108,7 @@ $smarty->assign("CATEGORY",$category);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE","Contacts");
+$smarty->assign("MODULE",$app_strings['Contacts']);
 $smarty->display("DetailView.tpl");
 ?>
 

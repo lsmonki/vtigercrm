@@ -26,7 +26,7 @@ require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings,$app_strings,$theme;
+global $mod_strings,$app_strings,$theme,$currentModule;
 
 $focus = new SalesOrder();
 
@@ -59,12 +59,12 @@ if (isset($focus->name))
 $smarty->assign("NAME", $focus->name);
 else 
 $smarty->assign("NAME", "");
-$smarty->assign("BLOCKS", getBlocks("SalesOrder","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD", "SalesOrder");
+$smarty->assign("SINGLE_MOD",$app_strings['SalesOrder']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
@@ -80,7 +80,7 @@ if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("SalesOrder","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
-$smarty->assign("MODULE", $module);
+$smarty->assign("MODULE", $currentModule);
 $smarty->assign("CONVERTMODE",'sotoinvoice');
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$focus));

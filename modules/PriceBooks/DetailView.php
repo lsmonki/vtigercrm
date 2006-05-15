@@ -27,7 +27,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
         $focus->id = "";
 }
 
-global $app_strings,$mod_strings,$theme;
+global $app_strings,$mod_strings,$theme,$currentModule;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -37,7 +37,7 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-$smarty->assign("BLOCKS", getBlocks("PriceBooks","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $category = getParentTab();
@@ -60,7 +60,7 @@ $smarty->assign("NAME", $focus->name);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE", $module);
-$smarty->assign("SINGLE_MOD","PriceBook");
+$smarty->assign("MODULE", $currentModule);
+$smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);
 $smarty->display("DetailView.tpl");
 ?>

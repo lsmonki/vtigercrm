@@ -23,7 +23,7 @@ require_once('include/utils/UserInfoUtil.php');
 
 global $mod_strings;
 global $app_strings;
-
+global $currentModule;
     global $log;
 $focus = new Lead();
 
@@ -56,13 +56,13 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
-$smarty->assign("SINGLE_MOD","Lead");
+$smarty->assign("SINGLE_MOD",$app_strings['Lead']);
 $smarty->assign("REDIR_MOD","leads");
 
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
-$smarty->assign("BLOCKS", getBlocks("Leads","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
 

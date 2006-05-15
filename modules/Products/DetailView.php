@@ -26,7 +26,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
 
-global $app_strings;
+global $app_strings,$currentModule;
 global $mod_strings;
 
 global $theme;
@@ -41,14 +41,14 @@ $smarty->assign("APP", $app_strings);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-$smarty->assign("BLOCKS", getBlocks("Products","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("SINGLE_MOD","Product");
+$smarty->assign("SINGLE_MOD",$app_strings['Product']);
 
 if(isPermitted("Products","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
@@ -63,7 +63,7 @@ $smarty->assign("ID", $_REQUEST['record']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 //Security check for related list
-$smarty->assign("MODULE", $module);
+$smarty->assign("MODULE", $currentModule);
 $smarty->display("DetailView.tpl");
 
 ?>

@@ -26,7 +26,7 @@ require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-global $mod_strings,$app_strings,$theme;
+global $mod_strings,$app_strings,$theme,$currentModule;
 
 $focus = new Order();
 
@@ -53,17 +53,17 @@ $smarty->assign("APP", $app_strings);
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-$smarty->assign("MODULE","PurchaseOrder");
+$smarty->assign("MODULE",$currentModule);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
-$smarty->assign("BLOCKS", getBlocks("PurchaseOrder","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD","PurchaseOrder");
+$smarty->assign("SINGLE_MOD",$app_strings['PurchaseOrder']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

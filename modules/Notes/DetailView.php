@@ -28,6 +28,7 @@ require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
+global $currentModule;
 
 $focus = new Note();
 
@@ -70,7 +71,7 @@ $log->info("Note detail view");
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("BLOCKS", getBlocks("Notes","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 
@@ -94,7 +95,7 @@ if ( isset($focus->filename) && $focus->filename != '')
 	$smarty->assign("FILELINK", $fileurl);
 }
 
-$smarty->assign("SINGLE_MOD","Note");
+$smarty->assign("SINGLE_MOD",$app_strings['Note']);
 
 if(isPermitted("Notes","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
@@ -105,7 +106,7 @@ if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE", $module);
+$smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 
 ?>

@@ -26,7 +26,7 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
 require_once('include/utils/utils.php');
 
-global $app_strings,$app_list_strings,$mod_strings,$theme;
+global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
 $focus = new Note();
 $smarty = new vtigerCRM_Smarty();
@@ -96,10 +96,10 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 }	
 $smarty->assign("OP_MODE",$disp_view);
 $category = getParentTab();
@@ -111,7 +111,7 @@ $log->info("Note detail view");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Note");
+$smarty->assign("SINGLE_MOD",$app_strings['Note']);
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 

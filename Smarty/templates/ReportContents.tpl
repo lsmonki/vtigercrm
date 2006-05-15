@@ -27,9 +27,9 @@
 			<tbody>
 			<tr>
 			<td class="lvtCol" width="5%">#</td>
-			<td class="lvtCol" width="35%">Report Name</td>
-			<td class="lvtCol" width="50%">Description</td>
-			<td class="lvtCol" width="10%">Tools</td>
+			<td class="lvtCol" width="35%">{$MOD.LBL_REPORT_NAME}</td>
+			<td class="lvtCol" width="50%">{$MOD.LBL_DESCRIPTION}</td>
+			<td class="lvtCol" width="10%">{$MOD.LBL_TOOLS}</td>
 			</tr>
 			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
 				<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">

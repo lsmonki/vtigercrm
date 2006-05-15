@@ -33,6 +33,7 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
+global $currentModule;
 
 $focus = new Email();
 $smarty = new vtigerCRM_Smarty();
@@ -85,11 +86,11 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 
-$details = getBlocks("Emails",$disp_view,$mode,$focus->column_fields);
+$details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
 $smarty->assign("BLOCKS",$details['Email Information']);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Email");
+$smarty->assign("SINGLE_MOD",$app_strings['Email']);
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
