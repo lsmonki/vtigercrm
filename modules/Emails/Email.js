@@ -8,18 +8,9 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-
-function showDefaultCustomView(selectView)
-{
-		show("status");
-		var ajaxObj = new Ajax(ajaxSaveResponse);
-		var viewName = selectView.options[selectView.options.selectedIndex].value;
-		var urlstring ="module=Emails&action=EmailsAjax&file=ListView&ajax=true&viewname="+viewName;
-	    ajaxObj.process("index.php?",urlstring);
-}
+var gFolderid = 1;
 function massDelete()
 {
-
         x = document.massdelete.selected_id.length;
         idstring = "";
         if ( x == undefined)
@@ -27,7 +18,7 @@ function massDelete()
 
                 if (document.massdelete.selected_id.checked)
                 {
-                        idstring = document.massdelete.selected_id.value+':';
+                        idstring = document.massdelete.selected_id.value;
 						xx = 1;
                 }
                 else
@@ -59,9 +50,10 @@ function massDelete()
         }
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{	
+			getObj('search_text').value = '';
 			show("status");
 			var ajaxObj = new Ajax(ajaxSaveResponse);
-			var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+idstring;
+			var urlstring ="module=Users&action=massdelete&folderid="+gFolderid+"&return_module=Emails&idlist="+idstring;
 		    ajaxObj.process("index.php?",urlstring);
 		}
 		else
@@ -69,4 +61,27 @@ function massDelete()
 			return false;
 		}
 }
-
+function DeleteEmail(id)
+{
+	if(confirm("Are you sure you want to delete ?"))
+	{	
+		getObj('search_text').value = '';
+		show("status");
+		var ajaxObj = new Ajax(ajaxDelResponse);
+		var urlstring ="module=Users&action=massdelete&return_module=Emails&folderid="+gFolderid+"&idlist="+id;
+	   	ajaxObj.process("index.php?",urlstring);
+	}
+	else
+	{
+		return false;
+	}
+}
+function Searchfn()
+{
+	var osearch_field = document.getElementById('search_field');
+	var search_field = osearch_field.options[osearch_field.options.selectedIndex].value;
+	var search_text = document.getElementById('search_text').value;
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring ="module=Emails&action=EmailsAjax&ajax=true&file=ListView&folderid="+gFolderid+"&search=true&search_field="+search_field+"&search_text="+search_text;
+    ajaxObj.process("index.php?",urlstring);
+}

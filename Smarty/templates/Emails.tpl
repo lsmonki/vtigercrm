@@ -33,20 +33,7 @@ function getEmailContents(id)
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
 {literal}
-function DeleteEmail(id)
-{
-	if(confirm("Are you sure you want to delete ?"))
-	{	
-		show("status");
-		var ajaxObj = new Ajax(ajaxDelResponse);
-		var urlstring ="module=Users&action=massdelete&return_module=Emails&idlist="+id;
-	   	ajaxObj.process("index.php?",urlstring);
-	}
-	else
-	{
-		return false;
-	}
-}
+
 function ajaxDelResponse(response)
 {
 	hide("status");
@@ -59,6 +46,8 @@ function ajaxDelResponse(response)
 function ShowFolders(folderid)
 {ldelim}
     var ajaxObj = new Ajax(ajaxSaveResponse);
+	gFolderid = folderid;
+	getObj('search_text').value = '';
 	switch(folderid)
 	{ldelim}
 		case 1:
@@ -168,9 +157,12 @@ function ShowFolders(folderid)
 											<td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
 											</td>
 											<td width="75%" align="right">
-							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
-											<select name="optionSel" class="importBox"><option selected>in Subject</option></select>&nbsp;
-							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" />
+							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" onkeyUp="Searchfn();">&nbsp;
+											<select name="search_field" id="search_field" onChange="Searchfn();" class="importBox">
+											<option value='subject'>{$MOD.LBL_IN_SUBJECT}</option>
+											<option value='user_name'>{$MOD.LBL_IN_SENDER}</option>
+											<option value='join'>{$MOD.LBL_IN_SUBJECT_OR_SENDER}</option>
+											</select>&nbsp;
 											</td>
 										</tr>
 									</table>
@@ -232,6 +224,6 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 		{rdelim}
-	openPopUp('xComposeEmail',this,url,'createemailWin',775,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+	openPopUp('xComposeEmail',this,url,'createemailWin',797,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
 {rdelim}
 </script>

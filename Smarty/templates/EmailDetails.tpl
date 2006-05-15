@@ -14,19 +14,17 @@
     <td class="forwardBg">
   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 		<tr>
-						{if $BLOCKS neq ''}
+		{if $BLOCKS neq ''}
 			<td width="75%">
-						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
-						  <input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
-						{foreach item=row from=$BLOCKS}	
-						{foreach item=elements key=title from=$row}	
-						{if $title eq 'Attachment'}
-							{if $elements.value ne ''}
-								<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay')"/>
-							{/if}
-						{/if}
-						{/foreach}
-						{/foreach}
+			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
+			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+				{foreach item=row from=$BLOCKS}	
+				{foreach item=elements key=title from=$row}	
+					{if $title eq 'Attachment' && $elements.value != ''}
+						<input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay')"/>
+					{/if}
+				{/foreach}
+				{/foreach}
 			</td>
 						<td width="25%" align="right"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" onClick="DeleteEmail('{$ID}')"/></td>
 						{else}
@@ -42,10 +40,10 @@
 	{foreach item=elements key=title from=$row}	
 		{if $title eq 'Subject'}
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
-	<tr><td align="right">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>&nbsp;{$CC_MAIL}</td></tr>
-	<tr><td align="right">{$MOD.LBL_BCC}</td><td>&nbsp;</td><td>&nbsp;{$BCC_MAIL}</td></tr>
-	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$elements.value}</td></tr>
+	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%">&nbsp;</td><td>{$TO_MAIL}&nbsp;</td></tr>
+	<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td>&nbsp;</td><td>{$CC_MAIL}&nbsp;</td></tr>
+	<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td>&nbsp;</td><td>{$BCC_MAIL}&nbsp;</td></tr>
+	<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td>&nbsp;</td><td>{$elements.value}&nbsp;</td></tr>
 			<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 		</table>
 		{elseif $title eq 'Description'}

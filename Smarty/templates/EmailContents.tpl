@@ -13,18 +13,18 @@
 	<table class="rssTable" cellspacing="0" cellpadding="0">
         <tr>
 			<th width="5%"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></th>
-			{foreach item=element from=$LISTHEADER}
-            <th>{$element}</th>
-			{/foreach}
+            <th width="65%">{$LISTHEADER.0}</th>
+            <th width="15%">{$LISTHEADER.1}</th>
+            <th width="15%">{$LISTHEADER.2}</th>
         </tr>
 		{foreach key=id item=row from=$LISTENTITY}
 	    <tr onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
 			<td>
 			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
 </span></td>
-			{foreach item=row_values from=$row}
-			<td><b>{$row_values}</b></td>
-			{/foreach}
+			<td><b>{$row.0}</b></td>
+			<td><b>{$row.1}</b></td>
+			<td><b>{$row.2}</b></td>
         </tr>
 		{/foreach}
     </table>

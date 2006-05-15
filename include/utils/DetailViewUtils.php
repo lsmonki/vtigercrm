@@ -258,8 +258,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 		//This is added to strip the crmid and _ from the file name and show the original filename
 		$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
-                $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
-
+		if($org_filename != '')
+        	$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
+		else
+			$custfldval = '';
 		$label_fld[] =$mod_strings[$fieldlabel];
 
 		$label_fld[] =$custfldval;

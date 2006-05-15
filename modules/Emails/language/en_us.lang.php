@@ -137,6 +137,9 @@ $mod_strings = Array(
 'LBL_ALLMAILS'=>'All Mails',
 'LBL_TO_USERS'=>'To Users',
 'LBL_TO'=>'To:',
+'LBL_IN_SUBJECT'=>'in Subject',
+'LBL_IN_SENDER'=>'in Sender',
+'LBL_IN_SUBJECT_OR_SENDER'=>'in Subject or Sender',
 );
 
 ?>

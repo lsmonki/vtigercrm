@@ -73,7 +73,8 @@ else
 {
 	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
 	
-	$query = 'update emaildetails set cc_email="'.ereg_replace(',','###',$cc).'",bcc_email="'.ereg_replace(',','###',$bcc).'",assigned_user_email="'.$to_email.'",email_flag="SENT" where emailid='.$focus->id;
+	$query = 'update emaildetails set email_flag ="SENT" where emailid='.$focus->id;
+	$adb->query($query);
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
 	{
@@ -88,7 +89,6 @@ else
 	}
 	else
 	{
-		$adb->query($query);
 		$mail_status_str = $to_email."=".$mail_status."&&&";
 	}
 }
@@ -178,9 +178,6 @@ else
 	global $adb;
 	$date_var = date('Ymd');
 	$query = 'update activity set date_start ='.$date_var.' where activityid = '.$returnid;
-	$adb->query($query);
-	$toemails = implode('###',$all_to_emailids);
-	$query = 'update emaildetails set email_flag="SENT",to_email="'.$toemails.'" where emailid='.$focus->id;
 	$adb->query($query);
 }
 //The following function call is used to parse and form a encoded error message and then pass to result page
