@@ -31,6 +31,7 @@ require_once('include/utils/utils.php');
 global $log;
 global $app_strings;
 global $mod_strings;
+global $currentModule;
 
 $focus = new Email();
 
@@ -129,7 +130,7 @@ $smarty->assign("CATEGORY",$category);
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 	else $smarty->assign("NAME", "");
 
-$entries = getBlocks("Emails","detail_view",'',$focus->column_fields);
+$entries = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
 if($_REQUEST['mode'] != 'ajax')
 	$smarty->assign("BLOCKS" , $entries);
 else	
@@ -138,7 +139,7 @@ else
 	$smarty->assign("BLOCKS" , from_html($entries['Email Information']));
 }
 	
-$smarty->assign("SINGLE_MOD","Email");
+$smarty->assign("SINGLE_MOD",$app_strings['Email']);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
@@ -154,7 +155,7 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 	
 //Constructing the Related Lists from here
-$smarty->assign("MODULE","Emails");
+$smarty->assign("MODULE",$app_strings['Emails']);
 $smarty->assign("SENDER",$email_id);
 if($_REQUEST['mode'] != 'ajax')
 	$smarty->display("DetailView.tpl");
