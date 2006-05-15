@@ -27,7 +27,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$focus->id = "";
 }
 
-global $app_strings,$mod_strings,$theme;
+global $app_strings,$mod_strings,$theme,$currentModule;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -39,7 +39,7 @@ $smarty->assign("APP", $app_strings);
 if(isset($focus->name))
 	$smarty->assign("NAME", $focus->name);
 
-$smarty->assign("BLOCKS", getBlocks("Vendors","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
@@ -56,8 +56,8 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("MODULE", $module);
-$smarty->assign("SINGLE_MOD","Vendor");
+$smarty->assign("MODULE", $currentModule);
+$smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
