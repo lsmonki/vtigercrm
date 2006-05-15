@@ -124,7 +124,7 @@ $smarty->assign("BLOCKS", getBlocks($tab_type,"detail_view",'',$focus->column_fi
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
-$smarty->assign("SINGLE_MOD", "Activity");
+$smarty->assign("SINGLE_MOD", $app_strings['Activity']);
 
 //get Description Information
 
@@ -137,7 +137,7 @@ if(isPermitted("Activities","Delete",$_REQUEST['record']) == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE","Activities");
+$smarty->assign("MODULE",$app_strings['Activities']);
 $smarty->display("DetailView.tpl");
 
 ?>

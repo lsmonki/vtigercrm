@@ -46,7 +46,7 @@ $related_array = getRelatedLists("Activities", $focus);
 $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID", $RECORD);
-$smarty->assign("SINGLE_MOD", "Activity");
+$smarty->assign("SINGLE_MOD", $app_strings['Activity']);
 $smarty->assign("ACTIVITY_MODE",'Events');
 $smarty->assign("MODULE", $MODULE);
 $smarty->assign("THEME", $theme);
