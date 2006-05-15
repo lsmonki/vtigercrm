@@ -28,6 +28,7 @@ require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
+global $currentModule;
 
 $focus = new Faq();
 
@@ -68,9 +69,9 @@ $smarty->assign("CATEGORY",$category);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("BLOCKS", getBlocks("Faq","detail_view",'',$focus->column_fields));
-$smarty->assign("SINGLE_MOD","Faq");
-$smarty->assign("MODULE","Faq");
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
+$smarty->assign("SINGLE_MOD",$currentModule);
+$smarty->assign("MODULE",$currentModule);
 
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Faq","EditView",$_REQUEST['record']) == 'yes')

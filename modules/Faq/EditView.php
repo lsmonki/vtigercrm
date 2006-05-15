@@ -30,6 +30,7 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $current_user;
+global $currentModule;
 
 $focus = new Faq();
 $smarty = new vtigerCRM_Smarty();
@@ -54,16 +55,16 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Faq",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Faq",$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 }
 
 $smarty->assign("OP_MODE",$disp_view);
 
-$smarty->assign("MODULE","Faq");
-$smarty->assign("SINGLE_MOD","Faq");
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",$currentModule);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
