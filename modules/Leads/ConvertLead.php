@@ -80,7 +80,7 @@ $convertlead = '<link rel="stylesheet" type="text/css" media="all" href="jscalen
 	<input type="hidden" name="action">
 	<input type="hidden" name="current_user_id" value="'.$modified_user_id.'">
 	
-	<div id="orgLay">
+	<div id="orgLay" style="display: block;">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 		<tr>
 			<td class="genHeaderSmall" align="left"><IMG src="'.$image_path.'Leads.gif">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
