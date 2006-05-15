@@ -23,7 +23,7 @@ $log->debug("name is ".$focus->name);
 }
 
 global $mod_strings;
-global $app_strings;
+global $app_strings,$currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -32,7 +32,7 @@ require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-$related_array=getRelatedLists("SalesOrder",$focus);
+$related_array=getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -40,7 +40,7 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD","SalesOrder");
+$smarty->assign("SINGLE_MOD",$app_strings['SalesOrder']);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
