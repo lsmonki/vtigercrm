@@ -16,7 +16,7 @@ require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
-
+global $currentModule;
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
 
@@ -78,16 +78,16 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields,'BAS'));
-	$smarty->assign("ADVBLOCKS",getBlocks("Products",$disp_view,$mode,$focus->column_fields,'ADV'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
 }
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Product");
+$smarty->assign("SINGLE_MOD",$app_strings['Product']);
 
 
 $smarty->assign("MOD", $mod_strings);
