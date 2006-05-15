@@ -29,7 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $log,$mod_strings,$app_strings,$theme;
+global $log,$mod_strings,$app_strings,$theme,$currentModule;
 
 //added for contact image
 $encode_val=$_REQUEST['encode_val'];
@@ -96,11 +96,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields));
+	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else
 {
-	$smarty->assign("BASBLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'BAS'));
-	$smarty->assign("ADVBLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields,'ADV'));
+	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
+	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
 }
 
 $smarty->assign("OP_MODE",$disp_view);
@@ -136,7 +136,7 @@ if(isset($cust_fld))
 }
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Contact");
+$smarty->assign("SINGLE_MOD",$app_strings['Contact']);
 
 if($focus->mode == 'edit')
 {
