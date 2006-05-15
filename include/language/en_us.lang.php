@@ -749,14 +749,14 @@ $app_strings = Array(
 'Quote'=>'Quote',
 'PriceBook'=>'PriceBook',
 'PurchaseOrder'=>'Purchase Order',
+'Ticket'=>'Ticket',
 'SalesOrder'=> 'Sales Order',
 'Campaign'=>'Campaign',
 'Note'=>'Note',
-'Faq'=>'Faq',
 'Dashboard'=>'Dashboard',
 'Report'=>'Report',
 'Vendor'=>'Vendor',
-
+'Webmail'=>'Webmail',
 
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
