@@ -729,6 +729,14 @@ $app_strings = Array(
 'Tools'=>'Tools',
 'Settings'=>'Settings',
 
+'LBL_INFORMATION'=>'Information',
+'LBL_MORE'=>'More',
+'LBL_BASIC'=>'Basic',
+'LBL_CREATING'=>'Creating',
+'LBL_EDITING'=>'Editing',
+'LBL_NEW'=>'New',
+
+
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
 
