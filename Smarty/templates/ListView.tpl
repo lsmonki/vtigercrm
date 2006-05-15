@@ -91,25 +91,19 @@ function alphabetic(url)
 </script>
 
 		{include file='Buttons_List.tpl'}
-	
-<div id="subMenuBg"  style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacit
-y:0.90;z-index:50"></div>
-<div id="subMenu" style="z-index:1;display:none;position:absolute;">
-<table border=0 cellspacing=0 cellpadding=0 width="100px" align=center class="moduleSearch">
-  <tr>
-   <td class=small>
-       <table cellspacing="2" cellpadding="2" border="0">
-         <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_EVENT}</a></td>
-         </tr>
-         <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_TASK}</a></td>
-         </tr>
-       </table>
-   </td>
-  </tr>
-</table>
+<!-- Activity createlink layer start  -->
+<div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
+        <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                        <td>
+                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_EVENT}</a>
+                                <a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}" class="calMnu">{$NEW_TASK}</a>
+                        </td>
+                </tr>
+        </table>
+
 </div>
+<!-- Activity createlink layer end  -->
 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
 <form name="basicSearch" action="index.php">
