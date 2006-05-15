@@ -11,7 +11,7 @@
 -->*}
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
-<script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 {$BLOCKJS_STD}
@@ -51,10 +51,10 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo"><input name="startdate" id="jscal_field_date_start" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$STARTDATE_STD}" type="text">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><br><font size="1"><em old="(yyyy-mm-dd)">(yyyy-mm-dd)</em></font>
+		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><br><font size="1"><em old="{$APP.NTC_DATE_FORMAT}">{$APP.NTC_DATE_FORMAT}</em></font>
 		</td>
 		<td class="dvtCellInfo"><input name="enddate" id="jscal_field_date_end" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$ENDDATE_STD}" type="text">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><br><font size="1"><em old="(yyyy-mm-dd)">(yyyy-mm-dd)</em></font>
+		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><br><font size="1"><em old="{$APP.NTC_DATE_FORMAT}">{$APP.NTC_DATE_FORMAT}</em></font>
 		</td>
 		</tr>
 		<tr>
@@ -90,7 +90,7 @@
 		</select>
 		</td>
 		<td class="dvtCellLabel"><input name="fval1" id="fval1" class="txtBox" type="text" value="{$VALUE1}"></td>
-		<td class="dvtCellLabel">and</td>
+		<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
 		<td class="dvtCellInfo">
@@ -106,7 +106,7 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo"><input name="fval2" id="fval2" class="txtBox" type="text" value="{$VALUE2}"></td>
-		<td class="dvtCellInfo">And</td>
+		<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
 		<td class="dvtCellLabel">
@@ -122,7 +122,7 @@
 		</select>
 		</td>
 		<td class="dvtCellLabel"><input name="fval3" id="fval3" class="txtBox" type="text" value="{$VALUE3}"></td>
-		<td class="dvtCellLabel">and</td>
+		<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
 		<td class="dvtCellInfo">
@@ -138,7 +138,7 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo"><input name="fval4" id="fval4" class="txtBox" type="text" value="{$VALUE4}"></td>
-		<td class="dvtCellInfo">and</td>
+		<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 		</tr>
 		<tr>
 		<td class="dvtCellLabel">
