@@ -736,6 +736,28 @@ $app_strings = Array(
 'LBL_EDITING'=>'Editing',
 'LBL_NEW'=>'New',
 
+//Added for Detail/Edit/Related List of all modules
+
+'Lead'=>'Lead',
+'Account'=>'Account',
+'Contact'=>'Contact',
+'Potential'=>'Potential',
+'Product'=>'Product',
+'Email'=>'Email',
+'Activity'=>'Activity',
+'Event'=>'Event',
+'Quote'=>'Quote',
+'PriceBook'=>'PriceBook',
+'PurchaseOrder'=>'Purchase Order',
+'SalesOrder'=> 'Sales Order',
+'Campaign'=>'Campaign',
+'Note'=>'Note',
+'Faq'=>'Faq',
+'Dashboard'=>'Dashboard',
+'Report'=>'Report',
+'Vendor'=>'Vendor',
+
+
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
