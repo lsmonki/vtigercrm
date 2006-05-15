@@ -53,6 +53,28 @@ $mod_strings = Array(
 //Added for 5.0 
 'LBL_NO_PERMISSION'=>'Your profile doesn\'t allow you view the Graph for this module',
 'LBL_NO_PERMISSION_FIELD'=>'Your profile doesn\'t allow you view the Graph for this module or for the Field',
+
+"leadsource" => "Leads By Source",
+"leadstatus" => "Leads By Status",
+"leadindustry" => "Leads By Industry",
+"salesbyleadsource" => "Sales by LeadSource",
+"salesbyaccount" => "Sales by Accounts",
+"accountindustry" => "Account By Industry",
+"productcategory" => "Products by Category",
+"sobyaccounts" => "Sales Order by Accounts",
+"sobystatus" => "Sales Order by Status",
+"pobystatus" => "Purchase Order by Status",
+"quotesbyaccounts" => "Quotes by Accounts",
+"quotesbystage" => "Quotes by Stage",
+"invoicebyacnts" => "Invoices by Accounts",
+"invoicebystatus" => "Invoices by Status",
+"ticketsbystatus" => "Tickets by Status",
+"ticketsbypriority" => "Tickets by Priority",
+
+'LBL_DASHBRD_HOME'=>'Dashboard Home',
+'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
+'LBL_VERT_BAR_CHART'=>'Vertical Bar Chart',
+'LBL_PIE_CHART'=>'Pie Chart',
 );
 
 ?>
