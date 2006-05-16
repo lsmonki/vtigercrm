@@ -256,6 +256,10 @@ $mod_strings = Array(
 
 'LBL_INACTIVE'=>'Inactive',
 
+'LBL_NOTIFICATION'=>'Notification',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_TOOL'=>'Tool',
+
 
 //Added fields for Title Informations -- after 4 Beta
 
