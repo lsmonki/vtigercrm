@@ -285,7 +285,7 @@ $mod_strings = Array(
 
 'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'OutGoing Mail Server Password',
 
-
+'LBL_MAIL_SERVER_SMTP'=>'Mail Server (SMTP)',
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
 
@@ -303,6 +303,8 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_INFO'=>'Currency Information',
 
+'LBL_YES'=>'yes',
+'LBL_NO'=>'no',
 
 
 //Fields for Settings
