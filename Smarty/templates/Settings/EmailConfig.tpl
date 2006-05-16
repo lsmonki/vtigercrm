@@ -55,7 +55,7 @@
 				</tr>
 		</table>
 	</td>
-	<td colspan="2" class="genHeaderBig" width="70%">Mail Server (SMTP) - Settings{$ERROR_MSG}<br><hr> </td>
+	<td colspan="2" class="genHeaderBig" width="70%">{$MOD.LBL_MAIL_SERVER_SMTP} - {$MOD.LBL_SETTINGS}<br>{$ERROR_MSG}<br><hr> </td>
 	</tr>
 	{if $EMAILCONFIG_MODE neq 'edit'}	
 	<tr><td colspan="2" style="padding-top: 0px;" align="right" width="75%">
@@ -81,9 +81,9 @@
 	<td align="right"><b>{$MOD.LBL_REQUIRE_SMTP_AUTHENTICATION} :</b></td>
 	<td>
 	{if $SMTP_AUTH eq 'checked'}
-	yes
+	{$MOD.LBL_YES}
 	{else}
-	no
+	{$MOD.LBL_NO}
 	{/if}
 	</td>
 	</tr>
