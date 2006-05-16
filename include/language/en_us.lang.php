@@ -449,6 +449,7 @@ $app_strings = Array(
 'LBL_SEARCH_NOW_BUTTON'=>'Search Now',
 'LBL_GO_TO'=>'Go to',
 'LBL_FEWER_BUTTON'=>'Fewer',
+'LBL_IN'=>'In',
 
 'LBL_ADV_SEARCH_MSG_ANY'=>'Match Any of the Following',
 'LBL_ADV_SEARCH_MSG_ALL'=>'Match All of the Following',
