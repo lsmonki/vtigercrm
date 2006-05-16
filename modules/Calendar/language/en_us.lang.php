@@ -167,6 +167,8 @@ $mod_strings = Array(
 "Dec",
 ),
 
+'LBL_EVENTS'=>'Events',
+'LBL_TODOS'=>'Todos',
 'LBL_ADD_EVENT'=>'Add Event',
 'LBL_INVITE'=>'Invite',
 'LBL_REMINDER'=>'Reminder',
@@ -183,6 +185,7 @@ $mod_strings = Array(
 'LBL_ACTION'=>'Actions',
 'LBL_CURSTATUS'=>'Current Status',
 'LBL_PENDING'=>'Pending',
+'LBL_MORE'=>'More',
 
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS
