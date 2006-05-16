@@ -48,8 +48,6 @@ class Appointment
                 }
 
                 $q.=" ((activity.date_start < '". $to_datetime->get_formatted_date() ."' AND activity.date_start >= '". $from_datetime->get_formatted_date()."')";
-                $q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' ))";
-
                 if(!is_admin($current_user))
                 {
                         $q .= "  ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') or (crmentity.smownerid in ($shared_ids) and salesmanactivityrel.smid in ($shared_ids) and activity.visibility='Public'))";

@@ -316,7 +316,7 @@ class Contact extends CRMEntity {
 
 		$log->info("Activity Related List for Contact Displayed");
 
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname  where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and ( activity.eventstatus is NULL || activity.eventstatus != 'Held') and ( activity.eventstatus is NULL || activity.eventstatus != 'Not Held' )";  //recurring type is added in Query -Jaguar
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname  where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.eventstatus is NULL OR activity.eventstatus != 'Held') and ( activity.eventstatus is NULL OR activity.eventstatus != 'Not Held' )";  //recurring type is added in Query -Jaguar
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
 
@@ -366,10 +366,10 @@ class Contact extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		$query = "select notes.title,'Notes      '  ActivityType,
-			notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified,
-			seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid,
-			crm2.createdtime, notes.notecontent description, users.user_name
+		$query = "select notes.title,'Notes      ' AS ActivityType,
+			notes.filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
+			seattachmentsrel.attachmentsid AS attachmentsid, notes.notesid AS crmid,
+			crm2.createdtime, notes.notecontent AS description, users.user_name
 		from notes
 			inner join crmentity on crmentity.crmid= notes.contact_id
 			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
@@ -378,9 +378,9 @@ class Contact extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;
 		$query .= " union all ";
-		$query .= "select attachments.description title,'Attachments'  ActivityType,
-			attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified,
-			attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid,
+		$query .= "select attachments.description AS title,'Attachments' AS ActivityType,
+			attachments.name AS filename, attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
+			attachments.attachmentsid AS attachmentsid, seattachmentsrel.attachmentsid AS crmid,
 			crm2.createdtime, attachments.description, users.user_name
 		from attachments
 			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
@@ -500,7 +500,7 @@ class Contact extends CRMEntity {
 
 		$log->info("Email Related List for Contact Displayed");
 
-		$query = 'select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = '.$id.'  and activity.activitytype="Emails" and crmentity.deleted = 0';
+		$query = "select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = ".$id." and activity.activitytype='Emails' and crmentity.deleted = 0";
 		$log->debug("Exiting get_emails method ...");
 		return GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
 	}

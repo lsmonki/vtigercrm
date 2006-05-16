@@ -64,7 +64,7 @@ require_once('include/utils/UserInfoUtil.php');
 		if( $owner != $userid)
 		{
 			
-			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id."  and crmentity.deleted=0 group by crmid;";
+			$usr_query="select activityid,activity.date_start,activity.due_date, activity.time_start,activity.duration_hours,activity.duration_minutes,crmentity.smownerid from activity,crmentity where crmentity.crmid=activity.activityid and ('".$avail_date."' like date_start) and crmentity.smownerid=".$userid." and activity.activityid !=".$activity_id."  and crmentity.deleted=0";
 		}
 		else
 		{

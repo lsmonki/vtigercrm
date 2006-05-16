@@ -69,7 +69,7 @@ class LoginHistory extends SugarBean {
 	
 	function user_logout(&$usname,&$usip,&$outtime)
 	{
-		$logid_qry = "SELECT max(login_id) login_id from loginhistory where user_name='$usname' and user_ip='$usip'";
+		$logid_qry = "SELECT max(login_id) AS login_id from loginhistory where user_name='$usname' and user_ip='$usip'";
 		$result = $this->db->query($logid_qry);
 		$loginid = $this->db->query_result($result,0,"login_id");
 		if ($loginid == '')

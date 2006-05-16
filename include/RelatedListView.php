@@ -82,12 +82,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$query .= ' and '.$where;
 	}
 
-	//Appending the group by for Jaguar/Don
-	if($relatedmodule == 'Activities')
-	{
-		$query .= ' group by crmentity.crmid';
-	}
-
 
 	//$url_qry = getURLstring($focus);
 

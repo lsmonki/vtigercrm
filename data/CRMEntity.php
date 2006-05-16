@@ -345,7 +345,7 @@ class CRMEntity extends SugarBean
 		$adb->query($sql1);
 		if($ownerid != $current_user->id)
 		{
-			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",'')";
+			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",null)";
 			$adb->query($sql1);
 		}
 	}
