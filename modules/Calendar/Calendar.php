@@ -55,10 +55,9 @@ class Calendar
 				for($i=0;$i<=23;$i++)
 				{
 					$layout = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($i));
-					$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->hour] = $layout;
-					array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->hour);
+					$this->day_slice[$layout->start_time->get_formatted_date().':'.$layout->start_time->z_hour] = $layout;
+					array_push($this->slices,  $layout->start_time->get_formatted_date().":".$layout->start_time->z_hour);
 				}
-				//echo '<pre>';print_r($this);echo'</pre>';
 				break;
 			case 'week':
 				$weekview_days = 7;
@@ -68,9 +67,9 @@ class Calendar
 					$this->week_array[$layout->start_time->get_formatted_date()] = $layout;
 					for($h=0;$h<=23;$h++)
 					{
-                                        	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->z_day,$layout->start_time->z_month,$layout->start_time->z_year));
-						$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->hour] = $hour_list;
-						array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->hour);
+                                        	$hour_list = new Layout('hour',$this->date_time->getTodayDatetimebyIndex($h,$layout->start_time->day,$layout->start_time->month,$layout->start_time->year));
+						$this->week_slice[$layout->start_time->get_formatted_date().':'.$hour_list->start_time->z_hour] = $hour_list;
+						array_push($this->week_hour_slices,  $layout->start_time->get_formatted_date().":".$hour_list->start_time->z_hour);
 					}
 					array_push($this->slices,  $layout->start_time->get_formatted_date());
 					
@@ -159,7 +158,6 @@ class Calendar
 
 			}
 		}
-		//echo '<pre>';print_r($this->week_slice);echo'</pre>';
 		
 	}
 	

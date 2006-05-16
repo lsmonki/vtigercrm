@@ -94,6 +94,7 @@ function get_cal_header_tab(& $header)
 //use getPendingActivities() method of Activities/OpenListView.php to get pending activities
 function get_cal_header_data(& $cal_arr)
 {
+	global $mod_strings;
 	//echo '<pre>'; print_r($cal_arr); echo '</pre>';
 	$format = $cal_arr['calendar']->hour_format;
 	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour); 
@@ -103,7 +104,7 @@ function get_cal_header_data(& $cal_arr)
 			<tr><td colspan='3'>&nbsp;</td></tr>
 			<tr>
 				<td class='tabSelected' style='border: 1px solid rgb(102, 102, 102);' align='center' width='10%'>
-					<a onClick='gshow(\"addEvent\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$hour_startat."\",\"".$hour_endat."\")' href='javascript:void(0)'>Add Event</a>
+					<a onClick='gshow(\"addEvent\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$hour_startat."\",\"".$hour_endat."\")' href='javascript:void(0)'>".$mod_strings['LBL_ADD_EVENT']."</a>
 					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
 				</td>
 				<td align='center' width='65%'>";
@@ -121,9 +122,10 @@ function get_cal_header_data(& $cal_arr)
 */
 function getEventViewOption(& $cal)
 {
+	global $mod_strings;
 	$view = "<select name='view' class='importBox' id='viewBox' onchange='fnRedirect(\"".$cal['calendar']->view."\",\"".$cal['calendar']->date_time->hour."\",\"".$cal['calendar']->date_time->day."\",\"".$cal['calendar']->date_time->month."\",\"".$cal['calendar']->date_time->year."\")'>";
-	$view .="<option value='hourview' selected='selected'>Hour View</option>
-		<option value='listview'>List View</option>
+	$view .="<option value='hourview' selected='selected'>".$mod_strings['LBL_HRVIEW']."</option>
+		<option value='listview'>".$mod_strings['LBL_LISTVIEW']."</option>
 		</select>";
 	return $view;
 }
@@ -649,31 +651,33 @@ function getTodosList($cal, $check)
 
 function getEventTodoInfo(& $cal, $mode)
 {
+	global $mod_strings;
 	$event_todo = Array();
 	$event_todo['event']=getListView($cal, $mode);
 	$event_todo['todo'] = getTodosList($cal, $mode);
 	$event_todo_info = "";
-	$event_todo_info .= "Total Events : ".$event_todo['event']['totalevent'];
+	$event_todo_info .= $mod_strings['LBL_TOTALEVENTS']."&nbsp;".$event_todo['event']['totalevent'];
 	if($event_todo['event']['pendingevent'] != null)
-		 $event_todo_info .= ", ".$event_todo['event']['pendingevent']." Pending";
+		 $event_todo_info .= ", ".$event_todo['event']['pendingevent']."&nbsp;".$mod_strings['LBL_PENDING'];
 	$event_todo_info .=" / ";
-	$event_todo_info .="Total Todos : ".$event_todo['todo']['totaltodo'];
+	$event_todo_info .=$mod_strings['LBL_TOTALTODOS']."&nbsp;".$event_todo['todo']['totaltodo'];
 	if($event_todo['todo']['pendingtodo'] != null)
-		$event_todo_info .= ", ".$event_todo['todo']['pendingtodo']." Pending";
+		$event_todo_info .= ", ".$event_todo['todo']['pendingtodo']."&nbsp;".$mod_strings['LBL_PENDING'];
 	
 	return $event_todo_info;
 }
 
 function constructListView($entry_list)
 {
+	global $mod_strings;
 	$list_view = "";
 	$header = Array('0'=>'#',
-                        '1'=>'Start Time',
-                        '2'=>'End Time',
-                        '3'=>'Event Type',
-                        '4'=>'Event Details',
-                        '5'=>'Actions',
-                        '6'=>'Current Status',
+                        '1'=>$mod_strings['LBL_APP_START_TIME'],
+                        '2'=>$mod_strings['LBL_APP_END_TIME'],
+                        '3'=>$mod_strings['LBL_EVENTTYPE'],
+                        '4'=>$mod_strings['LBL_EVTDTL'],
+                        '5'=>$mod_strings['LBL_ACTION'],
+                        '6'=>$mod_strings['LBL_CURSTATUS'],
                         );
         $header_width = Array('0'=>'5',
                               '1'=>'10',
