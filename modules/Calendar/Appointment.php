@@ -181,9 +181,17 @@ class Appointment
 		}
                 $this->record            = $act_array["activityid"];
 		if($view == 'day' || $view == 'week')
+		{
+			if($st_hour <= 9 && strlen(trim($st_hour)) < 2)
+                	{
+	                        $st_hour= '0'.$st_hour;
+        	        }
 			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
+		}
 		else
+		{
 			$this->formatted_datetime= $act_array["date_start"];
+		}
 		return;
 	}
 	
