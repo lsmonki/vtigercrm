@@ -86,8 +86,8 @@ function gshow(argg1,startdate,enddate,starttime,endtime)
 	
 	if (y.display=="none") 
 	{
-		document.getElementById("date_start").value = startdate;
-		document.getElementById("due_date").value = enddate;	
+		document.getElementById("jscal_field_date_start").value = startdate;
+		document.getElementById("jscal_field_due_date").value = enddate;	
 		document.getElementById("time_start").value = starttime;
 		document.getElementById("time_end").value = endtime;
 		y.display="block";
