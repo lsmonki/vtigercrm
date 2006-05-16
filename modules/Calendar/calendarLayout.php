@@ -100,8 +100,8 @@ function get_cal_header_data(& $cal_arr)
 	global $mod_strings;
 	//echo '<pre>'; print_r($cal_arr); echo '</pre>';
 	$format = $cal_arr['calendar']->hour_format;
-	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour); 
-	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1));
+	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour,false); 
+	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1),false);
 	$headerdata = "";
 	$headerdata .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>
@@ -303,8 +303,8 @@ function getDayViewLayout(& $cal,$type)
                         $sub_str = ':00';
 		}
 		$y = $i+1;
-		$hour_startat = convertTime2UserSelectedFmt($format,$i);
-	        $hour_endat = convertTime2UserSelectedFmt($format,$y);
+		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
+	        $hour_endat = convertTime2UserSelectedFmt($format,$y,false);
 		$dayview_layout .= '<tr>
 					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%">
 						<span class="genHeaderBig">'.$hour.'</span>
@@ -363,8 +363,8 @@ function getWeekViewLayout(& $cal,$type)
 	$weekview_layout .= '<table border="0" cellpadding="10" cellspacing="1" width="98%" class="calDayHour" style="background-color: #dadada">';
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
-		$hour_startat = convertTime2UserSelectedFmt($format,$i);
-	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1));
+		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
+	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1),false);
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
         	{
@@ -422,8 +422,8 @@ function getMonthViewLayout(& $cal,$type)
                 $rows = 6;
         }
 	$format = $cal['calendar']->hour_format;
-        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour);
-        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1));
+        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
+        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
 	$monthview_layout = '';
 	$monthview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
 		<div id="hrView_'.$type.'" style = "padding:5px">
@@ -708,9 +708,9 @@ function constructListView($entry_list)
 	echo $list_view;
 }
 
-function convertTime2UserSelectedFmt($format,$time)
+function convertTime2UserSelectedFmt($format,$time,$format_check)
 {
-	if($format == 'am/pm')
+	if($format == 'am/pm' && $format_check)
         {
 		if($time>='12')
                 {
