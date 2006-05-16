@@ -105,8 +105,10 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	$site_URL = $site_URL;
 	else $site_URL = $web_root;
 
-	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
-	else $root_directory = $current_dir;
+	if (! isset($_REQUEST['root_directory']))
+	{
+	 	$root_directory = $current_dir;
+	}
 
 	if (isset($_REQUEST['cache_dir']))
 	$cache_dir= $_REQUEST['cache_dir'];
