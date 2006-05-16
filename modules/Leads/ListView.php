@@ -66,6 +66,22 @@ $_SESSION['LEADS_ORDER_BY'] = $order_by;
 $_SESSION['LEADS_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
+//Storing Listvew session object
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+else
+{
+	setSessionVar($_SESSION['lvs'][$currentModule]);
+}
+
+$modOb = $_SESSION['lvs'][$currentModule];
+								
 //for change owner and change status
 $change_status = get_select_options_with_id($comboFieldArray['leadstatus_dom'], $focus->lead_status);
 $smarty->assign("CHANGE_STATUS",$change_status);
@@ -172,11 +188,20 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
         $start = $_REQUEST['start'];
 
 	//added to remain the navigation when sort
-	$url_string = "&start=".$_REQUEST['start'];
+	//$url_string = "&start=".$_REQUEST['start'];
+	$_SESSION['lvs'][$currentModule]['start'] = $_REQUEST['start'];
 }
 else
 {
-        $start = 1;
+	if ($start < ceil ($noofrows / $list_max_entries_per_page))
+	{
+		$start = ceil ($noofrows / $list_max_entries_per_page);
+		$_SESSION['lvs'][$currentModule]['start'] = $start;
+	}
+	else
+	{
+		$start = $modOb['start'];
+	}
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);

@@ -110,7 +110,7 @@ function showDefaultCustomView(selectView,module)
 		show("status");
 		var ajaxObj = new Ajax(ajaxSaveResponse);
 		var viewName = selectView.options[selectView.options.selectedIndex].value;
-		var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&viewname="+viewName;
+		var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName;
 	    ajaxObj.process("index.php?",urlstring);
 }
 
