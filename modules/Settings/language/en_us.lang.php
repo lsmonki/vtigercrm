@@ -303,6 +303,8 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_INFO'=>'Currency Information',
 
+'LBL_CURRENCY_TITLE'=>'Currency',
+
 'LBL_YES'=>'yes',
 'LBL_NO'=>'no',
 
