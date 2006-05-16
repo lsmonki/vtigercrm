@@ -21,7 +21,7 @@ class Calendar
 	/*
 	constructor
 	*/
-	function Calendar($view,$data)
+	function Calendar($view='',$data='')
 	{
 		$this->view = $view;
 		$this->date_time = new DateTime($data,true);
