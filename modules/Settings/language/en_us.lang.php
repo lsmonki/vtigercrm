@@ -180,6 +180,8 @@ $mod_strings = Array(
 
 'LBL_ADD_FIELD'=>'Add Field',
 
+'LBL_CUSTM_MSG'=>'allows you to ....',
+
 'PicklistFields'=>' Picklist Fields',
 
 'Edit'=>'Edit',
