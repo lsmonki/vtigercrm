@@ -45,7 +45,7 @@
 	<tbody>
 	{foreach item=elements from=$ORGINFO}	
 	<tr>
-	<th width="30%">{$elements.0}</th>
+	<th width="30%">{$APP[$elements.0]}</th>
 	<td width="70%">{$elements.2}</td>
 	<tr>
 	{/foreach}

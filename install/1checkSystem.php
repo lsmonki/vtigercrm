@@ -152,7 +152,7 @@ $array = Array(
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vtiger CRM 5.0 Alpha5 Installer: Step 1</title>
-<link rel="stylesheet" href="install/install.css" type="text/css" />
+<link rel="stylesheet" href="include/install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0" class="">
 
@@ -162,10 +162,10 @@ $array = Array(
 	<td align=center>
 	<br><br>
 	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha5" title="v5alpha5"></td>
+		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha5" title="v5alpha5"></td>
 	</tr>
 	</table>
 	
@@ -174,15 +174,15 @@ $array = Array(
 	<!-- 1 of 5 header -->
 	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
 	<tr>	
-		<td valign=top><img src="install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
+		<td valign=top><img src="include/install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
 		<td width=98% valign=top>
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			<tr>
-				<td><img src="install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="install/images/cwStep1of5.gif" alt="Step 1 of 5" title="Step 1 of 5"></td>
+				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
+				<td align=right><img src="include/install/images/cwStep1of5.gif" alt="Step 1 of 5" title="Step 1 of 5"></td>
 			</tr>
 			<tr>
-				<td colspan=2><img src="install/images/cwHdrSysCheck.gif" alt="System Check" title="System Check"></td>
+				<td colspan=2><img src="include/install/images/cwHdrSysCheck.gif" alt="System Check" title="System Check"></td>
 			</tr>
 			</table>
 			<hr noshade size=1>
@@ -337,20 +337,20 @@ $array = Array(
 	
 	<table border=0 cellspacing=0 cellpadding=0 width=70% class=small>
 	<tr>
-		<td><img src="install/images/cwURL.gif"></td>
+		<td><img src="include/install/images/cwURL.gif"></td>
 		<td align=right>
 			<form action="install.php" method="post" name="form" id="form">
 			<input type="hidden" name="file" value="2setConfig.php" />
-			<input type="image" src="install/images/cwBtnNext.gif" border="0" onClick="window.location=('install.php')">
+			<input type="image" src="include/install/images/cwBtnNext.gif" border="0" onClick="window.location=('install.php')">
 		</td>
 	</tr>
 	</table>
 	<br><br>
 	<!-- Horizontal Shade -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwShadeLeft.gif"></td>
-		<td align=right><img src="install/images/cwShadeRight.gif"></td>
+		<td><img src="include/install/images/cwShadeLeft.gif"></td>
+		<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
 	</tr>
 	</table>
 

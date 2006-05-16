@@ -47,7 +47,7 @@
 								<td style="padding:5px;" width="5%" >
 								<img src="{$IMAGE_PATH}mapping.gif" align="absmiddle" /> </td>
 								<td><span  class="genHeaderSmall">{$MOD.LBL_FIELD_MAPPING}</span><br />
-								{$MOD.LBL_FIELD_MAPPING} allows you to ....
+								{$MOD.LBL_FIELD_MAPPING} {$MOD.LBL_CUSTM_MSG} 
 								</td>
 							</tr>
 							<tr><td colspan="2" align="right"><input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="classBtn" onclick="CustomFieldMapping();" type="button" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}"></td></tr>

@@ -245,9 +245,9 @@ function pickColor(color)
 					 <table width="100%" border="0" cellpadding="5" cellspacing="0">
 		 		<tr>
 					<td width="50%" align="left" style="border-bottom:1px dotted #666666;">
-						<b>Change Photo</b></td>
+						<b>{$UMOD.LBL_CHANGE_PHOTO}</b></td>
 																				<td width="50%" align="right" style="border-bottom:1px dotted #666666;">
-																					<a href="javascript:fninvsh('chPhoto');"><img src="../themes/blue/images/close.gif" border="0"  align="absmiddle" /></a></td>
+																					<a href="javascript:fninvsh('chPhoto');"><img src="{$IMAGE_PATH}close.gif" border="0"  align="absmiddle" /></a></td>
 																		</tr>
 																		<tr>
 																			<td align="center" colspan="2"><input type="file" name="newPhoto" size="15" /></td>
@@ -256,7 +256,7 @@ function pickColor(color)
 
 																			<td align="center" colspan="2">
 																					<input type="button" name="cSave" value=" &nbsp;OK&nbsp; "  class="classBtn" onclick="fninvsh('chPhoto');" />
-																					&nbsp;<input type="button" name="cCancel" value=" Cancel "  class="classBtn" onclick="fninvsh('chPhoto');" />
+																					&nbsp;<input type="button" name="cCancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} "  class="classBtn" onclick="fninvsh('chPhoto');" />
 																			</td>
 																		</tr>
 																 </table>

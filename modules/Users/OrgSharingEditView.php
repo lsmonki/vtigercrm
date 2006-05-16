@@ -52,7 +52,7 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 			{
 				$selected='selected';
 			}
-			$output .= '<option value="'.$shareActId.'" '.$selected. '>'.$shareActName.'</option>';
+			$output .= '<option value="'.$shareActId.'" '.$selected. '>'.$mod_strings[$shareActName].'</option>';
 				
 		}
 

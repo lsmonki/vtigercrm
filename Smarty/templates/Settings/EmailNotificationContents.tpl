@@ -13,10 +13,10 @@
 	<tbody>
 	<tr>
 	<td class="lvtCol" width="5%">#</td>
-	<td class="lvtCol" width="35%">Notification</td>
-	<td class="lvtCol" width="50%">Description</td>
-	<td class="lvtCol" width="10%">Active</td>
-	<td class="lvtCol" width="10%">Tool</td>
+	<td class="lvtCol" width="35%">{$MOD.LBL_NOTIFICATION}</td>
+	<td class="lvtCol" width="50%">{$MOD.LBL_DESCRIPTION}</td>
+	<td class="lvtCol" width="10%">{$MOD.LBL_ACTIVE}</td>
+	<td class="lvtCol" width="10%">{$MOD.LBL_TOOL}</td>
 	</tr>
 	{foreach name=notifyfor item=elements from=$NOTIFICATION}
 	<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
@@ -24,7 +24,7 @@
 	<td>{$elements.label}</td>
 	<td>{$elements.schedulename}</td>
 	<td>{$elements.active}</td>
-	<td onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
+	<td onClick="fetchEditNotify('{$smarty.foreach.notifyfor.iteration}');"><img src="{$IMAGE_PATH}editfield.gif" title="edit"></td>
 	</tr>
 	{/foreach}
 	</tbody>

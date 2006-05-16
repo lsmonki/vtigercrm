@@ -1477,7 +1477,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Emails")
         {
-		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
+		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid left join emaildetails on emaildetails.emailid=activity.activityid WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1895,11 +1895,14 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td align="right" style="padding="5px;">';
+
+	/*    //commented due to usablity conflict -- Philip
 	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
+	*/
 	if(($navigation_array['prev']) != 0)
 	{
 		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'" title="Previous"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	}
 	else
@@ -1917,8 +1920,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	if(($navigation_array['next']) !=0)
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'" title="Next"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'" title="Last"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -1934,7 +1937,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 Param $currentmodule - modulename of the entity to be selected
 Param $returnmodule - modulename for which the entity is assingned
 Param $recordid - the record id for which the entity is assigned
-Return tyep string.
+Return type string.
 */
 
 function getRelCheckquery($currentmodule,$returnmodule,$recordid)
@@ -1971,4 +1974,20 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	return $where_relquery;
 }
 
+/**This function stores the variables sent in list view url string.
+Param $lv_array - list view session array
+Return type void.
+*/
+
+function setSessionVar($lv_array)
+{
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
+	$lv_array['start']=$_REQUEST['start'];
+	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
+	$lv_array['viewname']=$_REQUEST['viewname'];
+
+	$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
+
+}
+								
 ?>

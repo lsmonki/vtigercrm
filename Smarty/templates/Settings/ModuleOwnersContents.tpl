@@ -39,7 +39,7 @@
 	{foreach name=modulelists item=modules from=$USER_LIST}
 	<tr class="prvPrfHoverOff" onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
 		<td>{$smarty.foreach.modulelists.iteration}</td>
-		<td>{$modules.0}</td>
+		<td>{$APP[$modules.0]}</td>
 		<td><a href="index.php?module=Users&action=DetailView&record={$modules.1}">{$modules.2}</a></td>	
 	</tr>
 	{/foreach}
@@ -47,7 +47,7 @@
 	{foreach name=modulelists item=modules from=$USER_LIST}
 	<tr class="prvPrfHoverOff">
 		<td>{$smarty.foreach.modulelists.iteration}</td>
-		<td>{$modules.0}</td>
+		<td>{$APP[$modules.0]}</td>
 		<td>{$modules.1}</td>	
 	</tr>
 	{/foreach}

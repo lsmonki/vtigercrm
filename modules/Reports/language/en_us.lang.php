@@ -106,6 +106,7 @@ $mod_strings = Array(
 'LBL_DESCRIPTION'=>'Description',
 'LBL_TOOLS'=>'Tools',
 'LBL_AND'=>'and',
+'LBL_ADD_NEW_GROUP'=>'Add New Group',
 'LBL_REPORT_MODULE'=>'Report Module',
 'LBL_SELECT_RELATIVE_MODULE_FOR_REPORT'=>'Select Relative Module for Report',
 'LBL_SELECT_REPORT_TYPE_BELOW'=>'Select Report type Below',

@@ -17,6 +17,7 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
+
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
 
@@ -81,8 +82,15 @@ if($disp_view == 'edit_view')
 	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
 else	
 {
-	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
-	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
+	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
+	$adv_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV');
+
+	$blocks['basicTab'] = $bas_block;
+	if(is_array($adv_block))
+		$blocks['moreTab'] = $adv_block;
+
+	$smarty->assign("BLOCKS",$blocks);
+	$smarty->assign("BLOCKS_COUNT",count($blocks));
 }
 $smarty->assign("OP_MODE",$disp_view);
 
@@ -166,7 +174,7 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 if($focus->mode == 'edit')
-$smarty->display('salesEditView.tpl');
+	$smarty->display('salesEditView.tpl');
 else
-$smarty->display('CreateView.tpl');
+	$smarty->display('InventoryCreateView.tpl');
 ?>

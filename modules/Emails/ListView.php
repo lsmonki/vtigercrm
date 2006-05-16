@@ -162,7 +162,7 @@ if(isset($where) && $where != '')
 }
 if($_REQUEST['folderid'] =='2')
 {
-	$list_query .= "AND seactivityrel.crmid in (select contactid from contactdetails)";
+	$list_query .= "AND seactivityrel.crmid in (select contactid from contactdetails) AND emaildetails.email_flag !='WEBMAIL'";
 }
 if($_REQUEST['folderid'] =='3')
 {
@@ -175,6 +175,10 @@ if($_REQUEST['folderid'] =='4')
 if($_REQUEST['folderid'] =='5')
 {
 	$list_query .= "AND salesmanactivityrel.smid in (select id from users)";	
+}
+if($_REQUEST['folderid'] =='6')
+{
+	$list_query .= "AND emaildetails.email_flag ='WEBMAIL'";	
 }
 if(isset($order_by) && $order_by != '')
 {

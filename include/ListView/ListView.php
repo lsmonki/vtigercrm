@@ -17,6 +17,7 @@
  * Description:  generic list view class.
  ********************************************************************************/
 require_once('include/logging.php');
+require_once('include/ListView/ListViewSession.php');
 
 class ListView {
 	

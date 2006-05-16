@@ -7,6 +7,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 global $current_user;
 
+
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Email();
 
@@ -17,23 +18,30 @@ $bcc_address = explode(";",$_REQUEST['bcc_list']);
 $date = $_REQUEST["date_start"];
 $subject = $_REQUEST['subject'];
 
-$mailInfo = getMailServerInfo($current_user);
-$temprow = $adb->fetch_array($mailInfo);
+$start_message=$_REQUEST["start_message"];
 
+$mailInfo = getMailServerInfo($current_user);
+if($adb->num_rows($mailInfo) < 1) {
+	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+	exit();
+}
+
+$temprow = $adb->fetch_array($mailInfo);
 $login_username= $temprow["mail_username"];
 $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
-$start_message=$_REQUEST["start_message"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
 $ssltype=$temprow["ssltype"];
 $sslmeth=$temprow["sslmeth"];
+$account_name=$temprow["account_name"];
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 global $mbox;
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
 
 $email = new Webmail($mbox, $_REQUEST["mailid"]);
 
@@ -45,10 +53,6 @@ else {
 	$subject = $email->subject;
 	$imported=true;
 }
-if($email->relationship != 0)
-{
-	$focus->column_fields['parent_id']=$email->relationship["id"];
-}
 
 $focus->column_fields['subject']=$subject;
 $focus->column_fields["activitytype"]="Emails";
@@ -59,25 +63,39 @@ $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["date_start"]=$ddate;
 $focus->column_fields["time_start"]=$dtime;
 
-$tmpBody = preg_replace(array('/<br(.*?)>/i',"/&gt;/i","/&lt;/i","/&nbsp;/i","/&amp/i","/&copy;/i","/<style(.*?)>(.*?)<\/style>/i","/\{(.*?)\}/i","/BODY/i"),array("\r",">","<"," ","&","(c)","","",""),$msgData);
-$focus->column_fields["description"]=strip_tags($tmpBody);
+//$tmpBody = preg_replace(array('/<br(.*?)>/i',"/&gt;/i","/&lt;/i","/&nbsp;/i","/&amp/i","/&copy;/i","/<style(.*?)>(.*?)<\/style>/i","/\{(.*?)\}/i","/BODY/i"),array("\r",">","<"," ","&","(c)","","",""),$msgData);
+//$focus->column_fields["description"]=strip_tags($tmpBody);
+$focus->column_fields["description"]=$msgData;
 
+
+//to save the email details in emaildetails tables
+$fieldid = $adb->query_result($adb->query('select fieldid from field where tablename="contactdetails" and fieldname="email" and columnname="email"'),0,'fieldid');
+if($email->relationship != 0)
+{
+	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
+}else
+{
+	//if relationship is not available create a contact and relate the email to the contact
+	require_once('modules/Contacts/Contact.php');
+	$contact_focus = new Contact();	
+	$contact_focus->column_fields['lastname'] =$email->fromname; 
+	$contact_focus->column_fields['email'] = $email->from;
+	$contact_focus->save("Contacts");
+	$focus->column_fields['parent_id']=$contact_focus->id.'@'.$fieldid.'|';
+}
+$_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 $focus->save("Emails");
+
+//saving in emaildetails table
+$id_lists = $focus->column_fields['parent_id'].'@'.$fieldid;
+$all_to_ids = $email->from;
+$query = 'insert into emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
+$adb->query($query);
+
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
 $return_action='ListView';
 
-
-// check for relationships
-if(!isset($_REQUEST["email_body"])) {
-    $return_id = $focus->id;
-    $return_module='Emails';
-    $return_action='DetailView';
-    if($email->relationship != 0) {
-	$q = "INSERT INTO seactivityrel (crmid,activityid) VALUES ('".$email->relationship["id"]."','".$focus->id."')";
-	$rs = $adb->query($q);
-    }
-}
 
 if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	require_once("sendmail.php");
@@ -90,7 +108,7 @@ if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
 	header("Location: index.php?action=$return_action&module=$return_module");
 } else {
 	if($_POST["ajax"] != "true")
-		header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 
+		header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 
 }
 
 return;

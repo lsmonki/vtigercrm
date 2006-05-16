@@ -65,6 +65,8 @@ function ShowFolders(folderid)
 		case 5:
 			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_TO_USERS}';
 			break;
+		case 6:
+			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_QUAL_CONTACT}';
 	{rdelim}
     var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folderid="+folderid;
    	ajaxObj.process("index.php?",urlstring);
@@ -94,7 +96,7 @@ function ShowFolders(folderid)
 					<form name="massdelete" method="POST">
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 							<tr>
-								<td colspan="3" style="padding:10px;vertical-align:middle;">
+								<td colspan="3" style="vertical-align:middle;">
 									<table width="100%" cellpadding="0" cellspacing="0" border="0">
 										<tr>
 											<td width="10%" >
@@ -124,7 +126,7 @@ function ShowFolders(folderid)
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
 								<ul style="list-style-type:none;">
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-										<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
+										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>

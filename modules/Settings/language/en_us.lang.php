@@ -178,7 +178,9 @@ $mod_strings = Array(
 
 'CUSTOMFIELD'=>'Custom Field',
 
+'LBL_ADD_FIELD'=>'Add Field',
 
+'LBL_CUSTM_MSG'=>'allows you to ....',
 
 'PicklistFields'=>' Picklist Fields',
 
@@ -256,6 +258,10 @@ $mod_strings = Array(
 
 'LBL_INACTIVE'=>'Inactive',
 
+'LBL_NOTIFICATION'=>'Notification',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_TOOL'=>'Tool',
+
 
 //Added fields for Title Informations -- after 4 Beta
 
@@ -285,7 +291,7 @@ $mod_strings = Array(
 
 'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'OutGoing Mail Server Password',
 
-
+'LBL_MAIL_SERVER_SMTP'=>'Mail Server (SMTP)',
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
 
@@ -303,6 +309,10 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_INFO'=>'Currency Information',
 
+'LBL_CURRENCY_TITLE'=>'Currency',
+
+'LBL_YES'=>'yes',
+'LBL_NO'=>'no',
 
 
 //Fields for Settings
@@ -540,16 +550,16 @@ $mod_strings = Array(
 'Invoice'=>'Invoice',
 
 //For Custom Fields
-'LBL_LEAD_MAP_CUSTOM_FIELD'=>'Map Lead Custom Fields',
+'LBL_LEAD_MAP_CUSTOM_FIELD'=>'Mapping Lead Custom Fields',
 'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom account
 ,contact, or potential fields. These mappings will be used when you convert leads',
 'LBL_MAPPING_INFO'=>'Mapping Information',
-'LBL_ACCOUNT_FIELD'=>'Account Field',
-'LBL_CONTACT_FIELD'=>'Contact Field',
-'LBL_POTENTIAL_FIELD'=>'Potential Field',
+'LBL_ACCOUNT_FIELD'=>'Account Custom Field',
+'LBL_CONTACT_FIELD'=>'Contact Custom Field',
+'LBL_POTENTIAL_FIELD'=>'Potential Custom Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
 'LBL_FIELD_MAPPING'=>'Field Mapping',
-'LBL_LEAD_FIELD'=>'Lead Field',
+'LBL_LEAD_FIELD'=>'Lead Custom Field',
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
 //for Edit ordering the blocks

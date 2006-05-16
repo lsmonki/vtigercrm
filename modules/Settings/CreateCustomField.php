@@ -122,7 +122,7 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 	  <div id="orgLay" style="display:block;">
 		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 			<tr>
-				<td width="40%" align="left" class="genHeaderSmall">Add Field </td>
+				<td width="40%" align="left" class="genHeaderSmall">'.$mod_strings['LBL_ADD_FIELD'].'</td>
 				<td width="60%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
 			</tr>
 			<tr><td colspan="2"><hr /></td></tr>
@@ -159,8 +159,8 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 			<tr><td style="border-bottom:1px dashed #CCCCCC;" colspan="2">&nbsp;</td></tr>
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" name="save" value=" &nbsp; Save &nbsp; " class="classBtn" />&nbsp;&nbsp;
-					<input type="button" name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh(\'orgLay\');" />
+					<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' &nbsp; " class="classBtn" />&nbsp;&nbsp;
+					<input type="button" name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="classBtn" onclick="fninvsh(\'orgLay\');" />
 				</td>
 			</tr>
 			<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>

@@ -593,16 +593,16 @@ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field")
 
 //Block 46
 
-$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'street','vendor',1,'21','treet','Street',1,0,0,100,1,46,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,46,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'city','vendor',1,'1','city','City',1,0,0,100,3,46,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'state','vendor',1,'1','state','State',1,0,0,100,4,46,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'postalcode','vendor',1,'1','postalcode','Postal Code',1,0,0,100,5,46,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'country','vendor',1,'1','country','Country',1,0,0,100,6,46,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'street','vendor',1,'21','street','Street',1,0,0,100,1,46,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,46,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'city','vendor',1,'1','city','City',1,0,0,100,3,46,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'state','vendor',1,'1','state','State',1,0,0,100,4,46,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'postalcode','vendor',1,'1','postalcode','Postal Code',1,0,0,100,5,46,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'country','vendor',1,'1','country','Country',1,0,0,100,6,46,1,'V~O',1,null,'ADV')");
 
 //Block 47
 
-$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,47,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,47,1,'V~O',1,null,'ADV')");
 
 //Vendor Details -- END
 
@@ -667,10 +667,10 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,53,1,'V~O',1,null,'BAS')");
  //Block55
 
-$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,56,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,56,1,'V~O',1,null,'ADV')");
 
 //Block 56
-$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'terms_conditions','quotes',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,55,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'terms_conditions','quotes',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,55,1,'V~O',1,null,'ADV')");
 
 
 //Quote Details -- END
@@ -721,10 +721,10 @@ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,59,1,'V~O',1,null,'BAS')");
   
  //Block61
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,62,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,62,1,'V~O',1,null,'ADV')");
 
  //Block62
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,61,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,61,1,'V~O',1,null,'ADV')");
 
 //Purchase Order Details -- END
 
@@ -777,10 +777,10 @@ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,65,1,'V~O',1,null,'BAS')");
   
 //Block67
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,68,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,68,1,'V~O',1,null,'ADV')");
 
  //Block68
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'terms_conditions','salesorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,67,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'terms_conditions','salesorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,67,1,'V~O',1,null,'ADV')");
 
 
 //Sales Order Details -- END
@@ -834,9 +834,9 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,71,1,'V~O',1,null,'BAS')");
 
 //Block73
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,74,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,74,1,'V~O',1,null,'ADV')");
  //Block74
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'terms_conditions','invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,73,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'terms_conditions','invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,73,1,'V~O',1,null,'ADV')");
 
 
 //Invoice Details -- END

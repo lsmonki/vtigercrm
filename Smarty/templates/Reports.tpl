@@ -18,7 +18,7 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr><td style="height:2px"></td></tr>
 	<tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > {$MODULE}</td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$APP.$CATEGORY} > {$APP.$MODULE}</td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small width="60%">
 	<table border=0 cellspacing=0 cellpadding=0>
@@ -62,7 +62,7 @@
 <!-- POPUP LAYER FOR CREATE NEW REPORT -->
 <div style="display: none; left: 193px; top: 106px;" id="reportLay" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>Create New :</b></td></tr>
+	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$MOD.LBL_CREATE_NEW} :</b></td></tr>
 	<tr>
 	<td>
 	{foreach item=modules from=$REPT_MODULES}
@@ -80,7 +80,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody>
 	<tr>
-	<td class="genHeaderSmall" align="left" width="40%">Add New Group</td>
+	<td class="genHeaderSmall" align="left" width="40%">{$MOD.LBL_ADD_NEW_GROUP}</td>
 	<td align="right" width="60%"><a href="javascript:fninvsh('orgLay');"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
@@ -97,8 +97,8 @@
 	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
-	<input name="save" value=" &nbsp;Save&nbsp; " class="classBtn" onClick="AddFolder();" type="button">&nbsp;&nbsp;
-	<input name="cancel" value=" Cancel " class="classBtn" onclick="fninvsh('orgLay');" type="button">
+	<input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" onClick="AddFolder();" type="button">&nbsp;&nbsp;
+	<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" onclick="fninvsh('orgLay');" type="button">
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>

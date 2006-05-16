@@ -39,9 +39,9 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 	$access_privileges[] = $entity_name;
 	$access_privileges[] = $entity_perr;
 	if($entity_perr != 'Private')	
-		$access_privileges[] = 'Users can '.str_replace('Public:','',$entity_perr).' other users '.$entity_name;
+		$access_privileges[] = $mod_strings['LBL_USR_CAN_ACCESS'] .str_replace('Public:','',$mod_strings[$entity_perr]). $mod_strings['LBL_USR_OTHERS'] . $app_strings[$entity_name];
 	else
-		$access_privileges[] = 'Users cannot access other users '.$entity_name;
+	        $access_privileges[] = $mod_strings['LBL_USR_CANNOT_ACCESS'] . $app_strings[$entity_name];
 	$row++;
 }
 $access_privileges=array_chunk($access_privileges,3);
@@ -121,7 +121,7 @@ function getSharingRuleList($module)
 			}
 			elseif($permission == 1)
 			{
-				$perr_out = 'Read Write';
+				$perr_out = 'Read / Write';
 			}
 
 			$access_permission [] = $shareid;
