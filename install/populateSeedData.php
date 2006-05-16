@@ -81,9 +81,9 @@ function create_date()
 {
 	$date = "";
 	$date .= "2006";
-	$date .= "/";
+	$date .= "-";
 	$date .= rand(1,9);
-	$date .= "/";
+	$date .= "-";
 	$date .= rand(1,28);
 	
 	return $date;
@@ -758,7 +758,6 @@ for($i=0;$i<5;$i++)
 	//$rand_key = array_rand($s);$contact_key = array_rand($contact_ids);
         $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
 	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
-	
         $helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
 	
 	$helpdesk->save("HelpDesk");
@@ -779,7 +778,7 @@ for($i=0;$i<6;$i++)
 	$rand_num=array_rand($num_array);
 
 	$rand_date = & create_date();
-	$en=explode("/",$rand_date);
+	$en=explode("-",$rand_date);
 	if($en[1]<10)
 		$en[1]="0".$en[1];
 	if($en[2]<10)
@@ -847,7 +846,7 @@ for($i=0;$i<6;$i++)
 }
 
 
-$adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
+$adb->query("update crmentity set smcreatorid=".$assigned_user_id);
 
 $expected_revenue = Array("250000","750000","500000");
 $budget_cost = Array("25000","50000","90000");

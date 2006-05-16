@@ -1232,7 +1232,7 @@ function constructArray($var)
        		$code = 'array(';
        		foreach ($var as $key => $value)
 		{
-           		$code .= $key.'=>'.$value.',';
+           		$code .= "'".$key."'=>".$value.',';
        		}
        		$code .= ')';
        		return $code;

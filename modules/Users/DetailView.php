@@ -207,9 +207,14 @@ else
 	$smarty->assign("CURRENCY_NAME",$currency);
 
 //Getting the Group Lists
-$query ="select groupid,groupname from groups where groupid in (".fetchUserGroupids($focus->id).")";
-$result = $adb->query($query);
-$num_rows = $adb->num_rows($result);
+$groupids = fetchUserGroupids($focus->id);
+if($groupids) {
+	$query ="select groupid,groupname from groups where groupid in (".$groupids.")";
+	$result = $adb->query($query);
+	$num_rows = $adb->num_rows($result);
+} else {
+	$num_rows = 0;
+}
 
 
 

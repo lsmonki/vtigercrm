@@ -1219,9 +1219,11 @@ global $log;
 $log->debug("Entering updateActivityGroupRelation(".$activityid.",".$groupname.") method ...");
 	global $adb;
   $sqldelete = "delete from activitygrouprelation where activityid=".$activityid;
-  $adb->query($sqldelete);
-  $sql = "insert into activitygrouprelation values (".$activityid .",'" .$groupname ."')";  
-  $adb->query($sql);
+  if($groupname != '' && $groupname != 'null') {
+	  $adb->query($sqldelete);
+	  $sql = "insert into activitygrouprelation values (".$activityid .",'" .$groupname ."')";  
+	  $adb->query($sql);
+  }
   $log->debug("Exiting updateActivityGroupRelation method ...");
 
 }

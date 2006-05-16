@@ -110,8 +110,6 @@ if(isset($where) && $where != '')
 	$list_query .= " AND " .$where;
 }
 
-$list_query .= ' GROUP BY crmentity.crmid'; //Appeding for the recurring event by jaguar
-
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Activities',$order_by);

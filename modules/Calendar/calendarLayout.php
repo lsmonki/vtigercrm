@@ -578,14 +578,28 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$Entries = Array();
 	global $adb,$current_user,$mod_strings;
 	
-	$query = "select groups.groupname ,users.user_name,activity.activitytype,activity.subject,crmentity.smownerid,seactivityrel.crmid,cntactivityrel.contactid ,crmentity.crmid,activity.* from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.activitytype != 'Task') and (activity.date_start between '".$start_date."' and '".$end_date."' or recurringevents.recurringdate between '".$start_date."' and '".$end_date."')";
+	$query = "SELECT cntactivityrel.contactid, activity.*
+		FROM activity
+		INNER JOIN crmentity
+			ON crmentity.crmid = activity.activityid
+		LEFT JOIN cntactivityrel
+			ON cntactivityrel.activityid = activity.activityid
+		LEFT OUTER JOIN recurringevents
+			ON recurringevents.activityid = activity.activityid
+		WHERE crmentity.deleted = 0
+			AND (activity.activitytype = 'Meeting' OR activity.activitytype = 'Call')
+			AND (activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
+				OR recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')";
 	if($info != '')
 	{
-		$pending_query = $query." and (activity.eventstatus = 'Planned') and crmentity.smownerid = ".$current_user->id." GROUP BY crmentity.crmid ORDER BY activity.date_start,activity.time_start ASC";
+		$pending_query = $query." AND (activity.eventstatus = 'Planned')
+			AND crmentity.smownerid = ".$current_user->id."
+		ORDER BY activity.date_start,activity.time_start ASC";
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
 	}
-	$query .= " and crmentity.smownerid = ".$current_user->id." GROUP BY crmentity.crmid ORDER BY activity.date_start,activity.time_start ASC";
+	$query .= " AND crmentity.smownerid = ".$current_user->id."
+		ORDER BY activity.date_start,activity.time_start ASC";
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
 	if($info != '')

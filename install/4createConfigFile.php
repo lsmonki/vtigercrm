@@ -36,7 +36,6 @@
 
 
 
-require_once('include/utils/utils.php');
 include('vtigerversion.php');
 
 
@@ -52,16 +51,13 @@ $release_date = "31 March 2006";
 
 if (isset($_REQUEST['db_hostname'])) 	list($db_hostname,$db_port) = 	split(":",$_REQUEST['db_hostname']);
 
-// update default mysql port if not 
-// provided, to be removed latter
-if ($db_port == "")
-$db_port = "3306";
-
 if (isset($_REQUEST['db_username'])) 	$db_username = 	$_REQUEST['db_username'];
 
 if (isset($_REQUEST['db_password'])) 	$db_password = 		$_REQUEST['db_password'];
 
 if (isset($_REQUEST['db_name'])) 		$db_name  	= 		$_REQUEST['db_name'];
+
+if (isset($_REQUEST['db_type'])) 		$db_type  	= 		$_REQUEST['db_type'];
 
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = 	$_REQUEST['db_drop_tables'];
 
@@ -87,8 +83,24 @@ if (isset($_REQUEST['ftpuser'])) $ftpuser = 	$_REQUEST['ftpuser'];
 
 if (isset($_REQUEST['ftppassword'])) $ftppassword = 	$_REQUEST['ftppassword'];
 
-$cache_dir = 'cache/';
+// update default port
+if ($db_port == '')
+{
+	if($db_type == 'mysql')
+	{
+		$db_port = "3306";
+	}
+	elseif($db_type = 'pgsql')
+	{
+		$db_port = "5432";
+	}
+	elseif($db_type = 'oci8')
+	{
+		$db_port = '1521';
+	}
+}
 
+$cache_dir = 'cache/';
 
 
 ?>
@@ -172,7 +184,7 @@ $cache_dir = 'cache/';
 				      $buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
 				      $buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
 				      $buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
-				      $buffer = str_replace( "_DBC_TYPE_", "mysql", $buffer);
+				      $buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
 
 				      $buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
 

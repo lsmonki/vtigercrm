@@ -65,7 +65,7 @@ class ReportRun extends CRMEntity
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			if($querycolumns == "")
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." '".$selectedfields[2]."'";
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$selectedfields[2].'"';
 			}else
 			{
 				$columnslist[$fieldcolname] = $querycolumns;

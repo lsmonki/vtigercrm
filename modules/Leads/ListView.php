@@ -50,15 +50,6 @@ $focus = new Lead();
 $smarty = new vtigerCRM_Smarty;
 $other_text=Array();
 
-if(!$_SESSION['lvs'][$currentModule])
-{
-	unset($_SESSION['lvs']);
-	$modObj = new ListViewSession();
-	$modObj->sorder = $sorder;
-	$modObj->sortby = $order_by;
-	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
-}
-
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
@@ -176,7 +167,15 @@ $list_result = $adb->query($query);
 $noofrows = $adb->num_rows($list_result);
 
 //Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+else
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }

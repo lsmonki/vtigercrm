@@ -1211,7 +1211,7 @@ class CustomView extends CRMEntity{
                 {
                         $listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
 
-                        $query = "select count(*) count ".$listviewquery;
+                        $query = "select count(*) AS count ".$listviewquery;
                         
 			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
                         $advfiltersql = $this->getCVAdvFilterSQL($viewid);

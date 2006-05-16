@@ -1161,7 +1161,7 @@ function getQuickCreate($tabid,$actionid)
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
 	global $log;
-	$log->debug("Entering ChangeStatus(".$status.",".$activityid.",".$activity_mode=''.") method ...");
+	$log->debug("Entering ChangeStatus(".$status.",".$activityid.",".$activity_mode."='') method ...");
         $log->info("in ChangeStatus ".$status. ' activityid is  '.$activityid);
 
         global $adb;
@@ -1173,7 +1173,9 @@ function ChangeStatus($status,$activityid,$activity_mode='')
         {
                 $query = "Update activity set eventstatus='".$status."' where activityid = ".$activityid;
         }
-        $adb->query($query);
+	if($query) {
+        	$adb->query($query);
+	}
 	$log->debug("Exiting ChangeStatus method ...");
  }
 
@@ -1202,7 +1204,11 @@ function getDBInsertDateValue($value)
 		list($y,$m,$d) = split('-',$value);
 	}
 		
-	$insert_date=$y.'-'.$m.'-'.$d;
+	if(!$y && !$m && !$d) {
+		$insert_date = '';
+	} else {
+		$insert_date=$y.'-'.$m.'-'.$d;
+	}
 	$log->debug("Exiting getDBInsertDateValue method ...");
 	return $insert_date;
 }
@@ -1274,7 +1280,7 @@ function upload_product_image_file($mode,$id)
 function getProductImageName($id,$deleted_array='')
 {
 	global $log;
-	$log->debug("Entering getProductImageName(".$id.",".$deleted_array=''.") method ...");
+	$log->debug("Entering getProductImageName(".$id.",".$deleted_array."='') method ...");
 	global $adb;
 	$image_array=array();	
 	$query = "select imagename from products where productid=".$id;

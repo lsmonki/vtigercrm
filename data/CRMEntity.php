@@ -99,6 +99,9 @@ class CRMEntity extends SugarBean
 				$parentid=$_REQUEST['parent_id'];
 				if($_REQUEST['module'] != 'Emails' && $_REQUEST['module'] != 'Webmails')
 				{
+					if(!$parentid) {
+						$parentid = $adb->getUniqueID('seactivityrel');
+					}
 					$mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
 					$adb->query($mysql);
 				}
@@ -361,7 +364,7 @@ class CRMEntity extends SugarBean
 		$adb->query($sql1);
 		if($ownerid != $current_user->id)
 		{
-			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",'')";
+			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",null)";
 			$adb->query($sql1);
 		}
 	}
@@ -404,7 +407,7 @@ class CRMEntity extends SugarBean
 		else
 		{
 			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
+			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
 			$adb->query($sql);
 			$this->id = $current_id;
 		}
@@ -810,7 +813,7 @@ class CRMEntity extends SugarBean
 			  {
 				  if($table_name == 'activity')
                                   {
-			             updateActivityGroupRelation($this->id,'');
+			             updateActivityGroupRelation($this->id,$groupname);
 				  }
 			  }
 			  	
@@ -1014,7 +1017,7 @@ $log->debug("type is ".$type);
 	{
 		$activity_id=$this->id;
 
-		$sql='select min(recurringdate) min_date,max(recurringdate) max_date,recurringtype from recurringevents where activityid='. $activity_id.' group by activityid';
+		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
 		
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -1083,7 +1086,7 @@ $log->debug("type is ".$type);
 				$tdate=$date_array[$k];
 				if($tdate <= $end_date)
 				{
-					$max_recurid_qry = 'select max(recurringid) recurid  from recurringevents;';
+					$max_recurid_qry = 'select max(recurringid) AS recurid from recurringevents;';
 					$result = $adb->query($max_recurid_qry);
 					$noofrows = $adb->num_rows($result);
 					for($i=0; $i<$noofrows; $i++)
@@ -1091,7 +1094,7 @@ $log->debug("type is ".$type);
 						$recur_id = $adb->query_result($result,$i,"recurid");
 					}
 					$current_id =$recur_id+1;
-					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
+					$recurring_insert = "insert into recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
 					$adb->query($recurring_insert);
 					if($_REQUEST['set_reminder'] == 'Yes')
 					{

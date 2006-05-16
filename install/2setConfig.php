@@ -89,6 +89,11 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_password']))
 	$db_password = $dbconfig['db_password'];
 
+	if (isset($_REQUEST['db_type']))
+	$db_type = $_REQUEST['db_type'];
+	elseif (isset($dbconfig['db_type']))
+	$db_type = $dbconfig['db_type'];
+
 	if (isset($_REQUEST['db_name']))
 	$db_name = $_REQUEST['db_name'];
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
@@ -140,6 +145,15 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
 		!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
 		!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
+		}
+
+		// determine database options
+		$db_options = array();
+		if(function_exists('mysql_connect')) {
+			$db_options['mysql'] = 'MySQL';
+		}
+		if(function_exists('pg_connect')) {
+			$db_options['pgsql'] = 'Postgres';
 		}
 ?>
 
@@ -295,9 +309,19 @@ function verify_data(form) {
 			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
 			<tr>
                <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><select name="dbtype">
-			   <option value="mysql" selected="selected">MySQL</option>
-			   </select>
+               <td width="75%" bgcolor="white" align="left">
+		<?php if(!$db_options) : ?>
+			No Database Support Deteched
+		<?php elseif(count($db_options) == 1) : ?>
+			<?php list($db_type, $label) = each($db_options); ?>
+			<input type="hidden" name="db_type" value="<?php echo $db_type ?>"><?php echo $label ?>
+		<?php else : ?>
+			<select name="db_type">
+			<?php foreach($db_options as $db_option_type => $label) : ?>
+				<option value="<?php echo $db_option_type ?>" <?php if(isset($db_type) && $db_type == $db_option_type) { echo "SELECTED"; } ?>><?php echo $label ?></option>
+			<?php endforeach ?>
+			</select>
+		<?php endif ?>
 			   </td>
             </tr>
 			<tr>

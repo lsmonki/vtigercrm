@@ -752,9 +752,7 @@
 			<notnull />
 		</field>
 		<field name="due_date" type="D" />
-		<field name="time_start" type="C" size="50">
-			<notnull />
-		</field>
+		<field name="time_start" type="C" size="50" />
 		<field name="sendnotification" type="C" size="3">
 			<notnull />
 			<default value="0"/>
@@ -771,6 +769,7 @@
 		</field>
 		<field name="visibility" type="C" size="50">
 			<notnull />
+			<default value="all" />
 		</field>
 
 		<index name="activity_activityid_subject_idx">
@@ -1726,53 +1725,6 @@
 
 		<index name="campaigngrouprelation_IDX1">
 			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-	<table name="sogrouprelation">
-		<field name="salesorderid" type="I" size="19">
-			<key />
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
-		</field>
-		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
-		</field>
-
-		<index name="sogrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-	<table name="invoicegrouprelation">
-		<field name="invoiceid" type="I" size="19">
-			<key />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
-		</field>
-		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
-		</field>
-
-		<index name="invoicegrouprelation_groupname_invoiceid_idx">
-			<col>groupname</col>
-			<col>invoiceid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-	<table name="pogrouprelation">
-		<field name="purchaseorderid" type="I" size="19">
-			<key />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
-		</field>
-		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
-		</field>
-
-		<index name="pogrouprelation_groupname_purchaseorderid_idx">
-			<col>groupname</col>
-			<col>purchaseorderid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -2738,23 +2690,6 @@
 		</field>
 	</table>
 
-	<table name="profile2globalpermissions">
-		<field name="profileid" type="I" size="19">
-			<key />
-			<constraint>REFERENCES profile(profileid) ON DELETE CASCADE</constraint>
-		</field>
-		<field name="globalactionid" type="I" size="19">
-			<key />
-		</field>
-		<field name="globalactionpermission" type="I" size="19" />
-
-		<index name="idx_profile2globalpermissions">
-			<col>profileid</col>
-			<col>globalactionid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
 	<table name="activsubtype">
 		<field name="activesubtypeid" type="I" size="19">
 			<key />
@@ -2864,6 +2799,23 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="profile2globalpermissions">
+		<field name="profileid" type="I" size="19">
+			<key />
+			<constraint>REFERENCES profile(profileid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="globalactionid" type="I" size="19">
+			<key />
+		</field>
+		<field name="globalactionpermission" type="I" size="19" />
+
+		<index name="idx_profile2globalpermissions">
+			<col>profileid</col>
+			<col>globalactionid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 	<table name="profile2tab">
 		<field name="profileid" type="I" size="11" />
 		<field name="tabid" type="I" size="10" />
@@ -2940,9 +2892,7 @@
 		<field name="share_action_id" type="I" size="19">
 			<key />
 		</field>
-		<field name="share_action_name" type="C" size="200">
-			<key />
-		</field>
+		<field name="share_action_name" type="C" size="200" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -3063,6 +3013,21 @@
 		</index>
 		<index name="salesorder_contactid_idx">
 			<col>contactid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="sogrouprelation">
+		<field name="salesorderid" type="I" size="19">
+			<key />
+			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="groupname" type="C" size="100">
+			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+		</field>
+
+		<index name="sogrouprelation_groupname_idx">
+			<col>groupname</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -3475,6 +3440,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="pogrouprelation">
+		<field name="purchaseorderid" type="I" size="19">
+			<key />
+			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="groupname" type="C" size="100">
+			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+		</field>
+
+		<index name="pogrouprelation_groupname_purchaseorderid_idx">
+			<col>groupname</col>
+			<col>purchaseorderid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 	<table name="pobillads">
 		<field name="pobilladdressid" type="I" size="19">
 			<key />
@@ -3569,6 +3550,22 @@
 		<field name="invoicestatus" type="C" size='200' />
 
 		<index name="invoice_purchaseorderid_idx">
+			<col>invoiceid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="invoicegrouprelation">
+		<field name="invoiceid" type="I" size="19">
+			<key />
+			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="groupname" type="C" size="100">
+			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+		</field>
+
+		<index name="invoicegrouprelation_groupname_invoiceid_idx">
+			<col>groupname</col>
 			<col>invoiceid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
