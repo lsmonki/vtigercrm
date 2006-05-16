@@ -16,6 +16,12 @@ global $calpath,$callink;
        
 	<!-- Add Event DIV starts-->
 	<script language="JavaScript" type="text/javascript" src="general.js"></script>	
+
+	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+	<script type="text/javascript" src="jscalendar/calendar.js"></script>
+	<script type="text/javascript" src="jscalendar/lang/calendar-<? echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
+	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+
 	<div class="calAddEvent" style="display:none" id="addEvent" align=center> 
 	<form name="appSave" onSubmit="return check_form()" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
@@ -28,25 +34,25 @@ global $calpath,$callink;
 	<input type="hidden" name="duration_minutes" value="0">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
-			<td class="lvtHeaderText">Add Event</b></td>
+			<td class="lvtHeaderText"><? echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 			<td align=right>[ <a href="#" onClick="ghide('addEvent')">Close</a> ]</td>
 		</tr>
 		</table>
 		
 		<table border=0 cellspacing=0 cellpadding=5 width=90% >
 		<tr>
-			<td nowrap  width=20%><b>Event Type :</b></td>
+			<td nowrap  width=20%><b><?echo $mod_strings['LBL_EVENTTYPE']?> :</b></td>
 			<td width=80%>
 				<table>
 					<tr>
-					<td><input type="radio" name='activitytype' value='Call' onclick='document.appSave.module.value="Activities";' style='vertical-align: middle;' checked></td><td> Call</td><td style="width:10px">
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onclick='document.appSave.module.value="Activities";'></td><td> Meeting</td><td style="width:20px">
+					<td><input type="radio" name='activitytype' value='Call' onclick='document.appSave.module.value="Activities";' style='vertical-align: middle;' checked></td><td><?echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
+					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onclick='document.appSave.module.value="Activities";'></td><td><?echo $mod_strings['LBL_MEET']?></td><td style="width:20px">
 					</tr>
 				</table>
 			</td>
 		</tr>
 		<tr>
-			<td nowrap ><b>Event Name :</b></td>
+			<td nowrap ><b><?echo $mod_strings['LBL_EVENTNAME']?> :</b></td>
 			<td><input name="subject" type="text" class="textbox" style="width:90%"></td>
 		</tr>
 		</table>
@@ -58,16 +64,32 @@ global $calpath,$callink;
 				<tr>
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
-					<tr><td colspan=3 ><b>Event starts at</b></td></tr>
-				        <tr><td><input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-                                        <tr><td><input type="text" name="date_start" id="date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+					<tr><td colspan=3 ><b><?echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
+				        <tr><td>
+						<input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time..">
+					</td></tr>
+                                        <tr><td>
+						<input type="text" name="date_start" id="jscal_field_date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+						<script type="text/javascript">
+                					Calendar.setup ({
+								inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+									})
+     						        </script>
+					</td></tr>
 					</table>
 				</td>
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
-					<tr><td><b>Event ends on</b></td></tr>
+					<tr><td><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
 				        <tr><td><input type="text" name="time_end" id="time_end" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
-				        <tr><td><input type="text" name="due_date" id="due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.."></td></tr>
+				        <tr><td>
+						<input type="text" name="due_date" id="jscal_field_due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+					<script type="text/javascript">
+                                                        Calendar.setup ({
+                                                                inputField : "jscal_field_due_date", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+                                                                        })
+                                                        </script>
+					</td></tr>
 					</table>
 				</td>
 				</tr>
@@ -85,11 +107,11 @@ global $calpath,$callink;
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventRepeatUI');">Invite</a></td>
+					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');">Reminder</a></td>
+					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);">Repeat</a></td>
+					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>
