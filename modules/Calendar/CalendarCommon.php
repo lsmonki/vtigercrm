@@ -213,7 +213,7 @@ function getSharedUserListViewEntries($sharedid)
 function getOtherUserName($id)
 {
 	global $adb;
-	$query="select * from users where deleted=0 and id!=".$id;
+	$query="select * from users where deleted=0 and status='Active' and id!=".$id;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	$user_details=Array();
