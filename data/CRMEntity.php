@@ -60,6 +60,17 @@ class CRMEntity extends SugarBean
     		$recur_type='';	
 	// Code included by Jaguar - Ends
 
+	//Code included by Minnie - Starts
+	if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+	{
+		$selected_users_string =  $_REQUEST['inviteesid'];
+		$invitees_array = explode(';',$selected_users_string);
+
+	}
+	else
+		$invitees_array='';
+	//Code included by Minnie - Ends	
+
 	foreach($this->tab_name as $table_name)
 	{
 		if($table_name == "crmentity")
@@ -165,6 +176,15 @@ class CRMEntity extends SugarBean
 	      			$this->insertIntoRecurringTable($table_name,$module);
 			}		
 		}// Code included by Jaguar - Ends
+		// Code included by Minnie  -  starts	
+		elseif($table_name == "invitees") 
+		{
+			if($invitees_array != '')
+			{
+				$this->insertIntoInviteeTable($table_name,$module,$invitees_array);
+			}
+		}
+		// Code included by Minnie  -  Ends
 		else
 		{
 			$this->insertIntoEntityTable($table_name, $module);			
@@ -953,6 +973,24 @@ $log->debug("reminder_time is ".$reminder_time);
 		$this->activity_reminder($this->id,'0',0,$recurid,'delete');
 	}
 }
+
+// Code included by Minnie - starts
+function insertIntoInviteeTable($table_name,$module,$invitees_array)
+{
+	global $log,$adb;
+	$log->debug("Entering insertIntoInviteeTable(".$table_name.",".$module.",".$invitees_array.") method ...");
+	foreach($invitees_array as $inviteeid)
+	{
+		if($inviteeid != '')
+		{
+			$query="insert into invitees values(".$this->id.",".$inviteeid.")";
+			$adb->query($query);
+		}
+	}
+	$log->debug("Exiting insertIntoInviteeTable method ...");
+
+}
+// Code included by Minnie - Ends
 
 // Code included by Jaguar - starts 
 function insertIntoRecurringTable($table_name,$module)
