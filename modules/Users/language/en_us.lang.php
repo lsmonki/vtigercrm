@@ -329,6 +329,33 @@ $mod_strings = Array(
 'LBL_ACTIVITY_REMINDER_DESCRIPTION'=>'Notify before an event to occur based on the reminder set',
 'LBL_MESSAGE'=>'Message',
 
+//Added for Global Privileges
+
+'Public: Read Only'=>'Public: Read Only',
+'Public: Read, Create/Edit'=>'Public: Read, Create/Edit',
+'Public: Read, Create/Edit, Delete'=>'Public: Read, Create/Edit, Delete',
+'Private'=>'Private',
+'Hide Details'=>'Hide Details',
+'Hide Details and Add Events'=>'Hide Details and Add Events',
+'Show Details'=>'Show Details',
+'Show Details and Add Events'=>'Show Details and Add Events',
+
+'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other users ',
+'LBL_USR_CAN_ACCESS'=>'Users can ',
+'LBL_USR_OTHERS'=>' other users ',
+
+'Read Only '=>'Read Only ',
+'Read, Create/Edit, Delete '=>'Read, Create/Edit, Delete ',
+'Read, Create/Edit '=>'Read, Create/Edit ',
+'Read/Write'=>'Read/Write',
+'LBL_GO_TO_TOP'=>'Go to Top',
+'LNK_CLICK_HERE'=>'Click here',
+'LBL_RULE_NO'=>'Rule No.',
+'LBL_CAN_BE_ACCESSED'=>'can be accessed by',
+'LBL_PRIVILEGES'=>'Privileges',
+'LBL_OF'=>'of',
+
+
 
 //Added for 4.2GA support for mail server integration
 'LBL_ADD_MAILSERVER_BUTTON_TITLE'=>'Add Mail Server',
