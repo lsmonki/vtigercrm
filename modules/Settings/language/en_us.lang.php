@@ -178,7 +178,7 @@ $mod_strings = Array(
 
 'CUSTOMFIELD'=>'Custom Field',
 
-
+'LBL_ADD_FIELD'=>'Add Field',
 
 'PicklistFields'=>' Picklist Fields',
 
