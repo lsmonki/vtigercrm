@@ -63,7 +63,7 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 		else
 			$output .=   '<tr class="oddListRow">';
 
-		$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_name.'</TD>';
+		$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$app_strings[$entity_name].'</TD>';
 		$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_perr.'</TD>';
 		$output .=  '</tr>';
 

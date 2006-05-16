@@ -20,7 +20,7 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title("Users", $_REQUEST['fld_module'].': Profiles', true);
+echo get_module_title("Users", $app_strings{$_REQUEST['fld_module']}.': Profiles', true);
 echo '<BR>';
 
 global $adb;
@@ -45,7 +45,7 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_module)
 {
 	global $adb;
 	echo '<table border="0" cellpadding="0" cellspacing="0" width="30%"><tr><td>';
-	echo get_form_header("Profiles", "", false );
+	echo get_form_header($mod_strings['LBL_PROFILES'], "", false );
 	echo '</td></tr></table>';
 	$standCustFld= '';
 	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="30%">';

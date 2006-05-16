@@ -21,7 +21,7 @@ global $app_strings;
 global $app_list_strings;
 
 echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Users",'Roles', true);
+echo get_module_title("Users", $mod_strings['LBL_ROLES'], true);
 
 global $adb;
 global $theme;
@@ -51,7 +51,7 @@ function getStdOutput($roleListResult, $noofrows, $mod_strings)
 	$standCustFld .= '<br><BR>'; 
 	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="30%">';
 	$standCustFld .=  '<tr>';
-	$standCustFld .=   '<td class="ModuleListTitle" width="18%" height="21" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>';
+	$standCustFld .=   '<td class="ModuleListTitle" width="18%" height="21" style="padding:0px 3px 0px 3px;"><div><b>'.$mod_strings['LBL_OERATION'].'</b></div></td>';
 	$standCustFld .=   '<td class="ModuleListTitle" height="21" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ROLE_NAME'].'</b></td>';
 	$standCustFld .=  '</tr>';
 	

@@ -32,6 +32,7 @@ $mod_strings = Array(
 'ERR_ONE_CHAR'=>'Please enter at least one letter or number for your search ...',
 
 'LBL_OPEN_TASKS'=>'My Open Tasks',
+'LBL_SEARCH_RESULTS'=>'Search Results',
 );
 
 ?>

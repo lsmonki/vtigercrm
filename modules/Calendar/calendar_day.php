@@ -133,7 +133,7 @@ function check_form()
 //			inputField : "inlineCal15CallSavejscal_field", ifFormat : "%Y-%m-%d", showsTime : false, button : "inlineCal15CallSavejscal_trigger", singleClick : true, step : 1
 //		});
 		</script>
-        <td align="left" valign=top><input title='Save [Alt+S]' accessKey='S' class='button' type='submit' name='button' value=' Save ' ></td>
+        <td align="left" valign=top><input title='Save [Alt+S]' accessKey='S' class='button' type='submit' name='button' value='<?php echo $mod_strings["LBL_SAVE"]; ?>' ></td>
       </tr>
     </table>
   </form>
@@ -268,7 +268,7 @@ function check_form()
 	 echo " </td>\n";
 	 echo " <td align=\"center\" nowrap=\"nowrap\" class=\"calhead\">\n";
 	 //echo "&nbsp;". strftime($mod_strings['LBL_DATE_TITLE'],$from->ts) ."&nbsp;(". $mod_strings['LBL_WEEK']." ". $this->pref->menulink($callink ."calendar_week&t=".Date("Ymd",$from->ts), $wn ."/". $yy, $wn ."/". $yy ) .")&nbsp;";
-	 echo "&nbsp;". strftime($mod_strings['LBL_DATE_TITLE'],$from->ts) ."&nbsp;";
+	 echo "&nbsp;". $mod_strings['LBL_DAY'.Date("w",$ts)].", ". Date("d",$ts)." ".$mod_strings['cal_month_long'][Date("n",$ts)]." ".Date("Y",$ts) ;
 	 echo " </td>\n";
 	 echo " <td nowrap=\"nowrap\" width=\"20\" align=\"center\">\n";
      echo $this->pref->menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate());

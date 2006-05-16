@@ -22,7 +22,7 @@ global $app_strings;
 global $app_list_strings;
 
 echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Users", $_REQUEST['fld_module'].': '.$mod_strings['LBL_FIELD_LEVEL_ACCESS'], true);
+echo get_module_title("Users", $app_strings{$_REQUEST['fld_module']}.': '.$mod_strings['LBL_FIELD_LEVEL_ACCESS'], true);
 echo '<BR>';
 
 global $adb;

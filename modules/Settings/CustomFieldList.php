@@ -54,6 +54,7 @@ echo getCustomFieldList($tabid,$mod_strings,$fld_module);
 function getCustomFieldList($tabid, $mod_strings, $fld_module)
 {
   global $adb;
+  global $app_strings;
         //fieldid,fieldlabel,column_name,typdesc
 
 	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype from field where tabid=".$tabid." and generatedtype=2 order by sequence";
@@ -67,7 +68,7 @@ $list .='<form action="index.php" method="post" name="CustomFieldUpdate" id="for
 
 $list .= '<tr height=20>';
 
-$list .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div>';
+$list .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>'.$app_strings['LBL_OPERATION'].'</b></div>';
 
 $list .= '</td>';
 

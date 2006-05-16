@@ -50,6 +50,12 @@ $mod_strings = Array(
 'LBL_USER_SETTINGS'=>'User Settings',
 'LBL_THEME'=>'Theme:',
 'LBL_LANGUAGE'=>'Language:',
+///
+///Added for choice per country
+///
+'LBL_COUNTRY'=>'Country',
+'LBL_CHOOSE_COUNTRY' =>'--Choose Country--',
+
 'LBL_ADMIN'=>'Admin:',
 'LBL_USER_INFORMATION'=>'User Information',
 'LBL_OFFICE_PHONE'=>'Office Phone:',
@@ -210,8 +216,8 @@ $mod_strings = Array(
 'LBL_ROLE_PROFILE_NAME'=>'Associate With Profile',
 
 //Added fields in OrgSharingDetailsView.php
-'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
 'LBL_ORG_SHARING_PRIVILEGES_HEADER' => 'Setup: Organisation Sharing Privileges',
+'LBL_ORG_SHARING_PRIVILEGES'=>'Crm Parts',
 'LBL_ACCESS_PRIVILEGE' =>'Access Privilege',
 'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
 'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
@@ -287,7 +293,8 @@ $mod_strings = Array(
 
 //Added for patch2
 'LBL_FILE_INFORMATION'=>'File Information',
-
+//Added for Translate of HardCode
+'LBL_PROFILES'=>'Profiles',
 
 'LBL_MAP_START'=>'Map Start',
 );

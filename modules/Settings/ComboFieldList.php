@@ -146,13 +146,14 @@ $tabid = fetchTabIDVal($fldmodule);
 //Standard PickList Fields
 function getStdOutput($custFldArray, $mod_strings)
 {
+	global $app_strings;
 	$standCustFld = ''; 
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
 	$standCustFld .= get_form_header($mod_strings['LBL_STANDARD_FIELDS'], "", false );
 	$standCustFld .= '</td></tr></table>';
 	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
 	$standCustFld .= '<tr height=20>';
-	$standCustFld .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>';
+	$standCustFld .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>'.$app_strings["LBL_OPERATION"].'</b></div></td>';
 	$standCustFld .= '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['FieldName'].'</b></td>';
 	$standCustFld .= '</tr>';
 	$i=1;
@@ -204,7 +205,7 @@ if($fld_module != 'Activities' && $fld_module != 'Events' && $fld_module != 'Rss
 	$cust_fld_header = get_form_header($mod_strings['CustomFields'], "", false );
 	$xtpl->assign("CUSTOMHEADER", $cust_fld_header);
 	$custom_combo_table_header = '<tr>
-		<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>
+		<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>'.$app_strings["LBL_OPERATION"].'</b></div></td>
         <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['FieldName'].'</b></td>
 	</tr>';
 

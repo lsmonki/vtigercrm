@@ -117,7 +117,7 @@ function build_case_where_clause ($the_query_string) {
 }
 */
 //main
-echo get_module_title("", "Search Results", true); 
+echo get_module_title("", $mod_strings['LBL_SEARCH_RESULTS'], true); 
 echo "\n<BR>\n";
 if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
 	//get accounts
