@@ -148,8 +148,8 @@ $convertlead .='<tr>
 		</tr>
 		<tr>
 			<td colspan="2" align="center">
-				<input name="Save" value=" Save " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verify_data(ConvertLead)" type="submit"  class="classBtn">&nbsp;&nbsp;
-				<input type="button" name=" Cancel " value=" Cancel " onClick="hide(\'orgLay\')" class="classBtn">
+				<input name="Save" value=" '.$app_strings['LBL_SAVE_BUTTON_LABEL'].' " onclick="this.form.action.value=\'LeadConvertToEntities\'; return verify_data(ConvertLead)" type="submit"  class="classBtn">&nbsp;&nbsp;
+				<input type="button" name=" Cancel " value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " onClick="hide(\'orgLay\')" class="classBtn">
 			</td>
 		</tr>
 	</table>
