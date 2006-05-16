@@ -751,23 +751,26 @@ function getDetailAssociatedProducts($module,$focus)
 	global $adb;
 	global $theme;
 	global $log;
+	global $app_strings;
+	
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$log->debug("in getDetailAssociatedProducts. Module is  ".$module);
 
 	$output = '';
-	$output .= '<table class="prdTab" border="0" cellspacing="0" cellpadding="0" id="proTab">';
-	$output .=  '<tr><th width="20%">Product</th>';
+	$output .= '<table class="prdTab" border="0" cellspacing="0" cellpadding="2" id="proTab">';
+	$output .= '<tr><td colspan="6" class="detailedViewHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td></tr>';
+	$output .=  '<tr><th width="20%">'.$app_strings['LBL_PRODUCT'].'</th>';
 
 	if($module == 'Quotes' || $module == 'SalesOrder' || $module == 'Invoice')
 	{
-		$output .= '<th width="12%">Qty In Stock</th>';
+		$output .= '<th width="12%">'.$app_strings['LBL_QTY_IN_STOCK'].'</th>';
 	}
 
-	$output .= '<th width="10%">Qty</th>';
-	$output .= '<th width="10%">Unit Price </th>';
-	$output .= '<th width="19%">List Price</th>';
-	$output .= '<th width="10%">Total</th>';
+	$output .= '<th width="10%">'.$app_strings['LBL_QTY'].'</th>';
+	$output .= '<th width="10%">'.$app_strings['LBL_UNIT_PRICE'].'</th>';
+	$output .= '<th width="19%">'.$app_strings['LBL_LIST_PRICE'].'</th>';
+	$output .= '<th width="10%">'.$app_strings['LBL_TOTAL'].'</th>';
 	$output .= '</tr>';
 
 	if($module == 'Quotes')
@@ -827,22 +830,22 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
 	$output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
-	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
+	$output .= '<td><div align="right"><b>'.$app_strings['LBL_SUB_TOTAL'].':</b></div></td>';
 	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .=  '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>Tax:</b></div></td>';
+	$output .= '<td><div align="right"><b>'.$app_strings['LBL_TAX'].':</b></div></td>';
 	$output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .= '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
+	$output .= '<td><div align="right"><b>'.$app_strings['LBL_ADJUSTMENT'].':</b></div></td>';
 	$output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
 	$output .= '</tr>';
 	$output .= '<tr>'; 
 	$output .= '<td>&nbsp;</td>';
-	$output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
+	$output .= '<td><div align="right"><b>'.$app_strings['LBL_GRAND_TOTAL'].':</b></div></td>';
 	$output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
 	$output .= '</tr>';
 	$output .= '</table>';

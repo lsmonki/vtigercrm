@@ -186,6 +186,24 @@ $mod_strings = Array(
 'LBL_CURSTATUS'=>'Current Status',
 'LBL_PENDING'=>'Pending',
 'LBL_MORE'=>'More',
+'LBL_EVERYDAY'=>'Every Day',
+'LBL_EVERYWEEK'=>'Every Week',
+'LBL_EVERYMON'=>'Every Month',
+
+'LBL_INVITE_INST1'=>'To invite, select the users from the "Available Users" list and click the "Add" button.',
+'LBL_INVITE_INST2'=>'To remove, select the users in the "Selected Users" list and the click "Remove" button.',
+'LBL_SELUSR_INFO'=>' Selected users will receive an email about the Event.',
+'LBL_SEL_USERS'=>'Selected Users',
+'LBL_AVL_USERS'=>'Available Users',
+'LBL_ADD_BUTTON'=>'Add',
+'LBL_RMV_BUTTON'=>'Remove',
+'LBL_RMD_ON'=>'Remind on',
+'LBL_SDRMD'=>'Send Reminder to',
+'LBL_ENABLE_REPEAT'=>'Enable Repeat',
+'LBL_REPEAT_ONCE'=>'Repeat once in every',
+
+
+
 
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS

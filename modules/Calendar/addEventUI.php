@@ -1,9 +1,7 @@
 <?php
 require_once('include/utils/CommonUtils.php');
 require_once('modules/Activities/Activity.php');
-global $calpath,$callink;
- $calpath = 'modules/Calendar/';
- $callink = 'index.php?module=Calendar&action=';
+require_once('modules/Calendar/Calendar.php');
 
  global $theme;
  $theme_path="themes/".$theme."/";
@@ -11,7 +9,89 @@ global $calpath,$callink;
  require_once ($theme_path."layout_utils.php");
  global $mod_strings,$app_strings,$current_user;
  $focus= new Activity();
- $userDetails=getAllUserName();
+ $calendar = new Calendar();
+ $userDetails=getOtherUserName($current_user->id);
+ function getTimeCombo()
+ {
+	global $calendar;
+	$combo = '';
+	if($calendar->hour_format == 'am/pm')
+	{
+		for($i=0; $i<48; $i++)
+		{
+			$temp = $i%2;
+			if($temp == 1)
+			{
+				$hr = ($i/2) - 0.5;
+				if($hr >= 12)
+				{
+					if($hr == 12)
+						$text = $hr.':30pm';
+					else
+					{
+						$temp_hr = $hr - 12;
+						$text = $temp_hr.':30pm';
+					}
+				}
+				else
+					$text = $hr.':30am';
+				if($hr <= 9 && strlen(trim($hr)) < 2)
+					$hr = "0".$hr;
+				$value = $hr.':30';
+			}
+			else
+			{
+				$hr = ($i/2);
+				if($hr >= 12)
+				{
+					if($hr == 12)
+						$text = $hr.':00pm';
+					else
+					{
+						$temp_hr =$hr - 12;
+						$text = $temp_hr.':00pm';
+					}
+				}
+				else
+					$text = $hr.':00am';
+				if($hr <= 9 && strlen(trim($hr)) < 2)
+					$hr = "0".$hr;
+				$value = $hr.':00';
+			}
+			$combo .= '<option value="'.$value.'" >'.$text.'</option>';
+		}
+	}
+	else
+	{
+		for($i=0;$i<48;$i++)
+		{
+			$temp = $i%2;
+			if($temp == 1)
+			{
+				$hr = ($i/2) - 0.5;
+				if($hr <= 9 && strlen(trim($hr
+							  ))
+						< 2)
+					$hr = "0".$hr;
+				$value = $hr.':30';
+			}
+			else
+			{
+				$hr = ($i/2);
+				if($hr <= 9 && strlen(trim($hr
+							  )) < 2)
+					$hr = "0".$hr;
+				$value = $hr.':00';
+			}
+			$text = $value;
+
+			$combo .= '<option value="'.$value.'" >'.$text.'</option>';
+		}
+	}
+	return $combo;
+		
+ }
+
 ?>
        
 	<!-- Add Event DIV starts-->
@@ -30,12 +110,15 @@ global $calpath,$callink;
 	<input type="hidden" name="record" value="">
 	<input type="hidden" name="taskstatus" value="Not Started">
 	<input type="hidden" name="duration_hours" value="0">
+	<input type="hidden" name="hrformat" value="<? echo $calendar->hour_format ?>">
 	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
 	<input type="hidden" name="duration_minutes" value="0">
+	<input type=hidden name="inviteesid" id="inviteesid" value="">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
 			<td class="lvtHeaderText"><? echo $mod_strings['LBL_ADD_EVENT']?></b></td>
-			<td align=right>[ <a href="#" onClick="ghide('addEvent')">Close</a> ]</td>
+			<td align=right>
+				<a href="javascript:ghide('addEvent');"><img src="<?echo $image_path?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
 		
@@ -66,7 +149,10 @@ global $calpath,$callink;
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3 ><b><?echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
 				        <tr><td>
-						<input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time..">
+						<select name="time_start" id="time_start">
+						<? $combo = getTimeCombo(); echo $combo;?>
+						</select>
+						<!--input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."-->
 					</td></tr>
                                         <tr><td>
 						<input type="text" name="date_start" id="jscal_field_date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
@@ -81,7 +167,12 @@ global $calpath,$callink;
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
-				        <tr><td><input type="text" name="time_end" id="time_end" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."></td></tr>
+				        <tr><td>
+						<select name="time_end" id="time_end">
+                                                <? $combo = getTimeCombo(); echo $combo;?>
+                                                </select>
+						<!--input type="text" name="time_end" id="time_end" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."-->
+					</td></tr>
 				        <tr><td>
 						<input type="text" name="due_date" id="jscal_field_due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
 					<script type="text/javascript">
@@ -130,22 +221,24 @@ global $calpath,$callink;
 						<tr>
 							<td colspan=3>
 								<ul style="padding-left:20px">
-								<li>To invite, select the users from the "Available Users" list and click the "Add"  button. 
-								<li>To remove, select the users in the "Selected Users" list and the click "Remove" button.
+								<li><?echo $mod_strings['LBL_INVITE_INST1']?> 
+								<li><?echo $mod_strings['LBL_INVITE_INST2']?>
 								</ul>
 							</td>
 						</tr>
 						<tr>
-							<td><b>Available  Users</b></td>
+							<td><b><?echo $mod_strings['LBL_AVL_USERS']?></b></td>
 							<td>&nbsp;</td>
-							<td><b>Selected Users</b></td>
+							<td><b><?echo $mod_strings['LBL_SEL_USERS']?></b></td>
 						</tr>
 						<tr>
 							<td width=40% align=center valign=top>
-							<select name="available" id="available" class=small size=5 multiple style="height:70px;width:100%">
+							<select name="availableusers" id="availableusers" class=small size=5 multiple style="height:70px;width:100%">
 							<?php
-								for($i=1;$i<=count($userDetails);$i++){
-									echo "<option>".$userDetails[$i]."</option>";
+								foreach($userDetails as $id=>$name)
+								{
+									if($id != '')
+										echo "<option value=".$id.">".$name."</option>";
 									}
 							?>
 								</select>
@@ -158,8 +251,7 @@ global $calpath,$callink;
 							<td width=40% align=center valign=top>
 								<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
 								</select>
-								<div align=left>
-								Selected users will receive an email about the Event.
+								<div align=left><?echo $mod_strings['LBL_SELUSR_INFO']?>
 								</div>
 							
 							</td>
@@ -177,7 +269,7 @@ global $calpath,$callink;
 				<table border=0 cellspacing=0 cellpadding=2  width=100%>
 				<tr>
 					<td nowrap align=right width=20% valign=top>
-						<b>Remind on : </b>
+						<b><?echo $mod_strings['LBL_RMD_ON']?> : </b>
 					</td>
 					<td width=80%>
 						<table border=0>
@@ -195,7 +287,7 @@ global $calpath,$callink;
 				</tr>
 				<tr>
 					<td nowrap align=right>
-					Send Reminder to :
+					<?echo $mod_strings['LBL_SDRMD']?> :
 					</td>
 					<td >
 						<input type=text class=textbox style="width:90%" value="Type Email ID..">
@@ -208,20 +300,20 @@ global $calpath,$callink;
 				<table border=0 cellspacing=0 cellpadding=2  width=100%>
 				<tr>
 					<td nowrap align=right width=20% valign=top>
-					<strong>Repeat :</strong>
+					<strong><?echo $mod_strings['LBL_REPEAT']?> :</strong>
 					</td>
 					<td nowrap width=80% valign=top>
 						<table border=0 cellspacing=0 cellpadding=0>
 						<tr>
 							<td width=20><input type="checkbox" onClick="showhide('repeatOptions')"></td>
-							<td colspan=2>Enable Repeat</td>
+							<td colspan=2><?echo $mod_strings['LBL_RMD_ON']?></td>
 						</tr>
 						<tr>
 							<td colspan=2>
 							<div id="repeatOptions" style="display:none">
 								<table border=0 cellspacing=0 cellpadding=2>
 								<tr>
-								<td>Repeat once in every</td>
+								<td><?echo $mod_strings['LBL_REPEAT_ONCE']?></td>
 								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
 								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
 								</tr>
@@ -289,7 +381,7 @@ global $calpath,$callink;
 					<tr>
 						<td><input type="checkbox" id="cboxRepeatEvent" name="repeatEvent" onClick="showhideRepeat('cboxRepeatEvent','repeatOptions');showhideRepeat('cboxRepeatEvent','stopRepeatOptions')"></td>
 						<td>Repeat this event </td>
-						<td><select id="repeatOptions" style="display:none" class=small><option>Every day</option><option>Every week</option><option>Every Month</option></select></td>
+						<td><select id="repeatOptions" style="display:none" class=small><option><? echo $mod_strings['LBL_EVERYDAY']?></option><option><? echo $mod_strings['LBL_EVERYWEEK']?></option><option><? echo $mod_strings['LBL_EVERYMON']?></option></select></td>
 					</tr>
 					</table>
 					<table border=0 cellspacing=0 cellpadding=2 id="stopRepeatOptions" style="display:none">
@@ -316,8 +408,8 @@ global $calpath,$callink;
 		<tr>
 			<td valign=top></td>
 			<td  align=right>
-				<input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="Save">
-				<input type="button" class=small style="width:90px" value="Close" onClick="ghide('addEvent')">
+				<input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="<?echo $mod_strings['LBL_SAVE']?>">
+				<input type="button" class=small style="width:90px" value="<?echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
 			</td>
 		</tr>
 		</table>
@@ -326,4 +418,5 @@ global $calpath,$callink;
 	<script language="JavaScript" type="text/JavaScript">
 setObjects();
 	</script>
+
 	<!-- Add Activity DIV stops-->

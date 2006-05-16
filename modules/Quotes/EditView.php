@@ -138,7 +138,7 @@ if($focus->mode == 'edit')
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$num_of_products = getNoOfAssocProducts($module,$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
-	$associated_prod = getProductDetailsBlockInfo('edit','Quotes',$focus); 
+	$associated_prod = getAssociatedProducts("Quotes",$focus);//getProductDetailsBlockInfo('edit','Quotes',$focus); 
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
 	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);

@@ -222,8 +222,15 @@ elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinv
 elseif($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
+	$num_of_products = getNoOfAssocProducts("Invoice",$focus);
+	$smarty->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = getAssociatedProducts("Invoice",$focus);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$se_array=getProductDetailsBlockInfo($focus->mode,"Invoice",$focus);
+	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
+	$smarty->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
+	$smarty->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+	$smarty->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 }
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
@@ -251,7 +258,7 @@ if(isset($cust_fld))
         $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
 
-		
+$smarty->assign("ASSOCIATEDPRODUCTS",$associated_prod);
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $smarty->assign("RETURN_MODULE","Invoice");

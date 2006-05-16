@@ -136,6 +136,8 @@ function switchClass(myModule,toStatus) {
 
 function check_form()
 {
+	formSelectColumnString('inviteesid');
+
         if(document.appSave.subject.value == "")
         {
                 alert("Missing Event Name");
@@ -161,7 +163,7 @@ function check_form()
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 function setObjects()
 {
-        availListObj=getObj("available")
+        availListObj=getObj("availableusers")
         selectedColumnsObj=getObj("selectedusers")
 
 }
@@ -253,14 +255,15 @@ function delColumn()
         }
 }
 
-function formSelectColumnString()
+function formSelectColumnString(usr)
 {
+	usr_id = document.getElementById(usr);
 	var selectedColStr = "";
         for (i=0;i<selectedColumnsObj.options.length;i++)
         {
         	selectedColStr += selectedColumnsObj.options[i].value + ";";
         }
-        document.SharingForm.sharedid.value = selectedColStr;
+	usr_id.value = selectedColStr;
 }
 
 function ajaxCalSaveResponse(response)

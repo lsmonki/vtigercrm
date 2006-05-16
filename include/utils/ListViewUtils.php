@@ -1981,6 +1981,7 @@ Return type void.
 
 function setSessionVar($lv_array)
 {
+	$start = $_REQUEST['start'];
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
 	$lv_array['start']=$_REQUEST['start'];
 	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
@@ -1988,6 +1989,11 @@ function setSessionVar($lv_array)
 
 	$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
 
+	if ($start < ceil ($noofrows / $list_max_entries_per_page) && $start !='')
+	{
+		$start = ceil ($noofrows / $max_ent);
+		$_SESSION['lvs'][$currentModule]['start'] = $start;
+	}
 }
-								
+
 ?>

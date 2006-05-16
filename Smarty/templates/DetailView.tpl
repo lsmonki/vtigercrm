@@ -213,9 +213,7 @@ Calendar.setup ({ldelim}
 							   {assign var=keycntimage value=$data.cntimage}
                                       {if $label ne ''}
                                              {if $keycntimage ne ''}
-							{if $keyid neq 'P'}<!-- only to avoid Product Details in Inventory-->
 								      <td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
-							{/if}
 								     {else}
 								            <td class="dvtCellLabel" align=right width=25%>{$label}</td>
 								     {/if}  
@@ -341,11 +339,7 @@ Calendar.setup ({ldelim}
                                                        </div>
                                                   </td>
 						{else}
-						   {if $keyid eq 'P'}<!-- only for Product Details in Inventory-->
-							{$ASSOCIATED_PRODUCTS}
-                                             	   {else}
                                                   	<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
-                                                   {/if}
 						{/if}
 							   {else} 
                                            <td class="dvtCellLabel" align=right></td>
@@ -362,6 +356,10 @@ Calendar.setup ({ldelim}
                     {*-- End of Blocks--*} 
 			</td>
                 </tr>
+		<!-- Inventory - Product Details informations -->
+		   <tr>
+			{$ASSOCIATED_PRODUCTS}
+		   </tr>
 		</table>
 		</td>
 		<td width=20% valign=top style="border-left:2px dashed #cccccc;padding:13px">

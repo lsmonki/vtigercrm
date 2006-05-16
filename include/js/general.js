@@ -1366,8 +1366,9 @@ function fnAddRow(module){
 	rowCnt++;
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
-    var count = prev;
-    var row = tableName.insertRow(prev);
+    	var count = rowCnt;//prev;
+
+    	var row = tableName.insertRow(prev);
 	row.id = "row"+count;
 	if(count%2)
 		row.className = "dvtCellLabel";
@@ -1382,9 +1383,9 @@ function fnAddRow(module){
 	var colseven = row.insertCell(6);
 	colone.innerHTML="<input type='text' id='txtProduct"+count+"' name='txtProduct"+count+"' class='txtBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this,\""+module+"\")' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
 	coltwo.innerHTML="<div id='qtyInStock"+count+"'>";	
-	colthree.innerHTML="<input type='text' id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; settotalnoofrows(); calcTotal(this);' /> ";
+	colthree.innerHTML="<input type='text' id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; FindDuplicate(); settotalnoofrows(); calcTotal(this);' /> ";
 	colfour.innerHTML="&nbsp;</div><div id='unitPrice"+count+"'></div>";
-	colfive.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
+	colfive.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='FindDuplicate(); settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
 	colsix.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
 	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
@@ -1394,7 +1395,7 @@ function fnAddRowForPO(module){
 
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
-	var count = prev;
+	var count = rowCnt;//prev;
 	var row = tableName.insertRow(prev);
 	row.id = "row"+count;
 	if(count%2)
@@ -1408,9 +1409,9 @@ function fnAddRowForPO(module){
 	var colfive = row.insertCell(4);
 	var colsix = row.insertCell(5);
 	colone.innerHTML="<input type='text'id='txtProduct"+count+"' name='txtProduct"+count+"' class='txtBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this,\""+module+"\")' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
-	coltwo.innerHTML="<input type='text'id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; settotalnoofrows(); calcTotal(this);' /> ";
+	coltwo.innerHTML="<input type='text'id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; FindDuplicate(); settotalnoofrows(); calcTotal(this);' /> ";
 	colthree.innerHTML="&nbsp;<div id='unitPrice"+count+"'></div>";
-	colfour.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
+	colfour.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='FindDuplicate(); settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
 	colfive.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
 	colsix.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 

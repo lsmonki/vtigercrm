@@ -1142,7 +1142,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
-	elseif($module == 'Orders')
+	elseif($module == 'PurchaseOrder')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
