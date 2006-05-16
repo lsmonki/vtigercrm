@@ -6,10 +6,13 @@ require_once('include/utils/CommonUtils.php');
 */
 function calendar_layout(& $param_arr)
 {
+	global $mod_strings;
 	$cal_header = array ();
 	$cal_header['view'] = $param_arr['view'];
 	$cal_header['IMAGE_PATH'] = $param_arr['IMAGE_PATH'];
         $cal_header['calendar'] = $param_arr['calendar'];
+	$eventlabel = $mod_strings['LBL_EVENTS'];
+	$todolabel = $mod_strings['LBL_TODOS'];
        	get_cal_header_tab($cal_header);
 	$subheader = "";
 	$subheader .=<<<EOQ
@@ -21,8 +24,8 @@ function calendar_layout(& $param_arr)
 							<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 								<tr>
 									<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-									<td class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')" align="center" nowrap="nowrap" width="75"><b>Events</b></td>
-									<td class="dvtUnSelectedCell" style="width: 100px;" id="mi" onclick="fnLoadValues('mi','pi','mnuTab2','mnuTab')" align="center" nowrap="nowrap"><b>Todos</b></td>
+									<td class="dvtSelectedCell" id="pi" onclick="fnLoadValues('pi','mi','mnuTab','mnuTab2')" align="center" nowrap="nowrap" width="75"><b>$eventlabel</b></td>
+									<td class="dvtUnSelectedCell" style="width: 100px;" id="mi" onclick="fnLoadValues('mi','pi','mnuTab2','mnuTab')" align="center" nowrap="nowrap"><b>$todolabel</b></td>
 									<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
 								</tr>
 							</table>
@@ -473,6 +476,7 @@ function getYearViewLayout(& $cal,$type)
 
 function getdayEventLayer(& $cal,$slice)
 {
+	global $mod_strings;
 	$eventlayer = '';
 	$arrow_img_name = '';
 	$act = $cal['calendar']->day_slice[$slice]->activities;
@@ -500,7 +504,7 @@ function getdayEventLayer(& $cal,$slice)
 						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
 						<td align="left" width="85%"><span class="fontBold">'.$account_name.'</span><br>
 							<b>'.$start_hour.'</b>&nbsp;,<span class="orgTab">'.$subject.'</span>&nbsp;
-							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">[More...]</a>
+							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_MORE'].'...]</a>
 					
 						</td>
 						<td align="right" width="5%">
@@ -519,6 +523,7 @@ function getdayEventLayer(& $cal,$slice)
 
 function getmonthEventLayer(& $cal,$slice)
 {
+	global $mod_strings;
 	$eventlayer = '';
 	$arrow_img_name = '';
 	$act = $cal['calendar']->month_array[$slice]->activities;
@@ -560,7 +565,7 @@ function getmonthEventLayer(& $cal,$slice)
 		{
 			$eventlayer .='<div valign=bottom align=right width=10%>
 					<a href="index.php?module=Calendar&action=index&view='.$cal['calendar']->month_array[$slice]->getView().'&'.$cal['calendar']->month_array[$slice]->start_time->get_date_str().'" class="webMnu">
-					+'.$remin_list.'&nbsp;More</a></div>';
+					+'.$remin_list.'&nbsp;'.$mod_strings['LBL_MORE'].'</a></div>';
 		}
                 return $eventlayer;
         }
@@ -571,7 +576,7 @@ function getmonthEventLayer(& $cal,$slice)
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
-	global $adb,$current_user;
+	global $adb,$current_user,$mod_strings;
 	
 	$query = "select groups.groupname ,users.user_name,activity.activitytype,activity.subject,crmentity.smownerid,seactivityrel.crmid,cntactivityrel.contactid ,crmentity.crmid,activity.* from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.activitytype != 'Task') and (activity.date_start between '".$start_date."' and '".$end_date."' or recurringevents.recurringdate between '".$start_date."' and '".$end_date."')";
 	if($info != '')
@@ -611,7 +616,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$contactname = getContactName($contact_id);
 			$contact_data = "<b>".$contactname."</b>,";
 		}
-		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Events' class='webMnu'>[More...]</a>";
+		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Events' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
@@ -746,8 +751,8 @@ function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$du
 		{
 			$hour = $hour - 12;
                         $start_hour = $hour;
-                        if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-				$start_hour = "0".$start_hour;
+                        /*if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;*/
 			$start_time = $start_hour.":".$min."pm";
                         $end_min = $min+$duration_min;
                         $end_hour = $hour+$duration_hr;
@@ -766,8 +771,8 @@ function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$du
 		elseif($hour == '12')
 		{
 			$start_hour = $hour;
-			if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-				$start_hour = "0".$start_hour;
+			/*if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;*/
 			$start_time = $start_hour.":".$min."pm";
 			$end_min = $min+$duration_min;
 			$end_hour = $hour+$duration_hr;
@@ -797,8 +802,8 @@ function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$du
 		else
 		{
 			$start_hour = $hour;
-			if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
-				$start_hour = "0".$start_hour;
+			/*if($start_hour <= 9 && strlen(trim($start_hour)) < 2)
+				$start_hour = "0".$start_hour;*/
 			$start_time = $start_hour.":".$min."am";
 			$end_min = $min+$duration_min;
 			$end_hour = $hour+$duration_hr;
@@ -850,6 +855,9 @@ function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$du
 		if($end_min <= 9 && strlen(trim($end_min)) < 2)
 			$end_min = "0".$end_min;
 		$end_time  = $end_hour.":".$end_min;
+		if($hour <= 9 && strlen(trim($hour)) < 2)
+                                $hour = "0".$hour;
+                $start_time = $hour.":".$min;
 		$return_data = Array(
                                         'starttime'=>$start_time,
                                         'endtime'  =>$end_time
