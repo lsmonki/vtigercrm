@@ -174,11 +174,11 @@ if(!$_SESSION['lvs'][$currentModule])
 	$modObj->sorder = $sorder;
 	$modObj->sortby = $order_by;
 	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
-	}
-	else
-	{
-		setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
-	}
+}
+else
+{
+	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+}
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
