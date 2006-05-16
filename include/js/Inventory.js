@@ -48,10 +48,15 @@ function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
 
-function productPickList(currObj) {
+function productPickList(currObj,module) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
+
+	popuptype = 'inventory_prod';
+	if(module == 'PurchaseOrder')
+		popuptype = 'inventory_prod_po';
+
+	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,status=1,top=150,left=200");
 }
 
 function priceBookPickList(currObj) {
@@ -161,6 +166,7 @@ function delRow(rowId) {
 function calcTotal(currObj) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+
 	var total=eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value)
 	getObj("total"+rowId).innerHTML=getObj("hdnTotal"+rowId).value=roundValue(total.toString())
 	calcGrandTotal()
