@@ -21,7 +21,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-			<span class="lvtHeaderText"> {$MOD.LBL_MODULE_NAME} &gt;{$MOD.LBL_CONFIGURATION} &gt; {$MOD.LBL_CURRENCY_INFO} </span>
+			<span class="lvtHeaderText"> {$MOD.LBL_MODULE_NAME} &gt; {$MOD.LBL_CONFIGURATION} &gt; {$MOD.LBL_CURRENCY_INFO} </span>
 			<hr noshade="noshade" size="1" />
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
@@ -47,7 +47,7 @@
 				</tr>
 		</table>
 	</td>
-							<td colspan="2" class="genHeaderBig" width="70%">Currency<br />
+							<td colspan="2" class="genHeaderBig" width="70%">{$MOD.LBL_CURRENCY_TITLE}<br />
 							<hr /> </td>
 						</tr>
 					        <tr>
