@@ -86,8 +86,7 @@ class CRMEntity extends SugarBean
 					$actid=$_REQUEST['record'];
 				}
 				$parentid=$_REQUEST['parent_id'];
-
-				if($_REQUEST['module'] != 'Emails')
+				if($_REQUEST['module'] != 'Emails' && $_REQUEST['module'] != 'Webmails')
 				{
 					$mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
 					$adb->query($mysql);
