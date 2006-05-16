@@ -32,7 +32,7 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vtiger CRM 5.0 beta Installer: Step 5</title>
-<link rel="stylesheet" href="install/install.css" type="text/css" />
+<link rel="stylesheet" href="install/include/install.css" type="text/css" />
 <style type="text/css"><!--
 
 
@@ -76,10 +76,10 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 	<td align=center>
 	<br><br>
 	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
+		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 	</tr>
 	</table>
 	
@@ -88,15 +88,15 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 	<!-- 5 of 5 header -->
 	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
 	<tr>	
-		<td valign=top><img src="install/images/cwIcoDB.gif" alt="Create Database Tables" title="Create Database Tables"></td>
+		<td valign=top><img src="include/install/images/cwIcoDB.gif" alt="Create Database Tables" title="Create Database Tables"></td>
 		<td width=98% valign=top>
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			<tr>
-				<td><img src="install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="install/images/cwStep5of5.gif" alt="Step 5 of 5" title="Step 5 of 5"></td>
+				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
+				<td align=right><img src="include/install/images/cwStep5of5.gif" alt="Step 5 of 5" title="Step 5 of 5"></td>
 			</tr>
 			<tr>
-				<td colspan=2><img src="install/images/cwHdrCrDbTables.gif" alt="Create Database Tables" title="Create Database Tables"></td>
+				<td colspan=2><img src="include/install/images/cwHdrCrDbTables.gif" alt="Create Database Tables" title="Create Database Tables"></td>
 			</tr>
 			</table>
 			<hr noshade size=1>
@@ -150,16 +150,16 @@ rename("install/", $renamefile."install/");
 		<tr><td colspan=2 align="center">
 				 <form action="index.php" method="post" name="form" id="form">
 				 <input type="hidden" name="default_user_name" value="admin">
-			 <input  type="image" src="<?echo $renamefile;?>install/images/cwBtnFinish.gif" name="next" value="Finish" />
+			 <input  type="image" src="include/install/images/cwBtnFinish.gif" name="next" value="Finish" />
 				 </form>
 		</td></tr>
 		</table>		
 							<br><br>
 						<!-- Horizontal Shade -->
-					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(<?echo $renamefile;?>install/images/cwShadeBg.gif) repeat-x;">
+					<table border="0" cellspacing="0" cellpadding="0" width="75%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
 					<tr>
-				<td><img src="<?echo $renamefile;?>install/images/cwShadeLeft.gif"></td>
-					<td align=right><img src="<?echo $renamefile;?>install/images/cwShadeRight.gif"></td>
+				<td><img src="include/install/images/cwShadeLeft.gif"></td>
+					<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
 					</tr>
 					</table><br><br>
 

@@ -103,7 +103,7 @@ $cache_dir = 'cache/';
 
 <title>vtiger CRM 5.0 beta Installer: Step 4</title>
 
-<link rel="stylesheet" href="install/install.css" type="text/css" />
+<link rel="stylesheet" href="include/install/install.css" type="text/css" />
 
 </head>
 
@@ -115,10 +115,10 @@ $cache_dir = 'cache/';
 	<td align=center>
 	<br><br>
 	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5Beta" title="v5Beta"></td>
+		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5Beta" title="v5Beta"></td>
 	</tr>
 	</table>
 	
@@ -127,15 +127,15 @@ $cache_dir = 'cache/';
 	<!-- 4 of 5 header -->
 	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
 	<tr>	
-		<td valign=top><img src="install/images/cwIcoConfFile.gif" alt="System Check" title="System Check"></td>
+		<td valign=top><img src="include/install/images/cwIcoConfFile.gif" alt="System Check" title="System Check"></td>
 		<td width=98% valign=top>
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			<tr>
-				<td><img src="install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-				<td align=right><img src="install/images/cwStep4of5.gif" alt="Step 4 of 5" title="Step 4 of 5"></td>
+				<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
+				<td align=right><img src="include/install/images/cwStep4of5.gif" alt="Step 4 of 5" title="Step 4 of 5"></td>
 			</tr>
 			<tr>
-				<td colspan=2><img src="install/images/cwHdrCrConfFile.gif" alt="Create Configuration File" title="Create Configuration File"></td>
+				<td colspan=2><img src="include/install/images/cwHdrCrConfFile.gif" alt="Create Configuration File" title="Create Configuration File"></td>
 			</tr>
 			</table>
 			<hr noshade size=1>
@@ -222,7 +222,7 @@ if ($templateHandle && $includeHandle) {
 		<br><br>
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 			<tr>
-				<td><img src="install/images/cwURL.gif"></td>
+				<td><img src="include/install/images/cwURL.gif"></td>
 				<td align=right>
 				 <form action="install.php" method="post" name="form" id="form">
 				 <!--<form action="install.php" method="post" name="form" id="form"> -->
@@ -236,7 +236,7 @@ if ($templateHandle && $includeHandle) {
 				 <input type="hidden" class="dataInput" name="db_populate" value="<?php if (isset($db_populate)) echo "$db_populate"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 				 <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
-				 <input  type="image" name="next" value="Next" src="install/images/cwBtnNext.gif" onClick="window.location=('install.php')" />
+				 <input  type="image" name="next" value="Next" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php')" />
 				 </form>
 					
 				</td>
@@ -244,10 +244,10 @@ if ($templateHandle && $includeHandle) {
 		</table>
 		<br><br>
 		<!-- Horizontal Shade -->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+		<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
 			<tr>
-				<td><img src="install/images/cwShadeLeft.gif"></td>
-				<td align=right><img src="install/images/cwShadeRight.gif"></td>
+				<td><img src="include/install/images/cwShadeLeft.gif"></td>
+				<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
 			</tr>
 		</table>
 				
