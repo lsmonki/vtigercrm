@@ -30,24 +30,24 @@
 						<img src="{$IMAGE_PATH}mapping.gif" align="middle" height="48" width="48">
 						</td>
 						<td style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">
-						<span class="genHeaderGrayBig">Mapping Lead Custom Fields</span><br>
-						<span>Map each of your organizations lead custom fields to each of your custom account ,contact, or potential fields. These mappings will be used when you convert leads</span>
+						<span class="genHeaderGrayBig">{$MOD.LBL_LEAD_MAP_CUSTOM_FIELD}</span><br>
+						<span>{$MOD.leadCustomFieldDescription}</span>
 						</td>
 					</tr>
 					<tr><td colspan="2">&nbsp;</td></tr>
 					<tr>
 						<td align="right">&nbsp;</td>
-						<td><b class="lvtHeaderText">Mapping Information </b></td>
+						<td><b class="lvtHeaderText">{$MOD.LBL_MAPPING_INFO}</b></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 						<td>
 							<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="95%">
 								<tr>
-									<td class="lvtCol" width="25%">Leads Custom Field </td>
-									<td class="lvtCol" width="25%">Accounts Custom Field</td>
-									<td class="lvtCol" width="25%">Contacts Custom Field</td>
-									<td class="lvtCol" width="25%">Potential Custom Field</td>	
+									<td class="lvtCol" width="25%">{$MOD.LBL_LEAD_FIELD}</td>
+									<td class="lvtCol" width="25%">{$MOD.LBL_ACCOUNT_FIELD}</td>
+									<td class="lvtCol" width="25%">{$MOD.LBL_CONTACT_FIELD}</td>
+									<td class="lvtCol" width="25%">{$MOD.LBL_POTENTIAL_FIELD}</td>	
 								<tr>
 								{foreach key=leadcf item=cfarray from=$CUSTOMFIELDMAPPING}
 									<tr class="lvtColData" bgcolor="white">
@@ -55,7 +55,7 @@
 									{foreach item=acc_cf key=fldnameacc from=$cfarray.account}
 										<td>
 										<select name='{$fldnameacc}'>
-										<option value='None'>-None-</option>
+										<option value='None'>{$APP.LBL_NONE}</option>
 										{foreach item=element from=$acc_cf}
 										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
 										{/foreach}
@@ -65,7 +65,7 @@
 									{foreach item=con_cf key=fldnamecon from=$cfarray.contact}
                                                                                 <td>
                                                                                 <select name='{$fldnamecon}'>
-										<option value='None'>-None-</option>
+										<option value='None'>{$APP.LBL_NONE}</option>
 										{foreach item=element from=$con_cf}
 										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
 										{/foreach}
@@ -74,7 +74,7 @@
 									{foreach item=pot_cf key=fldnamepot from=$cfarray.potential}
 										<td>
 										<select name='{$fldnamepot}'>
-										<option value='None'>-None-</option>
+										<option value='None'>{$APP.LBL_NONE}</option>
 										{foreach item=element from=$pot_cf}
 										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
 										{/foreach}
