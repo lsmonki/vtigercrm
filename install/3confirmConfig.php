@@ -125,7 +125,7 @@ else
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>vtiger CRM 5.0 beta Installer: Step 3</title>
-		<link rel="stylesheet" href="install/install.css" type="text/css" />
+		<link rel="stylesheet" href="include/install/install.css" type="text/css" />
 	</head>
 	<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
@@ -135,25 +135,25 @@ else
 				<td align=center>
 					<br><br>
 					<!--  Top Header -->
-					<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+					<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
 						<tr>
-							<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-							<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
+							<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+							<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5alpha4" title="v5alpha4"></td>
 						</tr>
 					</table>
 
 					<!-- 3 of 5 header -->
 					<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small>
 						<tr>
-							<td valign=top><img src="install/images/cwIcoSystem.gif" alt="Confirm Configuration" title="Confirm Configuration"></td>
+							<td valign=top><img src="include/install/images/cwIcoSystem.gif" alt="Confirm Configuration" title="Confirm Configuration"></td>
 							<td width=98% valign=top>
 								<table border=0 cellspacing=0 cellpadding=0 width=100%>
 									<tr>
-										<td><img src="install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-										<td align=right><img src="install/images/cwStep3of5.gif" alt="Step 3 of 5" title="Step 3 of 5"></td>
+										<td><img src="include/install/images/cwHdrVtConfWiz.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
+										<td align=right><img src="include/install/images/cwStep3of5.gif" alt="Step 3 of 5" title="Step 3 of 5"></td>
 									</tr>
 									<tr>
-										<td colspan=2><img src="install/images/cwHdrCnfSysConf.gif" alt="Confirm Configuration" title="Confirm Configuration"></td>
+										<td colspan=2><img src="include/install/images/cwHdrCnfSysConf.gif" alt="Confirm Configuration" title="Confirm Configuration"></td>
 									</tr>
 								</table>
 								<hr noshade size=1>
@@ -242,7 +242,7 @@ else
 												<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
 												<input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
 												<input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
-												<input type="image" name="Change" value="Change" src="install/images/cwBtnChange.gif"/>
+												<input type="image" name="Change" value="Change" src="include/install/images/cwBtnChange.gif"/>
 											</form>
 										</td>
 
@@ -274,7 +274,7 @@ else
 												<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
 												<input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
 												<input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
-												<input type="image" src="install/images/cwBtnNext.gif" name="next" value="Create" onClick="window.location=('install.php')"/>
+												<input type="image" src="include/install/images/cwBtnNext.gif" name="next" value="Create" onClick="window.location=('install.php')"/>
 											</form>
 
 										</td>
@@ -288,10 +288,10 @@ else
 					<!-- -->
 					<br><br>
 					<!-- Horizontal Shade -->
-					<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+					<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
 						<tr>
-							<td><img src="install/images/cwShadeLeft.gif"></td>
-							<td align=right><img src="install/images/cwShadeRight.gif"></td>
+							<td><img src="include/install/images/cwShadeLeft.gif"></td>
+							<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
 						</tr>
 					</table>
 				</td>

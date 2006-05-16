@@ -589,7 +589,6 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		WHERE crmentity.deleted = 0
 			AND (activity.activitytype = 'Meeting' OR activity.activitytype = 'Call')
 			AND (activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
-				OR activity.due_date BETWEEN '".$start_date."' AND '".$end_date."'
 				OR recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')";
 	if($info != '')
 	{
