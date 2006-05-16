@@ -702,6 +702,7 @@ $app_strings = Array(
 
 'Leads'=>'Leads',
 'Accounts'=>'Accounts',
+'Accounts & Contacts'=>'Accounts & Contacts',
 'Contacts'=>'Contacts',
 'Potentials'=>'Potentials',
 'Products'=>'Products',
