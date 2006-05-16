@@ -5071,5 +5071,13 @@
 		</field>
 	</table>
 
+	<table name="invitees">
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="inviteeid" type="I" size="19">
+			<KEY/>
+		</field>
+	</table>
 
 </schema>
