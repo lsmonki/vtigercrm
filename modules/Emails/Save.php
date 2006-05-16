@@ -63,7 +63,7 @@ if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUES
 	header("Location: index.php?module=Emails&action=index");
 	exit();
 }
-if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
+/*if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
 	//get the list of data from the comma separated array
 	$emailids = explode(",",$_REQUEST['fromemail']);
@@ -119,7 +119,7 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 	}
 	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
 	return;
-}
+}*/
 
 /**	Function to check whether the contact is exist of not
  *	input  : contact id
@@ -144,7 +144,7 @@ function checkIfContactExists($mailid)
 		return -1;
 	}
 }
-
+//assign the focus values
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
@@ -152,6 +152,8 @@ $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
 $focus->column_fields["date_start"]= date('Y-m-d');
 $focus->save("Emails");
+
+//saving the email details in emaildetails table
 $return_id = $focus->id;
 $email_id = $return_id;
 $query = 'select emailid from emaildetails where emailid ='.$email_id;
@@ -165,12 +167,14 @@ $all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
 $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'" where emailid = '.$email_id;
+	$query = 'update emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
 }else
 {
 	$query = 'insert into emaildetails values ('.$email_id.',"","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
 }
-$adb->query($query);	
+$adb->query($query);
+
+
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button
@@ -193,14 +197,6 @@ if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_RE
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-/*if($file_upload_error)
-{
-        $return_module = 'Emails';
-        $return_action = 'EditView';
-        $return_id = $email_id.'&upload_error=true&return_module='.$_REQUEST['return_module'].'&return_action='.$_REQUEST['return_action'].'&return_id='.$_REQUEST['return_id'];
-	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
-}
-else*/
 if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 {
 	include("modules/Emails/mailsend.php");

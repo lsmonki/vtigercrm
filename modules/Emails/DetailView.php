@@ -42,13 +42,14 @@ if(isset($_REQUEST['record']))
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
-	$query = 'select from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
+	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
 	$result = $adb->query($query);
-    $smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
+    	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));
-    $smarty->assign('TO_MAIL',$to_email);	
-    $smarty->assign('CC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'cc_email')));	
-    $smarty->assign('BCC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'bcc_email')));	
+	$smarty->assign('TO_MAIL',$to_email);	
+	$smarty->assign('CC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'cc_email')));	
+    	$smarty->assign('BCC_MAIL',ereg_replace('###',', ',$adb->query_result($result,0,'bcc_email')));	
+    	$smarty->assign('EMAIL_FLAG',$adb->query_result($result,0,'email_flag'));	
 	if($focus->column_fields['name'] != '')
 	        $focus->name = $focus->column_fields['name'];		
 	else
