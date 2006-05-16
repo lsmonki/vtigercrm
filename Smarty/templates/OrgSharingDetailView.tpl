@@ -70,7 +70,7 @@
 							<input type="hidden" name="action" value="OrgSharingEditView">
 							<input type="hidden" name="parenttab" value="Settings">
 							<tr>
-								<td class="genHeaderSmall" height="25" valign="middle">Global Access Privileges</td>
+								<td class="genHeaderSmall" height="25" valign="middle">{$CMOD.LBL_GLOBAL_ACCESS_PRIVILEGES}</td>
 								<td align="right"><input class=small title="{$CMOD.LBL_RECALCULATE_BUTTON}"  type="submit" name="recalculate" value="{$CMOD.LBL_RECALCULATE_BUTTON}" onclick="this.form.action.value='RecalculateSharingRules'; return confirm('Recalculate Sharing Rules will calculate the sharing rules for the whole organization. This Operation will take some time. Do you want to contunue? ')">	
 	&nbsp;<input class=small type="submit" name="Edit" value={$CMOD.LBL_EDIT_PERMISSIONS}></td>
 								
@@ -83,14 +83,14 @@
 									<tbody>
 									{foreach item=module from=$DEFAULT_SHARING}	
 										<tr class="prvPrfHoverOff" onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
-									    <th width="20%">{$module.0}</th>
+									    <th width="20%">{$APP[$module.0]}</th>
 									    <td width="30%">
 										{if $module.1 neq 'Private' && $module.1 neq 'Hide Details'}
 											<img src="{$IMAGE_PATH}public.gif" align="absmiddle">
 										{else}
 											<img src="{$IMAGE_PATH}private.gif" align="absmiddle">
 										{/if}
-										{$module.1}</td>
+										{$CMOD[$module.1]}</td>
 									    <td width="50%">{$module.2}</td>
 								      	</tr>
 								 	{/foreach} 
@@ -140,23 +140,23 @@
 						
 				<!-- Start of Module Display -->
 						{foreach key=modulename item=details from=$MODSHARING}
-						<div align="right"><a href="#">Go to Top</a></div>
+						<div align="right"><a href="#">{$CMOD.LBL_GO_TO_TOP}</a></div>
 						{if $details.0 neq ''}
 						<table class="orgTab" cellpadding="0" cellspacing="0">
 						<tbody>
 						<tr bgcolor="#cccccc">
 							<td colspan=3 style="border: 1px solid rgb(204, 204, 204); padding-left: 5px;">
 							<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
-							<b>{$modulename}</b>&nbsp; 
+							<b>{$APP.$modulename}</b>&nbsp; 
 							</td>
 							<td align="right" colspan=2><input title="New" class="small" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv('{$modulename}','create','')"></td>
 						</tr>
 					  	<tr>
-							<th class="lvtCol" nowrap width="9%">Rule No.</th>
-							<th class="lvtCol" width="20%">{$modulename} of </th>
-							<th class="lvtCol" width="25%">can be accessed by </th>
-							<th class="lvtCol" width="40%">privileges</th>
-							<th class="lvtCol" width="6%">Delete</th>
+							<th class="lvtCol" nowrap width="9%">{$CMOD.LBL_RULE_NO}</th>
+							<th class="lvtCol" width="20%">{$APP.$modulename} {$CMOD.LBL_OF} </th>
+							<th class="lvtCol" width="25%">{$CMOD.LBL_CAN_BE_ACCESSED}</th>
+							<th class="lvtCol" width="40%">{$CMOD.LBL_PRIVILEGES}</th>
+							<th class="lvtCol" width="6%">{$APP.Tools}</th>
 						</tr>
 						{foreach key=sno item=elements from=$details}
 						<tr class="prvPrfHoverOut" onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOut'">
@@ -164,7 +164,7 @@
 							<td>{$elements.1}</td>
 							<td>{$elements.2}</td>
 							<td>{$elements.3}</td>
-							<td align="center"><a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" height="15" width="16" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" height="15" width="16" border=0></a></td>
+							<td align="center"><a href="javascript:onClick=callEditDiv('{$modulename}','edit','{$elements.0}')"><img src="{$IMAGE_PATH}editfield.gif" title='edit' align="absmiddle" height="15" width="16" border=0></a>|<a href="index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}"><img src="{$IMAGE_PATH}delete.gif" title='del' align="absmiddle" height="15" width="16" border=0></a></td>
 					    </tr>
 						{/foreach}
 				  		</tbody></table>
@@ -177,14 +177,14 @@
 					<tr bgcolor="#cccccc">
 					  	<td style="border: 1px solid rgb(204, 204, 204); padding-left: 5px;">
 					  	<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
-						<b>{$modulename}</b>&nbsp;&nbsp; 
+						<b>{$APP.$modulename}</b>&nbsp;&nbsp; 
 						</td>
 					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}','create','')"></td>
 				  	</tr>
 				  	<tr>
 				  		<td colspan="2" style="padding: 20px;" bgcolor="#ffffff" align="center">
 						{$CMOD.LBL_CUSTOM_ACCESS_MESG} 
-						<a href="javascript:onClick=callEditDiv('{$modulename}','create','')">Click here</a>
+						<a href="javascript:onClick=callEditDiv('{$modulename}','create','')">{$CMOD.LNK_CLICK_HERE}</a>
 						{$CMOD.LBL_CREATE_RULE_MESG}
 					    </td>
 				  	</tr>
