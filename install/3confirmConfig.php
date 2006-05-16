@@ -52,8 +52,10 @@ if($db_type)
 		$db_server_status = true;
 		if($db_type=='mysql')
 		{
-			$version = explode('-',mysql_get_server_info($conn));
+			$mysql_conn = mysql_connect($db_hostname,$db_username,$db_password);
+			$version = explode('-',mysql_get_server_info($mysql_conn));
 			$mysql_server_version=$version[0];
+			mysql_close($mysql_conn);
 		}
 		if($_REQUEST['check_createdb'] == 'on')
 		{
