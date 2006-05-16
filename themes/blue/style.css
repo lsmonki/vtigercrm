@@ -469,7 +469,7 @@ a:hover {
 
 .calAddEvent {
 	position:absolute;
-	z-index:1000000;
+	z-index:10000;
 	width:500px;
 
 	left:200px;
