@@ -58,7 +58,7 @@ class Activity extends CRMEntity {
 	
 	var $reminder_table = "activity_reminder";
 	
-	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder','recurringevents');
+	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder','recurringevents','invitees');
 
 	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id','recurringevents'=>'activityid');
 

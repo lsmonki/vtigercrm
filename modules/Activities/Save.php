@@ -128,6 +128,27 @@ if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
         $mail_status  = send_mail('Activities',$to_email,$current_user->user_name,'',$subject,$description);
 }
 
+//code added to send mail to the invitees
+if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+{
+	global $current_user;
+	$local_log->info("send notification is on");
+	require_once("modules/Emails/mail.php");
+	$selected_users_string =  $_REQUEST['inviteesid'];
+	$invitees_array = explode(';',$selected_users_string);
+	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
+	$description = getActivityDetails($_REQUEST['description']);
+	foreach($invitees_array as $inviteeid)
+	{
+		if($inviteeid != '')
+		{
+			$to_email = getUserEmailId('id',$inviteeid);
+			$mail_status  = send_mail('Activities',$to_email,$current_user->user_name,'',$subject,$description);
+		}
+	}
+}
+
+
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

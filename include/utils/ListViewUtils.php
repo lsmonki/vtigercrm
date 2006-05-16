@@ -178,7 +178,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
 
-							$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							$arrow = '';
 						}
 					}
@@ -1901,9 +1901,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	*/
 	if(($navigation_array['prev']) != 0)
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'" title="Previous"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
-
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start=1\');" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['prev'].'\');" title="Previous"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -1915,13 +1914,13 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .='<b>'.$i.'</b>&nbsp;';
 		}
 		else{
-			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.'\');" >'.$i.'</a>&nbsp;';
 		}
 	}
 	if(($navigation_array['next']) !=0)
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'" title="Next"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'" title="Last"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['next'].'\');" title="Next"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$navigation_array['verylast'].'\');" title="Last"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -1995,5 +1994,7 @@ function setSessionVar($lv_array)
 		$_SESSION['lvs'][$currentModule]['start'] = $start;
 	}
 }
+
+
 
 ?>

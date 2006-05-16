@@ -115,3 +115,12 @@ function showDefaultCustomView(selectView,module)
 }
 
 
+function getListViewEntries_js(module,url)
+{
+        show("status");
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url;
+        ajaxObj.process("index.php?",urlstring);
+
+}
+
