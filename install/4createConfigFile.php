@@ -36,7 +36,6 @@
 
 
 
-require_once('include/utils/utils.php');
 include('vtigerversion.php');
 
 
