@@ -101,9 +101,9 @@ function sensex_info()
 				<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
 				   <tr>
 					<!--this td is to display the entity details -->
-					<td align=left style="border-right:1px dashed #CCCCCC;padding:10px;">
+					<td align=left>
 					<!-- content cache -->
-					
+
 						<table border=0 cellspacing=0 cellpadding=0 width=100%>
 						   <tr>
 							<td id ="autocom"></td>
@@ -156,12 +156,6 @@ function sensex_info()
 						   </tr>
 						</table>
 					</td>
-					<!-- Added this td to display the right side links in Inventory-->
-					<td width="20%" valign="top" style="padding:10px;">
-						{include file="InventoryActions.tpl"}
-					</td>
-					<!-- Added this td to display the right side links in Inventory-->
-
 				   </tr>
 				</table>
 					
