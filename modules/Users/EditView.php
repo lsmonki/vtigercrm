@@ -185,43 +185,25 @@ else
 }	
 
 if (is_admin($current_user)) {
-      
-        	$ROLE_SELECT_OPTION = '<select name="user_role">';
+     
+               
+		 $opt =	'<a href="javascript:openPopup();"><img src="'.$image_path.'select.gif" border="0" align="absmiddle"></a>';
+                $smarty->assign("ROLEPOPUPBUTTON", $opt);
+	
 	}
-else
-{
 		
-		$ROLE_SELECT_OPTION = '<select name="user_role" disabled>';	}
         if($focus->id != '')
         {
 
 		$roleselectedid=fetchUserRole($focus->id);
 		$roleselected=getRoleName($roleselectedid);
+                $smarty->assign("USERROLE", $roleselectedid);
+                $smarty->assign("ROLENAME", $roleselected);
 
         }
                
-		$allRoleDetails=getAllRoleDetails();
-		foreach($allRoleDetails as $roleid=>$roleInfoArr)
-		{
-			if($roleid != 'H1')
-			{
-				$rolename=$roleInfoArr[0];
-				$selected = '';
-		        	if($roleselected != '' && $rolename == $roleselected)
-	        		{
-		                	$selected = 'selected';
-        			}
-        
-                    		$ROLE_SELECT_OPTION .= '<option value="'.$roleid .'" '.$selected .'>';
-                    		$ROLE_SELECT_OPTION .= $rolename;
-                    		$ROLE_SELECT_OPTION .= '</option>';
-			}
-						
-	
-		}
-		$ROLE_SELECT_OPTION .= ' </select>';
+		
 		 
-                   $smarty->assign("USER_ROLE", $ROLE_SELECT_OPTION);
 
 
 
