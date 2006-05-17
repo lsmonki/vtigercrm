@@ -167,7 +167,22 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid ,users.user_name from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and contactdetails.accountid = '.$id;
+		//SQL
+		$query = 'SELECT contactdetails.*,
+				crmentity.crmid,
+                        	crmentity.smownerid,
+				users.user_name
+			FROM contactdetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = contactdetails.contactid
+			LEFT JOIN contactgrouprelation
+				ON contactdetails.contactid=contactgrouprelation.contactid
+			LEFT JOIN groups
+				ON groups.groupname=contactgrouprelation.groupname
+			LEFT JOIN left join users
+				ON crmentity.smownerid=users.id
+			WHERE crmentity.deleted=0
+				AND contactdetails.accountid = '.$id;
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
 	}
