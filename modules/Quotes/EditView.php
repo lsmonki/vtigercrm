@@ -241,7 +241,7 @@ $smarty->assign("MODULE", $module);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 if($focus->mode == 'edit')
-	$smarty->display("salesEditView.tpl");
+	$smarty->display("InventoryEditView.tpl");
 else
 	$smarty->display('InventoryCreateView.tpl');
 

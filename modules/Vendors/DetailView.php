@@ -62,6 +62,6 @@ $smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->display("DetailView.tpl");
+$smarty->display("InventoryDetailView.tpl");
 
 ?>

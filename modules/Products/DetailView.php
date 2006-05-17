@@ -64,6 +64,6 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 //Security check for related list
 $smarty->assign("MODULE", $currentModule);
-$smarty->display("DetailView.tpl");
+$smarty->display("InventoryDetailView.tpl");
 
 ?>

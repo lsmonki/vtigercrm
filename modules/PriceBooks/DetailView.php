@@ -62,5 +62,5 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);
-$smarty->display("DetailView.tpl");
+$smarty->display("InventoryDetailView.tpl");
 ?>
