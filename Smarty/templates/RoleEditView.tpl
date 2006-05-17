@@ -10,8 +10,22 @@
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
 <script language="javascript">
+function dup_validation()
+{ldelim}
+	//show("status");
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var rolename = document.getElementById('rolename').value; 
+	var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&roleName="+rolename;
+	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function ajaxSaveResponse(response)
+{ldelim}
+	if(response.responseText == 'SUCESS')
+		document.newRoleForm.submit();
+	else
+		alert(response.responseText);
+{rdelim}
 function validate()
 {ldelim}
 	formSelectColumnString();
@@ -24,7 +38,7 @@ function validate()
 		alert('Role should have atlease one profile');
 		return false;
 	{rdelim}
-	return true;
+	dup_validation();
 {rdelim}
 </script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -68,7 +82,7 @@ function validate()
 																		 </td>
 																		<td align="left" nowrap="nowrap" width="85%"><b>{$CMOD.LBL_ROLE_NAME}</b><br>
 																					{$CMOD.LBL_SPECIFY_ROLE_NAME}&nbsp;
-																					<input type="text" name="roleName" class="importBox"  value="{$ROLENAME}">
+																					<input type="text" id="rolename" name="roleName" class="importBox"  value="{$ROLENAME}">
 																		</td>
 																</tr>
 																<tr><td colspan="2">&nbsp;</td></tr>
@@ -124,7 +138,7 @@ function validate()
 																	<tr><td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
 																	<tr>
 																			<td colspan="2" align="center"> &nbsp;&nbsp;
-																						<input value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="Next" type="submit" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
+																						<input value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="Next" type="button" class="classBtn" onClick="return validate()" >&nbsp;&nbsp;
 																						<input value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" type="button" class="classBtn" onClick="window.history.back()">
 																			</td>
 																	</tr>
@@ -220,4 +234,3 @@ function validate()
 </tr>
 </table>
 	{include file='SettingsSubMenu.tpl'}
-
