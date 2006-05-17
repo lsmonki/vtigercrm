@@ -3645,7 +3645,7 @@
 		<field name="reminder_sent" type="I" size="2">
 			<notnull />
 		</field>
-		<field name="activity_id" type="I" size="11">
+		<field name="recurringid" type="I" size="19">
 			<key />
 			<notnull />
 		</field>
