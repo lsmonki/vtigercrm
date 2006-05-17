@@ -4611,8 +4611,10 @@ function updateCampaignGroupRelation($campaignid,$groupname)
 	global $adb;
 	$sqldelete = "delete from campaigngrouprelation where campaignid=".$campaignid;
 	$adb->query($sqldelete);
-	$sql = "insert into campaigngrouprelation values (".$campaignid .",'" .$groupname ."')";
-	$adb->query($sql);
+	if($groupname) {
+		$sql = "insert into campaigngrouprelation values (".$campaignid .",'" .$groupname ."')";
+		$adb->query($sql);
+	}
 	$log->debug("Exiting updateCampaignGroupRelation method ...");
 }
 
