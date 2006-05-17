@@ -92,6 +92,7 @@ class User extends SugarBean {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
+	var $sortby_fields = Array('user_name','email1','last_name','is_admin');	
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -141,9 +142,17 @@ class User extends SugarBean {
 	var $additional_column_fields = Array('reports_to_name');		
 	
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'first_name', 'last_name', 'user_name', 'status', 'department', 'yahoo_id', 'is_admin', 'email1', 'phone_work');	
+	var $list_fields = Array(
+		'UserName'=>Array('users'=>'user_name'),
+		'Role'=>Array(''=>''),
+		'Email'=>Array('users'=>'email1'),
+		'Name'=>Array('users'=>'last_name'),
+		'Admin'=>Array('users'=>'is_admin'),
+		'Tools'=>Array(''=>''),
+	);	
 		
 	var $default_order_by = "user_name";
+	var $default_sort_order = 'ASC';
 
 	var $record_id;
 	var $new_schema = true;
@@ -488,46 +497,37 @@ class User extends SugarBean {
 											 "CITY","STATE","POSTALCODE","COUNTRY");	
   	return $mergeflds;
   }
-	//function added for the listview of users for 5.0 beta
-	function getUserListViewHeader()
-	{
-		global $mod_strings;
-		$header_array=array(
-						    $mod_strings['LBL_LIST_USER_NAME'],
-						    $mod_strings['LBL_USER_ROLE'],
-						    $mod_strings['LBL_LIST_EMAIL'],
-						    $mod_strings['LBL_LIST_NAME'],
-						    $mod_strings['LBL_LIST_ADMIN'],
-							$mod_strings['LBL_LIST_TOOLS']);
-		return $header_array;
-	}
 
-	function getUserListViewEntries($navigation_array)
+	function getUserListViewEntries($navigation_array,$sorder='',$orderby='')
 	{
 		global $theme;
+		global $adb;	
 	    	$theme_path="themes/".$theme."/";
 	    	$image_path=$theme_path."images/";
-		$query = "SELECT * from users where deleted=0";
-		$result =$this->db->query($query);
+		if($sorder != '' && $orderby !='')
+			$list_query = ' SELECT * from users where deleted=0 order by '.$orderby.' '.$sorder; 	
+		else
+			$list_query = "SELECT * from users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
+		$result =$adb->query($list_query);
 		$entries_list = array();
 		$roleinfo = getAllRoleDetails();
 		
 		for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
 		{
 			$entries=array();
-			$id=$this->db->query_result($result,$i-1,'id');
+			$id=$adb->query_result($result,$i-1,'id');
 			
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 
-                        $rolecode= fetchUserRole($this->db->query_result($result,$i-1,'id'));
+                        $rolecode= fetchUserRole($adb->query_result($result,$i-1,'id'));
                         $entries[]='<a href="index.php?action=RoleDetailView&module=Users&parenttab=Settings&roleid='.$rolecode.'">'.$roleinfo[$rolecode][0];
 
-			$entries[]='<a href="mailto:'.$this->db->query_result($result,$i-1,'email1').'">'.$this->db->query_result($result,$i-1,'email1').' </a>';
+			$entries[]='<a href="mailto:'.$adb->query_result($result,$i-1,'email1').'">'.$adb->query_result($result,$i-1,'email1').' </a>';
 
-			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'first_name').' '.$this->db->query_result($result,$i-1,'last_name').'</a>';
+			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'last_name').' '.$adb->query_result($result,$i-1,'first_name').'</a>';
 
-			$entries[]=$this->db->query_result($result,$i-1,'is_admin');
-			if($this->db->query_result($result,$i-1,'user_name') == 'admin' || $this->db->query_result($result,$i-1,'user_name') == 'standarduser' )
+			$entries[]=$adb->query_result($result,$i-1,'is_admin');
+			if($adb->query_result($result,$i-1,'user_name') == 'admin' || $adb->query_result($result,$i-1,'user_name') == 'standarduser' )
 			{
 			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
 	                }
