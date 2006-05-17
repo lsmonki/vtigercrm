@@ -176,13 +176,13 @@ class Account extends CRMEntity {
 			INNER JOIN crmentity
 				ON crmentity.crmid = contactdetails.contactid
 			LEFT JOIN contactgrouprelation
-				ON contactdetails.contactid=contactgrouprelation.contactid
+				ON contactdetails.contactid = contactgrouprelation.contactid
 			LEFT JOIN groups
-				ON groups.groupname=contactgrouprelation.groupname
-			LEFT JOIN left join users
-				ON crmentity.smownerid=users.id
-			WHERE crmentity.deleted=0
-				AND contactdetails.accountid = '.$id;
+				ON groups.groupname = contactgrouprelation.groupname
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+			WHERE crmentity.deleted = 0
+			AND contactdetails.accountid = '.$id;
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
 	}
@@ -207,7 +207,23 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 and potential.accountid= '.$id ;
+		$query = "SELECT potential.potentialid, potential.accountid,
+				potential.potentialname, potential.sales_stage,
+				potential.potentialtype, potential.amount,
+				potential.closingdate, potential.potentialtype,
+				users.user_name,
+				crmentity.crmid, crmentity.smownerid
+			FROM potential
+			INNER JOIN crmentity
+				ON crmentity.crmid = potential.potentialid
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+			LEFT JOIN potentialgrouprelation
+				ON potential.potentialid = potentialgrouprelation.potentialid
+			LEFT JOIN groups
+				ON groups.groupname = potentialgrouprelation.groupname
+			WHERE crmentity.deleted = 0
+			AND potential.accountid = ".$id;
 		$log->debug("Exiting get_opportunities method ...");
 
 		return GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
@@ -234,7 +250,42 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ((activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' &&  activity.eventstatus = 'Planned'))";
+		$query = "SELECT activity.*,
+				seactivityrel.*,
+				contactdetails.contactid, contactdetails.lastname,
+				contactdetails.firstname,
+				crmentity.crmid, crmentity.smownerid,
+				crmentity.modifiedtime,
+				users.user_name,
+				recurringevents.recurringtype
+			FROM activity
+			INNER JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			INNER JOIN crmentity
+				ON crmentity.crmid = activity.activityid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = cntactivityrel.contactid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			LEFT OUTER JOIN recurringevents
+				ON recurringevents.activityid = activity.activityid
+			LEFT JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = crmentity.crmid
+			LEFT JOIN groups
+				ON groups.groupname = activitygrouprelation.groupname
+			WHERE seactivityrel.crmid = ".$id."
+			AND (activitytype='Task'
+				OR activitytype='Call'
+				OR activitytype='Meeting')
+			AND crmentity.deleted = 0
+			AND ((activity.status IS NOT NULL
+					AND activity.status != 'Completed')
+				AND (activity.status IS NOT NULL
+					AND activity.status != 'Deferred')
+				OR (activity.eventstatus !=''
+					AND  activity.eventstatus = 'Planned'))";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 
@@ -244,21 +295,37 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
-			activity.activitytype, contactdetails.contactid, contactdetails.firstname,
-			contactdetails.lastname, crmentity.modifiedtime, crmentity.createdtime,
-			crmentity.description, users.user_name
-				from activity
-				inner join seactivityrel on seactivityrel.activityid=activity.activityid
-				inner join crmentity on crmentity.crmid=activity.activityid
-				left join cntactivityrel on cntactivityrel.activityid= activity.activityid 
-				left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
-				left join groups on groups.groupname=activitygrouprelation.groupname
-				inner join users on crmentity.smcreatorid=users.id
-				where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-				and (activity.status='Completed' or activity.status = 'Deferred'  or (activity.eventstatus != 'Planned' and activity.eventstatus !=''))
-				and seactivityrel.crmid=".$id;
+		$query = "SELECT activity.activityid, activity.subject,
+				activity.status, activity.eventstatus,
+				activity.activitytype,
+				contactdetails.contactid, contactdetails.firstname,
+				contactdetails.lastname,
+				crmentity.modifiedtime, crmentity.createdtime,
+				crmentity.description,
+				users.user_name
+			FROM activity
+			INNER JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			INNER JOIN crmentity
+				ON crmentity.crmid = activity.activityid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid 
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = cntactivityrel.contactid
+			LEFT JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = activity.activityid
+			LEFT JOIN groups
+				ON groups.groupname = activitygrouprelation.groupname
+			INNER JOIN users
+				ON crmentity.smcreatorid = users.id
+			WHERE (activity.activitytype = 'Meeting'
+				OR activity.activitytype = 'Call'
+				OR activity.activitytype = 'Task')
+			AND (activity.status = 'Completed'
+				OR activity.status = 'Deferred'
+				OR (activity.eventstatus != 'Planned'
+					AND activity.eventstatus != ''))
+			AND seactivityrel.crmid = ".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Accounts',$query,$id);
@@ -271,33 +338,48 @@ class Account extends CRMEntity {
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,	attachments.type  FileType,
-			crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid,	notes.notesid crmid,
-			crm2.createdtime, notes.notecontent description, users.user_name
-				from notes
-				inner join senotesrel on senotesrel.notesid= notes.notesid
-				inner join crmentity on crmentity.crmid= senotesrel.crmid
-				inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
-				left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
-				left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
-				inner join users on crm2.smcreatorid= users.id
-				where crmentity.crmid=".$id;
-		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, attachments.description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
-		// Inserted order by createdtime desc
-		$query .= "select attachments.description  title ,'Attachments'  ActivityType,
-			attachments.name filename, attachments.type FileType, crm2.modifiedtime lastmodified,
-			attachments.attachmentsid, seattachmentsrel.attachmentsid crmid,
-			crm2.createdtime, attachments.description, users.user_name
-				from attachments
-				inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
-				inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
-				inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
-				inner join users on crm2.smcreatorid= users.id
-				where crmentity.crmid=".$id."
-				order by createdtime desc";
+		$query = "SELECT notes.title, notes.notecontent AS description,
+				notes.filename, notes.notesid AS crmid,
+				'Notes      ' AS ActivityType,
+				attachments.type AS FileType,
+				crm2.modifiedtime AS lastmodified, crm2.createdtime,
+				seattachmentsrel.attachmentsid,
+				users.user_name
+			FROM notes
+			INNER JOIN senotesrel
+				ON senotesrel.notesid = notes.notesid
+			INNER JOIN crmentity
+				ON crmentity.crmid = senotesrel.crmid
+			INNER JOIN crmentity crm2
+				ON crm2.crmid = notes.notesid
+				AND crm2.deleted = 0
+			LEFT JOIN seattachmentsrel
+				ON seattachmentsrel.crmid = notes.notesid
+			LEFT JOIN attachments
+				ON seattachmentsrel.attachmentsid = attachments.attachmentsid
+			INNER JOIN users
+				ON crm2.smcreatorid = users.id
+			WHERE crmentity.crmid = ".$id."
+		 UNION ALL
+			SELECT attachments.description AS title, attachments.description,
+				attachments.name AS filename,
+				seattachmentsrel.attachmentsid AS crmid,
+				'Attachments' AS ActivityType,
+				attachments.type AS FileType,
+				crm2.modifiedtime AS lastmodified, crm2.createdtime,
+				attachments.attachmentsid,
+				users.user_name
+			FROM attachments
+			INNER JOIN seattachmentsrel
+				ON seattachmentsrel.attachmentsid = attachments.attachmentsid
+			INNER JOIN crmentity
+				ON crmentity.crmid = seattachmentsrel.crmid
+			INNER JOIN crmentity crm2
+				ON crm2.crmid = attachments.attachmentsid
+			INNER JOIN users
+				ON crm2.smcreatorid = users.id
+			WHERE crmentity.crmid = ".$id."
+			ORDER BY createdtime DESC";
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Accounts',$query,$id);
 	}
@@ -318,7 +400,27 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select users.user_name,groups.groupname, crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
+		$query = "SELECT users.user_name,
+				groups.groupname,
+				crmentity.*,
+				quotes.*,
+				potential.potentialname,
+				account.accountname
+			FROM quotes
+			INNER JOIN crmentity
+				ON crmentity.crmid = quotes.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = quotes.accountid
+			LEFT OUTER JOIN potential
+				ON potential.potentialid = quotes.potentialid
+			LEFT JOIN quotegrouprelation
+				ON quotes.quoteid = quotegrouprelation.quoteid
+			LEFT JOIN groups
+				ON groups.groupname = quotegrouprelation.groupname
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+			WHERE crmentity.deleted = 0
+			AND account.accountid = ".$id;
 		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
@@ -338,7 +440,27 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "select users.user_name,groups.groupname,crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and account.accountid=".$id;
+		$query = "SELECT users.user_name,
+				groups.groupname,
+				crmentity.*,
+				invoice.*,
+				account.accountname,
+				salesorder.subject AS salessubject
+			FROM invoice
+			INNER JOIN crmentity
+				ON crmentity.crmid = invoice.invoiceid
+			LEFT OUTER JOIN account
+				ON account.accountid = invoice.accountid
+			LEFT OUTER JOIN salesorder
+				ON salesorder.salesorderid = invoice.salesorderid
+			LEFT JOIN invoicegrouprelation
+				ON invoice.invoiceid = invoicegrouprelation.invoiceid
+			LEFT JOIN groups
+				ON groups.groupname = invoicegrouprelation.groupname
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+			WHERE crmentity.deleted = 0
+			AND account.accountid = ".$id;
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
@@ -359,7 +481,27 @@ class Account extends CRMEntity {
 
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname ,users.user_name,groups.groupname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname left join users on crmentity.smownerid=users.id where crmentity.deleted=0 and salesorder.accountid = ".$id;
+		$query = "SELECT crmentity.*,
+				salesorder.*,
+				quotes.subject AS quotename,
+				account.accountname,
+				users.user_name,
+				groups.groupname
+			FROM salesorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = salesorder.salesorderid
+			LEFT OUTER JOIN quotes
+				ON quotes.quoteid = salesorder.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = salesorder.accountid
+			LEFT JOIN sogrouprelation
+				ON salesorder.salesorderid = sogrouprelation.salesorderid
+			LEFT JOIN groups
+				ON groups.groupname = sogrouprelation.groupname
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+			WHERE crmentity.deleted = 0
+			AND salesorder.accountid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");		
 		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
@@ -375,7 +517,23 @@ class Account extends CRMEntity {
 		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join account on account.accountid=troubletickets.parent_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where account.accountid =".$id ;
+		$query = "SELECT users.user_name, users.id,
+				troubletickets.title, troubletickets.ticketid AS crmid,
+				troubletickets.status, troubletickets.priority,
+				troubletickets.parent_id,
+				crmentity.smownerid, crmentity.modifiedtime
+			FROM troubletickets
+			INNER JOIN crmentity
+				ON crmentity.crmid = troubletickets.ticketid
+			LEFT JOIN account
+				ON account.accountid = troubletickets.parent_id
+			LEFT JOIN users
+				ON users.id=crmentity.smownerid
+			LEFT JOIN ticketgrouprelation
+				ON troubletickets.ticketid = ticketgrouprelation.ticketid
+			LEFT JOIN groups
+				ON groups.groupname = ticketgrouprelation.groupname
+			WHERE account.accountid = ".$id ;
 		//Appending the security parameter
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -387,8 +545,26 @@ class Account extends CRMEntity {
 			$query .= ' '.$sec_parameter;
 
 		}
-		$query .= " union all ";
-		$query .= "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join contactdetails on contactdetails.contactid = troubletickets.parent_id left join account on account.accountid=contactdetails.accountid left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where account.accountid =".$id;
+		$query .= " UNION ALL
+			SELECT users.user_name, users.id,
+				troubletickets.title, troubletickets.ticketid AS crmid,
+				troubletickets.status, troubletickets.priority,
+				troubletickets.parent_id,
+				crmentity.smownerid, crmentity.modifiedtime
+			FROM troubletickets
+			INNER JOIN crmentity
+				ON crmentity.crmid = troubletickets.ticketid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = troubletickets.parent_id
+			LEFT JOIN account
+				ON account.accountid = contactdetails.accountid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			LEFT JOIN ticketgrouprelation
+				ON troubletickets.ticketid = ticketgrouprelation.ticketid
+			LEFT JOIN groups
+				ON groups.groupname = ticketgrouprelation.groupname
+			WHERE account.accountid = ".$id;
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
@@ -412,7 +588,19 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join account on account.accountid = seproductsrel.crmid  where account.accountid = '.$id.' and crmentity.deleted = 0';
+		$query = "SELECT products.productid, products.productname,
+				products.productcode, products.commissionrate,
+				products.qty_per_unit, products.unit_price,
+				crmentity.crmid, crmentity.smownerid
+			FROM products
+			INNER JOIN seproductsrel
+				ON products.productid = seproductsrel.productid
+			INNER JOIN crmentity
+				ON crmentity.crmid = products.productid
+			INNER JOIN account
+				ON account.accountid = seproductsrel.crmid
+			WHERE account.accountid = ".$id."
+			AND crmentity.deleted = 0";
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
 	}
@@ -425,45 +613,68 @@ class Account extends CRMEntity {
 		if($this->checkIfCustomTableExists('accountscf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum('accountscf','Accounts') . " 
-				account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
-				users.user_name, users.status  user_status
-					FROM ".$this->entity_table."
-					INNER JOIN account
-					ON crmentity.crmid=account.accountid
-					LEFT JOIN accountbillads
-					ON account.accountid=accountbillads.accountaddressid
-					LEFT JOIN accountshipads
-					ON account.accountid=accountshipads.accountaddressid
-					LEFT JOIN accountscf 
-					ON accountscf.accountid=account.accountid
-					LEFT JOIN users
+			$query = $this->constructCustomQueryAddendum('accountscf','Accounts') . "
+					account.*,
+					".$this->entity_table.".*,
+					accountbillads.city AS billing_city,
+					accountbillads.country AS billing_country,
+					accountbillads.code AS billing_code,
+					accountbillads.state AS billing_state,
+					accountbillads.street AS billing_street,
+					accountshipads.city AS shipping_city,
+					accountshipads.country AS shipping_country,
+					accountshipads.code AS shipping_code,
+					accountshipads.state AS shipping_state,
+					accountshipads.street AS shipping_street,
+					users.user_name,
+					users.status AS user_status
+				FROM ".$this->entity_table."
+				INNER JOIN account
+					ON crmentity.crmid = account.accountid
+				LEFT JOIN accountbillads
+					ON account.accountid = accountbillads.accountaddressid
+				LEFT JOIN accountshipads
+					ON account.accountid = accountshipads.accountaddressid
+				LEFT JOIN accountscf 
+					ON accountscf.accountid = account.accountid
+				LEFT JOIN users
 					ON crmentity.smownerid = users.id ";
 
 		}
 		else
 		{
-			$query = "SELECT 
-				account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state billing_state, accountbillads.street billing_street, accountshipads.city shipping_city, accountshipads.country shipping_country, accountshipads.code shipping_code, accountshipads.state shipping_state,  accountshipads.street shipping_street,
-				users.user_name, users.status user_status
-					FROM ".$this->entity_table."
-					INNER JOIN account
-					ON crmentity.crmid=account.accountid
-					LEFT JOIN accountbillads
-					ON account.accountid=accountbillads.accountaddressid
-					LEFT JOIN accountshipads
-					ON account.accountid=accountshipads.accountaddressid
-					LEFT JOIN users
+			$query = "SELECT account.*,
+					".$this->entity_table.".*,
+					accountbillads.city AS billing_city,
+					accountbillads.country AS billing_country,
+					accountbillads.code AS billing_code,
+					accountbillads.state AS billing_state,
+					accountbillads.street AS billing_street,
+					accountshipads.city AS shipping_city,
+					accountshipads.country AS shipping_country,
+					accountshipads.code AS shipping_code,
+					accountshipads.state AS shipping_state,
+					accountshipads.street AS shipping_street,
+					users.user_name,
+					users.status AS user_status
+				FROM ".$this->entity_table."
+				INNER JOIN account
+					ON crmentity.crmid = account.accountid
+				LEFT JOIN accountbillads
+					ON account.accountid = accountbillads.accountaddressid
+				LEFT JOIN accountshipads
+					ON account.accountid = accountshipads.accountaddressid
+				LEFT JOIN users
 					ON crmentity.smownerid = users.id ";
 		}
 
-		$where_auto = " users.status='Active'
-			AND crmentity.deleted=0 ";
+		$where_auto = " users.status = 'Active'
+			AND crmentity.deleted = 0 ";
 
 		if($where != "")
-			$query .= "where ($where) AND ".$where_auto;
+			$query .= "WHERE ($where) AND ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= "WHERE ".$where_auto;
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
@@ -477,7 +688,7 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getColumnNames_Acnt() method ...");
-		$sql1 = "select fieldlabel from field where tabid=6";
+		$sql1 = "SELECT fieldlabel FROM field WHERE tabid = 6";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)
