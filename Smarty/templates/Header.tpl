@@ -47,6 +47,8 @@
 	</tr>
 	</TABLE>
 
+<div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000'>
+</div>
 <!-- header - master tabs -->
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrTabBg">
 <tr>
