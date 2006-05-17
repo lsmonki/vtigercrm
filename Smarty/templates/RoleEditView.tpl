@@ -22,7 +22,6 @@ function dup_validation()
 		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
 	else
 		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&roleName="+rolename;
-	alert(urlstring)	
 
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
