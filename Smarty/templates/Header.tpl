@@ -265,7 +265,7 @@
 </table>
 </div>
 
-<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;"></div>
+<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
 <script>
 function Announcement_rss()
 {ldelim}
