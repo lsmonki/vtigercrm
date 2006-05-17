@@ -36,6 +36,15 @@ $mod_strings = Array(
 'LBL_LIST_ADMIN'=>'Admin',
 'LBL_LIST_PASSWORD'=>'Password',
 'LBL_LIST_CONFIRM_PASSWORD'=>'Confirm Password',
+
+'UserName'=>'UserName',
+'Role'=>'Role',
+'Email'=>'Email',
+'Name'=>'Name',
+'Admin'=>'Admin',
+'Tools'=>'Tools',
+
+
 //added for patch2
 'LBL_GROUP_NAME'=>'Group',
 'LBL_CURRENCY_NAME'=>'Currency',
