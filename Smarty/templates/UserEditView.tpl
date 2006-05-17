@@ -22,6 +22,10 @@ function pickColor(color)
 	ColorPicker_targetInput.value = color;
         ColorPicker_targetInput.style.backgroundColor = color;
 {rdelim}	
+
+function openPopup(){ldelim}
+		window.open("index.php?module=Users&action=UsersAjax&file=RolePopup&parenttab=Settings","roles_popup_window","height=425,width=640,toolbar=no,menubar=no,dependent=yes,resizable =no");
+	{rdelim}	
 </script>	
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -126,7 +130,11 @@ function pickColor(color)
 				 </tr>
 				 <tr>
 				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_ROLE}</td>
-				    <td class="dvtCellInfo">{$USER_ROLE}</td>
+				    <td class="dvtCellInfo"><!-- {$USER_ROLE} -->
+							<input type="text" name="role_name"  id="role_name" value="{$ROLENAME}" class="txtBox" readonly="readonly">&nbsp;
+							{$ROLEPOPUPBUTTON}
+							<input type="hidden" name="user_role" id="user_role" value="{$USERROLE}">
+					</td>
 
 
 				   <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_EMAIL}</td>
