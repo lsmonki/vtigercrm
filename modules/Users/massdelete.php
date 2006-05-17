@@ -21,12 +21,13 @@ $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
+array_filter($storearray);
 $ids_list = array();
 foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
-                $sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
+                $sql="update crmentity set deleted=1 where crmid='" .$id ."'";
                 $result = $adb->query($sql);
         }
         else

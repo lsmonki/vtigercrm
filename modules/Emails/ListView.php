@@ -137,9 +137,9 @@ if($email_title)$display_title = $email_title;
 if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_text'] != '')
 {
 	if($_REQUEST['search_field'] != 'join')
-		$where = $_REQUEST['search_field'].' like "%'.$_REQUEST['search_text'].'%"';	
+		$where = $_REQUEST['search_field']." like '%".$_REQUEST['search_text']."%'";	
 	else
-		$where = '(subject like "%'.$_REQUEST['search_text'].'%" OR users.user_name like "%'.$_REQUEST['search_text'].'%")';	
+		$where = "(subject like '%".$_REQUEST['search_text']."%' OR users.user_name like '%".$_REQUEST['search_text']."%')";	
 }
 
 
