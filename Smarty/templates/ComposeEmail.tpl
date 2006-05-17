@@ -117,7 +117,7 @@
    <tr>
 	<td colspan="3" class="lvtCol" style="padding: 5px;" align="center">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="return email_validate(this.form,'save');" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL} " >&nbsp;
-		<input name="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" value=" {$APP.LBL_SENDMAIL_BUTTON_LABEL} " class="classBtn" type="button" onclick="return email_validate(this.form,'send');">&nbsp;
+		<input name="{$MOD.LBL_SEND}" value=" {$APP.LBL_SEND} " class="classBtn" type="button" onclick="return email_validate(this.form,'send');">&nbsp;
 		<input name="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" type="button" onClick="window.close()">
 	</td>
    </tr>
