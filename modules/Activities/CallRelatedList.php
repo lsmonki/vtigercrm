@@ -47,6 +47,8 @@ $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID", $RECORD);
 $smarty->assign("SINGLE_MOD", $app_strings['Activity']);
+$smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
+$smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 $smarty->assign("ACTIVITY_MODE",'Events');
 $smarty->assign("MODULE", $MODULE);
 $smarty->assign("THEME", $theme);
