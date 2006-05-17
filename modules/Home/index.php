@@ -236,6 +236,7 @@ function getGroupTaskLists()
 			while($row = $adb->fetch_array($result))
 			{
 				$value=array();	
+				$row["type"]=trim($row["type"]);
 				if($row["type"] == "Tickets")
 				{	
 					$list = '<a href=index.php?module=HelpDesk';
@@ -272,4 +273,3 @@ function getGroupTaskLists()
 		} 
 }
 ?>
-
