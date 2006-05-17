@@ -15,8 +15,15 @@ function dup_validation()
 {ldelim}
 	//show("status");
 	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var rolename = document.getElementById('rolename').value; 
-	var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&roleName="+rolename;
+	var rolename = document.getElementById('rolename').value;
+	var mode = getObj('mode').value;
+	var roleid = getObj('roleid').value;
+	if(mode == 'edit')
+		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
+	else
+		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&roleName="+rolename;
+	alert(urlstring)	
+
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
 function ajaxSaveResponse(response)
