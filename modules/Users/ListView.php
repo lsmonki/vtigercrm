@@ -1,17 +1,4 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
- * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
 
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
@@ -33,14 +20,23 @@ $no_of_users=UserCount();
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
 	        $start = $_REQUEST['start'];
-
-			    //added to remain the navigation when sort
-				    $url_string = "&start=".$_REQUEST['start'];
 }
 else
 {
-	        $start = 1;
+	        $start = $_SESSION['user_pagestart'];
 }
+$_SESSION['user_pagestart'] = $start;
+if($_REQUEST['sorder'] !='')
+	$sortorder = $_REQUEST['sorder'];
+else
+	$sortorder = $_SESSION['user_sorder'];
+$_SESSION['user_sorder'] = $sortorder;
+if($_REQUEST['order_by'] != '')
+	$sortby = $_REQUEST['order_by'];
+else
+	$sortby = $_SESSION['user_orderby'];
+$_SESSION['user_orderby'] = $sortby;
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $no_of_users['user'], '10');
 $start_rec = $navigation_array['start'];
@@ -52,16 +48,15 @@ $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("LIST_HEADER",$focus->getUserListViewHeader());
-$smarty->assign("LIST_ENTRIES",$focus->getUserListViewEntries($navigation_array));
+$smarty->assign("LIST_HEADER",getListViewHeader($focus,"Users","",$sortorder,$sortby,"",""));
+$smarty->assign("LIST_ENTRIES",$focus->getUserListViewEntries($navigation_array,$sortorder,$sortby));
 $smarty->assign("USER_COUNT",$no_of_users);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("USER_IMAGES",getUserImageNames());
-if($_REQUEST['ajax'] != '')
+if($_REQUEST['ajax'] !='')
 	$smarty->display("UserListViewContents.tpl");
 else
 	$smarty->display("UserListView.tpl");
-	
 
 ?>
