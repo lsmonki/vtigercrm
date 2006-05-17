@@ -10,13 +10,6 @@
  ********************************************************************************/
 -->*}
 <table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
-<tr>
-<td>
-	{$GRAPH}
-</td>
-</tr>
-</table>
-<table align="center" border="0" cellpadding="5" cellspacing="0" width="95%">
 	<tbody><tr>
 	<td align="left" width="10%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTPDF_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreatePDF',{$REPORTID}));" title="{$MOD.LBL_EXPORTPDF_BUTTON}"></td>
 	<td align="left" width="20%"><input class="classBtn" id="btnExport" name="btnExport" value="{$MOD.LBL_EXPORTXL_BUTTON}" type="button" onClick="goToURL(CrearEnlace('CreateXL',{$REPORTID}));" title="{$MOD.LBL_EXPORTXL_BUTTON}" ></td>
