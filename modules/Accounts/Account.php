@@ -168,7 +168,7 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		//SQL
-		$query = 'SELECT contactdetails.*,
+		$query = "SELECT contactdetails.*,
 				crmentity.crmid,
                         	crmentity.smownerid,
 				users.user_name
@@ -182,7 +182,7 @@ class Account extends CRMEntity {
 			LEFT JOIN users
 				ON crmentity.smownerid = users.id
 			WHERE crmentity.deleted = 0
-			AND contactdetails.accountid = '.$id;
+			AND contactdetails.accountid = ".$id;
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
 	}
