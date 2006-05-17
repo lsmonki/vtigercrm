@@ -31,7 +31,7 @@
 					</td>
 			  </tr>
 			  <tr>
-					<td style="padding:5px;border-right:1px dashed #CCCCCC;"> 
+					<td style="padding:5px;"> 
 							<table border="0" cellpadding="0" cellspacing="0" width="100%">
 								<tr>
 									<td colspan="2" align="left"><img src="{$IMAGE_PATH}user.gif" align="absmiddle">&nbsp;<span class="genHeaderGray">{$MOD.LBL_USER_MANAGEMENT}</span></td>
@@ -40,49 +40,16 @@
 								 	 </td>
 								</tr>
 								<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-								<tr>
-									<td align="left" style="padding:5px;">{$RECORD_COUNTS}</td>
-									<td>&nbsp;</td>
-									{$NAVIGATION}
-								</tr>
 							</table>
 					</td>
-					<td width="25%" rowspan="2" class="padTab" align="center">
-								<div id="chPhoto" style="display:block;width:80%;">
-								<table width="100%"   cellspacing="0" cellpadding="5" class="small">
-								<tr><td align="left" colspan="2" style="border-bottom:1px dotted #CCCCCC;">
-											<b>{$CMOD.LBL_STATISTICS}</b></td></tr>
-								<tr><td align="right"><b>{$CMOD.LBL_TOTAL}</b></td>
-								<td  align="left">{$USER_COUNT.user} {$CMOD.LBL_USERS}</td>	
-								</tr>	
-								<tr><td  align="right"><b>{$CMOD.LBL_ADMIN} {$CMOD.LBL_COLON}</b></td>
-								<td  align="left">{$USER_COUNT.admin} {$CMOD.LBL_USERS}</td>	
-								</tr>	
-								<tr><td  align="right"><b>{$CMOD.LBL_OTHERS}</b></td>
-								<td  align="left">{$USER_COUNT.nonadmin} {$CMOD.LBL_USERS}</td>	
-								</tr>	
-							</table>
-					    </div></td>
+					<td>&nbsp;</td>
 			</tr>
-			<tr>
-					<td width="75%" style="border-right:1px dashed #CCCCCC;padding:5px;">
-							<table width="100%" border="0" cellpadding="5" cellspacing="1" class="small" style="background-color: rgb(204, 204, 204);">
-                          <tbody>
-                          	<tr>
-							{foreach item=header from=$LIST_HEADER}
-                              <td class="lvtCol">{$header}</td>
-							{/foreach}	
-                            </tr>
-							{section name=entries loop=$LIST_ENTRIES}
-                            <tr  class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-                             {foreach item=listvalues from=$LIST_ENTRIES[entries]}
-							  <td >{$listvalues}</td>
-                              {/foreach}
-							 </tr>
-							{/section}	
-                          </tbody>
-                        </table>
-					</td>
+			<tr><td colspan=2>
+					<div id="ListViewContents">
+						{include file="UserListViewContents.tpl"}
+					</div>
+					
+			</td>
 			</tr>
 		</table>
 	</form>
@@ -95,21 +62,23 @@
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <div id="status" style="display:none;position:absolute;background-color:#bbbbbb;vertical-align:center;left:887px;top:0px;height:17px;">Processing Request...</div>
+{literal}
 <script>
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("tempdiv").innerHTML=response.responseText;
-{rdelim}
+function getListViewEntries_js(module,url)
+{
+		show("status");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var urlstring ="module=Users&action=UsersAjax&file=ListView&ajax=true&"+url;
+	    ajaxObj.process("index.php?",urlstring);
 
-function DeleteProfile(userid)
-{ldelim}
-	show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring = "module=Users&action=UsersAjax&file=UserDeleteStep1&record="+userid;
-	ajaxObj.process("index.php?",urlstring);
-{rdelim}
+}
+function ajaxSaveResponse(response)
+{
+	hide("status");
+	document.getElementById("ListViewContents").innerHTML= response.responseText;
+}
 </script>
+{/literal}
 
 	{include file='SettingsSubMenu.tpl'}
 
