@@ -12,7 +12,7 @@
 
 -->*}
 
-<!-- Added this file to display the fields in Create Entity page based on ui types  --!>
+<!-- Added this file to display the fields in Create Entity page based on ui types  -->
 {foreach key=label item=subdata from=$data}
 	{if $header eq 'Product Details'}
 		<tr>
