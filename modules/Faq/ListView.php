@@ -42,6 +42,15 @@ else
 $focus = new Faq();
 $other_text = Array();
 
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
@@ -138,16 +147,14 @@ if($viewnamedesc['viewname'] == 'All')
 	$smarty->assign("ALL", 'All');
 }
 
-//Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+//Storing Listview session object
+if($_SESSION['lvs'][$currentModule])
 {
-	$start = $_REQUEST['start'];
+	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
-else
-{
-	
-	$start = 1;
-}
+
+$start = $_SESSION['lvs'][$currentModule]['start'];
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 

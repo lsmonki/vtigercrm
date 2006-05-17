@@ -39,6 +39,15 @@ $focus = new Potential();
 $smarty = new vtigerCRM_Smarty();
 $other_text = Array();
 
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
@@ -164,18 +173,14 @@ $smarty->assign("CATEGORY",$category);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
-//Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+//Storing Listview session object
+if($_SESSION['lvs'][$currentModule])
 {
-	$start = $_REQUEST['start'];
+	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+}
 
-	//added to remain the navigation when sort
-	$url_string = "&start=".$_REQUEST['start'];
-}
-else
-{
-	$start = 1;
-}
+$start = $_SESSION['lvs'][$currentModule]['start'];
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 

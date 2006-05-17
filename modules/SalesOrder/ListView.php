@@ -34,6 +34,15 @@ $focus = new SalesOrder();
 $other_text = Array();
 $url_string = ''; // assigning http url string
 
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
@@ -66,45 +75,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
 	
-/*	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-        if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-        if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
-
-	$where_clauses = Array();
-
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='salesordercf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-                                $str=" salesordercf.".$column[$i]." = 1";
-                        else
-			        $str=" salesordercf.".$column[$i]." like '$customfield[$i]%'";
-		        array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-*/
-	$log->info("Here is the where clause for the list view: $where");
- 
-
 }
 
 //<<<<cutomview>>>>>>>
@@ -164,18 +134,14 @@ $list_result = $adb->query($list_query);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
-//Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+//Storing Listview session object
+if($_SESSION['lvs'][$currentModule])
 {
-        $start = $_REQUEST['start'];
+	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+}
 
-	//added to remain the navigation when sort
-	$url_string = "&start=".$_REQUEST['start'];
-}
-else
-{
-        $start = 1;
-}
+$start = $_SESSION['lvs'][$currentModule]['start'];
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
