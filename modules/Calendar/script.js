@@ -285,3 +285,16 @@ function fnRedirect(view,hour,day,month,year){
 	ajaxObj.process("index.php?",urlstring);
 }
 
+function ajaxMiniCalSaveResponse(response)
+{
+        document.getElementById("miniCal").innerHTML=response.responseText;
+}
+
+function getMiniCal()
+{
+	var ajaxObj = new Ajax(ajaxMiniCalSaveResponse);
+	var urlstring ="module=Calendar&action=CalendarAjax&type=minical&parenttab=My Home Page&ajax=true";
+	ajaxObj.process("index.php?",urlstring);
+	
+}
+
