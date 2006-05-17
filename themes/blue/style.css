@@ -2311,5 +2311,19 @@ level2Sel{
 }
 .qcTransport{
 	    background-color:#ededed;
+
 }
+
+#role_popup{
+        position:relative;
+        left:0px;
+        top:0px;
+        width:95%;
+        height:300px;
+        overflow:auto;
+        border:1px solid #999999;
+        text-align:left;
+        background-color:#FFFFFF;
+    }
+
 								    
