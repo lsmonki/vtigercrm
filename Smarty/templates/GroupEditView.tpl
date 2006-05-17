@@ -12,6 +12,28 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 <script language="javascript">
+
+function dup_validation()
+{ldelim}
+        //show("status");
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var groupname = document.getElementById('groupName').value;
+        var mode = getObj('mode').value;
+        var groupid = getObj('groupId').value;
+        if(mode == 'edit')
+                var urlstring ="module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true&mode="+mode+"&groupName="+groupname+"&groupid="+groupid;
+        else
+                var urlstring ="module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true&groupName="+groupname;
+        ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function ajaxSaveResponse(response)
+{ldelim}
+        if(response.responseText == 'SUCESS')
+                document.newGroupForm.submit();
+        else
+                alert(response.responseText);
+{rdelim}
+
 var constructedOptionValue;
 var constructedOptionName;
 
@@ -117,7 +139,7 @@ function validate()
 		alert('Group should have atleast one member. Select a member to the group');
 		return false;
 	{rdelim}
-	return true;
+	dup_validation();	
 {rdelim}
 </script>
 
@@ -168,7 +190,7 @@ function validate()
 	<td style="padding-right: 10px;" align="right" width="20%">
 			<b>{$CMOD.LBL_GROUP_NAME} {$CMOD.LBL_COLON}</b></td>
 	<td style="padding-left: 10px;" align="left" width="80%">
-	<input name="groupName" class="importBox" style="width:40%;" type="text" value="{$GROUPNAME}">
+	<input id="groupName"  name="groupName" class="importBox" style="width:40%;" type="text" value="{$GROUPNAME}">
 	</td>
 	</tr>
 	<tr><td colspan="3">&nbsp;</td></tr>
@@ -228,9 +250,9 @@ function validate()
 	<tr>
 	<td colspan="3" align="center"> 	
 	{if $MODE eq 'edit'}
-		<input type="submit" class="classBtn" name="add" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " onClick="return validate()">
+		<input type="button" class="classBtn" name="add" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " onClick="return validate()">
 	{else}
-		<input type="submit" class="classBtn" name="add" value="{$CMOD.LBL_ADD_GROUP_BUTTON}" onClick="return validate()">
+		<input type="button" class="classBtn" name="add" value="{$CMOD.LBL_ADD_GROUP_BUTTON}" onClick="return validate()">
 	{/if}
 	&nbsp;&nbsp;
 	<input type="button" class="classBtn" name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="window.history.back()">
