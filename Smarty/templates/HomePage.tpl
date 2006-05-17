@@ -21,6 +21,7 @@
 
 
 {*<!--Home Page Entries  -->*}
+{* login history commented out
 {if isset($LOGINHISTORY.0)}
     <div id="loginhistory" style="float:left;position:absolute;left:300px;top:150px;height:100px:width:200px;overflow:auto;border:1px solid #dadada;">
     <table border="0" cellpadding="4" cellspacing="0" width="100%">
@@ -34,6 +35,8 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
     </table>
     </div>
 {/if}
+*}
+
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
  	<tr><td style="height:2px"></td></tr>

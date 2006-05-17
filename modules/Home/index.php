@@ -151,7 +151,7 @@ $result=$adb->query($query);
 $tagcloud_js=$adb->query_result($result,0,'tagcloud');
 $smarty->assign("TAGCLOUD_JS",$tagcloud_js);
 $smarty->assign("TAGCLOUD_CSS",ereg_replace('/js/','/css/',$tagcloud_js));
-$smarty->assign("LOGINHISTORY",getLoginHistory());
+//$smarty->assign("LOGINHISTORY",getLoginHistory());
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
