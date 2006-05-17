@@ -12,9 +12,19 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 $rolename = $_REQUEST['roleName'];
+$mode = $_REQUEST['mode'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
-	$query = 'select rolename from role where rolename="'.$rolename.'"';
+	if($mode != 'edit')
+	{
+		$query = 'select rolename from role where rolename="'.$rolename.'"';
+	}
+	else
+	{
+		$roleid=$_REQUEST['roleid'];
+		$query = 'select rolename from role where rolename="'.$rolename.'" and roleid !="'.$roleid.'"';
+
+	}
 	$result = $adb->query($query);
 	if($adb->num_rows($result) > 0)
 	{
@@ -25,6 +35,7 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 		echo 'SUCESS';
 		die;
 	}
+
 }
 $parentRoleId=$_REQUEST['parent'];
 //Inserting values into Role Table
