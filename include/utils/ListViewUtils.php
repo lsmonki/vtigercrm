@@ -99,7 +99,17 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$query  = "SELECT DISTINCT field.fieldname
+			FROM field
+			INNER JOIN profile2field
+				ON profile2field.fieldid = field.fieldid
+			INNER JOIN def_org_field
+				ON def_org_field.fieldid = field.fieldid
+			WHERE field.tabid = ".$tabid."
+			AND profile2field.visible = 0
+			AND def_org_field.visible = 0
+			AND profile2field.profileid IN ".$profileList."
+			AND field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -257,7 +267,17 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$query  = "SELECT DISTINCT field.fieldname
+			FROM field
+			INNER JOIN profile2field
+				ON profile2field.fieldid = field.fieldid
+			INNER JOIN def_org_field
+				ON def_org_field.fieldid = field.fieldid
+			WHERE field.tabid = ".$tabid."
+			AND profile2field.visible=0
+			AND def_org_field.visible=0
+			AND profile2field.profileid IN ".$profileList."
+			AND field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -278,7 +298,17 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		if($is_admin==false)
 		{
                 	$profileList = getCurrentUserProfileList();
-                	$query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+                	$query = "SELECT profile2field.*
+				FROM field
+				INNER JOIN profile2field
+					ON profile2field.fieldid = field.fieldid
+				INNER JOIN def_org_field
+					ON def_org_field.fieldid = field.fieldid
+				WHERE field.tabid = ".$tabid."
+				AND profile2field.visible = 0
+				AND def_org_field.visible = 0
+				AND profile2field.profileid IN ".$profileList."
+				AND field.fieldname = '".$fieldname."'";
 
                 	$result = $adb->query($query);
                 }
@@ -458,7 +488,17 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$query  = "SELECT DISTINCT field.fieldname
+			FROM field
+			INNER JOIN profile2field
+				ON profile2field.fieldid = field.fieldid
+			INNER JOIN def_org_field
+				ON def_org_field.fieldid = field.fieldid
+			WHERE field.tabid = ".$tabid."
+			AND profile2field.visible = 0
+			AND def_org_field.visible = 0
+			AND profile2field.profileid IN ".$profileList."
+			AND field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -469,7 +509,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	//constructing the uitype and columnname array
 	$ui_col_array=Array();
 
-	$query = "select uitype,columnname,fieldname from field where tabid=".$tabid." and fieldname in".$field_list;
+	$query = "SELECT uitype, columnname, fieldname
+		FROM field
+		WHERE tabid = ".$tabid."
+		AND fieldname IN".$field_list;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
@@ -743,7 +786,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		$query  = "SELECT DISTINCT field.fieldname
+			FROM field
+			INNER JOIN profile2field
+				ON profile2field.fieldid = field.fieldid
+			INNER JOIN def_org_field
+				ON def_org_field.fieldid = field.fieldid
+			WHERE field.tabid = ".$tabid."
+			AND profile2field.visible = 0
+			AND def_org_field.visible = 0
+			AND profile2field.profileid IN ".$profileList."
+			AND field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -754,7 +807,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	//constructing the uitype and columnname array
 	$ui_col_array=Array();
 
-	$query = "select uitype,columnname,fieldname from field where tabid=".$tabid." and fieldname in".$field_list;
+	$query = "SELECT uitype, columnname, fieldname
+		FROM field
+		WHERE tabid=".$tabid."
+		AND fieldname IN ".$field_list;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
@@ -781,7 +837,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			if($is_admin==false)
 			{
 				$profileList = getCurrentUserProfileList();
-				$query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+				$query = "SELECT profile2field.*
+					FROM field
+					INNER JOIN profile2field
+						ON profile2field.fieldid = field.fieldid
+					INNER JOIN def_org_field
+						ON def_org_field.fieldid = field.fieldid
+					WHERE field.tabid = ".$tabid."
+					AND profile2field.visible = 0
+					AND def_org_field.visible = 0
+					AND profile2field.profileid IN ".$profileList."
+					AND field.fieldname = '".$fieldname."'";
 
 				$result = $adb->query($query);
 			}
@@ -952,7 +1018,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		global $adb;
 		if($temp_val != '')
                 {
-			$sql="select * from contactdetails where contactid=".$temp_val;		
+			$sql="SELECT * FROM contactdetails WHERE contactid=".$temp_val;		
 			$result=$adb->query($sql);
 			$firstname=$adb->query_result($result,0,"firstname");
 			$lastname=$adb->query_result($result,0,"lastname");
@@ -980,7 +1046,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 			global $adb;
 
-	$attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$entity_id),0,'attachmentsid');
+	$attachmentid=$adb->query_result($adb->query("SELECT * FROM seattachmentsrel WHERE crmid = ".$entity_id),0,'attachmentsid');
 	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
 
 	}
@@ -1019,7 +1085,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 		if($parentid != '')
                 {
-			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
@@ -1048,7 +1114,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
@@ -1073,7 +1139,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
@@ -1101,7 +1167,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 		if($parentid != '')
                 {
-			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			$sql="SELECT * FROM ".$tablename." WHERE ".$idname." = ".$parentid;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 
 			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
@@ -1264,7 +1330,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
 
-						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM field WHERE tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
 						//Change this index 0 - to get the fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
@@ -1280,7 +1346,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
 
-						$querystr="select fieldid,fieldlabel,columnname from field where tabid=".getTabid($module)." and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM field WHERE tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
 						//Change this index 0 - to get the fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
@@ -1318,7 +1384,7 @@ $log->debug("Exiting getValue method ...");
 				{
 					if($module == "Contacts")
                                         {
-                                                 $query="select contactdetails.imagename from contactdetails where lastname='".$temp_val."'";
+                                                 $query="SELECT contactdetails.imagename FROM contactdetails WHERE lastname='".$temp_val."'";
                                                 //echo $query;
                                                  $result = $adb->query($query);
                                                  $imagename=$adb->query_result($result,0,'imagename');
@@ -1396,7 +1462,29 @@ function getListQuery($module,$where='')
 	$tab_id = getTabid($module);	
 	if($module == "HelpDesk")
 	{
-		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0 ";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				troubletickets.title, troubletickets.status,
+				troubletickets.priority, troubletickets.parent_id,
+				contactdetails.contactid, contactdetails.firstname,
+				contactdetails.lastname, account.accountid,
+				account.accountname, ticketcf.*
+			FROM troubletickets
+			INNER JOIN ticketcf
+				ON ticketcf.ticketid = troubletickets.ticketid
+			INNER JOIN crmentity
+				ON crmentity.crmid = troubletickets.ticketid
+			LEFT JOIN ticketgrouprelation
+				ON troubletickets.ticketid = ticketgrouprelation.ticketid
+			LEFT JOIN groups
+				ON groups.groupname = ticketgrouprelation.groupname
+			LEFT JOIN contactdetails
+				ON troubletickets.parent_id = contactdetails.contactid
+			LEFT JOIN account
+				ON account.accountid = troubletickets.parent_id
+			LEFT JOIN users
+				ON crmentity.smownerid = users.id
+				AND troubletickets.ticketid = ticketcf.ticketid
+			WHERE crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 				$sec_parameter=getListViewSecurityParameter($module);
@@ -1408,24 +1496,89 @@ function getListQuery($module,$where='')
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid, account.accountname,account.email1,account.email2,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account  inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				account.accountname, account.email1,
+				account.email2, account.website, account.phone,
+				accountbillads.city,
+				accountscf.*
+			FROM account
+			INNER JOIN crmentity
+				ON crmentity.crmid = account.accountid
+			INNER JOIN accountbillads
+				ON account.accountid = accountbillads.accountaddressid
+			INNER JOIN accountshipads
+				ON account.accountid = accountshipads.accountaddressid
+			INNER JOIN accountscf
+				ON account.accountid = accountscf.accountid
+			LEFT JOIN accountgrouprelation
+				ON accountscf.accountid = accountgrouprelation.accountid
+			LEFT JOIN groups
+				ON groups.groupname = accountgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
-                    $query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tab_id.") or (crmentity.smownerid in (0) and (";
+                    $query .= "AND (crmentity.smownerid IN (".$current_user->id.")
+		   		 OR crmentity.smownerid IN (
+					 SELECT user2role.userid
+					 FROM user2role
+					 INNER JOIN users
+						 ON users.id = user2role.userid
+					 INNER JOIN role
+						 ON role.roleid = user2role.roleid
+					 WHERE role.parentrole LIKE '".$current_user_parent_role_seq."::%')
+					 OR crmentity.smownerid IN (
+						 SELECT shareduserid
+						 FROM tmp_read_user_sharing_per
+						 WHERE userid=".$current_user->id."
+						 AND tabid=".$tab_id.")
+					 OR (crmentity.smownerid in (0)
+					 AND (";
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= "accountgrouprelation.groupname in(select groupname from groups where groupid in ".getCurrentUserGroupList().") or ";
+                              $query .= "accountgrouprelation.groupname IN (
+				      		SELECT groupname
+						FROM groups
+						WHERE groupid IN ".getCurrentUserGroupList().")
+					OR ";
                         }
-                         $query .= "accountgrouprelation.groupname in(select groups.groupname from tmp_read_group_sharing_per inner join groups on groups.groupid=tmp_read_group_sharing_per.sharedgroupid where userid=".$current_user->id." and tabid=".$tab_id.")))) ";
-                }	
-		
+                         $query .= "accountgrouprelation.groupname IN (
+				 	SELECT groups.groupname
+					FROM tmp_read_group_sharing_per
+					INNER JOIN groups
+						ON groups.groupid = tmp_read_group_sharing_per.sharedgroupid
+					WHERE userid=".$current_user->id."
+					AND tabid=".$tab_id.")))) ";
+                }
+
 	}
 	if ($module == "Potentials")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.sales_stage,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ".$where; 
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				account.accountname,
+				potential.accountid, potential.potentialname,
+				potential.sales_stage, potential.amount,
+				potential.currency, potential.closingdate,
+				potential.typeofrevenue,
+				potentialscf.*
+			FROM potential
+			INNER JOIN crmentity
+				ON crmentity.crmid = potential.potentialid
+			INNER JOIN account
+				ON potential.accountid = account.accountid
+			INNER JOIN potentialscf
+				ON potentialscf.potentialid = potential.potentialid
+			LEFT JOIN potentialgrouprelation
+				ON potential.potentialid = potentialgrouprelation.potentialid
+			LEFT JOIN groups
+				ON groups.groupname = potentialgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1437,26 +1590,105 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Leads")
 	{
-               $query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and leaddetails.converted=0 ";
+		$query = "SELECT crmentity.crmid, crmentity.smownerid,
+				leaddetails.firstname, leaddetails.lastname,
+				leaddetails.company, leadaddress.phone,
+				leadsubdetails.website, leaddetails.email,
+				leadscf.*
+			FROM leaddetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = leaddetails.leadid
+			INNER JOIN leadsubdetails
+				ON leadsubdetails.leadsubscriptionid = leaddetails.leadid
+			INNER JOIN leadaddress
+				ON leadaddress.leadaddressid = leadsubdetails.leadsubscriptionid
+			INNER JOIN leadscf
+				ON leaddetails.leadid = leadscf.leadid
+			LEFT JOIN leadgrouprelation
+				ON leadscf.leadid = leadgrouprelation.leadid
+			LEFT JOIN groups
+				ON groups.groupname = leadgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0
+			AND leaddetails.converted = 0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;
                 }				
-
 	}
 	if($module == "Products")
 	{
-		$query = "select distinct(crmentity.crmid), products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 and ((seproductsrel.crmid is NULL and (products.contactid=0 or products.contactid is NULL)) or seproductsrel.crmid in(".getReadEntityIds('Leads').") or seproductsrel.crmid in(".getReadEntityIds('Accounts').") or seproductsrel.crmid in(".getReadEntityIds('Potentials').") or products.contactid in(".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT products.*, productcf.*
+			FROM products
+			INNER JOIN crmentity
+				ON crmentity.crmid = products.productid
+			LEFT JOIN productcf
+				ON products.productid = productcf.productid
+			LEFT JOIN seproductsrel
+				ON seproductsrel.productid = products.productid
+			WHERE crmentity.deleted = 0
+			AND ((seproductsrel.crmid IS NULL
+					AND (products.contactid = 0
+						OR products.contactid IS NULL))
+				OR seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+				OR seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR products.contactid IN (".getReadEntityIds('Contacts').")) ";
 	}
         if($module == "Notes")
         {
-		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0  and ((senotesrel.crmid is NULL and (notes.contact_id=0 or notes.contact_id is NULL)) or senotesrel.crmid in(".getReadEntityIds('Leads').") or senotesrel.crmid in(".getReadEntityIds('Accounts').") or senotesrel.crmid in(".getReadEntityIds('Potentials').")  or senotesrel.crmid in(".getReadEntityIds('Products').") or senotesrel.crmid in(".getReadEntityIds('Invoice').") or senotesrel.crmid in(".getReadEntityIds('PurchaseOrder').") or senotesrel.crmid in(".getReadEntityIds('SalesOrder').") or notes.contact_id in(".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT crmentity.crmid, crmentity.modifiedtime,
+				notes.title, notes.contact_id, notes.filename,
+				senotesrel.crmid AS relatedto,
+				contactdetails.firstname, contactdetails.lastname,
+				notes.*
+			FROM notes
+			INNER JOIN crmentity
+				ON crmentity.crmid = notes.notesid
+			LEFT JOIN senotesrel
+				ON senotesrel.notesid = notes.notesid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = notes.contact_id
+			WHERE crmentity.deleted = 0
+			AND ((senotesrel.crmid IS NULL
+					AND (notes.contact_id = 0
+						OR notes.contact_id IS NULL))
+				OR senotesrel.crmid IN (".getReadEntityIds('Leads').")
+				OR senotesrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR senotesrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR senotesrel.crmid IN (".getReadEntityIds('Products').")
+				OR senotesrel.crmid IN (".getReadEntityIds('Invoice').")
+				OR senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
+				OR senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
+				OR notes.contact_id IN (".getReadEntityIds('Contacts').")) ";
         }
 	if($module == "Contacts")
         {
 		//Query modified to sort by assigned to
-		$query = "select contactdetails.firstname,contactdetails.lastname,contactdetails.title,contactdetails.accountid,contactdetails.email,contactdetails.phone,crmentity.smownerid ,crmentity.crmid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join contactaddress on contactdetails.contactid=contactaddress.contactaddressid inner join contactsubdetails on contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid inner join contactscf on contactdetails.contactid = contactscf.contactid left join account on account.accountid = contactdetails.accountid left join contactgrouprelation on contactscf.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ".$where;
+		$query = "SELECT contactdetails.firstname, contactdetails.lastname,
+				contactdetails.title, contactdetails.accountid,
+				contactdetails.email, contactdetails.phone,
+				crmentity.smownerid, crmentity.crmid
+			FROM contactdetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = contactdetails.contactid
+			INNER JOIN contactaddress
+				ON contactdetails.contactid = contactaddress.contactaddressid
+			INNER JOIN contactsubdetails
+				ON contactaddress.contactaddressid = contactsubdetails.contactsubscriptionid
+			INNER JOIN contactscf
+				ON contactdetails.contactid = contactscf.contactid
+			LEFT JOIN account
+				ON account.accountid = contactdetails.accountid
+			LEFT JOIN contactgrouprelation
+				ON contactscf.contactid = contactgrouprelation.contactid
+			LEFT JOIN groups
+				ON groups.groupname = contactgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where;
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1466,7 +1698,35 @@ function getListQuery($module,$where='')
         }
 	if($module == "Activities")
         {
-		$query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join users on users.id=crmentity.smownerid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where  ;
+		$query = "SELECT crmentity.crmid, crmentity.smownerid, crmentity.setype,
+				activity.*,
+				contactdetails.lastname, contactdetails.firstname,
+				contactdetails.contactid,
+				account.accountid, account.accountname,
+				recurringevents.recurringtype
+			FROM activity
+			INNER JOIN crmentity
+				ON crmentity.crmid = activity.activityid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = cntactivityrel.contactid
+			LEFT JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			LEFT JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = crmentity.crmid
+			LEFT JOIN groups
+				ON groups.groupname = activitygrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			LEFT OUTER JOIN account
+				ON account.accountid = contactdetails.accountid
+			LEFT OUTER JOIN recurringevents
+				ON recurringevents.activityid = activity.activityid
+			WHERE crmentity.deleted = 0
+			AND (activity.activitytype = 'Meeting'
+				OR activity.activitytype = 'Call'
+				OR activity.activitytype = 'Task') ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1477,7 +1737,33 @@ function getListQuery($module,$where='')
         }
 	if($module == "Emails")
         {
-		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid left join emaildetails on emaildetails.emailid=activity.activityid WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
+		$query = "SELECT DISTINCT crmentity.crmid, crmentity.smownerid,
+				activity.activityid, activity.subject,
+				activity.date_start,
+				contactdetails.lastname, contactdetails.firstname,
+				contactdetails.contactid
+			FROM activity
+			INNER JOIN crmentity
+				ON crmentity.crmid = activity.activityid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			LEFT JOIN seactivityrel
+				ON seactivityrel.activityid = activity.activityid
+			LEFT JOIN contactdetails
+				ON contactdetails.contactid = seactivityrel.crmid
+			LEFT JOIN cntactivityrel
+				ON cntactivityrel.activityid = activity.activityid
+				AND cntactivityrel.contactid = cntactivityrel.contactid
+			LEFT JOIN activitygrouprelation
+				ON activitygrouprelation.activityid = crmentity.crmid
+			LEFT JOIN groups
+				ON groups.groupname = activitygrouprelation.groupname
+			LEFT JOIN salesmanactivityrel
+				ON salesmanactivityrel.activityid = activity.activityid
+			LEFT JOIN emaildetails
+				ON emaildetails.emailid = activity.activityid
+			WHERE activity.activitytype = 'Emails'
+			AND crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1487,20 +1773,61 @@ function getListQuery($module,$where='')
 
 	if($module == "Faq")
 	{
-		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, crmentity.createdtime, crmentity.modifiedtime,
+				faq.*
+			FROM faq
+			INNER JOIN crmentity
+				ON crmentity.crmid = faq.id
+			LEFT JOIN products
+				ON faq.product_id = products.productid
+			WHERE crmentity.deleted = 0";
 	}
+	
 	if($module == "Vendors")
 	{
-		$query = "select crmentity.crmid, vendor.* from vendor inner join crmentity on crmentity.crmid=vendor.vendorid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, vendor.*
+			FROM vendor
+			INNER JOIN crmentity
+				ON crmentity.crmid = vendor.vendorid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "PriceBooks")
 	{
-		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";
+		$query = "SELECT crmentity.crmid, pricebook.*
+			FROM pricebook
+			INNER JOIN crmentity
+				ON crmentity.crmid = pricebook.pricebookid
+			WHERE crmentity.deleted = 0";
 	}
 	if($module == "Quotes")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes  inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left join quotescf on quotes.quoteid = quotescf.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ".$where;
+		$query = "SELECT crmentity.*,
+				quotes.*,
+				quotesbillads.*,
+				quotesshipads.*,
+				potential.potentialname,
+				account.accountname
+			FROM quotes
+			INNER JOIN crmentity
+				ON crmentity.crmid = quotes.quoteid
+			INNER JOIN quotesbillads
+				ON quotes.quoteid = quotesbillads.quotebilladdressid
+			INNER JOIN quotesshipads
+				ON quotes.quoteid = quotesshipads.quoteshipaddressid
+			LEFT JOIN quotescf
+				ON quotes.quoteid = quotescf.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = quotes.accountid
+			LEFT OUTER JOIN potential
+				ON potential.potentialid = quotes.potentialid
+			LEFT JOIN quotegrouprelation
+				ON quotes.quoteid = quotegrouprelation.quoteid
+			LEFT JOIN groups
+				ON groups.groupname = quotegrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1510,7 +1837,29 @@ function getListQuery($module,$where='')
 	if($module == "PurchaseOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname left join users on users.id=crmentity.smownerid  where crmentity.deleted=0 ";
+                $query = "SELECT crmentity.*,
+				purchaseorder.*,
+				pobillads.*,
+				poshipads.*,
+				vendor.vendorname
+			FROM purchaseorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = purchaseorder.purchaseorderid
+			LEFT OUTER JOIN vendor
+				ON purchaseorder.vendorid = vendor.vendorid
+			INNER JOIN pobillads
+				ON purchaseorder.purchaseorderid = pobillads.pobilladdressid
+			INNER JOIN poshipads
+				ON purchaseorder.purchaseorderid = poshipads.poshipaddressid
+			LEFT JOIN purchaseordercf
+				ON purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid
+			LEFT JOIN pogrouprelation
+				ON purchaseorder.purchaseorderid = pogrouprelation.purchaseorderid
+			LEFT JOIN groups
+				ON groups.groupname = pogrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1520,7 +1869,32 @@ function getListQuery($module,$where='')
         if($module == "SalesOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ".$where;
+                $query = "SELECT crmentity.*,
+				salesorder.*,
+				sobillads.*,
+				soshipads.*,
+				quotes.subject AS quotename,
+				account.accountname
+			FROM salesorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = salesorder.salesorderid
+			INNER JOIN sobillads
+				ON salesorder.salesorderid = sobillads.sobilladdressid
+			INNER JOIN soshipads
+				ON salesorder.salesorderid = soshipads.soshipaddressid
+			LEFT JOIN salesordercf
+				ON salesordercf.salesorderid = salesorder.salesorderid
+			LEFT OUTER JOIN quotes
+				ON quotes.quoteid = salesorder.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = salesorder.accountid
+			LEFT JOIN sogrouprelation
+				ON salesorder.salesorderid = sogrouprelation.salesorderid
+			LEFT JOIN groups
+				ON groups.groupname = sogrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1531,7 +1905,29 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.*,salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid inner join invoicecf on invoice.invoiceid = invoicecf.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ".$where;
+		$query = "SELECT crmentity.*,
+				invoice.*,
+				invoicebillads.*,
+				invoiceshipads.*,
+				salesorder.subject AS salessubject
+			FROM invoice
+			INNER JOIN crmentity
+				ON crmentity.crmid = invoice.invoiceid
+			INNER JOIN invoicebillads
+				ON invoice.invoiceid = invoicebillads.invoicebilladdressid
+			INNER JOIN invoiceshipads
+				ON invoice.invoiceid = invoiceshipads.invoiceshipaddressid
+			LEFT OUTER JOIN salesorder
+				ON salesorder.salesorderid = invoice.salesorderid
+			INNER JOIN invoicecf
+				ON invoice.invoiceid = invoicecf.invoiceid
+			LEFT JOIN invoicegrouprelation
+				ON invoice.invoiceid = invoicegrouprelation.invoiceid
+			LEFT JOIN groups
+				ON groups.groupname = invoicegrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1542,7 +1938,18 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid left join campaigngrouprelation on campaign.campaignid=campaigngrouprelation.campaignid left join groups on groups.groupname=campaigngrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0".$where;
+		$query = "SELECT crmentity.*,
+				campaign.*
+			FROM campaign
+			INNER JOIN crmentity
+				ON crmentity.crmid = campaign.campaignid
+			LEFT JOIN campaigngrouprelation
+				ON campaign.campaignid = campaigngrouprelation.campaignid
+			LEFT JOIN groups
+				ON groups.groupname = campaigngrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1567,7 +1974,22 @@ function getReadEntityIds($module)
 
 	if($module == "Leads")
 	{
-               $query = "select crmentity.crmid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0 ";
+		$query = "SELECT crmentity.crmid
+			FROM leaddetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = leaddetails.leadid
+			INNER JOIN leadsubdetails
+				ON leadsubdetails.leadsubscriptionid = leaddetails.leadid
+			INNER JOIN leadaddress
+				ON leadaddress.leadaddressid = leadsubdetails.leadsubscriptionid
+			INNER JOIN leadscf
+				ON leaddetails.leadid = leadscf.leadid
+			LEFT JOIN leadgrouprelation
+				ON leadscf.leadid = leadgrouprelation.leadid
+			LEFT JOIN groups
+				ON groups.groupname = leadgrouprelation.groupname
+			WHERE crmentity.deleted = 0
+			AND leaddetails.converted = 0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1580,17 +2002,58 @@ function getReadEntityIds($module)
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid from account inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 ";
+		$query = "SELECT crmentity.crmid
+			FROM account
+			INNER JOIN crmentity
+				ON crmentity.crmid = account.accountid
+			INNER JOIN accountbillads
+				ON account.accountid = accountbillads.accountaddressid
+			INNER JOIN accountshipads
+				ON account.accountid = accountshipads.accountaddressid
+			INNER JOIN accountscf
+				ON account.accountid = accountscf.accountid
+			LEFT JOIN accountgrouprelation
+				ON accountscf.accountid = accountgrouprelation.accountid
+			LEFT JOIN groups
+				ON groups.groupname = accountgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
-                    $query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tab_id.") or (crmentity.smownerid in (0) and (";
+                    $query .= "AND (crmentity.smownerid IN (".$current_user->id.")
+		   			 OR crmentity.smownerid IN (
+						 SELECT user2role.userid
+						 FROM user2role
+						 INNER JOIN users
+							 ON users.id = user2role.userid
+						 INNER JOIN role
+							 ON role.roleid = user2role.roleid
+						 WHERE role.parentrole LIKE '".$current_user_parent_role_seq."::%')
+						 OR crmentity.smownerid IN (
+							 SELECT shareduserid
+							 FROM tmp_read_user_sharing_per
+							 WHERE userid = ".$current_user->id."
+							 AND tabid = ".$tab_id.")
+						 OR (crmentity.smownerid IN (0)
+						 	AND (";
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= "accountgrouprelation.groupname in(select groupname from groups where groupid in ".getCurrentUserGroupList().") or ";
+                              $query .= "accountgrouprelation.groupname IN (
+				      		SELECT groupname
+						FROM groups
+						WHERE groupid IN ".getCurrentUserGroupList().")
+						OR ";
                         }
-                         $query .= "accountgrouprelation.groupname in(select groups.groupname from tmp_read_group_sharing_per inner join groups on groups.groupid=tmp_read_group_sharing_per.sharedgroupid where userid=".$current_user->id." and tabid=".$tab_id.")))) ";
+                         $query .= "accountgrouprelation.groupname IN(
+				 	SELECT groups.groupname
+					FROM tmp_read_group_sharing_per
+					INNER JOIN groups
+						ON groups.groupid = tmp_read_group_sharing_per.sharedgroupid
+					WHERE userid = ".$current_user->id."
+					AND tabid = ".$tab_id.")))) ";
                 }	
 		
 	}
@@ -1598,7 +2061,21 @@ function getReadEntityIds($module)
 	if ($module == "Potentials")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 "; 
+		$query = "SELECT crmentity.crmid
+			FROM potential
+			INNER JOIN crmentity
+				ON crmentity.crmid = potential.potentialid
+			INNER JOIN account
+				ON potential.accountid = account.accountid
+			INNER JOIN potentialscf
+				ON potentialscf.potentialid = potential.potentialid
+			LEFT JOIN potentialgrouprelation
+				ON potential.potentialid = potentialgrouprelation.potentialid
+			LEFT JOIN groups
+				ON groups.groupname = potentialgrouprelation.groupname
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 "; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1614,7 +2091,25 @@ function getReadEntityIds($module)
 		//Query modified to sort by assigned to
 
 		
-		$query = "select crmentity.crmid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join contactaddress on contactdetails.contactid=contactaddress.contactaddressid inner join contactsubdetails on contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid inner join contactscf on contactdetails.contactid = contactscf.contactid left join account on account.accountid = contactdetails.accountid left join contactgrouprelation on contactscf.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname inner join users on users.id=crmentity.smownerid where crmentity.deleted=0 ";
+		$query = "SELECT crmentity.crmid
+			FROM contactdetails
+			INNER JOIN crmentity
+				ON crmentity.crmid = contactdetails.contactid
+			INNER JOIN contactaddress
+				ON contactdetails.contactid = contactaddress.contactaddressid
+			INNER JOIN contactsubdetails
+				ON contactaddress.contactaddressid = contactsubdetails.contactsubscriptionid
+			INNER JOIN contactscf
+				ON contactdetails.contactid = contactscf.contactid
+			LEFT JOIN account
+				ON account.accountid = contactdetails.accountid
+			LEFT JOIN contactgrouprelation
+				ON contactscf.contactid = contactgrouprelation.contactid
+			LEFT JOIN groups
+				ON groups.groupname = contactgrouprelation.groupname
+			INNER JOIN users
+				ON users.id = crmentity.smownerid
+			WHERE crmentity.deleted = 0 ";
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1624,13 +2119,46 @@ function getReadEntityIds($module)
         }
 	if($module == "Products")
 	{
-		$query = "select distinct(crmentity.crmid) from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 and ((seproductsrel.crmid is NULL or products.contactid=0 or products.contactid is NULL) or seproductsrel.crmid in(".getReadEntityIds('Leads').") or seproductsrel.crmid in(".getReadEntityIds('Accounts').") or seproductsrel.crmid in(".getReadEntityIds('Potentials').") or products.contactid in(".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT DISTINCT crmentity.crmid
+			FROM products
+			INNER JOIN crmentity
+				ON crmentity.crmid = products.productid
+			LEFT JOIN productcf
+				ON products.productid = productcf.productid
+			LEFT JOIN seproductsrel
+				ON seproductsrel.productid = products.productid
+			WHERE crmentity.deleted = 0
+			AND ((seproductsrel.crmid IS NULL
+					OR products.contactid = 0
+					OR products.contactid IS NULL)
+				OR seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+				OR seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR products.contactid IN (".getReadEntityIds('Contacts').")) ";
 	}
 
 	if($module == "PurchaseOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.crmid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left join users on users.id=crmentity.smownerid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 ";
+                $query = "SELECT crmentity.crmid
+			FROM purchaseorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = purchaseorder.purchaseorderid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			LEFT OUTER JOIN vendor
+				ON purchaseorder.vendorid = vendor.vendorid
+			INNER JOIN pobillads
+				ON purchaseorder.purchaseorderid = pobillads.pobilladdressid
+			INNER JOIN poshipads
+				ON purchaseorder.purchaseorderid = poshipads.poshipaddressid
+			LEFT JOIN purchaseordercf
+				ON purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid
+			LEFT JOIN pogrouprelation
+				ON purchaseorder.purchaseorderid = pogrouprelation.purchaseorderid
+			LEFT JOIN groups
+				ON groups.groupname = pogrouprelation.groupname
+			WHERE crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1640,7 +2168,27 @@ function getReadEntityIds($module)
         if($module == "SalesOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.crmid from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left join users on users.id=crmentity.smownerid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 ".$where;
+                $query = "SELECT crmentity.crmid
+			FROM salesorder
+			INNER JOIN crmentity
+				ON crmentity.crmid = salesorder.salesorderid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			INNER JOIN sobillads
+				ON salesorder.salesorderid = sobillads.sobilladdressid
+			INNER JOIN soshipads
+				ON salesorder.salesorderid = soshipads.soshipaddressid
+			LEFT JOIN salesordercf
+				ON salesordercf.salesorderid = salesorder.salesorderid
+			LEFT OUTER JOIN quotes
+				ON quotes.quoteid = salesorder.quoteid
+			LEFT OUTER JOIN account
+				ON account.accountid = salesorder.accountid
+			LEFT JOIN sogrouprelation
+				ON salesorder.salesorderid = sogrouprelation.salesorderid
+			LEFT JOIN groups
+				ON groups.groupname = sogrouprelation.groupname
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1649,7 +2197,25 @@ function getReadEntityIds($module)
         }
 	if($module == "Invoice")
 	{
-		$query = "select crmentity.crmid from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left join users on users.id=crmentity.smownerid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid inner join invoicecf on invoice.invoiceid = invoicecf.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 ".$where;
+		$query = "SELECT crmentity.crmid
+			FROM invoice
+			INNER JOIN crmentity
+				ON crmentity.crmid = invoice.invoiceid
+			LEFT JOIN users
+				ON users.id = crmentity.smownerid
+			INNER JOIN invoicebillads
+				ON invoice.invoiceid = invoicebillads.invoicebilladdressid
+			INNER JOIN invoiceshipads
+				ON invoice.invoiceid = invoiceshipads.invoiceshipaddressid
+			LEFT OUTER JOIN salesorder
+				ON salesorder.salesorderid = invoice.salesorderid
+			INNER JOIN invoicecf
+				ON invoice.invoiceid = invoicecf.invoiceid
+			LEFT JOIN invoicegrouprelation
+				ON invoice.invoiceid = invoicegrouprelation.invoiceid
+			LEFT JOIN groups
+				ON groups.groupname = invoicegrouprelation.groupname
+			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1777,24 +2343,36 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $notesid = $adb->query_result($list_result,$rset,"notesid");
                 $action = "DetailView";
-                $evt_query="select senotesrel.crmid,crmentity.setype from senotesrel, crmentity where senotesrel.notesid ='".$notesid."' and senotesrel.crmid = crmentity.crmid";
+                $evt_query="SELECT senotesrel.crmid, crmentity.setype
+			FROM senotesrel
+			INNER JOIN crmentity
+				ON  senotesrel.crmid = crmentity.crmid
+			WHERE senotesrel.notesid ='".$notesid."'";
 	}else if($module == "Products")
 	{
 		$productid = $adb->query_result($list_result,$rset,"productid");
                 $action = "DetailView";
-                $evt_query="select seproductsrel.crmid,crmentity.setype from seproductsrel, crmentity where seproductsrel.productid ='".$productid."' and seproductsrel.crmid = crmentity.crmid";
+                $evt_query="SELECT seproductsrel.crmid, crmentity.setype
+			FROM seproductsrel
+			INNER JOIN crmentity
+				ON seproductsrel.crmid = crmentity.crmid
+			WHERE seproductsrel.productid ='".$productid."'";
 
 	}else
 	{
 		$activity_id = $adb->query_result($list_result,$rset,"activityid");
 		$action = "DetailView";
-		$evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
+		$evt_query="SELECT seactivityrel.crmid, crmentity.setype
+			FROM seactivityrel
+			INNER JOIN crmentity
+				ON  seactivityrel.crmid = crmentity.crmid
+			WHERE seactivityrel.activityid='".$activity_id."'";
 
 		if($module == 'HelpDesk')
 		{
 			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
 			if($activity_id != '')
-				$evt_query = "select * from crmentity where crmid=".$activity_id;
+				$evt_query = "SELECT * FROM crmentity WHERE crmid=".$activity_id;
 		}
 	}
 	//added by raju to change the related to in emails inot multiple if email is for more than one contact
@@ -1949,11 +2527,11 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
 	{
-		$query = "select contactid from contpotentialrel where potentialid = ".$recordid;
+		$query = "SELECT contactid FROM contpotentialrel WHERE potentialid = ".$recordid;
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Vendors")
 	{
-		$query = "select contactid from vendorcontactrel where vendorid = ".$recordid;
+		$query = "SELECT contactid FROM vendorcontactrel WHERE vendorid = ".$recordid;
 	}
 
 	if($query !='')

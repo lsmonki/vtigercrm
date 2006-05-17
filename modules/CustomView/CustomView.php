@@ -1170,7 +1170,7 @@ class CustomView extends CRMEntity{
 	{
 		if($viewid != "" && $listquery != "")
 		{
-			$listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
+			$listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 			if($module == "Activities" || $module == "Emails")
 			{
 				$query = "select groups.groupname ,users.user_name,".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,activity.* ".$listviewquery;
@@ -1209,7 +1209,7 @@ class CustomView extends CRMEntity{
 	{
 		if($viewid != "" && $listquery != "")
                 {
-                        $listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
+                        $listviewquery = substr($listquery, strpos($listquery,'FROM'),strlen($listquery));
 
                         $query = "select count(*) AS count ".$listviewquery;
                         
