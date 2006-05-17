@@ -374,8 +374,8 @@ function getHistory($parentmodule,$query,$id)
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			$list .= '<td valign="top" colspan="3" width="30%" height="21" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 30%, inserted colspan="3" valign="top" class="visibleDescriptionLink"
-			$list .= '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
-			$entries[] = $row['subject'];
+			$activity = '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
+			$entries[] = $activity;
 			$list .= '</td>';
 	
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
