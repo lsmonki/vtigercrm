@@ -2556,23 +2556,24 @@ Param $lv_array - list view session array
 Return type void.
 */
 
-function setSessionVar($lv_array)
+function setSessionVar($lv_array,$noofrows,$max_ent)
 {
-	$start = $_REQUEST['start'];
+	$start = '';
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
-	$lv_array['start']=$_REQUEST['start'];
+	{
+		$lv_array['start']=$_REQUEST['start'];
+		$start = $_REQUEST['start'];
+	}
 	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
-	$lv_array['viewname']=$_REQUEST['viewname'];
+		$lv_array['viewname']=$_REQUEST['viewname'];
 
 	$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
 
-	if ($start < ceil ($noofrows / $list_max_entries_per_page) && $start !='')
+	if ($start < ceil ($noofrows / $max_ent) && $start !='')
 	{
 		$start = ceil ($noofrows / $max_ent);
 		$_SESSION['lvs'][$currentModule]['start'] = $start;
 	}
 }
-
-
 
 ?>
