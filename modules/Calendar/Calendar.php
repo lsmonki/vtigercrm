@@ -6,7 +6,7 @@ class Calendar
 	var $view='day';
 	var $date_time;
 	var $hour_format = 'am/pm';
-	var $show_events;
+	var $show_events = true;
 	var $show_tasks; 
 	var $day_slice;
 	var $week_slice;
@@ -21,7 +21,7 @@ class Calendar
 	/*
 	constructor
 	*/
-	function Calendar($view='',$data='')
+	function Calendar($view='',$data=Array())
 	{
 		$this->view = $view;
 		$this->date_time = new DateTime($data,true);
