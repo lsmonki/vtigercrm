@@ -2125,6 +2125,53 @@ a.calMnu:Hover{
 									
 /* End of Calendar */
 
+/* Cal Year View */
+.month_table{
+	border:2px solid #CCCCCC;
+	width:100%;
+	background-color:white;
+}
+
+.month_table tr th{
+	background-color:#E9E9E9;
+	color:#000000;
+	text-align:center;
+	border:1px dotted #CCCCCC;
+	height:20px;
+	width:14%;
+	font-weight:normal;
+}
+
+.month_table tr td{
+	border:1px dotted #CCCCCC;
+	color:#000000;
+	text-align:center;
+	height:20px;
+}
+
+.cal_Hdr{
+	background-image:url(images/cal_Hdr.gif);
+	background-repeat:repeat-x;
+	background-position:left top;
+	font-weight:bold;
+	color:#000000;
+	text-align:left;
+	border:0px solid #000000;
+}
+
+.eventDay{
+	background-color:#FF9966;
+	font-weight:bold;
+}
+
+.currDay{
+	background-color:#006600;
+	font-weight:bold;
+	text-decoration:underline;
+}
+
+/* End of Cal Year View */
+
 /* Level 2 Menu Selected*/
 
 level2Sel{
