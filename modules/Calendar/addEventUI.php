@@ -245,8 +245,8 @@ require_once('modules/Calendar/Calendar.php');
 								
 							</td>
 							<td width=20% align=center valign=top>
-								<input type=button value="Add >>" class=small style="width:100%" onClick="addColumn()"><br>
-								<input type=button value="<< Remove " class=small style="width:100%" onClick="delColumn()">
+								<input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class=small style="width:100%" onClick="addColumn()"><br>
+								<input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class=small style="width:100%" onClick="delColumn()">
 							</td>
 							<td width=40% align=center valign=top>
 								<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -306,7 +306,7 @@ require_once('modules/Calendar/Calendar.php');
 						<table border=0 cellspacing=0 cellpadding=0>
 						<tr>
 							<td width=20><input type="checkbox" onClick="showhide('repeatOptions')"></td>
-							<td colspan=2><?echo $mod_strings['LBL_RMD_ON']?></td>
+							<td colspan=2><?echo $mod_strings['LBL_ENABLE_REPEAT']?></td>
 						</tr>
 						<tr>
 							<td colspan=2>
@@ -315,7 +315,7 @@ require_once('modules/Calendar/Calendar.php');
 								<tr>
 								<td><?echo $mod_strings['LBL_REPEAT_ONCE']?></td>
 								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
-								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI');ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI');ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
+								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
 								</tr>
 								</table>
 								
@@ -420,3 +420,18 @@ setObjects();
 	</script>
 
 	<!-- Add Activity DIV stops-->
+
+<div id="reportLay" style="width:125px;" onMouseout="fninvsh('reportLay')" onMouseover="fnvshNrm('reportLay')">
+	<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+		<tr>
+			<td>
+				<a href="#" class="calMnu">- Mark Completed</a>
+				<a href="#" class="calMnu">- Mark Pending</a>
+				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
+				<a href="#" class="calMnu">- Postpone</a>
+				<a href="#" class="calMnu">- Change Owner</a>
+				<a href="#" class="calMnu">- Delete</a>
+			</td>
+		</tr>
+	</table>
+</div>
