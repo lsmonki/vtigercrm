@@ -28,6 +28,7 @@ $image_path=$theme_path."images/";
 
 $focus = new Campaign();
 $category = getParentTab();
+$smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 $url_string = ''; // assigning http url string
 
@@ -82,7 +83,6 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $smarty->assign("CHANGE_OWNER",getUserslist());
 //<<<<<customview>>>>>
 
-$smarty = new vtigerCRM_Smarty;
 if($viewid != 0)
 {
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
