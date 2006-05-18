@@ -111,15 +111,15 @@ function save_customfields($entity_id)
 	$log->debug("Entering save_customfields(".$entity_id.") method ...");
 	$log->info("save customfields invoked");
 	global $adb;
-	$dbquery="select * from customfields where module='Accounts'";
+	$dbquery = "SELECT * FROM customfields WHERE module = 'Accounts'";
         /*
 	$result = mysql_query($dbquery);
-	$custquery = 'select * from accountcf where accountid="'.$entity_id.'"';
+	$custquery = "SELECT * FROM accountcf WHERE accountid = '".$entity_id."'";
         $cust_result = mysql_query($custquery);
 	if(mysql_num_rows($result) != 0)
         */
 	$result = $adb->query($dbquery);
-	$custquery = "select * from accountcf where accountid='".$entity_id."'";
+	$custquery = "SELECT * FROM accountcf WHERE accountid = '".$entity_id."'";
         $cust_result = $adb->query($custquery);
 	if($adb->num_rows($result) != 0)
 	{
@@ -185,16 +185,13 @@ function save_customfields($entity_id)
                   if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
-                  //$query = 'update accountcf SET '.$update.' where accountid="'.$entity_id.'"'; 
-                  //mysql_query($query);
-                        $query = 'update accountcf SET '.$update." where accountid='".$entity_id."'"; 
+                        $query = "UPDATE accountcf SET ".$update." WHERE accountid='".$entity_id."'"; 
 			$adb->query($query);
 		}
 		else
 		{
 			//Insert Block
-			$query = 'insert into accountcf ('.$columns.') values('.$values.')';
-			//mysql_query($query);
+			$query = "INSERT INTO accountcf (".$columns.") VALUES(".$values.")";
                         $adb->query($query);
 		}
 		
@@ -211,7 +208,7 @@ function save_customfields($entity_id)
 		else
 		{
 			//Insert Block
-			$query = 'insert into accountcf ('.$columns.') values('.$values.')';
+			$query = "INSERT INTO accountcf (".$columns.") VALUES(".$values.")";
                         $adb->query($query);
 			//mysql_query($query);
 		}
