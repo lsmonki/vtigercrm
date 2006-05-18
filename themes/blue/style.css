@@ -469,7 +469,7 @@ a:hover {
 
 .calAddEvent {
 	position:absolute;
-	z-index:10000;
+	z-index:10;
 	width:500px;
 
 	left:200px;
@@ -1133,6 +1133,7 @@ a.submenu:Hover{
 	display:block;
 	background-color:#CCCCCC;
 	width:175px;
+	z-index: 11;
 }
 
 .leftFormBorder1 {
@@ -1201,6 +1202,10 @@ a.submenu:Hover{
 	background: url(images/calc_mem_btn.gif) no-repeat;
 	width:25px;
 	/*background-color: #CCC;*/
+}
+
+#calc {
+	z-index: 11;
 }
 
 /* RSS STYLES */
@@ -1954,7 +1959,7 @@ a.alpha:Hover{
 /* All Menu */
 #allMenu{
 	width:500px;
-        z-index:10000002;
+        z-index:12;
 	border-top:2px solid #CCCCCC;
 	border-left:2px solid #CCCCCC;
 	border-bottom:2px solid #666666;
@@ -1963,7 +1968,7 @@ a.alpha:Hover{
 	top:100px;
 	background-color:#CCCCCC;
 	position:absolute;
-	z-index:1000001;
+	z-index:11;
 	display:none;
 }
 
