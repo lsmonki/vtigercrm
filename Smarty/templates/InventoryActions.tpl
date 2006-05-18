@@ -13,7 +13,7 @@
 -->*}
 
 
-
+<!-- Added this file to display the Inventory Actions based on the Inventory Modules -->
 <table width="100%" border="0" cellpadding="5" cellspacing="0">
    <tr>
 	<td>&nbsp;</td>
@@ -24,13 +24,13 @@
    <tr>
 	<td align="left" style="padding-left:10px;">
 		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/> 
-		<a href="#" class="webMnu">Generate Invoice</a> 
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='{$CONVERTMODE}'; document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">Generate Invoice</a> 
 	</td>
    </tr>
    <tr>
 	<td align="left" style="padding-left:10px;border-bottom:1px dotted #CCCCCC;">
 		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-		<a href="#" class="webMnu">Generate Sales Order</a> 
+		<a href="javascript: document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='quotetoso'; document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.submit();" class="webMnu">Generate Sales Order</a> 
 	</td>
    </tr>
    <tr>
