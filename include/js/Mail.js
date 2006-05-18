@@ -148,7 +148,6 @@ function sendmail(module,idstrings)
 {
 	var ajaxObj = new Ajax(ajaxSendmailResponse);
 	var urlstring ="module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings;
-	alert(urlstring)
 	ajaxObj.process("index.php?",urlstring);
 }
 function ajaxSendmailResponse(response)
