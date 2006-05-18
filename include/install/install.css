@@ -16,11 +16,14 @@
  * Description:  Defines the stylesheet used for the application installation.
  ********************************************************************************/
 
-body         { 
+body { 
 	font-size: 10pt;
-	background-color:#FFF;
 	color:#000000;
 	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	background-image: url(images/vtiger-paw.jpg);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	background-attachment: fixed;	
 }
 
 form,h1,h2,h3,h4{margin:0;padding:0;}
@@ -39,7 +42,7 @@ h4{
 
 }
 
-table{background-color:#FFF;}
+table{}
 td,tr,p,div {
         font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
         font-size: 10pt;
@@ -96,4 +99,9 @@ A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; TEXT-D
 	line-height: 14px;
 	color: #000000;
 }
-
+.background{
+background-image: url(images/vtiger-paw.jpg);
+background-repeat: no-repeat;
+background-position: bottom center;
+background-attachment: fixed;
+} 
