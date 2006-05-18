@@ -224,7 +224,7 @@ function alphabetic(url)
                                         {if $button_check eq 'del'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
@@ -289,7 +289,7 @@ function alphabetic(url)
                                         {if $button_check eq 'del'}
                                             <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail('{$MODULE}')"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
@@ -389,8 +389,13 @@ function alphabetic(url)
 </table>
 </div>
 {/if}
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
+<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
+
+{/if}
 <script>
 {literal}
+
 function ajaxChangeStatus(statusname)
 {
 	show("status");

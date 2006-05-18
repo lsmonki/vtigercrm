@@ -15,7 +15,9 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
-
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
+<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
+{/if}
 
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
@@ -121,7 +123,7 @@ Calendar.setup ({ldelim}
                                                         {/if}
                                                         {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
                                                                 {if $SENDMAILBUTTON eq 'permitted'}
-                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.module.value='Emails';this.form.email_directing_module.value='{$REDIR_MOD}';this.form.return_action.value='DetailView';this.form.action.value='EditView';" type="submit" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
+                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="small" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
                                                                 {/if}
                                                         {/if}
                                                         {if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
@@ -417,6 +419,7 @@ Calendar.setup ({ldelim}
 	<td align=right valign=top><img src="themes/blue/images/showPanelTopRight.gif"></td>
 </tr>
 </table>
+
 {if $MODULE eq 'Products'}
 <script language="JavaScript" type="text/javascript" src="modules/Products/Productsslide.js"></script>
 <script language="JavaScript" type="text/javascript">Carousel();</script>

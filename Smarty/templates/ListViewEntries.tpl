@@ -25,7 +25,7 @@
                                         {if $button_check eq 'del'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_status'}
@@ -96,8 +96,8 @@
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
-                       `                 {elseif $button_check eq 's_mail'}
-                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                        {elseif $button_check eq 's_mail'}
+                                             <input class="small" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
                                         {elseif $button_check eq 'c_status'}

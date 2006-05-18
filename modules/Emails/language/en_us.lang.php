@@ -140,6 +140,7 @@ $mod_strings = Array(
 'LBL_IN_SUBJECT'=>'in Subject',
 'LBL_IN_SENDER'=>'in Sender',
 'LBL_IN_SUBJECT_OR_SENDER'=>'in Subject or Sender',
+'CHOSE_EMAIL'=>'Choose Email ID',
 );
 
 ?>

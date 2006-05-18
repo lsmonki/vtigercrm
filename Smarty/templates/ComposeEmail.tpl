@@ -32,11 +32,6 @@
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">
 <input type="hidden" name="action">
-<input type="hidden" name="parenttab" value="{$CATEGORY}">
-<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
-<input type="hidden" name="return_id" value="{$RETURN_ID}">
-<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
-<input type="hidden" name="return_viewname" value="{$RETURN_VIEWNAME}">
 <input type="hidden" name="popupaction" value="create">
 <input type="hidden" name="hidden_toid">
 <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -92,7 +87,8 @@
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
-	<td colspan="2" class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}"></td>
+	<td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
+	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
 

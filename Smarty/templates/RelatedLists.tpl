@@ -12,6 +12,7 @@
 
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 
 	{include file='Buttons_List1.tpl'}
 
@@ -134,7 +135,7 @@
 							{elseif $header eq 'Emails'}
 							<input type="hidden" name="email_directing_module">
 							<input type="hidden" name="record">
-							<input title="New Email" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='Emails'; this.form.email_directing_module.value='{$REDIR_MOD}'; this.form.record.value='{$id}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Email"></td>
+							<input title="New Email" accessyKey="F" class="small" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$id});" type="button" name="button" value="Add new Email"></td>
 							{elseif $header eq 'Users'}
                                                                 {if $MODULE eq 'Activities'}
                                                                 <input title="Change" accessKey="" tabindex="2" type="button" class="small" value="Select User" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Activities&return_action=CallRelatedList&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id={$id}&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1")';>
@@ -208,4 +209,7 @@
 </table>
 
 </td></tr></table>
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
+<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
+{/if}
 
