@@ -297,8 +297,8 @@ function getProductTaxPercentage($type,$productid)
 
 	$taxpercentage = '';
 
-	$res = $adb->query("select percentage from inventorytaxinfo inner join producttaxrel on inventorytaxinfo.taxid=producttaxrel.taxid where producttaxrel.productid=$productid and inventorytaxinfo.taxname=\"$type\"");
-	$taxpercentage = $adb->query_result($res,0,'percentage');
+	$res = $adb->query("select taxpercentage from inventorytaxinfo inner join producttaxrel on inventorytaxinfo.taxid=producttaxrel.taxid where producttaxrel.productid=$productid and inventorytaxinfo.taxname=\"$type\"");
+	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	$log->debug("Exiting from getProductTaxPercentage($productid,$type) function. return value=$taxpercentage");
 	return $taxpercentage;
