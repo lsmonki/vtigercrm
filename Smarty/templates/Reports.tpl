@@ -76,22 +76,22 @@
 </div>
 <!-- END OF POPUP LAYER -->
 
-<div id="orgLay" style="display:none;">
+<div id="orgLay" style="display:none;width:350px;">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody>
 	<tr>
-	<td class="genHeaderSmall" align="left" width="40%">{$MOD.LBL_ADD_NEW_GROUP}</td>
-	<td align="right" width="60%"><a href="javascript:fninvsh('orgLay');"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
+	<td class="genHeaderSmall" nowrap align="left" width="30%">{$MOD.LBL_ADD_NEW_GROUP}</td>
+	<td align="right"><a href="javascript:fninvsh('orgLay');"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
 	</tr>
 	<tr><td colspan="2"><hr></td></tr>
 	<tr>
-	<td align="right" width="50%"><b>{$MOD.LBL_REP_FOLDER_NAME} : </b></td>
+	<td align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_NAME} </b></td>
 	<td align="left"><input id="folder_name" name="folderName" class="txtBox" type="text"></td>
 	</tr>
 	<input id="folder_id" name="folderId" type="hidden" value=''>
 	<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
 	<tr>
-	<td align="right" width="50%"><b>{$MOD.LBL_REP_FOLDER_DESC} : </b></td>
+	<td align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_DESC} </b></td>
 	<td align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
 	</tr>
 	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
