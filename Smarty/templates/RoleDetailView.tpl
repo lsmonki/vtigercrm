@@ -17,7 +17,7 @@
 	{include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
 
-<form id="form" name="new" action="index.php" method="post">
+<form id="form" name="roleView" action="index.php" method="post">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="createrole">
 <input type="hidden" name="parenttab" value="Settings">
@@ -84,7 +84,7 @@
 				  	<!-- <input title="Back" accessKey="C" class="classBtn" onclick="window.history.back();" type="button" name="New" value=" <  Back " > &nbsp; -->
 					 <input value="  {$APP.LBL_EDIT_BUTTON_LABEL}  " title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" type="submit" name="Edit" >
                     &nbsp;
-					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="classBtn" onclick="DeleteRole('{$ROLEID}')" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">
+					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="classBtn" onclick="DeleteRole()" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">
 				</td>
                 </tr>
           <tr><td colspan="2">&nbsp;</td></tr>
@@ -111,12 +111,10 @@
 	{include file='SettingsSubMenu.tpl'}
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
-	function DeleteRole(roleid)
+	function DeleteRole()
 	{ldelim}
-    		//show("an_busy");
-    		var ajaxObj = new Ajax(ajaxSaveResponse);
-    		var urlstring = "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid;
-    		ajaxObj.process("index.php?",urlstring);
+			document.roleView.action.value='RoleDeleteStep1';
+			document.roleView.submit();	
 	{rdelim}
 	
 	function ajaxSaveResponse(response)
