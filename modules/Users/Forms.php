@@ -86,7 +86,7 @@ function verify_data(form) {
 	        alert("The password does't match");
 	        return false;
 	}
-	return true;
+	check_duplicate();
 }
 
 // end hiding contents from old browsers  -->
