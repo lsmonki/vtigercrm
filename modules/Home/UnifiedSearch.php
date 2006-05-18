@@ -172,7 +172,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
 
-	$query = "select * from field where tabid=".getTabid($module);
+	$query = "SELECT * FROM field WHERE tabid = ".getTabid($module);
 	$result = $adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -186,8 +186,8 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		if(strstr($listquery,$tablename))
 		{
 			if($where != '')
-				$where .= ' or ';
-			$where .= $tablename.'.'.$columnname.' like "%'.$search_val.'%"';
+				$where .= " OR ";
+				$where .= $tablename.".".$columnname." LIKE ".$adb->quote("%$search_val%");
 		}
 	}
 
@@ -210,7 +210,7 @@ function getTagWhere($search_val,$current_user_id)
 	$where = '';
 	if(count($crmid_array) > 0)
 	{
-		$where = ' crmentity.crmid in (';
+		$where = " crmentity.crmid IN (";
 		foreach($crmid_array as $index => $crmid)
 		{
 			$where .= $crmid.',';
