@@ -262,4 +262,53 @@ class Email extends CRMEntity {
 
 
 }
+/** Function to get the emailids for the given ids form the request parameters 
+ *  It returns an array which contains the mailids and the parentidlists
+*/
+
+function get_to_emailids($module)
+{
+	global $adb;
+	$query = 'select columnname,fieldid from field where fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
+    $result = $adb->query($query);
+	$columns = Array();
+	$idlists = '';
+	$mailids = '';
+	while($row = $adb->fetch_array($result))
+    {
+		$columns[]=$row['columnname'];
+		$fieldid[]=$row['fieldid'];
+	}
+	$columnlists = implode(',',$columns);
+	$crmids = ereg_replace(':',',',$_REQUEST["idlist"]);
+	switch($module)
+	{
+		case 'Leads':
+			$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid left join leadscf on leadscf.leadid = leaddetails.leadid where crmentity.deleted=0 and crmentity.crmid in ('.$crmids.')';
+			break;
+		case 'Contacts':
+			$query = 'select crmid,concat(lastname," ",firstname) as entityname,'.$columnlists.' from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid left join contactscf on contactscf.contactid = contactdetails.contactid where crmentity.deleted=0 and crmentity.crmid in ('.$crmids.')';
+			break;
+		case 'Accounts':
+			$query = 'select crmid,accountname as entityname,'.$columnlists.' from account inner join crmentity on crmentity.crmid=account.accountid left join accountscf on accountscf.accountid = account.accountid where crmentity.deleted=0 and crmentity.crmid in ('.$crmids.')';
+			break;
+	}	
+	$result = $adb->query($query);
+	while($row = $adb->fetch_array($result))
+	{
+		$name = $row['entityname'];
+		for($i=0;$i<count($columns);$i++)
+		{
+			if($row[$columns[$i]] != NULL && $row[$columns[$i]] !='')
+			{
+				$idlists .= $row['crmid'].'@'.$fieldid[$i].'|'; 
+				$mailids .= $name.'<'.$row[$columns[$i]].'>,';	
+			}
+		}
+	}
+
+	$return_data = Array('idlists'=>$idlists,'mailds'=>$mailids);
+	return $return_data;
+		
+}
 ?>

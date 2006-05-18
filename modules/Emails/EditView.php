@@ -73,9 +73,11 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
     $log->info("Entity info successfully retrieved for EditView.");
 	$focus->name=$focus->column_fields['name'];		
 }
-if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+elseif(isset($_REQUEST['sendmail']) && $_REQUEST['sendmail'] !='')
 {
-        $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
+	$mailids = get_to_emailids($_REQUEST['pmodule']);
+	$smarty->assign('TO_MAIL',$mailids['mailds']);
+	$smarty->assign('IDLISTS',$mailids['idlists']);	
 	$focus->mode = '';
 }
 
@@ -94,7 +96,7 @@ $smarty->assign("SINGLE_MOD",$app_strings['Email']);
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
-
+/*
 if($_REQUEST['reply'])
 {
 	$tmp_theme = $theme;
@@ -103,7 +105,7 @@ if($_REQUEST['reply'])
 	//WEBMAIL FUNCTIONS
 	define('SM_PATH','modules/squirrelmail-1.4.4/');
 	//get the webmail id and get the subject of the mail given the mail id
-	/* SquirrelMail required files. */
+	// SquirrelMail required files. 
 	require_once(SM_PATH . 'functions/strings.php');
 	require_once(SM_PATH . 'functions/imap_general.php');
 	require_once(SM_PATH . 'functions/imap_messages.php');
@@ -148,7 +150,7 @@ if($_REQUEST['reply'])
 		}
 	}
 	$theme = $tmp_theme;
-}
+}*/
 //get Email Information
 
 //needed when creating a new email with default values passed in
@@ -240,20 +242,8 @@ if(isset($focus->parent_type) && $focus->parent_type != "")
 	$smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 
-if($focus->parent_type == "Account") 
-	$smarty->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
-
-
 $email_tables = Array('emails','crmentity','activity'); 
 $tabid = getTabid("Emails");
-$validationData = getDBValidationData($email_tables,$tabid);
-$data = split_validationdataArray($validationData);
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-$category = getParentTab();
-$smarty->assign("CATEGORY",$category);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
