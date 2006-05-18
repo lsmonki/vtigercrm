@@ -28,6 +28,29 @@ function openPopup(){ldelim}
 	{rdelim}	
 </script>	
 
+<script language="javascript">
+function check_duplicate()
+{ldelim}
+
+        var ajaxObj = new Ajax(ajaxSaveUserResponse);
+        var user_name = document.getElementById('user_name').value;
+
+        var urlstring ="module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName="+user_name;
+        ajaxObj.process("index.php?",urlstring);
+
+{rdelim}
+
+function ajaxSaveUserResponse(response)
+{ldelim}
+        if(response.responseText == 'SUCCESS')
+                document.EditView.submit();
+        else
+                alert(response.responseText);
+{rdelim}
+</script>
+
+
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
 	{include file='SettingsMenu.tpl'}
@@ -110,7 +133,7 @@ function openPopup(){ldelim}
 					   </tr>  
 				<tr>
 				    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_NAME} </td>
-				    <td class="dvtCellInfo"><input type="text" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"{$USERNAME_READONLY} /></td>
+				    <td class="dvtCellInfo"><input type="text" id="user_name" name="user_name" value='{$USER_NAME}' class="detailedViewTextBox"  onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"{$USERNAME_READONLY} /></td>
 				     <td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
                                      <td class="dvtCellInfo"><input type="checkbox" name="is_admin" {$DISABLED} {$IS_ADMIN}/></td>
 				</tr>
@@ -289,7 +312,7 @@ function openPopup(){ldelim}
 							        <tr><td>&nbsp;</td></tr>
 							        <tr>
 							            <td><div align="center">
-								    <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="submit" />
+								    <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
 								    <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
 								        </div></td>
 								</tr>
