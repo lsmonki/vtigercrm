@@ -151,10 +151,10 @@ $array = Array(
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Alpha5 Installer: Step 1</title>
+<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 1</title>
 <link rel="stylesheet" href="include/install/install.css" type="text/css" />
 </head>
-<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0" class="">
+<body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -172,7 +172,7 @@ $array = Array(
 	
 	
 	<!-- 1 of 5 header -->
-	<table border="0" cellspacing="0" cellpadding="5" width="75%" class=small> 
+	<table border="0" cellspacing="0" cellpadding="5" width="75%"> 
 	<tr>	
 		<td valign=top><img src="include/install/images/cwIcoSystem.gif" alt="System Check" title="System Check"></td>
 		<td width=98% valign=top>

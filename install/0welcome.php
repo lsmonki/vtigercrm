@@ -48,7 +48,7 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Alpha5 Configuration Wizard</title>
+<title>vtiger CRM 5.0 Beta Configuration Wizard</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -57,75 +57,50 @@ foreach($pieces as $val)
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
-	<td align=center>
+<td width="10%" valign="top"></td>
+<td align=center>
 	<br><br>
 	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
 		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha5" title="v5alpha5"></td>
 	</tr>
-	</table>
-	
-	<br><br>
+	<tr><td><br>&nbsp;<img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td></tr>
+	</table><br>
 	
 	<!-- Welcome note -->
-	<table border="0" cellspacing="0" cellpadding="5" width="70%" class=small> 
+	<table border="0" cellspacing="0" cellpadding="5" width="95%"> 
 	<tr>	
-		<td colspan="2"><img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
-	</tr>
-	<tr>
-		<td style="color:#333399" width="70%"><span
-	style="text-alignment:justify">
+<td>
+<p><b>Welcome to the vtiger family!</b><p>
+<p>This is a product of pure teamwork, passion, and fanaticism!</p>
+<p>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same.</p>
+<p><b>vtiger is 100% pure Open Source.</b> <em>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able to get time-bound answers to all your queries</em>. We do provide telephone-support for paid customers only. <a href:"http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37"><b>Click here</b></a> for subscribing to the Support.</p>
+<p>vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.</p>
+<p align="center">We do believe that <b>YOU</b> can and will make a difference.</p>
+<p>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.</p>
+<p>Please find mentioned below some information about us that you could utilize:<p>
 
-Welcome to the vtiger family!<br><br>
-This is a product of pure teamwork,passion and fanaticism!
-<br>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same.<br>
+<ul>
+<li><a href="http://blogs.vtiger.com">vtiger Blogs</a><br>&nbsp;</li> 
+<li><a href=" http://forums.vtiger.com">vtiger Public Forums</a><br>&nbsp;</li>
+<li><a href=" http://vtiger.fosslabs.com">vtigerForge</a><br>&nbsp;</li> 
+<li><a href="http://lists.vtigercrm.com/mailman/listinfo/vtigercrm-developers">Developers Mailing List</a> (vtigercrm-developers@lists.vtigercrm.com)<br>&nbsp;</li>
+<li>IRC Channel (Join Freenode - /join #vtiger<br>&nbsp;</li>
+<li><a href=" http://vtiger.fosslabs.com/cgi-bin/trac.cgi/newticket">Bug Tracker</a><br>&nbsp;</li>
+<li><a href=" http://www.flickr.com/photos/41109270@N00/">The growing vtiger family</a> ...<br>&nbsp;</li>
+</ul>
 
-<br>
-<br>
-<bold>vtiger is 100% pure Open Source. <u>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able
-to get time-bound answers to all your queries</u>.We do provide telephone-support for paid customers only.
-The support subscription link is as follows :- 
-<ul> http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37 </ul>
+<p><b><i>Again, thanks for taking out the time to try vtiger! We want you to know that we really appreciate it.</i></b>
 
-vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.<br><br><br>
-<center>
-We do believe that <b>YOU</b> can and will make a
-difference.</center><br><br><br>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.<br>
-Please find mentioned below some information about us that you could utilize
-<ul>http://blogs.vtiger.com</ul> 
-<ul>http://forums.vtiger.com </ul>
-<ul>http://vtiger.fosslabs.com (vtigerforge)</ul> 
-<ul>vtigercrm-developers@lists.vtigercrm.com (Mailing List)</ul>
-<ul>Join Freenode - /join #vtiger (IRC Channel)</ul>
-<ul>http://vtiger.fosslabs.com/cgi-bin/trac.cgi/newticket (Bug Tracker)</ul>
-<ul>http://www.flickr.com/photos/41109270@N00/ (The growing vtiger family ...)</ul>
-<br>
-<br>
-<b><i>Again, thanks for taking out the time to try vtiger! We want you to know that we really appreciate it.</i></b>
-
-<br>
-<br>
-<br>
-
-
-
-
-
-
-
-
-
-
-
-This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables and configuration files you need to start. The entire process should
-				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 5.0 Alpha5 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40. <br><br>
-				<center><font color='red'><b>vtiger CRM 5 will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it</b></font></center></br> The installation wizard will guide you with the installation regardless of the setup you may have.<br>
-				<br></span>
-<br>
-		</td>
+<p><b>Installation Instructions:-</b></p>
+<p>This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
+<br><br>
+<p><span style="color:#555555">- vtiger CRM 5.0 Alpha5 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
+<p align="center"><font color='red'><b>vtiger CRM 5 will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it</b></font></center>
+<p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
+</td>
 	</tr>
 	<tr>
 		<td >
@@ -133,12 +108,11 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables
 			<div align=left style="color:#737373;overflow: scroll; height: 100px; width: 95%;border:1px dashed #cccccc;padding:10px">
 			
 			<b>License Agreement</b><br>
-			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License.<br>
-			vtiger.com is not affiliated with nor endorsed by any of the above
+			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above
 			providers.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<br>
 			<br>
-			1. Apache web server software used under the Apache License available
+			1. Apache Web server software used under the Apache License available
 			at &lt;vtiger CRM Home&gt;/vtigerCRM/apache/LICENSE.txt<br>
 			2. MySQL database software used under the GPL License available at
 			&lt;vtiger CRM Home&gt;/vtigerCRM/mysql/README.txt <br>
@@ -2588,7 +2562,7 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables
 			<br>
 			</div>
 
-		</td>
+	</td>
 	</tr>
 	<tr>
 		<td align="center" width="70%">
@@ -2598,11 +2572,8 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables
 				By clicking the Start button, you are agreeing to the licensing terms.
 		</form>
 		</td>
-	</tr>
+</tr>
 	</table>
-	
-	<br><br><br><br>
-	
 	<!-- Horizontal Shade -->
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
 	<tr>
@@ -2612,13 +2583,12 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables
 	</table>
 		
 	
-<!--	<table border="0" cellspacing="0" cellpadding="5" width="80%" class=small> 
+<table border="0" cellspacing="0" cellpadding="5" width="80%" class=small> 
 	<tr>	
 		<td ><img align="left" src="install/images/cwRegVCRM.gif" alt="Register vtiger CRM " title="Register vtiger CRM "> (Optional)</td>
 	</tr>
 	<tr>
-		<td><span style="color:#999999">Please take a moment to register your copy of vtiger CRM. Though this is optional, we encourage you to register. Only your name and email 
-		address are required for registration. We do not sell, rent, share or otherwise, distribute your information to third parties.<br></span>
+		<td><span style="color:#999999">Please take a moment to register your copy of vtiger CRM. Though this is optional, we encourage you to register. Only your name and email address are required for registration. We do not sell, rent, share or otherwise, distribute your information to third parties.<br></span>
 		
 		</td>
 	</tr>
@@ -2630,12 +2600,9 @@ This Configuration Wizard will create vtiger CRM 5.0 Alpha5 databases and tables
   <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 
   </IFRAME> 		</td>
 	</tr>
-	</table>
-	
-		
-	
-	
+	</table>	
 	</td>
+<td width="10%" valign="top"></td>
 </tr>
 </table>
 <!-- Master table closes -->
