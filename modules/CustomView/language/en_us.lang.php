@@ -269,5 +269,4 @@ following values "Call","Meeting" or "Task".',
 'End_Date'=>'End_Date', 
 'LBL_RULE'=>'RULE' 
 ); 
-?> 
-
+?>
