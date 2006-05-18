@@ -1394,6 +1394,17 @@ $log->debug("type is ".$type);
 
 		$tax_per = '';
 		//Save the Product - VAT tax relationship if VAT tax check box is enabled
+		//Delete the existing tax if any
+		if($this->mode == 'edit')
+		{
+			$tax_array = Array('VAT','Sales','Service');
+			foreach($tax_array as $tax_type)
+			{
+				$taxid = getTaxId($tax_type);
+				$sql = "delete from producttaxrel where productid=$this->id and taxid=$taxid";
+				$adb->query($sql);
+			}
+		}
 		if($_REQUEST['vat_check'] == 'on' || $_REQUEST['vat_check'] == 1)
 		{
 			$taxid = getTaxId('VAT');
