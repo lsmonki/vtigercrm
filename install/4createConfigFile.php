@@ -113,7 +113,7 @@ $cache_dir = 'cache/';
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>vtiger CRM 5.0 beta Installer: Step 4</title>
+<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 4</title>
 
 <link rel="stylesheet" href="include/install/install.css" type="text/css" />
 

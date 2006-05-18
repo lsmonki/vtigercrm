@@ -161,7 +161,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 Alpha4 Installer: Step 2</title>
+<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 2</title>
 <link rel="stylesheet" href="include/install/install.css" type="text/css" />
 
 </head>

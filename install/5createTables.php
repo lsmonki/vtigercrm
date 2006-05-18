@@ -31,8 +31,8 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 5.0 beta Installer: Step 5</title>
-<link rel="stylesheet" href="install/include/install.css" type="text/css" />
+<title>vtiger CRM 5.0 Beta Configuration Wizard: Step 5</title>
+<link rel="stylesheet" href="include/install/install.css" type="text/css" />
 <style type="text/css"><!--
 
 
