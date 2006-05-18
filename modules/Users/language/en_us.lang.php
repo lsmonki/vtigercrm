@@ -467,6 +467,7 @@ $mod_strings = Array(
 'LBL_MY_DETAILS'=>'My Details',
 'LBL_MY_PHOTO'=>'My Photo',
 'LBL_CHANGE_PHOTO'=>'Change Photo...',
+'LBL_CHANGE'=>'Change',
 
 
 //Added for Access Privileges
