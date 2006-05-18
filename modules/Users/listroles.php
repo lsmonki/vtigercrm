@@ -101,8 +101,6 @@ $query = "select * from role";
 $result = $adb->query($query);
 $num_rows=$adb->num_rows($result);
 
-
-
 $roleout='';
 indent($hrarray,$roleout,$role_det);
 function indent($hrarray,$roleout,$role_det)
@@ -130,7 +128,7 @@ function indent($hrarray,$roleout,$role_det)
 		echo '<td style="width:5px"></td>';
 		if(! $roledepth == 0)
 		{
-			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit">Edit</a> | <a href="#" onclick="DeleteRole(\''.$roleid.'\')">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid='.$roleid.'">View</a></span></td>';
+			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid='.$roleid.'">View</a></span></td>';
 		}
 		else
 		{

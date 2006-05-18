@@ -82,16 +82,19 @@ $role_det = getAllRoleDetails();
 $query = "select * from role";
 $result = $adb->query($query);
 $num_rows=$adb->num_rows($result);
+$mask_roleid='';
+$mask_roleid=$_REQUEST['maskid'];
 
 $roleout ='';
-$roleout .= indent($hrarray,$roleout,$role_det);
-function indent($hrarray,$roleout,$role_det)
+$roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
+function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 {
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	foreach($hrarray as $roleid => $value)
 	{
+	
 		//retreiving the role details
 		$role_det_arr=$role_det[$roleid];
 		$roleid_arr=$role_det_arr[2];
@@ -109,7 +112,7 @@ function indent($hrarray,$roleout,$role_det)
 		else{
 			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="Root" title="Root" align="absmiddle">';
 		}	
-		if($roledepth ==0){
+		if($roledepth == 0 || $mask_roleid == $roleid){
 			$roleout .= '&nbsp;<b class="genHeaderGray">'.$rolename.'</b>';
 		}
 		else{
@@ -118,7 +121,7 @@ function indent($hrarray,$roleout,$role_det)
  		$roleout .=  '</li>';
 		if(sizeof($value) > 0 )
 		{
-			$roleout = indent($value,$roleout,$role_det);
+			$roleout = indent($value,$roleout,$role_det,$mask_roleid);
 		}
 
 		$roleout .=  '</ul>';

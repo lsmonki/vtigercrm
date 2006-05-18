@@ -11,7 +11,7 @@
 
 global $adb;
 $del_id =  $_REQUEST['delete_role_id'];
-$tran_id = $_REQUEST['transfer_role_id'];
+$tran_id = $_REQUEST['user_role'];
 
 deleteRole($del_id,$tran_id);
 
