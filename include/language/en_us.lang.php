@@ -864,6 +864,7 @@ $app_strings = Array(
 //Added after 5.0 Alpha5
 'Campaign Name'=>'Campaign Name',
 'LBL_ACTIONS'=>'Actions',
+'LBL_SEND'=>'Send',
 );
 
 
