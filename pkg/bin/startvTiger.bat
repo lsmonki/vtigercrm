@@ -45,14 +45,16 @@ echo "making an attempt to kill any existing vtigercrm service"
 echo ""
 bin\apache -k stop -n vtigercrm5_beta
 bin\apache -k uninstall -n vtigercrm5_beta
+echo "Uninstalling apache service again for confirmation after sleeping for 10 seconds"
+echo ""
+%SLEEP_STR% -n 10 127.0.0.1>nul
+bin\apache -k stop -n vtigercrm5_beta
+bin\apache -k uninstall -n vtigercrm5_beta 
 echo ""
 echo ""
-echo "installing vtigercrm5_beta apache service"
+echo "Installing  vtigercrm5_beta apache service after sleeping for 10 seconds"
 echo ""
-echo ""
-echo "Starting  vtigercrm5_beta apache service after sleeping for 20 seconds"
-echo ""
-%SLEEP_STR% -n 20 127.0.0.1>nul
+%SLEEP_STR% -n 10 127.0.0.1>nul
 bin\apache -k install -n vtigercrm5_beta -f conf\httpd.conf
 echo ""
 echo "Starting  vtigercrm5_beta apache service"
