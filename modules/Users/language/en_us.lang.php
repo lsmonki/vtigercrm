@@ -483,7 +483,10 @@ $mod_strings = Array(
 'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
 'LBL_SELECT_SCREEN'=>'Select the Screen / Module :',
 'LBL_FIELDS_AVLBL'=>'Fields Available in',
-'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown'
+'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown',
+'LBL_ROLE_TO_BE_DELETED'=>'Role to be Deleted',
+'LBL_TRANSFER_USER_ROLE'=>'Transfer Users to Role',
+'LBL_DELETE_ROLE'=>'Delete Role'
 
 
 );
