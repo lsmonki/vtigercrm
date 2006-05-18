@@ -35,6 +35,7 @@ if(trim($subject) != "")
 	{
 		foreach($storearray as $id)
 		{
+			if($id == '') continue;
 			if($camodule == "Contacts")
 			{
 				$sql="select * from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid where crmentity.deleted =0 and contactdetails.contactid='" .$id ."'";

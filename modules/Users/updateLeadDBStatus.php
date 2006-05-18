@@ -27,18 +27,22 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 {
 	foreach($storearray as $id)
 	{
-		$sql = "update crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
-		$result = $adb->query($sql);
+		if($id != '') {
+			$sql = "update crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
+			$result = $adb->query($sql);
+		}
 	}
 }
 elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 {
 	foreach($storearray as $id)
 	{
-		$sql = "update leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
-		$result = $adb->query($sql);
-		$query = "update crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
-		$result1 = $adb->query($query);
+		if($id != '') {
+			$sql = "update leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
+			$result = $adb->query($sql);
+			$query = "update crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
+			$result1 = $adb->query($query);
+		}
 	}
 }
 header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate&viewname=".$viewid);
