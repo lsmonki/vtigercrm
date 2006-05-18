@@ -1341,10 +1341,18 @@ function fnvshobj(obj,Lay){
     var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
-    tagName.style.left= leftSide + 'px';
+    var maxW = tagName.style.width;
+    var widthM = maxW.substring(0,maxW.length-2);
+    var getVal = eval(leftSide) + eval(widthM);
+    if(getVal  > innerWidth ){
+        leftSide = eval(leftSide) - eval(widthM);
+        tagName.style.left = leftSide + 'px';
+    }
+    else
+        tagName.style.left= leftSide + 'px';
     tagName.style.top= topSide + 'px';
-    tagName.style.visibility = 'visible';
     tagName.style.display = 'block';
+    tagName.style.visibility = "visible";
 }
 
 function fninvsh(Lay){
