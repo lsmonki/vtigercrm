@@ -25,7 +25,23 @@ require_once('include/logging.php');
 require_once('include/utils/UserInfoUtil.php');
 $log =& LoggerManager::getLogger('index');
 
-
+global $adb;
+$user_name = $_REQUEST['userName'];
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
+{
+        $query = 'Select user_name from users where user_name ="'.$user_name.'"';
+        $result = $adb->query($query);
+        if($adb->num_rows($result) > 0)
+        {
+		echo 'User Name Already Exists!';
+		die;
+	}else
+	{
+	        echo 'SUCCESS';
+	        die;
+	}
+}
+																		
 if (isset($_POST['record']) && !is_admin($current_user) && $_POST['record'] != $current_user->id) echo ("Unauthorized access to user administration.");
 elseif (!isset($_POST['record']) && !is_admin($current_user)) echo ("Unauthorized access to user administration.");
 
@@ -78,16 +94,16 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	if (!isset($_POST['deleted'])) $focus->deleted = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $focus->homeorder = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 	
-	if (!$focus->verify_data()) {
+/*	if (!$focus->verify_data()) {
 		header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
 		exit;
 	}
-	else{	
+	else{	*/
 		$focus->save("Users");
 //		include('modules/Calendar/user_ins.php');
 //		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
-	}
+//	}
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
 	/*	
 		//changing fourm password	
