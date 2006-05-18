@@ -251,5 +251,58 @@ function getPrdHandler($product_id)
 	return $handler;
 }
 
+/**	function to get the taxid
+ *	@param string $type - tax type (VAT or Sales or Service)
+ *	return int   $taxid - taxid corresponding to the Tax type from inventorytaxinfo table
+ */
+function getTaxId($type)
+{
+	global $adb, $log;
+	$log->debug("Entering into getTaxId($type) function.");
+
+	$res = $adb->query("select taxid from inventorytaxinfo where taxname=\"$type\"");
+	$taxid = $adb->query_result($res,0,'taxid');
+
+	$log->debug("Exiting from getTaxId($type) function. return value=$taxid");
+	return $taxid;
+}
+
+/**	function to get the taxpercentage
+ *	@param string $type       - tax type (VAT or Sales or Service)
+ *	return int $taxpercentage - taxpercentage corresponding to the Tax type from inventorytaxinfo table
+ */
+function getTaxPercentage($type)
+{
+	global $adb, $log;
+	$log->debug("Entering into getTaxPercentage($type) function.");
+
+	$taxpercentage = '';
+
+	$res = $adb->query("select percentage from inventorytaxinfo where taxname=\"$type\"");
+	$taxpercentage = $adb->query_result($res,0,'percentage');
+
+	$log->debug("Exiting from getTaxPercentage($type) function. return value=$taxpercentage");
+	return $taxpercentage;
+}
+
+/**	function to get the product's taxpercentage
+ *	@param string $type       - tax type (VAT or Sales or Service)
+ *	@param id  $productid     - productid to which we want the tax percentage
+ *	return int $taxpercentage - taxpercentage corresponding to the Tax type from inventorytaxinfo table
+ */
+function getProductTaxPercentage($type,$productid)
+{
+	global $adb, $log;
+	$log->debug("Entering into getProductTaxPercentage($type,$productid) function.");
+
+	$taxpercentage = '';
+
+	$res = $adb->query("select percentage from inventorytaxinfo inner join producttaxrel on inventorytaxinfo.taxid=producttaxrel.taxid where producttaxrel.productid=$productid and inventorytaxinfo.taxname=\"$type\"");
+	$taxpercentage = $adb->query_result($res,0,'percentage');
+
+	$log->debug("Exiting from getProductTaxPercentage($productid,$type) function. return value=$taxpercentage");
+	return $taxpercentage;
+}
+
 
 ?>

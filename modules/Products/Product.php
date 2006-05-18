@@ -42,8 +42,8 @@ class Product extends CRMEntity {
         );
 
 
-	var $tab_name = Array('crmentity','products','productcf','seproductsrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','products'=>'productid','productcf'=>'productid','seproductsrel'=>'productid');
+	var $tab_name = Array('crmentity','products','productcf','seproductsrel','producttaxrel');
+	var $tab_name_index = Array('crmentity'=>'crmid','products'=>'productid','productcf'=>'productid','seproductsrel'=>'productid','producttaxrel'=>'productid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('productname','productcode','commissionrate');		  

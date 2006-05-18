@@ -118,8 +118,40 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-    $smarty->assign("MODE", $focus->mode);
+	$smarty->assign("MODE", $focus->mode);
+
+	$vat_tax = getProductTaxPercentage('VAT',$focus->id);
+	$sales_tax = getProductTaxPercentage('Sales',$focus->id);
+	$service_tax = getProductTaxPercentage('Service',$focus->id);
 }
+
+$vat_check = 1;
+$sales_check = 1;
+$service_check = 1;
+if($vat_tax == '')
+{
+	$vat_tax = getTaxPercentage('VAT');
+	$vat_check = 0;
+}
+if($sales_tax == '')
+{
+	$sales_tax = getTaxPercentage('Sales');
+	$sales_check = 0;
+}
+if($service_tax == '')
+{
+	$service_tax = getTaxPercentage('Service');
+	$service_check = 0;
+}
+
+//Following values has been added to display the Tax information
+$smarty->assign("VAT_TAX", $vat_tax);
+$smarty->assign("SALES_TAX", $sales_tax);
+$smarty->assign("SERVICE_TAX", $service_tax);
+
+$smarty->assign("VAT_CHECK", $vat_check);
+$smarty->assign("SALES_CHECK", $sales_check);
+$smarty->assign("SERVICE_CHECK", $service_check);
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);

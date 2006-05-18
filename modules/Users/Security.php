@@ -447,7 +447,7 @@ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field")
 
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'71','unit_price','Unit Price',1,0,0,100,1,32,1,'N~O',1,null,'BAS')"); 
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'9','commissionrate','Commission Rate',1,0,0,100,2,32,1,'N~O',1,null,'BAS')"); 
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'taxclass','products',1,'15','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'taxclass','producttaxrel',1,'83','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
 
 
 //Block 33 stock info
@@ -2106,6 +2106,11 @@ title';
 	$this->db->query("insert into parenttabrel values (2,26,1)");
 	$this->db->query("insert into parenttabrel values (2,6,2)");
 	$this->db->query("insert into parenttabrel values (2,4,3)");
+
+	//Added to populate the default inventory tax informations
+	$this->db->query("insert into inventorytaxinfo values(".$this->db->getUniqueID("inventorytaxinfo").",'VAT','4.5')");
+	$this->db->query("insert into inventorytaxinfo values(".$this->db->getUniqueID("inventorytaxinfo").",'Sales','10')");
+	$this->db->query("insert into inventorytaxinfo values(".$this->db->getUniqueID("inventorytaxinfo").",'Service','12.5')");
 	
 	}
 }

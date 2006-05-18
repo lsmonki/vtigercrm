@@ -173,7 +173,7 @@ Calendar.setup ({ldelim}
 			{if $label ne ''}
 				{if $keycntimage ne ''}
 					<td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
-				{else}
+				{elseif $label neq 'Tax Class'}<!-- Avoid to display the label Tax Class -->
 					<td class="dvtCellLabel" align=right width=25%>{$label}</td>
 				{/if}  
 
@@ -342,6 +342,33 @@ Calendar.setup ({ldelim}
 							<a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
 						</div>
 					</td>
+				{elseif $keyid eq 83}<!-- Handle the Tax in Inventory -->
+					<td align="right" class="dvtCellLabel">
+						{$APP.LBL_VAT} :
+						
+					</td>
+					<td class="dvtCellInfo" align="left">
+						{$VAT_TAX}
+					</td>
+					<td colspan="2" class="dvtCellInfo">&nbsp;</td>
+		   		   </tr>
+		   		   <tr>
+					<td align="right" class="dvtCellLabel">
+						{$APP.LBL_SALES} :
+					</td> 
+					<td class="dvtCellInfo" align="left">
+						{$SALES_TAX}
+					</td>
+					<td colspan="2" class="dvtCellInfo">&nbsp;</td>
+				   </tr>
+		   		   <tr>
+					<td align="right" class="dvtCellLabel">
+						{$APP.LBL_SERVICE} :
+					</td>
+					<td class="dvtCellInfo" align="left" >
+						{$SERVICE_TAX}
+					</td>
+					
 				{else}
 					<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
 				{/if}

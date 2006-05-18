@@ -188,6 +188,10 @@ class CRMEntity extends SugarBean
 			}
 		}
 		// Code included by Minnie  -  Ends
+		elseif($table_name == 'producttaxrel')
+		{
+			$this->insertTaxInformation($table_name, $module);
+		}
 		else
 		{
 			$this->insertIntoEntityTable($table_name, $module);			
@@ -1375,7 +1379,62 @@ $log->debug("type is ".$type);
                 }
                 return $sql3;
 
-        }	
+        }
+
+
+	/**	function to save the product tax information in producttarel table
+	 *	@param string $tablename - tablename to save the product tax relationship (producttaxrel)
+	 *	@param string $module	 - current module name
+	 *	$return void
+	*/
+	function insertTaxInformation($tablename, $module)
+	{
+		global $adb, $log;
+		$log->debug("Entering into insertTaxInformation($tablename, $module) method ...");
+
+		$tax_per = '';
+		//Save the Product - VAT tax relationship if VAT tax check box is enabled
+		if($_REQUEST['vat_check'] == 'on' || $_REQUEST['vat_check'] == 1)
+		{
+			$taxid = getTaxId('VAT');
+			$tax_per = $_REQUEST['vat_tax'];
+			if($tax_per == '')
+				$tax_per = getTaxPercentage('VAT');
+
+			$log->debug("Going to save the Product - VAT tax relationship");
+
+			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$adb->query($sql);
+		}
+		//Save the Product - Sales tax relationship if Sales tax check box is enabled
+		if($_REQUEST['sales_check'] == 'on' || $_REQUEST['sales_check'] == 1)
+		{
+			$taxid = getTaxId('Sales');
+			$tax_per = $_REQUEST['sales_tax'];
+			if($tax_per == '')
+				$tax_per = getTaxPercentage('Sales');
+
+			$log->debug("Going to save the Product - Sales tax relationship");
+
+			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$adb->query($sql);
+		}
+		//Save the Product - Service tax relationship if Service tax check box is enabled
+		if($_REQUEST['service_check'] == 'on' || $_REQUEST['service_check'] == 1)
+		{
+			$taxid = getTaxId('Service');
+			$tax_per = $_REQUEST['service_tax'];
+			if($tax_per == '')
+				$tax_per = getTaxPercentage('Service');
+
+			$log->debug("Going to save the Product - Service tax relationship");
+
+			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$adb->query($sql);
+		}
+
+		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");
+	}	
 
 }
 ?>

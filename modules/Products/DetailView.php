@@ -60,6 +60,15 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
 
+//Added to display the Tax informations
+$vat_tax = getProductTaxPercentage('VAT',$focus->id);
+$sales_tax = getProductTaxPercentage('Sales',$focus->id);
+$service_tax = getProductTaxPercentage('Service',$focus->id);
+
+$smarty->assign("VAT_TAX", $vat_tax);
+$smarty->assign("SALES_TAX", $sales_tax);
+$smarty->assign("SERVICE_TAX", $service_tax);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 //Security check for related list

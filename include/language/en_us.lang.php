@@ -865,6 +865,10 @@ $app_strings = Array(
 'Campaign Name'=>'Campaign Name',
 'LBL_ACTIONS'=>'Actions',
 'LBL_SEND'=>'Send',
+'LBL_VAT'=>'VAT',
+'LBL_SALES'=>'Sales',
+'LBL_SERVICE'=>'Service',
+
 );
 
 
