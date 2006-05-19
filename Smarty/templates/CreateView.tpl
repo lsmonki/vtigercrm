@@ -19,7 +19,6 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/searchajax.js"></script>
 
 <script type="text/javascript">
 
