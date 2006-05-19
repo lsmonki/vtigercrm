@@ -469,7 +469,7 @@ a:hover {
 
 .calAddEvent {
 	position:absolute;
-	z-index:10;
+	z-index:10000;
 	width:500px;
 
 	left:200px;
@@ -1129,11 +1129,9 @@ a.submenu:Hover{
 	position:absolute;
 	left:100px;
 	top:100px;
-	visibility:hidden;
-	display:block;
+	display:none;
 	background-color:#CCCCCC;
 	width:175px;
-	z-index: 11;
 }
 
 .leftFormBorder1 {
@@ -1153,32 +1151,31 @@ a.submenu:Hover{
 }
 .calcResult {
 	width: 100%;
-	height: 25;
+	height: 25px;
 	background-color: #FFFFCC;/*CBDFD6*/
 	border-top: 1px solid #CCC;
 	border-left: 0px;
 	border-right: 1px solid #CCC;
 	border-bottom: 1px solid #CCC;
-	font-size: 10;
+	font-size: 10px;
 	text-align: right;
 }
 .calcMem {
 	width: 100%;
-	height: 25;
+	height: 25px;
 	border-top: 1px solid #CCC;
 	border-left: 1px solid #CCC;
 	border-right: 0px;
 	border-bottom: 1px solid #CCC;
 	background-color: #FFFFCC;/*CBDFD6*/
 	font-family: Arial;
-	font-size: 10;
+	font-size: 10px;
 	color: #BBB;
 	text-align: left;
 }
 .calcBlackBtn, .calcGreyBtn, .calcBigBtn, .calcCancBtn, .calcMemBtn, .calcBackBtn {
 	border: none;
-	width: 10;
-	height: 20;
+	height: 20px;
 	font-size: 11px;
 	color: #FFF;
 	text-align:left;
@@ -1203,9 +1200,16 @@ a.submenu:Hover{
 	width:25px;
 	/*background-color: #CCC;*/
 }
-
-#calc {
-	z-index: 11;
+#calc{
+	position:absolute;
+	left:100px;
+	top:100px;
+	background-color:#FFFFFF;
+	width:185px;
+	border-bottom:2px solid #000000;
+	border-right:2px solid #666666;
+	border-left:2px solid #CCCCCC;
+	border-top:2px solid #CCCCCC;
 }
 
 /* RSS STYLES */
@@ -1588,7 +1592,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:11px;
 	text-decoration:none;
-	font-weight:none;
+	font-weight:normal;
 	padding-left:5px;
 	height:20px;
 	border-bottom:1px solid #CCCCCC;
@@ -1627,7 +1631,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:11px;
 	text-decoration:none;
-	font-weight:none;
+	font-weight:normal;
 	padding-left:5px;
 	height:20px;
 }
@@ -1767,14 +1771,6 @@ a.submenu:Hover{
 	position:relative;
 	border:1px solid #666666;
 	height:175px;
-	scrollbar-base-color: #9999cc;
-	scrollbar-arrow-color: white;
-	scrollbar-track-color: #cccccc;
-	scrollbar-shadow-color: black;
-	scrollbar-lightshadow-color: black;
-	scrollbar-darkshadow-color: gray;
-	scrollbar-highlight-color: white;
-	scrollbar-3dlight-color: black;
 }
 
 .txtGreen{
@@ -1959,7 +1955,7 @@ a.alpha:Hover{
 /* All Menu */
 #allMenu{
 	width:500px;
-        z-index:12;
+        z-index:10000002;
 	border-top:2px solid #CCCCCC;
 	border-left:2px solid #CCCCCC;
 	border-bottom:2px solid #666666;
@@ -1968,7 +1964,7 @@ a.alpha:Hover{
 	top:100px;
 	background-color:#CCCCCC;
 	position:absolute;
-	z-index:11;
+	z-index:1000001;
 	display:none;
 }
 
