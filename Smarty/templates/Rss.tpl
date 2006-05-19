@@ -197,10 +197,13 @@ function toggleRSSFolder(id) {ldelim}
 {rdelim}
 function makedefaultRss(id)
 {ldelim}
-	show('status');	
-	var ajaxObj = new Ajax(ajaxSetDefault);
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id;
-	ajaxObj.process("index.php?",urlstring);
+	if(id != '')
+	{ldelim}
+		show('status');	
+		var ajaxObj = new Ajax(ajaxSetDefault);
+		var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id;
+		ajaxObj.process("index.php?",urlstring);
+	{rdelim}
 {rdelim}
 function getrssfolders()
 {ldelim}
