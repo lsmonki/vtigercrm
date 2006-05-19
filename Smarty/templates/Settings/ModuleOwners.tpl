@@ -48,7 +48,6 @@ function ajaxmoduleresponse(response)
 </tr>
 </table>
 	{include file='SettingsSubMenu.tpl'}
-	<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
 {literal}
 <script>
 function assignmodulefn(mode)

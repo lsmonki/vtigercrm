@@ -210,7 +210,6 @@ function ShowFolders(folderid)
 	</tr>
 </table>
 <!-- END -->
-<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
 <script>
 function OpenCompose(id,mode) 
 {ldelim}

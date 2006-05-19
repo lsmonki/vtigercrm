@@ -150,7 +150,6 @@ function ajaxRssSaveResponse(response)
 	<td>&nbsp;</td>
 	</tr>
 </table>
-<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;"">Processing Request...</div>
 	<div id="PopupLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>

@@ -221,7 +221,6 @@
 </tr>
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
-<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;vertical-align:center;left:887px;top:0px;height:17px;">Processing Request...</div>
 <script>
 function ajaxSaveResponse(response)
 {ldelim}

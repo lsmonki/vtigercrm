@@ -341,4 +341,4 @@ function ajaxQCreateResponse(response)
 	</tr>
 </table>
 </div>
-
+<div id="status" style="display:none;position:absolute;left:970px;top:0px;height:17px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>

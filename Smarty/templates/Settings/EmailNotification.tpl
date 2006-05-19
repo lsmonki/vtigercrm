@@ -42,7 +42,6 @@
 </table>
 	{include file='SettingsSubMenu.tpl'}
 	<div id="editdiv" style="display:none;position:absolute;left:180px;top:30px;"></div>
-	<div id="status" style="display:none;position:absolute;background-color:#bbbbbb;left:887px;top:0px;height:17px;white-space:nowrap;">Processing Request...</div>
 {literal}
 <script>
 function fetchSaveNotify(id)
