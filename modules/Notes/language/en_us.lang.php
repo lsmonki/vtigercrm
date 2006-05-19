@@ -54,7 +54,7 @@ $mod_strings = Array(
 'LBL_TOOL_FORM_TITLE'=>'Note Tools',
 // Added for 4GA
 'Contact Name'=>'Contact Name',
-'Related To'=>'Related To',
+'Related To'=>'Related to',
 'Subject'=>'Subject',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
