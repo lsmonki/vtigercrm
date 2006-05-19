@@ -35,12 +35,18 @@ function ajaxRssFeedResponse(response)
 }
 function DeleteRssFeeds(id)
 {
-	show('status');	
-	var feed = 'feed_'+id;
-	document.getElementById(feed).parentNode.removeChild(document.getElementById(feed));
-	var ajaxObj = new Ajax(ajaxRssFeedResponse);
-	var urlstring = 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id;
-	ajaxObj.process("index.php?",urlstring);
+   if(id != '')	
+   {		
+  	if(confirm('Are you sure to delete the rss feed?'))
+	{	
+		show('status');	
+		var feed = 'feed_'+id;
+		document.getElementById(feed).parentNode.removeChild(document.getElementById(feed));
+		var ajaxObj = new Ajax(ajaxRssFeedResponse);
+		var urlstring = 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id;
+		ajaxObj.process("index.php?",urlstring);
+	}
+   }
 }
 function SaveRssFeeds()
 {
