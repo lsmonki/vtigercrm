@@ -13,13 +13,11 @@ function get_calc($image_path) {
 global $log;
 $log->debug("Entering get_calc(".$image_path.") method ...");
 $the_calc = <<<EOQ
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:0;margin-left:0;" align="center">
   <tr>
     <td>
+	<form name="calculator">
         <table border="0" cellpadding="2" cellspacing="2">
-		<form name="calculator">
           <tr style="height:5">
             <td></td>
           </tr>
@@ -77,8 +75,8 @@ $the_calc = <<<EOQ
             <td width="25"> <input type="button" name="equal" class="calcBlackBtn" value="=" onClick="EqualButton(0); return false;"></td>
             <td width="25"> <input type="button" name="plus" class="calcBlackBtn" value="+" onClick="AddButton(1); return false;"></td>
           </tr>
-		   </form>
         </table>
+   </form>
      </td>
   </tr>
 </table>
