@@ -53,16 +53,13 @@ if(empty($date_data))
 	);
 	
 }
-//echo '<pre>';print_r($date_data);echo '</pre>';
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data); 
-//echo '<pre>';print_r($calendar_arr['calendar']);echo '</pre>';
-if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month')
+if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
 {
         global $current_user;
         $calendar_arr['calendar']->add_Activities($current_user);
 }
 $calendar_arr['view'] = $mysel;
 calendar_layout($calendar_arr);
-//echo '<pre>';print_r($calendar_arr);echo'</pre>';
 ?>
 
