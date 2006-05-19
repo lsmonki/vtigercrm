@@ -81,7 +81,7 @@
 			      {foreach item=entity key=entity_id from=$LISTENTITY}
 			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
 				{if $SHOW_MASS_SELECT neq 'false'}
-					 <td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+					 <td width="2%"><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
 				{/if}
 				 {foreach item=data from=$entity}	
 				 <td>{$data}</td>
