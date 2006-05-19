@@ -147,7 +147,11 @@ if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 		}
 	}
 }
-
+if(isset($_REQUEST['view']) && $_REQUEST['view']!='') $view='&view='.$_REQUEST['view'];
+if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='') $hour='&hour='.$_REQUEST['hour'];
+if(isset($_REQUEST['day']) && $_REQUEST['day']!='') $day='&day='.$_REQUEST['day'];
+if(isset($_REQUEST['month']) && $_REQUEST['month']!='') $month='&month='.$_REQUEST['month'];
+if(isset($_REQUEST['year']) && $_REQUEST['year']!='') $year='&year='.$_REQUEST['year'];
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
@@ -157,7 +161,7 @@ if($_REQUEST['allflag'] !='All')
 	$page.='&allflag=All';	
 else
 	$page.='&allflag=Normal';
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activemode&viewname=$return_viewname$page");
+header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page");
 
 //Function to get the activity details for mail body
 function getActivityDetails($description)
