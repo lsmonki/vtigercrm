@@ -15,7 +15,7 @@
 		<tr>
 		{include file='SettingsMenu.tpl'}
 				<td width="75%" valign="top">
-						<form action="index.php" method="post" name="new" id="form">
+						<form action="index.php" method="post" name="profileform" id="form">
 						<input type="hidden" name="module" value="Users">
 						<input type="hidden" name="mode" value="{$MODE}">
 						<input type="hidden" name="action" value="CreateProfile1">
@@ -62,7 +62,7 @@
 															<tr>
 																	<td colspan="2" align="right">
 																					<input type="button" value=" &lsaquo; {$APP.LBL_BACK} " name="back" class="classBtnDisable" disabled />&nbsp;&nbsp;
-																					<input type="submit" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " class="classBtn" name="Next" onClick="return rolevalidate();"/>&nbsp;&nbsp;
+																					<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " class="classBtn" name="Next" onClick="rolevalidate();"/>&nbsp;&nbsp;
 																					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back()"; class="classBtn"/>
 																	</td>
 															</tr>
@@ -82,12 +82,27 @@ function rolevalidate()
     var profilename = document.getElementById('pobox').value;
     profilename = profilename.replace(/ /gi,'',profilename);
     if(profilename != '')
-        return true;
+	dup_validation(profilename);
     else
     {ldelim}
         alert('Enter The Profile name');
         document.getElementById('pobox').focus();
-        return false;
     {rdelim}
+{rdelim}
+
+
+function dup_validation(profilename)
+{ldelim}
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring ="module=Users&action=UsersAjax&file=CreateProfile1&ajax=true&dup_check=true&profile_name="+profilename;
+
+        ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function ajaxSaveResponse(response)
+{ldelim}
+        if(response.responseText == 'SUCESS')
+                document.profileform.submit();
+        else
+                alert(response.responseText);
 {rdelim}
 </script>
