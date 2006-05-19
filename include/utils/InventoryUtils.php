@@ -288,9 +288,10 @@ function getTaxPercentage($type)
 /**	function to get the product's taxpercentage
  *	@param string $type       - tax type (VAT or Sales or Service)
  *	@param id  $productid     - productid to which we want the tax percentage
+ *	@param id  $default       - if 'default' then first look for product's tax percentage and product's tax is empty then it will return the default configured tax percentage, else it will return the product's tax (not look for default value)
  *	return int $taxpercentage - taxpercentage corresponding to the Tax type from inventorytaxinfo table
  */
-function getProductTaxPercentage($type,$productid)
+function getProductTaxPercentage($type,$productid,$default='')
 {
 	global $adb, $log;
 	$log->debug("Entering into getProductTaxPercentage($type,$productid) function.");
@@ -299,6 +300,11 @@ function getProductTaxPercentage($type,$productid)
 
 	$res = $adb->query("select taxpercentage from inventorytaxinfo inner join producttaxrel on inventorytaxinfo.taxid=producttaxrel.taxid where producttaxrel.productid=$productid and inventorytaxinfo.taxname=\"$type\"");
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
+
+	//This is to retrive the default configured value if the taxpercentage related to product is empty
+	if($taxpercentage == '' && $default == 'default')
+		$taxpercentage = getTaxPercentage($type);
+
 
 	$log->debug("Exiting from getProductTaxPercentage($productid,$type) function. return value=$taxpercentage");
 	return $taxpercentage;
