@@ -12,6 +12,8 @@
 
 -->*}
 
+<script type="text/javascript" src="include/js/Inventory.js"></script>
+<script type="text/javascript" src="include/js/general.js"></script>
 <!-- Added this file to display and hanld the Product Details in Inventory module  -->
 
    <tr>
@@ -27,37 +29,65 @@
 			<th width="20%"><font color='red'>*</font>{$APP.LBL_PRODUCT}</th>
 
 			{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			<th width="12%">{$APP.LBL_QTY_IN_STOCK}</th>
+			<th width="10%">{$APP.LBL_QTY_IN_STOCK}</th>
 			{/if}
 
 			<th width="10%"><font color='red'>*</font>{$APP.LBL_QTY}</th>
 			<th width="10%">{$APP.LBL_UNIT_PRICE}</th>
-			<th width="19%"><font color='red'>*</font>{$APP.LBL_LIST_PRICE}</th>
+			<th width="15%"><font color='red'>*</font>{$APP.LBL_LIST_PRICE}</th>
+			<th width="20%">{$APP.LBL_TAX_CALCULATION}</th>
 			<th width="10%">{$APP.LBL_TOTAL}</th>
 
 			<th width="5%">&nbsp;</th>
 		   </tr>
 		   <tr id="row1" class="dvtCellLabel">
-			<td nowrap>
+			<td nowrap valign="top">
 				<input type="text"  id="txtProduct1" name="txtProduct1" class="txtBox" readonly />&nbsp;<img src="themes/blue/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}')" />
 			</td>
 
 			{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			   <td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>
+			   <td style="padding:3px;" id="qtyInStock1" valign="top">&nbsp;</td>
 			{/if}
 
-			<td>
+			<td valign="top">
 				<input type="text" id="txtQty1" name="txtQty1" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)" />
 			</td>
-			<td style="padding:3px;">
-				<div id="unitPrice1"></div>&nbsp;
+			<td style="padding:3px;"  id="unitPrice1" valign="top">&nbsp;
+				
 			</td>
-			<td nowrap>
+			<td nowrap valign="top">
 				<input type="text" id="txtListPrice1" name="txtListPrice1" class="txtBox" readonly onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" />
 			</td>
-			<td style="padding:3px;">
-				<div id="total1" align="right"></div>&nbsp;
+			<!-- Added for Tax calculation-->
+			<td valign="top">
+				<input type="text" id="txtTaxTotal1" name="txtTaxTotal1" value="" class="detailedViewTextBox" style="width:65%;">
+				<input type="hidden" id="hdnTaxTotal1" name="hdnTaxTotal1">
+				&nbsp;<input type="button" name="showTax" value=" ... "  class="classBtnSmall"  onclick="fnshow_Hide('tax_Lay1');">
+
+				<!-- This div is added to display the tax informations -->
+				<div id="tax_Lay1" style="width:100%;position:relative;border:0px solid #CCCCCC;background-color:#FFFFFF;display:none;">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
+					   <tr id="row1">
+						<td align="left" width="40%"><input type="text" id="txtVATTax1" name="txtVATTax1" class="txtBox" onBlur="ValidateTax('txtVATTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td width="20%" align="right">{$APP.LBL_VAT}</td>
+						<td align="left" width="40%"><input type="text" id="txtVATTaxTotal1" name="txtVATTaxTotal1" class="txtBox" onBlur="ValidateTax('txtVATTaxTotal1'); calcTotal(this);"/></td>
+					   </tr>
+					   <tr id="row1">
+						<td align="left"><input type="text" id="txtSalesTax1" name="txtSalesTax1" class="txtBox" onBlur="ValidateTax('txtSalesTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td  align="right">{$APP.LBL_SALES}</td>
+						<td align="left"><input type="text" id="txtSalesTaxTotal1" name="txtSalesTaxTotal1" class="txtBox" onBlur="ValidateTax('txtSalesTaxTotal1'); calcTotal(this);"/></td>
+					   </tr>
+					   <tr id="row1">
+						<td align="left"><input type="text" id="txtServiceTax1" name="txtServiceTax1" class="txtBox" onBlur="ValidateTax('txtServiceTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td align="right">{$APP.LBL_SERVICE}</td>
+						<td align="left"><input type="text" id="txtServiceTaxTotal1" name="txtServiceTaxTotal1" class="txtBox" onBlur="ValidateTax('txtServiceTaxTotal1'); calcTotal(this);"/></td>
+					   </tr>
+					</table>
+				</div>
+				<!-- This above div is added to display the tax informations --> 
+
 			</td>
+			<td style="padding:3px;" id="total1">&nbsp;</td>
 			<td>
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1">
 				<input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1">
@@ -120,4 +150,5 @@
 		<input type="hidden" name="totalProductCount" id="totalProductCount" value="">
 	</td>
    </tr>
+
 

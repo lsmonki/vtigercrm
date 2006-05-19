@@ -1208,6 +1208,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['hdnRowStatus'.$i] = '';
 		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
+		//Added to pass the tax percentage values
+		$product_Detail[$i]['txtVATTax'.$i] = getProductTaxPercentage('VAT',$productid,'default');
+		$product_Detail[$i]['txtSalesTax'.$i] = getProductTaxPercentage('Sales',$productid,'default');
+		$product_Detail[$i]['txtServiceTax'.$i] = getProductTaxPercentage('Service',$productid,'default');
+
 	}
 	$log->debug("Exiting getAssociatedProducts method ...");
 	return $product_Detail;

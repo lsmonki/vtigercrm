@@ -868,6 +868,8 @@ $app_strings = Array(
 'LBL_VAT'=>'VAT',
 'LBL_SALES'=>'Sales',
 'LBL_SERVICE'=>'Service',
+'LBL_TAX_DETAILS'=>'Tax Details',
+'LBL_TAX_CALCULATION'=>'Tax Calculation',
 
 );
 

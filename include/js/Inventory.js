@@ -164,10 +164,18 @@ function delRow(rowId) {
 
 
 function calcTotal(currObj) {
+
+	calcTaxTotal(currObj)
+
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
 
-	var total=eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value)
+	var tax_total = 0
+	if(getObj("txtTaxTotal"+rowId).value > 0)
+		tax_total = getObj("txtTaxTotal"+rowId).value;
+
+	var total=eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value)+eval(tax_total)
+
 	getObj("total"+rowId).innerHTML=getObj("hdnTotal"+rowId).value=roundValue(total.toString())
 	calcGrandTotal()
 }
@@ -256,3 +264,45 @@ function FindDuplicate()
         return true;
 }
 
+function fnshow_Hide(Lay){
+    var tagName = document.getElementById(Lay);
+   	if(tagName.style.display == 'none')
+   		tagName.style.display = 'block';
+	else
+		tagName.style.display = 'none';
+}
+
+function ValidateTax(txtObj)
+{
+	temp= /^\d+\.\d+$/.test(document.getElementById(txtObj).value);
+	if(temp == false)
+		alert("Please enter Valid TAX value");
+}
+
+function calcTaxTotal(currObj)
+{
+	var trObj=currObj.parentNode.parentNode
+	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+
+	var vat_total=0.0;
+	var sales_total=0.0;
+	var service_total=0.0;
+
+	var temp_total = eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value);
+
+	if(getObj("txtVATTax"+rowId).value > 0)
+		vat_total = eval(getObj("txtVATTax"+rowId).value*temp_total/100.00)
+	if(getObj("txtSalesTax"+rowId).value > 0)
+		sales_total=eval(getObj("txtSalesTax"+rowId).value*temp_total/100.00)
+	if(getObj("txtServiceTax"+rowId).value > 0)
+		service_total=eval(getObj("txtServiceTax"+rowId).value*temp_total/100.00)
+
+	var total = vat_total + sales_total + service_total
+
+	getObj("txtVATTaxTotal"+rowId).value = vat_total
+	getObj("txtSalesTaxTotal"+rowId).value = sales_total
+	getObj("txtServiceTaxTotal"+rowId).value = service_total
+
+	//set the tax total
+	getObj("txtTaxTotal"+rowId).value=getObj("hdnTaxTotal"+rowId).value=roundValue(total.toString())
+}

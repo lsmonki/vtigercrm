@@ -1389,13 +1389,27 @@ function fnAddRow(module){
 	var colfive = row.insertCell(4);
 	var colsix = row.insertCell(5);
 	var colseven = row.insertCell(6);
+	var coleight = row.insertCell(7);
+
+	colone.style.verticalAlign = 'top';
+	coltwo.style.verticalAlign = 'top';
+	colthree.style.verticalAlign = 'top';
+	colfour.style.verticalAlign = 'top';
+	colfive.style.verticalAlign = 'top';
+	colsix.style.verticalAlign = 'top';
+	colseven.style.verticalAlign = 'top';
+	coleight.style.verticalAlign = 'top';
+	
 	colone.innerHTML="<input type='text' id='txtProduct"+count+"' name='txtProduct"+count+"' class='txtBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this,\""+module+"\")' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
 	coltwo.innerHTML="<div id='qtyInStock"+count+"'>";	
 	colthree.innerHTML="<input type='text' id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; FindDuplicate(); settotalnoofrows(); calcTotal(this);' /> ";
 	colfour.innerHTML="&nbsp;</div><div id='unitPrice"+count+"'></div>";
 	colfive.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='FindDuplicate(); settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
-	colsix.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
-	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
+	//Added for tax calculation
+	colsix.innerHTML="<input type='text' id='txtTaxTotal"+count+"' name='txtTaxTotal"+count+"' value='' class='detailedViewTextBox' style='width:65%;'><input type='hidden' id='hdnTaxTotal"+count+"' name='hdnTaxTotal"+count+"'>&nbsp;<input type='button' name='showTax' value=' ... '  class='classBtnSmall'  onclick='fnshow_Hide(\"tax_Lay"+count+"\");'><div id='tax_Lay"+count+"' style='width:100%;position:relative;border:0px solid #CCCCCC;background-color:#FFFFFF;display:none;'><table width='100%' border='0' cellpadding='2' cellspacing='0' class='small'><tr id='row"+count+"'><td align='left' width='40%'><input type='text' id='txtVATTax"+count+"' name='txtVATTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtVATTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td width='20%' align='right'>VAT</td><td align='left' width='40%'><input type='text' id='txtVATTaxTotal"+count+"' name='txtVATTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtVATTaxTotal"+count+"\"); calcTotal(this);'/></td></tr><tr id='row"+count+"'><td align='left'><input type='text' id='txtSalesTax"+count+"' name='txtSalesTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtSalesTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td  align='right'>Sales</td><td align='left'><input type='text' id='txtSalesTaxTotal"+count+"' name='txtSalesTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtSalesTaxTotal"+count+"\"); calcTotal(this);'/></td></tr><tr id='row"+count+"'><td align='left'><input type='text' id='txtServiceTax"+count+"' name='txtServiceTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtServiceTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td align='right'>Service</td><td align='left'><input type='text' id='txtServiceTaxTotal"+count+"' name='txtServiceTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtServiceTaxTotal"+count+"\"); calcTotal(this);'/></td></tr></table></div>";
+
+	colseven.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
+	coleight.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
 }
 function fnAddRowForPO(module){
@@ -1416,15 +1430,29 @@ function fnAddRowForPO(module){
 	var colfour = row.insertCell(3);
 	var colfive = row.insertCell(4);
 	var colsix = row.insertCell(5);
+	var colseven = row.insertCell(6);
+
+	colone.style.verticalAlign = 'top';
+	coltwo.style.verticalAlign = 'top';
+	colthree.style.verticalAlign = 'top';
+	colfour.style.verticalAlign = 'top';
+	colfive.style.verticalAlign = 'top';
+	colsix.style.verticalAlign = 'top';
+	colseven.style.verticalAlign = 'top';
+
 	colone.innerHTML="<input type='text'id='txtProduct"+count+"' name='txtProduct"+count+"' class='txtBox' readonly/>&nbsp;<img src='themes/blue/images/search.gif' onclick='productPickList(this,\""+module+"\")' align='absmiddle' /><input type='hidden' id='hdnProductId"+count+"' name='hdnProductId"+count+"'>";
 	coltwo.innerHTML="<input type='text'id='txtQty"+count+"' name='txtQty"+count+"' class='detailedViewTextBox' onfocus='this.className=\"detailedViewTextBoxOn\"' onBlur='this.className=\"detailedViewTextBox\"; FindDuplicate(); settotalnoofrows(); calcTotal(this);' /> ";
 	colthree.innerHTML="&nbsp;<div id='unitPrice"+count+"'></div>";
 	colfour.innerHTML="<input type='text' id='txtListPrice"+count+"' name='txtListPrice"+count+"' class='txtBox' readonly onBlur='FindDuplicate(); settotalnoofrows(); calcTotal(this)'>&nbsp;<img src='themes/blue/images/pricebook.gif' onClick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer' title='Price Book' /> ";
-	colfive.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
-	colsix.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
+
+	//Added for tax calculation
+	colfive.innerHTML="<input type='text' id='txtTaxTotal"+count+"' name='txtTaxTotal"+count+"' value='' class='detailedViewTextBox' style='width:65%;'><input type='hidden' id='hdnTaxTotal"+count+"' name='hdnTaxTotal"+count+"'>&nbsp;<input type='button' name='showTax' value=' ... '  class='classBtnSmall'  onclick='fnshow_Hide(\"tax_Lay"+count+"\");'><div id='tax_Lay"+count+"' style='width:100%;position:relative;border:0px solid #CCCCCC;background-color:#FFFFFF;display:none;'><table width='100%' border='0' cellpadding='2' cellspacing='0' class='small'><tr id='row"+count+"'><td align='left' width='40%'><input type='text' id='txtVATTax"+count+"' name='txtVATTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtVATTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td width='20%' align='right'>VAT</td><td align='left' width='40%'><input type='text' id='txtVATTaxTotal"+count+"' name='txtVATTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtVATTaxTotal"+count+"\"); calcTotal(this);'/></td></tr><tr id='row"+count+"'><td align='left'><input type='text' id='txtSalesTax"+count+"' name='txtSalesTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtSalesTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td  align='right'>Sales</td><td align='left'><input type='text' id='txtSalesTaxTotal"+count+"' name='txtSalesTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtSalesTaxTotal"+count+"\"); calcTotal(this);'/></td></tr><tr id='row"+count+"'><td align='left'><input type='text' id='txtServiceTax"+count+"' name='txtServiceTax"+count+"' class='txtBox' onBlur='ValidateTax(\"txtServiceTax"+count+"\"); calcTotal(this);'/>%&nbsp;</td><td align='right'>Service</td><td align='left'><input type='text' id='txtServiceTaxTotal"+count+"' name='txtServiceTaxTotal"+count+"' class='txtBox' onBlur='ValidateTax(\"txtServiceTaxTotal"+count+"\"); calcTotal(this);'/></td></tr></table></div>";
+
+	colsix.innerHTML="&nbsp;<div id='total"+count+"' align='right'></div><input type='hidden' id='hdnTotal"+count+"' name='hdnTotal"+count+"'>";
+	colseven.innerHTML="<span class='delTxt' onclick=\"deleteRow(this.parentNode.parentNode.rowIndex)\">Del</span>";
 
 }
-  
+ 
  
 function deleteRow(i)
 {

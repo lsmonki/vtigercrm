@@ -60,20 +60,30 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parid="+recordid;
 }
 
-function set_return_inventory(product_id,product_name,unitprice,qtyinstock,curr_row) {
+function set_return_inventory(product_id,product_name,unitprice,qtyinstock,vattax,salestax,servicetax,curr_row) {
         window.opener.document.EditView.elements["txtProduct"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["txtListPrice"+curr_row].value = unitprice;
 	getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
 	getOpenerObj("qtyInStock"+curr_row).innerHTML = qtyinstock;
+
+	getOpenerObj("txtVATTax"+curr_row).value = vattax;
+	getOpenerObj("txtSalesTax"+curr_row).value = salestax;
+	getOpenerObj("txtServiceTax"+curr_row).value = servicetax;
+
 	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,curr_row) {
+function set_return_inventory_po(product_id,product_name,unitprice,vattax,salestax,servicetax,curr_row) {
         window.opener.document.EditView.elements["txtProduct"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["txtListPrice"+curr_row].value = unitprice;
 	getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
+
+	getOpenerObj("txtVATTax"+curr_row).value = vattax;
+	getOpenerObj("txtSalesTax"+curr_row).value = salestax;
+	getOpenerObj("txtServiceTax"+curr_row).value = servicetax;
+
 	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
 }
 
