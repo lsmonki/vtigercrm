@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 require_once('modules/Calendar/CalendarCommon.php');
+require_once('include/utils/CommonUtils.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Activities/Activity.php');
 class Appointment
@@ -21,6 +22,11 @@ class Appointment
 	var $contact_name;
 	var $account_id;
 	var $account_name;
+	var $creatorid;
+	var $creator;
+	var $owner;
+	var $ownerid;
+	var $assignedto;
 	var $eventstatus;
 	var $activity_type;
 	var $description;
@@ -40,6 +46,8 @@ class Appointment
 	{
 		global $current_user,$adb;
 		$shared_ids = getSharedCalendarId($current_user->id,'shared');		
+		if(empty($shared_ids))
+			$shared_ids = $current_user->id;
                 $q= "select activity.*, crmentity.*, account.accountname,account.accountid,activitygrouprelation.groupname FROM activity inner join crmentity on activity.activityid = crmentity.crmid left join recurringevents on activity.activityid=recurringevents.activityid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype in ('Call','Meeting') AND ";
 
                 if(!is_admin($current_user))
@@ -54,8 +62,6 @@ class Appointment
                 }
                 $q .= " AND crmentity.deleted = 0) AND recurringevents.activityid is NULL ";
                 $q .= " ORDER by activity.date_start,activity.time_start";
-
-		//echo $q;
 		$r = $adb->query($q);
                 $n = $adb->getRowCount($r);
                 $a = 0;
@@ -64,9 +70,7 @@ class Appointment
                 {
                         $obj = &new Appointment();
                         $result = $adb->fetchByAssoc($r);
-                        //echo '<pre>'; print_r($result);echo '</pre>';
                         $obj->readResult($result, $view);
-			//$list_arr[$obj->record] = $obj;
                         $a++;
 			$list[] = $obj;
                         unset($obj);
@@ -102,12 +106,12 @@ class Appointment
 
 
 		usort($list,'compare');
-		//echo '<pre>';print_r($list);echo '</pre>';
 		return $list;
 	}
 
 	function readResult($act_array, $view)
 	{
+		global $adb;
 		$format_sthour='';
                 $format_stmin='';
                 list($st_hour,$st_min,$st_sec) = split(":",$act_array["time_start"]);
@@ -169,6 +173,27 @@ class Appointment
                 $this->activity_type     = $act_array["activitytype"];
 		$this->duration_hour     = $act_array["duration_hours"];
 		$this->duration_minute   = $act_array["duration_minutes"];
+		$this->creatorid 	 = $act_array["smcreatorid"];
+		$this->creator           = getUserName($act_array["smcreatorid"]);
+		if($act_array["smownerid"]==0)
+                {
+                        $this->assignedto ="group";
+                        $this->owner = $act_array["groupname"];
+                }
+		else
+		{
+			$this->assignedto ="user";
+			$this->ownerid = $act_array["smownerid"];
+			$this->owner   = getUserName($act_array["smownerid"]);
+                        $query="SELECT cal_color FROM users where id = ".$this->ownerid;
+                        $result=$adb->query($query);
+                        if($adb->getRowCount($result)!=0)
+			{
+                        	$res = $adb->fetchByAssoc($result, -1, false);
+                                $this->color = $res['cal_color'];
+                        }
+		}
+		
 		if($act_array["activitytype"] == 'Call')
 		{
 			$this->image_name = 'Calls.gif';
@@ -185,6 +210,11 @@ class Appointment
 	                        $st_hour= '0'.$st_hour;
         	        }
 			$this->formatted_datetime= $act_array["date_start"].":".$st_hour;
+		}
+		elseif($view == 'year')
+		{
+			list($year,$month,$date) = explode("-",$act_array["date_start"]);
+			$this->formatted_datetime = $month;
 		}
 		else
 		{
