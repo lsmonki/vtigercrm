@@ -6,8 +6,6 @@ class Calendar
 	var $view='day';
 	var $date_time;
 	var $hour_format = 'am/pm';
-	var $show_events = true;
-	var $show_tasks; 
 	var $day_slice;
 	var $week_slice;
 	var $week_array;
@@ -87,8 +85,25 @@ class Calendar
 				}
 				break;
 			case 'year':
+				$this->month_day_slices = Array();
+				for($i=0;$i<12;$i++)
+				{
+					$layout = new Layout('month',$this->date_time->getThisyearMonthsbyIndex($i));
+					$this->year_array[$layout->start_time->z_month] = $layout;
+					$daysinmonth = $this->year_array[$layout->start_time->z_month]->start_time->daysinmonth;
+					$firstday_of_month = $this->year_array[$layout->start_time->z_month]->start_time->getThismonthDaysbyIndex(0);
+					$noof_prevdays = $firstday_of_month->dayofweek;
+					$year_monthdays = Array();
+					for($m=0;$m<42;$m++)
+                                        {
+                                                $mday_list = new Layout('day',$this->year_array[$layout->start_time->z_month]->start_time->getThismonthDaysbyIndex($m-$noof_prevdays));
+						$year_monthdays[] = $mday_list->start_time->get_formatted_date(); 
+                                        }
+					$this->month_day_slices[$i] = $year_monthdays;
+					array_push($this->slices,  $layout->start_time->z_month);
+				}
+				break;
 			case 'share':
-				//include "calendar_share.php";
 		}
 	}
 
@@ -127,7 +142,10 @@ class Calendar
                 } elseif($this->view == 'month') {
 			$start_datetime = $this->date_time->getThismonthDaysbyIndex(0);
 			$end_datetime = $this->date_time->get_first_day_of_changed_month('increment');
-		} else {
+		} elseif($this->view == 'year'){
+			$start_datetime = $this->date_time->getThisyearMonthsbyIndex(0);
+			$end_datetime = $this->date_time->get_first_day_of_changed_year('increment');
+		}else {
 			$start_datetime = $this->date_time;
                         $end_datetime = $this->date_time->get_changed_day('increment');
                 }
@@ -152,6 +170,7 @@ class Calendar
 				}
 				elseif($this->view == 'year')
 				{
+					array_push($this->year_array[$value->formatted_datetime]->activities,$value);
 				}
 				else
 					die("view:".$this->view." is not defined");
@@ -175,6 +194,8 @@ class Layout
         {
                 $this->view = $view;
                 $this->start_time = $time;
+		if ( $view == 'month')
+			 $this->end_time = $this->start_time->getMonthendtime();
                 if ( $view == 'day')
                         $this->end_time = $this->start_time->getDayendtime();
                 if ( $view == 'hour')
