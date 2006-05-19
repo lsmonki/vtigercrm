@@ -78,7 +78,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 		}
 		elseif($type == 'listview')
 		{
-			getListView($calendar_arr);
+			getEventListView($calendar_arr);
 		}
 		else
 		{
