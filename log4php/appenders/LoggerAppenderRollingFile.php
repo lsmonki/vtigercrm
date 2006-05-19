@@ -134,7 +134,7 @@ class LoggerAppenderRollingFile extends LoggerAppenderFile {
                 $file = $fileName . "." . $i;
                 if (is_readable($file)) {
                     $target = $fileName . '.' . ($i + 1);
-                    rename($file, $target);
+                    @rename($file, $target);
                 }
             }
     
