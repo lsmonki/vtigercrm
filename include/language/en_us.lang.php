@@ -725,8 +725,8 @@ $app_strings = Array(
 'Dashboard'=>'Dashboard',
 'Reports'=>'Reports',
 'Vendors'=>'Vendors',
-'Rss'=>'Rss',
-'Portal'=>'Portal',
+'Rss'=>'RSS',
+'Portal'=>'My Sites',
 
 //Added language for Parent Tab
 
@@ -915,7 +915,7 @@ $app_list_strings = Array(
 
 				, 'Invoice'=>'Invoice'
 
-				, 'Rss'=>'Rss'
+				, 'Rss'=>'RSS'
 				
 				, 'Reports'=>'Reports'
 				
@@ -925,7 +925,7 @@ $app_list_strings = Array(
 
 				, 'SalesOrder'=>'SalesOrder'
 
-				, 'Portal'=>'Portal'
+				, 'Portal'=>'My Sites'
 				
 				),
 
