@@ -68,7 +68,7 @@
 	                  	  <tr>
 			
     	        		        <td width="25%" align="right" bgcolor="#F6F6F6"><b>{$UMOD.LBL_SUBJECT}</b></td>
-        	            		<td width="75%" class="mnuTab">{$DESCRIPTION}</td>
+        	            		<td width="75%" class="mnuTab">{$SUBJECT}</td>
             	      		  </tr>
 					  <tr><td bgcolor="#F6F6F6">&nbsp;</td>
 					  <td>&nbsp;</td></tr>
