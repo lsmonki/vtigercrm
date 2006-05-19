@@ -111,15 +111,35 @@ class DateTime
                 $datetimevalue = new DateTime($week_array,true);
                 return $datetimevalue;
         }
-	function getThismonthDaysbyIndex($index)
+	function getThismonthDaysbyIndex($index,$day='', $month='', $year='')
         {
+		if($day == '')
+                {
+                        $day = $index+1;
+                        $month = $this->month;
+                        $year = $this->year;
+                }
                 $month_array = array();
-                $month_array['day'] = $index+1;
-                $month_array['month'] = $this->month;
-                $month_array['year'] = $this->year;
+                $month_array['day'] = $day;
+                $month_array['month'] = $month;
+                $month_array['year'] = $year;
                 $datetimevalue = new DateTime($month_array,true);
                 return $datetimevalue;
         }
+	function getThisyearMonthsbyIndex($index)
+        {
+                $year_array = array();
+                $year_array['day'] = 1;
+		if($index < 0 || $index > 11)
+                {
+                        die("month is invalid");
+                }
+                $year_array['month'] = $index+1;
+                $year_array['year'] = $this->year;
+                $datetimevalue = new DateTime($year_array,true);
+                return $datetimevalue;
+        }
+	
 	function getHourendtime()
         {
                 $date_array = array();
@@ -142,6 +162,19 @@ class DateTime
                 $date_array['month'] = $this->month;
                 $date_array['year'] = $this->year;
 		$datetimevalue = new DateTime($date_array,true);
+                return $datetimevalue;
+        }
+
+	function getMonthendtime()
+        {
+                $date_array = array();
+                $date_array['hour'] = 23;
+                $date_array['min'] = 59;
+                $date_array['sec'] = 59;
+                $date_array['day'] = $this->daysinmonth;
+                $date_array['month'] = $this->month;
+                $date_array['year'] = $this->year;
+                $datetimevalue = new DateTime($date_array,true);
                 return $datetimevalue;
         }
 	
@@ -180,10 +213,6 @@ class DateTime
 
                 $this->ts = $ts;
 		$this->ts_def = $this->ts;
-		/*get values from calendar settings for following variables -- by Minnie
-		$this->day_start_hour
-		$this->day_end_hour
-		*/
                 $date_string = date('i::G::H::j::d::t::w::z::L::W::n::m::Y::Z::T::s',$ts);
                 list(
                 $this->minute,
