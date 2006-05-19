@@ -169,6 +169,8 @@ $mod_strings = Array(
 
 'LBL_EVENTS'=>'Events',
 'LBL_TODOS'=>'Todos',
+'LBL_TODO'=>'To Do',
+'LBL_TIME'=>'Time',
 'LBL_ADD_EVENT'=>'Add Event',
 'LBL_INVITE'=>'Invite',
 'LBL_REMINDER'=>'Reminder',
@@ -184,6 +186,7 @@ $mod_strings = Array(
 'LBL_EVTDTL'=>'Event Details',
 'LBL_ACTION'=>'Actions',
 'LBL_CURSTATUS'=>'Current Status',
+'LBL_STATUS'=>'Status',
 'LBL_PENDING'=>'Pending',
 'LBL_MORE'=>'More',
 'LBL_EVERYDAY'=>'Every Day',
@@ -212,6 +215,11 @@ $mod_strings = Array(
 'db_title' => 'LBL_LIST_TITLE',
 'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
 'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
+'LBL_COMPLETED'=>'Mark Completed',
+'LBL_EPENDING'=>'Mark Not Held',
+'LBL_POSTPONE'=>'Postpone',
+'LBL_CHANGEOWNER'=>'Change Owner',
+'LBL_DEL'=>'Delete',
 //END DON'T CONVERT
 	
 );
