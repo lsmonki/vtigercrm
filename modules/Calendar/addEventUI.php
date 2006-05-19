@@ -8,85 +8,144 @@ require_once('modules/Calendar/Calendar.php');
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
  global $mod_strings,$app_strings,$current_user;
- $focus= new Activity();
- $calendar = new Calendar();
  $userDetails=getOtherUserName($current_user->id);
- function getTimeCombo()
+ require_once("modules/Emails/mail.php");
+ $to_email = getUserEmailId('id',$current_user->id);
+
+$mysel= $_GET['view'];
+$calendar_arr = Array();
+$calendar_arr['IMAGE_PATH'] = $image_path;
+if(empty($mysel))
+{
+        $mysel = 'day';
+}
+$date_data = array();
+if ( isset($_REQUEST['day']))
+{
+
+        $date_data['day'] = $_REQUEST['day'];
+}
+
+if ( isset($_REQUEST['month']))
+{
+        $date_data['month'] = $_REQUEST['month'];
+}
+
+if ( isset($_REQUEST['week']))
+{
+        $date_data['week'] = $_REQUEST['week'];
+}
+
+if ( isset($_REQUEST['year']))
+{
+        if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
+        {
+                print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+                exit;
+        }
+        $date_data['year'] = $_REQUEST['year'];
+}
+
+
+if(empty($date_data))
+{
+	$data_value=date('Y-m-d H:i:s');
+        preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$data_value,$value);
+        $date_data = Array(
+                'day'=>$value[3],
+                'month'=>$value[2],
+                'year'=>$value[1],
+                'hour'=>$value[4],
+                'min'=>$value[5],
+        );
+
+}
+$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
+$calendar_arr['view'] = $mysel;
+
+ function getTimeCombo($format)
  {
-	global $calendar;
 	$combo = '';
-	if($calendar->hour_format == 'am/pm')
+	if($format == 'am/pm')
 	{
-		for($i=0; $i<48; $i++)
+		$combo .= '<select class=small name="sthr">';
+		for($i=1;$i<=12;$i++)
 		{
-			$temp = $i%2;
-			if($temp == 1)
-			{
-				$hr = ($i/2) - 0.5;
-				if($hr >= 12)
-				{
-					if($hr == 12)
-						$text = $hr.':30pm';
-					else
-					{
-						$temp_hr = $hr - 12;
-						$text = $temp_hr.':30pm';
-					}
-				}
-				else
-					$text = $hr.':30am';
-				if($hr <= 9 && strlen(trim($hr)) < 2)
-					$hr = "0".$hr;
-				$value = $hr.':30';
-			}
+			if($i == $selvalue)
+				$selected = 'selected';
 			else
-			{
-				$hr = ($i/2);
-				if($hr >= 12)
-				{
-					if($hr == 12)
-						$text = $hr.':00pm';
-					else
-					{
-						$temp_hr =$hr - 12;
-						$text = $temp_hr.':00pm';
-					}
-				}
-				else
-					$text = $hr.':00am';
-				if($hr <= 9 && strlen(trim($hr)) < 2)
-					$hr = "0".$hr;
-				$value = $hr.':00';
-			}
-			$combo .= '<option value="'.$value.'" >'.$text.'</option>';
+				$selected = '';
+			if($i <= 9 && strlen(trim($i)) < 2)
+                        {
+                                $hrvalue= '0'.$i;
+                        }
+			$combo .= '<option value="'.$hrvalue.'" '.$selected.'>'.$i.'</option>';
 		}
+		$combo .= '</select>&nbsp;';
+		$combo .= '<select name="stmin" class=small>';
+		for($i=0;$i<12;$i++)
+                {
+			$minvalue = 5;
+			if($i == $selmin)
+                                $minselected = 'selected';
+                        else
+                                $minselected = '';
+			$value = $i*5;
+			if($value <= 9 && strlen(trim($value)) < 2)
+                        {
+                                $value= '0'.$value;
+                        }
+			$combo .= '<option value="'.$value.'" '.$minselected.'>'.$value.'</option>';
+		}
+		$combo .= '</select>&nbsp;';
+		$combo .= '<select name="stfmt" class=small>';
+		if($selmin == 'am')
+		{
+			$amselected = 'selected';
+			$pmselected = '';
+		}
+		else
+		{
+			$pmselected = 'selected';
+                        $amselected = '';
+		}
+		$combo .= '<option value="am" '.$amselected.'>AM</option>';
+		$combo .= '<option value="pm" '.$pmselected.'>PM</option>';
+		$combo .= '</select>';
+		
 	}
 	else
 	{
-		for($i=0;$i<48;$i++)
+		$combo .= '<select name="endhr" class=small>';
+		for($i=0;$i<=23;$i++)
 		{
-			$temp = $i%2;
-			if($temp == 1)
-			{
-				$hr = ($i/2) - 0.5;
-				if($hr <= 9 && strlen(trim($hr
-							  ))
-						< 2)
-					$hr = "0".$hr;
-				$value = $hr.':30';
-			}
+			if($i == $selvalue)
+                                $selected = 'selected';
 			else
-			{
-				$hr = ($i/2);
-				if($hr <= 9 && strlen(trim($hr
-							  )) < 2)
-					$hr = "0".$hr;
-				$value = $hr.':00';
-			}
-			$text = $value;
-
-			$combo .= '<option value="'.$value.'" >'.$text.'</option>';
+                                $selected = '';
+                        if($i <= 9 && strlen(trim($i)) < 2)
+                        {
+                                $hrvalue= '0'.$i;
+                        }
+			$combo .= '<option value="'.$hrvalue.'" '.$selected.'>'.$i.'</option>';
 		}
+		$combo .= '</select>&nbsp;';
+		$combo .= '<select name="endmin">';
+                for($i=0;$i<12;$i++)
+                {
+                        $minvalue = 5;
+                        if($i == $selmin)
+                                $minselected = 'selected';
+                        else
+                                $minselected = '';
+                        $value = $i*5;
+                        if($value <= 9 && strlen(trim($value)) < 2)
+                        {
+                                $value= '0'.$value;
+                        }
+                        $combo .= '<option value="'.$value.'" '.$minselected.'>'.$value.'</option>';
+                }
+                $combo .= '</select>&nbsp;Hr';
 	}
 	return $combo;
 		
@@ -103,16 +162,23 @@ require_once('modules/Calendar/Calendar.php');
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
 	<div class="calAddEvent" style="display:none" id="addEvent" align=center> 
-	<form name="appSave" onSubmit="return check_form()" method="POST" action="index.php">
+	<form name="appSave" onSubmit="return check_form();" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
 	<input type="hidden" name="activity_mode" value="Events">
 	<input type="hidden" name="action" value="Save">
+	<input type="hidden" name="return_action" value="index">
+	<input type="hidden" name="return_module" value="Calendar">
+	<input type="hidden" name="view" value="<? echo $calendar_arr['view'] ?>">
+	<input type="hidden" name="hour" value="<? echo $calendar_arr['calendar']->date_time->hour ?>">
+	<input type="hidden" name="day" value="<? echo $calendar_arr['calendar']->date_time->day ?>">
+	<input type="hidden" name="month" value="<? echo $calendar_arr['calendar']->date_time->month ?>">
+	<input type="hidden" name="year" value="<? echo $calendar_arr['calendar']->date_time->year ?>">
 	<input type="hidden" name="record" value="">
-	<input type="hidden" name="taskstatus" value="Not Started">
 	<input type="hidden" name="duration_hours" value="0">
-	<input type="hidden" name="hrformat" value="<? echo $calendar->hour_format ?>">
 	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
 	<input type="hidden" name="duration_minutes" value="0">
+	<input type="hidden" name="time_start" id="time_start" value = "">
+	<input type="hidden" name="time_end" id="time_end" value = "">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
@@ -148,11 +214,8 @@ require_once('modules/Calendar/Calendar.php');
 				<td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3 ><b><?echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
-				        <tr><td>
-						<select name="time_start" id="time_start">
-						<? $combo = getTimeCombo(); echo $combo;?>
-						</select>
-						<!--input type="text" name="time_start" id="time_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."-->
+				        <tr><td colspan=3>
+						<? echo  getTimeCombo($calendar_arr['calendar']->hour_format);?>
 					</td></tr>
                                         <tr><td>
 						<input type="text" name="date_start" id="jscal_field_date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
@@ -166,16 +229,13 @@ require_once('modules/Calendar/Calendar.php');
 				</td>
 				<td width=50% valign=top >
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
-					<tr><td><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
-				        <tr><td>
-						<select name="time_end" id="time_end">
-                                                <? $combo = getTimeCombo(); echo $combo;?>
-                                                </select>
-						<!--input type="text" name="time_end" id="time_end" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Clock.gif" alt="Set time.." title="Set time.."-->
+					<tr><td colspan=3><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
+				        <tr><td colspan=3>
+                                                <? echo getTimeCombo($calendar_arr['calendar']->hour_format);?>
 					</td></tr>
 				        <tr><td>
 						<input type="text" name="due_date" id="jscal_field_due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
-					<script type="text/javascript">
+					<script type">
                                                         Calendar.setup ({
                                                                 inputField : "jscal_field_due_date", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
                                                                         })
@@ -266,6 +326,11 @@ require_once('modules/Calendar/Calendar.php');
 			
 			<!-- Reminder UI -->
 				<DIV id="addEventAlarmUI" style="display:none;width:100%">
+				<table>
+					<tr><td>Send Reminder</td><td><input name="set_reminder" type="checkbox" onClick="showhide('reminderOptions')">
+					</td></tr>
+				</table>
+				<DIV id="reminderOptions" style="display:none;width:100%">
 				<table border=0 cellspacing=0 cellpadding=2  width=100%>
 				<tr>
 					<td nowrap align=right width=20% valign=top>
@@ -274,12 +339,38 @@ require_once('modules/Calendar/Calendar.php');
 					<td width=80%>
 						<table border=0>
 						<tr>
-						<td><input type="text" class=textbox style="width:30px"></td>
-						<td>
-							<select class=small><option>Minutes</option><option>Hours</option><option>Days</option></select>
-						</td>
-						<td width=100%>
-							<select class=small><option>before the event starts</option><option>before the event ends</option></select>
+						<td colspan=2>
+							<select class=small name="remdays">
+							<?php
+								for($m=0;$m<=31;$m++)
+								{
+							?>
+									<option value="<?echo $m?>"><?echo $m?></option>
+							<?
+								}
+							?>
+							</select>days 
+							<select class=small name="remhrs">
+                                                        <?php
+                                                                for($h=0;$h<=23;$h++)
+                                                                {
+                                                        ?>
+                                                                        <option value="<?echo $h?>"><?echo $h?></option>
+                                                        <?
+                                                                }
+                                                        ?>
+                                                        </select>hours
+							<select class=small name="remmin">
+                                                        <?php
+                                                                for($min=1;$min<=59;$min++)
+                                                                {
+                                                        ?>
+                                                                        <option value="<?echo $min?>"><?echo $min?></option>
+                                                        <?
+                                                                }
+                                                        ?>
+                                                        </select>before the event starts
+								
 						</td>
 						</tr>
 						</table>
@@ -290,10 +381,11 @@ require_once('modules/Calendar/Calendar.php');
 					<?echo $mod_strings['LBL_SDRMD']?> :
 					</td>
 					<td >
-						<input type=text class=textbox style="width:90%" value="Type Email ID..">
+					<input type=text class=textbox style="width:90%" value="<? echo $to_email ?>">
 					</td>
 				</tr>
 				</table>
+				</DIV>
 				</DIV>
 			<!-- Repeat UI -->
 				<div id="addEventRepeatUI" style="display:none;width:100%">
@@ -425,12 +517,12 @@ setObjects();
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 		<tr>
 			<td>
-				<a href="#" class="calMnu">- Mark Completed</a>
-				<a href="#" class="calMnu">- Mark Pending</a>
+				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
+				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_EPENDING']?></a>
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
-				<a href="#" class="calMnu">- Postpone</a>
-				<a href="#" class="calMnu">- Change Owner</a>
-				<a href="#" class="calMnu">- Delete</a>
+				<a href="#" onClick="" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
+				<a href="#" onClick="calchangeowner();" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
 			</td>
 		</tr>
 	</table>
