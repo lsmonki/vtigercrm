@@ -81,14 +81,15 @@
 <!-- tabs -->
 																																<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 																																		<tr>
-																																				<td width="20%" id="prvPrfTab1" class="prvPrfSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');">{$CMOD.LBL_GLOBAL_PRIVILEGES}</td>
+																																				
+																																				<td width="20%" id="prvPrfTab1" class="prvPrfUnSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');">{$CMOD.LBL_GLOBAL_PRIVILEGES}</td>
 																																				<td width="20%" id="prvPrfTab2" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('tab_privileges','prvPrfTab2');">{$CMOD.LBL_TAB_PRIVILEGES}</td>
 																																				<td width="20%" id="prvPrfTab3" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('standard_privileges','prvPrfTab3');">{$CMOD.LBL_STANDARD_PRIVILEGES}</td>
 																																				<td width="20%" id="prvPrfTab4" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('field_privileges','prvPrfTab4');">{$CMOD.LBL_FIELD_PRIVILEGES}</td>
 																																				<td width="20%" id="prvPrfTab5" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('utility_privileges','prvPrfTab5');">{$CMOD.LBL_UTILITIES}</td>
 																																		</tr>
 																																</table>
-																																<div id="global_privileges" style="display:block;">
+																																<div id="global_privileges" style="display:none;">
 	<!-- Headers -->
 																																	<table border="0" cellspacing="0" cellpadding="5" width="100%" class="prvPrfBgImgGlobal">
 																																		<tr>
@@ -281,6 +282,7 @@
 </table>
 </div>
 
+
 <div id="utility_privileges" style="display:none;">
 <table border=0 cellspacing=0 cellpadding=5 width=100% >
 <tr>
@@ -352,6 +354,7 @@
 
 
 <div id="field_privileges" style="display:none;">
+
 <table border="0" cellspacing="0" cellpadding="5" width="100%" >
 <tr>
 <td><table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
@@ -382,7 +385,7 @@
 <table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 <tr>
 <td>
-<select name="module_list" onchange="showmoduleperm(this)">
+<select id="module_list" name="module_list" onchange="showmoduleperm(this)">
 {foreach key=module item=label from=$PRI_FIELD_LIST}
 <option value="{$label}">{$label}</option>
 {/foreach}
@@ -393,11 +396,7 @@
 <td colspan=2>
 
 {foreach key=module item=value from=$FIELD_PRIVILEGES}
-{if $module eq 'Leads'}
-<div id="field_{$module}" style="display:block;">
-{else}
 <div id="field_{$module}" style="display:none;">
-{/if}
 <table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 {foreach item=row_value from=$value}
 <tr>
@@ -438,6 +437,9 @@
 																			<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 																			<tr>
 																				<td colspan="2" align="center">
+
+																					<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">		
+																					<input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">		
 																					{if $MODE neq "edit"}
 																					<input type="submit" value=" &lsaquo; {$APP.LBL_BACK} " name="back" onclick="this.form.action.value='CreateProfile1'" class="classBtn" />&nbsp;&nbsp;
 																					{/if}
@@ -464,10 +466,32 @@
 	{include file='SettingsSubMenu.tpl'}
 
 <script language="javascript" type="text/javascript">
-var Selected_div= 'global_privileges';
+var Selected_div= '{$SELECTED_TAB}';
 divarray = new Array('global_privileges','tab_privileges','standard_privileges','field_privileges','utility_privileges'); 	
 tabarray = new Array('prvPrfTab1','prvPrfTab2','prvPrfTab3','prvPrfTab4','prvPrfTab5'); 	
-var defaultmodule = 'field_Leads';
+var defaultmodule = '{$SELECTED_MODULE}';
+function set_default()
+{ldelim}
+	show (Selected_div);
+	show (defaultmodule);
+	for(i = 0; i < divarray.length ;i++)
+	{ldelim}
+		if(divarray[i] == Selected_div)
+			break;	
+	{rdelim}
+	document.getElementById(tabarray[i]).className="prvPrfSelectedTab";
+	module_combo = document.getElementById('module_list');
+	module_combo_selected = defaultmodule.replace(/field_/gi,'')
+	for(i = 0; i < module_combo.length ;i++)
+	{ldelim}
+		if(module_combo.options[i].value == module_combo_selected)
+		{ldelim}	
+			module_combo.options[i].selected = true;	
+			break;	
+		{rdelim}	
+	{rdelim}
+{rdelim}
+set_default();
 function toggleshowhide(currentselecteddiv,currentselectedtab)
 {ldelim}
 	for(i = 0; i < divarray.length ;i++)
@@ -480,12 +504,14 @@ function toggleshowhide(currentselecteddiv,currentselectedtab)
 	show (currentselecteddiv);
 	document.getElementById(currentselectedtab).className="prvPrfSelectedTab";
 	Selected_div = currentselecteddiv;
+	document.getElementById('selected_tab').value =	Selected_div; 	
 {rdelim}	
 function showmoduleperm(selectmodule_view)
 {ldelim}
 	hide(defaultmodule);
 	defaultmodule='field_'+selectmodule_view.options[selectmodule_view.options.selectedIndex].value;
 	show(defaultmodule);
+	document.getElementById('selected_module').value = defaultmodule;	
 {rdelim}	
 	
 </script>

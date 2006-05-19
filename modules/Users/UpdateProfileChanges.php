@@ -14,6 +14,8 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 $profileid = $_REQUEST['profileid'];
+$def_module = $_REQUEST['selected_module'];
+$def_tab = $_REQUEST['selected_tab'];
 
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action']!= '')
 	$return_action =$_REQUEST['return_action'];
@@ -170,7 +172,7 @@ foreach($modArr as $fld_module => $fld_label)
 
 	}
 }
-	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid;
+	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
 	header($loc);
 
 function getPermissionValue($req_per)

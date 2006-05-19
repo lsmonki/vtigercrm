@@ -16,8 +16,17 @@ if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
 
 
-
 $smarty = new vtigerCRM_Smarty;
+if(isset($_REQUEST['selected_tab']) && $_REQUEST['selected_tab']!='')
+	$smarty->assign("SELECTED_TAB", $_REQUEST['selected_tab']);
+else
+	$smarty->assign("SELECTED_TAB", "global_privileges");
+
+if(isset($_REQUEST['selected_module']) && $_REQUEST['selected_module']!='')
+	$smarty->assign("SELECTED_MODULE", $_REQUEST['selected_module']);
+else
+	$smarty->assign("SELECTED_MODULE", "field_Leads");
+
 $smarty->assign("PARENTPROFILEID", $parentProfileId);
 $smarty->assign("RADIOBUTTON", $_REQUEST['radiobutton']);
 
