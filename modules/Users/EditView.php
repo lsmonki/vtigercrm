@@ -235,11 +235,11 @@ if (is_admin($current_user)) {
  }
 
 if (is_admin($current_user)) { 
-	$CURRENCY_SELECT_OPTION = '<select name="currency_id">';
+	$CURRENCY_SELECT_OPTION = '<select name="currency_id" class="small">';
 	}
 else
 {
-	$CURRENCY_SELECT_OPTION = '<select name="currency_id" disabled>';
+	$CURRENCY_SELECT_OPTION = '<select name="currency_id" class="small" disabled>';
 }
 	
         if($focus->id != '')
@@ -273,6 +273,56 @@ $smarty->assign("LEAD_VIEW", getLeadVIew($focus->lead_view));
 		if($focus->cal_color == '') $focus->cal_color = '#E6FAD8';
 
  		$smarty->assign("CAL_COLOR",'<INPUT TYPE="text" readonly NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');
+		
+		$hrformat = '<select name="hour_format" class="small">';
+		if($focus->hour_format == '24')
+		{
+			$_24selected = 'selected';
+			$_ampmselected = '';
+		}
+		elseif($focus->hour_format == 'am/pm')
+		{
+			$_24selected = '';
+			$_ampmselected = 'selected';
+		}
+		$hrformat .= '<option value="24" '.$_24selected.'>23:00</option>';
+		$hrformat .= '<option value="am/pm" '.$_ampmselected.'>11:00pm</option>';
+		$hrformat .= '</select>';
+		$smarty->assign("CAL_HRFORMAT",$hrformat);
+
+		$stend_hour = '<select name="start_hour" class="small">';
+		for($i=0;$i<=15;$i++)
+		{
+			if($i == $focus->start_hour)
+				$selected = 'selected';
+			else
+				$selected = '';
+			if($i <= 9 && strlen(trim($i)) < 2)
+			{
+				$hrvalue= '0'.$i.':00';
+			}
+			else
+				$hrvalue= $i.':00';
+			$stend_hour .= '<option value="'.$hrvalue.'" '.$selected.'>'.$hrvalue.'</option>';
+		}
+		$stend_hour .= '</select>&nbsp;ends at:';
+		$stend_hour .= '<select name="end_hour" class="small">';
+		for($i=16;$i<=23;$i++)
+		{
+			if($i == $focus->end_hour)
+				$selected = 'selected';
+			else
+				$selected = '';
+			if($i <= 9 && strlen(trim($i)) < 2)
+			{
+				$hrvalue= '0'.$i.':00';
+			}
+			else
+				$hrvalue= $i.':00';
+			$stend_hour .= '<option value="'.$hrvalue.'" '.$selected.'>'.$hrvalue.'</option>';
+		}
+		$stend_hour .= '</select>&nbsp;';
+		$smarty->assign("CAL_HRDURATION",$stend_hour);
 
 if (isset($default_user_name)
 	&& $default_user_name != ""
