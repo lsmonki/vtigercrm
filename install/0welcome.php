@@ -49,7 +49,7 @@ foreach($pieces as $val)
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vtiger CRM 5.0 Beta Configuration Wizard</title>
-<link rel="stylesheet" href="install/install.css" type="text/css" />
+<link rel="stylesheet" href="include/install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
