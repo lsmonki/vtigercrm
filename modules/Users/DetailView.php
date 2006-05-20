@@ -247,8 +247,15 @@ else
 	$smarty->assign("GROUPASSIGNED",$group_lists);
 }
 $smarty->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
-
-
+if($focus->hour_format == 'am/pm')
+{
+	$smarty->assign("CAL_HRFORMAT", "11:00pm");
+}
+else
+{
+	$smarty->assign("CAL_HRFORMAT", "23:00");
+}
+$smarty->assign("CAL_HRDURATION", $focus->start_hour."&nbsp;ends at&nbsp;".$focus->end_hour);
 $smarty->assign("ACTIVITY_VIEW", $focus->activity_view);
 $smarty->assign("LEAD_VIEW", $focus->lead_view);
 $smarty->assign("TITLE", $focus->title);
