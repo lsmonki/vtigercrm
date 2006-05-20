@@ -13,8 +13,8 @@ class Calendar
 	var $week_hour_slices = Array();
 	var $slices = Array();
 	/* for dayview */
-	var $day_start_hour=8;
-	var $day_end_hour=18;
+	var $day_start_hour=0;
+	var $day_end_hour=23;
 	var $sharedusers=Array();
 	/*
 	constructor
@@ -135,6 +135,12 @@ class Calendar
 	
 	function add_Activities($current_user,$free_busy='')
 	{
+		$this->hour_format = $current_user->hour_format;
+		list($sthour,$stmin)= explode(":",$current_user->start_hour);
+		$hr = $sthour+0;
+		list($endhour,$endmin)=explode(":",$current_user->end_hour);
+		$this->day_start_hour=$hr;
+	        $this->day_end_hour=$endhour;
 		if ( $this->view == 'week')
 		{
 			$start_datetime = $this->date_time->getThisweekDaysbyIndex(0);
