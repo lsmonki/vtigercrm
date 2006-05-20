@@ -1628,7 +1628,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Products")
 	{
-		$query = "SELECT products.*, productcf.*
+		$query = "SELECT crmentity.crmid, products.*, productcf.*
 			FROM products
 			INNER JOIN crmentity
 				ON crmentity.crmid = products.productid
