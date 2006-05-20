@@ -2642,7 +2642,9 @@ $query_array2 = Array(
 				"insert into inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Sales','10')",
 				"insert into inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Service','12.5')",
 				"update field set uitype=83, tablename='producttaxrel' where tabid=14 and fieldname='taxclass'",
-				"insert into moduleowners values(".$this->localGetTabID('Campaigns').",1)"
+				"insert into moduleowners values(".$this->localGetTabID('Campaigns').",1)",
+
+				"alter table attachments add column path varchar(255) default NULL"
 			     );
 
 foreach($query_array2 as $query)
