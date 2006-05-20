@@ -109,7 +109,7 @@ function alphabetic(url)
 <form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
 	<tr>
-		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>{$APP.LBL_SEARH_FOR}</b></td>
+		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td width="25%" class="dvtCellLabel"><input type="text"  class="txtBox" name="search_text"></td>
 		<td width="25%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
 			<select name ="search_field" class="txtBox">
