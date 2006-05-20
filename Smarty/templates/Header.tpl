@@ -179,7 +179,10 @@ function QCreate(qcoptions)
         show("status");
         var ajaxObj = new Ajax(ajaxQCreateResponse);
         var module = qcoptions.options[qcoptions.options.selectedIndex].value;
-        var urlstring = "module="+module+"&action="+module+"Ajax&ajaxmode=qcreate";
+	if(module == 'Events')
+                var urlstring = "module=Activities&action=ActivitiesAjax&ajaxmode=qcreate&activity_mode=Events";
+        else
+	        var urlstring = "module="+module+"&action="+module+"Ajax&ajaxmode=qcreate";
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
 function ajaxQCreateResponse(response)
