@@ -144,6 +144,12 @@
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
                 <td span class="dvtCellInfo">{$CURRENCY_NAME}&nbsp;</td>
 				</tr>
+				<tr>
+                                <td class="dvtCellLabel" align="right">{$UMOD.LBL_CAL_HRFORMAT}</td>
+                                <td class="dvtCellInfo">{$CAL_HRFORMAT}&nbsp;</td>
+                                <td class="dvtCellLabel" align="right">{$UMOD.LBL_CAL_DURATION}</td>
+                                <td span class="dvtCellInfo">{$CAL_HRDURATION}&nbsp;</td>
+                                </tr>
 				<tr><td colspan="4" height="30">&nbsp;</td></tr>
 				</table>
 				</td></tr>
