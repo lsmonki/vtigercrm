@@ -163,14 +163,19 @@ function get_cal_header_tab(& $header)
 function get_cal_header_data(& $cal_arr)
 {
 	global $mod_strings;
+	global $current_user,$app_strings;
+        $date_format = $current_user->date_format;
 	$format = $cal_arr['calendar']->hour_format;
 	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour,false); 
 	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1),false);
+	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
+	$temp_ts = $cal_arr['calendar']->date_time->ts;
+        $temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 	$headerdata = "";
 	$headerdata .="	<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>
 			<tr>
-				<td class='tabSelected' onClick='gshow(\"addEvent\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$cal_arr['calendar']->date_time->get_formatted_date()."\",\"".$hour_startat."\",\"".$hour_endat."\")' style='border: 1px solid rgb(102, 102, 102); cursor:pointer;' align='center' width='10%'>
+				<td class='tabSelected' onClick='gshow(\"addEvent\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\")' style='border: 1px solid rgb(102, 102, 102); cursor:pointer;' align='center' width='10%'>
 					".$mod_strings['LBL_ADD_EVENT']."
 					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
 				</td>
@@ -402,6 +407,8 @@ function getTodosListView($cal, $check='')
 
 function getDayViewLayout(& $cal,$type)
 {
+	global $current_user,$app_strings;
+        $date_format = $current_user->date_format;
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
@@ -441,22 +448,20 @@ function getDayViewLayout(& $cal,$type)
 		$y = $i+1;
 		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
 	        $hour_endat = convertTime2UserSelectedFmt($format,$y,false);
+		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
+		$temp_ts = $cal['calendar']->date_time->ts;
+		$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 		$dayview_layout .= '<tr>
-					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%">
+					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%" onMouseOver="show(\''.$hour.''.$sub_str.'\')" onMouseOut="hide(\''.$hour.''.$sub_str.'\')">
 						<span class="genHeaderBig">'.$hour.'</span>
-						<span class="genHeaderGray">'.$sub_str.'</span>
+						<span class="genHeaderGray">'.$sub_str.'</span><br>
+						<div id="'.$hour.''.$sub_str.'" style="display: none;">
+                                                        <a onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+                                                </div>
 					</td>
-					<td style="border-bottom: 1px solid rgb(204, 204, 204); width:5%;" onmouseover="show(\''.$hour.''.$sub_str.'\')" onmouseout="hide(\''.$hour.''.$sub_str.'\')" height="65">
-			                	<div id="'.$hour.''.$sub_str.'" style="display: none;">
-							<a onClick="gshow(\'addEvent\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
-						</div>
-					</td>
-					<td style="border-bottom: 1px solid rgb(204, 204, 204);">';
+					<td style="border-bottom: 1px solid rgb(204, 204, 204);" height="65">';
 		
 		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i]);
-		/*get events/tasks that has current date as starting time
-			*/
-		//$dayview_layout .= 
 		$dayview_layout .=' </td>		
 				    </tr>';
 	}
@@ -465,13 +470,18 @@ function getDayViewLayout(& $cal,$type)
                                     </table>
 			</div>
 		</div>';
-	$dayview_layout .= getTodosListView($cal);
+	if($type != 'ajax')
+        {
+		$dayview_layout .= getTodosListView($cal);
+	}
 	$dayview_layout .= '</td></tr></table></td></tr></table><br>';
 	echo $dayview_layout;		
 }
 
 function getWeekViewLayout(& $cal,$type)
 {
+	global $current_user,$app_strings;
+        $date_format = $current_user->date_format;
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
@@ -502,8 +512,10 @@ function getWeekViewLayout(& $cal,$type)
 	$weekview_layout .= '<table border="0" cellpadding="10" cellspacing="1" width="98%" class="calDayHour" style="background-color: #dadada">';
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
+		$count = $i;
 		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
 	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1),false);
+		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
         	{
@@ -540,16 +552,25 @@ function getWeekViewLayout(& $cal,$type)
 		}
 		for ($column=0;$column<=6;$column++)
 		{
-			$temp_date = $cal['calendar']->week_array[$cal['calendar']->slices[$column]]->start_time->get_formatted_date();
+			$temp_ts = $cal['calendar']->week_array[$cal['calendar']->slices[$column]]->start_time->ts;
+			$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 
-			$weekview_layout .= '<td class="cellNormal" onclick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" onmouseover="this.className=\'cellNormalHover\'" onmouseout="this.className=\'cellNormal\'" style="height: 40px;" bgcolor="white" valign="top" width="12%">';
+			$weekview_layout .= '<td class="cellNormal" onMouseOver="show(\''.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="hide(\''.$temp_date.''.$time_arr['starthour'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right>';
+			$weekview_layout .= '<div id="'.$temp_date.''.$time_arr['starthour'].'" style="display: none;">
+						<a onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+                                                </div>';
+			$weekview_layout .=getweekEventLayer($cal,$cal['calendar']->week_hour_slices[$count]);
 			$weekview_layout .= '</td>';
+			$count = $count+24;
 		}
 		$weekview_layout .= '</tr>';
 	}
 	$weekview_layout .= '</table></div>
 			 </div>';
-	$weekview_layout .= getTodosListView($cal);
+	if($type != 'ajax')
+        {
+		$weekview_layout .= getTodosListView($cal);
+	}
 	$weekview_layout .= '</td></tr></table></td></tr></table><br>';
 	echo $weekview_layout;
 		
@@ -557,6 +578,8 @@ function getWeekViewLayout(& $cal,$type)
 	
 function getMonthViewLayout(& $cal,$type)
 {
+	global $current_user,$app_strings;
+	$date_format = $current_user->date_format;
 	$count = 0;
         if ($cal['calendar']->month_array[$cal['calendar']->slices[35]]->start_time->month != $cal['calendar']->date_time->month) {
                 $rows = 5;
@@ -566,6 +589,7 @@ function getMonthViewLayout(& $cal,$type)
 	$format = $cal['calendar']->hour_format;
         $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
         $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$monthview_layout = '';
 	$monthview_layout .= '<br><!-- HOUR VIEW LAYER STARTS HERE -->
 		<div id="hrView_'.$type.'" style = "padding:5px">
@@ -598,8 +622,12 @@ function getMonthViewLayout(& $cal,$type)
 		$monthview_layout .= '<tr>';
 		for ($j = 0; $j < 7; $j ++)
 		{
-			$temp_date = $cal['calendar']->month_array[$cal['calendar']->slices[$cnt]]->start_time->get_formatted_date();
-			$monthview_layout .= '<td onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$hour_startat.'\',\''.$hour_endat.'\')" onMouseOver="this.className=\'cellNormalHover\'" onMouseOut="this.className=\'cellNormal\'" bgcolor="white" height="90" valign="top" width="200">';
+			$temp_ts = $cal['calendar']->month_array[$cal['calendar']->slices[$cnt]]->start_time->ts;
+			$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
+			$monthview_layout .= '<td onMouseOver="show(\''.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="hide(\''.$temp_date.''.$time_arr['starthour'].'\')" bgcolor="white" height="90" valign="top" width="200" align=right>';
+			$monthview_layout .= '<div id="'.$temp_date.''.$time_arr['starthour'].'" style="display: none;">
+                                                <a onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
+                                                </div>';
 			$monthview_layout .= getmonthEventLayer($cal,$cal['calendar']->slices[$cnt]);
 			$monthview_layout .= '</td>';
 			$cnt++;
@@ -609,7 +637,10 @@ function getMonthViewLayout(& $cal,$type)
 	}
 	$monthview_layout .= '</table></div>
 				</div>';
-	$monthview_layout .= getTodosListView($cal);
+	if($type != 'ajax')
+	{
+		$monthview_layout .= getTodosListView($cal);
+	}
         $monthview_layout .= '</td></tr></table></td></tr></table><br>';
 	echo $monthview_layout;
 		
@@ -651,7 +682,7 @@ function getYearViewLayout(& $cal,$type)
 		                $rows = 6;
 		        }
 			$cnt = 0;
-			for ($k = 0; $k < $rows; $k ++)
+			for ($k = 0; $k < 5; $k ++)
         		{
 				$yearview_layout .= '<tr>';
 				for ($mr = 0; $mr < 7; $mr ++)
@@ -661,7 +692,13 @@ function getYearViewLayout(& $cal,$type)
 					$month = $_1stmonth + 0;
 					$class = dateCheck($cal['calendar']->month_day_slices[$count][$cnt]);
 					$yearview_layout .= '<td class="'.$class.'">';
-					if(($_1stmonth == $_2ndmonth))
+					if($rows == 6 && $k==0)
+					{
+						list($tempyear,$tempmonth,$tempdate) = explode("-",$cal['calendar']->month_day_slices[$count][35+$mr]);
+						if($tempmonth == $_2ndmonth)
+							$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$tempdate.'&month='.$tempmonth.'&year='.$tempyear.'">'.$tempdate;
+					}
+					if($_1stmonth == $_2ndmonth)
 					{
 						$yearview_layout .= '<a href="index.php?module=Calendar&action=index&view=day&hour=0&day='.$date.'&month='.$month.'&year='.$_1styear.'">'.$date;
 					}
@@ -681,7 +718,10 @@ function getYearViewLayout(& $cal,$type)
 	}
 	$yearview_layout .= '</table></div>
 				</div>';
-	$yearview_layout .= getTodosListView($cal);
+	if($type != 'ajax')
+	{
+		$yearview_layout .= getTodosListView($cal);
+	}
         $yearview_layout .= '</td></tr></table></td></tr></table><br>';
 	echo $yearview_layout;
         
@@ -716,11 +756,12 @@ function getdayEventLayer(& $cal,$slice)
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 		$eventlayer .='<div class ="eventLay" style="background:'.$color.'" id="'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
 					<table border="0" cellpadding="0" cellspacing="0" width="95%">
-						<tr onmouseover="show(\''.$arrow_img_name.'\');" onmouseout="hide(\''.$arrow_img_name.'\');">
+						<tr onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="hide(\''.$arrow_img_name.'\');">
 						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
 						<td align="left" width="85%"><span class="fontBold">'.$account_name.'</span><br>
 							<b>'.$start_hour.'</b>&nbsp;,<span class="orgTab">'.$subject.'</span>&nbsp;
-							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_MORE'].'...]</a>
+							<a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_VIEW'].']</a>
+							<a href="index.php?action=EditView&module=Activities&record='.$id.'&activity_mode=Events" class="webMnu">['.$mod_strings['LBL_EDIT'].']</a>
 					
 						</td>
 						<td align="right" width="5%">
@@ -734,6 +775,38 @@ function getdayEventLayer(& $cal,$slice)
 		}
 		return $eventlayer;
 	}
+}
+
+function getweekEventLayer(& $cal,$slice)
+{
+	global $mod_strings;
+        $eventlayer = '';
+        $arrow_img_name = '';
+	$act = $cal['calendar']->week_slice[$slice]->activities;
+	if(!empty($act))
+        {
+		for($i=0;$i<count($act);$i++)
+                {
+			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->hour.'_'.$i;
+			$id = $act[$i]->record;
+                        $subject = $act[$i]->subject;
+			$format = $cal['calendar']->hour_format;
+                        $duration_hour = $act[$i]->duration_hour;
+                        $duration_min = $act[$i]->duration_minute;
+			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
+                        $st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
+			$start_hour = $st_end_time['starttime'];
+                        $end_hour = $st_end_time['endtime'];
+                        $account_name = $act[$i]->accountname;
+                        $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+                        $color = $act[$i]->color;
+			$eventlayer .='<div id="'.$cal['calendar']->week_slice[$slice]->start_time->hour.'_'.$i.'">
+                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" style="color:'.$color.'">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
+                                </div><br>';
+                }
+		return $eventlayer;
+	}
+			
 }
 
 function getmonthEventLayer(& $cal,$slice)
