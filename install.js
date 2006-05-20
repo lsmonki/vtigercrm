@@ -11,7 +11,7 @@
 const APP_DISPLAY_NAME = "vtiger Thunderbird Extension";
 const APP_NAME = "vtiger";
 const APP_PACKAGE = "/vtiger";
-const APP_VERSION = "4.0.1";
+const APP_VERSION = "4.2";
 
 const APP_JAR_FILE = "vtiger.jar";
 const APP_LOCALE_FOLDER  = "content/vtiger/";
