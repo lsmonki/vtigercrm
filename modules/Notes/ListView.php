@@ -44,6 +44,15 @@ else
 	$category = getParentTab();	
 }	
 
+if(!$_SESSION['lvs'][$currentModule])
+{
+	unset($_SESSION['lvs']);
+	$modObj = new ListViewSession();
+	$modObj->sorder = $sorder;
+	$modObj->sortby = $order_by;
+	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
+}
+
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Notes");
 $viewid = $oCustomView->getViewId($currentModule);
@@ -59,14 +68,6 @@ $focus = new Note();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
-if(!$_SESSION['lvs'][$currentModule])
-{
-	unset($_SESSION['lvs']);
-	$modObj = new ListViewSession();
-	$modObj->sorder = $sorder;
-	$modObj->sortby = $order_by;
-	$_SESSION['lvs'][$currentModule] = get_object_vars($modObj);
-}
 
 if($_REQUEST['errormsg'] != '')
 {
