@@ -22,6 +22,7 @@
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
@@ -128,7 +129,8 @@
 	{include file="Clock.tpl"}
 
 
-<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
+<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;`"></div>
+
 <script>
 function fetch_clock()
 {ldelim}
