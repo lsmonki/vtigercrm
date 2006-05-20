@@ -34,13 +34,21 @@
 	<input type="hidden" name="email2" value="">
 	<input type="hidden" name="action" value="Save">
 {elseif $MODULE eq 'Activities'}
-	<form name="ActivitySave" method="POST" action="index.php">
+	<form name="ActivitySave" onSubmit="return qcformValidate()" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Activities">
 	<input type="hidden" name="record" value="">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
 	<input type="hidden" name="assigned_user_id" value="{$USERID}">
 	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="due_date" value="">
+{elseif $MODULE eq 'Events'}
+        <form name="EventSave" onSubmit="return qcformValidate()" method="POST" action="index.php">
+        <input type="hidden" name="module" value="Activities">
+        <input type="hidden" name="record" value="">
+        <input type="hidden" name="activity_mode" value="Events">
+        <input type="hidden" name="assigned_user_id" value="{$USERID}">
+        <input type="hidden" name="action" value="Save">
+        <input type="hidden" name="due_date" value="">
 {elseif $MODULE eq 'Emails'}
 	<form name="EmailSave" onSubmit="return qcformValidate()" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Emails">
