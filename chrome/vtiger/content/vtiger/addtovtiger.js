@@ -75,7 +75,7 @@ function bget_CntBySearch()
 	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter(document.getElementById('txtemailid').value,"email_address"));
 	var call = new SOAPCall();
 	const objects = "uri:contact_by_emailRequest";
-	call.transportURI = gvturl + "/contactserialize.php";
+	call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
 	call.actionURI = objects + "/" + "contact_by_email";
 	call.encode(0,"contact_by_email",objects,headers.length,headers,params.length,params);
 	try
@@ -173,7 +173,7 @@ function vaddemailtovtigerCRM()
 		var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter(contactid,"contact_ids"),new SOAPParameter(opener.gdate,"date_sent"),new SOAPParameter(opener.gsubject,"email_subject"),new SOAPParameter(document.getElementById("TextAreaValue").value,"email_body"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = gvturl + "/contactserialize.php";
+		call.transportURI = gvturl + "/vtigerservice.php?service=thunderbird";
 		call.actionURI = objects + "/" + "track_email";
 		call.encode(0,"track_email",objects,headers.length,headers,params.length,params);
 		try
@@ -195,7 +195,6 @@ function vaddemailtovtigerCRM()
 					if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
 					{
 						alert_message("Successfully added message to the vtiger CRM");
-						window.close();
 					}else
 					{
 						alert_message("Can not add message to the vtiger CRM");

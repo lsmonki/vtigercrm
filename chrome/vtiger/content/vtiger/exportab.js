@@ -204,7 +204,7 @@ function get_vtigercrmcards(expAburl)
 					var headers = new Array();
 					var call = new SOAPCall();
 					const objects = "uri:create_contactRequest";
-					call.transportURI =  gvturl + "/contactserialize.php";
+					call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
 					call.actionURI = objects + "/" + "create_contact";
 					call.encode(0,"create_contact",objects,headers.length,headers,p.length,p);
 					

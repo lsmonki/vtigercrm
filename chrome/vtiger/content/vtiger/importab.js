@@ -170,7 +170,7 @@ function get_vtigercontcounts()
 	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter(gvtpassword,"password"));
 	var call = new SOAPCall();
 	const objects = "uri:get_contacts_countRequest";
-	call.transportURI =  gvturl + "/contactserialize.php";
+	call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
 	call.actionURI = objects + "/" + "get_contacts_count";
 	call.encode(0,"get_contacts_count",objects,headers.length,headers,params.length,params);
 	try
@@ -211,7 +211,7 @@ function create_cardinvtigerAB()
 	var params = new Array(new SOAPParameter(gvtusername,"user_name"),new SOAPParameter("0","from_index"),new SOAPParameter(gvtContactCount,"offset"));
 	var call = new SOAPCall();
 	const objects = "uri:contact_by_rangeRequest";
-	call.transportURI =  gvturl + "/contactserialize.php";
+	call.transportURI =  gvturl + "/vtigerservice.php?service=thunderbird";
 	call.actionURI = objects + "/" + "contact_by_range";
 	call.encode(0,"contact_by_range",objects,headers.length,headers,params.length,params);
 	try
