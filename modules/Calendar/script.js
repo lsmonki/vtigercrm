@@ -80,7 +80,7 @@ function showhideRepeat(argg1,argg2)
 
 
 
-function gshow(argg1,startdate,enddate,starttime,endtime)
+function gshow(argg1,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt)
 {
 	var y=document.getElementById(argg1).style;
 	
@@ -88,8 +88,12 @@ function gshow(argg1,startdate,enddate,starttime,endtime)
 	{
 		document.getElementById("jscal_field_date_start").value = startdate;
 		document.getElementById("jscal_field_due_date").value = enddate;	
-		document.getElementById("time_start").value = starttime;
-		document.getElementById("time_end").value = endtime;
+		document.getElementById("starthr").value = starthr;
+		document.getElementById("startmin").value = startmin;
+		document.getElementById("startfmt").value = startfmt;
+		document.getElementById("endhr").value = endhr;
+                document.getElementById("endmin").value = endmin;
+                document.getElementById("endfmt").value = endfmt;
 		y.display="block";
 	}
 }
@@ -146,14 +150,59 @@ function check_form()
         }
         else
         {
-                if (document.appSave.activitytype[0].checked==true)
-                {
-                        document.appSave.duration_minutes.value = "15";
-                }
-                else if (document.appSave.activitytype[1].checked == true)
-                {
-                        document.appSave.duration_minutes.value = "45";
-                }
+		starthour = document.appSave.starthr.value;
+		startmin  = document.appSave.startmin.value;
+		startformat = document.appSave.startfmt.value;
+		endhour = document.appSave.endhr.value;
+                endmin  = document.appSave.endmin.value;
+                endformat = document.appSave.endfmt.value;
+		if(startformat != '')
+		{
+			if(startformat == 'pm')
+			{
+				starthour = eval(starthour) + 12;
+				startmin  = startmin;
+			}
+			else
+			{
+				starthour = starthour;
+				startmin  = startmin;
+			}
+		}
+		if(endformat != '')
+		{
+			if(endformat == 'pm')
+                        {
+                                endhour = eval(endhour) + 12;
+				endmin = endmin;
+                        }
+			else
+			{
+				endhour = endhour;
+				endmin = endmin;
+			}
+		}
+		if((eval(endhour)*60+eval(endmin)) < (eval(starthour)*60+eval(startmin)))
+		{
+			alert("End Time should be greater than Start Time ");
+	                document.appSave.endhr.focus();
+        	        return false;
+		}
+			
+		durationinmin = (eval(endhour)*60+eval(endmin)) - (eval(starthour)*60+eval(startmin));
+		if(durationinmin >= 60)
+		{
+			hour = durationinmin/60;
+			minute = durationinmin%60;
+		}
+		else
+		{
+			hour = 0;
+			minute = durationinmin;
+		}
+		document.appSave.duration_hours.value = hour;
+		document.appSave.duration_minutes.value = minute;
+		document.appSave.time_start.value = starthour+':'+startmin;
                 return true;
         }
 }
@@ -297,4 +346,5 @@ function getMiniCal()
 	ajaxObj.process("index.php?",urlstring);
 	
 }
+
 
