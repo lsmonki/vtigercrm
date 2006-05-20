@@ -42,6 +42,9 @@ class User extends SugarBean {
 	var $user_name;
 	var $user_password;
 	var $cal_color;
+	var $hour_format;
+	var $start_hour;
+	var $end_hour;
 	var $first_name;
 	var $last_name;
 	var $date_entered;
@@ -97,6 +100,9 @@ class User extends SugarBean {
 		,"user_name"
 		,"user_password"
 		,"cal_color"
+		,"hour_format"
+		,"start_hour"
+		,"end_hour"
 		,"first_name"
 		,"last_name"
 		,"description"
