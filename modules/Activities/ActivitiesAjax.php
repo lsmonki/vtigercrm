@@ -45,6 +45,15 @@ if($ajaxaction == "DETAILVIEW")
 }
 elseif($_REQUEST['ajaxmode'] == 'qcreate')
 {
+	$activity_mode = $_REQUEST['activity_mode'];
+        if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] == 'Events')
+        {
+                $tab_type = 'Events';
+                $module = 'Events';
+        }
+
+        $tab_id=getTabid($tab_type);
+										
 	require_once('quickcreate.php');
 }
 else
