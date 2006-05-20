@@ -112,7 +112,7 @@ global $focus_list;
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
-$viewid = 20;
+$viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 

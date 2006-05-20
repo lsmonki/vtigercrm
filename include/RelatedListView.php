@@ -1,8 +1,9 @@
 <?php
 require_once('include/utils/UserInfoUtil.php');
 require_once("include/utils/utils.php");
+require_once("include/ListView/ListViewSession.php");
 
-function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$edit_val='',$del_val='')
+function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$id='',$edit_val='',$del_val='')
 {
 	$log = LoggerManager::getLogger('account_list');
 	$log->debug("Entering GetRelatedList(".$module.",".$relatedmodule.",".$focus.",".$query.",".$button.",".$returnset.",".$edit_val.",".$del_val.") method ...");
@@ -30,8 +31,11 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	global $focus_list;
 	$smarty = new vtigerCRM_Smarty;
 	if (!isset($where)) $where = "";
-
-	if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+	
+	if(method_exists($focus,getSortOrder))
+	$sorder = $focus->getSortOrder();
+	if(method_exists($focus,getOrderBy))
+	$order_by = $focus->getOrderBy();
 
 	$button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
@@ -74,14 +78,18 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	
 
-
-	
-
 	if(isset($where) && $where != '')
 	{
 		$query .= ' and '.$where;
 	}
-
+	
+	if(!$_SESSION['rlvs'][$module][$relatedmodule])
+	{
+		$modObj = new ListViewSession();
+		$modObj->sorder = $sorder;
+		$modObj->sortby = $order_by;
+		$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
+	}
 
 	//$url_qry = getURLstring($focus);
 
@@ -93,18 +101,18 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$list_result = $adb->query($query);
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
-
-	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+	
+	//Storing Listview session object
+	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='')
 	{
-		$start = $_REQUEST['start'];
+		$relmodule = $_REQUEST['relmodule'];
+		if($_SESSION['rlvs'][$module][$relmodule])
+		{
+			setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
+		}
 	}
-	else
-	{
+	$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
 
-		$start = 1;
-	}
-	//Retreive the Navigation array
 	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
 	//Retreive the List View Table Header
@@ -114,14 +122,14 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	else
 	{
-		$listview_header = getListViewHeader($focus,$relatedmodule,'','','','relatedlist');//"Accounts");
+		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,'relatedlist');//"Accounts");
 		if ($noofrows > 15)
 		{
 			$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
 			$smarty->assign('SCROLLSTOP','</div>');
 		}
 		$smarty->assign("LISTHEADER", $listview_header);
-
+															
 		if($module == 'PriceBook' && $relatedmodule == 'Products')
 		{
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
@@ -137,8 +145,14 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		{
 			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
 		}
-		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries);
-		$navigationOutput = getTableHeaderNavigation($navigation_array, $url_qry,$relatedmodule);
+		$start_rec = $navigation_array['start'];
+		$end_rec = $navigation_array['end_val'];
+
+		$navigationOutput = Array();
+		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
+		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
+		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
 		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;
 	}

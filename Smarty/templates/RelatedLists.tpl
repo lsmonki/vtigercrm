@@ -13,7 +13,17 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script>
+function getListViewEntries_js(module,url)
+{ldelim}
+        //Var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring ="module={$MODULE}&action={$MODULE}Ajax&record={$ID}&file=CallRelatedList&ajax=true&"+url+"&rmodule="+module;
+	//alert(urlstring); 
+        //ajaxObj.process("index.php?",urlstring);
 
+{rdelim}
+
+</script>
 	{include file='Buttons_List1.tpl'}
 
 <!-- Contents -->
@@ -66,10 +76,14 @@
 					{include file='RelatedListsHidden.tpl'}
 
 					  {foreach key=header item=detail from=$RELATEDLISTS}
-						<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
-							<tr >
-							<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b></td>
-							<td align=right style="border-bottom:1px solid #999999;padding:5px;">
+						<table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
+							<tr>
+							<td  valign=bottom><b>{$header}</b></td>
+							{if $detail ne ''}
+							<td align=center>{$detail.navigation.0}</td>
+							{$detail.navigation.1}
+							{/if}
+							<td align=right>
 							{if $header eq 'Potentials'}
 						
 							<input title="New Potential" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="Add new Potential"></td>

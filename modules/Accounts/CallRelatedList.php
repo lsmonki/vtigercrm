@@ -39,6 +39,12 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
+
+ if(!$_SESSION['rlvs'][$module])
+ {
+       unset($_SESSION['rlvs']);
+ }
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

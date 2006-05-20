@@ -42,19 +42,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	global $theme;
 	global $app_strings;
 	global $mod_strings;
-	//Seggregating between module and smodule
-	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
-	{
-		$smodule = 'Vendor';
-	}
-	elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
-	{
-		$smodule = 'PriceBook';
-	}
-	else
-	{
-		$smodule = $module;
-	}
 
 	$arrow='';
 	$qry = getURLstring($focus);
@@ -63,7 +50,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$list_header = Array();
 
 	//Get the tabid of the module
-	$tabid = getTabid($smodule);
+	$tabid = getTabid($module);
 	global $current_user;
 	//added for customview 27/5
 	if($oCv)
@@ -158,7 +145,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$temp_sorder = 'ASC';
 						}
-						if($relatedlist !='')
+					/*	if($relatedlist !='')
 						{
 							if($app_strings[$name])
 							{
@@ -170,7 +157,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							}
 						}
 						else
-						{
+						{*/
 							if($app_strings[$name])
 							{
 								$lbl_name = $app_strings[$name];
@@ -190,7 +177,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							$arrow = '';
-						}
+						//}
 					}
 					else
 					{       if($app_strings[$name])
@@ -2564,7 +2551,7 @@ Param $lv_array - list view session array
 Return type void.
 */
 
-function setSessionVar($lv_array,$noofrows,$max_ent)
+function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 {
 	$start = '';
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
@@ -2575,12 +2562,16 @@ function setSessionVar($lv_array,$noofrows,$max_ent)
 	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
 		$lv_array['viewname']=$_REQUEST['viewname'];
 
-	$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
-
+	if($related=='')
+		$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
+	else
+		$_SESSION['rlvs'][$module][$related] = $lv_array;
+		
 	if ($start < ceil ($noofrows / $max_ent) && $start !='')
 	{
 		$start = ceil ($noofrows / $max_ent);
-		$_SESSION['lvs'][$currentModule]['start'] = $start;
+		if($related=='')
+			$_SESSION['lvs'][$currentModule]['start'] = $start;
 	}
 }
 

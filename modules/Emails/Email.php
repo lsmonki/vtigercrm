@@ -71,7 +71,7 @@ class Email extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array();
+	var $sortby_fields = Array('subject','date_start','smownerid');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'subject';
@@ -111,6 +111,45 @@ class Email extends CRMEntity {
 		return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
 	}
 	
+	/** Returns the column name that needs to be sorted
+	 * Portions created by vtigerCRM are Copyright (C) vtigerCRM.
+	 * All Rights Reserved..
+	 * Contributor(s): Mike Crowe
+	*/
+
+	function getSortOrder()
+	{	
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder'])) 
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['EMAILS_SORT_ORDER'] != '')?($_SESSION['EMAILS_SORT_ORDER']):($this->default_sort_order));
+
+		$log->debug("Exiting getSortOrder method ...");
+		return $sorder;
+	}
+
+	/** Returns the order in which the records need to be sorted
+	 * Portions created by vtigerCRM are Copyright (C) vtigerCRM.
+	 * All Rights Reserved..
+	 * Contributor(s): Mike Crowe
+	*/
+
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by'])) 
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['EMAILS_ORDER_BY'] != '')?($_SESSION['EMAILS_ORDER_BY']):($this->default_order_by));
+
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}	
+	// Mike Crowe Mod --------------------------------------------------------
+
 	/** Returns a list of the associated users
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..

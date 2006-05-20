@@ -41,6 +41,12 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
+
+ if(!$_SESSION['rlvs'][$module])
+ {
+       unset($_SESSION['rlvs']);
+ }
+	
 $sql1 = $adb->query('select campaignid from leaddetails where leadid='.$focus->id);
 $campaignid = $adb->query_result($sql1,0,'campaignid');
 if($campaignid == 0) $campaignid='';
