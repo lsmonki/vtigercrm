@@ -2624,6 +2624,33 @@ foreach($customview_query_array as $query)
 	Execute($query);
 }
 
+
+$query_array2 = Array(
+				"INSERT INTO parenttabrel VALUES(2,4,2)",
+				"INSERT INTO parenttabrel VALUES(2,6,3)",
+				"update cvcolumnlist set columnname ='crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
+				"update field set sequence = 2 where columnname='filename' and tablename = 'attachments'",
+				"delete from cvcolumnlist where columnname = 'seactivityrel:crmid:parent_id:Emails_Related_To:I'",
+				"update cvcolumnlist set columnindex = 1 where cvid=3 and columnindex=3",
+				"update field set info_type='ADV' where tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
+				"update field set info_type='ADV' where tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
+
+				"create table inventorytaxinfo (taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL,  PRIMARY KEY  (taxid), KEY inventorytaxinfo_taxname_idx (taxname))",
+				"create table producttaxrel ( productid int(11) NOT NULL, taxid int(3) NOT NULL, taxpercentage decimal(7,3) default NULL, KEY producttaxrel_productid_idx (productid), KEY producttaxrel_taxid_idx (taxid))",
+
+				"insert into inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'VAT','4.5')",
+				"insert into inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Sales','10')",
+				"insert into inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Service','12.5')",
+				"update field set uitype=83, tablename='producttaxrel' where tabid=14 and fieldname='taxclass'",
+				"insert into moduleowners values(".$this->localGetTabID('Campaigns').",1)"
+			     );
+
+foreach($query_array2 as $query)
+{
+	Execute($query);
+}
+
+			     
 //To populate the comboStrings for Campaigns module which are added newly
 require_once('include/ComboStrings.php');
 global $combo_strings;
