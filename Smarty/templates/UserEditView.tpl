@@ -86,7 +86,7 @@ function ajaxSaveUserResponse(response)
 		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="record" value="{$ID}">
-			<input type="hidden" name="mode" value="register">
+			<input type="hidden" name="mode" value="{$MODE}">
 			<input type='hidden' name='parenttab' value='Settings'>
 			<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
 			<input type="hidden" name="action">

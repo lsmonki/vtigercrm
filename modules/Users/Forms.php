@@ -34,6 +34,7 @@ global $app_strings;
 
 $lbl_last_name = $mod_strings['LBL_LIST_LAST_NAME'];
 $lbl_user_name = $mod_strings['LBL_LIST_USER_NAME'];
+$lbl_role_name = $mod_strings['LBL_ROLE_NAME'];
 $lbl_new_password = $mod_strings['LBL_LIST_PASSWORD'];
 $lbl_confirm_new_password = $mod_strings['LBL_LIST_CONFIRM_PASSWORD'];
 $lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
@@ -44,49 +45,71 @@ $the_script  = <<<EOQ
 
 <script type="text/javascript" language="Javascript">
 <!--  to hide script contents from old browsers
+function set_fieldfocus(errorMessage,oMiss_field){
+		alert("$err_missing_required_fields" + errorMessage);
+		oMiss_field.focus();	
+		exit();
+}
 
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.user_name.value) == "") {
+	if (trim(form.email1.value) == "") {
 		isError = true;
-		errorMessage += "\\n$lbl_user_name";
+		errorMessage += "\\n$lbl_user_email1";
+		oField_miss = form.email1;
 	}
-	if (trim(form.new_password.value) == "") {
+	if (trim(form.role_name.value) == "") {
 		isError = true;
-		errorMessage += "\\n$lbl_new_password";
-	}
-	if (trim(form.confirm_new_password.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_confirm_new_password";
+		errorMessage += "\\n$lbl_role_name";
+		oField_miss =form.role_name;
 	}
 	if (trim(form.last_name.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_last_name";
+		oField_miss =form.last_name;
 	}
-	if (trim(form.email1.value) == "") {
+	if(form.mode.value !='edit')
+	{
+		if (trim(form.new_password.value) == "") {
+			isError = true;
+			errorMessage += "\\n$lbl_new_password";
+			oField_miss =form.new_password;
+		}
+		if (trim(form.confirm_new_password.value) == "") {
+			isError = true;
+			errorMessage += "\\n$lbl_confirm_new_password";
+			oField_miss =form.confirm_new_password;
+		}
+	}
+	if (trim(form.user_name.value) == "") {
 		isError = true;
-		errorMessage += "\\n$lbl_user_email1";
+		errorMessage += "\\n$lbl_user_name";
+		oField_miss =form.user_name;
 	}
 
 	if (isError == true) {
-		alert("$err_missing_required_fields" + errorMessage);
-		return false;
+		set_fieldfocus(errorMessage,oField_miss);
 	}
 	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert('"' + form.email1.value + '" is $err_invalid_email_address');
-		return false;
+		errorMessage='"' + form.email1.value + '" is $err_invalid_email_address';
+		set_fieldfocus(errorMessage,form.email1);
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert('"' + form.email2.value + '" value in other email field is $err_invalid_email_address');
-		return false;
+		errorMessage='"' + form.email2.value + '" value in other email field is $err_invalid_email_address';
+		set_fieldfocus(errorMessage,form.email2);
 	}
-   	if(trim(form.new_password.value) != trim(form.confirm_new_password.value))
-    	{
-	        alert("The password does't match");
-	        return false;
+	if(form.mode.value != 'edit')
+	{
+		if(trim(form.new_password.value) != trim(form.confirm_new_password.value))
+		{
+			set_fieldfocus("The password does't match",form.form.new_password);
+		}
+		check_duplicate();
+	}else
+	{
+		form.submit();
 	}
-	check_duplicate();
 }
 
 // end hiding contents from old browsers  -->
@@ -96,68 +119,5 @@ EOQ;
 
 return $the_script;
 }
-
-function get_validate_record_js1 () {
-global $mod_strings;
-global $app_strings;
-
-$lbl_last_name = $mod_strings['LBL_LIST_LAST_NAME'];
-$lbl_user_name = $mod_strings['LBL_LIST_USER_NAME'];
-$lbl_new_password = $mod_strings['LBL_LIST_PASSWORD'];
-$lbl_confirm_new_password = $mod_strings['LBL_LIST_CONFIRM_PASSWORD'];
-$lbl_user_email1 = $mod_strings['LBL_LIST_EMAIL'];
-$err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
-$err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
-
-$the_script  = <<<EOQ
-
-<script type="text/javascript" language="Javascript">
-<!--  to hide script contents from old browsers
-
-function verify_data(form) {
-	var isError = false;
-	var errorMessage = "";
-	if (trim(form.user_name.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_user_name";
-	}
-	if (trim(form.last_name.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_last_name";
-	}
-	if (trim(form.email1.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_user_email1";
-	}
-
-	if (isError == true) {
-		alert("$err_missing_required_fields" + errorMessage);
-		return false;
-	}
-	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert('"' + form.email1.value + '" is $err_invalid_email_address');
-		return false;
-	}
-	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert('"' + form.email2.value + '" value in other email field is $err_invalid_email_address');
-		return false;
-	}
-   	if(trim(form.new_password.value) != trim(form.confirm_new_password.value))
-    	{
-	        alert("The password does't match");
-	        return false;
-	}
-	return true;
-}
-
-// end hiding contents from old browsers  -->
-</script>
-
-EOQ;
-
-return $the_script;
-}
-
-
 
 ?>
