@@ -62,6 +62,11 @@
 			<toolbarbutton id="VTIGER-ACCOUNT" disabled="true" label="Create Account" tooltiptext="Click to create New Account"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_account.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
 
 			<toolbarbutton id="VTIGER-TICKET" disabled="true" label="Create Ticket" tooltiptext="Click to create New Ticket"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_ticket.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
+			<toolbarbutton id="VTIGER-VENDOR" disabled="true" label="Create Vendor" tooltiptext="Click to create New Vendor"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_vendor.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
+			<toolbarbutton id="VTIGER-PRODUCT" disabled="true" label="Create Product" tooltiptext="Click to create New Product"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_product.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
+			<toolbarbutton id="VTIGER-NOTE" disabled="true" label="Create Note" tooltiptext="Click to create New Note"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_note.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
+			<toolbarbutton id="VTIGER-SITE" disabled="true" label="Create Site" tooltiptext="Click to create New Site"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_site.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
+			<toolbarbutton id="VTIGER-RSS" disabled="true" label="Create RSS" tooltiptext="Click to create New RSS"  class="menuitem-iconic" oncommand="window.openDialog('chrome://vtiger/content/create_rss.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" />
 
 			
 			<toolbarseparator/>

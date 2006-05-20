@@ -42,21 +42,9 @@ function save_vtigeruserlogin()
 		return;
 	}else
 	{
-	
-		//if(document.getElementById("login_check").checked == true)
-		//{
 			vtiger_pref.setCharPref("Settings.Conf.vtiger_username",save_username);
 			vtiger_pref.setCharPref("Settings.Conf.vtiger_password",save_password);
 			vtiger_pref.setCharPref("Settings.Conf.vtiger_url",save_url);
-			//vtiger_pref.setCharPref("Settings.Conf.vtiger_checkvalue",get_checkvalue);	
-		/*}
-		else
-		{
-			vtiger_pref.setCharPref("Settings.Conf.vtiger_username",save_username);
-			vtiger_pref.setCharPref("Settings.Conf.vtiger_password",save_password);
-			vtiger_pref.setCharPref("Settings.Conf.vtiger_url",save_url);
-			vtiger_pref.setCharPref("Settings.Conf.vtiger_checkvalue","false");
-		}*/
 	}
 	window.close();                                                    
 }
@@ -65,7 +53,8 @@ function save_vtigeruserlogin()
 function enable_menubar()
 {
 	
-	if(vtiger_pref.prefHasUserValue("Settings.Conf.vtiger_username"))
+	
+       if(vtiger_pref.prefHasUserValue("Settings.Conf.vtiger_username"))
 	{
 		get_username = vtiger_pref.getCharPref("Settings.Conf.vtiger_username");
 		get_password = vtiger_pref.getCharPref("Settings.Conf.vtiger_password");
@@ -79,19 +68,19 @@ function enable_menubar()
 	var params = new Array(new SOAPParameter(get_username,"user_name"),new SOAPParameter(get_password,"password"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = get_url + "/contactserialize.php";
+		call.transportURI = get_url + "/vtigerservice.php?service=firefox";
 		call.actionURI = objects + "/" + "get_version";
 		call.encode(0,"get_version",objects,headers.length,headers,params.length,params);
 		var oResp = call.invoke();
 	}catch(errorObject)
 	{
-		alert("Can not connect to the vtiger CRM server");
+		window.alert("Can not connect to the vtiger CRM server");
 	}
 			
 		 	try
 			{
 				if(oResp.fault){
-					alert("Error while receiving response from the vtiger CRM server");
+					window.alert("Error while receiving response from the vtiger CRM server");
 				}
 				else
 				{
@@ -105,6 +94,11 @@ function enable_menubar()
 							document.getElementById("VTIGER-CONTACT").disabled=false;
 							document.getElementById("VTIGER-ACCOUNT").disabled=false;
 							document.getElementById("VTIGER-TICKET").disabled=false;
+							document.getElementById("VTIGER-VENDOR").disabled=false;
+							document.getElementById("VTIGER-PRODUCT").disabled=false;
+							document.getElementById("VTIGER-NOTE").disabled=false;
+							document.getElementById("VTIGER-RSS").disabled=false;
+							document.getElementById("VTIGER-SITE").disabled=false;
 							
 						   						
 						}else
@@ -114,17 +108,27 @@ function enable_menubar()
 							document.getElementById("VTIGER-CONTACT").disabled=true;
 							document.getElementById("VTIGER-ACCOUNT").disabled=true;
 							document.getElementById("VTIGER-TICKET").disabled=true;
+							document.getElementById("VTIGER-VENDOR").disabled=true;
+							document.getElementById("VTIGER-PRODUCT").disabled=true;
+							document.getElementById("VTIGER-NOTE").disabled=true;
+							document.getElementById("VTIGER-RSS").disabled=true;
+							document.getElementById("VTIGER-SITE").disabled=true;
 							alert("Can not connect to vtiger CRM");
 						    	
 
 						}
 					}else
 					{
-						alert("Can not connect to vtiger CRM");
+						window.alert("Can not connect to vtiger CRM");
 						document.getElementById("VTIGER-LEAD").disabled=true;
 						document.getElementById("VTIGER-CONTACT").disabled=true;
 						document.getElementById("VTIGER-ACCOUNT").disabled=true;
 						document.getElementById("VTIGER-TICKET").disabled=true;
+						document.getElementById("VTIGER-VENDOR").disabled=true;
+						document.getElementById("VTIGER-PRODUCT").disabled=true;
+						document.getElementById("VTIGER-NOTE").disabled=true;
+						document.getElementById("VTIGER-RSS").disabled=true;
+						document.getElementById("VTIGER-SITE").disabled=true;
 
 					}
 				}
@@ -259,7 +263,7 @@ function add_lead_to_vtigercrm()
 			var params = new Array(new SOAPParameter(save_lead_name,"lastname"),new SOAPParameter(save_lead_email,"email"),new SOAPParameter(save_lead_phone,"phone"),new SOAPParameter(save_lead_company,"company"),new SOAPParameter("","country"),new SOAPParameter(document.getElementById("txtdescription").value,"description"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = get_url + "/contactserialize.php";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
 		call.actionURI = objects + "/" + "create_lead_from_webform";
 		call.encode(0,"create_lead_from_webform",objects,headers.length,headers,params.length,params);
 			try
@@ -312,7 +316,6 @@ function add_contact_to_vtigercrm()
 
 	
 	//get the contact's information to save it to vtigerCRM
-	var save_contact_fname = trim(document.getElementById("txtcontact_fname").value);
 	var save_contact_lname = trim(document.getElementById("txtcontact_lname").value);
 	var save_contact_phone = trim(document.getElementById("txtcontact_phone").value);
 	var save_contact_mobile = trim(document.getElementById("txtcontact_mobile").value);
@@ -339,7 +342,7 @@ function add_contact_to_vtigercrm()
 			{
 				var h=new Array();
 				h[0] = new SOAPParameter(get_username,"user_name");
-				h[1] = new SOAPParameter(save_contact_fname,"first_name");
+				h[1] = new SOAPParameter("","first_name");
 				h[2] = new SOAPParameter(save_contact_lname,"last_name");
 				h[3] = new SOAPParameter(save_contact_email,"email_address");
 				h[4] = new SOAPParameter("","account_name");
@@ -367,7 +370,7 @@ function add_contact_to_vtigercrm()
 		var headers = new Array();
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = get_url + "/contactserialize.php";
+		call.transportURI = get_url + "/vtigerservice.php?service=firefox";
 		call.actionURI = objects + "/" + "create_contact";
 		call.encode(0,"create_contact",objects,headers.length,headers,h.length,h);
 			
@@ -444,7 +447,7 @@ function add_account_to_vtigercrm()
 		var params = new Array(new SOAPParameter(get_username,"username"),new SOAPParameter(save_account_name,"accountname"),new SOAPParameter(save_account_email,"email"),new SOAPParameter(save_account_phone,"phone"),new SOAPParameter(save_account_street,"primary_address_street"),new SOAPParameter(save_account_city,"primary_address_city"),new SOAPParameter(save_account_state,"primary_address_state"),new SOAPParameter(save_account_code,"primary_address_postalcode"),new SOAPParameter(save_account_country,"primary_address_country"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = get_url + "/contactserialize.php";
+		call.transportURI = get_url + "/vtigerservice.php?service=firefox";
 		call.actionURI = objects + "/" + "create_account";
 		call.encode(0,"create_account",objects,headers.length,headers,params.length,params);
 			try
@@ -512,7 +515,7 @@ function add_ticket_to_vtigercrm()
 		var params = new Array(new SOAPParameter(save_ticket_title,"title"),new SOAPParameter(document.getElementById("txtticket_description").value,"description"),new SOAPParameter(save_ticket_priority,"priority"),new SOAPParameter(save_ticket_severity,"severity"),new SOAPParameter(save_ticket_category,"category"),new SOAPParameter(get_username,"user_name"),new SOAPParameter("","parent_id"),new SOAPParameter("","product_id"));
 		var call = new SOAPCall();
 		const objects = "uri:track_emailRequest";
-		call.transportURI = get_url + "/contactserialize.php";
+		call.transportURI = get_url + "/vtigerservice.php?service=firefox";
 		call.actionURI = objects + "/" + "create_ticket_from_toolbar";
 		call.encode(0,"create_ticket_from_toolbar",objects,headers.length,headers,params.length,params);
 			try
@@ -577,11 +580,361 @@ function add_ticket_to_vtigercrm()
 function check_temp_variable()
 {
 	//if save button is pressed,call enable_menubar()
-	if(vtiger_pref.getCharPref("Settings.Conf.temp_variable") == "true"){enable_menubar();}
+	if(vtiger_pref.getCharPref("Settings.Conf.temp_variable") == "true")
+	{
+		enable_menubar();
+	}
 	//if cancel button is pressed
-	else{vtiger_pref.setCharPref("Settings.Conf.temp_variable","false");}
+	else
+	{
+		vtiger_pref.setCharPref("Settings.Conf.temp_variable","false");
+	window.alert('unable to set the menu bar')
+	}
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+//add vendor to vtigerCRM
+
+function add_vendor_to_vtigercrm()
+{
+	//get Lead's information to save it in vtigerCRM
+	var save_vendor_name = trim(document.getElementById("txtvendorname").value);
+	var save_vendor_email = trim(document.getElementById("txtvendoremail").value);
+	var save_vendor_phone = trim(document.getElementById("txtvendorphone").value);
+	var save_vendor_website = trim(document.getElementById("txtvendorwebsite").value);
+	//check for Vendor's Name 
+	if(save_vendor_name=="")
+	{
+		window.alert("Vendor Name is mandatory");
+		return;
+	}
+      if(save_vendor_name!="")
+		{
+			//SOAP method to save information in vtigerCRM
+						var headers = new Array();
+			var params = new Array(new SOAPParameter(save_vendor_name,"vendorname"),new SOAPParameter(save_vendor_email,"email"),new SOAPParameter(save_vendor_phone,"phone"),new SOAPParameter(save_vendor_website,"company"));
+		var call = new SOAPCall();
+		const objects = "uri:track_emailRequest";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
+		call.actionURI = objects + "/" + "create_vendor_from_webform";
+		call.encode(0,"create_vendor_from_webform",objects,headers.length,headers,params.length,params);
+			try
+			{
+				var oResp = call.invoke();
+			}catch(errorObject)
+				{
+					alert("Can not connect to the vtiger CRM server");
+				}
+			
+		 	try
+			{
+				if(oResp.fault){
+					alert("Error while receiving response from the vtiger CRM server");
+				}
+				else
+				{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+					{
+						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
+						{
+							alert("Vendor added to vtiger CRM successfully");
+						}else
+						{
+							alert("Can not add Vendor to vtiger CRM");
+						}
+					}else
+					{
+						alert("Can not add Vendor to vtiger CRM");
+					}
+				}
+			
+			}catch(errorObject)
+			{
+				alert(" Error while parsing response from the vtiger CRM server");
+			}
+		}
+
+  
+	window.close();
+}
+
+
+
+
+
+
+//add vendor to vtigerCRM
+
+function add_product_to_vtigercrm()
+{
+	//get Product's information to save it in vtigerCRM
+	var save_product_name = trim(document.getElementById("txtproductname").value);
+	var save_product_code = trim(document.getElementById("txtproductcode").value);
+	var save_product_website = trim(document.getElementById("txtproductwebsite").value);
+	//check for Product's Name 
+	if(save_product_name=="")
+	{
+		window.alert("Product Name is mandatory");
+		return;
+	}
+      if(save_product_name!="")
+		{
+			//SOAP method to save information in vtigerCRM
+			var headers = new Array();
+			var params = new Array(new SOAPParameter(save_product_name,"productname"),new SOAPParameter(save_product_code,"productcode"),new SOAPParameter(save_product_website,"website"));
+		var call = new SOAPCall();
+		const objects = "uri:track_emailRequest";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
+		call.actionURI = objects + "/" + "create_product_from_webform";
+		call.encode(0,"create_product_from_webform",objects,headers.length,headers,params.length,params);
+			try
+			{
+				var oResp = call.invoke();
+			}catch(errorObject)
+				{
+					window.alert("Can not connect to the vtiger CRM server");
+				}
+			
+		 	try
+			{
+				if(oResp.fault){
+					window.alert("Error while receiving response from the vtiger CRM server");
+				}
+				else
+				{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+					{
+						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
+						{
+							alert("Product added to vtiger CRM successfully");
+						}else
+						{
+							alert("Can not add Product to vtiger CRM");
+						}
+					}else
+					{
+						alert("Can not add Product to vtiger CRM");
+					}
+				}
+			
+			}catch(errorObject)
+			{
+				alert(" Error while parsing response from the vtiger CRM server");
+			}
+		}
+
+  
+	window.close();
+}
+
+
+
+//add Note to vtigerCRM
+
+function add_note_to_vtigercrm()
+{
+	//get Lead's information to save it in vtigerCRM
+	var save_note_subject = trim(document.getElementById("txtnotesubject").value);
+	var save_note_description = trim(document.getElementById("txtnotedescription").value);
+	//check for Vendor's Name 
+	if(save_note_subject=="")
+	{
+		window.alert("Note Subject is mandatory");
+		return;
+	}
+      if(save_note_subject!="")
+		{
+			//SOAP method to save information in vtigerCRM
+						var headers = new Array();
+			var params = new Array(new SOAPParameter(save_note_subject,"title"),new SOAPParameter(save_note_description,"notecontent"));
+		var call = new SOAPCall();
+		const objects = "uri:track_emailRequest";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
+		call.actionURI = objects + "/" + "create_note_from_webform";
+		call.encode(0,"create_note_from_webform",objects,headers.length,headers,params.length,params);
+			try
+			{
+				var oResp = call.invoke();
+			}catch(errorObject)
+				{
+					alert("Can not connect to the vtiger CRM server");
+				}
+			
+		 	try
+			{
+				if(oResp.fault){
+					alert("Error while receiving response from the vtiger CRM server");
+				}
+				else
+				{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+					{
+						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
+						{
+							alert("Note added to vtiger CRM successfully");
+						}else
+						{
+							alert("Can not add Note to vtiger CRM");
+						}
+					}else
+					{
+						alert("Can not add Note to vtiger CRM");
+					}
+				}
+			
+			}catch(errorObject)
+			{
+				alert(" Error while parsing response from the vtiger CRM server");
+			}
+		}
+
+  
+	window.close();
+}
+
+
+
+
+
+
+
+
+//add Site to vtigerCRM
+
+function add_site_to_vtigercrm()
+{
+	var save_portal_name = trim(document.getElementById("txtsitename").value);
+	var save_portal_url = trim(document.getElementById("txtsiteurl").value);
+	//check for Site's URL
+	if(save_portal_url=="")
+	{
+		window.alert("Portal url is mandatory");
+		return;
+	}
+      if(save_portal_url!="")
+		{
+			//SOAP method to save information in vtigerCRM
+						var headers = new Array();
+			var params = new Array(new SOAPParameter(save_portal_name,"portalname"),new SOAPParameter(save_portal_url,"portalurl"));
+		var call = new SOAPCall();
+		const objects = "uri:track_emailRequest";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
+		call.actionURI = objects + "/" + "create_site_from_webform";
+		call.encode(0,"create_site_from_webform",objects,headers.length,headers,params.length,params);
+			try
+			{
+				var oResp = call.invoke();
+			}catch(errorObject)
+				{
+					alert("Can not connect to the vtiger CRM server");
+				}
+			
+		 	try
+			{
+				if(oResp.fault){
+					alert("Error while receiving response from the vtiger CRM server");
+				}
+				else
+				{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+					{
+						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
+						{
+							alert("Site added to vtiger CRM successfully");
+						}else
+						{
+							alert("Can not add Site to vtiger CRM");
+						}
+					}else
+					{
+						alert("Can not add Site to vtiger CRM");
+					}
+				}
+			
+			}catch(errorObject)
+			{
+				alert(" Error while parsing response from the vtiger CRM server");
+			}
+		}
+
+  
+	window.close();
+}
+
+
+
+
+//add RSS to vtigerCRM
+
+function add_rss_to_vtigercrm()
+{
+	var save_rss_url = trim(document.getElementById("txtrssurl").value);
+	//check for RSS URL 
+	if(save_rss_url=="")
+	{
+		window.alert("RSS URL is mandatory");
+		return;
+	}
+      if(save_rss_url!="")
+		{
+			//SOAP method to save information in vtigerCRM
+						var headers = new Array();
+			var params = new Array(new SOAPParameter(save_rss_url,"rssurl"));
+		var call = new SOAPCall();
+		const objects = "uri:track_emailRequest";
+			call.transportURI = get_url + "/vtigerservice.php?service=firefox";
+		call.actionURI = objects + "/" + "create_rss_from_webform";
+		call.encode(0,"create_rss_from_webform",objects,headers.length,headers,params.length,params);
+			try
+			{
+				var oResp = call.invoke();
+			}catch(errorObject)
+				{
+					alert("Can not connect to the vtiger CRM server");
+				}
+			
+		 	try
+			{
+				if(oResp.fault){
+					alert("Error while receiving response from the vtiger CRM server");
+				}
+				else
+				{
+					if(oResp.body.childNodes.item(0).childNodes.item(0).hasChildNodes())
+					{
+						if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
+						{
+							alert("RSS added to vtiger CRM successfully");
+						}else
+						{
+							alert("Can not add RSS to vtiger CRM");
+						}
+					}else
+					{
+						alert("Can not add RSS to vtiger CRM");
+					}
+				}
+			
+			}catch(errorObject)
+			{
+				alert(" Error while parsing response from the vtiger CRM server");
+			}
+		}
+
+  
+	window.close();
+}
 
