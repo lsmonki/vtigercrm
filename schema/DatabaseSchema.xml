@@ -56,6 +56,9 @@
 		<field name="workdays" type="C" size="30" />
 		<field name="weekstart" type="I" size="11" />
 		<field name="date_format" type="C" size="30" />
+		<field name="hour_format" type="C" size="30" />
+		<field name="start_hour" type="C" size="30" />
+		<field name="end_hour" type="C" size="30" />
 		<field name="homeorder" type="C" size="255">
 			<default value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL" />
 		</field>
