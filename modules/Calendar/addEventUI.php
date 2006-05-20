@@ -11,7 +11,7 @@ require_once('modules/Calendar/Calendar.php');
  $userDetails=getOtherUserName($current_user->id);
  require_once("modules/Emails/mail.php");
  $to_email = getUserEmailId('id',$current_user->id);
-
+ $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 $mysel= $_GET['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
@@ -62,13 +62,14 @@ if(empty($date_data))
 }
 $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
+$calendar_arr['calendar']->hour_format = $current_user->hour_format;
 
- function getTimeCombo($format)
+ function getTimeCombo($format,$bimode)
  {
 	$combo = '';
 	if($format == 'am/pm')
 	{
-		$combo .= '<select class=small name="sthr">';
+		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
 		for($i=1;$i<=12;$i++)
 		{
 			if($i == $selvalue)
@@ -79,10 +80,12 @@ $calendar_arr['view'] = $mysel;
                         {
                                 $hrvalue= '0'.$i;
                         }
+			elseif($i == 12) $hrvalue = '00';
+			else $hrvalue= $i;
 			$combo .= '<option value="'.$hrvalue.'" '.$selected.'>'.$i.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="stmin" class=small>';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
 		for($i=0;$i<12;$i++)
                 {
 			$minvalue = 5;
@@ -95,10 +98,11 @@ $calendar_arr['view'] = $mysel;
                         {
                                 $value= '0'.$value;
                         }
+			else $value= $value;
 			$combo .= '<option value="'.$value.'" '.$minselected.'>'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="stfmt" class=small>';
+		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
 		if($selmin == 'am')
 		{
 			$amselected = 'selected';
@@ -116,7 +120,7 @@ $calendar_arr['view'] = $mysel;
 	}
 	else
 	{
-		$combo .= '<select name="endhr" class=small>';
+		$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small>';
 		for($i=0;$i<=23;$i++)
 		{
 			if($i == $selvalue)
@@ -127,10 +131,11 @@ $calendar_arr['view'] = $mysel;
                         {
                                 $hrvalue= '0'.$i;
                         }
+			else $hrvalue = $i;
 			$combo .= '<option value="'.$hrvalue.'" '.$selected.'>'.$i.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="endmin">';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
                 for($i=0;$i<12;$i++)
                 {
                         $minvalue = 5;
@@ -143,9 +148,10 @@ $calendar_arr['view'] = $mysel;
                         {
                                 $value= '0'.$value;
                         }
+			else $value=$value;
                         $combo .= '<option value="'.$value.'" '.$minselected.'>'.$value.'</option>';
                 }
-                $combo .= '</select>&nbsp;Hr';
+                $combo .= '</select>&nbsp;Hr<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 	}
 	return $combo;
 		
@@ -177,8 +183,9 @@ $calendar_arr['view'] = $mysel;
 	<input type="hidden" name="duration_hours" value="0">
 	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
 	<input type="hidden" name="duration_minutes" value="0">
-	<input type="hidden" name="time_start" id="time_start" value = "">
-	<input type="hidden" name="time_end" id="time_end" value = "">
+	<input type="hidden" name="time_start" id="time_start">
+	<input type="hidden" name="time_end" id="time_end">
+	<input type="hidden" name="eventstatus" id="status" value="Planned">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
@@ -215,13 +222,13 @@ $calendar_arr['view'] = $mysel;
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3 ><b><?echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
 				        <tr><td colspan=3>
-						<? echo  getTimeCombo($calendar_arr['calendar']->hour_format);?>
+						<? echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
                                         <tr><td>
-						<input type="text" name="date_start" id="jscal_field_date_start" value="" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+						<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px"></td><td width=50%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
-								inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 									})
      						        </script>
 					</td></tr>
@@ -231,13 +238,13 @@ $calendar_arr['view'] = $mysel;
 					<table border=0 cellspacing=0 cellpadding=2 width=90%>
 					<tr><td colspan=3><b><?echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
 				        <tr><td colspan=3>
-                                                <? echo getTimeCombo($calendar_arr['calendar']->hour_format);?>
+                                                <? echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
 					</td></tr>
 				        <tr><td>
-						<input type="text" name="due_date" id="jscal_field_due_date" value="" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
-					<script type">
+						<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px"></td><td width=100%><img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+					<script type="text/javascript">
                                                         Calendar.setup ({
-                                                                inputField : "jscal_field_due_date", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
+                                                                inputField : "jscal_field_due_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
                                                                         })
                                                         </script>
 					</td></tr>
@@ -258,11 +265,11 @@ $calendar_arr['view'] = $mysel;
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
+					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');ghide('addEventAlarmUI');gshow('addEventInviteUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
+					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');gshow('addEventAlarmUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
+					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="#" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>
@@ -407,7 +414,7 @@ $calendar_arr['view'] = $mysel;
 								<tr>
 								<td><?echo $mod_strings['LBL_REPEAT_ONCE']?></td>
 								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
-								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.time_start.value,document.appSave.time_end.value);ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
+								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
 								</tr>
 								</table>
 								
