@@ -154,7 +154,7 @@ class HelpDesk extends CRMEntity {
 			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
 			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
-			inner join users on crm2.smcreatorid= users.id
+			left join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('HelpDesk',$query,$id);

@@ -676,7 +676,7 @@ function get_ticket_attachments($userid,$ticketid)
 	for($i=0;$i<$noofrows;$i++)
 	{
 		$filename = $adb->query_result($res,$i,'name');
-		$filepath = getFilePath($adb->query_result($res,$i,'attachmentsid'),$filename);
+		$filepath = $adb->query_result($res,$i,'path');
 
 		$filesize = filesize($filepath.$filename);
 		$fileid = $adb->query_result($res,$i,'attachmentsid');
@@ -699,13 +699,16 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	global $adb;
 	global $root_directory;
 
+	//decide the file path where we should upload the file in the server
+	$upload_filepath = decideFilePath();
+
 	$upload_dir = $root_directory.'test/upload/';
 	$new_filename = $ticketid.'_'.$filename;
 
 	$data = base64_decode($filecontents);
 
 	//write a file with the passed content
-	$handle = @fopen($upload_dir.$new_filename,'w');
+	$handle = @fopen($upload_filepath.$new_filename,'w');
 	fputs($handle, $data);
 	fclose($handle);	
 
@@ -717,7 +720,7 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 	$crmquery = "insert into crmentity (crmid,setype,description,createdtime) values('".$attachmentid."','HelpDesk Attachment','".$description."','".$date_var."')";
 	$crmresult = $adb->query($crmquery);
 
-	$attachmentquery = "insert into attachments values(".$attachmentid.",'".$new_filename."','".$description."','".$filetype."')";
+	$attachmentquery = "insert into attachments values(".$attachmentid.",'".$new_filename."','".$description."','".$filetype."','".$upload_filepath."')";
 	$attachmentreulst = $adb->query($attachmentquery);
 
 	$relatedquery = $sql1 = "insert into seattachmentsrel values('".$ticketid."','".$attachmentid."')";

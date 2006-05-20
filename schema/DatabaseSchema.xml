@@ -808,6 +808,7 @@
 		</field>
 		<field name="description" type="C" size="100" />
 		<field name="type" type="C" size="100" />
+		<field name="path" type="C" size="255" />
 		<index name="attachments_attachmentsid_idx">
 			<col>attachmentsid</col>
 		</index>

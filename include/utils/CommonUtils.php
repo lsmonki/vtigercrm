@@ -1628,33 +1628,6 @@ function create_parenttab_data_file()
 }
 
 /**
- * This function is used to get the File Storage Path in the server.
- * @param int $attachmentid - file attachment id ie., crmid of the attachment
- * @param string $filename  - file name
- * return string $filepath  - filepath inwhere the file stored in the server will be return
-*/
-function getFilePath($attachmentid,$filename)
-{
-	global $log;
-	$log->debug("Entering getFilePath(".$attachmentid.",".$filename.") method ...");
-	global $adb;
-	global $root_directory;
-
-	$query = 'select crmid, setype, smownerid, users.user_name from crmentity inner join users on crmentity.smownerid=users.id where crmid='.$attachmentid;
-	$res = $adb->query($query);
-
-	$user_name = $adb->query_result($res,0,'user_name');
-
-	if(is_file($root_directory.'storage/user_'.$user_name.'/attachments/'.$filename))
-		$filepath = $root_directory.'storage/user_'.$user_name.'/attachments/';
-	else
-		$filepath = $root_directory.'test/upload/';
-
-	$log->debug("Exiting getFilePath method ...");
-	return $filepath;
-}
-
-/**
  * This function is used to get the all the modules that have Quick Create Feature.
  * Returns Tab Name and Tablabel.
  */
@@ -2146,6 +2119,59 @@ function getAllParenttabmoduleslist()
 	}			
 
 	        return $resultant_array;
+}
+
+/**
+ * 	This function is used to decide the File Storage Path in where we will upload the file in the server.
+ * 	return string $filepath  - filepath inwhere the file should be stored in the server will be return
+*/
+function decideFilePath()
+{
+	global $log, $adb;
+	$log->debug("Entering into decideFilePath() method ...");
+
+	$filepath = 'storage/';
+
+	$year  = date('Y');
+	$month = date('F');
+	$day  = date('j');
+	$week   = '';
+
+	if(!is_dir($filepath.$year))
+	{
+		//create new folder
+		mkdir($filepath.$year);
+	}
+
+	if(!is_dir($filepath.$year."/".$month))
+	{
+		//create new folder
+		mkdir($filepath."$year/$month");
+	}
+
+	if($day > 0 && $day <= 7)
+		$week = 'week1';
+	elseif($day > 7 && $day <= 14)
+		$week = 'week2';
+	elseif($day > 14 && $day <= 21)
+		$week = 'week3';
+	elseif($day > 21 && $day <= 28 )
+		$week = 'week4';
+	else
+		$week = 'week5';
+
+	if(!is_dir($filepath.$year."/".$month."/".$week))
+	{
+		//create new folder
+		mkdir($filepath."$year/$month/$week");
+	}
+
+	$filepath = $filepath.$year."/".$month."/".$week."/";
+
+	$log->debug("Year=$year & Month=$month & week=$week && filepath=\"$filepath\"");
+	$log->debug("Exiting from decideFilePath() method ...");
+	
+	return $filepath;
 }
 
 

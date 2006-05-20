@@ -27,8 +27,8 @@ if($adb->num_rows($result) == 1)
 {
 	$fileType = @$adb->query_result($result, 0, "type");
 	$name = @$adb->query_result($result, 0, "name");
+	$filepath = @$adb->query_result($result, 0, "path");
 
-	$filepath = getFilePath($attachmentsid,$name);
 	$filesize = filesize($filepath.$name);
 	$fileContent = fread(fopen($filepath.$name, "r"), $filesize);
 

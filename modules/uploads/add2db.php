@@ -44,7 +44,10 @@ for ($filecount=0;$filecount<count($_FILES) && $_FILES['file_'.$filecount]!='';$
 	$_FILES["file_".$filecount]["name"] = $binFile;
 	// Vulnerability fix ends
 
-	if(move_uploaded_file($_FILES["file_".$filecount]["tmp_name"],$uploaddir.$crmid."_".$_FILES["file_".$filecount]["name"])) 
+	//decide the file path where we should upload the file in the server
+	$upload_filepath = decideFilePath();
+
+	if(move_uploaded_file($_FILES["file_".$filecount]["tmp_name"],$upload_filepath.$crmid."_".$_FILES["file_".$filecount]["name"])) 
 	{
 		$filename = $crmid.'_'.basename($binFile);
 		$filetype= $_FILES['file_'.$filecount]['type'];
@@ -62,7 +65,7 @@ for ($filecount=0;$filecount<count($_FILES) && $_FILES['file_'.$filecount]!='';$
 			$result = $adb->query($query);
 
 			$sql = "insert into attachments values(";
-			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."')";
+			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
 			$result = $adb->query($sql);
 
 

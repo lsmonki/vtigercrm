@@ -286,13 +286,16 @@ class CRMEntity extends SugarBean
 		$filetype= $_FILES['filename']['type'];
 		$filesize = $_FILES['filename']['size'];
 
+		//get the file path inwhich folder we want to upload the file
+		$upload_file_path = decideFilePath();
+
 		if($binFile != '')
 		{
-			if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$binFile))
+			if(move_uploaded_file($_FILES["filename"]["tmp_name"],$upload_file_path.$binFile))
 			{
 				if($filesize != 0)
 				{
-					$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+					$data = base64_encode(fread(fopen($upload_file_path.$binFile, "r"), $filesize));
 				}
 			}
 			$current_id = $adb->getUniqueID("crmentity");
@@ -307,7 +310,7 @@ class CRMEntity extends SugarBean
 			$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
 			$adb->query($sql1);
 
-			$sql2="insert into attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','".$this->column_fields[$descname]."','".$filetype."')";
+			$sql2="insert into attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields[$descname]."','".$filetype."','".$upload_file_path."')";
 			$result=$adb->query($sql2);
 
 			//TODO -- instead of put contents in db now we should store the file in harddisk
