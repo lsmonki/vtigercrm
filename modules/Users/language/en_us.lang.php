@@ -90,6 +90,8 @@ $mod_strings = Array(
 'LBL_EMAIL'=>'E-Mail Id',
 'LBL_HOME_PHONE'=>'Home Phone',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
+'LBL_CAL_HRFORMAT'=>'Calendar Time Format',
+'LBL_CAL_DURATION'=>'Day starts at',
 'LBL_PRIMARY_ADDRESS'=>'Primary Address:',
 
 'LBL_CHANGE_PASSWORD_BUTTON_TITLE'=>'Change Password [Alt+P]',
