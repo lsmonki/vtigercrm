@@ -439,7 +439,7 @@ global $log;
 		$result->Move($row);
 		$rowdata = $this->change_key_case($result->FetchRow());
 		//$this->println($rowdata);
-		$coldata = to_html($rowdata[$col]);
+		$coldata = strip_selected_tags($rowdata[$col],'script');
 		//$this->println("ADODB query_result ". $coldata);
 		return $coldata;
 	}
