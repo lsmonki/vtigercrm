@@ -106,10 +106,10 @@ function set_focus() {
 													<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Beta</span><br><br>
 													vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
 													<b>New in Beta</b> <br>
-													<li>New-look Mail Client</li>
-													<li>Improved API docs</li>
-													<li>Performance Optimizations</li>
-													<li>Sexier Dashboards and Reports</li>	 		
+													<li>Integrated Mail Client</li>
+													<li>API docs</li>
+													<li>Optimized Performance</li>
+													<li>Sexier Dashboards,Reports,Calendar</li>	 		
 													<li>Migration Support</li><br>	
 															Your 'vtiger-xperience' is ... <br>	
 													<li><a href='http://blogs.vtiger.com' tabindex="6">vtiger blogs </a></li>
