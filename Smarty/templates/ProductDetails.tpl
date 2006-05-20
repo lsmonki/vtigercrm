@@ -24,18 +24,18 @@
 
    <tr>
 	<td colspan=4>
-		<table class="prdTab small"  border="0" cellspacing="0" cellpadding="2" id="proTab">
+		<table class="prdTab small"  border="0" cellspacing="0" cellpadding="5" id="proTab">
 		   <tr>
 			<th width="20%"><font color='red'>*</font>{$APP.LBL_PRODUCT}</th>
 
 			{if $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			<th width="10%">{$APP.LBL_QTY_IN_STOCK}</th>
+			<th width="8%" nowrap>{$APP.LBL_QTY_IN_STOCK}</th>
 			{/if}
 
-			<th width="10%"><font color='red'>*</font>{$APP.LBL_QTY}</th>
+			<th width="8%"><font color='red'>*</font>{$APP.LBL_QTY}</th>
 			<th width="10%">{$APP.LBL_UNIT_PRICE}</th>
 			<th width="15%"><font color='red'>*</font>{$APP.LBL_LIST_PRICE}</th>
-			<th width="20%">{$APP.LBL_TAX_CALCULATION}</th>
+			<th width="24%">{$APP.LBL_TAX_CALCULATION}</th>
 			<th width="10%">{$APP.LBL_TOTAL}</th>
 
 			<th width="5%">&nbsp;</th>
@@ -59,28 +59,28 @@
 				<input type="text" id="txtListPrice1" name="txtListPrice1" class="txtBox" readonly onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" />
 			</td>
 			<!-- Added for Tax calculation-->
-			<td valign="top">
+			<td valign="top" style="padding-bottom:5px;">
 				<input type="text" id="txtTaxTotal1" name="txtTaxTotal1" value="" class="detailedViewTextBox" style="width:65%;">
 				<input type="hidden" id="hdnTaxTotal1" name="hdnTaxTotal1">
 				&nbsp;<input type="button" name="showTax" value=" ... "  class="classBtnSmall"  onclick="fnshow_Hide('tax_Lay1');">
 
 				<!-- This div is added to display the tax informations -->
-				<div id="tax_Lay1" style="width:100%;position:relative;border:0px solid #CCCCCC;background-color:#FFFFFF;display:none;">
+				<div id="tax_Lay1" style="width:93%;position:relative;border:1px dotted #CCCCCC;display:none;background-color:#FFFFCC;top:5px;padding:5px;" align="center">
 					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 					   <tr id="row1">
-						<td align="left" width="40%"><input type="text" id="txtVATTax1" name="txtVATTax1" class="txtBox" onBlur="ValidateTax('txtVATTax1'); calcTotal(this);"/>%&nbsp;</td>
-						<td width="20%" align="right">{$APP.LBL_VAT}</td>
-						<td align="left" width="40%"><input type="text" id="txtVATTaxTotal1" name="txtVATTaxTotal1" class="txtBox" onBlur="ValidateTax('txtVATTaxTotal1'); calcTotal(this);"/></td>
+						<td align="left" width="40%" style="border:0px solid red;"><input type="text" id="txtVATTax1" name="txtVATTax1" class="txtBox" onBlur="ValidateTax('txtVATTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td width="20%" align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_VAT}</td>
+						<td align="left" width="40%" style="border:0px solid red;"><input type="text" id="txtVATTaxTotal1" name="txtVATTaxTotal1" class="txtBox" onBlur="ValidateTax('txtVATTaxTotal1'); calcTotal(this);"/></td>
 					   </tr>
 					   <tr id="row1">
-						<td align="left"><input type="text" id="txtSalesTax1" name="txtSalesTax1" class="txtBox" onBlur="ValidateTax('txtSalesTax1'); calcTotal(this);"/>%&nbsp;</td>
-						<td  align="right">{$APP.LBL_SALES}</td>
-						<td align="left"><input type="text" id="txtSalesTaxTotal1" name="txtSalesTaxTotal1" class="txtBox" onBlur="ValidateTax('txtSalesTaxTotal1'); calcTotal(this);"/></td>
+						<td align="left" style="border:0px solid red;"><input type="text" id="txtSalesTax1" name="txtSalesTax1" class="txtBox" onBlur="ValidateTax('txtSalesTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_SALES}</td>
+						<td align="left" style="border:0px solid red;"><input type="text" id="txtSalesTaxTotal1" name="txtSalesTaxTotal1" class="txtBox" onBlur="ValidateTax('txtSalesTaxTotal1'); calcTotal(this);"/></td>
 					   </tr>
 					   <tr id="row1">
-						<td align="left"><input type="text" id="txtServiceTax1" name="txtServiceTax1" class="txtBox" onBlur="ValidateTax('txtServiceTax1'); calcTotal(this);"/>%&nbsp;</td>
-						<td align="right">{$APP.LBL_SERVICE}</td>
-						<td align="left"><input type="text" id="txtServiceTaxTotal1" name="txtServiceTaxTotal1" class="txtBox" onBlur="ValidateTax('txtServiceTaxTotal1'); calcTotal(this);"/></td>
+						<td align="left" style="border:0px solid red;"><input type="text" id="txtServiceTax1" name="txtServiceTax1" class="txtBox" onBlur="ValidateTax('txtServiceTax1'); calcTotal(this);"/>%&nbsp;</td>
+						<td align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_SERVICE}</td>
+						<td align="left" style="border:0px solid red;"><input type="text" id="txtServiceTaxTotal1" name="txtServiceTaxTotal1" class="txtBox" onBlur="ValidateTax('txtServiceTaxTotal1'); calcTotal(this);"/></td>
 					   </tr>
 					</table>
 				</div>
