@@ -1828,6 +1828,7 @@ ul li{
 	padding-top:5px;
 	position:absolute;
 	display:none;
+	z-index:2000;
 }
 
 a.reportMnu{
@@ -2096,6 +2097,7 @@ a.allMnu:Hover{
 	visibility:visible;
 	padding:5px 5px 5px 5px;
 	display:block;
+	z-index:1000;
 }
 
 a.calMnu{
