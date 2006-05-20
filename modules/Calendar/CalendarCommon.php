@@ -226,5 +226,60 @@ function getOtherUserName($id)
 	return $user_details;
 }
 
+function getaddEventPopupTime($starttime,$endtime,$format)
+{
+	$timearr = Array();
+	list($sthr,$stmin) = explode(":",$starttime);
+	list($edhr,$edmin)  = explode(":",$endtime);
+	if($format == 'am/pm')
+	{
+		$hr = $sthr+0;
+		if($hr <= 11)
+		{
+			$timearr['starthour'] = $sthr;
+			$timearr['startfmt'] = 'am';
+		}
+		else
+		{
+			$sthr = $sthr - 12;
+			if($sthr <= 9 && strlen(trim($sthr)) < 2)
+                        {
+                                $hrvalue= '0'.$sthr;
+                        }else $hrvalue=$edhr;
+			$timearr['starthour'] = $hrvalue;
+			$timearr['startfmt'] = 'pm';
+		}
+		$ehr = $edhr+0;
+                if($hr <= 11)
+                {
+                        $timearr['endhour'] = $edhr;
+                        $timearr['endfmt'] = 'am';
+                }
+                else
+                {
+                        $edhr = $edhr - 12;
+                        if($edhr <= 9 && strlen(trim($edhr)) < 2)
+                        {
+                                $hrvalue= '0'.$edhr;
+                        }else $hrvalue=$edhr;
+                        $timearr['endhour'] = $hrvalue;
+                        $timearr['endfmt'] = 'pm';
+                }
+		$timearr['startmin']  = $stmin;
+		$timearr['endmin']    = $edmin;
+		return $timearr;
+	}
+	if($format == '24')
+	{
+		$timearr['starthour'] = $sthr;
+		$timearr['startmin']  = $stmin;
+		$timearr['startfmt']  = '';
+		$timearr['endhour']   = $edhr;
+                $timearr['endmin']    = $edmin;
+		$timearr['endfmt']    = '';
+		return $timearr;
+	}
+}
+
 //Code Added by Minnie -Ends
 ?>
