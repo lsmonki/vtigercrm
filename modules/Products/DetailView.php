@@ -71,6 +71,14 @@ $smarty->assign("SERVICE_TAX", $service_tax);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+ $product_tables = Array('products','productcf','productcollaterals');
+ $validationData = getDBValidationData($product_tables);
+ $data = split_validationdataArray($validationData);
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 //Security check for related list
 $smarty->assign("MODULE", $currentModule);
 $smarty->display("InventoryDetailView.tpl");
