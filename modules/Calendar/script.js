@@ -141,7 +141,6 @@ function switchClass(myModule,toStatus) {
 function check_form()
 {
 	formSelectColumnString('inviteesid');
-
         if(document.appSave.subject.value == "")
         {
                 alert("Missing Event Name");
@@ -150,6 +149,18 @@ function check_form()
         }
         else
         {
+		if(document.appSave.remindercheck.checked == true)
+			document.appSave.set_reminder.value = 'Yes';
+		else
+			document.appSave.set_reminder.value = 'No';
+		if(document.appSave.recurringcheck.checked == false)
+		{
+			document.appSave.recurringtype.value = '--None--';
+		}
+		else
+		{
+			document.appSave.recurringtype.value = document.appSave.repeat_option.value;
+		}
 		starthour = document.appSave.starthr.value;
 		startmin  = document.appSave.startmin.value;
 		startformat = document.appSave.startfmt.value;
