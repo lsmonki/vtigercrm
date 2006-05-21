@@ -139,6 +139,15 @@ if(isPermitted("Activities","Delete",$_REQUEST['record']) == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+ $activities_tables = Array('activity','crmentity');
+ $tabid = getTabid($tab_type);
+ $validationData = getDBValidationData($activities_tables,$tabid);
+ $data = split_validationdataArray($validationData);
+
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $smarty->assign("MODULE",$app_strings['Activities']);
 $smarty->display("DetailView.tpl");
 
