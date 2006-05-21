@@ -68,8 +68,29 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      var editArea = "editarea_"+ fieldLabel;
      var txtBox= "txtbox_"+ fieldLabel;
      var popupTxt= "popuptxt_"+ fieldLabel;      
-	
+	   var hdTxt = "hdtxt_"+ fieldLabel;
+	   
+     if(formValidate() == false)
+     {
+        return false;
+     }
+     
+     
+     var isAdmin = document.getElementById("hdtxt_IsAdmin").value; 
      var tagValue = trim(document.getElementById(txtBox).value);
+     
+     //overriden the tagValue based on UI Type for checkbox 
+     if(uitype == '56')
+     {
+        if(document.getElementById(txtBox).checked == true)
+        {
+          tagValue = "1";
+        }else
+        {
+          tagValue = "0";
+        }
+     }
+     
      var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
      data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
      show("vtbusy_info");
@@ -86,40 +107,62 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      }
      else if(getObj(popupTxt))
      {
-	var popObj = getObj(popupTxt);
-	if(uitype == '50' || uitype == '73' || uitype == '51')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Accounts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else if(uitype == '57')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Contacts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else if(uitype == '59')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Products&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else if(uitype == '75' || uitype == '81' )
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Vendors&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-
-	}
-	else if(uitype == '76')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Potentials&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else if(uitype == '78')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Quotes&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else if(uitype == '80')
-	{
-		getObj(dtlView).innerHTML = "<a href=\"index.php?module=SalesOrder&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
-	}
-	else
-	{
-		getObj(dtlView).innerHTML = popObj.value;
-	}
+      	var popObj = getObj(popupTxt);
+      	if(uitype == '50' || uitype == '73' || uitype == '51')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Accounts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else if(uitype == '57')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Contacts&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else if(uitype == '59')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Products&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else if(uitype == '75' || uitype == '81' )
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Vendors&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      
+      	}
+      	else if(uitype == '76')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Potentials&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else if(uitype == '78')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=Quotes&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else if(uitype == '80')
+      	{
+      		getObj(dtlView).innerHTML = "<a href=\"index.php?module=SalesOrder&action=DetailView&record="+tagValue+"\">"+popObj.value+"&nbsp;</a>";
+      	}
+      	else
+      	{
+      		getObj(dtlView).innerHTML = popObj.value;
+      	}
+     }
+     else if(uitype == '53')
+     {
+      		var hdObj = getObj(hdTxt);
+      		if(isAdmin == "0")
+      		{
+              getObj(dtlView).innerHTML = hdObj.value;
+          }else if(isAdmin == "1")
+          {
+              getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";;
+          }
+     }
+     else if(uitype == '56')
+     {
+        if(tagValue == '1')
+        {
+            getObj(dtlView).innerHTML = "yes";
+        }else
+        {
+            getObj(dtlView).innerHTML = "";
+        }
+        
      }
      else
      {
@@ -145,4 +188,14 @@ function SaveTag(txtBox,crmId,module)
 	var ajaxObj = new Ajax(dtlViewAjaxTagResponse);
     ajaxObj.process("index.php?",data);
    	show("vtbusy_info");
+}
+
+function setSelectValue(fieldLabel)
+{
+  var hdTxtBox = 'hdtxt_'+fieldLabel; 
+  var selCombo= 'txtbox_'+fieldLabel;
+  var oHdTxtBox = document.getElementById(hdTxtBox);
+  var oSelCombo = document.getElementById(selCombo);
+  
+  oHdTxtBox.value = oSelCombo.options[oSelCombo.selectedIndex].text;
 }
