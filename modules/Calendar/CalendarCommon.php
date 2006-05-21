@@ -241,23 +241,29 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 		}
 		else
 		{
-			$sthr = $sthr - 12;
+			if($hr == 12)
+				$sthr = $hr;
+			else
+				$sthr = $hr - 12;
 			if($sthr <= 9 && strlen(trim($sthr)) < 2)
                         {
                                 $hrvalue= '0'.$sthr;
-                        }else $hrvalue=$edhr;
+                        }else $hrvalue=$sthr;
 			$timearr['starthour'] = $hrvalue;
 			$timearr['startfmt'] = 'pm';
 		}
 		$ehr = $edhr+0;
-                if($hr <= 11)
+                if($ehr <= 11)
                 {
                         $timearr['endhour'] = $edhr;
                         $timearr['endfmt'] = 'am';
                 }
                 else
                 {
-                        $edhr = $edhr - 12;
+			if($edhr == 12)
+				$edhr =	$edhr;
+			else
+				$edhr = $edhr - 12;
                         if($edhr <= 9 && strlen(trim($edhr)) < 2)
                         {
                                 $hrvalue= '0'.$edhr;
