@@ -78,6 +78,15 @@ if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("Potentials","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+$potential_tables = Array('potential','crmentity','potentialscf');
+$tabid = getTabid("Potentials");
+$validationData = getDBValidationData($potential_tables,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+       
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
