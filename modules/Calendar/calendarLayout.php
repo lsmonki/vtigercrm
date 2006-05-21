@@ -450,6 +450,7 @@ function getDayViewLayout(& $cal,$type)
 	        $hour_endat = convertTime2UserSelectedFmt($format,$y,false);
 		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$temp_ts = $cal['calendar']->date_time->ts;
+		//echo '<pre>';print_r($time_arr);echo '</pre>';
 		$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 		$dayview_layout .= '<tr>
 					<td style="border-right: 1px solid rgb(102, 102, 102);" align="right" width="10%" onMouseOver="show(\''.$hour.''.$sub_str.'\')" onMouseOut="hide(\''.$hour.''.$sub_str.'\')">
@@ -555,8 +556,8 @@ function getWeekViewLayout(& $cal,$type)
 			$temp_ts = $cal['calendar']->week_array[$cal['calendar']->slices[$column]]->start_time->ts;
 			$temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
 
-			$weekview_layout .= '<td class="cellNormal" onMouseOver="show(\''.$temp_date.''.$time_arr['starthour'].'\')" onMouseOut="hide(\''.$temp_date.''.$time_arr['starthour'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right>';
-			$weekview_layout .= '<div id="'.$temp_date.''.$time_arr['starthour'].'" style="display: none;">
+			$weekview_layout .= '<td class="cellNormal" onMouseOver="show(\''.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')" onMouseOut="hide(\''.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right>';
+			$weekview_layout .= '<div id="'.$temp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'" style="display: none;">
 						<a onClick="gshow(\'addEvent\',\''.$temp_date.'\',\''.$temp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.jpg" border="0"></a>
                                                 </div>';
 			$weekview_layout .=getweekEventLayer($cal,$cal['calendar']->week_hour_slices[$count]);
@@ -754,7 +755,7 @@ function getdayEventLayer(& $cal,$slice)
 			$account_name = $act[$i]->accountname;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
-		$eventlayer .='<div class ="eventLay" style="background:'.$color.'" id="'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
+		$eventlayer .='<div class ="eventLay" id="'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'">
 					<table border="0" cellpadding="0" cellspacing="0" width="95%">
 						<tr onMouseOver="show(\''.$arrow_img_name.'\');" onMouseOut="hide(\''.$arrow_img_name.'\');">
 						<td align="left" width="5%"><img src="'.$image.'" align="right top"></td>
@@ -801,7 +802,7 @@ function getweekEventLayer(& $cal,$slice)
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
                         $color = $act[$i]->color;
 			$eventlayer .='<div id="'.$cal['calendar']->week_slice[$slice]->start_time->hour.'_'.$i.'">
-                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" style="color:'.$color.'">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
+                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" style="color:#DBF3FD;">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
                                 </div><br>';
                 }
 		return $eventlayer;
@@ -846,7 +847,7 @@ function getmonthEventLayer(& $cal,$slice)
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$color = $act[$i]->color;
 			$eventlayer .='<div id="'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i.'">
-                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" style="color:'.$color.'">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
+                                        <img src="'.$image.'" valign="absmiddle"><a href="index.php?action=DetailView&module=Activities&record='.$id.'&activity_mode=Events" style="color:#DBF3FD;">&nbsp;<b>'.$start_hour.'</b>&nbsp;'.$subject.'</a>&nbsp;
                                 </div><br>';
                 }
 		if($remin_list != null)
