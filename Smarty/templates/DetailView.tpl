@@ -213,6 +213,10 @@ Calendar.setup ({ldelim}
 							   {assign var=keycursymb value=$data.cursymb}
 							   {assign var=keysalut value=$data.salut}
 							   {assign var=keycntimage value=$data.cntimage}
+							   {assign var=keyadmin value=$data.isadmin}
+							   
+							   <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
+							   
                                       {if $label ne ''}
                                              {if $keycntimage ne ''}
 								      <td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
@@ -228,7 +232,7 @@ Calendar.setup ({ldelim}
                                                         {/if}
                                                        <div id="dtlview_{$label}" onClick="hndMouseOver({$keyid},'{$label}');">{$keyval}&nbsp;</div>
                                               		<div id="editarea_{$label}" style="display:none;">
-                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="textbox_{$label}" maxlength='100' value="{$keyval}"></input>
+                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{keyfldname}" maxlength='100' value="{$keyval}"></input>
                                               		  <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');"/> or
                                               		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
                                                        </div>
@@ -236,29 +240,52 @@ Calendar.setup ({ldelim}
                                              {elseif $keyid eq '13'} <!--Email-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');"><a href="mailto:{$keyval}" target="_blank">&nbsp;{$keyval}</a></div>
                                               		<div id="editarea_{$label}" style="display:none;">
-                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="textbox_{$label}" maxlength='100' value="{$keyval}"></input>
+                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{keyfldname}" maxlength='100' value="{$keyval}"></input>
                                               		  <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
                                               		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
                                                        </div>
                                                   </td>
                                              {elseif $keyid eq '15' || $keyid eq '16'} <!--ComboBox-->
-               							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');">&nbsp;{$keyval}</div>
-                                              		<div id="editarea_{$label}" style="display:none;">
-                    							   <select id="txtbox_{$label}" name="{$keyfldname}">
-                    								{foreach item=arr from=$keyoptions}
-                    									{foreach key=sel_value item=value from=$arr}
-                    										<option value="{$sel_value}" {$value}>{$sel_value}</option>
-                    									{/foreach}
-                    								{/foreach}
-                    							   </select>
-                    							   <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
-                                              		   <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
-                    							</div>
-               							</td>
+                                     							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');">&nbsp;{$keyval}</div>
+                                                           <div id="editarea_{$label}" style="display:none;">
+                                          							   <select id="txtbox_{$label}" name="{$keyfldname}">
+                                              								{foreach item=arr from=$keyoptions}
+                                              									{foreach key=sel_value item=value from=$arr}
+                                              										<option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                              									{/foreach}
+                                              								{/foreach}
+                                          							   </select>
+                                          							   <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
+                                                       	   <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
+                                          							</div>
+                                     							</td>
+                                             {elseif $keyid eq '53'} <!--Assigned To-->
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="hide('crmspanid');">
+                                                  <span id="dtlview_{$label}">
+                                                      {if $keyseclink eq ''}
+                                                             {$keyval}
+                                                      {else}
+                                                            <a href="{$keyseclink}">{$keyval}</a>         
+                                                      {/if}
+                                                  </span>
+                                                  <div id="editarea_{$label}" style="display:none;">
+                                                          <input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
+                                          							  <select id="txtbox_{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
+                                          								{foreach item=arr key=id from=$keyoptions}
+                                          									{foreach key=sel_value item=value from=$arr}
+                                          										<option value="{$id}" {$value}>{$sel_value}</option>
+                                          									{/foreach}
+                                          								{/foreach}
+                                          							   </select>
+                                          							   <br>
+                                                           <input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
+                                                           <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
+                                          				</div>
+                                     							</td>
                                              {elseif $keyid eq '17'} <!--WebSite-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');"><a href="http://{$keyval}" target="_blank">&nbsp;{$keyval}</a></div>
                                               		<div id="editarea_{$label}" style="display:none;">
-                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="textbox_{$label}" maxlength='100' value="{$keyval}"></input>
+                                              		  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{keyfldname}" maxlength='100' value="{$keyval}"></input>
                                               		  <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
                                               		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
                                                        </div>
@@ -288,6 +315,18 @@ Calendar.setup ({ldelim}
                                               		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
                                                        </div>
                                                   </td>
+                                             {elseif $keyid eq '56'} <!--CheckBox--> 
+                                                  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="hide('crmspanid');"><span id="dtlview_{$label}">{$keyval}</span>
+                                                  		<div id="editarea_{$label}" style="display:none;">
+                                                             {if $keyval eq 'yes'}                                              		  
+                                                                   <input id="txtbox_{$label}" type="checkbox" style="border:1px solid #bababa;" checked value="1">
+                                                             {else}
+                                                                   <input id="txtbox_{$label}" type="checkbox" style="border:1px solid #bababa;" value="0">
+                                                             {/if}
+                                                             <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
+                                                  		        <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
+                                                      </div>
+                                                  </td>     
                                              {elseif $keyid eq '57'} <!--ContactPopup-->
                                                   <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}" onClick="hndMouseOver({$keyid},'{$label}');"><a href="{$keyseclink}">&nbsp;{$keyval}</a></div>
                                               		<div id="editarea_{$label}" style="display:none;">                                              		  
@@ -434,8 +473,12 @@ function ajaxTagCloudResp(response)
 	var item = response.responseText;
 	getObj('tagfields').innerHTML = item;
 	document.getElementById('txtbox_tagfields').value ='';	
-	
 {rdelim}
 </script>
-
+<!-- added for validation -->
+<script language="javascript">
+  var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
+  var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
+  var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
+</script>
 </td></tr></table></form>
