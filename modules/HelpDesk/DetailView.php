@@ -91,6 +91,14 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$ticket_tables = Array('troubletickets','crmentity');
+$tabid = getTabid("HelpDesk");
+$validationData = getDBValidationData($ticket_tables,$tabid);
+$data = split_validationdataArray($validationData);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];
