@@ -145,7 +145,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$user_name = getUserName($user_id);
 			if(is_admin($current_user))
 			{
-				$label_fld[] ='<a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a>';
+				$label_fld[] =$user_name;
+        $label_fld["secid"] = $user_id;
+		    $label_fld["link"] = "index.php?module=Users&action=DetailView&record=".$user_id;
 			}
 			else
 			{
@@ -162,14 +164,96 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$groupname = $group_info[0];
 			$groupid = $group_info[1];
 			if(is_admin($current_user))
-                        {
-				$label_fld[] ='<a href="index.php?module=Users&action=GroupDetailView&groupId='.$groupid.'">'.$groupname.'</a>';
+      {
+				$label_fld[] =$groupname;
+        $label_fld["secid"] = $groupid;
+        $label_fld["link"] = "index.php?module=Users&action=GroupDetailView&groupId=".$groupid;
+        //$label_fld[] ='<a href="index.php?module=Users&action=GroupDetailView&groupId='.$groupid.'">'.$groupname.'</a>';
 			}
 			else
 			{
 				$label_fld[] =$groupname;
 			}			
 		}
+		
+		//Security Checks
+		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
+		{
+			$result=get_current_user_access_groups($module_name);
+		}
+		else
+		{ 		
+			$result = get_group_options();
+		}
+		$nameArray = $adb->fetch_array($result);
+
+
+		global $current_user;
+		$value = $user_id;
+		if($value != '' && $value != 0)
+		{
+			$assigned_user_id = $value;
+			$user_checked = "checked";
+			$team_checked = '';
+			$user_style='display:block';
+			$team_style='display:none';			
+		}
+		else
+		{
+			if($value=='0')
+			{
+				$record = $col_fields["record_id"];
+				$module = $col_fields["record_module"];
+
+				$selected_groupname = getGroupName($record, $module);
+				$user_checked = '';
+				$team_checked = 'checked';
+				$user_style='display:none';
+				$team_style='display:block';
+			}
+			else	
+			{				
+				$assigned_user_id = $current_user->id;
+				$user_checked = "checked";
+				$team_checked = '';
+				$user_style='display:block';
+				$team_style='display:none';
+			}	
+		}
+		
+		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
+		{
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+		}
+		else
+		{
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+		}
+	
+    if($noof_group_rows != 0)
+		{
+			do
+			{
+				$groupname=$nameArray["groupname"];
+				$selected = '';	
+				if($groupname == $selected_groupname[0])
+				{
+					$selected = "selected";
+				}	
+				$group_option[] = array($groupname=>$selected);
+
+			}while($nameArray = $adb->fetch_array($result));
+      
+		}
+		
+		if($user_id == 0)
+		{
+      $label_fld ["options"] = $group_option; 
+    }else
+    {
+      $label_fld ["options"] = $users_combo;
+    }
+    //print_r($users_combo);
 		
 	}
 	elseif($uitype == 55)
@@ -734,6 +818,16 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $col_fields[$fieldname];
 	}
 	$label_fld[]=$uitype;
+	
+	//sets whether the currenct user is admin or not
+	if(is_admin($current_user))
+	{
+	    $label_fld["isadmin"] = 1;
+	}else
+	{
+	   $label_fld["isadmin"] = 0;
+  }
+  
 	$log->debug("Exiting getDetailViewOutputHtml method ...");
 	return $label_fld;
 }
@@ -929,7 +1023,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-		$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+		$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		$i++;
 		if($i<$noofrows)
 		{
@@ -944,7 +1038,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$tabid = $adb->query_result($result,$i,"tabid");
 
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname));
 		}
 
 	}
