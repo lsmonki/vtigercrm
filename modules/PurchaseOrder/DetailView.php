@@ -79,6 +79,15 @@ if(isPermitted("PurchaseOrder","Delete",$_REQUEST['record']) == 'yes')
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('PurchaseOrder',$focus));
 
+ $po_tables = Array('purchaseorder','pobillads','poshipads');
+ $tabid = getTabid("PurchaseOrder");
+ $validationData = getDBValidationData($po_tables,$tabid);
+ $data = split_validationdataArray($validationData);
+
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("InventoryDetailView.tpl");
