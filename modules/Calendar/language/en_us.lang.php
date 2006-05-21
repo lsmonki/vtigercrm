@@ -174,6 +174,8 @@ $mod_strings = Array(
 'LBL_ADD_EVENT'=>'Add Event',
 'LBL_INVITE'=>'Invite',
 'LBL_REMINDER'=>'Reminder',
+'LBL_SENDREMINDER'=>'Send Reminder',
+'LBL_BEFORE'=>'before the event starts',
 'LBL_REPEAT'=>'Repeat',
 'LBL_EVENTTYPE'=>'Event Type',
 'LBL_EVENTNAME'=>'Event Name',
@@ -194,6 +196,7 @@ $mod_strings = Array(
 'LBL_EVERYDAY'=>'Every Day',
 'LBL_EVERYWEEK'=>'Every Week',
 'LBL_EVERYMON'=>'Every Month',
+'LBL_REPEATEVENT'=>'Repeat Event',
 
 'LBL_INVITE_INST1'=>'To invite, select the users from the "Available Users" list and click the "Add" button.',
 'LBL_INVITE_INST2'=>'To remove, select the users in the "Selected Users" list and the click "Remove" button.',
