@@ -107,6 +107,15 @@ if(isPermitted("Leads","Merge",'') == 'yes')
         $smarty->assign("TOPTIONS",$optionString);
 }
 
+$lead_tables = Array('leaddetails','crmentity','leadsubdetails','leadaddress','leadscf');
+$tabid = getTabid("Leads");
+$validationData = getDBValidationData($lead_tables,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+      
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
