@@ -182,10 +182,13 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 	<input type="hidden" name="record" value="">
 	<input type="hidden" name="duration_hours" value="0">
 	<input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
+	<input type="hidden" name="assigntype" value="U">
 	<input type="hidden" name="duration_minutes" value="0">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
-	<input type="hidden" name="eventstatus" id="status" value="Planned">
+	<input type="hidden" name="eventstatus" value="Planned">
+	<input type="hidden" name="recurringtype" value="">
+	<input type="hidden" name="set_reminder" value="">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
 		<tr>
@@ -334,7 +337,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			<!-- Reminder UI -->
 				<DIV id="addEventAlarmUI" style="display:none;width:100%">
 				<table>
-					<tr><td>Send Reminder</td><td><input name="set_reminder" type="checkbox" onClick="showhide('reminderOptions')">
+					<tr><td><?echo $mod_strings['LBL_SENDREMINDER']?></td><td><input name="remindercheck" type="checkbox" onClick="showhide('reminderOptions')">
 					</td></tr>
 				</table>
 				<DIV id="reminderOptions" style="display:none;width:100%">
@@ -376,8 +379,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
                                                         <?
                                                                 }
                                                         ?>
-                                                        </select>before the event starts
-								
+                                                        </select><?echo $mod_strings['LBL_BEFORE']?>
 						</td>
 						</tr>
 						</table>
@@ -404,7 +406,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 					<td nowrap width=80% valign=top>
 						<table border=0 cellspacing=0 cellpadding=0>
 						<tr>
-							<td width=20><input type="checkbox" onClick="showhide('repeatOptions')"></td>
+							<td width=20><input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')"></td>
 							<td colspan=2><?echo $mod_strings['LBL_ENABLE_REPEAT']?></td>
 						</tr>
 						<tr>
@@ -412,13 +414,22 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 							<div id="repeatOptions" style="display:none">
 								<table border=0 cellspacing=0 cellpadding=2>
 								<tr>
-								<td><?echo $mod_strings['LBL_REPEAT_ONCE']?></td>
-								<td><input type="text" class="textbox" style="width:20px" value="2" ></td>
-								<td><select class=small><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option><option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatMonthUI');">Week(s)</option><option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatWeekUI');">Month(s)</option><option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option></select></td>
+								<td><?echo $mod_strings['LBL_REPEATEVENT']?></td>
+								<!--td><input type="text" class="textbox" style="width:20px" value="2" ></td-->
+								<td><select class=small name="repeat_option">
+									<option value="Daily">Daily</option>
+									<option value="Weekly">Weekly</option>
+									<option value="Monthly">Monthly</option>
+									<option value="Yearly">Yearly</option>
+								<!--option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option>
+								<option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatMonthUI');">Week(s)</option>
+								<option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatWeekUI');">Month(s)</option>
+								<option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option-->
+								</select></td>
 								</tr>
 								</table>
 								
-								<div id="repeatWeekUI" style="display:none;">
+								<!--div id="repeatWeekUI" style="display:none;">
 									<table border=0 cellspacing=0 cellpadding=2>
 									<tr>
 										<td><input type="checkbox"></td><td>Sun</td>
@@ -450,7 +461,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 									</td>
 									</tr>
 									</table>
-								</div>
+								</div-->
 							</div>
 								
 							</td>
