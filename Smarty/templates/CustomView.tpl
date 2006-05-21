@@ -467,3 +467,24 @@ function mandatoryCheck()
 </table>
 {$STDFILTER_JAVASCRIPT}
 {$JAVASCRIPT}
+<!-- to show the mandatory fields while creating new customview -->
+<script language="javascript" type="text/javascript">
+var k;
+var colOpts;
+var manCheck = new Array({$MANDATORYCHECK});
+if(document.CustomView.record.value == '')
+{ldelim}
+  for(k=0;k<manCheck.length;k++)
+  {ldelim}
+      selname = "column"+(k+1);
+      colOpts = document.getElementById(selname).options;
+      for (l=0;l<colOpts.length;l++)
+      {ldelim}
+        if(colOpts[l].value == manCheck[k])
+        {ldelim}
+          colOpts[l].selected = true;
+        {rdelim}
+      {rdelim}
+  {rdelim}
+{rdelim}
+</script>
