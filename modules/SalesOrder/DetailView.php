@@ -85,6 +85,15 @@ $smarty->assign("CONVERTMODE",'sotoinvoice');
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$focus));
 
+ $so_tables = Array('salesorder','sobillads','soshipads');
+ $tabid = getTabid("SalesOrder");
+ $validationData = getDBValidationData($so_tables,$tabid);
+ $data = split_validationdataArray($validationData);
+
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("InventoryDetailView.tpl");
