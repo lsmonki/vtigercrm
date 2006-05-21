@@ -108,6 +108,16 @@ $smarty->assign("CATEGORY",$category);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$contact_tables =Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress','customerdetails');
+
+$tabid = getTabid("Contacts");
+$validationData = getDBValidationData($contact_tables,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $smarty->assign("MODULE",$app_strings['Contacts']);
 $smarty->display("DetailView.tpl");
 ?>
