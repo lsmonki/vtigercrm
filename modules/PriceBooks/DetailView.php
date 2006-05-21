@@ -60,6 +60,17 @@ $smarty->assign("NAME", $focus->name);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$pb_tables = Array('pricebook');
+
+$validationData = getDBValidationData($pb_tables);
+$data = split_validationdataArray($validationData);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);
 $smarty->display("InventoryDetailView.tpl");
