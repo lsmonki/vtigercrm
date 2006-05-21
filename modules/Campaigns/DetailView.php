@@ -55,6 +55,16 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
 
+
+$campaign_tables = Array('campaign','crmentity');
+$tabid = getTabid("Campaigns");
+$validationData = getDBValidationData($campaign_tables,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
