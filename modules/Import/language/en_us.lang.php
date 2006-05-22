@@ -105,7 +105,7 @@ $mod_strings = Array(
 'LBL_STEP_3_TITLE'=>'Step 3 of 4: Confirm Fields and Import',
 'LBL_STEP_1'=>'Step 1 of 3 : ',
 'LBL_STEP_1_TITLE'=>'Select the .CSV File',
-'LBL_STEP_1_TEXT'=> ' vtiger CRM supports importing records from .csv (<b> Comma Seperated Values</b> ) files. To start import, browse to locate the .CSV file and click on the Next button to Continue.',
+'LBL_STEP_1_TEXT'=> ' vtiger CRM supports importing records from .csv (<b> Comma Separated Values</b> ) files. To start import, browse to locate the .CSV file and click on the Next button to Continue.',
 
 'LBL_SELECT_FIELDS_TO_MAP'=>'In the list below, select the fields in your import file that should be imported into each field in the system. When you are finished, click <b>Import Now</b>',
 
