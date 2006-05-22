@@ -76,7 +76,7 @@ foreach($pieces as $val)
 <p><b>Welcome to the vtiger family!</b><p>
 <p>This is a product of pure teamwork, passion, and fanaticism!</p>
 <p>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same.</p>
-<p><b>vtiger is 100% pure Open Source.</b> <em>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able to get time-bound answers to all your queries</em>. We do provide telephone-support for paid customers only. <a href:"http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37"><b>Click here</b></a> for subscribing to the Support.</p>
+<p><b>vtiger is 100% pure Open Source.</b> <em>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able to get time-bound answers to all your queries</em>. We do provide telephone-support for paid customers only.<b><a href="http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37">Click here</a></b> for subscribing to the Support.</p>
 <p>vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.</p>
 <p align="center">We do believe that <b>YOU</b> can and will make a difference.</p>
 <p>If you feel we have lived up to your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.</p>
@@ -98,7 +98,7 @@ foreach($pieces as $val)
 <p>This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
 <br><br>
 <p><span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
-<p align="center"><font color='red'><b>vtiger CRM 5 Beta will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it</b></font></center>
+<p align="center"><font color='red'><b>vtiger CRM 5 Beta will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
 <p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
 </td>
 	</tr>
@@ -108,7 +108,7 @@ foreach($pieces as $val)
 			<div align=left style="color:#737373;overflow: scroll; height: 100px; width: 95%;border:1px dashed #cccccc;padding:10px">
 			
 			<b>License Agreement</b><br>
-			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above
+			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, phpSysinfo and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above
 			providers.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<br>
 			<br>
