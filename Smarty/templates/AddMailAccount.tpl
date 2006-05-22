@@ -45,7 +45,7 @@
                             <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
                                 <tr>
                                     <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record={$ID}"><b>{$MOD.LBL_MY_DETAILS}</a></b></td>
+                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record={$USERID}"><b>{$MOD.LBL_MY_DETAILS}</a></b></td>
                                     <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><b>{$MOD.LBL_MY_MAIL_SERVER_DET} </b></td>
 		                    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                                 </tr>
