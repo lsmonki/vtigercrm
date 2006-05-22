@@ -151,7 +151,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$navigationOutput = Array();
 		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
-		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
+		$navigationOutput[] = getTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
 		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
 		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;
