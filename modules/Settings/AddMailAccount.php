@@ -15,6 +15,7 @@ require_once('modules/Settings/Forms.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
+global $current_user;
 
 /*
 echo '<br>';
@@ -83,6 +84,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 $smarty->assign("RETURN_MODULE","Settings");
 $smarty->assign("RETURN_ACTION","index");
 $smarty->assign("JAVASCRIPT", get_validate_record_js());
+$smarty->assign("USERID", $current_user->id);
 
 $smarty->display('AddMailAccount.tpl');
 
