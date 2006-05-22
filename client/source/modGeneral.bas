@@ -175,7 +175,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -230,7 +230,7 @@ oSoap.MethodName = "end_session"
 If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -304,7 +304,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
 
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -408,7 +408,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -510,7 +510,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -565,7 +565,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
@@ -620,7 +620,7 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
 
     oSoap.Parameters.Create "user_name", gvtigerusername
     oSoap.Parameters.Create "password", gvtigerpassword
-    svtigerURL = gvtigerurl & "contactserialize.php"
+    svtigerURL = gvtigerurl & "/vtigerservice.php?service=wordplugin"
     
     If gproxyenabled = "1" Then
         oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)

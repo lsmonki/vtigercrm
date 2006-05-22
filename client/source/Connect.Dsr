@@ -1,11 +1,11 @@
 VERSION 5.00
 Begin {AC0714F6-3D04-11D1-AE7D-00A0C90F26F4} Connect 
-   ClientHeight    =   9630
+   ClientHeight    =   9495
    ClientLeft      =   1740
    ClientTop       =   1545
-   ClientWidth     =   10560
-   _ExtentX        =   18627
-   _ExtentY        =   16986
+   ClientWidth     =   12300
+   _ExtentX        =   21696
+   _ExtentY        =   16748
    _Version        =   393216
    Description     =   "vtigerCRM MSOffice Add-In"
    DisplayName     =   "vtigerCRM MSOffice Add-In"
