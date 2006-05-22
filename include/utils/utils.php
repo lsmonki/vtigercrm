@@ -40,6 +40,7 @@
   require_once('include/utils/InventoryUtils.php');
   require_once('include/utils/DeleteUtils.php');
   require_once('include/utils/SearchUtils.php');
+  require_once('include/FormValidationUtil.php');
   
 function return_name(&$row, $first_column, $last_column)
 {
