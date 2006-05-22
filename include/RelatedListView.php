@@ -95,7 +95,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 
 	if(isset($order_by) && $order_by != '')
 	{
-		$query .= ' ORDER BY '.$order_by;
+		$query .= ' ORDER BY '.$order_by.' '.$sorder;
 		$url_qry .="&order_by=".$order_by;
 	}
 	$list_result = $adb->query($query);
