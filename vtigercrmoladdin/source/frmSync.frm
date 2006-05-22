@@ -44,7 +44,7 @@ Begin VB.Form frmSync
       ForeColor       =   &H80000008&
       Height          =   615
       Left            =   0
-      Picture         =   "frmSync.frx":000C
+      Picture         =   "frmSync.frx":038A
       ScaleHeight     =   615
       ScaleWidth      =   5655
       TabIndex        =   0
@@ -65,9 +65,9 @@ Begin VB.Form frmSync
          Width           =   5370
          _ExtentX        =   9472
          _ExtentY        =   450
-         Picture         =   "frmSync.frx":093C
+         Picture         =   "frmSync.frx":0CBA
          ForeColor       =   0
-         BarPicture      =   "frmSync.frx":0958
+         BarPicture      =   "frmSync.frx":0CD6
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
             Size            =   8.25
