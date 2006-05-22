@@ -64,7 +64,7 @@ foreach($pieces as $val)
 	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha5" title="v5alpha5"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5 Beta" title="v5Beta"></td>
 	</tr>
 	<tr><td><br>&nbsp;<img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td></tr>
 	</table><br>
@@ -79,7 +79,7 @@ foreach($pieces as $val)
 <p><b>vtiger is 100% pure Open Source.</b> <em>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able to get time-bound answers to all your queries</em>. We do provide telephone-support for paid customers only. <a href:"http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37"><b>Click here</b></a> for subscribing to the Support.</p>
 <p>vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.</p>
 <p align="center">We do believe that <b>YOU</b> can and will make a difference.</p>
-<p>If you feel we have lived upto your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.</p>
+<p>If you feel we have lived up to your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.</p>
 <p>Please find mentioned below some information about us that you could utilize:<p>
 
 <ul>
@@ -87,7 +87,7 @@ foreach($pieces as $val)
 <li><a href=" http://forums.vtiger.com">vtiger Public Forums</a><br>&nbsp;</li>
 <li><a href=" http://vtiger.fosslabs.com">vtigerForge</a><br>&nbsp;</li> 
 <li><a href="http://lists.vtigercrm.com/mailman/listinfo/vtigercrm-developers">Developers Mailing List</a> (vtigercrm-developers@lists.vtigercrm.com)<br>&nbsp;</li>
-<li>IRC Channel (Join Freenode - /join #vtiger<br>&nbsp;</li>
+<li>IRC Channel (Join Freenode - /join #vtiger)<br>&nbsp;</li>
 <li><a href=" http://vtiger.fosslabs.com/cgi-bin/trac.cgi/newticket">Bug Tracker</a><br>&nbsp;</li>
 <li><a href=" http://www.flickr.com/photos/41109270@N00/">The growing vtiger family</a> ...<br>&nbsp;</li>
 </ul>
@@ -97,8 +97,8 @@ foreach($pieces as $val)
 <p><b>Installation Instructions:-</b></p>
 <p>This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
 <br><br>
-<p><span style="color:#555555">- vtiger CRM 5.0 Alpha5 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
-<p align="center"><font color='red'><b>vtiger CRM 5 will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it</b></font></center>
+<p><span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
+<p align="center"><font color='red'><b>vtiger CRM 5 Beta will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it</b></font></center>
 <p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
 </td>
 	</tr>
@@ -2607,64 +2607,5 @@ foreach($pieces as $val)
 </table>
 <!-- Master table closes -->
 
-
-<!-- <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
-  <tr>
-      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
-      <td align="right"><h2>Step 1 of 5</h2></td>
-      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
-    </tr>
-</tbody></table>
-<table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
-    <tr>
-      <td width="100%" colspan="3">
-		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
-				<td align="left"><h3>Registration</h3></td>
-					</tr></tbody></table>
-			  </td>
-			  <td align="right">&nbsp;</td>
-			  <td width="85%" align="right"><hr width="100%"></td>
-			  </tr>
-		</tbody></table>
-	  </td>
-    </tr>
-	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 5.0 Alpha5 database tables and sets the configuration variables that you need to start.
-			The entire process should take about four minutes.
-
-			<p>
-
- <font color=red> <b>Kindly note vtiger CRM 5.0 Alpha5 is tested on mysql 5.0.19 and PHP 5.1.19 and Apache 2.0.40 .  vtiger CRM 5 will not work on mysql 4.0.x versions. vtiger crm can run on a system which has xampp/lampp/wampp already installed in it. Please follow the wizard for the installation procedure regardless of the setup</b> </font>
-
-			
-			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
-	</tr>
-
-	<tr>
-
-		<td><hr></td>
-	</tr>
-	<tr>
-		<td valign='top'><h4>vtiger CRM Registration</h4><br>
-Please take a moment and register with vtiger CRM. Your name and email address are the only required fields for registration. All other fields are optional, but very helpful. We do not sell, rent, share, or otherwise distribute the information collected here to third parties.
-<P>
-Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigercrm.com</a> for information on additional functionality, support requests…
-</td></tr>	<tr>
-       <td align="right">
-	    <form action="install.php" method="post" name="form" id="form">
-		<input type="hidden" name="file" value="1checkSystem.php" />
-		<input class="button" type="submit" name="next" value="Next >" /> &nbsp; &nbsp; </td>
-    </tr>
-<tr><td align='center' colspan='3'>  <IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="100%" height=325 scrolling='no' frameborder="0">
-  [Your user agent does not support frames or is currently configured
-  not to display frames. However, you may visit
-  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 
-  </IFRAME>
-</td></tr>
-	</tbody>
-
-</form> -->
 </body>
 </html>
