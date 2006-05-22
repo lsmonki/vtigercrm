@@ -47,7 +47,7 @@ Private guserdatapath As String
 Public gsContactEntityId() As Integer
 
 'VtigerAdd-in Version
-Public gsVtAddinVersion As String
+Public Const gsVtAddinVersion As String = "4.2.3"
 
 'Users Path Accessble in all pages
 Public gsVtUserLogFile As String
@@ -305,7 +305,6 @@ Public Function OpenURL( _
   InternetCloseHandle hURL
   InternetCloseHandle hInet
 End Function
-
 Public Function sGetPathAsString(ByVal oMapiFldr As Outlook.MAPIFolder) As String
 Dim sPath As String
 Dim sFlag As Boolean

@@ -338,7 +338,7 @@ Private Sub cmdCalPick_Click()
 On Error GoTo ERROR_EXIT_ROUTINE
 Dim ObjMapiFldr As MAPIFolder
 Dim sFldrPath As String
-Dim ObjNS As Outlook.Namespace
+Dim ObjNS As Outlook.NameSpace
 
 Set ObjNS = Application.GetNamespace("MAPI")
 Set ObjMapiFldr = ObjNS.PickFolder
@@ -363,7 +363,7 @@ Private Sub cmdCntsPick_Click()
 On Error GoTo ERROR_EXIT_ROUTINE
 Dim ObjMapiFldr As MAPIFolder
 Dim sFldrPath As String
-Dim ObjNS As Outlook.Namespace
+Dim ObjNS As Outlook.NameSpace
 
 Set ObjNS = Application.GetNamespace("MAPI")
 Set ObjMapiFldr = ObjNS.PickFolder
@@ -387,7 +387,7 @@ Private Sub cmdTasksPick_Click()
 On Error GoTo ERROR_EXIT_ROUTINE
 Dim ObjMapiFldr As MAPIFolder
 Dim sFldrPath As String
-Dim ObjNS As Outlook.Namespace
+Dim ObjNS As Outlook.NameSpace
 
 Set ObjNS = Application.GetNamespace("MAPI")
 Set ObjMapiFldr = ObjNS.PickFolder

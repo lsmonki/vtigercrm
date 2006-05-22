@@ -8,9 +8,9 @@ BEGIN
 END
 Attribute VB_Name = "clsExplWrap"
 Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
+Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = True
+Attribute VB_Exposed = False
 '*********************************************************************************
 '* The contents of this file are subject to the vtiger CRM Public License Version 1.0
 ' * ("License"); You may not use this file except in compliance with the License

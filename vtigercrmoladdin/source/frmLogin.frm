@@ -218,11 +218,11 @@ Dim oNewLogin As New MSXML.DOMDocument
         oNewLogin.async = False
         
         'Check for WSDL to verify the vtigerURL
-        'If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook&wsdl") = True Then
-        If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerolservice.php?wsdl") = True Then
+        If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook&wsdl") = True Then
+        'If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerolservice.php?wsdl") = True Then
         
-            'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
-            gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
+            gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
+            'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
             
             sLoginReturn = sVtSoLogin(Trim(txtVtigerId.Text), Trim(txtVtigerPwd.Text))
             If Trim(sLoginReturn) <> "FALSE" Then
@@ -253,8 +253,8 @@ If sVtigerUserId <> "" Then
     sErrMsg = "Error while initializing the logfile"
     If bIntializeLogFile(sVtigerUserId) = False Then GoTo ERROR_EXIT_ROUTINE
     
-    'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
-    gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
+    gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
+    'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
     gsVtUserId = sVtigerUserId
     gsLoginSuccess = True
     
@@ -325,7 +325,7 @@ Else
     Set oXMLConfDoc.documentElement = oXMLConfElement
     
     Set oXMLInst = oXMLConfDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-    oXMLConfDoc.insertBefore oXMLInst, oXMLConfDoc.firstChild
+    oXMLConfDoc.insertBefore oXMLInst, oXMLConfDoc.FirstChild
     
     Set oXMLElmnt_First = oXMLConfDoc.createElement("logindtls")
     Set oXMLNode = oXMLConfElement.appendChild(oXMLElmnt_First)

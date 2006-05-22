@@ -33,6 +33,7 @@ oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
 oXMLHttp.setRequestHeader "Content-Type", "text/xml"
 oXMLHttp.send oPSoap.Serialize
 
+MsgBox oXMLHttp.responseText
 sErrMsg = gMsg003
 If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
@@ -136,7 +137,7 @@ Dim i As Integer
 Dim j As Integer
 
 Set oXMLInst = oXMLDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-oXMLDoc.insertBefore oXMLInst, oXMLDoc.firstChild
+oXMLDoc.insertBefore oXMLInst, oXMLDoc.FirstChild
 
 Set oXMLElmnt_Root = oXMLDoc.createElement("vtiger")
 Set oXMLDoc.documentElement = oXMLElmnt_Root
@@ -393,7 +394,7 @@ Dim i As Integer
 Dim j As Integer
 
 Set oXMLInst = oXMLDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
-oXMLDoc.insertBefore oXMLInst, oXMLDoc.firstChild
+oXMLDoc.insertBefore oXMLInst, oXMLDoc.FirstChild
 
 Set oXMLElmnt_Root = oXMLDoc.createElement("vtigercrm")
 Set oXMLDoc.documentElement = oXMLElmnt_Root
