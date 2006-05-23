@@ -105,7 +105,7 @@ $combo_output = '';
 for($i=0;$i<count($cftextcombo);$i++)
 {
         if($selectedvalue == $i)
-                $sel_val = 'selected';
+                $sel_val = '';
         else
                 $sel_val = '';
         $combo_output.= '<option style="background:url('.$cfimagecombo[$i].');background-repeat:no-repeat;background-position:left;padding-left:30px;padding-top:5px;padding-bottom:5px;" '.$sel_val.' onClick="selFieldType('.$i.')" >'.$cftextcombo[$i].'</option>';
