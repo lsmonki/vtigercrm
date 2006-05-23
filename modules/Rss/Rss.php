@@ -18,10 +18,12 @@ require_once('data/CRMEntity.php');
 require_once('include/database/PearDatabase.php');
 //require_once($theme_path."layout_utils.php");
 // Require the xmlParser class
-require_once('include/feedParser/xmlParser.php');
+//require_once('include/feedParser/xmlParser.php');
 
 // Require the feedParser class
-require_once('include/feedParser/feedParser.php');
+//require_once('include/feedParser/feedParser.php');
+
+require_once('include/magpierss/rss_fetch.inc');
 
 class vtigerRSS extends CRMEntity
 {
@@ -39,24 +41,24 @@ class vtigerRSS extends CRMEntity
 	function setRSSUrl($url)
 	{
 		global $cache_dir;
-		$this->rss = new feedParser();
+		$this->rss = fetch_rss($url);
 		// Read in our sample feed file
-		$data = @implode("",@file($url));
+		//$data = @implode("",@file($url));
 		// Tell feedParser to parse the data
-		$info = $this->rss->parseFeed($data);
+		$info = $this->rss->items;
 
 		if(isset($info))
 		{
-			$this->rss_object = $info["channel"];
+			$this->rss_object = $info;
 		}else
 		{
 			return false;
 		}	
-		if(isset($this->rss_object))
+		if(isset($this->rss))
 		{
-			$this->rss_title = $this->rss_object["title"];
-			$this->rss_link = $this->rss_object["link"];
-			$this->rss_object = $info["item"];
+			$this->rss_title = $this->rss->channel["title"];
+			$this->rss_link = $this->rss->channel["link"];
+			$this->rss_object = $info;
 			return true;
 		}else
 		{
