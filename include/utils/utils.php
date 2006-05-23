@@ -567,7 +567,7 @@ function ensure_length(&$string, $length)
 	}
 	$log->debug("Exiting ensure_length method ...");
 }
-
+/*
 function microtime_diff($a, $b) {
 	global $log;
 	$log->debug("Entering microtime_diff(".$a.",". $b.") method ...");
@@ -576,7 +576,7 @@ function microtime_diff($a, $b) {
 	$log->debug("Exiting microtime_diff method ...");
 	return $b_sec - $a_sec + $b_dec - $a_dec;
 }
-
+ */
 
 /**
  * Return the display name for a theme if it exists.
