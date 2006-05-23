@@ -149,7 +149,7 @@
 						  <span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="classWebBtn" /></span>&nbsp;
 						  <span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="classWebBtn" /></span>&nbsp;
 						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" />&nbsp;
-						  <input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" onclick="fnvshobj(this,'reportLay');"  onmouseout="fninvsh('reportLay')" />
+						  <span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" /></span>
 						</td>
 						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" /></span></td>
 					  </tr>
