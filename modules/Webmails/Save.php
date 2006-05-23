@@ -94,7 +94,7 @@ if($email->relationship != 0)
 		$current_id = $adb->getUniqueID("crmentity");
 		$date_var = date('YmdHis');
 
-		$filename = $attachments[$i]["filename"];
+		$filename = $PhoneCall = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
         	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
 		$filesize = $attachments[$i]["filesize"];
 
