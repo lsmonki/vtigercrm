@@ -44,6 +44,22 @@ function add_to_vtiger(mid) {
 		}
 	);
 }
+function check_for_new_mail(mbox) {
+	$("status").style.display="block";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position:'front', scope: 'command', limit:1},
+                        method: 'post',
+                        postBody: 'module=Webmails&action=ListView&mailbox='+mbox+'&command=check_mbox&ajax=true',
+                        onComplete: function(t) {
+				if(!t.responseText.match(/NORELOAD/))
+					window.location=window.location;
+
+				$("status").style.display="none";
+			}
+		}
+	);
+}
 </script>
 <?php
 global $current_user;
@@ -167,6 +183,17 @@ if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
 $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 
+if($_POST["command"] == "check_mbox" && $_POST["ajax"] == "true") {
+	$check = imap_mailboxmsginfo($mbox);
+	if($check->Unread > 0)
+		return "RELOAD";
+	else
+		return "NORELOAD";
+
+	imap_close($mbox);
+	flush();
+	exit();
+}
 
 
 function SureRemoveDir($dir) {
@@ -336,12 +363,18 @@ if (is_array($list)) {
 			$img = "webmail_uparrow.gif";
 		else
 			$img = "webmail_downarrow.gif";
-		if ($_REQUEST["mailbox"] == $tmpval) {
+		if ($mailbox == $tmpval) {
          		$boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$numEmails.')</b></li>';
+			$box = imap_mailboxmsginfo($mbox);
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
 		} else {
+			if($ssltype == "") {$ssltype = "notls";}
+			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
+			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+			$box = imap_mailboxmsginfo($tmbox);
          		$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;</li>';
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
+			imap_close($tmbox);
 		}
  	}
 	$boxes .= '</select>';

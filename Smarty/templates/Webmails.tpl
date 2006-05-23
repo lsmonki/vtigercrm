@@ -36,7 +36,7 @@
 									<tr>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:window.location = window.location;" class="webMnu" >{$MOD.LBL_CHK_MAIL}</a>
+												&nbsp;<a href="javascript:;" class="webMnu" onclick="check_for_new_mail('{$MAILBOX}');" >{$MOD.LBL_CHK_MAIL}</a>
 											</td>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
