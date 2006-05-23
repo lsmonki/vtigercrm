@@ -53,9 +53,14 @@ function massMerge(module)
         }
         
         if(getObj('selectall').checked == true)
-				{
-						getObj('idlist').value = getObj('allids').value;
-				}
+	{
+		getObj('idlist').value = getObj('allids').value
+	}
 	
+	if(getObj('mergefile').value == '')
+	{
+	         alert("Please select a template to merge");
+           	 return false;   
+        }
         document.massdelete.action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";
 }
