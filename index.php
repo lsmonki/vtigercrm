@@ -558,17 +558,17 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
                 echo "&copy; Click <a href ='javascript:mypopup()'>here</a> for Copyright details.<br>";
 		echo "</td></tr></table></td></tr></table>\n";
 
-		echo "<table align='center'><tr><td align='center'>";
+	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
 		// in both the code and end-user application.
-		if($calculate_response_time)
-		{
-			$endTime = microtime();
+	//	if($calculate_response_time)
+	//	{
+	//		$endTime = microtime();
 
-			$deltaTime = microtime_diff($startTime, $endTime);
-			echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
-		}
-		echo "</td></tr></table>\n";
+	//		$deltaTime = microtime_diff($startTime, $endTime);
+	//		echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
+	//	}
+	//	echo "</td></tr></table>\n";
 	}
 	if(($action != 'mytkt_rss') && ($action != 'home_rss'))
 	{
