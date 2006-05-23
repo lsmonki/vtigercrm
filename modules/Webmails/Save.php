@@ -5,6 +5,7 @@ require_once('modules/Webmails/Webmail.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/CommonUtils.php');
 global $current_user;
 
 
@@ -84,6 +85,35 @@ if($email->relationship != 0)
 	$contact_focus->column_fields['email'] = $email->from;
 	$contact_focus->save("Contacts");
 	$focus->column_fields['parent_id']=$contact_focus->id.'@'.$fieldid.'|';
+
+	// add attachments to contact
+	
+	$attachments=$email->downloadAttachments();
+	$upload_filepath = decideFilePath();
+	for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
+		$current_id = $adb->getUniqueID("crmentity");
+		$date_var = date('YmdHis');
+
+		$filename = $attachments[$i]["filename"];
+        	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
+		$filesize = $attachments[$i]["filesize"];
+
+                $query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
+                $query .= $current_id."','".$current_user->id."','".$current_user->id."','Contacts Attachment','Uploaded from webmail during qualification','".$date_var."')";
+                $result = $adb->query($query);
+
+                $sql = "insert into attachments values(";
+                $sql .= $current_id.",'".$filename."','Uploaded ".$filename." from webmail','".$filetype."','".$upload_filepath."')";
+                $result = $adb->query($sql);
+
+                $sql1 = "insert into seattachmentsrel values('";
+                $sql1 .= $contact_focus->id."','".$current_id."')";
+                $result = $adb->query($sql1);
+
+		$fp = fopen($upload_filepath.'/'.$filename, "w") or die("Can't open file");
+		fputs($fp, base64_decode($attachments[$i]["filedata"]));
+		fclose($fp);
+	}
 }
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 $focus->save("Emails");

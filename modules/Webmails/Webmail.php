@@ -223,7 +223,7 @@ function dl_attachments($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-                        $attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
+                        $attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
