@@ -214,6 +214,7 @@ function alphabetic(url)
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
+     <input name="allids" type="hidden" value="{$ALLIDS}">
                <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr style="background-color:#efefef">
 		      <td>
