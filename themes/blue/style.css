@@ -1178,7 +1178,7 @@ a.submenu:Hover{
 	height: 20px;
 	font-size: 11px;
 	color: #FFF;
-	text-align:left;
+	text-align:center;
 }
 .calcBackBtn {
 	background: url(images/calc_back_btn.gif) no-repeat;
@@ -1190,9 +1190,11 @@ a.submenu:Hover{
 }
 .calcGreyBtn {
 	background: url(images/calc_grey_btn.gif) no-repeat;
+	width:25px;
 }
 .calcCancBtn {
 	background: url(images/calc_canc_btn.gif) no-repeat;
+	width:25px;
 	
 }
 .calcMemBtn {
@@ -1970,7 +1972,6 @@ a.alpha:Hover{
 /* All Menu */
 #allMenu{
 	width:500px;
-        z-index:10000002;
 	border-top:2px solid #CCCCCC;
 	border-left:2px solid #CCCCCC;
 	border-bottom:2px solid #666666;
