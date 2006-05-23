@@ -76,6 +76,9 @@ $fieldid = $adb->query_result($adb->query('select fieldid from field where table
 if($email->relationship != 0)
 {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
+
+	if($email->relationship["type"] == "Contacts")
+		add_attachment_to_contact($email->relationship["id"],$email);
 }else
 {
 	//if relationship is not available create a contact and relate the email to the contact
@@ -86,7 +89,12 @@ if($email->relationship != 0)
 	$contact_focus->save("Contacts");
 	$focus->column_fields['parent_id']=$contact_focus->id.'@'.$fieldid.'|';
 
+	add_attachment_to_contact($contact_focus->id,$email);
+}
+
+function add_attachment_to_contact($cid,$email) {
 	// add attachments to contact
+	global $adb,$current_user;
 	
 	$attachments=$email->downloadAttachments();
 	$upload_filepath = decideFilePath();
@@ -104,10 +112,11 @@ if($email->relationship != 0)
 
                 $sql = "insert into attachments values(";
                 $sql .= $current_id.",'".$filename."','Uploaded ".$filename." from webmail','".$filetype."','".$upload_filepath."')";
+		echo $query;
                 $result = $adb->query($sql);
 
                 $sql1 = "insert into seattachmentsrel values('";
-                $sql1 .= $contact_focus->id."','".$current_id."')";
+                $sql1 .= $cid."','".$current_id."')";
                 $result = $adb->query($sql1);
 
 		$fp = fopen($upload_filepath.'/'.$filename, "w") or die("Can't open file");
@@ -115,6 +124,7 @@ if($email->relationship != 0)
 		fclose($fp);
 	}
 }
+
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 $focus->save("Emails");
 
