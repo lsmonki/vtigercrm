@@ -125,7 +125,7 @@
 </tr>
 </TABLE>		
 
-<div id="calculator_cont" style="position:absolute;"></div>
+<div id="calculator_cont" style="position:absolute; z-index:10000" ></div>
 	{include file="Clock.tpl"}
 
 
