@@ -231,9 +231,12 @@ $listview_entries = array();
 if($numEmails <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
 else {
+$displayed_msgs=0;
 $i=1;
     // Main loop to create listview entries
     while ($i<$c) {
+	if($displayed_msgs==$mails_per_page) {break;}
+
   	$num = $mails[$start_message]->msgno;
   	// TODO: scan the current db tables to find a
   	// matching email address that will make a good
@@ -248,9 +251,11 @@ $i=1;
   	$detailParams = 'record='.$record_id.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
  	$defaultParams = 'parenttab=My Home Page&mailbox='.$mailbox.'&start='.$start.'&viewname='.$viewname;
 
-	if ($mails[$start_message]->deleted && !$show_hidden)
+	$displayed_msgs++;
+	if ($mails[$start_message]->deleted && !$show_hidden) {
 		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
-	elseif ($mails[$start_message]->deleted && $show_hidden)
+	$displayed_msgs--;
+	} elseif ($mails[$start_message]->deleted && $show_hidden)
 		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
 	else 
 		$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
