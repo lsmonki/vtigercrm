@@ -81,7 +81,7 @@ function ajaxRssSaveResponse(response)
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-	<span class="lvtHeaderText">{$APP.$CATEGORY} &gt; {$APP.$MODULE} </span>
+	{include file="Buttons_List1.tpl"}
 	<hr noshade="noshade" size="1" />
 	</td>
 
@@ -92,10 +92,10 @@ function ajaxRssSaveResponse(response)
 	<!-- module Select Table -->
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 		<tr>
-		<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGEPATH}top_left.jpg" align="top"  /></td>
+		<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
 		<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
 
-		<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGEPATH}top_right.jpg" width="8" height="6" align="top" /></td>
+		<td width="8" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_right.jpg" width="8" height="6" align="top" /></td>
 		</tr>
 		<tr>
 		<td bgcolor="#EBEBEB" width="7"></td>
@@ -104,10 +104,10 @@ function ajaxRssSaveResponse(response)
 			<tr>
 			
 			<td style="padding:10px;vertical-align:middle;" width="28%">
-			<img src='{$IMAGEPATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
+			<img src='{$IMAGE_PATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
 			</td>
 			<td width="2%">&nbsp;</td>
-			<td width="60%"><img src="{$IMAGEPATH}rssimage.gif" width="176" height="44"  align="right"/></td>
+			<td width="60%"><img src="{$IMAGE_PATH}rssimage.gif" width="176" height="44"  align="right"/></td>
 			</tr>
 			<tr><td colspan="3">
 				
@@ -146,9 +146,9 @@ function ajaxRssSaveResponse(response)
 		<td bgcolor="#EBEBEB" width="8"></td>
 		</tr>
 		<tr>
-		<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGEPATH}bottom_left.jpg" align="bottom"  /></td>
+		<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
 		<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-		<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGEPATH}bottom_right.jpg" align="bottom" /></td>
+		<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
 		</tr>
 		</table><br />
 	
@@ -159,8 +159,8 @@ function ajaxRssSaveResponse(response)
 	<div id="PopupLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
-	<td class="genHeaderSmall" align="left"><img src="{$IMAGEPATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
-	<td align="right"><a href="javascript:fninvsh('PopupLay');"><img src="{$IMAGEPATH}close.gif" border="0"  align="absmiddle" /></a></td>
+	<td class="genHeaderSmall" align="left"><img src="{$IMAGE_PATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
+	<td align="right"><a href="javascript:fninvsh('PopupLay');"><img src="{$IMAGE_PATH}close.gif" border="0"  align="absmiddle" /></a></td>
 	</tr>
 	<tr><td colspan="2"><hr /></td></tr>
 	<tr>
@@ -186,12 +186,12 @@ function ajaxRssSaveResponse(response)
 function toggleRSSFolder(id) {ldelim}
 	if (document.getElementById(id+"_feeds").style.display=="none") {ldelim}
 		document.getElementById(id+"_feeds").style.display="block"
-		document.getElementById(id+"_folder").src="{$IMAGEPATH}rss_folder_opn.gif"
-		document.getElementById(id+"_toggle").src="{$IMAGEPATH}minus.gif"
+		document.getElementById(id+"_folder").src="{$IMAGE_PATH}rss_folder_opn.gif"
+		document.getElementById(id+"_toggle").src="{$IMAGE_PATH}minus.gif"
 	{rdelim} else {ldelim}
 		document.getElementById(id+"_feeds").style.display="none"
-		document.getElementById(id+"_folder").src="{$IMAGEPATH}rss_folder_cls.gif"
-		document.getElementById(id+"_toggle").src="{$IMAGEPATH}plus.gif"
+		document.getElementById(id+"_folder").src="{$IMAGE_PATH}rss_folder_cls.gif"
+		document.getElementById(id+"_toggle").src="{$IMAGE_PATH}plus.gif"
 	{rdelim}
 
 {rdelim}
