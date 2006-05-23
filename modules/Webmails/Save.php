@@ -40,8 +40,10 @@ $account_name=$temprow["account_name"];
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
 global $mbox;
-//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
-$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
+if($ssltype == "") {$ssltype = "notls";}
+if($sslmeth == "") {$sslmeth = "novalidate-cert";}
+$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+
 
 $email = new Webmail($mbox, $_REQUEST["mailid"]);
 

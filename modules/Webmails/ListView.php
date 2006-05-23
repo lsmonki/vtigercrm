@@ -20,7 +20,12 @@ function load_webmail(mid) {
 	$("reply_button_all").innerHTML = '<input type="button" name="reply" value=" Reply to All " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=all&return_action=index&return_module=Webmails\';" />';
 	$("reply_button").innerHTML = '<input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=single&return_action=index&return_module=Webmails\';" />';
 	$("qualify_button").innerHTML = '<input type="button" name="Qualify2" value=" Qualify " onclick="showRelationships('+mid+');" class="classWebBtn" />';
+	$("download_attach_button").innerHTML = '<input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="displayAttachments('+mid+');" />';
 
+}
+function displayAttachments(mid) {
+	var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid;
+	window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
 function showRelationships(mid) {
 	// just add to vtiger for now
@@ -158,9 +163,11 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 
 global $mbox;
-//$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed");
+if($ssltype == "") {$ssltype = "notls";}
+if($sslmeth == "") {$sslmeth = "novalidate-cert";}
+$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 
-$mbox = @imap_open('{'.$imapServerAddress.'/'.$mail_protocol.'}'.$mailbox, $login_username, $secretkey) or die("Connection to server failed with: ".imap_last_error());
+
 
 function SureRemoveDir($dir) {
    if(!$dh = @opendir($dir)) return;
