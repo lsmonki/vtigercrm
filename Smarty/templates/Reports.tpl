@@ -18,12 +18,12 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr><td style="height:2px"></td></tr>
 	<tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$APP.$CATEGORY} > {$APP.$MODULE}</td>
-	<td class="sep1" style="width:1px"></td>
 	<td class=small width="60%">
 	<table border=0 cellspacing=0 cellpadding=0>
+
 		<tr>
-		<td>
+	<td>{include file="Buttons_List1.tpl"}</td>		
+<td>
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
             <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
