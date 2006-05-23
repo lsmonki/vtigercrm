@@ -55,6 +55,7 @@ function CustomFieldMapping()
 <tr>
         {include file='SettingsMenu.tpl'}
 <td width="75%" valign="top">
+<b><font color=red>{$DUPLICATE_ERROR} </font></b>
 <table width="99%" border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr>
 		<td class="showPanelBg" valign="top" style="padding-left:20px; "><br />
