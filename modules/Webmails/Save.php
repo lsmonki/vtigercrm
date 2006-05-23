@@ -102,7 +102,7 @@ function add_attachment_to_contact($cid,$email) {
 		$current_id = $adb->getUniqueID("crmentity");
 		$date_var = date('YmdHis');
 
-		$filename = $PhoneCall = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
+		$filename = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
         	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
 		$filesize = $attachments[$i]["filesize"];
 
