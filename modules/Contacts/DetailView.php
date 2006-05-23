@@ -94,7 +94,7 @@ if(isPermitted("Contacts","Merge",'') == 'yes')
 	$tempVal = $adb->fetch_array($wordTemplateResult);
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString []=$tempVal["filename"];
+		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
