@@ -47,7 +47,7 @@ if($_REQUEST['portalid'] != '')
 	$portal_def [] = $adb->query_result($result,0,'portalid');
 	$smarty->assign("DEFPORTAL_DETAILS", $portal_def);
 
-$smarty->assign("IMAGEPATH", $image_path);
+$smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("PORTALS", $portal_info);
