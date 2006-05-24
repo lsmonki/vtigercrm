@@ -281,11 +281,7 @@ function mandatoryCheck()
 		 <td align="left" valign="top">
 		  <div id="mnuTab">
 		     <table width="100%" cellspacing="0" cellpadding="5" class="dvtContentSpace">
-		      <tr><td>&nbsp;</td></tr>
-                      <tr><td class="dvtCellInfo">
-                      {$MOD.LBL_AF_HDR5}<br /><br />
-		      </td></tr>
-                      <tr><td>
+                      <tr><td><br>
 			<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
 			  <tr><td colspan="2" class="detailedViewHeader"><b>{$MOD.Simple_Time_Filter}</b></td></tr>
 			  <tr>
