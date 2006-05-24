@@ -1674,7 +1674,7 @@ a.submenu:Hover{
 	border:3px solid #CCCCCC;
 	background-color:#FFFFFF;
 	padding:5px;
-	display:none;
+	display:block;
 	position:absolute;
 	left:100px;
 	top:100px;
