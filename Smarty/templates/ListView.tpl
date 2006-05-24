@@ -92,6 +92,7 @@ function alphabetic(url)
 
 		{include file='Buttons_List.tpl'}
 <!-- Activity createlink layer start  -->
+{if $MODULE eq 'Activities'}
 <div id="reportLay" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
         <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
@@ -103,6 +104,7 @@ function alphabetic(url)
         </table>
 
 </div>
+{/if}
 <!-- Activity createlink layer end  -->
 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
