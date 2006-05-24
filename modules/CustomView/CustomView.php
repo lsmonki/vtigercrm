@@ -1248,6 +1248,10 @@ class CustomView extends CRMEntity{
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
 			}
+			else if($module == "PriceBooks")
+			{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
+			}
 			else
 			{
 				$query = "select groups.groupname ,users.user_name,".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
