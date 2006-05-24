@@ -209,6 +209,40 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
     </table>
     {/if}
 
+					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
+    					<tr>
+    					   <td class="rightMailMergeHeader"><b>Tag Cloud</b></td>
+    					</tr>
+    					<tr style="height:25px">
+    						<td class="rightMailMergeContent">
+        						<table border=0 cellspacing=0 cellpadding=0 width=100% >
+          						<tr><td>
+          						<table width="250" border="0" cellspacing="0" cellpadding="0">
+            						<tr>
+            						  <td colspan="3"><img src="{$IMAGE_PATH}cloud_top.gif" width=250 height=38 alt=""></td>
+            						</tr>
+            						<tr>
+              						<td width="16" height="10"><img src="{$IMAGE_PATH}cloud_top_left.gif" width="16" height="10"></td>
+              						<td width="221" height="10"><img src="{$IMAGE_PATH}tagcloud_03.gif" width="221" height="10"></td>
+              						<td width="13" height="10"><img src="{$IMAGE_PATH}cloud_top_right.gif" width="13" height="10"></td>
+            						</tr>
+            						<tr>
+            						  <td class="cloudLft"></td>
+            						  <td><span id="tagfields">{$ALL_TAG}</span></td>
+            						  <td class="cloudRht"></td>
+            						</tr>
+            						<tr>
+            						<td width="16" height="13"><img src="{$IMAGE_PATH}cloud_btm_left.gif" width="16" height="13"></td>
+            						<td width="221" height="13"><img src="{$IMAGE_PATH}cloud_btm_bdr.gif" width="221" height="13"></td>
+            						<td width="13" height="13"><img src="{$IMAGE_PATH}cloud_btm_right.gif" width="13" height="13"></td>
+            						</tr>
+          						</table>
+      						    </td></tr>
+    						    </table>
+    					</td>
+    				</tr>
+				</table>
+
 
 </td>
 
