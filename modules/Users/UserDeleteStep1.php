@@ -43,7 +43,7 @@ $output ='<div id="DeleteLay">
 	<td ><b>:</b></td>
 	<td align="left">';
            
-$output.='<select class="select" name="transfer_user_id">';
+$output.='<select class="select" name="transfer_user_id" id="transfer_user_id">';
 	     
 		 global $adb;	
          $sql = "select * from users";
@@ -58,13 +58,12 @@ $output.='<select class="select" name="transfer_user_id">';
             	$output.='<option value="'.$user_id.'">'.$user_name.'</option>';
 		    }	
          }while($temprow = $adb->fetch_array($result));
-$output.='</select>';
 
 $output.='</td>
 </tr>
 <tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 <tr>
-	<td colspan="3" align="center"><input type="submit" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
+	<td colspan="3" align="center"><input type="button" onclick="transferUser('.$delete_user_id.')" name="Delete" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
 	</td>
 </tr>
 </table>

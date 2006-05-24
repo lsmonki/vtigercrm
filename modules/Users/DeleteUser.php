@@ -54,6 +54,5 @@ $adb->query($sql9);
 //delete from user table;
 $sql9 = "delete from users where id=".$del_id;
 $adb->query($sql9);
-
-header("Location: index.php?action=index&module=Administration");
+header("Location: index.php?action=UsersAjax&module=Users&file=ListView&ajax=true");
 ?>
