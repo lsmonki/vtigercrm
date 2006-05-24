@@ -27,6 +27,7 @@ require_once($theme_path.'layout_utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
+require_once('include/freetag/freetag.class.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -162,6 +163,8 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->assign("ACTIVITIES",$activities);
+$freetag = new freetag();
+$smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html());
 $smarty->display("HomePage.tpl");
 
 function getLoginHistory()
