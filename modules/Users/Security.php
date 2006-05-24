@@ -17,7 +17,6 @@ require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
 class Security extends CRMEntity {
-	var $table_name = "role";
 		
 	function Security() {
 		$this->log = LoggerManager::getLogger('security');
@@ -42,8 +41,6 @@ class Security extends CRMEntity {
                 $this->db->query("insert into role values('H".$role2_id."','administrator','H".$role1_id."::H".$role2_id."',1)");
                 $this->db->query("insert into role values('H".$role3_id."','standard_user','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
                 
-                $table_name="user2role";
-                $table_name="role2tab";
 
  $this->db->query("INSERT INTO tab VALUES (3,'Home',0,1,'Home',null,null,1)");
  $this->db->query("INSERT INTO tab VALUES (7,'Leads',0,4,'Leads',null,null,1)");
@@ -1589,10 +1586,6 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 					
   // New Secutity End
 
-                $table_name="groups";
-                $table_name="users2group";
-                $table_name="productcollaterals";
-                $table_name="email_attachments";
 
          //insert into the notificationscheduler table
 
