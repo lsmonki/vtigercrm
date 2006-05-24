@@ -475,7 +475,7 @@ function validate_import_map()
 			else
 			{
 				//if a field mapped more than once, alert the user and return
-				alert("'"+tagName.options[tagName.selectedIndex].text+"' has been mapped twice. Please check.");
+				alert("'"+tagName.options[tagName.selectedIndex].text+"' is mapped more than once. Please check the mapping.");
 				return false;
 			}
 		}
