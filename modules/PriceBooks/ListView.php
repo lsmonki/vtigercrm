@@ -100,7 +100,6 @@ if($viewid != "0")
 {
 	$list_query = getListQuery("PriceBooks");
 }
-$list_query = getListQuery("PriceBooks");
 //<<<<<<<<customview>>>>>>>>>
 
 
