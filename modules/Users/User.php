@@ -539,7 +539,7 @@ class User extends SugarBean {
 	                }
 		        else
 			  
-	    	              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<a href="#" onClick=DeleteProfile("'.$id.'");><img src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+	    	              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<img src="'.$image_path.'delete.gif" onclick="deleteUser('.$id.')" border="0"  alt="Delete" title="Delete"/></a>';
 
 			$entries_list[]=$entries;
 													
