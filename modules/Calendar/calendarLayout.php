@@ -58,6 +58,7 @@ EOQ;
 
 function get_mini_calendar(& $cal)
 {
+	//echo '<pre>';print_r($cal);echo '</pre>';
 	global $current_user,$adb;
 	$count = 0;
 	if ($cal['calendar']->month_array[$cal['calendar']->slices[35]]->start_time->month != $cal['calendar']->date_time->month) {
@@ -83,7 +84,8 @@ function get_mini_calendar(& $cal)
                 $minical .= '<th>'.$weekday.'</th>';
         }
 	$minical .= "</tr>";	
-
+	$event_class = '';
+	$class = '';
 	for ($i = 0; $i < $rows; $i ++)
         {
                 $minical .= "<tr>";
@@ -91,7 +93,19 @@ function get_mini_calendar(& $cal)
                 {
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
 			$class = dateCheck($cal['slice']->start_time->get_formatted_date());
-                        $minical .= "<td class=".$class.">";
+			if(count($cal['slice']->activities) != 0 && ($cal['slice']->start_time->get_formatted_date() == $cal['slice']->activities[0]->start_time->get_formatted_date()))
+			{
+					$event_class = 'class="eventDay"';
+			}
+			else
+			{
+                       		$event_class = '';
+                        }
+			if($class != '' )
+				$class = 'class="'.$class.'"';
+			else
+				$class = $event_class;
+                        $minical .= "<td ".$class.">";
                         $minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."&".$cal['slice']->start_time->get_date_str()."'>";
                         if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
                         {
@@ -689,10 +703,28 @@ function getYearViewLayout(& $cal,$type)
 				for ($mr = 0; $mr < 7; $mr ++)
 				{
 					list($_1styear,$_1stmonth,$_1stdate) = explode("-",$cal['calendar']->month_day_slices[$count][$cnt]);
+					if(count($cal['slice']->activities) != 0)
+					{
+						for($act_count = 0;$act_count<count($cal['slice']->activities);$act_count++)
+						{
+							if($cal['calendar']->month_day_slices[$count][$cnt] == $cal['slice']->activities[$act_count]->start_time->get_formatted_date())
+								$event_class = 'class="eventDay"';
+							else
+								$event_class = '';
+						}
+					}
+					$class = dateCheck($cal['calendar']->month_day_slices[$count][$cnt]);
+					if($class != '')
+					{
+						$class = 'class="'.$class.'"';
+					}
+					else
+					{
+						$class = $event_class;
+					}
 					$date = $_1stdate + 0;
 					$month = $_1stmonth + 0;
-					$class = dateCheck($cal['calendar']->month_day_slices[$count][$cnt]);
-					$yearview_layout .= '<td class="'.$class.'">';
+					$yearview_layout .= '<td '.$class.''.$event_class.'>';
 					if($rows == 6 && $k==0)
 					{
 						list($tempyear,$tempmonth,$tempdate) = explode("-",$cal['calendar']->month_day_slices[$count][35+$mr]);
