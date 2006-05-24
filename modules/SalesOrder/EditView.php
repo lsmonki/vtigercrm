@@ -47,6 +47,17 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 	$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
 	$focus->id = $quoteid;
+
+	//Added to display the Quotes's associated products -- when we create SO from Quotes DetailView 
+	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("MODE", $quote_focus->mode);
+	$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
+	$smarty->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
+	$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
+	$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
+	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_quote_val')
     {
@@ -111,6 +122,20 @@ else
 		$quote_focus->id = $quoteid;
 		$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 		$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
+
+		//Added to display the Quotes's associated products -- when we select Quote in New SO page
+		if(isset($_REQUEST['quote_id']) && $_REQUEST['quote_id'] !='')
+		{
+			$associated_prod = getAssociatedProducts("Quotes",$quote_focus,$focus->column_fields['quote_id']);
+		}
+
+		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+		$smarty->assign("MODE", $quote_focus->mode);
+		$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
+		$smarty->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
+		$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
+		$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
+		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 	}
 }
 

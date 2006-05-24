@@ -137,7 +137,13 @@ function sensex_info()
 								   {if $divName eq 'basicTab'}
 								   {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
 								   	<!-- Added to display the product details -->
-									{include file="ProductDetails.tpl"}
+									<!-- This if is added when we want to populate product details from the related entity  for ex. populate product details in new SO page when select Quote -->
+									{if $AVAILABLE_PRODUCTS eq true}
+										{include file="ProductDetailsEditView.tpl"}
+									{else}
+										{include file="ProductDetails.tpl"}
+									{/if}
+
 								   {/if}
 								   {/if}
 
