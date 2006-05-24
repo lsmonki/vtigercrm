@@ -195,10 +195,6 @@ require_once('include/PopulateComboValues.php');
 $combo = new PopulateComboValues();
 $combo->create_tables();
 
-// create and populate custom field tables;
-require_once('include/PopulateCustomFieldTables.php');
-create_custom_field_tables();
-
 create_default_users();
 
 // default report population
