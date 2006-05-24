@@ -8,7 +8,7 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-global $theme,$mod_strings,$current_language,$currentModule;
+global $theme,$mod_strings,$current_language,$currentModule,$current_user;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
 require_once($theme_path."layout_utils.php");
@@ -27,6 +27,7 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 	        $calendar_arr['calendar'] = new Calendar('month');
         	$calendar_arr['view'] = 'month';
 	        $calendar_arr['size'] = 'small';
+		$calendar_arr['calendar']->add_Activities($current_user);
         	calendar_layout($calendar_arr);
 	        $mod_strings = return_module_language($current_language,$temp_module);
         	$currentModule = $_REQUEST['module'];
@@ -66,9 +67,8 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 			$date_data['year'] = $_REQUEST['year'];
 		}
 		$calendar_arr['calendar'] = new Calendar($mysel,$date_data);
-		if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month')
+		if ($mysel == 'day' || $mysel == 'week' || $mysel == 'month' || $mysel == 'year')
 		{
-			global $current_user;
 			$calendar_arr['calendar']->add_Activities($current_user);
 		}
 		$calendar_arr['view'] = $mysel;
