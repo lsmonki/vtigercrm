@@ -229,8 +229,8 @@ if ($db_populate) {
 // populate forums data
 global $log, $db;
 
-$endTime = microtime();
-$deltaTime = microtime_diff($startTime, $endTime);
+//$endTime = microtime();
+//$deltaTime = microtime_diff($startTime, $endTime);
 
 
 // populate calendar data
