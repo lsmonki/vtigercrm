@@ -119,7 +119,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 // Buttons and View options
-if(isPermitted('Emails',2,'') == 'yes')
+if(isPermitted('Emails','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
