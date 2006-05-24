@@ -48,7 +48,7 @@
 											</td>
 											<td width="12%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
-												&nbsp;<a href="javascript:;"  onclick="window.location = window.location+'&show_hidden=true';" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
+												&nbsp;<a href="javascript:;"  onclick="show_hidden();" class="webMnu">{$MOD.LBL_SHOW_HIDDEN}</a>
 											</td>
 											<td width="18%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -116,7 +116,7 @@
                     <td>&nbsp;</td>
                     <td style="padding:1px;" align="left">
 						<div id="rssScroll">
-						<table class="rssTable" cellspacing="0" cellpadding="0" border="0">
+						<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%">
 	                      <tr>
     	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  /></th>
 							{foreach item=element from=$LISTHEADER}

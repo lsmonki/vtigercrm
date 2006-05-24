@@ -60,6 +60,15 @@ function check_for_new_mail(mbox) {
 		}
 	);
 }
+function show_hidden() {
+	var els = document.getElementsByClassName("deletedRow");
+	for(var i=0;i<els.length;i++) {
+		if(els[i].style.display == "none")
+			els[i].style.display ='';
+		else
+			els[i].style.display = 'none';
+	}
+}
 </script>
 <?php
 global $current_user;
@@ -221,13 +230,8 @@ $c=$numEmails;
 
 $overview=$elist["overview"];
 ?>
-</td>
-</table>
-</td></tr>
-</table>
 
 <!-- MAIN MSG LIST TABLE -->
-<table width="100%" cellpadding="2" cellspacing="0" align="center" border="0" class=""><tr><td>
 <?
 if($numEmails != 0)
 	$navigation_array = getNavigationValues($_REQUEST["start"], $numEmails, $c);
@@ -344,9 +348,6 @@ $i=1;
     }
 }
 ?>
-  </table>
- </td></tr>
-</table>
 <?
 $navigationOutput = getTableHeaderNavigation($navigation_array,'&parenttab=My%20Home%20Page&mailbox='.$mailbox,"Webmails","index",$viewid);
 $navigationOutput .= '<td size="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="right"><a href="index.php?module=Webmails&action=index&'.$defaultParams.'">Check for new e-Mails</a></td>';
