@@ -1043,6 +1043,10 @@ function getHeaderArray()
 		}
 
 		$parenttab = getParentTabName($parid);
+		if($parenttab == 'Settings' && $is_admin)
+                {
+                        $subtabs[] = 'Settings';
+                }
 
 		if($parenttab != 'Settings' ||($parenttab == 'Settings' && $is_admin))
 		{
