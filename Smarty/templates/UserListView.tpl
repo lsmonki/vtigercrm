@@ -76,6 +76,32 @@ function ajaxSaveResponse(response)
 	hide("status");
 	document.getElementById("ListViewContents").innerHTML= response.responseText;
 }
+
+function deleteUser(userid)
+{
+	show("status");
+	var ajaxObj = new Ajax(ajaxDeleteResponse);
+	var urlstring = "action=UsersAjax&file=UserDeleteStep1&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record="+userid;
+	ajaxObj.process("index.php?",urlstring);
+
+}
+
+function ajaxDeleteResponse(response)
+{
+	hide("status");
+	document.getElementById("tempdiv").innerHTML= response.responseText;
+}
+
+function transferUser(del_userid)
+{
+		show("status");
+		hide("DeleteLay");
+		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var trans_userid=document.getElementById('transfer_user_id').options[document.getElementById('transfer_user_id').options.selectedIndex].value;
+		var urlstring ="module=Users&action=UsersAjax&file=DeleteUser&ajax=true&delete_user_id="+del_userid+"&transfer_user_id="+trans_userid;
+	    	ajaxObj.process("index.php?",urlstring);
+
+}
 </script>
 {/literal}
 
