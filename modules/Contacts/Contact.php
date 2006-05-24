@@ -515,7 +515,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
 		if($this->checkIfCustomTableExists('contactscf'))
 		{
-	   $query =  $this->constructCustomQueryAddendum('contactscf','Contacts') .",
+			$query =  $this->constructCustomQueryAddendum('contactscf','Contacts') ."
                                 contactdetails.*, contactaddress.*,
                                 account.accountname account_name,
                                 users.user_name assigned_user_name

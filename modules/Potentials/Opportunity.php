@@ -159,7 +159,8 @@ class Potential extends CRMEntity {
 
 		if($this->checkIfCustomTableExists('potentialscf'))
 		{
-			$query = $this->constructCustomQueryAddendum('potentialscf','Potentials') .",                                potential.*,
+			$query = $this->constructCustomQueryAddendum('potentialscf','Potentials') ."
+				potential.*,
 				account.accountname account_name,
 				users.user_name assigned_user_name
 					FROM potential
