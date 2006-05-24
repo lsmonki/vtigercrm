@@ -162,7 +162,7 @@ function create_default_users() {
 
 }
 
-$startTime = microtime();
+//$startTime = microtime();
 $modules = array("Security");
 $focus=0;				
 // tables creation
