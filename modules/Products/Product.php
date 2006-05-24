@@ -277,9 +277,8 @@ class Product extends CRMEntity {
 		if($this->checkIfCustomTableExists('productcf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum('productcf','Products') . 
-				",    
-				products.productid productid,
+		$query = $this->constructCustomQueryAddendum('productcf','Products') ."    
+			products.productid productid,
 			products.productname productname,
 			products.productcode productcode,
 			products.productcategory productcategory,
