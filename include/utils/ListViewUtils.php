@@ -621,7 +621,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									$evt_status='&status=Completed';
 								else
 									$evt_status='&eventstatus=Held';
-								if(isPermitted("Activities",1,$activityid) == 'yes')
+								if(isPermitted("Activities",'EditView',$activityid) == 'yes')
 								{
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."&start=".$navigation_array['current']."&allflag=".$navigation_array['allflag']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
