@@ -27,7 +27,6 @@ require_once('include/logging.php');
 
 global $mod_strings;
 
-$local_log =& LoggerManager::getLogger('authenticate');
 
 $focus = new User();
 
