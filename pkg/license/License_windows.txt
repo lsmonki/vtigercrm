@@ -1,6 +1,6 @@
 
 This software is a collective work consisting of the following major Open Source components: 
-Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. 
+Apache software, MySQL server, PHP, SugarCRM, phpBB, phpSysinfo, Magpie and PHPMailer each licensed under a separate Open Source License. 
 vtiger.com is not affiliated with nor endorsed by any of the above providers.                  
 
 For Windows
@@ -12,13 +12,10 @@ For Windows
 5. gdwin32 software used under the GNU GPL available at gdwin32 <vtiger CRM Home>/vtigerCRM/gdwin32/gd-license.txt
 6. nusoap software used under GNU LGPL from http://sourceforge.net/projects/nusoap
 7. phpBB software used under GNU GPL downloaded from http://www.phpbb.com/support/license.php
-8. TUTOS software used under GNU GPL downloaded from http://www.tutos.org/html/copyright.html available at <vtiger CRM Home>/vtigerCRM/modules/Calendar/TUTOS_Copyright.pdf
 9. PHPMailer software used under the GNU LGPL available at <vtiger CRM Home>/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt
 10. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
 11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
-12. feedParser software used under GNU GPL downloaded from http://revjim.net/code/feedParser/
 13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
-14. SquirrelMail used under GNU GPL downloaded from http://www.squirrelmail.org/download.php available at http://www.squirrelmail.org/wiki/en_US/SquirrelMailGPL
 15. Mailfeed used under GNU GPL downloaed from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright 
 16. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 
@@ -1518,5 +1515,5 @@ http://www.linuxscope.net/articles/mailAttachmentsPHP.html
 3. FPDF package to create PDF reports and documents. We have taken the utility from the following Web site: 
 http://www.fpdf.org/
 
-We are grateful to the creators of the respective products for providing such a beautiful utilities.
+We are grateful to the creators of the respective products for providing such  beautiful utilities.
  
