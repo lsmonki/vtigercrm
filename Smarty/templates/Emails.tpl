@@ -225,6 +225,6 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 		{rdelim}
-	openPopUp('xComposeEmail',this,url,'createemailWin',797,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
 {rdelim}
 </script>
