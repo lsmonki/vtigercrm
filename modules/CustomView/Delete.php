@@ -21,7 +21,7 @@ if(isset($cvid) && $cvid != '')
 {
 	$deletesql = "delete from customview where cvid =".$cvid;
 	$deleteresult = $adb->query($deletesql);
-	$_SESSION["cv$module"] ='';
+	$_SESSION['lvs'][$module]["viewname"] = '';
 }
 if(isset($smodule) && $smodule != '')
 {
