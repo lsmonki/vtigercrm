@@ -13,11 +13,19 @@ require_once('include/logging.php');
 require_once('include/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboStrings.php');
-
+/**
+ *  Class which handles the population of the combo values
+ * 
+ *
+ */
 class PopulateComboValues
 {
 	var $app_list_strings;
 
+
+	/** 
+	 * To populate the default combo values for the combo tables
+	 */
 	function insertComboValues($values, $tableName)
 	{
 		global $log;
@@ -39,6 +47,11 @@ class PopulateComboValues
 		}
 		$log->debug("Exiting insertComboValues method ...");
 	}
+
+
+	/** 
+	 * To populate the combo tables at startup time
+	 */
 
 	function create_tables () 
 	{
