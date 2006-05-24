@@ -95,7 +95,7 @@ require_once('modules/Users/User.php');
 
 global $currentModule;
 
-if($calculate_response_time) $startTime = microtime();
+//if($calculate_response_time) $startTime = microtime();
 
 $log =& LoggerManager::getLogger('index');
 
@@ -195,8 +195,10 @@ if(isset($action) && isset($module))
 	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Choose", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^CurrencyDelete",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateDefaultFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action) || ereg("^Star",$action) || ereg("^addPbProductRelToDB",$action) || ereg("^UpdateListPrice",$action) || ereg("^PriceListPopup",$action) || ereg("^SalesOrderPopup",$action) || ereg("^CreatePDF",$action) || ereg("^CreateSOPDF",$action) || ereg("^redirect",$action) || ereg("^webmail",$action) || ereg("^left_main",$action) || ereg("^delete_message",$action) || ereg("^mime",$action) || ereg("^move_messages",$action) || ereg("^folders_create",$action) || ereg("^imap_general",$action) || ereg("^mime",$action) || ereg("^download",$action) || ereg("^about_us",$action) || ereg("^SendMailAction",$action) || ereg("^CreateXL",$action) || ereg("^savetermsandconditions",$action) || ereg("^home_rss",$action) || ereg("^ConvertAsFAQ",$action) || ereg("^Tickerdetail",$action) || ereg("^".$module."Ajax",$action) || ereg("^chat",$action) || ereg("^vtchat",$action) || ereg("^updateCalendarSharing",$action) || ereg("^disable_sharing",$action) || ereg("^HeadLines",$action) || ereg("^RecalculateSharingRules",$action) || (ereg("^body",$action) && ereg("^Webmails",$module) ))
 	{
 		$skipHeaders=true;
+		//skip headers for all these invocations as they are mostly popups
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action) || ereg("^about_us",$action) || ereg("^home_rss",$action) || ereg("^".$module."Ajax",$action) || ereg("^chat",$action)|| ereg("^vtchat",$action) || ereg("^massdelete", $action))
 			$skipFooters=true;
+		//skip footers for all these invocations as they are mostly popups
 		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
 		{
 			$viewAttachment = true;
@@ -207,7 +209,7 @@ if(isset($action) && isset($module))
 		}
 	}
 	
-	if($action == 'BusinessCard' || $action == 'Save')
+	if($action == 'Save')
 	{
  	         header( "Expires: Mon, 20 Dec 1998 01:00:00 GMT" );
  	         header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
