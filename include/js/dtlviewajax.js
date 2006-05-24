@@ -13,7 +13,7 @@ var globaltxtboxid = "";
 
 function showHide(showId, hideId)
 {
-	show(showId);
+	showBlock(showId);
 	hide(hideId);
 }
 
@@ -35,7 +35,7 @@ function hndMouseOver(uitype,fieldLabel)
 
 function handleEdit()
 {
-     show(globaleditareaspanid) ;
+     showBlock(globaleditareaspanid) ;
      hide(globaldtlviewspanid);
      getObj(globaltxtboxid).focus();
      return false;

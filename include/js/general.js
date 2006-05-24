@@ -33,11 +33,14 @@ function getObj(n,d) {
       d=document;
 
    
-  if((p=n.indexOf("?"))>0&&parent.frames.length) {
+   if(n != undefined)
+   {
+	   if((p=n.indexOf("?"))>0&&parent.frames.length) {
 
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
+		   d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
 
-  }
+	   }
+   }
 
 
 
@@ -703,137 +706,143 @@ function numConstComp(fldName,fldLabel,type,constval) {
 
 function formValidate() {
 	for (var i=0; i<fieldname.length; i++) {
-		var type=fielddatatype[i].split("~")
-		if (type[1]=="M") {
-			if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
-                           	return false
-		}
-		
-		switch (type[0]) {
-			case "O"  : break;
-			case "V"  : break;
-			case "C"  : break;
-			case "DT" :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-				{	 
-					if (type[1]=="M")
-						if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
-                           	return false
-							
-					if(typeof(type[3])=="undefined") var currdatechk="OTH"
-                                        else var currdatechk=type[3]
-					
-					if (!dateTimeValidate(fieldname[i],type[2],fieldlabel[i],currdatechk))
-							return false
-					   	if (type[4]) {
-							if (!dateTimeComparison(fieldname[i],type[2],fieldlabel[i],type[5],type[6],type[4]))
-								return false
-
-					   	}
-				}		
-					   	break;
-			case "D"  :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-			{	
-					if(typeof(type[2])=="undefined") var currdatechk="OTH"
-                                        else var currdatechk=type[2]
-
-					if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
-							return false
-					if (type[3]) {
-						if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
-								return false
-					  	}
-			}	
-					   	break;
-			case "T"  :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-			{	 
-					if(typeof(type[2])=="undefined") var currtimechk="OTH"
-                                        else var currtimechk=type[2]
-
-					if (!timeValidate(fieldname[i],fieldlabel[i],currtimechk))
-							return false
-						if (type[3]) {
-							if (!timeComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
-								return false
-					   	}
-			}
-					   	break;
-			case "I"  :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-			{	
-					if (getObj(fieldname[i]).value.length!=0)
-                                        {
-						if (!intValidate(fieldname[i],fieldlabel[i]))
-							return false
-					   	if (type[2]) {
-							if (!numConstComp(fieldname[i],fieldlabel[i],type[2],type[3]))
-								return false
-					   	}
-					}
-			}
-				   	break;
-			case "N"  :
-			case "NN" :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-				{
-					if (getObj(fieldname[i]).value.length!=0)
-					{
-						if (typeof(type[2])=="undefined") var numformat="any"
-						else var numformat=type[2]
-					
-						if (type[0]=="NN") {
-							
-							if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
-	return false
-						} else {
-							if (!numValidate(fieldname[i],fieldlabel[i],numformat))
-							return false
-						}
-					   	if (type[3]) {
-					   		if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
-								return false
-					   	}
-					}
-				 }
-					break;
-			case "E"  :
-				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
-				{
-					if (getObj(fieldname[i]).value.length!=0)
-					{
-						var etype = "EMAIL"
-						if (!patternValidate(fieldname[i],fieldlabel[i],etype))
-							return false
-					}
+		if(getObj(fieldname[i]) != null)
+		{
+			var type=fielddatatype[i].split("~")
+				if (type[1]=="M") {
+					if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
+						return false
 				}
-					break;
+
+			switch (type[0]) {
+				case "O"  : break;
+				case "V"  : break;
+				case "C"  : break;
+				case "DT" :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	 
+						if (type[1]=="M")
+							if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
+								return false
+
+									if(typeof(type[3])=="undefined") var currdatechk="OTH"
+									else var currdatechk=type[3]
+
+										if (!dateTimeValidate(fieldname[i],type[2],fieldlabel[i],currdatechk))
+											return false
+												if (type[4]) {
+													if (!dateTimeComparison(fieldname[i],type[2],fieldlabel[i],type[5],type[6],type[4]))
+														return false
+
+												}
+					}		
+				break;
+				case "D"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	
+						if(typeof(type[2])=="undefined") var currdatechk="OTH"
+						else var currdatechk=type[2]
+
+							if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+								return false
+									if (type[3]) {
+										if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+											return false
+									}
+					}	
+				break;
+				case "T"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	 
+						if(typeof(type[2])=="undefined") var currtimechk="OTH"
+						else var currtimechk=type[2]
+
+							if (!timeValidate(fieldname[i],fieldlabel[i],currtimechk))
+								return false
+									if (type[3]) {
+										if (!timeComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+											return false
+									}
+					}
+				break;
+				case "I"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							if (!intValidate(fieldname[i],fieldlabel[i]))
+								return false
+									if (type[2]) {
+										if (!numConstComp(fieldname[i],fieldlabel[i],type[2],type[3]))
+											return false
+									}
+						}
+					}
+				break;
+				case "N"  :
+					case "NN" :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							if (typeof(type[2])=="undefined") var numformat="any"
+							else var numformat=type[2]
+
+								if (type[0]=="NN") {
+
+									if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+										return false
+								} else {
+									if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+										return false
+								}
+							if (type[3]) {
+								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
+									return false
+							}
+						}
+					}
+				break;
+				case "E"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							var etype = "EMAIL"
+								if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+									return false
+						}
+					}
+				break;
+			}
 		}
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
-        {
-            if(fieldname[j] == "date_start")
-            {
-               var datelabel = fieldlabel[j]
-               var datefield = fieldname[j]
-               var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-            }
-            if(fieldname[j] == "time_start")
-            {
-                var timelabel = fieldlabel[j]
-                var timefield = fieldname[j]
-                var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-            }
-            if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
-            {
-               var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-               var statuslabel = fieldlabel[j++]
-            }
+		{
 
-        }
-	if(statusvalue == "Planned")
+			if(getObj(fieldname[i]) != null)
+			{
+				if(fieldname[j] == "date_start")
+				{
+					var datelabel = fieldlabel[j]
+						var datefield = fieldname[j]
+						var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				}
+				if(fieldname[j] == "time_start")
+				{
+					var timelabel = fieldlabel[j]
+						var timefield = fieldname[j]
+						var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				}
+				if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
+				{
+					var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+						var statuslabel = fieldlabel[j++]
+				}
+			}
+		}
+		if(statusvalue == "Planned")
         {
                 var dateelements=splitDateVal(startdatevalue)
 
@@ -1103,13 +1112,22 @@ function show(divId)
 
 }
 
+/*
+* javascript function to display the div tag
+* @param divId :: div tag ID
+*/
+function showBlock(divId)
+{
+    var id = document.getElementById(divId);
+    id.style.display = 'block';
+}
+
 
 /*
 * javascript function to hide the div tag
 * @param divId :: div tag ID
 */
 function hide(divId)
-
 {
 
     var id = document.getElementById(divId);
