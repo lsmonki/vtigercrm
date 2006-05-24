@@ -208,11 +208,17 @@ if (is_admin($current_user)) {
 if (is_admin($current_user)) {                   
         $GROUP_SELECT_OPTION = '<select name="group_name">';
 		$GROUP_SELECT_OPTION .= '<option value="">--None--</option>';
-               $sql = "select groupname from users2group inner join groups on groups.groupid=users2group.groupid where userid='" .$focus->id ."'";
-                  $result = $adb->query($sql);
-		$groupnameArray = $adb->fetch_array($result);
+		if($focus->id) {
+			$sql = "SELECT groupname
+				FROM users2group
+				INNER JOIN groups
+					ON groups.groupid = users2group.groupid
+				WHERE userid = '" .$focus->id ."'";
+			$result = $adb->query($sql);
+			$groupnameArray = $adb->fetch_array($result);
+		}
 		$groupselected = $groupnameArray["groupname"];
-		$sql2 = "select groupname from groups";
+		$sql2 = "SELECT groupname FROM groups";
                   $result_name = $adb->query($sql2);
                   $temprow = $adb->fetch_array($result_name);
                    do

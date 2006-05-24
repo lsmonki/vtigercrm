@@ -29,7 +29,7 @@ global $adb;
 $user_name = $_REQUEST['userName'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
-        $query = 'Select user_name from users where user_name ="'.$user_name.'"';
+        $query = "SELECT user_name FROM users WHERE user_name ='".$user_name."'";
         $result = $adb->query($query);
         if($adb->num_rows($result) > 0)
         {
