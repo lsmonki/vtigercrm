@@ -35,7 +35,7 @@ require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
-require_once('modules/Users/Security.php');
+require_once('modules/Users/DefaultDataPopulator.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 
 // load the config_override.php file to provide default user settings
@@ -163,7 +163,7 @@ function create_default_users() {
 }
 
 //$startTime = microtime();
-$modules = array("Security");
+$modules = array("DefaultDataPopulator");
 $focus=0;				
 // tables creation
 eecho("Creating Core tables: ");
