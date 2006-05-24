@@ -258,7 +258,7 @@ function getSearchModulesComboList($search_module)
 		     <tr>
 		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
 		        <td nowrap align="right">Show Results in &nbsp;
-		                <select name="global_search_module" onChange="displayModuleList(this);">
+		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);">
 		                        <option value="All">All</option>
 						<?php
 						foreach($object_array as $module => $object_name)
