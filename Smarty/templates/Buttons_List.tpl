@@ -68,10 +68,10 @@
 	<td class="sep1" style="width:1px;padding-right:1px"></td>
 	<td nowrap style="width:50%;padding:10px">
 	   	{if $CHECK.Import eq 'yes' && $CHECK.Export eq 'yes'}	
-			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> |	
+			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index&parenttab={$CATEGORY}">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> |	
 	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$APP.$MODULE}</a>
 	   	{elseif $CHECK.Import eq 'yes' && $CHECK.Export eq 'no'} 	
-			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> 	
+			<a href="index.php?module={$MODULE}&action=Import&step=2&return_module={$MODULE}&return_action=index&parenttab={$CATEGORY}">{$APP.LBL_IMPORT} {$APP.$MODULE}</a> 	
 	   	{elseif $CHECK.Import eq 'no' && $CHECK.Export eq 'yes' } 	
 	    		<a href="index.php?module={$MODULE}&action=Export&all=1">{$APP.LBL_EXPORT} {$APP.$MODULE}</a>
 	   	{/if}	
