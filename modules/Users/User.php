@@ -95,7 +95,7 @@ class User extends SugarBean {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
-	var $sortby_fields = Array('user_name','email1','last_name','is_admin');	
+	var $sortby_fields = Array('user_name','email1','last_name','is_admin','status');	
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -154,6 +154,7 @@ class User extends SugarBean {
 		'Email'=>Array('users'=>'email1'),
 		'Name'=>Array('users'=>'last_name'),
 		'Admin'=>Array('users'=>'is_admin'),
+		'Status'=>Array('users'=>'status'),
 		'Tools'=>Array(''=>''),
 	);	
 		
@@ -533,6 +534,7 @@ class User extends SugarBean {
 			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'last_name').' '.$adb->query_result($result,$i-1,'first_name').'</a>';
 
 			$entries[]=$adb->query_result($result,$i-1,'is_admin');
+			$entries[]=$adb->query_result($result,$i-1,'status');
 			if($adb->query_result($result,$i-1,'user_name') == 'admin' || $adb->query_result($result,$i-1,'user_name') == 'standarduser' )
 			{
 			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
