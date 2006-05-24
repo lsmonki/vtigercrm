@@ -94,6 +94,7 @@ function create_default_users() {
 
         $log->info("Created ".$user->table_name." table. for user $user->id");
 
+	/*
         if($create_default_user) {
                 $default_user = new User();
                 $default_user->last_name = $default_user_name;
@@ -111,6 +112,7 @@ function create_default_users() {
         	$default_user->namedays = '';
                 $default_user->save();
         }
+	*/
 
 	// insert values into user2role table
 	$role_query = "select roleid from role where rolename='administrator'";
