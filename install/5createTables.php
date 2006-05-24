@@ -145,8 +145,7 @@ if(!rename("install/", $renamefile."install/"))
 		<table borde=0 cellspacing=0 cellpadding=5 width=100% style="background-color:#EEFFEE; border:1px dashed #ccddcc;">
 		<tr>
 			<td align=center class=small>
-			<b>vtiger is all set to go!</b>
-			<br>Total time taken: <?php echo "$deltaTime"; ?> seconds.
+			<b>vtigercrm-5.0.0 is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
