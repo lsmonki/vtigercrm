@@ -41,6 +41,8 @@ else
 }
 
 $focus = new Faq();
+$smarty = new vtigerCRM_Smarty;
+
 $other_text = Array();
 
 if(!$_SESSION['lvs'][$currentModule])
@@ -132,7 +134,6 @@ $list_result = $adb->query($list_query);
 
 
 
-$smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
