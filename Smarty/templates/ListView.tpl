@@ -233,7 +233,9 @@ function alphabetic(url)
                                         {/if}
 
                                  {/foreach}
+					{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
                                              <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
+					{/if}
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -298,7 +300,9 @@ function alphabetic(url)
                                         {/if}
 
                                  {/foreach}
+					{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
                                              <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
+					{/if}
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >
