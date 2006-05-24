@@ -917,7 +917,8 @@ class freetag {
 		$cloud_spans = array();
 		//included to get the site URL
 		include("config.php");
-
+		if($module =='')
+			$module = 'All';	
 		foreach ($tag_list as $tag => $qty) {
           		$size = $min_font_size + ($qty - $min_qty) * 3;
 			$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
