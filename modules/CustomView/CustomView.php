@@ -382,7 +382,9 @@ class CustomView extends CRMEntity{
 
 	function getCriteriaJS()
 	{
-		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
+	
+		
+    $today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
 		$tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
 		$yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
 
@@ -421,7 +423,34 @@ class CustomView extends CRMEntity{
 
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
-
+    
+    if(date("m") <= 4)
+		{
+		  $cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  $nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+    }else if(date("m") > 4 and date("m") <= 8)
+    {
+		  $pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  $cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+      
+    }else
+    {
+		  $nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
+		  $pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
+    }
+    
 		$sjsStr = '<script language="JavaScript" type="text/javaScript">
 			function showDateRange( type )
 			{
@@ -552,18 +581,18 @@ class CustomView extends CRMEntity{
 				}
 				else if( type == "nextfq" )
 				{
-					document.CustomView.startdate.value = "2005-07-01";
-					document.CustomView.enddate.value = "2005-09-30";
+					document.CustomView.startdate.value = "'.$nFq.'";
+					document.CustomView.enddate.value = "'.$nFq1.'";
 				}
 				else if( type == "prevfq" )
 				{
-					document.CustomView.startdate.value = "2005-01-01";
-					document.CustomView.enddate.value = "2005-03-31";
+					document.CustomView.startdate.value = "'.$pFq.'";
+					document.CustomView.enddate.value = "'.$pFq1.'";
 				}
 				else if( type == "thisfq" )
 				{
-					document.CustomView.startdate.value = "2005-04-01";
-					document.CustomView.enddate.value = "2005-06-30";
+					document.CustomView.startdate.value = "'.$cFq.'";
+					document.CustomView.enddate.value = "'.$cFq1.'";
 				}
 				else
 				{
@@ -591,15 +620,20 @@ class CustomView extends CRMEntity{
 
 		if($stdfilterrow["stdfilter"] == "custom")
 		{
-			if($stdfilterrow["startdate"] != "0000-00-00")
-			{
-				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
-			}
-			if($stdfilterrow["enddate"] != "0000-00-00")
-			{
-				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
-			}
-		}
+  			if($stdfilterrow["startdate"] != "0000-00-00")
+  			{
+  				$stdfilterlist["startdate"] = $stdfilterrow["startdate"];
+  			}
+  			if($stdfilterrow["enddate"] != "0000-00-00")
+  			{
+  				$stdfilterlist["enddate"] = $stdfilterrow["enddate"];
+  			}
+		}else  //if it is not custom get the date according to the selected duration
+		{
+		    $datefilter = $this->getDateforStdFilterBytype($stdfilterrow["stdfilter"]);
+		    $stdfilterlist["startdate"] = $datefilter[0];
+		    $stdfilterlist["enddate"] = $datefilter[1];
+    }
 
 		return $stdfilterlist;
 	}
@@ -968,7 +1002,8 @@ class CustomView extends CRMEntity{
 	}
 	function getDateforStdFilterBytype($type)
 	{
-		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
+		$thisyear = date("Y");
+    $today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
 		$tomorrow  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
 		$yesterday  = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d")-1, date("Y")));
 
@@ -1007,6 +1042,33 @@ class CustomView extends CRMEntity{
 		$nextFY0 = date("Y-m-d",mktime(0, 0, 0, "01", "01",   date("Y")+1));
 		$nextFY1 = date("Y-m-t", mktime(0, 0, 0, "12", date("d"), date("Y")+1));
 
+    if(date("m") <= 4)
+		{
+		  $cFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  $nFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $pFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")-1));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")-1));
+    }else if(date("m") > 4 and date("m") <= 8)
+    {
+		  $pFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")));
+		  $cFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $nFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));
+      
+    }else
+    {
+		  $nFq = date("Y-m-d",mktime(0, 0, 0, "01","01",date("Y")+1));
+		  $nFq1 = date("Y-m-d",mktime(0, 0, 0, "04","30",date("Y")+1));
+		  $pFq = date("Y-m-d",mktime(0, 0, 0, "05","01",date("Y")));
+		  $pFq1 = date("Y-m-d",mktime(0, 0, 0, "08","31",date("Y")));
+      $cFq = date("Y-m-d",mktime(0, 0, 0, "09","01",date("Y")));
+		  $cFq1 = date("Y-m-d",mktime(0, 0, 0, "12","31",date("Y")));      
+    }
+    
 		if($type == "today" )
 		{
 
@@ -1143,19 +1205,19 @@ class CustomView extends CRMEntity{
 		elseif($type == "nextfq" )
 		{
 
-		$datevalue[0] = "2005-07-01";
-		$datevalue[1] = "2005-09-30";
+		$datevalue[0] = $nFq;
+		$datevalue[1] = $nFq1;
 		}                        
 		elseif($type == "prevfq" )
 		{
 
-		$datevalue[0] = "2005-01-01";
-		$datevalue[1] = "2005-03-31";
+		$datevalue[0] = $pFq;
+		$datevalue[1] = $pFq1;
 		}                
-		elseif($type == "thisfq" )
+		elseif($type == "thisfq")
 		{
-		$datevalue[0] = "2005-04-01";
-		$datevalue[1] = "2005-06-30";
+		$datevalue[0] = $cFq;
+		$datevalue[1] = $cFq1;
 		}
 		else
 		{
