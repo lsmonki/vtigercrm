@@ -139,19 +139,19 @@ class Calendar
 			$this->hour_format = 'am/pm';
 		else
 			$this->hour_format = $current_user->hour_format;
-		if($current_user->start_hour == '' || $current_user->end_hour)
+		/*if($current_user->start_hour == '' || $current_user->end_hour)
 		{
 			$this->day_start_hour = 8;
 			$this->day_end_hour = 18;
 		}
 		else
-		{
+		{*/
 			list($sthour,$stmin)= explode(":",$current_user->start_hour);
 			$hr = $sthour+0;
 			list($endhour,$endmin)=explode(":",$current_user->end_hour);
 			$this->day_start_hour=$hr;
 			$this->day_end_hour=$endhour;
-		}
+		//}
 		if ( $this->view == 'week')
 		{
 			$start_datetime = $this->date_time->getThisweekDaysbyIndex(0);
