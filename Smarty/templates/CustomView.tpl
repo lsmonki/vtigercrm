@@ -120,10 +120,18 @@ function mandatoryCheck()
 		  <input class="detailedViewTextBox" type="text" name='viewName' value="{$VIEWNAME}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/>
 		 </td>
 		 <td class="dvtCellInfo" width="25%">
-		  <input type="checkbox" name="setDefault" value="checkbox" />{$MOD.LBL_SETDEFAULT}
+		  {if $CHECKED eq 'checked'}
+		      <input type="checkbox" name="setDefault" value="1" checked/>{$MOD.LBL_SETDEFAULT}
+		  {else}
+		      <input type="checkbox" name="setDefault" value="0" />{$MOD.LBL_SETDEFAULT}
+		  {/if}
 		 </td>
 		 <td class="dvtCellInfo" width="25%">
-		  <input type="checkbox" name="setMetrics" value="checkbox" />{$MOD.LBL_LIST_IN_METRICS}
+		  {if $MCHECKED eq 'checked'}
+		      <input type="checkbox" name="setMetrics" value="1" checked/>{$MOD.LBL_LIST_IN_METRICS}
+		  {else}
+		      <input type="checkbox" name="setMetrics" value="0" />{$MOD.LBL_LIST_IN_METRICS}
+		  {/if}
 		 </td>
 		</tr>
 		<tr><td colspan="3">&nbsp;</td></tr>
