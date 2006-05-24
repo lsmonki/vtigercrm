@@ -19,6 +19,7 @@
 <input type="hidden" name="return_action" value="CallRelatedList">
 <input type="hidden" name="return_id" value="{$id}">
 <input type="hidden" name="parent_id" id="parent_id" value="{$id}">
+<input type="hidden" name="parenttab" id="parenttab" value="{$CATEGORY}">
 <input type="hidden" name="action">
 {if $MODULE eq 'Activities'}
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
