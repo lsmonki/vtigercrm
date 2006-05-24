@@ -148,6 +148,12 @@ function runEmailCommand(com,id) {
 						}
 					}
 				    break;
+				    case 'undelete_msg':
+					var node = $("row_"+id);
+					node.style.display = '';
+					var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
+					node.innerHTML=newhtml;
+				    break;
 				    case 'clear_flag':
 					var nm = "clear_td_"+id;
                 			var el = $(nm);
@@ -168,6 +174,19 @@ function runEmailCommand(com,id) {
                         }
                 }
         );
+}
+function remove(s, t) {
+  /*
+  **  Remove all occurrences of a token in a string
+  **    s  string to be processed
+  **    t  token to be removed
+  **  returns new string
+  */
+  i = s.indexOf(t);
+  r = "";
+  if (i == -1) return s;
+  r += s.substring(0,i) + remove(s.substring(i + t.length), t);
+  return r;
 }
 function changeMbox(box) {
 	location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+box;
