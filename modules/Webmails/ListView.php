@@ -109,7 +109,9 @@ function move_messages() {
 	runEmailCommand('expunge','');
 }
 function search_emails() {
-	confirm("Seriously?  This really doesn't work yet "+$("search_input").value);
+	var search_query = $("search_input").value;
+	var search_type = $("search_type").value;
+	window.location = "index.php?module=Webmails&action=index&search=true&search_type="+search_type+"&search_input="+search_query;
 }
 </script>
 <?php
@@ -256,7 +258,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 
-global $mbox;
+ global $mbox,$displayed_msgs;
 if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
 // bug in windows PHP having to do with SSL not being linked correctly
@@ -288,6 +290,7 @@ if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
 	exit();
 }
 
+
 function SureRemoveDir($dir) {
    if(!$dh = @opendir($dir)) return;
    while (($obj = readdir($dh))) {
@@ -305,9 +308,9 @@ $save_path='/usr/local/share/vtiger/modules/Webmails/tmp';
 $user_dir=$save_path."/".$_SESSION["authenticated_user_id"];
 
 $elist = fullMailList($mbox);
+
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
-
 
 //show all emails if user didn't specify amount per page
 if($mails_per_page < 1)
@@ -320,12 +323,14 @@ if($start == 1 || $start == "") {
 }
 $c=$numEmails;
 
-$numPages = round($numEmails/$mails_per_page);
-if($numPages > 1) {
-	$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'>&lt;&lt;</a>&nbsp;&nbsp;";
-	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'>&lt;</a> -- ";
-	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'>&gt;</a>&nbsp;&nbsp;";
-	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'>&gt;&gt;</a>";
+if(!isset($_REQUEST["search"])) {
+	$numPages = round($numEmails/$mails_per_page);
+	if($numPages > 1) {
+		$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'>&lt;&lt;</a>&nbsp;&nbsp;";
+		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'>&lt;</a> -- ";
+		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'>&gt;</a>&nbsp;&nbsp;";
+		$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'>&gt;&gt;</a>";
+	}
 }
 
 $overview=$elist["overview"];
@@ -354,14 +359,10 @@ echo "</script>";
 $listview_header = array("Info","Subject","Date","From","Del");
 $listview_entries = array();
 
-if($numEmails <= 0)
-	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
-else {
-$displayed_msgs=0;
-$i=1;
-    // Main loop to create listview entries
-    while ($i<$c) {
-	if($displayed_msgs==$mails_per_page) {break;}
+
+// draw a row for the listview entry
+function show_msg($mails,$start_message) {
+ 	global $mbox,$displayed_msgs;
 
   	$num = $mails[$start_message]->msgno;
   	// TODO: scan the current db tables to find a
@@ -436,12 +437,46 @@ $i=1;
 	else
   		$listview_entries[$num][] = '<td nowrap colspan="1" align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a></span></td>';
 
+	return $listview_entries[$num];
+}
 
 
+if($numEmails <= 0)
+	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
+else {
+
+if(isset($_REQUEST["search"])) {
+	$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
+	//echo $searchstring."<br>";
+	$searchlist = imap_search($mbox,$searchstring);
+	if($searchlist === false)
+  		echo "The search failed";
+
+	$num_searches = count($searchlist);
+
+	//print_r($searchlist);
+	$c=$numEmails;
+}
+
+// MAIN LOOP
+// Main loop to create listview entries
+$displayed_msgs=0;
+$i=1;
+while ($i<$c) {
+	if(is_array($searchlist)) {
+		for($l=0;$l<$num_searches;$l++) {
+			if($mails[$start_message]->msgno == $searchlist[$l])
+				$listview_entries[] = show_msg($mails,$start_message);
+		}
+	} else {
+		$listview_entries[] = show_msg($mails,$start_message);
+		if($displayed_msgs == $mails_per_page) {break;}
+	}
   	$i++;
   	$start_message--;
-    }
 }
+
+
 
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
@@ -477,8 +512,8 @@ if (is_array($list)) {
 }
 
 imap_close($mbox);
-//print_r($listview_entries);
 global $current_user;
+}
 
 $smarty = new vtigerCRM_Smarty;
 

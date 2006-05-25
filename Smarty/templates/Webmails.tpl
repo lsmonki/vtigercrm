@@ -105,9 +105,9 @@
                         <td width="45%"><input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn" onclick="move_messages();"/> {$FOLDER_SELECT}&nbsp;
                         </td>
                         <td width="75%" align="right">
-							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
-							<select name="optionSel" class="importBox"><option selected>in Subject</option></select>&nbsp;
-							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" />
+							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" id="search_input"/>&nbsp;
+							<select name="optionSel" class="importBox" id="search_type"><option selected value="SUBJECT">in Subject</option><option value="BODY">in Body</option><option value="TO">in To:</option><option value="CC">in CC:</option><option value="BCC">in BCC:</option><option value="FROM">in From:</option></select>&nbsp;
+							<input type="button" name="find" value=" {$APP.LBL_FIND_BUTTON} " class="classWebBtn" onclick="search_emails();" />
 						</td>
                       </tr>
                     </table></td>
