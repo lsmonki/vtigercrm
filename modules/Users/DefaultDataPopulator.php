@@ -415,11 +415,11 @@ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field")
 //Product Details -- START
 //Block31-36 -- Start
 
-$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productname','products',1,'2','productname','Product Name',1,0,0,100,1,31,1,'V~M',0,1,'BAS')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcode','products',1,'1','productcode','Product Code',1,0,0,100,2,31,1,'V~O',0,2,'BAS')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productname','products',1,'2','productname','Product Name',1,0,0,100,1,31,1,'V~M',1,null,'BAS')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcode','products',1,'1','productcode','Product Code',1,0,0,100,2,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'discontinued','products',1,'56','discontinued','Product Active',1,0,0,100,3,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'manufacturer','products',1,'15','manufacturer','Manufacturer',1,0,0,100,4,1,31,'V~O',1,null,'BAS')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcategory','products',1,'15','productcategory','Product Category',1,0,0,100,4,31,1,'V~O',0,3,'BAS')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcategory','products',1,'15','productcategory','Product Category',1,0,0,100,4,31,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'sales_start_date','products',1,'5','sales_start_date','Sales Start Date',1,0,0,100,5,31,1,'D~O',1,null,'BAS')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'sales_end_date','products',1,'5','sales_end_date','Sales End Date',1,0,0,100,6,31,1,'D~O~OTH~GE~sales_start_date~Sales Start Date',1,null,'BAS')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'start_date','products',1,'5','start_date','Support Start Date',1,0,0,100,7,31,1,'D~O',1,null,'BAS')");
@@ -484,12 +484,12 @@ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").
 //Email Details -- START
 //Block21 -- Start
 
-	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'date_start','activity',1,'6','date_start','Date & Time Sent',1,0,0,100,1,21,1,'DT~M~time_start~Time Start',0,2,'BAS')");
+	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'date_start','activity',1,'6','date_start','Date & Time Sent',1,0,0,100,1,21,1,'DT~M~time_start~Time Start',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'semodule','activity',1,'2','parent_type','Sales Enity Module',1,0,0,100,2,21,3,'',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'activitytype','activity',1,'2','activitytype','Activtiy Type',1,0,0,100,3,21,3,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'357','parent_id','Related To',1,0,0,100,1,22,1,'I~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,5,21,1,'V~M',1,null,'BAS')");
-	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,23,1,'V~M',0,1,'BAS')");
+	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,23,1,'V~M',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,2,23,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,24,1,'V~O',1,null,'BAS')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,9,1,23,'T~O',1,null,'BAS')");
