@@ -29,6 +29,7 @@ $mod_strings = Array(
 'LBL_LIST_RELATED_TO'=>'Related to',
 'LBL_LIST_DATE'=>'Date Sent',
 'LBL_LIST_TIME'=>'Time Sent',
+'LBL_MOVE_TO'=>'Move To',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'LBL_DATE_SENT'=>'Date Sent:',
