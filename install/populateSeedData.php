@@ -572,6 +572,12 @@ for($i=0;$i<5;$i++)
 	$quote->save("Quotes");
 
 	$quote_ids[] = $quote->id;
+	
+	$product_key = array_rand($product_ids);
+	
+	$query = "insert into quotesproductrel ( quoteid, productid, quantity, listprice ) values (".$quote->id.",".$product_ids[$product_key].",10,699.000 )";
+	$db->query($query);
+			
 }
 
 //Populate SalesOrder Data
@@ -601,6 +607,10 @@ for($i=0;$i<5;$i++)
 	$so->save("SalesOrder");
 
 	$salesorder_ids[] = $so->id;
+	$product_key = array_rand($product_ids);
+        $query = "insert into soproductrel ( salesorderid, productid, quantity, listprice ) values (".$so->id.",".$product_ids[$product_key].",12,499.000 )";
+        $db->query($query);
+			
 }
 
 
@@ -631,6 +641,12 @@ for($i=0;$i<5;$i++)
 	$po->save("PurchaseOrder");
 
 	$purchaseorder_ids[] = $po->id;
+	
+	$product_key = array_rand($product_ids);
+	$query = "insert into poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,399.000 )";
+	$db->query($query);
+			
+
 }
 
 //Populate Invoice Data
@@ -658,6 +674,11 @@ for($i=0;$i<5;$i++)
 	$invoice->save("Invoice");
 
 	$invoice_ids[] = $invoice->id;
+
+	$product_key = array_rand($product_ids);
+        $query = "insert into invoiceproductrel ( invoiceid, productid, quantity, listprice ) values (".$invoice->id.",".$product_ids[$product_key].",18,269.000 )";
+        $db->query($query);
+			
 }
 
 //Populate RSS Data
