@@ -294,9 +294,10 @@ $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
 
-// $start_message == loop starts at this number
-// $mails_per_page == number of emails to get started
-// $c= loop end hook
+//show all emails if user didn't specify amount per page
+if($mails_per_page < 1)
+	$mails_per_page=$numEmails;
+
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
 } else {
