@@ -69,6 +69,29 @@ function show_hidden() {
 			new Effect.Fade(els[i],{queue:{position:'end',scope:'effect',limit:'1'}});
 	}
 }
+function move_messages() {
+        var els = document.getElementsByTagName("INPUT");
+	var cnt = (els.length-1);
+        for(var i=cnt;i>0;i--) {
+                if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
+                        if(els[i].checked) {
+                                var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+				var mvmbox = $("mailbox_select").value;
+        			new Ajax.Request(
+                			'index.php',
+                			{queue: {position:'end', scope: 'command', limit:1},
+                        			method: 'post',
+                        			postBody: 'module=Webmails&action=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                        			onComplete: function(t) {
+							//alert(t.responseText);
+						}
+					}
+				);
+                        }
+                }
+        }
+	runEmailCommand('expunge','');
+}
 </script>
 <?php
 global $current_user;
@@ -236,6 +259,13 @@ if($_POST["command"] == "check_mbox" && $_POST["ajax"] == "true") {
 	exit();
 }
 
+if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
+	imap_mail_move($mbox,$_REQUEST["mailid"],$_REQUEST["mvbox"]);
+	imap_close($mbox);
+	echo "SUCCESS";
+	flush();
+	exit();
+}
 
 function SureRemoveDir($dir) {
    if(!$dh = @opendir($dir)) return;
@@ -382,12 +412,13 @@ $i=1;
 ?>
 <?
 $navigationOutput = getTableHeaderNavigation($navigation_array,'&parenttab=My%20Home%20Page&mailbox='.$mailbox,"Webmails","index",$viewid);
+
 $navigationOutput .= '<td size="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="right"><a href="index.php?module=Webmails&action=index&'.$defaultParams.'">Check for new e-Mails</a></td>';
 
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
 if (is_array($list)) {
-	$boxes = '<select name="mailbox">';
+	$boxes = '<select name="mailbox" id="mailbox_select">';
         foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))

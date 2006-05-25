@@ -102,7 +102,7 @@
                     <td>&nbsp;</td>
                     <td class="delBg"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td width="45%"><input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn"/> {$FOLDER_SELECT}&nbsp;
+                        <td width="45%"><input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn" onclick="move_messages();"/> {$FOLDER_SELECT}&nbsp;
                         </td>
                         <td width="75%" align="right">
 							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="srch" class="importBox" />&nbsp;
@@ -199,9 +199,11 @@ function OpenCompose(id,mode)
                 case 'reply':
                         url = 'index.php?module=Webmails&action=EditView&record='+id+'&reply=true';
                         break;
+                case 'attachments':
+                        url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id;
+                        break;
                 {rdelim}
-        openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+        openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
 {rdelim}
 </script>
-
 <!-- END -->
