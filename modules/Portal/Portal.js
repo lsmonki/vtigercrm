@@ -9,35 +9,72 @@
  ********************************************************************************/
 
 
-/***********************************************
-* Tabbed Document Viewer script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
-* This notice MUST stay intact for legal use
-* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
-***********************************************/
-
-var selectedtablink=""
-var tcischecked=false
-
-function handlelink(aobject){
-	selectedtablink=aobject.href
-	tcischecked=(document.tabcontrol && document.tabcontrol.tabcheck.checked)? true : false
-	if (document.getElementById && !tcischecked){
-		var tabobj=document.getElementById("tablist")
-		var tabobjlinks=tabobj.getElementsByTagName("A")
-		for (i=0; i<tabobjlinks.length; i++)
-			tabobjlinks[i].className=""
-			aobject.className="current"
-			document.getElementById("tabiframe").src=selectedtablink
-			return false
+function fetchAddSite(id)
+{
+	show('status');
+	var ajaxObj = new Ajax(ajaxeditSiteResp);
+	url ='module=Portal&action=PortalAjax&file=Popup&record='+id;
+	ajaxObj.process("index.php?",url);
+}
+function ajaxeditSiteResp(response)
+{
+	hide('status');
+	document.getElementById('editportal_cont').innerHTML = response.responseText;
+}
+function fetchContents(mode)
+{
+	show('status');
+	if(mode == 'data')
+	{
+		fninvsh('orgLay');
+		getObj('datatab').className = 'SiteSel';
+		getObj('managetab').className = 'SiteUnSel';
 	}
 	else
-		return true
+	{
+		getObj('datatab').className = 'SiteUnSel';
+		getObj('managetab').className = 'SiteSel';
+	}
+	var ajaxObj = new Ajax(ajaxfetchContentsResp);
+	url ='action=PortalAjax&mode=ajax&module=Portal&file=ListView&datamode='+mode;
+	ajaxObj.process("index.php?",url);
 }
-
-function handleview(){
-	tcischecked=document.tabcontrol.tabcheck.checked
-	if (document.getElementById && tcischecked){
-		if (selectedtablink!="")
-			window.location=selectedtablink
+function ajaxfetchContentsResp(response)
+{
+	hide('status');
+	document.getElementById('portalcont').innerHTML = response.responseText;
+}
+function DeleteSite(id)
+{
+	if(confirm("Are you sure you want to delete ?"))
+	{
+		show('status');
+		var ajaxObj = new Ajax(ajaxfetchContentsResp);
+		url ='action=PortalAjax&mode=ajax&file=Delete&module=Portal&record='+id;
+		ajaxObj.process("index.php?",url);
 	}
 }
+function SaveSite(id)
+{
+	var ajaxObj = new Ajax(ajaxfetchContentsResp);
+	if (document.getElementById('portalurl').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
+		alert('Site Url cannot be empty')
+		return false;
+	}
+	if (document.getElementById('portalname').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
+		alert('Site Name cannot be empty')
+		return false;
+	}
+	fninvsh('orgLay');
+	show('status');
+	var portalurl = document.getElementById('portalurl').value;
+	var portalname = document.getElementById('portalname').value;
+	url ='action=PortalAjax&mode=ajax&file=Save&module=Portal&portalname='+portalname+'&portalurl='+portalurl+'&record='+id;
+	ajaxObj.process("index.php?",url);
+}
+function setSite(oUrllist)
+{
+	var url = oUrllist.options[oUrllist.options.selectedIndex].value;
+	document.getElementById('locatesite').src = url;
+}
+

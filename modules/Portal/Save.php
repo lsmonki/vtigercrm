@@ -9,12 +9,14 @@
 *
 ********************************************************************************/
 
+require_once('modules/Portal/Portal.php');
 
-if(!isset($_REQUEST['record']))
-	die($mod_strings['ERR_DELETE_RECORD']);
-
-DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],'',$_REQUEST['record'],'');
-
- //code added for returning back to the current view after delete from list view
+if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
+{
+	$result=UpdatePortal($_REQUEST['portalname'],$_REQUEST['portalurl'],$_REQUEST['record']);
+}else
+{
+	$result=SavePortal($_REQUEST['portalname'],$_REQUEST['portalurl']);
+}
 header("Location: index.php?action=PortalAjax&module=Portal&file=ListView&mode=ajax&datamode=manage");
 ?>

@@ -16,6 +16,7 @@ $image_path=$theme_path."images/";
 
 global $app_strings;
 global $mod_strings;
+global $currentModule;
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Portal');
 global $adb;
@@ -34,22 +35,18 @@ for($i=0 ; $i<$no_of_portals; $i++)
 	$portal_info[]=$portal_array;
 }
 $smarty = new vtigerCRM_Smarty;
-$portal_def = Array();
-if($_REQUEST['portalid'] != '') 
-{
-	$query="select * from portal where portalid =".$_REQUEST['portalid'];
-}else
-{
-	$query="select * from portal";
-}
-	$result=$adb->query($query);
-	$portal_def [] = $adb->query_result($result,0,'portalurl');
-	$portal_def [] = $adb->query_result($result,0,'portalid');
-	$smarty->assign("DEFPORTAL_DETAILS", $portal_def);
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("PORTALS", $portal_info);
-$smarty->display("Portal.tpl");
+$smarty->assign("MODULE", $currentModule);
+$smarty->assign("CATEGORY", getParentTab());
+if($_REQUEST['datamode'] == 'data')
+	$smarty->display("MySitesContents.tpl");
+elseif($_REQUEST['datamode'] == 'manage')
+	$smarty->display("MySitesManage.tpl");
+else
+	$smarty->display("MySites.tpl");
+	
 ?>
