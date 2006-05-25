@@ -108,6 +108,9 @@ function move_messages() {
         }
 	runEmailCommand('expunge','');
 }
+function search_emails() {
+	confirm("Seriously?  This really doesn't work yet "+$("search_input").value);
+}
 </script>
 <?php
 global $current_user;
@@ -256,7 +259,10 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 global $mbox;
 if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
+// bug in windows PHP having to do with SSL not being linked correctly
+// causes this open command to fail.
+if(!preg_match("/windows/i",php_uname()))
+	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
 
 if(!$mbox)
 	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
@@ -457,7 +463,8 @@ if (is_array($list)) {
 		} else {
 			if($ssltype == "") {$ssltype = "notls";}
 			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+			if(!preg_match("/windows/i",php_uname()))
+				$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 			if(!$tmbox)
 				$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 			$box = imap_mailboxmsginfo($tmbox);
