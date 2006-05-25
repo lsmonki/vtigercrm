@@ -40,6 +40,25 @@ if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
+//Added for retrieve the old existing attachments when duplicated without new attachment
+if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
+{
+        $sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
+        $result = $adb->query($sql);
+        if($adb->num_rows($result) != 0)
+                $attachmentid = $adb->query_result($result,0,'attachmentsid');
+	        if($attachmentid != '')
+	        {
+	                $attachquery = "select * from attachments where attachmentsid = ".$attachmentid;
+	                $result = $adb->query($attachquery);
+	                $filename = $adb->query_result($result,0,'name');
+	                $filetype = $adb->query_result($result,0,'type');
+	                $_FILES['filename']['name'] = $filename;
+	                $_FILES['filename']['type'] = $filetype;
+	        }
+}
+																						
+
 $focus->save("Notes");
 
 $return_id = $focus->id;
