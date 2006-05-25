@@ -146,7 +146,10 @@ $show_hidden=$_REQUEST["show_hidden"];
 
 <script type="text/Javascript">
 var box_refresh=<?php echo $box_refresh;?>;
-var timer = addOnloadEvent(window.setTimeout("check_for_new_mail()",box_refresh));
+var timer = addOnloadEvent(function() {
+				window.setTimeout("check_for_new_mail()",box_refresh);
+			}
+		);
 
 var command;
 var id;
