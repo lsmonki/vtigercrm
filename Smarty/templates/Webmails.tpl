@@ -191,7 +191,7 @@ function OpenCompose(id,mode)
                         url = 'index.php?module=Webmails&action=EditView&record='+id;
                         break;
                 case 'create':
-                        url = 'index.php?module=Webmails&action=EditView';
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
                         break;
                 case 'forward':
                         url = 'index.php?module=Webmails&action=EditView&record='+id+'&forward=true';

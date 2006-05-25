@@ -5,6 +5,10 @@ if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} 
 ?>
 <script type="text/javascript">
 function load_webmail(mid) {
+	var node = $("row_"+mid);
+	var newhtml = remove(remove(node.innerHTML,'<b>'),'</b>');
+	node.innerHTML = newhtml;
+	var node = $("unread_img_"+mid).innerHTML = '<a href="javascript:;" onclick="OpenCompose(\''+mid+'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>';
 	$("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
 	$("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
 	$("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
@@ -379,8 +383,8 @@ $i=1;
 
   	// read/unread/forwarded/replied
   	if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
-		{
-  		$flags.='<a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a>&nbsp;';
+	{
+  		$flags.='<span id="unread_img_'.$num.'"><a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
 	}
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
