@@ -8,7 +8,9 @@ function load_webmail(mid) {
 	var node = $("row_"+mid);
 	var newhtml = remove(remove(node.innerHTML,'<b>'),'</b>');
 	node.innerHTML = newhtml;
-	var node = $("unread_img_"+mid).innerHTML = '<a href="javascript:;" onclick="OpenCompose(\''+mid+'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>';
+	try {
+		var node = $("unread_img_"+mid).innerHTML = '<a href="javascript:;" onclick="OpenCompose(\''+mid+'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>';
+	}catch(e){}
 	$("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
 	$("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
 	$("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
