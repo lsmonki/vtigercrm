@@ -205,7 +205,7 @@ function alphabetic(url)
 </div>
 
 {*<!-- Contents -->*}
-<table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 
@@ -330,6 +330,7 @@ function alphabetic(url)
 	</div>
 
      </td>
+        <td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
 

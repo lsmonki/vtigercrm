@@ -11,6 +11,7 @@
 -->*}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="99%"  class="showPanelBg">
 	<tbody><tr>
+	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td valign="top" width="50%" style="padding: 10px;border-right:1px dashed #CCCCCC">
 	<!-- Reports Table Starts Here  -->
 	{foreach item=reportfolder from=$REPT_FLDR}
@@ -56,11 +57,13 @@
 	{/foreach}
 	<!-- Reports Table Ends Here  -->
 	</td>
-	<td style="padding:10px;" valign="top" align="center">
+	<td style="padding:10px;" valign="top" align="center" width="50%">
 	<div id="customizedrep">
 		{include file="ReportsCustomize.tpl"}	
 	</div>
-	</td></tr>
+	</td>
+	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	</tr>
 	<tr>
 	<td colspan="2" align="center">&nbsp;</td>
 	</tr>

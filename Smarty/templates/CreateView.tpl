@@ -217,6 +217,7 @@ function sensex_info()
 		</table>
 	     </div>
 	</td>
+	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
 </form>

@@ -86,6 +86,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 {* Main Contents Start Here *}
 <table width="98%" cellpadding="0" cellspacing="0" border="0" class="small showPanelBg" align="center">
 			<tr>
+				<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 					<td width="75%" align="center" style="border-right:1px solid #666666;" >
 
 	<div id="MainMatrix">
@@ -245,6 +246,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 
 
 </td>
+						<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 
 </tr>
 </table>
