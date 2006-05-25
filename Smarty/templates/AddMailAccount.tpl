@@ -25,7 +25,7 @@
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
         <td class="showPanelBg" valign="top" width="100%">
                 <div class="small" style="padding: 10px;">
-                        <span class="lvtHeaderText">{$APP.LBL_MY_PREFERENCES}</span> <br>
+                        <span class="lvtHeaderText">{$MOD.LBL_MY_MAIL_SERVER_DET}</span> <br>
                         <hr noshade="noshade" size="1"><br>
 
   		<form action="index.php" method="post" name="EditView" id="form">
@@ -45,7 +45,6 @@
                             <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
                                 <tr>
                                     <td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                    <td width="75" align="center" nowrap="nowrap" class="dvtUnSelectedCell"><a href="index.php?module=Users&action=DetailView&record={$USERID}"><b>{$MOD.LBL_MY_DETAILS}</a></b></td>
                                     <td class="dvtSelectedCell" style="width: 100px;" align="center" nowrap="nowrap"><b>{$MOD.LBL_MY_MAIL_SERVER_DET} </b></td>
 		                    <td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
                                 </tr>
