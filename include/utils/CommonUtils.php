@@ -2174,5 +2174,29 @@ function decideFilePath()
 	return $filepath;
 }
 
+/**
+ * 	This function is used to get the Path in where we store the files based on the module.
+ *	@param string $module   - module name
+ * 	return string $storage_path - path inwhere the file will be uploaded (also where it was stored) will be return based on the module
+*/
+function getModuleFileStoragePath($module)
+{
+	global $log;
+	$log->debug("Entering into getModuleFileStoragePath($module) method ...");
+	
+	$storage_path = "test/";
+
+	if($module == 'Products')
+	{
+		$storage_path .= 'product/';
+	}
+	if($module == 'Contacts')
+	{
+		$storage_path .= 'contact/';
+	}
+
+	$log->debug("Exiting from getModuleFileStoragePath($module) method. return storage_path = \"$storage_path\"");
+	return $storage_path;
+}
 
 ?>
