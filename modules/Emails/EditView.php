@@ -251,12 +251,12 @@ $smarty->assign("CHECK", $check_button);
 $smarty->display("ComposeEmail.tpl");
 ?>
 <script type="text/javascript" defer="1">
-window.onload = function () {
+addOnloadEvent(function () {
 var oFCKeditor = null;
 oFCKeditor = new FCKeditor( "description" ) ;
 oFCKeditor.BasePath  = "include/fckeditor/" ;
 oFCKeditor.Height = 500;
 oFCKeditor.Width = "100%";
 oFCKeditor.ReplaceTextarea() ;
-}
+});
 </script>

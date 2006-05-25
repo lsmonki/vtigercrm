@@ -175,14 +175,14 @@ $smarty->assign("APP", $app_strings);
 
 ?>
 <script type="text/javascript" defer="1">
-window.onload = function () {
+addOnloadEvent(function () {
 var oFCKeditor = null;
 oFCKeditor = new FCKeditor( "email_body" ) ;
 oFCKeditor.BasePath  = "include/fckeditor/" ;
 oFCKeditor.Height = 550;
 oFCKeditor.Width = "100%";
 oFCKeditor.ReplaceTextarea() ;
-}
+});
 </script>
 <?
 
