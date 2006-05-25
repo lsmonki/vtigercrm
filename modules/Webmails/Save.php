@@ -43,7 +43,8 @@ if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mail
 global $mbox;
 if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
+if(!preg_match("/windows/i",php_uname()))
+	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
 
 if(!$mbox)
         $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
@@ -144,12 +145,12 @@ $return_action='ListView';
 
 
 if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
-	require_once("sendmail.php");
 	global $adb;
 	$sql = "select email1, first_name,last_name from users where id='".$current_user->id."'";
 	$res = $adb->query($sql);
 	$emailaddr = $adb->query_result($res,0,'email1');
 	$who = $adb->query_result($res,0,'first_name')." ".$adb->query_result($res,0,'last_name');
+	require_once("sendmail.php");
 	sendmail($to_address,$cc_address,$bcc_address,$emailaddr,$who,$subject,$msgData);
 	header("Location: index.php?action=$return_action&module=$return_module");
 } else {

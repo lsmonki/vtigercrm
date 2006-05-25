@@ -23,7 +23,8 @@ if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUES
 global $mbox;
 if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
+if(!preg_match("/windows/i",php_uname()))
+	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
 
 if(!$mbox)
         $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
