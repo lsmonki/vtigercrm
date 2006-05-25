@@ -213,6 +213,6 @@
 
 </td></tr></table>
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
+<div id="sendmail_cont" style="z-index:100001;position:absolute;width:310px;"></div>
 {/if}
 
