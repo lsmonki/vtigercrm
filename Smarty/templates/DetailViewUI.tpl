@@ -157,7 +157,7 @@
                              </td>
 						{elseif $keyid eq 83}<!-- Handle the Tax in Inventory -->
 							<td align="right" class="dvtCellLabel">
-							{$APP.LBL_VAT} :
+							{$APP.LBL_VAT} {$APP.COVERED_PERCENTAGE}
 							
 							</td>
 							<td class="dvtCellInfo" align="left">
@@ -167,7 +167,7 @@
 						   </tr>
 		   				   <tr>
 							<td align="right" class="dvtCellLabel">
-							{$APP.LBL_SALES} :
+							{$APP.LBL_SALES} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
 							</td> 
 							<td class="dvtCellInfo" align="left">
 								{$SALES_TAX}
@@ -176,7 +176,7 @@
 						   </tr>
 				   		   <tr>
 							<td align="right" class="dvtCellLabel">
-								{$APP.LBL_SERVICE} :
+								{$APP.LBL_SERVICE} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
 							</td>
 							<td class="dvtCellInfo" align="left" >
 								{$SERVICE_TAX}

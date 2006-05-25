@@ -492,7 +492,7 @@
 			{/if}
 
 			<td align="right" class="dvtCellLabel" style="border:0px solid red;">
-				{$APP.LBL_VAT} :
+				{$APP.LBL_VAT} {$APP.COVERED_PERCENTAGE}
 				<input type="checkbox" name="vat_check" id="vat_check" class="small" onclick="fnshowHide(this,'vat_tax')" {$vat_check}>
 			</td>
 			<td class="dvtCellInfo" align="left" style="border:0px solid red;">
@@ -502,7 +502,7 @@
 		   </tr>
 		   <tr>
 			<td align="right" class="dvtCellLabel" style="border:0px solid red;">
-				{$APP.LBL_SALES} :
+				{$APP.LBL_SALES} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
 				<input type="checkbox" name="sales_check" id="sales_check" class="small" onClick="fnshowHide(this,'sales_tax')" {$sales_check}>
 			</td> 
 			<td class="dvtCellInfo" align="left" style="border:0px solid red;">
@@ -512,7 +512,7 @@
 		   </tr>
 		   <tr>
 			<td align="right" class="dvtCellLabel">
-				{$APP.LBL_SERVICE} :
+				{$APP.LBL_SERVICE} {$APP.LBL_TAX} {$APP.COVERED_PERCENTAGE}
 				<input type="checkbox" name="service_check" id="service_check" class="small" onClick="fnshowHide(this,'service_tax')" {$service_check}>
 			</td>
 			<td class="dvtCellInfo" align="left">

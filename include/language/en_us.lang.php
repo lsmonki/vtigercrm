@@ -870,6 +870,7 @@ $app_strings = Array(
 'LBL_SERVICE'=>'Service',
 'LBL_TAX_DETAILS'=>'Tax Details',
 'LBL_TAX_CALCULATION'=>'Tax Calculation',
+'COVERED_PERCENTAGE'=>'(%)',
 
 );
 
