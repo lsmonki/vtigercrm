@@ -325,7 +325,7 @@ $i=1;
 
   	// Attachment Icons
   	if(getAttachmentDetails($start_message,$mbox))
-		$flags.='<img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14">&nbsp;';
+		$flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
   	else
 		$flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
 
@@ -335,14 +335,13 @@ $i=1;
   		$flags.='<a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a>&nbsp;';
 	}
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
-		$flags.='<img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12">&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
   	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
-		$flags.='<img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13">&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13"></a>&nbsp;';
   	else
   		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
-  		//$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
-  	// Add to Vtiger
+  	// Set IMAP flag
   	if($mails[$start_message]->flagged)
 		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"></a></span>';
   	else 
@@ -356,7 +355,7 @@ $i=1;
 	$listview_entries[$num][] = $flags."</td>";
 
   	if ($mails[$start_message]->deleted) {
-        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javscript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="deleted_date_'.$num.'"><s>'.$mails[$start_message]->date.'</s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,30).'</s></td>';
   	} elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
