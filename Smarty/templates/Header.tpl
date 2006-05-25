@@ -28,6 +28,7 @@
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
+	
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
 		<td><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
@@ -174,6 +175,7 @@ setInterval("Announcement_rss()",300000)
 </script>
 
 <script>
+
 function QCreate(qcoptions)
 {ldelim}
         show("status");
@@ -183,33 +185,204 @@ function QCreate(qcoptions)
                 var urlstring = "module=Activities&action=ActivitiesAjax&ajaxmode=qcreate&activity_mode=Events";
         else
 	        var urlstring = "module="+module+"&action="+module+"Ajax&ajaxmode=qcreate";
-        ajaxObj.process("index.php?",urlstring);
+          ajaxObj.process("index.php?",urlstring);
 {rdelim}
+
 function ajaxQCreateResponse(response)
 {ldelim}
         hide("status");
         show("qcform");
         document.getElementById('qcform').innerHTML = response.responseText;
+        eval(document.getElementById('qcform'));
 {rdelim}
 </script>
 
+{literal}
+<SCRIPT>
+function getFormValidate(divValidate)
+{
+  var st = document.getElementById('qcvalidate');
+  eval(st.innerHTML);
+  for (var i=0; i<fieldname.length; i++) {
+		if(getObj(fieldname[i]) != null)
+		{
+			var type=fielddatatype[i].split("~")
+				if (type[1]=="M") {
+					if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
+						return false
+				}
 
-{* Begining of Slide Menu 
+			switch (type[0]) {
+				case "O"  : break;
+				case "V"  : break;
+				case "C"  : break;
+				case "DT" :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	 
+						if (type[1]=="M")
+							if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
+								return false
 
-<div id="mnuSlide">
-<table border="0" cellpadding="0" cellspacing="0">
-       <tr>
-       <td  width="112" id="slidemenu">
-       <div id="slide" style="display:none;">
-       {foreach item=modulename from=$MODULELISTS}
-               <a href="index.php?module={$modulename}&action=index" class="submenu">{$modulename}</a>
-       {/foreach}
-       </div>
-       </td>
-       <td width="8" valign="top">
-       <div id="mnuKey" onclick="fnSlide1('slidemenu','slide')" ><img src="{$IMAGEPATH}/jump.gif" style="opacity:.7;"></div>
-       </td>
-       </tr>*}
+									if(typeof(type[3])=="undefined") var currdatechk="OTH"
+									else var currdatechk=type[3]
+
+										if (!dateTimeValidate(fieldname[i],type[2],fieldlabel[i],currdatechk))
+											return false
+												if (type[4]) {
+													if (!dateTimeComparison(fieldname[i],type[2],fieldlabel[i],type[5],type[6],type[4]))
+														return false
+
+												}
+					}		
+				break;
+				case "D"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	
+						if(typeof(type[2])=="undefined") var currdatechk="OTH"
+						else var currdatechk=type[2]
+
+							if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+								return false
+									if (type[3]) {
+										if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+											return false
+									}
+					}	
+				break;
+				case "T"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	 
+						if(typeof(type[2])=="undefined") var currtimechk="OTH"
+						else var currtimechk=type[2]
+
+							if (!timeValidate(fieldname[i],fieldlabel[i],currtimechk))
+								return false
+									if (type[3]) {
+										if (!timeComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
+											return false
+									}
+					}
+				break;
+				case "I"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{	
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							if (!intValidate(fieldname[i],fieldlabel[i]))
+								return false
+									if (type[2]) {
+										if (!numConstComp(fieldname[i],fieldlabel[i],type[2],type[3]))
+											return false
+									}
+						}
+					}
+				break;
+				case "N"  :
+					case "NN" :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							if (typeof(type[2])=="undefined") var numformat="any"
+							else var numformat=type[2]
+
+								if (type[0]=="NN") {
+
+									if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+										return false
+								} else {
+									if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+										return false
+								}
+							if (type[3]) {
+								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
+									return false
+							}
+						}
+					}
+				break;
+				case "E"  :
+					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+					{
+						if (getObj(fieldname[i]).value.length!=0)
+						{
+							var etype = "EMAIL"
+								if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+									return false
+						}
+					}
+				break;
+			}
+		}
+	}
+       //added to check Start Date & Time,if Activity Status is Planned.//start
+        for (var j=0; j<fieldname.length; j++)
+		{
+
+			if(getObj(fieldname[i]) != null)
+			{
+				if(fieldname[j] == "date_start")
+				{
+					var datelabel = fieldlabel[j]
+						var datefield = fieldname[j]
+						var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				}
+				if(fieldname[j] == "time_start")
+				{
+					var timelabel = fieldlabel[j]
+						var timefield = fieldname[j]
+						var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				}
+				if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
+				{
+					var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+						var statuslabel = fieldlabel[j++]
+				}
+			}
+		}
+		if(statusvalue == "Planned")
+        {
+                var dateelements=splitDateVal(startdatevalue)
+
+                var hourval=parseInt(timeval.substring(0,timeval.indexOf(":")))
+                var minval=parseInt(timeval.substring(timeval.indexOf(":")+1,timeval.length))
+
+
+               dd=dateelements[0]
+               mm=dateelements[1]
+               yyyy=dateelements[2]
+
+               var currdate=new Date()
+               var chkdate=new Date()
+               chkdate.setYear(yyyy)
+               chkdate.setMonth(mm-1)
+               chkdate.setDate(dd)
+
+               chktime = new Date()
+
+               chktime.setYear(yyyy)
+               chktime.setMonth(mm-1)
+               chktime.setDate(dd)
+               chktime.setHours(hourval)
+               chktime.setMinutes(minval)
+               //chkdate.setHours(hourval)
+               //chkdate.setMinutes(minval)
+                if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
+                        getObj(datefield).focus()
+                        return false
+                }
+                else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
+                {
+                        getObj(timefield).focus()
+                        return false
+                }
+                else return true
+
+	 }//end
+	return true;
+}
+</SCRIPT>
+{/literal}
 
 {* Quick Access Functionality *}
 <div id="allMenu" onmouseout="fninvsh('allMenu');" onmouseover="fnvshNrm('allMenu');">

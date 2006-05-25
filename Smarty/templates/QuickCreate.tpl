@@ -9,13 +9,6 @@
   *
  ********************************************************************************/
 -->*}
-<script language="javascript">
-        var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
-        var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
-        var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
-</script>
-
-
 <body class=small>
 {include file='QuickCreateHidden.tpl'}
 <table border=0 align="center" cellspacing=0 cellpadding=0 width="90%" class=qcWindow>
@@ -388,5 +381,10 @@
 </td>
 </tr>
 </table>
+<SCRIPT id="qcvalidate">
+        var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
+        var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
+        var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
+</SCRIPT>
 </form>
 </body>
