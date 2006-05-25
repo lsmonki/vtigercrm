@@ -56,6 +56,7 @@ function check_for_new_mail(mbox) {
 					window.location=window.location;
 
 				$("status").style.display="none";
+				timer = window.setTimeout("check_for_new_mail()",box_refresh);
 			}
 		}
 	);
@@ -129,16 +130,8 @@ $show_hidden=$_REQUEST["show_hidden"];
 <script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
 
 <script type="text/Javascript">
-//var box_refresh=<?php echo $box_refresh;?>;
-//var timer = window.onload=window.setTimeout("refresh_list()",box_refresh);
-function reset_timer() {
-	timer = window.setTimeout("refresh_list()",box_refresh);
-}
-function refresh_list() {
-	var sURL = unescape(window.location);
-	window.location.replace( sURL );
-	timer = window.setTimeout("refresh_list()",box_refresh);
-}
+var box_refresh=<?php echo $box_refresh;?>;
+var timer = window.onload=window.setTimeout("check_for_new_mail()",box_refresh);
 
 var command;
 var id;
@@ -225,7 +218,7 @@ function remove(s, t) {
   return r;
 }
 function changeMbox(box) {
-	location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+box;
+	location.href = "index.php?module=Webmails&action=index&parenttab=My%20Home%20Page&mailbox="+box+"&start=<?php echo $start;?>";
 }
 </script>
 <?
@@ -245,7 +238,11 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 global $mbox;
 if($ssltype == "") {$ssltype = "notls";}
 if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
+
+if(!$mbox)
+	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+	
 
 if($_POST["command"] == "check_mbox" && $_POST["ajax"] == "true") {
 	$check = imap_mailboxmsginfo($mbox);
@@ -442,6 +439,8 @@ if (is_array($list)) {
 			if($ssltype == "") {$ssltype = "notls";}
 			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
 			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+			if(!$mbox)
+				$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 			$box = imap_mailboxmsginfo($tmbox);
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
