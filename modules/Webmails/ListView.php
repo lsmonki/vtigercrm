@@ -287,18 +287,29 @@ $elist = fullMailList($mbox);
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 
-$start_message=$numEmails;
+
+// $start_message == loop starts at this number
+// $mails_per_page == number of emails to get started
+// $c= loop end hook
+if($start == 1 || $start == "") {
+	$start_message=$numEmails;
+} else {
+	$start_message=($numEmails-($start*$mails_per_page));
+}
 $c=$numEmails;
+
+$numPages = round($numEmails/$mails_per_page);
+if($numPages > 1) {
+	$navigationOutput = "<a href='index.php?module=Webmails&action=index&start=1&mailbox=".$mailbox."'>&lt;&lt;</a>&nbsp;&nbsp;";
+	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start-1)."&mailbox=".$mailbox."'>&lt;</a> -- ";
+	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".($start+1)."&mailbox=".$mailbox."'>&gt;</a>&nbsp;&nbsp;";
+	$navigationOutput .= "<a href='index.php?module=Webmails&action=index&start=".$numPages."&mailbox=".$mailbox."'>&gt;&gt;</a>";
+}
 
 $overview=$elist["overview"];
 ?>
 
 <!-- MAIN MSG LIST TABLE -->
-<?
-if($numEmails != 0)
-	$navigation_array = getNavigationValues($_REQUEST["start"], $numEmails, $c);
-
-?>
 <script type="text/javascript">
 var webmail = new Array();
 var msgCount = "<?php echo $numEmails;?>";
@@ -409,16 +420,11 @@ $i=1;
   	$start_message--;
     }
 }
-?>
-<?
-$navigationOutput = getTableHeaderNavigation($navigation_array,'&parenttab=My%20Home%20Page&mailbox='.$mailbox,"Webmails","index",$viewid);
-
-$navigationOutput .= '<td size="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="right"><a href="index.php?module=Webmails&action=index&'.$defaultParams.'">Check for new e-Mails</a></td>';
 
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
 if (is_array($list)) {
-	$boxes = '<select name="mailbox" id="mailbox_select">';
+      	$boxes = '<select name="mailbox" id="mailbox_select">';
         foreach ($list as $key => $val) {
 		$tmpval = preg_replace(array("/\{.*?\}/i"),array(""),$val->name);
 		if(preg_match("/trash/i",$tmpval))
@@ -427,8 +433,9 @@ if (is_array($list)) {
 			$img = "webmail_uparrow.gif";
 		else
 			$img = "webmail_downarrow.gif";
+
 		if ($mailbox == $tmpval) {
-         		$boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
+                        $boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
 			$box = imap_mailboxmsginfo($mbox);
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
 		} else {
@@ -436,17 +443,13 @@ if (is_array($list)) {
 			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
 			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 			$box = imap_mailboxmsginfo($tmbox);
-         		$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
+                      	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
 			imap_close($tmbox);
 		}
  	}
-	$boxes .= '</select>';
+        $boxes .= '</select>';
 }
-$navigationOutput .= '<td size="100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-$navigationOutput .= $boxes;
-$navigationOutput .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-$navigationOutput .= '<td align="right">Viewing Messages: <b>'.($start_message+$c).'</b> to <b>'.$start_message.'</b> ('.$numEmails.' Total)</td>';
 
 imap_close($mbox);
 //print_r($listview_entries);
