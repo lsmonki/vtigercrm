@@ -2465,6 +2465,14 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
+/**This function returns the pagination and navigation values in html format for a listview in a given module
+Param $navigation_array - navigation values in array
+Param $url_qry - url string
+Param $module - module name
+Param $action_val - action value
+Param $viewid - customview id
+Return type string.
+*/
 
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
@@ -2584,11 +2592,19 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 	}
 }
 
-//Temp function to be be deleted
+/**This function returns the pagination and navigation values in html format for a related module listview in a given module
+Param $navigation_array - navigation values in array
+Param $url_qry - url string
+Param $module - module name
+Param $action_val - action value
+Param $viewid - customview id
+Return type string.
+*/
+
 function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='CallRelatedList',$viewid='')
 {
 	global $log;
-	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
+	$log->debug("Entering getRelatedTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -2623,7 +2639,7 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
 	$output .= '</td>';
-		$log->debug("Exiting getTableHeaderNavigation method ...");
+		$log->debug("Exiting getRelatedTableHeaderNavigation method ...");
 		if($navigation_array['first']=='')
 		return;
 		else
