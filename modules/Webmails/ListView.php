@@ -44,6 +44,15 @@ function add_to_vtiger(mid) {
 		}
 	);
 }
+function select_all() {
+	var els = document.getElementsByClassName("msg_check");
+	for(var i=0;i<els.length;i++) {
+		if(els[i].checked)
+			els[i].checked = false;
+		else
+			els[i].checked = true;
+	}
+}
 function check_for_new_mail(mbox) {
 	$("status").style.display="block";
         new Ajax.Request(
@@ -354,12 +363,12 @@ $i=1;
 
 	$displayed_msgs++;
 	if ($mails[$start_message]->deleted && !$show_hidden) {
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
 	$displayed_msgs--;
 	} elseif ($mails[$start_message]->deleted && $show_hidden)
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
 	else 
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
   	if(getAttachmentDetails($start_message,$mbox))

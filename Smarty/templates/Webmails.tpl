@@ -13,8 +13,8 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">
-        	        <span class="lvtHeaderText">{$CATEGORY} -&gt; {$MODULE} </span>
-        	        <span id="status" style="display:none"><img src="{$IMAGE_PATH}busy.gif"> &nbsp; Executing Command...</span><hr noshade="noshade" size="1" /><br />
+        	        <span class="lvtHeaderText">{$CATEGORY} -&gt; {$MODULE}  </span>
+		<hr noshade="noshade" size="1" /><br />
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
 	</tr>
@@ -62,7 +62,7 @@
                   <tr>
                     <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
                     <td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><strong>{$MOD.LBL_MAILS} {$ACCOUNT} &gt; {$MAILBOX} </strong></td>
+					 <td width="60%" class="subHdr"><span style="float:left"><strong>{$MOD.LBL_MAILS} {$ACCOUNT} &gt; {$MAILBOX} </strong></span> <span style="float:right">{$NAVIGATION}</span></td>
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
@@ -118,7 +118,7 @@
 						<div id="rssScroll">
 						<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%">
 	                      <tr>
-    	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  /></th>
+    	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  onclick="select_all();"/></th>
 							{foreach item=element from=$LISTHEADER}
                 	        <th>{$element}</th>
 							{/foreach}
