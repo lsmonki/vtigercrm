@@ -1676,8 +1676,8 @@ a.submenu:Hover{
 	padding:5px;
 	display:block;
 	position:absolute;
-	left:100px;
-	top:100px;
+	left:0px;
+	top:0px;
 }
 
 /*  Role */
@@ -2345,3 +2345,52 @@ level2Sel{
     }
 
 								    
+/* MY SITES */
+
+.SiteSel{
+	font-family:Arial, Helvetica, sans-serif;
+	background-image:url(images/site_sel.jpg);
+	background-position:left bottom;
+	background-repeat:no-repeat;
+	height:33px;
+	width:194px;
+	text-align:center;
+	vertical-align:middle;
+	color:#000000;
+	font-weight:bold;
+	font-size:11px;
+	text-decoration:none;
+}
+
+.SiteUnSel{
+	font-family:Arial, Helvetica, sans-serif;
+	background-image:url(images/site_unsel.jpg);
+	background-position:left bottom;
+	background-repeat:no-repeat;
+	height:33px;
+	width:194px;
+	text-align:center;
+	vertical-align:middle;
+	color:#000000;
+	font-weight:normal;
+	font-size:11px;
+	text-decoration:none;
+	cursor:pointer;
+}
+
+.SiteHdr{
+	font-family:Arial, Helvetica, sans-serif;
+	background-image:url(images/site_hdr.jpg);
+	background-position:right bottom;
+	background-repeat:no-repeat;
+	height:33px;
+	text-align:center;
+	vertical-align:middle;
+	color:#000000;
+	font-weight:normal;
+	font-size:11px;
+	text-decoration:none;
+}
+
+
+
