@@ -40,8 +40,6 @@ class SugarBean
  * Contributor(s): ______________________________________..
      */
 	
-	var $new_schema = false;
-	var $new_with_id = false;
 
 	function save($module_name= '') 
 	{

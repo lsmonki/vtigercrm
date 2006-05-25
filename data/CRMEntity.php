@@ -38,14 +38,7 @@ class CRMEntity extends SugarBean
    * All Rights Reserved.
    * Contributor(s): ______________________________________..
    */
-
-
- 
-	
-  var $new_schema = false;
-  var $new_with_id = false;
-
-  function saveentity($module,$migration='')
+  function saveentity($module)
   {
 	global $current_user, $adb;//$adb added by raju for mass mailing
 	$insertion_mode = $this->mode;
@@ -75,7 +68,7 @@ class CRMEntity extends SugarBean
 	{
 		if($table_name == "crmentity")
 		{
-			$this->insertIntoCrmEntity($module,$migration);
+			$this->insertIntoCrmEntity($module);
 		}
 		elseif($table_name == "salesmanactivityrel")
 		{
@@ -335,7 +328,7 @@ class CRMEntity extends SugarBean
 
 
 
-  function insertIntoCrmEntity($module,$migration='')
+  function insertIntoCrmEntity($module)
   {
 	global $adb;
 	global $current_user;
@@ -351,7 +344,6 @@ class CRMEntity extends SugarBean
 		$ownerid = $this->column_fields['assigned_user_id'];
 	}
                 
-	//This check is done for products.
 	if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendors' || $module == 'PriceBooks')
 	{
 		$log->info("module is =".$module);
@@ -381,37 +373,6 @@ class CRMEntity extends SugarBean
 		$current_id = $adb->getUniqueID("crmentity");
 		$_REQUEST['currentid']=$current_id;
 
-		if($migration != '')
-		{
-			$sql = "select * from Migrator where oldid='".$this->id ."'";
-
-			$result = $adb->query($sql);
-			$id = $adb->query_result($result,0,"newid");
-			//get the corresponding newid for these assigned_user_id and modified_user_id
-			$modifierid = $adb->query_result($result,0,"assigned_user_id");
-			$id = $adb->query_result($result,0,"newid");
-
-			$sql_modifierid = "select * from Migrator where oldid='".$modifierid ."'";
-			$result_modifierid = $adb->query($sql_modifierid);
-			$modifierid = $adb->query_result($result_modifierid,0,"newid");
-
-			$creatorid =$adb->query_result($result,0,"modified_user_id");
-
-			$sql_creatorid = "select * from Migrator where oldid='".$creatorid ."'";
-			$result_creatorid = $adb->query($sql_creatorid);
-			$creatorid = $adb->query_result($result_creatorid,0,"newid");
-
-			$createdtime = $adb->query_result($result,0,"createdtime");
-			$modifiedtime = $adb->query_result($result,0,"modifiedtime");
-			$deleted = $adb->query_result($result,0,"deleted");
-			$module = $adb->query_result($result,0,"module");
-			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-			//get the values from this and set to the query below and then relax!
-			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$module."',".$description_val.",'".$createdtime."','".$modifiedtime ."',".$deleted.")";
-			$adb->query($sql);
-			$this->id = $id;
-		}
-		else
 		{
 			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
 			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
@@ -1172,7 +1133,7 @@ $log->debug("type is ".$type);
 	  global $log;
         $log->debug("module name is ".$module_name);
     //GS Save entity being called with the modulename as parameter
-      $this->saveentity($module_name,$migration);
+      $this->saveentity($module_name);
   }
   
 	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
