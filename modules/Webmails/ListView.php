@@ -448,8 +448,8 @@ if (is_array($list)) {
 			if($ssltype == "") {$ssltype = "notls";}
 			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
 			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-			if(!$mbox)
-				$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+			if(!$tmbox)
+				$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
 			$box = imap_mailboxmsginfo($tmbox);
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
