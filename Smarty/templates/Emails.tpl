@@ -45,7 +45,7 @@ function ajaxDelResponse(response)
 {/literal}
 function ShowFolders(folderid)
 {ldelim}
-    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var ajaxObj = new Ajax(ajaxDelResponse);
 	gFolderid = folderid;
 	getObj('search_text').value = '';
 	switch(folderid)
