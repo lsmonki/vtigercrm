@@ -21,5 +21,5 @@ if($id !='')
 }
 
 
-header("Location: index.php?module=Settings&action=ListLeadCustomFieldMapping");
+header("Location: index.php?module=Settings&action=ListLeadCustomFieldMapping&parenttab=Settings");
 ?>
