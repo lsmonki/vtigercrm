@@ -1,4 +1,4 @@
-<script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/prototype_fade.js"></script>
 <?php
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
@@ -64,9 +64,9 @@ function show_hidden() {
 	var els = document.getElementsByClassName("deletedRow");
 	for(var i=0;i<els.length;i++) {
 		if(els[i].style.display == "none")
-			els[i].style.display ='';
+			new Effect.Appear(els[i],{queue:{position:'end',scope:'effect',limit:'1'}});
 		else
-			els[i].style.display = 'none';
+			new Effect.Fade(els[i],{queue:{position:'end',scope:'effect',limit:'1'}});
 	}
 }
 </script>
@@ -138,9 +138,20 @@ function runEmailCommand(com,id) {
 					window.location = window.location;
 				    break;
 				    case 'delete_msg':
-					var parent = $("row_"+id).parentNode;
-					var node = $("row_"+id);
-					parent.removeChild(node);
+					var row = $("row_"+id);
+					row.className = "deletedRow";
+					try {
+						$("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
+						$("ndeleted_date_"+id).innerHTML = "<s>"+$("ndeleted_date_"+id).innerHTML+"</s>";
+						$("ndeleted_from_"+id).innerHTML = "<s>"+$("ndeleted_from_"+id).innerHTML+"</s>";
+					}catch(e){
+						$("deleted_subject_"+id).innerHTML = "<s>"+$("deleted_subject_"+id).innerHTML+"</s>";
+						$("deleted_date_"+id).innerHTML = "<s>"+$("deleted_date_"+id).innerHTML+"</s>";
+						$("deleted_from_"+id).innerHTML = "<s>"+$("deleted_from_"+id).innerHTML+"</s>";
+					}
+
+					$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
+					new Effect.Fade(row,{queue:{position:'end',scope:'effect',limit:'1'}});
 					tmp = document.getElementsByClassName("previewWindow");
 					for(var i=0;i<tmp.length;i++) {
 						if(tmp[i].style.visibility === "visible") {
@@ -150,9 +161,11 @@ function runEmailCommand(com,id) {
 				    break;
 				    case 'undelete_msg':
 					var node = $("row_"+id);
+					node.className='';
 					node.style.display = '';
 					var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
 					node.innerHTML=newhtml;
+					$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
 				    break;
 				    case 'clear_flag':
 					var nm = "clear_td_"+id;
@@ -326,7 +339,8 @@ $i=1;
   	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
 		$flags.='<img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13">&nbsp;';
   	else
-  		$flags.='<a href="xindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
+  		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
+  		//$flags.='<a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
   	// Add to Vtiger
   	if($mails[$start_message]->flagged)
@@ -356,9 +370,9 @@ $i=1;
   	}
 
 	if($mails[$start_message]->deleted)
-  		$listview_entries[$num][] = '<td colspan="1" nowrap align="center" id="deleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
+  		$listview_entries[$num][] = '<td colspan="1" nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a></span></td>';
 	else
-  		$listview_entries[$num][] = '<td nowrap colspan="1" align="center" id="ndeleted_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del" id="del_img_'.$num.'"></a></td>';
+  		$listview_entries[$num][] = '<td nowrap colspan="1" align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a></span></td>';
 
 
 

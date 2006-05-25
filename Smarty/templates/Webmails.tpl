@@ -40,7 +40,7 @@
 											</td>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
-												&nbsp;<a href="index.php?module=Emails&action=EditView&return_action=DetailView&parenttab=My Home Page" class="webMnu">{$MOD.LBL_COMPOSE}</a>
+												&nbsp;<a href="javascript:;" onclick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 											</td>
 											<td width="10%">
 												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
@@ -182,5 +182,26 @@
 		<td>&nbsp;</td>
 	</tr>
 </table>
-<!-- END -->
+<script>
+function OpenCompose(id,mode)
+{ldelim}
+        switch(mode)
+                {ldelim}
+                case 'edit':
+                        url = 'index.php?module=Webmails&action=EditView&record='+id;
+                        break;
+                case 'create':
+                        url = 'index.php?module=Webmails&action=EditView';
+                        break;
+                case 'forward':
+                        url = 'index.php?module=Webmails&action=EditView&record='+id+'&forward=true';
+                        break;
+                case 'reply':
+                        url = 'index.php?module=Webmails&action=EditView&record='+id+'&reply=true';
+                        break;
+                {rdelim}
+        openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+{rdelim}
+</script>
 
+<!-- END -->
