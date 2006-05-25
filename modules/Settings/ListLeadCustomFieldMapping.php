@@ -57,7 +57,7 @@ function getListLeadMapping($image_path)
 		$label['potentiallabel'] = $potentialfield;
 		if($accountfield !=''&& $contactfield !='' && $potentialfield!='')
 		{	
-			$label['del']='<a href="javascript:confirmdelete(\'index.php?action=DeleteLeadCustomFieldMapping&module=Settings&id='.$cfmid.'&return_module=Settings&return_action=ListCustomFieldMapping\')">delete</a>';
+			$label['del']='<img src="'.$image_path.'delete.gif" border="0" onClick="confirmdelete(\'index.php?action=DeleteLeadCustomFieldMapping&module=Settings&id='.$cfmid.'&return_module=Settings&return_action=ListCustomFieldMapping\');" alt="Delete" title="Delete"/>';
 		}else
 		{
 			$label['del']= '';
