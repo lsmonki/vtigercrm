@@ -740,7 +740,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
            	}
           	$label_fld[] = $vendor_name;
 		$label_fld["secid"] = $vendor_id;
-		$label_fld["link"] = "index.php?module=Products&action=VendorDetailView&record=".$vendor_id; 
+		$label_fld["link"] = "index.php?module=Vendors&action=DetailView&record=".$vendor_id; 
 		//$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
         }
 	elseif($uitype == 76)
