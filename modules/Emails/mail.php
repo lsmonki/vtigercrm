@@ -159,6 +159,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
+	$rs = $adb->query("select first_name,last_name from users where user_name='".$from_name."'");
+	if($adb->num_rows($rs) > 0)
+		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
+
 	$mail->FromName = $from_name;
 
 	if($to_email != '')
