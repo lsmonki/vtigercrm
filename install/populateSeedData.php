@@ -763,10 +763,9 @@ for($i=0;$i<12;$i++)
 
 //Populate Notes Data
 
-$notes_array = array ("Cont_Notes", "Prod_Notes", "PB_Notes", "Vendor_Notes", "Invoice_Notes", "Task_Notes", "Event_Notes", "Email_Notes", "Rss_Notes", "Qt_Notes", "Notes_Customer", "Notes_PO");
-$att_array = array ("cont.doc", "prod.txt", "pb.doc", "vendor.xls", "invoice.xls", "task.doc", "ev.xls", "em.txt", "rss.txt", "qt.txt", "cust.doc", "PO.doc");
+$notes_array = array ("Cont_Notes", "Prod_Notes", "Vendor_Notes", "Invoice_Notes", "Task_Notes", "Event_Notes", "Email_Notes");
 
-for($i=0;$i<12;$i++)
+for($i=0;$i<7;$i++)
 {
 	$notes = new Note();
 
@@ -774,11 +773,14 @@ for($i=0;$i<12;$i++)
 	$contact_key = array_rand($contact_ids);
         $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
 	$notes->column_fields["title"]		=	$notes_array[$i];
-	$notes->column_fields["filename"]       =	$att_array[$i];
 
 	$notes->save("Notes");
 	$notes_ids[] = $notes ->id;
 	
+	$product_key = array_rand($product_ids);
+        $query = "insert into senotesrel (crmid, notesid) values (".$product_ids[$product_key].", ".$notes->id.")";
+	$db->query($query);
+		
 }
 
 
