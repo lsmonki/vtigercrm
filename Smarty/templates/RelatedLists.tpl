@@ -13,17 +13,6 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-<script>
-function getListViewEntries_js(module,url)
-{ldelim}
-        //Var ajaxObj = new Ajax(ajaxSaveResponse);
-        var urlstring ="module={$MODULE}&action={$MODULE}Ajax&record={$ID}&file=CallRelatedList&ajax=true&"+url+"&rmodule="+module;
-	//alert(urlstring); 
-        //ajaxObj.process("index.php?",urlstring);
-
-{rdelim}
-
-</script>
 	{include file='Buttons_List1.tpl'}
 
 <!-- Contents -->

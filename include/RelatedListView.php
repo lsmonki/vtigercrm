@@ -32,11 +32,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$smarty = new vtigerCRM_Smarty;
 	if (!isset($where)) $where = "";
 	
-	if(method_exists($focus,getSortOrder))
-	$sorder = $focus->getSortOrder();
-	if(method_exists($focus,getOrderBy))
-	$order_by = $focus->getOrderBy();
-
+	
 	$button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
 	// Added to have Purchase Order as form Title
@@ -86,18 +82,38 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	if(!$_SESSION['rlvs'][$module][$relatedmodule])
 	{
 		$modObj = new ListViewSession();
-		$modObj->sorder = $sorder;
-		$modObj->sortby = $order_by;
+		$modObj->sortby = $focus->default_order_by;
+		$modObj->sorder = $focus->default_sort_order;
 		$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
 	}
+	if(isset($_REQUEST['relmodule']) && ($_REQUEST['relmodule'] == $relatedmodule))
+	{	
+		if(method_exists($focus,getSortOrder))
+		$sorder = $focus->getSortOrder();
+		if(method_exists($focus,getOrderBy))
+		$order_by = $focus->getOrderBy();
 
-	//$url_qry = getURLstring($focus);
+		if(isset($order_by) && $order_by != '')
+		{
+			$_SESSION['rlvs'][$module][$relatedmodule]['sorder'] = $sorder;
+			$_SESSION['rlvs'][$module][$relatedmodule]['sortby'] = $order_by;
+		}
 
-	if(isset($order_by) && $order_by != '')
-	{
-		$query .= ' ORDER BY '.$order_by.' '.$sorder;
-		$url_qry .="&order_by=".$order_by;
 	}
+	elseif($_SESSION['rlvs'][$module][$relatedmodule])
+	{
+		$sorder = $_SESSION['rlvs'][$module][$relatedmodule]['sorder'];
+		$order_by = $_SESSION['rlvs'][$module][$relatedmodule]['sortby'];
+	}
+	else
+	{
+		$order_by = $focus->default_order_by;
+		$sorder = $focus->default_sort_order;
+	}
+		
+	$query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$url_qry .="&order_by=".$order_by;
+	
 	$list_result = $adb->query($query);
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
@@ -122,7 +138,8 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	else
 	{
-		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,'relatedlist');//"Accounts");
+		$id = $_REQUEST['record'];
+		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
 		if ($noofrows > 15)
 		{
 			$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
@@ -151,7 +168,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$navigationOutput = Array();
 		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
-		$navigationOutput[] = getTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
+		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
 		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
 		$log->debug("Exiting GetRelatedList method ...");
 		return $related_entries;

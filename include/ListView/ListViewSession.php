@@ -16,6 +16,8 @@ class ListViewSession {
 	var $module = null;
 	var $viewname = null;
 	var $start = null;
+	var $sorder = null;
+	var $sortby = null;
 	var $page_view = null;
 
 /**initializes ListViewSession 
@@ -29,6 +31,7 @@ class ListViewSession {
 		$log->debug("Entering ListViewSession() method ...");
 		
 		$this->module = $currentModule;
+		$this->sortby = 'ASC';
 		$this->start =1;
 	}
 

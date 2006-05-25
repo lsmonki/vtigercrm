@@ -34,7 +34,7 @@ require_once('include/utils/CommonUtils.php'); //new
 *Param $oCv - Custom view object
 *Returns the listview header values in an array
 */
-function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='')
 {
 	global $log;
 	$log->debug("Entering getListViewHeader(".$focus.",". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".$oCv.") method ...");
@@ -174,8 +174,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 								$curr_symbol = $rate_symbol['symbol'];
 								$lbl_name .=': (in '.$curr_symbol.')';
 							}
-
-							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+							if($relatedlist !='')
+								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+							else
+								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							$arrow = '';
 						//}
 					}
@@ -378,7 +380,11 @@ function getNavigationValues($display, $noofrows, $limit)
 	else {
 		$previous=0;
 	}
-	if ($noofrows != $limit) {
+	if($noofrows < $limit)
+	{
+		$first = '';
+	}
+	elseif ($noofrows != $limit) {
 		$last = $paging;
 		$first = 1;
 		if ($paging > $limitpage_navigation) {
@@ -2502,6 +2508,9 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	$output .= '</td>';
 	$log->debug("Exiting getTableHeaderNavigation method ...");
+	if($navigation_array['first']=='')
+	return;
+	else
 	return $output;
 } 
 
@@ -2615,6 +2624,9 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 	}
 	$output .= '</td>';
 		$log->debug("Exiting getTableHeaderNavigation method ...");
+		if($navigation_array['first']=='')
+		return;
+		else
 		return $output;
 }
 
