@@ -54,6 +54,7 @@ global $street_address_count;
 global $city_array;
 global $city_array_count;
 global $campaign_name_array,$campaign_type_array,$campaign_status_array;
+global $adb;
  $db = new PearDatabase();
 
 function add_digits($quantity, &$string, $min = 0, $max = 9)
@@ -122,6 +123,7 @@ global $current_user;
 $current_user = new User();
 $result = $current_user->retrieve($assigned_user_id);
 
+$tagkey = 1;
 
 // Get _dom arrays
 $comboFieldNames = Array('leadsource'=>'leadsource_dom'
@@ -135,6 +137,8 @@ $comboFieldArray = getComboArray($comboFieldNames);
 //$adb->println("PSD assignid=".$assigned_user_id);
 $adb->println("company_name_array");
 $adb->println($company_name_array);
+
+$cloudtag = Array ('InvoiceTag', 'AccntTag', 'ContactTag', 'TktTag');
 
 for($i = 0; $i < $company_name_count; $i++)
 {
@@ -174,6 +178,17 @@ for($i = 0; $i < $company_name_count; $i++)
 	$account->save("Accounts");
 	
 	$account_ids[] = $account->id;
+	
+	if ($i > 3)
+	{
+		$query = "insert into freetags values ($tagkey, '$cloudtag[1]', '$cloudtag[1]')";
+		$res = $adb->query($query);
+
+		$date = date('YmdHis'); 
+		$query_tag = "insert into freetagged_objects values ($tagkey, 1,".$account->id.", $date, 'Accounts')";
+		$result = $adb->query($query_tag);
+	}
+
 
 //	$adb->println("PSD Account [".$account->id."] - ".$account_name);
 
@@ -266,6 +281,15 @@ for($i=0; $i<10; $i++)
 	$contact_ids[] = $contact->id;
 
 	
+	if ($i > 8)
+	{
+		$query = "insert into freetags values (2, '$cloudtag[2]', '$cloudtag[2]')";
+		$res1 = $adb->query($query);
+
+		$date = date('YmdHis'); 
+		$query_tag = "insert into freetagged_objects values (2, 1,".$contact->id.", $date, 'Contacts')";
+		$result1 = $adb->query($query_tag);
+	}
 	// This assumes that there will be one opportunity per company in the seed data.
 	$opportunity_key = array_rand($opportunity_ids);
 	//$query = "insert into opportunities_contacts set id='".create_guid()."', contact_id='$contact->id', contact_role='".$app_list_strings['opportunity_relationship_type_default_key']."', opportunity_id='".$opportunity_ids[$opportunity_key]."'";
@@ -572,12 +596,10 @@ for($i=0;$i<5;$i++)
 	$quote->save("Quotes");
 
 	$quote_ids[] = $quote->id;
-	
-	$product_key = array_rand($product_ids);
-	
+
+	$product_key = array_rand($product_ids); 
 	$query = "insert into quotesproductrel ( quoteid, productid, quantity, listprice ) values (".$quote->id.",".$product_ids[$product_key].",10,699.000 )";
 	$db->query($query);
-			
 }
 
 //Populate SalesOrder Data
@@ -607,10 +629,11 @@ for($i=0;$i<5;$i++)
 	$so->save("SalesOrder");
 
 	$salesorder_ids[] = $so->id;
+	
 	$product_key = array_rand($product_ids);
         $query = "insert into soproductrel ( salesorderid, productid, quantity, listprice ) values (".$so->id.",".$product_ids[$product_key].",12,499.000 )";
         $db->query($query);
-			
+
 }
 
 
@@ -641,11 +664,10 @@ for($i=0;$i<5;$i++)
 	$po->save("PurchaseOrder");
 
 	$purchaseorder_ids[] = $po->id;
-	
+
 	$product_key = array_rand($product_ids);
-	$query = "insert into poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,399.000 )";
-	$db->query($query);
-			
+        $query = "insert into poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,399.000 )";
+        $db->query($query);
 
 }
 
@@ -674,11 +696,20 @@ for($i=0;$i<5;$i++)
 	$invoice->save("Invoice");
 
 	$invoice_ids[] = $invoice->id;
+	if ($i > 3)
+	{
+		$query = "insert into freetags values (3, '$cloudtag[0]', '$cloudtag[0]')";
+		$res_inv = $adb->query($query);
+
+		$date = date('YmdHis'); 
+		$query_tag = "insert into freetagged_objects values (3, 1,".$invoice->id.", $date, 'Invoice')";
+		$result_inv = $adb->query($query_tag);
+	}
 
 	$product_key = array_rand($product_ids);
         $query = "insert into invoiceproductrel ( invoiceid, productid, quantity, listprice ) values (".$invoice->id.",".$product_ids[$product_key].",18,269.000 )";
         $db->query($query);
-			
+	
 }
 
 //Populate RSS Data
@@ -783,6 +814,17 @@ for($i=0;$i<5;$i++)
 	
 	$helpdesk->save("HelpDesk");
 	$helpdesk_ids[] = $helpdesk->id;
+	
+	if ($i > 3)
+	{
+		$query = "insert into freetags values (4, '$cloudtag[3]', '$cloudtag[3]')";
+		$res_tkt = $adb->query($query);
+
+		$date = date('YmdHis'); 
+		$query_tag = "insert into freetagged_objects values (4, 1,".$helpdesk->id.", $date, 'HelpDesk')";
+		$result_tkt = $adb->query($query_tag);
+	}
+
 }
 
 // Populate Activities Data
