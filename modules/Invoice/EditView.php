@@ -297,7 +297,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$invoice_tables = Array('invoice','invoicebillads','invoiceshipads'); 
+$invoice_tables = Array('invoice','invoicebillads','invoiceshipads','invoicecf'); 
  $tabid = getTabid("Invoice");
  $validationData = getDBValidationData($invoice_tables,$tabid);
  $data = split_validationdataArray($validationData);

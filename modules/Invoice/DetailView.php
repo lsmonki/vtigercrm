@@ -81,7 +81,7 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('Invoice',$foc
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$invoice_tables = Array('invoice','invoicebillads','invoiceshipads');
+$invoice_tables = Array('invoice','invoicebillads','invoiceshipads','invoicecf');
 $tabid = getTabid("Invoice");
 $validationData = getDBValidationData($invoice_tables,$tabid);
 $data = split_validationdataArray($validationData);
