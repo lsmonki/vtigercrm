@@ -6,6 +6,40 @@ function fullMailList($mbox) {
 	$out = array("headers"=>$mailHeaders,"overview"=>$mailOverviews,"count"=>$numEmails);
 	return $out;
 }
+function getImapMbox($mailbox,$temprow) {
+	 global $mbox; 
+	 $login_username= $temprow["mail_username"]; 
+	 $secretkey=$temprow["mail_password"]; 
+	 $imapServerAddress=$temprow["mail_servername"]; 
+	 $box_refresh=$temprow["box_refresh"]; 
+	 $mails_per_page=$temprow["mails_per_page"]; 
+	 $mail_protocol=$temprow["mail_protocol"]; 
+	 $ssltype=$temprow["ssltype"]; 
+	 $sslmeth=$temprow["sslmeth"]; 
+	 $account_name=$temprow["account_name"]; 
+	 $show_hidden=$_REQUEST["show_hidden"]; 
+	 	 
+	 	 
+	 // first we will try a regular old IMAP connection: 
+	 if($ssltype == "") {$ssltype = "notls";} 
+	 if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
+	 $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
+	 	 
+	 if(!$mbox) 
+	 { 
+	 	if($mail_protocol == 'pop3') 
+	 	{ 
+	 	        $connectString = "{".$imapServerAddress."/".$mail_protocol.":110/notls}".$mailbox; 
+	 	} 
+	 	else 
+	 	{ 
+	 	        $connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."}".$mailbox; 
+	 	} 
+	 	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
+	 } 
+
+	 return $mbox; 
+}
 function getInlineAttachments($mailid,$mbox) {
        $struct = imap_fetchstructure($mbox, $mailid);
        $parts = $struct->parts;
