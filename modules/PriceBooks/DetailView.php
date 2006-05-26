@@ -60,7 +60,7 @@ $smarty->assign("NAME", $focus->name);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$pb_tables = Array('pricebook');
+$pb_tables = Array('pricebook','pricebookcf');
 
 $validationData = getDBValidationData($pb_tables);
 $data = split_validationdataArray($validationData);

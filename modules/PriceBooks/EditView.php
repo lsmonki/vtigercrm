@@ -78,7 +78,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 
-$pb_tables = Array('pricebook'); 
+$pb_tables = Array('pricebook','pricebookcf'); 
 
 $validationData = getDBValidationData($pb_tables);
 $data = split_validationdataArray($validationData);
