@@ -26,13 +26,13 @@
 <td>
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
-			<td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'orgLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
-			<td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
-			<td>&nbsp;</td>
-            <td style="padding-right:0px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
+				<td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+                        <td>&nbsp;</td>
+            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
+                        <td>&nbsp;</td>
+            <td style="padding-right:0px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
+                        <td>&nbsp;</td>
+            <td style="padding-right:0px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
 			</tr>
 		</table>
 		</td>
