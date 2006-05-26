@@ -107,7 +107,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$fieldvalue[] = array($date_format=>$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']);
 		}
 	}
-	elseif($uitype == 15 || $uitype == 16 || $uitype == 33)
+	elseif($uitype == 15 || $uitype == 16)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from ".$fieldname;
@@ -138,6 +138,31 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue [] = $value;
+	}
+	elseif($uitype ==33)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$mulsel="select * from ".$fieldname;
+		$multiselect_result = $adb->query($mulsel);
+		$noofoptions = $adb->num_rows($multiselect_result);
+		$options = array();
+		$found = false;
+		$valur_arr = explode(' , ',$value);
+		for($j = 0; $j < $noofoptions; $j++)
+		{
+			$multiselect_combo = $adb->query_result($multiselect_result,$j,strtolower($fieldname));
+			if(in_array($multiselect_combo,$valur_arr))
+			{
+				$chk_val = "selected";
+				$found = true;
+			}
+			else
+			{
+				$chk_val = '';
+			}
+			$options[] = array($multiselect_combo=>$chk_val );
+		}
+		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 19 || $uitype == 20)
 	{
