@@ -2344,6 +2344,10 @@ level2Sel{
         background-color:#FFFFFF;
     }
 
+.unread_email {
+	font-weight:bold;
+}
+
 								    
 /* MY SITES */
 
@@ -2391,6 +2395,6 @@ level2Sel{
 	font-size:11px;
 	text-decoration:none;
 }
-
-
-
+.unread_email {
+	font-weight:bold;
+}

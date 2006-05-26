@@ -66,7 +66,7 @@
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>
+							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">Add Folder[X]</span></span>
 							<ul style="list-style-type:none;">
 
 
@@ -116,7 +116,7 @@
                     <td>&nbsp;</td>
                     <td style="padding:1px;" align="left">
 						<div id="rssScroll">
-						<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%">
+						<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
 	                      <tr>
     	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  onclick="select_all();"/></th>
 							{foreach item=element from=$LISTHEADER}
