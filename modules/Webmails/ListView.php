@@ -47,25 +47,41 @@ var webmail = new Array();
 function load_webmail(mid) {
 	var node = $("row_"+mid);
 	node.className='read_email';
+	// gracefully handle this if the mail is already read.
 	try {
-		$("unread_img_"+mid).innerHTML = '<a href="javascript:;" onclick="OpenCompose(\''+mid+'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>';
+		$("unread_img_"+mid).appendChild(Builder.node('a',
+			{href: 'javascript:;', onclick: 'OpenCompose('+mid+',"reply")'},
+			[Builder.node('img',{src: 'modules/Webmails/images/stock_mail-read.png', border: '0', width: '10', height: '11'})]
+		));
 	}catch(e){}
+
 	$("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
 	$("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
 	$("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
 	$("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
-	$("body_area").innerHTML = '<iframe src="index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>" width="100%" height="210" frameborder="0">You must enabled iframes</iframe>';
+	$("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>', width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
+
 	tmp = document.getElementsByClassName("previewWindow");
 	for(var i=0;i<tmp.length;i++) {
 		if(tmp[i].style.visibility === "hidden") {
 			tmp[i].style.visibility="visible";
 		}
 	}
-	$("delete_button").innerHTML = '<input type="button" name="Button" value=" Delete "  class="classWebBtn" onclick="runEmailCommand(\'delete_msg\','+mid+');"/>';
-	$("reply_button_all").innerHTML = '<input type="button" name="reply" value=" Reply to All " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=all&return_action=index&return_module=Webmails\';" />';
-	$("reply_button").innerHTML = '<input type="button" name="reply" value=" Reply to Sender " class="classWebBtn" onclick="window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=single&return_action=index&return_module=Webmails\';" />';
-	$("qualify_button").innerHTML = '<input type="button" name="Qualify2" value=" Qualify " onclick="showRelationships('+mid+');" class="classWebBtn" />';
-	$("download_attach_button").innerHTML = '<input type="button" name="download" value=" Download Attachments " class="classWebBtn" onclick="displayAttachments('+mid+');" />';
+
+	$("delete_button").removeChild($("delete_button").firstChild);
+	$("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'classWebBtn', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
+
+	$("reply_button_all").removeChild($("reply_button_all").firstChild);
+	$("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'classWebBtn', onclick: 'window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=all&return_action=index&return_module=Webmails\''}));
+
+	$("reply_button").removeChild($("reply_button").firstChild);
+	$("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'classWebBtn', onclick: 'window.location = \'index.php?module=Webmails&action=EditView&mailid='+mid+'&reply=single&return_action=index&return_module=Webmails\''}));
+
+	$("qualify_button").removeChild($("qualify_button").firstChild);
+	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'classWebBtn', onclick: 'showRelationships('+mid+')'}));
+
+	$("download_attach_button").removeChild($("download_attach_button").firstChild);
+	$("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'classWebBtn', onclick: 'displayAttachments('+mid+')'}));
 
 }
 function displayAttachments(mid) {
@@ -306,6 +322,7 @@ function runEmailCommand(com,id) {
 					}
 
 					$("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
+
 					new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'}});
 					tmp = document.getElementsByClassName("previewWindow");
 					for(var i=0;i<tmp.length;i++) {
