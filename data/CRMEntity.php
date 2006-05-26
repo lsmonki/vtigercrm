@@ -569,6 +569,24 @@ class CRMEntity extends SugarBean
 				  }
 
 			  }
+			  elseif($uitype == 33)
+			  {
+				$j = 0;
+				$field_list = '';
+				if(is_array($this->column_fields[$fieldname]) && count($this->column_fields[$fieldname]) > 0)
+				{
+					foreach($this->column_fields[$fieldname] as $key=>$multivalue)
+					{
+						if($j != 0)
+						{
+							$field_list .= ' , ';
+						}
+						$field_list .= $multivalue;
+						$j++;
+					}
+				}
+				$fldvalue = $field_list;
+			  }
 			  elseif($uitype == 5 || $uitype == 6 || $uitype ==23)
 			  {
 				  if($_REQUEST['action'] == 'Import')
