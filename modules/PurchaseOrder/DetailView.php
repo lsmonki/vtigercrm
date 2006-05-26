@@ -79,7 +79,7 @@ if(isPermitted("PurchaseOrder","Delete",$_REQUEST['record']) == 'yes')
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('PurchaseOrder',$focus));
 
- $po_tables = Array('purchaseorder','pobillads','poshipads');
+ $po_tables = Array('purchaseorder','pobillads','poshipads','purchaseordercf');
  $tabid = getTabid("PurchaseOrder");
  $validationData = getDBValidationData($po_tables,$tabid);
  $data = split_validationdataArray($validationData);
