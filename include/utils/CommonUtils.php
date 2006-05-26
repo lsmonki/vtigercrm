@@ -2232,5 +2232,24 @@ function validateImageFile($file_details)
 	return $saveimage;
 }
 
+/**
+ * 	This function is used to get the Email Template Details like subject and content for particular template. 
+ *	@param integer $templateid  - Template Id for an Email Template
+ * 	return array $returndata - Returns Subject, Body of Template of the the particular email template.
+*/
+
+function getTemplateDetails($templateid)
+{
+        global $adb,$log;
+        $log->debug("Entering into getTemplateDetails($templateid) method ...");
+        $returndata =  Array();
+        $result = $adb->query("select * from emailtemplates where templateid=$templateid");
+        $returndata[] = $templateid;
+        $returndata[] = $adb->query_result($result,0,'body');
+        $returndata[] = $adb->query_result($result,0,'subject');
+        $log->debug("Exiting from getTemplateDetails($templateid) method ...");
+        return $returndata;
+}
+										
 
 ?>
