@@ -57,9 +57,9 @@ if($num > 0) {
 		$ret .= '"date":"'.$data[$i]->date.'",';
 		$ret .= '"from":"'.$data[$i]->from.'",';
 		if(sizeof($part->parts) >0)
-			$ret .= '"attachments":"0"}';
-		else
 			$ret .= '"attachments":"1"}';
+		else
+			$ret .= '"attachments":"0"}';
 		if(($i+1) == $num)
 			$ret .= '}';
 		else
