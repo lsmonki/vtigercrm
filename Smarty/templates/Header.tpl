@@ -71,12 +71,21 @@
 				{/if}
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
-			
-				<select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
-			{foreach  item=detail from=$QCMODULE}
-					<option value="{$detail.1}">{$APP[$detail.0]}</option>
-			{/foreach}
-				</select>
+			{if $CNT eq 1}
+                                <select class=small style="width:120px" title="Create New" onclick="QCreate(this);">
+                        {foreach  item=detail from=$QCMODULE}
+                                        <option value="{$detail.1}">{$APP[$detail.0]}</option>
+                        {/foreach}
+                                </select>
+                        {else}
+                                <select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
+                        {foreach  item=detail from=$QCMODULE}
+                                        <option value="{$detail.1}">{$APP[$detail.0]}</option>
+                        {/foreach}
+                                </select>
+
+                        {/if}
+	
 			</td>
 		</tr>
 
