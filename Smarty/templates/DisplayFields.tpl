@@ -65,7 +65,7 @@
 				{$fldlabel}
 			</td>
 			<td width=30% align=left class="dvtCellInfo">
-				<textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2>{$fldvalue}</textarea>
+				<textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" rows=2>{$fldvalue}</textarea>
 			</td>
 		{elseif $uitype eq 15 || $uitype eq 16}
 			<td width="20%" class="dvtCellLabel" align=right>
@@ -88,7 +88,7 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select MULTIPLE name="{$fldname}" size="2">
+			   <select MULTIPLE name="{$fldname}[]" size="2">
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>{$sel_value}</option>
