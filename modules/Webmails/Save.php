@@ -6,9 +6,8 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
-require_once("modules/Webmails/MailParse.php");
-
 global $current_user;
+
 
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Email();
@@ -29,14 +28,28 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
+$ssltype=$temprow["ssltype"];
+$sslmeth=$temprow["sslmeth"];
+$account_name=$temprow["account_name"];
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 
-$mbox = getImapMbox($mailbox,$temprow);
+global $mbox;
+if($ssltype == "") {$ssltype = "notls";}
+if($sslmeth == "") {$sslmeth = "novalidate-cert";}
+if(!preg_match("/windows/i",php_uname()))
+	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
+
+if(!$mbox)
+        $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+
+
 
 $email = new Webmail($mbox, $_REQUEST["mailid"]);
 
