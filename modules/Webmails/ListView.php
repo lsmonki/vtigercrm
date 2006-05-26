@@ -187,14 +187,10 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
-$login_username= $temprow["mail_username"];
-$secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
-$ssltype=$temprow["ssltype"];
-$sslmeth=$temprow["sslmeth"];
 $account_name=$temprow["account_name"];
 $show_hidden=$_REQUEST["show_hidden"];
 ?>
@@ -322,18 +318,8 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 
-echo "<div id='writeroot'>&nbsp;</div>";
-
- global $mbox,$displayed_msgs;
-if($ssltype == "") {$ssltype = "notls";}
-if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-// bug in windows PHP having to do with SSL not being linked correctly
-// causes this open command to fail.
-if(!preg_match("/windows/i",php_uname()))
-	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
-
-if(!$mbox)
-	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+global $mbox,$displayed_msgs;
+$mbox = getImapMbox($mailbox,$temprow);
 	
 
 if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
@@ -550,16 +536,11 @@ if (is_array($list)) {
 			$box = imap_mailboxmsginfo($mbox);
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 		} else {
-			if($ssltype == "") {$ssltype = "notls";}
-			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-			if(!preg_match("/windows/i",php_uname()))
-				$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-			if(!$tmbox)
-				$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-			$box = imap_mailboxmsginfo($tmbox);
+			$tmpbox = getImapMbox($tmpval,$temprow);
+			$box = imap_mailboxmsginfo($tmpbox);
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
-			imap_close($tmbox);
+			imap_close($tmpbox);
 		}
  	}
         $boxes .= '</select>';
