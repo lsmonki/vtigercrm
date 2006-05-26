@@ -148,6 +148,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		$smarty->assign("MODULES_LIST", $object_array);
 
 		$smarty->display("GlobalListView.tpl");
+		unset($_SESSION['lvs'][$module]);
 	}
 
 	//Added to display the Total record count
