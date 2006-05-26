@@ -91,7 +91,7 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('Quotes',$focu
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
- $quote_tables = Array('quotes','quotesbillads','quotesshipads'); 
+ $quote_tables = Array('quotes','quotesbillads','quotesshipads','quotescf'); 
  $tabid = getTabid("Quotes");
  $validationData = getDBValidationData($quote_tables,$tabid);
  $fieldName = '';

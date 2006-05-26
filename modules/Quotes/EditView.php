@@ -192,7 +192,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$quote_tables = Array('quotes','quotesbillads','quotesshipads'); 
+$quote_tables = Array('quotes','quotesbillads','quotesshipads','quotescf'); 
  $tabid = getTabid("Quotes");
  $validationData = getDBValidationData($quote_tables,$tabid);
  $fieldName = '';
