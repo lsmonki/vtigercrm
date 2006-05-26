@@ -121,12 +121,9 @@ $combo_strings = Array(
                 , 'Held'=>'Held'
                 , 'Not Held'=>'Not Held'
                 ),
-'taskstatus_dom' => Array('Not Started'=>'Not Started'
-                , 'In Progress'=>'In Progress'
+'taskstatus_dom' => Array('Planned'=>'Planned'
                 , 'Completed'=>'Completed'
-                , 'Pending Input'=>'Pending Input'
                 , 'Deferred'=>'Deferred'
-                , 'Planned'=>'Planned'
                 ),
 'taskpriority_dom' => Array('High'=>'High'
                 ,'Medium'=>'Medium'
