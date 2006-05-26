@@ -38,6 +38,8 @@ class CRMEntity extends SugarBean
    * All Rights Reserved.
    * Contributor(s): ______________________________________..
    */
+
+	
   function saveentity($module)
   {
 	global $current_user, $adb;//$adb added by raju for mass mailing
@@ -185,6 +187,10 @@ class CRMEntity extends SugarBean
 		{
 			$this->insertTaxInformation($table_name, $module);
 		}
+		elseif($table_name == 'attachments')
+		{
+			$this->insertIntoAttachment($this->id,$module);
+		}
 		else
 		{
 			$this->insertIntoEntityTable($table_name, $module);			
@@ -192,13 +198,13 @@ class CRMEntity extends SugarBean
 	}
 
 
-	if($module == 'Emails' || $module == 'Notes' || $module == 'HelpDesk')
+	/*if($module == 'Emails' || $module == 'Notes' || $module == 'HelpDesk')
 	{
 		if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
 		{
 			$this->insertIntoAttachment($this->id,$module);
 		}
-	}
+	}*/
 
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");
@@ -248,23 +254,66 @@ class CRMEntity extends SugarBean
 	}
 
 
-
+	/**
+	 *      This function is used to add the attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the files to be uploaded
+	 *      @param string $module  - the current module name
+	*/
 	function insertIntoAttachment($id,$module)
 	{
-		$date_var = date('YmdHis');
-		global $current_user;
-		global $adb;
-		global $root_directory;
+		global $log, $adb;
+		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
+		
+		foreach($_FILES as $fileindex => $files)
+		{
+			if($files['name'] != '' && $files['size'] > 0)
+			{
+				$this->uploadAndSaveFile($id,$module,$files);
+			}
+		}
+
+		//Remove the deleted attachments from db - Products
+		if($module == 'Products' && $_REQUEST['del_file_list'] != '')
+		{
+			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
+			foreach($del_file_list as $del_file_name)
+			{
+				$attach_res = $adb->query("select attachments.attachmentsid from attachments inner join seattachmentsrel on attachments.attachmentsid=seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
+				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
+				
+				$del_res1 = $adb->query("delete from attachments where attachmentsid=$attachments_id");
+				$del_res2 = $adb->query("delete from seattachmentsrel where attachmentsid=$attachments_id");
+			}
+		}
+
+		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
+	}
+
+	/**
+	 *      This function is used to upload the attachment in the server and save that attachment information in db.
+	 *      @param int $id  - entity id to which the file to be uploaded
+	 *      @param string $module  - the current module name
+	 *      @param array $file_details  - array which contains the file information(name, type, size, tmp_name and error)
+	 *      return void
+	*/
+	function uploadAndSaveFile($id,$module,$file_details)
+	{
+		global $log;
+		$log->debug("Entering into uploadAndSaveFile($id,$module,$file_details) method.");
+		
+		global $adb, $current_user;
 		global $upload_badext;
 
-		$ownerid = $this->column_fields['assigned_user_id'];
+		$date_var = date('YmdHis');
 
+		//to get the owner id
+		$ownerid = $this->column_fields['assigned_user_id'];
 		if(!isset($ownerid) || $ownerid=='')
 			$ownerid = $current_user->id;
 
-		$uploaddir = $root_directory ."/test/upload/";
+	
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = $_FILES['filename']['name'];
+		$binFile = $file_details['name'];
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);
@@ -276,21 +325,25 @@ class CRMEntity extends SugarBean
 		// Vulnerability fix ends
 
 		$filename = basename($binFile);
-		$filetype= $_FILES['filename']['type'];
-		$filesize = $_FILES['filename']['size'];
-
+		$filetype= $file_details['type'];
+		$filesize = $file_details['size'];
+		$filetmp_name = $file_details['tmp_name'];
+		
 		//get the file path inwhich folder we want to upload the file
 		$upload_file_path = decideFilePath();
 
-		if($binFile != '')
+		//upload the file in server
+		$upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$binFile);
+
+		$save_file = 'true';
+		//only images are allowed for these modules
+		if($module == 'Contacts' || $module == 'Products')
 		{
-			if(move_uploaded_file($_FILES["filename"]["tmp_name"],$upload_file_path.$binFile))
-			{
-				if($filesize != 0)
-				{
-					$data = base64_encode(fread(fopen($upload_file_path.$binFile, "r"), $filesize));
-				}
-			}
+			$save_file = validateImageFile(&$file_details);
+		}
+
+		if($save_file == 'true')
+		{
 			$current_id = $adb->getUniqueID("crmentity");
 
 			//This is only to update the attached filename in the notes table for the Notes module
@@ -303,10 +356,8 @@ class CRMEntity extends SugarBean
 			$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
 			$adb->query($sql1);
 
-			$sql2="insert into attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields[$descname]."','".$filetype."','".$upload_file_path."')";
+			$sql2="insert into attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
 			$result=$adb->query($sql2);
-
-			//TODO -- instead of put contents in db now we should store the file in harddisk
 
 			if($_REQUEST['mode'] == 'edit')
 			{
@@ -324,6 +375,13 @@ class CRMEntity extends SugarBean
 			$sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
 			$adb->query($sql3);
 		}
+		else
+		{
+			$log->debug("Skip the save attachment process.");
+		}
+		$log->debug("Exiting from uploadAndSaveFile($id,$module,$file_details) method.");
+
+		return;
 	}
 
 
@@ -373,12 +431,10 @@ class CRMEntity extends SugarBean
 		$current_id = $adb->getUniqueID("crmentity");
 		$_REQUEST['currentid']=$current_id;
 
-		{
-			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
-			$adb->query($sql);
-			$this->id = $current_id;
-		}
+		$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+		$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
+		$adb->query($sql);
+		$this->id = $current_id;
 	}
 
 	//$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module."','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
@@ -1128,13 +1184,13 @@ $log->debug("type is ".$type);
 		
   }
 
-  function save($module_name) 
-  {
-	  global $log;
-        $log->debug("module name is ".$module_name);
-    //GS Save entity being called with the modulename as parameter
-      $this->saveentity($module_name);
-  }
+	function save($module_name) 
+	{
+		global $log;
+	        $log->debug("module name is ".$module_name);
+		//GS Save entity being called with the modulename as parameter
+		$this->saveentity($module_name);
+	}
   
 	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
 	{

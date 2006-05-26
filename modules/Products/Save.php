@@ -60,6 +60,10 @@ $uploaddir = $root_directory."test/product/" ;//set this to which location you n
 $log->info("The Location to Save the Product Image is ".$uploaddir);
 $image_lists=array();
 $count=0;
+
+$saveimage = "true";
+$image_error = "false";
+/*
 foreach($_FILES as $files)
 {
 	$file_path_name = $files['name'];
@@ -146,8 +150,9 @@ if($mode=="edit" && $image_error=="false" )
 		$image_lists[]= getProductImageName($record_id,$del_image_array);
 		$saveimage="true";
 }
-
+*/
 //end of code to retain the pictures from db
+
  //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

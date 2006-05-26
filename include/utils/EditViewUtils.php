@@ -472,17 +472,28 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 69)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$image_lists=explode("###",$value);
-		if(count($image_lists) > 1)
+		//This query is for Products only
+		if($module_name == 'Products')
 		{
-			foreach($image_lists as $image)
-			{
-				$fieldvalue[] = $image;
-			}
-		}else
-		{
-			$fieldvalue[] = $value;
+			$query = 'select attachments.path,attachments.name from products left join seattachmentsrel on seattachmentsrel.crmid=products.productid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
 		}
+		else
+		{
+			$query = "select attachments.path, attachments.name from contactdetails left join seattachmentsrel on seattachmentsrel.crmid=contactdetails.contactid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where contactdetails.imagename=attachments.name and contactid=".$col_fields['record_id'];
+		}
+		$result_image = $adb->query($query);
+		for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
+		{
+			$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+			$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+		}
+		if(is_array($image_array))
+			for($img_itr=0;$img_itr<count($image_array);$img_itr++)
+			{
+				$fieldvalue[] = array('name'=>$image_array[$img_itr],'path'=>$image_path_array[$img_itr]);
+			}
+		else
+			$fieldvalue[] = '';
 	}
 	elseif($uitype == 62)
 	{

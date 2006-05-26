@@ -183,16 +183,13 @@ function sensex_info()
 	var count=0;
 	function delRowEmt(imagename)
 	{ldelim}
-	       ProductImages[count++]=imagename;
+		ProductImages[count++]=imagename;
+		multi_selector.current_element.disabled = false;
+		multi_selector.count--;
 	{rdelim}
 	function displaydeleted()
 	{ldelim}
-		var imagelists='';
-		for(var x = 0; x < ProductImages.length; x++)
-		{ldelim}
-			imagelists+=ProductImages[x]+'###';
-		{rdelim}
-		if(imagelists != '')
-			document.EditView.imagelist.value=imagelists
+		if(ProductImages.length > 0)
+			document.EditView.del_file_list.value=ProductImages.join('###');
 	{rdelim}
 </script>

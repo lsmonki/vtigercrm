@@ -52,8 +52,8 @@ class Note extends CRMEntity {
 	var $default_note_name_dom = array('Meeting notes', 'Reminder');
 
 	var $table_name = "notes";
-	var $tab_name = Array('crmentity','notes','senotesrel');
-        var $tab_name_index = Array('crmentity'=>'crmid','notes'=>'notesid','senotesrel'=>'notesid');
+	var $tab_name = Array('crmentity','notes','senotesrel','attachments');
+	var $tab_name_index = Array('crmentity'=>'crmid','notes'=>'notesid','senotesrel'=>'notesid','attachments'=>'attachmentsid');
 
   	var $module_id = "notesid";
 	var $object_name = "Note";

@@ -29,7 +29,7 @@ class HelpDesk extends CRMEntity {
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','troubletickets','seticketsrel','ticketcf','ticketcomments');
+	var $tab_name = Array('crmentity','troubletickets','seticketsrel','ticketcf','ticketcomments','attachments');
 	var $tab_name_index = Array('crmentity'=>'crmid','troubletickets'=>'ticketid','seticketsrel'=>'ticketid','ticketcf'=>'ticketid','ticketcomments'=>'ticketid','attachments'=>'attachmentsid');
 	var $column_fields = Array();
 

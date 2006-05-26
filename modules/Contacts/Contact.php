@@ -55,8 +55,8 @@ class Contact extends CRMEntity {
 	var $assigned_user_name;
 		
 	var $table_name = "contactdetails";
-	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf','customerdetails');
-	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid','customerdetails'=>'customerid');
+	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf','customerdetails','attachments');
+	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid','customerdetails'=>'customerid','attachments'=>'attachmentsid');
 
 
 

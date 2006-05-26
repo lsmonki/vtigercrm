@@ -412,20 +412,31 @@
 			</td>
 			<td colspan="3" width="30%" align=left class="dvtCellInfo">
 				{if $MODULE eq 'Products'}
-					<input name="imagelist" type="hidden" value="">
+					<input name="del_file_list" type="hidden" value="">
 					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
 						<input id="my_file_element" type="file" name="file_1" >
+						{assign var=image_count value=0}
+						{if $maindata[3].0.name neq ''}
+						   {foreach name=image_loop key=num item=image_details from=$maindata[3]}
+							<div align="center">
+								<img src="{$image_details.path}{$image_details.name}" height="50">&nbsp;&nbsp;[{$image_details.name}]<input id="file_{$num}" value="Delete" type="button" onclick='this.parentNode.parentNode.removeChild(this.parentNode);delRowEmt("{$image_details.name}")'>
+							</div>
+					   	   {assign var=image_count value=$smarty.foreach.image_loop.iteration}
+					   	   {/foreach}
+						{/if}
 					</div>
+
 					<script>
 						{*<!-- Create an instance of the multiSelector class, pass it the output target and the max number of files -->*}
 						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						multi_selector.count = {$image_count}
 						{*<!-- Pass in the file element -->*}
 						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
 					</script>
 				{else}
-					<input name="{$fldname}"  type="file" value="{$secondvalue}"/>
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}"/>
 					<input type="hidden" name="id" value=""/>
-					{$fldvalue}
+					{$maindata[3].0.name}
 				{/if}
 			</td>
 
@@ -539,4 +550,6 @@
 			if(temp == false)
 				alert("Please enter Valid TAX value");
 	{rdelim}	
+
+
 </script>

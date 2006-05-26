@@ -2199,4 +2199,34 @@ function getModuleFileStoragePath($module)
 	return $storage_path;
 }
 
+/**
+ * 	This function is used to check whether the attached file is a image file or not
+ *	@param string $file_details  - files array which contains all the uploaded file details
+ * 	return string $save_image - true or false. if the image can be uploaded then true will return otherwise false.
+*/
+function validateImageFile($file_details)
+{
+	global $adb, $log;
+	$log->debug("Entering into validateImageFile($file_details) method.");
+	
+	$savefile = 'true';
+	$file_type_details = explode("/",$file_details['type']);
+	$filetype = $file_type_details['1'];
+
+	if (($filetype == "jpeg" ) || ($filetype == "png") || ($filetype == "jpg" ) || ($filetype == "pjpeg" ) || ($filetype == "x-png") || ($filetype == "gif") )
+	{
+		$saveimage = 'true';
+	}
+	else
+	{
+		$saveimage = 'false';
+		$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>$file_details[name]</b> is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif.";
+		$log->debug("Invalid Image type == $filetype");
+	}
+
+	$log->debug("Exiting from validateImageFile($file_details) method. return saveimage=$saveimage");
+	return $saveimage;
+}
+
+
 ?>

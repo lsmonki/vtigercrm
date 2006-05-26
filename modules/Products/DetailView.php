@@ -17,9 +17,16 @@ require_once('include/utils/utils.php');
 $focus = new Product();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-  $focus->retrieve_entity_info($_REQUEST['record'],"Products");
-  $focus->id = $_REQUEST['record'];
-  $focus->name=$focus->column_fields['productname'];		
+	//Display the error message
+	if($_SESSION['image_type_error'] != '')
+	{
+		echo '<font color="red">'.$_SESSION['image_type_error'].'</font>';
+		session_unregister('image_type_error');
+	}
+
+	$focus->retrieve_entity_info($_REQUEST['record'],"Products");
+	$focus->id = $_REQUEST['record'];
+	$focus->name=$focus->column_fields['productname'];		
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
