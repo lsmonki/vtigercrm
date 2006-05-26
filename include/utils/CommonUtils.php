@@ -1657,7 +1657,7 @@ function getQuickCreateModules()
 $qc_query = "select distinct tab.tablabel,tab.name from field inner join tab on tab.tabid = field.tabid where quickcreate=0 order by tab.tablabel";
 $result = $adb->query($qc_query);
 $noofrows = $adb->num_rows($result);
-$qcmodule_array = Array();
+$return_qcmodule = Array();
 for($i = 0; $i < $noofrows; $i++)
 {
          $tablabel = $adb->query_result($result,$i,'tablabel');
@@ -1670,7 +1670,11 @@ for($i = 0; $i < $noofrows; $i++)
 	        $return_qcmodule[] = $tabname;
 	}	
 }
-        $return_qcmodule = array_chunk($return_qcmodule,2);
+	if(sizeof($return_qcmodule >0))
+        {
+        	$return_qcmodule = array_chunk($return_qcmodule,2);
+	}
+	
 	$log->debug("Exiting getQuickCreateModules method ...");
         return $return_qcmodule;
 }
