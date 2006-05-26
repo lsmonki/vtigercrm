@@ -82,8 +82,7 @@ function check_for_new_mail(mbox) {
                         onComplete: function(t) {
 			    try {
 				var data = eval('(' + t.responseText + ')');
-				for (var i=0;i<data.mails.length;i++)
-				{
+				for (var i=0;i<data.mails.length;i++) {
 					var mailid = data.mails[i].mail.mailid;
 					var date = data.mails[i].mail.date;
 					var subject=data.mails[i].mail.subject;
@@ -97,34 +96,94 @@ function check_for_new_mail(mbox) {
 					webmail[mailid]["date"] = date;
 
 					// main row
-					var tr = Builder.node('tr',{id:'row_'+mailid, className: 'unread_email'});
+					var tr = Builder.node(
+						'tr',
+						{id:'row_'+mailid, className: 'unread_email'}
+					);
+
 					// checkbox
-					var check = Builder.node('td',[Builder.node('input',{type: 'checkbox', name: 'checkbox_'+mailid, className: 'msg_check'})]);
+					var check = Builder.node(
+						'td',
+						[ Builder.node(
+							'input',
+							{type: 'checkbox', name: 'checkbox_'+mailid, className: 'msg_check'}
+						)]
+					);
+
 					tr.appendChild(check);
 
 					// images
 					// Attachment
-					if(attachments > 0) 
-						tr.innerHTML += '<a href="javascript:;" onclick="displayAttachments('+mailid+');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>';
-					else
-						tr.innerHTML += '<a href="javascript:;" onclick="displayAttachments('+mailid+');"><img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14"></a>';
+					imgtd = Builder.node('td');
+					if(attachments > 0)  {
+					    var attach = Builder.node('a',
+						{href: 'javascript:;', onclick: 'displayAttachments('+mailid+')'},
+						[ Builder.node('img',
+							{src: 'modules/Webmails/images/stock_attach.png', border: '0', width: '14px', height: '14px'}
+						)]
+					    );
+					} else { 
+					    var attach = Builder.node('a',
+						{src: 'modules/Webmails/images/blank.png', border: '0', width: '14px', height: '14px'}
+					    );
+					}
+					imgtd.appendChild(attach);
 
-					// read/unread/forward/reply
-					tr.innerHTML += '<span id="unread_img_'+mailid+'"><a href="index.php?module=Webmails&action=DetailView&<?php echo $detailParams;?>"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
+					var unread = Builder.node('span',
+						{id: 'unread_img_'+mailid},
+						[ Builder.node('a',
+							{href: 'index.php?module=Webmails&action=DetailView&<?php echo $detailParams;?>'},
+							[ Builder.node('img',
+								{src: 'modules/Webmails/images/stock_mail-unread.png', border: '0', width: '14px', height: '14'}
+							)]
+						)]
+					);
+					imgtd.appendChild(unread);
 
-					// Urgent Flag
-					tr.innerHTML += '<span id="set_td_'+mailid+'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+mailid+');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'+mailid+'"></a></span>';
+					var flag = Builder.node('span',
+						{id: 'set_td_'+mailid},
+						[ Builder.node('a',
+							{href: 'javascript:void(0);', onclick: 'runEmailCommand(\'set_flag\','+mailid+')'},
+							[ Builder.node('img',
+								{src: 'modules/Webmails/images/plus.png', border: '0', width: '11px', height: '11px', id: 'set_flag_img_'+mailid}
+							)]
+						)]
+					);
+					imgtd.appendChild(flag);
+					tr.appendChild(imgtd);
 
 
 					// MSG details
-                			tr.innerHTML += '<td colspan="1" align="left" ><b><a href="javascript:;" onclick="load_webmail(\''+mailid+'\');" id="ndeleted_subject_'+mailid+'">'+subject+'</a></b></td>';
-                			tr.innerHTML += '<td colspan="1" align="left" nowrap id="ndeleted_date_'+mailid+'"><b>'+date+'</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
-                			tr.innerHTML += '<td  colspan="1" align="left" id="ndeleted_from_'+mailid+'"><b>'+from+'</b></td>';
+					tr.appendChild( Builder.node('td',
+						[ Builder.node('a',
+							{href: 'javascript:;', onclick: 'load_webmail(\''+mailid+'\')', id: 'ndeleted_subject_'+mailid},
+							''+subject+''
+						)]
+					));
+					tr.appendChild( Builder.node('td',
+						{id: 'ndeleted_date_'+mailid},
+						''+date+''
+					));
+					tr.appendChild( Builder.node('td',
+						{id: 'ndeleted_from_'+mailid},
+						''+from+''
+					));
 
-					tr.innerHTML +=  '<td nowrap colspan="1" align="center" id="ndeleted_td_'+mailid+'"><span id="del_link_'+mailid+'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+mailid+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a></span></td>';
+					var del = Builder.node('td',
+						{align: 'center', id:'ndeleted_td_'+mailid},
+						[ Builder.node('span',
+							{id: 'del_link_'+mailid},
+							[ Builder.node('a',
+								{href: 'javascript:;', onclick: 'runEmailCommand(\'delete_msg\','+mailid+')'},
+								[ Builder.node('img',
+									{src: 'modules/Webmails/images/gnome-fs-trash-empty.png', border: '0', width: '14', height: '14', alt: 'del'}
+								)]
+							)]
+						)]
+					);
+					tr.appendChild(del);
 
 					tr.style.display='none';
-
 					var tels = $("message_table").childNodes[1].childNodes;
 					for(var j=0;j<tels.length;j++) {
 						try {
