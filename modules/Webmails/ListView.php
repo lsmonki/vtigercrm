@@ -36,6 +36,7 @@ $mail_protocol=$temprow["mail_protocol"];
 $account_name=$temprow["account_name"];
 $show_hidden=$_REQUEST["show_hidden"];
 
+
 // BEGIN MASSIVE AMOUNTS OF JAVASCRIPT
 ?>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
@@ -376,20 +377,10 @@ function show_remfolder(mb) {
 <?
 // END MASSIVE AMOUNTS OF JAVASCRIPT
 
-$viewname="20";
 
-// CUSTOM VIEW
-//<<<<cutomview>>>>>>>
-global $currentModule;
-$oCustomView = new CustomView("Webmails");
-$viewid = $oCustomView->getViewId($currentModule);
-$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
-$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
-//<<<<<customview>>>>>
 
 global $mbox,$displayed_msgs;
 $mbox = getImapMbox($mailbox,$temprow);
-	
 
 if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
 	imap_mail_move($mbox,$_REQUEST["mailid"],$_REQUEST["mvbox"]);
@@ -622,9 +613,7 @@ global $current_user;
 }
 
 $smarty = new vtigerCRM_Smarty;
-
 $smarty->assign("USERID", $current_user->id);
-$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
@@ -641,5 +630,4 @@ $smarty->assign("MAILBOX", $mailbox);
 $smarty->assign("ACCOUNT", $account_name);
 $smarty->assign("BOXLIST",$folders);
 $smarty->display("Webmails.tpl");
-//$smarty->display("ListView.tpl");
 ?>
