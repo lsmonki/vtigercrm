@@ -9,6 +9,7 @@ require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Webmails/Webmail.php');
+require_once('modules/Webmails/MailParse.php');
 
 global $log;
 global $app_strings;
@@ -18,26 +19,15 @@ if($_REQUEST["record"]) {$mailid=$_REQUEST["record"];} else {$mailid=$_REQUEST["
 
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
-
-$login_username= $temprow["mail_username"];
-$secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $start_message=$_REQUEST["start_message"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
-$mail_protocol=$temprow["mail_protocol"];
-$ssltype=$temprow["ssltype"];
-$sslmeth=$temprow["sslmeth"];
 
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-global $mbox;
-if($ssltype == "") {$ssltype = "notls";}
-if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-if(!preg_match("/windows/i",php_uname()))
-	$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
 
-if(!$mbox)
-        $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
+global $mbox;
+$mbox = getImapMbox($mailbox,$temprow);
 
 
 $email = new Webmail($mbox, $mailid);
