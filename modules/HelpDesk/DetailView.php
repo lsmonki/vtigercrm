@@ -91,7 +91,7 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$ticket_tables = Array('troubletickets','crmentity');
+$ticket_tables = Array('troubletickets','crmentity','ticketcf');
 $tabid = getTabid("HelpDesk");
 $validationData = getDBValidationData($ticket_tables,$tabid);
 $data = split_validationdataArray($validationData);

@@ -90,7 +90,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$ticket_tables = Array('troubletickets','crmentity');
+$ticket_tables = Array('troubletickets','crmentity','ticketcf');
 $tabid = getTabid("HelpDesk");
 $validationData = getDBValidationData($ticket_tables,$tabid);
 $data = split_validationdataArray($validationData);
