@@ -21,6 +21,7 @@ require_once($theme_path.'layout_utils.php');
 
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
+$readonly = '';
 $smarty = new vtigerCRM_Smarty;
 $cfimagecombo = Array($image_path."text.gif",
                         $image_path."number.gif",
@@ -104,8 +105,8 @@ $output = '';
 $combo_output = '';
 for($i=0;$i<count($cftextcombo);$i++)
 {
-        if($selectedvalue == $i)
-                $sel_val = '';
+        if($selectedvalue == $i && $fieldid != '')
+                $sel_val = 'selected';
         else
                 $sel_val = '';
         $combo_output.= '<option style="background:url('.$cfimagecombo[$i].');background-repeat:no-repeat;background-position:left;padding-left:30px;padding-top:5px;padding-bottom:5px;" '.$sel_val.' onClick="selFieldType('.$i.')" >'.$cftextcombo[$i].'</option>';
@@ -129,6 +130,7 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 			<tr>
 				<td>
 					<table>
+						<tr><td>'.$mod_strings['LBL_SELECT_FIELD_TYPE'].'</td></tr>
 						<tr><td>
 							<select name="cfcombo" id="cfcombo" class=small size=10 multiple style="width:100%">'.$combo_output.'</select>
 						</td></tr>
@@ -142,15 +144,15 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 						</tr>
 						<tr id="lengthdetails">
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-							<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'""'.$readonly.'" class="txtBox"></td>
+							<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
 						</tr>
 						<tr id="decimaldetails" style="visibility:hidden;">
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
-							<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" "'.$readonly.'" class="txtBox"></td>
+							<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" '.$readonly.' class="txtBox"></td>
 						</tr>
 						<tr id="picklist" style="visibility:hidden;">
 							<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" "'.$readonly.'">'.$fldVal.'</textarea></td>
+							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
 							<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
 						</tr>
 					</table>
