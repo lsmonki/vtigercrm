@@ -117,7 +117,7 @@ function check_for_new_mail(mbox) {
 
 					webmail[mailid] = new Array();
 					webmail[mailid]["from"] = from;
-					webmail[mailid]["to"] = "myname";
+					webmail[mailid]["to"] = data.mails[i].mail.to;
 					webmail[mailid]["subject"] = subject;
 					webmail[mailid]["date"] = date;
 
@@ -141,7 +141,7 @@ function check_for_new_mail(mbox) {
 					// images
 					// Attachment
 					imgtd = Builder.node('td');
-					if(attachments > 0)  {
+					if(attachments === "1")  {
 					    var attach = Builder.node('a',
 						{href: 'javascript:;', onclick: 'displayAttachments('+mailid+')'},
 						[ Builder.node('img',
@@ -158,7 +158,7 @@ function check_for_new_mail(mbox) {
 					var unread = Builder.node('span',
 						{id: 'unread_img_'+mailid},
 						[ Builder.node('a',
-							{href: 'index.php?module=Webmails&action=DetailView&<?php echo $detailParams;?>'},
+							{href: 'index.php?module=Webmails&action=DetailView&record='+mailid+'&mailbox=<?php echo $mailbox;?>&mailid='+mailid},
 							[ Builder.node('img',
 								{src: 'modules/Webmails/images/stock_mail-unread.png', border: '0', width: '14px', height: '14'}
 							)]
@@ -475,8 +475,7 @@ function show_msg($mails,$start_message) {
 		$mails[$start_message]->subject="(No Subject)";
 
   	// Let's pre-build our URL parameters since it's too much of a pain not to
-  	$detailParams = 'record='.$record_id.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
- 	$defaultParams = 'parenttab=My Home Page&mailbox='.$mailbox.'&start='.$start.'&viewname='.$viewname;
+  	$detailParams = 'record='.$num.'&mailbox='.$mailbox.'&mailid='.$num.'&parenttab=My Home Page';
 
 	$displayed_msgs++;
 	if ($mails[$start_message]->deleted && !$show_hidden) {
@@ -490,7 +489,7 @@ function show_msg($mails,$start_message) {
 		$flags = "<tr id='row_".$num."'><td colspan='1'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
-  	if(getAttachmentDetails($start_message,$mbox))
+  	if(getAttachmentDetails($start_message,$mbox) || getInlineAttachments($num,$mbox))
 		$flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
   	else
 		$flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
@@ -498,7 +497,7 @@ function show_msg($mails,$start_message) {
   	// read/unread/forwarded/replied
   	if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-  		$flags.='<span id="unread_img_'.$num.'"><a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
+  		$flags.='<span id="unread_img_'.$num.'"><a href="index.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
 	}
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
@@ -521,15 +520,15 @@ function show_msg($mails,$start_message) {
 	$listview_entries[$num][] = $flags."</td>";
 
   	if ($mails[$start_message]->deleted) {
-        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,50).'</a></s></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_subject_'.$num.'"><s><a href="javascript:;" onclick="load_webmail(\''.$num.'\');">'.substr($mails[$start_message]->subject,0,40).'</a></s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="deleted_date_'.$num.'"><s>'.$mails[$start_message]->date.'</s></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" id="deleted_from_'.$num.'"><s>'.substr($from,0,30).'</s></td>';
   	} elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent) {
-        	$listview_entries[$num][] = '<td colspan="1" align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,40).'</a></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="ndeleted_date_'.$num.'" >'.$mails[$start_message]->date.' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>';
         	$listview_entries[$num][] = '<td  colspan="1" align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,30).'</td>';
   	} else {
-        	$listview_entries[$num][] = '<td colspan="1" align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,50).'</a></td>';
+        	$listview_entries[$num][] = '<td colspan="1" align="left" ><a href="javascript:;" onclick="load_webmail(\''.$num.'\');" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,40).'</a></td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" nowrap id="ndeleted_date_'.$num.'">'.$mails[$start_message]->date.'</td>';
         	$listview_entries[$num][] = '<td colspan="1" align="left" id="ndeleted_from_'.$num.'">'.substr($from,0,30).'</td>';
   	}

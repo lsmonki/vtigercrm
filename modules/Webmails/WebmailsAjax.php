@@ -53,10 +53,11 @@ if($num > 0) {
 		$ret .= '{"mail":';
 		$ret .= '{';
 		$ret .= '"mailid":"'.$data[$i]->msgno.'",';
-		$ret .= '"subject":"'.substr($data[$i]->subject,0,50).'",';
-		$ret .= '"date":"'.$data[$i]->date.'",';
-		$ret .= '"from":"'.$data[$i]->from.'",';
-		if(sizeof($part->parts) >0)
+		$ret .= '"subject":"'.substr($data[$i]->subject,0,40).'",';
+		$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
+		$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
+		$ret .= '"to":"'.$data[$i]->to.'",';
+		if(getAttachmentDetails($data[$i]->msgno,$mbox) || getInlineAttachments($data[$i]->msgno,$mbox))
 			$ret .= '"attachments":"1"}';
 		else
 			$ret .= '"attachments":"0"}';
