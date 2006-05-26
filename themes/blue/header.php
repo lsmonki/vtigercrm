@@ -76,9 +76,7 @@ $smarty->assign("MODULE_NAME", $currentModule);
 
 $smarty->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
 
-if ($current_user->first_name != '') $smarty->assign("CURRENT_USER", $current_user->first_name);
-
-else $smarty->assign("CURRENT_USER", $current_user->user_name);
+$smarty->assign("CURRENT_USER", $current_user->user_name);
 
 $smarty->assign("CURRENT_USER_ID", $current_user->id);
 $smarty->assign("MODULELISTS",$app_list_strings['moduleList']);
