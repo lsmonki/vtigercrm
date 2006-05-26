@@ -9,13 +9,38 @@
   *
   ********************************************************************************/
 
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
+
+global $current_user;
+require_once('Smarty_setup.php');
+require_once("data/Tracker.php");
+require_once('themes/'.$theme.'/layout_utils.php');
+require_once('include/logging.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once("modules/Webmails/MailParse.php");
+require_once('modules/CustomView/CustomView.php');
+
+$mailInfo = getMailServerInfo($current_user);
+if($adb->num_rows($mailInfo) < 1) {
+	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+	exit();
+}
+
+$temprow = $adb->fetch_array($mailInfo);
+$imapServerAddress=$temprow["mail_servername"];
+$box_refresh=$temprow["box_refresh"];
+$mails_per_page=$temprow["mails_per_page"];
+$mail_protocol=$temprow["mail_protocol"];
+$account_name=$temprow["account_name"];
+$show_hidden=$_REQUEST["show_hidden"];
+
+// BEGIN MASSIVE AMOUNTS OF JAVASCRIPT
 ?>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/scriptaculous.js?load=effects,builder"></script>
-<?php
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
-?>
+
 <script type="text/javascript">
 var webmail = new Array();
 function load_webmail(mid) {
@@ -239,34 +264,7 @@ function search_emails() {
 	var search_type = $("search_type").value;
 	window.location = "index.php?module=Webmails&action=index&search=true&search_type="+search_type+"&search_input="+search_query;
 }
-</script>
-<?php
-global $current_user;
-require_once('Smarty_setup.php');
-require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
-require_once('include/logging.php');
-require_once('include/utils/utils.php');
-require_once('include/utils/UserInfoUtil.php');
-require_once("modules/Webmails/MailParse.php");
-require_once('modules/CustomView/CustomView.php');
 
-$mailInfo = getMailServerInfo($current_user);
-if($adb->num_rows($mailInfo) < 1) {
-	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
-	exit();
-}
-
-$temprow = $adb->fetch_array($mailInfo);
-$imapServerAddress=$temprow["mail_servername"];
-$box_refresh=$temprow["box_refresh"];
-$mails_per_page=$temprow["mails_per_page"];
-$mail_protocol=$temprow["mail_protocol"];
-$account_name=$temprow["account_name"];
-$show_hidden=$_REQUEST["show_hidden"];
-?>
-
-<script type="text/Javascript">
 var box_refresh=<?php echo $box_refresh;?>;
 var timer = addOnloadEvent(function() {
 				window.setTimeout("check_for_new_mail('<?php echo $mailbox;?>')",box_refresh);
@@ -376,6 +374,7 @@ function show_remfolder(mb) {
 }
 </script>
 <?
+// END MASSIVE AMOUNTS OF JAVASCRIPT
 
 $viewname="20";
 
@@ -387,7 +386,6 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
 
 global $mbox,$displayed_msgs;
 $mbox = getImapMbox($mailbox,$temprow);
@@ -445,9 +443,11 @@ if(!isset($_REQUEST["search"])) {
 
 $overview=$elist["overview"];
 ?>
-
 <!-- MAIN MSG LIST TABLE -->
 <script type="text/javascript">
+// Here we are creating a multi-dimension array to store mail info
+// these are mainly used in the preview window and could be ajaxified/
+// during the preview window load instead.
 var msgCount = "<?php echo $numEmails;?>";
 <?
 $mails = array();
@@ -489,14 +489,14 @@ function show_msg($mails,$start_message) {
 
 	$displayed_msgs++;
 	if ($mails[$start_message]->deleted && !$show_hidden) {
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."' class='deletedRow' style='display:none'><td colspan='1'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 	$displayed_msgs--;
 	} elseif ($mails[$start_message]->deleted && $show_hidden)
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."' class='deletedRow'><td colspan='1'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
   	elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent)
-		$flags = "<tr class='unread_email' id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr class='unread_email' id='row_".$num."'><td colspan='1'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 	else 
-		$flags = "<tr id='row_".$mails[$start_message]->msgno."'><td colspan='1'><input type='checkbox' name='checkbox_".$mails[$start_message]->msgno."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."'><td colspan='1'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
   	if(getAttachmentDetails($start_message,$mbox))
@@ -510,11 +510,11 @@ function show_msg($mails,$start_message) {
   		$flags.='<span id="unread_img_'.$num.'"><a href="sssindex.php?module=Webmails&action=DetailView&'.$detailParams.'"><img src="modules/Webmails/images/stock_mail-unread.png" border="0" width="10" height="14"></a></span>&nbsp;';
 	}
   	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
-		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-replied.png" border="0" width="10" height="12"></a>&nbsp;';
   	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
-		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13"></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-forward.png" border="0" width="10" height="13"></a>&nbsp;';
   	else
-  		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$mails[$start_message]->msgno.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
+  		$flags.='<a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="modules/Webmails/images/stock_mail-read.png" border="0" width="10" height="11"></a>&nbsp;';
 
   	// Set IMAP flag
   	if($mails[$start_message]->flagged)
