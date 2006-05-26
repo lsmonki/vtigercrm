@@ -191,6 +191,7 @@ $mod_strings = Array(
 'LBL_SELECT_FIELD_TYPE'=>'Select Field Type :',
 'LBL_SELECT_FIELD'=>'Select Field :',
 'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value :',
+'LBL_ACCOUNT_FIELDS'=>'Account Fields',
 'LBL_CONTACT_FIELDS'=>'Contact Fields',
 'LBL_LEAD_FIELDS'=>'Lead Fields',
 'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge field value into your template below.',
