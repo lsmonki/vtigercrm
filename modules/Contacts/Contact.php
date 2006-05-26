@@ -316,7 +316,7 @@ class Contact extends CRMEntity {
 
 		$log->info("Activity Related List for Contact Displayed");
 
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname  where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.eventstatus is NULL OR activity.eventstatus != 'Held') and ( activity.eventstatus is NULL OR activity.eventstatus != 'Not Held' )";  //recurring type is added in Query -Jaguar
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname  where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.eventstatus is NULL OR activity.eventstatus != 'Held') ";  //recurring type is added in Query -Jaguar
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
 
@@ -339,7 +339,7 @@ class Contact extends CRMEntity {
                                 left join groups on groups.groupname=activitygrouprelation.groupname
 				inner join users on crmentity.smcreatorid= users.id
 				where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
+				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus = 'Held' and activity.eventstatus != ''))
 				and cntactivityrel.contactid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 		$log->debug("Entering get_history method ...");
