@@ -34,21 +34,19 @@ function getImapMbox($mailbox,$temprow) {
 	 if($ssltype == "") {$ssltype = "notls";} 
 	 if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
 	 $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
-	 	 
-	 if(!$mbox) 
-	 { 
-	 	if($mail_protocol == 'pop3') 
-	 	{ 
-	 	        $connectString = "{".$imapServerAddress."/".$mail_protocol.":110/notls}".$mailbox; 
-	 	} 
-	 	else 
-	 	{ 
+
+	// next we'll try to make a port specific connection to see if that helps.
+	// this may need to be updated to remove SSL/TLS since the c-client libs
+	// are not linked correctly to SSL in most windows installs.
+	if(!$mbox) {
+	 	if($mail_protocol == 'pop3') {
+	 	        $connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."}".$mailbox; 
+	 	} else { 
 	 	        $connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."}".$mailbox; 
 	 	} 
 	 	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
-	 } 
-
-	 return $mbox; 
+	} 
+	return $mbox; 
 }
 function getInlineAttachments($mailid,$mbox) {
        $struct = imap_fetchstructure($mbox, $mailid);
