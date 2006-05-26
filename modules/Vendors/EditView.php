@@ -84,7 +84,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 
-$vendor_tables = Array('vendor'); 
+$vendor_tables = Array('vendor','vendorcf'); 
 
 $validationData = getDBValidationData($vendor_tables);
 $data = split_validationdataArray($validationData);
