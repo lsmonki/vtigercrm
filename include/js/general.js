@@ -821,7 +821,7 @@ function formValidate() {
         for (var j=0; j<fieldname.length; j++)
 		{
 
-			if(getObj(fieldname[i]) != null)
+			if(getObj(fieldname[j]) != null)
 			{
 				if(fieldname[j] == "date_start")
 				{
@@ -867,8 +867,6 @@ function formValidate() {
                chktime.setDate(dd)
                chktime.setHours(hourval)
                chktime.setMinutes(minval)
-               //chkdate.setHours(hourval)
-               //chkdate.setMinutes(minval)
                 if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
                         getObj(datefield).focus()
                         return false
