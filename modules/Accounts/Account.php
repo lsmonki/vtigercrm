@@ -285,7 +285,7 @@ class Account extends CRMEntity {
 				AND (activity.status IS NOT NULL
 					AND activity.status != 'Deferred')
 				OR (activity.eventstatus !=''
-					AND  activity.eventstatus = 'Planned'))";
+					AND  activity.eventstatus != 'Held'))";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 
@@ -323,7 +323,7 @@ class Account extends CRMEntity {
 				OR activity.activitytype = 'Task')
 			AND (activity.status = 'Completed'
 				OR activity.status = 'Deferred'
-				OR (activity.eventstatus != 'Planned'
+				OR (activity.eventstatus = 'Held'
 					AND activity.eventstatus != ''))
 			AND seactivityrel.crmid = ".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
