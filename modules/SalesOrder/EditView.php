@@ -303,7 +303,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$so_tables = Array('salesorder','sobillads','soshipads'); 
+$so_tables = Array('salesorder','sobillads','soshipads','salesordercf'); 
  $tabid = getTabid("SalesOrder");
  $validationData = getDBValidationData($so_tables,$tabid);
  $data = split_validationdataArray($validationData);
