@@ -59,6 +59,8 @@ function load_webmail(mid) {
 	$("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
 	$("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
 	$("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
+
+	$("body_area").removeChild($("body_area").firstChild);
 	$("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox=<?php echo $mailbox;?>', width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
 
 	tmp = document.getElementsByClassName("previewWindow");
