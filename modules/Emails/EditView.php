@@ -87,71 +87,19 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
-
 $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
+if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
+{
+	$templatedetails = getTemplateDetails($_REQUEST['templateid']);
+	$details['Email Information'][2][0][3][0] = $templatedetails[2];	
+	$details['Email Information'][3][0][3][0] = $templatedetails[1];	
+}
 $smarty->assign("BLOCKS",$details['Email Information']);
-
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
-/*
-if($_REQUEST['reply'])
-{
-	$tmp_theme = $theme;
-
-
-	//WEBMAIL FUNCTIONS
-	define('SM_PATH','modules/squirrelmail-1.4.4/');
-	//get the webmail id and get the subject of the mail given the mail id
-	// SquirrelMail required files. 
-	require_once(SM_PATH . 'functions/strings.php');
-	require_once(SM_PATH . 'functions/imap_general.php');
-	require_once(SM_PATH . 'functions/imap_messages.php');
-	require_once(SM_PATH . 'functions/i18n.php');
-	require_once(SM_PATH . 'functions/mime.php');
-	require_once(SM_PATH .'include/load_prefs.php');
-	require_once(SM_PATH . 'class/mime.class.php');
-	sqgetGlobalVar('username',  $username,      SQ_SESSION);
-	$mailbox = 'INBOX';
-
-
-	$msgData='';
-	global $current_user;
-	require_once('include/utils/UserInfoUtil.php');
-	$mailInfo = getMailServerInfo($current_user);
-	$temprow = $adb->fetch_array($mailInfo);
-
-	$secretkey=$temprow["mail_password"];
-	$imapServerAddress=$temprow["mail_servername"];
-	$imapPort="143";
-
-	$key = OneTimePadEncrypt($secretkey, $onetimepad);
-	$imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
-	$mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
-
-	if($_REQUEST['passed_id']!='')
-	{
-		$message = sqimap_get_message($imapConnection, $_REQUEST['passed_id'], $mailbox);
-		$header = $message->rfc822_header;
-		$ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
-		$cnt = count($ent_ar);
-		global $color;
-
-		for ($u = 0; $u < $cnt; $u++)
-		{
-			$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u],$_REQUEST['passed_id'] , $mailbox);
-			$msgData = $messagebody;
-		}
-		if($msgData != '')
-		{
-			$focus->column_fields['description'] = $msgData;
-		}
-	}
-	$theme = $tmp_theme;
-}*/
-//get Email Information
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
