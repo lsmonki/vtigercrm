@@ -236,6 +236,10 @@ else
 	{
 		$custfld_fieldid=$adb->getUniqueID("field");
 	}
+	else
+	{
+		$custfld_fieldid= $_REQUEST['fieldid'];
+	}
 	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
     	
 	$blockid ='';
@@ -256,19 +260,22 @@ else
 			$adb->query($query);
 		}
 		//Inserting values into profile2field tables
-		$sql1 = "select * from profile";
-		$sql1_result = $adb->query($sql1);
-		$sql1_num = $adb->num_rows($sql1_result);
-		for($i=0; $i<$sql1_num; $i++)
+		if($_REQUEST['fieldid'] == '')
 		{
-			$profileid = $adb->query_result($sql1_result,$i,"profileid");
-			$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
-			$adb->query($sql2);	 	
-		}
+			$sql1 = "select * from profile";
+			$sql1_result = $adb->query($sql1);
+			$sql1_num = $adb->num_rows($sql1_result);
+			for($i=0; $i<$sql1_num; $i++)
+			{
+				$profileid = $adb->query_result($sql1_result,$i,"profileid");
+				$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
+				$adb->query($sql2);	 	
+			}
 
-		//Inserting values into def_org tables
-		$sql_def = "insert into def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
-		$adb->query($sql_def);
+			//Inserting values into def_org tables
+			$sql_def = "insert into def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
+			$adb->query($sql_def);
+		}
 
 
 		if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
