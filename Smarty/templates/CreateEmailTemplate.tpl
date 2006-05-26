@@ -32,76 +32,92 @@
         {rdelim}
         document.getElementById('mergeFieldValue').value = '';
     {rdelim}
-
+{literal}
     function init() 
-    {ldelim}
+    {
         var blankOption = new Option('--None--', '--None--');
         var allOpts = new Object(0);
         var options = null;
+            
+	    options = new Object(19);
+            options[0] = blankOption;
+            
+                
+                options[1] = new Option('Account: Account Name', '{$accounts_accountname}'); 
+                options[2] = new Option('Account: Account Type', '{$accounts_account_type}'); 
+                options[3] = new Option('Account: Industry', '{$accounts_industry}'); 
+                options[4] = new Option('Account: Annual Revenue', '{$accounts_annualrevenue}'); 
+                options[5] = new Option('Account: Phone', '{$accounts_phone}'); 
+                options[6] = new Option('Account: Email', '{$accounts_email1}'); 
+                options[7] = new Option('Account: Rating', '{$accounts_rating}'); 
+                options[8] = new Option('Account: Website', '{$accounts_website}'); 
+                options[9] = new Option('Account: Fax', '{$accounts_fax}'); 
+            
+	        allOpts[1] = options;
         
             options = new Object(11);
             options[0] = blankOption;
                 
-                options[1] = new Option('Contact: First Name', '$contacts_firstname'); 
-                options[2] = new Option('Contact: Last Name', '$contacts_lastname'); 
-                options[3] = new Option('Contact: Salutation', '$contacts_salutationtype'); 
-                options[4] = new Option('Contact: Title', '$contacts_title'); 
-                options[5] = new Option('Contact: Email', '$contacts_email'); 
-                options[6] = new Option('Contact: Department', '$contacts_department'); 
-                options[7] = new Option('Contact: Other Email','$contacts_otheremail'); 
-                options[8] = new Option('Contact: Phone', '$contacts_phone'); 
-                options[9] = new Option('Contact: Mobile', '$contacts_mobile'); 
-                options[10] = new Option('Contact: Currency', '$contacts_currency'); 
+                options[1] = new Option('Contact: First Name', '{$contacts_firstname}'); 
+                options[2] = new Option('Contact: Last Name', '{$contacts_lastname}'); 
+                options[3] = new Option('Contact: Salutation', '{$contacts_salutationtype}'); 
+                options[4] = new Option('Contact: Title', '{$contacts_title}'); 
+                options[5] = new Option('Contact: Email', '{$contacts_email}'); 
+                options[6] = new Option('Contact: Department', '{$contacts_department}'); 
+                options[7] = new Option('Contact: Other Email','{$contacts_otheremail}'); 
+                options[8] = new Option('Contact: Phone', '{$contacts_phone}'); 
+                options[9] = new Option('Contact: Mobile', '{$contacts_mobile}'); 
+                options[10] = new Option('Contact: Currency', '{$contacts_currency}'); 
                             
-            allOpts[1] = options;
+            allOpts[2] = options;
         
             
             options = new Object(19);
             options[0] = blankOption;
             
                 
-                options[1] = new Option('Lead: First Name', '$leads_firstname'); 
-                options[2] = new Option('Lead: Last Name', '$leads_lastname'); 
-                options[3] = new Option('Lead: Lead Source', '$leads_leadsource'); 
-                options[4] = new Option('Lead: Status', '$leads_leadstatus'); 
-                options[5] = new Option('Lead: Rating', '$leads_rating'); 
-                options[6] = new Option('Lead: Industry', '$leads_industry'); 
-                options[7] = new Option('Lead: Yahoo ID', '$leads_yahooid'); 
-                options[8] = new Option('Lead: Email', '$leads_email'); 
-                options[9] = new Option('Lead: Annual Revenue', '$leads_annualrevenue'); 
-                options[10] = new Option('Lead: Title', '$leads_designation'); 
-                options[11] = new Option('Lead: Salutation', '$leads_salutation'); 
+                options[1] = new Option('Lead: First Name', '{$leads_firstname}'); 
+                options[2] = new Option('Lead: Last Name', '{$leads_lastname}'); 
+                options[3] = new Option('Lead: Lead Source', '{$leads_leadsource}'); 
+                options[4] = new Option('Lead: Status', '{$leads_leadstatus}'); 
+                options[5] = new Option('Lead: Rating', '{$leads_rating}'); 
+                options[6] = new Option('Lead: Industry', '{$leads_industry}'); 
+                options[7] = new Option('Lead: Yahoo ID', '{$leads_yahooid}'); 
+                options[8] = new Option('Lead: Email', '{$leads_email}'); 
+                options[9] = new Option('Lead: Annual Revenue', '{$leads_annualrevenue}'); 
+                options[10] = new Option('Lead: Title', '{$leads_designation}'); 
+                options[11] = new Option('Lead: Salutation', '{$leads_salutation}'); 
             
-	        allOpts[2] = options;
+	        allOpts[3] = options;
 
 	        options = new Object(19);
                 options[0] = blankOption;
             
-                options[1] = new Option('User: First Name', '$users_first_name'); 
-                options[2] = new Option('User: Last Name', '$users_last_name'); 
-		options[3] = new Option('User: Title', '$users_title'); 
-		options[4] = new Option('User: Department', '$users_department'); 
-		options[5] = new Option('User: HomePhone', '$users_phone_home'); 
-		options[6] = new Option('User: Mobile', '$users_phone_mobile'); 
-		options[7] = new Option('User: Signature', '$users_signature'); 
-		options[8] = new Option('User: Email', '$users_email'); 
-		options[9] = new Option('User: Street', '$users_address_street'); 
-		options[10] = new Option('User: City', '$users_address_city'); 
-		options[11] = new Option('User: State', '$users_address_state'); 
-		options[11] = new Option('User: Country', '$users_address_country'); 
-		options[11] = new Option('User: PostalCode', '$users_address_postalcode'); 
+                options[1] = new Option('User: First Name', '{$users_first_name}'); 
+                options[2] = new Option('User: Last Name', '{$users_last_name}'); 
+		options[3] = new Option('User: Title', '{$users_title}'); 
+		options[4] = new Option('User: Department', '{$users_department}'); 
+		options[5] = new Option('User: HomePhone', '{$users_phone_home}'); 
+		options[6] = new Option('User: Mobile', '{$users_phone_mobile}'); 
+		options[7] = new Option('User: Signature', '{$users_signature}'); 
+		options[8] = new Option('User: Email', '{$users_email}'); 
+		options[9] = new Option('User: Street', '{$users_address_street}'); 
+		options[10] = new Option('User: City', '{$users_address_city}'); 
+		options[11] = new Option('User: State', '{$users_address_state}'); 
+		options[11] = new Option('User: Country', '{$users_address_country}'); 
+		options[11] = new Option('User: PostalCode', '{$users_address_postalcode}'); 
             
-            	allOpts[3] = options;
+            	allOpts[4] = options;
 	    
         setAllOptions(allOpts);
-    {rdelim}
+    }
 	
 	function cancelForm(frm)
-	{ldelim}
+	{
 		frm.action.value='detailviewemailtemplate'
 		frm.submit()
-	{rdelim}
-
+	}
+{/literal}
 </script>
 
 
@@ -203,12 +219,12 @@
 								<tr><td><b>{$UMOD.LBL_SELECT_FIELD_TYPE}</b></td></tr>
 								<tr><td><select class="detailedViewTextBox" id="entityType" ONCHANGE="modifyMergeFieldSelect(this, document.getElementById('mergeFieldSelect'));" tabindex="6">
 								<OPTION VALUE="0" selected>{$APP.LBL_NONE}                            
-                            		
-                        				        <OPTION VALUE="1">{$UMOD.LBL_CONTACT_FIELDS}
+								<OPTION VALUE="1">{$UMOD.LBL_ACCOUNT_FIELDS}                            
+                        				        <OPTION VALUE="2">{$UMOD.LBL_CONTACT_FIELDS}
                             
-								<OPTION VALUE="2" >{$UMOD.LBL_LEAD_FIELDS}
+								<OPTION VALUE="3" >{$UMOD.LBL_LEAD_FIELDS}
 
-                                				<OPTION VALUE="3" >{$UMOD.LBL_USER_FIELDS}
+                                				<OPTION VALUE="4" >{$UMOD.LBL_USER_FIELDS}
                             
 								</select></td></tr>
 								<tr><td>&nbsp;</td></tr>
