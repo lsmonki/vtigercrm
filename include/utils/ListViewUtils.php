@@ -1734,6 +1734,7 @@ function getListQuery($module,$where='')
 			$query .= $sec_parameter;		
 
 		}
+		$query .=" group by activity.activityid ";
 		//included by Jaguar
         }
 	if($module == "Emails")
