@@ -183,7 +183,7 @@ function SaveTag(txtBox,crmId,module)
 {
 	var tagValue = document.getElementById(txtBox).value;
 	document.getElementById(txtBox).value ='';
-    var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue;
+    var data = "module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&file=TagCloud&ajxaction=SAVETAG&tagfields=" +tagValue;
     
 	var ajaxObj = new Ajax(dtlViewAjaxTagResponse);
     ajaxObj.process("index.php?",data);

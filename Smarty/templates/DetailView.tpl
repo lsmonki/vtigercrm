@@ -316,7 +316,7 @@ Calendar.setup ({ldelim}
 {/if}
 
 <script>
-var data = "module={$MODULE}&action={$MODULE}Ajax&ajxaction=GETTAGCLOUD";
+var data = "module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD";
 var ajaxObj = new Ajax(ajaxTagCloudResp);
 ajaxObj.process("index.php?",data);
 function ajaxTagCloudResp(response)
