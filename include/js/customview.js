@@ -27,7 +27,15 @@ function splitValues() {
 
 
 function validate() {
-	 lengthLayer=getObj("lengthdetails")
+	var nummaxlength = 255;
+        var fieldtype = document.addtodb.cfcombo.value;
+        if(fieldtype == "")
+        {
+                alert("Field Type is not selected");
+                document.addtodb.cfcombo.focus()
+                return false;
+        }
+	lengthLayer=getObj("lengthdetails")
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
         var str = getObj("fldLabel").value;
@@ -51,8 +59,6 @@ function validate() {
                 if (!numConstComp("fldLength","Length","GT",0))
                         return false
 
-                if (!numConstComp("fldLength","Length","LE",255))
-                        return false
         }
 
         if (decimalLayer.style.visibility=="visible") {
@@ -65,6 +71,15 @@ function validate() {
                 if (!numConstComp("fldDecimal","Decimal","LE",30))
                         return false
         }
+	var decimallength = document.addtodb.fldDecimal.value;
+        if(fieldtype == 'Percent' || fieldtype == 'Currency' || fieldtype == 'Number')
+        {
+                if(decimallength == '')
+                        decimallength = 0;
+                nummaxlength = 65 - (eval(decimallength) + 1);
+        }
+        if (!numConstComp("fldLength","Length","LE",nummaxlength))
+                return false
 var picklistObj=getObj("fldPickList")
         if (pickListLayer.style.visibility=="visible") {
                 if (emptyCheck("fldPickList","Picklist values"))        {
