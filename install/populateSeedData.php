@@ -836,7 +836,7 @@ for($i=0;$i<5;$i++)
 // Populate Activities Data
 $task_array=array("Tele Conference","Call user - John","Send Fax to Mary Smith");
 $event_array=array("","","Call Smith","Team Meeting","Call Richie","Meeting with Don");
-$task_status_array=array("Not Started","In Progress","Completed");
+$task_status_array=array("Planned","In Progress","Completed");
 $task_priority_array=array("High","Medium","Low");
 $visibility=array("","","Private","Public","Private","Public");
 
