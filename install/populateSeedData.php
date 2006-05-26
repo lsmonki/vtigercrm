@@ -181,11 +181,12 @@ for($i = 0; $i < $company_name_count; $i++)
 	
 	if ($i > 3)
 	{
-		$query = "insert into freetags values ($tagkey, '$cloudtag[1]', '$cloudtag[1]')";
+		$freetag = $adb->getUniqueId('freetags');
+		$query = "insert into freetags values ($freetag, '$cloudtag[1]', '$cloudtag[1]')";
 		$res = $adb->query($query);
 
 		$date = date('YmdHis'); 
-		$query_tag = "insert into freetagged_objects values ($tagkey, 1,".$account->id.", $date, 'Accounts')";
+		$query_tag = "insert into freetagged_objects values ($freetag, 1,".$account->id.", $date, 'Accounts')";
 		$result = $adb->query($query_tag);
 	}
 
@@ -283,11 +284,12 @@ for($i=0; $i<10; $i++)
 	
 	if ($i > 8)
 	{
-		$query = "insert into freetags values (2, '$cloudtag[2]', '$cloudtag[2]')";
+		$freetag = $adb->getUniqueId('freetags');
+		$query = "insert into freetags values ($freetag, '$cloudtag[2]', '$cloudtag[2]')";
 		$res1 = $adb->query($query);
 
 		$date = date('YmdHis'); 
-		$query_tag = "insert into freetagged_objects values (2, 1,".$contact->id.", $date, 'Contacts')";
+		$query_tag = "insert into freetagged_objects values ($freetag, 1,".$contact->id.", $date, 'Contacts')";
 		$result1 = $adb->query($query_tag);
 	}
 	// This assumes that there will be one opportunity per company in the seed data.
@@ -698,11 +700,12 @@ for($i=0;$i<5;$i++)
 	$invoice_ids[] = $invoice->id;
 	if ($i > 3)
 	{
-		$query = "insert into freetags values (3, '$cloudtag[0]', '$cloudtag[0]')";
+		$freetag = $adb->getUniqueId('freetags');
+		$query = "insert into freetags values ($freetag, '$cloudtag[0]', '$cloudtag[0]')";
 		$res_inv = $adb->query($query);
 
 		$date = date('YmdHis'); 
-		$query_tag = "insert into freetagged_objects values (3, 1,".$invoice->id.", $date, 'Invoice')";
+		$query_tag = "insert into freetagged_objects values ($freetag, 1,".$invoice->id.", $date, 'Invoice')";
 		$result_inv = $adb->query($query_tag);
 	}
 
@@ -819,11 +822,12 @@ for($i=0;$i<5;$i++)
 	
 	if ($i > 3)
 	{
-		$query = "insert into freetags values (4, '$cloudtag[3]', '$cloudtag[3]')";
+		$freetag = $adb->getUniqueId('freetags');
+		$query = "insert into freetags values ($freetag, '$cloudtag[3]', '$cloudtag[3]')";
 		$res_tkt = $adb->query($query);
 
 		$date = date('YmdHis'); 
-		$query_tag = "insert into freetagged_objects values (4, 1,".$helpdesk->id.", $date, 'HelpDesk')";
+		$query_tag = "insert into freetagged_objects values ($freetag, 1,".$helpdesk->id.", $date, 'HelpDesk')";
 		$result_tkt = $adb->query($query_tag);
 	}
 
