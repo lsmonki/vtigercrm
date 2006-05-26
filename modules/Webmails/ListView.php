@@ -127,16 +127,13 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
-$login_username= $temprow["mail_username"];
-$secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
-$mail_protocol=$temprow["mail_protocol"];
-$ssltype=$temprow["ssltype"];
-$sslmeth=$temprow["sslmeth"];
 $account_name=$temprow["account_name"];
 $show_hidden=$_REQUEST["show_hidden"];
+
+$mbox = getImapMbox($mailbox,$temprow);
 ?>
 
 <script language="Javascript" type="text/javascript" src="modules/Webmails/js/ajax_connection.js"></script>
@@ -249,26 +246,6 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-
-global $mbox;
-if($ssltype == "") {$ssltype = "notls";}
-if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
-
-if(!$mbox)
-{
-	if($mail_protocol == 'pop3')
-	{
-		$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/notls}".$mailbox;
-	}
-	else
-	{
- 		$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/notls}".$mailbox;
-	}
-	//$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-		
-}	
 
 if($_POST["command"] == "check_mbox" && $_POST["ajax"] == "true") {
 	$check = imap_mailboxmsginfo($mbox);
@@ -446,8 +423,8 @@ $i=1;
 }
 
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
-echo ' deliberately putting this print here ';
-print_r($list);
+//echo ' deliberately putting this print here ';
+//print_r($list);
 sort($list);
 if (is_array($list)) {
       	$boxes = '<select name="mailbox" id="mailbox_select">';
@@ -465,23 +442,13 @@ if (is_array($list)) {
 			$box = imap_mailboxmsginfo($mbox);
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
 		} else {
-			if($ssltype == "") {$ssltype = "notls";}
-			if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-			echo ' the tmbox check fails here because of .bash_logout being passed as the mailbox  >>>>>>>  ' .$tmpval;
-	//			$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey);
-			$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$tmpval, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-			//echo '  1211111111111111  ';   
-			echo ' tmbox is ' .$tmbox;
-			if(!$tmbox)
-			{
-							$tmbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/}".$mailbox, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
- $connectString = "{".$imapServerAddress.":143/".$imapProtocol."/notls}".$mailbox;
-	$tmbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error());
-			$box = imap_mailboxmsginfo($tmbox);
+			$tmpbox = getImapMbox($tmpval,$temprow);
+			$box = imap_mailboxmsginfo($tmpbox);
+
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
-			}
-			imap_close($tmbox);
+
+			imap_close($tmpbox);
 		}
  	}
         $boxes .= '</select>';

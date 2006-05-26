@@ -18,6 +18,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once("modules/Webmails/MailParse.php");
+
 
 global $adb,$mbox,$current_user;
 
@@ -30,33 +32,15 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
-$login_username= $temprow["mail_username"];
-$secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
-$mail_protocol=$temprow["mail_protocol"];
-$ssltype=$temprow["ssltype"];
-$sslmeth=$temprow["sslmeth"];
-$account_name=$temprow["account_name"];
 $show_hidden=$_REQUEST["show_hidden"];
 
+$mbox = getImapMbox($mailbox,$temprow);
 
-if($ssltype == "") {$ssltype = "notls";}
-if($sslmeth == "") {$sslmeth = "novalidate-cert";}
-// bug in windows PHP having to do with SSL not being linked correctly
-// causes this open command to fail.
-if(!preg_match("/windows/i",php_uname()))
-        $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$_REQUEST["mailbox"], $login_username, $secretkey);
-
-
-$check = imap_check($mbox);
-
-//if($check->Recent > 0) {
 $search = imap_search($mbox, "NEW ALL");
 if($search === false) {echo "";flush();exit();}
-
-//echo $search[0];flush();exit();
 
 $data = imap_fetch_overview($mbox,implode(',',$search));
 $num=sizeof($data);
