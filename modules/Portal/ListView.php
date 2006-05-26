@@ -39,6 +39,7 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("PORTAL_COUNT", count($portal_info));
 $smarty->assign("PORTALS", $portal_info);
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("CATEGORY", getParentTab());

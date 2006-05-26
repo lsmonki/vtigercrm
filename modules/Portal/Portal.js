@@ -20,13 +20,13 @@ function ajaxeditSiteResp(response)
 {
 	hide('status');
 	document.getElementById('editportal_cont').innerHTML = response.responseText;
+
 }
 function fetchContents(mode)
 {
 	show('status');
 	if(mode == 'data')
 	{
-		fninvsh('orgLay');
 		getObj('datatab').className = 'SiteSel';
 		getObj('managetab').className = 'SiteUnSel';
 	}
@@ -65,7 +65,7 @@ function SaveSite(id)
 		alert('Site Name cannot be empty')
 		return false;
 	}
-	fninvsh('orgLay');
+	Effect.Puff('orgLay');	
 	show('status');
 	var portalurl = document.getElementById('portalurl').value;
 	var portalname = document.getElementById('portalname').value;
