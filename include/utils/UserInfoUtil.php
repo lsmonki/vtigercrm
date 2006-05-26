@@ -1607,10 +1607,19 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 	global $adb;
 	global $current_user;
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	$recordOwnerArr=getRecordOwnerId($record_id);
 	$ownertype='';
 	$ownerid='';
 	$sharePer='no';
+
+	$sharingModuleList=getSharingModuleList();
+	if(! in_array($module,$sharingModuleList))
+	{
+		$sharePer='no';
+		return $sharePer;
+	}
+
+	
+	$recordOwnerArr=getRecordOwnerId($record_id);
 	foreach($recordOwnerArr as $type=>$id)
 	{
 		$ownertype=$type;
@@ -1740,10 +1749,18 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 	global $adb;
 	global $current_user;	
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	$recordOwnerArr=getRecordOwnerId($record_id);
 	$ownertype='';
 	$ownerid='';
 	$sharePer='no';
+
+	$sharingModuleList=getSharingModuleList();
+        if(! in_array($module,$sharingModuleList))
+        {
+                $sharePer='no';
+                return $sharePer;
+        }
+
+	$recordOwnerArr=getRecordOwnerId($record_id);
 	foreach($recordOwnerArr as $type=>$id)
 	{
 		$ownertype=$type;
@@ -1752,6 +1769,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 
 	$varname=$module."_share_write_permission";
 	$write_per_arr=$$varname;
+	
 	if($ownertype == 'Users')
 	{
 		//Checking the Write Sharing Permission Array in Role Users
@@ -4617,6 +4635,32 @@ function updateCampaignGroupRelation($campaignid,$groupname)
 	}
 	$log->debug("Exiting updateCampaignGroupRelation method ...");
 }
+
+
+/** Function to get the list of module for which the user defined sharing rules can be defined  
+  * @returns Array:: Type array
+  *
+  */
+function getSharingModuleList()
+{
+	global $log;
+	
+	$sharingModuleArray=Array('Accounts',
+				 'Leads',
+				 'Contacts',
+				 'Potentials',
+				 'HelpDesk',
+				 'Emails',
+				 'Campaigns',
+				 'Quotes',
+				 'PurchaseOrder',
+				 'SalesOrder',
+				 'Invoice');
+
+	return $sharingModuleArray;					
+}
+
+
 
 //end					   
 ?>
