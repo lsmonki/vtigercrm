@@ -88,7 +88,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$campaign_tables = Array('campaign','crmentity');
+$campaign_tables = Array('campaign','crmentity','campaignscf');
 $tabid = getTabid("Campaigns");
 $validationData = getDBValidationData($campaign_tables,$tabid);
 $data = split_validationdataArray($validationData);

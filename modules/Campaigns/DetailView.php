@@ -56,7 +56,7 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 
 
-$campaign_tables = Array('campaign','crmentity');
+$campaign_tables = Array('campaign','crmentity','campaignscf');
 $tabid = getTabid("Campaigns");
 $validationData = getDBValidationData($campaign_tables,$tabid);
 $data = split_validationdataArray($validationData);
