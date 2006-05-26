@@ -239,7 +239,7 @@ class Potential extends CRMEntity {
 		}
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join potential on potential.potentialid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+		$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join potential on potential.potentialid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus != 'Held')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Potentials','Activities',$focus,$query,$button,$returnset);
 
@@ -405,7 +405,7 @@ class Potential extends CRMEntity {
 				left join groups on groups.groupname=activitygrouprelation.groupname
 				inner join users on crmentity.smcreatorid= users.id
 				where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
+				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus = 'Held' and activity.eventstatus != ''))
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
