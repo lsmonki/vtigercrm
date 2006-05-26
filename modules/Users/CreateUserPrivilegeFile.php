@@ -93,7 +93,7 @@ function createUserPrivilegesfile($userid)
 function createUserSharingPrivilegesfile($userid)
 {
 	global $adb;
-	require_once('user_privileges/user_privileges_'.$userid.'.php');
+	require('user_privileges/user_privileges_'.$userid.'.php');
 	$handle=@fopen($root_directory.'user_privileges/sharing_privileges_'.$userid.'.php',"w+");
 
 	if($handle)
@@ -358,7 +358,7 @@ function createUserSharingPrivilegesfile($userid)
 function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups)
 {
 	global $adb;
-	
+
 	$mod_tabid=getTabid($module);
 
 	$mod_share_permission;
