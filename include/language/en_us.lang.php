@@ -988,13 +988,9 @@ $app_list_strings = Array(
 
 
 
-'task_status_dom' => Array('Not Started'=>'Not Started'
-
-		, 'In Progress'=>'In Progress'
+'task_status_dom' => Array('Planned'=>'Planned'
 
 		, 'Completed'=>'Completed'
-
-		, 'Pending Input'=>'Pending Input'
 
 		, 'Deferred'=>'Deferred'
 
