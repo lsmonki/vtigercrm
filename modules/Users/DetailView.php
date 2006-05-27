@@ -127,16 +127,28 @@ if(isset($focus->imagename) && $focus->imagename!='')
 }
 				
 if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $smarty->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
+
+if(isset($_REQUEST['modechk']) && $_REQUEST['modechk'] != '' )
+{
+	$modepref = $_REQUEST['modechk'];
+}
+	if($_REQUEST['modechk'] == 'prefview')
+		$parenttab = '';
+	else
+		$parenttab = 'Settings';
+
+$smarty->assign("PARENTTAB", $parenttab);
+
 if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& isset($default_user_name)
 		&& $default_user_name == $focus->user_name
 		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true	) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='PARENTTAB' \" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 	
  //global $AUTHCFG;
@@ -277,24 +289,11 @@ $smarty->assign("ADDRESS_COUNTRY", $focus->address_country);
 $smarty->assign("SIGNATURE", nl2br($focus->signature));
 $smarty->assign("MODULE", 'Settings');
 
-if(isset($_REQUEST['modechk']) && $_REQUEST['modechk'] != '' )
-{
-	$mode = $_REQUEST['modechk'];
-}
-	if($_REQUEST['mode'] == 'prefview')
-		$parenttab = '';
-	else
-		$parenttab = 'Settings';
-
-$smarty->assign("PARENTTAB", $parenttab);
 
 $mode1 = 'pref';
 $smarty->assign("MODE1", $mode1);
 
-if ($category == "Settings")
         $smarty->display("UserDetailView.tpl");
-else
-        $smarty->display("MyPrefDetailView.tpl");
 
 echo "</td></tr>\n";
 
