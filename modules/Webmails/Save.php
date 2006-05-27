@@ -100,10 +100,14 @@ if($email->relationship != 0)
 function add_attachment_to_contact($cid,$email) {
 	// add attachments to contact
 	global $adb,$current_user;
-	
-	$attachments=$email->downloadAttachments();
-	$upload_filepath = decideFilePath();
-	for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
+	for($j=0;$j<2;$j++) {
+	    if($j==0)
+	    	$attachments=$email->downloadAttachments();
+	    else
+	    	$attachments=$email->inline;
+
+	    $upload_filepath = decideFilePath();
+	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
 		$current_id = $adb->getUniqueID("crmentity");
 		$date_var = date('YmdHis');
 
@@ -127,6 +131,7 @@ function add_attachment_to_contact($cid,$email) {
 		$fp = fopen($upload_filepath.'/'.$filename, "w") or die("Can't open file");
 		fputs($fp, base64_decode($attachments[$i]["filedata"]));
 		fclose($fp);
+	    }
 	}
 }
 

@@ -70,7 +70,7 @@ function show_inline(num) {
 					echo nl2br($inline[$i]["filedata"]);
 					echo "</blockquote>";
 				} elseif($inline[$i]["subtype"] == "JPEG") {
-					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><div id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>";
+					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><div id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden;width:95%'>";
 					global $root_directory;
 					$save_path=$root_directory.'/modules/Webmails/tmp';
 					if(!is_dir($save_path))
@@ -82,7 +82,7 @@ function show_inline(num) {
         				$fp = fopen($save_dir.'/'.$inline[$i]["filename"], "w") or die("Can't open file");
         				fputs($fp, base64_decode($inline[$i]["filedata"]));
         				$filename = 'modules/Webmails/tmp/cache/'.$inline[$i]['filename'];
-					echo '<img src="'.$filename.'" border="0">';
+					echo '<img src="'.$filename.'" border="0" width="100%">';
 					echo '</div>';
 				} else 
 					echo "<br>".($i+1).") <a target='_BLANK' href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"]."</a>";
