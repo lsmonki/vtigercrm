@@ -84,7 +84,7 @@
 		</tr>
 		 <tr>
                       <td align="right" valign="top"><font color="red">{$APP.LBL_REQUIRED_SYMBOL}</font><b>{$UMOD.LBL_MERGE_FILE}</b></td>
-                      <td><input type="file" name="binFile" size="40" tabindex="3" /><br />(Eg - .doc, .rtf files)</td>
+                      <td><input type="file" name="binFile" size="40" tabindex="3" /><br />(Upload only <b>'.doc'</b> files)</td>
 		 </tr>
 		 <tr>
 		      <td colspan="2"  width="75%" style="border-top:1px dashed #CCCCCC;border-bottom:1px dashed #CCCCCC;"  align="center">
