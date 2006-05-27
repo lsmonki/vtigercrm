@@ -1985,16 +1985,10 @@ function getReadEntityIds($module)
 			FROM leaddetails
 			INNER JOIN crmentity
 				ON crmentity.crmid = leaddetails.leadid
-			INNER JOIN leadsubdetails
-				ON leadsubdetails.leadsubscriptionid = leaddetails.leadid
-			INNER JOIN leadaddress
-				ON leadaddress.leadaddressid = leadsubdetails.leadsubscriptionid
-			INNER JOIN leadscf
-				ON leaddetails.leadid = leadscf.leadid
 			LEFT JOIN leadgrouprelation
-				ON leadscf.leadid = leadgrouprelation.leadid
+				ON leaddetails.leadid = leadgrouprelation.leadid
 			LEFT JOIN groups
-				ON groups.groupname = leadgrouprelation.groupname
+                                ON groups.groupname = leadgrouprelation.groupname
 			WHERE crmentity.deleted = 0
 			AND leaddetails.converted = 0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -2013,55 +2007,18 @@ function getReadEntityIds($module)
 			FROM account
 			INNER JOIN crmentity
 				ON crmentity.crmid = account.accountid
-			INNER JOIN accountbillads
-				ON account.accountid = accountbillads.accountaddressid
-			INNER JOIN accountshipads
-				ON account.accountid = accountshipads.accountaddressid
-			INNER JOIN accountscf
-				ON account.accountid = accountscf.accountid
 			LEFT JOIN accountgrouprelation
-				ON accountscf.accountid = accountgrouprelation.accountid
+				ON account.accountid = accountgrouprelation.accountid
 			LEFT JOIN groups
-				ON groups.groupname = accountgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
+                                ON groups.groupname = accountgrouprelation.groupname
 			WHERE crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
-                    $query .= "AND (crmentity.smownerid IN (".$current_user->id.")
-		   			 OR crmentity.smownerid IN (
-						 SELECT user2role.userid
-						 FROM user2role
-						 INNER JOIN users
-							 ON users.id = user2role.userid
-						 INNER JOIN role
-							 ON role.roleid = user2role.roleid
-						 WHERE role.parentrole LIKE '".$current_user_parent_role_seq."::%')
-						 OR crmentity.smownerid IN (
-							 SELECT shareduserid
-							 FROM tmp_read_user_sharing_per
-							 WHERE userid = ".$current_user->id."
-							 AND tabid = ".$tab_id.")
-						 OR (crmentity.smownerid IN (0)
-						 	AND (";
-
-                        if(sizeof($current_user_groups) > 0)
-                        {
-                              $query .= "accountgrouprelation.groupname IN (
-				      		SELECT groupname
-						FROM groups
-						WHERE groupid IN ".getCurrentUserGroupList().")
-						OR ";
-                        }
-                         $query .= "accountgrouprelation.groupname IN(
-				 	SELECT groups.groupname
-					FROM tmp_read_group_sharing_per
-					INNER JOIN groups
-						ON groups.groupid = tmp_read_group_sharing_per.sharedgroupid
-					WHERE userid = ".$current_user->id."
-					AND tabid = ".$tab_id.")))) ";
-                }	
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;
+		}
+                    	
 		
 	}
 
@@ -2072,16 +2029,10 @@ function getReadEntityIds($module)
 			FROM potential
 			INNER JOIN crmentity
 				ON crmentity.crmid = potential.potentialid
-			INNER JOIN account
-				ON potential.accountid = account.accountid
-			INNER JOIN potentialscf
-				ON potentialscf.potentialid = potential.potentialid
 			LEFT JOIN potentialgrouprelation
 				ON potential.potentialid = potentialgrouprelation.potentialid
 			LEFT JOIN groups
-				ON groups.groupname = potentialgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
+                                ON groups.groupname = potentialgrouprelation.groupname
 			WHERE crmentity.deleted = 0 "; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -2102,20 +2053,10 @@ function getReadEntityIds($module)
 			FROM contactdetails
 			INNER JOIN crmentity
 				ON crmentity.crmid = contactdetails.contactid
-			INNER JOIN contactaddress
-				ON contactdetails.contactid = contactaddress.contactaddressid
-			INNER JOIN contactsubdetails
-				ON contactaddress.contactaddressid = contactsubdetails.contactsubscriptionid
-			INNER JOIN contactscf
-				ON contactdetails.contactid = contactscf.contactid
-			LEFT JOIN account
-				ON account.accountid = contactdetails.accountid
 			LEFT JOIN contactgrouprelation
-				ON contactscf.contactid = contactgrouprelation.contactid
+				ON contactdetails.contactid = contactgrouprelation.contactid
 			LEFT JOIN groups
-				ON groups.groupname = contactgrouprelation.groupname
-			INNER JOIN users
-				ON users.id = crmentity.smownerid
+                                ON groups.groupname = contactgrouprelation.groupname
 			WHERE crmentity.deleted = 0 ";
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -2130,8 +2071,6 @@ function getReadEntityIds($module)
 			FROM products
 			INNER JOIN crmentity
 				ON crmentity.crmid = products.productid
-			LEFT JOIN productcf
-				ON products.productid = productcf.productid
 			LEFT JOIN seproductsrel
 				ON seproductsrel.productid = products.productid
 			WHERE crmentity.deleted = 0
@@ -2151,20 +2090,10 @@ function getReadEntityIds($module)
 			FROM purchaseorder
 			INNER JOIN crmentity
 				ON crmentity.crmid = purchaseorder.purchaseorderid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			LEFT OUTER JOIN vendor
-				ON purchaseorder.vendorid = vendor.vendorid
-			INNER JOIN pobillads
-				ON purchaseorder.purchaseorderid = pobillads.pobilladdressid
-			INNER JOIN poshipads
-				ON purchaseorder.purchaseorderid = poshipads.poshipaddressid
-			LEFT JOIN purchaseordercf
-				ON purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid
 			LEFT JOIN pogrouprelation
 				ON purchaseorder.purchaseorderid = pogrouprelation.purchaseorderid
 			LEFT JOIN groups
-				ON groups.groupname = pogrouprelation.groupname
+                                ON groups.groupname = pogrouprelation.groupname
 			WHERE crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -2179,22 +2108,10 @@ function getReadEntityIds($module)
 			FROM salesorder
 			INNER JOIN crmentity
 				ON crmentity.crmid = salesorder.salesorderid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			INNER JOIN sobillads
-				ON salesorder.salesorderid = sobillads.sobilladdressid
-			INNER JOIN soshipads
-				ON salesorder.salesorderid = soshipads.soshipaddressid
-			LEFT JOIN salesordercf
-				ON salesordercf.salesorderid = salesorder.salesorderid
-			LEFT OUTER JOIN quotes
-				ON quotes.quoteid = salesorder.quoteid
-			LEFT OUTER JOIN account
-				ON account.accountid = salesorder.accountid
 			LEFT JOIN sogrouprelation
 				ON salesorder.salesorderid = sogrouprelation.salesorderid
 			LEFT JOIN groups
-				ON groups.groupname = sogrouprelation.groupname
+                                ON groups.groupname = sogrouprelation.groupname
 			WHERE crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -2208,16 +2125,6 @@ function getReadEntityIds($module)
 			FROM invoice
 			INNER JOIN crmentity
 				ON crmentity.crmid = invoice.invoiceid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			INNER JOIN invoicebillads
-				ON invoice.invoiceid = invoicebillads.invoicebilladdressid
-			INNER JOIN invoiceshipads
-				ON invoice.invoiceid = invoiceshipads.invoiceshipaddressid
-			LEFT OUTER JOIN salesorder
-				ON salesorder.salesorderid = invoice.salesorderid
-			INNER JOIN invoicecf
-				ON invoice.invoiceid = invoicecf.invoiceid
 			LEFT JOIN invoicegrouprelation
 				ON invoice.invoiceid = invoicegrouprelation.invoiceid
 			LEFT JOIN groups
