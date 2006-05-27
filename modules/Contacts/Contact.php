@@ -521,7 +521,7 @@ class Contact extends CRMEntity {
                                 users.user_name assigned_user_name
                                 FROM contactdetails
 				inner join crmentity on crmentity.crmid=contactdetails.contactid
-                                LEFT JOIN users ON crmentity.smcreatorid=users.id
+                                LEFT JOIN users ON crmentity.smownerid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
 				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
 			        left join contactscf on contactscf.contactid=contactdetails.contactid
@@ -535,7 +535,7 @@ class Contact extends CRMEntity {
                                 users.user_name assigned_user_name
                                 FROM contactdetails
                                 inner join crmentity on crmentity.crmid=contactdetails.contactid
-                                LEFT JOIN users ON crmentity.smcreatorid=users.id
+                                LEFT JOIN users ON crmentity.smownerid=users.id
                                 LEFT JOIN account on contactdetails.accountid=account.accountid
 				left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid
 			        left join contactscf on contactscf.contactid=contactdetails.contactid

@@ -168,7 +168,7 @@ class Potential extends CRMEntity {
 					ON crmentity.crmid=potential.potentialid
 					LEFT JOIN account on potential.accountid=account.accountid
 					left join potentialscf on potentialscf.potentialid=potential.potentialid
-					left join users on crmentity.smcreatorid=users.id where crmentity.deleted=0 ";
+					left join users on crmentity.smownerid=users.id where crmentity.deleted=0 ";
 		}
 		else
 		{
@@ -177,7 +177,7 @@ class Potential extends CRMEntity {
 				account.accountname account_name,
 				users.user_name assigned_user_name
 					FROM potential inner join crmentity on crmentity.crmid=potential.potentialid                                LEFT JOIN users
-					ON crmentity.smcreatorid=users.id
+					ON crmentity.smownerid=users.id
 					LEFT JOIN account on potential.accountid=account.accountid  LEFT JOIN potentialscf on potentialscf.potentialid=potential.potentialid where crmentity.deleted=0 ";
 		}	
 
