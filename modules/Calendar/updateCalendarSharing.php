@@ -10,12 +10,10 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 global $adb;
-$sharedid = $_REQUEST['sharedid'];
-if(isset($_REQUEST['sharedid']) && $_REQUEST['sharedid'] != '')
+$sharedid = $_REQUEST['user'];
+if(isset($sharedid) && $sharedid != null)
 {
-        //split the string and store in an array
-        $storearray = explode (";",$sharedid);
-        foreach($storearray as $sid)
+        foreach($sharedid as $sid)
         {
                 if($sid != '')
                 {
@@ -23,7 +21,7 @@ if(isset($_REQUEST['sharedid']) && $_REQUEST['sharedid'] != '')
 		        $adb->query($sql);
                 }
         }
-        header("Location: index.php?action=calendar_share&module=Calendar");
+        header("Location: index.php?action=index&module=Calendar&parenttab=My Home Page");
 }
 
 ?>
