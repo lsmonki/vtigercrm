@@ -518,7 +518,7 @@ class User extends SugarBean {
 	function getUserListViewEntries($navigation_array,$sorder='',$orderby='')
 	{
 		global $theme;
-		global $adb;	
+		global $adb, $current_user;	
 	    	$theme_path="themes/".$theme."/";
 	    	$image_path=$theme_path."images/";
 		if($sorder != '' && $orderby !='')
@@ -548,6 +548,10 @@ class User extends SugarBean {
 			if($adb->query_result($result,$i-1,'user_name') == 'admin' || $adb->query_result($result,$i-1,'user_name') == 'standarduser' )
 			{
 			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
+	                }
+			elseif($adb->query_result($result,$i-1,'id') == $current_user->id)
+                        {
+                              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
 	                }
 		        else
 			  
