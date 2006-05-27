@@ -191,9 +191,9 @@ function QCreate(qcoptions)
         var ajaxObj = new Ajax(ajaxQCreateResponse);
         var module = qcoptions.options[qcoptions.options.selectedIndex].value;
 	if(module == 'Events')
-                var urlstring = "module=Activities&action=ActivitiesAjax&ajaxmode=qcreate&activity_mode=Events";
+                var urlstring = "module=Activities&action=ActivitiesAjax&file=QuickCreate&activity_mode=Events";
         else
-	        var urlstring = "module="+module+"&action="+module+"Ajax&ajaxmode=qcreate";
+	        var urlstring = "module="+module+"&action="+module+"Ajax&file=QuickCreate";
           ajaxObj.process("index.php?",urlstring);
 {rdelim}
 
