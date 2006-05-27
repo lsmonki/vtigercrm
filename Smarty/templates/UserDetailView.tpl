@@ -82,7 +82,6 @@
 			{if $CATEGORY eq 'Settings'}
 				{$DUPLICATE_BUTTON}
 			{/if}	
-				{$DELETE_BUTTON}
 				{$CHANGE_HOMEPAGE_BUTTON}	
 				{$LISTROLES_BUTTON}
 	</td></tr>
