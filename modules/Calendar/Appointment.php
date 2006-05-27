@@ -45,7 +45,7 @@ class Appointment
 	function readAppointment($userid, &$from_datetime, &$to_datetime, $view)
 	{
 		global $current_user,$adb;
-		$shared_ids = getSharedCalendarId($current_user->id,'shared');		
+		$shared_ids = getSharedCalendarId($current_user->id);		
 		if(empty($shared_ids))
 			$shared_ids = $current_user->id;
                 $q= "select activity.*, crmentity.*, account.accountname,account.accountid,activitygrouprelation.groupname FROM activity inner join crmentity on activity.activityid = crmentity.crmid left join recurringevents on activity.activityid=recurringevents.activityid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE activity.activitytype in ('Call','Meeting') AND ";

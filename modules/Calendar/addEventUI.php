@@ -1,15 +1,24 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once('include/utils/CommonUtils.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Calendar/Calendar.php');
+require_once("modules/Emails/mail.php");
 
- global $theme;
+ global $theme,$mod_strings,$app_strings,$current_user;
  $theme_path="themes/".$theme."/";
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
- global $mod_strings,$app_strings,$current_user;
  $userDetails=getOtherUserName($current_user->id);
- require_once("modules/Emails/mail.php");
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 $mysel= $_GET['view'];
@@ -531,17 +540,24 @@ setObjects();
 
 	<!-- Add Activity DIV stops-->
 
-<div id="reportLay" style="width:125px;" onMouseout="fninvsh('reportLay')" onMouseover="fnvshNrm('reportLay')">
+<div id="calAction" style="width:125px;" onMouseout="fninvsh('calAction')" onMouseover="fnvshNrm('calAction')">
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 		<tr>
 			<td>
-				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
-				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_EPENDING']?></a>
+				<a href="" id="complete" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
+				<a href="" id="pending" class="calMnu">- <?php echo $mod_strings['LBL_EPENDING']?></a>
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
-				<a href="#" onClick="" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-				<a href="#" onClick="calchangeowner();" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
-				<a href="#" onClick="changeCalstatus();" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+				<a href="" id="postpone" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
+				<a href="#" id="changeowner" onClick="calchangeowner();" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="" id="actdelete" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
 			</td>
 		</tr>
 	</table>
+</div>
+
+<!-- Dropdown for Add Event -->
+<div id='addEventDropDown' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
+	<a href='' id="addcall" class='submenu'>Add Call</a>
+        <a href='' id="addmeeting" class='submenu'>Add Meeting</a>
+        <a href='' id="addtodo" class='submenu'>Add Todo</a>
 </div>

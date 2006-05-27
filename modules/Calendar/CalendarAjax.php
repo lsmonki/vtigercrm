@@ -32,6 +32,10 @@ if(isset($_REQUEST['type']) && ($_REQUEST['type'] !=''))
 	        $mod_strings = return_module_language($current_language,$temp_module);
         	$currentModule = $_REQUEST['module'];
 	}
+	elseif($type == 'settings')
+	{
+		require_once('modules/Calendar/calendar_share.php');	
+	}
 	else
 	{
 		$mysel= $_REQUEST['view'];
