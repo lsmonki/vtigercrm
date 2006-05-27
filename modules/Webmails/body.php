@@ -49,10 +49,10 @@ if(isset($_POST["command"])) {
 <script type="text/javascript">
 function show_inline(num) {
 	var el = document.getElementById("block_"+num);
-	if(el.style.visibility == 'visible')
-		el.style.visibility='hidden';
+	if(el.style.display == 'block')
+		el.style.display='none';
 	else
-		el.style.visibility='visible';
+		el.style.display='block';
 }
 </script>
 <?
@@ -61,16 +61,16 @@ function show_inline(num) {
 	if(is_array($email->inline)) {
 		$inline = $email->inline;
 		$num=sizeof($inline);
-		echo "<b>Inline Attachments</b>:<br>";
+		echo "<p style='border-bottom:1px solid black;font-weight:bold'>Inline Attachments:</p>";
 		for($i=0;$i<$num;$i++) {
 				//var_dump($inline[$i]);
 				// PLAIN TEXT
 				if($inline[$i]["subtype"] == "RFC822") {
-					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><blockquote id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>";
+					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><blockquote id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;display:none'>";
 					echo nl2br($inline[$i]["filedata"]);
 					echo "</blockquote>";
 				} elseif($inline[$i]["subtype"] == "JPEG") {
-					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><div id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden;width:95%'>";
+					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><br><br><div id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;display:none;width:95%'>";
 					global $root_directory;
 					$save_path=$root_directory.'/modules/Webmails/tmp';
 					if(!is_dir($save_path))
@@ -82,6 +82,7 @@ function show_inline(num) {
         				$fp = fopen($save_dir.'/'.$inline[$i]["filename"], "w") or die("Can't open file");
         				fputs($fp, base64_decode($inline[$i]["filedata"]));
         				$filename = 'modules/Webmails/tmp/cache/'.$inline[$i]['filename'];
+					fclose($fp);
 					echo '<img src="'.$filename.'" border="0" width="100%">';
 					echo '</div>';
 				} else 
