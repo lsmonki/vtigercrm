@@ -44,10 +44,6 @@ if($ajaxaction == "DETAILVIEW")
 		echo ":#:FAILURE";
 	}
 }
-elseif($_REQUEST['ajaxmode'] == 'qcreate')
-{
-        require_once('quickcreate.php');
-}
 else
 {
         require_once('include/Ajax/CommonAjax.php');
