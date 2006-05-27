@@ -48,7 +48,7 @@ $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("LIST_HEADER",getListViewHeader($focus,"Users","",$sortorder,$sortby,"",""));
+$smarty->assign("LIST_HEADER",$focus->getUserListViewHeader());
 $smarty->assign("LIST_ENTRIES",$focus->getUserListViewEntries($navigation_array,$sortorder,$sortby));
 $smarty->assign("USER_COUNT",$no_of_users);
 $smarty->assign("RECORD_COUNTS", $record_string);

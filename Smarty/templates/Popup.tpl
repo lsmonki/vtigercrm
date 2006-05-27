@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css"/>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
@@ -22,62 +23,94 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 {rdelim}
 </script>
 
-<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
 	<tr>
-	        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
-
-        	<td class="showPanelBg" valign=top width=100%>
-                	<div class="small" style="padding:20px">
-			       <form name="selectall" method="POST">
-		               <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
-                		<tr style="background-color:#efefef">
-                        		<td >
-						<table border=0 cellspacing=0 cellpadding=2 width=100%>
-		                                <tr>
-		           		                <input name="module" type="hidden" value="{$RETURN_MODULE}">
-		                                <input name="action" type="hidden" value="{$RETURN_ACTION}">
-                  		                <input name="pmodule" type="hidden" value="{$MODULE}">
-										<input type="hidden" name="curr_row" value="{$CURR_ROW}">	
-		                                <input name="entityid" type="hidden" value="">
-		                                <input name="idlist" type="hidden" value="">
-						{if $SELECT eq 'enable'}
-						  <td><input class="small" type="button" value="Add Contacts" onclick="if(SelectAll()) window.close();"/></td>
-						{/if}
-                        	                  <td style="padding-right:20px" class="small" nowrap>&nbsp;{$RECORD_COUNTS}</td>
-			                          <td class="small" nowrap>{$NAVIGATION}</td>
-						 </tr>
-						</table>
-						<div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
-			                        <table border=0 cellspacing=1 cellpadding=3 width=100% class=small>
-                        				<tr>	
-							{if $SELECT eq 'enable'}
-								<td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
-							{/if}
-
-                        				{foreach item=header from=$LISTHEADER}
-							         <td class="lvtCol">{$header}</td>
-					                {/foreach}
-				                        </tr>
-							{foreach key=entity_id item=entity from=$LISTENTITY}
-			                                <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
-							{if $SELECT eq 'enable'}
-								<td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
-							{/if}
-                                				{foreach item=data from=$entity}
-			                                        <td>
-                        			                        {$data}
-			                                        </td>
-                        				        {/foreach}
-			                                </tr>
-                        				{/foreach}
-                        			</table>
-                       				</div>
-					</td>
-				 </tr>
-				</table>
-				</form>    
-			</div>
+		<td background="{$IMAGE_PATH}popupHdr.jpg" height="70" style="padding-left:20px;">
+		<span style="color:#FFFFFF;font:Arial, Helvetica, sans-serif;font-size:18px;font-weight:bold;">
+		{$MODULE}
+		</span> 
 		</td>
 	</tr>
+	<tr>
+	  	<td style="padding:10px;" >
+			<form name="basicSearch" action="index.php">
+			<table width="100%" cellpadding="5" cellspacing="0" style="border-top:1px dashed #CCCCCC;border-bottom:1px dashed #CCCCCC;">
+			<tr>
+				<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
+				<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
+				<td width="30%" class="dvtCellLabel"><b>In</b>&nbsp;
+					<select name ="search_field" class="txtBox">
+		                         {html_options  options=$SEARCHLISTHEADER }
+                		        </select>
+								<input type="hidden" name="searchtype" value="BasicSearch">
+		                        <input type="hidden" name="module" value="{$MODULE}">
+								<input type="hidden" name="action" value="Popup">
+		    	                <input type="hidden" name="query" value="true">
+								<input type="hidden" name="search_cnt">
+
+				</td>
+				<td width="20%" class="dvtCellLabel">
+					<input type="button" name="search" value=" &nbsp;Search&nbsp; " onClick="callSearch('Basic');" class="classBtn">
+				</td>
+			</tr>
+			 <tr>
+				<td colspan="4" align="center">
+					<table width="100%">
+					<tr>	
+						{$ALPHABETICAL}
+					</tr>
+					</table>
+				</td>
+			</tr>
+			</table>
+			</form>
+  		</td>
+  	</tr>
 </table>
-				
+<div id="ListViewContents">
+	{include file="PopupContents.tpl"}
+</div>
+<script>
+function callSearch(searchtype)
+{ldelim}
+
+        search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+        search_type_val=document.basicSearch.searchtype.value;
+        search_txt_val=document.basicSearch.search_text.value;
+
+	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var urlstring = '';
+        elements=document.basicSearch;
+	for(ii = 0 ; ii < elements.length; ii++)
+	{ldelim}
+	if(elements[ii].name != 'action')
+		urlstring = urlstring+''+elements[ii].name+'='+elements[ii].value+'&';
+	else
+		urlstring = urlstring+'file=Popup&';
+	{rdelim}
+	var no_rows = document.basicSearch.search_cnt.value;
+	for(jj = 0 ; jj < no_rows; jj++)
+	{ldelim}
+		var sfld_name = getObj("Fields"+jj);
+		var scndn_name= getObj("Condition"+jj);
+		var srchvalue_name = getObj("Srch_value"+jj);
+		urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
+		urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
+		urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+	{rdelim}
+	popuptype = document.getElementById('popup_type').value;
+	urlstring = urlstring +'action={$MODULE}Ajax&ajax=true&popuptype='+popuptype;	
+	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function ajaxSaveResponse(response)
+{ldelim}
+	document.getElementById("ListViewContents").innerHTML= response.responseText;
+{rdelim}
+function getListViewEntries_js(module,url)
+{ldelim}
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+		popuptype = document.getElementById('popup_type').value;
+        var urlstring ="module="+module+"&action="+module+"Ajax&popuptype="+popuptype+"&file=Popup&ajax=true&"+url;
+        ajaxObj.process("index.php?",urlstring);
+{rdelim}
+</script>

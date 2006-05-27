@@ -95,7 +95,7 @@ class User extends SugarBean {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
-	var $sortby_fields = Array('user_name','email1','last_name','is_admin','status');	
+	//var $sortby_fields = Array('user_name','email1','last_name','is_admin','status');	
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -148,6 +148,9 @@ class User extends SugarBean {
 	var $additional_column_fields = Array('reports_to_name');		
 	
 	// This is the list of fields that are in the lists.
+	var $list_fields = Array('id', 'first_name', 'last_name', 'user_name', 'status', 'department', 'yahoo_id', 'is_admin', 'email1', 'phone_work');
+	//commented as we get issues with sugarbean
+	/*
 	var $list_fields = Array(
 		'UserName'=>Array('users'=>'user_name'),
 		'Role'=>Array(''=>''),
@@ -156,7 +159,7 @@ class User extends SugarBean {
 		'Admin'=>Array('users'=>'is_admin'),
 		'Status'=>Array('users'=>'status'),
 		'Tools'=>Array(''=>''),
-	);	
+	);*/	
 		
 	var $default_order_by = "user_name";
 	var $default_sort_order = 'ASC';
@@ -504,6 +507,13 @@ class User extends SugarBean {
 											 "CITY","STATE","POSTALCODE","COUNTRY");	
   	return $mergeflds;
   }
+		//function added for the listview of users for 5.0 beta
+	function getUserListViewHeader()
+	{
+		global $mod_strings;
+		$header_array=array($mod_strings['LBL_LIST_USER_NAME'],$mod_strings['LBL_USER_ROLE'],$mod_strings['LBL_LIST_EMAIL'],$mod_strings['LBL_LIST_NAME'],$mod_strings['LBL_LIST_ADMIN'],$mod_strings['LBL_STATUS'],$mod_strings['LBL_LIST_TOOLS']);
+		return $header_array;
+	}
 
 	function getUserListViewEntries($navigation_array,$sorder='',$orderby='')
 	{

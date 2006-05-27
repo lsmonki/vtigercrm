@@ -67,7 +67,6 @@ if (!isset($_REQUEST['html'])) {
 		$form =new XTemplate ('modules/Users/Popup_picker.html');
 	else
 		$form =new XTemplate ('modules/Users/Popup_picker_emails.html');
-	$form->assign("POPUPTYPE",$_REQUEST['popuptype']);
 	$log->debug("using file modules/Users/Popup_picker.html");
 }
 else {
@@ -78,8 +77,10 @@ else {
 	$log->debug("using file modules/Users/".$_REQUEST['html'].'.html');
 	$log->debug("_REQUEST['html'] is ".$_REQUEST['html']);
 }
+	$form->assign("POPUPTYPE",$_REQUEST['popuptype']);
 
 $form->assign("MOD", $mod_strings);
+$form->assign("IMAGE_PATH", $image_path);
 $form->assign("APP", $app_strings);
 
 // the form key is required
@@ -165,6 +166,7 @@ $button .= "<tr><td>&nbsp;</td>";
 $button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
 $button .= "</tr></form></table>\n";
 */
+
 $ListView = new ListView();
 $ListView->setXTemplate($form);
 $ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
@@ -176,11 +178,3 @@ $ListView->processListView($seed_object, "main", "USER");
 
 
 ?>
-
-	<tr><td COLSPAN=7><?php echo get_form_footer(); ?></td></tr>
-</form>
-	</table>
-</td></tr></tbody></table>
-</td></tr>
-
-<?php insert_popup_footer(); ?>

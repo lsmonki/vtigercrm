@@ -32,7 +32,6 @@ if (!isset($where)) $where = "";
 
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-
 switch($currentModule)
 {
 	case 'Contacts':
@@ -46,8 +45,8 @@ switch($currentModule)
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 		break;
 	case 'Accounts':
 		require_once("modules/$currentModule/Account.php");
@@ -61,8 +60,7 @@ switch($currentModule)
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
-		$sorder = $focus->getSortOrder();
-		$order_by = $focus->getOrderBy();
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','accountname','true','basic',$popuptype,"","","");
 		break;
 	case 'Leads':
 		require_once("modules/$currentModule/Lead.php");
@@ -78,7 +76,7 @@ switch($currentModule)
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
 			$smarty->assign("RETURN_MODULE",'Emails');
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 		break;
 	case 'Potentials':
 		require_once("modules/$currentModule/Opportunity.php");
@@ -89,10 +87,9 @@ switch($currentModule)
 				,'sales_stage'=>'sales_stage_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Opportunity');
-		if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-			$sorder = $_REQUEST['sorder'];
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','potentialname','true','basic',$popuptype,"","","");
 		break;
 	case 'Quotes':
 		require_once("modules/$currentModule/Quote.php");	
@@ -101,8 +98,7 @@ switch($currentModule)
 		$comboFieldNames = Array('quotestage'=>'quotestage_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Quote');
-		if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-			$sorder = $_REQUEST['sorder'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'Invoice':
 		require_once("modules/$currentModule/Invoice.php");
@@ -110,12 +106,11 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'Invoice');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'Products':
 		require_once("modules/$currentModule/Product.php");
 		$focus = new Product();
-		//echo '<pre>';print_r($_REQUEST);echo '</pre>';
 		$smarty->assign("SINGLE_MOD",'Product');
 		if(isset($_REQUEST['curr_row']))
 		{
@@ -125,21 +120,13 @@ switch($currentModule)
 		}
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
-		{
-			$smarty->assign("SMODULE",$_REQUEST['smodule']);
-			$smodule = $_REQUEST['smodule'];
-			$url_string = '&smodule=VENDOR';
-			$search_query .= " and vendor_id=''";
-		}
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','productname','true','basic',$popuptype,"","","");
 		break;
 	case 'Vendors':
 		require_once("modules/$currentModule/Vendor.php");
 		$focus = new Vendor();
 		$smarty->assign("SINGLE_MOD",'Vendor');
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-		if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-			$sorder = $_REQUEST['sorder'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','vendorname','true','basic',$popuptype,"","","");
 		break;
 	case 'SalesOrder':
 		require_once("modules/$currentModule/SalesOrder.php");
@@ -147,7 +134,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'SalesOrder');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'PurchaseOrder':
 		require_once("modules/$currentModule/PurchaseOrder.php");
@@ -155,7 +142,7 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'PurchaseOrder');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","","");
 		break;
 	case 'PriceBooks':
 		require_once("modules/$currentModule/PriceBook.php");
@@ -163,12 +150,13 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'PriceBook');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","","");
 		break;
+
 
 }
 
-
+/*
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	$url_string .="&query=true";
@@ -474,7 +462,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$log->info("Here is the where clause for the list view: $where");
 
 }
-
+*/
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -497,10 +485,16 @@ else
         $query = getListQuery($currentModule,$where_relquery);
 }
 			
+
+list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
+
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
+
+if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')	$sorder = $_REQUEST['sorder'];
 
 if(isset($order_by) && $order_by != '')
 {
@@ -508,7 +502,6 @@ if(isset($order_by) && $order_by != '')
 }
 
 $list_result = $adb->query($query);
-
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
@@ -561,6 +554,12 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
+$url_string .='&popuptype='.$popuptype;
+$listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
+
+$smarty->assign("ALPHABETICAL", $alphabetical);
+
 
 $listview_header = getSearchListViewHeader($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
@@ -569,17 +568,16 @@ $smarty->assign("LISTHEADER", $listview_header);
 $listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);
 
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
-
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("POPUP_TYPE", $popuptype);
 
 
-$smarty->display("Popup.tpl");
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("PopupContents.tpl");
+else
+	$smarty->display("Popup.tpl");
 
 ?>
 
