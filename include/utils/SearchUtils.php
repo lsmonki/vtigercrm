@@ -505,7 +505,7 @@ function getWhereCondition($currentModule)
 			}
 			elseif(in_array($column_name,$column_array))
                         {
-                                $adv_string .= getValuesforColumns($column_name,$search_string)." ".$matchtype;
+                                $adv_string .= getValuesforColumns($column_name,$srch_val)." ".$matchtype;
                         }
 			else
 			{
