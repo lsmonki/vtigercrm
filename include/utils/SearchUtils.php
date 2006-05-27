@@ -255,7 +255,6 @@ function getValuesforColumns($column_name,$search_string)
 	global $column_array,$table_col_array;
 	for($i=0; $i<count($column_array);$i++)
 	{
-		
 		if($column_name == $column_array[$i])
 		{
 			$val=$table_col_array[$i];
@@ -502,6 +501,11 @@ function getWhereCondition($currentModule)
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'activity.status')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'activity.eventstatus')." )".$matchtype;	
+			}
+			elseif($tab_col == "cntactivityrel.contactid")
+			{
+				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'contactdetails.firstname')." or";	
+				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'contactdetails.lastname')." )".$matchtype;	
 			}
 			elseif(in_array($column_name,$column_array))
                         {

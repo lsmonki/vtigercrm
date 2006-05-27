@@ -121,6 +121,8 @@ if(isset($where) && $where != '')
 	$list_query .= " AND " .$where;
 }
 
+$list_query .= ' group by activity.activityid';
+
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Activities',$order_by);
