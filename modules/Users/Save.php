@@ -170,5 +170,10 @@ require_once('modules/Users/CreateUserPrivilegeFile.php');
 createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab$activitymode");
+if($_REQUEST['modechk'] == 'prefview')
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+else
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab");
+
+
 ?>
