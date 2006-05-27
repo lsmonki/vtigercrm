@@ -30,7 +30,7 @@
 // if you put the phpsysinfo folder at /tools/phpsysinfo $webpath will be /tools/phpsysinfo/
 // you don't need to change it, if you don't include it in other pages
 // so default will be fine for everyone
-$webpath = "";
+$webpath = $site_URL."/modules/System/";
 
 // define the default lng and template here
 $default_lng='en';
