@@ -16,6 +16,10 @@ function fullMailList($mbox) {
 	$out = array("headers"=>$mailHeaders,"overview"=>$mailOverviews,"count"=>$numEmails);
 	return $out;
 }
+function isBase64($iVal){
+	//$_tmp=preg_replace("/[^A-Z0-9\+\/\=]/i","",$iVal);
+	return (strlen($iVal) % 4 == 0 ) ? "y" : "n";
+}
 function getImapMbox($mailbox,$temprow) {
 	 global $mbox; 
 	 $login_username= $temprow["mail_username"]; 
@@ -79,7 +83,7 @@ function getInlineAttachments($mailid,$mbox) {
              }
              $partstring .= ($i+1);
        		if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN")
-               		$attachment[] = array("filename" => $parts[$i]->parameters[0]->value, "filedata" => imap_fetchbody($mbox, $mailid, $partstring),"ID"=> $parts[$i]->parts[0]);
+               		$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value, "filedata" => imap_fetchbody($mbox, $mailid, $partstring),"ID"=> $parts[$i]->parts[0]);
            }
             if ($parts[$i]->parts) {
               $stack[] = array("p" => $parts, "i" => $i);
@@ -128,7 +132,7 @@ function getAttachmentDetails($mailid,$mbox) {
              }
              $partstring .= ($i+1);
        		if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-               		$attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes);
+               		$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filesize"=>$parts[$i]->bytes);
            }
 
            if ($parts[$i]->parts) {
@@ -178,7 +182,7 @@ function getAttachments($mailid,$mbox) {
              }
              $partstring .= ($i+1);
        		if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-               		$attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes, "filedata" => imap_fetchbody($mbox, $mailid, $partstring));
+               		$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filesize"=>$parts[$i]->bytes, "filedata" => imap_fetchbody($mbox, $mailid, $partstring));
            }
 
            if ($parts[$i]->parts) {

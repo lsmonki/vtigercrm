@@ -58,15 +58,34 @@ function show_inline(num) {
 <?
 	echo $email->body;
 	echo "<br><br>";
-	if(getInlineAttachments($mailid,$mbox)) {
-		$inline = getInlineAttachments($mailid,$mbox);
+	if(is_array($email->inline)) {
+		$inline = $email->inline;
 		$num=sizeof($inline);
 		echo "<b>Inline Attachments</b>:<br>";
 		for($i=0;$i<$num;$i++) {
-			if($inline[$i]["ID"]->subtype == "PLAIN") {
-				echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><blockquote id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>".nl2br($inline[$i]["filedata"])."</blockquote>";
-			} else
-				echo "<br>".($i+1).") <a href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"];
+				//var_dump($inline[$i]);
+				// PLAIN TEXT
+				if($inline[$i]["subtype"] == "RFC822") {
+					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><blockquote id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>";
+					echo nl2br($inline[$i]["filedata"]);
+					echo "</blockquote>";
+				} elseif($inline[$i]["subtype"] == "JPEG") {
+					echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><div id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>";
+					global $root_directory;
+					$save_path=$root_directory.'/modules/Webmails/tmp';
+					if(!is_dir($save_path))
+       		 				mkdir($save_path);
+					$save_dir=$save_path."/cache";
+					if(!is_dir($save_dir))
+       		 				mkdir($save_dir);
+		
+        				$fp = fopen($save_dir.'/'.$inline[$i]["filename"], "w") or die("Can't open file");
+        				fputs($fp, base64_decode($inline[$i]["filedata"]));
+        				$filename = 'modules/Webmails/tmp/cache/'.$inline[$i]['filename'];
+					echo '<img src="'.$filename.'" border="0">';
+					echo '</div>';
+				} else 
+					echo "<br>".($i+1).") <a target='_BLANK' href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"]."</a>";
 		}
 	}
 } 

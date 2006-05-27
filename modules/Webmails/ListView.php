@@ -20,7 +20,6 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/MailParse.php");
-require_once('modules/CustomView/CustomView.php');
 
 $mailInfo = getMailServerInfo($current_user);
 if($adb->num_rows($mailInfo) < 1) {
@@ -168,7 +167,7 @@ function show_msg($mails,$start_message) {
 		$flags = "<tr id='row_".$num."'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
-  	if(getAttachmentDetails($start_message,$mbox) || getInlineAttachments($num,$mbox))
+	if(getAttachments($num,$mbox) || getInlineAttachments($num,$mbox))
 		$flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
   	else
 		$flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';

@@ -187,7 +187,7 @@ function dl_inline($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "INLINE")
-                        $inline[] = array("filename" => $parts[$i]->parameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
+                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
@@ -291,7 +291,8 @@ function load_mail($mailid,$mbox) {
 
              $type='';
 	     if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN") {
-                        $inline[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes);
+                        //$inline[] = array("filename" => $parts[$i]);
+                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype);
 	     } elseif (strtoupper($parts[$i]->disposition) == "ATTACHMENT") {
                         $attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes);
 
