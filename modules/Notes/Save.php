@@ -53,8 +53,14 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 	                $result = $adb->query($attachquery);
 	                $filename = $adb->query_result($result,0,'name');
 	                $filetype = $adb->query_result($result,0,'type');
+			$filepath = $adb->query_result($result,0,'path');
+
 	                $_FILES['filename']['name'] = $filename;
 	                $_FILES['filename']['type'] = $filetype;
+
+			//we should read the file and calculate the size, without setting filesize, attachment will not save
+	                $filesize = filesize($filepath.$filename);
+	                $_FILES['filename']['size'] = $filesize;
 	        }
 }
 																						
