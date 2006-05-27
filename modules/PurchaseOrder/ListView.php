@@ -75,6 +75,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	// we have a query
 	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
+	$smarty->assign("SEARCH_URL",$url_string);
 }
 
 //<<<<cutomview>>>>>>>
