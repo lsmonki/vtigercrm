@@ -63,7 +63,7 @@ class Migration
 
 	function takeDatabaseDump($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname)
 	{
-		$this->conn->println("Inside the function taleDatabaseDump. Going to take the old database dump...");
+		$this->conn->println("Inside the function takeDatabaseDump. Going to take the old database dump...");
 		$dump_filename = 'dump_'.$dbname.'.txt';
 
 		if($mysql_password != '')
@@ -99,7 +99,7 @@ class Migration
 			exec("echo 'set FOREIGN_KEY_CHECKS = 1;' >> ".$dump_filename);
 		}
 
-		echo '<br> <b>'.$dbname.'</b> Database Dump has been taken and the file is ==> '.$dump_filename;
+		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database Dump has been taken and the file is ==> '.$dump_filename;
 
 		return $dump_filename;
 	}
@@ -110,7 +110,7 @@ class Migration
 		$sql = "drop database ".$dbname;
 		$conn->query($sql);
 
-		echo '<br> <b>'.$dbname.'</b> Database has been dropped.';
+		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database has been dropped.';
 	}
 	function createDatabase($conn,$dbname)
 	{
@@ -118,7 +118,7 @@ class Migration
 		$sql = "create database ".$dbname;
 		$conn->query($sql);
 
-		echo '<br> <b>'.$dbname.'</b> Database has been created.';
+		$_SESSION['migration_log'] .= '<br> <b>'.$dbname.'</b> Database has been created.';
 
 		//Added to avoid the No Database Selected error when execute the queries
 		$conn->connect();
@@ -126,7 +126,8 @@ class Migration
 
 	function applyDumpData($host_name,$mysql_port,$mysql_username,$mysql_password,$dbname,$dumpfile)
 	{
-		$this->conn->println("Inside the function appluDumpData.");
+		$this->conn->println("Inside the function applyDumpData.");
+		$this->conn->println("hostname=$host_name&port=$mysql_port&username=$mysql_username&password=$mysql_password& dump file = $dumpfile");
 		if($mysql_password != '')
 		{
 			$password_str = " --password=".$mysql_password;
@@ -155,7 +156,7 @@ class Migration
 			exec("mysql --user=".$mysql_username." -h ".$host_name." --force --port=".$mysql_port.$password_str." ".$dbname." < ".$dumpfile);
 		}
 
-		echo '<br> Database Dump has been applied to the <b>'.$dbname.'</b> Database from <b>'.$dumpfile.'</b>';
+		$_SESSION['migration_log'] .= '<br> Database Dump has been applied to the <b>'.$dbname.'</b> Database from <b>'.$dumpfile.'</b>';
 	}
 
 
@@ -193,9 +194,10 @@ class Migration
 	function modifyDatabase($conn)
 	{
 		$this->conn->println("Inside the function modifyDatabase");
-		echo '<br><br>Note : Please note that for each query the "Object" string will be displayed at the starting of the line if the query executed successfully. If the query fails then "Object" will not be displayed. we can find out the failed queries based on these Object display.';
 		$conn->println("\n\n\nMickie ---- Starts");
 
+		$_SESSION['migration_log'] .= "<br>The current database is going to be modified by executing the following queries...<br>";
+		
 		//Added variables to get the queries list and count
 		$query_count = 1;
 		$success_query_count = 1;
@@ -206,22 +208,30 @@ class Migration
 		//To handle the file includes for each and every version
 		//Here we have to decide which files should be included, where the files will be added newly for every public release
 		//Handle Here -- Mickie
-		include("ModifyDatabase/42P2_to_50Alpha.php");
+		include("modules/Migration/ModifyDatabase/MigrationInfo.php");
 
 		$conn->println("Mickie ---- Ends\n\n\n");
 	}
 
-	function migrate($same_databases)
+	function migrate($same_databases, $option, $old_dump_file_name='')
 	{
-		//Migration Procedure
+		//1. Migration Procedure -- when we give the Source Database values
 		//Step : 1 => Take a dump of old database
 		//Step : 2 => Drop the New Database
 		//Step : 3 => Create the New Database
 		//Step : 4 => Put the old dump into the New Database
 		//Step : 5 => Modify the new database with the new changes
 
+		//2. Migration Procedure -- when we give the Database dump file
+		//Step : 1 => Drop the New Database
+		//Step : 2 => Create the New Database
+		//Step : 3 => Put the dump into the New Database
+		//Step : 4 => Modify the new database with the new changes
+
+
 		global $conn;
 		$this->conn->println("Database Migration from Old Database to the Current Database Starts.");
+		$this->conn->println("Migration Option = $option");
 
 		//Set the old database parameters
 		$old_host_name = $this->old_hostname;
@@ -237,11 +247,17 @@ class Migration
 		$new_mysql_password = $this->new_mysql_password;
 		$new_dbname = $this->new_dbname;
 
-
-
-		//Take the dump of the old Database
-		$this->conn->println("Going to take the old Database Dump.");
-		$dump_file = $this->takeDatabaseDump($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
+		//This will be done when we give the Source Database details
+		if($option == 'dbsource')
+		{
+			//Take the dump of the old Database
+			$this->conn->println("Going to take the old Database Dump.");
+			$dump_file = $this->takeDatabaseDump($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
+		}
+		elseif($option == 'dumpsource')
+		{
+			$dump_file = $old_dump_file_name;
+		}
 
 		//if old db and new db are different then take new db dump
 		if($old_dbname != $new_dbname)
@@ -255,11 +271,11 @@ class Migration
 		$continue_process = 1;
 		if($same_databases == 1)
 		{
-			echo '<br> Same databases are used. so skip the process of drop and crate the current database.';
+			$_SESSION['migration_log'] .= '<br> Same databases are used. so skip the process of drop and create the current database.';
 		}
 		else
 		{
-			echo '<br> Databases are different. So drop the Current Database and create. Also apply the dump of Old Database';
+			$_SESSION['migration_log'] .= '<br> Databases are different. So drop the Current Database and create. Also apply the dump of Old Database';
 			//Drop the current(latest) Database
 			$this->conn->println("Going to Drop the current Database");
 			$this->dropDatabase($conn,$new_dbname);
@@ -279,17 +295,17 @@ class Migration
 			$old_tables_count = $this->getTablesCountInOldDatabase();
 
 			//if tables are missing after apply the dump, then alert the user and quit
-			if($new_tables_count != $old_tables_count)
+			if(($new_tables_count != $old_tables_count && $option == 'dbsource') || ($new_tables_count < 180 && $option == 'dumpsource'))
 			{
 				$this->conn->println("New Database tables not equal to Old Database tables count. Reload the current database again and quit.");
 				
 				$continue_process = 0;
 				$msg = "The dump may not be applied correctly. Tables exist in 4.2.3 database : $old_tables_count. Tables exist in current database after apply the dump : $new_tables_count";
-			?>
+			   ?>
 				<script language="javascript">
 					alert("<?php echo $msg; ?>");
 				</script>
-			<?php
+			   <?php
 			}
 		}
 
@@ -305,6 +321,7 @@ class Migration
 		else
 		{
 			//Drop the current(latest) Database
+			$this->conn->println("Going to Restore the current Database");
 			$this->conn->println("Going to Drop the current Database");
 			$this->dropDatabase($conn,$new_dbname);
 
@@ -315,6 +332,10 @@ class Migration
 			//Reload the new db dump and quit
 			$this->conn->println("Going to apply the new backup db dump");
 			$this->applyDumpData($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$new_dump_file);
+
+			//Return to Step1
+			echo '<br><font color="red"><b>Dump could not be applied correctly. so your previous database restored.</b></font>';
+			include("modules/Migration/MigrationStep1.php");
 		}
 	}
 
