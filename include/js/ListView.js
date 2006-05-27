@@ -120,6 +120,8 @@ function getListViewEntries_js(module,url)
         show("status");
         var ajaxObj = new Ajax(ajaxSaveResponse);
         var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
+	if(document.getElementById('search_url').value!='')
+        	urlstring = urlstring+document.getElementById('search_url').value;
         ajaxObj.process("index.php?",urlstring);
 
 }

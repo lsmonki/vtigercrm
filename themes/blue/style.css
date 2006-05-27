@@ -373,10 +373,17 @@ a:hover {
 .searchAlph {
 	border:1px solid #dadada;
 	background-color:#ffffff;
+	cursor:pointer;
 	width:10px
 
 }
+.searchAlphselected {
+	border:1px solid #666666;
+	background-color:#bbbbbb;
+	cursor:pointer;
+	width:10px
 
+}
 .searchNotFound {
 	border:2px solid #ff3333;
 	background-color:#fafafa;

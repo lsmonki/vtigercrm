@@ -10,6 +10,8 @@
  ********************************************************************************/
 -->*}
 &#&#&#{$ERROR}&#&#&#
+
+     <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name='allids' type='hidden' value='{$ALLIDS}'>
      <form name="massdelete" method="POST">
      <input name="idlist" type="hidden">

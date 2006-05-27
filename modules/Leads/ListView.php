@@ -89,6 +89,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	// we have a query
 	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
+	$smarty->assign("SEARCH_URL",$url_string);
 }
 
 //<<<<cutomview>>>>>>>
@@ -171,7 +172,6 @@ if(isset($order_by) && $order_by != '')
 }
 
 $list_result = $adb->query($query);
-
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 

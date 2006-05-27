@@ -32,62 +32,53 @@ function ajaxSaveResponse(response)
 
 function callSearch(searchtype)
 {ldelim}
-
-        search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-        search_type_val=document.basicSearch.searchtype.value;
+	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring = '';
+        if(searchtype == 'Basic')
+        {ldelim}
+                urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val+'&';
+        {rdelim}
+        else if(searchtype == 'Advanced')
+        {ldelim}
+                var no_rows = document.basicSearch.search_cnt.value;
+                for(jj = 0 ; jj < no_rows; jj++)
+                {ldelim}
+                        var sfld_name = getObj("Fields"+jj);
+                        var scndn_name= getObj("Condition"+jj);
+                        var srchvalue_name = getObj("Srch_value"+jj);
+                        urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
+                        urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
+                        urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+                {rdelim}
+                for (i=0;i<getObj("matchtype").length;i++){ldelim}
+                        if (getObj("matchtype")[i].checked==true)
+                                urlstring += 'matchtype='+getObj("matchtype")[i].value+'&';
+                {rdelim}
+                urlstring += 'search_cnt='+no_rows+'&';
+                urlstring += 'searchtype=advance&'
+        {rdelim}
+        urlstring = urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
+        ajaxObj.process("index.php?",urlstring);
 
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring = '';
-        elements=document.basicSearch;
-	for(ii = 0 ; ii < elements.length; ii++)
-	{ldelim}
-	if(elements[ii].name != 'action')
-		urlstring = urlstring+''+elements[ii].name+'='+elements[ii].value+'&';
-	else
-		urlstring = urlstring+'file=index&';
-	{rdelim}
-	var no_rows = document.basicSearch.search_cnt.value;
-	for(jj = 0 ; jj < no_rows; jj++)
-	{ldelim}
-		var sfld_name = getObj("Fields"+jj);
-		var scndn_name= getObj("Condition"+jj);
-		var srchvalue_name = getObj("Srch_value"+jj);
-		urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
-		urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-		urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
-	{rdelim}
-	urlstring = urlstring +'action={$MODULE}Ajax&ajax=true';	
-	ajaxObj.process("index.php?",urlstring);
 {rdelim}
-function alphabetic(url)
+function alphabetic(module,url,dataid)
 {ldelim}
+        for(i=1;i<=26;i++)
+        {ldelim}
+                var data_td_id = 'alpha_'+ eval(i);
+                getObj(data_td_id).className = 'searchAlph';
 
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	
-	url_param = url.split('&');
-	for(plen=0; plen< url_param.length;plen++)
-	{ldelim}
-		url_var=url_param[plen];
-		if(url_var.search(/search_text/gi)!= -1)
-		{ldelim}
-				name_value = url_var.split('=');
-				document.basicSearch.search_text.value = name_value[1];
-		{rdelim}
-		else if(url_var.search(/search_field/gi)!= -1)
-		{ldelim}
-				name_value = url_var.split('=');
-				var oSfield = getObj("search_field");
-				for (os=0; os<oSfield.length;os++)
-				{ldelim}
-					if(oSfield[os].value == name_value[1])
-					oSfield.selectedIndex = os;
-				{rdelim}
-		{rdelim}
+        {rdelim}
+        getObj(dataid).className = 'searchAlphselected';
+        show("status");
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
+        ajaxObj.process("index.php?",urlstring);
 
- 	{rdelim}
-        ajaxObj.process("index.php?",url);
 {rdelim}
+
 </script>
 
 		{include file='Buttons_List.tpl'}
@@ -179,7 +170,7 @@ function alphabetic(url)
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=80% style="border-bottom:1px dashed #CCCCCC;border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" align="center">
 		<tr>
-			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Basic');">
+			<td align=center class="dvtCellLabel"><input type="button" class="classBtn" value=" {$APP.LBL_SEARCH_NOW_BUTTON} " onClick="totalnoofrows();callSearch('Advanced');">
 			</td>
 		</tr>
 	</table>
@@ -212,6 +203,7 @@ function alphabetic(url)
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	   <!-- PUBLIC CONTENTS STARTS-->
 	   <div id="ListViewContents" class="small" style="width:100%;position:relative;">
+	<input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <form name="massdelete" method="POST">
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
