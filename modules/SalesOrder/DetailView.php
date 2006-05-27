@@ -96,6 +96,6 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->display("InventoryDetailView.tpl");
+$smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

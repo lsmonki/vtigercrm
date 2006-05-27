@@ -88,6 +88,6 @@ $smarty->assign("CHECK", $check_button);
 
 //Security check for related list
 $smarty->assign("MODULE", $currentModule);
-$smarty->display("InventoryDetailView.tpl");
+$smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

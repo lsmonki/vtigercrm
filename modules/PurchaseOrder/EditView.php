@@ -194,7 +194,7 @@ $po_tables = Array('purchaseorder','pobillads','poshipads','purchaseordercf');
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 if($focus->mode == 'edit')
-	$smarty->display('InventoryEditView.tpl');
+	$smarty->display('Inventory/InventoryEditView.tpl');
 else
-	$smarty->display('InventoryCreateView.tpl');
+	$smarty->display('Inventory/InventoryCreateView.tpl');
 ?>

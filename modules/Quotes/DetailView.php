@@ -135,6 +135,6 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);$quote_tables = Array('quotes','quotesbillads','quotesshipads'); 
 
-$smarty->display("InventoryDetailView.tpl");
+$smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>
