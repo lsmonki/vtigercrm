@@ -45,7 +45,30 @@ if(isset($_POST["command"])) {
 	if($command == "clear_flag")
 		 $email->delFlag();
 } else {
+?>
+<script type="text/javascript">
+function show_inline(num) {
+	var el = document.getElementById("block_"+num);
+	if(el.style.visibility == 'visible')
+		el.style.visibility='hidden';
+	else
+		el.style.visibility='visible';
+}
+</script>
+<?
 	echo $email->body;
+	echo "<br><br>";
+	if(getInlineAttachments($mailid,$mbox)) {
+		$inline = getInlineAttachments($mailid,$mbox);
+		$num=sizeof($inline);
+		echo "<b>Inline Attachments</b>:<br>";
+		for($i=0;$i<$num;$i++) {
+			if($inline[$i]["ID"]->subtype == "PLAIN") {
+				echo "<a href='javascript:show_inline(".$i.");'>".$inline[$i]["filename"]."</a><blockquote id='block_".$i."' style='border:1px solid gray;padding:6px;background-color:#FFFFCC;visibility:hidden'>".nl2br($inline[$i]["filedata"])."</blockquote>";
+			} else
+				echo "<br>".($i+1).") <a href='index.php?module=Webmails&action=dlAttachments&inline=true&num=".$i."&mailid=".$mailid."'>".$inline[$i]["filename"];
+		}
+	}
 } 
 imap_close($mbox);
 
