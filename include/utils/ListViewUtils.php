@@ -366,7 +366,11 @@ function getNavigationValues($display, $noofrows, $limit)
 		$log->debug("Exiting getNavigationValues method ...");
 		return $navigation_array;
 	}
+	if($noofrows != 0)
 	$start = ((($display * $limit) - $limit)+1);
+	else
+	$start = 0;
+	
 	$end = $start + ($limit-1);
 	if($end > $noofrows)
 	{
@@ -518,6 +522,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$ui_col_array[$field_name]=$tempArr;
 	}
 	//end
+	if($navigation_array['start'] !=0)
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
 		$list_header =Array();
@@ -2466,14 +2471,6 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
-/**This function returns the pagination and navigation values in html format for a listview in a given module
-Param $navigation_array - navigation values in array
-Param $url_qry - url string
-Param $module - module name
-Param $action_val - action value
-Param $viewid - customview id
-Return type string.
-*/
 
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
@@ -2572,6 +2569,17 @@ Return type void.
 function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 {
 	$start = '';
+	if($noofrows>=1)
+	{
+		$lv_array['start']=1;
+		$start = 1;
+	}
+	else
+	{
+		$lv_array['start']=0;
+		$start = 0;
+	}
+
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
 	{
 		$lv_array['start']=$_REQUEST['start'];
@@ -2593,19 +2601,11 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 	}
 }
 
-/**This function returns the pagination and navigation values in html format for a related module listview in a given module
-Param $navigation_array - navigation values in array
-Param $url_qry - url string
-Param $module - module name
-Param $action_val - action value
-Param $viewid - customview id
-Return type string.
-*/
-
+//Temp function to be be deleted
 function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='CallRelatedList',$viewid='')
 {
 	global $log;
-	$log->debug("Entering getRelatedTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
+	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -2640,7 +2640,7 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
 	$output .= '</td>';
-		$log->debug("Exiting getRelatedTableHeaderNavigation method ...");
+		$log->debug("Exiting getTableHeaderNavigation method ...");
 		if($navigation_array['first']=='')
 		return;
 		else
