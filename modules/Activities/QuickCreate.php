@@ -8,5 +8,13 @@
 * All Rights Reserved.
 *
 ********************************************************************************/
+	$activity_mode = $_REQUEST['activity_mode'];
+        if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] == 'Events')
+        {
+                $tab_type = 'Events';
+                $module = 'Events';
+        }
+
+        $tab_id=getTabid($tab_type);
 	require_once('include/quickcreate.php');
 ?>
