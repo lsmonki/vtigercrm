@@ -872,6 +872,8 @@ $app_strings = Array(
 'LBL_TAX_CALCULATION'=>'Tax Calculation',
 'COVERED_PERCENTAGE'=>'(%)',
 
+'LBL_TAG_CLOUD'=>'Tag Cloud',
+
 );
 
 
