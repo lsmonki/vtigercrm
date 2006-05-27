@@ -53,20 +53,27 @@ function ajaxSaveUserResponse(response)
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
+{if $PARENTTAB neq ''}	
 	{include file='SettingsMenu.tpl'}
+{/if}
 <td width="75%" valign="top">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
 	<tr><td align="left">
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
-									<tr>
-											<td colspan="2" style="padding:5px;">
-													<span class="lvtHeaderText">
-													<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-															 > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
-															<hr noshade="noshade" size="1" />
-											</td>
-									  </tr>
-									<tr>
+			<tr>
+			<td colspan="2" style="padding:5px;">
+				<span class="lvtHeaderText">
+					{if $PARENTTAB neq ''}	
+					<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
+					{else}
+                                            <span class="lvtHeaderText">
+                                            <b>{$APP.LBL_MY_PREFERENCES}</b>
+                                            </span>
+                                        {/if}
+				<hr noshade="noshade" size="1" />
+			</td>
+		  </tr>
+		<tr>
 											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
 										{if $MODE eq 'edit'}
 												<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
@@ -87,7 +94,7 @@ function ajaxSaveUserResponse(response)
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="record" value="{$ID}">
 			<input type="hidden" name="mode" value="{$MODE}">
-			<input type='hidden' name='parenttab' value='Settings'>
+			<input type='hidden' name='parenttab' value='{$PARENTTAB}'>
 			<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
 			<input type="hidden" name="action">
 			<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
@@ -98,7 +105,6 @@ function ajaxSaveUserResponse(response)
 			<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
 			<input type="hidden" name="namedays" value="">			
 			<input type="hidden" name="weekstart" value="1">
-			<input type="hidden" name="parenttab" value=Settings>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 		<tr><td colspan="2">&nbsp;</td></tr>
@@ -335,5 +341,6 @@ function ajaxSaveUserResponse(response)
 </table>
 
 {$JAVASCRIPT}
-
+{if $PARENTTAB neq ''}
 	{include file='SettingsSubMenu.tpl'}
+{/if}
