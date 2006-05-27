@@ -80,7 +80,7 @@ function showhideRepeat(argg1,argg2)
 
 
 
-function gshow(argg1,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt)
+function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt)
 {
 	var y=document.getElementById(argg1).style;
 	
@@ -94,6 +94,10 @@ function gshow(argg1,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,en
 		document.getElementById("endhr").value = endhr;
                 document.getElementById("endmin").value = endmin;
                 document.getElementById("endfmt").value = endfmt;
+		if(type == 'call')
+			document.appSave.activitytype[0].checked = true;
+		if(type == 'meeting')
+			document.appSave.activitytype[1].checked = true;
 		y.display="block";
 	}
 }
@@ -137,6 +141,15 @@ function switchClass(myModule,toStatus) {
 		}
 		
 }
+
+function enableCalstarttime()
+{
+	if(document.SharingForm.sttime_check.checked == true)
+		document.SharingForm.start_hour.disabled = false;
+	else	
+		document.SharingForm.start_hour.disabled = true;
+}
+
 
 function check_form()
 {
@@ -227,6 +240,8 @@ function setObjects()
         selectedColumnsObj=getObj("selectedusers")
 
 }
+
+
 
 function addColumn()
 {
@@ -345,6 +360,27 @@ function fnRedirect(view,hour,day,month,year){
 	ajaxObj.process("index.php?",urlstring);
 }
 
+function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt){
+	var tagName = document.getElementById(CurrObj);
+	var left_Side = findPosX(obj);
+	var top_Side = findPosY(obj);
+	tagName.style.left= left_Side  + 'px';
+	tagName.style.top= top_Side + 22+ 'px';
+	tagName.style.display = 'block';
+	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
+	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
+	document.getElementById("addtodo").href="javascript:gshow('addEvent','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
+	
+}
+	
+function fnRemoveEvent(){
+	var tagName = document.getElementById('addEventDropDown').style.display= 'none';
+}
+
+function fnShowEvent(){
+		var tagName = document.getElementById('addEventDropDown').style.display= 'block';
+}
+
 function ajaxMiniCalSaveResponse(response)
 {
         document.getElementById("miniCal").innerHTML=response.responseText;
@@ -358,4 +394,37 @@ function getMiniCal()
 	
 }
 
+function getCalSettings()
+{
+	 var ajaxObj = new Ajax(ajaxCalSettingsSaveResponse);
+	 var urlstring ="module=Calendar&action=CalendarAjax&type=settings&parenttab=My Home Page&ajax=true";
+	 ajaxObj.process("index.php?",urlstring);
+}
+
+function ajaxCalSettingsSaveResponse(response)
+{
+        document.getElementById("calSettings").innerHTML=response.responseText;
+}
+
+function getcalAction(obj,Lay,id,view,hour,day,month,year){
+    var tagName = document.getElementById(Lay);
+    var leftSide = findPosX(obj);
+    var topSide = findPosY(obj);
+    var maxW = tagName.style.width;
+    var widthM = maxW.substring(0,maxW.length-2);
+    var getVal = eval(leftSide) + eval(widthM);
+    if(getVal  > window.innerWidth ){
+        leftSide = eval(leftSide) - eval(widthM);
+        tagName.style.left = leftSide + 'px';
+    }
+    else
+        tagName.style.left= leftSide + 'px';
+    tagName.style.top= topSide + 'px';
+    tagName.style.display = 'block';
+    tagName.style.visibility = "visible";
+    document.getElementById("complete").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&eventstatus=Held&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("pending").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&eventstatus=Not Held&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("postpone").href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode=Events";
+    document.getElementById("actdelete").href="index.php?return_module=Calendar&return_action=index&action=Delete&module=Activities&record="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+}
 
