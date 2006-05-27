@@ -2147,6 +2147,37 @@ a.calMnu:Hover{
 	background-image:url(images/cal_nav.gif);
 	background-repeat:repeat-x;
 }
+
+#addEventDropDown{
+	position:absolute;
+	display:none;
+	width:110px;
+	border:1px solid #666666;
+	left:0px;
+	top:0px;
+	z-index:5000;
+}
+
+#calAction{
+	width:175px;
+	background-color:#CCCCCC;
+	border:1px solid #DDDDDD;
+	padding-top:5px;
+	position:absolute;
+	display:none;
+	z-index:2000;
+}
+
+.calSettings{
+	position:absolute;
+	z-index:20000;
+	width:500px;
+	left:200px;
+	top:150px;
+	border:2px solid #999999;
+	background-color:#ffffff;
+	padding:5px;
+}
 									
 /* End of Calendar */
 
