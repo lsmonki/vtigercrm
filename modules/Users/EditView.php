@@ -361,9 +361,6 @@ else $smarty->assign("IS_ADMIN", "disabled");
 
 $smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
 
-if ($_REQUEST['mode1'] == 'pref')
-	$smarty->display('MyPrefEditView.tpl');
-else 
 	$smarty->display('UserEditView.tpl');
 
 ?>
