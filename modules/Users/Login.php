@@ -104,7 +104,7 @@ function set_focus() {
 							<td valign="top" width="60%" height="250" class="loginBillBoard small">
 									<div align=left style="padding:20px">
 													<span style="font-size:20px;color:white">Welcome to vtiger CRM 5.0.0 </span><br><br>
-													vtigerCRM 5 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
+													vtigerCRM 5.0.0 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
 													<b>New in Beta</b> <br>
 													<li>Integrated Mail Client</li>
 													<li>API docs</li>
