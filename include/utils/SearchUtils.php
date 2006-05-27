@@ -406,7 +406,7 @@ function getcriteria_options()
 {
 	global $log;
 	$log->debug("Entering getcriteria_options() method ...");
-	$CRIT_OPT = "<option value=\'cts\'>Contains</option><option value=\'dcts\'>does not Contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>Begins With</option><option value=\'ewt\'>Ends With</option>";
+	$CRIT_OPT = "<option value=\'cts\'>contains</option><option value=\'dcts\'>does not contains</option><option value=\'is\'>is</option><option value=\'isn\'>is not</option><option value=\'bwt\'>begins with</option><option value=\'ewt\'>ends with</option><option value=\'grt\'>greater than</option><option value=\'lst\'>less than</option><option value=\'grteq\'>greater or equal</option><option value=\'lsteq\'>lesser or equal</option>";
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
@@ -440,6 +440,23 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 		case 'ewt':
 			$where_string = $searchfield." like '%".$searchstring."' ";
 			break;
+
+		case 'grt':
+			$where_string = $searchfield." > '".$searchstring."' ";
+			break;
+
+		case 'lst':
+			$where_string = $searchfield." < '".$searchstring."' ";
+			break;
+
+		case 'grteq':
+			$where_string = $searchfield." >= '".$searchstring."' ";
+			break;
+
+		case 'lsteq':
+			$where_string = $searchfield." <= '".$searchstring."' ";
+			break;
+
 
 	}
 	$log->debug("Exiting getSearch_criteria method ...");
