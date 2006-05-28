@@ -573,7 +573,7 @@ for($i=0;$i<12;$i++)
 
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
-$total_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$total_array = array ("29990.000", "29990.000", "29990.000", "29990.000", "29990.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $invmgr_array = array ("admin", "user");
 
@@ -600,7 +600,7 @@ for($i=0;$i<5;$i++)
 	$quote_ids[] = $quote->id;
 
 	$product_key = array_rand($product_ids); 
-	$query = "insert into quotesproductrel ( quoteid, productid, quantity, listprice ) values (".$quote->id.",".$product_ids[$product_key].",10,699.000 )";
+	$query = "insert into quotesproductrel ( quoteid, productid, quantity, listprice ) values (".$quote->id.",".$product_ids[$product_key].",10,2999.000 )";
 	$db->query($query);
 }
 
@@ -608,7 +608,7 @@ for($i=0;$i<5;$i++)
 
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled");
-$sototal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$sototal_array = array ("5988.000", "5988.000", "5988.000", "5988.000", "5988.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 
 for($i=0;$i<5;$i++)
@@ -643,7 +643,7 @@ for($i=0;$i<5;$i++)
 
 $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk", "PO_vendtl");
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
-$pototal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$pototal_array = array ("19485.000", "19485.000", "19485.000", "19485.000", "19485.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
 
@@ -668,7 +668,7 @@ for($i=0;$i<5;$i++)
 	$purchaseorder_ids[] = $po->id;
 
 	$product_key = array_rand($product_ids);
-        $query = "insert into poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,399.000 )";
+        $query = "insert into poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,1299.000 )";
         $db->query($query);
 
 }
@@ -677,7 +677,7 @@ for($i=0;$i<5;$i++)
 
 $isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
 $istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
-$itotal_array = array ("2085.014", "7985.257", "5748.981", "1245.478", "410.530");
+$itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000");
 
 for($i=0;$i<5;$i++)
 {
