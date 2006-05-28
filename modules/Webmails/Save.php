@@ -78,14 +78,12 @@ $focus->column_fields["description"]=$msgData;
 
 //to save the email details in emaildetails tables
 $fieldid = $adb->query_result($adb->query('select fieldid from field where tablename="contactdetails" and fieldname="email" and columnname="email"'),0,'fieldid');
-if($email->relationship != 0)
-{
+if($email->relationship != 0) {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
 
 	if($email->relationship["type"] == "Contacts")
 		add_attachment_to_contact($email->relationship["id"],$email);
-}else
-{
+}else {
 	//if relationship is not available create a contact and relate the email to the contact
 	require_once('modules/Contacts/Contact.php');
 	$contact_focus = new Contact();	

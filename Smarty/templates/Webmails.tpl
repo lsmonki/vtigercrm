@@ -152,7 +152,7 @@
 						  <span id="qualify_button"><input type="button" name="Qualify2" value=" {$MOD.LBL_QUALIFY_BUTTON} " class="classWebBtn" /></span>&nbsp;
 						  <span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="classWebBtn" /></span>&nbsp;
 						  <span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="classWebBtn" /></span>&nbsp;
-						  <input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" />&nbsp;
+						  <span id="forward_button"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" /></span>&nbsp;
 						  <span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="classWebBtn" /></span>
 						</td>
 						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="classWebBtn" /></span></td>
@@ -198,16 +198,19 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
                         break;
                 case 'forward':
-                        url = 'index.php?module=Webmails&action=EditView&record='+id+'&forward=true';
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&forward=true&webmail=true&file=EditView';
                         break;
                 case 'reply':
-                        url = 'index.php?module=Webmails&action=EditView&record='+id+'&reply=true';
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=single&webmail=true&file=EditView';
+                        break;
+                case 'replyall':
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=all&webmail=true&file=EditView';
                         break;
                 case 'attachments':
                         url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id;
                         break;
                 {rdelim}
-        openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
 {rdelim}
 </script>
 <!-- END -->

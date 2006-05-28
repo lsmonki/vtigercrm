@@ -77,6 +77,12 @@ class Webmail extends CRMEntity {
 		$this->body = $this->email["content"]["body"];
 	}
 
+	function replyBody() {
+		$tmp = "<br><br><p style='font-weight:bold'>In reply to the message sent by ".$this->reply_name." on ".$this->date."</p>";
+		$tmp .= "<blockquote style='border-left:1px solid blue;padding-left:5px'>".$this->body."</blockquote>";
+		return $tmp;
+	}
+
 	function unDeleteMsg() {
 		imap_undelete($this->mbox, $this->mailid);
 	}

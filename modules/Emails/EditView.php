@@ -81,6 +81,46 @@ elseif(isset($_REQUEST['sendmail']) && $_REQUEST['sendmail'] !='')
 	$focus->mode = '';
 }
 
+// Webmails
+if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
+	$mailid = $_REQUEST["mailid"];
+	$mailbox = $_REQUEST["mailbox"];
+	require_once('include/utils/UserInfoUtil.php');
+	require_once("modules/Webmails/Webmail.php");
+	require_once("modules/Webmails/MailParse.php");
+
+	$mailInfo = getMailServerInfo($current_user);
+	$temprow = $adb->fetch_array($mailInfo);
+
+	global $mbox;
+	$mbox = getImapMbox($mailbox,$temprow);
+
+	$webmail = new Webmail($mbox,$mailid);
+	$webmail->loadMail();
+
+	$smarty->assign('WEBMAIL',"true");
+	if($_REQUEST["reply"] == "all") {
+		$smarty->assign('TO_MAIL',$webmail->fromaddr);	
+		if(is_array($webmail->cc_list))
+			$smarty->assign('CC_MAIL',implode(",".$webmail->cc_list).implode(",",$webmail->to));
+		else
+			$smarty->assign('CC_MAIL',implode(",",$webmail->to));
+		$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
+
+	} elseif($_REQUEST["reply"] == "single") {
+		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
+		$smarty->assign('BCC_MAIL',$webmail->to[0]);
+		$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
+
+	} elseif($_REQUEST["forward"] == "true") {
+		$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
+		$smarty->assign('BCC_MAIL',$webmail->to[0]);
+		$smarty->assign('SUBJECT',"FW: ".$webmail->subject);
+	}
+	$smarty->assign('DESCRIPTION',$webmail->replyBody());
+	$focus->mode='';
+}
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -200,11 +240,11 @@ $smarty->display("ComposeEmail.tpl");
 ?>
 <script type="text/javascript" defer="1">
 addOnloadEvent(function () {
-var oFCKeditor = null;
-oFCKeditor = new FCKeditor( "description" ) ;
-oFCKeditor.BasePath  = "include/fckeditor/" ;
-oFCKeditor.Height = 500;
-oFCKeditor.Width = "100%";
-oFCKeditor.ReplaceTextarea() ;
+	var oFCKeditor = null;
+	oFCKeditor = new FCKeditor("description") ;
+	oFCKeditor.BasePath  = "include/fckeditor/" ;
+	oFCKeditor.Height = 500;
+	oFCKeditor.Width = "100%";
+	oFCKeditor.ReplaceTextarea() ;
 });
 </script>
