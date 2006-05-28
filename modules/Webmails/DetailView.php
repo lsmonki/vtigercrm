@@ -3,6 +3,9 @@ require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/Webmail.php");
 require_once("modules/Webmails/MailParse.php");
 
+global $app_strings;
+global $mod_strings;
+
 if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "") { $mailbox=$_REQUEST["mailbox"];} else { $mailbox = "INBOX";}
 if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") { $mailid=$_REQUEST["mailid"];} else { echo "ERROR";flush();exit();}
 
@@ -16,11 +19,11 @@ $webmail = new Webmail($mbox,$mailid);
 $webmail->loadMail();
 
 
-echo '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>';
+echo '<table width="100%" cellpadding="0" cellspacing="0" border="0" class="previewWindow"><tr>';
 
-echo '<td style="background-color:#CCCC99">';
+echo '<td>';
 
-echo '<table border="1" width="100%" cellpadding="0" cellspacing="0">';
+echo '<table border="0" width="100%" cellpadding="0" cellspacing="0">';
 echo '<tr><td width="10%">From:</td><td>'.$webmail->fromname.'</td></tr>';
 echo '<tr><td width="10%">To:</td><td>'.implode(" ",$webmail->to).'</td></tr>';
 echo '<tr><td width="10%">Subject:</td><td>'.$webmail->subject.'</td></tr>';
