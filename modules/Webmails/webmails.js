@@ -305,7 +305,7 @@ function runEmailCommand(com,id) {
                                     break;
                                     case 'delete_msg':
                                         var row = $("row_"+id);
-					if(row.classname=="unread_email") {
+					if(row.className == "unread_email") {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
