@@ -33,7 +33,7 @@ echo '<tr><td align="center"><iframe src="index.php?module=Webmails&action=body&
 
 echo "<tr><td><p style='font-weight:bold'>Email Attachments:</p></td></tr>";
 foreach($webmail->attachments as $key=>$value) {
-	echo '<tr><td>'.($key+1).') <a href="">'.$value["filename"]."</a></td></tr>";
+	echo '<tr><td>'.($key+1).') <a href="index.php?module=Webmails&action=dlAttachments&num='.$key.'&mailid='.$mailid.'" target="_blank">'.$value["filename"]."</a></td></tr>";
 }
 echo '</table>';
 ?>
