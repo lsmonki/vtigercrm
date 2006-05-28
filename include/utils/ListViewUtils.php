@@ -1001,7 +1001,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 13)
         {
-                $value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
+		if(useInternalMailer() == 1)
+                	$value = '<a href="javascript:InternalMailer('.$entity_id.',\'record_id\')">'.$temp_val.'</a>';
+		else
+                	$value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
         }
 	elseif($uitype == 56)
 	{

@@ -2248,5 +2248,8 @@ function strip_selected_tags($text, $tags = array())
     return $text;
 }
 
-
+function useInternalMailer() {
+	global $current_user,$adb;
+	return $adb->query_result($adb->query("select int_mailer from mail_accounts where user_id='".$current_user->id."'"),0,"int_mailer");
+}
 ?>
