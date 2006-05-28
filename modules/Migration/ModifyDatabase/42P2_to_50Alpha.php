@@ -17,11 +17,10 @@ global $query_count, $success_query_count, $failure_query_count;
 global $success_query_array, $failure_query_array;
 
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
-echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.....</b><br>";
+
 
 /****************** 5.0(Alpha) dev version 1 Database changes -- Starts*********************/
-echo "<table border=1>";
-echo '<tr width="100%"><td width="20%"><b> Status Object </b></td><td width="10%">Suceess/Failure</td><td width="80%"> Query</td></tr>';
+
 
 //Added the announcement table creation to avoid the error
 $ann_query = "CREATE TABLE `announcement` (
@@ -2711,7 +2710,6 @@ Execute($update_query4);
 		}
 		else
 		{
-			//alert("Please give valid conversion rate ( > 0)");
 			getConversionRate("Please give valid conversion rate ( > 0)");
 		}
 	}
@@ -2726,34 +2724,10 @@ Execute($update_query4);
 
 
 $conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha ends here.");
-//echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha ends here.....</b><br>";
 
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 ends here.");
-//echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
-
-echo '</table>';
-echo "<br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
-echo '<br><b>Migration has been successfully completed. Data has been moved from your old vtiger to Latest vtigerCRM.';
-echo '<br>Please note down all the failed queries or please copy the whole table and save. This may be useful in future.</b>';
 
 
-echo '<br><br>';
-echo '<br> Total Number of Queries executed = '.$query_count;
-echo '<br> Total Number of Success Queries  = '.$success_query_count;
-echo '<br> Total Number of Failure Queries  = '.$failure_query_count;
-//echo '<pre>Success Queries => ';print_r($success_query_array);echo '</pre>';
-//echo '<pre>Failure Queries => ';print_r($failure_query_array);echo '</pre>';
-
-
-echo '<br><br><br>';
-
-echo '<div align="center"><a href="index.php"><b> Home </b></a></div>';
-echo '<br><br><br>';
-
-echo '<br>Failed Queries are : <br><br>';
-foreach($failure_query_array as $failed_query)
-	echo '<br><font color="red">'.$failed_query.'</font>';
-echo '<br><br>';
 
 
 function Execute($query)
@@ -2770,7 +2744,6 @@ function Execute($query)
 				<td width="5%"><font color="green"> S </font></td>
 				<td width="70%">'.$query.'</td>
 			</tr>';
-		//echo '<br>'.$status.' ==> '.$query;
 		$success_query_array[$success_query_count++] = $query;
 	}
 	else
@@ -2781,7 +2754,6 @@ function Execute($query)
 				<td width="5%"><font color="red"><b> F </b></font></td>
 				<td width="70%">'.$query.'</td>
 			</tr>';
-		//echo '<br><br>'.$status.' ======>  '.$query;
 		$failure_query_array[$failure_query_count++] = $query;
 	}
 }
