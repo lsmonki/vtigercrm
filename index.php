@@ -491,7 +491,7 @@ else
 	include($currentModuleFile);
 }
 
-	if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss' && $action != $module."Ajax" && $action != "chat" && $action != 'massdelete') )
+	if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss' && $action != $module."Ajax" && $action != "chat" && $action != 'massdelete' && $action != "body") )
 	{
 		echo "<!-- stopscrmprint -->";
 	}
@@ -572,7 +572,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	//	}
 	//	echo "</td></tr></table>\n";
 	}
-	if(($action != 'mytkt_rss') && ($action != 'home_rss'))
+	if(($action != 'mytkt_rss') && ($action != 'home_rss') && ($action != $module."Ajax") && ($action != "body"))
 	{
 	?>
 		<script>
@@ -580,7 +580,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		</script>
 <?php
 	}
-	if(!$skipFooters)
-	include('themes/'.$theme.'/footer.php');
+	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") )
+		include('themes/'.$theme.'/footer.php');
 }
 ?>
