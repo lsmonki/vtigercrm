@@ -80,6 +80,9 @@ function select_all() {
         }
 }
 function check_in_all_boxes(mymbox) {
+	if(degraded_service == 'true') {
+		return;
+	}
         $("status").style.display="block";
         new Ajax.Request(
                 'modules/Webmails/WebmailsAjax.php',
