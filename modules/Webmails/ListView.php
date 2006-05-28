@@ -161,14 +161,14 @@ function show_msg($mails,$start_message) {
 
 	$displayed_msgs++;
 	if ($mails[$start_message]->deleted && !$show_hidden) {
-		$flags = "<tr id='row_".$num."' class='deletedRow' style='display:none'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."' class='deletedRow' style='display:none'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 	$displayed_msgs--;
 	} elseif ($mails[$start_message]->deleted && $show_hidden)
-		$flags = "<tr id='row_".$num."' class='deletedRow'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."' class='deletedRow'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
   	elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent)
-		$flags = "<tr class='unread_email' id='row_".$num."'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr class='unread_email' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 	else 
-		$flags = "<tr id='row_".$num."'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
+		$flags = "<tr id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
 	if(getAttachments($num,$mbox))

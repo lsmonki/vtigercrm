@@ -43,6 +43,9 @@ function load_webmail(mid) {
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
         $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'classWebBtn', onclick: 'displayAttachments('+mid+')'}));
 
+        $("full_view").removeChild($("full_view").firstChild);
+        $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
+
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid;

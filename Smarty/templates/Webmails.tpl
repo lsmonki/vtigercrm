@@ -122,7 +122,7 @@
 						<div id="rssScroll">
 						<table class="rssTable" cellspacing="0" cellpadding="0" border="0" width="100%" id="message_table">
 	                      <tr>
-    	                    <th width="5%"><input type="checkbox" name="checkbox" value="checkbox"  onclick="select_all();"/></th>
+    	                    <th><input type="checkbox" name="checkbox" value="checkbox"  onclick="select_all();"/></th>
 							{foreach item=element from=$LISTHEADER}
 								{$element}
 							{/foreach}
@@ -167,8 +167,9 @@
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_FROM}</b></td><td id="from_addy">&nbsp;</td></tr>
 						<tr><td width="20%" align="right"><b>{$MOD.LBL_TO}</b></td><td id="to_addy">&nbsp;</td></tr>
 						<tr><td align="right"><b>{$MOD.LBL_SUBJECT}</b></td><td id="webmail_subject"></td></tr>
-						<tr><td align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td></tr>
-						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="2">&nbsp;</td></tr>
+						<tr><td align="right"><b>{$MOD.LBL_DATE}</b></td><td id="webmail_date"></td>
+							<td id="full_view"><a href="javascript:;">Full Window View</a></td></tr>
+						<tr><td align="right" style="border-bottom:1px solid #666666;" colspan="3">&nbsp;</td></tr>
 					</table>
 			   <span id="body_area" style="width:95%">&nbsp;</span></td>
 			   </tr>
@@ -198,16 +199,19 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
                         break;
                 case 'forward':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&forward=true&webmail=true&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&forward=true&webmail=true&file=EditView&mailbox={$MAILBOX}';
                         break;
                 case 'reply':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=single&webmail=true&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=single&webmail=true&file=EditView&mailbox={$MAILBOX}';
                         break;
                 case 'replyall':
-                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=all&webmail=true&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=all&webmail=true&file=EditView&mailbox={$MAILBOX}';
                         break;
                 case 'attachments':
-                        url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id;
+                        url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id+'&mailbox={$MAILBOX}';
+                        break;
+                case 'full_view':
+                        url = 'index.php?module=Webmails&action=DetailView&&record='+id+'&mailid='+id+'&mailbox={$MAILBOX}';
                         break;
                 {rdelim}
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
