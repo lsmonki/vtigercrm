@@ -143,7 +143,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			else $hrvalue = $i;
 			$combo .= '<option value="'.$hrvalue.'" '.$selected.'>'.$i.'</option>';
 		}
-		$combo .= '</select>&nbsp;';
+		$combo .= '</select>Hr&nbsp;';
 		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
                 for($i=0;$i<12;$i++)
                 {
@@ -160,7 +160,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 			else $value=$value;
                         $combo .= '<option value="'.$value.'" '.$minselected.'>'.$value.'</option>';
                 }
-                $combo .= '</select>&nbsp;Hr<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
+                $combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 	}
 	return $combo;
 		
@@ -388,7 +388,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
                                                         <?
                                                                 }
                                                         ?>
-                                                        </select><?echo $mod_strings['LBL_BEFORE']?>
+                                                        </select><?echo $mod_strings['LBL_BEFOREEVENT']?>
 						</td>
 						</tr>
 						</table>
@@ -424,53 +424,15 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 								<table border=0 cellspacing=0 cellpadding=2>
 								<tr>
 								<td><?echo $mod_strings['LBL_REPEATEVENT']?></td>
-								<!--td><input type="text" class="textbox" style="width:20px" value="2" ></td-->
 								<td><select class=small name="repeat_option">
 									<option value="Daily">Daily</option>
 									<option value="Weekly">Weekly</option>
 									<option value="Monthly">Monthly</option>
 									<option value="Yearly">Yearly</option>
-								<!--option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');">Day(s)</option>
-								<option onClick="gshow('repeatWeekUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatMonthUI');">Week(s)</option>
-								<option onClick="gshow('repeatMonthUI',document.appSave.date_start.value,document.appSave.due_date.value,document.appSave.starthr.value,document.appSave.startmin.value,document.appSave.startfmt.value,document.appSave.endhr.value,document.appSave.endmin.value,document.appSave.endfmt.value);ghide('repeatWeekUI');">Month(s)</option>
-								<option onClick="ghide('repeatWeekUI');ghide('repeatMonthUI');";>Year</option-->
 								</select></td>
 								</tr>
 								</table>
 								
-								<!--div id="repeatWeekUI" style="display:none;">
-									<table border=0 cellspacing=0 cellpadding=2>
-									<tr>
-										<td><input type="checkbox"></td><td>Sun</td>
-										<td><input type="checkbox"></td><td>Mon</td>
-										<td><input type="checkbox"></td><td>Tue</td>
-										<td><input type="checkbox"></td><td>Wed</td>
-										<td><input type="checkbox"></td><td>Thu</td>
-										<td><input type="checkbox"></td><td>Fri</td>
-										<td><input type="checkbox"></td><td>Sat</td>
-									</tr>
-									</table>
-								</div>
-								<div id="repeatMonthUI" style="display:none;">
-									<table border=0 cellspacing=0 cellpadding=2>
-									<tr>
-									<td>
-										<table border=0 cellspacing=0 cellpadding=2>
-										<tr>
-										<td><input type="radio" checked name="repeatMonth"></td><td>on</td><td><input type="text" class=textbox style="width:20px" value="2"></td><td>day of the month</td></tr>
-										</table>
-									</td>
-									</tr>
-									<tr>
-									<td>
-										<table border=0 cellspacing=0 cellpadding=2>
-										<tr>
-										<td><input type="radio" name="repeatMonth"></td><td>on</td><td><select class=small><option>First</option><option>Last</option></td><td><select class=small><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></td></tr>
-										</table>
-									</td>
-									</tr>
-									</table>
-								</div-->
 							</div>
 								
 							</td>
@@ -487,41 +449,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 		</table>
 		<!-- Alarm, Repeat, Invite stops-->
 
-<br>
-
-		
-		
-		<div id="addEventAdvanced" style="display:none">
-			<!-- more options-->
-			<table border=0 cellspacing=0 cellpadding=5 width=90% align=center style="border-top:1px dotted silver">
-			<tr>
-				<td valign=top>
-					<table border=0 cellspacing=0 cellpadding=2>
-					<tr>
-						<td><input type="checkbox" id="cboxRepeatEvent" name="repeatEvent" onClick="showhideRepeat('cboxRepeatEvent','repeatOptions');showhideRepeat('cboxRepeatEvent','stopRepeatOptions')"></td>
-						<td>Repeat this event </td>
-						<td><select id="repeatOptions" style="display:none" class=small><option><? echo $mod_strings['LBL_EVERYDAY']?></option><option><? echo $mod_strings['LBL_EVERYWEEK']?></option><option><? echo $mod_strings['LBL_EVERYMON']?></option></select></td>
-					</tr>
-					</table>
-					<table border=0 cellspacing=0 cellpadding=2 id="stopRepeatOptions" style="display:none">
-					<tr>
-						<td width=40 align=right><input type="checkbox" name="stopRepeat" ></td>
-						<td>Stop repeat on </td>
-						<td>
-							<table border=0 cellspacing=0 cellpadding=0 >
-							<tr>
-								<td><input type="text" class="textbox" style="width:70px"></td>
-								<td><img src="../images/btnL3Calendar.gif" alt="Select date" title="Select date"></td>
-							</tr>
-							</table>
-						</td>
-					</tr>
-					</table>
-				</td>
-			</tr>
-			</table>
-			
-		</div>
+		<br>
 		
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
 		<tr>
@@ -548,7 +476,7 @@ setObjects();
 				<a href="" id="pending" class="calMnu">- <?php echo $mod_strings['LBL_EPENDING']?></a>
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
 				<a href="" id="postpone" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-				<a href="#" id="changeowner" onClick="calchangeowner();" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="" id="changeowner" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
 				<a href="" id="actdelete" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
 			</td>
 		</tr>
@@ -557,7 +485,186 @@ setObjects();
 
 <!-- Dropdown for Add Event -->
 <div id='addEventDropDown' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
-	<a href='' id="addcall" class='submenu'>Add Call</a>
-        <a href='' id="addmeeting" class='submenu'>Add Meeting</a>
-        <a href='' id="addtodo" class='submenu'>Add Todo</a>
+	<a href='' id="addcall" class='submenu'><?php echo $mod_strings['LBL_ADDCALL']?></a>
+        <a href='' id="addmeeting" class='submenu'><?php echo $mod_strings['LBL_ADDMEETING']?></a>
+        <a href='' id="addtodo" class='submenu'><?php echo $mod_strings['LBL_ADDTODO']?></a>
 </div>
+
+<div class="calAddEvent" style="display:none" id="createTodo" align=center>
+<form name="createTodo" onSubmit="return check_form();" method="POST" action="index.php">
+  <input type="hidden" name="module" value="Activities">
+  <input type="hidden" name="activity_mode" value="Task">
+  <input type="hidden" name="action" value="Save">
+  <input type="hidden" name="return_action" value="index">
+  <input type="hidden" name="return_module" value="Calendar">
+  <input type="hidden" name="view" value="<? echo $calendar_arr['view'] ?>">
+  <input type="hidden" name="hour" value="<? echo $calendar_arr['calendar']->date_time->hour ?>">
+  <input type="hidden" name="day" value="<? echo $calendar_arr['calendar']->date_time->day ?>">
+  <input type="hidden" name="month" value="<? echo $calendar_arr['calendar']->date_time->month ?>">
+  <input type="hidden" name="year" value="<? echo $calendar_arr['calendar']->date_time->year ?>">
+  <input type="hidden" name="record" value="">
+  <input type="hidden" name="assigned_user_id" value="<? echo $current_user->id ?>">
+  <input type="hidden" name="assigntype" value="U">
+  <input type="hidden" name="time_start" id="time_start">
+  <input type="hidden" name="takstatus" value="Planned">
+  <input type="hidden" name="set_reminder" value="">
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventHeader">
+		<tr>
+                	<td class="lvtHeaderText"><? echo $mod_strings['LBL_ADD_TODO']?></b></td>
+                        <td align=right>
+                                <a href="javascript:ghide('createTodo');"><img src="<?echo $image_path?>close.gif" border="0"  align="absmiddle" /></a></td>
+		</tr>
+        </table>
+	<table border=0 cellspacing=0 cellpadding=5 width=90% >
+		<tr>
+                        <td width=20%><b><?echo $mod_strings['LBL_TODONAME']?> :</b></td>
+                        <td width=80%><input name="subject" type="text" class="textbox" style="width:90%"></td>
+                </tr>
+		<tr>
+			<td><b><?echo $mod_strings['LBL_TODODATETIME']?> :</b></td>
+			<td>
+				<? echo getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
+			</td>		
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="text" name="date_start" id="task_jscal_field_date_start" class="textbox" style="width:90px">&nbsp;<img border=0 src="<?echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="absmiddle">
+				<script type="text/javascript">
+					Calendar.setup ({
+	                                        inputField : "task_jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+					})
+				</script>
+			</td>
+			
+		</tr>
+
+			
+	</table>
+        <br>
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+		<tr>
+			<td>
+				<table border=0 cellspacing=0 cellpadding=3 width=100%>
+					<tr>
+						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
+						<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><?php echo $mod_strings['LBL_REMINDER']?></td>
+						<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width=100% valign=top align=left class="dvtContentSpace" style="padding:10px;height:120px">
+		<!-- Reminder UI -->
+		<DIV id="addTaskAlarmUI" style="display:block;width:100%">
+                <table>
+			<tr><td><?echo $mod_strings['LBL_SENDREMINDER']?></td><td><input name="remindercheck" type="checkbox" onClick="showhide('taskreminderOptions')">
+			</td></tr>
+                </table>
+		<DIV id="taskreminderOptions" style="display:none;width:100%">
+                	<table border=0 cellspacing=0 cellpadding=2  width=100%>
+                        	<tr>
+                                	<td nowrap align=right width=20% valign=top>
+                                        	<b><?echo $mod_strings['LBL_RMD_ON']?> : </b>
+                                        </td>
+                                        <td width=80%>
+                                                <table border=0>
+                                                <tr>
+                                                <td colspan=2>
+                                                        <select class=small name="remdays">
+                                                        <?php
+                                                                for($m=0;$m<=31;$m++)
+                                                                {
+                                                        ?>
+                                                                        <option value="<?echo $m?>"><?echo $m?></option>
+							<?
+                                                                }
+                                                        ?>
+                                                        </select>days
+                                                        <select class=small name="remhrs">
+                                                        <?php
+                                                                for($h=0;$h<=23;$h++)
+                                                                {
+                                                        ?>
+                                                        	<option value="<?echo $h?>"><?echo $h?></option>
+							<?
+                                                                }
+                                                        ?>
+                                                        </select>hours
+                                                        <select class=small name="remmin">
+                                                        <?php
+                                                                for($min=1;$min<=59;$min++)
+                                                                {
+                                                        ?>
+                                                                        <option value="<?echo $min?>"><?echo $min?></option>
+							<?
+                                                                }
+                                                        ?>
+                                                        </select><?echo $mod_strings['LBL_BEFORETASK']?>
+                                                </td>
+                                                </tr>
+                                                </table>
+                                        </td>
+                                </tr>
+                                <tr>
+                                        <td nowrap align=right>
+                                        <?echo $mod_strings['LBL_SDRMD']?> :
+                                        </td>
+                                        <td >
+                                        <input type=text class=textbox style="width:90%" value="<? echo $to_email ?>">
+                                        </td>
+                                </tr>
+                                </table>
+			</DIV>
+			</DIV>
+		</td></tr>
+                <!-- Repeat UI -->
+	</table>
+	<br>
+
+                <table border=0 cellspacing=0 cellpadding=5 width=100% class="addEventFooter">
+                <tr>
+                        <td valign=top></td>
+                        <td  align=right>
+                                <input title='Save [Alt+S]' accessKey='S' type="submit" class=small style="width:90px" value="<?echo $mod_strings['LBL_SAVE']?>">
+                                <input type="button" class=small style="width:90px" value="<?echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
+                        </td>
+                </tr>
+                </table>
+</form>
+	
+
+</div>
+
+
+<div id="act_changeowner" class="statechange">
+	<table width="100%" border="0" cellpadding="3" cellspacing="0">
+		<tr>
+			<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
+			<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
+			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')">Close</a></td>
+		</tr>
+		<tr>
+		        <td colspan="3">&nbsp;</td>
+	</tr>
+	<tr>
+        	<td width="50%"><b>Transfer Ownership to</b></td>
+	        <td width="2%"><b>:</b></td>
+        	<td width="48%">
+	        	<select name="activity_owner" id="activity_owner" class="detailedViewTextBox">
+				<?echo getUserslist();?>
+		        </select>
+        	</td>
+	</tr>
+	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+	<tr>
+        	<td colspan="3" align="center">
+	        &nbsp;&nbsp;
+        		<input type="button" name="button" class="small" value="Update Owner" onClick="ajaxChangeStatus('owner')">
+		        <input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_changeowner')">	
+		</td>
+	</tr>
+	</table>
+</div>
+
