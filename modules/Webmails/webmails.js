@@ -85,10 +85,10 @@ function check_in_all_boxes(mymbox) {
 	}
         $("status").style.display="block";
         new Ajax.Request(
-                'modules/Webmails/WebmailsAjax.php',
+                'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: '&command=check_mbox_all&ajax=true',
+                        postBody: 'module=Webmails&action=WebmailsAjax&command=check_mbox_all&ajax=true',
                         onComplete: function(t) {
 				//alert(t.responseText);
 				try {
@@ -117,10 +117,10 @@ function check_for_new_mail(mbox) {
 	}
         $("status").style.display="block";
         new Ajax.Request(
-                'modules/Webmails/WebmailsAjax.php',
+                'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'mailbox='+mbox+'&command=check_mbox&ajax=true',
+                        postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true',
                         onComplete: function(t) {
                             try {
                                 var data = eval('(' + t.responseText + ')');

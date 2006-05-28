@@ -8,37 +8,30 @@
   * All Rights Reserved.
   *
   ********************************************************************************/
+require_once('include/database/PearDatabase.php');
+require_once('include/logging.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once('modules/Webmails/MailParse.php');
 
-session_start();
-if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] == "") {exit();}
+global $adb,$mbox,$current_user;
 
-if($_POST["command"] == "check_mbox") {
+$sql = "select * from mail_accounts where status=1 and user_id='".$_SESSION["authenticated_user_id"]."'";
+$mailInfo = $adb->query($sql);
 
-	ini_set("include_path","../../");
-	require_once('config.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/logging.php');
-	require_once('include/utils/utils.php');
-	require_once('include/utils/UserInfoUtil.php');
-	require_once('modules/Webmails/MailParse.php');
+if($adb->num_rows($mailInfo) < 1) {
+        echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+        exit();
+}
 
-	global $adb,$mbox,$current_user;
+$temprow = $adb->fetch_array($mailInfo);
+$imapServerAddress=$temprow["mail_servername"];
+$box_refresh=$temprow["box_refresh"];
+$mails_per_page=$temprow["mails_per_page"];
+$account_name=$temprow["account_name"];
+$show_hidden=$_REQUEST["show_hidden"];
 
-	$sql = "select * from mail_accounts where status=1 and user_id='".$_SESSION["authenticated_user_id"]."'";
-	$mailInfo = $adb->query($sql);
-
-	if($adb->num_rows($mailInfo) < 1) {
-        	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
-        	exit();
-	}
-
-	$temprow = $adb->fetch_array($mailInfo);
-	$imapServerAddress=$temprow["mail_servername"];
-	$box_refresh=$temprow["box_refresh"];
-	$mails_per_page=$temprow["mails_per_page"];
-	$account_name=$temprow["account_name"];
-	$show_hidden=$_REQUEST["show_hidden"];
-
+if($_REQUEST["command"] == "check_mbox") {
 	$mbox = getImapMbox($mailbox,$temprow);
 
 	$search = imap_search($mbox, "NEW ALL");
@@ -74,28 +67,7 @@ if($_POST["command"] == "check_mbox") {
 	flush();
 	imap_close($mbox);
 }
-if($_POST["command"] == "check_mbox_all") {
-	ini_set("include_path","../../");
-	require_once('config.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/logging.php');
-	require_once('include/utils/utils.php');
-	require_once('include/utils/UserInfoUtil.php');
-	require_once('modules/Webmails/MailParse.php');
-
-	global $adb,$mbox,$current_user;
-
-	$sql = "select * from mail_accounts where status=1 and user_id='".$_SESSION["authenticated_user_id"]."'";
-	$mailInfo = $adb->query($sql);
-
-	if($adb->num_rows($mailInfo) < 1) {
-        	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
-        	exit();
-	}
-
-	$temprow = $adb->fetch_array($mailInfo);
-	$imapServerAddress=$temprow["mail_servername"];
-
+if($_REQUEST["command"] == "check_mbox_all") {
 	$boxes = array();
 	$i=0;
         foreach ($_SESSION["mailboxes"] as $key => $val) {

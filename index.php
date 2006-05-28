@@ -550,7 +550,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body")
+	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != "WebmailsAjax")
 	{
 		echo $copyrightstatement;
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
