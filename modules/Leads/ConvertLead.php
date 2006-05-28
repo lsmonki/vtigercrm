@@ -120,14 +120,8 @@ $convertlead .='<tr>
 						<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
-								<input name="closedate" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
-								<img src="'.$image_path.'calendar.gif" id="jscal_trigger">
+								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
-								<script type="text/javascript">
-									Calendar.setup ({
-										inputField : "jscal_field", ifFormat :"'.parse_calendardate($app_strings['NTC_DATE_FORMAT']).'", showsTime : false, button :"jscal_trigger", singleClick : true, step : 1
-									});
-								</script>
 							</td>
 						</tr>
 						<tr>
