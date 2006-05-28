@@ -226,8 +226,8 @@ function show_hidden() {
         $("status").style.display="none";
 }
 function mass_delete() {
-	var confirm = "Are you sure you want to delete these messages?";
-	if(confirm) {
+	var ok = confirm("Are you sure you want to delete these messages?");
+	if(ok) {
         	$("status").style.display="block";
         	var els = document.getElementsByTagName("INPUT");
         	var cnt = (els.length-1);
