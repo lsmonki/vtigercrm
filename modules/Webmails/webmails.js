@@ -124,7 +124,7 @@ function check_for_new_mail(mbox) {
                         method: 'post',
                         postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true',
                         onComplete: function(t) {
-			alert(t.responseText);
+			//alert(t.responseText);
                             try {
                                 var data = eval('(' + t.responseText + ')');
 				var read  = parseInt($(mailbox+"_read").innerHTML);
