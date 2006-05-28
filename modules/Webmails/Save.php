@@ -147,19 +147,8 @@ $return_module='Webmails';
 $return_action='ListView';
 
 
-if(isset($_REQUEST["send_mail"]) && $_REQUEST["send_mail"] == "true") {
-	global $adb;
-	$sql = "select email1, first_name,last_name from users where id='".$current_user->id."'";
-	$res = $adb->query($sql);
-	$emailaddr = $adb->query_result($res,0,'email1');
-	$who = $adb->query_result($res,0,'first_name')." ".$adb->query_result($res,0,'last_name');
-	require_once("sendmail.php");
-	sendmail($to_address,$cc_address,$bcc_address,$emailaddr,$who,$subject,$msgData);
-	header("Location: index.php?action=$return_action&module=$return_module");
-} else {
-	if($_POST["ajax"] != "true")
-		header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 
-}
+if($_POST["ajax"] != "true")
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 
 
 return;
 ?>
