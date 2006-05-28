@@ -101,6 +101,8 @@ function check_in_all_boxes(mymbox) {
 							
 							var read  = parseInt($(mbox+"_read").innerHTML);
 							$(mbox+"_read").innerHTML = (read+numnew);
+							var unread  = parseInt($(mbox+"_unread").innerHTML);
+							$(mbox+"_unread").innerHTML = (unread+numnew);
 						}
 					}
 				}
@@ -122,7 +124,7 @@ function check_for_new_mail(mbox) {
                         method: 'post',
                         postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true',
                         onComplete: function(t) {
-			//alert(t.responseText);
+			alert(t.responseText);
                             try {
                                 var data = eval('(' + t.responseText + ')');
 				var read  = parseInt($(mailbox+"_read").innerHTML);
@@ -250,10 +252,11 @@ function check_for_new_mail(mbox) {
         );
 }
 function periodic_event() {
-        window.clearTimeout(timer);
+	try {
         check_for_new_mail(mailbox);
 	check_in_all_boxes(mailbox);
-        timer = window.setTimeout("periodic_event()",box_refresh);
+        window.setTimeout("periodic_event()",box_refresh);
+	}catch(e){alert(e);}
 }
 function show_hidden() {
 	if(degraded_service == 'true') {
