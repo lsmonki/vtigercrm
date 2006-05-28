@@ -150,319 +150,22 @@ switch($currentModule)
 		$smarty->assign("SINGLE_MOD",'PriceBook');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		if(isset($_REQUEST['fldname']) && $_REQUEST['fldname'] !='')
+		{
+			$smarty->assign("FIELDNAME",$_REQUEST['fldname']);
+			$url_string .="&fldname=".$_REQUEST['fldname'];
+		}
+		if(isset($_REQUEST['productid']) && $_REQUEST['productid'] !='')
+		{
+			$smarty->assign("PRODUCTID",$_REQUEST['productid']);
+			$url_string .="&productid=".$_REQUEST['productid'];
+		}
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","","");
 		break;
 
 
 }
 
-/*
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	$url_string .="&query=true";
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
-
-
-	$where_clauses = Array();
-	if($currentModule == 'Contacts')
-	{
-		if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
-		if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
-		if (isset($_REQUEST['title'])) $title = $_REQUEST['title'];
-
-		if(isset($lastname) && $lastname != "") {
-			array_push($where_clauses, "contactdetails.lastname like ".$adb->quote($lastname.'%')."");
-			$url_string .= "&lastname=".$lastname;
-		}
-		if(isset($firstname) && $firstname != "") {
-			array_push($where_clauses, "contactdetails.firstname like ".$adb->quote($firstname.'%')."");
-			$url_string .= "&firstname=".$firstname;
-		}
-		if(isset($title) && $title != "")       {
-			array_push($where_clauses, "contactdetails.title like ".$adb->quote("%".$title.'%')."");
-			$url_string .= "&title=".$title;
-		}
-		if(isset($current_user_only) && $current_user_only != "") {
-			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-			$url_string .= "&current_user_only=on";
-		}
-
-	}
-	if($currentModule == 'Accounts')
-	{
-		if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
-		if (isset($_REQUEST['website'])) $website = $_REQUEST['website'];
-		if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
-		if (isset($_REQUEST['address_city'])) $address_city = $_REQUEST['address_city'];
-
-		if(isset($name) && $name != ""){
-			array_push($where_clauses, "account.accountname like ".$adb->quote($name."%"));
-			$url_string .= "&name=".$name;
-		}
-		if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".$adb->quote("%".$website."%"));
-		if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".$adb->quote("%".$phone."%")." OR account.otherphone like ".$adb->quote("%".$phone."%")." OR account.fax like ".$adb->quote("%".$phone."%").")");
-		if(isset($address_city) && $address_city != ""){
-			array_push($where_clauses, "(accountbillads.city like ".$adb->quote("%".$address_city."%")." OR accountshipads.city like ".$adb->quote($address_city."%").")");
-			$url_string .= "&address_city=".$address_city;
-		}
-		if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".$adb->quote($ownership."%"));
-		if(isset($current_user_only) && $current_user_only != ""){
-			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-			$url_string .= "&current_user_only=".$current_user_only;
-		}
-	}
-	if($currentModule == 'Leads')
-	{
-		if (isset($_REQUEST['first_name'])) $first_name = $_REQUEST['first_name'];
-		if (isset($_REQUEST['last_name'])) $last_name = $_REQUEST['last_name'];
-		if (isset($_REQUEST['company'])) $company = $_REQUEST['company'];
-		if(isset($last_name) && $last_name != ""){
-			array_push($where_clauses, "leaddetails.lastname like '$last_name%'");
-			$url_string .= "&last_name=".$last_name;
-		}
-		if(isset($first_name) && $first_name != ""){
-			array_push($where_clauses, "leaddetails.firstname like '%$first_name%'");
-			$url_string .= "&first_name=".$first_name;
-		}
-		if(isset($company) && $company != ""){
-			array_push($where_clauses, "leaddetails.company like '%$company%'");
-			$url_string .= "&company=".$company;	
-		}
-		if(isset($current_user_only) && $current_user_only != ""){
-			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-			$url_string .= "&current_user_only=".$current_user_only;
-		}
-		if(isset($assigned_user_id) && $assigned_user_id != "") array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
-
-	}
-	if($currentModule == 'Potentials')
-	{
-		if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
-		if (isset($_REQUEST['account_name'])) $accountname = $_REQUEST['account_name'];
-
-		if(isset($name) && $name != "") {
-			array_push($where_clauses, "potential.potentialname like ".$adb->quote($name.'%')."");
-			$url_string .= "&name=".$name;
-		}
-		if(isset($accountname) && $accountname != "") {
-			array_push($where_clauses, "account.accountname like ".$adb->quote('%'.$accountname.'%')."");
-			$url_string .= "&account_name=".$accountname;
-		}
-		if(isset($current_user_only) && $current_user_only != "") {
-			array_push($where_clauses, "crmentity.smcreator='$current_user->id'");
-			$url_string .= "&current_user_only=".$current_user_only;
-		}
-		if(isset($assigned_user_id) && $assigned_user_id != "")
-			array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
-	}
-	if($currentModule == 'Quotes')
-	{
-		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-		if (isset($_REQUEST['potentialname'])) $potentialname = $_REQUEST['potentialname'];
-		if (isset($_REQUEST['quotestage'])) $quotestage = $_REQUEST['quotestage'];
-		if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-		if(isset($subject) && $subject != "")
-		{
-			array_push($where_clauses, "quotes.subject like ".$adb->quote($subject."%"));
-			$url_string .= "&subject=".$subject;
-		}
-		if(isset($accountname) && $accountname != "")
-		{
-			array_push($where_clauses, "account.accountname like ".$adb->quote("%".$accountname."%"));
-			$url_string .= "&accountname=".$accountname;
-		}
-
-		if(isset($quotestage) && $quotestage != "")
-		{
-			array_push($where_clauses, "quotes.quotestage like ".$adb->quote("%".$quotestage."%"));
-			$url_string .= "&quotestage=".$quotestage;
-		}
-
-
-	}
-	if($currentModule == 'Invoice')
-	{
-		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-		if (isset($_REQUEST['salesorder'])) $salesorder = $_REQUEST['salesorder'];
-
-		if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
-		if ($sorder !='') $smarty->assign("SORDER", $sorder);
-		if (isset($subject) && $subject !='')
-		{
-			$search_query .= " and invoice.subject like '".$subject."%'";
-			$url_string .= "&subject=".$subject;
-			$smarty->assign("SUBJECT", $subject);
-		}
-
-		if (isset($salesorder) && $salesorder !='')
-		{
-			$search_query .= " and salesorder.subject like '%".$salesorder."%'";
-			$url_string .= "&salesorder=".$salesorder;
-			$smarty->assign("SALESORDER", $salesorder);
-		}
-
-	}
-	if($currentModule == 'Products')
-	{
-		if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
-		if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-		if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
-
-		if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
-		if ($sorder !='') $smarty->assign("SORDER", $sorder);
-
-
-		if (isset($productname) && $productname !='')
-		{
-			$search_query .= " and productname like '".$productname."%'";
-			$url_string .= "&productname=".$productname;
-			$smarty->assign("PRODUCT_NAME", $productname);
-		}
-
-		if (isset($productcode) && $productcode !='')
-		{
-			$search_query .= " and productcode like '%".$productcode."%'";
-			$url_string .= "&productcode=".$productcode;
-			$smarty->assign("PRODUCT_CODE", $productcode);
-		}
-		if (isset($unitprice) && $unitprice !='')
-		{
-			$search_query .= " and unit_price like '%".$unitprice."%'";
-			$url_string .= "&unitprice=".$unitprice;
-			$smarty->assign("UNITPRICE", $unitprice);
-		}
-
-
-	}
-	if($currentModule == 'PurchaseOrder')
-	{
-		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-		if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
-		if (isset($_REQUEST['trackingno'])) $trackingno = $_REQUEST['trackingno'];
-
-		if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
-		if ($sorder !='') $smarty->assign("SORDER", $sorder);
-
-		$where_clauses = Array();
-		if(isset($subject) && $subject != '')
-		{
-			array_push($where_clauses, "purchaseorder.subject like ".$adb->quote($subject."%"));
-			$url_string .= "&subject=".$subject;
-
-		}
-		if(isset($vendorname) && $vendorname != "")
-		{
-			array_push($where_clauses, "vendor.vendorname like ".$adb->quote("%".$vendorname."%"));
-			$url_string .= "&vendorname=".$vendorname;
-		}
-		if(isset($trackingno) && $trackingno != "")
-		{
-			array_push($where_clauses, "purchaseorder.tracking_no like ".$adb->quote("%".$trackingno."%"));
-			$url_string .= "&trackingno=".$trackingno;
-		}
-	}
-	if($currentModule == 'SalesOrder')
-	{
-		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-		if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-		if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
-
-		if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
-		if ($sorder !='') $smarty->assign("SORDER", $sorder);
-
-		$where_clauses = Array();
-
-		if (isset($subject) && $subject !='')
-		{
-			array_push($where_clauses, "salesorder.subject like ".$adb->quote($subject.'%'));
-			$url_string .= "&subject=".$subject;
-		}	
-
-		if (isset($accountname) && $accountname !='')
-		{
-			array_push($where_clauses, "account.accountname like ".$adb->quote($accountname.'%'));
-			$url_string .= "&accountname=".$accountname;
-		}
-
-		if (isset($quotename) && $quotename !='')
-		{
-			array_push($where_clauses, "quotes.subject like ".$adb->quote($quotename.'%'));
-			$url_string .= "&quotename=".$quotename;
-		}
-
-	}
-	if($currentModule == 'Vendors')
-	{
-		if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
-		if (isset($_REQUEST['companyname'])) $companyname = $_REQUEST['companyname'];
-		if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
-		$sql="select * from field where tablename='vendorcf' order by fieldlabel";
-		$result=$adb->query($sql);
-		for($i=0;$i<$adb->num_rows($result);$i++)
-		{
-			$column[$i]=$adb->query_result($result,$i,'columnname');
-			$fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-			$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-			if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-			if(isset($customfield[$i]) && $customfield[$i] != '')
-			{
-				if($uitype[$i] == 56)
-					$str=" vendorcf.".$column[$i]." = 1";
-				else
-					$str="vendorcf.".$column[$i]." like '$customfield[$i]%'";
-				array_push($where_clauses, $str);
-				//        $search_query .= ' and '.$str;
-				$url_string .="&".$column[$i]."=".$customfield[$i];
-			}
-		}
-		if (isset($vendorname) && $vendorname !='')
-		{
-			array_push($where_clauses, "vendorname like ".$adb->quote($vendorname.'%'));
-			//$search_query .= " and productname like '".$productname."%'";
-			$url_string .= "&vendorname=".$vendorname;
-		}
-
-		if (isset($companyname) && $companyname !='')
-		{
-			array_push($where_clauses, "company_name like ".$adb->quote($companyname.'%'));
-			//$search_query .= " and productcode like '".$productcode."%'";
-			$url_string .= "&companyname=".$companyname;
-		}
-
-		if (isset($category) && $category !='')
-		{
-			array_push($where_clauses, "category like ".$adb->quote($category.'%'));
-			//$search_query .= " and productcode like '".$productcode."%'";
-			$url_string .= "&category=".$category;
-		}
-
-	}
-
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-			$where .= " and ";
-		$where .= $clause;
-	}
-	if (!empty($assigned_user_id)) {
-		if (!empty($where)) {
-			$where .= " AND ";
-		}
-		$where .= "crmentity.smownerid IN(";
-		foreach ($assigned_user_id as $key => $val) {
-			$where .= "".$adb->quote($val)."";
-			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
-		}
-	}
-
-	$log->info("Here is the where clause for the list view: $where");
-
-}
-*/
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -500,7 +203,6 @@ if(isset($order_by) && $order_by != '')
 {
         $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
-
 $list_result = $adb->query($query);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
@@ -517,7 +219,6 @@ else
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
 // Setting the record count string
 if ($navigation_array['start'] == 1)
 {
@@ -548,13 +249,16 @@ else
                 $end_rec = $noofrows;
         }
 }
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+if($navigation_array['start'] != 0)
+	$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
 
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 $url_string .='&popuptype='.$popuptype;
+if(isset($_REQUEST['select']) && $_REQUEST['select'] == 'enable')
+	$url_string .='&select=enable';
 $listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 

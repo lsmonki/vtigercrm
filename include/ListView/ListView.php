@@ -483,6 +483,10 @@ function getSessionVariableName($localVarName,$varName){
 	$log->debug("Entering processListNavigation(".$xtemplateSection.",". $html_varName.",". $current_offset.",". $next_offset.",". $previous_offset.",". $row_count.") method ...");
 	global $current_user;
 	global $allow_exports;
+	global $theme;
+    $theme_path="themes/".$theme."/";
+    $image_path=$theme_path."images/";
+
 	$start_record = $current_offset + 1;
 	if($row_count == 0)
 		$start_record = 0;
@@ -521,20 +525,20 @@ function getSessionVariableName($localVarName,$varName){
 		$this->log->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_offset)");
 
 		if(0 == $current_offset){
-			$start_link = $this->local_app_strings['LNK_LIST_START'];
-			$previous_link = $this->local_app_strings['LNK_LIST_PREVIOUS'];
+			$start_link = '<img src="'.$image_path.'start_disabled.gif" border="0" align="absmiddle">&nbsp;';
+			$previous_link = '<img src="'.$image_path.'previous_disabled.gif" border="0" align="absmiddle">&nbsp;';
 		}else{
-			$start_link = "<a href=\"$start_URL\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LNK_LIST_START']."</a>";
-			$previous_link = "<a href=\"$previous_URL\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LNK_LIST_PREVIOUS']."</a>";
+			$start_link = "<a href=\"$start_URL\"><img src='".$image_path."start.gif' border='0' align='absmiddle'></a>";
+			$previous_link = "<a href=\"$previous_URL\"><img src='".$image_path."previous.gif' border='0' align='absmiddle'></a>";
 		}
 
 		if($last_offset <= $current_offset){
-			$end_link = $this->local_app_strings['LNK_LIST_END'];
-			$next_link = $this->local_app_strings['LNK_LIST_NEXT'];
+			$next_link = '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
+			$end_link = '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 		}
 		else{
-			$end_link = "<a href=\"$end_URL\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LNK_LIST_END']."</a>";
-			$next_link = "<a href=\"$next_URL\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LNK_LIST_NEXT']."</a>";
+			$end_link = "<a href=\"$end_URL\"><img src='".$image_path."end.gif' border='0' align='absmiddle'>&nbsp;</a>";
+			$next_link = "<a href=\"$next_URL\"><img src='".$image_path."next.gif' border='0' align='absmiddle'></a>";
 		}
 		global $current_module;
 		$this->log->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
@@ -543,10 +547,10 @@ function getSessionVariableName($localVarName,$varName){
 		$this->xTemplate->assign("START_RECORD", $start_record);
 		$this->xTemplate->assign("END_RECORD", $end_record-1);
 		$this->xTemplate->assign("ROW_COUNT", $row_count);
-		if ($start_link !== "") $this->xTemplate->assign("START_LINK", "[ ".$start_link." ]");
-		if ($end_link !== "")$this->xTemplate->assign("END_LINK", "[ ".$end_link." ]");
-		if ($next_link !== "") $this->xTemplate->assign("NEXT_LINK", "[ ".$next_link." ]");
-		if ($previous_link !== "") $this->xTemplate->assign("PREVIOUS_LINK", "[ ".$previous_link." ]");
+		if ($start_link !== "") $this->xTemplate->assign("START_LINK", $start_link);
+		if ($end_link !== "")$this->xTemplate->assign("END_LINK", $end_link);
+		if ($next_link !== "") $this->xTemplate->assign("NEXT_LINK", $next_link);
+		if ($previous_link !== "") $this->xTemplate->assign("PREVIOUS_LINK", $previous_link);
 
 		$_SESSION['export_where'] = $this->query_where;
 

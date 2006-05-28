@@ -226,7 +226,7 @@ function ajaxSaveUserResponse(response)
 					     </tr>
 					     <tr>
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_REPORTS_TO}</td>
-						<td class="dvtCellInfo" width="20%"><input readonly name='reports_to_name' class="small" type="text" value='{$REPORTS_TO_NAME}'><input name='reports_to_id' type="hidden" value='{$REPORTS_TO_ID}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
+						<td class="dvtCellInfo" width="20%"><input readonly name='reports_to_name' class="small" type="text" value='{$REPORTS_TO_NAME}'><input name='reports_to_id' type="hidden" value='{$REPORTS_TO_ID}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=640,height=522,resizable=0,scrollbars=0");'></td>
 						<td class="dvtCellLabel" align="right">{$UMOD.LBL_OTHER_PHONE}</td>
 						<td class="dvtCellInfo"><input type="text" name="phone_other" value='{$PHONE_OTHER}' class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
 					     </tr>

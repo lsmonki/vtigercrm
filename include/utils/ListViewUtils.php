@@ -821,96 +821,99 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		$ui_col_array[$field_name]=$tempArr;
 	}
 	//end
-	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	if($navigation_array['end_val'] > 0)
 	{
-
-		//Getting the entityid
-		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
-		$list_header=Array();
-
-		foreach($focus->search_fields as $name=>$tableinfo)
+		for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 		{
-			$fieldname = $focus->search_fields_name[$name];
 
-			if($is_admin==false)
+			//Getting the entityid
+			$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+			$list_header=Array();
+
+			foreach($focus->search_fields as $name=>$tableinfo)
 			{
-				$profileList = getCurrentUserProfileList();
-				$query = "SELECT profile2field.*
-					FROM field
-					INNER JOIN profile2field
+				$fieldname = $focus->search_fields_name[$name];
+
+				if($is_admin==false)
+				{
+					$profileList = getCurrentUserProfileList();
+					$query = "SELECT profile2field.*
+						FROM field
+						INNER JOIN profile2field
 						ON profile2field.fieldid = field.fieldid
-					INNER JOIN def_org_field
+						INNER JOIN def_org_field
 						ON def_org_field.fieldid = field.fieldid
-					WHERE field.tabid = ".$tabid."
-					AND profile2field.visible = 0
-					AND def_org_field.visible = 0
-					AND profile2field.profileid IN ".$profileList."
-					AND field.fieldname = '".$fieldname."'";
+						WHERE field.tabid = ".$tabid."
+						AND profile2field.visible = 0
+						AND def_org_field.visible = 0
+						AND profile2field.profileid IN ".$profileList."
+						AND field.fieldname = '".$fieldname."'";
 
-				$result = $adb->query($query);
-			}
-
-			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
-			{			
-				if($fieldname == '')
-				{
-					$table_name = '';
-					$column_name = '';
-					foreach($tableinfo as $tablename=>$colname)
-					{
-						$table_name=$tablename;
-						$column_name = $colname;
-					}
-					$value = $adb->query_result($list_result,$i-1,$colname); 
+					$result = $adb->query($query);
 				}
-				else
-				{
-					if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
+
+				if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+				{			
+					if($fieldname == '')
 					{
-						if ($name=='Related to')
-							$value=getRelatedTo($module,$list_result,$i-1);
-						if($name=='Contact Name')
+						$table_name = '';
+						$column_name = '';
+						foreach($tableinfo as $tablename=>$colname)
 						{
-							$first_name = $adb->query_result($list_result,$i-1,"firstname");
-							$last_name = $adb->query_result($list_result,$i-1,"lastname");
-							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-							$contact_name = "";
-							$value="";
-							if($last_name != 'NULL')
-								$contact_name .= $last_name;
-							if($first_name != 'NULL')
-								$contact_name .= " ".$first_name;
-							if(($contact_name != "") && ($contact_id !='NULL'))
-								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+							$table_name=$tablename;
+							$column_name = $colname;
 						}
-					}
-					elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
-					{
-						$value=getRelatedToEntity($module,$list_result,$i-1);
-					}
-					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder' || $module == 'Quotes'))
-					{
-						$account_id = $adb->query_result($list_result,$i-1,"accountid");
-						$account_name = getAccountName($account_id);
-						$value = $account_name;
-					}
-					elseif($name=='Quote Name' && $module == 'SalesOrder')
-					{
-						$quote_id = $adb->query_result($list_result,$i-1,"quoteid");
-						$quotename = getQuoteName($quote_id);
-						$value = $quotename;
+						$value = $adb->query_result($list_result,$i-1,$colname); 
 					}
 					else
 					{
-						$list_result_count = $i-1;
-						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
-					}
+						if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
+						{
+							if ($name=='Related to')
+								$value=getRelatedTo($module,$list_result,$i-1);
+							if($name=='Contact Name')
+							{
+								$first_name = $adb->query_result($list_result,$i-1,"firstname");
+								$last_name = $adb->query_result($list_result,$i-1,"lastname");
+								$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+								$contact_name = "";
+								$value="";
+								if($last_name != 'NULL')
+									$contact_name .= $last_name;
+								if($first_name != 'NULL')
+									$contact_name .= " ".$first_name;
+								if(($contact_name != "") && ($contact_id !='NULL'))
+									$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+							}
+						}
+						elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+						{
+							$value=getRelatedToEntity($module,$list_result,$i-1);
+						}
+						elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder' || $module == 'Quotes'))
+						{
+							$account_id = $adb->query_result($list_result,$i-1,"accountid");
+							$account_name = getAccountName($account_id);
+							$value = $account_name;
+						}
+						elseif($name=='Quote Name' && $module == 'SalesOrder')
+						{
+							$quote_id = $adb->query_result($list_result,$i-1,"quoteid");
+							$quotename = getQuoteName($quote_id);
+							$value = $quotename;
+						}
+						else
+						{
+							$list_result_count = $i-1;
+							$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+						}
 
+					}
+					$list_header[]=$value;
 				}
-				$list_header[]=$value;
-			}
-		}	
-		$list_block[$entity_id]=$list_header;
+			}	
+			$list_block[$entity_id]=$list_header;
+		}
 	}
 	$log->debug("Exiting getSearchListViewEntries method ...");
 	return $list_block;

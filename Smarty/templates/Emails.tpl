@@ -99,10 +99,6 @@ function ShowFolders(folderid)
 								<td colspan="3" style="vertical-align:middle;">
 									<table width="100%" cellpadding="0" cellspacing="0" border="0">
 										<tr>
-											<td width="10%" >
-											<img src="{$IMAGE_PATH}check_mail.gif" align="absmiddle" />
-						&nbsp;<a href="#" class="webMnu" >{$MOD.LBL_CHK_MAIL}</a>
-											</td>
 											<td width="10%">
 											<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
 						&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>

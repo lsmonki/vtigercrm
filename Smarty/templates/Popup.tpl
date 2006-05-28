@@ -12,7 +12,7 @@
 
 -->*}
 
-<link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css"/>
+<link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
@@ -22,7 +22,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
         opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 {rdelim}
 </script>
-
+<body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
 	<tr>
 		<td background="{$IMAGE_PATH}popupHdr.jpg" height="70" style="padding-left:20px;">
@@ -42,11 +42,14 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 					<select name ="search_field" class="txtBox">
 		                         {html_options  options=$SEARCHLISTHEADER }
                 		        </select>
-								<input type="hidden" name="searchtype" value="BasicSearch">
-		                        <input type="hidden" name="module" value="{$MODULE}">
-								<input type="hidden" name="action" value="Popup">
+					<input type="hidden" name="searchtype" value="BasicSearch">
+		       		        <input type="hidden" name="module" value="{$MODULE}">
+					<input type="hidden" name="action" value="Popup">
 		    	                <input type="hidden" name="query" value="true">
-								<input type="hidden" name="search_cnt">
+					<input type="hidden" name="select_enable" id="select_enable" value="{$SELECT}">
+					<input type="hidden" name="curr_row" value="{$CURR_ROW}">
+					<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
+					<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
 
 				</td>
 				<td width="20%" class="dvtCellLabel">
@@ -67,41 +70,60 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
   		</td>
   	</tr>
 </table>
+
 <div id="ListViewContents">
 	{include file="PopupContents.tpl"}
 </div>
+</body>
 <script>
 function callSearch(searchtype)
 {ldelim}
-
-        search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-        search_type_val=document.basicSearch.searchtype.value;
-        search_txt_val=document.basicSearch.search_text.value;
-
-	var ajaxObj = new Ajax(ajaxSaveResponse);
-	var urlstring = '';
-        elements=document.basicSearch;
-	for(ii = 0 ; ii < elements.length; ii++)
-	{ldelim}
-	if(elements[ii].name != 'action')
-		urlstring = urlstring+''+elements[ii].name+'='+elements[ii].value+'&';
-	else
-		urlstring = urlstring+'file=Popup&';
-	{rdelim}
-	var no_rows = document.basicSearch.search_cnt.value;
-	for(jj = 0 ; jj < no_rows; jj++)
-	{ldelim}
-		var sfld_name = getObj("Fields"+jj);
-		var scndn_name= getObj("Condition"+jj);
-		var srchvalue_name = getObj("Srch_value"+jj);
-		urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
-		urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-		urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+	for(i=1;i<=26;i++)
+    {ldelim}
+        var data_td_id = 'alpha_'+ eval(i);
+        getObj(data_td_id).className = 'searchAlph';
+    {rdelim}
+	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+    search_txt_val=document.basicSearch.search_text.value;
+    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var urlstring = '';
+    if(searchtype == 'Basic')
+    {ldelim}
+       urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
 	{rdelim}
 	popuptype = document.getElementById('popup_type').value;
-	urlstring = urlstring +'action={$MODULE}Ajax&ajax=true&popuptype='+popuptype;	
+	urlstring += '&popuptype='+popuptype;
+	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
+	urlstring +=gethiddenelements();
 	ajaxObj.process("index.php?",urlstring);
+{rdelim}	
+function alphabetic(module,url,dataid)
+{ldelim}
+    for(i=1;i<=26;i++)
+    {ldelim}
+	var data_td_id = 'alpha_'+ eval(i);
+	getObj(data_td_id).className = 'searchAlph';
+    {rdelim}
+    getObj(dataid).className = 'searchAlphselected';
+    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
+    urlstring +=gethiddenelements();
+    ajaxObj.process("index.php?",urlstring);
 {rdelim}
+function gethiddenelements()
+{ldelim}
+	var urlstring=''	
+	if(getObj('select_enable').value != '')
+		urlstring +='&select=enable';	
+	if(getObj('curr_row').value != '')
+		urlstring +='&curr_row='+getObj('curr_row').value;	
+	if(getObj('fldname_pb').value != '')
+		urlstring +='&fldname='+getObj('fldname_pb').value;	
+	if(getObj('productid_pb').value != '')
+		urlstring +='&productid='+getObj('productid_pb').value;	
+	return urlstring;
+{rdelim}
+																									
 function ajaxSaveResponse(response)
 {ldelim}
 	document.getElementById("ListViewContents").innerHTML= response.responseText;
@@ -109,8 +131,9 @@ function ajaxSaveResponse(response)
 function getListViewEntries_js(module,url)
 {ldelim}
         var ajaxObj = new Ajax(ajaxSaveResponse);
-		popuptype = document.getElementById('popup_type').value;
+	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&popuptype="+popuptype+"&file=Popup&ajax=true&"+url;
+    	urlstring +=gethiddenelements();
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
 </script>
