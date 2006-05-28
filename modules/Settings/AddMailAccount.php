@@ -73,7 +73,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("NOVALIDATECERT", "CHECKED");
 
 			if($temprow['int_mailer'] == "1")
-				$smarty->assign("INT_MAILER", "CHECKED");
+				$smarty->assign("INT_MAILER_USE", "CHECKED");
+			else
+				$smarty->assign("INT_MAILER_NOUSE", "CHECKED");
 
 		}
 	}
