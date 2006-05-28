@@ -138,7 +138,7 @@ function check_for_new_mail(mbox) {
                                         var unread = Builder.node('span',
                                                 {id: 'unread_img_'+mailid},
                                                 [ Builder.node('a',
-                                                        {href: 'index.php?module=Webmails&action=DetailView&record='+mailid+'&mailbox='+mailbox+'&mailid='+mailid},
+                                                        {href: 'javascript:;', onclick: 'OpenCompose('+mailid+',\'reply\')'},
                                                         [ Builder.node('img',
                                                                 {src: 'modules/Webmails/images/stock_mail-unread.png', border: '0', width: '10', height: '14'}
                                                         )]
