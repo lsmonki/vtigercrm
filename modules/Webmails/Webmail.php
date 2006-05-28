@@ -187,7 +187,7 @@ function dl_inline($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "INLINE")
-                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
+                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
@@ -234,7 +234,7 @@ function dl_attachments($mailid,$mbox) {
              $partstring .= ($i+1);
 
              if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
-                        $attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring));
+                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
              } 
            if ($parts[$i]->parts) {
              $stack[] = array("p" => $parts, "i" => $i);
@@ -291,10 +291,9 @@ function load_mail($mailid,$mbox) {
 
              $type='';
 	     if (strtoupper($parts[$i]->disposition) == "INLINE" && strtoupper($parts[$i]->subtype) != "PLAIN") {
-                        //$inline[] = array("filename" => $parts[$i]);
-                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>imap_fetchbody($mbox, $mailid, $partstring),"subtype"=>$parts[$i]->subtype);
+                        $inline[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 	     } elseif (strtoupper($parts[$i]->disposition) == "ATTACHMENT") {
-                        $attachment[] = array("filename" => $parts[$i]->parameters[0]->value,"filesize"=>$parts[$i]->bytes);
+                        $attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 
              } elseif (strtoupper($parts[$i]->subtype) == "HTML") {
                         $content['body'] = preg_replace($search,$replace,imap_fetchbody($mbox, $mailid, $partstring));

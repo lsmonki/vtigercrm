@@ -77,7 +77,7 @@ function check_for_new_mail(mbox) {
                 'modules/Webmails/WebmailsAjax.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=ListView&mailbox='+mbox+'&command=check_mbox&ajax=true',
+                        postBody: 'mailbox='+mbox+'&command=check_mbox&ajax=true',
                         onComplete: function(t) {
                             try {
                                 var data = eval('(' + t.responseText + ')');

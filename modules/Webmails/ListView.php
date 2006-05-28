@@ -167,7 +167,7 @@ function show_msg($mails,$start_message) {
 		$flags = "<tr id='row_".$num."'><td><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
-	if(getAttachments($num,$mbox) || getInlineAttachments($num,$mbox))
+	if(getAttachments($num,$mbox))
 		$flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="modules/Webmails/images/stock_attach.png" border="0" width="14px" height="14"></a>&nbsp;';
   	else
 		$flags.='<img src="modules/Webmails/images/blank.png" border="0" width="14px" height="14" alt="">&nbsp;';
