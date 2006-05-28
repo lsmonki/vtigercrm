@@ -1592,3 +1592,6 @@ function InternalMailer(record_id,type) {
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,opts);
 }
 
+function fnHide_Event(obj){
+        document.getElementById(obj).style.display = 'none';
+}
