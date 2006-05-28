@@ -26,9 +26,6 @@ function tagvalidate()
 	{rdelim}
 {rdelim}
 
-Calendar.setup ({ldelim}
-                inputField : "jscal_field", ifFormat : "{$CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
-        {rdelim});
 </script>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
