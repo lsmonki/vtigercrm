@@ -83,6 +83,8 @@ function getPendingActivities()
 	{
 		$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.status is NULL OR activity.status != 'Deferred') and (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held') and (activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' ) AND (due_date < '$today') OR (recurringevents.recurringdate < '$today') AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='$current_user->id'";
 	}
+	$res = $adb->query($list_query);
+	$noofrecords = $adb->num_rows($res);
 	$list_result = $adb->limitQuery($list_query,0,5);
 	$open_activity_list = array();
 	$noofrows = $adb->num_rows($list_result);
@@ -222,7 +224,7 @@ function getPendingActivities()
 			}
 		}
 		// Code by Jaguar Ends
-		$entries['noofactivities'] = $noofrows;
+		$entries['noofactivities'] = $noofrecords;
 		$entries[$event['id']] = array(
 				'0' => '<a href="index.php?action=DetailView&module='.$event["module"].'&activity_mode='.$activity_type.'&record='.$event["id"].''.$return_url.'" style="'.$font_color.';">'.$event["name"].'</a>',
 				'IMAGE' => '<IMG src="'.$image_path.$event["type"].'s.gif">',
