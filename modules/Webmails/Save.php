@@ -104,7 +104,7 @@ function add_attachment_to_contact($cid,$email) {
 	    if($j==0)
 	    	$attachments=$email->downloadAttachments();
 	    else
-	    	$attachments=$email->inline;
+	    	$attachments=$email->downloadInlineAttachments();
 
 	    $upload_filepath = decideFilePath();
 	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
