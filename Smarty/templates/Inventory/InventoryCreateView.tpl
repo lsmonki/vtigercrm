@@ -169,9 +169,22 @@ function sensex_info()
 			</td>
 		   </tr>
 		</table>
-		</form>
 	 </div>
 	</td>
+	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
    </tr>
 </table>
+</form>
 
+<script>
+
+
+
+        var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
+
+        var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
+
+        var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+
+
+</script>
