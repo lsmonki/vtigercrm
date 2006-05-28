@@ -62,23 +62,21 @@
                   <tr>
                     <td width="22%" bgcolor="#949494" style="overflow:auto"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
                     <td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><span style="float:left"><strong>{$MOD.LBL_MAILS} {$ACCOUNT} &gt; {$MAILBOX} </strong></span> <span style="float:right">{$NAVIGATION}</span></td>
+					 <td width="60%" class="subHdr"><span style="float:left"><strong>{$ACCOUNT} &gt; {$MAILBOX} </strong></span> <span style="float:right">{$NAVIGATION}</span></td>
                   </tr>
                   <tr>
                     <td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<span onmouseover="show_addfolder();" onmouseout="show_addfolder();" style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">Add Folder[X]</span></span>
-							<ul style="list-style-type:none;">
 
+							<ul style="list-style-type:none;">
 
                                                   {foreach item=row from=$BOXLIST}
                                                         {foreach item=row_values from=$row}
-                                {$row_values}
+                                				{$row_values}
                                                         {/foreach}
                                                   {/foreach}
-
-
-
 							</ul><br />
+
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 							<ul style="list-style-type:none;">
 								<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;

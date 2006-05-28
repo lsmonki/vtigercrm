@@ -33,6 +33,7 @@ $box_refresh=$temprow["box_refresh"];
 $mails_per_page=$temprow["mails_per_page"];
 $mail_protocol=$temprow["mail_protocol"];
 $account_name=$temprow["account_name"];
+$display_name=$temprow["display_name"];
 $show_hidden=$_REQUEST["show_hidden"];
 
 $degraded_service='false';
@@ -308,7 +309,7 @@ $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $mailbox);
-$smarty->assign("ACCOUNT", $account_name);
+$smarty->assign("ACCOUNT", $display_name);
 $smarty->assign("BOXLIST",$folders);
 $smarty->assign("DEGRADED_SERVICE",$degraded_service);
 $smarty->display("Webmails.tpl");
