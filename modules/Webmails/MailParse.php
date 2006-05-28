@@ -20,29 +20,38 @@ function isBase64($iVal){
 	$_tmp=preg_replace("/[^A-Z0-9\+\/\=]/i","",$iVal);
 	return (strlen($_tmp) % 4 == 0 ) ? "y" : "n";
 }
-function getImapMbox($mailbox,$temprow) {
-	 global $mbox; 
-	 $login_username= $temprow["mail_username"]; 
-	 $secretkey=$temprow["mail_password"]; 
-	 $imapServerAddress=$temprow["mail_servername"]; 
-	 $mail_protocol=$temprow["mail_protocol"]; 
-	 $ssltype=$temprow["ssltype"]; 
-	 $sslmeth=$temprow["sslmeth"]; 
+function getImapMbox($mailbox,$temprow,$readonly='') {
+	global $mbox; 
+	$login_username= $temprow["mail_username"]; 
+	$secretkey=$temprow["mail_password"]; 
+	$imapServerAddress=$temprow["mail_servername"]; 
+	$mail_protocol=$temprow["mail_protocol"]; 
+	$ssltype=$temprow["ssltype"]; 
+	$sslmeth=$temprow["sslmeth"]; 
 	 	 
 	 	 
-	 // first we will try a regular old IMAP connection: 
-	 if($ssltype == "") {$ssltype = "notls";} 
-	 if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
-	 $mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
+	// first we will try a regular old IMAP connection: 
+	if($ssltype == "") {$ssltype = "notls";} 
+	if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
+	if($readonly == "true")
+		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."/readonly}".$mailbox, $login_username, $secretkey); 
+	else
+		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
 
 	// next we'll try to make a port specific connection to see if that helps.
 	// this may need to be updated to remove SSL/TLS since the c-client libs
 	// are not linked correctly to SSL in most windows installs.
 	if(!$mbox) {
 	 	if($mail_protocol == 'pop3') {
-	 	        $connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."}".$mailbox; 
+			if($readonly == "true")
+	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."/readonly}".$mailbox;
+			else
+	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."}".$mailbox;
 	 	} else { 
-	 	        $connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."}".$mailbox; 
+			if($readonly == "true")
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/readonly}".$mailbox; 
+			else
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."}".$mailbox; 
 	 	} 
 	 	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
 	} 

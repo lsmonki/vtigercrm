@@ -39,7 +39,7 @@ if($_POST["command"]) {
 	$account_name=$temprow["account_name"];
 	$show_hidden=$_REQUEST["show_hidden"];
 
-	$mbox = getImapMbox($mailbox,$temprow);
+	$mbox = getImapMbox($mailbox,$temprow,"true");
 
 	$search = imap_search($mbox, "NEW ALL");
 	if($search === false) {echo "";flush();exit();}
