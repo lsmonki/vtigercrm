@@ -9,8 +9,10 @@
  ********************************************************************************/
 
 var gFolderid = 1;
+var gselectedrowid = 0;
 function massDelete()
 {
+		var delete_selected_row = false;
         x = document.massdelete.selected_id.length;
         idstring = "";
         if ( x == undefined)
@@ -18,6 +20,11 @@ function massDelete()
 
                 if (document.massdelete.selected_id.checked)
                 {
+					if(document.massdelete.selected_id.value == gselectedrowid)
+					{
+						gselectedrowid = 0;
+						delete_selected_row = true;						
+					}
                         idstring = document.massdelete.selected_id.value;
 						xx = 1;
                 }
@@ -33,10 +40,15 @@ function massDelete()
                 for(i = 0; i < x ; i++)
                 {
                         if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                        xx++
-                        }
+						{
+							if(document.massdelete.selected_id[i].value == gselectedrowid)
+							{
+								gselectedrowid = 0;
+								delete_selected_row = true;						
+							}
+							idstring = document.massdelete.selected_id[i].value +";"+idstring
+							xx++
+						}
                 }
                 if (xx != 0)
                 {
@@ -52,7 +64,10 @@ function massDelete()
 		{	
 			getObj('search_text').value = '';
 			show("status");
-			var ajaxObj = new Ajax(ajaxSaveResponse);
+			if(!delete_selected_row)
+				var ajaxObj = new Ajax(ajaxSaveResponse);
+			else	
+				var ajaxObj = new Ajax(ajaxDelResponse);
 			var urlstring ="module=Users&action=massdelete&folderid="+gFolderid+"&return_module=Emails&idlist="+idstring;
 		    ajaxObj.process("index.php?",urlstring);
 		}
@@ -66,6 +81,7 @@ function DeleteEmail(id)
 	if(confirm("Are you sure you want to delete ?"))
 	{	
 		getObj('search_text').value = '';
+		gselectedrowid = 0;
 		show("status");
 		var ajaxObj = new Ajax(ajaxDelResponse);
 		var urlstring ="module=Users&action=massdelete&return_module=Emails&folderid="+gFolderid+"&idlist="+id;
@@ -78,10 +94,29 @@ function DeleteEmail(id)
 }
 function Searchfn()
 {
+	gselectedrowid = 0;
 	var osearch_field = document.getElementById('search_field');
 	var search_field = osearch_field.options[osearch_field.options.selectedIndex].value;
 	var search_text = document.getElementById('search_text').value;
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new Ajax(ajaxDelResponse);
 	var urlstring ="module=Emails&action=EmailsAjax&ajax=true&file=ListView&folderid="+gFolderid+"&search=true&search_field="+search_field+"&search_text="+search_text;
     ajaxObj.process("index.php?",urlstring);
 }
+
+function OpenCompose(id,mode) 
+{
+	switch(mode)
+	{		
+		case 'edit':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
+			break;
+		case 'create':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+			break;
+		case 'forward':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
+			break;
+	}
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+}
+

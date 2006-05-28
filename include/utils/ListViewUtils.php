@@ -177,7 +177,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							if($relatedlist !='')
 								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							else
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 							$arrow = '';
 						//}
 					}
@@ -1438,7 +1438,7 @@ $log->debug("Exiting getValue method ...");
 				}
 				elseif($module == 'Emails')
 				{
-					$value = '<a href="javascript:;"onClick="getEmailContents(\''.$entity_id.'\'),setSubject(\''.$temp_val.'\')">'.$temp_val.'</a>';
+					$value = $temp_val;
 				}
                 else
                 {

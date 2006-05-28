@@ -18,15 +18,21 @@
             <th width="15%">{$LISTHEADER.2}</th>
         </tr>
 		{foreach key=id item=row from=$LISTENTITY}
-	    <tr onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
+	    <tr id="row_{$id}">
 			<td>
 			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
 </span></td>
-			<td><b>{$row.0}</b></td>
-			<td><b>{$row.1}</b></td>
-			<td><b>{$row.2}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.0}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.1}</b></td>
+			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');"><b>{$row.2}</b></td>
         </tr>
 		{/foreach}
     </table>
 </div>
-
+<SCRIPT>
+	if(gselectedrowid != 0)
+	{ldelim}
+		var rowid = 'row_'+gselectedrowid;
+	    getObj(rowid).className = 'prvPrfHoverOn';
+	{rdelim}
+</SCRIPT>

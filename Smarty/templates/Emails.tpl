@@ -15,6 +15,7 @@ function ajaxSaveResponse(response)
 {ldelim}
 	hide("status");
 	document.getElementById("email_con").innerHTML=response.responseText;
+	execJS(document.getElementById('email_con'));
 {rdelim}
 function ajaxgetResponse(response)
 {ldelim}
@@ -28,6 +29,14 @@ document.getElementById("subjectsetter").innerHTML=subject
 function getEmailContents(id)
 {ldelim}
 	show("status");
+	var rowid = 'row_'+id;
+	getObj(rowid).className = 'prvPrfHoverOn';
+	if(gselectedrowid != 0 && gselectedrowid != id)
+	{ldelim}
+		var prev_selected_rowid = 'row_'+gselectedrowid;
+		getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
+	{rdelim}
+	gselectedrowid = id;
 	var ajaxObj = new Ajax(ajaxgetResponse);
 	var urlstring ="module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record="+id;
 	ajaxObj.process("index.php?",urlstring);
@@ -40,12 +49,22 @@ function ajaxDelResponse(response)
 	document.getElementById('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
 	document.getElementById("subjectsetter").innerHTML='';
 	document.getElementById("email_con").innerHTML=response.responseText;
+	execJS(document.getElementById('email_con'));
 }
 
 {/literal}
 function ShowFolders(folderid)
 {ldelim}
-    var ajaxObj = new Ajax(ajaxDelResponse);
+	show("status");
+	if(gFolderid != folderid)
+	{ldelim}	
+    	var ajaxObj = new Ajax(ajaxSaveResponse);
+		gselectedrowid = 0;
+	{rdelim}
+	else
+	{ldelim}
+		var ajaxObj = new Ajax(ajaxDelResponse);
+	{rdelim}
 	gFolderid = folderid;
 	getObj('search_text').value = '';
 	switch(folderid)
@@ -70,6 +89,14 @@ function ShowFolders(folderid)
 	{rdelim}
     var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folderid="+folderid;
    	ajaxObj.process("index.php?",urlstring);
+{rdelim}
+function getListViewEntries_js(module,url)
+{ldelim}
+		show("status");
+        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url;
+        ajaxObj.process("index.php?",urlstring);
+
 {rdelim}
 </script>
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
@@ -200,27 +227,10 @@ function ShowFolders(folderid)
 					<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
 					<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
 				</tr>
-			</table><br />
+			</table><br/>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
 </table>
 <!-- END -->
-<script>
-function OpenCompose(id,mode) 
-{ldelim}
-	switch(mode)
-		{ldelim}
-		case 'edit':
-			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
-			break;
-		case 'create':
-			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
-			break;
-		case 'forward':
-			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
-			break;
-		{rdelim}
-	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
-{rdelim}
-</script>
+

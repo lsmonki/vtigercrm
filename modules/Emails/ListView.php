@@ -28,51 +28,6 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 global $current_user;
-//$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=Webmails&action=index&parenttab=My Home Page');
-
-//$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=Webmails&action=index&parenttab=parenttab=My Home Page'=>'Emails');
-
-/*if($_REQUEST['ajax'] == '')
-{
-
-	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
-	{
-		$classname = "tabOff";
-	}
-	else
-	{
-		$classname = "tabOn";
-	}
-	$listView = "ListView.php";
-	foreach($submenu as $label=>$filename)
-	{
-		$cur_mod = $sec_arr[$filename];
-		$cur_tabid = getTabid($cur_mod);
-
-		if($tab_per_Data[$cur_tabid] == 0)
-		{
-			list($lbl,$sname,$title)=split("_",$label);
-			if(stristr($label,"EMAILS"))
-			{
-				//echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView" class="tabLink">'.$mod_strings[$label].'</a>&nbsp;&nbsp;&nbsp;</td>';
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			elseif(stristr($label,$_REQUEST['smodule']))
-			{
-				//echo '<td class="tabOn" nowrap><a href="index.php?module=Webmails&action=index&smodule='.$_REQUEST['smodule'].'&parenttab=My Home Page" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			else
-			{
-				//echo '<td class="'.$classname.'" nowrap><a href="index.php?module=Webmails&action=index&smodule='.$sname.'&parenttab=My Home Page" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-			}
-			$classname = "tabOff";
-		}
-
-	}
-}*/
 global $app_strings;
 global $mod_strings;
 
@@ -136,6 +91,7 @@ if($email_title)$display_title = $email_title;
 //to get the search field if exists
 if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_text'] != '')
 {
+	$url_string .= "&search=".$_REQUEST['search']."&search_field=".$_REQUEST['search_field']."&search_text=".$_REQUEST['search_text'];
 	if($_REQUEST['search_field'] != 'join')
 		$where = $_REQUEST['search_field']." like '%".$_REQUEST['search_text']."%'";	
 	else
@@ -204,47 +160,22 @@ $smarty->assign("CATEGORY",$category);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
-//Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-	$start = $_REQUEST['start'];
-
-	//added to remain the navigation when sort
-	$url_string = "&start=".$_REQUEST['start'];
-}
-else
-{
-	$start = 1;
-}
 //Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$_REQUEST['allflag'] = 'All';
+$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
 
 //Retreive the List View Table Header
 if($viewid !='')
 	$url_string .="&viewname=".$viewid;
-
+if(isset($_REQUEST['folderid']) && $_REQUEST['folderid'] != '')
+	$url_string .= "&folderid=".$_REQUEST['folderid'];
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header = getSearchListHeaderValues($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
-$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);                                                  
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
-$navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
-$alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
-$smarty->assign("ALPHABETICAL", $alphabetical);
-$smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("USERID", $current_user->id);
 
 $check_button = Button_Check($module);
@@ -253,5 +184,4 @@ if($_REQUEST['ajax'] != '')
 	$smarty->display("EmailContents.tpl");
 else
 	$smarty->display("Emails.tpl");
-
 ?>
