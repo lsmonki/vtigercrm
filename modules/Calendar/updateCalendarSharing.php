@@ -21,8 +21,19 @@ if(isset($sharedid) && $sharedid != null)
 		        $adb->query($sql);
                 }
         }
-        header("Location: index.php?action=index&module=Calendar&parenttab=My Home Page");
 }
+if(isset($_REQUEST['start_hour']) && $_REQUEST['start_hour'] != '')
+{
+	$sql = "update users set start_hour='".$_REQUEST['start_hour']."' where id=".$current_user->id;
+        $adb->query($sql);
+}
+
+if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
+{
+	$sql = "update users set hour_format='".$_REQUEST['hour_format']."' where id=".$current_user->id;
+	$adb->query($sql);
+}
+header("Location: index.php?action=index&module=Calendar&parenttab=My Home Page");
 
 ?>
 
