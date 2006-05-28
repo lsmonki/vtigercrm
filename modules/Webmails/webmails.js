@@ -1,14 +1,16 @@
 function load_webmail(mid) {
         var node = $("row_"+mid);
-        node.className='read_email';
-        // gracefully handle this if the mail is already read.
-        try {
+	if(node.className == "unread_email") {
+		var unread  = parseInt($(mailbox+"_unread").innerHTML);
+		$(mailbox+"_unread").innerHTML = (unread-1);
+
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
                         {href: 'javascript:;', onclick: 'OpenCompose('+mid+',"reply")'},
                         [Builder.node('img',{src: 'modules/Webmails/images/stock_mail-read.png', border: '0', width: '10', height: '11'})]
                 ));
-        }catch(e){}
+	}
+        node.className='read_email';
 
         $("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
         $("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
@@ -91,6 +93,10 @@ function check_for_new_mail(mbox) {
                         onComplete: function(t) {
                             try {
                                 var data = eval('(' + t.responseText + ')');
+				var read  = parseInt($(mailbox+"_read").innerHTML);
+				$(mailbox+"_read").innerHTML = (read+data.mails.length);
+				var unread  = parseInt($(mailbox+"_unread").innerHTML);
+				$(mailbox+"_unread").innerHTML = (unread+data.mails.length);
                                 for (var i=0;i<data.mails.length;i++) {
                                         var mailid = data.mails[i].mail.mailid;
                                         var date = data.mails[i].mail.date;
@@ -299,6 +305,12 @@ function runEmailCommand(com,id) {
                                     break;
                                     case 'delete_msg':
                                         var row = $("row_"+id);
+					if(row.classname=="unread_email") {
+						var unread  = parseInt($(mailbox+"_unread").innerHTML);
+						$(mailbox+"_unread").innerHTML = (unread-1);
+					}
+					var read  = parseInt($(mailbox+"_read").innerHTML);
+					$(mailbox+"_read").innerHTML = (read-1);
                                         row.className = "deletedRow";
                                         try {
                                                 $("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
@@ -327,6 +339,8 @@ function runEmailCommand(com,id) {
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
+					var read  = parseInt($(mailbox+"_read").innerHTML);
+					$(mailbox+"_read").innerHTML = (read+1);
                                     break;
                                     case 'clear_flag':
                                         var nm = "clear_td_"+id;
