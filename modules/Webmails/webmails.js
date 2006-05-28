@@ -309,8 +309,6 @@ function runEmailCommand(com,id) {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
-					var read  = parseInt($(mailbox+"_read").innerHTML);
-					$(mailbox+"_read").innerHTML = (read-1);
                                         row.className = "deletedRow";
                                         try {
                                                 $("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
@@ -339,8 +337,6 @@ function runEmailCommand(com,id) {
                                         var newhtml = remove(remove(node.innerHTML,'<s>'),'</s>');
                                         node.innerHTML=newhtml;
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"></a>';
-					var read  = parseInt($(mailbox+"_read").innerHTML);
-					$(mailbox+"_read").innerHTML = (read+1);
                                     break;
                                     case 'clear_flag':
                                         var nm = "clear_td_"+id;
