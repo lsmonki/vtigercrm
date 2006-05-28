@@ -104,7 +104,7 @@
                       <tr>
                         <td width="45%">
 			<input type="button" name="mass_del" value=" {$MOD.LBL_DELETE} "  class="classWebBtn" onclick="mass_delete();"/>
-			<input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn" onclick="move_messages();"/><br> {$FOLDER_SELECT}
+			<input type="button" name="Button2" value=" {$MOD.LBL_MOVE_TO} "  class="classWebBtn" onclick="move_messages();"/> {$FOLDER_SELECT}
                         </td>
 			{if $DEGRADED_SERVICE eq 'false'}
                         <td width="75%" align="right">
