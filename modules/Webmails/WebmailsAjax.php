@@ -39,7 +39,7 @@ if($_POST["command"] == "check_mbox") {
 	$account_name=$temprow["account_name"];
 	$show_hidden=$_REQUEST["show_hidden"];
 
-	$mbox = getImapMbox($mailbox,$temprow,"true");
+	$mbox = getImapMbox($mailbox,$temprow);
 
 	$search = imap_search($mbox, "NEW ALL");
 	if($search === false) {echo "";flush();exit();}
@@ -100,7 +100,7 @@ if($_POST["command"] == "check_mbox_all") {
 	$i=0;
         foreach ($_SESSION["mailboxes"] as $key => $val) {
 		$mailbox=$val;
-		$mbox = getImapMbox($mailbox,$temprow,"true");
+		$mbox = getImapMbox($mailbox,$temprow);
 
 		$search = imap_search($mbox, "NEW ALL");
 		if($search != false) {
