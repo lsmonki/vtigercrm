@@ -86,7 +86,6 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 	
 	if (y.display=="none") 
 	{
-		document.getElementById("jscal_field_date_start").value = startdate;
 		document.getElementById("jscal_field_due_date").value = enddate;	
 		document.getElementById("starthr").value = starthr;
 		document.getElementById("startmin").value = startmin;
@@ -98,6 +97,11 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 			document.appSave.activitytype[0].checked = true;
 		if(type == 'meeting')
 			document.appSave.activitytype[1].checked = true;
+		 if(type == 'todo')
+			document.getElementById("task_jscal_field_date_start").value = startdate;
+		else
+			document.getElementById("jscal_field_date_start").value = startdate;
+		
 		y.display="block";
 	}
 }
@@ -367,9 +371,9 @@ function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt
 	tagName.style.left= left_Side  + 'px';
 	tagName.style.top= top_Side + 22+ 'px';
 	tagName.style.display = 'block';
-	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
-	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
-	document.getElementById("addtodo").href="javascript:gshow('addEvent','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"')";
+	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
+	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
+	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"');fnRemoveEvent();";
 	
 }
 	
@@ -426,5 +430,6 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year){
     document.getElementById("pending").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&eventstatus=Not Held&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
     document.getElementById("postpone").href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode=Events";
     document.getElementById("actdelete").href="index.php?return_module=Calendar&return_action=index&action=Delete&module=Activities&record="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("changeowner").href="javascript:fnvshobj(this,'act_changeowner');";
 }
 
