@@ -264,6 +264,7 @@ while ($i<$c) {
 
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
+$i=0;
 if (is_array($list)) {
       	$boxes = '<select name="mailbox" id="mailbox_select">';
         foreach ($list as $key => $val) {
@@ -275,6 +276,9 @@ if (is_array($list)) {
 		else
 			$img = "webmail_downarrow.gif";
 
+		$_SESSION["mailboxes"][$i] = $tmpval;
+		$i++;
+
 		if ($mailbox == $tmpval) {
                         $boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
 			$box = imap_mailboxmsginfo($mbox);
@@ -283,7 +287,7 @@ if (is_array($list)) {
 			$tmpbox = getImapMbox($tmpval,$temprow);
 			$box = imap_mailboxmsginfo($tmpbox);
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<b>('.$box->Unread.' of '.$box->Nmsgs.')</b></li>';
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->Unread.'</span> of <span id="'.$tmpval.'_read">'.$box->Nmsgs.'</span>)</span></li>';
 			imap_close($tmpbox);
 		}
  	}

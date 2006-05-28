@@ -9,10 +9,10 @@
   *
   ********************************************************************************/
 
-if($_POST["command"]) {
+session_start();
+if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] == "") {exit();}
 
-	session_start();
-	if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] == "") {exit();}
+if($_POST["command"] == "check_mbox") {
 
 	ini_set("include_path","../../");
 	require_once('config.php');
@@ -73,5 +73,64 @@ if($_POST["command"]) {
 	echo $ret;
 	flush();
 	imap_close($mbox);
+}
+if($_POST["command"] == "check_mbox_all") {
+	ini_set("include_path","../../");
+	require_once('config.php');
+	require_once('include/database/PearDatabase.php');
+	require_once('include/logging.php');
+	require_once('include/utils/utils.php');
+	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Webmails/MailParse.php');
+
+	global $adb,$mbox,$current_user;
+
+	$sql = "select * from mail_accounts where status=1 and user_id='".$_SESSION["authenticated_user_id"]."'";
+	$mailInfo = $adb->query($sql);
+
+	if($adb->num_rows($mailInfo) < 1) {
+        	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
+        	exit();
+	}
+
+	$temprow = $adb->fetch_array($mailInfo);
+	$imapServerAddress=$temprow["mail_servername"];
+
+	$boxes = array();
+	$i=0;
+        foreach ($_SESSION["mailboxes"] as $key => $val) {
+		$mailbox=$val;
+		$mbox = getImapMbox($mailbox,$temprow,"true");
+
+		$search = imap_search($mbox, "NEW ALL");
+		if($search != false) {
+			$boxes[$i]["name"] = $mailbox;
+			$boxes[$i]["newmsgs"] = sizeof($search);
+
+			$i++;
+		}
+		imap_close($mbox);
+	}
+
+	$ret = '';
+	if(count($boxes) > 0) {
+		$ret = '{"msgs":[';
+		for($i=0,$num=count($boxes);$i<$num;$i++) {
+			$ret .= '{"msg":';
+			$ret .= '{';
+			$ret .= '"box":"'.$boxes[$i]["name"].'",';
+			$ret .= '"newmsgs":"'.$boxes[$i]["newmsgs"].'"}';
+
+			if(($i+1) == $num)
+				$ret .= '}';
+			else
+				$ret .= '},';
+		}
+		$ret .= ']}';
+	}
+
+	echo $ret;
+	flush();
+	exit();
 }
 ?>

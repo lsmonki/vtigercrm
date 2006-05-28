@@ -79,6 +79,34 @@ function select_all() {
                         els[i].checked = true;
         }
 }
+function check_in_all_boxes(mymbox) {
+        $("status").style.display="block";
+        new Ajax.Request(
+                'modules/Webmails/WebmailsAjax.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: '&command=check_mbox_all&ajax=true',
+                        onComplete: function(t) {
+				//alert(t.responseText);
+				try {
+				if(t.responseText != "") {
+                                	var data = eval('(' + t.responseText + ')');
+                                	for (var i=0;i<data.msgs.length;i++) {
+						if(mbox != mymbox) {
+                                        		var mbox = data.msgs[i].msg.box;
+                                        		var numnew = parseInt(data.msgs[i].msg.newmsgs);
+							
+							var read  = parseInt($(mbox+"_read").innerHTML);
+							$(mbox+"_read").innerHTML = (read+numnew);
+						}
+					}
+				}
+				}catch(e){alert(e);}
+			}
+		}
+	);
+        $("status").style.display="none";
+}
 function check_for_new_mail(mbox) {
 	if(degraded_service == 'true') {
 		window.location=window.location;
@@ -220,6 +248,7 @@ function check_for_new_mail(mbox) {
 function periodic_event() {
         window.clearTimeout(timer);
         check_for_new_mail(mailbox);
+	check_in_all_boxes(mailbox);
         timer = window.setTimeout("periodic_event()",box_refresh);
 }
 function show_hidden() {
