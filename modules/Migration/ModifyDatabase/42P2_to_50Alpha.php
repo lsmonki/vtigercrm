@@ -2559,6 +2559,14 @@ foreach($query_array as $query)
 	Execute($query);
 }
 
+
+$conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha (5) ends here.");
+
+
+/************************* The following changes have been made after 5.0 Alpha 5 *************************/
+$conn->println("Database Modifications after 5.0(Alpha 5) starts here.");
+
+
 //Added on 22-04-06 - to add the Notify Owner field in Contacts and Accounts
 $notify_owner_array = Array(
 	"update field set sequence=26 where tabid=4 and fieldname='modifiedtime'",
@@ -2683,6 +2691,81 @@ $update_query4 = "update relatedlists set label='Purchase Order' where tabid=18 
 Execute($update_query4);
 
 
+
+//Added on 27-05-06
+
+$create_query27 = "CREATE TABLE invitees (activityid int(19) NOT NULL, inviteeid int(19) NOT NULL, PRIMARY KEY (activityid,inviteeid))";
+Execute($create_query27);
+
+$alter_query_array17 = Array(
+				"ALTER TABLE users ADD column hour_format varchar(30) default NULL AFTER date_format",
+				"ALTER TABLE users ADD column start_hour varchar(30) default NULL AFTER hour_format",
+				"ALTER TABLE users ADD column end_hour varchar(30) default NULL AFTER start_hour"
+			    );
+foreach($alter_query_array17 as $query)
+{
+	Execute($query);
+}
+
+$create_query28 = "CREATE TABLE emaildetails (
+			emailid int(19) NOT NULL,
+			from_email varchar(50) NOT NULL default '',
+			to_email text,
+			cc_email text,
+			bcc_email text,
+			assigned_user_email varchar(50) NOT NULL default '',
+			idlists varchar(50) NOT NULL default '',
+			email_flag varchar(50) NOT NULL default '',
+			PRIMARY KEY  (`emailid`)
+		  )";
+Execute($create_query28);
+
+
+$obj_array = Array('Leads'=>'leaddetails','Contacts'=>'contactdetails');
+$leadfieldid = $conn->query_result($conn->query("select fieldid from field where tabid=7 and fieldname='email'"),0,'fieldid');
+$contactfieldid = $conn->query_result($conn->query("select fieldid from field where tabid=4 and fieldname='email'"),0,'fieldid');
+$fieldid_array = Array("Leads"=>"$leadfieldid","Contacts"=>"$contactfieldid");
+$idname_array = Array("Leads"=>"leadid","Contacts"=>"contactid");
+
+$query = 'select * from seactivityrel where activityid in (select activityid from activity where activitytype="Emails")';
+$result = $conn->query($query);
+$numofrows = $conn->num_rows($result);
+
+$islists = '';
+$toemail = '';
+for($i=0;$i<$numofrows;$i++)
+{
+	$parentid = $conn->query_result($result,$i,'crmid');
+	$emailid = $conn->query_result($result,$i,'activityid');
+
+	$query = 'select setype from crmentity where crmid='.$parentid;
+	$result1 = $conn->query($query);
+	$module = $conn->query_result($result1,0,'setype');
+
+	$idlists = "$parentid@$fieldid_array[$module]|";
+
+	$result2 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = $parentid");
+	$toemail = $conn->query_result($result2,0,'lastname').' '.$conn->query_result($result2,0,'firstname').'<'.$conn->query_result($result2,0,'email').'>###';
+
+	//insert this idlists and toemail values in emaildetails table
+	$sql = "insert into emaildetails values ($emailid,'',$toemail,'','','',$idlists,'SAVE')";
+	Execute($sql);
+
+}
+
+$update_query5 = "update field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";
+Execute($update_query5);
+
+
+
+
+
+
+
+
+
+
+
 //Added to get the conversion rate and update for all records
 //include("modules/Migration/ModifyDatabase/updateCurrency.php");
 ?>
@@ -2719,17 +2802,7 @@ Execute($update_query4);
 
 
 
-
-
-
-
-$conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha ends here.");
-
-$conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 ends here.");
-
-
-
-
+//Function which is used to execute the query and display the result within tr tag. Also it stores the success and failure queries in a array where we can get this array to find the list of success and failure queries at the end of migraion.
 function Execute($query)
 {
 	global $conn, $query_count, $success_query_count, $failure_query_count, $success_query_array, $failure_query_array;
