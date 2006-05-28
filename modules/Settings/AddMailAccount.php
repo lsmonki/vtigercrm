@@ -17,11 +17,6 @@ global $app_strings;
 global $app_list_strings;
 global $current_user;
 
-/*
-echo '<br>';
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_ADD_MAIL_ACCOUNT'], true);
-echo '<br><br>';*/
-
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -76,6 +71,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 				$smarty->assign("VALIDATECERT", "CHECKED");
 			if(strtolower($temprow['sslmeth']) == "novalidate-cert")
 				$smarty->assign("NOVALIDATECERT", "CHECKED");
+
+			if($temprow['int_mailer'] == "1")
+				$smarty->assign("INT_MAILER", "CHECKED");
 
 		}
 	}

@@ -124,6 +124,13 @@
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>
+           <td class="dvtCellLabel" align="right">{$MOD.LBL_INT_MAILER}</td>
+           <td class="dvtCellInfo">
+		<input type="radio" name="int_mailer" value="1" {$INT_MAILER} />&nbsp;{$MOD.LBL_INT_MAILER_USE}
+	   </td>	
+           <td class="dvtCellInfo">&nbsp;</td>
+       </tr>
+       <tr>
            <td class="dvtCellLabel" align="right">{$MOD.LBL_REFRESH_TIMEOUT}</td>
            <td class="dvtCellInfo">
 		<select value="{$BOX_REFRESH}" name="box_refresh">
