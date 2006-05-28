@@ -225,6 +225,20 @@ function show_hidden() {
         }
         $("status").style.display="none";
 }
+function mass_delete() {
+        $("status").style.display="block";
+        var els = document.getElementsByTagName("INPUT");
+        var cnt = (els.length-1);
+        for(var i=cnt;i>0;i--) {
+                if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
+                        if(els[i].checked) {
+                                var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
+				runEmailCommand("delete_msg",nid);
+			}
+		}
+	}
+        $("status").style.display="none";
+}
 function move_messages() {
         $("status").style.display="block";
         var els = document.getElementsByTagName("INPUT");
