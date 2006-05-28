@@ -60,7 +60,7 @@
 					</td>
                   </tr>
                   <tr>
-                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
+                    <td width="22%" bgcolor="#949494" style="overflow:auto"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
                     <td width="2%">&nbsp;</td>
 					 <td width="60%" class="subHdr"><span style="float:left"><strong>{$MOD.LBL_MAILS} {$ACCOUNT} &gt; {$MAILBOX} </strong></span> <span style="float:right">{$NAVIGATION}</span></td>
                   </tr>
@@ -129,7 +129,7 @@
                     	  </tr>
 						  {foreach item=row from=$LISTENTITY}
 						  	{foreach item=row_values from=$row}
-                	        {$row_values}
+                	        				{$row_values}
 							{/foreach}
 						  {/foreach}
                     </table>
