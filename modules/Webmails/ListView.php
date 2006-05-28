@@ -43,7 +43,6 @@ if($mail_protocol == "imap" || $mail_protocol == "pop3")
 ?>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/scriptaculous.js?load=effects,builder"></script>
-<script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
 
 <script type="text/javascript">
 <?php if($degraded_service == 'true') { echo 'var degraded_service="true";';}else{echo 'var degraded_service="false";';};?>
@@ -60,6 +59,7 @@ addOnloadEvent(function() {
 	}
 );
 </script>
+<script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
 <?
 
 global $mbox,$displayed_msgs;

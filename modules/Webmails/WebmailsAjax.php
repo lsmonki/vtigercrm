@@ -22,17 +22,16 @@ if($adb->num_rows($mailInfo) < 1) {
 }
 
 $temprow = $adb->fetch_array($mailInfo);
+
 $imapServerAddress=$temprow["mail_servername"];
-$box_refresh=$temprow["box_refresh"];
-$mails_per_page=$temprow["mails_per_page"];
-$account_name=$temprow["account_name"];
-$show_hidden=$_REQUEST["show_hidden"];
+
+$mailbox = $_REQUEST["mailbox"];
 
 if($_REQUEST["command"] == "check_mbox") {
 	$mbox = getImapMbox($mailbox,$temprow);
 
 	$search = imap_search($mbox, "NEW ALL");
-	if($search === false) {echo "";flush();exit();}
+	if($search === false) {echo "failed";flush();exit();}
 
 	$data = imap_fetch_overview($mbox,implode(',',$search));
 	$num=sizeof($data);
