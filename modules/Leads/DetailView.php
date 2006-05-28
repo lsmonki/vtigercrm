@@ -65,6 +65,9 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
+if(useInternalMailer() == 1)
+        $smarty->assign("INT_MAILER","true");
+
 
 $val = isPermitted("Leads","EditView",$_REQUEST['record']);
 

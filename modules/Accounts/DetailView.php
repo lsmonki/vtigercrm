@@ -69,6 +69,9 @@ $smarty->assign("SINGLE_MOD",$app_strings['Account']);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+if(useInternalMailer() == 1)
+        $smarty->assign("INT_MAILER","true");
+
 
 if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

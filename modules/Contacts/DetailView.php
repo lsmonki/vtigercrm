@@ -63,6 +63,9 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
+if(useInternalMailer() == 1) 
+	$smarty->assign("INT_MAILER","true");
+
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
 $log->info("Detail Block Informations successfully retrieved.");

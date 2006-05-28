@@ -420,18 +420,6 @@ function ajaxChangeStatus(statusname)
 	
 	ajaxObj.process("index.php?",urlstring);
 }
-function InternalMailer(record_id,type) {
-        var url;
-        switch(type) {
-                case 'record_id':
-			url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&rec_id='+record_id+'&file=EditView';
-                break;
-        }
-
-        var opts = "menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes";
-        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,opts);
-}
-
 </script>
 {/literal}
 

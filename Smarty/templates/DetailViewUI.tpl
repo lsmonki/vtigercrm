@@ -13,7 +13,12 @@
                      </div>
                      </td>
                      {elseif $keyid eq '13'} <!--Email-->
-                     <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');"><a href="mailto:{$keyval}" target="_blank">&nbsp;{$keyval}</a></div>
+                     <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');">
+			{if $INT_MAILER eq 'true'}
+				<a href="javascript:InternalMailer('{$keyval}','email_addy');">&nbsp;{$keyval}</a></div>
+			{else}
+				<a href="mailto:{$keyval}" target="_blank">&nbsp;{$keyval}</a></div>
+			{/if}
                 	 <div id="editarea_{$label}" style="display:none;">
     	                 <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval}"></input>
 	                      <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');hide('crmspanid');"/> or
@@ -185,4 +190,3 @@
 				{else}
                                                   	<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
 				{/if}
-
