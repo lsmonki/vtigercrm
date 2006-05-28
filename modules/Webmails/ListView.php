@@ -35,6 +35,9 @@ $mail_protocol=$temprow["mail_protocol"];
 $account_name=$temprow["account_name"];
 $show_hidden=$_REQUEST["show_hidden"];
 
+$degraded_service='false';
+if($mail_protocol == "imap" || $mail_protocol == "pop3")
+	$degraded_service='true';
 
 ?>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
@@ -42,6 +45,7 @@ $show_hidden=$_REQUEST["show_hidden"];
 <script language="JavaScript" type="text/javascript" src="modules/Webmails/webmails.js"></script>
 
 <script type="text/javascript">
+<?php if($degraded_service == 'true') { echo 'var degraded_service="true";';}else{echo 'var degraded_service="false";';};?>
 var mailbox = "<?php echo $mailbox;?>";
 var box_refresh=<?php echo $box_refresh;?>;
 var webmail = new Array();
@@ -140,7 +144,7 @@ $listview_entries = array();
 
 // draw a row for the listview entry
 function show_msg($mails,$start_message) {
- 	global $mbox,$displayed_msgs;
+ 	global $mbox,$displayed_msgs,$show_hidden;
 
   	$num = $mails[$start_message]->msgno;
   	// TODO: scan the current db tables to find a
@@ -306,5 +310,6 @@ $smarty->assign("NUM_EMAILS", $numEmails);
 $smarty->assign("MAILBOX", $mailbox);
 $smarty->assign("ACCOUNT", $account_name);
 $smarty->assign("BOXLIST",$folders);
+$smarty->assign("DEGRADED_SERVICE",$degraded_service);
 $smarty->display("Webmails.tpl");
 ?>

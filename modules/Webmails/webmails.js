@@ -72,6 +72,10 @@ function select_all() {
         }
 }
 function check_for_new_mail(mbox) {
+	if(degraded_service == 'true') {
+		window.location=window.location;
+		return;
+	}
         $("status").style.display="block";
         new Ajax.Request(
                 'modules/Webmails/WebmailsAjax.php',
@@ -207,6 +211,10 @@ function periodic_event() {
         timer = window.setTimeout("periodic_event()",box_refresh);
 }
 function show_hidden() {
+	if(degraded_service == 'true') {
+		window.location=window.location+"&show_hidden=true";
+		return;
+	}
         $("status").style.display="block";
         var els = document.getElementsByClassName("deletedRow");
         for(var i=0;i<els.length;i++) {

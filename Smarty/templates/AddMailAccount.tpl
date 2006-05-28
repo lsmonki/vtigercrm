@@ -101,8 +101,8 @@
        <tr>
            <td class="dvtCellLabel" align="right">{$MOD.LBL_MAIL_PROTOCOL}</td>
            <td class="dvtCellInfo">
-		<!-- <input type="radio" name="mailprotocol" value="imap" {$IMAP}/>&nbsp;{$MOD.LBL_IMAP} 
-		<input type="radio" name="mailprotocol" value="pop3" {$POP3}/>&nbsp;{$MOD.LBL_POP}  -->
+		<input type="radio" name="mailprotocol" value="pop3" {$POP3}/>&nbsp;{$MOD.LBL_POP} <font color="red">*</font>&nbsp;
+		<input type="radio" name="mailprotocol" value="imap" {$IMAP}/>&nbsp;{$MOD.LBL_IMAP} <font color="red">*</font>&nbsp;
 		<input type="radio" name="mailprotocol" value="imap2" {$IMAP2}/>&nbsp;{$MOD.LBL_IMAP2}
 		<input type="radio" name="mailprotocol" value="IMAP4" {$IMAP4}/>&nbsp;{$MOD.LBL_IMAP4}
 	   </td>	
@@ -140,6 +140,8 @@
            <td class="dvtCellLabel" align="right">{$MOD.LBL_EMAILS_PER_PAGE}</td>
            <td class="dvtCellInfo"><input type="text" name="mails_per_page" value="{$MAILS_PER_PAGE}" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
            <td class="dvtCellInfo">&nbsp;</td>
+	</tr><tr>
+	<td colspan='3' align='center'>{$MOD.LBL_MAIL_DISCLAIM}</td>
        </tr>
        <tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
        <tr>
