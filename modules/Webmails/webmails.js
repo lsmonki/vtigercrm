@@ -246,17 +246,15 @@ function check_for_new_mail(mbox) {
                                         new Effect.Appear("row_"+mailid);
                                 }
                             }catch(e) {}
+			    window.setTimeout("check_in_all_boxes('"+mailbox+"')",0);
                             $("status").style.display="none";
                         }
                 }
         );
 }
 function periodic_event() {
-	try {
         check_for_new_mail(mailbox);
-	check_in_all_boxes(mailbox);
         window.setTimeout("periodic_event()",box_refresh);
-	}catch(e){alert(e);}
 }
 function show_hidden() {
 	if(degraded_service == 'true') {
