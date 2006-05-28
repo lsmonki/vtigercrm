@@ -28,5 +28,5 @@ else
 }
 $adb->query($sql);
 
-header("Location: index.php?module=Users&action=OrganizationTermsandConditions");
+header("Location: index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings");
 ?>
