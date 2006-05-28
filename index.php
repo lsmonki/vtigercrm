@@ -550,16 +550,16 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	echo $copyrightstatement;
-	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword")
+	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body")
 	{
+		echo $copyrightstatement;
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<table width=20% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 		echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
 		
                 echo "&copy; Click <a href ='javascript:mypopup()'>here</a> for Copyright details.<br>";
 		echo "</td></tr></table></td></tr></table>\n";
-
+	
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
 		// in both the code and end-user application.
