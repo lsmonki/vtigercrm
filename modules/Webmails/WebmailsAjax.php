@@ -58,7 +58,7 @@ if($_POST["command"]) {
 			$ret .= '"date":"'.substr($data[$i]->date,0,30).'",';
 			$ret .= '"from":"'.substr($data[$i]->from,0,20).'",';
 			$ret .= '"to":"'.$data[$i]->to.'",';
-			if(getAttachmentDetails($data[$i]->msgno,$mbox) || getInlineAttachments($data[$i]->msgno,$mbox))
+			if(getAttachments($data[$i]->msgno,$mbox))
 				$ret .= '"attachments":"1"}';
 			else
 				$ret .= '"attachments":"0"}';

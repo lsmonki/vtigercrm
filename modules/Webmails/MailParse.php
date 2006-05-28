@@ -17,21 +17,17 @@ function fullMailList($mbox) {
 	return $out;
 }
 function isBase64($iVal){
-	//$_tmp=preg_replace("/[^A-Z0-9\+\/\=]/i","",$iVal);
-	return (strlen($iVal) % 4 == 0 ) ? "y" : "n";
+	$_tmp=preg_replace("/[^A-Z0-9\+\/\=]/i","",$iVal);
+	return (strlen($_tmp) % 4 == 0 ) ? "y" : "n";
 }
 function getImapMbox($mailbox,$temprow) {
 	 global $mbox; 
 	 $login_username= $temprow["mail_username"]; 
 	 $secretkey=$temprow["mail_password"]; 
 	 $imapServerAddress=$temprow["mail_servername"]; 
-	 $box_refresh=$temprow["box_refresh"]; 
-	 $mails_per_page=$temprow["mails_per_page"]; 
 	 $mail_protocol=$temprow["mail_protocol"]; 
 	 $ssltype=$temprow["ssltype"]; 
 	 $sslmeth=$temprow["sslmeth"]; 
-	 $account_name=$temprow["account_name"]; 
-	 $show_hidden=$_REQUEST["show_hidden"]; 
 	 	 
 	 	 
 	 // first we will try a regular old IMAP connection: 

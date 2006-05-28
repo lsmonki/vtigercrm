@@ -207,6 +207,7 @@ function periodic_event() {
         timer = window.setTimeout("periodic_event()",box_refresh);
 }
 function show_hidden() {
+        $("status").style.display="block";
         var els = document.getElementsByClassName("deletedRow");
         for(var i=0;i<els.length;i++) {
                 if(els[i].style.display == "none")
@@ -214,8 +215,10 @@ function show_hidden() {
                 else
                         new Effect.Fade(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.3});
         }
+        $("status").style.display="none";
 }
 function move_messages() {
+        $("status").style.display="block";
         var els = document.getElementsByTagName("INPUT");
         var cnt = (els.length-1);
         for(var i=cnt;i>0;i--) {
@@ -237,6 +240,7 @@ function move_messages() {
                 }
         }
         runEmailCommand('expunge','');
+        $("status").style.display="none";
 }
 function search_emails() {
         var search_query = $("search_input").value;
