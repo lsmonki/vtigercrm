@@ -87,7 +87,11 @@
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
-	<td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
+        {if $WEBMAIL eq 'true'}
+                <td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$SUBJECT}" id="{$elements.2.0}" style="width:99%"></td>
+        {else}
+                <td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
+        {/if}
 	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
@@ -103,7 +107,11 @@
 	{elseif $elements.2.0 eq 'description'}
    <tr>
 	<td colspan="3" align="center" height="320">
-		<input id="description___Config" value="" style="display: none;" type="hidden"><iframe id="description___Frame" src="include/fckeditor/editor/fckeditor.html?InstanceName=description&amp;Toolbar=Default" frameborder="no" height="400" scrolling="no" width="100%"></iframe><textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$elements.3.0}</textarea>
+        <input id="description___Config" value="" style="display: none;" type="hidden"><iframe id="description___Frame" src="include/fckeditor/editor/fckeditor.html?InstanceName=description&amp;Toolbar=Default" frameborder="no" height="400" scrolling="no" width="100%"></iframe>
+        {if $WEBMAIL eq 'true'}
+                <textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
+        {else}
+                <textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$elements.3.0}</textarea>        {/if}
 	</td>
    </tr>
 	{/if}
