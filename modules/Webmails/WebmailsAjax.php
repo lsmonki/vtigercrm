@@ -15,10 +15,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Webmails/MailParse.php');
 
 global $adb,$mbox,$current_user;
-
-$sql = "select * from mail_accounts where status=1 and user_id='".$_SESSION["authenticated_user_id"]."'";
-$mailInfo = $adb->query($sql);
-
+$mailInfo = getMailServerInfo($current_user);
 if($adb->num_rows($mailInfo) < 1) {
         echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
         exit();
