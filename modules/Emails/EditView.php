@@ -81,6 +81,32 @@ elseif(isset($_REQUEST['sendmail']) && $_REQUEST['sendmail'] !='')
 	$focus->mode = '';
 }
 
+// INTERNAL MAILER
+if($_REQUEST["internal_mailer"] == "true") {
+	$smarty->assign('INT_MAILER',"true");
+	$rec_type = $_REQUEST["type"];
+	$rec_id = $_REQUEST["rec_id"];
+
+	if($rec_type == "record_id") {
+		$rs = $adb->query("select setype from crmentity where crmid='".$rec_id."'");
+		$type = $adb->query_result($rs,0,'setype');
+
+		if($type == "Leads") 
+			$q = "select email as email1 from leaddetails where leadid='".$rec_id."'";
+		elseif ($type == "Contacts")
+			$q = "select email as email1 from contactdetails where contactid='".$rec_id."'";
+		elseif ($type == "Accounts")
+			$q = "select email1,email2 from account where accountid='".$rec_id."'";
+
+		$email1 = $adb->query_result($adb->query($q),0,"email1");
+	} elseif ($rec_type == "email_addy") {
+		$email1 = $_REQUEST["email_addy"];
+	}
+
+	$smarty->assign('TO_MAIL',$email1);
+	$smarty->assign('BCC_MAIL',$current_user->email1);
+}
+
 // Webmails
 if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 	$mailid = $_REQUEST["mailid"];
@@ -245,6 +271,6 @@ addOnloadEvent(function () {
 	oFCKeditor.BasePath  = "include/fckeditor/" ;
 	oFCKeditor.Height = 500;
 	oFCKeditor.Width = "100%";
-	oFCKeditor.ReplaceTextarea() ;
+	oFCKeditor.ReplaceTextarea();
 });
 </script>

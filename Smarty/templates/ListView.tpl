@@ -424,7 +424,7 @@ function InternalMailer(record_id,type) {
         var url;
         switch(type) {
                 case 'record_id':
-			url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record='+record_id+'&file=EditView';
+			url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&rec_id='+record_id+'&file=EditView';
                 break;
         }
 
