@@ -221,13 +221,14 @@ function show_hidden() {
 		window.location=window.location+"&show_hidden=true";
 		return;
 	}
+
         $("status").style.display="block";
         var els = document.getElementsByClassName("deletedRow");
         for(var i=0;i<els.length;i++) {
                 if(els[i].style.display == "none")
-                        new Effect.Appear(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.3});
+                        new Effect.Appear(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.2});
                 else
-                        new Effect.Fade(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.3});
+                        new Effect.Fade(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.2});
         }
         $("status").style.display="none";
 }
@@ -311,7 +312,7 @@ function runEmailCommand(com,id) {
 
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
 
-                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'}});
+                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
                                         tmp = document.getElementsByClassName("previewWindow");
                                         for(var i=0;i<tmp.length;i++) {
                                                 if(tmp[i].style.visibility === "visible") {
