@@ -324,6 +324,7 @@ $array = Array(
 		<tr bgcolor="#ffffff"> <td valign=top ><strong>Change the memory limit = 16M</strong></tr>
 		<tr bgcolor="#ffffff"> <td valign=top ><strong>error_reporting = E_WARNING & ~E_NOTICE</strong></tr>
 		<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_reference = On</strong></tr>
+		<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
 		<tr bgcolor="#ffffff"> <td valign=top ><strong>output_buffering= On</strong></tr>
 		<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf">Linux installation pre-requisites</a></tr>
 		</table>
