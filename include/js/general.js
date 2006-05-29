@@ -1595,3 +1595,21 @@ function InternalMailer(record_id,type) {
 function fnHide_Event(obj){
         document.getElementById(obj).style.display = 'none';
 }
+
+function OpenCompose(id,mode) 
+{
+	switch(mode)
+	{		
+		case 'edit':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id;
+			break;
+		case 'create':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+			break;
+		case 'forward':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
+			break;
+	}
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,652,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+}
+
