@@ -21,6 +21,17 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
         $sql = "select * from currency_info where id=".$tempid;
         $result = $adb->query($sql);
         $currencyResult = $adb->fetch_array($result);
+	$sql1 = "select * from users where currency_id=".$tempid;
+	$result1 = $adb->query($sql1);
+	$noofrows = $adb->num_rows($result1);
+	if($noofrows != 0)
+	{
+		$smarty->assign("STATUS_DISABLE","disabled");
+	}
+	else
+	{
+		$smarty->assign("STATUS_DISABLE","");
+	}
 	$smarty->assign("CURRENCY_NAME",$currencyResult['currency_name']);
 	$smarty->assign("CURRENCY_CODE",$currencyResult['currency_code']);
 	$smarty->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
