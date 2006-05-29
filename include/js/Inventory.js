@@ -79,7 +79,7 @@ function getProdListBody() {
 	return prodListBody;
 }
 
-function delRow(rowId) {
+/*function delRow(rowId) {
    var rowId=parseInt(rowId.substr(rowId.indexOf("w")+1,rowId.length))
       //removing the corresponding row
    var prodListBody=getProdListBody()
@@ -160,7 +160,111 @@ function delRow(rowId) {
    }
 
    calcGrandTotal()
+}*/
+
+/*  New Delete Function */
+
+//  Don't take risk by changing this function 
+
+function deleteRow(module,i)
+{
+	rowCnt--;
+	var tableName = document.getElementById('proTab');
+	var prev = tableName.rows.length;
+	document.getElementById('proTab').deleteRow(i);
+	for(loop_count=i+1;loop_count<prev;loop_count++)
+	{
+
+		var row_id = "row" + loop_count;
+		var new_id = "row" + (loop_count - 1);
+
+		if(module == 'PurchaseOrder')
+		{						
+			var stack = new Array("txtProduct","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
+			var stack_new = new Array("txtProduct","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
+		}
+		else
+		{
+			var stack = new Array("txtProduct","qtyInStock","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
+			var stack_new = new Array("txtProduct","qtyInStock","txtQty","txtListPrice","hdnTaxTotal","txtTaxTotal","hdnProductId","hdnRowStatus","hdnTotal","txtVATTax","txtVATTaxTotal","txtSalesTax","txtSalesTaxTotal","txtServiceTax","txtServiceTaxTotal");
+		}
+
+		for(inner_loop=0;inner_loop<stack.length;inner_loop++)
+		{
+			stack_new[inner_loop] = getObj(stack[inner_loop]+loop_count).value;
+		}
+
+		document.getElementById(row_id).id=new_id;
+		document.getElementById('vat'+row_id).id='vat'+new_id;
+		document.getElementById('sales'+row_id).id='sales'+new_id;
+		document.getElementById('service'+row_id).id='service'+new_id;
+
+		var temp = document.getElementById(new_id).innerHTML;
+		var vatTemp = document.getElementById('vat'+new_id).innerHTML;
+		var salesTemp = document.getElementById('sales'+new_id).innerHTML;
+		var serviceTemp = document.getElementById('service'+new_id).innerHTML;
+
+		temp = temp.replace('txtProduct'+loop_count,'txtProduct'+(loop_count-1));
+		temp = temp.replace('txtProduct'+loop_count,'txtProduct'+(loop_count-1));
+
+		if(module != 'PurchaseOrder')
+		{
+			temp = temp.replace('qtyInStock'+loop_count,'qtyInStock'+(loop_count-1));
+		}
+
+		temp = temp.replace('txtQty'+loop_count,'txtQty'+(loop_count-1));
+		temp = temp.replace('txtQty'+loop_count,'txtQty'+(loop_count-1));
+		temp = temp.replace('unitPrice'+loop_count,'unitPrice'+(loop_count-1));
+		temp = temp.replace('txtListPrice'+loop_count,'txtListPrice'+(loop_count-1));
+		temp = temp.replace('txtListPrice'+loop_count,'txtListPrice'+(loop_count-1));
+		temp = temp.replace('total'+loop_count,'total'+(loop_count-1));
+		temp = temp.replace('hdnTaxTotal'+loop_count,'hdnTaxTotal'+(loop_count-1));
+		temp = temp.replace('hdnTaxTotal'+loop_count,'hdnTaxTotal'+(loop_count-1));
+		temp = temp.replace('txtTaxTotal'+loop_count,'txtTaxTotal'+(loop_count-1));
+		temp = temp.replace('txtTaxTotal'+loop_count,'txtTaxTotal'+(loop_count-1));
+		temp = temp.replace('hdnProductId'+loop_count,'hdnProductId'+(loop_count-1));
+		temp = temp.replace('hdnProductId'+loop_count,'hdnProductId'+(loop_count-1));
+		temp = temp.replace('hdnRowStatus'+loop_count,'hdnRowStatus'+(loop_count-1));
+		temp = temp.replace('hdnRowStatus'+loop_count,'hdnRowStatus'+(loop_count-1));
+		temp = temp.replace('hdnTotal'+loop_count,'hdnTotal'+(loop_count-1));
+		temp = temp.replace('hdnTotal'+loop_count,'hdnTotal'+(loop_count-1));
+		temp = temp.replace('tax_Lay'+loop_count,'tax_Lay'+(loop_count-1));
+		temp = temp.replace('tax_Lay'+loop_count,'tax_Lay'+(loop_count-1));	
+
+		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
+		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
+		vatTemp = vatTemp.replace('txtVATTax'+loop_count,'txtVATTax'+(loop_count-1));
+		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
+		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
+		vatTemp = vatTemp.replace('txtVATTaxTotal'+loop_count,'txtVATTaxTotal'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTax'+loop_count,'txtSalesTax'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
+		salesTemp = salesTemp.replace('txtSalesTaxTotal'+loop_count,'txtSalesTaxTotal'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTax'+loop_count,'txtServiceTax'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
+		serviceTemp = serviceTemp.replace('txtServiceTaxTotal'+loop_count,'txtServiceTaxTotal'+(loop_count-1));
+
+		document.getElementById(new_id).innerHTML = temp;
+		document.getElementById('vat'+new_id).innerHTML = vatTemp;
+		document.getElementById('sales'+new_id).innerHTML = salesTemp;
+		document.getElementById('service'+new_id).innerHTML = serviceTemp;
+
+		for(inner_loop=0;inner_loop<stack.length;inner_loop++)
+		{
+			getObj(stack[inner_loop]+(loop_count-1)).value = stack_new[inner_loop];
+		}
+
+	}
+	calcGrandTotal()
 }
+/*  End */
+
 
 
 function calcTotal(currObj) {

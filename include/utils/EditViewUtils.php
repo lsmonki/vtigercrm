@@ -1209,11 +1209,16 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$productid=$adb->query_result($result,$i-1,'productid');
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$vat=$adb->query_result($result,$i-1,'vattax');
+		$sales=$adb->query_result($result,$i-1,'salestax');
+		$service=$adb->query_result($result,$i-1,'servicetax');
+
 		if($listprice == '')
 			$listprice = $unitprice;
 		if($qty =='')
 			$qty = 1;
 		$total = $qty*$listprice;
+		$total_with_tax = $total+($vat*$total/100)+($sales*$total/100)+($service*$total/100);
 
 		$product_id_var = 'hdnProductId'.$i;
 		$status_var = 'hdnRowStatus'.$i;
@@ -1233,7 +1238,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['txtQty'.$i]=$qty;
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
 		$product_Detail[$i]['txtListPrice'.$i]=$listprice;
-		$product_Detail[$i]['total'.$i]=$total;
+		$product_Detail[$i]['total'.$i]=$total_with_tax;
 
 		if($i != 1)
 		{
@@ -1245,9 +1250,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
 		//Added to pass the tax percentage values
-		$product_Detail[$i]['txtVATTax'.$i] = getProductTaxPercentage('VAT',$productid,'default');
-		$product_Detail[$i]['txtSalesTax'.$i] = getProductTaxPercentage('Sales',$productid,'default');
-		$product_Detail[$i]['txtServiceTax'.$i] = getProductTaxPercentage('Service',$productid,'default');
+		$product_Detail[$i]['txtVATTax'.$i] = $vat;//getProductTaxPercentage('VAT',$productid,'default');
+		$product_Detail[$i]['txtSalesTax'.$i] = $sales;//getProductTaxPercentage('Sales',$productid,'default');
+		$product_Detail[$i]['txtServiceTax'.$i] = $service;//getProductTaxPercentage('Service',$productid,'default');
 
 	}
 	$log->debug("Exiting getAssociatedProducts method ...");

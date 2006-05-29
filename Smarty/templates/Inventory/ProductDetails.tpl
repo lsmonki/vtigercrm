@@ -67,17 +67,17 @@
 				<!-- This div is added to display the tax informations -->
 				<div id="tax_Lay1" style="width:93%;position:relative;border:1px dotted #CCCCCC;display:none;background-color:#FFFFCC;top:5px;padding:5px;" align="center">
 					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-					   <tr id="row1">
+					   <tr id="vatrow1">
 						<td align="left" width="40%" style="border:0px solid red;"><input type="text" id="txtVATTax1" name="txtVATTax1" class="txtBox" onBlur="ValidateTax('txtVATTax1'); calcTotal(this);"/>%&nbsp;</td>
 						<td width="20%" align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_VAT}</td>
 						<td align="left" width="40%" style="border:0px solid red;"><input type="text" id="txtVATTaxTotal1" name="txtVATTaxTotal1" class="txtBox" onBlur="ValidateTax('txtVATTaxTotal1'); calcTotal(this);"/></td>
 					   </tr>
-					   <tr id="row1">
+					   <tr id="salesrow1">
 						<td align="left" style="border:0px solid red;"><input type="text" id="txtSalesTax1" name="txtSalesTax1" class="txtBox" onBlur="ValidateTax('txtSalesTax1'); calcTotal(this);"/>%&nbsp;</td>
 						<td align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_SALES}</td>
 						<td align="left" style="border:0px solid red;"><input type="text" id="txtSalesTaxTotal1" name="txtSalesTaxTotal1" class="txtBox" onBlur="ValidateTax('txtSalesTaxTotal1'); calcTotal(this);"/></td>
 					   </tr>
-					   <tr id="row1">
+					   <tr id="servicerow1">
 						<td align="left" style="border:0px solid red;"><input type="text" id="txtServiceTax1" name="txtServiceTax1" class="txtBox" onBlur="ValidateTax('txtServiceTax1'); calcTotal(this);"/>%&nbsp;</td>
 						<td align="right" style="border:0px solid red;">&nbsp;{$APP.LBL_SERVICE}</td>
 						<td align="left" style="border:0px solid red;"><input type="text" id="txtServiceTaxTotal1" name="txtServiceTaxTotal1" class="txtBox" onBlur="ValidateTax('txtServiceTaxTotal1'); calcTotal(this);"/></td>

@@ -2756,7 +2756,27 @@ for($i=0;$i<$numofrows;$i++)
 $update_query5 = "update field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";
 Execute($update_query5);
 
-
+$alter_query_array18 = Array(
+				"alter table soproductrel add column vattax decimal(7,3) default NULL",
+				"alter table soproductrel add column salestax decimal(7,3) default NULL",
+				"alter table soproductrel add column servicetax decimal(7,3) default NULL",
+				
+				"alter table poproductrel add column vattax decimal(7,3) default NULL",
+				"alter table poproductrel add column salestax decimal(7,3) default NULL",
+				"alter table poproductrel add column servicetax decimal(7,3) default NULL",
+				
+				"alter table quotesproductrel add column vattax decimal(7,3) default NULL",
+				"alter table quotesproductrel add column salestax decimal(7,3) default NULL",
+				"alter table quotesproductrel add column servicetax decimal(7,3) default NULL",
+				
+				"alter table invoiceproductrel add column vattax decimal(7,3) default NULL",
+				"alter table invoiceproductrel add column salestax decimal(7,3) default NULL",
+				"alter table invoiceproductrel add column servicetax decimal(7,3) default NULL",
+			    );
+foreach($alter_query_array18 as $query)
+{
+	Execute($query);
+}
 
 
 

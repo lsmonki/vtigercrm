@@ -894,7 +894,11 @@ function getDetailAssociatedProducts($module,$focus)
 		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$vat=$adb->query_result($result,$i-1,'vattax');
+		$sales=$adb->query_result($result,$i-1,'salestax');
+		$service=$adb->query_result($result,$i-1,'servicetax');
 		$total = $qty*$listprice;
+		$total_with_tax = $total+($vat*$total/100)+($sales*$total/100)+($service*$total/100);
 
 		if($i%2 == 0)
 		{
@@ -914,7 +918,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$output .= '<td style="padding:3px;">'.$qty.'</td>';
 		$output .= '<td style="padding:3px;">'.$unitprice.'</td>';
 		$output .= '<td style="padding:3px;">'.$listprice.'</td>';
-		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total_with_tax.'</div></td>';
 		$output .= '</tr>';
 
 

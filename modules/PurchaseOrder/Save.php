@@ -59,14 +59,22 @@ for($i=1; $i<=$tot_no_prod; $i++)
         $qty_var = 'txtQty'.$i;
         $list_price_var = 'txtListPrice'.$i;
 
+	$vat_var = 'txtVATTax'.$i;
+	$sales_var = 'txtSalesTax'.$i;
+	$service_var = 'txtServiceTax'.$i;
+	
         $prod_id = $_REQUEST[$product_id_var];
         $prod_status = $_REQUEST[$status_var];
         $qty = $_REQUEST[$qty_var];
         $listprice = $_REQUEST[$list_price_var];
+	$vat = $_REQUEST[$vat_var];
+	$sales = $_REQUEST[$sales_var];
+	$service = $_REQUEST[$service_var];
+
         if($prod_status != 'D')
         {
 
-                $query ="insert into poproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
+                $query ="insert into poproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
                 $adb->query($query);
 		if($update_prod_stock == 'true')
                 {
