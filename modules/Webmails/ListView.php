@@ -225,7 +225,8 @@ function show_msg($mails,$start_message) {
 	return $listview_entries[$num];
 }
 
-
+$displayed_msgs=0;
+$new_msgs=0;
 if($numEmails <= 0)
 	$listview_entries[0][] = '<td colspan="6" width="100%" align="center"><b>No Emails In This Folder</b></td>';
 else {
@@ -245,8 +246,6 @@ if(isset($_REQUEST["search"])) {
 
 // MAIN LOOP
 // Main loop to create listview entries
-$displayed_msgs=0;
-$new_msgs=0;
 $i=1;
 while ($i<$c) {
 	if(is_array($searchlist)) {
@@ -261,7 +260,7 @@ while ($i<$c) {
   	$i++;
   	$start_message--;
 }
-
+}
 
 // Build folder list and move_to dropdown box
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
@@ -300,7 +299,6 @@ if (is_array($list)) {
 
 imap_close($mbox);
 global $current_user;
-}
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("USERID", $current_user->id);
