@@ -10,11 +10,12 @@
  ********************************************************************************/
 -->*}
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$APP.$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:30px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a></td>
 	<td class="sep1" style="width:1px;padding-right:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -22,7 +23,7 @@
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					{if $CHECK.EditView eq 'yes'}
+					{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
 				        	{if $MODULE eq 'Activities'}
                                         	        <td style="padding-right:0px"><a href="#" id="showSubMenu"  onMouseOver="fnvshobj(this,'reportLay');" onMouseOut="fninvsh('reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
                                        		 {else}

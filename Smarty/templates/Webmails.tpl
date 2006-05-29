@@ -10,11 +10,10 @@
  ********************************************************************************/
 -->*}
 <!--  USER  SETTINGS PAGE STARTS HERE -->
+		{include file='Buttons_List.tpl'}
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">
-        	        <span class="lvtHeaderText">{$CATEGORY} -&gt; {$MODULE}  </span>
-		<hr noshade="noshade" size="1" /><br />
+		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">&nbsp;
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
 	</tr>

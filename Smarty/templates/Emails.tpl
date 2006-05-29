@@ -99,12 +99,11 @@ function getListViewEntries_js(module,url)
 
 {rdelim}
 </script>
+		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; "><br />
-        	        <span class="lvtHeaderText">{$CATEGORY} &gt; {$MODULE} </span>
-            <hr noshade="noshade" size="1" />
+		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">&nbsp;
 		</td>
 		<td width="5%" class="showPanelBg">&nbsp;</td>
 	</tr>
@@ -152,7 +151,7 @@ function getListViewEntries_js(module,url)
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="index.php?module=Webmails&action=index" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
+									<a href="index.php?module=Webmails&action=index&parenttab=My Home Page" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul><br />
 							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
