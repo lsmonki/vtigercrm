@@ -465,16 +465,29 @@ $seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' :: 
 
 if(!$skipSecurityCheck)
 {
+
+
 	require_once('include/utils/UserInfoUtil.php');
-	if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
-	{
-		$display = isPermitted($module,$action,$_REQUEST['record']);
-	}
-	else
-	{
-		$display = isPermitted($module,$action);
-	}
+
+        if(ereg('Ajax',$action))
+        {
+                $now_action=$_REQUEST['file'];
+        }
+        else
+        {
+                $now_action=$action;
+        }
+
+        if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
+        {
+                $display = isPermitted($module,$now_action,$_REQUEST['record']);
+        }
+        else
+        {
+                $display = isPermitted($module,$now_action);
+        }	
 	$seclog->debug('########### Pemitted ---> '.$display.'  ##############');
+
 }
 else
 {
