@@ -100,6 +100,10 @@ if(isPermitted("Activities","Delete",$_REQUEST['record']) == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
+if(isPermitted('Activities','EditView','') == 'yes')
+{
+        $other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+}
 global  $task_title;
 $title_display = $current_module_strings['LBL_LIST_FORM_TITLE'];
 if ($task_title) $title_display= $task_title;

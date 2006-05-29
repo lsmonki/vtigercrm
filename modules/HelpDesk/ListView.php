@@ -93,7 +93,10 @@ if($viewid != 0)
 // Buttons and View options
 if(isPermitted('HelpDesk','Delete','') == 'yes')
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
-
+if(isPermitted('HelpDesk','EditView','') == 'yes')
+{
+        $other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+}
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');

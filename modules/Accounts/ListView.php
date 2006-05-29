@@ -96,6 +96,10 @@ if(isPermitted('Accounts','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
+if(isPermitted('Accounts','EditView','') == 'yes')
+{
+	        $other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+}
 if(isPermitted('Emails','EditView','') == 'yes')
 {
 	$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
