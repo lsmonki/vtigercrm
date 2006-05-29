@@ -57,15 +57,15 @@ if($returnmodule == 'Emails')
 	{
 		$folderid = 1;
 	}
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete&file=ListView");
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete&file=ListView&errormsg=".$errormsg);
 }
 elseif($returnmodule!='Faq')
 {
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid);
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid."&errormsg=".$errormsg);
 }
 else
 {
-	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView");
+	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&errormsg=".$errormsg);
 }
 ?>
 
