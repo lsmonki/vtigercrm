@@ -896,6 +896,7 @@ class freetag {
 
 	function get_tag_cloud_html($module="",$num_tags = 100, $min_font_size = 10, $max_font_size = 20, $font_units = 'px', $span_class = '', $tag_page_url = '/tag/', $tagger_id = NULL) {
 		$tag_list = $this->get_tag_cloud_tags($num_tags, $tagger_id,$module);
+		if(!$tag_list) return;
 		// Get the maximum qty of tagged objects in the set
 		$max_qty = max(array_values($tag_list));
 		// Get the min qty of tagged objects in the set
@@ -971,12 +972,13 @@ class freetag {
 			ORDER BY quantity DESC";
         //echo $sql;
 		$rs = $adb->limitQuery($sql, 0, $max) or die("Syntax Error: $sql");
+		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[$rs->fields['tag']] = $rs->fields['quantity'];
 			$rs->MoveNext();
 		}
 
-		ksort($retarr);
+		if($retarr) ksort($retarr);
 
 		return $retarr;
 
