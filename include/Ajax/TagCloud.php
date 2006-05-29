@@ -8,6 +8,7 @@
   * All Rights Reserved.
   *
   ********************************************************************************/
+$ajaxaction = $_REQUEST['ajxaction'];
 if($ajaxaction == "SAVETAG")
 {
 	
