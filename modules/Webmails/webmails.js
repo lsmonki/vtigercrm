@@ -84,7 +84,6 @@ function check_in_all_boxes(mymbox) {
 	if(degraded_service == 'true') {
 		return;
 	}
-        $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -92,13 +91,13 @@ function check_in_all_boxes(mymbox) {
                         postBody: 'module=Webmails&action=WebmailsAjax&command=check_mbox_all&ajax=true',
                         onComplete: function(t) {
 				//alert(t.responseText);
-				try {
 				if(t.responseText != "") {
                                 	var data = eval('(' + t.responseText + ')');
                                 	for (var i=0;i<data.msgs.length;i++) {
 						if(mbox != mymbox) {
                                         		var mbox = data.msgs[i].msg.box;
                                         		var numnew = parseInt(data.msgs[i].msg.newmsgs);
+
 
 							var read  = parseInt($(mbox+"_read").innerHTML);
 							$(mbox+"_read").innerHTML = (read+numnew);
@@ -107,11 +106,10 @@ function check_in_all_boxes(mymbox) {
 						}
 					}
 				}
-				}catch(e){alert(e);}
+        			$("status").style.display="none";
 			}
 		}
 	);
-        $("status").style.display="none";
 }
 function check_for_new_mail(mbox) {
 	if(degraded_service == 'true') {
@@ -247,8 +245,7 @@ function check_for_new_mail(mbox) {
                                         new Effect.Appear("row_"+mailid);
                                 }
                             }catch(e) {}
-			    window.setTimeout("check_in_all_boxes('"+mailbox+"')",0);
-                            $("status").style.display="none";
+			    check_in_all_boxes('"+mailbox+"');
                         }
                 }
         );

@@ -70,20 +70,19 @@ if($_REQUEST["command"] == "check_mbox_all") {
 		$mailbox=$key;
 		$mbox = getImapMbox($mailbox,$temprow,"true");
 
-		$search = imap_search($mbox, "NEW ALL");
-		if($search != false) {
-			$boxes[$i]["name"] = $mailbox;
-			if($val == sizeof($search))
-				$boxes[$i]["newmsgs"] = 0;
-			elseif($val < sizeof($search)) {
-				$boxes[$i]["newmsgs"] = (sizeof($search)-$val);
-				$_SESSION["mailboxes"][$key] = (sizeof($search));
-			} else {
-				$boxes[$i]["newmsgs"] = 0;
-				$_SESSION["mailboxes"][$key] = 0;
-			}
-			$i++;
+		$box = imap_status($mbox, "{".$imapServerAddress."}".$mailbox, SA_ALL);
+
+		$boxes[$i]["name"] = $mailbox;
+		if($val == $box->unseen)
+			$boxes[$i]["newmsgs"] = 0;
+		elseif($val < $box->unseen) {
+			$boxes[$i]["newmsgs"] = ($box->unseen-$val);
+			$_SESSION["mailboxes"][$mailbox] = $box->unseen;
+		} else {
+			$boxes[$i]["newmsgs"] = 0;
+			$_SESSION["mailboxes"][$mailbox] = $box->unseen;
 		}
+		$i++;
 		imap_close($mbox);
 	}
 
