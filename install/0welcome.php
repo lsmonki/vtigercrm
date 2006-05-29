@@ -61,12 +61,12 @@ foreach($pieces as $val)
 <td align=center>
 	<br><br>
 	<!--  Top Header -->
-	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background:url(include/install/images/cwTopBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v5 Beta" title="v5Beta"></td>
+		<td><img src="include/install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+		<td align=right><img src="include/install/images/cwTopRight.gif" alt="v5 Beta" title="v5Beta"></td>
 	</tr>
-	<tr><td><br>&nbsp;<img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td></tr>
+	<tr><td><br>&nbsp;<img src="include/install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td></tr>
 	</table><br>
 	
 	<!-- Welcome note -->
@@ -2568,24 +2568,24 @@ foreach($pieces as $val)
 		<td align="center" width="70%">
 		<form action="install.php" method="post" name="form" id="form">
                 <input type="hidden" name="file" value="1checkSystem.php" />
-				<input type="image" src="install/images/cwBtnStart.gif" onClick="window.location='install.php'"><br>
+				<input type="image" src="include/install/images/cwBtnStart.gif" onClick="window.location='install.php'"><br>
 				By clicking the Start button, you are agreeing to the licensing terms.
 		</form>
 		</td>
 </tr>
 	</table>
 	<!-- Horizontal Shade -->
-	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(include/install/images/cwShadeBg.gif) repeat-x;">
 	<tr>
-		<td><img src="install/images/cwShadeLeft.gif"></td>
-		<td align=right><img src="install/images/cwShadeRight.gif"></td>
+		<td><img src="include/install/images/cwShadeLeft.gif"></td>
+		<td align=right><img src="include/install/images/cwShadeRight.gif"></td>
 	</tr>
 	</table>
 		
 	
 <table border="0" cellspacing="0" cellpadding="5" width="80%" class=small> 
 	<tr>	
-		<td ><img align="left" src="install/images/cwRegVCRM.gif" alt="Register vtiger CRM " title="Register vtiger CRM "> (Optional)</td>
+		<td ><img align="left" src="include/install/images/cwRegVCRM.gif" alt="Register vtiger CRM " title="Register vtiger CRM "> (Optional)</td>
 	</tr>
 	<tr>
 		<td><span style="color:#999999">Please take a moment to register your copy of vtiger CRM. Though this is optional, we encourage you to register. Only your name and email address are required for registration. We do not sell, rent, share or otherwise, distribute your information to third parties.<br></span>
