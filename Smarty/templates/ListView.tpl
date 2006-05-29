@@ -224,12 +224,13 @@ function alphabetic(module,url,dataid)
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					{elseif $button_check eq 'c_owner'}
+						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
+						     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+                                                {/if}
                                         {/if}
 
                                  {/foreach}
-					{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
-					{/if}
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
@@ -291,12 +292,13 @@ function alphabetic(module,url,dataid)
                                              <input class="small" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'c_status'}
                                              <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
+					{elseif $button_check eq 'c_owner'}
+				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
+                                                     <input class="small" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+                                                {/if}
                                         {/if}
 
                                  {/foreach}
-					{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                             <input class="small" type="button" value="{$APP.LBL_CHANGE_OWNER}" onclick="return change(this,'changeowner')"/>
-					{/if}
                     </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >
