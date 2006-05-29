@@ -254,9 +254,9 @@ function FindDuplicate()
 			{
 				product_id[j] = getObj("hdnProductId"+j).value;
 			}
-			if(product_id[i] == product_id[j])
+			if(product_id[i] == product_id[j] && product_id[i] != '')
 			{
-				alert("You have selected < "+getObj("txtProduct"+j).value+" > more than once in line items  "+i+" & "+j+".\n Please select it once and change the Qty");
+				alert("You have selected < "+getObj("txtProduct"+j).value+" > more than once in line items  "+i+" & "+j+".\n It is advisable to select the product just once but change the Qty. Thank You");
 				return false;
 			}
 		}
