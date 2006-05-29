@@ -45,7 +45,7 @@
             <td colspan="2" >
 					<table width="100%" cellpadding="5" cellspacing="0" border="0" >
 							<tr>
-									<td colspan="4" class="detailedViewHeader"><b>{$CMOD.LBL_GROUP_DETAILS}</b></td>
+									<td colspan="4" class="detailedViewHeader"><b>{$CMOD.LBL_ROLE_DETAILS}</b></td>
 							</tr>
 							<tr>
 							  <td class="dvtCellLabel" width="5%">&nbsp;</td>
