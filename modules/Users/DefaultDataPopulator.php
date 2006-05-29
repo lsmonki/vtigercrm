@@ -2047,6 +2047,9 @@ title';
 	$this->db->query("insert into actionmapping values(0,'SavePriceBook',0)");
 	$this->db->query("insert into actionmapping values(2,'DeletePriceBook',0)");
 	$this->db->query("insert into actionmapping values(9,'ConvertLead',0)");
+	$this->db->query("insert into actionmapping values(1,'DetailViewAjax',0)");
+	$this->db->query("insert into actionmapping values(4,'TagCloud',0)");
+	$this->db->query("insert into actionmapping values(1,'QuickCreate',0)");
 
 	//Insert values for moduleowners table which contains the modules and their users. default user id admin - after 4.2 patch 2
 	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Activities','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
