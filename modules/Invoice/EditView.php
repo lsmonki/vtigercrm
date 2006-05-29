@@ -162,7 +162,7 @@ if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-	  $log->debug("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id']);
+	$log->debug("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id']);
 	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
 	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 } 
@@ -257,12 +257,14 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$se_array=getProductDetailsBlockInfo($focus->mode,"",$focus,$num_of_products,$associated_prod);
 }
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] != '')) {
+	$smarty->assign("ROWCOUNT", $num_of_products);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
         $smarty->assign("MODE", $focus->mode);
-	$focus->column_fields['txtTax'] = "0.000";
-        $focus->column_fields['txtAdjustment'] = "0.000";
-        $focus->column_fields['hdnSubTotal'] = ".00";
-        $focus->column_fields['hdnGrandTotal'] =".00";
-        $se_array=getProductDetailsBlockInfo($focus->mode,"",$focus,$num_of_products,$associated_prod);
+	$smarty->assign("TAXVALUE", "0.000");
+	$smarty->assign("ADJUSTMENTVALUE", "0.000");
+	$smarty->assign("SUBTOTAL", $InvTotal.".00");
+	$smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
 }
 else
