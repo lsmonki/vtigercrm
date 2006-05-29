@@ -117,7 +117,7 @@
 				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_NAME} </td>
 				<td class="dvtCellInfo">{$USER_NAME}&nbsp;</td>
 				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
-        	    <td class="dvtCellInfo"><input type="checkbox" name="is_admin" DISABLED {$IS_ADMIN}/></td>
+        	    <td class="dvtCellInfo"><input type="checkbox" name="is_admin" {$IS_ADMIN}/></td>
 				</tr>
 				{if $MODE eq 'edit'}
 				<tr>
