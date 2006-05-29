@@ -210,7 +210,7 @@ function getPrdQtyInStck($product_id)
 	global $log;
 	$log->debug("Entering getPrdQtyInStck(".$product_id.") method ...");
 	global $adb;
-	$query1 = "select qtyinstock from products where productid=".$product_id;
+	$query1 = "SELECT qtyinstock FROM products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$qtyinstck= $adb->query_result($result,0,"qtyinstock");
 	$log->debug("Exiting getPrdQtyInStck method ...");
@@ -227,7 +227,7 @@ function getPrdReOrderLevel($product_id)
 	global $log;
 	$log->debug("Entering getPrdReOrderLevel(".$product_id.") method ...");
 	global $adb;
-	$query1 = "select reorderlevel from products where productid=".$product_id;
+	$query1 = "SELECT reorderlevel FROM products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
 	$log->debug("Exiting getPrdReOrderLevel method ...");
@@ -244,7 +244,7 @@ function getPrdHandler($product_id)
 	global $log;
 	$log->debug("Entering getPrdHandler(".$product_id.") method ...");
 	global $adb;
-	$query1 = "select handler from products where productid=".$product_id;
+	$query1 = "SELECT handler FROM products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$handler= $adb->query_result($result,0,"handler");
 	$log->debug("Exiting getPrdHandler method ...");
@@ -260,7 +260,7 @@ function getTaxId($type)
 	global $adb, $log;
 	$log->debug("Entering into getTaxId($type) function.");
 
-	$res = $adb->query("select taxid from inventorytaxinfo where taxname=\"$type\"");
+	$res = $adb->query("SELECT taxid FROM inventorytaxinfo WHERE taxname='$type'");
 	$taxid = $adb->query_result($res,0,'taxid');
 
 	$log->debug("Exiting from getTaxId($type) function. return value=$taxid");
@@ -278,7 +278,7 @@ function getTaxPercentage($type)
 
 	$taxpercentage = '';
 
-	$res = $adb->query("select percentage from inventorytaxinfo where taxname=\"$type\"");
+	$res = $adb->query("SELECT percentage FROM inventorytaxinfo WHERE taxname = '$type'");
 	$taxpercentage = $adb->query_result($res,0,'percentage');
 
 	$log->debug("Exiting from getTaxPercentage($type) function. return value=$taxpercentage");
@@ -298,7 +298,12 @@ function getProductTaxPercentage($type,$productid,$default='')
 
 	$taxpercentage = '';
 
-	$res = $adb->query("select taxpercentage from inventorytaxinfo inner join producttaxrel on inventorytaxinfo.taxid=producttaxrel.taxid where producttaxrel.productid=$productid and inventorytaxinfo.taxname=\"$type\"");
+	$res = $adb->query("SELECT taxpercentage
+			FROM inventorytaxinfo
+			INNER JOIN producttaxrel
+				ON inventorytaxinfo.taxid = producttaxrel.taxid
+			WHERE producttaxrel.productid = $productid
+			AND inventorytaxinfo.taxname = '$type'");
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	//This is to retrive the default configured value if the taxpercentage related to product is empty
