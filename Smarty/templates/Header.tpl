@@ -44,7 +44,9 @@
 		<table border=0 cellspacing=0 cellpadding=0>
 		 <tr>
 		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
-		 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
+		 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://www.vtiger.com/index.php?option=com_content&task=view&id=34&Itemid=60" target="_blank">{$APP.LNK_HELP}</a></td>
+	         <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td>
+	  	 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=Logout">{$APP.LBL_LOGOUT}</a> ({$CURRENT_USER})</td>
 		 </tr>
 		</table>
 		</td>
@@ -418,3 +420,10 @@ function getFormValidate(divValidate)
 
 
 <div id="status" style="display:none;position:absolute;left:970px;top:0px;height:17px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
+<script>
+function openwin()
+{ldelim}
+            window.open("index.php?module=Users&action=about_us","aboutwin","height=300,width=400,top=200,left=300")
+{rdelim}
+</script>
+
