@@ -162,7 +162,7 @@ function ajachangeresponse(response)
 </tr>
 </table>
 	{include file='SettingsSubMenu.tpl'}
-<div id="editdiv" style="display:none;position:absolute;left:200px;top:100px;"></div>
+<div id="editdiv" style="display:block;position:absolute;width:510px;"></div>
 {literal}
 <script>
 function SavePickList(fieldname,module)

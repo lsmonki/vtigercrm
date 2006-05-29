@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<div style="left: 323px; top: 395px; display: block;" id="orgLay">
+<div style="position:relative;display: block;" id="orgLay">
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tbody><tr>
 	<td class="genHeaderSmall" align="left" width="40%">{$MOD.LBL_EDIT_PICKLIST} {$FIELDNAME}</td>
