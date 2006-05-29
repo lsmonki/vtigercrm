@@ -873,7 +873,7 @@ $app_strings = Array(
 'COVERED_PERCENTAGE'=>'(%)',
 
 'LBL_TAG_CLOUD'=>'Tag Cloud',
-
+'LBL_FOR'=>'for',
 );
 
 
