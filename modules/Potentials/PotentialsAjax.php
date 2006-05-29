@@ -8,44 +8,5 @@
   * All Rights Reserved.
  *
   ********************************************************************************/
-
-require_once('include/logging.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('include/database/PearDatabase.php');
-global $adb;
-
-$local_log =& LoggerManager::getLogger('PotentialsAjax');
-
-$ajaxaction = $_REQUEST["ajxaction"];
-if($ajaxaction == "DETAILVIEW")
-{
-	$crmid = $_REQUEST["recordid"];
-	$tablename = $_REQUEST["tableName"];
-	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
-	if($crmid != "")
-	{
-		$modObj = new Potential();
-		$modObj->retrieve_entity_info($crmid,"Potentials");
-		$modObj->column_fields[$fieldname] = $fieldvalue;
-		$modObj->id = $crmid;
-		$modObj->mode = "edit";
-		$modObj->save("Potentials");
-		if($modObj->id != "")
-		{
-			echo ":#:SUCCESS";
-		}else
-		{
-			echo ":#:FAILURE";
-		}   
-	}else
-	{
-		echo ":#:FAILURE";
-	}
-}
-
-else
-{
 	require_once('include/Ajax/CommonAjax.php');
-}
 ?>

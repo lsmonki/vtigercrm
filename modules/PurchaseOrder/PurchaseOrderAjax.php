@@ -8,43 +8,5 @@
   * All Rights Reserved.
  *
   ********************************************************************************/
-
-require_once('include/logging.php');
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
-require_once('include/database/PearDatabase.php');
-global $adb;
-
-$local_log =& LoggerManager::getLogger('PurchaseOrderAjax');
-
-$ajaxaction = $_REQUEST["ajxaction"];
-if($ajaxaction == "DETAILVIEW")
-{
-	$crmid = $_REQUEST["recordid"];
-	$tablename = $_REQUEST["tableName"];
-	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
-	if($crmid != "")
-	{
-		$modObj = new Order();
-		$modObj->retrieve_entity_info($crmid,"PurchaseOrder");
-		$modObj->column_fields[$fieldname] = $fieldvalue;
-		$modObj->id = $crmid;
-		$modObj->mode = "edit";
-		$modObj->save("PurchaseOrder");
-		if($modObj->id != "")
-		{
-			echo ":#:SUCCESS";
-		}else
-		{
-			echo ":#:FAILURE";
-		}   
-	}else
-	{
-		echo ":#:FAILURE";
-	}
-}
-else
-{
 	require_once('include/Ajax/CommonAjax.php');
-}
 ?>

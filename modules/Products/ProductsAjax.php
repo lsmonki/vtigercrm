@@ -9,47 +9,5 @@
  *
   ********************************************************************************/
 
-require_once('include/logging.php');
-require_once('modules/Products/Product.php');
-require_once('include/database/PearDatabase.php');
-global $adb;
-
-$local_log =& LoggerManager::getLogger('ProductsAjax');
-
-$ajaxaction = $_REQUEST["ajxaction"];
-if($ajaxaction == "DETAILVIEW")
-{
-	$crmid = $_REQUEST["recordid"];
-	$tablename = $_REQUEST["tableName"];
-	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
-	if($crmid != "")
-	{
-		$modObj = new Product();
-		$modObj->retrieve_entity_info($crmid,"Products");
-		$modObj->column_fields[$fieldname] = $fieldvalue;
-		$modObj->id = $crmid;
-		$modObj->mode = "edit";
-		$modObj->save("Products");
-		if($modObj->id != "")
-		{
-			echo ":#:SUCCESS";
-		}else
-		{
-			echo ":#:FAILURE";
-		}   
-	}else
-	{
-		echo ":#:FAILURE";
-	}
-}
-
-elseif($_REQUEST['ajaxmode'] == 'qcreate')
-{
-	require_once('quickcreate.php');
-}
-else
-{
 	require_once('include/Ajax/CommonAjax.php');
-}
 ?>

@@ -9,42 +9,5 @@
  *
   ********************************************************************************/
 
-require_once('include/logging.php');
-require_once('modules/Faq/Faq.php');
-require_once('include/database/PearDatabase.php');
-global $adb;
-
-$local_log =& LoggerManager::getLogger('FaqAjax');
-
-$ajaxaction = $_REQUEST["ajxaction"];
-if($ajaxaction == "DETAILVIEW")
-{
-	$crmid = $_REQUEST["recordid"];
-	$tablename = $_REQUEST["tableName"];
-	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
-	if($crmid != "")
-	{
-		$modObj = new Faq();
-		$modObj->retrieve_entity_info($crmid,"Faq");
-		$modObj->column_fields[$fieldname] = $fieldvalue;
-		$modObj->id = $crmid;
-		$modObj->mode = "edit";
-		$modObj->save("Faq");
-		if($modObj->id != "")
-		{
-			echo ":#:SUCCESS";
-		}else
-		{
-			echo ":#:FAILURE";
-		}   
-	}else
-	{
-		echo ":#:FAILURE";
-	}
-}
-else
-{
 	require_once('include/Ajax/CommonAjax.php');
-}
 ?>
