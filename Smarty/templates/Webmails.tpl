@@ -10,6 +10,7 @@
  ********************************************************************************/
 -->*}
 <!--  USER  SETTINGS PAGE STARTS HERE -->
+                {include file='Buttons_List.tpl'} 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
 		 <td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">&nbsp;
