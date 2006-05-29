@@ -2698,9 +2698,9 @@ $create_query27 = "CREATE TABLE invitees (activityid int(19) NOT NULL, inviteeid
 Execute($create_query27);
 
 $alter_query_array17 = Array(
-				"ALTER TABLE users ADD column hour_format varchar(30) default NULL AFTER date_format",
-				"ALTER TABLE users ADD column start_hour varchar(30) default NULL AFTER hour_format",
-				"ALTER TABLE users ADD column end_hour varchar(30) default NULL AFTER start_hour"
+				"ALTER TABLE users ADD column hour_format varchar(30) default 'am/pm' AFTER date_format",
+				"ALTER TABLE users ADD column start_hour varchar(30) default '10:00' AFTER hour_format",
+				"ALTER TABLE users ADD column end_hour varchar(30) default '23:00' AFTER start_hour"
 			    );
 foreach($alter_query_array17 as $query)
 {
