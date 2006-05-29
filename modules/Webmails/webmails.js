@@ -81,9 +81,6 @@ function select_all() {
         }
 }
 function check_in_all_boxes(mymbox) {
-	if(degraded_service == 'true') {
-		return;
-	}
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
