@@ -103,15 +103,14 @@ function set_focus() {
 						<tr>
 							<td valign="top" width="60%" height="250" class="loginBillBoard small">
 									<div align=left style="padding:20px">
-													<span style="font-size:20px;color:white">Welcome to vtiger CRM 5.0.0 </span><br><br>
-													vtigerCRM 5.0.0 is more user-friendly than ever before and sets the standard for all commercial-grade business applications, open-source or otherwise.<br><br>
+													<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 Beta</span><br><br>
 													<b>New in Beta</b> <br>
-													<li>Integrated Mail Client</li>
-													<li>API docs</li>
-													<li>Optimized Performance</li>
+													<li>Integrated webmail Client</li>
+													<li>Campaign Management</li>
+													<li>Better Performance</li>
 													<li>Sexier Dashboards,Reports,Calendar</li>	 		
 													<li>Migration Support</li><br>	
-															Your 'vtiger-xperience' is ... <br>	
+															How is 'vtiger-experience' ? <br>	
 													<li><a href='http://blogs.vtiger.com' tabindex="6">vtiger blogs </a></li>
 													<li><a href='http://www.bloglines.com' tabindex="7">bloglines </a></li>
 													<li><a href='http://technorati.com/' tabindex="8">technorati</a></li>
