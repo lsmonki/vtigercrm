@@ -694,6 +694,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					{
 						$value=$adb->query_result($list_result,$i-1,"groupname");
 					}
+					elseif($module =='Emails' && $relatedlist != '' && $name=='Subject')
+					{
+						$list_result_count = $i-1;
+						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+						$value = '<a href="javascript:;" onClick="OpenCompose(\''.$entity_id.'\',\'edit\');">'.$tmp_value.'</a>';
+
+					}
 					else
 					{
 						$list_result_count = $i-1;
