@@ -62,6 +62,10 @@ $mod_strings = Array(
 
 'LBL_EMAIL_ADDRESS'=>'Email',
 
+'LBL_TRANSCURR'=>'Transfer User currency to',
+
+'LBL_CURRDEL'=>'Currency to be Deleted',
+
 'LBL_NEW_FORM_TITLE'=>'New Contact',
 
 'LBL_NEW_CURRENCY'=>'New Currency',
