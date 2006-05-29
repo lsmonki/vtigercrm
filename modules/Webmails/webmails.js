@@ -91,10 +91,9 @@ function check_in_all_boxes(mymbox) {
 				if(t.responseText != "") {
                                 	var data = eval('(' + t.responseText + ')');
                                 	for (var i=0;i<data.msgs.length;i++) {
-						if(mbox != mymbox) {
-                                        		var mbox = data.msgs[i].msg.box;
+                                        	var mbox = data.msgs[i].msg.box;
+						if(mbox != mailbox) {
                                         		var numnew = parseInt(data.msgs[i].msg.newmsgs);
-
 
 							var read  = parseInt($(mbox+"_read").innerHTML);
 							$(mbox+"_read").innerHTML = (read+numnew);
@@ -232,12 +231,12 @@ function check_for_new_mail(mbox) {
                                         tr.style.display='none';
                                         var tels = $("message_table").childNodes[1].childNodes;
                                         for(var j=0;j<tels.length;j++) {
-                                                try {
-                                                    if(tels[j].id.match(/row_/)) {
-                                                        $("message_table").childNodes[1].insertBefore(tr,tels[j]);
+					    try {
+                                                if(tels[j].id.match(/row_/)) {
+                                                	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
                                                         break;
-                                                    }
-                                                }catch(e){}
+                                        	}
+					    }catch(f){}
                                         }
                                         new Effect.Appear("row_"+mailid);
                                 }
