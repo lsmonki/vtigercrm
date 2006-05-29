@@ -29,7 +29,7 @@ function ajaxSaveResponse(response)
 function callConvertLeadDiv(id)
 {ldelim}
         var ajaxObj = new Ajax(ajaxSaveResponse);
-        var urlstring = "module=Leads&action=LeadsAjax&ajxaction=convertlead&record="+id;
+        var urlstring = "module=Leads&action=LeadsAjax&file=ConvertLead&record="+id;
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
 function tagvalidate()
