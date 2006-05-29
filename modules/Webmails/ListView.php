@@ -55,7 +55,7 @@ var id;
 
 
 addOnloadEvent(function() {
-		timer = window.setTimeout("periodic_event()",box_refresh);
+		window.setTimeout("periodic_event()",box_refresh);
 	}
 );
 </script>
@@ -63,7 +63,7 @@ addOnloadEvent(function() {
 <?
 
 global $mbox,$displayed_msgs;
-$mbox = getImapMbox($mailbox,$temprow);
+$mbox = getImapMbox($mailbox,$temprow,"true");
 
 if($_POST["command"] == "move_msg" && $_POST["ajax"] == "true") {
 	imap_mail_move($mbox,$_REQUEST["mailid"],$_REQUEST["mvbox"]);

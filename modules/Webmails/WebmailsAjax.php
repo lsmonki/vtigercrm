@@ -30,7 +30,7 @@ $mailbox = $_REQUEST["mailbox"];
 if($_REQUEST["command"] == "check_mbox") {
 	$mbox = getImapMbox($mailbox,$temprow);
 
-	$search = imap_search($mbox, "NEW ALL");
+	$search = imap_search($mbox, "NEW");
 	if($search === false) {echo "failed";flush();exit();}
 
 	$data = imap_fetch_overview($mbox,implode(',',$search));

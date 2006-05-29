@@ -126,7 +126,8 @@
        <tr>
            <td class="dvtCellLabel" align="right">{$MOD.LBL_INT_MAILER}</td>
            <td class="dvtCellInfo">
-		<input type="radio" name="int_mailer" value="1" {$INT_MAILER} />&nbsp;{$MOD.LBL_INT_MAILER_USE}
+		<input type="radio" name="int_mailer" value="1" {$INT_MAILER_USE} />&nbsp;{$MOD.LBL_INT_MAILER_USE}
+		<input type="radio" name="int_mailer" value="0" {$INT_MAILER_NOUSE} />&nbsp;{$MOD.LBL_INT_MAILER_NOUSE}
 	   </td>	
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
