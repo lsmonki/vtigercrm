@@ -727,6 +727,7 @@ $app_strings = Array(
 'Vendors'=>'Vendors',
 'Rss'=>'RSS',
 'Portal'=>'My Sites',
+'Webmails'=>'Webmails',
 
 //Added language for Parent Tab
 
