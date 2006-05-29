@@ -49,10 +49,13 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	//Added to display the Quote's associated products -- when we create invoice from Quotes DetailView 
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
+	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
+
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
-	$smarty->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
+	$smarty->assign("TAXVALUE", $txtTax);
+	$smarty->assign("ADJUSTMENTVALUE", $txtAdj);
 	$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -67,10 +70,13 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	//Added to display the SalesOrder's associated products -- when we create invoice from SO DetailView
 	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
+	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
+	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
+
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
-	$smarty->assign("TAXVALUE", $so_focus->column_fields['txtTax']);
-	$smarty->assign("ADJUSTMENTVALUE", $so_focus->column_fields['txtAdjustment']);
+	$smarty->assign("TAXVALUE", $txtTax);
+	$smarty->assign("ADJUSTMENTVALUE", $txtAdj);
 	$smarty->assign("SUBTOTAL", $so_focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $so_focus->column_fields['hdnGrandTotal']);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');

@@ -226,12 +226,15 @@ else $smarty->assign("NAME", "");
 if(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'quotetoso' || $_REQUEST['convertmode'] == 'update_quote_val'))
 {
 	$num_of_products = getNoOfAssocProducts("Quotes",$quote_focus);
+	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
+	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
+		
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
-	$smarty->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
+	$smarty->assign("TAXVALUE", $txtTax);
+	$smarty->assign("ADJUSTMENTVALUE", $txtAdj);
 	$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
 }
