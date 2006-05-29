@@ -261,7 +261,7 @@ function alphabetic(module,url,dataid)
 				 </td>	
        		       </tr>
 			 </table>
-                         <div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
+                         <div  style="width:100%;border-top:1px solid #999999;border-bottom:1px solid #999999">
 			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
 			      <tr>
              			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
