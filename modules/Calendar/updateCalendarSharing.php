@@ -10,6 +10,13 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 global $adb;
+
+if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
+	$hour_format = $_REQUEST['hour_format'];
+else
+	$hour_format = 'am/pm';
+$delquery = "delete from sharedcalendar where userid=".$_REQUEST["current_userid"];
+$adb->query($delquery);
 $sharedid = $_REQUEST['user'];
 if(isset($sharedid) && $sharedid != null)
 {
@@ -28,11 +35,8 @@ if(isset($_REQUEST['start_hour']) && $_REQUEST['start_hour'] != '')
         $adb->query($sql);
 }
 
-if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
-{
-	$sql = "update users set hour_format='".$_REQUEST['hour_format']."' where id=".$current_user->id;
-	$adb->query($sql);
-}
+$sql = "update users set hour_format='".$hour_format."' where id=".$current_user->id;
+$adb->query($sql);
 header("Location: index.php?action=index&module=Calendar&parenttab=My Home Page");
 
 ?>

@@ -1,3 +1,13 @@
+/*********************************************************************************
+
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+
 function DisableSharing()
 {
 
@@ -86,22 +96,28 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 	
 	if (y.display=="none") 
 	{
-		document.getElementById("jscal_field_due_date").value = enddate;	
-		document.getElementById("starthr").value = starthr;
-		document.getElementById("startmin").value = startmin;
-		document.getElementById("startfmt").value = startfmt;
-		document.getElementById("endhr").value = endhr;
-                document.getElementById("endmin").value = endmin;
-                document.getElementById("endfmt").value = endfmt;
-		if(type == 'call')
-			document.appSave.activitytype[0].checked = true;
-		if(type == 'meeting')
-			document.appSave.activitytype[1].checked = true;
-		 if(type == 'todo')
-			document.getElementById("task_jscal_field_date_start").value = startdate;
-		else
-			document.getElementById("jscal_field_date_start").value = startdate;
-		
+		if(type == 'call' || type == 'meeting')
+		{
+			if(type == 'call')
+	                        document.appSave.activitytype[0].checked = true;
+	                if(type == 'meeting')
+        	                document.appSave.activitytype[1].checked = true;
+
+			document.appSave.date_start.value = startdate;
+			document.appSave.starthr.value = starthr;
+			document.appSave.startmin.value = startmin;
+			document.appSave.startfmt.value = startfmt;
+			document.appSave.endhr.value = endhr;
+			document.appSave.endmin.value = endmin;
+			document.appSave.endfmt.value = endfmt;
+		}
+		if(type == 'todo')
+		{
+			document.createTodo.task_date_start.value = startdate;
+			document.createTodo.starthr.value = starthr;
+                        document.createTodo.startmin.value = startmin;
+                        document.createTodo.startfmt.value = startfmt;
+		}
 		y.display="block";
 	}
 }
@@ -153,7 +169,6 @@ function enableCalstarttime()
 	else	
 		document.SharingForm.start_hour.disabled = true;
 }
-
 
 function check_form()
 {
@@ -235,6 +250,26 @@ function check_form()
         }
 }
 
+function task_check_form()
+{
+	starthour = document.createTodo.starthr.value;
+	startmin  = document.createTodo.startmin.value;
+        startformat = document.createTodo.startfmt.value;
+	if(startformat != '')
+	{
+        	if(startformat == 'pm')
+                {
+                	starthour = eval(starthour) + 12;
+                        startmin  = startmin;
+                }
+                else
+                {
+                	starthour = starthour;
+                        startmin  = startmin;
+                }
+        }
+	document.createTodo.task_time_start.value = starthour+':'+startmin;
+}
 
 
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
@@ -410,7 +445,7 @@ function ajaxCalSettingsSaveResponse(response)
         document.getElementById("calSettings").innerHTML=response.responseText;
 }
 
-function getcalAction(obj,Lay,id,view,hour,day,month,year){
+function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
     var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
@@ -426,10 +461,24 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year){
     tagName.style.top= topSide + 'px';
     tagName.style.display = 'block';
     tagName.style.visibility = "visible";
-    document.getElementById("complete").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&eventstatus=Held&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    document.getElementById("pending").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&eventstatus=Not Held&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    document.getElementById("postpone").href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode=Events";
-    document.getElementById("actdelete").href="index.php?return_module=Calendar&return_action=index&action=Delete&module=Activities&record="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    if(type == 'event')
+    {
+	var heldstatus = "eventstatus=Held";
+	var notheldstatus = "eventstatus=Not Held";
+        var activity_mode = "Events";
+    }
+    if(type == 'todo')
+    {
+	var heldstatus = "status=Completed";
+        var notheldstatus = "status=Deferred";
+	var activity_mode = "Task";
+    }
+	
+    document.getElementById("complete").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+heldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("pending").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+notheldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    document.getElementById("postpone").href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode="+activity_mode;
+    document.getElementById("actdelete").href="index.php?return_module=Calendar&return_action=index&action=massdelete&module=Users&idlist="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
     document.getElementById("changeowner").href="javascript:fnvshobj(this,'act_changeowner');";
+
 }
 
