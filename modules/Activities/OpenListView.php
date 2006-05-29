@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-function getPendingActivities()
+function getPendingActivities($mode)
 {
 	global $log;
         $log->debug("Entering getPendingActivities() method ...");
@@ -74,14 +74,16 @@ function getPendingActivities()
 	{
 		$later = date("Y-m-d", strtotime("$today +1 day"));
 	}
-
-	if($activity_view != 'OverDue')
+	$last_tendays = date("Y-m-d",strtotime("$today - 10 days"));
+	if($mode != 1)
 	{
-		$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.status is NULL OR activity.status != 'Deferred') and  (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held') and (activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' ) AND (((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='$current_user->id'";
+		//for upcoming avtivities
+		$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.status is NULL OR activity.status != 'Deferred') and  (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held') and (activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' ) AND (((date_start > '$today' AND date_start < '$later'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='$current_user->id'";
 	}	
 	else
 	{
-		$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.status is NULL OR activity.status != 'Deferred') and (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held') and (activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' ) AND (due_date < '$today') OR (recurringevents.recurringdate < '$today') AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='$current_user->id'";
+		//for pending activities for the last 10 days
+		$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL OR activity.status != 'Completed' ) and ( activity.status is NULL OR activity.status != 'Deferred') and (  activity.eventstatus is NULL OR  activity.eventstatus != 'Held') and (activity.eventstatus is NULL OR  activity.eventstatus != 'Not Held' ) AND (due_date > '$last_tendays' AND due_date <= '$today') OR (recurringevents.recurringdate > '$last_tendays' AND recurringevents.recurringdate <= '$today') AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='$current_user->id'";
 	}
 	$res = $adb->query($list_query);
 	$noofrecords = $adb->num_rows($res);
@@ -114,8 +116,8 @@ function getPendingActivities()
 	$later_day = getDisplayDate(date("Y-m-d", strtotime("$later -1 day ")));
 	
 	$title=array();
+	$title[]=$activity_view;
 	$title[]='myUpcoPendAct.gif';
-	$title[]=$current_module_strings["LBL_UPCOMING"];
 	//.'('.$current_module_strings["LBL_TODAY"].' '.$later_day.')';
 	$title[]='home_myact';
 	$title[]=getActivityView($activity_view);
@@ -262,10 +264,6 @@ function getActivityview($activity_view)
 	{
 		$selected4 = 'selected';
 	}
-	else if($activity_view == 'OverDue')	
-	{
-		$selected5 = 'selected';
-	}
 
 	//constructing the combo values for activities
 	$ACTIVITY_VIEW_SELECT_OPTION = '<select class=small name="activity_view" onchange="showActivityView(this)">';
@@ -280,9 +278,6 @@ function getActivityview($activity_view)
 	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
 	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Year" '.$selected4.'>';
 	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Year';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="OverDue" '.$selected5.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'OverDue';
 	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
 	$ACTIVITY_VIEW_SELECT_OPTION .= '</select>';
 	

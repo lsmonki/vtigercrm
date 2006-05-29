@@ -45,7 +45,7 @@ $mod_strings = Array(
 
 'LBL_UPCOMING_EVENTS'=>'Upcoming Events',
 'LBL_PENDING_EVENTS'=>'Pending Events',
-'LBL_TODAYEVENT'=>'Events for Today',
+'LBL_TODAYEVENT'=>'Events for Last Ten days',
 
 
 );

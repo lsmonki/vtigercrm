@@ -114,40 +114,11 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 			</div>
 			{/if}	
 {/foreach}
-<div class="MatrixLayer" style="float:left;" id="SubMatrix_9">
-
-	  <table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-          <tr style="cursor:move;">
-          <td align="left" style="border-bottom:1px solid #666666;"><b>{$MOD.LBL_LEADS_BY_SOURCE}</b></td>
-          <td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
-          </tr>
-          <tr>
-          <td colspan="2" align="center"><img src="cache/images/pie_2082672713_leadsource_96954858.png" width="200" height="170" align="absmiddle" /></td>
-          </tr>
-	<tr><td colspan="2" style="border-top:1px solid #666666;padding-right:30px;" align="right" >
-	{$MOD.LBL_TOTAL}<b>340</b>
-	</td></tr>                                
-        </table>
-</div>
-<div class="MatrixLayer" style="float:left;" id="SubMatrix_9">
-
-	  <table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-          <tr style="cursor:move;">
-          <td align="left" style="border-bottom:1px solid #666666;"><b>{$MOD.LBL_LEADS_BY_STATUS}</b></td>
-          <td align="right" style="border-bottom:1px solid #666666;"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
-          </tr>
-          <tr>
-          <td colspan="2" align="center"><img src="cache/images/hor_2082672713_leadstatus_96954858.png" width="200" height="170" align="absmiddle" /></td>
-          </tr>
-	<tr><td colspan="2" style="border-top:1px solid #666666;padding-right:30px;" align="right" >
-	{$MOD.LBL_TOTAL}<b>340</b>
-	</td></tr>                                
-        </table>
-</div>
 </div>
 </td>
 
 <td width="25%" valign="top" style="padding:5px;">
+	{if $ACTIVITIES.0.Entries.noofactivities > 0}	
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 	<td width="13" height="38"><img src="{$IMAGE_PATH}upcoming_left.gif" align="top"  /></td>
@@ -158,10 +129,9 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
-	<td width="75%" colspan="2"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />{$ACTIVITIES.0.Entries.noofactivities} {$MOD.LBL_TODAYEVENT}</td>
+	<td width="75%" colspan="2"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$ACTIVITIES.0.Title.0}</td>
 	<td width="25%" valign="top" align="right"><img src="{$IMAGE_PATH}up.gif" align="absmiddle" /></td>
 	</tr>
-	<tr><td colspan="3" height="10"></td></tr>															
 	{foreach item=entries from=$ACTIVITIES.0.Entries}
 	<tr>
 	<td align="right" width="15%">{$entries.IMAGE}</td>
@@ -173,6 +143,9 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	</td>
 	</tr>
 	</table><br />
+	{/if}
+
+	{if $ACTIVITIES.1.Entries.noofactivities > 0}	
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
 	<tr>
 	<td width="14" height="70" background="{$IMAGE_PATH}pending_left.gif" ></td>
@@ -201,6 +174,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	</tr>
 	</table>
 	<br>
+	{/if}
     {if $TAGCLOUD_JS ne ''}
     <table width="100%" border=0>
     <tr><td>
