@@ -1,4 +1,14 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 
@@ -180,6 +190,7 @@ function get_cal_header_tab(& $header)
 }
 
 /*To display events/todos detail in calendar header
+ *@param $cal_arr -- The calendar array:: Type Array 
 */
 function get_cal_header_data(& $cal_arr)
 {
@@ -212,6 +223,7 @@ function get_cal_header_data(& $cal_arr)
 	echo $headerdata;	
 }
 /*To get View Combo box
+ *@param $cal -- The calendar array:: Type Array
 */
 function getEventViewOption(& $cal)
 {
@@ -224,6 +236,7 @@ function getEventViewOption(& $cal)
 }
 
 /*link to previous day/week/month/year view
+ *@param $cal -- The calendar array:: Type Array
 */
 function get_previous_cal(& $cal)
 {
@@ -233,6 +246,7 @@ function get_previous_cal(& $cal)
 }
 
 /*link to next day/week/month view
+ *@param $cal -- The calendar array:: Type Array
 */
 function get_next_cal(& $cal)
 {
@@ -243,6 +257,7 @@ function get_next_cal(& $cal)
 }
 
 /*To display date info in calendar header
+ *@param $cal -- The calendar array:: Type Array
 */
 function display_date($view,$date_time)
 {
@@ -280,7 +295,10 @@ function display_date($view,$date_time)
         }
 
 }
-
+/*To get css class name for date
+ *@param $slice_date -- The calendar date:: Type string
+ *return css class name :: Type string 
+*/
 function dateCheck($slice_date)
 {
 	$today = date('Y-m-d');
@@ -294,7 +312,9 @@ function dateCheck($slice_date)
 	}
 }
 
-/*To get day/week/month events hourview
+/*To get day/week/month events Hourview
+ @param $view -- The calendar array :: Type Array
+ @param $type -- The type(to differntiate hourview and listview) :: Type string
 */
 function getHourView(& $view,$type = 'default' )
 {
@@ -321,6 +341,8 @@ function getHourView(& $view,$type = 'default' )
 }
 
 /*To get day/week/month events listview
+ @param $cal -- The calendar array :: Type Array
+ @param $mode -- The mode(to differntiate hourview and listview) :: Type string
 */
 function getEventListView(& $cal,$mode='')
 {
@@ -374,7 +396,11 @@ function getEventListView(& $cal,$mode='')
 	
 }
 
-
+/*To get day/week/month todos listview
+ *@param $cal -- The calendar array :: Type Array
+ *@param $check -- The check :: Type string
+ *return todolist string or todo listview html depends on $check value
+*/
 function getTodosListView($cal, $check='')
 {
 	if($cal['calendar']->view == 'day')
@@ -426,6 +452,10 @@ function getTodosListView($cal, $check='')
         }
 }
 
+/*To get calendar layout for dayview
+ *@param $cal -- The calendar array :: Type Array
+ *@param $type -- The type :: Type string
+*/
 function getDayViewLayout(& $cal,$type)
 {
 	global $current_user,$app_strings;
@@ -500,6 +530,10 @@ function getDayViewLayout(& $cal,$type)
 	echo $dayview_layout;		
 }
 
+/*To get calendar layout for week view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $type  -- The type :: Type string
+*/
 function getWeekViewLayout(& $cal,$type)
 {
 	global $current_user,$app_strings;
@@ -598,6 +632,10 @@ function getWeekViewLayout(& $cal,$type)
 		
 }
 	
+/*To get calendar layout for month view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $type  -- The type :: Type string
+*/
 function getMonthViewLayout(& $cal,$type)
 {
 	global $current_user,$app_strings;
@@ -668,6 +706,10 @@ function getMonthViewLayout(& $cal,$type)
 		
 }
 
+/*To get calendar layout for year view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $type  -- The type :: Type string
+*/
 function getYearViewLayout(& $cal,$type)
 {
 	global $mod_strings;
@@ -772,7 +814,11 @@ function getYearViewLayout(& $cal,$type)
 	
 }
 
-
+/*To display events in day view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $slice  -- The slice(date and time) :: Type string
+ *returns event in html div format
+*/
 function getdayEventLayer(& $cal,$slice)
 {
 	global $mod_strings;
@@ -810,7 +856,7 @@ function getdayEventLayer(& $cal,$slice)
 						</td>
 						<td align="right" width="5%">
 							<div id="'.$arrow_img_name.'" style="display: none;">
-								<img onClick="getcalAction(this,\'calAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\');" onMouseout="fninvsh(\'calAction\')" src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0">
+								<img onClick="getcalAction(this,\'calAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" onMouseout="fninvsh(\'calAction\')" src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0">
 							</div>
 						</td>
 						</tr>
@@ -821,6 +867,11 @@ function getdayEventLayer(& $cal,$slice)
 	}
 }
 
+/*To display events in week view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $slice  -- The slice(date) :: Type string
+ *returns event in html div format
+*/
 function getweekEventLayer(& $cal,$slice)
 {
 	global $mod_strings;
@@ -853,6 +904,11 @@ function getweekEventLayer(& $cal,$slice)
 			
 }
 
+/*To display events in month view
+ *@param $cal -- The calendar array :: Type Array
+ *@param $slice  -- The slice(date) :: Type string
+ *returns event in html div format
+*/
 function getmonthEventLayer(& $cal,$slice)
 {
 	global $mod_strings;
@@ -904,7 +960,13 @@ function getmonthEventLayer(& $cal,$slice)
 
 }
 
-
+/*To get events list scheduled between specified dates
+ *@param $calendar -- The calendar array :: Type Array
+ *@param $start_date -- the start date :: Type string
+ *@param $end_date -- the end date :: Type string
+ *@param $info -- the info :: Type string
+ *returns $Entries :: Type Array
+*/
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
@@ -971,13 +1033,21 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
-		$element['action'] ="<img onClick='getcalAction(this,\"calAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		$element['action'] ="<img onClick='getcalAction(this,\"calAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
         	$element['status'] = $adb->query_result($result,$i,"eventstatus");
 	$Entries[] = $element;
 	}
 	return $Entries;
 }
 
+
+/*To get todos list scheduled between specified dates
+ *@param $calendar -- The calendar array :: Type Array
+ *@param $start_date -- the start date :: Type string
+ *@param $end_date -- the end date :: Type string
+ *@param $info -- the info :: Type string
+ *returns $Entries :: Type Array
+*/
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
         $Entries = Array();
@@ -1023,7 +1093,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Task' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		$element['status'] = $adb->query_result($result,$i,"status");
-                $element['action'] = "<img onClick='getcalAction(this,\"calAction\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		$element['action'] ="<img onClick='getcalAction(this,\"calAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$Entries[] = $element;
 	}
 	return $Entries;
