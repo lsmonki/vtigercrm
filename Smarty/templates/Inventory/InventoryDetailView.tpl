@@ -232,7 +232,7 @@ function tagvalidate()
 
 <script>
 	var data = "module={$MODULE}&action={$MODULE}Ajax&ajxaction=GETTAGCLOUD&file=TagCloud";
-	var ajaxObj = new Ajax(ajaxTagCloudResp);
+	var ajaxObj = new VtigerAjax(ajaxTagCloudResp);
 	ajaxObj.process("index.php?",data);
 	function ajaxTagCloudResp(response)
 	{ldelim}

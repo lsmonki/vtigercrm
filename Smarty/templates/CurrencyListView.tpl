@@ -16,7 +16,7 @@
 	function deleteCurrency(currid)
 	{
         	show("status");
-	        var ajaxObj = new Ajax(ajaxCurrencyDeleteResponse);
+	        var ajaxObj = new VtigerAjax(ajaxCurrencyDeleteResponse);
         	var urlstring = "action=SettingsAjax&file=CurrencyDeleteStep1&return_action=CurrencyListView&return_module=Settings&module=Settings&parenttab=Settings&id="+currid;
 	        ajaxObj.process("index.php?",urlstring);
 	}
@@ -31,7 +31,7 @@
 	{
                 show("status");
                 hide("CurrencyDeleteLay");
-                var ajaxObj = new Ajax(ajaxCurrencySaveResponse);
+                var ajaxObj = new VtigerAjax(ajaxCurrencySaveResponse);
                 var trans_currencyid=document.getElementById('transfer_currency_id').options[document.getElementById('transfer_currency_id').options.selectedIndex].value;
                 var urlstring ="module=Settings&action=SettingsAjax&file=CurrencyDelete&ajax=true&delete_currency_id="+del_currencyid+"&transfer_currency_id="+trans_currencyid;
                 ajaxObj.process("index.php?",urlstring);

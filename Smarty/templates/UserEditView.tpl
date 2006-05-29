@@ -32,7 +32,7 @@ function openPopup(){ldelim}
 function check_duplicate()
 {ldelim}
 
-        var ajaxObj = new Ajax(ajaxSaveUserResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveUserResponse);
         var user_name = document.getElementById('user_name').value;
 
         var urlstring ="module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName="+user_name;

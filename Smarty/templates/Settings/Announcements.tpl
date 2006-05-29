@@ -20,7 +20,7 @@ function ajaxSaveResponse(response)
 function Announcement()
 {
 	show("an_busy");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var announcement=document.getElementById("announcement").value;
 	//var title=document.getElementById("title_announce").value;
 	var urlstring = "module=Users&action=UsersAjax&announcement="+announcement+"&announce_save=yes";

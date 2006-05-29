@@ -48,7 +48,7 @@ function fetchSaveNotify(id)
 {
 	hide('editdiv');
 	show('status');
-	var ajaxObj = new Ajax(ajaxsavenotifyresponse);
+	var ajaxObj = new VtigerAjax(ajaxsavenotifyresponse);
 	var subject = document.getElementById("notifysubject").value;
 	var body = document.getElementById("notifybody").value;
 	urlstring ='action=UsersAjax&module=Users&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id;
@@ -63,7 +63,7 @@ function ajaxsavenotifyresponse(response)
 function fetchEditNotify(id)
 {
 	show('status');
-	var ajaxObj = new Ajax(ajaxnotifyresponse);
+	var ajaxObj = new VtigerAjax(ajaxnotifyresponse);
 	urlstring ='action=UsersAjax&module=Users&file=EditInventoryNotification&record='+id;
 	ajaxObj.process("index.php?",urlstring);
 }

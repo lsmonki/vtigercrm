@@ -85,7 +85,7 @@ function ajaxSaveResponse(response)
 function DeleteProfile(profileid)
 {ldelim}
 	show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var urlstring = "module=Users&action=UsersAjax&file=ProfileDeleteStep1&profileid="+profileid;
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}

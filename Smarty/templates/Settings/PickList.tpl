@@ -169,7 +169,7 @@ function SavePickList(fieldname,module)
 {
 	show('status');
 	Effect.Puff(document.getElementById('editdiv'),{duration:2});
-	var ajaxObj = new Ajax(ajachangeresponse);
+	var ajaxObj = new VtigerAjax(ajachangeresponse);
 	var body = document.getElementById("picklist_values").value;
 	urlstring ='action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body;
 	ajaxObj.process("index.php?",urlstring);
@@ -177,7 +177,7 @@ function SavePickList(fieldname,module)
 function changeModule(pickmodule)
 {
 	show('status');
-	var ajaxObj = new Ajax(ajachangeresponse);
+	var ajaxObj = new VtigerAjax(ajachangeresponse);
 	var module=pickmodule.options[pickmodule.options.selectedIndex].value;
 	urlstring ='action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module='+module;
 	ajaxObj.process("index.php?",urlstring);
@@ -185,7 +185,7 @@ function changeModule(pickmodule)
 function fetchEditPickList(module,fieldname)
 {
 	show('status');
-	var ajaxObj = new Ajax(ajaxnotifyresponse);
+	var ajaxObj = new VtigerAjax(ajaxnotifyresponse);
 	urlstring ='action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname;
 	ajaxObj.process("index.php?",urlstring);
 }

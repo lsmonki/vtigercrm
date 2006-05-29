@@ -37,7 +37,7 @@ function getEmailContents(id)
 		getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
 	{rdelim}
 	gselectedrowid = id;
-	var ajaxObj = new Ajax(ajaxgetResponse);
+	var ajaxObj = new VtigerAjax(ajaxgetResponse);
 	var urlstring ="module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record="+id;
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}
@@ -58,12 +58,12 @@ function ShowFolders(folderid)
 	show("status");
 	if(gFolderid != folderid)
 	{ldelim}	
-    	var ajaxObj = new Ajax(ajaxSaveResponse);
+    	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 		gselectedrowid = 0;
 	{rdelim}
 	else
 	{ldelim}
-		var ajaxObj = new Ajax(ajaxDelResponse);
+		var ajaxObj = new VtigerAjax(ajaxDelResponse);
 	{rdelim}
 	gFolderid = folderid;
 	getObj('search_text').value = '';
@@ -93,7 +93,7 @@ function ShowFolders(folderid)
 function getListViewEntries_js(module,url)
 {ldelim}
 		show("status");
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url;
         ajaxObj.process("index.php?",urlstring);
 

@@ -12,7 +12,7 @@
 function fetchAddSite(id)
 {
 	show('status');
-	var ajaxObj = new Ajax(ajaxeditSiteResp);
+	var ajaxObj = new VtigerAjax(ajaxeditSiteResp);
 	url ='module=Portal&action=PortalAjax&file=Popup&record='+id;
 	ajaxObj.process("index.php?",url);
 }
@@ -35,7 +35,7 @@ function fetchContents(mode)
 		getObj('datatab').className = 'SiteUnSel';
 		getObj('managetab').className = 'SiteSel';
 	}
-	var ajaxObj = new Ajax(ajaxfetchContentsResp);
+	var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
 	url ='action=PortalAjax&mode=ajax&module=Portal&file=ListView&datamode='+mode;
 	ajaxObj.process("index.php?",url);
 }
@@ -49,14 +49,14 @@ function DeleteSite(id)
 	if(confirm("Are you sure you want to delete ?"))
 	{
 		show('status');
-		var ajaxObj = new Ajax(ajaxfetchContentsResp);
+		var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
 		url ='action=PortalAjax&mode=ajax&file=Delete&module=Portal&record='+id;
 		ajaxObj.process("index.php?",url);
 	}
 }
 function SaveSite(id)
 {
-	var ajaxObj = new Ajax(ajaxfetchContentsResp);
+	var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
 	if (document.getElementById('portalurl').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 		alert('Site Url cannot be empty')
 		return false;

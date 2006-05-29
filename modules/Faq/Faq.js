@@ -51,7 +51,7 @@ function massDelete()
 	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
     {
 		show("status");
-		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 		var urlstring ="module=Users&action=massdelete&return_module=Faq&idlist="+idstring;
 	    ajaxObj.process("index.php?",urlstring);
 	}

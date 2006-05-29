@@ -18,7 +18,7 @@
 function getImportSavedMap(impoptions)
 {ldelim}
 	//show('status');
-	var ajaxObj = new Ajax(ajaxImportSavedMapResponse);
+	var ajaxObj = new VtigerAjax(ajaxImportSavedMapResponse);
 	var mapping = impoptions.options[impoptions.options.selectedIndex].value;
 	var urlstring = "module=Import&mapping="+mapping+"&action=ImportAjax";
 	ajaxObj.process("index.php",urlstring);

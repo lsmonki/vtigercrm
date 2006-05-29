@@ -65,9 +65,9 @@ function massDelete()
 			getObj('search_text').value = '';
 			show("status");
 			if(!delete_selected_row)
-				var ajaxObj = new Ajax(ajaxSaveResponse);
+				var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 			else	
-				var ajaxObj = new Ajax(ajaxDelResponse);
+				var ajaxObj = new VtigerAjax(ajaxDelResponse);
 			var urlstring ="module=Users&action=massdelete&folderid="+gFolderid+"&return_module=Emails&idlist="+idstring;
 		    ajaxObj.process("index.php?",urlstring);
 		}
@@ -83,7 +83,7 @@ function DeleteEmail(id)
 		getObj('search_text').value = '';
 		gselectedrowid = 0;
 		show("status");
-		var ajaxObj = new Ajax(ajaxDelResponse);
+		var ajaxObj = new VtigerAjax(ajaxDelResponse);
 		var urlstring ="module=Users&action=massdelete&return_module=Emails&folderid="+gFolderid+"&idlist="+id;
 	   	ajaxObj.process("index.php?",urlstring);
 	}
@@ -98,7 +98,7 @@ function Searchfn()
 	var osearch_field = document.getElementById('search_field');
 	var search_field = osearch_field.options[osearch_field.options.selectedIndex].value;
 	var search_text = document.getElementById('search_text').value;
-	var ajaxObj = new Ajax(ajaxDelResponse);
+	var ajaxObj = new VtigerAjax(ajaxDelResponse);
 	var urlstring ="module=Emails&action=EmailsAjax&ajax=true&file=ListView&folderid="+gFolderid+"&search=true&search_field="+search_field+"&search_text="+search_text;
     ajaxObj.process("index.php?",urlstring);
 }

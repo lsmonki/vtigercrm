@@ -231,7 +231,7 @@ function ajaxSaveResponse(response)
 function callEditDiv(modulename,mode,id)
 {ldelim}
 	show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var urlstring = "module=Users&action=UsersAjax&orgajax=true&mode="+mode+"&sharing_module="+modulename+"&shareid="+id;
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}

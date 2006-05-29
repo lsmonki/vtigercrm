@@ -127,7 +127,7 @@ Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", s
     Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
 function generateReport(id)
 {
-	var ajaxObj = new Ajax(ajaxgenReportResp);
+	var ajaxObj = new VtigerAjax(ajaxgenReportResp);
 	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
 	var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;

@@ -123,7 +123,7 @@ function ajaxSaveResponse(response)
 function DeleteRole(roleid)
 {
     //show("an_busy");
-    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
     var urlstring = "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid;
     ajaxObj.process("index.php?",urlstring);
 }

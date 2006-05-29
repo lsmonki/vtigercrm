@@ -93,7 +93,7 @@ function showDefaultCustomView(selectView)
 {
 
 		show("status");
-		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 		var viewName = selectView.options[selectView.options.selectedIndex].value;
 		var urlstring ="module=Activities&action=ActivitiesAjax&file=ListView&ajax=true&viewname="+viewName;
 	    ajaxObj.process("index.php?",urlstring);
@@ -144,7 +144,7 @@ function massDelete()
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{
 			show("status");
-			var ajaxObj = new Ajax(ajaxSaveResponse);
+			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 			var urlstring ="module=Users&action=massdelete&return_module=Activities&viewname="+viewid+"&idlist="+idstring;
 	    	ajaxObj.process("index.php?",urlstring);
 		}

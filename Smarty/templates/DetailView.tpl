@@ -28,7 +28,7 @@ function ajaxSaveResponse(response)
 
 function callConvertLeadDiv(id)
 {ldelim}
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring = "module=Leads&action=LeadsAjax&file=ConvertLead&record="+id;
         ajaxObj.process("index.php?",urlstring);
 {rdelim}
@@ -313,7 +313,7 @@ function tagvalidate()
 
 <script>
 var data = "module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD";
-var ajaxObj = new Ajax(ajaxTagCloudResp);
+var ajaxObj = new VtigerAjax(ajaxTagCloudResp);
 ajaxObj.process("index.php?",data);
 function ajaxTagCloudResp(response)
 {ldelim}

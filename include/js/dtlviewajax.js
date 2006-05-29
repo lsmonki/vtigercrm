@@ -95,7 +95,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
      data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
      show("vtbusy_info");
      
-     var ajaxObj = new Ajax(dtlViewAjaxResponse);
+     var ajaxObj = new VtigerAjax(dtlViewAjaxResponse);
      ajaxObj.process("index.php?",data);
      if(uitype == '13')
      {
@@ -185,7 +185,7 @@ function SaveTag(txtBox,crmId,module)
 	document.getElementById(txtBox).value ='';
     var data = "module=" + module + "&action=" + module + "Ajax&file=TagCloud&recordid=" + crmId + "&file=TagCloud&ajxaction=SAVETAG&tagfields=" +tagValue;
     
-	var ajaxObj = new Ajax(dtlViewAjaxTagResponse);
+	var ajaxObj = new VtigerAjax(dtlViewAjaxTagResponse);
     ajaxObj.process("index.php?",data);
    	show("vtbusy_info");
 }

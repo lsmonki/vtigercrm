@@ -35,7 +35,7 @@ function sensex_info()
         if(Ticker!='')
         {ldelim}
                 show('vtbusy_info');
-                var ajaxObj = new Ajax(ajaxResponse);
+                var ajaxObj = new VtigerAjax(ajaxResponse);
                 //var Ticker = document.getElementById('tickersymbol').value;
                 var urlstring = "module={$MODULE}&action=Tickerdetail&tickersymbol="+Ticker;
                 ajaxObj.process("index.php?",urlstring);

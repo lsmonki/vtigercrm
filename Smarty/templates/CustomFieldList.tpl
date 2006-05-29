@@ -16,7 +16,7 @@ function ajaxSaveResponse(response)
 {rdelim}
 function getCustomFieldList(customField)
 {ldelim}
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var modulename = customField.options[customField.options.selectedIndex].value;
 	var urlstring ="module=Settings&action=SettingsAjax&file=CustomFieldList&fld_module="+modulename+"&parenttab=Settings&ajax=true";
 	ajaxObj.process("index.php?",urlstring);
@@ -37,7 +37,7 @@ function ajaxCFSaveResponse(response)
 {rdelim}
 function getCreateCustomFieldForm(customField,id,tabid,ui)
 {ldelim}
-        var ajaxObj = new Ajax(ajaxCFSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxCFSaveResponse);
         var modulename = customField;
         var urlstring ="module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module="+modulename+"&parenttab=Settings&ajax=true&fieldid="+id+"&tabid="+tabid+"&uitype="+ui;
         ajaxObj.process("index.php?",urlstring);

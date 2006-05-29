@@ -93,7 +93,7 @@ function massDelete(module)
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{
 			show("status");
-			var ajaxObj = new Ajax(ajaxSaveResponse);
+			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 			var urlstring ="module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring;
 	    	ajaxObj.process("index.php?",urlstring);
 		}
@@ -108,7 +108,7 @@ function showDefaultCustomView(selectView,module)
 {
 
 		show("status");
-		var ajaxObj = new Ajax(ajaxSaveResponse);
+		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 		var viewName = selectView.options[selectView.options.selectedIndex].value;
 		var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName;
 	    ajaxObj.process("index.php?",urlstring);
@@ -118,7 +118,7 @@ function showDefaultCustomView(selectView,module)
 function getListViewEntries_js(module,url)
 {
         show("status");
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
 	if(document.getElementById('search_url').value!='')
         	urlstring = urlstring+document.getElementById('search_url').value;

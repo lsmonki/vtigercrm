@@ -2807,7 +2807,7 @@ foreach($alter_query_array18 as $query)
 
 		if(crate != 0 && crate > 0)
 		{
-			var ajaxObj = new Ajax(ajaxSaveResponse);
+			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 			url = 'module=Migration&action=updateCurrency&ajax=1&crate='+crate;
 			ajaxObj.process("index.php?",url);
 		}

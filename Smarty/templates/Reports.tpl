@@ -121,7 +121,7 @@ function DeleteFolder(id)
 	var fldr_name = getObj(title).innerHTML;
 	if(confirm("Are you sure you want to delete the folder  "+fldr_name +" ?"))
 	{
-		var ajaxObj = new Ajax(ajaxDelFolderResp);
+		var ajaxObj = new VtigerAjax(ajaxDelFolderResp);
 		url ='action=ReportsAjax&mode=ajax&file=DeleteReportFolder&module=Reports&record='+id;
 		ajaxObj.process("index.php?",url);
 	}
@@ -140,7 +140,7 @@ function AddFolder()
 	else
 	{
 		fninvsh('orgLay');
-		var ajaxObj = new Ajax(ajaxDelFolderResp);
+		var ajaxObj = new VtigerAjax(ajaxDelFolderResp);
 		var foldername = getObj('folder_name').value;
 		var folderdesc = getObj('folder_desc').value;
 		getObj('folder_name').value = '';
@@ -207,7 +207,7 @@ function massDeleteReport()
 	{
 		if(confirm("Are you sure you want to delete the selected "+count+" reports ?"))
         {
-			var ajaxObj = new Ajax(ajaxDelFolderResp);
+			var ajaxObj = new VtigerAjax(ajaxDelFolderResp);
 			url ='action=ReportsAjax&mode=ajax&file=Delete&module=Reports&idlist='+idstring;
 			ajaxObj.process("index.php?",url);
 		}else
@@ -225,7 +225,7 @@ function DeleteReport(id)
 {
 	if(confirm("Are you sure you want to delete this report ?"))
 	{
-		var ajaxObj = new Ajax(ajaxDelReportResp);
+		var ajaxObj = new VtigerAjax(ajaxDelReportResp);
 		url ='action=ReportsAjax&file=Delete&module=Reports&record='+id;
 		ajaxObj.process("index.php?",url);
 	}else
@@ -277,7 +277,7 @@ function MoveReport(id,foldername)
 	{
 		if(confirm("Are you sure you want to move this report to "+foldername+" folder ?"))
         {
-			var ajaxObj = new Ajax(ajaxDelReportResp);
+			var ajaxObj = new VtigerAjax(ajaxDelReportResp);
 			url ='action=ReportsAjax&file=ChangeFolder&module=Reports&folderid='+id+'&idlist='+idstring;
 			ajaxObj.process("index.php?",url);
 		}else

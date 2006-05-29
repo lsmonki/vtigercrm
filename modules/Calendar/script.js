@@ -387,7 +387,7 @@ function ajaxCalSaveResponse(response)
 }
 
 function fnRedirect(view,hour,day,month,year){
-	var ajaxObj = new Ajax(ajaxCalSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxCalSaveResponse);
 	var tagName =  document.getElementById('viewBox');
 	var OptionData = tagName.options[tagName.selectedIndex].value;
 	if(OptionData == 'hourview'){
@@ -427,7 +427,7 @@ function ajaxMiniCalSaveResponse(response)
 
 function getMiniCal()
 {
-	var ajaxObj = new Ajax(ajaxMiniCalSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxMiniCalSaveResponse);
 	var urlstring ="module=Calendar&action=CalendarAjax&type=minical&parenttab=My Home Page&ajax=true";
 	ajaxObj.process("index.php?",urlstring);
 	
@@ -435,7 +435,7 @@ function getMiniCal()
 
 function getCalSettings()
 {
-	 var ajaxObj = new Ajax(ajaxCalSettingsSaveResponse);
+	 var ajaxObj = new VtigerAjax(ajaxCalSettingsSaveResponse);
 	 var urlstring ="module=Calendar&action=CalendarAjax&type=settings&parenttab=My Home Page&ajax=true";
 	 ajaxObj.process("index.php?",urlstring);
 }

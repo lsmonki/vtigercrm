@@ -85,7 +85,7 @@ function callSearch(searchtype)
     {rdelim}
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
     search_txt_val=document.basicSearch.search_text.value;
-    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
     var urlstring = '';
     if(searchtype == 'Basic')
     {ldelim}
@@ -105,7 +105,7 @@ function alphabetic(module,url,dataid)
 	getObj(data_td_id).className = 'searchAlph';
     {rdelim}
     getObj(dataid).className = 'searchAlphselected';
-    var ajaxObj = new Ajax(ajaxSaveResponse);
+    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
     var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     urlstring +=gethiddenelements();
     ajaxObj.process("index.php?",urlstring);
@@ -130,7 +130,7 @@ function ajaxSaveResponse(response)
 {rdelim}
 function getListViewEntries_js(module,url)
 {ldelim}
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&popuptype="+popuptype+"&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();

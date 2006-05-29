@@ -16,7 +16,7 @@
 function dup_validation()
 {ldelim}
         //show("status");
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var groupname = document.getElementById('groupName').value;
         var mode = getObj('mode').value;
         var groupid = getObj('groupId').value;

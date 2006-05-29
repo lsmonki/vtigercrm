@@ -146,7 +146,7 @@
 <script>
 function fetch_clock()
 {ldelim}
-	var ajaxObj = new Ajax(ajaxClockResponse);
+	var ajaxObj = new VtigerAjax(ajaxClockResponse);
 	var urlstring = "module=Utilities&action=UtilitiesAjax&file=Clock";
 	ajaxObj.process("index.php?",urlstring);
 
@@ -158,7 +158,7 @@ function ajaxClockResponse(response)
 {rdelim}
 function fetch_calc()
 {ldelim}
-	var ajaxObj = new Ajax(ajaxCalcResponse);
+	var ajaxObj = new VtigerAjax(ajaxCalcResponse);
 	var urlstring = "module=Utilities&action=UtilitiesAjax&file=Calculator";
 	ajaxObj.process("index.php?",urlstring);
 
@@ -172,7 +172,7 @@ function ajaxCalcResponse(response)
 
 function Announcement_rss()
 {ldelim}
-	var ajaxObj = new Ajax(ajaxRssResponse);
+	var ajaxObj = new VtigerAjax(ajaxRssResponse);
 	var urlstring = "module=Users&action=UsersAjax&announce_rss=yes";
 		ajaxObj.process("index.php?",urlstring);
 
@@ -190,7 +190,7 @@ setInterval("Announcement_rss()",300000)
 function QCreate(qcoptions)
 {ldelim}
         show("status");
-        var ajaxObj = new Ajax(ajaxQCreateResponse);
+        var ajaxObj = new VtigerAjax(ajaxQCreateResponse);
         var module = qcoptions.options[qcoptions.options.selectedIndex].value;
 	if(module == 'Events')
                 var urlstring = "module=Activities&action=ActivitiesAjax&file=QuickCreate&activity_mode=Events";

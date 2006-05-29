@@ -57,7 +57,7 @@ responseXML	DOM-compatible document object of data returned from server process
 status	Numeric code returned by server, such as 404 for "Not Found" or 200 for "OK"
 statusText	String message accompanying the status code
 */
-function Ajax(cb)
+function VtigerAjax(cb)
 {
   var me = this;
   this.requester = getRequester();

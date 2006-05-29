@@ -53,7 +53,7 @@ function ajaxmoduleresponse(response)
 function assignmodulefn(mode)
 {
 	show('status');
-	var ajaxObj = new Ajax(ajaxmoduleresponse);
+	var ajaxObj = new VtigerAjax(ajaxmoduleresponse);
 	var urlstring ='';
 	for(i = 0;i < document.support_owners.elements.length;i++)
 	{

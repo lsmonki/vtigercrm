@@ -24,7 +24,7 @@ function ajaxSetDefault(response)
 function GetRssFeedList(id)
 {
 	show('status');	
-	var ajaxObj = new Ajax(ajaxRssFeedResponse);
+	var ajaxObj = new VtigerAjax(ajaxRssFeedResponse);
 	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=ListView&directmode=ajax&record='+id;
 	ajaxObj.process("index.php?",urlstring);
 }
@@ -42,7 +42,7 @@ function DeleteRssFeeds(id)
 		show('status');	
 		var feed = 'feed_'+id;
 		document.getElementById(feed).parentNode.removeChild(document.getElementById(feed));
-		var ajaxObj = new Ajax(ajaxRssFeedResponse);
+		var ajaxObj = new VtigerAjax(ajaxRssFeedResponse);
 		var urlstring = 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id;
 		ajaxObj.process("index.php?",urlstring);
 	}
@@ -51,7 +51,7 @@ function DeleteRssFeeds(id)
 function SaveRssFeeds()
 {
 	show('status');	
-	var ajaxObj = new Ajax(ajaxRssSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxRssSaveResponse);
 	rssurl = document.getElementById('rssurl').value;
 	rssurl = rssurl.replace(/&/gi,"##amp##");
 	var category = document.getElementById('rsscategory')[document.getElementById('rsscategory').selectedIndex].value;
@@ -200,14 +200,14 @@ function makedefaultRss(id)
 	if(id != '')
 	{ldelim}
 		show('status');	
-		var ajaxObj = new Ajax(ajaxSetDefault);
+		var ajaxObj = new VtigerAjax(ajaxSetDefault);
 		var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id;
 		ajaxObj.process("index.php?",urlstring);
 	{rdelim}
 {rdelim}
 function getrssfolders()
 {ldelim}
-	var ajaxObj = new Ajax(ajaxrssfolders);
+	var ajaxObj = new VtigerAjax(ajaxrssfolders);
 	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=ListView&folders=true';
 	ajaxObj.process("index.php?",urlstring);
 {rdelim}

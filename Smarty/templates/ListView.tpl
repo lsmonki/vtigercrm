@@ -34,7 +34,7 @@ function callSearch(searchtype)
 {ldelim}
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
@@ -73,7 +73,7 @@ function alphabetic(module,url,dataid)
         {rdelim}
         getObj(dataid).className = 'searchAlphselected';
         show("status");
-        var ajaxObj = new Ajax(ajaxSaveResponse);
+        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
         ajaxObj.process("index.php?",urlstring);
 
@@ -400,7 +400,7 @@ function alphabetic(module,url,dataid)
 function ajaxChangeStatus(statusname)
 {
 	show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var viewid = document.massdelete.viewname.value;
 	var idstring = document.massdelete.idlist.value;
 	if(statusname == 'status')

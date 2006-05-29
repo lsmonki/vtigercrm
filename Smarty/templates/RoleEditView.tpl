@@ -14,7 +14,7 @@
 function dup_validation()
 {ldelim}
 	//show("status");
-	var ajaxObj = new Ajax(ajaxSaveResponse);
+	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	var rolename = document.getElementById('rolename').value;
 	var mode = getObj('mode').value;
 	var roleid = getObj('roleid').value;
