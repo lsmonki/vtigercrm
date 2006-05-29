@@ -337,6 +337,9 @@ class Migration
 			echo '<br><font color="red"><b>Dump could not be applied correctly. so your previous database restored.</b></font>';
 			include("modules/Migration/MigrationStep1.php");
 		}
+
+		//Now we should recalculate the user and sharing privileges
+		RecalculateSharingRules();
 	}
 
 }
