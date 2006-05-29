@@ -290,7 +290,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 
 				$this->fill_in_additional_list_fields();
 
-				$list[] = $this;
+				$list[] = clone($this);   //added clone to support PHP5
 			}
 		}
 
@@ -327,7 +327,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 
 				$this->fill_in_additional_list_fields();
 
-				$list[] = $this;
+				$list[] = clone($this);         //added clone tosupport PHP5
 			}
 		}
 
