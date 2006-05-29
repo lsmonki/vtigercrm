@@ -1410,11 +1410,14 @@ $log->debug("Exiting getValue method ...");
                                                  if($imagename != '')
                                                  {
                                                          $imgpath = "test/contact/".$imagename;
-                                                         $contact_image='&nbsp;&nbsp;<img align="right" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=hide("dynloadarea");>';
+                                                         $contact_image='<img align="absmiddle" src="'.$imgpath.'" width="20" height="20" border="0" onMouseover=modifyimage("dynloadarea","'.$imgpath.'"); onMouseOut=fnhide("dynloadarea");>';
                                                  }
-                                        }
+						$value = '<table width=100% border=0 cellpadding=0 cellspacing=0><tr><td align="left"><a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a></td><td align="right">'.$contact_image.'</td></tr></table>';
+					}else
+					{
 					//Commented to give link even to the first name - Jaguar
 					$value = $contact_image.'<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
+					}
 				}
 				elseif($module == "Activities")
                                 {
