@@ -1133,6 +1133,13 @@ function hide(divId)
     id.style.display = 'none';
 
 }
+function fnhide(divId)
+{
+
+    var id = document.getElementById(divId);
+
+    id.style.display = 'none';
+}
 
 function fnLoadValues(obj1,obj2,SelTab,unSelTab){
 
