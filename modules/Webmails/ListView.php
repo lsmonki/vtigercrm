@@ -312,7 +312,7 @@ $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("MODULE","Webmails");
 $smarty->assign("SINGLE_MOD",'Webmails');
 $smarty->assign("BUTTONS",$other_text);
-$smarty->assign("CATEGORY","My  Home Page");
+$smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
