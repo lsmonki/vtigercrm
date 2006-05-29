@@ -183,17 +183,11 @@ function ajaxSaveUserResponse(response)
 				    <td span class="dvtCellInfo">{$LEAD_VIEW}</td>
 				 </tr>
 				 <tr>
-				   <td class="dvtCellLabel" align="right">{$UMOD.LBL_COLOR}</td>
-					<td class="dvtCellInfo">&nbsp;&nbsp;{$CAL_COLOR}</td>
-				    <td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
-                                    <td span class="dvtCellInfo">{$CURRENCY_NAME}</td>
+				   <td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
+                                   <td span class="dvtCellInfo">{$CURRENCY_NAME}</td>
+				   <td class="dvtCellLabel" align="right"></td>
+			 	   <td class="dvtCellInfo">&nbsp;</td>
 				 </tr>
-				 <tr>
-                                   <td class="dvtCellLabel" align="right">{$UMOD.LBL_CAL_HRFORMAT}</td>
-                                        <td class="dvtCellInfo">&nbsp;&nbsp;{$CAL_HRFORMAT}</td>
-                                    <td class="dvtCellLabel" align="right">{$UMOD.LBL_CAL_DURATION}</td>
-                                    <td class="dvtCellInfo">{$CAL_HRDURATION}</td>
-                                 </tr>
 				 <tr><td colspan="4" height="30">&nbsp;</td></tr>
 				 </table>
 				 </td></tr>
