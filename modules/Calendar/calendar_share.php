@@ -70,7 +70,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 					}
 				?>
 			</select><br>
-			<input type="checkbox" name="hour_format" value="24">&nbsp;<?echo $mod_strings['LBL_USE24']?>
+			<input type="checkbox" name="hour_format" <? if($current_user->hour_format == '24'){?> checked <? } ?> value="24">&nbsp;<?echo $mod_strings['LBL_USE24']?>
 		</td>
 	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dotted #CCCCCC;"></td></tr>
