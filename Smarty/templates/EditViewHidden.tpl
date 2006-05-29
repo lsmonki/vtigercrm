@@ -52,7 +52,7 @@
 
 {elseif $MODULE eq 'HelpDesk'}
 	<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
 
 {elseif $MODULE eq 'Leads'}
