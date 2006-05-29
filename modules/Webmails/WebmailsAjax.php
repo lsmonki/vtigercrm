@@ -75,9 +75,9 @@ if($_REQUEST["command"] == "check_mbox_all") {
 			$boxes[$i]["name"] = $mailbox;
 			if($val == sizeof($search))
 				$boxes[$i]["newmsgs"] = 0;
-			else {
-				$boxes[$i]["newmsgs"] = (sizeof($search)-$val);
-				$_SESSION["mailboxes"][$mailbox] = ($val+sizeof($search));
+			elseif($val < sizeof($search)) {
+				$boxes[$i]["newmsgs"] = (sizeof($search) - $val);
+				$_SESSION["mailboxes"][$key] = (sizeof($search));
 			}
 			$i++;
 		}

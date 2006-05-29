@@ -99,7 +99,7 @@ function check_in_all_boxes(mymbox) {
 						if(mbox != mymbox) {
                                         		var mbox = data.msgs[i].msg.box;
                                         		var numnew = parseInt(data.msgs[i].msg.newmsgs);
-							
+
 							var read  = parseInt($(mbox+"_read").innerHTML);
 							$(mbox+"_read").innerHTML = (read+numnew);
 							var unread  = parseInt($(mbox+"_unread").innerHTML);
