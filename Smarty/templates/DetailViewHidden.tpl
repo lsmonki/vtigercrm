@@ -84,6 +84,12 @@
 	<input type="hidden" name="email_directing_module">
 	{$HIDDEN_PARENTS_LIST}
 {elseif $MODULE eq 'Products' || $MODULE eq 'Vendors' || $MODULE eq 'PriceBooks'}
+	{if $MODULE eq 'Products'}
+		<input type="hidden" name="product_id" value="{$id}">
+	{elseif $MODULE eq 'Vendors'}
+		<input type="hidden" name="vendor_id" value="{$id}">
+	{/if}
+	<input type="hidden" name="parent_id" value="{$id}">
 	<input type="hidden" name="module" value="{$MODULE}">
         <input type="hidden" name="action">
         <input type="hidden" name="isDuplicate" value=false>
