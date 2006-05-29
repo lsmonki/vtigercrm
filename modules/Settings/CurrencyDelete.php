@@ -9,17 +9,13 @@
 *
  ********************************************************************************/
 
-$currency_name = $_REQUEST['currency_name'];
-$currency_code= $_REQUEST['currency_code'];
-$currency_symbol= $_REQUEST['currency_symbol'];
-$conversion_rate= $_REQUEST['conversion_rate'];
-$currency_status= $_REQUEST['currency_status'];
-$id = $_REQUEST['record'];
-$sql = "delete from currency_info where id =".$id;
+$del_id = $_REQUEST['delete_currency_id'];
+$tran_id = $_REQUEST['transfer_currency_id'];
+$sql0 = "update users set currency_id=".$tran_id." where currency_id=".$del_id;
+$adb->query($sql0);
+$sql = "delete from currency_info where id =".$del_id;
 $adb->query($sql);
-
-header("Location:index.php?module=Settings&action=CurrencyListView&parenttab=".$_REQUEST['parenttab']);
-
+header("Location: index.php?action=SettingsAjax&module=Settings&file=CurrencyListView&ajax=true");
 
 ?>
 
