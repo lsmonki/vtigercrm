@@ -21,9 +21,13 @@
    <tr>
 	<td>&nbsp;</td>
    </tr>
+
+   <!-- This if condition is added to avoid display Tools heading because now there is no options in Tools. -->
+   {if $MODULE neq 'PurchaseOrder' && $MODULE neq 'Invoice'}
    <tr>
 	<td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td>
    </tr>
+   {/if}
 
 
 
@@ -33,21 +37,28 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">Create Quote</a> 
+			<a href="javascript: document.DetailView.module.value='Quotes'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create Quote</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">Create Invoice</a> 
+			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create Invoice</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">Create SalesOrder</a> 
+			<a href="javascript: document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create SalesOrder</a> 
 		</td>
 	   </tr>
+	   <tr>
+		<td align="left" style="padding-left:10px;">
+			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create PurchaseOrder</a> 
+		</td>
+	   </tr>
+	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
@@ -66,6 +77,13 @@
 			<a href="#" class="webMnu">List Pending Old SalesOrders</a> 
 		</td>
 	   </tr>
+	   <tr>
+		<td align="left" style="padding-left:10px;">
+			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+			<a href="#" class="webMnu">List Pending Old PurchaseOrders</a> 
+		</td>
+	   </tr>
+	   -->
 	   <!-- Product Actions ends -->
 
 	{elseif $MODULE eq 'Vendors'}
@@ -73,29 +91,40 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">Create PurchaseOrder</a> 
+			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Vendors'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.vendor_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create PurchaseOrder</a> 
 		</td>
 	   </tr>
+	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
 			<a href="#" class="webMnu">List PurchaseOrders for this Vendor</a> 
 		</td>
 	   </tr>
+	   -->
 	   <!-- Vendors Actions ends -->
 
 	{elseif $MODULE eq 'PurchaseOrder'}
 	   <!-- PO Actions starts -->
+	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
 			<a href="#" class="webMnu">List Other PurchaseOrders to this Vendor</a> 
 		</td>
 	   </tr>
+	   -->
 	   <!-- PO Actions ends -->
 
 	{elseif $MODULE eq 'SalesOrder'}
 	   <!-- SO Actions starts -->
+	   <tr>
+		<td align="left" style="padding-left:10px;">
+			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
+			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.record.value='{$ID}'; document.DetailView.convertmode.value='sotoinvoice'; document.DetailView.submit();" class="webMnu">Create Invoice</a> 
+		</td>
+	   </tr>
+	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
@@ -108,6 +137,7 @@
 			<a href="#" class="webMnu">List Linked Invoices</a> 
 		</td>
 	   </tr>
+	   -->
 	   <!-- SO Actions ends -->
 
 	{elseif $MODULE eq 'Quotes'}
@@ -128,18 +158,14 @@
 
 	{elseif $MODULE eq 'Invoice'}
 	   <!-- Invoice Actions starts -->
+	   <!--
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
 			<a href="#" class="webMnu">List Linked Quotes</a> 
 		</td>
 	   </tr>
-	   <tr>
-		<td align="left" style="padding-left:10px;">
-			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">Generare SalesOrder</a> 
-		</td>
-	   </tr>
+	   -->
 	   <!-- Invoice Actions ends -->
 
 	{/if}
@@ -149,47 +175,41 @@
 
 
 
-
+<!-- Following condition is added to avoid the Tools section in Products and Vendors because we are not providing the Print and Email Now links throughout all the modules. when we provide these links we will remove this if condition -->
+{if $MODULE neq 'Products' && $MODULE neq 'Vendors'}
 
    <tr>
 	<td align="left">
-		<span class="genHeaderSmall">Other Functions</span><br /> 
+		<span class="genHeaderSmall">Tools</span><br /> 
 	</td>
    </tr>
 
 
-<!-- 
-   <tr>
-	<td align="left" style="padding-left:10px;">
-		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-		<a href="#" class="webMnu">Use Customer Name</a> 
-	</td>
-   </tr>
-   <tr>
-	<td align="left" style="padding-left:10px;">
-		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-		<a href="#" class="webMnu">Use Shipping Address </a> 
-	</td>
-   </tr>
--->
 
 
-<!-- This following Export To PDF link will come for PO, SO, Quotes and Invoice -->
+<!-- To display the Export To PDF link for PO, SO, Quotes and Invoice - starts -->
 {if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
 
+	{if $MODULE eq 'SalesOrder'}
+		{assign var=export_pdf_action value="CreateSOPDF"}
+	{else}
+		{assign var=export_pdf_action value="CreatePDF"}
+	{/if}
+
    <tr>
 	<td align="left" style="padding-left:10px;">
 		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-		<a href="#" class="webMnu">Export To PDF</a> 
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='{$export_pdf_action}'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">Export To PDF</a> 
 	</td>
    </tr>
 
 {/if}
+<!-- To display the Export To PDF link for PO, SO, Quotes and Invoice - ends -->
 
 
 
    <!-- The following links are common to all the inventory modules -->
-   <tr>
+<!--   <tr>
 	<td align="left" style="padding-left:10px;">
 		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
 		<a href="#" class="webMnu">Print</a> 
@@ -201,6 +221,14 @@
 		<a href="#" class="webMnu">Email Now </a> 
 	</td>
    </tr>
+-->
+
+{/if}
+<!-- Above if condition is added to avoid the Tools section in Products and Vendors because we are not providing the Print and Email Now links throughout all the modules. when we provide these links we will remove this if condition -->
+
+
+
+
 </table>
 
 
