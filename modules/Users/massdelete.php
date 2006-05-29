@@ -59,13 +59,14 @@ if($returnmodule == 'Emails')
 	}
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&folderid=".$folderid."&ajax=delete&file=ListView&errormsg=".$errormsg);
 }
+elseif($returnmodule == 'Calendar')
+{
+	header("Location: index.php?module=".$returnmodule."&action=index&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&parenttab=My Home Page");
+}
+			
 elseif($returnmodule!='Faq')
 {
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete&file=ListView&viewname=".$viewid."&errormsg=".$errormsg);
-}
-elseif($returnmodule == 'Calendar')
-{
-	        header("Location: index.php?module=".$returnmodule."&action=index&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&parenttab=My Home Page");
 }
 else
 {
