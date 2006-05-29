@@ -145,7 +145,7 @@ $listview_entries = array();
 
 // draw a row for the listview entry
 function show_msg($mails,$start_message) {
- 	global $mbox,$displayed_msgs,$show_hidden;
+ 	global $mbox,$displayed_msgs,$show_hidden,$new_msgs;
 
   	$num = $mails[$start_message]->msgno;
   	// TODO: scan the current db tables to find a
@@ -166,9 +166,10 @@ function show_msg($mails,$start_message) {
 	$displayed_msgs--;
 	} elseif ($mails[$start_message]->deleted && $show_hidden)
 		$flags = "<tr id='row_".$num."' class='deletedRow'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
-  	elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent)
+  	elseif (!$mails[$start_message]->seen || $mails[$start_message]->recent) {
 		$flags = "<tr class='unread_email' id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
-	else 
+		$new_msgs++;
+	} else 
 		$flags = "<tr id='row_".$num."'><td width='2px'><input type='checkbox' name='checkbox_".$num."' class='msg_check'></td><td colspan='1'>";
 
   	// Attachment Icons
@@ -245,6 +246,7 @@ if(isset($_REQUEST["search"])) {
 // MAIN LOOP
 // Main loop to create listview entries
 $displayed_msgs=0;
+$new_msgs=0;
 $i=1;
 while ($i<$c) {
 	if(is_array($searchlist)) {
@@ -261,7 +263,7 @@ while ($i<$c) {
 }
 
 
-
+// Build folder list and move_to dropdown box
 $list = imap_getmailboxes($mbox, "{".$imapServerAddress."}", "*");
 sort($list);
 $i=0;
@@ -276,16 +278,18 @@ if (is_array($list)) {
 		else
 			$img = "webmail_downarrow.gif";
 
-		$_SESSION["mailboxes"][$i] = $tmpval;
 		$i++;
 
-		if ($mailbox == $tmpval) {
+		if ($_REQUEST["mailbox"] == $tmpval) {
                         $boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
-			$box = imap_mailboxmsginfo($mbox);
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->Unread.'</span> of <span id="'.$tmpval.'_read">'.$box->Nmsgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
+
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span> of <span id="'.$tmpval.'_read">'.$numEmails.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 		} else {
-			$tmpbox = getImapMbox($tmpval,$temprow);
+			$tmpbox = getImapMbox($tmpval,$temprow,"true");
 			$box = imap_mailboxmsginfo($tmpbox);
+			$_SESSION["mailboxes"][$tmpval] = $box->Unread;
+
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
 			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->Unread.'</span> of <span id="'.$tmpval.'_read">'.$box->Nmsgs.'</span>)</span></li>';
 			imap_close($tmpbox);

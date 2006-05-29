@@ -67,14 +67,18 @@ if($_REQUEST["command"] == "check_mbox_all") {
 	$boxes = array();
 	$i=0;
         foreach ($_SESSION["mailboxes"] as $key => $val) {
-		$mailbox=$val;
-		$mbox = getImapMbox($mailbox,$temprow);
+		$mailbox=$key;
+		$mbox = getImapMbox($mailbox,$temprow,"true");
 
 		$search = imap_search($mbox, "NEW ALL");
 		if($search != false) {
 			$boxes[$i]["name"] = $mailbox;
-			$boxes[$i]["newmsgs"] = sizeof($search);
-
+			if($val == sizeof($search))
+				$boxes[$i]["newmsgs"] = 0;
+			else {
+				$boxes[$i]["newmsgs"] = (sizeof($search)-$val);
+				$_SESSION["mailboxes"][$mailbox] = ($val+sizeof($search));
+			}
 			$i++;
 		}
 		imap_close($mbox);

@@ -2,7 +2,8 @@ function load_webmail(mid) {
         var node = $("row_"+mid);
 	if(node.className == "unread_email") {
 		var unread  = parseInt($(mailbox+"_unread").innerHTML);
-		$(mailbox+"_unread").innerHTML = (unread-1);
+		if(unread != 0)
+			$(mailbox+"_unread").innerHTML = (unread-1);
 
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
