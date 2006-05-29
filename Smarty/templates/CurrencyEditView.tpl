@@ -64,13 +64,16 @@
 						</tr>
 						<tr>
 							<td align="right"><b>{$MOD.LBL_CURRENCY_CRATE}  : </b></td>
-							<td><input type="text" name="conversion_rate" value="{$CONVERSION_RATE}" class="txtBox" /></td>
+							<td>
+								<input type="text" name="conversion_rate" value="{$CONVERSION_RATE}" class="txtBox" />
+								<br>(Eg: 1 U.S. Dollar equal to 0.78 Euro) 
+							</td>
 						</tr>
 						<tr>
-							<td align="right"><b>{$MOD.LBL_CURRENCY_STATUS}  : </b></td>
-							<td><select name="currency_status" value="{$CURRENCY_STATUS}" class="importBox">
-								<option value="Active" "{$ACTSELECT}">{$MOD.LBL_ACTIVE}</option>
-					        	        <option value="Inactive" "{$INACTSELECT}">{$MOD.LBL_INACTIVE}</option>
+							<td align="right"><b>{$MOD.LBL_CURRENCY_STATUS} : </b></td>
+							<td><select name="currency_status" {$STATUS_DISABLE} class="importBox">
+								<option value="Active"  {$ACTSELECT}>{$MOD.LBL_ACTIVE}</option>
+					        	        <option value="Inactive" {$INACTSELECT}>{$MOD.LBL_INACTIVE}</option>
 					                    </select>
 							</td>
 						</tr>

@@ -11,6 +11,43 @@
  ********************************************************************************/
 
 -->*}
+{literal}
+<script>
+	function deleteCurrency(currid)
+	{
+        	show("status");
+	        var ajaxObj = new Ajax(ajaxCurrencyDeleteResponse);
+        	var urlstring = "action=SettingsAjax&file=CurrencyDeleteStep1&return_action=CurrencyListView&return_module=Settings&module=Settings&parenttab=Settings&id="+currid;
+	        ajaxObj.process("index.php?",urlstring);
+	}
+
+	function ajaxCurrencyDeleteResponse(response)
+	{
+        	hide("status");
+	        document.getElementById("currencydiv").innerHTML= response.responseText;
+	}
+	
+	function transferCurrency(del_currencyid)
+	{
+                show("status");
+                hide("CurrencyDeleteLay");
+                var ajaxObj = new Ajax(ajaxCurrencySaveResponse);
+                var trans_currencyid=document.getElementById('transfer_currency_id').options[document.getElementById('transfer_currency_id').options.selectedIndex].value;
+                var urlstring ="module=Settings&action=SettingsAjax&file=CurrencyDelete&ajax=true&delete_currency_id="+del_currencyid+"&transfer_currency_id="+trans_currencyid;
+                ajaxObj.process("index.php?",urlstring);
+
+	}
+
+	function ajaxCurrencySaveResponse(response)
+	{
+        	hide("status");
+	        document.getElementById("CurrencyListViewContents").innerHTML= response.responseText;
+	}
+
+
+</script>
+
+{/literal}
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
         {include file='SettingsMenu.tpl'}
@@ -30,24 +67,9 @@
 	<tr>
 		<td width="90%" style="padding-left:20px;" valign="top">
 			<input type="submit" name="new" value="{$MOD.LBL_NEW_CURRENCY}" class="classBtn" /><br /><br />
-			<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
-			<tbody>
-				<tr>
-					<td class="lvtCol" width="25%">{$MOD.LBL_CURRENCY_NAME}</td>
-			                <td class="lvtCol" width="20%">{$MOD.LBL_CURRENCY_CODE}</td>
-				        <td class="lvtCol" width="5%">{$MOD.LBL_CURRENCY_SYMBOL}</td>
-			                <td class="lvtCol" width="20%">{$MOD.LBL_CURRENCY_CRATE}</td>
-					<td class="lvtCol" width="15%">{$MOD.LBL_CURRENCY_STATUS}</td>
-					<td class="lvtCol" width="15%">{$MOD.LBL_CURRENCY_TOOL}</td>			                      </tr>
-				{foreach item=currency_array key=id from=$CURRENCY_LIST}
-					<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-					{foreach item=currencyvalues from=$currency_array}
-						<td nowrap>{$currencyvalues}</td>
-					{/foreach}
-					</tr>
-				{/foreach}
-			</tbody>
-		        </table>
+			<div id="CurrencyListViewContents">
+				{include file="CurrencyListViewEntries.tpl"}
+			</div>
 		</td>
 		<td>&nbsp;</td>
 	</tr>
@@ -56,4 +78,5 @@
 </td>
 </tr>
 </table>
-        {include file='SettingsSubMenu.tpl'}
+<div id="currencydiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
+{include file='SettingsSubMenu.tpl'}
