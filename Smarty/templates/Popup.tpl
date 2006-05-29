@@ -58,7 +58,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 			</tr>
 			 <tr>
 				<td colspan="4" align="center">
-					<table width="100%">
+					<table width="100%" class="small">
 					<tr>	
 						{$ALPHABETICAL}
 					</tr>
