@@ -268,22 +268,63 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 }
 
 ?>
-<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
- <tbody>
-    <tr>
-          <td style="height: 2px;"></td>
-    </tr>
 
-    <tr>
-       <td style="padding-left: 10px; padding-right: 10px;" class="moduleName" nowrap="nowrap">Analytics &gt; Dashboard </td>
-       <td style="width: 1px;"></td>
-       <td class="small" height="30">&nbsp;</td>
-    </tr>
-    <tr>
-       <td style="height: 20px;"></td>
-    </tr>
- </tbody>
-</table>
+
+
+<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
+<tr><td style="height:2px"></td></tr>
+<tr>
+	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap><? echo $app_strings['Analytics'];?> &gt; <a class="hdrLink" href="index.php?action=index&parenttab=Analytics&module=Dashboard"><? echo $app_strings['Dashboard'] ?></a></td>
+	<td class="sep1" style="width:1px;padding-right:1px"></td>
+	<td class=small >
+		<table border=0 cellspacing=0 cellpadding=0>
+		<tr>
+			<td>
+				<table border=0 cellspacing=0 cellpadding=5>
+				<tr>
+						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" alt="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." title="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." border=0></td>	
+					 <td style="padding-right:10px"><img src="<?echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
+				</tr>
+				</table>
+	</td>
+	<td class="sep1" style="width:1px;padding-right:1px"></td>
+	<td>
+				<table border=0 cellspacing=0 cellpadding=5>
+
+				<tr>
+					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="<?echo $image_path;?>btnL3Calendar.gif" alt="<? echo $app_strings['LBL_CALENDAR_ALT']; ?>" title="<? echo $app_strings['LBL_CALENDAR_TITLE']; ?>" border=0></a></a></td>
+					<td style="padding-right:0px"><a href="javascript:;"><img src="<?echo $image_path;?>btnL3Clock.gif" alt="<? echo $app_strings['LBL_CLOCK_ALT']; ?>" title="<? echo $app_strings['LBL_CLOCK_TITLE']; ?>" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
+					<td style="padding-right:0px"><a href="#"><img src="<?echo $image_path;?>btnL3Calc.gif" alt="<? echo $app_strings['LBL_CALCULATOR_ALT']; ?>" title="<? echo $app_strings['LBL_CALCULATOR_TITLE']; ?>" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
+					<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=450,height=400,resizable=1,scrollbars=1");'><img src="<?echo $image_path;?>tbarChat.gif" alt="<? echo $app_strings['LBL_CHAT_ALT']; ?>" title="<? echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
+                    </td>	
+				</tr>
+				</table>
+	</td>
+	<td class="sep1" style="width:1px;padding-right:1px"></td>
+	<td>
+		<table border=0 cellspacing=0 cellpadding=5>
+			<tr>
+				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" alt="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
+                <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" alt="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
+			</tr>
+		</table>	
+	<td class="sep1" style="width:1px;padding-right:1px"></td>
+	<td>
+				<table border=0 cellspacing=0 cellpadding=5>
+				<tr>
+				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onMouseover="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
+				</tr>
+				</table>
+	</td>			
+	</tr>
+	</table>
+	</td>
+	
+</tr>
+<tr><td style="height:2px"></td></tr>
+</TABLE>
+
+
 
 <table class="dashMain" cellspacing="0" cellpadding="0" align="center">
    <tr>
