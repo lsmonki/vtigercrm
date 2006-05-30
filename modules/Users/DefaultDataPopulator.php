@@ -2036,7 +2036,7 @@ title';
 	$this->db->query("insert into actionmapping values(4,'DetailView',0)");
 	$this->db->query("insert into actionmapping values(5,'Import',0)");
 	$this->db->query("insert into actionmapping values(6,'Export',0)");
-	$this->db->query("insert into actionmapping values(7,'AddBusinessCard',0)");
+	//$this->db->query("insert into actionmapping values(7,'AddBusinessCard',0)");
 	$this->db->query("insert into actionmapping values(8,'Merge',0)");
 	$this->db->query("insert into actionmapping values(1,'VendorEditView',1)");
 	$this->db->query("insert into actionmapping values(4,'VendorDetailView',1)");
