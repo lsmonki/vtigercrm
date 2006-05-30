@@ -1405,12 +1405,12 @@ function isPermitted($module,$actionname,$record_id='')
         	{	
                 	$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
-                	return $permission;
         	}
 		else
 		{
 			$permission ="no";
 		}
+               	return $permission;
 		
 	}	
 
