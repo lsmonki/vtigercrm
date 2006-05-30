@@ -43,31 +43,31 @@
             options[0] = blankOption;
             
                 
-                options[1] = new Option('Account: Account Name', '{$accounts_accountname}'); 
-                options[2] = new Option('Account: Account Type', '{$accounts_account_type}'); 
-                options[3] = new Option('Account: Industry', '{$accounts_industry}'); 
-                options[4] = new Option('Account: Annual Revenue', '{$accounts_annualrevenue}'); 
-                options[5] = new Option('Account: Phone', '{$accounts_phone}'); 
-                options[6] = new Option('Account: Email', '{$accounts_email1}'); 
-                options[7] = new Option('Account: Rating', '{$accounts_rating}'); 
-                options[8] = new Option('Account: Website', '{$accounts_website}'); 
-                options[9] = new Option('Account: Fax', '{$accounts_fax}'); 
+                options[1] = new Option('Account: Account Name', '$accounts-accountname$'); 
+                options[2] = new Option('Account: Account Type', '$accounts-account_type$'); 
+                options[3] = new Option('Account: Industry', '$accounts-industry$'); 
+                options[4] = new Option('Account: Annual Revenue', '$accounts-annualrevenue$'); 
+                options[5] = new Option('Account: Phone', '$accounts-phone$'); 
+                options[6] = new Option('Account: Email', '$accounts-email1$'); 
+                options[7] = new Option('Account: Rating', '$accounts-rating$'); 
+                options[8] = new Option('Account: Website', '$accounts-website$'); 
+                options[9] = new Option('Account: Fax', '$accounts-fax$'); 
             
 	        allOpts[1] = options;
         
             options = new Object(11);
             options[0] = blankOption;
                 
-                options[1] = new Option('Contact: First Name', '{$contacts_firstname}'); 
-                options[2] = new Option('Contact: Last Name', '{$contacts_lastname}'); 
-                options[3] = new Option('Contact: Salutation', '{$contacts_salutationtype}'); 
-                options[4] = new Option('Contact: Title', '{$contacts_title}'); 
-                options[5] = new Option('Contact: Email', '{$contacts_email}'); 
-                options[6] = new Option('Contact: Department', '{$contacts_department}'); 
-                options[7] = new Option('Contact: Other Email','{$contacts_otheremail}'); 
-                options[8] = new Option('Contact: Phone', '{$contacts_phone}'); 
-                options[9] = new Option('Contact: Mobile', '{$contacts_mobile}'); 
-                options[10] = new Option('Contact: Currency', '{$contacts_currency}'); 
+                options[1] = new Option('Contact: First Name', '$contacts-firstname$'); 
+                options[2] = new Option('Contact: Last Name', '$contacts-lastname$'); 
+                options[3] = new Option('Contact: Salutation', '$contacts-salutationtype$'); 
+                options[4] = new Option('Contact: Title', '$contacts-title$'); 
+                options[5] = new Option('Contact: Email', '$contacts-email$'); 
+                options[6] = new Option('Contact: Department', '$contacts-department$'); 
+                options[7] = new Option('Contact: Other Email','$contacts-otheremail$'); 
+                options[8] = new Option('Contact: Phone', '$contacts-phone$'); 
+                options[9] = new Option('Contact: Mobile', '$contacts-mobile$'); 
+                options[10] = new Option('Contact: Currency', '$contacts-currency$'); 
                             
             allOpts[2] = options;
         
@@ -76,36 +76,36 @@
             options[0] = blankOption;
             
                 
-                options[1] = new Option('Lead: First Name', '{$leads_firstname}'); 
-                options[2] = new Option('Lead: Last Name', '{$leads_lastname}'); 
-                options[3] = new Option('Lead: Lead Source', '{$leads_leadsource}'); 
-                options[4] = new Option('Lead: Status', '{$leads_leadstatus}'); 
-                options[5] = new Option('Lead: Rating', '{$leads_rating}'); 
-                options[6] = new Option('Lead: Industry', '{$leads_industry}'); 
-                options[7] = new Option('Lead: Yahoo ID', '{$leads_yahooid}'); 
-                options[8] = new Option('Lead: Email', '{$leads_email}'); 
-                options[9] = new Option('Lead: Annual Revenue', '{$leads_annualrevenue}'); 
-                options[10] = new Option('Lead: Title', '{$leads_designation}'); 
-                options[11] = new Option('Lead: Salutation', '{$leads_salutation}'); 
+                options[1] = new Option('Lead: First Name', '$leads-firstname$'); 
+                options[2] = new Option('Lead: Last Name', '$leads-lastname$'); 
+                options[3] = new Option('Lead: Lead Source', '$leads-leadsource$'); 
+                options[4] = new Option('Lead: Status', '$leads-leadstatus$'); 
+                options[5] = new Option('Lead: Rating', '$leads-rating$'); 
+                options[6] = new Option('Lead: Industry', '$leads-industry$'); 
+                options[7] = new Option('Lead: Yahoo ID', '$leads-yahooid$'); 
+                options[8] = new Option('Lead: Email', '$leads-email$'); 
+                options[9] = new Option('Lead: Annual Revenue', '$leads-annualrevenue$'); 
+                options[10] = new Option('Lead: Title', '$leads-designation$'); 
+                options[11] = new Option('Lead: Salutation', '$leads-salutation$'); 
             
 	        allOpts[3] = options;
 
 	        options = new Object(19);
                 options[0] = blankOption;
             
-                options[1] = new Option('User: First Name', '{$users_first_name}'); 
-                options[2] = new Option('User: Last Name', '{$users_last_name}'); 
-		options[3] = new Option('User: Title', '{$users_title}'); 
-		options[4] = new Option('User: Department', '{$users_department}'); 
-		options[5] = new Option('User: HomePhone', '{$users_phone_home}'); 
-		options[6] = new Option('User: Mobile', '{$users_phone_mobile}'); 
-		options[7] = new Option('User: Signature', '{$users_signature}'); 
-		options[8] = new Option('User: Email', '{$users_email}'); 
-		options[9] = new Option('User: Street', '{$users_address_street}'); 
-		options[10] = new Option('User: City', '{$users_address_city}'); 
-		options[11] = new Option('User: State', '{$users_address_state}'); 
-		options[11] = new Option('User: Country', '{$users_address_country}'); 
-		options[11] = new Option('User: PostalCode', '{$users_address_postalcode}'); 
+                options[1] = new Option('User: First Name', '$users-first_name$'); 
+                options[2] = new Option('User: Last Name', '$users-last_name$'); 
+		options[3] = new Option('User: Title', '$users-title$'); 
+		options[4] = new Option('User: Department', '$users-department$'); 
+		options[5] = new Option('User: HomePhone', '$users-phone_home$'); 
+		options[6] = new Option('User: Mobile', '$users-phone_mobile$'); 
+		options[7] = new Option('User: Signature', '$users-signature$'); 
+		options[8] = new Option('User: Email', '$users-email$'); 
+		options[9] = new Option('User: Street', '$users-address_street$'); 
+		options[10] = new Option('User: City', '$users-address_city$'); 
+		options[11] = new Option('User: State', '$users-address_state$'); 
+		options[11] = new Option('User: Country', '$users-address_country$'); 
+		options[11] = new Option('User: PostalCode', '$users-address_postalcode$'); 
             
             	allOpts[4] = options;
 	    

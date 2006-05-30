@@ -2250,6 +2250,93 @@ function getTemplateDetails($templateid)
         $log->debug("Exiting from getTemplateDetails($templateid) method ...");
         return $returndata;
 }
-										
+/**
+ * 	This function is used to merge the Template Details with the email description  
+ *  @param string $description  -body of the mail(ie template)
+ *	@param integer $tid  - Id of the entity
+ *  @param string $parent_type - module of the entity
+ * 	return string $description - Returns description, merged with the input template.
+*/
+									
+function getMergedDescription($description,$id,$parent_type)
+{
+	global $adb,$log;
+    $log->debug("Entering getMergedDescription ...");
+	$token_data_pair = explode('$',$description);
+	$fields = Array();
+	for($i=1;$i < count($token_data_pair);$i+=2)
+	{
+
+		$module = explode('-',$token_data_pair[$i]);
+		$fields[$module[0]][] = $module[1];
+		
+	}
+	//replace the tokens with the values for the selected parent
+	switch($parent_type)
+	{
+		case 'Accounts':
+			if(is_array($fields["accounts"]))
+			{
+				$columnfields = implode(',',$fields["accounts"]);
+				$query = 'select '.$columnfields.' from account where accountid ='.$id;
+				$result = $adb->query($query);
+				foreach($fields["accounts"] as $columnname)			
+				{
+					$token_data = '$accounts-'.$columnname.'$';
+					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+				}
+			}
+			break;
+		case 'Contacts':
+			if(is_array($fields["contacts"]))
+			{
+				$columnfields = implode(',',$fields["contacts"]);
+				$query = 'select '.$columnfields.' from contactdetails where contactid='.$id;
+				$result = $adb->query($query);
+				foreach($fields["contacts"] as $columnname)
+				{
+					$token_data = '$contacts-'.$columnname.'$';
+					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+				}
+			}
+			break;
+		case 'Leads':	
+			if(is_array($fields["leads"]))
+			{
+				$columnfields = implode(',',$fields["leads"]);
+				$query = 'select '.$columnfields.' from leaddetails where leadid='.$id;
+				$result = $adb->query($query);
+				foreach($fields["leads"] as $columnname)
+				{
+					$token_data = '$leads-'.$columnname.'$';
+					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+				}
+			}
+			break;
+		case 'Users':	
+			if(is_array($fields["users"]))
+			{
+				$columnfields = implode(',',$fields["users"]);
+				$query = 'select '.$columnfields.' from users where id='.$id;
+				$result = $adb->query($query);
+				foreach($fields["users"] as $columnname)
+				{
+					$token_data = '$users-'.$columnname.'$';
+					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+				}
+			}
+			break;
+	}
+	//replace the unwanted tokens by null
+	$token_data_pair = explode('$',$description);
+    for($i=1;$i < count($token_data_pair);$i+=2)
+	{
+		$token_data = '$'.$token_data_pair[$i].'$';
+		$description = str_replace($token_data,'',$description);
+	}
+    $log->debug("Exiting from getMergedDescription ...");
+	return $description;
+}
+
 
 ?>
