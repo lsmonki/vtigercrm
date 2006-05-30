@@ -213,8 +213,9 @@ class Product extends CRMEntity {
 		$log->debug("Entering get_activities(".$id.") method ...");
 		global $app_strings;
 	
-	require_once('modules/Activities/Activity.php');	
-        if($this->column_fields['contact_id']!=0 && $this->column_fields['contact_id']!='')
+		require_once('modules/Activities/Activity.php');
+
+        	//if($this->column_fields['contact_id']!=0 && $this->column_fields['contact_id']!='')
         	$focus = new Activity();
 
 		$button = '';
