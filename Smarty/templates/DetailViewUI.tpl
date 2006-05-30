@@ -1,18 +1,33 @@
-					{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
-                    	<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" >
-                   	{if $keyid eq '55'}<!--SalutationSymbol-->
-                        {$keysalut}
-                    {elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
-                            {$keycursymb}
-                    {/if}
-                    <div id="dtlview_{$label}" onClick="hndMouseOver({$keyid},'{$label}');">{$keyval}&nbsp;</div>
-                    <div id="editarea_{$label}" style="display:none;">
-                     	  <input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval}"></input>
-                   		  <br><input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');"/> or
-                  		  <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
-                     </div>
-                     </td>
-                     {elseif $keyid eq '13'} <!--Email-->
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
+
+<!-- This file is used to display the fields based on the ui type in detailview -->
+{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72'} <!--TextBox-->
+	<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" >
+		{if $keyid eq '55'}<!--SalutationSymbol-->
+			{$keysalut}
+		{/if}
+
+		<div id="dtlview_{$label}" onClick="hndMouseOver({$keyid},'{$label}');">{$keyval}&nbsp;</div>
+		<div id="editarea_{$label}" style="display:none;">
+			<input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval}"></input>
+			<br>
+			<input name="button_{$label}" type="button" class="small" value="Save" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');"/> or
+			<a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">Cancel</a>
+		</div>
+	</td>
+{elseif $keyid eq '13'} <!--Email-->
                      <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');">
 			{if $INT_MAILER eq 'true'}
 				<a href="javascript:InternalMailer('{$keyval}','email_addy');">&nbsp;{$keyval}</a></div>

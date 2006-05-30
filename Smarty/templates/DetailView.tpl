@@ -214,11 +214,13 @@ function tagvalidate()
 							   <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
 							   
                            {if $label ne ''}
-	                             {if $keycntimage ne ''}
-									      <td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
-							     {else}
-								            <td class="dvtCellLabel" align=right width=25%>{$label}</td>
-							     {/if}  
+	                        {if $keycntimage ne ''}
+					<td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
+				{elseif $keyid eq '71' || $keyid eq '72'}<!-- Currency symbol -->
+					<td class="dvtCellLabel" align=right width=25%>{$label} ({$keycursymb})</td>
+				{else}
+					<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+				{/if}  
 
 										{include file="DetailViewUI.tpl"}
 						   {else} 

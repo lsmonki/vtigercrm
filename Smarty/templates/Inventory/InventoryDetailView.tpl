@@ -174,7 +174,11 @@ function tagvalidate()
 					{if $keycntimage ne ''}
 						<td class="dvtCellLabel" align=right width=25%>{$keycntimage}</td>
 					{elseif $label neq 'Tax Class'}<!-- Avoid to display the label Tax Class -->
-						<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+						{if $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
+							<td class="dvtCellLabel" align=right width=25%>{$label} ({$keycursymb})</td>
+						{else}
+							<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+						{/if}
 					{/if}  
 						{include file="DetailViewUI.tpl"}
 				{else} 
