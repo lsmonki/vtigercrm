@@ -156,7 +156,7 @@
            <td colspan="3" align="center">
 		<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='SaveMailAccount'; return verify_data(EditView)" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " >
 			&nbsp;&nbsp;
-	        <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='DetailView'; this.form.module.value='Users'; this.form.record.value='{$ID}'" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	        <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}"></td>
            </td>
        </tr>
        <tr><td colspan="3" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
