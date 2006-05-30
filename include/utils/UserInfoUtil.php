@@ -2542,7 +2542,7 @@ function getRoleAndSubordinatesInformation($roleId)
 		$roleid=$adb->query_result($result,$i,'roleid');
                 $rolename=$adb->query_result($result,$i,'rolename');
                 $roledepth=$adb->query_result($result,$i,'depth');
-                $parentRoleSeq=$adb->query_result($result,$i,'parentrole');
+                $parentrole=$adb->query_result($result,$i,'parentrole');
 		$roleDet=Array();
 		$roleDet[]=$rolename;
 		$roleDet[]=$parentrole;
