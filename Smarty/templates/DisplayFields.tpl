@@ -48,6 +48,10 @@
 				<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 			{/if}
 		{elseif $uitype eq 19 || $uitype eq 20}
+			<!-- In Add Comment are we should not display anything -->
+			{if $fldlabel eq 'Add Comment'}
+				{assign var=fldvalue value=""}
+			{/if}
 			<td width=20% class="dvtCellLabel" align=right>
 				{if $uitype eq 20}
 					<font color="red">*</font>

@@ -110,16 +110,19 @@ class Faq extends CRMEntity {
 			return '';
 		}
 
-		$list .= '<div style="overflow: scroll;height:150;width:100%;">';
+		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			$comment = $this->db->query_result($result,$i,'comments');
 			$createdtime = $this->db->query_result($result,$i,'createdtime');
 			if($comment != '')
 			{
-				$list .= '<div valign="top" width="70%" class="dataField">&nbsp;&nbsp;'.$comment.'</div>';
-				$list .= '<div valign="top" width="70%" class="dataLabel">'.$mod_strings['Created Time'];
-				$list .= ' : '.$createdtime.'</div>';
+				//this div is to display the comment
+				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">'.make_clickable(nl2br($comment)).'</div>';
+				
+				//this div is to display the created time
+				$list .= '<div valign="top" style="width:99%;border-bottom:1px dotted #CCCCCC;padding-bottom:5px;" class="dataLabel"><font color=darkred>'.$mod_strings['Created Time'];
+				$list .= ' : '.$createdtime.'</font></div>';
 			}
 		}
 		$list .= '</div>';

@@ -99,6 +99,9 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+//Added to display the ticket comments information
+$smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record']));
+
 $smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];

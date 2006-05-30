@@ -102,6 +102,12 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+if($_REQUEST['record'] != '')
+{
+	//Added to display the ticket comments information
+	$smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record']));
+}
+
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

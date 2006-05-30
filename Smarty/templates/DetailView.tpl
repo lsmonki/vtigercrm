@@ -189,6 +189,27 @@ function tagvalidate()
                                                {/if}
                                                         </td>
                                                         </tr>
+
+
+
+
+							<!-- This is added to display the existing comments -->
+							{if $header eq 'Comments' || $header eq 'Comment Information'}
+							   <tr>
+								<td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+						        	<b>{$MOD.LBL_COMMENT_INFORMATION}</b>
+								</td>
+							   </tr>
+							   <tr>
+							   			<td colspan=4 class="dvtCellInfo">{$COMMENT_BLOCK}</td>
+							   </tr>
+							   <tr><td>&nbsp;</td></tr>
+							{/if}
+
+
+
+
+
 						     <tr>{strip}
 						     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
 							<b>

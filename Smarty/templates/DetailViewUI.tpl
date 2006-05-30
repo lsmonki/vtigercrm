@@ -87,6 +87,10 @@
                     </div>
                     </td>
                     {elseif $keyid eq '19' || $keyid eq '20'} <!--TextArea/Description-->
+			<!-- In Add Comment are we should not display anything -->
+			{if $label eq 'Add Comment'}
+				{assign var=keyval value=""}
+			{/if}
                     <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}"><div id="dtlview_{$label}"  onClick="hndMouseOver({$keyid},'{$label}');">&nbsp;{$keyval}</div>
                    	<div id="editarea_{$label}" style="display:none;">
                     <textarea id="txtbox_{$label}" name="txtbox_{$label}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">{$keyval}</textarea>                                            		  

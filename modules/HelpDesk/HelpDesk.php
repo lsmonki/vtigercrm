@@ -358,16 +358,21 @@ class HelpDesk extends CRMEntity {
 			return '';
 		}
 
-		$list .= '<div style="overflow: scroll;height:200;width:100%;">';
+		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			if($adb->query_result($result,$i,'comments') != '')
 			{
-				$list .= '<div valign="top" width="70%"class="dataField">';
+				//this div is to display the comment
+				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">';
 				$list .= make_clickable(nl2br($adb->query_result($result,$i,'comments')));
 
-				$list .= '</div><div valign="top" width="20%" class="dataLabel"><font color=darkred>';
+				$list .= '</div>';
+
+				//this div is to display the author and time
+				$list .= '<div valign="top" style="width:99%;border-bottom:1px dotted #CCCCCC;padding-bottom:5px;" class="dataLabel"><font color=darkred>';
 				$list .= $mod_strings['LBL_AUTHOR'].' : ';
+
 				if($adb->query_result($result,$i,'ownertype') == 'user')
 					$list .= getUserName($adb->query_result($result,$i,'ownerid'));
 				else
@@ -388,7 +393,7 @@ class HelpDesk extends CRMEntity {
 	 *      @param  int    $id   - Ticket id
 	 *      @return string $customername - The contact name
 	**/
-function getCustomerName($id)
+	function getCustomerName($id)
 	{
 		global $log;
 		$log->debug("Entering getCustomerName(".$id.") method ...");

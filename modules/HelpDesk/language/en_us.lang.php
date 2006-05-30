@@ -157,6 +157,7 @@ $mod_strings = Array(
 'LBL_CONVERT_AS_FAQ_BUTTON_KEY'=>'C',
 'LBL_CONVERT_AS_FAQ_BUTTON_LABEL'=>'Convert As FAQ',
 'Attachment'=>'Attachment',
+'LBL_COMMENT_INFORMATION'=>'Comment Information',
 
 );
 

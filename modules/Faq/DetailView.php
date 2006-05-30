@@ -90,6 +90,9 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-	
+
+//Added to display the Faq comments information
+$smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
+
 $smarty->display("DetailView.tpl");
 ?>
