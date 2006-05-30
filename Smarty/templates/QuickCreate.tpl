@@ -225,7 +225,6 @@
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
 							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
-							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$fldname}">
 							{if $uitype eq 6}
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
