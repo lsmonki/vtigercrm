@@ -27,6 +27,10 @@ if(isset($_REQUEST['service']))
 	{
 		include("soap/contactserialize.php");
 	}
+	elseif($_REQUEST['service'] == "wordplugin")
+	{
+		include("soap/contactserialize.php");
+	}
 	elseif($_REQUEST['service'] == "thunderbird")
 	{
 		include("soap/contactserialize.php");
