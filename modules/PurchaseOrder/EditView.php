@@ -147,6 +147,17 @@ elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
         $smarty->assign("SUBTOTAL", $InvTotal.".00");
         $smarty->assign("GRANDTOTAL", $InvTotal.".00");
 
+	//this is to display the Product Details in first row when we create new PO from Product relatedlist
+	if($_REQUEST['return_module'] == 'Products')
+	{
+		$smarty->assign("PRODUCT_ID",$_REQUEST['product_id']);
+		$smarty->assign("PRODUCT_NAME",getProductName($_REQUEST['product_id']));
+		$smarty->assign("UNIT_PRICE",getUnitPrice($_REQUEST['product_id']));
+		$smarty->assign("QTY_IN_STOCK",getPrdQtyInStck($_REQUEST['product_id']));
+		$smarty->assign("VAT_TAX",getProductTaxPercentage("VAT",$_REQUEST['product_id']));
+		$smarty->assign("SALES_TAX",getProductTaxPercentage("Sales",$_REQUEST['product_id']));
+		$smarty->assign("SERVICE_TAX",getProductTaxPercentage("Service",$_REQUEST['product_id']));
+	}
 }
 else
 {
