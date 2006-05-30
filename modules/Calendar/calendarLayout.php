@@ -11,6 +11,7 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
+require_once('modules/Calendar/CalendarCommon.php');
 
 /** To construct calendar subtabs
   * @param $param_arr -- The calendar object:: Type class Calendar
@@ -858,7 +859,7 @@ function getdayEventLayer(& $cal,$slice)
 						</td>
 						<td align="right" width="5%">
 							<div id="'.$arrow_img_name.'" style="display: none;">
-								<img onClick="getcalAction(this,\'calAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" onMouseout="fninvsh(\'calAction\')" src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0">
+								<img onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" src="'.$cal['IMAGE_PATH'].'cal_event.jpg" border="0">
 							</div>
 						</td>
 						</tr>
@@ -973,7 +974,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
 	$Entries = Array();
 	global $adb,$current_user,$mod_strings;
-	
+	$shared_ids = getSharedCalendarId($current_user->id);
 	$query = "SELECT cntactivityrel.contactid, activity.*
 		FROM activity
 		INNER JOIN crmentity
@@ -994,8 +995,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
 	}
-	$query .= " AND crmentity.smownerid = ".$current_user->id."
-		ORDER BY activity.date_start,activity.time_start ASC";
+	if(!is_admin($current_user))
+		$query .= " AND crmentity.smownerid in (".$shared_ids.")";
+		
+	$query .= "ORDER BY activity.date_start,activity.time_start ASC";
 
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
@@ -1035,7 +1038,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
-		$element['action'] ="<img onClick='getcalAction(this,\"calAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
         	$element['status'] = $adb->query_result($result,$i,"eventstatus");
 	$Entries[] = $element;
 	}
@@ -1054,7 +1057,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
         $Entries = Array();
         global $adb,$current_user,$mod_strings;
-
+	$shared_ids = getSharedCalendarId($current_user->id);
         $query = "SELECT cntactivityrel.contactid, activity.*
                 FROM activity
                 INNER JOIN crmentity
@@ -1072,8 +1075,10 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                 $res = $adb->query($pending_query);
                 $pending_rows = $adb->num_rows($res);
         }
-        $query .= " AND crmentity.smownerid = ".$current_user->id."
-                ORDER BY activity.date_start,activity.time_start ASC";
+	
+	if(!is_admin($current_user))
+                $query .= " AND crmentity.smownerid in (".$shared_ids.")";
+        $query .= " ORDER BY activity.date_start,activity.time_start ASC";
 
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
@@ -1095,12 +1100,17 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		$more_link = "<a href='index.php?action=DetailView&module=Activities&record=".$id."&activity_mode=Task' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
 		$element['status'] = $adb->query_result($result,$i,"status");
-		$element['action'] ="<img onClick='getcalAction(this,\"calAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$Entries[] = $element;
 	}
 	return $Entries;
 }
 
+/*To get number of events and todos
+ *@param $cal -- The calendar array :: Type Array
+ *@param $mode  -- The mode :: Type string
+ *return number of events and todos in Array format
+*/
 function getEventTodoInfo(& $cal, $mode)
 {
 	global $mod_strings;
@@ -1119,6 +1129,10 @@ function getEventTodoInfo(& $cal, $mode)
 	return $event_todo_info;
 }
 
+/*To construct event listview
+ *@param $entry_list -- The event entries array :: Type Array
+ *constructs event listview in HTML format
+*/
 function constructEventListView($entry_list)
 {
 	global $mod_strings;
@@ -1170,6 +1184,11 @@ function constructEventListView($entry_list)
 	echo $list_view;
 }
 
+/*To construct todo listview
+ *@param $todo_list -- The todo entries array :: Type Array
+ *@param $cal -- The calendar array :: Type Array
+ *constructs todo listview in HTML format
+*/
 function constructTodoListView($todo_list,$cal)
 {
 	global $mod_strings;
