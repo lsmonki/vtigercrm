@@ -2794,6 +2794,33 @@ foreach($alter_query_array18 as $query)
 		
 		$sql2_sec="insert into profile2utility values(".$prof_id.",7,9,0)";
 		Execute($sql2_sec);
+
+		$sql3_sec="insert into profile2tab values(".$prof_id.",26,0)";
+                Execute($sql3_sec);
+
+		$sql4_sec="insert into profile2tab values(".$prof_id.",27,0)";
+                Execute($sql4_sec);
+
+		$sql5_sec="delete from profile2standardpermissions where tabid=1 and profileid=".$prof_id;
+                Execute($sql5_sec);
+
+		$sql6_sec="delete from profile2standardpermissions where tabid=3 and profileid=".$prof_id;
+                Execute($sql6_sec);
+
+		$sql7_sec="insert into profile2standardpermissions values(".$prof_id.",26,0,0)";
+                Execute($sql7_sec);
+
+		$sql8_sec="insert into profile2standardpermissions values(".$prof_id.",26,1,0)";
+                Execute($sql8_sec);
+
+		$sql9_sec="insert into profile2standardpermissions values(".$prof_id.",26,2,0)";
+                Execute($sql9_sec);
+
+		$sql10_sec="insert into profile2standardpermissions values(".$prof_id.",26,3,0)";
+                Execute($sql10_sec);
+
+		$sql11_sec="insert into profile2standardpermissions values(".$prof_id.",26,4,0)";
+                Execute($sql11_sec);	
 		
 	}
 
