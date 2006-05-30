@@ -50,15 +50,23 @@ ul {ldelim}color:black;{rdelim}
 {rdelim}
 </style>
 <script>
+ if(!e)
   window.captureEvents(Event.MOUSEMOVE);
-  window.onmousemove= displayCoords;
-  window.onclick = fnRevert;
+
+//  window.onmousemove= displayCoords;
+//  window.onclick = fnRevert;
   
-   function displayCoords(e) 
+   function displayCoords(event) 
 	 {ldelim}
 				var move_Element = document.getElementById('Drag_content').style;
-				move_Element.left = e.pageX +'px' ;
-				move_Element.top = e.pageY+10 + 'px';	
+				if(!event){ldelim}
+						move_Element.left = e.pageX +'px' ;
+						move_Element.top = e.pageY+10 + 'px';	
+				{rdelim}
+				else{ldelim}
+						move_Element.left = event.clientX +'px' ;
+					    move_Element.top = event.clientY+10 + 'px';	
+				{rdelim}
 	{rdelim}
   
 	  function fnRevert(e)
@@ -74,7 +82,7 @@ ul {ldelim}color:black;{rdelim}
 	{rdelim}
 
 </script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" onMouseMove="displayCoords(event)">
 		<tr>
 				{include file='SettingsMenu.tpl'}
 				<td width="75%" valign="top">
@@ -167,7 +175,7 @@ ul {ldelim}color:black;{rdelim}
 			{ldelim}
 				childId = childId.replace(/user_/gi,'');
 				parentId = parentId.replace(/user_/gi,'');
-        			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
+        			var ajaxObj = new Ajax(ajaxSaveResponse);
 				
                 		var urlstring ="module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId="+parentId+"&childId="+childId;
         			ajaxObj.process("index.php?",urlstring);
