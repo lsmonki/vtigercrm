@@ -106,20 +106,36 @@ class HelpDesk extends CRMEntity {
 
 		$query = "SELECT activity.*, crmentity.crmid, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, recurringevents.recurringtype, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		$log->debug("Exiting get_activities method ...");
+		
 		return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
 	}
 
-	/**     Function to display the History of the Ticket which just includes a file which contains the TicketHistory informations
+	/**     Function to get the Ticket History information as in array format
+	 *	@param int $ticketid - ticket id
+	 *	return array with title and the ticket history informations in the following format
+							array(	
+								header=>array('0'=>'title'),
+								entries=>array('0'=>'info1','1'=>'info2',etc.,)
+							     )
 	 */
-	function Get_Ticket_History()
+	function get_ticket_history($ticketid)
 	{
-		global $log;
-		$log->debug("Entering Get_Ticket_History() method ...");
-	        global $mod_strings;
-	        echo '<br><br>';
-	        echo get_form_header($mod_strings['LBL_TICKET_HISTORY'],"", false);
-        	include("modules/HelpDesk/TicketHistory.php");
-		$log->debug("Exiting Get_Ticket_History method ...");
+		global $log, $adb;
+		$log->debug("Entering into get_ticket_history($ticketid) method ...");
+
+		$query="select title,update_log from troubletickets where ticketid=".$ticketid;
+		$result=$adb->query($query);
+		$update_log = $adb->query_result($result,0,"update_log");
+
+		$splitval = split('--//--',trim($update_log,'--//--'));
+
+		$header[] = $adb->query_result($result,0,"title");
+
+		$return_value = Array('header'=>$header,'entries'=>$splitval);
+
+		$log->debug("Exiting from get_ticket_history($ticketid) method ...");
+
+		return $return_value;
 	}
 
 	/**	Function to form the query to get the list of attachments and notes
