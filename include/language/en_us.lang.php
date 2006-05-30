@@ -460,7 +460,7 @@ $app_strings = Array(
 
 'LBL_OPEN_ACTIVITIES'=>'Open Activities',
 
-'LBL_HISTORY'=>'History',
+'LBL_HISTORY'=>'Activity History',
 
 'LBL_ATTACHMENTS'=>'Attachments',
 

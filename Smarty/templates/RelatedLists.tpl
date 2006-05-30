@@ -146,7 +146,7 @@
 								<input title="Bulk Mail" accessykey="F" class="small" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="Bulk Mails" type="submit">&nbsp;
 								<input title="Change" accesskey="" tabindex="2" class="small" value="Select User" name="Button" language="javascript" onclick='return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id={$id}&recordid={$ID}","test","width=640,height=520,resizable=0,scrollbars=0");' type="button">&nbsp;</td>
                                                                 {/if}
-							{elseif $header eq 'History'}
+							{elseif $header eq 'Activity History'}
                                                         &nbsp;</td>
 
 							{/if}
