@@ -2102,6 +2102,8 @@ title';
 	$this->db->query("insert into parenttabrel values (2,26,1)");
 	$this->db->query("insert into parenttabrel values (2,6,2)");
 	$this->db->query("insert into parenttabrel values (2,4,3)");
+	$this->db->query("insert into parenttabrel values (2,10,4)");
+	$this->db->query("insert into parenttabrel values (4,10,7)");
 
 	//Added to populate the default inventory tax informations
 	$this->db->query("insert into inventorytaxinfo values(".$this->db->getUniqueID("inventorytaxinfo").",'VAT','4.5')");
