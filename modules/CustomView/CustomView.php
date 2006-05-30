@@ -305,7 +305,7 @@ class CustomView extends CRMEntity{
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql = "select * from field inner join tab on tab.tabid = field.tabid innerjoin  profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
+			$sql = "select * from field inner join tab on tab.tabid = field.tabid inner join  profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
 			$sql.= " where field.tabid=".$tabid." and field.block in (".$blockids.") and (field.uitype =5 or field.displaytype=2)";
 			$sql.= " and profile2field.visible=0";
 			$sql.= " and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by field.sequence";
