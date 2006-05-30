@@ -108,47 +108,32 @@ foreach($pieces as $val)
 			<div align=left style="color:#737373;overflow: scroll; height: 100px; width: 95%;border:1px dashed #cccccc;padding:10px">
 			
 			<b>License Agreement</b><br>
-			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, Smarty, phpSysinfo and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above
-			providers.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			This software is a collective work consisting of the following major Open Source components: <br>Apache software, MySQL server, PHP, SugarCRM, ADOdb, Smarty, PHPMailer, phpSysinfo, MagpieRSS and others, each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above providers. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<br>
 			<br>
-			1. Apache Web server software used under the Apache License available
-			at &lt;vtiger CRM Home&gt;/vtigerCRM/apache/LICENSE.txt<br>
-			2. MySQL database software used under the GPL License available at
-			&lt;vtiger CRM Home&gt;/vtigerCRM/mysql/README.txt <br>
-			3. PHP software used under the PHP License version 3.0 available at
-			&lt;vtiger CRM Home&gt;/vtigerCRM/php/license.txt&nbsp; <br>
-			4. SugarCRM software used under the SugarCRM Public License SPL 1.1.2
-			available at &lt;vtiger CRM Home&gt;/vtigerCRM/LICENSE_windows.txt<br>
-			5. gdwin32 software used under the GNU GPL available at gdwin32
-			&lt;vtiger CRM Home&gt;/vtigerCRM/gdwin32/gd-license.txt<br>
-			6. nusoap software used under GNU LGPL from
-			http://sourceforge.net/projects/nusoap<br>
-			7. phpBB software used under GNU GPL downloaded from
-			http://www.phpbb.com/support/license.php<br>
-			8. TUTOS software used under GNU GPL downloaded from
-			http://www.tutos.org/html/copyright.html available at &lt;vtiger CRM
-			Home&gt;/vtigerCRM/modules/Calendar/TUTOS_Copyright.pdf<br>
-			9. PHPMailer software used under the GNU LGPL available at &lt;vtiger
-			CRM Home&gt;/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt<br>
-			10. ADOdb software used under BSD license available at &lt;vtiger CRM
-			Home&gt;/vtigerCRM/adodb/license.txt<br>
-			11. phpSysinfo software used under GNU GPL available at &lt;vtiger CRM
-			Home&gt;/vtigerCRM/modules/System/COPYING<br>
-			12. feedParser software used under GNU GPL downloaded from
-			http://revjim.net/code/feedParser/<br>
-			13. FCKeditor software used under LGPL downloaded from
-			http://www.fckeditor.net/download/default.html available at &lt;vtiger
-			CRM Home&gt;/vtigerCRM/includes/FCKeditor/license.txt<br>
-			14. SquirrelMail used under GNU GPL downloaded from
-			http://www.squirrelmail.org/download.php available at
-			http://www.squirrelmail.org/wiki/en_US/SquirrelMailGPL<br>
-			15. Mailfeed used under GNU GPL downloaed from
-			http://wiki.wonko.com/software/mailfeed/ available at
-			http://wiki.wonko.com/software/mailfeed/#copyright <br>
-			16. In addition to the above mentioned Open Source components, vtiger
-			provides additional functionality, which is dual-licensed under Mozilla
-			Public License (MPL 1.1) as well as the GNU Public License (GPL).<br>
+			1. Apache Web server software used under the Apache License available at &lt;vtiger CRM Home&gt;/vtigerCRM/apache/LICENSE.txt<br>
+			2. MySQL database software used under the GPL License available at &lt;vtiger CRM Home&gt;/vtigerCRM/mysql/README.txt<br>
+			3. PHP software used under the PHP License version 3.0 available at &lt;vtiger CRM Home&gt;/vtigerCRM/php/license.txt<br> 
+			4. SugarCRM software used under the SugarCRM Public License SPL 1.1.2 available at &lt;vtiger CRM Home&gt;/vtigerCRM/LICENSE.txt<br>
+			5. gdwin32 software used under the GNU GPL available at gdwin32 &lt;vtiger CRM Home&gt;/vtigerCRM/gdwin32/gd-license.txt<br>
+			6. nusoap software used under GNU LGPL from http://sourceforge.net/projects/nusoap<br>
+			7. PHPMailer software used under the GNU LGPL downloaded from http://adodb.sourceforge.net available at &lt;vtiger CRM Home&gt;/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt<br>
+			8. ADOdb software used under BSD license downloaded from http://adodb.sourceforge.net available at &lt;vtiger CRM Home&gt;/vtigerCRM/adodb/license.txt<br>
+			9. phpSysinfo software used under GNU GPL downloaded from http://phpsysinfo.sourceforge.net/ available at &lt;vtiger CRM Home&gt;/vtigerCRM/modules/System/COPYING<br>
+			10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at http://magpierss.sourceforge.net/<br>
+			11. FCKeditor software used under GNU LGPL downloaded from http://www.fckeditor.net/download/default.html available at &lt;vtiger CRM Home&gt;/vtigerCRM/includes/FCKeditor/license.txt<br>
+			12. Mailfeed used under GNU GPL downloaded from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright<br>
+			13. Smarty Template Engine for PHP used under the GNU LGPL available at available at &lt;vtiger CRM Home&gt;/vtigerCRM/Smarty/COPYING.lib<br>
+			14. freetag is used under dual license BSD and GNU LGPL downloaded from http://www.getluky.net available at &lt;vtiger CRM Home&gt;/vtigerCRM/include/freetag/license.txt<br>
+			15. Image_Canvas is used under GNU LGPL downloaded from http://pear.php.net/pepr/pepr-proposal-show.php?id=212 available at http://www.gnu.org/copyleft/lesser.html<br>
+			16. Image_Color is used under PHP license 3.0 downloaded from http://pear.php.net/package/Image_Color available at http://www.php.net/license/3_0.txt<br>
+			17. Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html<br>
+			18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/<br>
+			19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html<br>
+			20. XTemplate is used under GNU LGPL downloaded from http://sourceforge.net/projects/xtpl/ available at &lt;vtiger CRM Home&gt;/vtigerCRM/XTemplate/LICENSE<br>
+			21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/# <br>
+			22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).<br>
+			
 			<br>
 			The licenses of the Open Source components are reproduced in full below.<br>
 			<br>
@@ -2541,23 +2526,20 @@ foreach($pieces as $val)
 			Acknowledgements:<br>
 			<br>
 			We have used the following software:<br>
-			<br>
-			1. ExcelReader package to read the xls files. We have taken the utility
-			from the following Web site : <br>
-			&nbsp;http://freshmeat.net/projects/phpexcelreader/<br>
-			&nbsp;The product is available as GNU General Public License (GPL).<br>
-			<br>
-			2. E-mail Client to handle attachments with PHP. We have taken the
-			ideas from the article by Kevin Steffer available at the following Web
-			site:<br>
-			http://www.linuxscope.net/articles/mailAttachmentsPHP.html<br>
-			<br>
-			3. FPDF package to create PDF reports and documents. We have taken the
-			utility from the following Web site: <br>
-			http://www.fpdf.org/<br>
-			<br>
-			We are grateful to the creators of the respective products for
-			providing such a beautiful utilities.<br>
+			<br>1. ExcelReader package to read the xls files. We have taken the utility from the following Web site : <br>
+			http://freshmeat.net/projects/phpexcelreader/<br>
+			The product is available as GNU General Public License (GPL).<br>
+			2. E-mail Client to handle attachments with PHP. We have taken the ideas from the article by Kevin Steffer available at the<br>
+  http://www.linuxscope.net/articles/mailAttachmentsPHP.html<br>
+			3. FPDF package to create PDF reports and documents. We have downloaded package from http://www.fpdf.org<br>
+			4. Prototype (Object-Oriented JavaScript framework) package to ease development of dynamic web applications. We have downloaded package from http://prototype.conio.net<br>
+			5. class_http to cache scraped content. We have downloaded package from http://www.troywolf.com/articles/php/class_http/ <br>
+			6.Carousel Slideshow package to display large images as thumbnails. We have downloaded package from http://www.dynamicdrive.com/dynamicindex14/carousel2.htm<br>
+			7. Ajax Popup Chat for enabling instant messaging for vtiger CRM users. We have downloaded package from http://www.os-solution.com/demo/ajaxcsspopupchat/index.php<br>
+			8. Image Crossfade Redux for enabling fade effect to images. We have downloaded package from http://slayeroffice.com/code/imageCrossFade/xfade2.html<br>
+			9. Calculator for enabling calculations in vtiger CRM. We have downloaded package from http://www.hmhd.com/steve<br>
+We are grateful to the creators of the respective products for providing such a beautiful utilities.<br>
+			
 			&nbsp;<br>
 			<br>
 			</div>
