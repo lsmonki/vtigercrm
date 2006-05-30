@@ -147,7 +147,9 @@ function get_cal_header_tab(& $header)
 	$tabhtml = "";
 	$count = 1;
 	include_once 'modules/Calendar/addEventUI.php';
-	$div = "<br><div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000;'></div>
+	include_once 'modules/Calendar/header.php';
+
+	$div = "<div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000;'></div>
 		<div id='calSettings' class='calSettings' style='display:none;width:500px;' align=center ></div>
 		";
 	echo $div;

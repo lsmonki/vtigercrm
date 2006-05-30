@@ -160,6 +160,8 @@ $t=Date("Ymd");
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("MOD",$mod_strings);
+$smarty->assign("MODULE",'Home');
+$smarty->assign("CATEGORY",getParenttab('Home'));
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->assign("ACTIVITIES",$activities);
