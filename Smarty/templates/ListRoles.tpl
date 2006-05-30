@@ -175,7 +175,7 @@ ul {ldelim}color:black;{rdelim}
 			{ldelim}
 				childId = childId.replace(/user_/gi,'');
 				parentId = parentId.replace(/user_/gi,'');
-        			var ajaxObj = new Ajax(ajaxSaveResponse);
+        			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 				
                 		var urlstring ="module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId="+parentId+"&childId="+childId;
         			ajaxObj.process("index.php?",urlstring);
