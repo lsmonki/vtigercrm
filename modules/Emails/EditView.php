@@ -157,8 +157,8 @@ $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
 {
 	$templatedetails = getTemplateDetails($_REQUEST['templateid']);
-	$details['Email Information'][2][0][3][0] = $templatedetails[2];	
-	$details['Email Information'][3][0][3][0] = $templatedetails[1];	
+	$details['Email Information'][2][0][3][0] = $templatedetails[2]; //Subject	
+	$details['Email Information'][3][0][3][0] = nl2br($templatedetails[1]);	//Body
 }
 $smarty->assign("BLOCKS",$details['Email Information']);
 $smarty->assign("MODULE",$currentModule);
