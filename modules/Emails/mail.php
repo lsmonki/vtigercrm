@@ -138,7 +138,8 @@ function addSignature($contents, $fromname)
   *	$contents	-- body of the email you want to send
   *	$from_email	-- from email id which will be displayed in the mail
   *	$from_name	-- from name which will be displayed in the mail
-  *	$to_email 	-- to email address 
+  *	$to_email 	-- to email address  -- This can be an email in a single string, a comma separated
+  *			   list of emails or an array of email addresses
   *	$attachment	-- whether we want to attach the currently selected file or all files.
   				[values = current,all] - optional
   *	$emailid	-- id of the email object which will be used to get the attachments - optional
@@ -167,7 +168,16 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	if($to_email != '')
 	{
-		$mail->AddAddress($to_email);
+		if(is_array($to_email)) {
+			for($j=0,$num=count($to_email);$j<$num;$j++) {
+				$mail->addAddress($to_email[$j]);
+			}
+		} else {
+			$_tmp = explode(",",$to_email);
+			for($j=0,$num=count($_tmp);$j<$num;$j++) {
+				$mail->addAddress($_tmp[$j]);
+			}
+		}
 	}
 
 	$mail->AddReplyTo($from_email);

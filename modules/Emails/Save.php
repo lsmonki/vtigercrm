@@ -197,21 +197,20 @@ if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_RE
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
-{
+if($_REQUEST["parent_name"] != '' && isset($_REQUEST["parent_name"])) {
+	include("modules/Emails/webmailsend.php");
+
+} elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 	include("modules/Emails/mailsend.php");
-}
-elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
-{
+
+
+
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 	header("Location: index.php?module=$return_module&action=index");
-}
-else
-{
-	//code added for returning back to the current view after edit from list view
+else {
 	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
 	echo $inputs;
-	//header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename&viewname=$return_viewname");
 }
 ?>
