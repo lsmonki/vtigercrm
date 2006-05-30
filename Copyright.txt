@@ -23,7 +23,7 @@ For Windows
 
 9. phpSysinfo software used under GNU GPL downloaded from http://phpsysinfo.sourceforge.net/ available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
 
-10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at 
+10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at http://magpierss.sourceforge.net 
 
 11. FCKeditor software used under GNU LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
 
@@ -39,7 +39,7 @@ For Windows
 
 17. Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
 
-18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at
+18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
 
 19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
@@ -66,7 +66,7 @@ For Linux
 
 9. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
 
-10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/
+10. MagpieRSS software used under GNU GPL downloaded from http://magpierss.sourceforge.net/ available at http://magpierss.sourceforge.net/
 
 10. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
 
@@ -84,7 +84,7 @@ For Linux
 
 17. Image_Graph is used under GNU LGPL downloaded from http://pear.php.net/package/Image_Graph available at http://www.gnu.org/copyleft/lesser.html
 
-18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at
+18. log4php is used under GNU LGPL downloaded from http://www.vxr.it/log4php/ available at http://www.vxr.it/log4php/
 
 19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
