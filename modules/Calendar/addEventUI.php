@@ -442,16 +442,16 @@ setObjects();
 
 	<!-- Add Activity DIV stops-->
 
-<div id="calAction" style="width:125px;" onMouseout="fninvsh('calAction')" onMouseover="fnvshNrm('calAction')">
+<div id="eventcalAction" class="calAction" style="width:125px;" onMouseout="fninvsh('eventcalAction')" onMouseover="fnvshNrm('eventcalAction')">
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 		<tr>
 			<td>
-				<a href="" id="complete" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
-				<a href="" id="pending" class="calMnu">- <?php echo $mod_strings['LBL_EPENDING']?></a>
+				<a href="" id="complete" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_HELD']?></a>
+				<a href="" id="pending" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_NOTHELD']?></a>
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
-				<a href="" id="postpone" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-				<a href="" id="changeowner" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
-				<a href="" id="actdelete" onclick ="alert('Are you sure?')" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+				<a href="" id="postpone" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
+				<a href="" id="changeowner" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="" id="actdelete" onclick ="fninvsh('eventcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
 			</td>
 		</tr>
 	</table>
@@ -616,7 +616,14 @@ setObjects();
 </div>
 
 
-<div id="act_changeowner" class="statechange">
+<div id="act_changeowner" class="statechange" style="left:250px;top:200px;z-index:5000">
+	<form name="change_owner">
+	<input type="hidden" value="" name="idlist" id="idlist">
+	<input type="hidden" value="" name="action">
+	<input type="hidden" value="" name="module">
+	<input type="hidden" value="" name="user_id">
+	<input type="hidden" value="" name="return_module">
+	<input type="hidden" value="" name="return_action">
 	<table width="100%" border="0" cellpadding="3" cellspacing="0">
 		<tr>
 			<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">Change Owner</td>
@@ -639,10 +646,27 @@ setObjects();
 	<tr>
         	<td colspan="3" align="center">
 	        &nbsp;&nbsp;
-        		<input type="button" name="button" class="small" value="Update Owner" onClick="ajaxChangeStatus('owner')">
+        		<input type="button" name="button" class="small" value="Update Owner" onClick="calendarChangeOwner()">
 		        <input type="button" name="button" class="small" value="Cancel" onClick="fninvsh('act_changeowner')">	
 		</td>
 	</tr>
 	</table>
+	</form>
+</div>
+
+
+<div id="taskcalAction" class="calAction" style="width:125px;" onMouseout="fninvsh('taskcalAction')" onMouseover="fnvshNrm('taskcalAction')">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+                <tr>
+                        <td>
+                                <a href="" id="taskcomplete" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
+                                <a href="" id="taskpending" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_DEFERRED']?></a>
+                                <span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
+                                <a href="" id="taskpostpone" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
+                                <a href="" id="taskchangeowner" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+                                <a href="" id="taskactdelete" onClick ="fninvsh('taskcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+                        </td>
+                </tr>
+        </table>
 </div>
 
