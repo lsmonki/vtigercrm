@@ -940,7 +940,7 @@ function getActionname($actionid)
 	global $adb;
 
 	$actionname='';
-	$query="select * from actionmapping where actionid=".$actionid;
+	$query="select * from actionmapping where actionid=".$actionid ." and securitycheck=0";
 	$result =$adb->query($query);
 	$actionname=$adb->query_result($result,0,"actionname");
 	$log->debug("Exiting getActionname method ...");
