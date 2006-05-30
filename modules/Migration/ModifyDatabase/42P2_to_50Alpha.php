@@ -2782,8 +2782,20 @@ foreach($alter_query_array18 as $query)
 
 
 
-
-
+//Inserting into profile2utility table
+	$sql_sec="select profileid from  profile";
+	$result_sec=$conn->query($sql_sec);
+	$num_rows=$conn->num_rows($result_sec);
+	for($i=0;$i<$num_row;$i++)
+	{
+		$prof_id=$conn->query_result($result_sec,$i,'profileid');
+		$sql1_sec="insert into profile2utility values(".$prof_id.",13,8,0)";
+		Execute($sql1_sec);
+		
+		$sql2_sec="insert into profile2utility values(".$prof_id.",7,9,0)";
+		Execute($sql2_sec);
+		
+	}
 
 
 
