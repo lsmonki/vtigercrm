@@ -317,32 +317,45 @@ function roundValue(val) {
    
    return val;
 } 
-	function validate() {
-		if(!formValidate())
-			return false
-				if(!FindDuplicate())
-					return false;
-		if(rowCnt == 0)
-		{
-			alert('No product is selected. Select atleast one Product');
-			return false;
-		}
 
+//This function is used to validate the Inventory modules 
+function validateInventory(module) 
+{
+	if(!formValidate())
+		return false
 
-		for (var i=1;i<=rowCnt;i++) {
-			if (!emptyCheck("txtProduct"+i,"Product","text")) return false
-				if (!emptyCheck("txtQty"+i,"Qty","text")) return false
-					if (!numValidate("txtQty"+i,"Qty","any")) return false
-						if (!numConstComp("txtQty"+i,"Qty","GE","1")) return false
-							if (!emptyCheck("txtListPrice"+i,"List Price","text")) return false
-								if (!numValidate("txtListPrice"+i,"List Price","any")) return false           }
-		if (getObj("txtTax").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-			if (!numValidate("txtTax","Tax","any")) return false
-				if (getObj("txtAdjustment").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-					if (!numValidate("txtAdjustment","Adjustment","any")) return false
-
-						return true    
+	//for products, vendors and pricebook modules we won't validate the product details. here return the control
+	if(module == 'Products' || module == 'Vendors' || module == 'PriceBooks')
+	{
+		return true;
 	}
+
+
+	if(!FindDuplicate())
+		return false;
+
+	if(rowCnt == 0)
+	{
+		alert('No product is selected. Select atleast one Product');
+		return false;
+	}
+
+	for (var i=1;i<=rowCnt;i++) 
+	{
+		if (!emptyCheck("txtProduct"+i,"Product","text")) return false
+		if (!emptyCheck("txtQty"+i,"Qty","text")) return false
+		if (!numValidate("txtQty"+i,"Qty","any")) return false
+		if (!numConstComp("txtQty"+i,"Qty","GE","1")) return false
+		if (!emptyCheck("txtListPrice"+i,"List Price","text")) return false
+		if (!numValidate("txtListPrice"+i,"List Price","any")) return false           
+	}
+	if (getObj("txtTax").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
+	if (!numValidate("txtTax","Tax","any")) return false
+	if (getObj("txtAdjustment").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
+	if (!numValidate("txtAdjustment","Adjustment","any")) return false
+
+	return true    
+}
 
 function FindDuplicate()
 {
@@ -378,7 +391,7 @@ function fnshow_Hide(Lay){
 
 function ValidateTax(txtObj)
 {
-	temp= /^\d+\.\d+$/.test(document.getElementById(txtObj).value);
+	temp= /^\d+(\.\d\d*)*$/.test(document.getElementById(txtObj).value);
 	if(temp == false)
 		alert("Please enter Valid TAX value");
 }
