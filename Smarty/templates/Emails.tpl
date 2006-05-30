@@ -99,18 +99,18 @@ function getListViewEntries_js(module,url)
 
 {rdelim}
 </script>
-		{include file='Buttons_List1.tpl'}
+		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
+
+<!-- Shadow starts here -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">&nbsp;
-		</td>
-		<td width="5%" class="showPanelBg">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="95%" style="padding-left:20px;" valign="top">
-			<!-- module Select Table -->
-			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+		<td valign=top align=right><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+
+		<td class="showPanelBg" valign="top" width="95%" align=center >
+		<!-- Email Client starts here -->
+			<br>
+			<table width="95%"  border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="7" height="6" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}top_left.jpg" align="top"  /></td>
 					<td bgcolor="#EBEBEB" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;height:6px;"></td>
@@ -118,44 +118,52 @@ function getListViewEntries_js(module,url)
 				</tr>
 				<tr>
 					<td bgcolor="#EBEBEB" width="7"></td>
-					<td bgcolor="#ECECEC" style="padding-left:10px;height:20px;vertical-align:middle;">
+					<td bgcolor="#ECECEC" style="vertical-align:middle;">
 					<form name="massdelete" method="POST">
+					
+						
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+							<!-- Compose, Settings and Name image -->
 							<tr>
 								<td colspan="3" style="vertical-align:middle;">
 									<table width="100%" cellpadding="0" cellspacing="0" border="0">
 										<tr>
-											<td width="10%">
+											<td nowrap style="padding-left:20px;padding-right:20px">
 											<img src="{$IMAGE_PATH}compose.gif" align="absmiddle" />
 						&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 											</td>
-											<td width="10%">
+											<td nowrap style="padding-left:20px;padding-right:20px">
 											<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
 						&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 											</td>
-											<td><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
+											<td width=90%><img src="{$IMAGE_PATH}webmail_header.gif" align="right"/></td>
 										</tr>
 									</table>
 								</td>
 							</tr>
+							<!-- Columns -->
 							<tr>
-                    <td width="28%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
-								<td width="2%">&nbsp;</td>
-					 <td width="60%" class="subHdr"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
+							<td width="25%" bgcolor="#949494"><span class="subHdr"><b>{$MOD.LBL_EMAIL_FOLDERS}</b></span> </td>
+							<td width="2%">&nbsp;</td>
+							<td width="65%" class="subHdr"><span id="mail_fldrname"><strong>{$MOD.LBL_ALLMAILS}</strong></span></td>
 							</tr>
+							
 							<tr>
-								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:10px; ">
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
-								<ul style="list-style-type:none;">
+								<td rowspan="6" valign="top" bgcolor="#FFFFFF" style="padding:5px; ">
+								<!-- Mailbox Tree -->
+								<!-- Inbox -->
+								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
+								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="index.php?module=Webmails&action=index&parenttab=My Home Page" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
-								</ul><br />
-							<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
-								<ul style="list-style-type:none;">
+								</ul>
+								<!-- Sent mail -->
+								<img src="{$IMAGE_PATH}webmail_root.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(1)" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
@@ -170,28 +178,32 @@ function getListViewEntries_js(module,url)
 									<li><img src="{$IMAGE_PATH}webmail_uparrow.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(5)" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 									</li>
-								</ul><br />
+								</ul>
 								</td>
 								<td>&nbsp;</td>
 								
 								<td class="delBg">
+									<!-- All mails pane -->
 									<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 									<input name="idlist" type="hidden">
 										<tr>
-											<td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;
+											<td width="25%"><input type="button" name="Button2" value=" {$APP.LBL_DELETE_BUTTON}"  class="classWebBtn" onClick="return massDelete();"/> &nbsp;</td>
+											<td width="50%" align="right" class="small">
+												<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" onkeyUp="Searchfn();">&nbsp;
 											</td>
-											<td width="75%" align="right">
-							<font color="#000000">{$APP.LBL_SEARCH}</font>&nbsp;<input type="text" name="search_text" id="search_text" class="importBox" onkeyUp="Searchfn();">&nbsp;
-											<select name="search_field" id="search_field" onChange="Searchfn();" class="importBox">
-											<option value='subject'>{$MOD.LBL_IN_SUBJECT}</option>
-											<option value='user_name'>{$MOD.LBL_IN_SENDER}</option>
-											<option value='join'>{$MOD.LBL_IN_SUBJECT_OR_SENDER}</option>
-											</select>&nbsp;
+											<td width="25%" align=left class="small">
+												<select name="search_field" id="search_field" onChange="Searchfn();" class="importBox">
+												<option value='subject'>{$MOD.LBL_IN_SUBJECT}</option>
+												<option value='user_name'>{$MOD.LBL_IN_SENDER}</option>
+												<option value='join'>{$MOD.LBL_IN_SUBJECT_OR_SENDER}</option>
+												</select>&nbsp;
 											</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
+							
+							
 							<tr>
 								<td>&nbsp;</td>
 								<td style="padding:1px;" align="left">
@@ -200,14 +212,17 @@ function getListViewEntries_js(module,url)
 									</div>
 								</td>
 							</tr>
+							
 							<tr>
 								<td>&nbsp;</td>
 								<td height="5"></td>
 							</tr>
+							
 							<tr>
 								<td>&nbsp;</td>
 								<td class="mailHdr" id="subjectsetter">&nbsp;</td>
 							</tr>
+							
 							<tr>
 								<td>&nbsp;</td>	
 								<td valign="top">
@@ -228,7 +243,9 @@ function getListViewEntries_js(module,url)
 				</tr>
 			</table><br/>
 		</td>
-		<td>&nbsp;</td>
+		<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+		
+		
 	</tr>
 </table>
 <!-- END -->

@@ -113,10 +113,11 @@
 </tr>
 </TABLE>
 <!-- header - level 2 tabs -->
-<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="level2Bg" style="border-bottom:1px solid #999999">
+<TABLE border=0 cellspacing=0 cellpadding=2 width=100% class="level2Bg" style="border-bottom:1px solid #999999">
 <tr>
-	<td width=20 class=small>&nbsp;</td>
-	<td>
+	<!-- Left side gap -->
+	
+	<td >
 
 		<table border=0 cellspacing=0 cellpadding=0>
 		<tr>
@@ -124,9 +125,9 @@
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=module from=$detail}
 						{if $module eq $MODULE_NAME}
-							<td class="level2textSel"><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a></td>
+							<td class="level2textSel" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a></td>
 						{else}
-							<td class="level2text"> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a> </td>
+							<td class="level2text" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a> </td>
 						{/if}	
 					{/foreach}
 				{/if}
@@ -396,8 +397,8 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* Quick Access Functionality *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onmouseover="fnvshNrm('allMenu');">
-	<table cellpadding="5" cellspacing="0" class="allMnuTable" >
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onmouseover="fnvshNrm('allMenu');" style="width:500px">
+	<table border=0 cellpadding="5" cellspacing="0" class="allMnuTable" >
 	<tr>
 		<td valign="top">
 		{assign var="parentno" value=0}

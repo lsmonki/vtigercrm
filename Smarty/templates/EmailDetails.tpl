@@ -15,7 +15,7 @@
   		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 		<tr>
 		{if $BLOCKS neq ''}
-			<td width="75%">
+			<td>
 			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="classWebBtn" onClick=OpenCompose('{$ID}','forward')>&nbsp;
 				{if $EMAIL_FLAG neq 'WEBMAIL'}
 			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="classWebBtn" onClick=OpenCompose('{$ID}','edit')>&nbsp;
@@ -39,7 +39,7 @@
 	</td>
 </tr>
 <tr>
-	<td height="300" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
+	<td height="250" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
 	{foreach item=row from=$BLOCKS}	
 	{foreach item=elements key=title from=$row}	
 		{if $title eq 'Subject'}
