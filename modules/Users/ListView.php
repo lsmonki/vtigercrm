@@ -21,10 +21,13 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
 	        $start = $_REQUEST['start'];
 }
-else
+elseif($_SESSION['user_pagestart'] != '')
 {
 	        $start = $_SESSION['user_pagestart'];
 }
+else
+	$start=1;
+
 $_SESSION['user_pagestart'] = $start;
 if($_REQUEST['sorder'] !='')
 	$sortorder = $_REQUEST['sorder'];
