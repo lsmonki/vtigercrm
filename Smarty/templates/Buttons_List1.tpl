@@ -39,7 +39,7 @@
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					{if $CHECK.EditView eq 'yes'}
+					{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
 				        	{if $MODULE eq 'Activities'}
         			              	        <td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" id="showSubMenu"  onMouseOver="fnvshobj(this,'reportLay');" onMouseOut="fninvsh('reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
                    				 {else}
