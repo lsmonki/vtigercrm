@@ -99,7 +99,7 @@ function getListViewEntries_js(module,url)
 
 {rdelim}
 </script>
-		{include file='Buttons_List.tpl'}
+		{include file='Buttons_List1.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
