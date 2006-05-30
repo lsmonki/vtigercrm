@@ -466,19 +466,42 @@ function getcalAction(obj,Lay,id,view,hour,day,month,year,type){
 	var heldstatus = "eventstatus=Held";
 	var notheldstatus = "eventstatus=Not Held";
         var activity_mode = "Events";
+	var complete = document.getElementById("complete");
+	var pending = document.getElementById("pending");
+	var postpone = document.getElementById("postpone");
+	var actdelete =	document.getElementById("actdelete");
+	var changeowner = document.getElementById("changeowner");
+	
     }
     if(type == 'todo')
     {
 	var heldstatus = "status=Completed";
         var notheldstatus = "status=Deferred";
 	var activity_mode = "Task";
+	var complete = document.getElementById("taskcomplete");
+        var pending = document.getElementById("taskpending");
+        var postpone = document.getElementById("taskpostpone");
+        var actdelete = document.getElementById("taskactdelete");
+        var changeowner = document.getElementById("taskchangeowner");
     }
-	
-    document.getElementById("complete").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+heldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    document.getElementById("pending").href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+notheldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    document.getElementById("postpone").href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode="+activity_mode;
-    document.getElementById("actdelete").href="index.php?return_module=Calendar&return_action=index&action=massdelete&module=Users&idlist="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
-    document.getElementById("changeowner").href="javascript:fnvshobj(this,'act_changeowner');";
+    document.getElementById("idlist").value = id;	
+    complete.href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+heldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    pending.href="index.php?return_module=Calendar&return_action=index&action=Save&module=Activities&record="+id+"&change_status=true&"+notheldstatus+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    postpone.href="index.php?action=EditView&module=Activities&record="+id+"&activity_mode="+activity_mode;
+    actdelete.href="index.php?return_module=Calendar&return_action=index&action=massdelete&module=Users&idlist="+id+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&parenttab=My Home Page";
+    changeowner.href="javascript:fnvshNrm('act_changeowner');";
 
 }
+
+function calendarChangeOwner()
+{
+	document.change_owner.action.value = "updateLeadDBStatus";
+	document.change_owner.module.value = "Users";
+	document.change_owner.return_module.value = "Calendar";
+	document.change_owner.return_action.value = "index";
+	document.change_owner.user_id.value = document.getElementById('activity_owner').options[document.getElementById('activity_owner').options.selectedIndex].value;
+	fninvsh('act_changeowner');
+	window.document.change_owner.submit();
+}
+
 
