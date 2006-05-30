@@ -55,7 +55,7 @@
 	<td class="dvtCellLabel" style="padding: 5px;">
  		<input name="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<textarea id="parent_name" cols="70">{$TO_MAIL}</textarea>
+		<textarea id="parent_name" readonly cols="70">{$TO_MAIL}</textarea>
 	</td>
 	<td class="dvtCellLabel" style="padding: 5px;" align="left">
 		<select name="parent_type">
