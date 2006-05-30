@@ -71,5 +71,14 @@ if(count($ret_owner) > 0)
        $errormsg = '';
 }
 
-header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate&viewname=".$viewid."&errormsg=".$errormsg);
+if($return_module == 'Calendar')
+{
+	header("Location: index.php?module=$return_module&action=index");
+}
+else
+{
+	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate&viewname=".$viewid."&errormsg=".$errormsg);
+}
+				
+
 ?>
