@@ -148,7 +148,7 @@ class ReportRun extends CRMEntity
 	function getAdvComparator($comparator,$value)
         {
 
-		global $log;
+		global $log,$adb;
 
 		if($comparator == "e")
                 {
