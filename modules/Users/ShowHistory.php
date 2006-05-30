@@ -44,27 +44,12 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_LOGIN_HISTORY_TITLE'], true); 
-echo "\n<BR>\n";
-
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
 if (!isset($where)) $where = "";
 
 $seedLogin = new LoginHistory();
-
-$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' method='post' name='DetailView' action='index.php'>\n";
-
-$button .= "<tr><td>\n";
-$button .= "<input type='hidden' name='module' value='Users'>\n";
-$button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
-$button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
-$button .= "<input type='hidden' name='record' value='".$focus->id."'>\n";
-$button .= "<input type='hidden' name='action'>\n";
-$button .= "<input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='DetailView'; this.form.module.value='Users'; this.form.record.value='$focus->id'\" type='submit' name='button' value='".$app_strings['LBL_CANCEL_BUTTON_LABEL']."'></td></tr>";
-
-$button .= "</form></table>";
 
 $ListView = new ListView();
 $ListView->initNewXTemplate('modules/Users/ShowHistory.html',$current_module_strings);
