@@ -12,7 +12,7 @@
 if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
 if($_REQUEST["start"] && $_REQUEST["start"] != "") {$start=$_REQUEST["start"];} else {$start="1";}
 
-global $current_user;
+global $current_user,$mods;
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -21,8 +21,10 @@ require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("modules/Webmails/MailParse.php");
 
+$mods = parsePHPModules();
 $mailInfo = getMailServerInfo($current_user);
-if($adb->num_rows($mailInfo) < 1) {
+
+if($adb->num_rows($mailInfo) < 1 || !isset($mods["imap"]) || $mods["imap"] == "") {
 	echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
 	exit();
 }

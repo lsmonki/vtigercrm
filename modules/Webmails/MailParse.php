@@ -21,7 +21,7 @@ function isBase64($iVal){
 	return (strlen($_tmp) % 4 == 0 ) ? "y" : "n";
 }
 function getImapMbox($mailbox,$temprow,$readonly='') {
-	global $mbox; 
+	global $mbox,$mods; 
 	$login_username= $temprow["mail_username"]; 
 	$secretkey=$temprow["mail_password"]; 
 	$imapServerAddress=$temprow["mail_servername"]; 
@@ -33,10 +33,18 @@ function getImapMbox($mailbox,$temprow,$readonly='') {
 	// first we will try a regular old IMAP connection: 
 	if($ssltype == "") {$ssltype = "notls";} 
 	if($sslmeth == "") {$sslmeth = "novalidate-cert";} 
-	if($readonly == "true")
+
+	if($readonly == "true") {
+	    if($mods["imap"]["SSL Support"] == "enabled")
 		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."/readonly}".$mailbox, $login_username, $secretkey); 
-	else
+	    else
+		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/readonly}".$mailbox, $login_username, $secretkey); 
+	} else {
+	    if($mods["imap"]["SSL Support"] == "enabled")
 		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox, $login_username, $secretkey); 
+	    else
+		$mbox = @imap_open("{".$imapServerAddress."/".$mail_protocol."}".$mailbox, $login_username, $secretkey); 
+	}
 
 	// next we'll try to make a port specific connection to see if that helps.
 	// this may need to be updated to remove SSL/TLS since the c-client libs
@@ -44,14 +52,21 @@ function getImapMbox($mailbox,$temprow,$readonly='') {
 	if(!$mbox) {
 	 	if($mail_protocol == 'pop3') {
 			if($readonly == "true")
-	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."/readonly}".$mailbox;
+	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/readonly}".$mailbox;
 			else
-	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/".$ssltype."}".$mailbox;
+	 	        	$connectString = "{".$imapServerAddress."/".$mail_protocol.":110/}".$mailbox;
 	 	} else { 
-			if($readonly == "true")
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/readonly}".$mailbox; 
-			else
-	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."}".$mailbox; 
+			if($readonly == "true") { 
+	    		    if($mods["imap"]["SSL Support"] == "enabled")
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/".$sslmeth."/readonly}".$mailbox; 
+			    else
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/}".$mailbox; 
+			} else {
+	    		    if($mods["imap"]["SSL Support"] == "enabled")
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."/".$ssltype."/".$sslmeth."}".$mailbox;
+			    else
+	 	        	$connectString = "{".$imapServerAddress.":143/".$mail_protocol."}".$mailbox;
+			}
 	 	} 
 	 	$mbox = imap_open($connectString, $login_username, $secretkey) or die("Connection to server failed ".imap_last_error()); 
 	} 
@@ -102,5 +117,34 @@ function getAttachments($mailid,$mbox) {
          }
        }
         return false;
+}
+function parsePHPModules() {
+ ob_start();
+ phpinfo(INFO_MODULES);
+ $s = ob_get_contents();
+ ob_end_clean();
+
+ $s = strip_tags($s,'<h2><th><td>');
+ $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/',"<info>\\1</info>",$s);
+ $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/',"<info>\\1</info>",$s);
+ $vTmp = preg_split('/(<h2>[^<]+<\/h2>)/',$s,-1,PREG_SPLIT_DELIM_CAPTURE);
+ $vModules = array();
+ for ($i=1;$i<count($vTmp);$i++) {
+  if (preg_match('/<h2>([^<]+)<\/h2>/',$vTmp[$i],$vMat)) {
+   $vName = trim($vMat[1]);
+   $vTmp2 = explode("\n",$vTmp[$i+1]);
+   foreach ($vTmp2 AS $vOne) {
+   $vPat = '<info>([^<]+)<\/info>';
+   $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
+   $vPat2 = "/$vPat\s*$vPat/";
+   if (preg_match($vPat3,$vOne,$vMat)) { // 3cols
+     $vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]),trim($vMat[3]));
+   } elseif (preg_match($vPat2,$vOne,$vMat)) { // 2cols
+     $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
+   }
+   }
+  }
+ }
+ return $vModules;
 }
 ?>
