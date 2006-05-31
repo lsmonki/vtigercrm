@@ -28,37 +28,43 @@
 
 
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
-
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$APP.$MODULE}</a></td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td class=small >
-		<table border=0 cellspacing=0 cellpadding=0>
+	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$APP.$MODULE}</a></td>
+	<td width=100% nowrap>
+	
+		<table border="0" cellspacing="0" cellpadding="0" >
 		<tr>
+		<td class="sep1" style="width:1px;"></td>
+		<td class=small >
+			<!-- Add and Search -->
+			<table border=0 cellspacing=0 cellpadding=0>
+			<tr>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
-				        	{if $MODULE eq 'Activities'}
-        			              	        <td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" id="showSubMenu"  onMouseOver="fnvshobj(this,'reportLay');" onMouseOut="fninvsh('reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
-                   				 {else}
-			                          	<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
-       			                	{/if}
+					{if $CHECK.EditView eq 'yes'}
+			        		{if $MODULE eq 'Activities'}
+		                      	        	<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" id="showSubMenu"  onMouseOver="fnvshobj(this,'reportLay');" onMouseOut="fninvsh('reportLay');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
+                	   			 {else}
+	                        		       	<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></a></td>
+			                       	{/if}
 					{else}
-						<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}btnL
-3Add-Faded.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border
-=0></td>	
+						<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}btnL3Add-Faded.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$MODULE}..." border=0></td>	
 					{/if}
 									
-					 <td style="padding-right:10px"><img src="{$IMAGE_PATH}btnL3Search-Faded.gif" border=0></td>
+						<td style="padding-right:10px"><img src="{$IMAGE_PATH}btnL3Search-Faded.gif" alt="{$APP.LBL_SEARCH_ALT}{$MODULE}..." title="{$APP.LBL_SEARCH_TITLE}{$MODULE}..." border=0></td>
+					
 				</tr>
 				</table>
-	</td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
+			</td>
+			</tr>
+			</table>
+		</td>
+		<td style="width:20px;">&nbsp;</td>
+		<td class="small">
+			<!-- Calendar Clock Calculator and Chat -->
 				<table border=0 cellspacing=0 cellpadding=5>
-
 				<tr>
 					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td>
 					<td style="padding-right:0px"><a href="javascript:;"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
@@ -67,10 +73,11 @@
                     </td>	
 				</tr>
 				</table>
-	</td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
-		<table border=0 cellspacing=0 cellpadding=5>
+		</td>
+		<td style="width:20px;">&nbsp;</td>
+		<td class="small">
+			<!-- Import / Export -->
+			<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
 			{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' }
 		   		{if $CHECK.Import eq 'yes'}	
@@ -84,7 +91,7 @@
 					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></td>
                 {/if}
 			{elseif $MODULE eq 'Notes' || $MODULE eq 'Emails'}	
-				<td nowrap style="width:50%;padding:10px">
+				
 				{if $CHECK.Export eq 'yes'}
 					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" alt="{$APP.LBL_IMPORT} {$APP.$MODULE}" title="{$APP.LBL_IMPORT} {$APP.$MODULE}" border="0"></td>
 					<td style="padding-right:10px"><a href="index.php?module={$MODULE}&action=Export&all=1"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>
@@ -97,20 +104,19 @@
                 <td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></td>
 			{/if}
 			</tr>
-		</table>	
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
+			</table>	
+		<td style="width:20px;">&nbsp;</td>
+		<td class="small">
+			<!-- All Menu -->
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onMouseover="fnvshobj(this,'allMenu')"><img src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0"></a></td>
 				</tr>
 				</table>
-	</td>			
-	</tr>
-	</table>
+		</td>			
+		</tr>
+		</table>
 	</td>
-	
-	
 </tr>
 <tr><td style="height:2px"></td></tr>
 </TABLE>
