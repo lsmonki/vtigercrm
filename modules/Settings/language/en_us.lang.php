@@ -596,6 +596,7 @@ $mod_strings = Array(
 'LBL_EDIT_PICKLIST'=>'Edit Pick List',
 'LBL_PICKLIST_SAVEINFO'=>'Type the entries one - by - one below and click the Save button to save the list.',
 'LBL_SELECT_CRM_MODULE'=>'Select crm module',
+'LBL_INVENTORY_TAX_CONFIG'=>'Inventory Tax Configuration',
 );
 
 

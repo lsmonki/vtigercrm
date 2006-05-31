@@ -33,7 +33,7 @@ function updateAllListPrice()
 {PRODUCTLISTHEADER}
 <table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">
   <tr height="20"> 
-    <td COLSPAN="18" class="listFormHeaderLinks">
+    <td >
 	 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td>&nbsp;{RECORD_COUNTS}</td>
@@ -42,10 +42,13 @@ function updateAllListPrice()
 	 </table>
     </td>
    </tr>
-   <tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+   <tr><td >
+   <table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="3" cellspacing="1" width="90%" align="center">
    {LISTHEADER}
- 	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
    {LISTENTITY}
+   </table>
+   </td></tr>
+   <tr><td>&nbsp;</td></tr>
    </form>
 </table>
 

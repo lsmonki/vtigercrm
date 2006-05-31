@@ -55,13 +55,18 @@
 	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		   <tr>
-			<td width="30%" bgcolor="#FFFFFF">&nbsp;</td>
+			<td height="250" width="30%" bgcolor="#FFFFFF"  valign="bottom" background="{$IMAGE_PATH}taxConfig_top.gif" style="background-position:top right;background-repeat:no-repeat;padding:5px;">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td background="{$IMAGE_PATH}taxConfig_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="150">&nbsp;</td>
+              </tr>
+            </table></td>
 			<td>
 				<table width="100%" border="0" cellpadding="5" cellspacing="0" height="100%">
 				   <tr>
 					<td colspan="2" align="left" class="genHeaderBig">{$APP.LBL_TAX} {$MOD.LBL_CONFIGURATION}<br><hr></td>
 				   </tr>
-				   <tr><td colspan="2">&nbsp;</td></tr>
+				   <tr><td colspan="2" >&nbsp;</td></tr>
 				   <tr>
                                 	<td align="right" width="50%"><b>{$APP.LBL_VAT} : </b></td>
                                 	<td align="left">

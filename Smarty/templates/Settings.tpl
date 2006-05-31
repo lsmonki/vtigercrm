@@ -159,6 +159,8 @@
 <td><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings"><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}" border="0"/></a><br />
 <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}">{$MOD.LBL_CURRENCY_CONFIG}</a> </td>
 
+<td><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings"><img src="{$IMAGE_PATH}taxConfiguration.gif" alt="{$MOD.LBL_INVENTORY_TAX_CONFIG}" title="{$MOD.LBL_INVENTORY_TAX_CONFIG}" border="0"/></a><br />
+<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_TAX_CONFIG}" title="{$MOD.LBL_INVENTORY_TAX_CONFIG}">{$MOD.LBL_INVENTORY_TAX_CONFIG}</a> </td>
 
 <td><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"><img src="{$IMAGE_PATH}migrate.gif" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}" border="0"/></a><br />
 <a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}">{$MOD.LBL_MIGRATION}</a></td>

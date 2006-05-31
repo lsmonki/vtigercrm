@@ -117,12 +117,15 @@ function updateAllListPrice(unitprice)
 
 </script>
 <script language="javascript" src="modules/Products/Product.js"></script>
-<BR>
-<BR>
+<table width="95%" border="0" cellpadding="0" cellspacing="0">
+<tr><td colspan="3">&nbsp;</td></tr>
+<tr>
+		<td>&nbsp;</td>
+		<td class="showPanelBg">
 {PRICEBOOKLISTHEADER}
-<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">
+<table border="0" cellpadding="0" cellspacing="0"  width="100%">
   <tr height="20"> 
-    <td COLSPAN="18" class="listFormHeaderLinks">
+    <td  class="listFormHeaderLinks">
 	 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td>&nbsp;{RECORD_COUNTS}</td>
@@ -131,14 +134,23 @@ function updateAllListPrice(unitprice)
 	 </table>
     </td>
    </tr>
-   <tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-   {LISTHEADER}
- 	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-   {LISTENTITY}
+   <tr>
+   			<td>
+					<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="3" cellspacing="1" width="90%" align="center">
+							 {LISTHEADER}
+							 {LISTENTITY}
+					</table>
+			</td>
+   </tr>   
+   <tr><td>&nbsp;</td></tr>
    </form>
 </table>
 
 <!-- END: main -->
 </form>
+</table>
+</td>
+<td>&nbsp;</td>
+</tr>
 </table>
 

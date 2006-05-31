@@ -27,7 +27,7 @@
 </table>
 
 <div id="top">
-<div id="user" style="height:185px;">
+<div id="user" style="height:180px;">
 	<a href="index.php?module=Administration&action=index&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_USERS}</a>
 	<a href="index.php?module=Users&action=listroles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ROLES}</a>
 	<a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PROFILES}</a>	
@@ -44,10 +44,9 @@
 </tr></table>
 
 <div id="top2">
-<div id="studio" style="height:45px;">
+<div id="studio" style="height:50px;">
 	<a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
 	<a href="index.php?module=Settings&action=PickList&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PICKLIST_SETTINGS}</a>
-	<!--a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" >{$MOD.LBL_FIELD_ORDERING}</a-->
 </div></div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top3','communication');" >
@@ -69,12 +68,13 @@
 <td width="5%"><a href="javascript:;" class="lftMnuHdr"><img src="{$IMAGE_PATH}downArrow.gif" border="0" /></a></td>
 </tr></table>
 <div id="top4">
-<div id="config" style="height:135px;">
+<div id="config" style="height:160px;">
 <a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ORGANIZATION_DETAILS}</a>
 <a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_EMAIL_CONFIG}</a>
 <a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a>
 <a href="index.php?module=System&action=systemconfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_SYSTEM_CONFIG}</a>
 <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_CURRENCY_CONFIG}</a>
+<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_INVENTORY_TAX_CONFIG}</a>
 <a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_MIGRATION}</a>
 </div></div>
 </td>

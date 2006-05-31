@@ -23,8 +23,6 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 $pricebookname = getPriceBookName($pricebook_id);
-echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_ADD_PRODUCTS_PRICEBOOK'].": ".$pricebookname, true);
-echo "<br>";
 
 $xtpl=new XTemplate ('modules/Products/AddProductsToPriceBook.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -149,14 +147,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 }
 
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+$other_text = '<table width="95%" border="0" cellpadding="1" cellspacing="0" align="center">
 	<form name="addToPB" method="POST">
 	<tr>
 	<input name="pricebook_id" type="hidden" value="'.$pricebook_id.'">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden">';
-        $other_text .='<td><input class="button" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/></td>';
-	$other_text .='<td>&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="button" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
+        $other_text .='<td align="center"><input class="classBtn" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/>';
+	$other_text .='&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="classBtn" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
 
 	$other_text .='</tr></table>';
 
@@ -212,18 +210,12 @@ $xtpl->assign("UNIT_PRICE_ARRAY",implode(",",$unit_price_array));
 $xtpl->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
 $list_header = '';
-$list_header .= '<tr class="moduleListTitle" height=20>';
-$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice()\'></td>';
-$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_LIST_PRODUCT_NAME'].'</td>';
-$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_CODE'].'</td>';
-$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
-$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
-$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '<tr>';
+$list_header .='<td class="lvtCol"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice()\'></td>';
+$list_header .= '<td class="lvtCol">'.$mod_strings['LBL_LIST_PRODUCT_NAME'].'</td>';
+$list_header .= '<td class="lvtCol">'.$mod_strings['LBL_PRODUCT_CODE'].'</td>';
+$list_header .= '<td class="lvtCol">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
+$list_header .= '<td class="lvtCol">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
 $list_header .= '</tr>';
 
 $xtpl->assign("LISTHEADER", $list_header);
@@ -236,25 +228,15 @@ for($i=0; $i<$num_rows; $i++)
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{
-		if (($i%2)==0)
-			$list_body .= '<tr height=20 class=evenListRow>';
-		else
-			$list_body .= '<tr height=20 class=oddListRow>';
-
+		$list_body .= '<tr class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'" bgcolor="white">';
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$field_name=$entity_id."_listprice";
 
-		$list_body .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'")\'></td>';
-		$list_body .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productname").'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productcode").'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$unit_price.'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;"><input type="text" name="'.$field_name.'"></td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'")\'></td>';
+		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productname").'</td>';
+		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productcode").'</td>';
+		$list_body .= '<td>'.$unit_price.'</td>';
+		$list_body .= '<td><input type="text" name="'.$field_name.'"></td></tr>';
 	}
 	
 }
