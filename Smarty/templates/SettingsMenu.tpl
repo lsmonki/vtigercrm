@@ -27,7 +27,7 @@
 </table>
 
 <div id="top">
-<div id="user" style="height:180px;">
+<div id="user" style="height:185px;">
 	<a href="index.php?module=Administration&action=index&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_USERS}</a>
 	<a href="index.php?module=Users&action=listroles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_ROLES}</a>
 	<a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PROFILES}</a>	
@@ -44,10 +44,10 @@
 </tr></table>
 
 <div id="top2">
-<div id="studio" style="height:70px;">
+<div id="studio" style="height:45px;">
 	<a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a>
 	<a href="index.php?module=Settings&action=PickList&parenttab=Settings" class="lftSubMnu">{$MOD.LBL_PICKLIST_SETTINGS}</a>
-	<a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" >{$MOD.LBL_FIELD_ORDERING}</a>
+	<!--a href="index.php?module=Settings&action=SettingsSubMenu&type=FieldOrder&parenttab=Settings" class="lftSubMnu" >{$MOD.LBL_FIELD_ORDERING}</a-->
 </div></div>
 
 <table class="lftMnuHdr" cellpadding="0" cellspacing="0" onclick="fnWipe('top3','communication');" >
