@@ -117,7 +117,7 @@ function alphabetic(module,url,dataid)
 		</td>
 		<td width="35%" class="dvtCellLabel">
 			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
-			   <span class="hiliteBtn4Search"><a href="#" onClick="hide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
+			   <span class="hiliteBtn4Search"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
 							</td>
 	</tr>
 	<tr>
@@ -138,7 +138,7 @@ function alphabetic(module,url,dataid)
 					<td width="15%"  class="dvtCellLabel" align="right"><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="{$APP.LNK_ADVANCED_SEARCH}" title="{$APP.LNK_ADVANCED_SEARCH}" border=0></td>
 					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
 					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
-					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');hide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
+					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
 			</tr>
 		</table>
 		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">

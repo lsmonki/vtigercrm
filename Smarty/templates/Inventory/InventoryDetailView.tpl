@@ -58,11 +58,11 @@ function tagvalidate()
 					<td>{$UPDATEINFO}</td>	
 					<td align="right" width="400" nowrap>
 						<div id="addtagdiv">
-							<a href="javascript:;" onClick="show('tagdiv'),hide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a>
+							<a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a>
 						</div>
 						<div id="tagdiv" style="display:none;">
 							<input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;
-							<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="hide('tagdiv'),show('addtagdiv')">
+							<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="fnhide('tagdiv'),show('addtagdiv')">
 						</div>
 					</td>
 				   </tr>
