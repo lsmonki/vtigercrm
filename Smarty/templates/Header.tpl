@@ -424,7 +424,7 @@ function getFormValidate(divValidate)
 <script>
 function openwin()
 {ldelim}
-            window.open("index.php?module=Users&action=about_us","aboutwin","height=300,width=400,top=200,left=300")
+            window.open("index.php?module=Users&action=about_us","aboutwin","height=520,width=515,top=200,left=300")
 {rdelim}
 </script>
 
