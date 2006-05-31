@@ -29,7 +29,7 @@ function getImapMbox($mailbox,$temprow,$readonly='') {
 	$ssltype=$temprow["ssltype"]; 
 	$sslmeth=$temprow["sslmeth"]; 
 	 
-	$mods = parsePHPModules()	 
+	$mods = parsePHPModules();
 	 	 
 	// first we will try a regular old IMAP connection: 
 	if($ssltype == "") {$ssltype = "notls";} 
