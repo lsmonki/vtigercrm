@@ -269,17 +269,16 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 
 ?>
 
-
-
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
 	<td style="padding-left:10px;padding-right:30px" class="moduleName" width="20%" nowrap><? echo $app_strings['Analytics'];?> &gt; <a class="hdrLink" href="index.php?action=index&parenttab=Analytics&module=Dashboard"><? echo $app_strings['Dashboard'] ?></a></td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td class=small >
+
+	<td  nowrap width="8%">
 		<table border=0 cellspacing=0 cellpadding=0>
 		<tr>
-			<td>
+			<td class="sep1" style="width:1px;"></td>
+			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 						<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>btnL3Add-Faded.gif" alt="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." title="<? echo $app_strings['LBL_CREATE_BUTTON_LABEL']; ?> <? echo $app_strings['Dashboard']; ?>..." border=0></td>	
@@ -287,8 +286,11 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 				</tr>
 				</table>
 	</td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
+			</tr>
+			</table>
+	</td>
+	<td width="20">&nbsp;</td>
+                <td class="small" width="10%" align="left">
 				<table border=0 cellspacing=0 cellpadding=5>
 
 				<tr>
@@ -300,16 +302,17 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 				</tr>
 				</table>
 	</td>
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
+	<td width="20">&nbsp;</td>
+               <td class="small" align="left" width="5%">
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
 				<td style="padding-right:0px;padding-left:10px;"><img src="<?echo $image_path;?>tbarImport-Faded.gif" alt="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_IMPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
                 <td style="padding-right:10px"><img src="<?echo $image_path;?>tbarExport-Faded.gif" alt="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" title="<? echo $app_strings['LBL_EXPORT']; ?> <? echo $app_strings['Dashboard']; ?>" border="0"></td>
 			</tr>
 		</table>	
-	<td class="sep1" style="width:1px;padding-right:1px"></td>
-	<td>
+	</td>
+	<td width="20">&nbsp;</td>
+                <td class="small" align="left">	
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onMouseover="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
@@ -319,10 +322,13 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 	</tr>
 	</table>
 	</td>
-	
 </tr>
 <tr><td style="height:2px"></td></tr>
 </TABLE>
+	
+
+<!--
+</TABLE> -->
 
 
 
