@@ -204,7 +204,10 @@ function check_form()
 		{
 			if(startformat == 'pm')
 			{
-				starthour = eval(starthour) + 12;
+				if(starthour == '12')
+					starthour = 12;
+				else
+					starthour = eval(starthour) + 12;
 				startmin  = startmin;
 			}
 			else
@@ -217,7 +220,10 @@ function check_form()
 		{
 			if(endformat == 'pm')
                         {
-                                endhour = eval(endhour) + 12;
+				if(endhour == '12')
+                                        endhour = 12;
+                                else
+                                        endhour = eval(endhour) + 12;
 				endmin = endmin;
                         }
 			else
@@ -226,13 +232,17 @@ function check_form()
 				endmin = endmin;
 			}
 		}
-		if((eval(endhour)*60+eval(endmin)) < (eval(starthour)*60+eval(startmin)))
+		if(dateComparison('due_date','End date','date_start','Start date','GE'))
 		{
-			alert("End Time should be greater than Start Time ");
-	                document.appSave.endhr.focus();
-        	        return false;
-		}
-			
+			if((eval(endhour)*60+eval(endmin)) < (eval(starthour)*60+eval(startmin)))
+			{
+				alert("End Time should be greater than Start Time ");
+	                	document.appSave.endhr.focus();
+	        	        return false;
+			}
+		}	
+		else
+			return false;
 		durationinmin = (eval(endhour)*60+eval(endmin)) - (eval(starthour)*60+eval(startmin));
 		if(durationinmin >= 60)
 		{
