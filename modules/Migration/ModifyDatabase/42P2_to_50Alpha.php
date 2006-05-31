@@ -68,13 +68,9 @@ foreach($alter_array1 as $query)
 }
 
 //Tables profile2globalpermissions, actionmapping creation
-$create_sql1 = "CREATE TABLE `profile2globalpermissions` (
-`profileid` int(19) NOT NULL default '0',
-	`globalactionid` int(19) NOT NULL default '0',
-	`globalactionpermission` int(19) default NULL,
-	PRIMARY KEY (`profileid`,`globalactionid`),
-	CONSTRAINT `fk_profile2globalpermissions` FOREIGN KEY (`profileid`) REFERENCES `profile` (`profileid`) ON DELETE CASCADE
-	)";
+
+$create_sql1 ="CREATE TABLE `profile2globalpermissions` (`profileid` int(19) NOT NULL, `globalactionid` int(19) NOT NULL, `globalactionpermission` int(19) default NULL, PRIMARY KEY  (`profileid`,`globalactionid`),  KEY `idx_profile2globalpermissions` (`profileid`,`globalactionid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+
 Execute($create_sql1);
 
 $create_sql2 = "CREATE TABLE `actionmapping` (
@@ -2831,6 +2827,8 @@ foreach($alter_query_array18 as $query)
 	Execute($sec4);
 
 	//Inserting into datashare related modules table
+
+	Execute("insert into datashare_relatedmodules_seq values(1)");
 	
 	//Lead Related Module
                 Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",7,10)");
