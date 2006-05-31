@@ -1,29 +1,16 @@
 <?php
-////////////////////////////////////////////////////
-// PHPMailer - PHP email class
-//
-// Class for sending email using either
-// sendmail, PHP mail(), or SMTP.  Methods are
-// based upon the standard AspEmail(tm) classes.
-//
-// Copyright (C) 2001 - 2003  Brent R. Matzelle
-//
-// License: LGPL, see LICENSE
-////////////////////////////////////////////////////
-
-/**
- * PHPMailer - PHP email transport class
- * @package PHPMailer
- * @author Brent R. Matzelle
- * @copyright 2001 - 2003 Brent R. Matzelle
- */
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ *
+ ********************************************************************************/
 
 
 require("modules/Emails/class.phpmailer.php");
-
-//Add these lines in wherever we want to use this function
-//include("modules/Emails/mail.php");
-//send_mail('Emails',$to_email,$from_name,$from_email,$subject,$body,$ccmail,$bccmail);
 
 /**   Function used to send email 
   *   $module 		-- current module 
