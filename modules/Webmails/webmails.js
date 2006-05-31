@@ -55,10 +55,14 @@ function displayAttachments(mid) {
         window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
 function showRelationships(mid) {
-        // just add to vtiger for now
+	// TODO: present the user with a simple DHTML div to
+	// choose what type of relationship they would like to create
+	// before creating it.
         add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
+	// TODO: update this function to allow you to set what entity type
+	// you would like to associate to
         $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
@@ -81,6 +85,8 @@ function select_all() {
         }
 }
 function check_in_all_boxes(mymbox) {
+	// TODO: There is possibly still a bug in the mailbox counting code
+	// check for NaN
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -121,6 +127,8 @@ function check_for_new_mail(mbox) {
                         onComplete: function(t) {
 			//alert(t.responseText);
                             try {
+				// TODO: replace this at some point with prototype JSON
+				// tools
                                 var data = eval('(' + t.responseText + ')');
 				var read  = parseInt($(mailbox+"_read").innerHTML);
 				$(mailbox+"_read").innerHTML = (read+data.mails.length);
@@ -228,6 +236,7 @@ function check_for_new_mail(mbox) {
                                         );
                                         tr.appendChild(del);
 
+					// TODO: this is ugly, replace using prototype child walker tools
                                         tr.style.display='none';
                                         var tels = $("message_table").childNodes[1].childNodes;
                                         for(var j=0;j<tels.length;j++) {
@@ -247,15 +256,13 @@ function check_for_new_mail(mbox) {
         );
 }
 function periodic_event() {
+	// NOTE: any functions you put in here may race.  This could probably
+	// be avoided by executing functions in a 0'ed timeout, or a prototype
+	// enumerator
         check_for_new_mail(mailbox);
         window.setTimeout("periodic_event()",box_refresh);
 }
 function show_hidden() {
-	if(degraded_service == 'true') {
-		window.location=window.location+"&show_hidden=true";
-		return;
-	}
-
         $("status").style.display="block";
         var els = document.getElementsByClassName("deletedRow");
         for(var i=0;i<els.length;i++) {
@@ -269,6 +276,11 @@ function show_hidden() {
 function mass_delete() {
 	var ok = confirm("Are you sure you want to delete these messages?");
 	if(ok) {
+		// TODO: CHANGE THIS ASAP.  This spikes the client proc @ 100% and
+		// depending on the mbox size may seem completely unresponsive for
+		// extended periods.  Could be changed with getElementsByClassName()
+		// to shorten the loop.  The majority of the slowdown probably comes from
+		// executing an AJAX delete_msg for each mailid :).
         	$("status").style.display="block";
         	var els = document.getElementsByTagName("INPUT");
         	var cnt = (els.length-1);
@@ -309,6 +321,7 @@ function move_messages() {
         $("status").style.display="none";
 }
 function search_emails() {
+	// TODO: find a way to search in degraded functionality mode.
         var search_query = $("search_input").value;
         var search_type = $("search_type").value;
         window.location = "index.php?module=Webmails&action=index&search=true&search_type="+search_type+"&search_input="+search_query;
@@ -338,6 +351,7 @@ function runEmailCommand(com,id) {
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
                                         row.className = "deletedRow";
+					// TODO: change to try.these() from prototype.
                                         try {
                                                 $("ndeleted_subject_"+id).innerHTML = "<s>"+$("ndeleted_subject_"+id).innerHTML+"</s>";
                                                 $("ndeleted_date_"+id).innerHTML = "<s>"+$("ndeleted_date_"+id).innerHTML+"</s>";
@@ -403,6 +417,8 @@ function remove(s, t) {
 function changeMbox(box) {
         location.href = "index.php?module=Webmails&action=index&mailbox="+box;
 }
+// TODO: these two functions should be tied into a mailbox management panel of some kind.
+// could be a DHTML div with AJAX calls to execute the commands on the mailbox.  
 function show_addfolder() {
         var fldr = $("folderOpts");
         if(fldr.style.display == 'none')
