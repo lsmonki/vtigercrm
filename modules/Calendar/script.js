@@ -104,6 +104,7 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
         	                document.appSave.activitytype[1].checked = true;
 
 			document.appSave.date_start.value = startdate;
+			document.appSave.due_date.value = enddate;
 			document.appSave.starthr.value = starthr;
 			document.appSave.startmin.value = startmin;
 			document.appSave.startfmt.value = startfmt;
