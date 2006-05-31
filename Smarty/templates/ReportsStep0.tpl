@@ -84,7 +84,7 @@
 			</td>
 			</tr>
 			<tr>
-			<td style="padding-right: 5px;" align="right" width="25%"><b>{$MOD} : </b></td>
+			<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
 			<td style="padding-left: 5px;" align="left" width="75%">
 			<select name="secondarymodule" class="txtBox">
 			<option value="">--None--</option>
@@ -105,7 +105,7 @@
 		<td align="right" style="padding:10px;" background="{$IMAGE_PATH}report_bottom.gif">
 		<input type="button" name="back_rep" value=" &nbsp;&lt;&nbsp;Back&nbsp; " disabled="disabled" class="classBtn" onClick="changeStepsback();">
 		&nbsp;<input type="button" name="next" value=" &nbsp;Next&nbsp;&rsaquo;&nbsp; " onClick="changeSteps();" class="classBtn">
-		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="fnClose()">
+		&nbsp;<input type="button" name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="self.close();">
 		</td>
 		</tr>
 	</form>	

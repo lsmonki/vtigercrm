@@ -500,9 +500,9 @@ function changeSteps()
 {
 	if(getObj('step1').style.display != 'none')
 	{
-		if (trim(NewRep.reportname.value) == "")
+		if (trim(document.NewRep.reportname.value) == "")
 		{
-			alert("Missing Folder Name");
+			alert("Missing Report Name");
 		}else
 		{
 			hide('step1');

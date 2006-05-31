@@ -113,6 +113,7 @@ $mod_strings = Array(
 'LBL_TABULAR_FORMAT'=>'Tabular Format',
 'LBL_TABULAR_REPORTS_ARE_SIMPLEST'=>'Tabular Reports are the simplest and fastest way of getting your data',
 'LBL_SUMMARY_REPORT_VIEW_DATA_WITH_SUBTOTALS'=>'Summary reports allow you to view your data along with subtotals and other summary information',
+'LBL_FILTERS'=>'Filters',
 
 )
 
