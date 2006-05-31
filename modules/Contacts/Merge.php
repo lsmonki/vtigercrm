@@ -77,7 +77,7 @@ if($mass_merge != "")
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (4,6) and field.block <> 4 order by field.tablename";
+$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (4,6) and field.block <> 6 and field.block <> 75 order by field.tablename";
 
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
