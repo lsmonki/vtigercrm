@@ -31,7 +31,6 @@ $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 //$dbconfig['db_password'] = '';
 //$dbconfig['db_name'] = 'vtigercrm';
 
-//$host_name = '';
 //$site_URL = '';
 //$root_directory = '';
 

@@ -74,8 +74,6 @@ $dbconfigoption['portability'] = 0;
 // ssl default value = false
 $dbconfigoption['ssl'] = false;
 
-$host_name = $dbconfig['db_hostname'];
-
 $site_URL = '_SITE_URL_';
 
 // root directory path
