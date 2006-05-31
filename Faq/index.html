@@ -1,0 +1,125 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+
+
+<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="98%">
+   <tr>
+	<td align="right" valign="top">
+		<form name="Submit" method="POST" action="index.php">
+		<input type=hidden name="fun" value="search">
+		<input type=hidden name="module" value="Faq">
+		<input type=hidden name="action" value="index">
+		<input type="text" name="search_text" value="<?php echo $search_text; ?>">&nbsp;in&nbsp;
+		<?php echo getSearchCombo(); ?>
+		<input type="submit" name="search" onclick="this.fun.value='search'" value="<?php echo $mod_strings['LBL_SEARCH']; ?>">
+		</form>
+	</td>
+   </tr>	
+   <tr><td valign="top">&nbsp;</td></tr>	
+   <tr>
+	<td align="left" valign="top">
+		<table cellpadding="0" cellspacing="0" class="mainTab">
+                   <tr>
+			<td style="padding: 10px;width:20%;" valign="top">
+				<table class="lftMnu" border="0" width="100%" cellspacing="0" cellpadding="0">
+				   <tr>
+					<td><a href="javascript:;toggleView('category')"><img id="categoryimg" src="images/minus.gif" border="0" align="absmiddle"></a></td>
+					<td><a href="javascript:;toggleView('category')"><img src="images/category.gif" border="0" align="absmiddle"></a></td>
+					<td><a href="javascript:;toggleView('category')" class="kbNavHead"><?php echo $mod_strings['LNK_CATEGORY']; ?></a></td>
+				   </tr>
+				   <tr>
+					<td></td>
+					<td></td>
+					<td>
+						<div id="category" style="display:block">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+						<?php
+							for($i=0,$j=1;$i<count($category_array);$i++,$j++)
+							{
+							        $noof_faqs = getNoofFaqsPerCategory($category_array[$i]);
+						?>
+						   <tr>
+							<td nowrap><a class="hdr" href="index.php?module=Faq&action=index&fun=faqs&category_index=<?php echo $i; ?>"><?php echo $category_array[$i]; ?></a> <span class="kbNavCnt">(<?php echo $noof_faqs; ?>)</span></td>
+						   </tr>
+						<?php
+							}
+						?>
+						</table>
+						</div>
+					</td>
+				   </tr>
+				</table>
+				<table class="lftMnu" border="0" width="100%" cellspacing="0" cellpadding="0">
+				   <tr>
+					<td><a href="javascript:;toggleView('products')"><img id="productsimg" src="images/minus.gif" border="0" align="absmiddle"></a></td>
+					<td><a href="javascript:;toggleView('products')"><img src="images/products.gif" border="0" align="absmiddle"></a></td>
+					<td><a href="javascript:;toggleView('products')" class="kbNavHead"><?php echo $mod_strings['LNK_PRODUCTS']; ?></a></td>
+				   </tr>
+				   <tr>
+					<td></td>
+					<td></td>
+					<td>
+						<div id="products" style="display:block">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0">
+						<?php
+							for($i=0,$j=1;$i<count($product_array);$i++,$j++)
+							{
+								$noof_faqs = getNoofFaqsPerProduct($product_array[$i]['productid']);
+					   	?>
+						   <tr>
+							<td nowrap><a class="hdr" href="index.php?module=Faq&action=index&fun=faqs&productid=<?php echo $product_array[$i]['productid']; ?>"><?php echo $product_array[$i]['productname']; ?></a> <span class="kbNavCnt">(<?php echo $noof_faqs; ?>)</span></td>
+						   </tr>
+						<?php
+							}
+						?>
+						</table>
+						</div>
+					</td>
+				   </tr>
+				   	<!-- <tr><td><a href="#" class="hdr">Vtiger Single User Pack</a>(0)</td></tr>
+					   <tr><td><a href="#" class="hdr">Vtiger 5 User Pack</a>(0)</td></tr>
+					   <tr><td><a href="#" class="hdr">Vtiger 10 User Pack</a>(1)</td></tr> -->
+				</table>
+
+			</td>
+			<td style="padding:10px;width:80%" valign="top">
+
+
+
+
+
+
+<script language="JavaScript" src="js/cookies.js"></script>
+<script>
+function toggleView(view) {
+	if (document.getElementById(view).style.display=="block") {
+		document.getElementById(view).style.display="none"
+		document.getElementById(view+"img").src="images/plus.gif"
+		set_cookie("kb_"+view,"none")
+	} else {
+		document.getElementById(view).style.display="block"
+		document.getElementById(view+"img").src="images/minus.gif"
+		set_cookie("kb_"+view,"block")
+	}
+}
+
+var view=new Array("category","products")
+for (i=0;i<view.length;i++) {
+	if (get_cookie("kb_"+view[i])==null || get_cookie("kb_"+view[i])=="" || get_cookie("kb_"+view[i])=="block") {
+		document.getElementById(view[i]).style.display="block"
+		document.getElementById(view[i]+"img").src="images/minus.gif"
+	} else {
+		document.getElementById(view[i]).style.display="none"
+		document.getElementById(view[i]+"img").src="images/plus.gif"
+	}
+}
+</script>

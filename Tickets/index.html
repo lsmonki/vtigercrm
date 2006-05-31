@@ -1,0 +1,103 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+
+<script language="JavaScript" src="js/general.js"></script>
+<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
+   <tr>
+	<td align="left">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		  <form name="index" method="post" action="index.php">
+		  <input type="hidden" name="module">
+		  <input type="hidden" name="action">
+		  <input type="hidden" name="fun">
+		  <tr>
+			<td style="padding:5px;">
+				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+				  <tr><td colspan="2">&nbsp;</td></tr>
+				   <tr>
+					<td align="left">
+						<?php $show= ''; if($_REQUEST['showstatus'] != '') $show = $_REQUEST['showstatus']; ?>
+					   <span class="lvtHeaderText">Show&nbsp;
+						<select id="ticket_status_combo" onchange="this.form.module.value='Tickets';this.form.action.value='index';this.form.fun.value='home'; showTickets(index)">
+							<?php 
+								echo getStatusComboList($show);
+							?>
+						</select>
+					   Tickets</span>
+					</td>
+					<td align="right">
+					   <input name="newticket" type="submit" value="New Ticket" onclick="this.form.module.value='Tickets';this.form.action.value='index';this.form.fun.value='newticket'">&nbsp;&nbsp;&nbsp;
+					   <input name="srch" type="button" value="Search" onClick="fnDown('tabSrch');">
+					</td>
+					</form>
+				   </tr>
+				   <tr><td colspan="2">&nbsp;</td> </tr>	 
+				   <!-- tr>
+					<td align="left">&nbsp;
+					</td>
+					<td align="right">
+						<span class="hdr">1&nbsp;|&nbsp;2&nbsp;|&nbsp;3&nbsp;|&nbsp;4&nbsp;|&nbsp;5</span>&nbsp;
+						<a href="#" class="hdr">Next >></a>
+					</td>
+				   <tr 	
+				   <tr><td colspan="2">&nbsp;</td></tr>-->
+
+<!-- following tags should be closed after displayed the list of tickets or new ticket in table format
+						</table>
+					</td>
+				   </tr>
+				</table>
+			</td>
+		   </tr>
+		</table>-->
+
+
+
+
+<script>
+function verify_data(form,fldval)
+{
+	com = trim(form.fldval.value);
+	if(com != '')
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+function trim(s) 
+{
+	while (s.substring(0,1) == " ")
+	{
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ')
+	{
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
+function showTickets(form)
+{
+	window.location.href = "index.php?showstatus="+form.ticket_status_combo.value;
+	//window.location.reload();
+}
+
+</script>
+
+
+
+
+
