@@ -975,6 +975,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$Entries = Array();
 	global $adb,$current_user,$mod_strings;
 	$shared_ids = getSharedCalendarId($current_user->id);
+	if(empty($shared_ids))
+		$shared_ids = $current_user->id;
 	$query = "SELECT cntactivityrel.contactid, activity.*
 		FROM activity
 		INNER JOIN crmentity
@@ -1058,6 +1060,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
         $Entries = Array();
         global $adb,$current_user,$mod_strings;
 	$shared_ids = getSharedCalendarId($current_user->id);
+	if(empty($shared_ids))
+		$shared_ids = $current_user->id;
         $query = "SELECT cntactivityrel.contactid, activity.*
                 FROM activity
                 INNER JOIN crmentity
