@@ -551,7 +551,7 @@ function getColumnNames()
 {
 	global $log;
 	$log->debug("Entering getColumnNames() method ...");
-	$sql1 = "select fieldlabel from field where tabid=4 and block <> 4";
+	$sql1 = "select fieldlabel from field where tabid=4 and block <> 6 and block <> 75";
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)
