@@ -33,7 +33,7 @@ oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
 oXMLHttp.setRequestHeader "Content-Type", "text/xml"
 oXMLHttp.send oPSoap.Serialize
 
-MsgBox oXMLHttp.responseText
+'MsgBox oXMLHttp.responseText
 sErrMsg = gMsg003
 If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
