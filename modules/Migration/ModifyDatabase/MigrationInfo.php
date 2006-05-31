@@ -44,7 +44,7 @@ require_once($theme_path.'layout_utils.php');
 			<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 				   <tr>
-					   <td width="10%"><img src="<?php echo $image_path; ?>MigrationIcon.jpg" width="66" height="61"  align="absmiddle"/></td>
+					   <td width="10%"><img src="<?php echo $image_path; ?>migrate.gif" align="absmiddle"/></td>
 					<td width="90%">
 						<span class="genHeaderBig">Migrate From Previous Version</span><br />
 						Update your new vtiger CRM 5 database with the data from previous installation<br />
@@ -189,10 +189,19 @@ require_once($theme_path.'layout_utils.php');
 						<br /><br />
 
 						<b style="color:#006600">Migration Queries Log</b>
-						<div id="successLog" style="border:1px solid #666666;width:90%;position:relative;height:100px;overflow:auto;left:5%;top:10px;">
+						<div id="successLog" style="border:1px solid #666666;width:90%;position:relative;height:250px;overflow:auto;left:5%;top:10px;">
 							<!-- we should place the All queries executed-->
 							<!-- This table is designed to display all the queries (before this table a div tag is opened. so all these following queries will be put inside the div tab as a table format) -->
-							<table border=1>
+							<style>
+								.MigInfo{
+									border-collapse:collapse;
+									border:0px solid red;
+								}
+								.MigInfo tr td{
+										border:1px solid #CCCCCC;
+									      }
+							</style>
+							<table width="98%" cellpadding="3" cellspacing="0" border="0" class="MigInfo">
 							   <tr>
 							   	<td colspan=3 width="100%">
 									<br>Note : Please note that for each query the "Object" string will be displayed at the	starting of the line if the query executed successfully. If the query fails then "Object" will not be displayed. we can find out the failed queries based on these Object display.
@@ -219,7 +228,7 @@ require_once($theme_path.'layout_utils.php');
 						<br /><br />
 
 						<b style="color:#FF0000">Failed Queries Log</b>
-						<div id="failedLog" style="border:1px solid #666666;width:90%;position:relative;height:100px;overflow:auto;left:5%;top:10px;">
+						<div id="failedLog" style="border:1px solid #666666;width:90%;position:relative;height:200px;overflow:auto;left:5%;top:10px;">
 							<!-- we should place the failed queries here -->
 							<?php
 								foreach($failure_query_array as $failed_query)

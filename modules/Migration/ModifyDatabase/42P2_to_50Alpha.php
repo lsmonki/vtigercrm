@@ -2875,7 +2875,7 @@ Execute($alter_query18);
 		alert("Currency Changes has been made Successfully");
 	}
 
-	if(!confirm("Are you using Dollar $ as Currency?"))
+	if(!confirm("Are you using Dollar $ as Currency? \n Click OK to remain as $, Cancel to change the currency conversion rate."))
 	{
 		getConversionRate('');
 	}

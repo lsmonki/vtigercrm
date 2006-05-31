@@ -43,7 +43,7 @@
 			<td bgcolor="#ECECEC" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 				   <tr>
-					<td width="10%"><img src="{$IMAGE_PATH}MigrationIcon.jpg" width="66" height="61"  align="absmiddle"/></td>
+					<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
 					<td width="90%">
 						<span class="genHeaderBig">Migrate From Previous Version</span><br />
 						Update your new vtiger CRM 5 database with the data from previous installation<br />
@@ -71,6 +71,10 @@
 						This option requires you to have the dump file, in this local system.
 						You cannot specify a remote machine. Refer documentation for Help.
 					</td>
+				   </tr>
+				   <tr bgcolor="#FFFFFF">
+					<td align="right" valign="top"><b>Note: </b></td>
+					<td>{$MOD.LBL_NOTES_DUMP_PROCESS}</td>
 				   </tr>
 				   <tr><td colspan="2" height="10"></td></tr>
 				   <tr bgcolor="#FFFFFF">
@@ -130,7 +134,7 @@
 				   </tr>
 				   <tr>
 					<td colspan="2" style="padding:10px;" align="center">
-						<input type="submit" name="migrate" value=" Test &amp; Migrate "  class="classBtn" onclick="return validate_migration(Migration);"/>
+						<input type="submit" name="migrate" value="  Migrate  "  class="classBtn" onclick="return validate_migration(Migration);"/>
 						&nbsp;<input type="submit" name="cancel" value=" &nbsp;Cancel&nbsp; "  class="classBtn" onclick="this.form.module.value='Settings';this.form.action.value='index';"/>
  					</td>
 				   </tr>
