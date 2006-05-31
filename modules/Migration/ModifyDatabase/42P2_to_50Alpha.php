@@ -2330,9 +2330,9 @@ $query_array = Array(
 "ALTER TABLE `mail_accounts` MODIFY COLUMN `user_id` INTEGER(11) NOT NULL",
 "ALTER TABLE `mail_accounts` ADD COLUMN `box_refresh` INTEGER(10) DEFAULT NULL",
 "ALTER TABLE `mail_accounts` ADD COLUMN `mails_per_page` INTEGER(10) DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `ssltype` VARCHAR(50) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `sslmeth` VARCHAR(50) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `showbody` VARCHAR(10) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `mail_accounts` ADD COLUMN `ssltype` VARCHAR(50) DEFAULT NULL",
+"ALTER TABLE `mail_accounts` ADD COLUMN `sslmeth` VARCHAR(50) DEFAULT NULL",
+"ALTER TABLE `mail_accounts` ADD COLUMN `showbody` VARCHAR(10) DEFAULT NULL",
 "ALTER TABLE `notes` MODIFY COLUMN `contact_id` INTEGER(19) DEFAULT '0'",
 "ALTER TABLE `notes` MODIFY COLUMN `notecontent` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `notificationscheduler` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
@@ -2855,6 +2855,14 @@ foreach($alter_query_array18 as $query)
 	
 
 //By Don Ends
+
+//Added the tabel mail_accounts which has been added by mmbrich
+$alter_query18 = "alter table mail_accounts add column int_mailer int(1) default '0'";
+Execute($alter_query18);
+
+
+
+
 
 
 //Added to get the conversion rate and update for all records
