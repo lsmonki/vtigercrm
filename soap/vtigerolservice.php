@@ -308,7 +308,7 @@ function AddMessageToContact($username,$contactid,$msgdtls)
           	$email->column_fields[assigned_user_id] = $user_id;
           	$email->column_fields[date_start] = $date_sent;
           	$email->column_fields[description]  = $email_body;
-          
+         	$email->column_fields[activitytype] = 'Emails'; 
           	$email->save("Emails");
           
           	$email->set_emails_contact_invitee_relationship($email->id,$contactid);
