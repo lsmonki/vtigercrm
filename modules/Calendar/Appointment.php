@@ -58,7 +58,7 @@ class Appointment
                 $q.=" ((activity.date_start < '". $to_datetime->get_formatted_date() ."' AND activity.date_start >= '". $from_datetime->get_formatted_date()."')";
                 if(!is_admin($current_user))
                 {
-                        $q .= "  ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') or (crmentity.smownerid in (".$shared_ids.") and salesmanactivityrel.smid in (".$shared_ids.") and activity.visibility='Public'))";
+                        $q .= "  ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') or (crmentity.smownerid in (".$shared_ids.") and salesmanactivityrel.smid in (".$shared_ids.")))";
                 }
                 $q .= " AND crmentity.deleted = 0) AND recurringevents.activityid is NULL ";
                 $q .= " ORDER by activity.date_start,activity.time_start";
@@ -86,7 +86,7 @@ class Appointment
                 $q .= "  (recurringdate < '".$to_datetime->get_formatted_date()."' AND recurringdate >= '".$from_datetime->get_formatted_date(). "') ";
                 if(!is_admin($current_user))
                 {
-			$q .= " ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) or (crmentity.smownerid in (".$shared_ids.") and salesmanactivityrel.smid in (".$shared_ids.") and activity.visibility='Public'))";
+			$q .= " ) AND ((crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) or (crmentity.smownerid in (".$shared_ids.") and salesmanactivityrel.smid in (".$shared_ids.")))";
                 }
 
                 $q .= " AND crmentity.deleted = 0 )" ;
