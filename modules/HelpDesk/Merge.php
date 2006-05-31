@@ -71,7 +71,7 @@ else
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (13,4,6) and field.uitype <> 61 and (field.tablename <>'CustomerDetails' and block <> 6) and block <> 30 order by field.tablename";
+$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (13,4,6) and field.uitype <> 61 and (field.tablename <>'CustomerDetails' and block <> 6 and block <> 75) and block <> 30 order by field.tablename";
 
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
