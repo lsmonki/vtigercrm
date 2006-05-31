@@ -263,15 +263,25 @@ function periodic_event() {
         window.setTimeout("periodic_event()",box_refresh);
 }
 function show_hidden() {
-        $("status").style.display="block";
+	// prototype uses enumerable lists to queue events for execution.
+	// because of this, this function executes and returns imediately and
+	// the status spinner is never seen.  The status spinner below is a hack
+	// and doesn't even attempt to pretend like it knows the event is finished.
+	// this cannot be fixed with the scriptaculous beforeStart and afterFinish
+	// event hooks for some reason, maybe because the event duration is too quick?
+	window.setTimeout(function() {
+        	$("status").style.display="block";
+		window.setTimeout(function() {
+       			$("status").style.display="none";
+		},2000);
+	},0);
         var els = document.getElementsByClassName("deletedRow");
         for(var i=0;i<els.length;i++) {
                 if(els[i].style.display == "none")
-                        new Effect.Appear(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.2});
+                        new Effect.Appear(els[i],{queue: {position: 'end', scope: 'show'}, duration: 0.2});
                 else
-                        new Effect.Fade(els[i],{queue: {position: 'end', scope: 'command'}, duration: 0.2});
+                        new Effect.Fade(els[i],{queue: {position: 'end', scope: 'show'}, duration: 0.2});
         }
-        $("status").style.display="none";
 }
 function mass_delete() {
 	var ok = confirm("Are you sure you want to delete these messages?");
