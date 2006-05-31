@@ -21,14 +21,15 @@ function isBase64($iVal){
 	return (strlen($_tmp) % 4 == 0 ) ? "y" : "n";
 }
 function getImapMbox($mailbox,$temprow,$readonly='') {
-	global $mbox,$mods; 
+	global $mbox;
 	$login_username= $temprow["mail_username"]; 
 	$secretkey=$temprow["mail_password"]; 
 	$imapServerAddress=$temprow["mail_servername"]; 
 	$mail_protocol=$temprow["mail_protocol"]; 
 	$ssltype=$temprow["ssltype"]; 
 	$sslmeth=$temprow["sslmeth"]; 
-	 	 
+	 
+	$mods = parsePHPModules()	 
 	 	 
 	// first we will try a regular old IMAP connection: 
 	if($ssltype == "") {$ssltype = "notls";} 
