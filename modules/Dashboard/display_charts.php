@@ -315,7 +315,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                 <td class="small" align="left">	
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onMouseover="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
+				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onClick="fnvshobj(this,'allMenu')"><img src="<?echo $image_path;?>btnL3AllMenu.gif" alt="<? echo $app_strings['LBL_ALL_MENU_ALT']; ?>" title="<? echo $app_strings['LBL_ALL_MENU_TITLE']; ?>" border="0"></a></td>
 				</tr>
 				</table>
 	</td>			
