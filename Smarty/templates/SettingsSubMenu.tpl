@@ -106,7 +106,7 @@ padding:2px;
 </table>
 </div>
 
-<div id="subMnuEditFld" class="subMnu" onmouseover="fnvshNrm('subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">
+<!--div id="subMnuEditFld" class="subMnu" onmouseover="fnvshNrm('subMnuEditFld')" onmouseout="fninvsh('subMnuEditFld')">
 <table width="99%" cellpadding="5" cellspacing="0" border="0">
 <tr><td>
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=7&fld_module=Leads&parenttab=Settings" class="mnuSub">{$MOD.LBL_LEAD_FIELD_ACCESS}</a>
@@ -121,4 +121,4 @@ padding:2px;
 <a href="index.php?module=Settings&action=EditFieldBlock&tabid=16&fld_module=Events&parenttab=Settings" class="mnuSub">{$MOD.LBL_EVENT_FIELD_ACCESS}</a>
 </td></tr>
 </table>
-</div>
+</div-->
