@@ -365,6 +365,8 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 {
      global $adb;
      require_once('modules/Users/User.php');
+     require_once('include/utils/utils.php');
+     
      $date_var = date('YmdHis');
      
      $seed_user = new User();
@@ -372,6 +374,12 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
      	
      $crmid = $adb->getUniqueID("crmentity");
      
+     $upload_file_path = decideFilePath();
+   	
+     $handle = fopen($upload_file_path.$filename,"wb");
+     fwrite($handle,base64_decode($filedata),$filesize);
+     fclose($handle);
+
      $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
      values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
      
@@ -380,26 +388,21 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
      
      if($entityresult != false)
      {
-     $sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) 
-     values(".$crmid.",'".$filename."',' ','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
+    	$sql2="insert into attachments(attachmentsid, name, description, type, path) 
+               values(".$crmid.",'".$filename."',' ','".$filetype."','".$upload_file_path."')";
+    	    
+        $result=$adb->query($sql2);
      
-     $result=$adb->query($sql2);
+        $sql3='insert into seattachmentsrel values('.$emailid.','.$crmid.')';
+        $adb->query($sql3);
      
-     if($result != false)
-     {
-     $result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$crmid."' and name='".$filename."'",addslashes($filedata));
+        return $crmid;   
      }
-     
-     $sql3='insert into seattachmentsrel values('.$emailid.','.$crmid.')';
-     $adb->query($sql3);
-     
-     return $crmid;   
-   }
-   else
-   {
+     else
+     {
    		 //$server->setError("Invalid username and/or password"); 
           return "";
-   }
+     }
 }
 
 function GetContacts($username)
