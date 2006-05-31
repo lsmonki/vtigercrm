@@ -137,7 +137,7 @@ if($_REQUEST['mode'] != 'ajax')
 else	
 {
 	$entries['Email Information']['4']['Description']['value'] = from_html($entries['Email Information']['4']['Description']['value']);
-	$smarty->assign("BLOCKS" , from_html($entries['Email Information']));
+	$smarty->assign("BLOCKS", $entries['Email Information']);
 }
 	
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
