@@ -67,4 +67,12 @@ $create_default_user = false;
 // this is for site specific special instructions
 $login_message = 'Please login to the application.';
 
+// access level for vtiger log files
+// set to 1, the vtiger.log will be readable by the owner (chmod: 0600)
+// set to 0, the vtiger.log will not be readable remotely (chmod: 0200)
+
+// 0 is recommended for security.
+// You may need to set it to 1 to read it for certain hosted accounts.
+$log_readable = 0;
+
 ?>
