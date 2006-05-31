@@ -114,7 +114,7 @@
 							{elseif $header eq 'Attachments'}
 							<input title="New Notes" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="Add new Note">&nbsp;
 							<input type="hidden" name="fileid">
-							<input title="New Attachment" accessyKey="F" class="small" onclick="this.form.action.value='upload'; this.form.module.value='uploads'" type="submit" name="button" value="Add new Attachment"></td>
+							<input title="New Attachment" accessyKey="F" class="small" onclick="OpenWindow('index.php?module=uploads&action=uploadsAjax&file=upload&return_action=CallRelatedList&return_module={$MODULE}&return_id={$id}');" type="button" name="button" value="Add new Attachment"></td>
 							{elseif $header eq 'Quotes'}
 							<input title="New Quote" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="Add new Quote"></td>
 							
@@ -216,3 +216,9 @@
 <div id="sendmail_cont" style="z-index:100001;position:absolute;width:310px;"></div>
 {/if}
 
+<script>
+function OpenWindow(url)
+{ldelim}
+	openPopUp('xAttachFile',this,url,'attachfileWin',380,375,'menubar=no,toolbar=no,location=no,status=no,resizable=no');	
+{rdelim}
+</script>

@@ -23,10 +23,11 @@
 $mod_strings = Array(
 
 //Added fields for uploads (attach files)
-'LBL_DESCRIPTION'=>'Description:',
-'LBL_FILENAME'=>'File Name:',
-'LBL_ATTACH_FILE'=>'File Attachment',
-'LBL_UPLOAD'=>'Upload',
+'LBL_ATTACH_FILE'=>'Attach File',
+'LBL_STEP_SELECT_FILE'=>'Step 1 : Select File',
+'LBL_BROWSE_FILES'=>'Click the browse button and select the file to be attached',
+'LBL_DESCRIPTION'=>'Step 2 : Write some description',
+'LBL_OPTIONAL'=>'(optional)',
 );
 
 ?>
