@@ -48,7 +48,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 	
 		<table border="0" cellspacing="0" cellpadding="0" >
 		<tr>
-		<td class="sep1" style="width:0px;">&nbsp;</td>
+		<td class="sep1" style="width:1px;"></td>
 		<td class=small >
 			<!-- Add and Search -->
 			<table border=0 cellspacing=0 cellpadding=0>
