@@ -352,7 +352,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
                                                         <?
                                                                 }
                                                         ?>
-                                                        </select>hours
+                                                        </select>hrs
 							<select class=small name="remmin">
                                                         <?php
                                                                 for($min=1;$min<=59;$min++)
@@ -362,7 +362,7 @@ $calendar_arr['calendar']->hour_format = $current_user->hour_format;
                                                         <?
                                                                 }
                                                         ?>
-                                                        </select><?echo $mod_strings['LBL_BEFOREEVENT']?>
+                                                        </select>minutes&nbsp;<?echo $mod_strings['LBL_BEFOREEVENT']?>
 						</td>
 						</tr>
 						</table>
