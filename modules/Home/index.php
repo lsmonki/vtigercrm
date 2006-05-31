@@ -78,14 +78,14 @@ foreach ( explode(",",$home_section_order) as $section )
         if(isPermitted('Accounts','index') == "yes")
         {
                 include("modules/Accounts/ListViewTop.php");
-		$home_values[]=getTopAccounts();
+		$home_values['Accounts']=getTopAccounts();
         }
             break;
         case 'PLVT':
 	if(isPermitted('Potentials','index') == "yes")
         {
 		 include("modules/Potentials/ListViewTop.php");
-		 $home_values[]=getTopPotentials();
+		 $home_values['Potentials']=getTopPotentials();
 	}
             break;
 
@@ -93,46 +93,46 @@ foreach ( explode(",",$home_section_order) as $section )
 	if(isPermitted('Leads','index') == "yes")
         {
 		 include("modules/Leads/ListViewTop.php");
-		 $home_values[]=getNewLeads();
+		 $home_values['Leads']=getNewLeads();
 	}
             break;
 
 	case 'GRT':
 	if(isPermitted('Activities','index') == "yes")
 	{
-		$home_values[]=getGroupTaskLists();	   
+		$home_values['Activities']=getGroupTaskLists();	   
 	}
    			break;
         case 'HLT':
         if(isPermitted('HelpDesk','index') == "yes")
         {
 		require_once('modules/HelpDesk/ListTickets.php');
-		$home_values[]=getMyTickets();
+		$home_values['HelpDesk']=getMyTickets();
 	}
         	break;
         case 'CVLVT':
 	include("modules/CustomView/ListViewTop.php");
-	$home_values[] = getKeyMetrics();
+	$home_values['CustomView'] = getKeyMetrics();
         	break;
         case 'QLTQ':
         if(isPermitted('Quotes','index') == "yes")
         {
 		require_once('modules/Quotes/ListTopQuotes.php');
-		$home_values[]=getTopQuotes();
+		$home_values['Quotes']=getTopQuotes();
 	}
         	break;
         case 'OLTSO':
         if(isPermitted('SalesOrder','index') == "yes")
         {
 		require_once('modules/SalesOrder/ListTopSalesOrder.php');
-		$home_values[]=getTopSalesOrder();
+		$home_values['SalesOrder']=getTopSalesOrder();
 	}
         	break;
         case 'ILTI':
         if(isPermitted('Invoice','index') == "yes")
         {
 		require_once('modules/Invoice/ListTopInvoice.php');
-		$home_values[]=getTopInvoice();
+		$home_values['Invoice']=getTopInvoice();
 	}
         	break;
     }
@@ -274,7 +274,8 @@ function getGroupTaskLists()
 		}
 
 		$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-		return $values;
+		if(count($entries)>0)	
+			return $values;
 		} 
 }
 ?>
