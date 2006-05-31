@@ -287,7 +287,7 @@ function SearchContactsByEmail($username,$emailaddress)
 
 function AddMessageToContact($username,$contactid,$msgdtls)
 {
-	//global $log;
+	global $adb;
      require_once('modules/Users/User.php');
 	require_once('modules/Emails/Email.php');
 	
@@ -314,8 +314,16 @@ function AddMessageToContact($username,$contactid,$msgdtls)
           	$email->set_emails_contact_invitee_relationship($email->id,$contactid);
           	$email->set_emails_se_invitee_relationship($email->id,$contactid);
           	$email->set_emails_user_invitee_relationship($email->id,$user_id);
-          	
-          	return $email->id;
+		$sql = "select email from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid where crmentity.deleted =0 and contactdetails.contactid='".$contactid."'";
+		$result = $adb->query($sql);
+		$camodulerow = $adb->fetch_array($result);
+		if(isset($camodulerow))
+		{
+			$emailid = $camodulerow["email"];
+			$query = 'insert into emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
+			$adb->query($query);
+		}
+		return $email->id;
           }
           else
           {
