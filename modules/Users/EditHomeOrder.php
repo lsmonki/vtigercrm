@@ -253,6 +253,7 @@ echo $fblock;
 <form align="center" action="" method="post">
          <input type="hidden" name="order" id="order" value="">
         <div align="center">
+		<input type="button" onclick="window.history.back()" value="Back">
                 <input type="button" onclick="showValue()" value="Update System">
         </div>
         <br>
