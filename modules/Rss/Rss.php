@@ -259,7 +259,7 @@ class vtigerRSS extends CRMEntity
 	function getStarredRssHTML()
 	{
 		global $adb;
-		global $image_path;
+		global $image_path,$mod_strings;
 
 		$sSQL = "select * from rss where starred=1";
 		$result = $adb->query($sSQL);
@@ -275,7 +275,7 @@ class vtigerRSS extends CRMEntity
 				if(count($this->rss_object) > 10)
 				{
 					$shtml .= "<tr><td colspan='3' align=\"right\">
-						<a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
+						<a target=\"_BLANK\" href=\"$this->rss_link\">".$mod_strings['LBL_MORE']."</a>
 						</td></tr>";
 				}
 			}
@@ -292,8 +292,8 @@ class vtigerRSS extends CRMEntity
 		}
 		$starredhtml  = "<table class='rssTable' cellspacing='0' cellpadding='0'>
 						<tr>
-       	                <th width='75%'>Subject</th>
-           	            <th width='25%'>Sender</th>
+       	                <th width='75%'>".$mod_strings['LBL_SUBJECT']."</th>
+           	            <th width='25%'>".$mod_strings['LBL_SENDER']."</th>
                    	    </tr>".$starredhtml."</table>";
 
 		return $starredhtml;
@@ -306,7 +306,7 @@ class vtigerRSS extends CRMEntity
 	function getSelectedRssHTML($rssid)
 	{
 		global $adb;
-		global $image_path;
+		global $image_path, $mod_strings;
 
 		$sSQL = "select * from rss where rssid=".$rssid;
 		$result = $adb->query($sSQL);
@@ -322,7 +322,7 @@ class vtigerRSS extends CRMEntity
 				if(count($this->rss_object) > 10)
 				{
 					$shtml .= "<tr><td colspan='3' align=\"right\">
-							<a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
+							<a target=\"_BLANK\" href=\"$this->rss_link\">".$mod_strings['LBL_MORE']."</a>
 							</td></tr>";
 				}
 			}
@@ -339,8 +339,8 @@ class vtigerRSS extends CRMEntity
 		}
 		$starredhtml  = "<table class='rssTable' cellspacing='0' cellpadding='0'>
 						<tr>
-       	                <th width='75%'>Subject</th>
-           	            <th width='25%'>Sender</th>
+       	                <th width='75%'>".$mod_strings['LBL_SUBJECT']."</th>
+           	            <th width='25%'>".$mod_strings['LBL_SENDER']."</th>
                    	    </tr>".$starredhtml."</table>";
 
 		return $starredhtml;

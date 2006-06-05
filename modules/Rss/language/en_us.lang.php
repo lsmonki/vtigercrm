@@ -32,6 +32,9 @@ $mod_strings = Array(
 'LBL_POP_CRM_RSS'=>'Popular CRM Related Feeds',
 'LBL_ALL_RSS_FEEDS'=>'All RSS Feeds',
 
+'LBL_MORE'=>'More...',
+'LBL_SUBJECT'=>'Suject',
+'LBL_SENDER'=>'Sender',
 'LBL_CATEGORY'=>'Category :',
 'LBL_FEED'=>'Feed :',
 'LBL_ADD_RSS_FEED'=>'Add Rss Feed',
