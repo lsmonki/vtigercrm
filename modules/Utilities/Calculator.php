@@ -16,13 +16,13 @@
 
 require_once('Smarty_setup.php');
 require_once("include/calculator/Calc.php");
-global $theme;
+global $theme,$app_strings;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
 
-
+$smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGEPATH",$image_path);
 $smarty->assign("CALC",get_calc($image_path));
 $smarty->display("Calculator.tpl");

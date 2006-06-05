@@ -14,7 +14,7 @@
 	<table class="leftFormBorder1" align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
 	<tbody>
 	<tr class="lvtCol" style="cursor:move;" >
-		<td style="text-align:left;padding-left:5px;border-bottom:1px solid #666666;" id="Handle">World Clock</td>
+		<td style="text-align:left;padding-left:5px;border-bottom:1px solid #666666;" id="Handle">{$APP.LBL_WORLD_CLOCK}</td>
 		<td align="right" style="padding:5px;border-bottom:1px solid #666666;">
 			<a href="javascript:;">
 				<img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('wclock')" hspace="5" align="absmiddle">

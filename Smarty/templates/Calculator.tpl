@@ -13,7 +13,7 @@
 <div id="calc" style="z-index:10000002">
 	<table class="leftFormBorder1" border="0" cellpadding="0" cellspacing="0" width="100%">
 		<tr class="lvtCol" style="cursor:move;" >
-			<td style="text-align:left;padding-left:5px;border-bottom:1px solid #666666;" id="calc_Handle">Calculator</td>
+			<td style="text-align:left;padding-left:5px;border-bottom:1px solid #666666;" id="calc_Handle">{$APP.LBL_CALCULATOR}</td>
 			<td align="right" style="padding:5px;border-bottom:1px solid #666666;">
 			<a href="javascript:;">
 			<img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('calc')" hspace="5" align="absmiddle">
