@@ -12,7 +12,7 @@
 <title>Ajax Css-Popup chat</title>
 
 <!-- NEEDED SCRIPTS  -->
-<script type="text/javascript" src="modules/Contacts/js/ajax.js"></script>
+<script type="text/javascript" src="include/js/ajax.js"></script>
 <script type="text/javascript" src="modules/Contacts/js/dom-drag_p.js"></script>
 <script type="text/javascript" src="modules/Contacts/js/css-window_p.js"></script>
 <script type="text/javascript" src="modules/Contacts/js/chat.js"></script>
