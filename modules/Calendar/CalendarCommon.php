@@ -17,10 +17,9 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 /**
- * Function to get the lists of sharedids 
- * This function accepts the user id as argument and
- * returns the shared ids related with the user id
- * as an array
+ * To get the lists of sharedids 
+ * @param $id -- The user id :: Type integer
+ * @returns $sharedids -- The shared users id :: Type Array
  */
 function getSharedUserId($id)
 {
@@ -37,10 +36,9 @@ function getSharedUserId($id)
 }
 
 /**
- * Function to get the lists of user ids who shared their calendar with an user
- * This function accepts the shared id as arguments and
- * returns the user ids related with the shared id
- * as a comma seperated string
+ * To get the lists of users id who shared their calendar with specified user
+ * @param $sharedid -- The shared user id :: Type integer
+ * @returns $shared_ids -- a comma seperated users id  :: Type string
  */
 function getSharedCalendarId($sharedid)
 {
@@ -57,39 +55,10 @@ function getSharedCalendarId($sharedid)
 }
 
 /**
- * Function to get the label for user lists
- * Returns the label as an array
- */
-function getSharedUserListViewHeader()
-{
-	global $mod_strings;
-		$header_label=array($mod_strings['LBL_LIST_NAME'],
-			            $mod_strings['LBL_LIST_USER_NAME'],
-				   );
-	return $header_label;
-}
-
-/**
- * Function to get the entries for user lists
- * This function accepts the shared id as arguments and
- * returns the user entries related with the shared id
- * as an array
- */
-function getSharedUserListViewEntries($sharedid)
-{
-	global $adb;
-	$query = "SELECT * from users where id=".$sharedid;
-	$result =$adb->query($query);
-	$entries[]=$adb->query_result($result,0,'first_name').' '.$adb->query_result($result,0,'last_name');
-	$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$sharedid.'">'.$adb->query_result($result,0,'user_name').'</a>';
-	return $entries;
-
-}
-
-/**
- * Function to get userid and username of all users except the current user
- * @returns $userArray -- User Array in the following format:
- * $userArray=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
+ * To get userid and username of all users except the current user
+ * @param $id -- The user id :: Type integer
+ * @returns $user_details -- Array in the following format:
+ * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
  */
 function getOtherUserName($id)
 {
@@ -107,6 +76,13 @@ function getOtherUserName($id)
 	return $user_details;
 }
 
+/**
+ * To get hour,minute and format
+ * @param $starttime -- The date&time :: Type string
+ * @param $endtime -- The date&time :: Type string
+ * @param $format -- The format :: Type string
+ * @returns $timearr :: Type Array
+*/
 function getaddEventPopupTime($starttime,$endtime,$format)
 {
 	$timearr = Array();
