@@ -167,7 +167,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		{/if}
            </tr>
 {/foreach}
-	<tr><td colspan="2" align="right" valign="bottom"><a href="index.php?module={$modulename}&action=index">more..</a></td></tr>
+	<tr><td colspan="2" align="right" valign="bottom"><a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a></td></tr>
 	</table>
 				
 			</div>
