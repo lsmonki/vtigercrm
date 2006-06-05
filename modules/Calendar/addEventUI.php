@@ -73,6 +73,14 @@ $calendar_arr['calendar'] = new Calendar($mysel,$date_data);
 $calendar_arr['view'] = $mysel;
 $calendar_arr['calendar']->hour_format = $current_user->hour_format;
 
+/**
+  *To construct time select combo box
+  *@param $format -- the format :: Type string
+  *@param $bimode -- The mode :: Type string
+  *constructs html select combo box for time selection 
+  *and returns it in string format.
+ */
+
  function getTimeCombo($format,$bimode)
  {
 	$combo = '';
