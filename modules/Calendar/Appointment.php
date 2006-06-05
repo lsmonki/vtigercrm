@@ -41,7 +41,16 @@ class Appointment
 		$this->participant = Array();
 		$this->participant_state = Array();
 		$this->description = "";
-	}	
+	}
+	
+	/** To get the events of the specified user and shared events
+	  * @param $userid -- The user Id:: Type integer
+          * @param $from_datetime -- The start date Obj :: Type Array
+          * @param $to_datetime -- The end date Obj :: Type Array
+          * @param $view -- The calendar view :: Type String
+	  * @returns $list :: Type Array
+	 */
+	
 	function readAppointment($userid, &$from_datetime, &$to_datetime, $view)
 	{
 		global $current_user,$adb;
@@ -109,6 +118,11 @@ class Appointment
 		return $list;
 	}
 
+
+	/** To read and set the events value in Appointment Obj
+          * @param $act_array -- The activity array :: Type Array
+          * @param $view -- The calendar view :: Type String
+         */
 	function readResult($act_array, $view)
 	{
 		global $adb;
@@ -226,6 +240,11 @@ class Appointment
 	
 }
 
+/** To two array values
+  * @param $a -- The activity array :: Type Array
+  * @param $b -- The activity array :: Type Array
+  * @returns value 0 or 1 or -1 depends on comparision result
+ */
 function compare($a,$b)
 {
 	if ($a->start_time->ts == $b->start_time->ts)
