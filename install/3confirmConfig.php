@@ -102,7 +102,7 @@ if(!$db_type_status || !$db_server_status)
 			-  specified database user, password, hostname, database type, or port is invalid.<BR>
 			-  specified database user does not have access to connect to the database server from the host';
 }
-elseif($db_type == 'mysql' && ($mysql_server_version < '4.1' || $mysql_server_version > '5.0.19'))
+elseif($db_type == 'mysql' && $mysql_server_version < '4.1')
 {
 	$error_msg = 'MySQL version '.$mysql_server_version.' is not supported, kindly connect to MySQL 4.1.x or above';
 }
