@@ -15,6 +15,10 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
+<span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
+   <a class="link"  align="right" href="javascript:;">Edit</a>
+</span>
+
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
 <div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
 {/if}
