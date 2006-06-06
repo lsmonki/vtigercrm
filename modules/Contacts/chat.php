@@ -68,12 +68,12 @@ class Chat
     // las message id received by user
     if(!isset($_SESSION["mlid"]))
       {
-	$res = $adb->query("show table status like 'chat_msg'");
+	$res = $adb->query("SELECT max(id) AS id FROM chat_msg");
 	$line = $adb->fetch_array($res);
-	if(intval($line['Auto_increment']) == 0)
+	if(intval($line['id']) == 0)
 	  $_SESSION["mlid"] = 0;
 	else
-	  $_SESSION["mlid"] = intval($line['Auto_increment']) - 1;
+	  $_SESSION["mlid"] = intval($line['id']) - 1;
       }
     
     // when the las user list was sended.
@@ -89,7 +89,7 @@ class Chat
       }
     else
       {
-	$res = $adb->query("update chat_users set ping=now() where session='".session_id()."'");
+	      $res = $adb->query("UPDATE chat_users SET ping = ".$adb->database->sysTimeStamp." WHERE session = '".session_id()."'");
 	if($adb->getAffectedRowCount($res) == 0)
 	  {
 	    $this->setUserNick();
@@ -164,7 +164,7 @@ class Chat
   {
 	global $current_user;	
 	global $adb;
-    $res = $adb->query("select id from chat_users where session='".session_id()."'");
+    $res = $adb->query("SELECT id FROM chat_users WHERE session = '".session_id()."'");
     if($adb->num_rows($res) > 0)
       {
 	$line = $adb->fetch_array($res);
@@ -172,14 +172,14 @@ class Chat
 	return;
       }
     
-    $res = $adb->query("show table status like 'chat_users'");
-    $line = $adb->fetch_array($res);
-    if(intval($line['Auto_increment']) == 0)
-      $line['Auto_increment'] = 1;
+    $_SESSION['chat_user'] = $adb->getUniqueID('chat_users');
     
-    $_SESSION['chat_user'] = $line['Auto_increment'];
-    
-    $res = $adb->query("insert into chat_users set nick='".$current_user->user_name."',session='".session_id()."',ping=now(),ip='".$_SERVER['REMOTE_ADDR']."'");
+    $res = $adb->query("INSERT INTO chat_users (id, nick, session, ping, ip)
+   			 VALUES ('".$_SESSION['chat_user']."',
+			 	'".$current_user->user_name."',
+				 '".session_id()."',
+				 ".$adb->database->sysTimeStamp.",
+				 '".$_SERVER['REMOTE_ADDR']."')");
     //$res = $adb->query("select LAST_INSERT_ID()");
     //$line = $adb->fetch_array($res);
     //$_SESSION['chat_user'] = $line[0];
@@ -193,8 +193,10 @@ class Chat
 	global $adb;
     global $chat_conf;
     $tmp = '';
-    $res = $adb->query("delete from chat_users where ((unix_timestamp(now())-unix_timestamp(ping))>'".$chat_conf['alive_time']."')");
-    $res = $adb->query("select id,nick from chat_users");
+    $delete_from = time() - $chat_conf['alive_time'];
+    $res = $adb->query("DELETE FROM chat_users
+    			WHERE ping > ".$adb->formatDate($delete_from));
+    $res = $adb->query("SELECT id, nick FROM chat_users");
     if($adb->num_rows($res)==0)
       {
 	$this->json = '';
@@ -227,7 +229,21 @@ class Chat
 	global $adb;
     global $chat_conf;
     $format = '{"mlid":%s,"chat":%s,"from":"%s","msg":"%s"},';
-    $res = $adb->query("select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,pv.id id,us.nick `from`,ms.msg msg from chat_users us,chat_pvchat pv,chat_msg ms where pv.msg=ms.id and us.id=ms.chat_from and ms.id>'".($_SESSION['mlid'])."' and ((ms.chat_from='".$_SESSION['chat_user']."' and ms.chat_to>0) or (ms.chat_to='".$_SESSION['chat_user']."' and ms.chat_from>0)) order by ms.born limit 0,".$chat_conf['msg_limit']);
+    $res = $adb->limitQuery("SELECT ms.id AS mid, ms.chat_from AS mfrom,
+   				 ms.chat_to AS mto,pv.id AS id,
+				 us.nick AS nfrom, ms.msg AS msg
+			FROM chat_users us
+			INNER JOIN chat_msg ms
+				ON us.id = ms.chat_from
+			INNER JOIN chat_pvchat pv
+				ON pv.msg = ms.id
+			WHERE ms.id > '".($_SESSION['mlid'])."'
+			AND (ms.chat_from = '".$_SESSION['chat_user']."'
+				AND ms.chat_to > 0)
+			OR (ms.chat_to = '".$_SESSION['chat_user']."'
+				AND ms.chat_from>0)
+			ORDER BY ms.born",
+			0, $chat_conf['msg_limit']);
     if($adb->num_rows($res)==0)
       {
 	$this->json = '';
@@ -242,7 +258,7 @@ class Chat
 	else
 	  $cid = $line['mfrom'];
 
-	$tmp .= sprintf($format,$line['mid'],$cid,$line['from'],addslashes($line['msg']));
+	$tmp .= sprintf($format,$line['mid'],$cid,$line['nfrom'],addslashes($line['msg']));
       }
     $tmp = trim($tmp,',');
     $this->json = sprintf($this->json,$tmp);
@@ -258,7 +274,18 @@ class Chat
 	global $adb;
     global $chat_conf;
     $format = '{"mlid":%s,"from":"%s","msg":"%s"},';
-    $res = $adb->query("select ms.id mid,ms.chat_from mfrom,ms.chat_to mto,p.id id,us.nick `from`,ms.msg msg from chat_users us,chat_pchat p,chat_msg ms where p.msg=ms.id and us.id=ms.chat_from and ms.id>'".($_SESSION['mlid'])."' and ms.chat_to=0 order by ms.born limit 0,".$chat_conf['msg_limit']);
+    $res = $adb->limitQuery("SELECT ms.id AS mid, ms.chat_from AS mfrom,
+    				ms.chat_to AS mto, p.id AS id,
+				us.nick AS nfrom, ms.msg AS msg
+			FROM chat_users us
+			INNER JOIN chat_msg ms
+				ON us.id = ms.chat_from
+			INNER JOIN chat_pchat p
+				ON p.msg = ms.id
+			WHERE ms.id > '".($_SESSION['mlid'])."'
+			AND ms.chat_to = 0
+			ORDER BY ms.born",
+			0, $chat_conf['msg_limit']);
     if($adb->num_rows($res)==0)
       {
 	$this->json = '';
@@ -268,7 +295,7 @@ class Chat
     $tmp = '';
     while($line = $adb->fetch_array($res))
       {
-	$tmp .= sprintf($format,$line['mid'],$line['from'],addslashes($line['msg']));
+	$tmp .= sprintf($format,$line['mid'],$line['nfrom'],addslashes($line['msg']));
       }
     $tmp = trim($tmp,',');
     $this->json = sprintf($this->json,$tmp);
@@ -291,9 +318,13 @@ class Chat
 	  case '\nick':
 	    if(isset($words[1]) && strlen($words[1]) > 3)
 	      {
-		$res = $adb->query("select nick from chat_users where id='".$_SESSION['chat_user']."'");
+		$res = $adb->query("SELECT nick
+				FROM chat_users
+				WHERE id= '".$_SESSION['chat_user']."'");
 		$line = $adb->fetch_array($res);
-		$res = $adb->query("update chat_users set nick='".addslashes($words[1])."' where id='".$_SESSION['chat_user']."'");
+		$res = $adb->query("UPDATE chat_users
+				SET nick = ".$adb->quote($words[1])."
+				WHERE id = '".$_SESSION['chat_user']."'");
 		$msg = '\sys <span class="sysb">'.$line['nick'].'</span> changed nick to <span class="sysb">'.$words[1].'</span>';
 	      }
 	    break;
@@ -315,13 +346,15 @@ class Chat
     $msg = $this->msgParse($msg);
     if(strlen($msg) == 0) return;
     
-    $res = $adb->query("insert into chat_msg set `chat_from`='".$_SESSION['chat_user']."',`chat_to`='".$to."',born=now(),msg='".$msg."'");
+    $id = $adb->getUniqueID('chat_msg');
+    $res = $adb->query("INSERT INTO chat_msg (id, chat_from, chat_to, born, msg)
+    			VALUES (".$id.", '".$_SESSION['chat_user']."', '".$to."', ".$adb->database->sysTimeStamp.", '".$msg."')");
     
     $chat = "p";
     if($to != 0)
       $chat .= "v";
     
-    $res = $adb->query("insert into chat_".$chat."chat set msg=LAST_INSERT_ID()");
+      $res = $adb->query("INSERT INTO chat_".$chat."chat (msg) VALUES (".$id.")");
   }
 
   /**
@@ -330,7 +363,11 @@ class Chat
   function pvClose($to)
   {
 	global $adb;
-    $res = $adb->query("delete from chat_msg where (`chat_from`='".$to."' and `chat_to`='".$_SESSION['chat_user']."') or (`chat_from`='".$_SESSION['chat_user']."' and `chat_to`='".$to."')");
+    $res = $adb->query("DELETE FROM chat_msg
+   			 WHERE (chat_from = '".$to."'
+				 AND chat_to = '".$_SESSION['chat_user']."')
+			 OR (chat_from = '".$_SESSION['chat_user']."'
+				 AND chat_to = '".$to."')");
   }
 }
 
