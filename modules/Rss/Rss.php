@@ -145,7 +145,7 @@ class vtigerRSS extends CRMEntity
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 				\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
-			$shtml .= "<td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td></tr>";
+			$shtml .= "<td>&nbsp;</td></tr>";
 
 		}
 		return $shtml;
@@ -171,7 +171,7 @@ class vtigerRSS extends CRMEntity
 				$shtml .= "<td width=\"15\">
 					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}
-			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"index.php?module=Rss&action=Delete&return_module=Rss&return_action=index&record=$allrssrow[rssid]\"><img src=\"".$image_path."del.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
+			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
 			$shtml .= "</tr>";
 
 		}
@@ -386,7 +386,7 @@ class vtigerRSS extends CRMEntity
 				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}
 					   $shtml .= "</td>";
-			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td><a href=\"javascript:DeleteRssFeeds('$allrssrow[rssid]');\"><img src=\"".$image_path."del.gif\"  border=\"0\" align=\"absmiddle\"></a></td>";
+			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
 			$shtml .= "</tr>";
 		}
 		return $shtml;
