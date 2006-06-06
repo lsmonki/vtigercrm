@@ -28,12 +28,11 @@ if(isset($_REQUEST["record"]))
 elseif(isset($_REQUEST["rssurl"]))
 {
 	$newRssUrl = str_replace('##amp##','&',$_REQUEST["rssurl"]);
-	$rsscategory = $_REQUEST["rsscategory"];
 	$setstarred = 0;
 	$oRss = new vtigerRSS();
 	if($oRss->setRSSUrl($newRssUrl))
 	{
-			$result = $oRss->saveRSSUrl($newRssUrl,$setstarred,$rsscategory);
+			$result = $oRss->saveRSSUrl($newRssUrl,$setstarred);
         	if($result == false)
         	{
 				echo "Unable to save the RSS Feed URL" ;

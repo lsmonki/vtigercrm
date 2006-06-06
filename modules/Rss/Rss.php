@@ -96,15 +96,13 @@ class vtigerRSS extends CRMEntity
 	}
 
 	/** Function to save the Rss Feeds  
-	  * This Function accepts the RssURl,RssCategory,Starred Status as arguments and 
+	  * This Function accepts the RssURl,Starred Status as arguments and 
 	  * returns true on sucess 
 	  * returns false if fails
 	 */
-	function saveRSSUrl($url,$makestarred=0,$rsscategory='')
+	function saveRSSUrl($url,$makestarred=0)
 	{
 		global $adb;
-		if($rsscategory == '')
-			$rsscategory = 'vtiger Discussions';	
 
 		if ($url != "")
 		{
@@ -114,8 +112,8 @@ class vtigerRSS extends CRMEntity
 				$rsstitle = $url;
 			}
 			$genRssId = $adb->getUniqueID("rss");
-			$sSQL = "insert into rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED,RSSCATEGORY) values (".$genRssId.",'".addslashes($url);
-			$sSQL .= "','".addslashes($rsstitle)."',0,".$makestarred.",'".addslashes($rsscategory)."')";
+			$sSQL = "insert into rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (".$genRssId.",'".addslashes($url);
+			$sSQL .= "','".addslashes($rsstitle)."',0,".$makestarred.")";
 			$result = $adb->query($sSQL);
 			if($result)
 			{
@@ -355,27 +353,11 @@ class vtigerRSS extends CRMEntity
 	{
 		global $adb;
 		global $image_path;
-		$sSQL = "select * from rsscategory where presence = 1 order by sortorderid";
-		$result = $adb->query($sSQL);
-
-		while($categoryrow = $adb->fetch_array($result))
-		{
 			$shtml .= "<tr>
-						<td width=\"15\">
-						<div align=\"center\"><a href=\"javascript:;\" onClick=\"toggleRSSFolder('".$categoryrow["sortorderid"]."')\"><img id=\"".$categoryrow["sortorderid"]."_toggle\" src=\"".$image_path."plus.gif\" border=\"0\"></a></div>
-						</td>
-						<td width=\"20\">
-						<div align=\"center\"><img id=\"".$categoryrow["sortorderid"]."_folder\" src=\"".$image_path."rss_folder_cls.gif\"></div>
-						</td>
-						<td nowrap><a href=\"javascript:;\" onClick=\"toggleRSSFolder('".$categoryrow["sortorderid"]."')\" class=\"rssFolder\">".$categoryrow["rsscategory"]."</a>
-						</td>
-					  </tr>
-					  <tr>
 						<td colspan=\"3\">
-						<div id=\"".$categoryrow["sortorderid"]."_feeds\" style=\"display:none\"><table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\" style=\"margin:5 0 0 35\">".$this->getRssFeedsbyCategory($categoryrow["rsscategory"])."</table></div>
+						<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\" style=\"margin:5 0 0 35\">".$this->getRssFeedsbyCategory()."</table>
 						</td>
 					  </tr>";
-		}
 
 		return $shtml;
 	}
@@ -384,13 +366,13 @@ class vtigerRSS extends CRMEntity
 	  * This Function accepts the RssCategory as argument 
 	  * and returns the html string for the Rss feeds lists
 	 */
-	function getRssFeedsbyCategory($rsscategory)
+	function getRssFeedsbyCategory()
 	{
 
 		global $adb;
 		global $image_path;
 
-		$sSQL = "select * from rss where rsscategory='".$rsscategory."'";
+		$sSQL = "select * from rss";
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))
 		{

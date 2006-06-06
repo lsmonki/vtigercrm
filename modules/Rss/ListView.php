@@ -81,7 +81,6 @@ if($currentModule == "Rss")
 	require_once("modules/".$currentModule."/Forms.php");
 	if (function_exists('get_rssfeeds_form'))
 	{
-		$rss_form->assign("RSSCATEG", $oRss->getRsscategory_html());
 		$rss_form->assign("RSSFEEDS", get_rssfeeds_form());
 	}
 }

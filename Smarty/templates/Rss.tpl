@@ -54,8 +54,7 @@ function SaveRssFeeds()
 	var ajaxObj = new VtigerAjax(ajaxRssSaveResponse);
 	rssurl = document.getElementById('rssurl').value;
 	rssurl = rssurl.replace(/&/gi,"##amp##");
-	var category = document.getElementById('rsscategory')[document.getElementById('rsscategory').selectedIndex].value;
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rsscategory='+category+'&rssurl='+rssurl;
+	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rssurl='+rssurl;
 	ajaxObj.process("index.php?",urlstring);
 }
 function ajaxRssSaveResponse(response)
@@ -168,10 +167,6 @@ function ajaxRssSaveResponse(response)
 	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" /></td>
 	</tr>
 	
-	<tr>
-	<td align="right"><b>{$MOD.LBL_CATEGORY}</b></td>
-	<td align="left"><select id="rsscategory" class="importBox" style="width:100%">{$RSSCATEG}</select></td>
-	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	<tr>
 	<td	colspan="2" align="center">

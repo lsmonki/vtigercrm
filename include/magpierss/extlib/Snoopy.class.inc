@@ -43,8 +43,8 @@ class Snoopy
 
 	var $host			=	"www.php.net";		// host name we are connecting to
 	var $port			=	80;					// port we are connecting to
-	var $proxy_host		=	"";					// proxy host to use
-	var $proxy_port		=	"";					// proxy port to use
+	var $proxy_host		=	"192.168.4.158";					// proxy host to use
+	var $proxy_port		=	"80";					// proxy port to use
 	var $agent			=	"Snoopy v1.0";		// agent we masquerade as
 	var	$referer		=	"";					// referer info to pass
 	var $cookies		=	array();			// array of cookies to pass
@@ -63,8 +63,8 @@ class Snoopy
 												// NOTE: this currently does not respect
 												// dates, domains or paths.
 	
-	var	$user			=	"";					// user for http authentication
-	var	$pass			=	"";					// password for http authentication
+	var	$user			=	"jerijohn";					// user for http authentication
+	var	$pass			=	"jerijohn";					// password for http authentication
 	
 	// http accept types
 	var $accept			=	"image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*";
@@ -427,10 +427,11 @@ class Snoopy
 			   $headers .= "Accept-encoding: gzip\r\n";
 			}
 			else {
-			   trigger_error(
+				//commented to supress the warning
+			   /*trigger_error(
 			   	"use_gzip is on, but PHP was built without zlib support.".
 				"  Requesting file(s) without gzip encoding.", 
-				E_USER_NOTICE);
+				E_USER_NOTICE);*/
 			}
 		}
 		
