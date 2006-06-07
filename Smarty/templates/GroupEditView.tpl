@@ -15,23 +15,26 @@
 
 function dup_validation()
 {ldelim}
-        //show("status");
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var groupname = document.getElementById('groupName').value;
-        var mode = getObj('mode').value;
-        var groupid = getObj('groupId').value;
-        if(mode == 'edit')
-                var urlstring ="module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true&mode="+mode+"&groupName="+groupname+"&groupid="+groupid;
-        else
-                var urlstring ="module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true&groupName="+groupname;
-        ajaxObj.process("index.php?",urlstring);
-{rdelim}
-function ajaxSaveResponse(response)
-{ldelim}
-        if(response.responseText == 'SUCESS')
-                document.newGroupForm.submit();
-        else
-                alert(response.responseText);
+	var mode = getObj('mode').value;
+	var groupname = $('groupName').value;
+	var groupid = getObj('groupId').value;
+	if(mode == 'edit')
+		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
+	else
+		var reminstr = '&groupName='+groupname;
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true'+reminstr,
+			onComplete: function(response) {ldelim}
+				if(response.responseText == 'SUCESS')
+					document.newGroupForm.submit();
+				else
+					alert(response.responseText);
+			{rdelim}
+		{rdelim}
+	);
 {rdelim}
 
 var constructedOptionValue;
