@@ -140,7 +140,7 @@
 </tr>
 <tr>
 <td valign="top"></td>
-<td > {$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_VIEW}</td>
+<td > {$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_EDIT}</td>
 </tr>
 </table>
 </td>
@@ -192,18 +192,18 @@
 <td width=97% valign=top onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff'" >
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
 
-<tr>
-<td>{$CMOD.LBL_ENTITY}</td>
-<td>{$CMOD.LBL_CREATE_EDIT}</td>
-<td>{$CMOD.LBL_DELETE}</td>
-<td>{$CMOD.LBL_VIEW}</td>
-</tr>
-
+	<tr>
+	<td><b>{$CMOD.LBL_ENTITY}</b></td>
+	<td><b>{$CMOD.LBL_CREATE_EDIT}</b></td>
+	<td><b>{$CMOD.LBL_DELETE}</b></td>
+	<td><b>{$CMOD.LBL_VIEW}</b></td>
+	</tr>
 {foreach item=value from=$STANDARD_PRIV}
 <tr>
-{foreach item=element from=$value}
-<td>{$element}</td>
-{/foreach}
+<td>{$APP[$value.0]}</td>
+<td>{$value.1}</td>
+<td>{$value.2}</td>
+<td>{$value.3}</td>
 </tr>
 {/foreach}
 
@@ -263,7 +263,7 @@
 {foreach item=value from=$TAB_PRIV}
 <tr>
 {foreach item=element from=$value}
-<td width=35%>{$element.0}</td>
+<td width=35%>{$APP[$element.0]}</td>
 <td width=15%>{$element.1}</td>
 {/foreach}
 </tr>
@@ -322,7 +322,7 @@
 
 {foreach key=module item=value from=$UTILITIES_PRIV}
 <tr>
-<td colspan="4" style="border-bottom:1px solid #efefef"><b>{$module}</b></td>
+<td colspan="4" style="border-bottom:1px solid #efefef"><b>{$APP.$module}</b></td>
 </tr>
 <tr>
 <td class="prvPrfTexture" style="width:20px">&nbsp;</td>
@@ -330,9 +330,9 @@
 <table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 {foreach item=element from=$value}
 <tr>
-<td width=25%>{$element.0.0}</td>
+<td width=25%>{$APP[$element.0.0]}</td>
 <td width=25%>{$element.0.1}</td>
-<td width=25%>{$element.1.0}</td>
+<td width=25%>{$APP[$element.1.0]}</td>
 <td width=25%>{$element.1.1}</td>
 {/foreach}
 </tr>
@@ -387,7 +387,7 @@
 <td>
 <select id="module_list" name="module_list" onchange="showmoduleperm(this)">
 {foreach key=module item=label from=$PRI_FIELD_LIST}
-<option value="{$label}">{$label}</option>
+<option value="{$label}">{$APP.$label}</option>
 {/foreach}
 </td>
 <td width=50%>&nbsp;</td>
