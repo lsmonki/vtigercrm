@@ -160,8 +160,8 @@ ul {ldelim}color:black;{rdelim}
 	
 	function put_child_ID(currObj)
 	{ldelim}
-			var move_Element = document.getElementById('Drag_content');
-	 		parentName  = document.getElementById(currObj).innerHTML;
+			var move_Element = $('Drag_content');
+	 		parentName  = $(currObj).innerHTML;
 			parentId = currObj;
 			move_Element.style.display = 'none';
 			hideAll = false;	
@@ -175,29 +175,28 @@ ul {ldelim}color:black;{rdelim}
 			{ldelim}
 				childId = childId.replace(/user_/gi,'');
 				parentId = parentId.replace(/user_/gi,'');
-        			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-				
-                		var urlstring ="module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId="+parentId+"&childId="+childId;
-        			ajaxObj.process("index.php?",urlstring);
+				new Ajax.Request(
+  					'index.php',
+				        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+					        method: 'post',
+					        postBody: 'module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId='+parentId+'&childId='+childId,
+						onComplete: function(response) {ldelim}
+							if(response.responseText != 'You cannot move a Parent Node under a Child Node')
+							{ldelim}
+						                $('RoleTreeFull').innerHTML=response.responseText;
+						                hideAll = false;
+							        parentId = "";
+						                parentName = "";
+						                childId ="NULL";
+								childName = "NULL";
+						        {rdelim}
+						        else
+						                alert(response.responseText);
+			                        {rdelim}
+				        {rdelim}
+				);
 			{rdelim}
 	{rdelim}
-
-
-	function ajaxSaveResponse(response)
-	{ldelim}
-        if(response.responseText != 'You cannot move a Parent Node under a Child Node')
-	{ldelim}
-                document.getElementById('RoleTreeFull').innerHTML=response.responseText;
-		hideAll = false;
-		parentId = "";
-		parentName = "";
-		childId ="NULL";
-		childName = "NULL";
-	{rdelim}
-        else
-                alert(response.responseText);
-	{rdelim}
-
 
 	function fnVisible(Obj)
 	{ldelim}
