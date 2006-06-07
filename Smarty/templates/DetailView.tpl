@@ -25,17 +25,23 @@
 
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
-function ajaxSaveResponse(response)
-{ldelim}
-        document.getElementById("convertleaddiv").innerHTML=response.responseText;
-{rdelim}
+{literal}
 
 function callConvertLeadDiv(id)
-{ldelim}
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var urlstring = "module=Leads&action=LeadsAjax&file=ConvertLead&record="+id;
-        ajaxObj.process("index.php?",urlstring);
-{rdelim}
+{
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Leads&action=LeadsAjax&file=ConvertLead&record='+id,
+                        onComplete: function(response) {
+                                $("convertleaddiv").innerHTML=response.responseText;
+                        }
+                }
+        );
+}
+{/literal}
+
 function tagvalidate()
 {ldelim}
 	if(document.getElementById('txtbox_tagfields').value != '')
@@ -316,15 +322,17 @@ function tagvalidate()
 {/if}
 
 <script>
-var data = "module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD";
-var ajaxObj = new VtigerAjax(ajaxTagCloudResp);
-ajaxObj.process("index.php?",data);
-function ajaxTagCloudResp(response)
-{ldelim}
-	var item = response.responseText;
-	getObj('tagfields').innerHTML = item;
-	document.getElementById('txtbox_tagfields').value ='';	
-{rdelim}
+new Ajax.Request(
+        'index.php',
+        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+        method: 'post',
+        postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD',
+        onComplete: function(response) {ldelim}
+                                $("tagfields").innerHTML=response.responseText;
+                                $("txtbox_tagfields").value ='';
+                        {rdelim}
+        {rdelim}
+);
 </script>
 <!-- added for validation -->
 <script language="javascript">
