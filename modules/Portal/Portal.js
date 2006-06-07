@@ -11,20 +11,23 @@
 
 function fetchAddSite(id)
 {
-	show('status');
-	var ajaxObj = new VtigerAjax(ajaxeditSiteResp);
-	url ='module=Portal&action=PortalAjax&file=Popup&record='+id;
-	ajaxObj.process("index.php?",url);
+	$("status").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Portal&action=PortalAjax&file=Popup&record='+id,
+			onComplete: function(response) {
+				$("status").style.display="none";
+				$('editportal_cont').innerHTML = response.responseText;
+			}
+		}
+	);
 }
-function ajaxeditSiteResp(response)
-{
-	hide('status');
-	document.getElementById('editportal_cont').innerHTML = response.responseText;
 
-}
 function fetchContents(mode)
 {
-	show('status');
+	$("status").style.display="inline";
 	if(mode == 'data')
 	{
 		getObj('datatab').className = 'SiteSel';
@@ -35,42 +38,61 @@ function fetchContents(mode)
 		getObj('datatab').className = 'SiteUnSel';
 		getObj('managetab').className = 'SiteSel';
 	}
-	var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
-	url ='action=PortalAjax&mode=ajax&module=Portal&file=ListView&datamode='+mode;
-	ajaxObj.process("index.php?",url);
-}
-function ajaxfetchContentsResp(response)
-{
-	hide('status');
-	document.getElementById('portalcont').innerHTML = response.responseText;
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody:'action=PortalAjax&mode=ajax&module=Portal&file=ListView&datamode='+mode,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                $('portalcont').innerHTML = response.responseText;
+                        }
+                }
+        );
 }
 function DeleteSite(id)
 {
 	if(confirm("Are you sure you want to delete ?"))
 	{
-		show('status');
-		var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
-		url ='action=PortalAjax&mode=ajax&file=Delete&module=Portal&record='+id;
-		ajaxObj.process("index.php?",url);
+		$("status").style.display="inline";
+		new Ajax.Request(
+          	      'index.php',
+                	{queue: {position: 'end', scope: 'command'},
+                        	method: 'post',
+	                        postBody:'action=PortalAjax&mode=ajax&file=Delete&module=Portal&record='+id,
+        	                onComplete: function(response) {
+                	                $("status").style.display="none";
+                        	        $('portalcont').innerHTML = response.responseText;
+                        	}
+                	}
+        	);
 	}
 }
 function SaveSite(id)
 {
-	var ajaxObj = new VtigerAjax(ajaxfetchContentsResp);
-	if (document.getElementById('portalurl').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
+	if ($('portalurl').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 		alert('Site Url cannot be empty')
 		return false;
 	}
-	if (document.getElementById('portalname').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
+	if ($('portalname').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 		alert('Site Name cannot be empty')
 		return false;
 	}
 	Effect.Puff('orgLay');	
-	show('status');
+	$("status").style.display="inline";
 	var portalurl = document.getElementById('portalurl').value;
 	var portalname = document.getElementById('portalname').value;
-	url ='action=PortalAjax&mode=ajax&file=Save&module=Portal&portalname='+portalname+'&portalurl='+portalurl+'&record='+id;
-	ajaxObj.process("index.php?",url);
+        new Ajax.Request(
+        	'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                	method: 'post',
+                        postBody:'action=PortalAjax&mode=ajax&file=Save&module=Portal&portalname='+portalname+'&portalurl='+portalurl+'&record='+id,
+                        onComplete: function(response) {
+                        		$("status").style.display="none";
+                                        $('portalcont').innerHTML = response.responseText;
+                        }
+                }
+	);
 }
 function setSite(oUrllist)
 {
