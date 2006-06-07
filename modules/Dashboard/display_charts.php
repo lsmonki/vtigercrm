@@ -17,7 +17,7 @@
         include("modules/Dashboard/pie_graph.php");
 	
 global $tmp_dir;
-
+global $mod_strings,$app_strings;
 
 $period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; // Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek; lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
@@ -71,22 +71,22 @@ $helpdesk_query=" select troubletickets.status AS ticketstatus, troubletickets.*
         * Contributor(s): ______________________________________..
  */
 $graph_array = Array(
-          "leadsource" => "Leads By Source",
-          "leadstatus" => "Leads By Status",
-          "leadindustry" => "Leads By Industry",
-          "salesbyleadsource" => "Sales by LeadSource",
-          "salesbyaccount" => "Sales by Accounts",
-          "accountindustry" => "Account By Industry",
-          "productcategory" => "Products by Category",
-          "sobyaccounts" => "Sales Order by Accounts",
-          "sobystatus" => "Sales Order by Status",
-          "pobystatus" => "Purchase Order by Status",
-          "quotesbyaccounts" => "Quotes by Accounts",
-          "quotesbystage" => "Quotes by Stage",
-          "invoicebyacnts" => "Invoices by Accounts",
-          "invoicebystatus" => "Invoices by status",
-          "ticketsbystatus" => "Tickets by status",
-          "ticketsbypriority" => "Tickets by Priority",
+	  "leadsource" => $mod_strings['leadsource'],
+          "leadstatus" => $mod_strings['leadstatus'],
+          "leadindustry" => $mod_strings['leadindustry'],
+          "salesbyleadsource" => $mod_strings['salesbyleadsource'],
+          "salesbyaccount" => $mod_strings['salesbyaccount'],
+          "accountindustry" => $mod_strings['accountindustry'],
+          "productcategory" => $mod_strings['productcategory'],
+          "sobyaccounts" => $mod_strings['sobyaccounts'],
+          "sobystatus" => $mod_strings['sobystatus'],
+          "pobystatus" => $mod_strings['pobystatus'],
+          "quotesbyaccounts" => $mod_strings['quotesbyaccounts'],
+          "quotesbystage" => $mod_strings['quotesbystage'],
+          "invoicebyacnts" => $mod_strings['invoicebyacnts'],
+          "invoicebystatus" => $mod_strings['invoicebystatus'],
+          "ticketsbystatus" => $mod_strings['ticketsbystatus'],
+          "ticketsbypriority" => $mod_strings['ticketsbypriority'],
           );
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
@@ -139,7 +139,7 @@ function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$h
 {
 
 	global $tmp_dir;
-     global $graph_title;
+     global $graph_title, $mod_strings;
 	$val=explode(":",$title); 		
 	$display_title=$val[0];	
 			
@@ -151,7 +151,7 @@ $sHTML .= "<tr>
  		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
  		 </tr>
    		 <tr>
-		   <td><span class=big>Horizontal Bar Chart</span> </td>
+		   <td nowrap><span class=big>".$mod_strings['LBL_HORZ_BAR_CHART']."</span> </td>
 		 </tr>
 		</table>
   	   </td>
@@ -197,7 +197,7 @@ $sHTML .= "<tr>
  		   <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
  		 </tr>
    		 <tr>
-		   <td><span class=big>Pie Chart</span> </td>
+		   <td><span class=big>".$mod_strings['LBL_PIE_CHART']."</span> </td>
 		 </tr>
 		</table>
   	   </td>
@@ -342,7 +342,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
     <td width="20%" nowrap valign="top">
 		<table width="100%"  border="0" cellspacing="0" cellpadding="0" bgcolor="#DFDFDF">
           	<tr><td class="dashMnuUnSel">
-                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome">Dashboard Home</a>
+                    <a href="index.php?module=Dashboard&action=index&type=dashboardhome"><? echo $mod_strings['LBL_DASHBRD_HOME'];?></a>
                </td></tr>              
                <?php 
                  $mnuHTML = "";
@@ -375,7 +375,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     if(($type == "leadsource") && (getFieldVisibilityPermission('Leads',$user_id,'leadsource') == "0"))
                     {
                     	$graph_by="leadsource";
-                    	$graph_title="Leads By Source";
+                    	$graph_title= $mod_strings['leadsource'];
                     	$module="Leads";
                     	$where="";
                     	$query=$leads_query;                   
@@ -386,7 +386,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "leadstatus")&& (getFieldVisibilityPermission('Leads',$user_id,'leadstatus') == "0"))
                     {
                     	$graph_by="leadstatus";
-                    	$graph_title="Leads By Status";
+                    	$graph_title= $mod_strings['leadstatus'];
                     	$module="Leads";
                     	$where="";
                     	$query=$leads_query;
@@ -396,7 +396,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "leadindustry") && (getFieldVisibilityPermission('Leads',$user_id,'industry') == "0"))
                     {
                     	$graph_by="industry";
-                            $graph_title="Leads By Industry";
+                            $graph_title=$mod_strings['leadindustry'];
                             $module="Leads";
                             $where="";
                             $query=$leads_query;
@@ -406,7 +406,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "salesbyleadsource")&& (getFieldVisibilityPermission('Potentials',$user_id,'leadsource') == "0"))
                     {
                             $graph_by="leadsource";
-                            $graph_title="Sales by LeadSource";
+                            $graph_title=$mod_strings['salesbyleadsource'];
                             $module="Potentials";
                             $where=" and potential.sales_stage like '%Closed Won%' ";
                             $query=$potential_query;
@@ -416,7 +416,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'account_id') == "0"))
                     {
                     	$graph_by="accountid";
-                         $graph_title="Sales by Accounts";
+                         $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
                          $where=" and potential.sales_stage like '%Closed Won%' ";
                          $query=$potential_query;
@@ -426,7 +426,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "accountindustry") && (getFieldVisibilityPermission('Accounts',$user_id,'industry') == "0"))
                     {
                     	$graph_by="industry";
-                            $graph_title="Account By Industry";
+                            $graph_title=$mod_strings['accountindustry'];
                             $module="Accounts";
                             $where="";
                             $query=$account_query;
@@ -436,7 +436,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "productcategory") && (getFieldVisibilityPermission('Products',$user_id,'productcategory') == "0"))
                     {
                     	$graph_by="productcategory";
-                            $graph_title="Products by Category";
+                            $graph_title=$mod_strings['productcategory'];
                             $module="Products";
                             $where="";
                             $query=$products_query;
@@ -446,7 +446,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "sobyaccounts") && (getFieldVisibilityPermission('SalesOrder',$user_id,'account_id') == "0"))
                     {
                     	$graph_by="accountid";
-                            $graph_title="Sales Order by Accounts";
+                            $graph_title=$mod_strings['sobyaccounts'];
                             $module="SalesOrder";
                             $where="";
                             $query=$so_query;
@@ -456,7 +456,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "sobystatus") && (getFieldVisibilityPermission('SalesOrder',$user_id,'sostatus') == "0"))
                     {
                             $graph_by="sostatus";
-                            $graph_title="Sales Order by Status";
+                            $graph_title=$mod_strings['sobystatus'];
                             $module="SalesOrder";
                             $where="";
                             $query=$so_query;
@@ -466,7 +466,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "pobystatus") && (getFieldVisibilityPermission('PurchaseOrder',$user_id,'postatus') == "0"))
                     {
                             $graph_by="postatus";
-                            $graph_title="Purchase Order by Status";
+                            $graph_title=$mod_strings['pobystatus'];
                             $module="PurchaseOrder";
                             $where="";
                             $query=$po_query;
@@ -476,7 +476,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "quotesbyaccounts") && (getFieldVisibilityPermission('Quotes',$user_id,'account_id') == "0"))
                     {
                             $graph_by="accountid";
-                            $graph_title="Quotes by Accounts";
+                            $graph_title= $mod_strings['quotesbyaccounts'];
                             $module="Quotes";
                             $where="";
                             $query=$quotes_query;
@@ -486,7 +486,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "quotesbystage") && (getFieldVisibilityPermission('Quotes',$user_id,'quotestage') == "0"))
                     {
                             $graph_by="quotestage";
-                            $graph_title="Quotes by Stage";
+                            $graph_title=$mod_strings['quotesbystage'];
                             $module="Quotes";
                             $where="";
                             $query=$quotes_query;
@@ -496,7 +496,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "invoicebyacnts") && (getFieldVisibilityPermission('Invoice',$user_id,'account_id') == "0"))
                     {
                             $graph_by="accountid";
-                            $graph_title="Invoices by Accounts";
+                            $graph_title=$mod_strings['invoicebyacnts'];
                             $module="Invoice";
                             $where="";
                             $query=$invoice_query;
@@ -506,7 +506,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "invoicebystatus") && (getFieldVisibilityPermission('Invoice',$user_id,'invoicestatus') == "0"))
                     {
                             $graph_by="invoicestatus";
-                            $graph_title="Invoices by status";
+                            $graph_title=$mod_strings['invoicebystatus'];
                             $module="Invoice";
                             $where="";
                             $query=$invoice_query;
@@ -516,7 +516,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "ticketsbystatus") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketstatus') == "0"))
                     {
                             $graph_by="ticketstatus";
-                            $graph_title="Tickets by status";
+                            $graph_title=$mod_strings['ticketsbystatus'];
                             $module="HelpDesk";
                             $where="";
                             $query=$helpdesk_query;
@@ -526,7 +526,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                     elseif (($type == "ticketsbypriority") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketpriorities') == "0"))
                     {
                             $graph_by="priority";
-                            $graph_title="Tickets by Priority";
+                            $graph_title=$mod_strings['ticketsbypriority'];
                             $module="HelpDesk";
                             $where="";
                             $query=$helpdesk_query;
