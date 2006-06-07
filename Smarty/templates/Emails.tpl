@@ -11,24 +11,15 @@
 -->*}
 <!--  USER  SETTINGS PAGE STARTS HERE -->
 <script language="javascript">
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("email_con").innerHTML=response.responseText;
-	execJS(document.getElementById('email_con'));
-{rdelim}
-function ajaxgetResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("EmailDetails").innerHTML=response.responseText;
-{rdelim}
+
 function setSubject(subject)
 {ldelim}
-document.getElementById("subjectsetter").innerHTML=subject
+	document.getElementById("subjectsetter").innerHTML=subject
 {rdelim}
+
 function getEmailContents(id)
 {ldelim}
-	show("status");
+	$("status").style.display="inline";
 	var rowid = 'row_'+id;
 	getObj(rowid).className = 'prvPrfHoverOn';
 	if(gselectedrowid != 0 && gselectedrowid != id)
@@ -37,34 +28,22 @@ function getEmailContents(id)
 		getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
 	{rdelim}
 	gselectedrowid = id;
-	var ajaxObj = new VtigerAjax(ajaxgetResponse);
-	var urlstring ="module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record="+id;
-	ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record='+id,
+			onComplete: function(response) {ldelim}
+						$("status").style.display="none";
+						$("EmailDetails").innerHTML = response.responseText;
+					{rdelim}
+			{rdelim}
+		);
 {rdelim}
-{literal}
 
-function ajaxDelResponse(response)
-{
-	hide("status");
-	document.getElementById('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
-	document.getElementById("subjectsetter").innerHTML='';
-	document.getElementById("email_con").innerHTML=response.responseText;
-	execJS(document.getElementById('email_con'));
-}
-
-{/literal}
 function ShowFolders(folderid)
 {ldelim}
-	show("status");
-	if(gFolderid != folderid)
-	{ldelim}	
-    	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-		gselectedrowid = 0;
-	{rdelim}
-	else
-	{ldelim}
-		var ajaxObj = new VtigerAjax(ajaxDelResponse);
-	{rdelim}
+	$("status").style.display="inline";
 	gFolderid = folderid;
 	getObj('search_text').value = '';
 	switch(folderid)
@@ -87,8 +66,31 @@ function ShowFolders(folderid)
 		case 6:
 			getObj('mail_fldrname').innerHTML = '{$MOD.LBL_QUAL_CONTACT}';
 	{rdelim}
-    var urlstring ="module=Emails&ajax=true&action=EmailsAjax&file=ListView&folderid="+folderid;
-   	ajaxObj.process("index.php?",urlstring);
+	
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                method: 'post',
+                postBody: 'module=Emails&ajax=true&action=EmailsAjax&file=ListView&folderid='+folderid,
+                onComplete: function(response) {ldelim}
+                                        $("status").style.display="none";
+                                        if(gFolderid != folderid)
+                                        {ldelim}
+                                                gselectedrowid = 0;
+                                                $("email_con").innerHTML=response.responseText;
+                                                execJS($('email_con'));
+                                        {rdelim}
+                                        else
+                                        {ldelim}
+                                                $('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top:10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
+                                                $("subjectsetter").innerHTML='';
+                                                $("email_con").innerHTML=response.responseText;
+                                                execJS($('email_con'));
+                                        {rdelim}
+                                {rdelim}
+                        {rdelim}
+	);
+
 {rdelim}
 function getListViewEntries_js(module,url)
 {ldelim}
