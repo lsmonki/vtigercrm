@@ -76,18 +76,20 @@
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <script>
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("tempdiv").innerHTML=response.responseText;
-{rdelim}
-
 function DeleteProfile(profileid)
 {ldelim}
-	show("status");
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-	var urlstring = "module=Users&action=UsersAjax&file=ProfileDeleteStep1&profileid="+profileid;
-	ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody:'module=Users&action=UsersAjax&file=ProfileDeleteStep1&profileid='+profileid,
+                        onComplete: function(response) {ldelim}
+                                $("status").style.display="none";
+				$("tempdiv").innerHTML=response.responseText;
+                        {rdelim}
+                {rdelim}
+        );
 {rdelim}
 </script>
 {include file='SettingsSubMenu.tpl'}
