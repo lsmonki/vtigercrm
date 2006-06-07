@@ -11,13 +11,6 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
-<script language="javascript">
-function ajaxmoduleresponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("module_list_owner").innerHTML=response.responseText;
-{rdelim}
-</script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -52,17 +45,24 @@ function ajaxmoduleresponse(response)
 <script>
 function assignmodulefn(mode)
 {
-	show('status');
-	var ajaxObj = new VtigerAjax(ajaxmoduleresponse);
+	$("status").style.display="inline";
 	var urlstring ='';
 	for(i = 0;i < document.support_owners.elements.length;i++)
 	{
 		if(document.support_owners.elements[i].name != 'button')
 		urlstring +='&'+document.support_owners.elements[i].name+'='+document.support_owners.elements[i].value;
 	}
-	
-	urlstring +='&list_module_mode='+mode+'&file_mode=ajax';
-	ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: urlstring+'&list_module_mode='+mode+'&file_mode=ajax',
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+				$("module_list_owner").innerHTML=response.responseText;
+                        }
+                }
+        );
 }
 </script>
 {/literal}
