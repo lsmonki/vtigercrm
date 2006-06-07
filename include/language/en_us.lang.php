@@ -353,6 +353,11 @@ $app_strings = Array(
 
 'LBL_EXPORT_ALL'=>'Export All',
 
+'Export'=>'Export',
+'Import'=>'Import',
+'Merge'=>'Merge',
+'ConvertLead'=>'ConvertLead',
+
 //3.2 release
 
 'NTC_MERGE_CONFIRMATION'=>'Are you sure you want to merge this record?',
