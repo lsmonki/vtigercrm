@@ -10,45 +10,54 @@
  ********************************************************************************/ *}
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 <script language="javascript">
-function ajaxSaveResponse(response)
-{ldelim}
-        document.getElementById("cfList").innerHTML=response.responseText;
-{rdelim}
+{literal}
+
 function getCustomFieldList(customField)
-{ldelim}
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
+{
 	var modulename = customField.options[customField.options.selectedIndex].value;
-	var urlstring ="module=Settings&action=SettingsAjax&file=CustomFieldList&fld_module="+modulename+"&parenttab=Settings&ajax=true";
-	ajaxObj.process("index.php?",urlstring);
-{rdelim}
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=CustomFieldList&fld_module='+modulename+'&parenttab=Settings&ajax=true',
+			onComplete: function(response) {
+				$("cfList").innerHTML=response.responseText;
+			}
+		}
+	);	
+}
 
 function deleteCustomField(id, fld_module, colName, uitype)
-{ldelim}
+{
         if(confirm("Are you sure?"))
-        {ldelim}
+        {
                 document.form.action="index.php?module=Settings&action=DeleteCustomField&fld_module="+fld_module+"&fld_id="+id+"&colName="+colName+"&uitype="+uitype
                 document.form.submit()
-        {rdelim}
-{rdelim}
+        }
+}
 
-function ajaxCFSaveResponse(response)
-{ldelim}
-        document.getElementById("createcf").innerHTML=response.responseText;
-{rdelim}
 function getCreateCustomFieldForm(customField,id,tabid,ui)
-{ldelim}
-        var ajaxObj = new VtigerAjax(ajaxCFSaveResponse);
+{
         var modulename = customField;
-        var urlstring ="module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module="+modulename+"&parenttab=Settings&ajax=true&fieldid="+id+"&tabid="+tabid+"&uitype="+ui;
-        ajaxObj.process("index.php?",urlstring);
-{rdelim}
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module='+customField+'&parenttab=Settings&ajax=true&fieldid='+id+'&tabid='+tabid+'&uitype='+ui,
+			onComplete: function(response) {
+				$("createcf").innerHTML=response.responseText;
+			}
+		}
+	);
+
+}
 
 function CustomFieldMapping()
-{ldelim}
+{
         document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
         document.form.submit();
-{rdelim}
-
+}
+{/literal}
 </script>
 <div id="createcf" style="display:block;position:absolute;top:175px;left:275px;"></div>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
