@@ -21,20 +21,11 @@
 {/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	result = response.responseText.split('&#&#&#'); 
-	document.getElementById("ListViewContents").innerHTML= result[2];
-	if(result[1] != '')
-		alert(result[1]);	
-{rdelim}
 
 function callSearch(searchtype)
 {ldelim}
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
@@ -59,8 +50,20 @@ function callSearch(searchtype)
                 urlstring += 'search_cnt='+no_rows+'&';
                 urlstring += 'searchtype=advance&'
         {rdelim}
-        urlstring = urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
-        ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true',
+			onComplete: function(response) {ldelim}
+				$("status").style.display="none";
+                                result = response.responseText.split('&#&#&#');
+                                $("ListViewContents").innerHTML= result[2];
+                                if(result[1] != '')
+                                        alert(result[1]);
+			{rdelim}
+	       {rdelim}
+        );
 
 {rdelim}
 function alphabetic(module,url,dataid)
@@ -72,11 +75,21 @@ function alphabetic(module,url,dataid)
 
         {rdelim}
         getObj(dataid).className = 'searchAlphselected';
-        show("status");
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
-        ajaxObj.process("index.php?",urlstring);
-
+	$("status").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module='+module+'&action='+module+'Ajax&file=index&ajax=true&'+url,
+			onComplete: function(response) {ldelim}
+				$("status").style.display="none";
+				result = response.responseText.split('&#&#&#');
+				$("ListViewContents").innerHTML= result[2];
+				if(result[1] != '')
+			                alert(result[1]);
+			{rdelim}
+		{rdelim}
+	);
 {rdelim}
 
 </script>
@@ -399,8 +412,7 @@ function alphabetic(module,url,dataid)
 
 function ajaxChangeStatus(statusname)
 {
-	show("status");
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
+	$("status").style.display="inline";
 	var viewid = document.massdelete.viewname.value;
 	var idstring = document.massdelete.idlist.value;
 	if(statusname == 'status')
@@ -419,8 +431,21 @@ function ajaxChangeStatus(statusname)
 {literal}
 
 	}
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: urlstring,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                result = response.responseText.split('&#&#&#');
+                                $("ListViewContents").innerHTML= result[2];
+                                if(result[1] != '')
+                                        alert(result[1]);
+                        }
+                }
+        );
 	
-	ajaxObj.process("index.php?",urlstring);
 }
 </script>
 {/literal}
