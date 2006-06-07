@@ -37,25 +37,25 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='Quotes'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create Quote</a> 
+			<a href="javascript: document.DetailView.module.value='Quotes'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.Quote}</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create Invoice</a> 
+			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.Invoice}</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create SalesOrder</a> 
+			<a href="javascript: document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.SalesOrder}</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create PurchaseOrder</a> 
+			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.PurchaseOrder}</a> 
 		</td>
 	   </tr>
 	   <!--
@@ -91,7 +91,7 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Vendors'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.vendor_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">Create PurchaseOrder</a> 
+			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Vendors'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.vendor_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.PurchaseOrder}</a> 
 		</td>
 	   </tr>
 	   <!--
@@ -121,7 +121,7 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.record.value='{$ID}'; document.DetailView.convertmode.value='sotoinvoice'; document.DetailView.submit();" class="webMnu">Create Invoice</a> 
+			<a href="javascript: document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.record.value='{$ID}'; document.DetailView.convertmode.value='sotoinvoice'; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.Invoice}</a> 
 		</td>
 	   </tr>
 	   <!--
@@ -145,13 +145,13 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/> 
-			<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='{$CONVERTMODE}'; document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">Generate Invoice</a> 
+			<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='{$CONVERTMODE}'; document.DetailView.module.value='Invoice'; document.DetailView.action.value='EditView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.Invoice}</a> 
 		</td>
 	   </tr>
 	   <tr>
 		<td align="left" style="padding-left:10px;border-bottom:1px dotted #CCCCCC;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='quotetoso'; document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.submit();" class="webMnu">Generate Sales Order</a> 
+			<a href="javascript: document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='quotetoso'; document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.SalesOrder}</a> 
 		</td>
 	   </tr>
 	   <!-- Vendors Actions ends -->
@@ -180,7 +180,7 @@
 
    <tr>
 	<td align="left">
-		<span class="genHeaderSmall">Tools</span><br /> 
+		<span class="genHeaderSmall">{$APP.Tools}</span><br /> 
 	</td>
    </tr>
 
@@ -199,7 +199,7 @@
    <tr>
 	<td align="left" style="padding-left:10px;">
 		<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='{$export_pdf_action}'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">Export To PDF</a> 
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='{$export_pdf_action}'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_EXPORT_TO_PDF}</a> 
 	</td>
    </tr>
 
