@@ -65,41 +65,52 @@
 <script>
 function getListViewEntries_js(module,url)
 {
-		show("status");
-		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-		var urlstring ="module=Users&action=UsersAjax&file=ListView&ajax=true&"+url;
-	    ajaxObj.process("index.php?",urlstring);
-
-}
-function ajaxSaveResponse(response)
-{
-	hide("status");
-	document.getElementById("ListViewContents").innerHTML= response.responseText;
+	$("status").style.display="inline";
+        new Ajax.Request(
+		'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&file=ListView&ajax=true&'+url,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+				$("ListViewContents").innerHTML= response.responseText;
+                        }
+                }
+        );
 }
 
 function deleteUser(userid)
 {
-	show("status");
-	var ajaxObj = new VtigerAjax(ajaxDeleteResponse);
-	var urlstring = "action=UsersAjax&file=UserDeleteStep1&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record="+userid;
-	ajaxObj.process("index.php?",urlstring);
-
-}
-
-function ajaxDeleteResponse(response)
-{
-	hide("status");
-	document.getElementById("tempdiv").innerHTML= response.responseText;
+	$("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=UsersAjax&file=UserDeleteStep1&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='+userid,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+				$("tempdiv").innerHTML= response.responseText;
+                        }
+                }
+        );
 }
 
 function transferUser(del_userid)
 {
-		show("status");
-		hide("DeleteLay");
-		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-		var trans_userid=document.getElementById('transfer_user_id').options[document.getElementById('transfer_user_id').options.selectedIndex].value;
-		var urlstring ="module=Users&action=UsersAjax&file=DeleteUser&ajax=true&delete_user_id="+del_userid+"&transfer_user_id="+trans_userid;
-	    	ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+	$("DeleteLay").style.display="none";
+	var trans_userid=$('transfer_user_id').options[$('transfer_user_id').options.selectedIndex].value;
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&file=DeleteUser&ajax=true&delete_user_id='+del_userid+'&transfer_user_id='+trans_userid,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                                $("ListViewContents").innerHTML= response.responseText;
+                        }
+                }
+        );
 
 }
 </script>
