@@ -24,7 +24,7 @@ $mod_strings = Array(
 'LBL_NOTE_TITLE'=>'Note:',
 'LBL_NOTES_LIST1'=>'If Current MySQL Exist in the Same Machine then enter the MySQL Path (or) you can enter the Dump file if you have.',
 'LBL_NOTES_LIST2'=>'If Current MySQL Exist in different Machine then enter the (Source) Dump filename with the full Path.',
-'LBL_NOTES_DUMP_PROCESS'=>'To take Database dump please execute the following command
+'LBL_NOTES_DUMP_PROCESS'=>'To take Database dump please execute the following command from inside the <b>mysql/bin</b> directory
 			   <br><b>mysqldump --user="mysql_username"  --password="mysql-password" -h "hostname"  --port="mysql_port" "database_name" > dump_filename</b>
 			   <br>add <b>SET FOREIGN_KEY_CHECKS = 0;</b> -- at the start of the dump file
 			   <br>add <b>SET FOREIGN_KEY_CHECKS = 1;</b> -- at the end of the dump file',

@@ -317,6 +317,14 @@ foreach($update_array3 as $query)
 
 
 //create table moduleowners to assign the module and corresponding owners
+$create_query2 = "CREATE TABLE `moduleowners` (
+	  `tabid` int(19) NOT NULL default '0',
+	    `user_id` varchar(11) NOT NULL,
+	      PRIMARY KEY  (`tabid`),
+	        KEY `moduleowners_tabid_user_id_idx` (`tabid`,`user_id`)
+	) ENGINE=InnoDB";
+
+/*
 $create_query2 = "CREATE TABLE `moduleowners` 
 (
  `tabid` int(19) NOT NULL default '0',
@@ -324,6 +332,7 @@ $create_query2 = "CREATE TABLE `moduleowners`
  PRIMARY KEY  (`tabid`),
  CONSTRAINT `fk_ModuleOwners` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
+*/
 Execute($create_query2);
 
 //Populated the default entries for moduleowners which is created newly
@@ -489,6 +498,11 @@ foreach($role_map_array as $roleid => $rolename)
 	$new_role_id = createRole($rolename,$parentRole,$empty_array);
 	$new_role_map_array[$roleid] = $new_role_id;
 }
+
+//Before insert the new entry we should remove the old entries -- added on 06-06-06
+$user2role_del = "truncate user2role";
+Execute($user2role_del);
+
 //First we will insert the old values from user2role_array to user2role table and then update the new role id
 foreach($user2role_array as $userid => $roleid)
 {
@@ -576,6 +590,13 @@ foreach($alter_query_array4 as $query)
 
 
 //Moved the create table queries for group2grouprel, group2role, group2rs from the end of this block
+//Added on 06-06-06
+$query8 = "CREATE TABLE `group2grouprel` (
+	  `groupid` int(19) NOT NULL,
+	    `containsgroupid` int(19) NOT NULL,
+	      PRIMARY KEY  (`groupid`,`containsgroupid`)
+      ) ENGINE=InnoDB";
+      /*
 $query8 = "CREATE TABLE `group2grouprel` 
 (
  `groupid` int(19) NOT NULL default '0',
@@ -583,8 +604,16 @@ $query8 = "CREATE TABLE `group2grouprel`
  PRIMARY KEY (`groupid`,`containsgroupid`),
  CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
+*/
 Execute($query8);
 
+//Added on 06-06-06
+$query9 = "CREATE TABLE `group2role` (
+	  `groupid` int(19) NOT NULL,
+	    `roleid` varchar(255) NOT NULL,
+	      PRIMARY KEY  (`groupid`,`roleid`)
+      ) ENGINE=InnoDB";
+/*
 $query9 = "CREATE TABLE `group2role` 
 (
  `groupid` int(19) NOT NULL default '0',
@@ -592,8 +621,16 @@ $query9 = "CREATE TABLE `group2role`
  PRIMARY KEY (`groupid`,`roleid`),
  CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
+*/
 Execute($query9);
 
+//Added on 06-06-06
+$query10 = "CREATE TABLE `group2rs` (
+	  `groupid` int(19) NOT NULL,
+	    `roleandsubid` varchar(255) NOT NULL,
+	      PRIMARY KEY  (`groupid`,`roleandsubid`)
+      ) ENGINE=InnoDB";
+/*
 $query10 = "CREATE TABLE `group2rs` 
 (
  `groupid` int(19) NOT NULL default '0',
@@ -601,6 +638,7 @@ $query10 = "CREATE TABLE `group2rs`
  PRIMARY KEY (`groupid`,`roleandsubid`),
  CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
+*/
 Execute($query10);
 
 //Insert all the retrieved old values to the new groups table ie., create new groups
@@ -623,7 +661,14 @@ foreach($group_map_array as $groupname => $description)
 $query6 = "drop table users2group";
 Execute($query6);
 
-
+//Added on 06-06-06
+$query7 = "CREATE TABLE `users2group` (
+	  `groupid` int(19) NOT NULL,
+	    `userid` int(19) NOT NULL,
+	      PRIMARY KEY  (`groupid`,`userid`),
+	        KEY `users2group_groupname_uerid_idx` (`groupid`,`userid`)
+	) ENGINE=InnoDB";
+/*
 $query7 = "CREATE TABLE `users2group` 
 (
  `groupid` int(19) NOT NULL default '0',
@@ -631,6 +676,7 @@ $query7 = "CREATE TABLE `users2group`
  PRIMARY KEY (`groupid`,`userid`),
  CONSTRAINT `fk_users2group1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
+*/
 Execute($query7);
 
 //Step 5 : put entries to users2group table based on users2group_map_array. Here get the groupid from groups table based on groupname
@@ -1745,7 +1791,14 @@ CREATE TABLE `campaign` (
 Execute($create_query24);
 
 
-
+//Added on 06-06-06
+$create_query25 = "CREATE TABLE `campaigncontrel` (
+	  `campaignid` int(19) NOT NULL default '0',
+	    `contactid` int(19) NOT NULL default '0',
+	      PRIMARY KEY  (`campaignid`),
+	        KEY `campaigncontrel_contractid_idx` (`contactid`)
+	) ENGINE=InnoDB";
+/*
 $create_query25 = "CREATE TABLE `campaigncontrel` (
   `campaignid` int(19) NOT NULL default '0',
   `contactid` int(19) NOT NULL default '0',
@@ -1754,8 +1807,17 @@ $create_query25 = "CREATE TABLE `campaigncontrel` (
   CONSTRAINT `fk_CampaignContRel2` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE,
   CONSTRAINT `fk_CampaignContRel1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
+*/
 Execute($create_query25);
 
+//Added on 06-06-06
+$create_table_query = "CREATE TABLE `campaigngrouprelation` (
+	  `campaignid` int(19) NOT NULL,
+	    `groupname` varchar(100) default NULL,
+	      PRIMARY KEY  (`campaignid`),
+	        KEY `campaigngrouprelation_IDX1` (`groupname`)
+	) ENGINE=InnoDB";
+/*
 $create_table_query = "
 CREATE TABLE `campaigngrouprelation` (
        `campaignid` int(19) NOT NULL,
@@ -1765,9 +1827,18 @@ CREATE TABLE `campaigngrouprelation` (
 	CONSTRAINT `fk_campaigngrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE,
 	CONSTRAINT `fk_campaigngrouprelation1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
+*/
 Execute($create_table_query);
 
 
+//Added on 06-06-06
+$create_query26 = "CREATE TABLE `campaignleadrel` (
+			`campaignid` int(19) NOT NULL default '0',
+			`leadid` int(19) NOT NULL default '0',
+			PRIMARY KEY  (`campaignid`),
+			KEY `campaignleadrel_leadid_campaignid_idx` (`leadid`,`campaignid`)
+		   ) ENGINE=InnoDB";
+/*
 $create_query26 = "CREATE TABLE `campaignleadrel` (
   `campaignid` int(19) NOT NULL default '0',
   `leadid` int(19) NOT NULL default '0',
@@ -1776,6 +1847,7 @@ $create_query26 = "CREATE TABLE `campaignleadrel` (
   CONSTRAINT `fk_CampaignLeadRel1234` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE,
   CONSTRAINT `fk_CampaignLeadRel2423` FOREIGN KEY (`leadid`) REFERENCES `leaddetails` (`leadid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
+*/
 Execute($create_query26);
 
 $create_table_query1 = "CREATE TABLE `campaignscf` (
@@ -1949,9 +2021,19 @@ $query_array = Array(
   `relationtype` varchar(200) default NULL,
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_module_rel_tabid` (`tabid`),
-  CONSTRAINT `fk_datashare_module_rel456` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+) ENGINE=InnoDB",
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_grp2grp` (
+	  `shareid` int(19) NOT NULL,
+	    `share_groupid` int(19) default NULL,
+	      `to_groupid` int(19) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `datashare_grp2grp_share_groupid_idx` (`share_groupid`),
+		      KEY `datashare_grp2grp_to_groupid_idx` (`to_groupid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_grp2grp` (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
@@ -1964,7 +2046,18 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_grp2grp1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_grp2grp789` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
+"CREATE TABLE `datashare_grp2role` (
+	  `shareid` int(19) NOT NULL,
+	    `share_groupid` int(19) default NULL,
+	      `to_roleid` varchar(255) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `idx_datashare_grp2role_share_groupid` (`share_groupid`),
+		      KEY `idx_datashare_grp2role_to_roleid` (`to_roleid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_grp2role` (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
@@ -1977,7 +2070,19 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_grp2role1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_grp2role345` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_grp2rs` (
+	  `shareid` int(19) NOT NULL,
+	    `share_groupid` int(19) default NULL,
+	      `to_roleandsubid` varchar(255) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `datashare_grp2rs_share_groupid_idx` (`share_groupid`),
+		      KEY `datashare_grp2rs_to_roleandsubid_idx` (`to_roleandsubid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_grp2rs` (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
@@ -1990,6 +2095,7 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_grp2rs1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_grp2rs36` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
 "CREATE TABLE `datashare_relatedmodule_permission` (
   `shareid` int(19) NOT NULL,
@@ -1999,6 +2105,16 @@ $query_array = Array(
   KEY `datashare_relatedmodule_permission_UK1` (`shareid`,`permission`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_relatedmodules` (
+	  `datashare_relatedmodule_id` int(19) NOT NULL,
+	    `tabid` int(19) default NULL,
+	      `relatedto_tabid` int(19) default NULL,
+	        PRIMARY KEY  (`datashare_relatedmodule_id`),
+		  KEY `datashare_relatedmodules_tabid_idx` (`tabid`),
+		    KEY `datashare_relatedmodules_relatedto_tabid_idx` (`relatedto_tabid`)
+	    ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_relatedmodules` (
   `datashare_relatedmodule_id` int(19) NOT NULL,
   `tabid` int(19) default NULL,
@@ -2009,11 +2125,23 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_relatedmodules1` FOREIGN KEY (`relatedto_tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_relatedmodules123` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
 "CREATE TABLE `datashare_relatedmodules_seq` (
   `id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1",
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_role2group` (
+	  `shareid` int(19) NOT NULL,
+	    `share_roleid` varchar(255) default NULL,
+	      `to_groupid` int(19) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `idx_datashare_role2group_share_roleid` (`share_roleid`),
+		      KEY `idx_datashare_role2group_to_groupid` (`to_groupid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_role2group` (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
@@ -2026,7 +2154,19 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_role2group1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_role2group568` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_role2role` (
+	  `shareid` int(19) NOT NULL,
+	    `share_roleid` varchar(255) default NULL,
+	      `to_roleid` varchar(255) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `datashare_role2role_share_roleid_idx` (`share_roleid`),
+		      KEY `datashare_role2role_to_roleid_idx` (`to_roleid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_role2role` (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
@@ -2039,7 +2179,19 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_role2role1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_role2role345` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
+//Added on 06-06-06
+"CREATE TABLE `datashare_role2rs` (
+	  `shareid` int(19) NOT NULL,
+	    `share_roleid` varchar(255) default NULL,
+	      `to_roleandsubid` varchar(255) default NULL,
+	        `permission` int(19) default NULL,
+		  PRIMARY KEY  (`shareid`),
+		    KEY `datashare_role2s_share_roleid_idx` (`share_roleid`),
+		      KEY `datashare_role2s_to_roleandsubid_idx` (`to_roleandsubid`)
+	      ) ENGINE=InnoDB",
+/*
 "CREATE TABLE `datashare_role2rs` (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
@@ -2052,6 +2204,7 @@ $query_array = Array(
   CONSTRAINT `fk_datashare_role2rs1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
   CONSTRAINT `fk_datashare_role2rs987` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
+*/
 
 "CREATE TABLE `datashare_rs2grp` (
   `shareid` int(19) NOT NULL,
@@ -2059,11 +2212,8 @@ $query_array = Array(
   `to_groupid` int(19) default NULL,
   `permission` int(19) default NULL,
   PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_rs2grp_share_roleandsubid` (`share_roleandsubid`),
-  KEY `idx_datashare_rs2grp_to_groupid` (`to_groupid`),
-  CONSTRAINT `fk_datashare_rs2grp2` FOREIGN KEY (`to_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2grp1` FOREIGN KEY (`share_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2grpQ2` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  KEY `datashare_rs2grp_share_roleandsubid_idx` (`share_roleandsubid`),
+  KEY `datashare_rs2grp_to_groupid_idx` (`to_groupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `datashare_rs2role` (
@@ -2072,11 +2222,8 @@ $query_array = Array(
   `to_roleid` varchar(255) default NULL,
   `permission` int(19) default NULL,
   PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_rs2role_share_roleandsubid` (`share_roleandsubid`),
-  KEY `idx_datashare_rs2role_to_roleid` (`to_roleid`),
-  CONSTRAINT `fk_datashare_rs2role2` FOREIGN KEY (`to_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2role1` FOREIGN KEY (`share_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2role122` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  KEY `datashare_rs2role_share_roleandsubid_idx` (`share_roleandsubid`),
+  KEY `datashare_rs2role_to_roleid_idx` (`to_roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `datashare_rs2rs` (
@@ -2085,11 +2232,8 @@ $query_array = Array(
   `to_roleandsubid` varchar(255) default NULL,
   `permission` int(19) default NULL,
   PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_rs2rs_share_roleandsubid` (`share_roleandsubid`),
-  KEY `idx_datashare_rs2rs_to_roleandsubid` (`to_roleandsubid`),
-  CONSTRAINT `fk_datashare_rs2rs2` FOREIGN KEY (`to_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2rs1` FOREIGN KEY (`share_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_rs2rs353` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  KEY `datashare_rs2rs_share_roleandsubid_idx` (`share_roleandsubid`),
+  KEY `idx_datashare_rs2rs_to_roleandsubid_idx` (`to_roleandsubid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `expectedresponse` (
@@ -2116,14 +2260,7 @@ $query_array = Array(
   `relatedtabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`sharedgroupid`),
-  KEY `tmp_read_group_rel_sharing_per_UK1` (`userid`,`sharedgroupid`,`tabid`),
-  KEY `fk_tmp_read_group_rel_sharing_per2` (`tabid`),
-  KEY `fk_tmp_read_group_rel_sharing_per4` (`relatedtabid`),
-  KEY `fk_tmp_read_group_rel_sharing_per3` (`sharedgroupid`),
-  CONSTRAINT `fk_tmp_read_group_rel_sharing_per3` FOREIGN KEY (`sharedgroupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_group_rel_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_group_rel_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_group_rel_sharing_per4` FOREIGN KEY (`relatedtabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_read_group_rel_sharing_per_userid_sharedgroupid_tabid` (`userid`,`sharedgroupid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_read_group_sharing_per` (
@@ -2131,12 +2268,7 @@ $query_array = Array(
   `tabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`sharedgroupid`),
-  KEY `tmp_read_group_sharing_per_UK1` (`userid`,`sharedgroupid`),
-  KEY `fk_tmp_read_group_sharing_per2` (`tabid`),
-  KEY `fk_tmp_read_group_sharing_per3` (`sharedgroupid`),
-  CONSTRAINT `fk_tmp_read_group_sharing_per3` FOREIGN KEY (`sharedgroupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_group_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_group_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_read_group_sharing_per_userid_sharedgroupid_idx` (`userid`,`sharedgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_read_user_rel_sharing_per` (
@@ -2145,14 +2277,7 @@ $query_array = Array(
   `relatedtabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`shareduserid`),
-  KEY `tmp_read_user_rel_sharing_per_UK1` (`userid`,`shareduserid`,`relatedtabid`),
-  KEY `fk_tmp_read_user_rel_sharing_per2` (`tabid`),
-  KEY `fk_tmp_read_user_rel_sharing_per4` (`relatedtabid`),
-  KEY `fk_tmp_read_user_rel_sharing_per3` (`shareduserid`),
-  CONSTRAINT `fk_tmp_read_user_rel_sharing_per3` FOREIGN KEY (`shareduserid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_user_rel_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_user_rel_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_user_rel_sharing_per4` FOREIGN KEY (`relatedtabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_read_user_rel_sharing_per_userid_shared_reltabid_idx` (`userid`,`shareduserid`,`relatedtabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_read_user_sharing_per` (
@@ -2160,12 +2285,7 @@ $query_array = Array(
   `tabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`shareduserid`),
-  KEY `tmp_read_user_sharing_per_UK1` (`userid`,`shareduserid`),
-  KEY `fk_tmp_read_user_sharing_per2` (`tabid`),
-  KEY `fk_tmp_read_user_sharing_per3` (`shareduserid`),
-  CONSTRAINT `fk_tmp_read_user_sharing_per3` FOREIGN KEY (`shareduserid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_user_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_read_user_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_read_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_write_group_rel_sharing_per` (
@@ -2174,14 +2294,7 @@ $query_array = Array(
   `relatedtabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`sharedgroupid`),
-  KEY `tmp_write_group_rel_sharing_per_UK1` (`userid`,`sharedgroupid`,`tabid`),
-  KEY `fk_tmp_write_group_rel_sharing_per2` (`tabid`),
-  KEY `fk_tmp_write_group_rel_sharing_per4` (`relatedtabid`),
-  KEY `fk_tmp_write_group_rel_sharing_per3` (`sharedgroupid`),
-  CONSTRAINT `fk_tmp_write_group_rel_sharing_per3` FOREIGN KEY (`sharedgroupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_group_rel_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_group_rel_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_group_rel_sharing_per4` FOREIGN KEY (`relatedtabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_write_group_rel_sharing_per_userid_sharedgroupid_tabid_idx` (`userid`,`sharedgroupid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_write_group_sharing_per` (
@@ -2189,12 +2302,7 @@ $query_array = Array(
   `tabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`sharedgroupid`),
-  KEY `tmp_write_group_sharing_per_UK1` (`userid`,`sharedgroupid`),
-  KEY `fk_tmp_write_group_sharing_per2` (`tabid`),
-  KEY `fk_tmp_write_group_sharing_per3` (`sharedgroupid`),
-  CONSTRAINT `fk_tmp_write_group_sharing_per3` FOREIGN KEY (`sharedgroupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_group_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_group_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_write_group_sharing_per_UK1` (`userid`,`sharedgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_write_user_rel_sharing_per` (
@@ -2203,14 +2311,7 @@ $query_array = Array(
   `relatedtabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`relatedtabid`,`shareduserid`),
-  KEY `tmp_write_user_rel_sharing_per_UK1` (`userid`,`shareduserid`,`tabid`),
-  KEY `fk_tmp_write_user_rel_sharing_per2` (`tabid`),
-  KEY `fk_tmp_write_user_rel_sharing_per4` (`relatedtabid`),
-  KEY `fk_tmp_write_user_rel_sharing_per3` (`shareduserid`),
-  CONSTRAINT `fk_tmp_write_user_rel_sharing_per3` FOREIGN KEY (`shareduserid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_user_rel_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_user_rel_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_user_rel_sharing_per4` FOREIGN KEY (`relatedtabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_write_user_rel_sharing_per_userid_sharduserid_tabid_idx` (`userid`,`shareduserid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "CREATE TABLE `tmp_write_user_sharing_per` (
@@ -2218,12 +2319,7 @@ $query_array = Array(
   `tabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
   PRIMARY KEY  (`userid`,`tabid`,`shareduserid`),
-  KEY `tmp_write_user_sharing_per_UK1` (`userid`,`shareduserid`),
-  KEY `fk_tmp_write_user_sharing_per2` (`tabid`),
-  KEY `fk_tmp_write_user_sharing_per3` (`shareduserid`),
-  CONSTRAINT `fk_tmp_write_user_sharing_per3` FOREIGN KEY (`shareduserid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_user_sharing_per1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_tmp_write_user_sharing_per2` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  KEY `tmp_write_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 "ALTER TABLE `account` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
@@ -2743,13 +2839,19 @@ for($i=0;$i<$numofrows;$i++)
 
 	$idlists = "$parentid@$fieldid_array[$module]|";
 
-	$result2 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = $parentid");
-	$toemail = $conn->query_result($result2,0,'lastname').' '.$conn->query_result($result2,0,'firstname').'<'.$conn->query_result($result2,0,'email').'>###';
+	if($module == 'Leads' || $module == 'Contacts')
+	{
+		$result2 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = $parentid");
+		$toemail = $conn->query_result($result2,0,'lastname').' '.$conn->query_result($result2,0,'firstname').'<'.$conn->query_result($result2,0,'email').'>###';
 
-	//insert this idlists and toemail values in emaildetails table
-	$sql = "insert into emaildetails values ($emailid,'',$toemail,'','','',$idlists,'SAVE')";
-	Execute($sql);
-
+		//insert this idlists and toemail values in emaildetails table
+		$sql = "insert into emaildetails values ($emailid,'',\"$toemail\",'','','',\"$idlists\",'SAVE')";
+		Execute($sql);
+	}
+	else
+	{
+		//the parent is not a Lead or Contact. so we have avoided the insert query
+	}
 }
 
 $update_query5 = "update field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";

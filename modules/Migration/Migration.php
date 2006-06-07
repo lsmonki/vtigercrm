@@ -75,21 +75,21 @@ class Migration
 			$password_str = '';
 		}
 
-		//This if is only for windows environment where we cannot access mysql from vtiger root directory
-		if($_SESSION['windows_mysql_path'] != '')
+		//This if is used when we cannot access mysql from vtiger root directory
+		if($_SESSION['set_server_mysql_path'] != '')
 		{
 			$current_working_dir = getcwd();
-			$win_mysql_path = $_SESSION['windows_mysql_path'];
+			$server_mysql_path = $_SESSION['set_server_mysql_path'];
 
 			$dump_str = "mysqldump -u".$mysql_username.$password_str." -h ".$host_name." --port=".$mysql_port." ".$dbname." >> ".$dump_filename;
 
-			chdir ($win_mysql_path);
+			chdir ($server_mysql_path);
 
 			exec("echo 'set FOREIGN_KEY_CHECKS = 0;' > ".$dump_filename);
 			exec($dump_str);
 			exec("echo 'set FOREIGN_KEY_CHECKS = 1;' >> ".$dump_filename);
 			
-			exec('cp "'.$win_mysql_path.'\\'.$dump_filename.'" "'.$current_working_dir.'\\'.$dump_filename).'"';
+			exec('cp "'.$server_mysql_path.'\\'.$dump_filename.'" "'.$current_working_dir.'\\'.$dump_filename).'"';
 			chdir ($current_working_dir);
 		}
 		else
@@ -137,15 +137,16 @@ class Migration
 			$password_str = '';
 		}
 
-		//This if is only for windows environment where we cannot access mysql from vtiger root directory
-		if($_SESSION['windows_mysql_path'] != '')
+		//This if is used when we cannot access mysql from vtiger root directory
+		if($_SESSION['set_server_mysql_path'] != '')
 		{
 			$current_working_dir = getcwd();
-			$win_mysql_path = $_SESSION['windows_mysql_path'];
+			$server_mysql_path = $_SESSION['set_server_mysql_path'];
 			
 			$dump_str = "mysql --user=".$mysql_username.$password_str." -h ".$host_name." --force --port=".$mysql_port." ".$dbname." < ".$dumpfile;
 
-			chdir ($win_mysql_path);
+			//exec("path = $server_mysql_path");
+			chdir ($server_mysql_path);
 
 			exec($dump_str);
 			

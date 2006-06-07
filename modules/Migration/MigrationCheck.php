@@ -20,6 +20,35 @@ $new_mysql_username = $dbconfig['db_username'];
 $new_mysql_password = $dbconfig['db_password'];
 $new_dbname = $dbconfig['db_name'];
 
+//this is to check whether the mysql path is needed and has been entered or not
+if($_REQUEST['getmysqlpath'] == 1 && $_REQUEST['server_mysql_path'] != '')
+{
+	$mysql_path_found = false;
+	$server_mysql_path = $_REQUEST['server_mysql_path'];
+	if(is_file($server_mysql_path."/mysqldump"))
+	{
+		$mysql_path_found = true;
+		@session_unregister('set_server_mysql_path');
+		$_SESSION['set_server_mysql_path'] = $server_mysql_path;
+		echo 'MySQL Dump file has found in ==> '.$server_mysql_path;
+	}
+	elseif(substr($_ENV["OS"],0,3) == "Win" && is_file($server_mysql_path."\mysqldump.exe"))
+	{
+		$mysql_path_found = true;
+		@session_unregister('set_server_mysql_path');
+		$_SESSION['set_server_mysql_path'] = $server_mysql_path;
+		echo 'MySQL Dump file has found in ==> '.$server_mysql_path;
+	}
+
+	if(!$mysql_path_found)
+	{
+		//header("Location: index.php?module=Migration&action=MigrationStep1&parenttab=Settings");
+		echo '<br>MySQL dump file is not exist in the specified MySQL Server Path';
+		include("modules/Migration/MigrationStep1.php");
+		exit;
+	}
+}
+//echo '<br>Proceed with migration';
 
 include("modules/Migration/Migration.php");
 if($_REQUEST['migration_option'] == 'db_details')
@@ -217,6 +246,96 @@ elseif($_REQUEST['migration_option'] == 'dump_details')
 		}
 	}
 
+}
+elseif($_REQUEST['migration_option'] == 'alter_db_details')
+{
+	//old database values
+	$old_host_name = $_REQUEST['alter_old_host_name'];
+	$old_mysql_port = $_REQUEST['alter_old_port_no'];
+	$old_mysql_username = $_REQUEST['alter_old_mysql_username'];
+	$old_mysql_password = $_REQUEST['alter_old_mysql_password'];
+	$old_dbname = $_REQUEST['alter_old_dbname'];
+
+	//make a connection with the old database
+	$oldconn = @mysql_connect($old_host_name.":".$old_mysql_port,$old_mysql_username,$old_mysql_password);
+
+	if(!$oldconn)
+	{
+		echo '<br>  Source Database Server cannot be connected';
+		$continue1 = 0;
+	}
+	else
+	{
+		$migration_log .= ' Database Server can be connected. Can proceed with migration';
+		$continue1 = 1;
+	}
+
+	if($continue1 == 1)
+	{
+		//check whether the specified databases are exist or not
+		$olddb_exist = @mysql_select_db($old_dbname,$oldconn);
+
+		if(!$olddb_exist)
+		{
+			echo '<br> Source Database does not exist';
+			$continue2 = 0;
+		}
+		else
+		{
+			$migration_log .= '<br> Required database exist';
+			$continue2 = 1;
+		}
+	}
+
+	if($continue2 == 1)
+	{
+		//Check whether the table are exist in the databases or not
+		$old_tables = @mysql_num_rows(mysql_list_tables($old_dbname,$oldconn));
+
+		if(!$old_tables)
+		{
+			echo '<br> Tables do not exist in the Source Database';
+			$continue3 = 0;
+		}
+		else
+		{
+			$migration_log .= '<br> Tables exist in the Database';
+			$continue3 = 1;
+		}
+	}
+
+	//$continue1 -- Database server can be connected
+	//$continue2 -- Database exists in the server
+	//$continue3 -- Tables are exist in the database
+
+	if($continue1 == 1 && $continue2 == 1 && $continue3 == 1)
+	{
+
+		$conn = new PearDatabase("mysql",$old_host_name.":".$old_mysql_port,$old_dbname,$old_mysql_username,$old_mysql_password);
+		$conn->connect();
+
+		$conn->println("MICKIE ==> Option = Alter DB details. From the given DB details we will migrate.");
+
+		@session_unregister('migration_log');
+		$_SESSION['migration_log'] = $migration_log;
+		if($conn)
+		{
+			$obj = new Migration('',$conn);
+			$obj->setOldDatabaseParams($old_host_name,$old_mysql_port,$old_mysql_username,$old_mysql_password,$old_dbname);
+			//$obj->migrate($same_databases,'dbsource');
+			$obj->modifyDatabase($conn);
+		}
+		else
+		{
+			echo '<br> Cannot make a connection with the current database setup';
+			include("modules/Migration/MigrationStep1.php");
+		}
+	}
+	else
+	{
+		echo '<br>ERROR!!!!!!Please check the input values, unable to proceed.';
+		include("modules/Migration/MigrationStep1.php");
+	}
 }
 else
 {
