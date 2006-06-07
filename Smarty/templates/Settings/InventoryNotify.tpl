@@ -46,32 +46,37 @@
 <script>
 function fetchSaveNotify(id)
 {
-	hide('editdiv');
-	show('status');
-	var ajaxObj = new VtigerAjax(ajaxsavenotifyresponse);
-	var subject = document.getElementById("notifysubject").value;
-	var body = document.getElementById("notifybody").value;
-	urlstring ='action=UsersAjax&module=Users&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id;
-	ajaxObj.process("index.php?",urlstring);
-}
-function ajaxsavenotifyresponse(response)
-{
-	hide("status");
-	//document.getElementById("notifycontents").innerHTML=response.responseText;	
+	$("editdiv").style.display="none";
+	$("status").style.display="inline";
+	var subject = $("notifysubject").value;
+        var body = $("notifybody").value;
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=UsersAjax&module=Users&file=SaveInventoryNotification&notifysubject='+subject+'&notifybody='+body+'&record='+id,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+                        }
+                }
+        );
 }
 
 function fetchEditNotify(id)
 {
-	show('status');
-	var ajaxObj = new VtigerAjax(ajaxnotifyresponse);
-	urlstring ='action=UsersAjax&module=Users&file=EditInventoryNotification&record='+id;
-	ajaxObj.process("index.php?",urlstring);
-}
-function ajaxnotifyresponse(response)
-{
-	hide("status");
-	document.getElementById("editdiv").innerHTML=response.responseText;	
-	show("editdiv");
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=UsersAjax&module=Users&file=EditInventoryNotification&record='+id,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+				$("editdiv").innerHTML=response.responseText;
+				$("editdiv").style.display="inline";
+                        }
+                }
+        );
 }
 </script>
 {/literal}
