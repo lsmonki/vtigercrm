@@ -83,11 +83,6 @@ function validate() {
 	}
 }
 
-function ajachangeresponse(response)
-{
-	hide("status");
-	document.getElementById("picklist_datas").innerHTML=response.responseText;	
-}
 {/literal}
 </script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
@@ -167,33 +162,52 @@ function ajachangeresponse(response)
 <script>
 function SavePickList(fieldname,module)
 {
-	show('status');
-	Effect.Puff(document.getElementById('editdiv'),{duration:2});
-	var ajaxObj = new VtigerAjax(ajachangeresponse);
-	var body = document.getElementById("picklist_values").value;
-	urlstring ='action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body;
-	ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+	Effect.Puff($('editdiv'),{duration:2});
+	var body = $("picklist_values").value;
+	new Ajax.Request(
+        	'index.php',
+	        {queue: {position: 'end', scope: 'command'},
+        		method: 'post',
+		        postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=UpdateComboValues&table_name='+fieldname+'&fld_module='+module+'&listarea='+body,
+		        onComplete: function(response) {
+					$("status").style.display="none";
+        				$("picklist_datas").innerHTML=response.responseText;
+	                        }
+        	}
+	);
 }
 function changeModule(pickmodule)
 {
-	show('status');
-	var ajaxObj = new VtigerAjax(ajachangeresponse);
+	$("status").style.display="inline";
 	var module=pickmodule.options[pickmodule.options.selectedIndex].value;
-	urlstring ='action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module='+module;
-	ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module='+module,
+                        onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("picklist_datas").innerHTML=response.responseText;
+                                }
+                }
+        );
 }
 function fetchEditPickList(module,fieldname)
 {
-	show('status');
-	var ajaxObj = new VtigerAjax(ajaxnotifyresponse);
-	urlstring ='action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname;
-	ajaxObj.process("index.php?",urlstring);
-}
-function ajaxnotifyresponse(response)
-{
-	hide("status");
-	document.getElementById("editdiv").innerHTML=response.responseText;	
-	Effect.Grow('editdiv');
+	$("status").style.display="inline";
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='+module+'&fieldname='+fieldname,
+			onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("editdiv").innerHTML=response.responseText;
+					Effect.Grow('editdiv');
+                	}
+                }
+        );
 }
 </script>
 {/literal}
