@@ -16,7 +16,7 @@
 	<td class="lvtCol" width="5%">#</td>
 	<td class="lvtCol" width="40%">{$CMOD.LBL_NOTIFICATION}</td>
 	<td class="lvtCol" width="50%">{$CMOD.LBL_DESCRIPTION}</td>
-	<td class="lvtCol" width="5%">Tool</td>
+	<td class="lvtCol" width="5%">{$CMOD.Tools}</td>
 	</tr>
 	{foreach name=notifyfor item=elements from=$NOTIFICATION}
 	<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
