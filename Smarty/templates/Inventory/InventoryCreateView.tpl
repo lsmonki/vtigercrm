@@ -23,23 +23,24 @@
 
 <script type="text/javascript">
 
-function ajaxResponse(response)
-{ldelim}
-        document.getElementById('autocom').innerHTML = response.responseText;
-        document.getElementById('autocom').style.display="block";
-        hide('vtbusy_info');
-{rdelim}
-
 function sensex_info()
 {ldelim}
-        var Ticker = document.getElementById('tickersymbol').value;
+        var Ticker = $('tickersymbol').value;
         if(Ticker!='')
         {ldelim}
-                show('vtbusy_info');
-                var ajaxObj = new VtigerAjax(ajaxResponse);
-                //var Ticker = document.getElementById('tickersymbol').value;
-                var urlstring = "module={$MODULE}&action=Tickerdetail&tickersymbol="+Ticker;
-                ajaxObj.process("index.php?",urlstring);
+		$("vtbusy_info").style.display="inline";
+		new Ajax.Request(
+          	      'index.php',
+                      {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                      		method: 'post',
+                        	postBody: 'module={$MODULE}&action=Tickerdetail&tickersymbol='+Ticker,
+	                        onComplete: function(response) {ldelim}
+					$('autocom').innerHTML = response.responseText;
+				        $('autocom').style.display="block";
+        	                        $("vtbusy_info").style.display="none";
+                	        {rdelim}
+                	{rdelim}
+        	);
         {rdelim}
 {rdelim}
 

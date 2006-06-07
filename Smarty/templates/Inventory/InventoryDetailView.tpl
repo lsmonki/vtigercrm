@@ -235,16 +235,17 @@ function tagvalidate()
 {/if}
 
 <script>
-	var data = "module={$MODULE}&action={$MODULE}Ajax&ajxaction=GETTAGCLOUD&file=TagCloud";
-	var ajaxObj = new VtigerAjax(ajaxTagCloudResp);
-	ajaxObj.process("index.php?",data);
-	function ajaxTagCloudResp(response)
-	{ldelim}
-		var item = response.responseText;
-		getObj('tagfields').innerHTML = item;
-		document.getElementById('txtbox_tagfields').value ='';	
-
-	{rdelim}
+	new Ajax.Request(
+  	      'index.php',
+        	{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+	        method: 'post',
+        	postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD',
+	        onComplete: function(response) {ldelim}
+        	                        $("tagfields").innerHTML=response.responseText;
+                	                $("txtbox_tagfields").value ='';
+                        	{rdelim}
+		{rdelim}
+	);
 </script>
 
 	</td>
