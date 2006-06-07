@@ -12,27 +12,25 @@
 <script language="JavaScript" type="text/javascript" src="modules/Rss/Rss.js"></script>
 <script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script>
 {literal}
 
-function ajaxSetDefault(response)
-{
-	hide('status');
-	getrssfolders();
-}
 function GetRssFeedList(id)
 {
-	show('status');	
-	var ajaxObj = new VtigerAjax(ajaxRssFeedResponse);
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=ListView&directmode=ajax&record='+id;
-	ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Rss&action=RssAjax&vtigerfile=ListView&directmode=ajax&record='+id,
+                        onComplete: function(response) {
+                                $("status").style.display="none";
+				$("rssfeedscont").innerHTML=response.responseText;
+                        }
+                }
+        );
 }
-function ajaxRssFeedResponse(response)
-{
-	hide('status');	
-	document.getElementById("rssfeedscont").innerHTML=response.responseText;
-}
+
 function DeleteRssFeeds(id)
 {
    if(id != '')	
@@ -41,38 +39,50 @@ function DeleteRssFeeds(id)
 	{	
 		show('status');	
 		var feed = 'feed_'+id;
-		document.getElementById(feed).parentNode.removeChild(document.getElementById(feed));
-		var ajaxObj = new VtigerAjax(ajaxRssFeedResponse);
-		var urlstring = 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id;
-		ajaxObj.process("index.php?",urlstring);
+		$(feed).parentNode.removeChild($(feed));
+		new Ajax.Request(
+                	'index.php',
+        	        {queue: {position: 'end', scope: 'command'},
+                        	method: 'post',
+	                        postBody: 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id,
+        	                onComplete: function(response) {
+	        	                $("status").style.display="none";
+                                	$("rssfeedscont").innerHTML=response.responseText;
+                        	}
+                	}
+        	);
 	}
    }
 }
 function SaveRssFeeds()
 {
-	show('status');	
-	var ajaxObj = new VtigerAjax(ajaxRssSaveResponse);
-	rssurl = document.getElementById('rssurl').value;
+	$("status").style.display="inline";
+	rssurl = $('rssurl').value;
 	rssurl = rssurl.replace(/&/gi,"##amp##");
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rssurl='+rssurl;
-	ajaxObj.process("index.php?",urlstring);
-}
-function ajaxRssSaveResponse(response)
-{
-	hide('status')	
-	if(isNaN(parseInt(response.responseText)))	
-	{
-		alert(response.responseText);
-		document.getElementById('rssurl').value = '';
-	}
-	else
-	{
-		GetRssFeedList(response.responseText);
-		getrssfolders();
-		document.getElementById('rssurl').value = '';
-		Effect.Puff('PopupLay');
-	}
-		
+	var category = $('rsscategory')[$('rsscategory').selectedIndex].value;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rsscategory='+category+'&rssurl='+rssurl, 
+			onComplete: function(response) {
+	
+                                        $("status").style.display="none";
+					if(isNaN(parseInt(response.responseText)))
+        				{
+				                alert(response.responseText);
+				                $('rssurl').value = '';
+					}
+					else
+        				{
+				                GetRssFeedList(response.responseText);
+				                getrssfolders();
+				                $('rssurl').value = '';
+				                Effect.Puff('PopupLay');
+        				}
+                                }
+                        }
+                );
 }
 {/literal}
 </script>
@@ -167,6 +177,10 @@ function ajaxRssSaveResponse(response)
 	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" /></td>
 	</tr>
 	
+	<tr>
+	<td align="right"><b>{$MOD.LBL_CATEGORY}</b></td>
+	<td align="left"><select id="rsscategory" class="importBox" style="width:100%">{$RSSCATEG}</select></td>
+	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	<tr>
 	<td	colspan="2" align="center">
@@ -194,21 +208,32 @@ function makedefaultRss(id)
 {ldelim}
 	if(id != '')
 	{ldelim}
-		show('status');	
-		var ajaxObj = new VtigerAjax(ajaxSetDefault);
-		var urlstring = 'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id;
-		ajaxObj.process("index.php?",urlstring);
+		$("status").style.display="inline";
+		new Ajax.Request(
+                	'index.php',
+	                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+        	                method: 'post',
+                	        postBody:'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id, 
+                        	onComplete: function(response) {ldelim}
+                                	$("status").style.display="none";
+        				getrssfolders();
+        	               {rdelim}
+                	{rdelim}
+        	);
 	{rdelim}
 {rdelim}
 function getrssfolders()
 {ldelim}
-	var ajaxObj = new VtigerAjax(ajaxrssfolders);
-	var urlstring = 'module=Rss&action=RssAjax&vtigerfile=ListView&folders=true';
-	ajaxObj.process("index.php?",urlstring);
-{rdelim}
-function ajaxrssfolders(response)
-{ldelim}
-	hide('status')
-	document.getElementById("rssfolders").innerHTML=response.responseText;
+	new Ajax.Request(
+        	'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                	method: 'post',
+                        postBody:'module=Rss&action=RssAjax&vtigerfile=ListView&folders=true',
+			onComplete: function(response) {ldelim}
+                        		$("status").style.display="none";
+					$("rssfolders").innerHTML=response.responseText;
+                               {rdelim}
+                        {rdelim}
+                );
 {rdelim}
 </script>
