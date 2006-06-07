@@ -13,24 +13,27 @@
 <script language="javascript">
 function dup_validation()
 {ldelim}
-	//show("status");
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-	var rolename = document.getElementById('rolename').value;
+	var rolename = $('rolename').value;
 	var mode = getObj('mode').value;
 	var roleid = getObj('roleid').value;
 	if(mode == 'edit')
-		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
+		var urlstring ="&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
 	else
-		var urlstring ="module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true&roleName="+rolename;
+		var urlstring ="&roleName="+rolename;
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: 'module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
+                                onComplete: function(response) {ldelim}
+					if(response.responseText == 'SUCESS')
+						document.newRoleForm.submit();
+					else
+						alert(response.responseText);
+                                {rdelim}
+                        {rdelim}
+                );
 
-	ajaxObj.process("index.php?",urlstring);
-{rdelim}
-function ajaxSaveResponse(response)
-{ldelim}
-	if(response.responseText == 'SUCESS')
-		document.newRoleForm.submit();
-	else
-		alert(response.responseText);
 {rdelim}
 function validate()
 {ldelim}
