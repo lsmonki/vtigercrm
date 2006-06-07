@@ -156,7 +156,7 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 	
 //Constructing the Related Lists from here
-$smarty->assign("MODULE",$app_strings['Emails']);
+$smarty->assign("MODULE",$currentModule);
 $smarty->assign("SENDER",$email_id);
 if($_REQUEST['mode'] != 'ajax')
 	$smarty->display("DetailView.tpl");

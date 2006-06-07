@@ -68,7 +68,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE",$app_strings['Campaigns']);
+$smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];
 

@@ -28,7 +28,7 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
-global $mod_strings;
+global $mod_strings, $currentModule;
 if( $_SESSION['mail_send_error']!="")
 {
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
@@ -148,7 +148,7 @@ $smarty->assign("CHECK", $check_button);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
-$smarty->assign("MODULE",$app_strings['Activities']);
+$smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 
 ?>

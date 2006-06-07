@@ -29,7 +29,7 @@ require_once('include/utils/utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-global $log;
+global $log, $currentModule;
 
 $focus = new Account();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -108,6 +108,6 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$smarty->assign("MODULE","Accounts");
+$smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");
 ?>
