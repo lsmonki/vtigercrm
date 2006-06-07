@@ -12,19 +12,21 @@
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 {literal}
 <script>
-function ajaxSaveResponse(response)
-{
-	document.getElementById("announcement").innerHTML=response.responseText;
-	hide("an_busy");
-}
 function Announcement()
 {
-	show("an_busy");
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-	var announcement=document.getElementById("announcement").value;
-	//var title=document.getElementById("title_announce").value;
-	var urlstring = "module=Users&action=UsersAjax&announcement="+announcement+"&announce_save=yes";
-	ajaxObj.process("index.php?",urlstring);
+	$("an_busy").style.display="inline";
+	var announcement=$("announcement").value;
+	new Ajax.Request(
+	'index.php',
+        {queue: {position: 'end', scope: 'command'},
+       		method: 'post',
+	        postBody: 'module=Users&action=UsersAjax&announcement='+announcement+'&announce_save=yes',
+	        onComplete: function(response) {
+					$("announcement").innerHTML=response.responseText;
+					$("an_busy").style.display="none";
+                        	}
+	        }
+	);
 }
 </script>
 {/literal}
