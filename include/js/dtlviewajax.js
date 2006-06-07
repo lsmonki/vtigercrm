@@ -65,19 +65,6 @@ function handleEdit()
      return false;
 }
 
-function dtlViewAjaxResponse(response)
-{
-     var item = response.responseText;
-     if(item.indexOf(":#:FAILURE")>-1)
-     {
-          alert("Error while Editing");
-     }
-     else if(item.indexOf(":#:SUCCESS")>-1)
-     {
-          fnhide("vtbusy_info");
-     }
-}
-
 function trim(str)
 {
 	return(str.replace(/\s+$/,''));
@@ -118,10 +105,24 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
-	show("vtbusy_info");
-
-	var ajaxObj = new VtigerAjax(dtlViewAjaxResponse);
-	ajaxObj.process("index.php?",data);
+	$("vtbusy_info").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: data,
+                        onComplete: function(response) {
+				if(response.responseText.indexOf(":#:FAILURE")>-1)
+				{
+					alert("Error while Editing");
+				}
+				else if(item.indexOf(":#:SUCCESS")>-1)
+     				{
+					$("vtbusy_info").style.display="none";
+     				}
+                       	}
+                }
+        );
 	if(uitype == '13')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
@@ -220,23 +221,23 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	itsonview=false;
 }
 
-
-function dtlViewAjaxTagResponse(response)
-{
-     var item = response.responseText;
-	 getObj('tagfields').innerHTML = item;
-     fnhide("vtbusy_info");
-}
-
 function SaveTag(txtBox,crmId,module)
 {
 	var tagValue = document.getElementById(txtBox).value;
 	document.getElementById(txtBox).value ='';
-    var data = "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue;
+	$("vtbusy_info").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue,
+                        onComplete: function(response) {
+				        getObj('tagfields').innerHTML = response.responseText;
+					$("vtbusy_info").style.display="none";
+                        }
+                }
+        );
     
-	var ajaxObj = new VtigerAjax(dtlViewAjaxTagResponse);
-    ajaxObj.process("index.php?",data);
-   	show("vtbusy_info");
 }
 function setSelectValue(fieldLabel)
 {
