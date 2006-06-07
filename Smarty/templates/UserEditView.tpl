@@ -31,22 +31,23 @@ function openPopup(){ldelim}
 <script language="javascript">
 function check_duplicate()
 {ldelim}
-
-        var ajaxObj = new VtigerAjax(ajaxSaveUserResponse);
-        var user_name = document.getElementById('user_name').value;
-
-        var urlstring ="module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName="+user_name;
-        ajaxObj.process("index.php?",urlstring);
+	var user_name = $('user_name').value;
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName='+user_name,
+                        onComplete: function(response) {ldelim}
+				if(response.responseText == 'SUCCESS')
+			                document.EditView.submit();
+       				else
+			                alert(response.responseText);
+                        {rdelim}
+                {rdelim}
+        );
 
 {rdelim}
 
-function ajaxSaveUserResponse(response)
-{ldelim}
-        if(response.responseText == 'SUCCESS')
-                document.EditView.submit();
-        else
-                alert(response.responseText);
-{rdelim}
 </script>
 
 
