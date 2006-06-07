@@ -37,28 +37,33 @@ global $mod_strings;
 </tr>
 
 <tr>
-<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2.3 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;<?php echo $release_date; ?><span class="gensmall"> (Current version)</span></td>
+<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2.4 Release Date:&nbsp;</b></td>
+<td class="dataField" height="30 px">&nbsp;<?php echo $release_date; ?><span class="gensmall"> (Current version)</span></font></td>
 </tr>
 
 <tr>
-<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;18-7-2005</font></td>
+<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2.3 Release Date:&nbsp;</b></td>
+<td class="dataField" height="30 px">&nbsp;23 December 2005</font></td>
+</tr>
+
+<tr>
+<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2.0 Release Date:&nbsp;</b></td>
+<td class="dataField" height="30 px">&nbsp;18 July 2005</font></td>
 </tr>
 
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.0.1 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;04-29-2005</font></td>
+<td class="dataField" height="30 px">&nbsp;29 April 2005</font></td>
                 </tr>
 		
 	
 <tr>
-<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.0 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;03-29-2005</font></td>
+<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.0.0 Release Date:&nbsp;</b></td>
+<td class="dataField" height="30 px">&nbsp;29 March 2005</font></td>
 	        </tr>
 		<tr>
-		<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>3.2 Release Date:&nbsp;</b></td>
-		<td class="dataField" height="30 px">&nbsp;12-13-2004</font></td>
+		<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>3.2.0 Release Date:&nbsp;</b></td>
+		<td class="dataField" height="30 px">&nbsp;13 December 2004</font></td>
 			        </tr>
 
 <tr>
@@ -76,4 +81,3 @@ global $mod_strings;
 </td>
 </tr>
 </table>
-

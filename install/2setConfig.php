@@ -112,9 +112,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
   !isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 
-  if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
-    else $host_name = $hostname;
-
   if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
     else $site_URL = $web_root;
 
@@ -150,7 +147,6 @@ else {
   */
   !isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_2_4" : $db_name = $_REQUEST['db_name'];
   !isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
-  !isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
   !isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
   !isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
   !isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);

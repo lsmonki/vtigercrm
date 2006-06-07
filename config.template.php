@@ -74,8 +74,6 @@ $dbconfigoption['portability'] = 0;
 // ssl default value = false
 $dbconfigoption['ssl'] = false;
 
-$host_name = $dbconfig['db_hostname'];
-
 $site_URL = '_SITE_URL_';
 
 // root directory path
@@ -177,5 +175,13 @@ $default_language = 'en_us';
 // add the language pack name to every translation string in the display.
 // translation_string_prefix default value = false
 $translation_string_prefix = false;
+
+// access level for vtiger log files
+// set to 1, the vtiger.log will be readable by the owner (chmod: 0600)
+// set to 0, the vtiger.log will not be readable remotely (chmod: 0200)
+
+// 0 is recommended for security.
+// You may need to set it to 1 to read it for certain hosted accounts.
+$log_readable = 0;
 
 ?>

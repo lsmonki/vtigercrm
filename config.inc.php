@@ -49,6 +49,9 @@ $dbconfig['db_name'] = 'vtigercrm';
 $dbconfig['db_type'] = 'pgsql';
 $dbconfig['db_status'] = 'true';
 
+//$site_URL = '';
+//$root_directory = '';
+
 // TODO: test if port is empty
 // TODO: set db_hostname dependending on db_type
 $dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
@@ -177,5 +180,13 @@ $default_language = 'en_us';
 // add the language pack name to every translation string in the display.
 // translation_string_prefix default value = false
 $translation_string_prefix = false;
+
+// access level for vtiger log files
+// set to 1, the vtiger.log will be readable by the owner (chmod: 0600)
+// set to 0, the vtiger.log will not be readable remotely (chmod: 0200)
+
+// 0 is recommended for security.
+// You may need to set it to 1 to read it for certain hosted accounts.
+$log_readable = 0;
 
 ?>

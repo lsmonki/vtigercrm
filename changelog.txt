@@ -1,7 +1,92 @@
-vtigerCRM v4.2.3 (Dec 23, 2005)
+vtigerCRM v4.2.4 (Jun 1, 2006)
 -------------------------------
 
 NOTE: first time vtigerCRM users can directly install the source in their vtiger supported version of LAMP / WAMP. 
+
+bug fixes
+---------
+
+r3606: Issue in Pop-up New link which caused elements to disappear when hovering over ">>"
+r3607: Display currency symbol in listview header
+r3608: Added dash after Potential Name when converting from Lead
+r3609: Start/End date options in Custom View
+r3614: utils.php call time pass reference error
+r3615: fix for totals in reports not showing up
+r3616: PearDatabase.php call time pass reference
+r3617: Signatures are double-spaced in e-mails
+r3618: vendor search has a field "company" .but vendor form does not have company field
+r3619: "Email" mapping added for new search field
+r3773: Search leads by Fax in advanced search
+r3775: Order pending activities by date and time
+r3776: Allow more lead columns to be sorted
+r3777: Import CSV files with CR as line ending
+r3779: Set memory limit higher than 8mb
+r3783: removing schtasks.exe from source cron directory
+r3784: move DatabaseSchema.xml out of adodb/ into new schema/ directory
+r3787: Emails that contain HTML characters cause bad display in the Reply, Reply to All buttons area
+r3789: My Group Allocation on the Home page does not have a border on the right edge
+r3790: When switching from Email to Webmails and back to Emails, the tabs are drawn incorrectly
+r3792: Products listed in the Help Desk custom views display the record ID instead of the Product Name
+r3794: Missing border on Home module with more than 5 tickets open
+r3795: Remove readonly attribs from installer db form fields
+r3796: when we display fieldlabels, the label will not be displayed if there is a special character(like &)
+r3803: copyright / license cleanup
+r3809: install cleanup
+r3811: unified naming scheme to vtigerCRM files
+r3824: split README with Changelog
+r3831: fix extraneous colon character appearing in installer stage 3 next to database name
+r3833: add template for config file and 4.2.3 sql file
+r3834: add config file for FHS system
+r3868: update to jpgraph-1.20.3
+r3869: rename db_host_name and db_user_name to db_hostname and db_username
+r3871: move columns for sunday and week number to the right
+r3872: Fix Home Ticket List is Colored Opposite of Other Sections
+r3873: Fix html emails sent with tags viewable
+r3874: fixed time shift occuring if the calendar view spans a time change (daylight saving switch) 
+r3875: removed magic quotes check on input sanitization as magic quotes are removed on all input in the index.php file
+r3876: Apostrophe in description of Lead means that the lead is lost upon converting
+r3877: Don't die 'Couldn't get the group listing'
+r3878: fix direct calls to mysql functions
+r3879: Fix activities relatedlist won't display well if translated
+r3891: Fix missing "break" in OpenListView.php CASE statement
+r3892: Show rendered html instead of tags in notes editor
+r3911: update to adodb-4.72
+r3912: Fix Quotes/Invoices/Orders Do Not Support Negative Adjustments
+r3914: add file to extract adodb XML schema from database
+r3915: remove unused code in extractSchema
+r3931: port constraints & table type hack for AXMLS from 4.55 to 4.72
+r3932: Add indexes & fix FK name collisions in DB XML Schema
+r3933: Remove foreign keys that point to missing fields
+r3934: remove duplicate indexes in database
+r3935: turn on adodb and AXMLS debugging during install
+r3937: installer use template file
+r3938: Put vtiger version and release date only in vtigerversion.php
+r3940: config.inc.php is configuration file included by config.php
+r3941: added missing parameters in template file
+r3942: create install/5createTables.inc.php and modify install.php to use it when called from the command line
+r3943: output one less line to compensate for create_default_users().  see #40
+r3945: fix scope issue in getUserFldArray()
+r3966: remove old unused modules and files
+r4051: Remove hard coded upload limits
+r4057: changes made to support multiple packaging
+r4058: reduce memory usage in lead attachment upload code
+r4059: reduce adodb memory usage to enable larger BLOB uploads
+r4392: clean up uninitialized var notice while importing leads ref #70
+r4394: disable installer after successful install for security reasons.  closes #25
+r4397: Patch forUnicode-readyAlphabeticalSearch(), by justoff.
+r4399: Jpgraph fixes for Traditional Chinese, by kiange. closes #37
+r4400: Fix quotes are not created correctly form Potentials or from Quote screen, by onwealdandy. closes #51
+r4401: Translate of hard code by Summing columns in reports, by kleo. closes #54
+r4402: urlencode the downloading filename to deal with special characters, by mcrowe. closes #64
+r4443: expand lead street field to match street maxlen in contacts
+r5079: Detect if the key metric is for a sub module and set the partent module and appropriate sub module code when needed. Closes #93.
+r5113: Added inital condition check before looping through the parts list.  Closes #96.
+r6804: $host_name doesn't appear to be used anywhere, removing from configureation.  Closes #68.
+
+
+
+vtigerCRM v4.2.3 (Dec 23, 2005)
+-------------------------------
 
 vulnerability fixes
 -------------------
@@ -20,6 +105,7 @@ a) Arbitrary File Upload
 b) Authentication ByPass
 c) Unsafe File Inclusion
 d) Arbitrary code execution
+
 
 vtigerCRM v4.2 Patch 2 (Sep 15, 2005)
 -------------------------------------
@@ -125,6 +211,7 @@ S.No ID        Subject
 61.  T2512   - Home upcoming activities
 62.  P8030   - Meetings not held must not be shown in upcoming activities
 
+
 vtigerCRM v4.2 Patch 1 (Aug 10, 2005)
 -------------------------------------
 
@@ -196,6 +283,7 @@ bug fixes
 58. Internal: Form Validation for Add Business Card
 59. Internal: Single, double quotes problem in ticket comments and FAQ comments
 60. Forum Topic ID 1612: Misbehaviour on validation of number fields
+
 
 vtigerCRM v4.2 GA (July 18, 2005)
 ---------------------------------
@@ -379,6 +467,7 @@ limitations
 NOTE: For more details about vtigerCRM v4.2 Release Notes, Please refer to the following URL:
 http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4_2_Release_Notes
  
+ 
 vtigerCRM v4.2 Alpha (May 31, 2005)
 -----------------------------------
 
@@ -397,6 +486,7 @@ new features
 10. Event Reminders
 11. Configurable Email Notifications
 12. Incoming Email Support
+
 
 vtigerCRM v4.0.1 (April 29, 2005)
 ---------------------------------
@@ -465,6 +555,7 @@ Manufacturer & category -- Moved from Advanced to Basic.
 49) Displaying of Closed Ticket in Home Page.
 50) Deleted entities are getting listed in Tracker.
 51) Enabling History tabs in Leads, Contacts, Accounts and Potentials for Activity History.
+
 
 vtigerCRM v4.0 (March 29, 2005)
 --------------------------------
@@ -682,6 +773,7 @@ known issues
 2. In Windowos OS, System Inoformantion is not displayed
 3. While importing leads, accounts, contacts, and potentials the XLS file format can be browsed even though the allowed file format is CSV.
  
+ 
 vtigerCRM v4.0 Beta (January 10, 2005)
 -------------------------------------
 
@@ -724,6 +816,7 @@ We have fixed the following issues reported in Sourceforge.net:
 18. 1093669 - Delete attachments
 19. Support for Latest versions of Apache and MySQL in installation wizard (Both Linux and Windows).
 
+
 vtigerCRM v3.2.1 (December 21, 2004)
 ------------------------------------
 
@@ -744,6 +837,7 @@ e) Quick create form is getting displayed now.
 f) Empty Line Space appearing between the heading and List view table in module Lead and MessageBoard is fixed 
 g) Proper Message display is done when a user with no delete privileges tries to delete the entity.
 h) vtiger Outlook Plug-in in server side fixes related to performance improvement.
+
 
 vtigerCRM v3.2 (December 13, 2004)
 ----------------------------------
@@ -776,6 +870,7 @@ new features
 Released vtiger Outlook Plug-in, business productivity enhancement utility for Microsoft Outlook users.
 It is an open source project covered under vtiger Public License 1.0 based on Mozilla Public License 1.1.
 
+
 vtigerCRM v2.0 (September 6, 2004)
 ----------------------------------
 
@@ -807,6 +902,7 @@ price quotes, and others, so that they can instantly access the related document
 dealing with leads/opportunities, accounts, and contacts.
 
 Send your feedback, which is vital for our understanding your needs.
+
 
 vtigerCRM v1.0 (August 26, 2004)
 --------------------------------
