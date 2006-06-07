@@ -108,7 +108,7 @@ $smarty->assign("VIEWID", $viewid);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("MODULE",'Campaigns');
+$smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("SINGLE_MOD",'Campaign');
