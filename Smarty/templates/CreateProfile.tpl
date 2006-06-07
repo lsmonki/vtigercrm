@@ -93,16 +93,18 @@ function rolevalidate()
 
 function dup_validation(profilename)
 {ldelim}
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var urlstring ="module=Users&action=UsersAjax&file=CreateProfile1&ajax=true&dup_check=true&profile_name="+profilename;
-
-        ajaxObj.process("index.php?",urlstring);
-{rdelim}
-function ajaxSaveResponse(response)
-{ldelim}
-        if(response.responseText == 'SUCESS')
-                document.profileform.submit();
-        else
-                alert(response.responseText);
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Users&action=UsersAjax&file=CreateProfile1&ajax=true&dup_check=true&profile_name='+profilename,
+			onComplete: function(response) {ldelim}
+					if(response.responseText == 'SUCESS')
+						document.profileform.submit();
+					else
+						alert(response.responseText);
+				{rdelim}
+		{rdelim}
+	);
 {rdelim}
 </script>
