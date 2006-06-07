@@ -301,7 +301,7 @@
 		
 		{foreach key=module item=value from=$UTILITIES_PRIV}
 		<tr>
-		<td colspan="4" style="border-bottom:1px solid #efefef"><b>{$module}</b></td>
+		<td colspan="4" style="border-bottom:1px solid #efefef"><b>{$APP.$module}</b></td>
 		</tr>
 		<tr>
 		<td class="prvPrfTexture" style="width:20px">&nbsp;</td>
