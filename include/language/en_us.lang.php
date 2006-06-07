@@ -287,7 +287,6 @@ $app_strings = Array(
 'LNK_NEW_PRICEBOOK'=>'New PriceBook',
 
 
-
 'NTC_REQUIRED'=>'Indicates required field',
 
 'LBL_REQUIRED_SYMBOL'=>'*',
@@ -423,6 +422,8 @@ $app_strings = Array(
 
 'LBL_ADD_ITEM'=>'Add',
 
+'LBL_ADD_NEW'=>'Add new',
+
 //Added for version 5
 
 'LBL_CALENDAR_TITLE'=>'Open Calendar...',
@@ -460,9 +461,13 @@ $app_strings = Array(
 
 'LBL_OPEN_ACTIVITIES'=>'Open Activities',
 
-'LBL_HISTORY'=>'Activity History',
+'LBL_HISTORY'=>'History',
+
+'LBL_ACTIVITY_HISTORY'=>'Activity History',
 
 'LBL_ATTACHMENTS'=>'Attachments',
+
+'LBL_ATTACHMENT'=>'Attachment',
 
 'LBL_TYPE'=>'Type',
 
@@ -713,8 +718,8 @@ $app_strings = Array(
 'Events'=>'Events',
 'Quotes'=>'Quotes',
 'PriceBook'=>'Price Books',
-'PurchaseOrder'=>'Purchase Orders',
-'SalesOrder'=> 'Sales Orders',
+'PurchaseOrder'=>'Purchase Order',
+'SalesOrder'=> 'Sales Order',
 'Invoice'=>'Invoice',
 'Calendar'=>'Calendar',
 'Home'=>'Home',
@@ -757,6 +762,7 @@ $app_strings = Array(
 'Email'=>'Email',
 'Activity'=>'Activity',
 'Event'=>'Event',
+'Task'=>'Task',
 'Quote'=>'Quote',
 'PriceBook'=>'PriceBook',
 'PurchaseOrder'=>'Purchase Order',
@@ -769,6 +775,8 @@ $app_strings = Array(
 'Vendor'=>'Vendor',
 'Webmail'=>'Webmail',
 
+'LBL_NONE_INCLUDED'=>'None Included',
+'LBL_ADD_TO'=>'Add to',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
@@ -805,8 +813,8 @@ $app_strings = Array(
 'Start Date'=>'Start Date',
 'Related to'=>'Related To',
 'Recurring Type'=> 'Recurring Type',
-'SalesOrder'=> 'Sales Orders',
-'PurchaseOrder'=> 'Purchase Orders',
+'SalesOrder'=> 'Sales Order',
+'PurchaseOrder'=> 'Purchase Order',
 'LBL_QUOTE_NAME'=>'Quote Name',
  //Added Orders in activity parent type selection / Related list
 'LBL_NEW_QUOTE_BUTTON_TITLE'=>'New Quote [Alt+Q]',
