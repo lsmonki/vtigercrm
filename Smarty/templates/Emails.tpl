@@ -94,10 +94,19 @@ function ShowFolders(folderid)
 {rdelim}
 function getListViewEntries_js(module,url)
 {ldelim}
-		show("status");
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url;
-        ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                	method: 'post',
+			postBody: "module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url,
+			onComplete: function(response) {ldelim}
+				$("status").style.display="none";
+				$("email_con").innerHTML=response.responseText;
+				execJS(document.getElementById('email_con'));
+			{rdelim}
+		{rdelim}
+	);
 
 {rdelim}
 </script>
