@@ -17,19 +17,17 @@
 
 function getImportSavedMap(impoptions)
 {ldelim}
-	//show('status');
-	var ajaxObj = new VtigerAjax(ajaxImportSavedMapResponse);
 	var mapping = impoptions.options[impoptions.options.selectedIndex].value;
-	var urlstring = "module=Import&mapping="+mapping+"&action=ImportAjax";
-	ajaxObj.process("index.php",urlstring);
-
-{rdelim}
-
-function ajaxImportSavedMapResponse(response)
-{ldelim}
-	//hide('status');
-	document.getElementById('importmapform').innerHTML = response.responseText;
-
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Import&mapping='+mapping+'&action=ImportAjax',
+			onComplete: function(response) {ldelim}
+					$("importmapform").innerHTML = response.responseText;
+				{rdelim}
+			{rdelim}
+		);
 {rdelim}
 
 </script>
