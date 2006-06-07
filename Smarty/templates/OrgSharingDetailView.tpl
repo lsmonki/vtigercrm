@@ -179,7 +179,7 @@
 					  	<img src="{$IMAGE_PATH}arrow.jpg" align="absmiddle">&nbsp;
 						<b>{$APP.$modulename}</b>&nbsp;&nbsp; 
 						</td>
-					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="Add Privileges" onClick="callEditDiv('{$modulename}','create','')"></td>
+					 	<td align="right"><input title="New" class="small" type="button" name="Create" value="{$APP.LBL_ADD_ITEM} {$CMOD.LBL_PRIVILEGES}" onClick="callEditDiv('{$modulename}','create','')"></td>
 				  	</tr>
 				  	<tr>
 				  		<td colspan="2" style="padding: 20px;" bgcolor="#ffffff" align="center">
