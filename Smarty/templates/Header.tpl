@@ -142,46 +142,57 @@
 	{include file="Clock.tpl"}
 
 
-<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;`"></div>
+<div id="qcform" style="position:absolute;width:500px;top:60px;left:450px;z-index:5000;"></div>
 
 <script>
 function fetch_clock()
 {ldelim}
-	var ajaxObj = new VtigerAjax(ajaxClockResponse);
-	var urlstring = "module=Utilities&action=UtilitiesAjax&file=Clock";
-	ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Utilities&action=UtilitiesAjax&file=Clock',
+			onComplete: function(response)
+				    {ldelim}
+					$("clock_cont").innerHTML=response.responseText;
+					execJS($('clock_cont'));
+				    {rdelim}
+		{rdelim}
+	);
 
 {rdelim}
-function ajaxClockResponse(response)
-{ldelim}
-	document.getElementById("clock_cont").innerHTML=response.responseText;
-	execJS(document.getElementById('clock_cont'));
-{rdelim}
+
 function fetch_calc()
 {ldelim}
-	var ajaxObj = new VtigerAjax(ajaxCalcResponse);
-	var urlstring = "module=Utilities&action=UtilitiesAjax&file=Calculator";
-	ajaxObj.process("index.php?",urlstring);
-
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Utilities&action=UtilitiesAjax&file=Calculator',
+			onComplete: function(response)
+					{ldelim}
+						$("calculator_cont").innerHTML=response.responseText;
+						execJS($('calculator_cont'));
+					{rdelim}
+		{rdelim}
+	);
 {rdelim}
-function ajaxCalcResponse(response)
-{ldelim}
-	document.getElementById("calculator_cont").innerHTML=response.responseText;
-	execJS(document.getElementById('calculator_cont'));
-{rdelim}
-
 
 function Announcement_rss()
 {ldelim}
-	var ajaxObj = new VtigerAjax(ajaxRssResponse);
-	var urlstring = "module=Users&action=UsersAjax&announce_rss=yes";
-		ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&announce_rss=yes',
+                        onComplete: function(response)
+                                        {ldelim}
+						if($("rss").innerHTML != response.responseText)
+							$("rss").innerHTML=response.responseText;
+                                        {rdelim}
+                {rdelim}
+        );
 
-{rdelim}
-function ajaxRssResponse(response)
-{ldelim}
-	if(document.getElementById("rss").innerHTML != response.responseText)
-		document.getElementById("rss").innerHTML=response.responseText;
 {rdelim}
 setInterval("Announcement_rss()",300000)
 </script>
@@ -190,23 +201,32 @@ setInterval("Announcement_rss()",300000)
 
 function QCreate(qcoptions)
 {ldelim}
-        show("status");
-        var ajaxObj = new VtigerAjax(ajaxQCreateResponse);
-        var module = qcoptions.options[qcoptions.options.selectedIndex].value;
+	$("status").style.display="inline";
+	var module = qcoptions.options[qcoptions.options.selectedIndex].value;
 	if(module == 'Events')
-                var urlstring = "module=Activities&action=ActivitiesAjax&file=QuickCreate&activity_mode=Events";
-        else
-	        var urlstring = "module="+module+"&action="+module+"Ajax&file=QuickCreate";
-          ajaxObj.process("index.php?",urlstring);
+	{ldelim}
+		module = 'Activities';
+		action = 'Activities';
+		var urlstr = '&activity_mode=Events';
+	{rdelim}
+	else
+		var urlstr = '';
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module='+module+'&action='+module+'Ajax&file=QuickCreate'+urlstr,
+                        onComplete: function(response)
+                                        {ldelim}
+						$("status").style.display="none";
+						$("qcform").style.display="inline";
+					        $("qcform").innerHTML = response.responseText;
+						eval($("qcform"));
+                                        {rdelim}
+                {rdelim}
+        );
 {rdelim}
 
-function ajaxQCreateResponse(response)
-{ldelim}
-        hide("status");
-        show("qcform");
-        document.getElementById('qcform').innerHTML = response.responseText;
-        eval(document.getElementById('qcform'));
-{rdelim}
 </script>
 
 {literal}
@@ -377,8 +397,6 @@ function getFormValidate(divValidate)
                chktime.setDate(dd)
                chktime.setHours(hourval)
                chktime.setMinutes(minval)
-               //chkdate.setHours(hourval)
-               //chkdate.setMinutes(minval)
                 if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
                         getObj(datefield).focus()
                         return false
