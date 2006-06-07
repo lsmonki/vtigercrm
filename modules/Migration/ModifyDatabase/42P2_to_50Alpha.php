@@ -2882,78 +2882,77 @@ foreach($alter_query_array18 as $query)
 
 
 //Security profile and tab table handling by DON starts
-	$sql_sec="select profileid from  profile";
-	$result_sec=$conn->query($sql_sec);
-	$num_rows=$conn->num_rows($result_sec);
-	for($i=0;$i<$num_row;$i++)
-	{
-		$prof_id=$conn->query_result($result_sec,$i,'profileid');
-		$sql1_sec="insert into profile2utility values(".$prof_id.",13,8,0)";
-		Execute($sql1_sec);
-		
-		$sql2_sec="insert into profile2utility values(".$prof_id.",7,9,0)";
-		Execute($sql2_sec);
+$sql_sec="select profileid from  profile";
+$result_sec=$conn->query($sql_sec);
+$num_rows=$conn->num_rows($result_sec);
+for($i=0;$i<$num_row;$i++)
+{
+	$prof_id=$conn->query_result($result_sec,$i,'profileid');
+	$sql1_sec="insert into profile2utility values(".$prof_id.",13,8,0)";
+	Execute($sql1_sec);
 
-		$sql3_sec="insert into profile2tab values(".$prof_id.",26,0)";
-                Execute($sql3_sec);
+	$sql2_sec="insert into profile2utility values(".$prof_id.",7,9,0)";
+	Execute($sql2_sec);
 
-		$sql4_sec="insert into profile2tab values(".$prof_id.",27,0)";
-                Execute($sql4_sec);
+	$sql3_sec="insert into profile2tab values(".$prof_id.",26,0)";
+	Execute($sql3_sec);
 
-		$sql7_sec="insert into profile2standardpermissions values(".$prof_id.",26,0,0)";
-                Execute($sql7_sec);
+	$sql4_sec="insert into profile2tab values(".$prof_id.",27,0)";
+	Execute($sql4_sec);
 
-		$sql8_sec="insert into profile2standardpermissions values(".$prof_id.",26,1,0)";
-                Execute($sql8_sec);
+	$sql7_sec="insert into profile2standardpermissions values(".$prof_id.",26,0,0)";
+	Execute($sql7_sec);
 
-		$sql9_sec="insert into profile2standardpermissions values(".$prof_id.",26,2,0)";
-                Execute($sql9_sec);
+	$sql8_sec="insert into profile2standardpermissions values(".$prof_id.",26,1,0)";
+	Execute($sql8_sec);
 
-		$sql10_sec="insert into profile2standardpermissions values(".$prof_id.",26,3,0)";
-                Execute($sql10_sec);
+	$sql9_sec="insert into profile2standardpermissions values(".$prof_id.",26,2,0)";
+	Execute($sql9_sec);
 
-		$sql11_sec="insert into profile2standardpermissions values(".$prof_id.",26,4,0)";
-                Execute($sql11_sec);	
-		
-	}
+	$sql10_sec="insert into profile2standardpermissions values(".$prof_id.",26,3,0)";
+	Execute($sql10_sec);
 
-	//Inserting into tab tables
-	$sec2="INSERT INTO tab VALUES (27,'Portal',0,24,'Portal',null,null,1)";
-	$sec3="INSERT INTO tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)";
+	$sql11_sec="insert into profile2standardpermissions values(".$prof_id.",26,4,0)";
+	Execute($sql11_sec);	
 
-	//Insert into def_org_share tables
-	$sec4="insert into def_org_share values (".$conn->getUniqueID('def_org_share').",26,2,0)";	
+}
 
-	Execute($sec2);
-	Execute($sec3);
-	Execute($sec4);
+//Inserting into tab tables
+$sec2="INSERT INTO tab VALUES (27,'Portal',0,24,'Portal',null,null,1)";
+$sec3="INSERT INTO tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)";
 
-	//Inserting into datashare related modules table
+//Insert into def_org_share tables
+$sec4="insert into def_org_share values (".$conn->getUniqueID('def_org_share').",26,2,0)";	
 
-	Execute("insert into datashare_relatedmodules_seq values(1)");
+Execute($sec2);
+Execute($sec3);
+Execute($sec4);
+
+//Inserting into datashare related modules table
+
+Execute("insert into datashare_relatedmodules_seq values(1)");
 	
-	//Lead Related Module
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",7,10)");
+//Lead Related Module
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",7,10)");
 
-                //Account Related Module
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,2)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,13)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,20)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,22)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,23)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,10)");
+//Account Related Module
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,2)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,13)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,20)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,22)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,23)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,10)");
 
 
-	
-		//Potential Related Module
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,20)");
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,22)");
+//Potential Related Module
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,20)");
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,22)");
 
-                //Quote Related Module
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",20,22)");
+//Quote Related Module
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",20,22)");
 
-                //SO Related Module
-                Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",22,23)");
+//SO Related Module
+Execute("insert into datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",22,23)");
 	
 
 //By Don Ends
@@ -2962,10 +2961,30 @@ foreach($alter_query_array18 as $query)
 $alter_query18 = "alter table mail_accounts add column int_mailer int(1) default '0'";
 Execute($alter_query18);
 
+$update_query_array5 = Array(
+	"update field set info_type='BAS' where tabid=6 and fieldname in ('tickersymbol','account_id')",
+	"update relatedlists set label = 'Activity History' where tabid in (4,6,7,20,21,22,23) and label = 'History'",
+	"update relatedlists set label = 'Products' where tabid=2 and name='get_products' and label='History'",
+	"update relatedlists set label = 'Activity History' where tabid=2 and name='get_history' and label='History'"
+			    );
+foreach($update_query_array5 as $query)
+{
+	Execute($query);
+}
+
+$insert_query_array27 = Array(
+	"insert into relatedlists values(".$conn->getUniqueID('relatedlists').",13,0,'get_ticket_history',3,'Ticket History',0)",
+	"insert into parenttabrel values (2,10,4)",
+	"insert into parenttabrel values (4,10,7)"
+			     );
+foreach($insert_query_array27 as $query)
+{
+	Execute($query);
+}
 
 
 
-
+			     
 
 //Added to get the conversion rate and update for all records
 //include("modules/Migration/ModifyDatabase/updateCurrency.php");
