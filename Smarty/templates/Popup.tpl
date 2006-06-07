@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
+<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
@@ -85,17 +85,25 @@ function callSearch(searchtype)
     {rdelim}
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
     search_txt_val=document.basicSearch.search_text.value;
-    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
     var urlstring = '';
     if(searchtype == 'Basic')
     {ldelim}
-       urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
-	{rdelim}
-	popuptype = document.getElementById('popup_type').value;
+	urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
+    {rdelim}
+	popuptype = $('popup_type').value;
 	urlstring += '&popuptype='+popuptype;
 	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
 	urlstring +=gethiddenelements();
-	ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+				method: 'post',
+				postBody: urlstring,
+				onComplete: function(response) {ldelim}
+					$("ListViewContents").innerHTML= response.responseText;
+				{rdelim}
+			{rdelim}
+		);
 {rdelim}	
 function alphabetic(module,url,dataid)
 {ldelim}
@@ -105,10 +113,18 @@ function alphabetic(module,url,dataid)
 	getObj(data_td_id).className = 'searchAlph';
     {rdelim}
     getObj(dataid).className = 'searchAlphselected';
-    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
     var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     urlstring +=gethiddenelements();
-    ajaxObj.process("index.php?",urlstring);
+    new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: urlstring,
+                                onComplete: function(response) {ldelim}
+                                        $("ListViewContents").innerHTML= response.responseText;
+				{rdelim}
+			{rdelim}
+		);
 {rdelim}
 function gethiddenelements()
 {ldelim}
@@ -124,16 +140,20 @@ function gethiddenelements()
 	return urlstring;
 {rdelim}
 																									
-function ajaxSaveResponse(response)
-{ldelim}
-	document.getElementById("ListViewContents").innerHTML= response.responseText;
-{rdelim}
 function getListViewEntries_js(module,url)
 {ldelim}
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
 	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&popuptype="+popuptype+"&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
-        ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: urlstring,
+                                onComplete: function(response) {ldelim}
+                                        $("ListViewContents").innerHTML= response.responseText;
+				{rdelim}
+			{rdelim}
+		);
 {rdelim}
 </script>
