@@ -138,6 +138,8 @@ $app_strings = Array(
 
 'LBL_CREATE_BUTTON_LABEL' =>'Create',
 
+'LBL_GENERATE'=>'Generate',
+
 'LBL_SAVE_BUTTON_KEY'=>'S',
 
 'LBL_EDIT_BUTTON_KEY'=>'E',
