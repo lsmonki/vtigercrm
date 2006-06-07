@@ -127,18 +127,21 @@ Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", s
     Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
 function generateReport(id)
 {
-	var ajaxObj = new VtigerAjax(ajaxgenReportResp);
 	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
 	var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
-	url ='action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&record='+id+'&stdDateFilterField='+stdDateFilterFieldvalue+'&stdDateFilter='+stdDateFiltervalue+'&startdate='+startdatevalue+'&enddate='+enddatevalue;
-	ajaxObj.process("index.php?",url);
-}
-function ajaxgenReportResp(response)
-{
-	getObj('Generate').innerHTML = response.responseText;
-	setTimeout("ReportInfor()",1);
+	new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&record='+id+'&stdDateFilterField='+stdDateFilterFieldvalue+'&stdDateFilter='+stdDateFiltervalue+'&startdate='+startdatevalue+'&enddate='+enddatevalue,
+                        onComplete: function(response) {
+				getObj('Generate').innerHTML = response.responseText;
+				setTimeout("ReportInfor()",1);
+                        }
+                }
+        );
 }
 function selectReport()
 {
