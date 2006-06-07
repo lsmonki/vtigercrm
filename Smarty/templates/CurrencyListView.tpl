@@ -15,36 +15,37 @@
 <script>
 	function deleteCurrency(currid)
 	{
-        	show("status");
-	        var ajaxObj = new VtigerAjax(ajaxCurrencyDeleteResponse);
-        	var urlstring = "action=SettingsAjax&file=CurrencyDeleteStep1&return_action=CurrencyListView&return_module=Settings&module=Settings&parenttab=Settings&id="+currid;
-	        ajaxObj.process("index.php?",urlstring);
+		$("status").style.display="inline";
+		new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'action=SettingsAjax&file=CurrencyDeleteStep1&return_action=CurrencyListView&return_module=Settings&module=Settings&parenttab=Settings&id='+currid,
+				onComplete: function(response) {
+					$("status").style.display="none";
+                                        $("currencydiv").innerHTML= response.responseText;
+                                }
+                        }
+		);
 	}
 
-	function ajaxCurrencyDeleteResponse(response)
-	{
-        	hide("status");
-	        document.getElementById("currencydiv").innerHTML= response.responseText;
-	}
-	
 	function transferCurrency(del_currencyid)
 	{
-                show("status");
-                hide("CurrencyDeleteLay");
-                var ajaxObj = new VtigerAjax(ajaxCurrencySaveResponse);
-                var trans_currencyid=document.getElementById('transfer_currency_id').options[document.getElementById('transfer_currency_id').options.selectedIndex].value;
-                var urlstring ="module=Settings&action=SettingsAjax&file=CurrencyDelete&ajax=true&delete_currency_id="+del_currencyid+"&transfer_currency_id="+trans_currencyid;
-                ajaxObj.process("index.php?",urlstring);
-
+		$("status").style.display="inline";
+		$("CurrencyDeleteLay").style.display = "none";
+		var trans_currencyid=$("transfer_currency_id").options[$("transfer_currency_id").options.selectedIndex].value;
+		new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module=Settings&action=SettingsAjax&file=CurrencyDelete&ajax=true&delete_currency_id='+del_currencyid+'&transfer_currency_id='+trans_currencyid,
+				onComplete: function(response) {
+					$("status").style.display="none";
+					$("CurrencyListViewContents").innerHTML= response.responseText;
+				}
+			}
+		);
 	}
-
-	function ajaxCurrencySaveResponse(response)
-	{
-        	hide("status");
-	        document.getElementById("CurrencyListViewContents").innerHTML= response.responseText;
-	}
-
-
 </script>
 
 {/literal}
