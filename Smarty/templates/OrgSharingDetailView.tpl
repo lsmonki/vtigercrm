@@ -222,18 +222,21 @@
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
-function ajaxSaveResponse(response)
-{ldelim}
-	hide("status");
-	document.getElementById("tempdiv").innerHTML=response.responseText;
-{rdelim}
 
 function callEditDiv(modulename,mode,id)
 {ldelim}
-	show("status");
-	var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-	var urlstring = "module=Users&action=UsersAjax&orgajax=true&mode="+mode+"&sharing_module="+modulename+"&shareid="+id;
-	ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
+			onComplete: function(response) {ldelim}
+				$("status").style.display="none";
+				$("tempdiv").innerHTML=response.responseText;
+			{rdelim}
+		{rdelim}
+	);
 {rdelim}
 
 function fnwriteRules(module,related)
