@@ -92,10 +92,22 @@ function massDelete(module)
         }
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{
-			show("status");
-			var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-			var urlstring ="module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring;
-	    	ajaxObj.process("index.php?",urlstring);
+			
+			$("status").style.display="inline";
+			new Ajax.Request(
+          	  	      'index.php',
+			      	{queue: {position: 'end', scope: 'command'},
+		                        method: 'post',
+                		        postBody:"module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring,
+		                        onComplete: function(response) {
+        	        	                $("status").style.display="none";
+                	        	        result = response.responseText.split('&#&#&#');
+                        	        	$("ListViewContents").innerHTML= result[2];
+	                        	        if(result[1] != '')
+                                        		alert(result[1]);
+		                        }
+              			 }
+       			);
 		}
 		else
 		{
@@ -106,23 +118,45 @@ function massDelete(module)
 
 function showDefaultCustomView(selectView,module)
 {
-
-		show("status");
-		var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-		var viewName = selectView.options[selectView.options.selectedIndex].value;
-		var urlstring ="module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName;
-	    ajaxObj.process("index.php?",urlstring);
+	$("status").style.display="inline";
+	var viewName = selectView.options[selectView.options.selectedIndex].value;
+	new Ajax.Request(
+               	'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                       	method: 'post',
+                        postBody:"module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&start=1&viewname="+viewName,
+                        onComplete: function(response) {
+                        $("status").style.display="none";
+                        result = response.responseText.split('&#&#&#');
+                        $("ListViewContents").innerHTML= result[2];
+                        if(result[1] != '')
+                               	alert(result[1]);
+                        }
+                }
+	);
 }
 
 
 function getListViewEntries_js(module,url)
 {
-        show("status");
-        var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-        var urlstring ="module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url;
-	if(document.getElementById('search_url').value!='')
-        	urlstring = urlstring+document.getElementById('search_url').value;
-        ajaxObj.process("index.php?",urlstring);
-
+	$("status").style.display="inline";
+	if($('search_url').value!='')
+                urlstring = $('search_url').value;
+	else
+		urlstring = '';
+        new Ajax.Request(
+        	'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                	method: 'post',
+                        postBody:"module="+module+"&action="+module+"Ajax&file=index&ajax=true&"+url+urlstring,
+			onComplete: function(response) {
+                        	$("status").style.display="none";
+                                result = response.responseText.split('&#&#&#');
+                                $("ListViewContents").innerHTML= result[2];
+                                if(result[1] != '')
+                                        alert(result[1]);
+                  	}
+                }
+        );
 }
 
