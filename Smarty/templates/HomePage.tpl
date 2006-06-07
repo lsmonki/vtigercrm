@@ -10,7 +10,6 @@
  ********************************************************************************/
 -->*}
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/effects.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/builder.js"></script>

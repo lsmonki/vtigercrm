@@ -14,7 +14,6 @@
 
 <script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/Portal/Portal.js"></script>
 
 {include file="Buttons_List1.tpl"}
