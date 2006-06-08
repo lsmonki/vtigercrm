@@ -10,7 +10,6 @@
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>

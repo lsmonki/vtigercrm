@@ -23,7 +23,6 @@
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
-	<script language="JavaScript" type="text/javascript" src="include/js/ajax.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
