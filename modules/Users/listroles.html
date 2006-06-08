@@ -115,18 +115,18 @@ function hidex(argg)
 	x.display="none";
 }
 
-function ajaxSaveResponse(response)
-{
-   document.getElementById("tempdiv").innerHTML=response.responseText;
-}
-
 function DeleteRole(roleid)
 {
-    //show("an_busy");
-    var ajaxObj = new VtigerAjax(ajaxSaveResponse);
-    var urlstring = "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid;
-    ajaxObj.process("index.php?",urlstring);
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: "module=Users&action=UsersAjax&file=RoleDeleteStep1&roleid="+roleid,
+			onComplete: function(response) {
+					$("tempdiv").innerHTML=response.responseText;
+			}
+		}
+	);
 }
-
 </script>
 <!-- END: main -->
