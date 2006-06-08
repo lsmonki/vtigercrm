@@ -16,7 +16,7 @@
 
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
-   <a class="link"  align="right" href="javascript:;">Edit</a>
+   <a class="link"  align="right" href="javascript:;">{$APP.LBL_EDIT_BUTTON}</a>
 </span>
 
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
@@ -74,7 +74,7 @@ function tagvalidate()
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
-		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">+addtag</a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="Tag it" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="Close" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td></tr>
+		 <tr height=20><td>{$UPDATEINFO}</td><td align="right" width="400" nowrap><div id="addtagdiv"><a href="javascript:;" onClick="show('tagdiv'),fnhide('addtagdiv'),document.getElementById('txtbox_tagfields').focus()">{$APP.LBL_ADD_TAG}</a></div><div id="tagdiv" style="display:none;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value=""></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="small" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/><input name="close" type="button" class="small" value="{$APP.LBL_CLOSE}" onClick="fnhide('tagdiv'),show('addtagdiv')"></div></td></tr>
 		 </table>			 
 		 <hr noshade size=1>
 		
@@ -171,7 +171,7 @@ function tagvalidate()
                                                         <td align=right>
 							{if $header eq 'Address Information' && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
                                                         {if $MODULE eq 'Leads'}
-                                                        <input id="locateMap" name="locateMap" value="Locate Map" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="Locate Map">
+                                                        <input id="locateMap" name="locateMap" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
                                                         {else}
                                                                 {if $MODULE eq 'Accounts'}
                                                                        {assign var=address1 value='Billing'}
@@ -181,14 +181,14 @@ function tagvalidate()
                                                                        {assign var=address1 value='Mailing'}
                                                                        {assign var=address2 value='Other'}
                                                                 {/if}
-                                                                <input id="locateMap" name="locateMap" value="Locate Map" class="small" type="button" onClick="javascript:showLocateMapMenu()" title="Locate Map">
+                                                                <input id="locateMap" name="locateMap" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="javascript:showLocateMapMenu()" title="{$APP.LBL_LOCATE_MAP}">
                                                         <div id="dropDownMenu" style="position:absolute;display:none;z-index:60">
 							<table border="0" cellspacing="0" cellpadding="4">
                                                 <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'" onClick="searchMapLocation( 'Main' )">
-                                                <td>{$address1} Address</td>
+                                                <td>{$address1} {$APP.LBL_ADDRESS}</td>
                                                 </tr>
                                                 <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'"  onClick="searchMapLocation( 'Other' )">
-                                                <td>{$address2} Address</td>
+                                                <td>{$address2} {$APP.LBL_ADDRESS}</td>
                                                 </tr>
                                                 </table>
                                                 </div>
@@ -298,7 +298,7 @@ function tagvalidate()
       				<tr style="height:25px">
       						<td class="rightMailMergeContent">
           						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
-          						<input value="Merge" onclick="this.form.action.value='Merge';" type="submit"></input>
+          						<input value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input>
       					  </td>
       				</tr>
   				</table>
