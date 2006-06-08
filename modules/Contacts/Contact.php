@@ -37,28 +37,9 @@ class Contact extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored fields
-	var $id;
-	var $mode;
-
-	var $contactid;
-	
-
-	// These are for related fields
-	var $accountname;
-	var $accountid;
-	var $campaignid;
-	var $reports_to_name;
-	var $opportunity_id;
-	var $note_id;
-	var $email_id;
-	var $assigned_user_name;
-		
 	var $table_name = "contactdetails";
 	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf','customerdetails','attachments');
 	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid','customerdetails'=>'customerid','attachments'=>'attachmentsid');
-
-
 
 	var $module_id = "contactid";
 	var $object_name = "Contact";
@@ -124,10 +105,6 @@ class Contact extends CRMEntity {
 	'Phone' => 'phone',
 	'Assigned To' => 'assigned_user_id'
 	);
-
-	var $record_id;
-	var $list_mode;
-        var $popup_type;
 
 	var $search_fields = Array(
 	'Name' => Array('contactdetails'=>'lastname'),

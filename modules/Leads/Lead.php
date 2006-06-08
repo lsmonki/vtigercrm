@@ -28,54 +28,6 @@ class Lead extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored fields
-	var $leadid;
-	var $email;
-	var $firstname;
-	var $salutation;
-	var $lastname;
-	var $company;
-	var $annualrevenue;
-
-	var $industry;
-	var $campaign;
-	var $rating;
-	var $status;
-	var $leadsource;
-	var $designation;
-	var $licencekey;
-	var $region;
-	var $space;
-	var $comments;
-	var $priority;
-	var $partnercontact;
-	var $maildate;
-	var $nextstepdate;
-	var $fundingsituation;
-	var $deleted;
-
-	var $description;
-	// These are for related fields
-	var $city;
-	var $code;
-	var $state;
-	var $country;
-	var $phone;
-	var $mobile;
-	var $fax;
-	var $lane;
-	var $leadaddresstype;
-	var $currency;
-	var $website;
-	var $callornot;
-	var $readornot;
-	var $empct;
-
-	var $accountid;
-	var $contactid;
-	var $campaignid;
-	var $potentialid;
-
 	var $module_id = "leadid";
 
 	var $tab_name = Array('crmentity','leaddetails','leadsubdetails','leadaddress','leadscf');
@@ -124,10 +76,6 @@ class Lead extends CRMEntity {
 		'Assigned To'=>'assigned_user_id'
 	);
 	var $list_link_field= 'lastname';
-
-	var $record_id;
-	var $list_mode;
-	var $popup_type;
 
 	var $search_fields = Array(
 		'Name'=>Array('leaddetails'=>'lastname'),

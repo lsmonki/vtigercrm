@@ -38,24 +38,9 @@ class Account extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored fields
-	var $id;
-	var $mode;
-
-	// These are for related fields
-	var $opportunity_id;
-	var $contact_id;
-	var $note_id;
-	var $email_id;
-	var $member_id;
-	var $parent_name;
-	var $assigned_user_name;
-
 	var $table_name = "account";
 	var $tab_name = Array('crmentity','account','accountbillads','accountshipads','accountscf');
 	var $tab_name_index = Array('crmentity'=>'crmid','account'=>'accountid','accountbillads'=>'accountaddressid','accountshipads'=>'accountaddressid','accountscf'=>'accountid');
-
 
 	var $entity_table = "crmentity";
 
@@ -92,10 +77,6 @@ class Account extends CRMEntity {
 			'Assigned To'=>'assigned_user_id'
 			);
 	var $list_link_field= 'accountname';
-
-	var $record_id;
-	var $list_mode;
-	var $popup_type;
 
 	var $search_fields = Array(
 			'Account Name'=>Array('account'=>'accountname'),

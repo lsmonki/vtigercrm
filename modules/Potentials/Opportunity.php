@@ -35,14 +35,6 @@ require_once('include/utils/utils.php');
 class Potential extends CRMEntity {
 	var $log;
 	var $db;
-	// Stored fields
-	var $id;
-	var $potentialid;
-	var $private;
-
-	var $stage;
-
-	var $deleted;
 
 	var $module_name="Potentials";
 	var $table_name = "potential";
@@ -79,10 +71,6 @@ class Potential extends CRMEntity {
 
 	var $list_link_field= 'potentialname';
 
-	var $record_id;
-	var $list_mode;
-	var $popup_type;
-
 	var $search_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
 			'Account Name'=>Array('potential'=>'accountid'),
@@ -114,8 +102,6 @@ class Potential extends CRMEntity {
 	}
 
 	var $new_schema = true;
-
-
 
 	function create_list_query($order_by, $where)
 	{
