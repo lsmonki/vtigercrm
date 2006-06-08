@@ -471,7 +471,7 @@ class Potential extends CRMEntity {
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 and potential.potentialid=".$id;
+		$query = "select crmentity.*, quotes.*, potential.potentialname, users.user_name from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and potential.potentialid=".$id;
 		$log->debug("Exiting get_quotes method ...");
 		return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 	}
