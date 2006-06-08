@@ -19,17 +19,17 @@ function DeleteEmail(id)
 		$("status").style.display="inline";
                 new Ajax.Request(
                         'index.php',
-                        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
                                 postBody: "module=Users&action=massdelete&return_module=Emails&folderid="+gFolderid+"&idlist="+id,
-                                onComplete: function(response) {ldelim}
+                                onComplete: function(response) {
                                                 $("status").style.display="none";
                                                 $('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
                                                 $("subjectsetter").innerHTML='';
                                                 $("email_con").innerHTML=response.responseText;
                                                 execJS($('email_con'));
-                                {rdelim}
-                        {rdelim}
+                                }
+                        }
                 );
 	}
 	else
@@ -45,17 +45,17 @@ function Searchfn()
 	var search_text = document.getElementById('search_text').value;
 	new Ajax.Request(
                 'index.php',
-                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                {queue: {position: 'end', scope: 'command'},
                         method: 'post',
                         postBody: "module=Emails&action=EmailsAjax&ajax=true&file=ListView&folderid="+gFolderid+"&search=true&search_field="+search_field+"&search_text="+search_text,
-                        onComplete: function(response) {ldelim}
+                        onComplete: function(response) {
                                         $("status").style.display="none";
                                         $('EmailDetails').innerHTML = '<table valign="top" border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="forwardBg"><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td colspan="2">&nbsp;</td></tr></tbody></table></td></tr><tr><td style="padding-top: 10px;" bgcolor="#ffffff" height="300" valign="top"></td></tr></tbody></table>';
                                         $("subjectsetter").innerHTML='';
                                         $("email_con").innerHTML=response.responseText;
                                         execJS($('email_con'));
-                        {rdelim}
-                {rdelim}
+                        }
+                }
         );
 }
 
