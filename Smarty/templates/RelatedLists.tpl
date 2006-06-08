@@ -67,7 +67,7 @@
 					  {foreach key=header item=detail from=$RELATEDLISTS}
 						<table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
 							<tr>
-							<td  valign=bottom><b>{$header}</b></td>
+							<td  valign=bottom><b>{$APP.$header}</b></td>
 							{if $detail ne ''}
 							<td align=center>{$detail.navigation.0}</td>
 							{$detail.navigation.1}

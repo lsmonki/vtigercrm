@@ -740,6 +740,14 @@ $app_strings = Array(
 'Rss'=>'RSS',
 'Portal'=>'My Sites',
 'Webmails'=>'Webmails',
+'Attachments'=>'Attachments',
+'Activity History'=>'Activity History',
+'Ticket History'=>'Ticket History',
+'Purchase Order'=>'Purchase Order',
+'Sales Stage History'=>'Sales Stage History',
+'Users'=>'Users',
+
+
 
 //Added language for Parent Tab
 
