@@ -199,16 +199,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		return $this;
 	}
 
-	/**
-	 * This function returns a paged list of the current object type.  It is intended to allow for
-	 * hopping back and forth through pages of data.  It only retrieves what is on the current page.
-	 * This method must be called on a new instance.  It trashes the values of all the fields in the current one.
-	 */
-	function get_lead_list($order_by = "", $where = "", $row_offset = 0) {
-		$query = $this->create_lead_list_query($order_by, $where);
-		return $this->process_list_query($query, $row_offset);
-	}
-		
 	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1, $max=-1) {
 		$this->log->debug("get_list:  order_by = '$order_by' and where = '$where' and limit = '$limit'");
 		
@@ -342,14 +332,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-/*	function track_view($user_id, $current_module)
-	{
-		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
-
-		$tracker = new Tracker();
-		$tracker->track_view($user_id, $current_module, $this->id, $this->get_summary_text());
-	}
-	*/
 	function track_view($user_id, $current_module,$id='')
 	{
 		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
@@ -358,30 +340,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
 
-
-	/**
-	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
-	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
-	 * This method is only used for populating extra fields in lists
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function fill_in_additional_list_fields()
-	{
-	}
-
-	/**
-	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
-	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
-	 * This method is only used for populating extra fields in the detail form
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	 */
-	function fill_in_additional_detail_fields()
-	{
-	}
 
 	/** This function should be overridden in each module.  It marks an item as deleted.
 	* If it is not overridden, then marking this type of item is not allowed
@@ -403,11 +361,11 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	}
 
 
-	/* This is to allow subclasses to fill in row specific columns of a list view form */
+	/* This is to allow subclasses to fill in row specific columns of a list view form 
 	function list_view_parse_additional_sections(&$list_form)
 	{
 	}
-
+	*/
 	/* This function assigns all of the values into the template for the list view */
 	function get_list_view_array(){
 		$return_array = Array();
@@ -489,31 +447,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 			} 
 		} 
 	}
-	/**
-		builds a generic search based on the query string using or
-		do not include any $this-> because this is called on without having the class instantiated
-	*/
-	function build_generic_where_clause($value){
-			$where_clause = "WHERE "; 
-		$first = 1; 
-		foreach ($fields_array as $name=>$value) 
-		{ 
-			if ($first) 
-			{ 
-				$first = 0;
-			} 
-			else 
-			{ 
-				$where_clause .= " or";
-			} 
-
-			$where_clause .= "$name = ".$adb->quote($value)."";
-		} 
-
-		$where_clause .= " AND deleted=0";
-		return $where_clause;
-	}
-
 }
 
 
