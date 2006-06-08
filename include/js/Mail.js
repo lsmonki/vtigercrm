@@ -146,12 +146,16 @@ function validate_sendmail(idlist,module)
 }
 function sendmail(module,idstrings)
 {
-	var ajaxObj = new VtigerAjax(ajaxSendmailResponse);
-	var urlstring ="module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings;
-	ajaxObj.process("index.php?",urlstring);
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings,
+                        onComplete: function(response) {
+                                        getObj('sendmail_cont').innerHTML=response.responseText;
+                        }
+                }
+        );
 }
-function ajaxSendmailResponse(response)
-{
-	getObj('sendmail_cont').innerHTML=response.responseText;
-}
+
 	
