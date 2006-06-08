@@ -2310,6 +2310,7 @@ function getPotentialName($potential_id)
 {
 global $vtlog;
 $vtlog->logthis("in getPotentialName ".$potential_id,'info');  
+	if(!$potential_id) return '';
 	global $adb;
 	$sql = "select potentialname from potential where potentialid=".$potential_id;
         $result = $adb->query($sql);
