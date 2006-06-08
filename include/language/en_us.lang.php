@@ -228,7 +228,15 @@ $app_strings = Array(
 
 'LNK_IMPORT_LEADS'=>'Import Leads',
 
+'LBL_LOCATE_MAP'=>'Locate Map',
 
+'LBL_ADDRESS'=>'Address',
+
+'LBL_ADD_TAG'=>'+addtag',
+
+'LBL_TAG_IT'=>'Tag it',
+
+'LBL_CLOSE'=>'Close',
 
 'LNK_ADVANCED_SEARCH'=>'Advanced Search',
 
