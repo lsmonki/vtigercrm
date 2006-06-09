@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('database/DatabaseConnection.php');
 require_once('HelpDeskUtil.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');

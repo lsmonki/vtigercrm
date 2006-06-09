@@ -15,7 +15,8 @@
 
 require_once('include/logging.php');
 include('adodb/adodb.inc.php');
-require_once("adodb/adodb-xmlschema.inc.php");
+require_once("adodb/adodb-xmlschema03.inc.php");
+require_once("include/utils.php");
 
 require_once('vtigerlogger.php');
 global $vtlog;
@@ -664,7 +665,7 @@ global $vtlog;
 		}
 		
 		$this->database = ADONewConnection($this->dbType);
-		//$this->database->debug = true;
+		$this->database->debug = true;
 		
 		$this->database->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
 		$this->database->LogSQL($this->enableSQLlog);

@@ -11,7 +11,6 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('database/DatabaseConnection.php');
 require_once('XTemplate/xtpl.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 global $mod_strings;

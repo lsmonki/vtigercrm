@@ -23,7 +23,6 @@
 
 require_once('modules/Invoice/Invoice.php');
 require_once('include/logging.php');
-//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');

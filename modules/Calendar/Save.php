@@ -26,7 +26,6 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/webelements.p3');
 require_once('modules/Calendar/Date.pinc');
-#require_once('database/DatabaseConnection.php');
 
 //Added for Appointment Validation
  global $callink,$mod_strings;

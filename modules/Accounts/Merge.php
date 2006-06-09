@@ -28,7 +28,6 @@ else if(document.all)
 }
 </script>
 <?php
-//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
 //echo 'id is ....... ' .$_REQUEST['record'];
