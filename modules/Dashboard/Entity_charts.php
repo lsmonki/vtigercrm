@@ -211,7 +211,11 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						$graph_for="ticketpriorities";
 					}
 
+					if($graph_for == "accountid") $graph_for = "account_id";
+					
 					$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true";
+
+					if($graph_for == "account_id") $graph_for = "accountid";
 
 					//Adding the links to the graph	
 					if($i==0)
