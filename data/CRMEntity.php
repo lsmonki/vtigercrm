@@ -1025,10 +1025,7 @@ $vtlog->logthis("type is ".$type,'debug');
 				}
 
 
-				//$this->db->println("here is the bug");
-			
-
-				$list[] = $this;
+				$list[] = clone($this);
 			}
 		}
 
@@ -1060,10 +1057,7 @@ $vtlog->logthis("type is ".$type,'debug');
 				else
 					$this->db->println("rowid not set unable to retrieve");
 				 
-				 
-				
-
-				$list[] = $this;
+				$list[] = clone($this);
 			}
 		}
 

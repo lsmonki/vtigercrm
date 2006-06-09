@@ -19,10 +19,6 @@
  * defined by the input parameters.
  ********************************************************************************/
 
-if (substr(phpversion(), 0, 1) == "5") {
-	ini_set("zend.ze1_compatibility_mode", "1");
-}
-
 if (ini_get("allow_url_fopen") != 1) {
         die("You must have the allow_url_fopen directive in your php.ini file enabled");
 }

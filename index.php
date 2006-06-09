@@ -22,11 +22,11 @@
 global $entityDel;
 global $display;
 
-require_once('include/utils.php');
-//$phpbb_root_path='./modules/MessageBoard/';
-if (substr(phpversion(), 0, 1) == "5") {
-        ini_set("zend.ze1_compatibility_mode", "1");
+if (version_compare(phpversion(), '5.0') < 0) {
+	eval('function clone($object) { return $object; } ');
 }
+
+require_once('include/utils.php');
 
 function fetchPermissionDataForTabList()
 {
