@@ -115,7 +115,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "".PearDatabase::quote($val)."";
+			$where .= "".$adb->quote($val)."";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}
