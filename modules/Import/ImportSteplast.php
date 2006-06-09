@@ -57,7 +57,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$log->info("Upload Step 2");
+$log->info("Import Step last");
 
 if ( isset($_REQUEST['message']))
 {
@@ -83,7 +83,7 @@ if ( isset($_REQUEST['message']))
 				   <form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
 					<input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
 					<input type="hidden" name="action" value="Import">
-					<input type="hidden" name="step" value="2">
+					<input type="hidden" name="step" value="1">
 					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
 					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
 					<input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
@@ -131,10 +131,10 @@ global $list_max_entries_per_page;
 $implict_account = false;
 
 $import_modules_array = Array(
-				"Contacts"=>"Contact",
-				"Potentials"=>"Potential",
 				"Leads"=>"Lead",
 				"Accounts"=>"Account",
+				"Contacts"=>"Contact",
+				"Potentials"=>"Potential",
 				"Products"=>"Product" 
 			     );
 
@@ -153,7 +153,7 @@ foreach($import_modules_array as $module_name => $object_name)
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
 
-	if($noofrows>1) 
+	if($noofrows>=1) 
 	{
 		if($module_name != 'Accounts')
 		{

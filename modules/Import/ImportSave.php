@@ -205,7 +205,7 @@ if($end >= $totalnoofrows)
 else
 {
 	$module = 'Import';
-	$action = 'ImportStep4';
+	$action = 'ImportStep3';
 }
 ?>
 
