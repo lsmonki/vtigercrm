@@ -1,15 +1,45 @@
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
+	line-height: 14px;
 	color: #000000;
 }
 .big {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: 18px;
-	color: #aaaaaa;
+	color: #000000;
 	font-weight:bold;
 }
+
+.ybToday {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	color: #119911;
+}
+.ybUnfinished {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	color: #993311;
+}
+.ybTime {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	color: #777777;
+	font-weight:bold;
+}
+.yellowBox {
+	background-color:#ffffE1;
+	border:1px solid #999999;
+}
+.ybSeperator{
+	height:0px;
+	border-top:2px dotted #adadad;
+}
+
 .genHeaderBig{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
@@ -90,8 +120,8 @@
     font-size: 11px;
     padding-left:20px;
     padding-right:20px;
-    padding-top:3px;
-    padding-bottom:3px;
+    padding-top:5px;
+    padding-bottom:5px;
     font-weight:bold;
     color:white;
 }
@@ -99,8 +129,6 @@
 .level2text a{
 	text-decoration:none;
 	color:white;
-	padding-left:10px;
-	padding-right:10px;
 }
 
 .level2text a:hover {
@@ -148,21 +176,15 @@
 
 .showPanelBg {
 	background:url(images/showPanelTopBg.gif) repeat-x;
-	background-position:top;
 }
 
 a {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
 	text-decoration:none;
-	color:#333366;
+	color:#003399;
 }
 
 a:hover {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
 	text-decoration:underline;
-	color:#333333;
 }
 
 .hdrLink {
@@ -272,7 +294,6 @@ a:hover {
 .dvtCellLabel {
 	background-color:#f6f6f6;
 	padding-right:10px;
-	padding-left:10px;
 	border-bottom:1px solid #eaeaea;
 	color:#737373;
 	white-space:nowrap;
@@ -280,7 +301,6 @@ a:hover {
 
 .dvtCellInfo {
 	padding-left:10px;
-	padding-right:10px;
 	border-bottom:1px solid #eaeaea;
 	white-space:nowrap;
 }
@@ -292,8 +312,6 @@ a:hover {
 .rightMailMergeHeader {
 	border-bottom:1px solid #dddddd;
 	padding:5px;
-	font-size: 11px;
-        line-height: 14px;
 	background-color:#eaeaea;
 
 }
@@ -2471,8 +2489,8 @@ level2Sel{
 
    
 .tagCloudTopBg {
-    background: url(images/tagCloudBg.gif) repeat-x;
-    background-color:#e5e5e5;
+    background: url(images/tagCloudBg.gif);
+    background-repeat:repeat-x;
    
 }
 
@@ -2483,6 +2501,322 @@ level2Sel{
     font-size: 11px;
     line-height: 14px;
     color: #000000;
-    height:100px;
 
 }
+.adProgressBar {
+	border-style:solid;
+	border-width:2px;
+	border-color:blue;
+
+}
+
+.h2 {
+
+	font-size:18px;
+	line-height:20px;
+
+}
+
+.gray {
+
+	color:gray;
+}
+
+.hdeskComments {
+
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	color: #999999;
+	border:0px;
+	background-color:#ffffef;
+	width:100%;
+
+}
+
+
+
+
+ul {
+	list-style:none;
+	line-height:20px;
+	padding-left:20px;
+	margin-left:0px;
+	font-weight:normal;
+	border-top:1px dotted #dadada;
+
+}
+	
+.branch {
+	list-style-image: url("secAdd.gif");
+}	
+
+
+
+.tagCloudTopBg {
+	background-image:url(images/topCloudBg.gif) repeat-x;
+}
+
+.tagCloudDisplay {
+	background-color:#e5e5e5;
+	padding:5px;
+}
+	
+	
+	
+.heading1 {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 19px;
+	line-height: 14px;
+	color: #000000;
+}
+
+.heading2 {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	line-height: 16px;
+	font-weight:bold;
+	color: #000000;
+}
+
+.heading3 {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 14px;
+	color: #999999;
+}
+
+.heading4 {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 14px;
+	color: #999999;
+}
+
+.settingsUI {
+
+	background-color:#efefef;
+	border:2px solid #777777;
+
+}
+
+
+.settingsTabHeader {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height:25px;
+	font-weight:bold;
+	color:#ffffff;
+	background-image: url(images/settingsMTBg.gif);
+	background-repeat: repeat-x;
+	padding-left:10px;
+	padding-right:10px;
+	
+
+}
+
+.settingsTabList {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	font-weight:normal;
+	color:#000000;
+	background-color:#e3e3e3;
+	padding-left:30px;
+	border-top:1px solid #eaeaea;
+	border-bottom:1px solid #d3d3d3;
+}
+.settingsTabSelected {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:20px;
+	font-weight:bold;
+	color:#000000;
+	background-color:#ffffff;
+	padding-left:30px;
+}
+.settingsSelectedUI {
+	padding:10px;
+	background:url(images/settingsSelUIBg.gif) repeat-x;
+	background-color:#ffffff;
+}
+.settingsIconDisplay {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height:14px;
+	padding:10px;
+
+	color:#000000;
+	background-color:#ffffff;
+	padding-left:10px;
+}
+.settingsSelUITopLine{
+	border-bottom:2px dotted #999999;
+
+}
+
+.tableHeading{
+	background-color:#ffffff;
+	border-bottom:2px solid #aaaaaa;
+}
+.ColHeader{
+	background-color:#dadada;
+	border-left:1px solid #eaeaea;
+	border-top:1px solid #eaeaea;
+	border-right:1px solid #aaaaaa;
+	border-bottom:1px solid #aaaaaa;
+	font-weight:bold;
+
+}
+.cellLabel {
+	background-color:#eaeaea;
+	border-top:1px solid #efefef;
+	border-bottom:1px solid #dadada;
+	color:#555555;
+
+}
+.cellText {
+	color:#333333;
+	border-bottom:1px solid #dadada;
+}
+
+.listTable{
+	border-left:1px solid #cccccc;
+	border-right:1px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+
+}
+
+.listTableRow{
+	border-bottom:1px solid #eaeaea;
+	border-right	:1px solid #eaeaea;
+	border-bottom:1px solid #eaeaea;
+	border-bottom:1px solid #eaeaea;
+}
+
+.listTableTopButtons{
+	background-color:#eeeeee;
+	
+}
+
+.crmButton{
+	
+	border-left:1px solid #ffffff;
+	border-top:1px solid #ffffff;
+	border-right:1px solid #555555;
+	border-bottom:1px solid #555555;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+.create{
+	background-color:#33cc11;
+	color:#333333;
+	font-weight:bold;
+}
+.delete {
+	background-color:#dd9900;
+	color:#ffffff;
+	font-weight:bold;
+}
+.edit {
+	background-color:#a5a5ee;
+	color:#ffffff;
+	font-weight:bold;
+}
+.save{
+	background-color:#33cc11;
+	color:#ffffff;
+	font-weight:bold;
+}
+.cancel {
+	background-color:#dd9900;
+	color:#ffffff;
+	font-weight:bold;
+}
+
+.inactive{
+color:#999999;
+}
+
+.active{
+color:#229922;
+
+}
+textarea {
+	width:95%;
+	height:70px;
+	border:1px solid #dadada;
+}
+.treeTable1{
+	padding:0px;
+}
+
+.prvPrfBigText {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.prvPrfTopBg {
+	background-color:#ebebeb;
+}
+
+.prvPrfBottomBg {
+	background-color:#ebebeb;
+}
+
+.prvPrfOutline {
+	border:1px solid #ebebeb;
+}
+
+.prvPrfSelectedTab {
+	background:url(../images/prvPrfSelectedTab.gif) repeat-x;
+
+}
+
+.prvPrfUnSelectedTab {
+	background:url(../images/prvPrfUnSelectedTab.gif) repeat-x;
+
+}
+
+.prvPrfTexture {
+	background:url(../images/prvPrfTexture1.gif);
+
+}
+.prvPrfBgOn{
+	background-color:#33ee33;
+}
+.prvPrfBgOff{
+	background-color:#cccccc;
+}
+
+.prvPrfHoverOn {
+	background-color:#ffffef;
+	
+}
+.prvPrfHoverOut {
+	background-color:#ffffff;
+}
+
+.prvPrfBgImgGlobal {
+	background:url(../images/prvPrfBgImgGlobal.jpg) top right no-repeat;
+}
+.prvPrfBgImgTab {
+	background:url(../images/prvPrfBgImgTab.jpg) top right no-repeat;
+}
+.prvPrfBgImgStandard {
+	background:url(../images/prvPrfBgImgStandard.jpg) top right no-repeat;
+}
+.prvPrfBgImgUtils {
+	background:url(../images/prvPrfBgImgUtils.jpg) top right no-repeat;
+}
+.prvPrfBgImgField {
+	background:url(../images/prvPrfBgImgField.jpg) top right no-repeat;
+}
+
+.prvPrfTabSample {
+	border-top:1px solid #ababab;
+	border-left:1px solid #ababab;
+	border-right:1px solid #a1a1a1;
+}
+
