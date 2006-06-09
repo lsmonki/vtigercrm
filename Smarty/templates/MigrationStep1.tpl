@@ -199,7 +199,7 @@
 <br>2. Create new database (Better is to create a database in the server where your vtiger 5.0 Database is running.)
 <br>3. Apply this 4.2.3 dump to this new database.
 <br>Now give this new database access details. This migration will modify this Database to fit with the 5.0 Schema.
-Then you can give this Database name in config.php file to use this Database ie., $dbconfig['db_name'] = 'new db name';
+Then you can give this Database name in config.inc.php file to use this Database ie., $dbconfig['db_name'] = 'new db name';
 
 								</td>
 							   </tr>
