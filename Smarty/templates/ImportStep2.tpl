@@ -55,7 +55,7 @@ function getImportSavedMap(impoptions)
 				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
 				<input type="hidden" name="module" value="{$MODULE}">
 				<input type="hidden" name="action" value="Import">
-				<input type="hidden" name="step" value="4">
+				<input type="hidden" name="step" value="3">
 				<input type="hidden" name="has_header" value="{$HAS_HEADER}">
 				<input type="hidden" name="source" value="{$SOURCE}">
 				<input type="hidden" name="delimiter" value="{$DELIMITER}">
@@ -153,9 +153,9 @@ function getImportSavedMap(impoptions)
 				   <tr bgcolor="#ECECEC"><td><hr /></td></tr>
 				   <tr bgcolor="#ECECEC">
 					<td align="right" style="padding-right:40px;" >
-						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='2'; return true;" />
+						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='4'; return validate_import_map();" />
+						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="classBtn" onclick="this.form.action.value='Import';this.form.step.value='3'; return validate_import_map();" />
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC"><td align="right" >&nbsp;</td></tr>

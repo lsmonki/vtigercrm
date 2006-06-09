@@ -16,7 +16,7 @@
 		<input type="hidden" name="module" value="{$MODULE}">
  		<input type="hidden" name="return_module" value="{$MODULE}">
 		<input type="hidden" name="return_action" value="index">
-		<input type="hidden" name="step" value="2">
+		<input type="hidden" name="step" value="1">
 		<input type="hidden" name="action" value="Import">
 
 		<!-- IMPORT ERROR STARTS HERE  -->

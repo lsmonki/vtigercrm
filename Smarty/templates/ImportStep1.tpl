@@ -37,7 +37,7 @@
 			<td width="75%" valign=top>
 				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
 				<input type="hidden" name="module" value="{$MODULE}">
-				<input type="hidden" name="step" value="2">
+				<input type="hidden" name="step" value="1">
 				<input type="hidden" name="source" value="{$SOURCE}">
 				<input type="hidden" name="source_id" value="{$SOURCE_ID}">
 				<input type="hidden" name="action" value="Import">
@@ -100,7 +100,7 @@
 				   <tr bgcolor="#ECECEC"><td colspan="2"><hr /></td></tr>
 				   <tr bgcolor="#ECECEC">
 					<td colspan="2" align="right" style="padding-right:40px;">
-						<input title="{$MOD.LBL_NEXT}" accessKey="" class="classBtn" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='3'; return verify_data(this.form);">
+						<input title="{$MOD.LBL_NEXT}" accessKey="" class="classBtn" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return verify_data(this.form);">
 					</td>
 				   </tr>
 				   <tr bgcolor="#ECECEC">
