@@ -18,8 +18,16 @@ require_once('include/utils/CommonUtils.php'); //new
 $column_array=array('accountid','contact_id');
 $table_col_array=array('account.accountname','contactdetails.firstname,contactdetails.lastname');
 
-
-
+/**This function is used to get the list view header values in a list view during search
+*Param $focus - module object
+*Param $module - module name
+*Param $sort_qry - sort by value
+*Param $sorder - sorting order (asc/desc)
+*Param $order_by - order by
+*Param $relatedlist - flag to check whether the header is for listvie or related list
+*Param $oCv - Custom view object
+*Returns the listview header values in an array
+*/
 
 function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
@@ -178,6 +186,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 }
 
+/**This function is used to get the where condition for search listview query along with url_string
+*Param $module - module name
+*Returns the where conditions and url_string values in string format
+*/
 
 function Search($module)
 {
@@ -215,6 +227,13 @@ function Search($module)
 
 }
 
+/**This function is used to get user_id's for a given user_name during search
+*Param $table_name - tablename
+*Param $column_name - columnname
+*Param $search_string - searchstring value (username)
+*Returns the where conditions for list query in string format
+*/
+
 function get_usersid($table_name,$column_name,$search_string)
 {
 
@@ -247,6 +266,13 @@ function get_usersid($table_name,$column_name,$search_string)
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
 }
+
+/**This function is used to get where conditions for a given accountid or contactid during search for their respective names
+*Param $column_name - columnname
+*Param $search_string - searchstring value (username)
+*Returns the where conditions for list query in string format
+*/
+
 
 function getValuesforColumns($column_name,$search_string)
 {
@@ -283,6 +309,13 @@ function getValuesforColumns($column_name,$search_string)
 	$log->debug("Exiting getValuesforColumns method ...");
 	return $where;
 }
+
+/**This function is used to get where conditions in Basic Search
+*Param $module - module name
+*Param $search_field - columnname/field name in which the string has be searched
+*Param $search_string - searchstring value (username)
+*Returns the where conditions for list query in string format
+*/
 
 function BasicSearch($module,$search_field,$search_string)
 {
@@ -327,6 +360,11 @@ function BasicSearch($module,$search_field,$search_string)
 	$log->debug("Exiting BasicSearch method ...");
 	return $where;
 }
+
+/**This function is used to get where conditions in Advance Search
+*Param $module - module name
+*Returns the where conditions for list query in string format
+*/
 
 function getAdvSearchfields($module)
 {
@@ -401,6 +439,11 @@ function getAdvSearchfields($module)
 	return $OPTION_SET;
 }
 
+/**This function is returns the search criteria options for Advance Search
+*takes no parameter
+*Returns the criteria option in html format
+*/
+
 function getcriteria_options()
 {
 	global $log;
@@ -409,6 +452,14 @@ function getcriteria_options()
 	$log->debug("Exiting getcriteria_options method ...");
 	return $CRIT_OPT;
 }
+
+/**This function is returns the where conditions for each search criteria option in Advance Search
+*Param $criteria - search criteria option
+*Param $searchstring - search string
+*Param $searchfield - fieldname to be search for 
+*Returns the search criteria option (where condition) to be added in list query
+*/
+
 function getSearch_criteria($criteria,$searchstring,$searchfield)
 {
 	global $log;
@@ -460,7 +511,13 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	}
 	$log->debug("Exiting getSearch_criteria method ...");
 	return $where_string;
-}								
+}
+
+/**This function is returns the where conditions for search
+*Param $currentModule - module name
+*Returns the where condition to be added in list query in string format
+*/
+
 function getWhereCondition($currentModule)
 {
 	global $log;
@@ -518,6 +575,10 @@ function getWhereCondition($currentModule)
 		}
 		$where="(".$adv_string.")#@@#".$url_string."&searchtype=advance&search_cnt=".$tot_no_criteria."&matchtype=".$_REQUEST['matchtype'];
 	}
+	elseif($_REQUEST['type']=='dbrd')
+	{
+		$where = getdashboardcondition();
+	}
 	else
 	{
  		$where=Search($currentModule);
@@ -525,5 +586,55 @@ function getWhereCondition($currentModule)
 	$log->debug("Exiting getWhereCondition method ...");
 	return $where;
 
+}
+
+/**This function is returns the where conditions for dashboard and shows the records when clicked on dashboard graph
+*Takes no parameter, process the values got from the html request object
+*Returns the search criteria option (where condition) to be added in list query
+*/
+
+function getdashboardcondition()
+{
+	global $adb;
+	$where_clauses = Array();
+	$url_string = "";
+
+	if (isset($_REQUEST['leadsource'])) $lead_source = $_REQUEST['leadsource'];
+	if (isset($_REQUEST['date_closed'])) $date_closed = $_REQUEST['date_closed'];
+	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
+	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
+	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
+	
+
+	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
+	{
+		array_push($where_clauses, "potential.closingdate >= ".$adb->quote($date_closed_start)." and potential.closingdate <= ".$adb->quote($date_closed_end));
+		$url_string .= "&closingdate_start=".$date_closed_start."&closingdate_end=".$date_closed_end;
+	}
+	
+	if(isset($sales_stage) && $sales_stage!=''){
+		if($sales_stage=='Other')
+		array_push($where_clauses, "(potential.sales_stage <> 'Closed Won' and potential.sales_stage <> 'Closed Lost')");
+		else
+		array_push($where_clauses, "potential.sales_stage = ".$adb->quote($sales_stage));
+		$url_string .= "&sales_stage=".$sales_stage;
+	}
+	if(isset($lead_source) && $lead_source != "") {
+		array_push($where_clauses, "potential.leadsource = ".$adb->quote($lead_source));
+		$url_string .= "&leadsource=".$lead_source;
+	}
+	
+	if(isset($date_closed) && $date_closed != "") {
+		array_push($where_clauses, $adb->getDBDateString("potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
+		$url_string .= "&date_closed=".$date_closed;
+	}
+	$where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($where != "")
+		$where .= " and ";
+		$where .= $clause;
+	}
+	return $where."#@@#".$url_string;
 }
 ?>
