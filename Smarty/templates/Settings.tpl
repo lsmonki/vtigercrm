@@ -9,167 +9,511 @@
   *
  ********************************************************************************/
 -->*}
+
 <style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-<tr>
-		{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="small">
-<tr>
+<body class=small>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="themes/blue/images/showPanelTopLeft.gif"></td>
+	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+	<br>
+	<div align=center>
+	<table border=0 cellspacing=0 cellpadding=10 width=90% class="settingsUI">
+	<tr>
+		<td>
+		<!-- heading -->
 
-<td class="detailedViewHeader" align="left"><b>{$MOD.LBL_USER_MANAGEMENT}</b></td>
-</tr>
+		<span class="heading2">{$MOD.LBL_SETTINGS}</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<!--All Icons table -->
+			<table border=0 cellspacing=0 cellpadding=0 width=100%>
+			<tr>
 
-<tr>
-<td class="padTab">
+				<td class="settingsTabHeader">
+				<!-- Users & Access Management -->
+					{$MOD.LBL_USER_MANAGEMENT}	
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsIconDisplay small">
+				<!-- Icons for Users & Access Management -->
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100%>
 
-<table class="controlTab" cellspacing="0" cellpadding="0">
-<tr>
+				<tr>
+					<td width=25% valign=top>
+					<!-- icon 1-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Administration&action=index&parenttab=Settings"><img src="{$IMAGE_PATH}ico-users.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a></td>
+						</tr>
 
-<td width="25%"><a href="index.php?module=Administration&action=index&parenttab=Settings"><img src="{$IMAGE_PATH}user.gif" border="0" alt="{$MOD.LBL_CREATE_AND_MANAGE_USERS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USERS}"/></a><br>
-<a href="index.php?module=Administration&action=index&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USERS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USERS}">{$MOD.LBL_USERS}</a></td>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_USER_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 2-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
-<td width="25%"><a href="index.php?module=Users&action=listroles&parenttab=Settings"><img src="{$IMAGE_PATH}roles.gif" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_ROLES}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_ROLES}" border="0"/></a><br>
-<a href="index.php?module=Users&action=listroles&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_ROLES}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_ROLES}">{$MOD.LBL_ROLES}</a>
-</td>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listroles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$MOD.LBL_ROLES}" width="48" height="48" border=0 title="{$MOD.LBL_ROLES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_ROLE_DESCRIPTION}</td>
+						</tr>
+						</table>
 
-<td width="25%"><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings"><img src="{$IMAGE_PATH}profile.gif" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}"  border="0" /></a><br>
-<a href="index.php?module=Users&action=ListProfiles&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}">{$MOD.LBL_PROFILES}</a>
-</td>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 3-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings"><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td>
+						</tr>
 
-<td width="25%"><a href="index.php?module=Users&action=listgroups&parenttab=Settings"><img src="{$IMAGE_PATH}groups.gif" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}" border="0" /></a><br>
-<a href="index.php?module=Users&action=listgroups&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}">{$MOD.USERGROUPLIST}</a></td>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_PROFILE_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 4-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
-</tr>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listgroups&parenttab=Settings"><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$MOD.USERGROUPLIST}" width="48" height="48" border=0 title="{$MOD.USERGROUPLIST}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_GROUP_DESCRIPTION}</td>
+						</tr>
+						</table>
 
-<tr><td colspan="4" height="30px;">&nbsp;</td></tr>
+					</td>
+				</tr>
+				<!-- Row 2 -->
+				<tr>
+					<td width=25% valign=top>
+					<!-- icon 5-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings"><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_SHARING_ACCESS}" width="48" height="48" border=0 title="{$MOD.LBL_SHARING_ACCESS}"></a></td>
 
-<tr>
+							<td class=big valign=top><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_SHARING_ACCESS_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
 
-<td><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings"><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}" title="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}" border="0"/></a><br>
-<a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}" title="{$MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}">{$MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a>
-</td>
+					<!-- icon 6 -->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="Fields to be shown" width="48" height="48" border=0 title="Fields to be shown"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_SHARING_FIELDS_DESCRIPTION}</td>
 
-<td><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings"><img src="{$IMAGE_PATH}orgshar.gif" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" border="0"/></a><br>						
-<a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings" alt="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}" title="{$MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}">{$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a></td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 7-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}assign.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" width="48" height="48" border=0 title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td>
 
-<td><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"><img src="{$IMAGE_PATH}assign.gif" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings" alt="{$MOD.LBL_ASSIGN_MODULE_OWNERS}" title="{$MOD.LBL_ASSIGN_MODULE_OWNERS}">{$MOD.LBL_ASSIGN_MODULE_OWNERS}</a>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_MODULE_OWNERS_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 8-->
 
-<td><a href="index.php?module=Users&action=Announcements&parenttab=Settings"><img src="{$IMAGE_PATH}announ.gif" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}" border="0" /></a><br>
-<a href="index.php?module=Users&action=Announcements&parenttab=Settings" alt="{$MOD.LBL_SETTING_ANNOUNCEMENT}" title="{$MOD.LBL_SETTING_ANNOUNCEMENT}">{$MOD.LBL_ANNOUNCEMENT}</a></td>
-<td>&nbsp;</td>
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=Announcements&parenttab=Settings"><img src="{$IMAGE_PATH}announ.gif" alt="{$MOD.LBL_ANNOUNCEMENT}" width="48" height="48" border=0 title="{$MOD.LBL_ANNOUNCEMENT}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_ANNOUNCEMENT_DESCRIPTION}</td>
+						</tr>
 
-</tr>
+						</table>
+					</td>
+				</tr>
+				</table>
+				
+				
+				</td>
+			</tr>
 
-</table>
-</td>
-</tr>
 
-<tr><td>&nbsp;</td></tr>
+			<tr>
+				<td class="settingsTabHeader">
 
-<tr>
-<td class="detailedViewHeader" align="left" ><b>{$MOD.LBL_STUDIO}</b></td>
-</tr>
+				<!-- Studio  -->
+					{$MOD.LBL_STUDIO}	
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsIconDisplay small">
+				<!-- Icons for Users & Access Management -->
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100%>
+				<tr>
 
-<tr>
-<td class="padTab">
+					<td width=25% valign=top>
+					<!-- icon 9-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}custom.gif" alt="{$MOD.LBL_CUSTOM_FIELDS}" title="{$MOD.LBL_CUSTOM_FIELDS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td>
+						</tr>
+						<tr>
 
-<table class="controlTab" cellspacing="0" cellpadding="0">
+							<td class="small" valign=top>{$MOD.LBL_CUSTOM_FIELDS_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 10-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
 
-<tr>
-<td width="25%"><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings"><img src="{$IMAGE_PATH}custom.gif" border="0" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}"/></a><br />
-<a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings" alt="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}" title="{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_PICKLIST_EDITOR}" title="{$MOD.LBL_PICKLIST_EDITOR}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_PICKLIST_DESCRIPTION}</td>	
+						</tr>
+						</table>
+					</td>
 
-<td width="25%"><a href="index.php?module=Settings&action=PickList&parenttab=Settings"><img src="{$IMAGE_PATH}picklist.gif" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=PickList&parenttab=Settings" alt="{$MOD.LBL_EDIT_PICKLIST_VALUES}" title="{$MOD.LBL_EDIT_PICKLIST_VALUES}">{$MOD.LBL_PICKLIST_SETTINGS}</a> </td>
+					<td width=25% valign=top>
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
 
-<td width="25%"> </td>
-<td width="25%">&nbsp;</td>
-</tr>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
 
-<tr>
-<td colspan="4" height="30px;">&nbsp;</td>
-</tr>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+				</table>
+				
+				
+				</td>
 
-</table>
-</td>
-</tr>
+			</tr>
+			
+			
+			
+			<tr>
+				<td class="settingsTabHeader">
+				<!-- Communication Templates -->
+					{$MOD.LBL_COMMUNICATION_TEMPLATES}
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsIconDisplay small">
 
-<tr><td>&nbsp;</td></tr>
+				<!-- Icons for Communication Templates -->
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100%>
+				<tr>
+					<td width=25% valign=top>
+					<!-- icon 11-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}ViewTemplate.gif" alt="{$MOD.EMAILTEMPLATES}" title="{$MOD.EMAILTEMPLATES}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td>
 
-<tr>
-<td class="detailedViewHeader" align="left"><b>{$MOD.LBL_COMMUNICATION_TEMPLATES}</b></td>
-</tr>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_EMAIL_TEMPLATE_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 12-->
 
-<tr><td class="padTab">
-<table class="controlTab" cellspacing="0" cellpadding="0">
-<tr>
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}mailmarge.gif" alt="{$MOD.LBL_MAIL_MERGE}" title="{$MOD.LBL_MAIL_MERGE}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_MAIL_MERGE_DESCRIPTION}</td>
+						</tr>
 
-<td width="25%"><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img src="{$IMAGE_PATH}ViewTemplate.gif" border="0" alt="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}" title="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}"/></a><br />
-<a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings" alt="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}" title="{$MOD.LBL_CREATE_EMAIL_TEMPLATES}">{$MOD.EMAILTEMPLATES}</a></td>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 13-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}notification.gif" alt="{$MOD.NOTIFICATIONSCHEDULERS}" title="{$MOD.NOTIFICATIONSCHEDULERS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td>
 
-<td width="25%"><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings"><img src="{$IMAGE_PATH}mailmarge.gif" alt="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}" title="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}" border="0"/></a><br />
-<a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings" alt="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}" title="{$MOD.LBL_UPLOAD_MSWORD_TEMPLATES}">{$MOD.WORDINTEGRATION}</a> </td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_NOTIF_SCHED_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 14-->
 
-<td width="25%"><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings"><img src="{$IMAGE_PATH}notification.gif" alt="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}" title="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}"  border="0" /></a><br />
-<a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings" alt="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}" title="{$MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}">{$MOD.NOTIFICATIONSCHEDULERS}</a> </td>
-<td width="25%"><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img src="{$IMAGE_PATH}inventory.gif" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" border="0" /></a><br />
-<a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_NOTIFICATIONS}" title="{$MOD.LBL_INVENTORY_NOTIFICATIONS}">{$MOD.INVENTORYNOTIFICATION}</a></td>
-</tr>
-<tr><td colspan="4" height="30px;">&nbsp;</td></tr>
-<tr>
-<td width="25%"><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img src="{$IMAGE_PATH}terms.gif" alt="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" title="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" border="0"/></a><br />
-<a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}" title="{$MOD.LBL_INVENTORY_TERMSANDCONDITIONS}">{$MOD.INVENTORYTERMSANDCONDITIONS}</a> </td>
-<td width="25%">&nbsp;</td><td width="25%">&nbsp;</td><td width="25%">&nbsp;</td>
-</tr>
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}/inventory.gif" alt="{$MOD.INVENTORYNOTIFICATION}" title="{$MOD.INVENTORYNOTIFICATION}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_INV_NOTIF_DESCRIPTION}</td>
+						</tr>
 
-<td>&nbsp;</td>
-</tr>
+						</table>
+					</td>
+				</tr>
+				<!-- Row 2 -->
+				<tr>
+					<td width=25% valign=top>
+					<!-- icon 15-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
 
-</table>
-</td></tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORYTERMSANDCONDITIONS}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
+						</tr>
+						</table>
 
-<tr><td>&nbsp;</td></tr>
-<tr>
-<td class="detailedViewHeader" align="left"><b>{$MOD.LBL_CONFIGURATION}</b></td>
-</tr>
-<tr><td class="padTab">
-<table class="controlTab" cellspacing="0" cellpadding="0">
-<tr>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty -->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
 
-<td width="25%"><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings"><img src="{$IMAGE_PATH}company.gif" border="0" alt="{$MOD.LBL_SPECIFY_COMPANY_DETAILS}" title="{$MOD.LBL_SPECIFY_COMPANY_DETAILS}"/></a><br />
-<a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings" alt="{$MOD.LBL_SPECIFY_COMPANY_DETAILS}" title="{$MOD.LBL_SPECIFY_COMPANY_DETAILS}">{$MOD.LBL_ORGANIZATION_DETAILS}</a></td>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
 
-<td width="25%"><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings"><img src="{$IMAGE_PATH}ogmailserver.gif" alt="{$MOD.LBL_CONFIGURE_MAIL_SERVER}" title="{$MOD.LBL_CONFIGURE_MAIL_SERVER}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings" alt="{$MOD.LBL_CONFIGURE_MAIL_SERVER}" title="{$MOD.LBL_CONFIGURE_MAIL_SERVER}">{$MOD.LBL_EMAIL_CONFIG}</a></td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty-->
 
-<td width="25%"><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings"><img src="{$IMAGE_PATH}backupserver.gif" alt="{$MOD.LBL_CONFIGURE_BACKUP_SERVER}" title="{$MOD.LBL_CONFIGURE_BACKUP_SERVER}"  border="0" /></a><br />
-<a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings" alt="{$MOD.LBL_CONFIGURE_BACKUP_SERVER}" title="{$MOD.LBL_CONFIGURE_BACKUP_SERVER}">{$MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a> </td>
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
 
-<td width="25%"><a href="index.php?module=System&action=systemconfig&parenttab=Settings"><img src="{$IMAGE_PATH}system.gif" alt="{$MOD.LBL_SYSTEM_CONFIGURATION}" title="{$MOD.LBL_SYSTEM_CONFIGURATION}" border="0" /></a><br />
-<a href="index.php?module=System&action=systemconfig&parenttab=Settings" alt="{$MOD.LBL_SYSTEM_CONFIGURATION}" title="{$MOD.LBL_SYSTEM_CONFIGURATION}">{$MOD.LBL_SYSTEM_CONFIG}</a></td>
+					</td>
+				</tr>
+				</table>
+				
+				
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsTabHeader">
+				<!-- Other settings -->
+					{$MOD.LBL_OTHER_SETTINGS}
+				</td>
 
-</tr>
+			</tr>
+			<tr>
+				<td class="settingsIconDisplay small">
+				<!-- Icons for Other Settings-->
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100%>
+				<tr>
+					<td width=25% valign=top>
+					<!-- icon 16-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
-<tr><td colspan="4" height="30px;">&nbsp;</td></tr>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}company.gif" alt="{$MOD.LBL_COMPANY_DETAILS}" title="{$MOD.LBL_COMPANY_DETAILS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_COMPANY_DESCRIPTION}</td>
+						</tr>
+						</table>
 
-<tr>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 17-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}ogmailserver.gif" alt="{$MOD.LBL_MAIL_SERVER_SETTINGS}" title="{$MOD.LBL_MAIL_SERVER_SETTINGS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings">{$MOD.LBL_MAIL_SERVER_SETTINGS}</a></td>
+						</tr>
 
-<td><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings"><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings" alt="{$MOD.LBL_CURRENCY_CONFIGURATION}" title="{$MOD.LBL_CURRENCY_CONFIGURATION}">{$MOD.LBL_CURRENCY_CONFIG}</a> </td>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_MAIL_SERVER_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 18-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 
-<td><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings"><img src="{$IMAGE_PATH}taxConfiguration.gif" alt="{$MOD.LBL_INVENTORY_TAX_CONFIG}" title="{$MOD.LBL_INVENTORY_TAX_CONFIG}" border="0"/></a><br />
-<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings" alt="{$MOD.LBL_INVENTORY_TAX_CONFIG}" title="{$MOD.LBL_INVENTORY_TAX_CONFIG}">{$MOD.LBL_INVENTORY_TAX_CONFIG}</a> </td>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}backupserver.gif" alt="{$MOD.LBL_BACKUP_SERVER_SETTINGS}" title="{$MOD.LBL_BACKUP_SERVER_SETTINGS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings">{$MOD.LBL_BACKUP_SERVER_SETTINGS}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_BACKUP_SERVER_DESCRIPTION}</td>
+						</tr>
+						</table>
 
-<td><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"><img src="{$IMAGE_PATH}migrate.gif" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}" border="0"/></a><br />
-<a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings" alt="{$MOD.LBL_MIGRATION_INFO}" title="{$MOD.LBL_MIGRATION_INFO}">{$MOD.LBL_MIGRATION}</a></td>
+					</td>
+					<td width=25% valign=top>
+					<!-- icon 19-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_CURRENCY_SETTINGS}" title="{$MOD.LBL_CURRENCY_SETTINGS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a></td>
+						</tr>
 
-</tr>
-<tr><td colspan="4" height="30px;">&nbsp;</td></tr>
-</table></td></tr>
-</table>
-</td>
-</tr>
-</table>
-		{include file='SettingsSubMenu.tpl'}
+						<tr>
+							<td class="small" valign=top>{$MOD.LBL_CURRENCY_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+				<!-- Row 2 -->
+				<tr>
+
+					<td width=25% valign=top>
+					<!-- icon 20-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}taxConfiguration.gif" alt="{$MOD.LBL_TAX_SETTINGS}" title="{$MOD.LBL_TAX_SETTINGS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings">{$MOD.LBL_TAX_SETTINGS}</a></td>
+						</tr>
+						<tr>
+
+							<td class="small" valign=top>{$MOD.LBL_TAX_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty -->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
+					</td>
+					<td width=25% valign=top>
+
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+
+						</table>
+					</td>
+					<td width=25% valign=top>
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top>&nbsp;</td>
+							<td class=big valign=top>&nbsp;</td>
+						</tr>
+
+						<tr>
+							<td class="small" valign=top>&nbsp;</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
+				</table>
+				
+				
+				</td>
+			</tr>
+
+			</table>
+		
+		</td>
+	</tr>
+	</table>
+		
+	</div>
+
+	</td>
+        <td valign="top"><img src="themes/blue/images/showPanelTopRight.gif"></td>
+   </tr>
+</tbody></table>
+
+
+</body>
