@@ -102,7 +102,7 @@ else
 <form name="Import" method="POST" action="index.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 <input type="hidden" name="action" value="Import">
-<input type="hidden" name="step" value="2">
+<input type="hidden" name="step" value="1">
 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['RETURN_MODULE'] ?>">
 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['RETURN_ID'] ?>">
 <input type="hidden" name="return_action" value="<?php echo $_REQUEST['RETURN_ACTION'] ?>">
