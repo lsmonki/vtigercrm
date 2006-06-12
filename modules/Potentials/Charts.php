@@ -20,52 +20,12 @@
 require_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once("jpgraph/jpgraph.php");
+require_once('Image/Graph.php');
 require_once('include/utils.php');
+require_once('include/GraphUtils.php');
+
 require_once('include/logging.php');
 
-
-
-
-// TTF Font families
-DEFINE("FF_COURIER",10);
-DEFINE("FF_VERDANA",11);
-DEFINE("FF_TIMES",12);
-DEFINE("FF_COMIC",14);
-DEFINE("FF_ARIAL",15);
-DEFINE("FF_GEORGIA",16);
-DEFINE("FF_TREBUCHE",17);
-
-// Chinese font
-DEFINE("FF_SIMSUN",30);
-DEFINE("FF_CHINESE",31);
-DEFINE("FF_BIG5",31);
-DEFINE("FF_TCHINESE_UTF8",32);
-
-
-function calculate_font_family($locale)
-
-{
-
-	switch($locale)
-	{
-		case 'cn_zh':
-			return FF_SIMSUN;
-		case 'zh-tw':
-		    return FF_TCHINESE_UTF8;
-		case 'tw_zh':
-			if(!function_exists('iconv')){
-				echo " Unable to display traditional Chinese on the graphs.<BR>The function iconv does not exists please read more about <a href='http://us4.php.net/iconv'>iconv here</a><BR>";
-				return FF_FONT1;
-
-			}
-			else return FF_CHINESE;
-		default:
-			return FF_FONT1;
-	}
-
-	return FF_FONT1;
-}
 
 
 class jpgraph {
@@ -79,7 +39,8 @@ class jpgraph {
 	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
-		include_once ("jpgraph/jpgraph_bar.php");
+		include_once ('Image/Graph.php');
+		include_once ('Image/Canvas.php');
 
 		// Size of graph
 		$width=600;
@@ -87,13 +48,39 @@ class jpgraph {
 
 		$log =& LoggerManager::getLogger('outcome_by_month chart');
 		// Set the basic parameters of the graph
-		$graph = new Graph($width,$height,$cache_file_name);
+		$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
+		$imagemap = $canvas->getImageMap();
+		$graph =& Image_Graph::factory('graph', $canvas);
 		$log->debug("graph object created");
 
-		$graph->SetScale("textlin");
+		// add a TrueType font
+		$font =& $graph->addNew('font', calculate_font_name($lang_crm));
+		// set the font size to 11 pixels
+		$font->setSize(8);
+		
+		$graph->setFont($font);
+		// create the plotarea layout
+        $title =& Image_Graph::factory('title', array('Title',10));
+    	$plotarea =& Image_Graph::factory('plotarea',array(
+                    'axis',
+                    'axis'
+                ));
+        $footer =& Image_Graph::factory('title', array('Footer',8));
+		$graph->add(
+		    Image_Graph::vertical($title,
+	        Image_Graph::vertical(
+				$plotarea,
+        	    $footer,
+            	90
+		        ),
+        	5
+	    	)
+		);   
+
+		//$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
+			//$font = calculate_font_family($lang_crm);
 
 			$log->debug("date_start is: $date_start");
 			$log->debug("date_end is: $date_end");
@@ -206,32 +193,45 @@ class jpgraph {
 			$log->debug($count);
 
 			//now build the bar plots for each user across the sales stages
-			$bplot = array();
-			$color = array('Closed Lost'=>'FF9900','Closed Won'=>'009933', $other=>'0066CC');
+			$color = array('Closed Lost'=>'#FF9900','Closed Won'=>'#009933', $other=>'#0066CC');
 			$index = 0;
+			$datasets = array();
+			$xlabels = array();
+			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($stages as $stage) {
-				// Now create a bar pot
-				$bplot[$index] = new BarPlot($datax[$stage]);
-
-				//You can change the width of the bars if you like
-				$bplot[$index]->SetWidth(5);
+				// Now create a bar plot
+				$datasets[$index] = & Image_Graph::factory('dataset');
+				foreach($datax[$stage] as $i => $y) {
+				  	$x = 1+2*$i;
+				    $datasets[$index]->addPoint(
+				        $x,
+				        $y,
+				        array(
+				            'url' => $aTargets[$stage][$i],
+				            'alt' => $aAlts[$stage][$i]
+				        )
+				    );
+				}
 
 				// Set fill colors for bars
-				$bplot[$index]->SetFillColor("#".$color[$stage]);
+				$fills->addColor($color[$stage]);
 
-				// We want to display the value of each bar at the top
-				$bplot[$index]->value->Show();
-				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
-				//$bplot->value->SetAlign('left','center');
-				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('center');
-
-				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
-				$log->debug("bplot[$index] is: ");
-				$log->debug($bplot[$index]);
 				$index++;
+			}
+			for($i=0;$i<count($months); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $months[$i];
+			  $xlabels[$x+1] = '';
+			}
+			
+			// compute maximum value because of grace jpGraph parameter not supported
+			$maximum = 0;
+			foreach($months as $num=>$m) {
+			  	$monthSum = 0;
+			  	foreach($stages as $stage) $monthSum += $datax[$stage][$num];
+				if($monthSum > $maximum) $maximum = $monthSum;
+				$log->debug('maximum = '.$maximum.' month = '.$m.' sum = '.$monthSum);
 			}
 
 			if($theme == "blue")
@@ -242,85 +242,103 @@ class jpgraph {
 			{
 				$font_color = "#000000";
 			}
+			$font->setColor($font_color);
 
 			// Create the grouped bar plot
-			$gbplot = new AccBarPlot($bplot);
+			$gbplot = & $plotarea->addNew('bar', array($datasets, 'stacked'));
+			$gbplot->setFillStyle($fills);
 
-			// Add the bar to the graph
-			$graph->Add($gbplot);
+			//You can change the width of the bars if you like
+			$gbplot->setBarWidth(60/count($months),"%");
 
-			// No frame around the image
-			$graph->SetFrame(true,"white");
-
-			// Rotate graph 90 degrees and set margin
-			$top = 20;
-			$bottom = 50;
-			$left = 20;
-			$right = 50;
-			$graph->SetMargin($left,$right,$top,$bottom);
+			// set margin
+			$plotarea->setPadding(array('top'=>0,'bottom'=>0,'left'=>10,'right'=>20));
 
 			// Set white margin color
-			$graph->SetMarginColor('#F5F5F5');
+			$graph->setBackgroundColor('#F5F5F5');
 
 			// Use a box around the plot area
-			$graph->SetBox();
+			$gbplot->setBorderColor('black');
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
+			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$graph->title->Set($title);
-			$graph->title->SetColor($font_color);
-			$graph->title->SetFont($font,FS_BOLD,11);
+			$curr_symbol = getCurrencySymbol();
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title->setText($titleStr);
+
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
 
 			// Setup X-axis
-			$graph->xaxis->SetColor($font_color);
-			$graph->xaxis->SetTickLabels($legend);
-			$graph->xaxis->SetFont($font,FS_NORMAL,8);
+			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($months));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
 
-			// Some extra margin looks nicer
-			$graph->xaxis->SetLabelMargin(10);
+			// set grid
+			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
+			$gridY->setLineColor('#E5E5E5@0.5');
 
-			// Label align for X-axis
-			$graph->xaxis->SetLabelAlign('center','center');
-			$graph->yaxis->SetColor($font_color);
-			$graph->yaxis->SetLabelSide(SIDE_LEFT);
-
-			// The fix the tick marks
-			$graph->yaxis->SetTickSide(SIDE_RIGHT);
 
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
-			$graph->yaxis->scale->SetGrace(10);
+			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
 
 			// Setup the Y-axis to be displayed in the bottom of the
 			// graph. We also finetune the exact layout of the title,
 			// ticks and labels to make them look nice.
-			$graph->yaxis->SetPos('max');
+			$yaxis->setAxisIntersection('max');
 
-			// First make the labels look right
-			$graph->yaxis->SetLabelAlign('left','top');
-			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
-			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-
-			// The fix the tick marks
-			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			// Then fix the tick marks
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$yaxis->setFontSize(8);
+			$yaxis->setDataPreprocessor($valueproc);
+			// Arrange Y-Axis tick marks inside
+			$yaxis->setLabelInterval($ticks[0]);
+			$yaxis->setTickOptions(-5,0);
+			$yaxis->setLabelInterval($ticks[1],2);
+			$yaxis->setTickOptions(-2,0,2);
+			$yaxis->setLabelOption('position','inside');
 
 			// Finally setup the title
-			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
-			$graph->yaxis->SetTitleMargin(35);
+			$yaxis->setLabelOption('position','inside');
+			
+			// eliminate zero values
+			$gbplot->setDataSelector(Image_Graph::factory('Image_Graph_DataSelector_NoZeros'));
+			
+			// set markers
+			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
+			$marker->setDataPreprocessor($valueproc);
+			$marker->setFillColor('000000@0.0');
+			$marker->setBorderColor('000000@0.0');
+			$marker->setFontColor('white');
+			$marker->setFontSize(8);
+			$gbplot->setMarker($marker);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE'];
-			$graph->footer->right->SetColor($font_color);
-			$graph->footer->right->Set($subtitle);
-			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-
-			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$footer->setText($subtitle);
+			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
 			// .. and stroke the graph
-			$graph->Stroke($cache_file_name);
-			$imgMap = $graph->GetHTMLImageMap('outcome_by_month');
+			$imgMap = $graph->done(
+								    array(
+									        'tohtml' => true,
+									        'border' => 0,
+									        'filename' => $cache_file_name,
+									        'filepath' => './',
+									        'urlpath' => ''
+									    ));
+			//$imgMap = htmlspecialchars($output);
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
@@ -329,9 +347,7 @@ class jpgraph {
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
-		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
-		$return .= "ismap usemap='#outcome_by_month' border='0'>\n";
+		$return = "\n$imgMap";
 		return $return;
 	}
 
@@ -351,7 +367,8 @@ class jpgraph {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
 
-		include_once ("jpgraph/jpgraph_bar.php");
+		include_once ('Image/Graph.php');
+		include_once ('Image/Canvas.php');
 
 		// Size of graph
 		$width=300;
@@ -359,13 +376,36 @@ class jpgraph {
 
 		$log =& LoggerManager::getLogger('lead_source_by_outcome chart');
 		// Set the basic parameters of the graph
-		$graph = new Graph($width,$height,$cache_file_name);
+		$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
+		$imagemap = $canvas->getImageMap();
+		$graph =& Image_Graph::factory('graph', $canvas);
 		$log->debug("graph object created");
-
-		$graph->SetScale("textlin");
+		// add a TrueType font
+		$font =& $graph->addNew('font', calculate_font_name($lang_crm));
+		// set the font size to 11 pixels
+		$font->setSize(8);
+		
+		$graph->setFont($font);
+		// create the plotarea layout
+        $title =& Image_Graph::factory('title', array('Test',10));
+    	$plotarea =& Image_Graph::factory('plotarea',array(
+                    'axis',
+                    'axis',
+                    'horizontal'
+                ));
+        $footer =& Image_Graph::factory('title', array('Footer',8));
+		$graph->add(
+		    Image_Graph::vertical($title,
+	        Image_Graph::vertical(
+				$plotarea,
+        	    $footer,
+            	90
+		        ),
+        	5
+	    	)
+		);   
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
 
 			$log->debug("datay is:");
 			$log->debug($datay);
@@ -494,34 +534,48 @@ class jpgraph {
 			$log->debug($count);
 
 			//now build the bar plots for each user across the sales stages
-			$bplot = array();
 			$color = array('Closed Lost'=>'FF9900','Closed Won'=>'009933', $other=>'0066CC');
 			$index = 0;
+			$xlabels = array();
+			$datasets = array();
+			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($stages as $stage) {
 				// Now create a bar pot
-				$bplot[$index] = new BarPlot($datax[$stage]);
-
-				//You can change the width of the bars if you like
-				$bplot[$index]->SetWidth(5);
+				$datasets[$index] = & Image_Graph::factory('dataset');
+				foreach($datax[$stage] as $i => $y) {
+				  	$x = 1+2*$i;
+				    $datasets[$index]->addPoint(
+				        //$datay[$legend[$x]],
+				        $x,
+				        $y,
+				        array(
+				            'url' => $aTargets[$stage][$i],
+				            'alt' => $aAlts[$stage][$i],
+				            'target' => '_blank'
+				        )
+				    );
+				}
+			for($i=0;$i<count($legend); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $legend[$i];
+			  $xlabels[$x+1] = '';
+			}
 
 				// Set fill colors for bars
-				$bplot[$index]->SetFillColor("#".$color[$stage]);
+				$fills->addColor("#".$color[$stage]);
 
-				// We want to display the value of each bar at the top
-				$bplot[$index]->value->Show();
-				$bplot[$index]->value->SetFont($font,FS_NORMAL,7);
-				//$bplot->value->SetAlign('left','center');
-				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('center');
-
-				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
-				$log->debug("bplot[$index] is: ");
-				$log->debug($bplot[$index]);
 				$log->debug("datax[$stage] is: ");
 				$log->debug($datax[$stage]);
 				$index++;
+			}
+			
+			// compute maximum value because of grace jpGraph parameter not supported
+			$maximum = 0;
+			foreach($legend as $legendidx=>$legend_text) {
+			  	$dataxSum = 0;
+				foreach($stages as $stage) $dataxSum += $datax[$stage][$legendidx];
+				if($dataxSum > $maximum) $maximum = $dataxSum;
 			}
 
 			if($theme == "blue")
@@ -532,84 +586,92 @@ class jpgraph {
 			{
 				$font_color = "#000000";
 			}
+			$font->setColor($font_color);
 
 			// Create the grouped bar plot
-			$gbplot = new AccBarPlot($bplot);
+			$gbplot = & $plotarea->addNew('bar', array($datasets, 'stacked'));
+			$gbplot->setFillStyle($fills);
 
-			// Add the bar to the graph
-			$graph->Add($gbplot);
-
-			// No frame around the image
-			$graph->SetFrame(true,"white");
-
-			// Rotate graph 90 degrees and set margin
-			$top = 20;
-			$bottom = 50;
-			$left = 130;
-			$right = 40;
-			$graph->Set90AndMargin($left,$right,$top,$bottom);
+			//You can change the width of the bars if you like
+			$gbplot->setBarWidth(120/count($legend),"%");
 
 			// Set white margin color
-			$graph->SetMarginColor('#F5F5F5');
+			$graph->setBackgroundColor('#F5F5F5');
 
 			// Use a box around the plot area
-			$graph->SetBox();
+			$gbplot->setBorderColor('black');
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
+			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			// Setup title
-			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$graph->title->Set($title);
-			$graph->title->SetColor($font_color);
-			$graph->title->SetFont($font,FS_BOLD,11);
+			$curr_symbol = getCurrencySymbol();
+			$titlestr = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title->setText($titlestr);
+
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
 
 			// Setup X-axis
-			$graph->xaxis->SetTickLabels($legend);
-			$graph->xaxis->SetColor($font_color);
-			$graph->xaxis->SetFont($font,FS_NORMAL,8);
-
-			// Some extra margin looks nicer
-			$graph->xaxis->SetLabelMargin(10);
-
-			// Label align for X-axis
-			$graph->xaxis->SetLabelAlign('right','center');
-			$graph->yaxis->SetLabelSide(SIDE_LEFT);
-			$graph->yaxis->SetColor($font_color);
-			// The fix the tick marks
-			$graph->yaxis->SetTickSide(SIDE_RIGHT);
+			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($legend));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
+			$xaxis->setInverted(true);
+			
+			// set grid
+			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
+			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
-			$graph->yaxis->scale->SetGrace(10);
+			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
 
-			// Setup the Y-axis to be displayed in the bottom of the
-			// graph. We also finetune the exact layout of the title,
-			// ticks and labels to make them look nice.
-			$graph->yaxis->SetPos('max');
-
-			// First make the labels look right
-			$graph->yaxis->SetLabelAlign('left','top');
-			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
-			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-
-			// The fix the tick marks
-			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			// Then fix the tick marks
+			$yaxis->setFontSize(8);
+			$yaxis->setAxisIntersection('max');
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$yaxis->setDataPreprocessor($valueproc);
+			$yaxis->setLabelInterval($ticks[0]);
+			$yaxis->setTickOptions(-5,0);
+			$yaxis->setLabelInterval($ticks[1],2);
+			$yaxis->setTickOptions(-2,0,2);
+			
+			// eliminate zero values
+			$gbplot->setDataSelector(Image_Graph::factory('Image_Graph_DataSelector_NoZeros'));
+			
+			// set markers
+			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
+			$marker->setDataPreprocessor($valueproc);
+			$marker->setFillColor('#000000@0.0');
+			$marker->setBorderColor('#000000@0.0');
+			$marker->setFontColor('white');
+			$marker->setFontSize(8);
+			$gbplot->setMarker($marker);
 
 			// Finally setup the title
-			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
-			$graph->yaxis->SetTitleMargin(35);
-
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE']; 
-			$graph->footer->right->SetColor($font_color);
-			$graph->footer->right->Set($subtitle);
-			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-
-			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			$footer->setText($subtitle);
+			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
 			// .. and stroke the graph
-			$graph->Stroke($cache_file_name);
-			$imgMap = $graph->GetHTMLImageMap('lead_source_by_outcome');
+			$imgMap = $graph->done(
+								    array(
+									        'tohtml' => true,
+									        'border' => 0,
+									        'filename' => $cache_file_name,
+									        'filepath' => './',
+									        'urlpath' => ''
+									    ));
+			//$imgMap = htmlspecialchars($output);
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
@@ -618,9 +680,7 @@ class jpgraph {
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
-		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
-		$return .= "ismap usemap='#lead_source_by_outcome' border='0'>\n";
+		$return = "\n$imgMap";
 		return $return;
 	}
 
@@ -634,7 +694,8 @@ class jpgraph {
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
-		include_once ("jpgraph/jpgraph_bar.php");
+		include_once ('Image/Graph.php');
+		include_once ('Image/Canvas.php');
 
 		// Size of graph
 		$width=300;
@@ -642,13 +703,40 @@ class jpgraph {
 
 		$log =& LoggerManager::getLogger('opportunity charts');
 		// Set the basic parameters of the graph
-		$graph = new Graph($width,$height,$cache_file_name);
-		$log->debug("graph object created");
 
-		$graph->SetScale("textlin");
+		
+		$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
+		$imagemap = $canvas->getImageMap();
+		$graph =& Image_Graph::factory('graph', $canvas);
+		//$log->debug("graph object created");
+		// add a TrueType font
+		//$font =& $graph->addNew('font', calculate_font_name($lang_crm));
+		$font =& $graph->addNew('font', calculate_font_name($lang_crm));
+		// set the font size to 11 pixels
+		$font->setSize(8);
+		
+		$graph->setFont($font);
+        $title =& Image_Graph::factory('title', array('Test',10));
+    	$plotarea =& Image_Graph::factory('plotarea',array(
+                    'axis',
+                    'axis',
+                    'horizontal'
+                ));
+        $footer =& Image_Graph::factory('title', array('Footer',8));
+		$graph->add(
+		    Image_Graph::vertical($title,
+	        Image_Graph::vertical(
+				$plotarea,
+        	    $footer,
+            	90
+		        ),
+        	5
+	    	)
+		);   
+		$log->debug("graph object created");
+		
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
 
 			$log->debug("starting pipeline chart");
 			$log->debug("datax is:");
@@ -764,63 +852,61 @@ class jpgraph {
 			$log->debug($count);
 
 			//now build the bar plots for each user across the sales stages
-			$bplot = array();
-			$color = 'D50100';
+			$colors = color_generator(count($user_id),'#D50100','#002222');
 			$index = 0;
+			$datasets = array();
+			$xlabels = array();
+			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
 			foreach($user_id as $the_id) {
 				// Now create a bar pot
-				$bplot[$index] = new BarPlot($datay[$the_id]);
-				//color="black",$hsize=3,$vsize=3,$show=true
-				$bplot[$index]->SetShadow();
-				//You can change the width of the bars if you like
-				$bplot[$index]->SetWidth(0.5);
+				$datasets[$index] = & Image_Graph::factory('dataset');
+				foreach($datay[$the_id] as $i => $y) {
+				    $x = 1+2*$i;
+				    $datasets[$index]->addPoint(
+				        $x,
+				        $y,
+				        array(
+				            'url' => $aTargets[$the_id][$i],
+				            'alt' => $aAlts[$the_id][$i]
+				        )
+				    );
+				}
 
 				// Set fill colors for bars
-				//$bplot[$index]->SetFillGradient('red','#7D7D7D',GRAD_HOR);//SetFillColor("#$color");
-				$bplot[$index]->SetFillColor("#$color");
-				$color = $color + 220022;
+				$fills->addColor($colors[$index]);
 
-				// We want to display the value of each bar at the top
-				$bplot[$index]->value->Show();
-				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
-				//$bplot->value->SetAlign('left','center');
-				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
-				$bplot[$index]->SetValuePos('center');
-
-				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$the_id],$aAlts[$the_id]);
-				$log->debug("bplot[$index] is: ");
-				$log->debug($bplot[$index]);
-				$log->debug("datay[$the_id] is: ");
-				$log->debug($datay[$the_id]);
 				$index++;
 			}
-
+			for($i=0;$i<count($legend); $i++)
+			{
+			  $x = 1+2*$i;
+			  $xlabels[$x] = $legend[$i];
+			  $xlabels[$x+1] = '';
+			}
+			
+			// compute maximum value because of grace jpGraph parameter not supported
+			$maximum = 0;
+			foreach($legend as $legendidx=>$legend_text) {
+			  	$legendsum = 0;
+				foreach($user_id as $the_id) $legendsum += $datay[$the_id][$legendidx];
+				if($legendsum > $maximum) $maximum = $legendsum;
+			}
 			// Create the grouped bar plot
-			$gbplot = new AccBarPlot($bplot);
+			$gbplot = & $plotarea->addNew('bar', array($datasets, 'stacked'));
+			$gbplot->setFillStyle($fills);
 
-			// Add the bar to the graph
-			$graph->Add($gbplot);
+			//You can change the width of the bars if you like
+			$gbplot->setBarWidth(120/count($legend),"%");
 
-			// No frame around the image
-			$graph->SetFrame(true,"white");
-
-			// Rotate graph 90 degrees and set margin
-			$top = 20;
-			$bottom = 70;
-			$left = 130;
-			$right = 40;
-			$graph->Set90AndMargin($left,$right,$top,$bottom);
 
 			// Set white margin color
-			$graph->SetMarginColor('#F5F5F5');
+			$graph->setBackgroundColor('#F5F5F5');
 
 			// Use a box around the plot area
-			$graph->SetBox();
+			$gbplot->setBorderColor('black');
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
+			$gbplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 
 			if($theme == "blue")
 			{
@@ -830,57 +916,81 @@ class jpgraph {
 			{
 				$font_color = "#000000";
 			}
-
+			$font->setColor($font_color);
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$graph->title->Set($title);
-			$graph->title->SetColor($font_color);
-			$graph->title->SetFont($font,FS_BOLD,11);
+			$curr_symbol = getCurrencySymbol();
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title->setText($titlestr);
 
+			// Create the xaxis labels
+			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
+			    array($xlabels) 
+			); 
+
+		
 			// Setup X-axis
-			$graph->xaxis->SetTickLabels($legend);
-			$graph->xaxis->SetColor($font_color);
-			$graph->xaxis->SetFont($font,FS_NORMAL,8);
+			$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
+			$xaxis->setDataPreprocessor($array_data);
+			$xaxis->forceMinimum(0);
+			$xaxis->forceMaximum(2*count($legend));
+			$xaxis->setLabelInterval(1);
+			$xaxis->setTickOptions(0,0);
+			$xaxis->setLabelInterval(2,2);
+			$xaxis->setTickOptions(5,0,2);
+			$xaxis->setInverted(true);
 
-			// Some extra margin looks nicer
-			$graph->xaxis->SetLabelMargin(10);
-
-			// Label align for X-axis
-			$graph->xaxis->SetLabelAlign('right','center');
+			// Setup Y-axis
+			$yaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+			$yaxis->setFontSize(8);
+			$yaxis->setAxisIntersection('max');
 
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
-			$graph->yaxis->scale->SetGrace(10);
-
-			// Setup the Y-axis to be displayed in the bottom of the
-			// graph. We also finetune the exact layout of the title,
-			// ticks and labels to make them look nice.
-			$graph->yaxis->SetPos('max');
+			$yaxis->forceMaximum($maximum * 1.1);
+			$ticks = get_tickspacing($maximum);
+			
+			// set grid
+			$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
+			$gridY->setLineColor('#E5E5E5@0.5');
 
 			// First make the labels look right
-			$graph->yaxis->SetColor($font_color);
-			$graph->yaxis->SetLabelAlign('center','top');
-			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
-			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-
-			// The fix the tick marks
-			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
+			$yaxis->setDataPreprocessor($valueproc);
+			$yaxis->setLabelInterval($ticks[0]);
+			$yaxis->setTickOptions(-5,0);
+			$yaxis->setLabelInterval($ticks[1],2);
+			$yaxis->setTickOptions(-2,0,2);
+			
+			// eliminate zero values
+			$gbplot->setDataSelector(Image_Graph::factory('Image_Graph_DataSelector_NoZeros'));
+			
+			// set markers
+			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
+			$marker->setDataPreprocessor($valueproc);
+			$marker->setFillColor('000000@0.0');
+			$marker->setBorderColor('000000@0.0');
+			$marker->setFontColor('white');
+			$marker->setFontSize(8);
+			$gbplot->setMarker($marker);
 
 			// Finally setup the title
-			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
-			$graph->yaxis->SetTitleMargin(35);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE']; 
-			$graph->footer->right->Set($subtitle);
-			$graph->footer->right->SetColor($font_color);
-			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-
-			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+			$curr_symbol = getCurrencySymbol();
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE']; 
+			$footer->setText($subtitle);
+			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_RIGHT);
 
 			// .. and stroke the graph
-			$graph->Stroke($cache_file_name);
-			$imgMap = $graph->GetHTMLImageMap('pipeline');
+			$imgMap = $graph->done(
+								    array(
+									        'tohtml' => true,
+									        'border' => 0,
+									        'filename' => $cache_file_name,
+									        'filepath' => './',
+									        'urlpath' => ''
+									    ));
+			//$imgMap = $graph->GetHTMLImageMap('pipeline');
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
@@ -889,9 +999,7 @@ class jpgraph {
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
-		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
-		$return .= "ismap usemap='#pipeline' border='0'>\n";
+		$return = "\n$imgMap";
 		return $return;
 	}
 
@@ -908,10 +1016,10 @@ class jpgraph {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
 		global $theme;
 
-		include_once ("jpgraph/jpgraph_pie.php");
-		include_once ("jpgraph/jpgraph_pie3d.php");
+		include_once ('Image/Graph.php');
+		include_once ('Image/Canvas.php');
 
-		$font = calculate_font_family($lang_crm);
+		$font = calculate_font_name($lang_crm);
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
 			$log =& LoggerManager::getLogger('opportunity charts');
@@ -1013,47 +1121,99 @@ class jpgraph {
 			}
 
 			// Create the Pie Graph.
-			$graph = new PieGraph(490,260,$cache_file_name);
+			$width = 600;
+			$height = 400;
+	
+			$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
+			$imagemap = $canvas->getImageMap();
+			$graph =& Image_Graph::factory('graph', $canvas);
+	
+			$font =& $graph->addNew('font', calculate_font_name('en_en'));
+			// set the font size to 11 pixels
+			$font->setSize(8);
+			$font->setColor($font_color);
+			
+			$graph->setFont($font);
+			// create the plotarea layout
+	        $title =& Image_Graph::factory('title', array('Test',10));
+	    	$plotarea =& Image_Graph::factory('plotarea',array(
+                    'category',
+                    'axis'
+                ));
+	        $footer =& Image_Graph::factory('title', array('Footer',8));
+			$graph->add(
+			    Image_Graph::vertical($title,
+		        Image_Graph::vertical(
+					$plotarea,
+	        	    $footer,
+	            	90
+			        ),
+	        	5
+		    	)
+			);   
 
-			$graph->SetShadow();
+			// Generate colours
+			$colors = color_generator(count($visible_legends),'#33CCFF','#3322FF');
+			$index = 0;
+			$dataset = & Image_Graph::factory('dataset');
+			$fills =& Image_Graph::factory('Image_Graph_Fill_Array');
+			foreach($visible_legends as $legend) {
+			    $dataset->addPoint(
+			        $legend,
+			        $data[$index],
+			        array(
+			            'url' => $aTargets[$index],
+			            'alt' => $aAlts[$index]
+			        )
+			    );
+				$fills->addColor($colors[$index]);
+			    $log->debug('point ='.$legend.','.$data[$index]);
+
+				$index++;
+			}
+
+			// create the pie chart and associate the filling colours			
+			$gbplot = & $plotarea->addNew('pie', $dataset);
+			$plotarea->hideAxis();
+			$gbplot->setFillStyle($fills);
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$graph->title->Set($title);
-			$graph->title->SetColor($font_color);
-			$graph->title->SetFont($font,FS_BOLD,11);
+			$curr_symbol = getCurrencySymbol();
+			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title->setText($titlestr);
 
-			// No frame around the image
-			$graph->SetFrame(false);
-			//$graph->SetMarginColor('#F5F5F5');
+			// format the data values
+			$valueproc =& Image_Graph::factory('Image_Graph_DataPreprocessor_Formatted', $curr_symbol."%d");
 
-			$graph->legend->Pos(0.01,0.10);
-			$graph->legend->SetColor($font_color);
-			$graph->legend->SetFont($font,FS_NORMAL,12);
+			// set markers
+			$marker =& $graph->addNew('value_marker', IMAGE_GRAPH_VALUE_Y);
+			$marker->setDataPreprocessor($valueproc);
+			$marker->setFillColor('#FFFFFF');
+			$marker->setBorderColor($font_color);
+			$marker->setFontColor($font_color);
+			$marker->setFontSize(8);
+			$pointingMarker =& $graph->addNew('Image_Graph_Marker_Pointing_Angular', array(20, &$marker));
+			$gbplot->setMarker($pointingMarker);
+			
+			// set legend
+			$legend_box =& $plotarea->addNew('legend');
+			$legend_box->setPadding(array('top'=>20,'bottom'=>0,'left'=>0,'right'=>0));
+			$legend_box->setFillColor('#F5F5F5');
+			$legend_box->showShadow();
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE'];
-			$graph->footer->left->Set($subtitle);
-			$graph->footer->left->SetColor($font_color);
-			$graph->footer->left->SetFont($font,FS_NORMAL,8);
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].$curr_symbol.$current_module_strings['LBL_OPP_SIZE_VALUE'];
+			$footer->setText($subtitle);
+			$footer->setAlignment(IMAGE_GRAPH_ALIGN_TOP_LEFT);
 
-			// Create pie plot
-			$p1 = new PiePlot3d($data);
-			$p1->SetSize(0.30);
-			$p1->SetTheme("water");
-			$p1->SetCenter(0.33,0.35);
-			$p1->SetAngle(30);
-			$p1->value->SetFont($font,FS_NORMAL,12);
-			$p1->SetLegends($visible_legends);
-			$p1->SetLabelType(PIE_VALUE_ABS);
-			$p1->value->SetFormat(getCurrencySymbol().'%d');
-
-			//set client side image map URL's
-			$p1->SetCSIMTargets($aTargets,$aAlts);
-
-			$graph->Add($p1);
-
-			$graph->Stroke($cache_file_name);
-			$imgMap = $graph->GetHTMLImageMap('pipeline_by_lead_source');
+			$imgMap = $graph->done(
+								    array(
+									        'tohtml' => true,
+									        'border' => 0,
+									        'filename' => $cache_file_name,
+									        'filepath' => './',
+									        'urlpath' => ''
+									    ));
+			//$imgMap = htmlspecialchars($output);
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
@@ -1062,9 +1222,7 @@ class jpgraph {
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
-		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
-		$return .= "ismap usemap='#pipeline_by_lead_source' border='0'>\n";
+		$return = "\n$imgMap";
 		return $return;
 
 	}

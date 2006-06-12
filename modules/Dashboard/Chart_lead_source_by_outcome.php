@@ -101,10 +101,6 @@ $log->debug($ids);
 $cache_file_name = $id_hash."_lead_source_by_outcome_".$current_language."_".crc32(implode('',$datax)).".png";
 $log->debug("cache file name is: $cache_file_name");
 
-if (substr(phpversion(), 0, 1) == "5") { // php5 }
-	echo "<em>Charts not supported in PHP 5.</em>";
-}
-else {
 $draw_this = new jpgraph();
 echo $draw_this->lead_source_by_outcome($datax, $ids, $tmp_dir.$cache_file_name, $refresh);
 echo "<P><font size='1'><em>".$current_module_strings['LBL_LEAD_SOURCE_BY_OUTCOME_DESC']."</em></font></P>";
@@ -140,4 +136,4 @@ else {
 [<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&lsbo_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 
-}?>
+?>
