@@ -83,21 +83,21 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($subject) && $subject !='')
 	{
-		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".PearDatabase::quote($subject.'%'));
+		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".$adb->quote($subject.'%'));
 		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&subject=".$subject;
 	}
 	
 	if (isset($accountname) && $accountname !='')
 	{
-		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($accountname.'%'));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote($accountname.'%'));
 		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&accountname=".$accountname;
 	}
 
 	if (isset($quotename) && $quotename !='')
 	{
-		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".PearDatabase::quote($quotename.'%'));
+		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".$adb->quote($quotename.'%'));
 		 //$search_query .= " and commissionrate ".$adb->getLike()." '".$commissionrate."%'";
 		 $url_string .= "&quotename=".$quotename;
 	}

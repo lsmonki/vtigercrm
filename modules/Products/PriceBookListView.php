@@ -84,7 +84,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($bookname) && $bookname !='')
 	{
-		array_push($where_clauses, "bookname ".$adb->getLike()." ".PearDatabase::quote($bookname.'%'));
+		array_push($where_clauses, "bookname ".$adb->getLike()." ".$adb->quote($bookname.'%'));
 		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&bookname=".$bookname;
 	}

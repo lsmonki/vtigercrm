@@ -89,16 +89,16 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //upto this added for Custom Field
 */	
 	if(isset($name) && $name != ""){
-		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($name."%"));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote($name."%"));
 		$url_string .= "&name=".$name;
 	}
-	if(isset($website) && $website != "") array_push($where_clauses, "account.website ".$adb->getLike()." ".PearDatabase::quote("%".$website."%"));
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.otherphone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.fax ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%").")");
+	if(isset($website) && $website != "") array_push($where_clauses, "account.website ".$adb->getLike()." ".$adb->quote("%".$website."%"));
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone ".$adb->getLike()." ".$adb->quote("%".$phone."%")." OR account.otherphone ".$adb->getLike()." ".$adb->quote("%".$phone."%")." OR account.fax ".$adb->getLike()." ".$adb->quote("%".$phone."%").")");
 	if(isset($address_city) && $address_city != ""){
-		array_push($where_clauses, "(accountbillads.city ".$adb->getLike()." ".PearDatabase::quote("%".$address_city."%")." OR accountshipads.city ".$adb->getLike()." ".PearDatabase::quote($address_city."%").")");
+		array_push($where_clauses, "(accountbillads.city ".$adb->getLike()." ".$adb->quote("%".$address_city."%")." OR accountshipads.city ".$adb->getLike()." ".$adb->quote($address_city."%").")");
 		$url_string .= "&address_city=".$address_city;
 	}
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership ".$adb->getLike()." ".PearDatabase::quote($ownership."%"));
+	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership ".$adb->getLike()." ".$adb->quote($ownership."%"));
 	if(isset($current_user_only) && $current_user_only != ""){
 		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 		$url_string .= "&current_user_only=".$current_user_only;
@@ -118,7 +118,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
+			$where .= $adb->quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

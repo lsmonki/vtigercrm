@@ -119,20 +119,20 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "activity.subject ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
+		array_push($where_clauses, "activity.subject ".$adb->getLike()." ".$adb->quote($name.'%')."");
 		$url_string .= "&name=".$name;
 	}
 	if(isset($contactname) && $contactname != '')
 	{
 		//$contactnames = explode(" ", $contactname);
 		//foreach ($contactnames as $name) {
-		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($contactname.'%').")");
+		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".$adb->quote($contactname.'%')." OR contactdetails.lastname ".$adb->getLike()." ".$adb->quote($contactname.'%').")");
 		$url_string .= "&contactname=".$contactname;
 		//}
 	}
 	if(isset($duedate) && $duedate != '')
 	{
-		array_push($where_clauses, "activity.duedate ".$adb->getLike()." ".PearDatabase::quote($datedue.'%')."");
+		array_push($where_clauses, "activity.duedate ".$adb->getLike()." ".$adb->quote($datedue.'%')."");
 	}
 	if(isset($status) && $status != '')
 	{
@@ -141,7 +141,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$the_where_clause = "(";
 		$val = reset($each_status);
 		do {
-			$the_where_clause .= "activity.status = ".PearDatabase::quote($val);
+			$the_where_clause .= "activity.status = ".$adb->quote($val);
 			$val = next($each_status);
 			if ($val) $the_where_clause .= " OR ";
 		} while($val);

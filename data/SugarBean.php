@@ -116,11 +116,6 @@ class SugarBean
 						$insValues = $insValues.", ";
 					}
 				}
-				/*else
-					$query = $query.", ";
-	
-				$query = $query.$field."='".PearDatabase::quote(from_html($this->$field,$isUpdate))."'";
-				*/
 				if($isUpdate)
 				{
 					$updKeyValues = $updKeyValues.$field."=".$this->db->formatString($this->table_name,$field,from_html($this->$field,$isUpdate));
@@ -553,6 +548,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 
 	function get_where(&$fields_array)
 	{ 
+		global $adb;
 		$where_clause = "WHERE "; 
 		$first = 1; 
 		foreach ($fields_array as $name=>$value) 
@@ -566,7 +562,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$where_clause .= " AND ";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";
@@ -621,6 +617,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	*/
 	function build_generic_where_clause($value){
 			$where_clause = "WHERE "; 
+		global $adb;
 		$first = 1; 
 		foreach ($fields_array as $name=>$value) 
 		{ 
@@ -633,7 +630,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$where_clause .= " or";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";

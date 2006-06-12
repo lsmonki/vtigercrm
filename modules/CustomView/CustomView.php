@@ -821,7 +821,7 @@ class CustomView extends CRMEntity{
 		{
 			if(trim($value) != "")
                         {
-                                $rtvalue = " = ".PearDatabase::quote($value);
+                                $rtvalue = " = ".$adb->quote($value);
                         }else
                         {
                                 $rtvalue = " is NULL";
@@ -831,7 +831,7 @@ class CustomView extends CRMEntity{
 		{
 			if(trim($value) != "")
                         {
-                                $rtvalue = " <> ".PearDatabase::quote($value);
+                                $rtvalue = " <> ".$adb->quote($value);
                         }else
                         {
                                 $rtvalue = "is NOT NULL";
@@ -839,31 +839,31 @@ class CustomView extends CRMEntity{
 		}
 		if($comparator == "s")
 		{
-			$rtvalue = " ".$adb->getLike()." ".PearDatabase::quote($value."%");
+			$rtvalue = " ".$adb->getLike()." ".$adb->quote($value."%");
 		}
 		if($comparator == "c")
 		{
-			$rtvalue = " ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
+			$rtvalue = " ".$adb->getLike()." ".$adb->quote("%".$value."%");
 		}
 		if($comparator == "k")
 		{
-			$rtvalue = " not ".$adb->getLike()." ".PearDatabase::quote("%".$value."%");
+			$rtvalue = " not ".$adb->getLike()." ".$adb->quote("%".$value."%");
 		}
 		if($comparator == "l")
 		{
-			$rtvalue = " < ".PearDatabase::quote($value);
+			$rtvalue = " < ".$adb->quote($value);
 		}
 		if($comparator == "g")
 		{
-			$rtvalue = " > ".PearDatabase::quote($value);
+			$rtvalue = " > ".$adb->quote($value);
 		}
 		if($comparator == "m")
 		{
-			$rtvalue = " <= ".PearDatabase::quote($value);
+			$rtvalue = " <= ".$adb->quote($value);
 		}
 		if($comparator == "h")
 		{
-			$rtvalue = " >= ".PearDatabase::quote($value);
+			$rtvalue = " >= ".$adb->quote($value);
 		}
 		
 		return $rtvalue;

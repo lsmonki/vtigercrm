@@ -1216,6 +1216,7 @@ $vtlog->logthis("type is ".$type,'debug');
 
 	function get_where(&$fields_array)
 	{ 
+		global $adb;
 		$where_clause = "WHERE "; 
 		$first = 1; 
 		foreach ($fields_array as $name=>$value) 
@@ -1229,7 +1230,7 @@ $vtlog->logthis("type is ".$type,'debug');
 				$where_clause .= " AND ";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";
@@ -1284,6 +1285,7 @@ $vtlog->logthis("type is ".$type,'debug');
 	*/
 	function build_generic_where_clause($value){
 			$where_clause = "WHERE "; 
+		global $adb;
 		$first = 1; 
 		foreach ($fields_array as $name=>$value) 
 		{ 
@@ -1296,7 +1298,7 @@ $vtlog->logthis("type is ".$type,'debug');
 				$where_clause .= " or";
 			} 
 
-			$where_clause .= "$name = ".PearDatabase::quote($value)."";
+			$where_clause .= "$name = ".$adb->quote($value)."";
 		} 
 
 		$where_clause .= " AND deleted=0";

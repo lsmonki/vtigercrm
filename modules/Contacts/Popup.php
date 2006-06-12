@@ -86,15 +86,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where_clauses = Array();
 
 	if(isset($lastname) && $lastname != "") {
-			array_push($where_clauses, "contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($lastname.'%')."");
+			array_push($where_clauses, "contactdetails.lastname ".$adb->getLike()." ".$adb->quote($lastname.'%')."");
 			$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != "") {
-			array_push($where_clauses, "contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($firstname.'%')."");
+			array_push($where_clauses, "contactdetails.firstname ".$adb->getLike()." ".$adb->quote($firstname.'%')."");
 			$url_string .= "&firstname=".$firstname;
 	}
 	if(isset($title) && $title != "")	{
-			array_push($where_clauses, "contactdetails.title ".$adb->getLike()." ".PearDatabase::quote("%".$title.'%')."");
+			array_push($where_clauses, "contactdetails.title ".$adb->getLike()." ".$adb->quote("%".$title.'%')."");
 			$url_string .= "&title=".$title;
 	}
 	if(isset($current_user_only) && $current_user_only != "") {

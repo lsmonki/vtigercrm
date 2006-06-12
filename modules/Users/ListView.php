@@ -67,21 +67,21 @@ if(isset($_REQUEST['query']))
 	$where_clauses = Array();
 	
 	$adb->checkConnection();
-	if(isset($last_name) && $last_name != "") array_push($where_clauses, "last_name ".$adb->getLike()." ".PearDatabase::quote($last_name.'%')."");
-	if(isset($first_name) && $first_name != "") array_push($where_clauses, "first_name ".$adb->getLike()." ".PearDatabase::quote($first_name.'%')."");
-	if(isset($user_name) && $user_name != "") array_push($where_clauses, "user_name ".$adb->getLike()." ".PearDatabase::quote($user_name.'%')."");
-	if(isset($status) && $status != "") array_push($where_clauses, "status = ".PearDatabase::quote($status)."");
-	if(isset($is_admin) && $is_admin != "") array_push($where_clauses, "is_admin = ".PearDatabase::quote($is_admin)."");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_home ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR phone_mobile ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR phone_work ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR phone_other ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR phone_fax ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%').")");
-	if(isset($email) && $email != "") array_push($where_clauses, "(users.email1 ".$adb->getLike()." ".PearDatabase::quote($email.'%')." OR users.email2 ".$adb->getLike()." ".PearDatabase::quote($email.'%').")");
-	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "yahoo_id ".$adb->getLike()." ".PearDatabase::quote($yahoo_id.'%')."");
-	if(isset($department) && $department != "") array_push($where_clauses, "department ".$adb->getLike()." ".PearDatabase::quote($department.'%')."");
-	if(isset($title) && $title != "") array_push($where_clauses, "title ".$adb->getLike()." ".PearDatabase::quote($title.'%')."");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "address_street ".$adb->getLike()." ".PearDatabase::quote($address_street.'%')."");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "address_city ".$adb->getLike()." ".PearDatabase::quote($address_city.'%')."");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "address_state ".$adb->getLike()." ".PearDatabase::quote($address_state.'%')."");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "address_postalcode ".$adb->getLike()." ".PearDatabase::quote($address_postalcode.'%')."");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "address_country ".$adb->getLike()." ".PearDatabase::quote($address_country.'%')."");
+	if(isset($last_name) && $last_name != "") array_push($where_clauses, "last_name ".$adb->getLike()." ".$adb->quote($last_name.'%')."");
+	if(isset($first_name) && $first_name != "") array_push($where_clauses, "first_name ".$adb->getLike()." ".$adb->quote($first_name.'%')."");
+	if(isset($user_name) && $user_name != "") array_push($where_clauses, "user_name ".$adb->getLike()." ".$adb->quote($user_name.'%')."");
+	if(isset($status) && $status != "") array_push($where_clauses, "status = ".$adb->quote($status)."");
+	if(isset($is_admin) && $is_admin != "") array_push($where_clauses, "is_admin = ".$adb->quote($is_admin)."");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_home ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR phone_mobile ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR phone_work ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR phone_other ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR phone_fax ".$adb->getLike()." ".$adb->quote('%'.$phone.'%').")");
+	if(isset($email) && $email != "") array_push($where_clauses, "(users.email1 ".$adb->getLike()." ".$adb->quote($email.'%')." OR users.email2 ".$adb->getLike()." ".$adb->quote($email.'%').")");
+	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "yahoo_id ".$adb->getLike()." ".$adb->quote($yahoo_id.'%')."");
+	if(isset($department) && $department != "") array_push($where_clauses, "department ".$adb->getLike()." ".$adb->quote($department.'%')."");
+	if(isset($title) && $title != "") array_push($where_clauses, "title ".$adb->getLike()." ".$adb->quote($title.'%')."");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "address_street ".$adb->getLike()." ".$adb->quote($address_street.'%')."");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "address_city ".$adb->getLike()." ".$adb->quote($address_city.'%')."");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "address_state ".$adb->getLike()." ".$adb->quote($address_state.'%')."");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "address_postalcode ".$adb->getLike()." ".$adb->quote($address_postalcode.'%')."");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "address_country ".$adb->getLike()." ".$adb->quote($address_country.'%')."");
 
 
 	$where = "";

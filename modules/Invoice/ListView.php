@@ -82,12 +82,12 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "invoice.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "invoice.subject ".$adb->getLike()." ".$adb->quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($salesorder) && $salesorder != "")
 	{
-		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".PearDatabase::quote("%".$salesorder."%"));
+		array_push($where_clauses, "salesorder.subject ".$adb->getLike()." ".$adb->quote("%".$salesorder."%"));
 		$url_string .= "&salesorder=".$salesorder;
 	}
 	
@@ -105,7 +105,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
+			$where .= $adb->quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

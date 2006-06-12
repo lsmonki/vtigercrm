@@ -83,23 +83,23 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "quotes.subject ".$adb->getLike()." ".$adb->quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($potentialname) && $potentialname != "")
 	{
-		array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".PearDatabase::quote("%".$potentialname."%"));
+		array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".$adb->quote("%".$potentialname."%"));
 		$url_string .= "&potentialname=".$potentialname;
 	}
 	if(isset($accountname) && $accountname != "")
 	{
-		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote("%".$accountname."%"));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote("%".$accountname."%"));
 		$url_string .= "&accountname=".$accountname;
 	}
 
 	if(isset($quotestage) && $quotestage != "")
 	{
-		array_push($where_clauses, "quotes.quotestage ".$adb->getLike()." ".PearDatabase::quote("%".$quotestage."%"));
+		array_push($where_clauses, "quotes.quotestage ".$adb->getLike()." ".$adb->quote("%".$quotestage."%"));
 		$url_string .= "&quotestage=".$quotestage;
 	}
 	
@@ -117,7 +117,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
+			$where .= $adb->quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

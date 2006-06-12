@@ -106,14 +106,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "notes.title ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
+		array_push($where_clauses, "notes.title ".$adb->getLike()." ".$adb->quote($name.'%')."");
 		$url_string .= "&title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($name.'%').")");
+			array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()." ".$adb->quote($name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".$adb->quote($name.'%').")");
 		}
 		$url_string .= "&contact_name=".$contact_name;
 	}

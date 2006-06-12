@@ -83,17 +83,17 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	
 	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "purchaseorder.subject ".$adb->getLike()." ".PearDatabase::quote($subject."%"));
+		array_push($where_clauses, "purchaseorder.subject ".$adb->getLike()." ".$adb->quote($subject."%"));
 		$url_string .= "&subject=".$subject;
 	}
 	if(isset($vendorname) && $vendorname != "")
 	{
-		array_push($where_clauses, "vendor.vendorname ".$adb->getLike()." ".PearDatabase::quote("%".$vendorname."%"));
+		array_push($where_clauses, "vendor.vendorname ".$adb->getLike()." ".$adb->quote("%".$vendorname."%"));
 		$url_string .= "&vendorname=".$vendorname;
 	}
 	if(isset($trackingno) && $trackingno != "")
 	{
-		array_push($where_clauses, "purchaseorder.tracking_no ".$adb->getLike()." ".PearDatabase::quote("%".$trackingno."%"));
+		array_push($where_clauses, "purchaseorder.tracking_no ".$adb->getLike()." ".$adb->quote("%".$trackingno."%"));
 		$url_string .= "&trackingno=".$trackingno;
 	}
 	
@@ -111,7 +111,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
+			$where .= $adb->quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

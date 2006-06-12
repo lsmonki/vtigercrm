@@ -73,12 +73,12 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where_clauses = array();
 
 	if(isset($name) && $name != "") {
-			array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".PearDatabase::quote($name.'%')."");
-			$url_string .= "&name=".$name;		
+		array_push($where_clauses, "potential.potentialname ".$adb->getLike()." ".$adb->quote($name.'%')."");
+		$url_string .= "&name=".$name;		
 	}
 	if(isset($accountname) && $accountname != "") {
-			array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote('%'.$accountname.'%')."");
-			$url_string .= "&account_name=".$accountname;		
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote('%'.$accountname.'%')."");
+		$url_string .= "&account_name=".$accountname;		
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
 			array_push($where_clauses, "crmentity.smcreator='$current_user->id'");
@@ -101,7 +101,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		$where .= "crmentity.smcreatorid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "".PearDatabase::quote($val)."";
+			$where .= "".$adb->quote($val)."";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

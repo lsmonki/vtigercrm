@@ -95,7 +95,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if(isset($contact_name) && $contact_name != "")
 	{
-		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()."".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($contact_name.'%').")");
+		array_push($where_clauses, "(contactdetails.firstname ".$adb->getLike()."".$adb->quote($contact_name.'%')." OR contactdetails.lastname ".$adb->getLike()." ".$adb->quote($contact_name.'%').")");
 		$url_string .= "&contact_name=".$contact_name;
 
 	}

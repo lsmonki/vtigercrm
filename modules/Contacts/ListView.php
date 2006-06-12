@@ -101,59 +101,59 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 
 	if(isset($lastname) && $lastname != "") {
-			array_push($where_clauses, "contactdetails.lastname ".$adb->getLike()." ".PearDatabase::quote($lastname.'%')."");
+			array_push($where_clauses, "contactdetails.lastname ".$adb->getLike()." ".$adb->quote($lastname.'%')."");
 			$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != "") {
-			array_push($where_clauses, "contactdetails.firstname ".$adb->getLike()." ".PearDatabase::quote($firstname.'%')."");
+			array_push($where_clauses, "contactdetails.firstname ".$adb->getLike()." ".$adb->quote($firstname.'%')."");
 			$url_string .= "&firstname=".$firstname;
 	}
 	if(isset($accountname) && $accountname != "")	{
-			array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($accountname.'%')."");
+			array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote($accountname.'%')."");
 			$url_string .= "&accountname=".$accountname;
 	}
 	if(isset($leadsource) && $leadsource != "") {
-			array_push($where_clauses, "contactsubdetails.leadsource = ".PearDatabase::quote($leadsource)."");
+			array_push($where_clauses, "contactsubdetails.leadsource = ".$adb->quote($leadsource)."");
 			$url_string .= "&leadsource=".$leadsource;
 	}
 	if(isset($donotcall) && $donotcall != "") {
-			array_push($where_clauses, "contactdetails.donotcall = ".PearDatabase::quote($donotcall)."");
+			array_push($where_clauses, "contactdetails.donotcall = ".$adb->quote($donotcall)."");
 			$url_string .= "&donotcall=".$donotcall;
 	}
 	if(isset($phone) && $phone != "") {
-			array_push($where_clauses, "(contactdetails.phone ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.mobile ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.fax ".$adb->getLike()." ".PearDatabase::quote('%'.$phone.'%').")");
+			array_push($where_clauses, "(contactdetails.phone ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR contactdetails.mobile ".$adb->getLike()." ".$adb->quote('%'.$phone.'%')." OR contactdetails.fax ".$adb->getLike()." ".$adb->quote('%'.$phone.'%').")");
 			$url_string .= "&phone=".$phone;
 	}
 	if(isset($email) && $email != "") {
-			array_push($where_clauses, "(contactdetails.email ".$adb->getLike()." ".PearDatabase::quote($email.'%').")");
+			array_push($where_clauses, "(contactdetails.email ".$adb->getLike()." ".$adb->quote($email.'%').")");
 			$url_string .= "&email=".$email;
 	}
 	if(isset($yahooid) && $yahooid != "") {
-			array_push($where_clauses, "contactdetails.yahooid ".$adb->getLike()." ".PearDatabase::quote($yahooid.'%')."");
+			array_push($where_clauses, "contactdetails.yahooid ".$adb->getLike()." ".$adb->quote($yahooid.'%')."");
 			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($assistant) && $assistant != "") {
-			array_push($where_clauses, "contactsubdetails.assistant ".$adb->getLike()." ".PearDatabase::quote($assistant.'%')."");
+			array_push($where_clauses, "contactsubdetails.assistant ".$adb->getLike()." ".$adb->quote($assistant.'%')."");
 			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($mailingstreet) && $mailingstreet != "") {
-			array_push($where_clauses, "(contactaddress.mailingstreet ".$adb->getLike()." ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet ".$adb->getLike()." ".PearDatabase::quote($mailingstreet.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingstreet ".$adb->getLike()." ".$adb->quote($mailingstreet.'%')." OR contactaddress.otherstreet ".$adb->getLike()." ".$adb->quote($mailingstreet.'%').")");
 			$url_string .= "&mailingstreet=".$mailingstreet;
 	}
 	if(isset($mailingcity) && $mailingcity != "") {
-			array_push($where_clauses, "(contactaddress.mailingcity ".$adb->getLike()." ".PearDatabase::quote($mailingcity.'%')." OR contactaddress.othercity ".$adb->getLike()." ".PearDatabase::quote($mailingcity.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingcity ".$adb->getLike()." ".$adb->quote($mailingcity.'%')." OR contactaddress.othercity ".$adb->getLike()." ".$adb->quote($mailingcity.'%').")");
 			$url_string .= "&mailingcity=".$mailingcity;
 	}
 	if(isset($mailingstate) && $mailingstate != "") {
-			array_push($where_clauses, "(contactaddress.mailingstate ".$adb->getLike()." ".PearDatabase::quote($mailingstate.'%')." OR contactaddress.otherstate ".$adb->getLike()." ".PearDatabase::quote($mailingstate.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingstate ".$adb->getLike()." ".$adb->quote($mailingstate.'%')." OR contactaddress.otherstate ".$adb->getLike()." ".$adb->quote($mailingstate.'%').")");
 			$url_string .= "&mailingstate=".$mailingstate;
 	}
 	if(isset($mailingzip) && $mailingzip != "") {
-			array_push($where_clauses, "(contactaddress.mailingzip ".$adb->getLike()." ".PearDatabase::quote($mailingzip.'%')." OR contactaddress.otherzip ".$adb->getLike()." ".PearDatabase::quote($mailingzip.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingzip ".$adb->getLike()." ".$adb->quote($mailingzip.'%')." OR contactaddress.otherzip ".$adb->getLike()." ".$adb->quote($mailingzip.'%').")");
 			$url_string .= "&mailingzip=".$mailingzip;
 	}
 	if(isset($mailingcountry) && $mailingcountry != "") {
-			array_push($where_clauses, "(contactaddress.mailingcountry ".$adb->getLike()." ".PearDatabase::quote($mailingcountry.'%')." OR contactaddress.othercountry ".$adb->getLike()." ".PearDatabase::quote($mailingcountry.'%').")");
+			array_push($where_clauses, "(contactaddress.mailingcountry ".$adb->getLike()." ".$adb->quote($mailingcountry.'%')." OR contactaddress.othercountry ".$adb->getLike()." ".$adb->quote($mailingcountry.'%').")");
 			$url_string .= "&mailingcountry=".$mailingcountry;
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
@@ -183,7 +183,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "".PearDatabase::quote($val)."";
+			$where .= "".$adb->quote($val)."";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 			// ACIPIA - to allow prev/next button to use criterias
 		        $url_string .= '&' . urlencode( 'assigned_user_id[]' ) . '=' . $val ;

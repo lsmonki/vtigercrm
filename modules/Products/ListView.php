@@ -90,65 +90,65 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($productname) && $productname !='')
 	{
-		array_push($where_clauses, "productname ".$adb->getLike()." ".PearDatabase::quote($productname.'%'));
+		array_push($where_clauses, "productname ".$adb->getLike()." ".$adb->quote($productname.'%'));
 		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&productname=".$productname;
 	}
 	
 	if (isset($productcode) && $productcode !='')
 	{
-		array_push($where_clauses, "productcode ".$adb->getLike()." ".PearDatabase::quote($productcode.'%'));
+		array_push($where_clauses, "productcode ".$adb->getLike()." ".$adb->quote($productcode.'%'));
 		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&productcode=".$productcode;
 	}
 
 	if (isset($commissionrate) && $commissionrate !='')
 	{
-		array_push($where_clauses, "commissionrate ".$adb->getLike()." ".PearDatabase::quote($commissionrate.'%'));
+		array_push($where_clauses, "commissionrate ".$adb->getLike()." ".$adb->quote($commissionrate.'%'));
 		 //$search_query .= " and commissionrate ".$adb->getLike()." '".$commissionrate."%'";
 		 $url_string .= "&commissionrate=".$commissionrate;
 	}
 	
 	if (isset($qtyperunit) && $qtyperunit !='')
 	{
-		array_push($where_clauses, "qty_per_unit ".$adb->getLike()." ".PearDatabase::quote($qtyperunit.'%'));
+		array_push($where_clauses, "qty_per_unit ".$adb->getLike()." ".$adb->quote($qtyperunit.'%'));
 	 	//$search_query .= " and qty_per_unit ".$adb->getLike()." '".$qtyperunit."%'";
 		$url_string .= "&qtyperunit=".$qtyperunit;
 	}
 	
 	if (isset($unitprice) && $unitprice !='')
 	{
-		array_push($where_clauses, "unit_price ".$adb->getLike()." ".PearDatabase::quote($unitprice.'%'));
+		array_push($where_clauses, "unit_price ".$adb->getLike()." ".$adb->quote($unitprice.'%'));
 	 //	$search_query .= " and unit_price ".$adb->getLike()." '".$unitprice."%'";
 		$url_string .= "&unitprice=".$unitprice;
 	}
 	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
         {
-		array_push($where_clauses, "manufacturer ".$adb->getLike()." ".PearDatabase::quote($manufacturer.'%'));
+		array_push($where_clauses, "manufacturer ".$adb->getLike()." ".$adb->quote($manufacturer.'%'));
         	//$search_query .= " and manufacturer ".$adb->getLike()." '".$manufacturer."%'";
                 $url_string .= "&manufacturer=".$manufacturer;
 	}
 	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
         {
-		array_push($where_clauses, "productcategory ".$adb->getLike()." ".PearDatabase::quote($productcategory.'%'));
+		array_push($where_clauses, "productcategory ".$adb->getLike()." ".$adb->quote($productcategory.'%'));
         	//$search_query .= " and productcategory ".$adb->getLike()." '".$productcategory."%'";
                 $url_string .= "&productcategory=".$productcategory;
 	}
 	if (isset($start_date) && $start_date !='')
         {
-		array_push($where_clauses, "start_date ".$adb->getLike()." ".PearDatabase::quote($start_date.'%'));
+		array_push($where_clauses, "start_date ".$adb->getLike()." ".$adb->quote($start_date.'%'));
                 //$search_query .= " and start_date = '".$start_date."%'";
                 $url_string .= "&start_date=".$start_date;
         } 
 	if (isset($expiry_date) && $expiry_date !='')
         {
-		array_push($where_clauses, "expiry_date ".$adb->getLike()." ".PearDatabase::quote($expiry_date.'%'));
+		array_push($where_clauses, "expiry_date ".$adb->getLike()." ".$adb->quote($expiry_date.'%'));
                 //$search_query .= " and expiry_date = '".$expiry_date."%'";
                 $url_string .= "&expiry_date=".$expiry_date;
         } 
 	if (isset($purchase_date) && $purchase_date !='')
         {
-		array_push($where_clauses, "purchase_date ".$adb->getLike()." ".PearDatabase::quote($purchase_date.'%'));
+		array_push($where_clauses, "purchase_date ".$adb->getLike()." ".$adb->quote($purchase_date.'%'));
                 //$search_query .= " and purchase_date = '".$purchase_date."%'";
                 $url_string .= "&purchase_date=".$purchase_date;
         }

@@ -99,83 +99,83 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 	if(isset($name) && $name != "")
 	{
-		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".PearDatabase::quote($name."%"));
+		array_push($where_clauses, "account.accountname ".$adb->getLike()." ".$adb->quote($name."%"));
 		$url_string .= "&accountname=".$name;
 	}
 	if(isset($website) && $website != "")
 	{
-		array_push($where_clauses, "account.website ".$adb->getLike()." ".PearDatabase::quote("%".$website."%"));
+		array_push($where_clauses, "account.website ".$adb->getLike()." ".$adb->quote("%".$website."%"));
 		$url_string .= "&website=".$website;
 	}
 	if(isset($phone) && $phone != "")
 	{
-		array_push($where_clauses, "(account.phone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.otherphone ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%")." OR account.fax ".$adb->getLike()." ".PearDatabase::quote("%".$phone."%").")");
+		array_push($where_clauses, "(account.phone ".$adb->getLike()." ".$adb->quote("%".$phone."%")." OR account.otherphone ".$adb->getLike()." ".$adb->quote("%".$phone."%")." OR account.fax ".$adb->getLike()." ".$adb->quote("%".$phone."%").")");
 		$url_string .= "&phone=".$phone;
 	}
 	if(isset($annual_revenue) && $annual_revenue != "")
 	{
-		array_push($where_clauses, "account.annualrevenue ".$adb->getLike()." ".PearDatabase::quote($annual_revenue."%"));
+		array_push($where_clauses, "account.annualrevenue ".$adb->getLike()." ".$adb->quote($annual_revenue."%"));
 		$url_string .= "&annual_revenue=".$annual_revenue;
 	}
 	if(isset($employees) && $employees != "")
 	{
-		array_push($where_clauses, "account.employees ".$adb->getLike()." ".PearDatabase::quote($employees."%"));
+		array_push($where_clauses, "account.employees ".$adb->getLike()." ".$adb->quote($employees."%"));
 		$url_string .= "&employees=".$employees;
 	}
 	if(isset($address_street) && $address_street != "")
 	{
-		array_push($where_clauses, "(accountbillads.street ".$adb->getLike()." ".PearDatabase::quote($address_street."%")." OR accountshipads.street ".$adb->getLike()." ".PearDatabase::quote($address_street."%").")");
+		array_push($where_clauses, "(accountbillads.street ".$adb->getLike()." ".$adb->quote($address_street."%")." OR accountshipads.street ".$adb->getLike()." ".$adb->quote($address_street."%").")");
 		$url_string .= "&address_street=".$address_street;
 	}
 	if(isset($address_city) && $address_city != "")
 	{
-		array_push($where_clauses, "(accountbillads.city ".$adb->getLike()." ".PearDatabase::quote($address_city."%")." OR accountshipads.city ".$adb->getLike()." ".PearDatabase::quote($address_city."%").")");
+		array_push($where_clauses, "(accountbillads.city ".$adb->getLike()." ".$adb->quote($address_city."%")." OR accountshipads.city ".$adb->getLike()." ".$adb->quote($address_city."%").")");
 		$url_string .= "&bill_city=".$address_city;
 	}
 	if(isset($address_state) && $address_state != "")
 	{
-		array_push($where_clauses, "(accountbillads.state ".$adb->getLike()." ".PearDatabase::quote($address_state."%")." OR accountshipads.state ".$adb->getLike()." ".PearDatabase::quote($address_state."%").")");
+		array_push($where_clauses, "(accountbillads.state ".$adb->getLike()." ".$adb->quote($address_state."%")." OR accountshipads.state ".$adb->getLike()." ".$adb->quote($address_state."%").")");
 		$url_string .= "&bill_state=".$address_state;
 	}
 	if(isset($address_postalcode) && $address_postalcode != "")
 	{
-		array_push($where_clauses, "(accountbillads.code ".$adb->getLike()." ".PearDatabase::quote($address_postalcode."%")." OR accountshipads.code ".$adb->getLike()." ".PearDatabase::quote($address_postalcode."%").")");
+		array_push($where_clauses, "(accountbillads.code ".$adb->getLike()." ".$adb->quote($address_postalcode."%")." OR accountshipads.code ".$adb->getLike()." ".$adb->quote($address_postalcode."%").")");
 		$url_string .= "&bill_code=".$address_postalcode;
 	}
 	if(isset($address_country) && $address_country != "")
 	{
-		array_push($where_clauses, "(accountbillads.country ".$adb->getLike()." ".PearDatabase::quote($address_country."%")." OR accountshipads.country ".$adb->getLike()." ".PearDatabase::quote($address_country."%").")");
+		array_push($where_clauses, "(accountbillads.country ".$adb->getLike()." ".$adb->quote($address_country."%")." OR accountshipads.country ".$adb->getLike()." ".$adb->quote($address_country."%").")");
 		$url_string .= "&bill_country=".$address_country;
 	}
 	if(isset($email) && $email != "")
 	{
-		array_push($where_clauses, "(account.email1 ".$adb->getLike()." ".PearDatabase::quote($email."%")." OR account.email2 ".$adb->getLike()." ".PearDatabase::quote($email."%").")");
+		array_push($where_clauses, "(account.email1 ".$adb->getLike()." ".$adb->quote($email."%")." OR account.email2 ".$adb->getLike()." ".$adb->quote($email."%").")");
 		$url_string .= "&email=".$email;
 	}
 	if(isset($industry) && $industry != "")
 	{
-		array_push($where_clauses, "account.industry = ".PearDatabase::quote($industry));
+		array_push($where_clauses, "account.industry = ".$adb->quote($industry));
 		$url_string .= "&industry=".$industry;
 	}
 	if(isset($ownership) && $ownership != "")
 	{
-	 	array_push($where_clauses, "account.ownership ".$adb->getLike()." ".PearDatabase::quote($ownership."%"));
+	 	array_push($where_clauses, "account.ownership ".$adb->getLike()." ".$adb->quote($ownership."%"));
 		$url_string .= "&ownership=".$ownership;
 	}
-	if(isset($rating) && $rating != "") array_push($where_clauses, "account.rating ".$adb->getLike()." ".PearDatabase::quote($rating."%"));
+	if(isset($rating) && $rating != "") array_push($where_clauses, "account.rating ".$adb->getLike()." ".$adb->quote($rating."%"));
 	if(isset($sic_code) && $sic_code != "")
 	{
-		array_push($where_clauses, "account.siccode ".$adb->getLike()." ".PearDatabase::quote($sic_code."%"));
+		array_push($where_clauses, "account.siccode ".$adb->getLike()." ".$adb->quote($sic_code."%"));
 		$url_string .= "&siccode=".$sic_code;
 	}
 	if(isset($ticker_symbol) && $ticker_symbol != "")
 	{
-		array_push($where_clauses, "account.tickersymbol ".$adb->getLike()." ".PearDatabase::quote($ticker_symbol."%"));
+		array_push($where_clauses, "account.tickersymbol ".$adb->getLike()." ".$adb->quote($ticker_symbol."%"));
 		$url_string .= "&tickersymbol=".$ticker_symbol;
 	}
 	if(isset($account_type) && $account_type != "")
 	{
-		array_push($where_clauses, "account.account_type = ".PearDatabase::quote($account_type));
+		array_push($where_clauses, "account.account_type = ".$adb->quote($account_type));
 		$url_string .= "&accounttype=".$account_type;
 	}
 	if(isset($current_user_only) && $current_user_only != "")
@@ -197,7 +197,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		}
 		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
+			$where .= $adb->quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 			   // ACIPIA - to allow prev/next button to use criterias
 			  $url_string .= '&' . urlencode( 'assigned_user_id[]' ) . '=' . $val ;
