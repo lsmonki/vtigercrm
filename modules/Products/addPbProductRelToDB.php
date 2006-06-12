@@ -16,19 +16,21 @@ global $vtlog;
 require_once('include/database/PearDatabase.php');
 $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
-$pricebook_id=$_REQUEST['pricebook_id'];
-$productid=$_REQUEST['product_id'];
+$pricebook_id=(int)$_REQUEST['pricebook_id'];
+$productid=(int)$_REQUEST['product_id'];
 if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
 	//split the string and store in an array
 	$storearray = explode(";",$idlist);
+	array_filter($storearray);
 	foreach($storearray as $id)
 	{
+		$id = (int) $id;
 		$lp_name = $id.'_listprice';
 		$list_price = $_REQUEST[$lp_name];
 		//Updating the pricebook product rel table
 		$vtlog->logthis("Products :: Inserting products to price book","info");
-		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
+		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$adb->quote($list_price).")";
 		$adb->query($query);
 	}
 	header("Location: index.php?module=Products&action=PriceBookDetailView&record=".$pricebook_id);
@@ -37,13 +39,15 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 {
 	//split the string and store in an array
 	$storearray = explode(";",$idlist);
+	array_filter($storearray);
 	foreach($storearray as $id)
 	{
+		$id = (int) $id;
 		$lp_name = $id.'_listprice';
 		$list_price = $_REQUEST[$lp_name];
 		//Updating the pricebook product rel table
 		$vtlog->logthis("Products :: Inserting PriceBooks to Product","info");
-		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
+		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$adb->quote($list_price).")";
 		$adb->query($query);
 	}
 	header("Location: index.php?module=Products&action=DetailView&record=".$productid);
