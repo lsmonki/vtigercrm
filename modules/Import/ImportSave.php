@@ -17,7 +17,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 	global $current_user;
 	global $adb;
 
-// MWC ** Getting users
+// MWC ** Getting vtiger_users
 $temp = get_user_array(FALSE);
 foreach ( $temp as $key=>$data)
 	$my_users[$data] = $key;
@@ -84,7 +84,7 @@ foreach ($rows1 as $row)
 
 	p("setting done");
 	
-	p("do save before req fields=".$do_save);
+	p("do save before req vtiger_fields=".$do_save);
 
 	$adb->println($focus->required_fields);
 
@@ -128,7 +128,7 @@ foreach ($rows1 as $row)
 			{
 				$_REQUEST['module']='contactdetails';
 			}
-			$dbquery="select * from field where tablename='".$_REQUEST['module']."'";
+			$dbquery="select * from vtiger_field where vtiger_tablename='".$_REQUEST['module']."'";
 			$custresult = $adb->query($dbquery);
 			if($adb->num_rows($custresult) != 0)
 			{

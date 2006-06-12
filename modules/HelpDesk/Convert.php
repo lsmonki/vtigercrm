@@ -71,7 +71,7 @@ else
 $change='';
 if($_REQUEST['change_owner'])
 {
-	$change .= '<input type="hidden" name="change_owner" value="true"/><td width="20%" valign="top" class="dataLabel">'.$mod_strings['LBL_ASSIGNED_TO'].'<select tabindex="5" name="assigned_user_id" {ASSIGNED_USER_OPTIONS}</select> </td>';
+	$change .= '<input type="hidden" name="change_owner" value="true"/><td width="20%" valign="top" class="dataLabel">'.$mod_strings['LBL_ASSIGNED_TO'].'<select vtiger_tabindex="5" name="assigned_user_id" {ASSIGNED_USER_OPTIONS}</select> </td>';
 	$xtpl->assign("ASSIGNED_USER_OPTIONS",getComboValues("user_name","users","user_name","1",'--None--'));
 }
 if($_REQUEST['change_status'])

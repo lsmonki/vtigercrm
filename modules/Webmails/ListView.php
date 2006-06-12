@@ -150,7 +150,7 @@ function show_msg($mails,$start_message) {
  	global $mbox,$displayed_msgs,$show_hidden,$new_msgs;
 
   	$num = $mails[$start_message]->msgno;
-  	// TODO: scan the current db tables to find a
+  	// TODO: scan the current db vtiger_tables to find a
   	// matching email address that will make a good
   	// candidate for record_id
   	// this module will also need to be able to associate to any entity type

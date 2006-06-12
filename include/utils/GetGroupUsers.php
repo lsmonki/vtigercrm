@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 
-/** Class to retreive all the users present in a group 
+/** Class to retreive all the vtiger_users present in a group 
  *
  */
 require_once('include/utils/UserInfoUtil.php');
@@ -21,17 +21,17 @@ class GetGroupUsers {
 	var $group_users=array();
 	var $group_subgroups=array();
 
-	/** to get all the users and groups of the specified group
+	/** to get all the vtiger_users and vtiger_groups of the specified group
 	 * @params $groupId --> Group Id :: Type Integer
-         * @returns the users present in the group in the variable $parent_groups of the class
-         * @returns the sub groups present in the group in the variable $group_subgroups of the class
+         * @returns the vtiger_users present in the group in the variable $parent_groups of the class
+         * @returns the sub vtiger_groups present in the group in the variable $group_subgroups of the class
          */
 	function getAllUsersInGroup($groupid)
 	{
 		global $adb,$log;
 		$log->debug("Entering getAllUsersInGroup(".$groupid.") method...");
 		//Retreiving from the user2grouptable
-		$query="select * from users2group where groupid=".$groupid;
+		$query="select * from vtiger_users2group where groupid=".$groupid;
 		$result = $adb->query($query);
 		$num_rows=$adb->num_rows($result);
 		for($i=0;$i<$num_rows;$i++)
@@ -45,8 +45,8 @@ class GetGroupUsers {
 		}
 		
 
-		//Retreiving from the group2role
-		$query="select * from group2role where groupid=".$groupid;
+		//Retreiving from the vtiger_group2role
+		$query="select * from vtiger_group2role where groupid=".$groupid;
                 $result = $adb->query($query);
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)
@@ -66,8 +66,8 @@ class GetGroupUsers {
 			
                 }
 
-		//Retreiving from the group2rs
-		$query="select * from group2rs where groupid=".$groupid;
+		//Retreiving from the vtiger_group2rs
+		$query="select * from vtiger_group2rs where groupid=".$groupid;
                 $result = $adb->query($query);
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)
@@ -86,7 +86,7 @@ class GetGroupUsers {
  
                 }
 		//Retreving from group2group
-		$query="select * from group2grouprel where groupid=".$groupid;
+		$query="select * from vtiger_group2grouprel where groupid=".$groupid;
                 $result = $adb->query($query);
                 $num_rows=$adb->num_rows($result);
                 for($i=0;$i<$num_rows;$i++)

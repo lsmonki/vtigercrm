@@ -28,20 +28,20 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
-// Account is used to store account information.
+// Account is used to store vtiger_account information.
 class SalesOrder extends CRMEntity {
 	var $log;
 	var $db;
 
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $mode;
 	
 		
 	var $table_name = "salesorder";
-	var $tab_name = Array('crmentity','salesorder','sobillads','soshipads','salesordercf');
-	var $tab_name_index = Array('crmentity'=>'crmid','salesorder'=>'salesorderid','sobillads'=>'sobilladdressid','soshipads'=>'soshipaddressid','salesordercf'=>'salesorderid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_salesorder','vtiger_sobillads','vtiger_soshipads','vtiger_salesordercf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_salesorder'=>'salesorderid','vtiger_sobillads'=>'sobilladdressid','vtiger_soshipads'=>'soshipaddressid','vtiger_salesordercf'=>'salesorderid');
 				
 	
 	var $entity_table = "crmentity";
@@ -58,10 +58,10 @@ class SalesOrder extends CRMEntity {
 
 	var $sortby_fields = Array('subject','smownerid');		
 
-	// This is used to retrieve related fields from form posts.
+	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
@@ -99,7 +99,7 @@ class SalesOrder extends CRMEntity {
 				        'Quote Name'=>'quote_id'
 				      );
 
-	// This is the list of fields that are required.
+	// This is the list of vtiger_fields that are required.
 	var $required_fields =  array("accountname"=>1);
 
 	//Added these variables which are used as default order by and sortorder in ListView
@@ -131,7 +131,7 @@ class SalesOrder extends CRMEntity {
 		$button = '';
 
 		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status !='Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or vtiger_activitytype='Call' or vtiger_activitytype='Meeting') and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus = 'Planned')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('SalesOrder','Activities',$focus,$query,$button,$returnset);
 	}
@@ -144,27 +144,27 @@ class SalesOrder extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,
-				activity.*, seactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime,
-				crmentity.createdtime, crmentity.description, users.user_name
-			from activity
-				inner join seactivityrel on seactivityrel.activityid=activity.activityid
-				inner join crmentity on crmentity.crmid=activity.activityid
-				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
-				left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
-				inner join users on crmentity.smcreatorid=users.id
-				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
-                                left join groups on groups.groupname=activitygrouprelation.groupname
-			where (activitytype='Task' or activitytype='Call' or activitytype='Meeting')
-				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus !='Planned' and activity.eventstatus != ''))
-				and seactivityrel.crmid=".$id;
+		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,
+			vtiger_activity.*, vtiger_seactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,
+			vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
+			from vtiger_activity
+				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
+				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
+				left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+				inner join vtiger_users on vtiger_crmentity.smcreatorid=vtiger_users.id
+				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
+                                left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+			where (activitytype='Task' or vtiger_activitytype='Call' or vtiger_activitytype='Meeting')
+				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus !='Planned' and vtiger_activity.eventstatus != ''))
+				and vtiger_seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
 		return getHistory('SalesOrder',$query,$id);
 	}
 
-/** Function to get attachments associated with the id
+/** Function to get vtiger_attachments associated with the id
  *  This function accepts the id as arguments and execute the MySQL query using the id
  *  and sends the query and the id as arguments to renderRelatedAttachments() method.
 */
@@ -173,41 +173,41 @@ class SalesOrder extends CRMEntity {
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crmentity.createdtime, notes.notecontent description, users.user_name
-		// Inserted inner join users on crmentity.smcreatorid= users.id
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
-			attachments.type  FileType,crm2.modifiedtime lastmodified,
-			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
-			crmentity.createdtime, notes.notecontent description, users.user_name
-		from notes
-			inner join senotesrel on senotesrel.notesid= notes.notesid
-			inner join crmentity on crmentity.crmid= senotesrel.crmid
-			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
-			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
-			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
-			inner join users on crmentity.smcreatorid= users.id
-		where crmentity.crmid=".$id;
+		// Desc: Inserted vtiger_crmentity.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
+		// Inserted inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
+		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
+		vtiger_seattachmentsrel.attachmentsid vtiger_attachmentsid, vtiger_notes.notesid crmid,
+		vtiger_crmentity.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
+		from vtiger_notes
+			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+			inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+		where vtiger_crmentity.crmid=".$id;
 		$query .= ' union all ';
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crmentity.createdtime, attachments.description, users.user_name
-		// Inserted inner join users on crmentity.smcreatorid= users.id
+		// Desc: Inserted vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		// Inserted inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
 		// Inserted order by createdtime desc
-		$query .= "select attachments.description  title ,'Attachments'  ActivityType,
-			attachments.name  filename, attachments.type  FileType, crm2.modifiedtime lastmodified,
-			attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid,
-			crmentity.createdtime, attachments.description, users.user_name
-		from attachments
-			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
-			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
-			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
-			inner join users on crmentity.smcreatorid= users.id
-		where crmentity.crmid=".$id."
+		$query .= "select vtiger_attachments.description  title ,'Attachments'  ActivityType,
+		vtiger_attachments.name  filename, vtiger_attachments.type  FileType, crm2.modifiedtime lastmodified,
+		vtiger_attachments.attachmentsid  vtiger_attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		from vtiger_attachments
+			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
+			inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+		where vtiger_crmentity.crmid=".$id."
 		order by createdtime desc";
 	$log->debug("Exiting get_attachments method ...");
 	return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid='salesorderid');
 	}
 
-/** Function to get invoices associated with the id
+/** Function to get vtiger_invoices associated with the id
  *  This function accepts the id as arguments and execute the MySQL query using the id
  *  and sends the query and the id as arguments to renderRelatedInvoices() method.
 */
@@ -223,7 +223,7 @@ class SalesOrder extends CRMEntity {
 		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
 
 
-		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join salesorder on salesorder.salesorderid=invoice.salesorderid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 and salesorder.salesorderid=".$id;
+		$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
 	

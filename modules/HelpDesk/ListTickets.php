@@ -24,18 +24,18 @@ function getMyTickets()
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$search_query="select troubletickets.ticketid, parent_id, priority, troubletickets.status, category, troubletickets.title, troubletickets.description, update_log, version_id,
-	crmentity.createdtime, crmentity.modifiedtime, 
-	contactdetails.firstname, contactdetails.lastname, 
-	account.accountid, account.accountname, 
-	users.user_name from 
-	troubletickets 
-	inner join crmentity on crmentity.crmid = troubletickets.ticketid 
-	inner join users on users.id = crmentity.smownerid 
-	left join contactdetails on troubletickets.parent_id = contactdetails.contactid 
-	left join account on account.accountid = troubletickets.parent_id 
-	left join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid 
-	where crmentity.smownerid = ".$current_user->id." and crmentity.deleted = 0 and troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
+	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_troubletickets.description, update_log, version_id,
+vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 
+vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, 
+vtiger_account.accountid, vtiger_account.accountname, 
+vtiger_users.user_name from 
+	vtiger_troubletickets 
+	inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
+	inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
+	left join vtiger_contactdetails on vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid 
+	left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id 
+	left join vtiger_seticketsrel on vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid 
+	where vtiger_crmentity.smownerid = ".$current_user->id." and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
 
 	$resultcount = $adb->num_rows($adb->query($search_query));
 	if($resultcount > 0)
@@ -96,19 +96,19 @@ function getParentLink($parent_id)
 	$log->debug("Entering getParentLink(".$parent_id.") method ...");
 	global $adb;
 
-	$sql = "select setype from crmentity where crmid=".$parent_id;
+	$sql = "select setype from vtiger_crmentity where crmid=".$parent_id;
 	$parent_module = $adb->query_result($adb->query($sql),0,'setype');
 
 	if($parent_module == 'Contacts')
 	{
-		$sql = "select firstname,lastname from contactdetails where contactid=".$parent_id;
+		$sql = "select firstname,lastname from vtiger_contactdetails where contactid=".$parent_id;
 		$parentname = $adb->query_result($adb->query($sql),0,'firstname');
 		$parentname .= ' '.$adb->query_result($adb->query($sql),0,'lastname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 	if($parent_module == 'Accounts')
 	{
-		$sql = "select accountname from account where accountid=".$parent_id;
+		$sql = "select vtiger_accountname from vtiger_account where vtiger_accountid=".$parent_id;
 		$parentname = $adb->query_result($adb->query($sql),0,'accountname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}

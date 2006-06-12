@@ -31,10 +31,10 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 function DeleteReport($reportid)
 {
 	global $adb;
-	$idelreportsql = "delete from selectquery where queryid=".$reportid;
+	$idelreportsql = "delete from vtiger_selectquery where queryid=".$reportid;
 	$idelreportsqlresult = $adb->query($idelreportsql);
 
-	$ireportsql = "delete from report where reportid=".$reportid;
+	$ireportsql = "delete from vtiger_report where vtiger_reportid=".$reportid;
     $ireportsqlresult = $adb->query($ireportsql);
 }
 ?>

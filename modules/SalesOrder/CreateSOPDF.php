@@ -16,7 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 global $adb,$app_strings,$products_per_page;
 
-$sql="select currency_symbol from currency_info";
+$sql="select vtiger_currency_symbol from vtiger_currency_info";
 $result = $adb->query($sql);
 $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
@@ -25,7 +25,7 @@ $endpage="1";
 $products_per_page="6";
 
 $id = $_REQUEST['record'];
-//retreiving the invoice info
+//retreiving the vtiger_invoice info
 $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
 $account_name = getAccountName($focus->column_fields[account_id]);
@@ -59,7 +59,7 @@ $description = $focus->column_fields["description"];
 $status = $focus->column_fields["sostatus"];
 
 // Company information
-$add_query = "select * from organizationdetails";
+$add_query = "select * from vtiger_organizationdetails";
 $result = $adb->query($add_query);
 $num_rows = $adb->num_rows($result);
 
@@ -85,7 +85,7 @@ $price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_
 $price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
 
 //getting the Product Data
-$query="select products.productname,products.unit_price,products.product_description,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$id;
+$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.product_description,vtiger_soproductrel.* from vtiger_soproductrel inner join vtiger_products on vtiger_products.productid=vtiger_soproductrel.productid where vtiger_salesorderid=".$id;
 
 global $result;
 $result = $adb->query($query);

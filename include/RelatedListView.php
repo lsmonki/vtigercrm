@@ -379,7 +379,7 @@ function getHistory($parentmodule,$query,$id)
 
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
 // Desc: 'X'
-//			 Insert new table with 1 cell where all entries are in a new table.
+//			 Insert new vtiger_table with 1 cell where all entries are in a new vtiger_table.
 //			 This cell will be scrollable when too many entries exist
 		$list .= ($noofrows>15) ? '<tr><td colspan="'.$colspan.'"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
 // end: Armando Lüscher 14.07.2005 -> §scrollableTables
@@ -512,7 +512,7 @@ function getHistory($parentmodule,$query,$id)
 		}
 
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
-// Desc: Close table from 
+// Desc: Close vtiger_table from 
 		$list .= ($noofrows>15) ? '</table></div></td></tr>':'';
 // end: Armando Lüscher 14.07.2005 -> §scrollableTables
 
@@ -590,7 +590,7 @@ $smarty->assign("LISTHEADER", $list_header);
 
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
 // Desc: 'X'
-//			 Insert new table with 1 cell where all entries are in a new table.
+//			 Insert new vtiger_table with 1 cell where all entries are in a new vtiger_table.
 //			 This cell will be scrollable when too many entries exist
 		$list_body .= ($num_rows>15) ? '<tr><td colspan="12"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
 // end: Armando Lüscher 14.07.2005 -> §scrollableTablEs

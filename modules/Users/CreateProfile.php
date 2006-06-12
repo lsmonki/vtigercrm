@@ -33,7 +33,7 @@ if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] !
 if(isset($_REQUEST['profileid']) && $_REQUEST['profileid'] != '')
 {
 	global $adb;	
-	$sql = "select * from profile where profileid=".$_REQUEST['profileid'];
+	$sql = "select * from vtiger_profile where vtiger_profileid=".$_REQUEST['profileid'];
 	$profileResult = $adb->query($sql);
 	$profile_name = $adb->query_result($profileResult,0,"profilename");
 	$profile_description = $adb->query_result($profileResult,0,"description");

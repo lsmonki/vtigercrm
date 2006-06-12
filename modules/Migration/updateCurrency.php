@@ -20,10 +20,10 @@ if($ajax_val == 1)
 	$crate = $_REQUEST['crate'];
 	$conn->println('conversion rate = '.$crate);
 	
-	$query = "update currency_info set conversion_rate='".$_REQUEST['crate']."' where id=1";
+	$query = "update vtiger_currency_info set conversion_rate='".$_REQUEST['crate']."' where id=1";
 	$result = $conn->query($query);
 
-	//array should be id || fieldname => tablename
+	//array should be id || vtiger_fieldname => vtiger_tablename
 	$modules_array = Array(
 				"accountid||annualrevenue"	=>	"account",
 				

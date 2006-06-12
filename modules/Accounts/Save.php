@@ -98,13 +98,13 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-//Send notification mail to the assigned to owner about the account creation
+//Send notification mail to the assigned to owner about the vtiger_account creation
 if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
 	$status = sendNotificationToOwner('Accounts',&$focus);
 
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
 
-//Code to save the custom field info into database
+//Code to save the custom vtiger_field info into database
 function save_customfields($entity_id)
 {
 	global $log;
@@ -114,12 +114,12 @@ function save_customfields($entity_id)
 	$dbquery = "SELECT * FROM customfields WHERE module = 'Accounts'";
         /*
 	$result = mysql_query($dbquery);
-	$custquery = "SELECT * FROM accountcf WHERE accountid = '".$entity_id."'";
+	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = '".$entity_id."'";
         $cust_result = mysql_query($custquery);
 	if(mysql_num_rows($result) != 0)
         */
 	$result = $adb->query($dbquery);
-	$custquery = "SELECT * FROM accountcf WHERE accountid = '".$entity_id."'";
+	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = '".$entity_id."'";
         $cust_result = $adb->query($custquery);
 	if($adb->num_rows($result) != 0)
 	{
@@ -185,19 +185,19 @@ function save_customfields($entity_id)
                   if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
-                        $query = "UPDATE accountcf SET ".$update." WHERE accountid='".$entity_id."'"; 
+                        $query = "UPDATE vtiger_accountcf SET ".$update." WHERE vtiger_accountid='".$entity_id."'"; 
 			$adb->query($query);
 		}
 		else
 		{
 			//Insert Block
-			$query = "INSERT INTO accountcf (".$columns.") VALUES(".$values.")";
+			$query = "INSERT INTO vtiger_accountcf (".$columns.") VALUES(".$values.")";
                         $adb->query($query);
 		}
 		
 	}
 	$log->debug("Exiting save_customfields method ...");
-	// commented by srini - PATCH for saving accounts
+	// commented by srini - PATCH for saving vtiger_accounts
 	/*else
 	{
           //if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
@@ -208,7 +208,7 @@ function save_customfields($entity_id)
 		else
 		{
 			//Insert Block
-			$query = "INSERT INTO accountcf (".$columns.") VALUES(".$values.")";
+			$query = "INSERT INTO vtiger_accountcf (".$columns.") VALUES(".$values.")";
                         $adb->query($query);
 			//mysql_query($query);
 		}

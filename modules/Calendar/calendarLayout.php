@@ -997,30 +997,30 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$shared_ids = getSharedCalendarId($current_user->id);
 	if(empty($shared_ids))
 		$shared_ids = $current_user->id;
-	$query = "SELECT cntactivityrel.contactid, activity.*
-		FROM activity
-		INNER JOIN crmentity
-			ON crmentity.crmid = activity.activityid
-		LEFT JOIN cntactivityrel
-			ON cntactivityrel.activityid = activity.activityid
-		LEFT OUTER JOIN recurringevents
-			ON recurringevents.activityid = activity.activityid
-		WHERE crmentity.deleted = 0
-			AND (activity.activitytype = 'Meeting' OR activity.activitytype = 'Call')
-			AND (activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
-				OR recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')";
+	$query = "SELECT vtiger_cntactivityrel.contactid, vtiger_activity.*
+		FROM vtiger_activity
+		INNER JOIN vtiger_crmentity
+			ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_cntactivityrel
+			ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+		LEFT OUTER JOIN vtiger_recurringevents
+			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+		WHERE vtiger_crmentity.deleted = 0
+			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
+			AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
+				OR vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."')";
 	if($info != '')
 	{
-		$pending_query = $query." AND (activity.eventstatus = 'Planned')
-			AND crmentity.smownerid = ".$current_user->id."
-		ORDER BY activity.date_start,activity.time_start ASC";
+		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')
+			AND vtiger_crmentity.smownerid = ".$current_user->id."
+		ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 		$res = $adb->query($pending_query);
 		$pending_rows = $adb->num_rows($res);
 	}
 	if(!is_admin($current_user))
-		$query .= " AND crmentity.smownerid in (".$shared_ids.")";
+		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";
 		
-	$query .= "ORDER BY activity.date_start,activity.time_start ASC";
+	$query .= "ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 
 	$result = $adb->query($query);
 	$rows = $adb->num_rows($result);
@@ -1083,27 +1083,27 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	$shared_ids = getSharedCalendarId($current_user->id);
 	if(empty($shared_ids))
 		$shared_ids = $current_user->id;
-        $query = "SELECT cntactivityrel.contactid, activity.*
-                FROM activity
-                INNER JOIN crmentity
-                        ON crmentity.crmid = activity.activityid
-                LEFT JOIN cntactivityrel
-                        ON cntactivityrel.activityid = activity.activityid
-                WHERE crmentity.deleted = 0
-                        AND activity.activitytype = 'Task'
-                        AND (activity.date_start BETWEEN '".$start_date."' AND '".$end_date."')";
+        $query = "SELECT vtiger_cntactivityrel.contactid, vtiger_activity.*
+                FROM vtiger_activity
+                INNER JOIN vtiger_crmentity
+                        ON vtiger_crmentity.crmid = vtiger_activity.activityid
+                LEFT JOIN vtiger_cntactivityrel
+                        ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+                WHERE vtiger_crmentity.deleted = 0
+                        AND vtiger_activity.activitytype = 'Task'
+                        AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."')";
         if($info != '')
         {
-                $pending_query = $query." AND (activity.status != 'Completed')
-                        AND crmentity.smownerid = ".$current_user->id."
-                ORDER BY activity.date_start,activity.time_start ASC";
+                $pending_query = $query." AND (vtiger_activity.status != 'Completed')
+                        AND vtiger_crmentity.smownerid = ".$current_user->id."
+                ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
                 $res = $adb->query($pending_query);
                 $pending_rows = $adb->num_rows($res);
         }
 	
 	if(!is_admin($current_user))
-                $query .= " AND crmentity.smownerid in (".$shared_ids.")";
-        $query .= " ORDER BY activity.date_start,activity.time_start ASC";
+                $query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";
+        $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);

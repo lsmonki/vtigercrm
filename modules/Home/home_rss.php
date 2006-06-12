@@ -40,7 +40,7 @@ echo ("	  <generator>vtigerCRM</generator>\n");
 
 //retrieving notifications******************************
 //<<<<<<<<<<<<<<<< start of owner notify>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-$query = "select crmentity.setype,crmentity.crmid,crmentity.smcreatorid,crmentity.modifiedtime from crmentity inner join ownernotify on crmentity.crmid=ownernotify.crmid";
+$query = "select vtiger_crmentity.setype,vtiger_crmentity.crmid,vtiger_crmentity.smcreatorid,vtiger_crmentity.modifiedtime from vtiger_crmentity inner join vtiger_ownernotify on vtiger_crmentity.crmid=vtiger_ownernotify.crmid";
 
 $result = $adb->query($query);
 for($i=0;$i<$adb->num_rows($result);$i++)
@@ -48,77 +48,77 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	    $mod_notify[$i] = $adb->fetch_array($result);
 		if($mod_notify[$i]['setype']=='Accounts')
 		{
-			$tempquery='select accountname from account where accountid='.$mod_notify[$i]['crmid'];
+			$tempquery='select vtiger_accountname from vtiger_account where vtiger_accountid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$account_name=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$account_name['accountname'];	
 		}else if($mod_notify[$i]['setype']=='Potentials')
 		{
-			$tempquery='select potentialname from potential where potentialid='.$mod_notify[$i]['crmid'];
+			$tempquery='select vtiger_potentialname from vtiger_potential where vtiger_potentialid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$potential_name=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$potential_name['potentialname'];
 		}else if($mod_notify[$i]['setype']=='Contacts')
 		{	
-			$tempquery='select lastname from contactdetails where contactid='.$mod_notify[$i]['crmid'];
+			$tempquery='select lastname from vtiger_contactdetails where contactid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$contact_name=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$contact_name['lastname'];
 
 		}else if($mod_notify[$i]['setype']=='Leads')
 		{
-			$tempquery='select lastname from leaddetails where leadid='.$mod_notify[$i]['crmid'];
+			$tempquery='select lastname from vtiger_leaddetails where leadid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$lead_name=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$lead_name['lastname'];
 		}else if($mod_notify[$i]['setype']=='SalesOrder')
 		{
-			$tempquery='select subject from salesorder where salesorderid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_salesorder where vtiger_salesorderid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$sales_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$sales_subject['subject'];
 
 		}else if($mod_notify[$i]['setype']=='Orders')
 		{
-			$tempquery='select subject from purchaseorder where purchaseorderid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_purchaseorder where vtiger_purchaseorderid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$purchase_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$purchase_subject['subject'];
 
 		}else if($mod_notify[$i]['setype']=='Products')
 		{
-			$tempquery='select productname from products where productid='.$mod_notify[$i]['crmid'];
+			$tempquery='select productname from vtiger_products where productid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$product_name=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$product_name['productname'];
 		}else if($mod_notify[$i]['setype']=='Emails')
 		{
-			$tempquery='select subject from activity where activityid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_activity where vtiger_activityid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$email_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$email_subject['subject'];
 
 		}else if($mod_notify[$i]['setype']=='HelpDesk')
 		{
-			$tempquery='select title from troubletickets where ticketid='.$mod_notify[$i]['crmid'];
+			$tempquery='select title from vtiger_troubletickets where ticketid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$HelpDesk_title=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$HelpDesk_title['title'];
 		}else if($mod_notify[$i]['setype']=='Activities')
 		{
-			$tempquery='select subject from activity where activityid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_activity where vtiger_activityid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$Activity_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$Activity_subject['subject'];
 		}else if($mod_notify[$i]['setype']=='Quotes')
 		{
-			$tempquery='select subject from quotes where quoteid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_quotes where quoteid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$quote_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$quote_subject['subject'];
 		}else if($mod_notify[$i]['setype']=='Invoice')
 		{
-			$tempquery='select subject from invoice where invoiceid='.$mod_notify[$i]['crmid'];
+			$tempquery='select subject from vtiger_invoice where vtiger_invoiceid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$invoice_subject=$adb->fetch_array($tempresult);
 			$notify_values[$i]=$invoice_subject['subject'];

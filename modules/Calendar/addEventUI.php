@@ -616,9 +616,9 @@ setObjects();
                 </table>
 </form>
 <script>
-	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
-        var fieldlabel = new Array('Subject','Date','Time','Status');
-        var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+	var vtiger_fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
+        var vtiger_fieldlabel = new Array('Subject','Date','Time','Status');
+        var vtiger_fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
 </script>	
 
 </div>

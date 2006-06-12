@@ -28,25 +28,25 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
-// Faq is used to store faq information.
+// Faq is used to store vtiger_faq information.
 class Faq extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $mode;
 	
-	var $tab_name = Array('crmentity','faq','faqcomments');
-	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id','faqcomments'=>'faqid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_faq','vtiger_faqcomments');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_faq'=>'id','vtiger_faqcomments'=>'faqid');
 				
-	var $entity_table = "crmentity";
+	var $entity_table = "vtiger_crmentity";
 	
 	var $column_fields = Array();
 		
 	var $sortby_fields = Array('question','category','id');		
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'FAQ Id'=>Array('faq'=>'id'),
 				'Question'=>Array('faq'=>'question'),
@@ -100,7 +100,7 @@ class Faq extends CRMEntity {
 		global $log;
 		$log->debug("Entering getFAQComments(".$faqid.") method ...");
 		global $mod_strings;
-		$sql = "select * from faqcomments where faqid=".$faqid;
+		$sql = "select * from vtiger_faqcomments where faqid=".$faqid;
 		$result = $this->db->query($sql);
 		$noofrows = $this->db->num_rows($result);
 

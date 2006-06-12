@@ -13,7 +13,7 @@ require_once('include/utils/UserInfoUtil.php');
 global $adb;
 $del_id =  $_REQUEST['groupId'];
 
-//Updating the user2 role table
+//Updating the user2 vtiger_role vtiger_table
 deleteGroup($del_id);
 
 header("Location: index.php?action=listgroups&module=Users&parenttab=Settings");

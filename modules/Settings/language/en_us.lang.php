@@ -62,7 +62,7 @@ $mod_strings = Array(
 
 'LBL_EMAIL_ADDRESS'=>'Email',
 
-'LBL_TRANSCURR'=>'Transfer User currency to',
+'LBL_TRANSCURR'=>'Transfer User vtiger_currency to',
 
 'LBL_CURRDEL'=>'Currency to be Deleted',
 
@@ -273,7 +273,7 @@ $mod_strings = Array(
 'LBL_TOOL'=>'Tool',
 
 
-//Added fields for Title Informations -- after 4 Beta
+//Added vtiger_fields for Title Informations -- after 4 Beta
 
 'LBL_EMAIL_CONFIG'=>'Outgoing Mail Server Configuration',
 
@@ -291,7 +291,7 @@ $mod_strings = Array(
 
 
 
-//Added fields after RC1 - Release
+//Added vtiger_fields after RC1 - Release
 
 'LBL_MAIL_SERVER_INFO'=>'Mail Server Information',
 
@@ -337,13 +337,13 @@ $mod_strings = Array(
 
 'LBL_ROLES'=>'Roles',
 
-'LBL_CREATE_AND_MANAGE_USER_ROLES'=>'- Create and Manage user roles (e.g., Administrator, Standard User, etc.)',
+'LBL_CREATE_AND_MANAGE_USER_ROLES'=>'- Create and Manage user vtiger_roles (e.g., Administrator, Standard User, etc.)',
 
 'LBL_PROFILES'=>'Profiles',
 
-'LBL_CREATE_AND_MANAGE_USER_PROFILES'=>'- Create and Manage user profiles (e.g., CEO, Sales Manager, etc.)',
+'LBL_CREATE_AND_MANAGE_USER_PROFILES'=>'- Create and Manage user vtiger_profiles (e.g., CEO, Sales Manager, etc.)',
 
-'LBL_CREATE_AND_MANAGE_USER_GROUPS'=>'- Create and Manage user groups',
+'LBL_CREATE_AND_MANAGE_USER_GROUPS'=>'- Create and Manage user vtiger_groups',
 
 'LBL_SHARING_ACCESS'=>'Sharing Access',
 
@@ -357,8 +357,8 @@ $mod_strings = Array(
 
 'LBL_FIELD_ACCESSIBILITY'=>'Field Accessibility',
 
-'LBL_SETTING_FIELD_ACCESSIBILITY'=>' - Setting Field Accessibility for each profiles',
-//<<<<<<<<for edit ordering blocks>>>>>>
+'LBL_SETTING_FIELD_ACCESSIBILITY'=>' - Setting Field Accessibility for each vtiger_profiles',
+//<<<<<<<<for edit ordering vtiger_blocks>>>>>>
 'LBL_FIELD_ORDERING_DESC'=>' - Edit Field Order',
 
 'LBL_FIELD_ORDERING'=>'Edit Field Blocks',
@@ -393,7 +393,7 @@ $mod_strings = Array(
 
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings',
 
-'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Create and Manage user defined fields...',
+'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Create and Manage user defined vtiger_fields...',
 
 'LBL_SELECT_MODULE'=>'Select Module',
 
@@ -403,7 +403,7 @@ $mod_strings = Array(
 
 'LBL_PICKLIST_SETTINGS'=>'Picklist Settings',
 
-'LBL_EDIT_PICKLIST_VALUES'=>' - Edit values of Picklist fields',
+'LBL_EDIT_PICKLIST_VALUES'=>' - Edit values of Picklist vtiger_fields',
 
 'LBL_EDIT'=>'Editing',
 
@@ -433,7 +433,7 @@ $mod_strings = Array(
 
 
 
-//Field Types for custom fields
+//Field Types for custom vtiger_fields
 
 'LBL_URL'=>'URL',
 
@@ -487,10 +487,10 @@ $mod_strings = Array(
 'LBL_LIST_PASSWORD'=>'Password',
 'LBL_MAIL_SERVER_NAME'=>'Mail Server Name or IP',
 'LBL_MAIL_SERVER_SETTINGS'=>'Mail Server Settings',
-'LBL_TEST_SETTINGS'=>'Test my account setting immediately',
-'LBL_TEST_BUTTON_TITLE'=>'Test my account now! [Alt+T]',
+'LBL_TEST_SETTINGS'=>'Test my vtiger_account setting immediately',
+'LBL_TEST_BUTTON_TITLE'=>'Test my vtiger_account now! [Alt+T]',
 'LBL_TEST_BUTTON_KEY'=>'T',
-'LBL_TEST_BUTTON_LABEL'=>'Test my account now!',
+'LBL_TEST_BUTTON_LABEL'=>'Test my vtiger_account now!',
 'LBL_DEFAULT'=>'Default',
 'LBL_IMAP2'=>'IMAP2',
 'LBL_IMAP4'=>'IMAP4',
@@ -573,8 +573,8 @@ $mod_strings = Array(
 
 //For Custom Fields
 'LBL_LEAD_MAP_CUSTOM_FIELD'=>'Mapping Lead Custom Fields',
-'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom account
-,contact, or potential fields. These mappings will be used when you convert leads',
+'leadCustomFieldDescription'=>'Map each of your organizations lead custom vtiger_fields to each of your custom vtiger_account
+,contact, or vtiger_potential vtiger_fields. These mappings will be used when you convert leads',
 'LBL_MAPPING_INFO'=>'Mapping Information',
 'LBL_ACCOUNT_FIELD'=>'Account Custom Field',
 'LBL_CONTACT_FIELD'=>'Contact Custom Field',
@@ -584,10 +584,10 @@ $mod_strings = Array(
 'LBL_LEAD_FIELD'=>'Lead Custom Field',
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
-//for Edit ordering the blocks
+//for Edit ordering the vtiger_blocks
 'NOTESCUSTOMFIELDS'=>'Notes Custom Fields',
 
-//Added fields after 4.2 ptach 2
+//Added vtiger_fields after 4.2 ptach 2
 'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',
 'LBL_MODULE_OWNERS'=>'Module Owners',
 'LBL_ASSIGN_MODULE_OWNERS_INFO'=>' - Assign Owners for each modules',
@@ -601,12 +601,12 @@ $mod_strings = Array(
 'LBL_USER_DESCRIPTION'=>'Manage Users list who access CRM',
 'LBL_ROLE_DESCRIPTION'=>'Define hierarchy of Roles and assign to Users',
 'LBL_PROFILE_DESCRIPTION'=>'Define Profiles to provide access rights to each Role',
-'LBL_GROUP_DESCRIPTION'=>'Define Groups based on roles, users, profiles etc',
+'LBL_GROUP_DESCRIPTION'=>'Define Groups based on vtiger_roles, vtiger_users, vtiger_profiles etc',
 'LBL_SHARING_ACCESS_DESCRIPTION'=>'Define privileges for each Role to access CRM modules',
-'LBL_SHARING_FIELDS_DESCRIPTION'=>'Show or hide fields in each CRM Module',
+'LBL_SHARING_FIELDS_DESCRIPTION'=>'Show or hide vtiger_fields in each CRM Module',
 'LBL_MODULE_OWNERS_DESCRIPTION'=>'Assign Owners for each CRM module',
 'LBL_ANNOUNCEMENT_DESCRIPTION'=>'Edit the contents of Announcements display',
-'LBL_CUSTOM_FIELDS_DESCRIPTION'=>'Create and Manage user-defined fields',
+'LBL_CUSTOM_FIELDS_DESCRIPTION'=>'Create and Manage user-defined vtiger_fields',
 'LBL_PICKLIST_DESCRIPTION'=>'Manage contents of Picklists in all CRM Modules',
 'LBL_EMAIL_TEMPLATE_DESCRIPTION'=>'Manage templates for E-Mail module',
 'LBL_MAIL_MERGE_DESCRIPTION'=>'Manage templates for Mail Merging',
@@ -621,11 +621,11 @@ $mod_strings = Array(
 
 
 
-//Added fields after 5.0 Alpha
+//Added vtiger_fields after 5.0 Alpha
 'LBL_REQUIRE_SMTP_AUTHENTICATION'=>'Require SMTP Authentication?',
 'LBL_ANNOUNCEMENT'=>'Announcements',
 'LBL_SETTING_ANNOUNCEMENT'=>'Announcement',
-'LBL_ANNOUNCEMENT_INFO'=>'Type the announcement text below, and click the save button.',
+'LBL_ANNOUNCEMENT_INFO'=>'Type the vtiger_announcement text below, and click the save button.',
 'LBL_EMAIL_CONTENTS'=>'Email Contents',
 'LBL_SUBJECT'=>'Subject',
 'LBL_MESSAGE'=>'Message',

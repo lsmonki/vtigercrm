@@ -15,9 +15,9 @@ require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 
-//To get the account names
+//To get the vtiger_account names
 
-/* Function to get the Account name for a given account id
+/* Function to get the Account name for a given vtiger_account id
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -27,7 +27,7 @@ function get_account_name($acc_id)
 {
 	global $adb;
 
-	$acc_qry="select accountname from account where accountid =".$acc_id;
+	$acc_qry="select vtiger_accountname from vtiger_account where vtiger_accountid =".$acc_id;
 	$acc_result=$adb->query($acc_qry);
 	$no_acc_rows=$adb->num_rows($acc_result);
 
@@ -57,7 +57,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	global $adb;
 	global $days,$date_array,$period_type;
 
-	//$where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
+	//$where= " and vtiger_crmentity.smownerid=".$user_id." and vtiger_crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
 	$query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
@@ -117,7 +117,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			$mod_cnt_table="<table border=0 cellspacing=1 cellpadding=3><tr>
 				<th>  Status </th>";
 
-			//Assigning the Header values to the table and giving the dates as graphformat 
+			//Assigning the Header values to the vtiger_table and giving the dates as graphformat 
 			for($i=0; $i<$days; $i++)
 			{
 				$tdate=$date_array[$i];
@@ -235,7 +235,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					$test_target_val.="K".$link_val;
 			}
 			$mod_cnt_table .="</tr><tr><td class=\"$class\">Total</td>";
-			//For all Days getting the table 
+			//For all Days getting the vtiger_table 
 			for($k=0; $k<$days;$k++)
 			{
 				$tdate=$date_array[$k];

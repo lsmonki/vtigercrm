@@ -18,7 +18,7 @@ require_once('include/database/PearDatabase.php');
 $mergeFileName = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from wordtemplatestorage where filename='".$mergeFileName."'";
+$sql = "select filename,data,filesize from vtiger_wordtemplatestorage where filename='".$mergeFileName."'";
 
 $result = $adb->query($sql);
 $temparray = $adb->fetch_array($result);

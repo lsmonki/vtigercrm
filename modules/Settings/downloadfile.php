@@ -17,7 +17,7 @@ global $fileId;
 
 $fileid = $_REQUEST['fileid'];
 
-//$dbQuery = "SELECT * from seattachmentsrel where crmid = '" .$fileid ."'";
+//$dbQuery = "SELECT * from vtiger_seattachmentsrel where crmid = '" .$fileid ."'";
 //$attachmentsid = $adb->query_result($adb->query($dbQuery),0,'attachmentsid');
 $attachmentsid = $fileid;
 
@@ -26,7 +26,7 @@ $returnmodule=$_REQUEST['return_module'];
 if($_REQUEST['activity_type']=='Settings')
 	$attachmentsid=$fileid;
 
-$dbQuery = "SELECT * FROM organizationdetails ";
+$dbQuery = "SELECT * FROM vtiger_organizationdetails ";
 
 $result = $adb->query($dbQuery) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)

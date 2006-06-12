@@ -23,9 +23,9 @@ if(get_magic_quotes_gpc() == 1)
 }
 
 
-//checking if the user is trying to create a custom field which already exists  
+//checking if the user is trying to create a custom vtiger_field which already exists  
 
-$checkquery="select * from field where tabid='".$tabid."'and fieldlabel='".$fldlabel."'";
+$checkquery="select * from vtiger_field where vtiger_tabid='".$tabid."'and vtiger_fieldlabel='".$fldlabel."'";
 $checkresult=$adb->query($checkquery);
 
 if($adb->num_rows($checkresult) != 0)
@@ -72,7 +72,7 @@ else
 		$columnName = $max_fieldid;
 	}
   
-	//Assigning the table Name
+	//Assigning the vtiger_table Name
 	$tableName ='';
 	if($fldmodule == 'Leads')
 	{
@@ -228,8 +228,8 @@ else
 
         
 
-        //1. add the customfield table to the field table as Block4
-        //2. fetch the contents of the custom field and show in the UI
+        //1. add the customfield vtiger_table to the vtiger_field vtiger_table as Block4
+        //2. fetch the contents of the custom vtiger_field and show in the UI
         
 	//retreiving the sequence
 	if($_REQUEST['fieldid'] == '')
@@ -250,30 +250,30 @@ else
         {
 		if($_REQUEST['fieldid'] == '')
 		{
-			$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'BAS')";
+			$query = "insert into vtiger_field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0,'BAS')";
 			$adb->query($query);
 			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 		}
 		else
 		{
-			$query = "update field set fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where fieldid=".$_REQUEST['fieldid'];
+			$query = "update vtiger_field set vtiger_fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where vtiger_fieldid=".$_REQUEST['fieldid'];
 			$adb->query($query);
 		}
-		//Inserting values into profile2field tables
+		//Inserting values into vtiger_profile2field vtiger_tables
 		if($_REQUEST['fieldid'] == '')
 		{
-			$sql1 = "select * from profile";
+			$sql1 = "select * from vtiger_profile";
 			$sql1_result = $adb->query($sql1);
 			$sql1_num = $adb->num_rows($sql1_result);
 			for($i=0; $i<$sql1_num; $i++)
 			{
 				$profileid = $adb->query_result($sql1_result,$i,"profileid");
-				$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
+				$sql2 = "insert into vtiger_profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
 				$adb->query($sql2);	 	
 			}
 
-			//Inserting values into def_org tables
-			$sql_def = "insert into def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
+			//Inserting values into def_org vtiger_tables
+			$sql_def = "insert into vtiger_def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
 			$adb->query($sql_def);
 		}
 
@@ -283,7 +283,7 @@ else
 			// Creating the PickList Table and Populating Values
 			$adb->createTable($columnName, $columnName." C(255)");
 			//Adding Primary Key
-			$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
+			$qur = "ALTER vtiger_table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
 			$adb->query($qur);
 
 			$fldPickList =  $_REQUEST['fldPickList'];
@@ -299,11 +299,11 @@ else
 				}
 			}
 		}
-		//Inserting into LeadMapping table - Jaguar
+		//Inserting into LeadMapping vtiger_table - Jaguar
 		if($fldmodule == 'Leads')
 		{
 
-			$sql_def = "insert into convertleadmapping (leadfid) values(".$custfld_fieldid.")";
+			$sql_def = "insert into vtiger_convertleadmapping (leadfid) values(".$custfld_fieldid.")";
 			$adb->query($sql_def);
 		}
 	}

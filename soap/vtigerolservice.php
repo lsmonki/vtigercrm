@@ -314,13 +314,13 @@ function AddMessageToContact($username,$contactid,$msgdtls)
           	$email->set_emails_contact_invitee_relationship($email->id,$contactid);
           	$email->set_emails_se_invitee_relationship($email->id,$contactid);
           	$email->set_emails_user_invitee_relationship($email->id,$user_id);
-		$sql = "select email from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid where crmentity.deleted =0 and contactdetails.contactid='".$contactid."'";
+		$sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='".$contactid."'";
 		$result = $adb->query($sql);
 		$camodulerow = $adb->fetch_array($result);
 		if(isset($camodulerow))
 		{
 			$emailid = $camodulerow["email"];
-			$query = 'insert into emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
+			$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$cotactid."@77|".'","OUTLOOK")';
 			$adb->query($query);
 		}
 		return $email->id;
@@ -380,7 +380,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
      fwrite($handle,base64_decode($filedata),$filesize);
      fclose($handle);
 
-     $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
+     $sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
      values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
      
      $entityresult = $adb->query($sql1);	
@@ -388,12 +388,12 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
      
      if($entityresult != false)
      {
-    	$sql2="insert into attachments(attachmentsid, name, description, type, path) 
+    	$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) 
                values(".$crmid.",'".$filename."',' ','".$filetype."','".$upload_file_path."')";
     	    
         $result=$adb->query($sql2);
      
-        $sql3='insert into seattachmentsrel values('.$emailid.','.$crmid.')';
+        $sql3='insert into vtiger_seattachmentsrel values('.$emailid.','.$crmid.')';
         $adb->query($sql3);
      
         return $crmid;   
@@ -631,7 +631,7 @@ function retrieve_account_id($account_name,$user_id)
         return null;
     }
 
-    $query = "select account.accountname accountname,account.accountid accountid from account inner join crmentity on crmentity.crmid=account.accountid where crmentity.deleted=0 and account.accountname='" .$account_name."'";
+    $query = "select vtiger_account.accountname vtiger_accountname,vtiger_account.accountid vtiger_accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname='" .$account_name."'";
 
 
 	  $db = new PearDatabase();

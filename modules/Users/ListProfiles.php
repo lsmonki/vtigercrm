@@ -24,7 +24,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
-$sql = "select * from profile";
+$sql = "select * from vtiger_profile";
 $profileListResult = $adb->query($sql);
 $noofrows = $adb->num_rows($profileListResult);
 $list_entries = array($mod_strings['LBL_OERATION'],$mod_strings['LBL_NEW_PROFILE_NAME'],$mod_strings['LBL_DESCRIPTION']);

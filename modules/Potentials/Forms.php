@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Forms.php,v 1.11 2005/04/20 20:25:13 ray Exp $
  * Description:  Contains a variety of utility functions used to display UI
- * components such as form headers and footers.  Intended to be modified on a per
+ * components such as form vtiger_headers and footers.  Intended to be modified on a per
  * theme basis.
  ********************************************************************************/
 
@@ -182,7 +182,7 @@ return $the_script;
 }
 
 /**
- * Create HTML form to enter a new record with the minimum necessary fields.
+ * Create HTML form to enter a new record with the minimum necessary vtiger_fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -197,7 +197,7 @@ global $theme;
 global $current_user;
 global $adb;//for dynamic quickcreateform construction
 
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 // global $current_language;
 // global $default_language;
 // global $cal_codes;
@@ -214,7 +214,7 @@ $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
 $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
 $lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
 $user_id = $current_user->id;
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 // $cal_lang = (empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language];
 $cal_lang = "en";
 $cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
@@ -227,7 +227,7 @@ $comboFieldArray = getComboArray($comboFieldNames);
 
 $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
-$qcreate_get_field="select * from field where tabid=2 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where vtiger_tabid=2 and quickcreate=0 order by quickcreatesequence";
 $qcreate_get_result=$adb->query($qcreate_get_field);
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
@@ -317,9 +317,9 @@ $qcreate_form.='<script type="text/javascript">
 		Calendar.setup ({
 			inputField : "QCK_closingdate", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
 		});
-	var fieldname = new Array('.$fieldName.')
-	var fieldlabel = new Array('.$fieldLabel.')
-	var fielddatatype = new Array('.$fldDataType.')
+	var vtiger_fieldname = new Array('.$fieldName.')
+	var vtiger_fieldlabel = new Array('.$fieldLabel.')
+	var vtiger_fielddatatype = new Array('.$fldDataType.')
 
 
 		</script>';

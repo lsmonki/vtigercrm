@@ -15,7 +15,7 @@
  for($i=0; $i < count($id_array)-1; $i++)
  {
 
-	         $sql = "delete from wordtemplates where templateid=".$id_array[$i];
+	         $sql = "delete from vtiger_wordtemplates where templateid=".$id_array[$i];
 	         $adb->query($sql);
 
  }

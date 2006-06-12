@@ -48,7 +48,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
 	$focus->id = $quoteid;
 
-	//Added to display the Quotes's associated products -- when we create SO from Quotes DetailView 
+	//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView 
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
@@ -72,7 +72,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         	}
 
 	}
-	//Handling for dateformat in due_date field
+	//Handling for dateformat in due_date vtiger_field
 	if($focus->column_fields['duedate'] != '')
 	{
 		$curr_due_date = $focus->column_fields['duedate'];
@@ -111,7 +111,7 @@ else
         		}
 
 		}
-		//Handling for dateformat in due_date field
+		//Handling for dateformat in due_date vtiger_field
 		if($focus->column_fields['duedate'] != '')
 		{
 			$curr_due_date = $focus->column_fields['duedate'];
@@ -123,7 +123,7 @@ else
 		$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 		$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
 
-		//Added to display the Quotes's associated products -- when we select Quote in New SO page
+		//Added to display the Quotes's associated vtiger_products -- when we select Quote in New SO page
 		if(isset($_REQUEST['quote_id']) && $_REQUEST['quote_id'] !='')
 		{
 			$associated_prod = getAssociatedProducts("Quotes",$quote_focus,$focus->column_fields['quote_id']);
@@ -163,7 +163,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
 
-// Get Account address if account is given
+// Get Account address if vtiger_account is given
 if(isset($_REQUEST['account_id']) && $_REQUEST['record']=='' && $_REQUEST['account_id'] != ''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();

@@ -80,7 +80,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$smarty->assign("SEARCH_URL",$url_string);
 				
 	//Added for Custom Field Search
-/*	$sql="select * from field where tablename='potentialscf' order by fieldlabel";
+/*	$sql="select * from vtiger_field where vtiger_tablename='potentialscf' order by vtiger_fieldlabel";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
@@ -92,11 +92,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		if(isset($customfield[$i]) && $customfield[$i] != '')
 		{
 			if($uitype[$i] == 56)
-				$str = " potentialscf.".$column[$i]." = 1";
+				$str = " vtiger_potentialscf.".$column[$i]." = 1";
 			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-				$str = " potentialscf.".$column[$i]." = '".$customfield[$i]."'";
+				$str = " vtiger_potentialscf.".$column[$i]." = '".$customfield[$i]."'";
 			else
-				$str = " potentialscf.".$column[$i]." like '$customfield[$i]%'";
+				$str = " vtiger_potentialscf.".$column[$i]." like '$customfield[$i]%'";
 			array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 		}

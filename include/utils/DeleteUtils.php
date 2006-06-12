@@ -24,73 +24,73 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case Accounts:
 		if($return_id!='')
 		{
-			$sql ='delete from seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+			$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 			$adb->query($sql);
 		}
 	break;
 	case Activities:
 		if($return_module == 'Contacts')
 		{
-			$sql = 'delete from cntactivityrel where contactid = '.$return_id.' and activityid = '.$record;
+			$sql = 'delete from vtiger_cntactivityrel where contactid = '.$return_id.' and activityid = '.$record;
 			$adb->query($sql);
 		}
 		else
 		{
-			$sql= 'delete from seactivityrel where activityid='.$record;
+			$sql= 'delete from vtiger_seactivityrel where activityid='.$record;
 			$adb->query($sql);
 		}
 
 		if($return_module == 'HelpDesk')
 		{
-			$sql = 'delete from seticketsrel where ticketid = '.$return_id.' and crmid = '.$record;
+			$sql = 'delete from vtiger_seticketsrel where ticketid = '.$return_id.' and crmid = '.$record;
 			$adb->query($sql);
 		}
-		$sql = 'delete from activity_reminder where activity_id='.$record;
+		$sql = 'delete from vtiger_activity_reminder where activity_id='.$record;
  		$adb->query($sql);
 
- 		$sql = 'delete  from recurringevents where activityid='.$record;
+ 		$sql = 'delete  from vtiger_recurringevents where activityid='.$record;
  		$adb->query($sql);
 	break;
 	case Contacts:
 		if($return_module == 'Accounts')
 		{
-			$sql = 'update crmentity set deleted = 1 where crmid = '.$record;
+			$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$record;
 			$adb->query($sql);
 		}
 		if($return_module == 'Potentials' && $record != '' && $return_id != '')
 		{
-			$sql = 'delete from contpotentialrel where contactid='.$record.' and potentialid='.$return_id;
+			$sql = 'delete from vtiger_contpotentialrel where contactid='.$record.' and potentialid='.$return_id;
 			$adb->query($sql);
 		}
 		if($record != '' && $return_id != '')
 		{
-			$sql = 'delete from seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+			$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 			$adb->query($sql);
-			$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$record;
+			$sql_recentviewed ='delete from vtiger_tracker where user_id = '.$current_user->id.' and item_id = '.$record;
 			$adb->query($sql_recentviewed);
 		}
 		if($return_module == 'Products')
 		{
-			$sql = 'delete from vendorcontactrel where contactid='.$record.' and vendorid='.$return_id;
+			$sql = 'delete from vtiger_vendorcontactrel where contactid='.$record.' and vendorid='.$return_id;
 			$adb->query($sql);
 		}
 	break;
 	case Emails:
-		$sql='delete from seactivityrel where activityid='.$adb->quote($record);
+		$sql='delete from vtiger_seactivityrel where activityid='.$adb->quote($record);
 		$adb->query($sql);
 	break;
 	case HelpDesk:
 		if($return_module == 'Contacts' || $return_module == 'Accounts')
 		{
-			$sql = "update troubletickets set parent_id='' where ticketid=".$record;
+			$sql = "update vtiger_troubletickets set parent_id='' where ticketid=".$record;
 			$adb->query($sql);
-			$se_sql= 'delete from seticketsrel where ticketid='.$record;
+			$se_sql= 'delete from vtiger_seticketsrel where ticketid='.$record;
 			$adb->query($se_sql);
 
 		}
 		if($return_module == 'Products')
 		{
-			$sql = "update troubletickets set product_id='' where ticketid=".$record;
+			$sql = "update vtiger_troubletickets set product_id='' where ticketid=".$record;
 			$adb->query($sql);
 		}
 	break;
@@ -101,13 +101,13 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module=="SalesOrder")
 		{
-			$relation_query = "UPDATE invoice set salesorderid='' where invoiceid=".$record;
+			$relation_query = "UPDATE vtiger_invoice set salesorderid='' where invoiceid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module=="Products")
 		{
-			//Removing the relation from the quotes product rel
-			$inv_query = "select * from invoiceproductrel where productid=".$return_id;
+			//Removing the relation from the vtiger_quotes product rel
+			$inv_query = "select * from vtiger_invoiceproductrel where productid=".$return_id;
 			$result = $adb->query($inv_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
@@ -120,48 +120,48 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				//Get the current sub total from Quotes and update it with the new subtotal
 				updateSubTotal("Invoices","invoice","subtotal","total","invoiceid",$invoice_id,$prod_total);
 			}
-			//delete the relation from quotes product rel
-			$del_query = "delete from invoiceproductrel where productid=".$return_id." and invoiceid=".$record;
+			//delete the relation from vtiger_quotes product rel
+			$del_query = "delete from vtiger_invoiceproductrel where productid=".$return_id." and invoiceid=".$record;
 			$adb->query($del_query);
 		}
 	break;
 	case Leads:
-		$sql = 'delete from seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+		$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 		$adb->query($sql);
 	break;
 	case Notes:
 		if($return_module== 'Contacts')
 		{
-			$sql = 'update notes set contact_id = 0 where notesid = '.$record;
+			$sql = 'update vtiger_notes set contact_id = 0 where notesid = '.$record;
 			$adb->query($sql);
 		}
-		$sql = 'delete from senotesrel where notesid = '.$record. ' and crmid = '.$return_id;
+		$sql = 'delete from vtiger_senotesrel where notesid = '.$record. ' and crmid = '.$return_id;
 		$adb->query($sql);
 
 	break;
 	case Potentials:
 		if($return_module == 'Accounts')
 		{
-			$sql = 'update crmentity set deleted = 1 where crmid = '.$record;
+			$sql = 'update vtiger_crmentity set deleted = 1 where crmid = '.$record;
 			$adb->query($sql);
 		}
-		$sql ='delete from seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+		$sql ='delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 		$adb->query($sql);
 	break;
 	case Products:
 		if($record != '' && $return_id != '')
 		{
 			if($return_module == 'Activities')
-				$sql = 'delete from seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+				$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
 
 			if($return_module == 'Potentials' || $return_module == 'Accounts' || $return_module == 'Leads')
-				$sql = 'delete from seproductsrel where crmid = '.$return_id.' and productid = '.$record;
+				$sql = 'delete from vtiger_seproductsrel where crmid = '.$return_id.' and productid = '.$record;
 
 			$adb->query($sql);
 		}
 		if($return_module == "Contacts")
 		{
-			$sql = "UPDATE products set contactid = '' where productid = ".$record;
+			$sql = "UPDATE vtiger_products set contactid = '' where productid = ".$record;
 			$adb->query($sql);
 		}
 	break;
@@ -173,13 +173,13 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Vendors")
 		{
-			$sql_req ='DELETE from purchaseorder where purchaseorderid= '.$record;
+			$sql_req ='DELETE from vtiger_purchaseorder where purchaseorderid= '.$record;
 			$adb->query($sql_req);
 		}
 		elseif($return_module == "Products")
 		{
 			//Removing the relation from the po product rel
-			$po_query = "select * from poproductrel where productid=".$return_id;
+			$po_query = "select * from vtiger_poproductrel where productid=".$return_id;
 			$result = $adb->query($po_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
@@ -192,13 +192,13 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				updateSubTotal("PurchaseOrder","purchaseorder","subtotal","total","purchaseorderid",$po_id,$prod_total);
 			}
 			//delete the relation from po product rel
-			$del_query = "delete from poproductrel where productid=".$return_id." and purchaseorderid=".$record;
+			$del_query = "delete from vtiger_poproductrel where productid=".$return_id." and purchaseorderid=".$record;
 			$adb->query($del_query);
 
 		}
 		elseif($return_module == "Contacts")
 		{
-			$sql_req ='UPDATE purchaseorder set contactid="" where purchaseorderid = '.$record;
+			$sql_req ='UPDATE vtiger_purchaseorder set contactid="" where purchaseorderid = '.$record;
 			$adb->query($sql_req);
 		}
 	break;
@@ -209,18 +209,18 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE quotes set potentialid='' where quoteid=".$record;
+			$relation_query = "UPDATE vtiger_quotes set potentialid='' where quoteid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE quotes set contactid='' where quoteid=".$record;
+			$relation_query = "UPDATE vtiger_quotes set contactid='' where quoteid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Products")
 		{
-			//Removing the relation from the quotes product rel
-			$qt_query = "select * from quotesproductrel where productid=".$return_id;
+			//Removing the relation from the vtiger_quotes product rel
+			$qt_query = "select * from vtiger_quotesproductrel where productid=".$return_id;
 			$result = $adb->query($qt_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
@@ -233,8 +233,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				//Get the current sub total from Quotes and update it with the new subtotal
 				updateSubTotal("Quotes","quotes","subtotal","total","quoteid",$quote_id,$prod_total);
 			}
-			//delete the relation from quotes product rel
-			$del_query = "delete from quotesproductrel where productid=".$return_id." and quoteid=".$record;
+			//delete the relation from vtiger_quotes product rel
+			$del_query = "delete from vtiger_quotesproductrel where productid=".$return_id." and quoteid=".$record;
 			$adb->query($del_query);
 
 		}
@@ -245,23 +245,23 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Quotes")
 		{
-			$relation_query = "UPDATE salesorder set quoteid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set quoteid='' where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE salesorder set potentialid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set potentialid='' where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE salesorder set contactid='' where salesorderid=".$record;
+			$relation_query = "UPDATE vtiger_salesorder set contactid='' where salesorderid=".$record;
 			$adb->query($relation_query);
 		}
 		elseif($return_module == "Products")
 		{
 			//Removing the relation from the so product rel
-			$so_query = "select * from soproductrel where productid=".$return_id;
+			$so_query = "select * from vtiger_soproductrel where productid=".$return_id;
 			$result = $adb->query($so_query);
 			$num_rows = $adb->num_rows($result);
 			for($i=0; $i< $num_rows; $i++)
@@ -275,17 +275,17 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				updateSubTotal("SalesOrder","salesorder","subtotal","total","salesorderid",$so_id,$prod_total);
 			}
 			//delete the relation from so product rel
-			$del_query = "delete from soproductrel where productid=".$return_id." and salesorderid=".$record;
+			$del_query = "delete from vtiger_soproductrel where productid=".$return_id." and salesorderid=".$record;
 			$adb->query($del_query);
 
 		}
 	break;
 		case Rss:
-			$del_query = "delete from rss where rssid=".$record;
+			$del_query = "delete from vtiger_rss where rssid=".$record;
 			$adb->query($del_query);
 	break;
 		case Portal:
-			$del_query = "delete from portal where portalid=".$record;
+			$del_query = "delete from vtiger_portal where portalid=".$record;
 			$adb->query($del_query);
 	break;
 	endswitch;
@@ -300,7 +300,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	}
 	if($module != 'Faq')
 	{	
-		$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$record;
+		$sql_recentviewed ='delete from vtiger_tracker where user_id = '.$current_user->id.' and item_id = '.$record;
         	$adb->query($sql_recentviewed);
 	}
 	$log->debug("Entering DeleteEntity method ...");

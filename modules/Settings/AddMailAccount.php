@@ -30,7 +30,7 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$sql = "select * from mail_accounts where user_id=".$_REQUEST['record'];
+	$sql = "select * from vtiger_mail_accounts where user_id=".$_REQUEST['record'];
 	$result = $adb->query($sql);
 	$rowcount = $adb->num_rows($result);
 	

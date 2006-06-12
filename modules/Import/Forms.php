@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header$
  * Description:  Contains a variety of utility functions used to display UI 
- * components such as form headers and footers.  Intended to be modified on a per 
+ * components such as form vtiger_headers and footers.  Intended to be modified on a per 
  * theme basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -64,7 +64,7 @@ function verify_data(form)
 			}
 			if ( hash[ form.elements[i].value ] == 1)
 			{
-				// got same field more than once
+				// got same vtiger_field more than once
 				isError = true;
 			}
 			hash[form.elements[i].value] = 1;
@@ -83,7 +83,7 @@ function verify_data(form)
 		return false;
 	}
 
-	for(var field_name in required)
+	for(var vtiger_field_name in required)
 	{
 		// contacts hack to bypass errors if full_name is set
 		if (field_name == 'last_name' && 
@@ -91,7 +91,7 @@ function verify_data(form)
 		{
 			continue;
 		}
-		if ( hash[ field_name ] != 1 )
+		if ( hash[ vtiger_field_name ] != 1 )
 		{
 				isError = true;
 				errorMessage += "$err_required " + required[field_name];
@@ -177,11 +177,11 @@ EOQ;
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {
 /*
-echo '<br> column fields : ';print_r($column_fields);
+echo '<br> column vtiger_fields : ';print_r($column_fields);
 echo '<br> column  : '.$colnum;
-echo '<br> required fields : ';print_r($required_fields);
-echo '<br> suggest fields : '.$suggest_field;
-echo '<br> translated fields : ';print_r($translated_fields);
+echo '<br> required vtiger_fields : ';print_r($required_fields);
+echo '<br> suggest vtiger_fields : '.$suggest_field;
+echo '<br> translated vtiger_fields : ';print_r($translated_fields);
 */	global $mod_strings;
 	global $app_strings;
 	global $outlook_contacts_field_map;
@@ -238,7 +238,7 @@ echo '<br> translated fields : ';print_r($translated_fields);
 	{
 	$module ='contactdetails';
 	}	
-	$custquery = "select * from field where tablename='".$module."'";
+	$custquery = "select * from vtiger_field where vtiger_tablename='".$module."'";
 	$cust_result = $adb->query($custquery);
 	while($row = $adb->fetch_array($cust_result))
 	{

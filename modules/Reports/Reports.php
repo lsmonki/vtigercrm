@@ -63,7 +63,7 @@ class Reports extends CRMEntity{
 
 /**
  * This class has the informations for Reports and inherits class CRMEntity and
- * has the variables required to generate,save,restore reports
+ * has the variables required to generate,save,restore vtiger_reports
  * and also the required functions for the same
  * Contributor(s): ______________________________________..
  */
@@ -119,9 +119,9 @@ class Reports extends CRMEntity{
 				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Custom Information"=>5)
 				);
 
-/** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given reportid
- *  This function accepts the reportid as argument
- *  It sets primodule,secmodule,reporttype,reportname,reportdescription,folderid for the given reportid
+/** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given vtiger_reportid
+ *  This function accepts the vtiger_reportid as argument
+ *  It sets primodule,secmodule,reporttype,reportname,reportdescription,folderid for the given vtiger_reportid
  */
 			
 	function Reports($reportid="")
@@ -130,8 +130,8 @@ class Reports extends CRMEntity{
 
 		if($reportid != "")
 		{
-			$ssql = "select reportmodules.*,report.* from report inner join reportmodules on report.reportid = reportmodules.reportmodulesid";
-			$ssql .= " where report.reportid =".$reportid;
+			$ssql = "select vtiger_reportmodules.*,vtiger_report.* from vtiger_report inner join vtiger_reportmodules on vtiger_report.reportid = vtiger_reportmodules.reportmodulesid";
+			$ssql .= " where vtiger_report.reportid =".$reportid;
 			$result = $adb->query($ssql);
 		        $reportmodulesrow = $adb->fetch_array($result);
 			if($reportmodulesrow)
@@ -159,7 +159,7 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 		$returndata = Array();
-		$sql = "select * from reportfolder order by folderid";
+		$sql = "select * from vtiger_reportfolder order by folderid";
 		$result = $adb->query($sql);
 		$reportfldrow = $adb->fetch_array($result);
 		if($mode != '')
@@ -190,7 +190,7 @@ class Reports extends CRMEntity{
 			}while($reportfldrow = $adb->fetch_array($result));
 		}
 
-		$log->info("Reports :: ListView->Successfully returned report folder HTML");
+		$log->info("Reports :: ListView->Successfully returned vtiger_report folder HTML");
 		return $returndata;
 	}
 
@@ -210,8 +210,8 @@ class Reports extends CRMEntity{
 		
 		require_once('include/utils/UserInfoUtil.php');
 		
-		$sql = "select report.*, reportmodules.* from report inner join reportfolder on reportfolder.folderid = report.folderid";
-		$sql .= " inner join reportmodules on reportmodules.reportmodulesid = report.reportid where reportfolder.folderid=".$rpt_fldr_id;
+		$sql = "select vtiger_report.*, vtiger_reportmodules.* from vtiger_report inner join vtiger_reportfolder on vtiger_reportfolder.folderid = vtiger_report.folderid";
+		$sql .= " inner join vtiger_reportmodules on vtiger_reportmodules.reportmodulesid = vtiger_report.reportid where vtiger_reportfolder.folderid=".$rpt_fldr_id;
 		$result = $adb->query($sql);
 		$report = $adb->fetch_array($result);
 		if(count($report)>0)
@@ -231,7 +231,7 @@ class Reports extends CRMEntity{
 					  }while($report = $adb->fetch_array($result));
 		}
 	
-		$log->info("Reports :: ListView->Successfully returned report details HTML");
+		$log->info("Reports :: ListView->Successfully returned vtiger_report details HTML");
 		return $returndata;
 	}
 
@@ -249,9 +249,9 @@ class Reports extends CRMEntity{
 		return $srptfldr_js;
 	}
 
-/** Function to set the Primary module fields for the given Report 
+/** Function to set the Primary module vtiger_fields for the given Report 
  *  This function sets the primary module columns for the given Report 
- *  It accepts the Primary module as the argument and set the fields of the module
+ *  It accepts the Primary module as the argument and set the vtiger_fields of the module
  *  to the varialbe pri_module_columnslist and returns true if sucess
  */
 
@@ -267,7 +267,7 @@ class Reports extends CRMEntity{
 
 /** Function to set the Secondary module fileds for the given Report
  *  This function sets the secondary module columns for the given module
- *  It accepts the module as the argument and set the fields of the module
+ *  It accepts the module as the argument and set the vtiger_fields of the module
  *  to the varialbe sec_module_columnslist and returns true if sucess
  */
 	
@@ -288,11 +288,11 @@ class Reports extends CRMEntity{
             return true;
         }
 
-/** Function to get fields for the given module and block
- *  This function gets the fields for the given module
+/** Function to get vtiger_fields for the given module and block
+ *  This function gets the vtiger_fields for the given module
  *  It accepts the module and the block as arguments and 
  *  returns the array column lists
- *  Array module_columnlist[ fieldtablename:fieldcolname:module_fieldlabel1:fieldname:fieldtypeofdata]=fieldlabel
+ *  Array module_columnlist[ vtiger_fieldtablename:fieldcolname:module_fieldlabel1:fieldname:fieldtypeofdata]=fieldlabel
  */
 
 	function getColumnsListbyBlock($module,$block)
@@ -308,12 +308,12 @@ class Reports extends CRMEntity{
 	//Security Check 
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 	{
-		$sql = "select * from field where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) order by sequence";
+		$sql = "select * from vtiger_field where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) order by sequence";
 	}
 	else
 	{
 			
-        	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList." group by field.fieldid order by sequence";
+        	$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
 	}
         $result = $adb->query($sql);
         $noofrows = $adb->num_rows($result);
@@ -375,8 +375,8 @@ class Reports extends CRMEntity{
 		return $module_columnlist;
 	}
 	
-/** Function to set the standard filter fields for the given report
- *  This function gets the standard filter fields for the given report
+/** Function to set the standard filter vtiger_fields for the given vtiger_report
+ *  This function gets the standard filter vtiger_fields for the given vtiger_report
  *  and set the values to the corresponding variables
  *  It accepts the repordid as argument 
  */
@@ -384,7 +384,7 @@ class Reports extends CRMEntity{
 	function getSelectedStandardCriteria($reportid)
 	{
 		global $adb;
-		$sSQL = "select reportdatefilter.* from reportdatefilter inner join report on report.reportid = reportdatefilter.datefilterid where report.reportid=".$reportid;
+		$sSQL = "select vtiger_reportdatefilter.* from vtiger_reportdatefilter inner join vtiger_report on vtiger_report.reportid = vtiger_reportdatefilter.datefilterid where vtiger_report.reportid=".$reportid;
 
 		$result = $adb->query($sSQL);
 		$selectedstdfilter = $adb->fetch_array($result);
@@ -406,7 +406,7 @@ class Reports extends CRMEntity{
 	}
 
 /** Function to get the combo values for the standard filter
- *  This function get the combo values for the standard filter for the given report
+ *  This function get the combo values for the standard filter for the given vtiger_report
  *  and return a HTML string 
  */
 
@@ -441,7 +441,7 @@ class Reports extends CRMEntity{
 
 /** Function to get the selected standard filter columns 
  *  This function returns the selected standard filter criteria 
- *  which is selected for reports as an array
+ *  which is selected for vtiger_reports as an array
  *  Array stdcriteria_list[fieldtablename:fieldcolname:module_fieldlabel1]=fieldlabel
  */
 
@@ -461,12 +461,12 @@ class Reports extends CRMEntity{
 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
                 {
-			$sql = "select * from field where field.tabid=".$tabid." and (field.uitype =5 or field.displaytype=2) and field.block in (".$blockids.") order by field.sequence";
+			$sql = "select * from vtiger_field where vtiger_field.tabid=".$tabid." and (vtiger_field.uitype =5 or vtiger_field.displaytype=2) and vtiger_field.block in (".$blockids.") order by vtiger_field.sequence";
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();			
-			$sql = "select * from field inner join tab on tab.tabid = field.tabid inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and (field.uitype =5 or field.displaytype=2) and profile2field.visible=0 and def_org_field.visible=0 and field.block in (".$blockids.") and profile2field.profileid in ".$profileList." order by field.sequence";
+			$sql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and (vtiger_field.uitype =5 or vtiger_field.displaytype=2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.block in (".$blockids.") and vtiger_profile2field.profileid in ".$profileList." order by vtiger_field.sequence";
 	
 		}
 		
@@ -720,7 +720,7 @@ class Reports extends CRMEntity{
 
 /** Function to set the order of grouping and to find the columns responsible
  *  to the grouping
- *  This function accepts the reportid as variable,sets the variable ascdescorder[] to the sort order and
+ *  This function accepts the vtiger_reportid as variable,sets the variable ascdescorder[] to the sort order and
  *  returns the array array_list which has the column responsible for the grouping
  *  Array array_list[0]=columnname
  */
@@ -732,9 +732,9 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 
-    	$sreportsortsql = "select reportsortcol.* from report";
-		$sreportsortsql .= " inner join reportsortcol on report.reportid = reportsortcol.reportid";
-		$sreportsortsql .= " where report.reportid =".$reportid." order by reportsortcol.sortcolid";
+    	$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report";
+		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid";
+		$sreportsortsql .= " where vtiger_report.reportid =".$reportid." order by vtiger_reportsortcol.sortcolid";
 
 		$result = $adb->query($sreportsortsql);
 		$noofrows = $adb->num_rows($result);
@@ -751,9 +751,9 @@ class Reports extends CRMEntity{
 		return $array_list;
 	}
 	
-/** Function to get the selected columns list for a selected report
- *  This function accepts the reportid as the argument and get the selected columns
- *  for the given reportid and it forms a combo lists and returns
+/** Function to get the selected columns list for a selected vtiger_report
+ *  This function accepts the vtiger_reportid as the argument and get the selected columns
+ *  for the given vtiger_reportid and it forms a combo lists and returns
  *  HTML of the combo values
  */
 
@@ -764,9 +764,9 @@ class Reports extends CRMEntity{
 	    global $modules;
 		global $log;
 
-		$ssql = "select selectcolumn.* from report inner join selectquery on selectquery.queryid = report.queryid";
-		$ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid where report.reportid =".$reportid;
-		$ssql .= " order by selectcolumn.columnindex";
+		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
+		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid where vtiger_report.reportid =".$reportid;
+		$ssql .= " order by vtiger_selectcolumn.columnindex";
 
 		$result = $adb->query($ssql);
 		$noofrows = $adb->num_rows($result);
@@ -785,8 +785,8 @@ class Reports extends CRMEntity{
 		return $shtml;
 	}
 
-/** Function to Set the selected columns for the advanced filter for the report
- *  This function accepts the reportid as the argument and get the selected columns
+/** Function to Set the selected columns for the advanced filter for the vtiger_report
+ *  This function accepts the vtiger_reportid as the argument and get the selected columns
  *  in the advanced filter and sets the values
  *  $this->advft_column[] = The column name
  *  $this->advft_option[] = The filter option
@@ -800,8 +800,8 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $modules;
 		global $log;
-		$ssql = 'select relcriteria.* from report inner join relcriteria on relcriteria.queryid = report.queryid left join selectquery on relcriteria.queryid = selectquery.queryid';
-		$ssql.= " where report.reportid =".$reportid." order by relcriteria.columnindex";
+		$ssql = 'select vtiger_relcriteria.* from vtiger_report inner join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_report.queryid left join vtiger_selectquery on vtiger_relcriteria.queryid = vtiger_selectquery.queryid';
+		$ssql.= " where vtiger_report.reportid =".$reportid." order by vtiger_relcriteria.columnindex";
 
 		$result = $adb->query($ssql);
 
@@ -817,8 +817,8 @@ class Reports extends CRMEntity{
 	}
 	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
 	
-/** Function to get the list of report folders when Save and run  the report
- *  This function gets the report folders from database and form
+/** Function to get the list of vtiger_report folders when Save and run  the vtiger_report
+ *  This function gets the vtiger_report folders from database and form
  *  a combo values of the folders and return 
  *  HTML of the combo values
  */
@@ -828,7 +828,7 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 
-		$sql = "select * from reportfolder order by folderid";
+		$sql = "select * from vtiger_reportfolder order by folderid";
 		$result = $adb->query($sql);
 		$reportfldrow = $adb->fetch_array($result);
 		$x = 0;
@@ -841,10 +841,10 @@ class Reports extends CRMEntity{
 		return $shtml;
 	}
 
-/** Function to get the column to total fields in Reports 
- *  This function gets columns to total field 
- *  and generated the html for that fields
- *  It returns the HTML of the fields along with the check boxes
+/** Function to get the column to total vtiger_fields in Reports 
+ *  This function gets columns to total vtiger_field 
+ *  and generated the html for that vtiger_fields
+ *  It returns the HTML of the vtiger_fields along with the check boxes
  */
 
 	function sgetColumntoTotal($primarymodule,$secondarymodule)
@@ -862,10 +862,10 @@ class Reports extends CRMEntity{
 		return $options;
 	}
 	
-/** Function to get the selected columns of total fields in Reports
- *  This function gets selected columns of total field
- *  and generated the html for that fields
- *  It returns the HTML of the fields along with the check boxes
+/** Function to get the selected columns of total vtiger_fields in Reports
+ *  This function gets selected columns of total vtiger_field
+ *  and generated the html for that vtiger_fields
+ *  It returns the HTML of the vtiger_fields along with the check boxes
  */
 	
 	
@@ -876,7 +876,7 @@ class Reports extends CRMEntity{
 		$options = Array();
 		if($reportid != "")
 		{
-			$ssql = "select reportsummary.* from reportsummary inner join report on report.reportid = reportsummary.reportsummaryid where report.reportid=".$reportid;
+			$ssql = "select vtiger_reportsummary.* from vtiger_reportsummary inner join vtiger_report on vtiger_report.reportid = vtiger_reportsummary.reportsummaryid where vtiger_report.reportid=".$reportid;
 			$result = $adb->query($ssql);
 			if($result)
 			{
@@ -906,14 +906,14 @@ class Reports extends CRMEntity{
 
 /** Function to form the HTML for columns to total	
  *  This function formulates the HTML format of the
- *  fields along with four checkboxes
- *  It returns the HTML of the fields along with the check boxes
+ *  vtiger_fields along with four checkboxes
+ *  It returns the HTML of the vtiger_fields along with the check boxes
  */
 	
 	
 	function sgetColumnstoTotalHTML($module)
 	{
-		//retreive the tabid	
+		//retreive the vtiger_tabid	
 		global $adb;
 		global $log;
 		global $current_user;
@@ -922,12 +922,12 @@ class Reports extends CRMEntity{
 		$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$ssql = "select * from field inner join tab on tab.tabid = field.tabid where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 order by sequence";
+			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 order by sequence";
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$ssql = "select * from field inner join tab on tab.tabid = field.tabid inner join def_org_field on def_org_field.fieldid=field.fieldid inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.displaytype = 1 and def_org_field.visible=0 and profile2field.visible=0 and profile2field.profileid in ".$profileList." order by sequence";
+			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid  where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 and vtiger_def_org_field.visible=0 and vtiger_profile2field.visible=0 and vtiger_profile2field.profileid in ".$profileList." order by sequence";
 		}
 		$result = $adb->query($ssql);
 		$columntototalrow = $adb->fetch_array($result);
@@ -1009,8 +1009,8 @@ $columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldla
 	}
 }
 
-/** Function to get the primary module list in reports
- *  This function generates the list of primary modules in reports
+/** Function to get the primary module list in vtiger_reports
+ *  This function generates the list of primary modules in vtiger_reports
  *  and returns an array of permitted modules 
  */
 
@@ -1038,8 +1038,8 @@ function getReportsModuleList()
 	}
 	return $modules;
 }
-/** Function to get the Related module list in reports
- *  This function generates the list of secondary modules in reports
+/** Function to get the Related module list in vtiger_reports
+ *  This function generates the list of secondary modules in vtiger_reports
  *  and returns the related module as an Array 
  */
 

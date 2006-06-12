@@ -55,7 +55,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
 
-// Get vendor address if vendorid is given
+// Get vtiger_vendor address if vtiger_vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Vendors/Vendor.php');
 	$vend_focus = new Vendor();

@@ -274,7 +274,7 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'Quotes Detailed Report',
                        'reportfolder'=>'Quote Reports',
-                       'description'=>'Quotes detailed report',
+                       'description'=>'Quotes detailed vtiger_report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
@@ -286,13 +286,13 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
 
 		 Array('reportname'=>'PurchaseOrder Detailed Report',
                        'reportfolder'=>'PurchaseOrder Reports',
-                       'description'=>'PurchaseOrder detailed report',
+                       'description'=>'PurchaseOrder detailed vtiger_report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
 		 Array('reportname'=>'Invoice Detailed Report',
                        'reportfolder'=>'Invoice Reports',
-                       'description'=>'Invoice detailed report',
+                       'description'=>'Invoice detailed vtiger_report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>'')
 
@@ -416,13 +416,13 @@ foreach($reports as $key=>$report)
 function PopulateReportFolder($fldrname,$fldrdescription)
 {
 	global $adb;
-	$sql = "INSERT INTO reportfolder ";
+	$sql = "INSERT INTO vtiger_reportfolder ";
 	$sql .= "(FOLDERNAME,DESCRIPTION,STATE) ";
 	$sql .= "VALUES ('".$fldrname."','".$fldrdescription."','SAVED')";
 	$result = $adb->query($sql);
 }
 
-/** Function to add an entry in selestquery table 
+/** Function to add an entry in selestquery vtiger_table 
  *
  */
 
@@ -432,14 +432,14 @@ function insertSelectQuery()
 	$genQueryId = $adb->getUniqueID("selectquery");
         if($genQueryId != "")
         {
-		$iquerysql = "insert into selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
+		$iquerysql = "insert into vtiger_selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
 		$iquerysqlresult = $adb->query($iquerysql);
 	}
 
 	return $genQueryId;
 }
 
-/** Function to store the field names selected for a report to a database
+/** Function to store the vtiger_field names selected for a vtiger_report to a database
  *  
  *  
  */
@@ -451,16 +451,16 @@ function insertSelectColumns($queryid,$columnname)
 	{
 		for($i=0;$i < count($columnname);$i++)
 		{
-			$icolumnsql = "insert into selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (".$queryid.",".$i.",'".$columnname[$i]."')";
+			$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (".$queryid.",".$i.",'".$columnname[$i]."')";
 			$icolumnsqlresult = $adb->query($icolumnsql);	
 		}
 	}
 }
 
 
-/** Function to store the report details to database
+/** Function to store the vtiger_report details to database
  *  This function accepts queryid,folderid,reportname,description,reporttype
- *  as arguments and store the informations in report table
+ *  as arguments and store the informations in vtiger_report vtiger_table
  */
 
 function insertReports($queryid,$folderid,$reportname,$description,$reporttype)
@@ -468,15 +468,15 @@ function insertReports($queryid,$folderid,$reportname,$description,$reporttype)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportsql = "insert into report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
+		$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
                 $ireportsql .= " values (".$queryid.",".$folderid.",'".$reportname."','".$description."','".$reporttype."',".$queryid.",'SAVED')";
 		$ireportresult = $adb->query($ireportsql);
 	}
 }
 
-/** Function to store the report modules to database
+/** Function to store the vtiger_report modules to database
  *  This function accepts queryid,primary module and secondary module
- *  as arguments and store the informations in reportmodules table
+ *  as arguments and store the informations in vtiger_reportmodules vtiger_table
  */
 
 
@@ -485,16 +485,16 @@ function insertReportModules($queryid,$primarymodule,$secondarymodule)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (".$queryid.",'".$primarymodule."','".$secondarymodule."')";
+		$ireportmodulesql = "insert into vtiger_reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (".$queryid.",'".$primarymodule."','".$secondarymodule."')";
 		$ireportmoduleresult = $adb->query($ireportmodulesql);
 	}
 }
 
 
-/** Function to store the report sortorder to database
+/** Function to store the vtiger_report sortorder to database
  *  This function accepts queryid,sortlists
  *  as arguments and store the informations sort columns and
- *  and sortorder in reportsortcol table
+ *  and sortorder in vtiger_reportsortcol vtiger_table
  */
 
 
@@ -505,7 +505,7 @@ function insertSortColumns($queryid,$sortlists)
 	{
 		foreach($sortlists as $i=>$sort)
                 {
-			$sort_bysql = "insert into reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) 
+			$sort_bysql = "insert into vtiger_reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) 
 					values (".($i+1).",".$queryid.",'".$sort['columnname']."','".$sort['sortorder']."')";
 			$sort_byresult = $adb->query($sort_bysql);
 		}
@@ -514,9 +514,9 @@ function insertSortColumns($queryid,$sortlists)
 }
 
 
-/** Function to store the report sort date details to database
+/** Function to store the vtiger_report sort date details to database
  *  This function accepts queryid,filtercolumn,datefilter,startdate,enddate
- *  as arguments and store the informations in reportdatefilter table
+ *  as arguments and store the informations in vtiger_reportdatefilter vtiger_table
  */
 
 
@@ -525,15 +525,15 @@ function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$startdate."','".$enddate."')";
+		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$startdate."','".$enddate."')";
 		$ireportmoduleresult = $adb->query($ireportmodulesql);
 	}
 
 }
 
-/** Function to store the report conditions to database
+/** Function to store the vtiger_report conditions to database
  *  This function accepts queryid,filters
- *  as arguments and store the informations in relcriteria table
+ *  as arguments and store the informations in vtiger_relcriteria vtiger_table
  */
 
 
@@ -544,7 +544,7 @@ function insertAdvFilter($queryid,$filters)
 	{
 		foreach($filters as $i=>$filter)
 		{
-		      $irelcriteriasql = "insert into relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) 
+		      $irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) 
 		      values (".$queryid.",".$i.",'".$filter['columnname']."','".$filter['comparator']."','".$filter['value']."')";
 		      $irelcriteriaresult = $adb->query($irelcriteriasql);
 		}

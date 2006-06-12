@@ -112,13 +112,13 @@ else
 
 $focus = new $current_bean_type();
 
-//Constructing the custom field Array
+//Constructing the custom vtiger_field Array
 require_once('include/CustomFieldUtil.php');
 $custFldArray = getCustomFieldArray($_REQUEST['module']);
 p("IMP 3: custFldArray");
 p($custFldArray);
 
-//Initializing  an empty Array to store the custom field Column Name and Value
+//Initializing  an empty Array to store the custom vtiger_field Column Name and Value
 $resCustFldArray = Array();
 
 p("Getting from request");
@@ -137,13 +137,13 @@ foreach ($_REQUEST as $name=>$value)
 		continue;
 	}
 
-	// this value is a user defined field name
+	// this value is a user defined vtiger_field name
 	$user_field = $value;
 
-	// pull out the column position for this field name
+	// pull out the column position for this vtiger_field name
 	$pos = substr($name,6);
 
-	// make sure we haven't seen this field defined yet
+	// make sure we haven't seen this vtiger_field defined yet
 	if ( isset( $field_to_pos[$user_field]) )
 	{
 		show_error_import($mod_strings['LBL_ERROR_MULTIPLE']);
@@ -153,12 +153,12 @@ foreach ($_REQUEST as $name=>$value)
 
 	p("user_field=".$user_field." if=".$focus->importable_fields[$user_field]);
 	
-	// match up the "official" field to the user 
+	// match up the "official" vtiger_field to the user 
 	// defined one, and map to columm position: 
 	if ( isset( $focus->importable_fields[$user_field] ) || isset( $custFldArray[$user_field] ))
 	{
 		p("user_field SET=".$user_field);
-		// now mark that we've seen this field
+		// now mark that we've seen this vtiger_field
 		$field_to_pos[$user_field] = $pos;
 		$col_pos_to_field[$pos] = $user_field;
 	}
@@ -207,7 +207,7 @@ if ($has_header == 1)
 	$firstrow = array_shift($datarows);
 }
 
-//Mark the last imported records as deleted which are imported by the current user in users_last_import table
+//Mark the last imported records as deleted which are imported by the current user in vtiger_users_last_import vtiger_table
 if(!isset($_REQUEST['startval']))
 {
 	$seedUsersLastImport = new UsersLastImport();

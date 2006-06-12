@@ -33,23 +33,23 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/utils/utils.php');
 
-// Account is used to store account information.
+// Account is used to store vtiger_account information.
 class Account extends CRMEntity {
 	var $log;
 	var $db;
 
 	var $table_name = "account";
-	var $tab_name = Array('crmentity','account','accountbillads','accountshipads','accountscf');
-	var $tab_name_index = Array('crmentity'=>'crmid','account'=>'accountid','accountbillads'=>'accountaddressid','accountshipads'=>'accountaddressid','accountscf'=>'accountid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_account','vtiger_accountbillads','vtiger_accountshipads','vtiger_accountscf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_account'=>'accountid','vtiger_accountbillads'=>'accountaddressid','vtiger_accountshipads'=>'accountaddressid','vtiger_accountscf'=>'accountid');
 
-	var $entity_table = "crmentity";
+	var $entity_table = "vtiger_crmentity";
 
-	var $billadr_table = "accountbillads";
+	var $billadr_table = "vtiger_accountbillads";
 
 	var $object_name = "Accounts";
 	// Mike Crowe Mod --------------------------------------------------------added for general search
-	var $base_table_name = "account";
-	var $cf_table_name = "accountscf";
+	var $base_table_name = "vtiger_account";
+	var $cf_table_name = "vtiger_accountscf";
 
 	var $new_schema = true;
 
@@ -60,13 +60,13 @@ class Account extends CRMEntity {
 	var $sortby_fields = Array('accountname','city','website','phone','smownerid');		
 
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-			'Account Name'=>Array('account'=>'accountname'),
-			'City'=>Array('accountbillads'=>'city'), 
-			'Website'=>Array('account'=>'website'),
-			'Phone'=>Array('account'=> 'phone'),
-			'Assigned To'=>Array('crmentity'=>'smownerid')
+			'Account Name'=>Array('vtiger_account'=>'accountname'),
+			'City'=>Array('vtiger_accountbillads'=>'city'), 
+			'Website'=>Array('vtiger_account'=>'website'),
+			'Phone'=>Array('vtiger_account'=> 'phone'),
+			'Assigned To'=>Array('vtiger_crmentity'=>'smownerid')
 			);
 
 	var $list_fields_name = Array(
@@ -79,8 +79,8 @@ class Account extends CRMEntity {
 	var $list_link_field= 'accountname';
 
 	var $search_fields = Array(
-			'Account Name'=>Array('account'=>'accountname'),
-			'City'=>Array('accountbillads'=>'city'), 
+			'Account Name'=>Array('vtiger_account'=>'accountname'),
+			'City'=>Array('vtiger_accountbillads'=>'city'), 
 			);
 
 	var $search_fields_name = Array(
@@ -88,7 +88,7 @@ class Account extends CRMEntity {
 			'City'=>'bill_city',
 			);
 
-	// This is the list of fields that are required.
+	// This is the list of vtiger_fields that are required.
 	var $required_fields =  array("accountname"=>1);
 
 	//Added these variables which are used as default order by and sortorder in ListView
@@ -149,21 +149,21 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 		//SQL
-		$query = "SELECT contactdetails.*,
-				crmentity.crmid,
-                        	crmentity.smownerid,
-				users.user_name
-			FROM contactdetails
-			INNER JOIN crmentity
-				ON crmentity.crmid = contactdetails.contactid
-			LEFT JOIN contactgrouprelation
-				ON contactdetails.contactid = contactgrouprelation.contactid
-			LEFT JOIN groups
-				ON groups.groupname = contactgrouprelation.groupname
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-			WHERE crmentity.deleted = 0
-			AND contactdetails.accountid = ".$id;
+		$query = "SELECT vtiger_contactdetails.*,
+			vtiger_crmentity.crmid,
+                        vtiger_crmentity.smownerid,
+			vtiger_users.user_name
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_contactgrouprelation
+				ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_contactdetails.accountid = ".$id;
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
 	}
@@ -188,23 +188,23 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT potential.potentialid, potential.accountid,
-				potential.potentialname, potential.sales_stage,
-				potential.potentialtype, potential.amount,
-				potential.closingdate, potential.potentialtype,
-				users.user_name,
-				crmentity.crmid, crmentity.smownerid
-			FROM potential
-			INNER JOIN crmentity
-				ON crmentity.crmid = potential.potentialid
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-			LEFT JOIN potentialgrouprelation
-				ON potential.potentialid = potentialgrouprelation.potentialid
-			LEFT JOIN groups
-				ON groups.groupname = potentialgrouprelation.groupname
-			WHERE crmentity.deleted = 0
-			AND potential.accountid = ".$id;
+		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.accountid,
+			vtiger_potential.potentialname, vtiger_potential.sales_stage,
+			vtiger_potential.potentialtype, vtiger_potential.amount,
+			vtiger_potential.closingdate, vtiger_potential.potentialtype,
+			vtiger_users.user_name,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			FROM vtiger_potential
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			LEFT JOIN vtiger_potentialgrouprelation
+				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_potential.accountid = ".$id;
 		$log->debug("Exiting get_opportunities method ...");
 
 		return GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
@@ -231,42 +231,42 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT activity.*,
-				seactivityrel.*,
-				contactdetails.contactid, contactdetails.lastname,
-				contactdetails.firstname,
-				crmentity.crmid, crmentity.smownerid,
-				crmentity.modifiedtime,
-				users.user_name,
-				recurringevents.recurringtype
-			FROM activity
-			INNER JOIN seactivityrel
-				ON seactivityrel.activityid = activity.activityid
-			INNER JOIN crmentity
-				ON crmentity.crmid = activity.activityid
-			LEFT JOIN cntactivityrel
-				ON cntactivityrel.activityid = activity.activityid
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = cntactivityrel.contactid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			LEFT OUTER JOIN recurringevents
-				ON recurringevents.activityid = activity.activityid
-			LEFT JOIN activitygrouprelation
-				ON activitygrouprelation.activityid = crmentity.crmid
-			LEFT JOIN groups
-				ON groups.groupname = activitygrouprelation.groupname
-			WHERE seactivityrel.crmid = ".$id."
+		$query = "SELECT vtiger_activity.*,
+			vtiger_seactivityrel.*,
+			vtiger_contactdetails.contactid, vtiger_contactdetails.lastname,
+			vtiger_contactdetails.firstname,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_crmentity.modifiedtime,
+			vtiger_users.user_name,
+			vtiger_recurringevents.recurringtype
+			FROM vtiger_activity
+			INNER JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT OUTER JOIN vtiger_recurringevents
+				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			WHERE vtiger_seactivityrel.crmid = ".$id."
 			AND (activitytype='Task'
-				OR activitytype='Call'
-				OR activitytype='Meeting')
-			AND crmentity.deleted = 0
-			AND ((activity.status IS NOT NULL
-					AND activity.status != 'Completed')
-				AND (activity.status IS NOT NULL
-					AND activity.status != 'Deferred')
-				OR (activity.eventstatus !=''
-					AND  activity.eventstatus != 'Held'))";
+				OR vtiger_activitytype='Call'
+				OR vtiger_activitytype='Meeting')
+			AND vtiger_crmentity.deleted = 0
+			AND ((vtiger_activity.status IS NOT NULL
+					AND vtiger_activity.status != 'Completed')
+				AND (vtiger_activity.status IS NOT NULL
+					AND vtiger_activity.status != 'Deferred')
+				OR (vtiger_activity.eventstatus !=''
+					AND  vtiger_activity.eventstatus != 'Held'))";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 
@@ -276,37 +276,37 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT activity.activityid, activity.subject,
-				activity.status, activity.eventstatus,
-				activity.activitytype,
-				contactdetails.contactid, contactdetails.firstname,
-				contactdetails.lastname,
-				crmentity.modifiedtime, crmentity.createdtime,
-				crmentity.description,
-				users.user_name
-			FROM activity
-			INNER JOIN seactivityrel
-				ON seactivityrel.activityid = activity.activityid
-			INNER JOIN crmentity
-				ON crmentity.crmid = activity.activityid
-			LEFT JOIN cntactivityrel
-				ON cntactivityrel.activityid = activity.activityid 
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = cntactivityrel.contactid
-			LEFT JOIN activitygrouprelation
-				ON activitygrouprelation.activityid = activity.activityid
-			LEFT JOIN groups
-				ON groups.groupname = activitygrouprelation.groupname
-			INNER JOIN users
-				ON crmentity.smcreatorid = users.id
-			WHERE (activity.activitytype = 'Meeting'
-				OR activity.activitytype = 'Call'
-				OR activity.activitytype = 'Task')
-			AND (activity.status = 'Completed'
-				OR activity.status = 'Deferred'
-				OR (activity.eventstatus = 'Held'
-					AND activity.eventstatus != ''))
-			AND seactivityrel.crmid = ".$id;
+		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject,
+			vtiger_activity.status, vtiger_activity.eventstatus,
+			vtiger_activity.activitytype,
+			vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
+			vtiger_contactdetails.lastname,
+			vtiger_crmentity.modifiedtime, vtiger_crmentity.createdtime,
+			vtiger_crmentity.description,
+			vtiger_users.user_name
+			FROM vtiger_activity
+			INNER JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid 
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			INNER JOIN vtiger_users
+				ON vtiger_crmentity.smcreatorid = vtiger_users.id
+			WHERE (vtiger_activity.activitytype = 'Meeting'
+				OR vtiger_activity.activitytype = 'Call'
+				OR vtiger_activity.activitytype = 'Task')
+			AND (vtiger_activity.status = 'Completed'
+				OR vtiger_activity.status = 'Deferred'
+				OR (vtiger_activity.eventstatus = 'Held'
+					AND vtiger_activity.eventstatus != ''))
+			AND vtiger_seactivityrel.crmid = ".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Accounts',$query,$id);
@@ -317,49 +317,49 @@ class Account extends CRMEntity {
 		 global $log;
                  $log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
-		$query = "SELECT notes.title, notes.notecontent AS description,
-				notes.filename, notes.notesid AS crmid,
+		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
+		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		$query = "SELECT vtiger_notes.title, vtiger_notes.notecontent AS description,
+			vtiger_notes.filename, vtiger_notes.notesid AS crmid,
 				'Notes      ' AS ActivityType,
-				attachments.type AS FileType,
+			vtiger_attachments.type AS FileType,
 				crm2.modifiedtime AS lastmodified, crm2.createdtime,
-				seattachmentsrel.attachmentsid,
-				users.user_name
-			FROM notes
-			INNER JOIN senotesrel
-				ON senotesrel.notesid = notes.notesid
-			INNER JOIN crmentity
-				ON crmentity.crmid = senotesrel.crmid
-			INNER JOIN crmentity crm2
-				ON crm2.crmid = notes.notesid
+			vtiger_seattachmentsrel.attachmentsid,
+			vtiger_users.user_name
+			FROM vtiger_notes
+			INNER JOIN vtiger_senotesrel
+				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_senotesrel.crmid
+			INNER JOIN vtiger_crmentity crm2
+				ON crm2.crmid = vtiger_notes.notesid
 				AND crm2.deleted = 0
-			LEFT JOIN seattachmentsrel
-				ON seattachmentsrel.crmid = notes.notesid
-			LEFT JOIN attachments
-				ON seattachmentsrel.attachmentsid = attachments.attachmentsid
-			INNER JOIN users
-				ON crm2.smcreatorid = users.id
-			WHERE crmentity.crmid = ".$id."
+			LEFT JOIN vtiger_seattachmentsrel
+				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
+			LEFT JOIN vtiger_attachments
+				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+			INNER JOIN vtiger_users
+				ON crm2.smcreatorid = vtiger_users.id
+			WHERE vtiger_crmentity.crmid = ".$id."
 		 UNION ALL
-			SELECT attachments.description AS title, attachments.description,
-				attachments.name AS filename,
-				seattachmentsrel.attachmentsid AS crmid,
+			SELECT vtiger_attachments.description AS title, vtiger_attachments.description,
+			vtiger_attachments.name AS filename,
+			vtiger_seattachmentsrel.attachmentsid AS crmid,
 				'Attachments' AS ActivityType,
-				attachments.type AS FileType,
+			vtiger_attachments.type AS FileType,
 				crm2.modifiedtime AS lastmodified, crm2.createdtime,
-				attachments.attachmentsid,
-				users.user_name
-			FROM attachments
-			INNER JOIN seattachmentsrel
-				ON seattachmentsrel.attachmentsid = attachments.attachmentsid
-			INNER JOIN crmentity
-				ON crmentity.crmid = seattachmentsrel.crmid
-			INNER JOIN crmentity crm2
-				ON crm2.crmid = attachments.attachmentsid
-			INNER JOIN users
-				ON crm2.smcreatorid = users.id
-			WHERE crmentity.crmid = ".$id."
+			vtiger_attachments.attachmentsid,
+			vtiger_users.user_name
+			FROM vtiger_attachments
+			INNER JOIN vtiger_seattachmentsrel
+				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.crmid
+			INNER JOIN vtiger_crmentity crm2
+				ON crm2.crmid = vtiger_attachments.attachmentsid
+			INNER JOIN vtiger_users
+				ON crm2.smcreatorid = vtiger_users.id
+			WHERE vtiger_crmentity.crmid = ".$id."
 			ORDER BY createdtime DESC";
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Accounts',$query,$id);
@@ -381,27 +381,27 @@ class Account extends CRMEntity {
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 
-		$query = "SELECT users.user_name,
-				groups.groupname,
-				crmentity.*,
-				quotes.*,
-				potential.potentialname,
-				account.accountname
-			FROM quotes
-			INNER JOIN crmentity
-				ON crmentity.crmid = quotes.quoteid
-			LEFT OUTER JOIN account
-				ON account.accountid = quotes.accountid
-			LEFT OUTER JOIN potential
-				ON potential.potentialid = quotes.potentialid
-			LEFT JOIN quotegrouprelation
-				ON quotes.quoteid = quotegrouprelation.quoteid
-			LEFT JOIN groups
-				ON groups.groupname = quotegrouprelation.groupname
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-			WHERE crmentity.deleted = 0
-			AND account.accountid = ".$id;
+		$query = "SELECT vtiger_users.user_name,
+			vtiger_groups.groupname,
+			vtiger_crmentity.*,
+			vtiger_quotes.*,
+			vtiger_potential.potentialname,
+			vtiger_account.accountname
+			FROM vtiger_quotes
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_quotes.accountid
+			LEFT OUTER JOIN vtiger_potential
+				ON vtiger_potential.potentialid = vtiger_quotes.potentialid
+			LEFT JOIN vtiger_quotegrouprelation
+				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_account.accountid = ".$id;
 		$log->debug("Exiting get_quotes method ...");
 		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
@@ -421,27 +421,27 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT users.user_name,
-				groups.groupname,
-				crmentity.*,
-				invoice.*,
-				account.accountname,
-				salesorder.subject AS salessubject
-			FROM invoice
-			INNER JOIN crmentity
-				ON crmentity.crmid = invoice.invoiceid
-			LEFT OUTER JOIN account
-				ON account.accountid = invoice.accountid
-			LEFT OUTER JOIN salesorder
-				ON salesorder.salesorderid = invoice.salesorderid
-			LEFT JOIN invoicegrouprelation
-				ON invoice.invoiceid = invoicegrouprelation.invoiceid
-			LEFT JOIN groups
-				ON groups.groupname = invoicegrouprelation.groupname
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-			WHERE crmentity.deleted = 0
-			AND account.accountid = ".$id;
+		$query = "SELECT vtiger_users.user_name,
+			vtiger_groups.groupname,
+			vtiger_crmentity.*,
+			vtiger_invoice.*,
+			vtiger_account.accountname,
+			vtiger_salesorder.subject AS salessubject
+			FROM vtiger_invoice
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_invoice.accountid
+			LEFT OUTER JOIN vtiger_salesorder
+				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
+			LEFT JOIN vtiger_invoicegrouprelation
+				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_account.accountid = ".$id;
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
@@ -462,27 +462,27 @@ class Account extends CRMEntity {
 
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT crmentity.*,
-				salesorder.*,
-				quotes.subject AS quotename,
-				account.accountname,
-				users.user_name,
-				groups.groupname
-			FROM salesorder
-			INNER JOIN crmentity
-				ON crmentity.crmid = salesorder.salesorderid
-			LEFT OUTER JOIN quotes
-				ON quotes.quoteid = salesorder.quoteid
-			LEFT OUTER JOIN account
-				ON account.accountid = salesorder.accountid
-			LEFT JOIN sogrouprelation
-				ON salesorder.salesorderid = sogrouprelation.salesorderid
-			LEFT JOIN groups
-				ON groups.groupname = sogrouprelation.groupname
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-			WHERE crmentity.deleted = 0
-			AND salesorder.accountid = ".$id;
+		$query = "SELECT vtiger_crmentity.*,
+			vtiger_salesorder.*,
+			vtiger_quotes.subject AS quotename,
+			vtiger_account.accountname,
+			vtiger_users.user_name,
+			vtiger_groups.groupname
+			FROM vtiger_salesorder
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
+			LEFT OUTER JOIN vtiger_quotes
+				ON vtiger_quotes.quoteid = vtiger_salesorder.quoteid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_salesorder.accountid
+			LEFT JOIN vtiger_sogrouprelation
+				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_salesorder.accountid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");		
 		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
@@ -498,23 +498,23 @@ class Account extends CRMEntity {
 		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT users.user_name, users.id,
-				troubletickets.title, troubletickets.ticketid AS crmid,
-				troubletickets.status, troubletickets.priority,
-				troubletickets.parent_id,
-				crmentity.smownerid, crmentity.modifiedtime
-			FROM troubletickets
-			INNER JOIN crmentity
-				ON crmentity.crmid = troubletickets.ticketid
-			LEFT JOIN account
-				ON account.accountid = troubletickets.parent_id
-			LEFT JOIN users
-				ON users.id=crmentity.smownerid
-			LEFT JOIN ticketgrouprelation
-				ON troubletickets.ticketid = ticketgrouprelation.ticketid
-			LEFT JOIN groups
-				ON groups.groupname = ticketgrouprelation.groupname
-			WHERE account.accountid = ".$id ;
+		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
+			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
+			vtiger_troubletickets.status, vtiger_troubletickets.priority,
+			vtiger_troubletickets.parent_id,
+			vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime
+			FROM vtiger_troubletickets
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_troubletickets.parent_id
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id=vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_ticketgrouprelation
+				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+			WHERE vtiger_account.accountid = ".$id ;
 		//Appending the security parameter
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -527,25 +527,25 @@ class Account extends CRMEntity {
 
 		}
 		$query .= " UNION ALL
-			SELECT users.user_name, users.id,
-				troubletickets.title, troubletickets.ticketid AS crmid,
-				troubletickets.status, troubletickets.priority,
-				troubletickets.parent_id,
-				crmentity.smownerid, crmentity.modifiedtime
-			FROM troubletickets
-			INNER JOIN crmentity
-				ON crmentity.crmid = troubletickets.ticketid
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = troubletickets.parent_id
-			LEFT JOIN account
-				ON account.accountid = contactdetails.accountid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			LEFT JOIN ticketgrouprelation
-				ON troubletickets.ticketid = ticketgrouprelation.ticketid
-			LEFT JOIN groups
-				ON groups.groupname = ticketgrouprelation.groupname
-			WHERE account.accountid = ".$id;
+			SELECT vtiger_users.user_name, vtiger_users.id,
+			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
+			vtiger_troubletickets.status, vtiger_troubletickets.priority,
+			vtiger_troubletickets.parent_id,
+			vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime
+			FROM vtiger_troubletickets
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_ticketgrouprelation
+				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+			WHERE vtiger_account.accountid = ".$id;
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
@@ -569,19 +569,19 @@ class Account extends CRMEntity {
 		}
 		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT products.productid, products.productname,
-				products.productcode, products.commissionrate,
-				products.qty_per_unit, products.unit_price,
-				crmentity.crmid, crmentity.smownerid
-			FROM products
-			INNER JOIN seproductsrel
-				ON products.productid = seproductsrel.productid
-			INNER JOIN crmentity
-				ON crmentity.crmid = products.productid
-			INNER JOIN account
-				ON account.accountid = seproductsrel.crmid
-			WHERE account.accountid = ".$id."
-			AND crmentity.deleted = 0";
+		$query = "SELECT vtiger_products.productid, vtiger_products.productname,
+			vtiger_products.productcode, vtiger_products.commissionrate,
+			vtiger_products.qty_per_unit, vtiger_products.unit_price,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			FROM vtiger_products
+			INNER JOIN vtiger_seproductsrel
+				ON vtiger_products.productid = vtiger_seproductsrel.productid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_products.productid
+			INNER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_seproductsrel.crmid
+			WHERE vtiger_account.accountid = ".$id."
+			AND vtiger_crmentity.deleted = 0";
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
 	}
@@ -595,62 +595,62 @@ class Account extends CRMEntity {
 		{
 
 			$query = $this->constructCustomQueryAddendum('accountscf','Accounts') . "
-					account.*,
+				vtiger_account.*,
 					".$this->entity_table.".*,
-					accountbillads.city AS billing_city,
-					accountbillads.country AS billing_country,
-					accountbillads.code AS billing_code,
-					accountbillads.state AS billing_state,
-					accountbillads.street AS billing_street,
-					accountshipads.city AS shipping_city,
-					accountshipads.country AS shipping_country,
-					accountshipads.code AS shipping_code,
-					accountshipads.state AS shipping_state,
-					accountshipads.street AS shipping_street,
-					users.user_name,
-					users.status AS user_status
+				vtiger_accountbillads.city AS billing_city,
+				vtiger_accountbillads.country AS billing_country,
+				vtiger_accountbillads.code AS billing_code,
+				vtiger_accountbillads.state AS billing_state,
+				vtiger_accountbillads.street AS billing_street,
+				vtiger_accountshipads.city AS shipping_city,
+				vtiger_accountshipads.country AS shipping_country,
+				vtiger_accountshipads.code AS shipping_code,
+				vtiger_accountshipads.state AS shipping_state,
+				vtiger_accountshipads.street AS shipping_street,
+				vtiger_users.user_name,
+				vtiger_users.status AS user_status
 				FROM ".$this->entity_table."
-				INNER JOIN account
-					ON crmentity.crmid = account.accountid
-				LEFT JOIN accountbillads
-					ON account.accountid = accountbillads.accountaddressid
-				LEFT JOIN accountshipads
-					ON account.accountid = accountshipads.accountaddressid
-				LEFT JOIN accountscf 
-					ON accountscf.accountid = account.accountid
-				LEFT JOIN users
-					ON crmentity.smownerid = users.id ";
+				INNER JOIN vtiger_account
+					ON vtiger_crmentity.crmid = vtiger_account.accountid
+				LEFT JOIN vtiger_accountbillads
+					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+				LEFT JOIN vtiger_accountshipads
+					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+				LEFT JOIN vtiger_accountscf 
+					ON vtiger_accountscf.accountid = vtiger_account.accountid
+				LEFT JOIN vtiger_users
+					ON vtiger_crmentity.smownerid = vtiger_users.id ";
 
 		}
 		else
 		{
-			$query = "SELECT account.*,
+			$query = "SELECT vtiger_account.*,
 					".$this->entity_table.".*,
-					accountbillads.city AS billing_city,
-					accountbillads.country AS billing_country,
-					accountbillads.code AS billing_code,
-					accountbillads.state AS billing_state,
-					accountbillads.street AS billing_street,
-					accountshipads.city AS shipping_city,
-					accountshipads.country AS shipping_country,
-					accountshipads.code AS shipping_code,
-					accountshipads.state AS shipping_state,
-					accountshipads.street AS shipping_street,
-					users.user_name,
-					users.status AS user_status
+				vtiger_accountbillads.city AS billing_city,
+				vtiger_accountbillads.country AS billing_country,
+				vtiger_accountbillads.code AS billing_code,
+				vtiger_accountbillads.state AS billing_state,
+				vtiger_accountbillads.street AS billing_street,
+				vtiger_accountshipads.city AS shipping_city,
+				vtiger_accountshipads.country AS shipping_country,
+				vtiger_accountshipads.code AS shipping_code,
+				vtiger_accountshipads.state AS shipping_state,
+				vtiger_accountshipads.street AS shipping_street,
+				vtiger_users.user_name,
+				vtiger_users.status AS user_status
 				FROM ".$this->entity_table."
-				INNER JOIN account
-					ON crmentity.crmid = account.accountid
-				LEFT JOIN accountbillads
-					ON account.accountid = accountbillads.accountaddressid
-				LEFT JOIN accountshipads
-					ON account.accountid = accountshipads.accountaddressid
-				LEFT JOIN users
-					ON crmentity.smownerid = users.id ";
+				INNER JOIN vtiger_account
+					ON vtiger_crmentity.crmid = vtiger_account.accountid
+				LEFT JOIN vtiger_accountbillads
+					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+				LEFT JOIN vtiger_accountshipads
+					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+				LEFT JOIN vtiger_users
+					ON vtiger_crmentity.smownerid = vtiger_users.id ";
 		}
 
-		$where_auto = " users.status = 'Active'
-			AND crmentity.deleted = 0 ";
+		$where_auto = " vtiger_users.status = 'Active'
+			AND vtiger_crmentity.deleted = 0 ";
 
 		if($where != "")
 			$query .= "WHERE ($where) AND ".$where_auto;
@@ -669,7 +669,7 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getColumnNames_Acnt() method ...");
-		$sql1 = "SELECT fieldlabel FROM field WHERE tabid = 6";
+		$sql1 = "SELECT vtiger_fieldlabel FROM vtiger_field WHERE vtiger_tabid = 6";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)

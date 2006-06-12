@@ -35,11 +35,11 @@ $comboFieldNames = Array('leadsource'=>'lead_source_dom'
                       ,'sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-// Account is used to store account information.
+// Account is used to store vtiger_account information.
 class ImportOpportunity extends Potential {
 	 var $db;
 
-	// This is the list of fields that are required.
+	// This is the list of vtiger_fields that are required.
 	/*
 	var $required_fields =  array(
 					"potentialname"=>1,
@@ -133,9 +133,9 @@ class ImportOpportunity extends Potential {
 
 		$query = '';
 
-		// if user is defining the account id to be associated with this contact..
+		// if user is defining the vtiger_account id to be associated with this contact..
 		$acc_name = trim(addslashes($acc_name));
-		$query = "select crmentity.deleted, account.* from account,crmentity WHERE accountname='{$acc_name}' and crmentity.crmid =account.accountid";
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account,crmentity WHERE vtiger_accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid";
 
                 $this->log->info($query);
 
@@ -143,7 +143,7 @@ class ImportOpportunity extends Potential {
 
                 $row = $this->db->fetchByAssoc($result, -1, false);
 
-		$adb->println("fetched account");
+		$adb->println("fetched vtiger_account");
 		$adb->println($row);
 
 		// we found a row with that id
@@ -153,14 +153,14 @@ class ImportOpportunity extends Potential {
                         if ( isset($row['deleted']) && $row['deleted'] == 1)
                         {
 				$adb->println("row exists - deleting");
-                                $query2 = "delete from crmentity WHERE crmid='". $row['accountid']."'";
+                                $query2 = "delete from vtiger_crmentity WHERE crmid='". $row['accountid']."'";
 
                                 $this->log->info($query2);
 
                                 $result2 = $adb->query($query2)	or die("Error deleting existing sugarbean: ".mysql_error());
 
                         }
-			// else just use this id to link the contact to the account
+			// else just use this id to link the contact to the vtiger_account
                         else
                         {				
                                 $focus->id = $row['accountid'];
@@ -168,10 +168,10 @@ class ImportOpportunity extends Potential {
                         }
                 }
 
-		// if we didnt find the account, so create it
+		// if we didnt find the vtiger_account, so create it
                 if (! isset($focus->id) || $focus->id == '')
                 {
-			$adb->println("Createing new account");
+			$adb->println("Createing new vtiger_account");
                         $focus->column_fields['accountname'] = $acc_name;
                         $focus->column_fields['assigned_user_id'] = $current_user->id;
                         $focus->column_fields['modified_user_id'] = $current_user->id;
@@ -184,8 +184,8 @@ class ImportOpportunity extends Potential {
 			// avoid duplicate mappings:
 			if (! isset( $imported_ids[$acc_id]) )
 			{
-				$adb->println("inserting users last import for accounts");
-				// save the new account as a users_last_import
+				$adb->println("inserting vtiger_users last import for vtiger_accounts");
+				// save the new vtiger_account as a vtiger_users_last_import
                 		$last_import = new UsersLastImport();
                 		$last_import->assigned_user_id = $current_user->id;
                 		$last_import->bean_type = "Accounts";
@@ -196,7 +196,7 @@ class ImportOpportunity extends Potential {
                 }
 
 		$adb->println("prev contact accid=".$this->column_fields["account_id"]);
-		// now just link the account
+		// now just link the vtiger_account
                 $this->column_fields["account_id"] = $focus->id;
 		$adb->println("curr contact accid=".$this->column_fields["account_id"]);
 
@@ -213,7 +213,7 @@ class ImportOpportunity extends Potential {
 	}
 
 	
-	// This is the list of fields that are importable.
+	// This is the list of vtiger_fields that are importable.
 	// some if these do not map directly to database columns
 	/*var $importable_fields = Array(
 		"id"=>1

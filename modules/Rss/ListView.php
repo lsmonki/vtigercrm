@@ -70,7 +70,7 @@ if(isset($_REQUEST[record]))
 {
 	$rss_form->assign("TITLE",gerRssTitle());
 	$rss_html = $oRss->getStarredRssHTML();
-	$query = "select rssid from rss where starred=1";
+	$query = "select rssid from vtiger_rss where starred=1";
 	$result = $adb->query($query);
 	$recordid = $adb->query_result($result,0,'rssid');
 	$rss_form->assign("ID",$recordid);

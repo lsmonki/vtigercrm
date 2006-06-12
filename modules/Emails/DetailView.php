@@ -42,7 +42,7 @@ if(isset($_REQUEST['record']))
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
-	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from emaildetails where emailid ='.$focus->id;
+	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid ='.$focus->id;
 	$result = $adb->query($query);
     	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));

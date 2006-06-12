@@ -105,7 +105,7 @@ else
 
 $smarty->assign("OP_MODE",$disp_view);
 
-//needed when creating a new contact with a default account value passed in
+//needed when creating a new contact with a default vtiger_account value passed in
 if (isset($_REQUEST['account_name']) && is_null($focus->account_name)) {
 	$focus->account_name = $_REQUEST['account_name'];
 	
@@ -147,7 +147,7 @@ if($focus->mode == 'edit')
 if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] !='')
         $smarty->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
 
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 

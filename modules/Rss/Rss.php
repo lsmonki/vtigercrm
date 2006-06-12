@@ -112,7 +112,7 @@ class vtigerRSS extends CRMEntity
 				$rsstitle = $url;
 			}
 			$genRssId = $adb->getUniqueID("rss");
-			$sSQL = "insert into rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (".$genRssId.",'".addslashes($url);
+			$sSQL = "insert into vtiger_rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (".$genRssId.",'".addslashes($url);
 			$sSQL .= "','".addslashes($rsstitle)."',0,".$makestarred.")";
 			$result = $adb->query($sSQL);
 			if($result)
@@ -129,7 +129,7 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path;
 
-		$sSQL = "select * from rss where rsstype=1";
+		$sSQL = "select * from vtiger_rss where rsstype=1";
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))
 		{
@@ -157,7 +157,7 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path;
 
-		$sSQL = "select * from rss where rsstype <> 1";
+		$sSQL = "select * from vtiger_rss where rsstype <> 1";
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))	
 		{
@@ -179,8 +179,8 @@ class vtigerRSS extends CRMEntity
 		return $shtml;
 	}
 
-	/** Function to get the rssurl for the given id  
-	  * This Function accepts the rssid as argument and returns the rssurl for that id
+	/** Function to get the vtiger_rssurl for the given id  
+	  * This Function accepts the vtiger_rssid as argument and returns the vtiger_rssurl for that id
 	 */
 	function getRssUrlfromId($rssid)
 	{
@@ -188,7 +188,7 @@ class vtigerRSS extends CRMEntity
 
 		if($rssid != "")
 		{
-			$sSQL = "select * from rss where rssid=".$rssid;
+			$sSQL = "select * from vtiger_rss where rssid=".$rssid;
 			$result = $adb->query($sSQL);
 			$rssrow = $adb->fetch_array($result);
 
@@ -207,7 +207,7 @@ class vtigerRSS extends CRMEntity
 
 		if($rssid != "")
 		{
-			$sSQL = "select * from rss where rssid=".$rssid;
+			$sSQL = "select * from vtiger_rss where rssid=".$rssid;
 			$result = $adb->query($sSQL);
 			$rssrow = $adb->fetch_array($result);
 
@@ -238,7 +238,7 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path;
 
-		$sSQL = "select * from rss where starred=1";
+		$sSQL = "select * from vtiger_rss where starred=1";
 		$result = $adb->query($sSQL);
 		$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
 
@@ -250,8 +250,8 @@ class vtigerRSS extends CRMEntity
 		return $shtml;
 	}
 	
-	/** Function to get the rssfeed lists for the starred Rss feeds  
-	  * This Function accepts no argument and returns the rss feeds of 
+	/** Function to get the vtiger_rssfeed lists for the starred Rss feeds  
+	  * This Function accepts no argument and returns the vtiger_rss feeds of 
 	  * the starred Feeds as HTML strings
 	 */
 	function getStarredRssHTML()
@@ -259,7 +259,7 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path,$mod_strings;
 
-		$sSQL = "select * from rss where starred=1";
+		$sSQL = "select * from vtiger_rss where starred=1";
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))
 		{
@@ -298,15 +298,15 @@ class vtigerRSS extends CRMEntity
 
 	}
 
-	/** Function to get the rssfeed lists for the given rssid  
-	  * This Function accepts the rssid as argument and returns the rss feeds as HTML strings
+	/** Function to get the vtiger_rssfeed lists for the given vtiger_rssid  
+	  * This Function accepts the vtiger_rssid as argument and returns the vtiger_rss feeds as HTML strings
 	 */
 	function getSelectedRssHTML($rssid)
 	{
 		global $adb;
 		global $image_path, $mod_strings;
 
-		$sSQL = "select * from rss where rssid=".$rssid;
+		$sSQL = "select * from vtiger_rss where rssid=".$rssid;
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))
 		{
@@ -372,7 +372,7 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path;
 
-		$sSQL = "select * from rss";
+		$sSQL = "select * from vtiger_rss";
 		$result = $adb->query($sSQL);
 		while($allrssrow = $adb->fetch_array($result))
 		{
@@ -393,7 +393,7 @@ class vtigerRSS extends CRMEntity
 
 	}
 
-	/** Function to get the rsscategories   
+	/** Function to get the vtiger_rsscategories   
 	* This Function accepts no argument and returns the categorylist as an array
 	*/
 
@@ -401,7 +401,7 @@ class vtigerRSS extends CRMEntity
 	{
 		global $adb;
 		global $image_path;
-		$sSQL = "select * from rsscategory where presence = 1 order by sortorderid";
+		$sSQL = "select * from vtiger_rsscategory where presence = 1 order by sortorderid";
 		$result = $adb->query($sSQL);
 
 		while($categoryrow = $adb->fetch_array($result))
@@ -426,17 +426,17 @@ class vtigerRSS extends CRMEntity
 	}
 }
 
-/** Function to get the rsstitle for the given rssid  
- * This Function accepts the rssid as an optional argument and returns the title
- * if no id is passed it will return the tittle of the starred rss
+/** Function to get the vtiger_rsstitle for the given vtiger_rssid  
+ * This Function accepts the vtiger_rssid as an optional argument and returns the title
+ * if no id is passed it will return the tittle of the starred vtiger_rss
  */
 function gerRssTitle($id='')
 {
 	global $adb;
 	if($id == '')
-		$query = 'select * from rss where starred=1';	 
+		$query = 'select * from vtiger_rss where starred=1';	 
 	else		
-		$query = 'select * from rss where rssid ='.$id;	 
+		$query = 'select * from vtiger_rss where rssid ='.$id;	 
 	$result = $adb->query($query);	
 	$title = $adb->query_result($result,0,'rsstitle');
 	return $title;

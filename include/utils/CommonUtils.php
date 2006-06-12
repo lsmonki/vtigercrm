@@ -119,7 +119,7 @@ function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key
 	foreach ($key_list as $option_key=>$option_value) {
 		$selected_string = '';
 		// the system is evaluating $selected_key == 0 || '' to true.  Be very careful when changing this.  Test all cases.
-		// The reported bug was only happening with one of the users in the drop down.  It was being replaced by none.
+		// The vtiger_reported bug was only happening with one of the vtiger_users in the drop down.  It was being replaced by none.
 		if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (in_array($option_key, $selected_key)))
 		{
 			$selected_string = 'selected ';
@@ -221,22 +221,22 @@ function from_html($string, $encode=true){
 
 /** To get the Currency of the specified user
   * @param $id -- The user Id:: Type integer
-  * @returns  currencyid :: Type integer
+  * @returns  vtiger_currencyid :: Type integer
  */
 function fetchCurrency($id)
 {
 	global $log;
 	$log->debug("Entering fetchCurrency(".$id.") method ...");
         global $adb;
-        $sql = "select currency_id from users where id=" .$id;
+        $sql = "select currency_id from vtiger_users where id=" .$id;
         $result = $adb->query($sql);
         $currencyid=  $adb->query_result($result,0,"currency_id");
 	$log->debug("Exiting fetchCurrency method ...");
         return $currencyid;
 }
 
-/** Function to get the Currency name from the currency_info
-  * @param $currencyid -- currencyid:: Type integer
+/** Function to get the Currency name from the vtiger_currency_info
+  * @param $currencyid -- vtiger_currencyid:: Type integer
   * @returns $currencyname -- Currency Name:: Type varchar
   *
  */
@@ -255,7 +255,7 @@ function getCurrencyName($currencyid)
 
 
 /**
- * Function to fetch the list of groups from group table 
+ * Function to fetch the list of vtiger_groups from group vtiger_table 
  * Takes no value as input 
  * returns the query result set object
  */
@@ -265,7 +265,7 @@ function get_group_options()
 	global $log;
 	$log->debug("Entering get_group_options() method ...");
 	global $adb,$noof_group_rows;;
-	$sql = "select groupname from groups";
+	$sql = "select groupname from vtiger_groups";
 	$result = $adb->query($sql);
 	$noof_group_rows=$adb->num_rows($result);
 	$log->debug("Exiting get_group_options method ...");
@@ -293,7 +293,7 @@ function getTabid($module)
 
         $log->info("module  is ".$module);
         global $adb;
-	$sql = "select tabid from tab where name='".$module."'";
+	$sql = "select tabid from vtiger_tab where name='".$module."'";
 	$result = $adb->query($sql);
 	$tabid=  $adb->query_result($result,0,"tabid");
 	}
@@ -314,7 +314,7 @@ function getSalesEntityType($crmid)
 	$log->debug("Entering getSalesEntityType(".$crmid.") method ...");
 	$log->info("in getSalesEntityType ".$crmid);
 	global $adb;
-	$sql = "select * from crmentity where crmid=".$crmid;
+	$sql = "select * from vtiger_crmentity where crmid=".$crmid;
         $result = $adb->query($sql);
 	$parent_module = $adb->query_result($result,0,"setype");
 	$log->debug("Exiting getSalesEntityType method ...");
@@ -322,9 +322,9 @@ function getSalesEntityType($crmid)
 }
 
 /**
- * Function to get the AccountName when a account id is given 
- * Takes the input as $acount_id - account id
- * returns the account name in string format.
+ * Function to get the AccountName when a vtiger_account id is given 
+ * Takes the input as $acount_id - vtiger_account id
+ * returns the vtiger_account name in string format.
  */
 
 function getAccountName($account_id)
@@ -336,7 +336,7 @@ function getAccountName($account_id)
 	global $adb;
 	if($account_id != '')
 	{
-		$sql = "select accountname from account where accountid=".$account_id;
+		$sql = "select accountname from vtiger_account where accountid=".$account_id;
         	$result = $adb->query($sql);
 		$accountname = $adb->query_result($result,0,"accountname");
 	}
@@ -358,7 +358,7 @@ function getProductName($product_id)
 	$log->info("in getproductname ".$product_id);
 
 	global $adb;
-	$sql = "select productname from products where productid=".$product_id;
+	$sql = "select productname from vtiger_products where productid=".$product_id;
         $result = $adb->query($sql);
 	$productname = $adb->query_result($result,0,"productname");
 	$log->debug("Exiting getProductName method ...");
@@ -366,9 +366,9 @@ function getProductName($product_id)
 }
 
 /**
- * Function to get the Potentail Name when a potential id is given 
- * Takes the input as $potential_id - potential id
- * returns the potential name in string format.
+ * Function to get the Potentail Name when a vtiger_potential id is given 
+ * Takes the input as $potential_id - vtiger_potential id
+ * returns the vtiger_potential name in string format.
  */
 
 function getPotentialName($potential_id)
@@ -381,7 +381,7 @@ function getPotentialName($potential_id)
 	$potentialname = '';
 	if($potential_id != '')
 	{
-		$sql = "select potentialname from potential where potentialid=".$potential_id;
+		$sql = "select potentialname from vtiger_potential where potentialid=".$potential_id;
         	$result = $adb->query($sql);
 		$potentialname = $adb->query_result($result,0,"potentialname");
 	}
@@ -402,7 +402,7 @@ function getContactName($contact_id)
 	$log->info("in getContactName ".$contact_id);
 
         global $adb;
-        $sql = "select * from contactdetails where contactid=".$contact_id;
+        $sql = "select * from vtiger_contactdetails where contactid=".$contact_id;
         $result = $adb->query($sql);
         $firstname = $adb->query_result($result,0,"firstname");
         $lastname = $adb->query_result($result,0,"lastname");
@@ -412,8 +412,8 @@ function getContactName($contact_id)
 }
 
 /**
- * Function to get the Vendor Name when a vendor id is given 
- * Takes the input as $vendor_id - vendor id
+ * Function to get the Vendor Name when a vtiger_vendor id is given 
+ * Takes the input as $vendor_id - vtiger_vendor id
  * returns the Vendor Name in string format.
  */
 
@@ -423,7 +423,7 @@ function getVendorName($vendor_id)
 	$log->debug("Entering getVendorName(".$vendor_id.") method ...");
 	$log->info("in getVendorName ".$vendor_id);
         global $adb;
-        $sql = "select * from vendor where vendorid=".$vendor_id;
+        $sql = "select * from vtiger_vendor where vendorid=".$vendor_id;
         $result = $adb->query($sql);
         $vendor_name = $adb->query_result($result,0,"vendorname");
 	$log->debug("Exiting getVendorName method ...");
@@ -431,7 +431,7 @@ function getVendorName($vendor_id)
 }
 
 /**
- * Function to get the Quote Name when a vendor id is given 
+ * Function to get the Quote Name when a vtiger_vendor id is given 
  * Takes the input as $quote_id - quote id
  * returns the Quote Name in string format.
  */
@@ -442,7 +442,7 @@ function getQuoteName($quote_id)
 	$log->debug("Entering getQuoteName(".$quote_id.") method ...");
 	$log->info("in getQuoteName ".$quote_id);
         global $adb;
-        $sql = "select * from quotes where quoteid=".$quote_id;
+        $sql = "select * from vtiger_quotes where quoteid=".$quote_id;
         $result = $adb->query($sql);
         $quote_name = $adb->query_result($result,0,"subject");
 	$log->debug("Exiting getQuoteName method ...");
@@ -450,8 +450,8 @@ function getQuoteName($quote_id)
 }
 
 /**
- * Function to get the PriceBook Name when a pricebook id is given 
- * Takes the input as $pricebook_id - pricebook id
+ * Function to get the PriceBook Name when a vtiger_pricebook id is given 
+ * Takes the input as $pricebook_id - vtiger_pricebook id
  * returns the PriceBook Name in string format.
  */
 
@@ -461,7 +461,7 @@ function getPriceBookName($pricebookid)
 	$log->debug("Entering getPriceBookName(".$pricebookid.") method ...");
 	$log->info("in getPriceBookName ".$pricebookid);
         global $adb;
-        $sql = "select * from pricebook where pricebookid=".$pricebookid;
+        $sql = "select * from vtiger_pricebook where pricebookid=".$pricebookid;
         $result = $adb->query($sql);
         $pricebook_name = $adb->query_result($result,0,"bookname");
 	$log->debug("Exiting getPriceBookName method ...");
@@ -478,15 +478,15 @@ function getPoName($po_id)
 	$log->debug("Entering getPoName(".$po_id.") method ...");
         $log->info("in getPoName ".$po_id);
         global $adb;
-        $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
+        $sql = "select * from vtiger_purchaseorder where purchaseorderid=".$po_id;
         $result = $adb->query($sql);
         $po_name = $adb->query_result($result,0,"subject");
 	$log->debug("Exiting getPoName method ...");
         return $po_name;
 }
 /**
- * Function to get the Sales Order Name when a salesorder id is given 
- * Takes the input as $salesorder_id - salesorder id
+ * Function to get the Sales Order Name when a vtiger_salesorder id is given 
+ * Takes the input as $salesorder_id - vtiger_salesorder id
  * returns the Salesorder Name in string format.
  */
 
@@ -496,7 +496,7 @@ function getSoName($so_id)
 	$log->debug("Entering getSoName(".$so_id.") method ...");
 	$log->info("in getSoName ".$so_id);
 	global $adb;
-        $sql = "select * from salesorder where salesorderid=".$so_id;
+        $sql = "select * from vtiger_salesorder where salesorderid=".$so_id;
         $result = $adb->query($sql);
         $so_name = $adb->query_result($result,0,"subject");
 	$log->debug("Exiting getSoName method ...");
@@ -518,47 +518,47 @@ function getGroupName($id, $module)
         global $adb;
         if($module == 'Leads')
         {
-               $sql = "select leadgrouprelation.groupname,groups.groupid from leadgrouprelation inner join groups on groups.groupname=leadgrouprelation.groupname where leadgrouprelation.leadid=".$id;
+               $sql = "select vtiger_leadgrouprelation.groupname,vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_leadgrouprelation.groupname where vtiger_leadgrouprelation.leadid=".$id;
         }
         elseif($module == 'Accounts')
         {
-               $sql = "select accountgrouprelation.groupname,groups.groupid from accountgrouprelation inner join groups on groups.groupname=accountgrouprelation.groupname where accountgrouprelation.accountid=".$id;
+               $sql = "select vtiger_accountgrouprelation.groupname,vtiger_groups.groupid from vtiger_accountgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname where vtiger_accountgrouprelation.accountid=".$id;
         }
         elseif($module == 'Contacts')
         {
-               $sql = "select contactgrouprelation.groupname,groups.groupid from contactgrouprelation inner join groups on groups.groupname=contactgrouprelation.groupname where contactgrouprelation.contactid=".$id;
+               $sql = "select vtiger_contactgrouprelation.groupname,vtiger_groups.groupid from vtiger_contactgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname where vtiger_contactgrouprelation.contactid=".$id;
         }
 	elseif($module == 'Potentials')
         {
-               $sql = "select potentialgrouprelation.groupname,groups.groupid from potentialgrouprelation inner join groups on groups.groupname=potentialgrouprelation.groupname where potentialgrouprelation.potentialid=".$id;
+               $sql = "select vtiger_potentialgrouprelation.groupname,vtiger_groups.groupid from vtiger_potentialgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname where vtiger_potentialgrouprelation.potentialid=".$id;
         }
 	elseif($module == 'Quotes')
         {
-               $sql = "select quotegrouprelation.groupname,groups.groupid from quotegrouprelation inner join groups on groups.groupname=quotegrouprelation.groupname where quotegrouprelation.quoteid=".$id;
+               $sql = "select vtiger_quotegrouprelation.groupname,vtiger_groups.groupid from vtiger_quotegrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_quotegrouprelation.groupname where vtiger_quotegrouprelation.quoteid=".$id;
         }
 	elseif($module == 'SalesOrder')
         {
-               $sql = "select sogrouprelation.groupname,groups.groupid from sogrouprelation inner join groups on groups.groupname=sogrouprelation.groupname where sogrouprelation.salesorderid=".$id;
+               $sql = "select vtiger_sogrouprelation.groupname,vtiger_groups.groupid from vtiger_sogrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname where vtiger_sogrouprelation.salesorderid=".$id;
         }
 	elseif($module == 'Invoice')
         {
-               $sql = "select invoicegrouprelation.groupname,groups.groupid from invoicegrouprelation inner join groups on groups.groupname=invoicegrouprelation.groupname where invoicegrouprelation.invoiceid=".$id;
+               $sql = "select vtiger_invoicegrouprelation.groupname,vtiger_groups.groupid from vtiger_invoicegrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_invoicegrouprelation.invoiceid=".$id;
         }
 	elseif($module == 'PurchaseOrder')
         {
-               $sql = "select pogrouprelation.groupname,groups.groupid from pogrouprelation inner join groups on groups.groupname=pogrouprelation.groupname where pogrouprelation.purchaseorderid=".$id;
+               $sql = "select vtiger_pogrouprelation.groupname,vtiger_groups.groupid from vtiger_pogrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_pogrouprelation.groupname where vtiger_pogrouprelation.purchaseorderid=".$id;
         }
         elseif($module == 'HelpDesk')
         {
-               $sql = "select ticketgrouprelation.groupname,groups.groupid from ticketgrouprelation inner join groups on groups.groupname=ticketgrouprelation.groupname where ticketgrouprelation.ticketid=".$id;
+               $sql = "select vtiger_ticketgrouprelation.groupname,vtiger_groups.groupid from vtiger_ticketgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname where vtiger_ticketgrouprelation.ticketid=".$id;
         }
 	elseif($module == 'Campaigns')
 	{
-	       $sql = "select campaigngrouprelation.groupname,groups.groupid from campaigngrouprelation inner join groups on groups.groupname=campaigngrouprelation.groupname where campaigngrouprelation.campaignid=".$id;
+	       $sql = "select vtiger_campaigngrouprelation.groupname,vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname where vtiger_campaigngrouprelation.campaignid=".$id;
         }
         elseif($module == 'Activities' || $module == 'Emails' || $module == 'Events')
         {
-               $sql = "select activitygrouprelation.groupname,groups.groupid from activitygrouprelation inner join groups on groups.groupname=activitygrouprelation.groupname where activitygrouprelation.activityid=".$id;
+               $sql = "select vtiger_activitygrouprelation.groupname,vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_activitygrouprelation.activityid=".$id;
 	}
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
@@ -584,7 +584,7 @@ function getUserName($userid)
 	global $adb;
 	if($userid != '')
 	{
-		$sql = "select user_name from users where id=".$userid;
+		$sql = "select user_name from vtiger_users where id=".$userid;
 		$result = $adb->query($sql);
 		$user_name = $adb->query_result($result,0,"user_name");
 	}
@@ -594,7 +594,7 @@ function getUserName($userid)
 
 /**
  * Creates and returns database query. To be used for search and other text links.   This method expects the module object.
- * param $focus - the module object contains the column fields
+ * param $focus - the module object contains the column vtiger_fields
  */
    
 function getURLstring($focus)
@@ -708,7 +708,7 @@ function getNewDisplayDate()
 	return $display_date;
 }
 
-/** This function returns the default currency information.
+/** This function returns the default vtiger_currency information.
   * Takes no param, return type array.
     */
     
@@ -718,7 +718,7 @@ function getDisplayCurrency()
 	global $adb;
 	$log->debug("Entering getDisplayCurrency() method ...");
         $curr_array = Array();
-        $sql1 = "select * from currency_info where currency_status='Active'";
+        $sql1 = "select * from vtiger_currency_info where currency_status='Active'";
         $result = $adb->query($sql1);
         $num_rows=$adb->num_rows($result);
         for($i=0; $i<$num_rows;$i++)
@@ -755,9 +755,9 @@ function convertFromDollar($amount,$crate){
         return $amount * $crate;
 }
 
-/** This function returns the conversion rate and currency symbol
+/** This function returns the conversion rate and vtiger_currency symbol
   * in array format for a given id.
-  * param $id - currency id.
+  * param $id - vtiger_currency id.
   */
       
 function getCurrencySymbolandCRate($id)
@@ -765,7 +765,7 @@ function getCurrencySymbolandCRate($id)
 	global $log;
 	$log->debug("Entering getCurrencySymbolandCRate(".$id.") method ...");
         global $adb;
-        $sql1 = "select conversion_rate,currency_symbol from currency_info where id=".$id;
+        $sql1 = "select conversion_rate,currency_symbol from vtiger_currency_info where id=".$id;
         $result = $adb->query($sql1);
 	$rate_symbol['rate'] = $adb->query_result($result,0,"conversion_rate");
 	$rate_symbol['symbol'] = $adb->query_result($result,0,"currency_symbol");
@@ -782,7 +782,7 @@ function getTermsandConditions()
 	global $log;
 	$log->debug("Entering getTermsandConditions() method ...");
         global $adb;
-        $sql1 = "select * from inventory_tandc";
+        $sql1 = "select * from vtiger_inventory_tandc";
         $result = $adb->query($sql1);
         $tandc = $adb->query_result($result,0,"tandc");
 	$log->debug("Exiting getTermsandConditions method ...");
@@ -791,10 +791,10 @@ function getTermsandConditions()
 
 /**
  * Create select options in a dropdown list.  To be used inside
-  *  a reminder select statement in a activity form. 
+  *  a reminder select statement in a vtiger_activity form. 
    * param $start - start value
    * param $end - end value
-   * param $fldname - field name 
+   * param $fldname - vtiger_field name 
    * param $selvalue - selected value 
    */
     
@@ -821,7 +821,7 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 
 /** This function returns the List price of a given product in a given price book.
   * param $productid - product id.
-  * param $pbid - pricebook id.
+  * param $pbid - vtiger_pricebook id.
   */
   
 function getListPrice($productid,$pbid)
@@ -831,7 +831,7 @@ function getListPrice($productid,$pbid)
         $log->info("in getListPrice productid ".$productid);
 
 	global $adb;
-	$query = "select listprice from pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
+	$query = "select listprice from vtiger_pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
 	$result = $adb->query($query);
 	$lp = $adb->query_result($result,0,'listprice');
 	$log->debug("Exiting getListPrice method ...");
@@ -889,8 +889,8 @@ function make_clickable($text)
    return($ret);
 }
 /**
- * This function returns the blocks and its related information for given module.
- * Input Parameter are $module - module name, $disp_view = display view (edit,detail or create),$mode - edit, $col_fields - * column fields/
+ * This function returns the vtiger_blocks and its related information for given module.
+ * Input Parameter are $module - module name, $disp_view = display view (edit,detail or create),$mode - edit, $col_fields - * column vtiger_fields/
  * This function returns an array
  */
 
@@ -903,7 +903,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
         $tabid = getTabid($module);
         $block_detail = Array();
         $getBlockinfo = "";
-        $query="select blockid,blocklabel,show_title from blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
+        $query="select blockid,blocklabel,show_title from vtiger_blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
 
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
@@ -918,18 +918,18 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$block_label[$blockid] = $adb->query_result($result,$i,"blocklabel");
 	}
 	$blockid_list .= ')';
-	//retreive the profileList from database
+	//retreive the vtiger_profileList from database
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($disp_view == "detail_view")
 	{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$sql = "select field.* from field where field.tabid=".$tabid." and field.block in $blockid_list and field.displaytype in (1,2) order by block,sequence";
+			$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in $blockid_list and vtiger_field.displaytype in (1,2) order by block,sequence";
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList." group by field.fieldid order by block,sequence";
+			$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by block,sequence";
 		}
 		$result = $adb->query($sql);
 		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
@@ -940,24 +940,24 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0)
 			{
-				$sql = "select field.* from field where field.tabid=".$tabid." and field.block in ".$blockid_list ." and field.displaytype=1 and info_type = '".$info_type."' order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list ." and vtiger_field.displaytype=1 and info_type = '".$info_type."' order by block,sequence";
 			}
 			else
 			{
 				$profileList = getCurrentUserProfileList();
-				$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 and info_type = '".$info_type."' and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 and info_type = '".$info_type."' and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		else
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 			{
-				$sql = "select field.* from field where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 order by block,sequence";
 			}
 			else
 			{
 				$profileList = getCurrentUserProfileList();
-				$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block in ".$blockid_list." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid in ".$profileList.=" group by field.fieldid order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->query($sql);
@@ -995,7 +995,7 @@ function getBlockId($tabid,$label)
 	$log->debug("Entering getBlockId(".$tabid.",".$label.") method ...");
         global $adb;
         $blockid = '';
-        $query = "select blockid from blocks where tabid=$tabid and blocklabel = '$label'";
+        $query = "select blockid from vtiger_blocks where tabid=$tabid and blocklabel = '$label'";
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
         if($noofrows == 1)
@@ -1007,8 +1007,8 @@ function getBlockId($tabid,$label)
 }
 
 /**
- * This function is used to get the Parent and Child tab relation array.
- * Takes no parameter and get the data from parent_tabdata.php and tabdata.php
+ * This function is used to get the Parent and Child vtiger_tab relation array.
+ * Takes no parameter and get the data from parent_tabdata.php and vtiger_tabdata.php
  * This returns array type value
  */
 
@@ -1059,8 +1059,8 @@ function getHeaderArray()
 }
 
 /**
- * This function is used to get the Parent Tab name for a given parent tab id.
- * Takes the input parameter as $parenttabid - Parent tab id
+ * This function is used to get the Parent Tab name for a given parent vtiger_tab id.
+ * Takes the input parameter as $parenttabid - Parent vtiger_tab id
  * This returns value string type 
  */
 
@@ -1076,7 +1076,7 @@ function getParentTabName($parenttabid)
 	}
 	else
 	{
-		$sql = "select parenttab_label from parenttab where parenttabid=".$parenttabid;
+		$sql = "select parenttab_label from vtiger_parenttab where parenttabid=".$parenttabid;
 		$result = $adb->query($sql);
 		$parent_tabname=  $adb->query_result($result,0,"parenttab_label");
 	}
@@ -1113,7 +1113,7 @@ function getParentTabFromModule($module)
 	}
 	else
 	{
-		$sql = "select parenttab.* from parenttab inner join parenttabrel on parenttabrel.parenttabid=parenttab.parenttabid inner join tab on tab.tabid=parenttabrel.tabid where tab.name='".$module."'";
+		$sql = "select vtiger_parenttab.* from vtiger_parenttab inner join vtiger_parenttabrel on vtiger_parenttabrel.parenttabid=vtiger_parenttab.parenttabid inner join vtiger_tab on vtiger_tab.tabid=vtiger_parenttabrel.tabid where vtiger_tab.name='".$module."'";
 		$result = $adb->query($sql);
 		$tab =  $adb->query_result($result,0,"parenttab_label");
 		$log->debug("Exiting getParentTabFromModule method ...");
@@ -1123,7 +1123,7 @@ function getParentTabFromModule($module)
 
 /**
  * This function is used to get the Parent Tab name for a given module.
- * Takes no parameter but gets the parenttab value from form request
+ * Takes no parameter but gets the vtiger_parenttab value from form request
  * This returns value string type 
  */
 
@@ -1146,7 +1146,7 @@ function getParentTab()
 /**
  * This function is used to get the days in between the current time and the modified time of an entity .
  * Takes the input parameter as $id - crmid  it will calculate the number of days in between the
- * the current time and the modified time from the crmentity table and return the result as a string.
+ * the current time and the modified time from the vtiger_crmentity vtiger_table and return the result as a string.
  * The return format is updated <No of Days> day ago <(date when updated)>
  */
 
@@ -1157,7 +1157,7 @@ function updateInfo($id)
 
     global $adb;
     global $app_strings;
-    $query='select modifiedtime from crmentity where crmid ='.$id ;
+    $query='select modifiedtime from vtiger_crmentity where crmid ='.$id ;
     $result = $adb->query($query);
     $modifiedtime = $adb->query_result($result,0,'modifiedtime');
     $values=explode(' ',$modifiedtime);
@@ -1194,7 +1194,7 @@ function getProductImages($id)
 	$script_images=array();
 	$script = '<script>var ProductImages = new Array(';
    	$i=0;
-	$query='select imagename from products where productid='.$id;
+	$query='select imagename from vtiger_products where productid='.$id;
 	$result = $adb->query($query);
 	$imagename=$adb->query_result($result,0,'imagename');
 	$image_lists=explode('###',$imagename);
@@ -1381,7 +1381,7 @@ function file_exist_fn($filename,$exist)
 
 /**
  * This function is used get the User Count.
- * It returns the array which has the total users ,admin users,and the non admin users 
+ * It returns the array which has the total vtiger_users ,admin vtiger_users,and the non admin vtiger_users 
  */
 
 function UserCount()
@@ -1389,9 +1389,9 @@ function UserCount()
 	global $log;
 	$log->debug("Entering UserCount() method ...");
 	global $adb;
-	$result=$adb->query("select * from users where deleted =0;");
+	$result=$adb->query("select * from vtiger_users where deleted =0;");
 	$user_count=$adb->num_rows($result);
-	$result=$adb->query("select * from users where deleted =0 AND is_admin != 'on';");
+	$result=$adb->query("select * from vtiger_users where deleted =0 AND is_admin != 'on';");
 	$nonadmin_count = $adb->num_rows($result);
 	$admin_count = $user_count-$nonadmin_count;
 	$count=array('user'=>$user_count,'admin'=>$admin_count,'nonadmin'=>$nonadmin_count);
@@ -1435,7 +1435,7 @@ function DefHomeView()
 		$log->debug("Entering DefHomeView() method ...");
 		global $adb;
 		global $current_user;
-		$query="select defhomeview from users where id = ".$current_user->id;
+		$query="select defhomeview from vtiger_users where id = ".$current_user->id;
 		$result=$adb->query($query);
 		$defaultview=$adb->query_result($result,0,'defhomeview');
 		$log->debug("Exiting DefHomeView method ...");
@@ -1472,7 +1472,7 @@ function setObjectValuesFromRequest($focus)
 }
 
  /**
- * Function to write the tabid and name to a flat file tabdata.txt so that the data
+ * Function to write the tabid and name to a flat file vtiger_tabdata.txt so that the data
  * is obtained from the file instead of repeated queries
  * returns null
  */
@@ -1481,9 +1481,9 @@ function create_tab_data_file()
 {
 	global $log;
 	$log->debug("Entering create_tab_data_file() method ...");
-        $log->info("creating tabdata file");
+        $log->info("creating vtiger_tabdata file");
         global $adb;
-        $sql = "select * from tab";
+        $sql = "select * from vtiger_tab";
         $result = $adb->query($sql);
         $num_rows=$adb->num_rows($result);
         $result_array=Array();
@@ -1540,7 +1540,7 @@ else
 
 
  /**
- * Function to write the parenttabid and name to a flat file parent_tabdata.txt so that the data
+ * Function to write the vtiger_parenttabid and name to a flat file parent_tabdata.txt so that the data
  * is obtained from the file instead of repeated queries
  * returns null
  */
@@ -1551,7 +1551,7 @@ function create_parenttab_data_file()
 	$log->debug("Entering create_parenttab_data_file() method ...");
 	$log->info("creating parent_tabdata file");
 	global $adb;
-	$sql = "select parenttabid,parenttab_label from parenttab order by sequence";
+	$sql = "select parenttabid,parenttab_label from vtiger_parenttab order by sequence";
 	$result = $adb->query($sql);
 	$num_rows=$adb->num_rows($result);
 	$result_array=Array();
@@ -1591,7 +1591,7 @@ function create_parenttab_data_file()
 			foreach($result_array as $parid=>$parvalue)
 			{
 				$childArray=Array();
-				$sql = "select * from parenttabrel where parenttabid=".$parid." order by sequence";
+				$sql = "select * from vtiger_parenttabrel where parenttabid=".$parid." order by sequence";
 				$result = $adb->query($sql);
 				$num_rows=$adb->num_rows($result);
 				$result_array=Array();
@@ -1654,7 +1654,7 @@ function getQuickCreateModules()
 			 'Contacts'=>'LNK_NEW_CONTACT',
 			 'Vendors'=>'LNK_NEW_VENDOR'); 	
 
-$qc_query = "select distinct tab.tablabel,tab.name from field inner join tab on tab.tabid = field.tabid where quickcreate=0 order by tab.tablabel";
+$qc_query = "select distinct vtiger_tab.tablabel,vtiger_tab.name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where quickcreate=0 order by vtiger_tab.tablabel";
 $result = $adb->query($qc_query);
 $noofrows = $adb->num_rows($result);
 $return_qcmodule = Array();
@@ -1680,7 +1680,7 @@ for($i = 0; $i < $noofrows; $i++)
 }
 																					   
 /**
- * This function is used to get the Quick create form field parameters for a given module.
+ * This function is used to get the Quick create form vtiger_field parameters for a given module.
  * Param $module - module name 
  * returns the value in array format
  */
@@ -1700,12 +1700,12 @@ $tabid = getTabid($module);
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
            if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
            {
-                 $quickcreate_query = "select * from field where quickcreate=0 and tabid = ".$tabid." order by quickcreatesequence";
+                 $quickcreate_query = "select * from vtiger_field where quickcreate=0 and tabid = ".$tabid." order by quickcreatesequence";
            }
            else
            {
                  $profileList = getCurrentUserProfileList();
-                 $quickcreate_query = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and quickcreate=0 and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by quickcreatesequence";
+                 $quickcreate_query = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and quickcreate=0 and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by quickcreatesequence";
            }
 																					     
 $category = getParentTab();
@@ -1830,7 +1830,7 @@ function getUserslist()
 	global $log;
 	$log->debug("Entering getUserslist() method ...");
 	global $adb;
-	$result=$adb->query("select * from users");
+	$result=$adb->query("select * from vtiger_users");
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
 	       $useridlist[$i]=$adb->query_result($result,$i,'id');
@@ -1883,7 +1883,7 @@ function getEntityName($module, $ids_list)
 		
 	switch ($module)
 	{
-		case "Accounts" : $query = "select accountname from account where accountid in (".$list.")";
+		case "Accounts" : $query = "select accountname from vtiger_account where accountid in (".$list.")";
 				  $result = $adb->query($query);
 				  $numrows = $adb->num_rows($result);
 				  $account_name = array();	
@@ -1895,7 +1895,7 @@ function getEntityName($module, $ids_list)
 					return $account_name;
 					break;
 
-		  case "Leads" :  $query = "select concat(firstname,' ',lastname) as leadname from leaddetails where leadid in (".$list.")";
+		  case "Leads" :  $query = "select concat(firstname,' ',lastname) as leadname from vtiger_leaddetails where leadid in (".$list.")";
 				  $result = $adb->query($query);
 				  $numrows = $adb->num_rows($result);
 				  $lead_name = array();
@@ -1908,7 +1908,7 @@ function getEntityName($module, $ids_list)
 					return $lead_name;
 					break;
 		
-	       case "Contacts" : $query = "select concat(firstname,' ',lastname) as contactname from contactdetails where contactid in (".$list.")"; 
+	       case "Contacts" : $query = "select concat(firstname,' ',lastname) as contactname from vtiger_contactdetails where contactid in (".$list.")"; 
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $contact_name = array();
@@ -1921,7 +1921,7 @@ function getEntityName($module, $ids_list)
 					return $contact_name;
 					break;
 
-	    case "Potentials"  : $query = "select potentialname from potential where potentialid in (".$list.")";
+	    case "Potentials"  : $query = "select potentialname from vtiger_potential where potentialid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $potential_name = array();
@@ -1934,7 +1934,7 @@ function getEntityName($module, $ids_list)
 					return $potential_name;
 					break;
 
-	        case "Quotes"  : $query = "select subject from quotes where quoteid in (".$list.")";
+	        case "Quotes"  : $query = "select subject from vtiger_quotes where quoteid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $quote_subject = array();		    	
@@ -1947,7 +1947,7 @@ function getEntityName($module, $ids_list)
 					return $quote_subject;
 					break;	
 
-	    case "SalesOrder"  : $query = "select subject from salesorder where salesorderid in (".$list.")";
+	    case "SalesOrder"  : $query = "select subject from vtiger_salesorder where salesorderid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $so_subject = array();		    	
@@ -1960,7 +1960,7 @@ function getEntityName($module, $ids_list)
 					return $so_subject;
 					break;
 	
-	       case "Invoice"  : $query = "select subject from invoice where invoiceid in (".$list.")";
+	       case "Invoice"  : $query = "select subject from vtiger_invoice where invoiceid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $inv_subject = array();		    	
@@ -1973,7 +1973,7 @@ function getEntityName($module, $ids_list)
 					return $inv_subject;
 					break;
 		
-	      case "Products"  : $query = "select productname from products where productid in (".$list.")";
+	      case "Products"  : $query = "select productname from vtiger_products where productid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $product_name = array();		    	
@@ -1986,7 +1986,7 @@ function getEntityName($module, $ids_list)
 					return $product_name;
 					break;
 
-	   case "PriceBooks"  :  $query = "select bookname from pricebook where pricebookid in (".$list.")";
+	   case "PriceBooks"  :  $query = "select bookname from vtiger_pricebook where pricebookid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $pbook_name = array();		    	
@@ -1999,7 +1999,7 @@ function getEntityName($module, $ids_list)
 					return $pbook_name;
 					break;
 
-	        case "Notes"  :  $query = "select title from notes where notesid in (".$list.")";
+	        case "Notes"  :  $query = "select title from vtiger_notes where notesid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $notes_title = array();		    	
@@ -2012,7 +2012,7 @@ function getEntityName($module, $ids_list)
 					return $notes_title;
 					break;
 		
-	  case "Activities"  :  $query = "select subject from activity where activityid in (".$list.")";
+	  case "Activities"  :  $query = "select subject from vtiger_activity where activityid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $activity_subject = array();		    	
@@ -2025,7 +2025,7 @@ function getEntityName($module, $ids_list)
 					return $activity_subject;
 					break;
 
-	    case "Campaigns"  :  $query = "select campaignname from campaign where campaignid in (".$list.")";
+	    case "Campaigns"  :  $query = "select campaignname from vtiger_campaign where campaignid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $campaign_name = array();		    	
@@ -2038,7 +2038,7 @@ function getEntityName($module, $ids_list)
 					return $campaign_name;
 					break;
 
-	          case "Faq"  :  $query = "select question from faq where id in (".$list.")";
+	          case "Faq"  :  $query = "select question from vtiger_faq where id in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $faq_name = array();		    	
@@ -2051,7 +2051,7 @@ function getEntityName($module, $ids_list)
 					return $faq_name;
 					break;
 		
-	      case "Vendors"  :  $query = "select vendorname from vendor where vendorid in (".$list.")";
+	      case "Vendors"  :  $query = "select vendorname from vtiger_vendor where vendorid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $vendor_name = array();		    	
@@ -2064,7 +2064,7 @@ function getEntityName($module, $ids_list)
 					return $vendor_name;
 					break;
 
-	case "PurchaseOrder"  :  $query = "select subject from purchaseorder where purchaseorderid in (".$list.")";
+	case "PurchaseOrder"  :  $query = "select subject from vtiger_purchaseorder where purchaseorderid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $po_name = array();		    	
@@ -2077,7 +2077,7 @@ function getEntityName($module, $ids_list)
 					return $po_name;
 					break;
 
-	     case "HelpDesk"  :  $query = "select title from troubletickets where ticketid in (".$list.")";
+	     case "HelpDesk"  :  $query = "select title from vtiger_troubletickets where ticketid in (".$list.")";
 				 $result = $adb->query($query);
 				 $numrows = $adb->num_rows($result);
 				 $ticket_name = array();		    	
@@ -2099,7 +2099,7 @@ function getAllParenttabmoduleslist()
         global $adb;
 	global $current_user;
         $resultant_array = Array();
-        $query = 'select name,tablabel,parenttab_label,tab.tabid from parenttabrel inner join tab on parenttabrel.tabid = tab.tabid inner join parenttab on parenttabrel.parenttabid = parenttab.parenttabid order by parenttab.sequence';
+        $query = 'select name,tablabel,parenttab_label,vtiger_tab.tabid from vtiger_parenttabrel inner join vtiger_tab on vtiger_parenttabrel.tabid = vtiger_tab.tabid inner join vtiger_parenttab on vtiger_parenttabrel.parenttabid = vtiger_parenttab.parenttabid order by vtiger_parenttab.sequence';
         $result = $adb->query($query);
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         for($i=0;$i<$adb->num_rows($result);$i++)
@@ -2179,7 +2179,7 @@ function decideFilePath()
 }
 
 /**
- * 	This function is used to get the Path in where we store the files based on the module.
+ * 	This function is used to get the Path in where we store the vtiger_files based on the module.
  *	@param string $module   - module name
  * 	return string $storage_path - path inwhere the file will be uploaded (also where it was stored) will be return based on the module
 */
@@ -2205,7 +2205,7 @@ function getModuleFileStoragePath($module)
 
 /**
  * 	This function is used to check whether the attached file is a image file or not
- *	@param string $file_details  - files array which contains all the uploaded file details
+ *	@param string $file_details  - vtiger_files array which contains all the uploaded file details
  * 	return string $save_image - true or false. if the image can be uploaded then true will return otherwise false.
 */
 function validateImageFile($file_details)
@@ -2243,7 +2243,7 @@ function getTemplateDetails($templateid)
         global $adb,$log;
         $log->debug("Entering into getTemplateDetails($templateid) method ...");
         $returndata =  Array();
-        $result = $adb->query("select * from emailtemplates where templateid=$templateid");
+        $result = $adb->query("select * from vtiger_emailtemplates where templateid=$templateid");
         $returndata[] = $templateid;
         $returndata[] = $adb->query_result($result,0,'body');
         $returndata[] = $adb->query_result($result,0,'subject');
@@ -2278,7 +2278,7 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["accounts"]))
 			{
 				$columnfields = implode(',',$fields["accounts"]);
-				$query = 'select '.$columnfields.' from account where accountid ='.$id;
+				$query = 'select '.$columnfields.' from vtiger_account where accountid ='.$id;
 				$result = $adb->query($query);
 				foreach($fields["accounts"] as $columnname)			
 				{

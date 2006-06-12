@@ -48,7 +48,7 @@ if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule
 
 	$list_report_form = new vtigerCRM_Smarty;
 	$ogReport->getSelectedStandardCriteria($reportid);
-	//commented to omit dashboards for reports
+	//commented to omit dashboards for vtiger_reports
 	//require_once('modules/Dashboard/ReportsCharts.php');
 	//$image = get_graph_by_type('Report','Report',$primarymodule,'',$sshtml[2]);
 	//$list_report_form->assign("GRAPH", $image);
@@ -176,7 +176,7 @@ function getSecondaryStdFilterHTML($module,$selected="")
 function getReportsinFolder($folderid)
 {
 	global $adb;
-	$query = 'select reportid,reportname from report where folderid='.$folderid;
+	$query = 'select vtiger_reportid,reportname from vtiger_report where folderid='.$folderid;
 	$result = $adb->query($query);
 	$reports_array = Array();
 	for($i=0;$i < $adb->num_rows($result);$i++)	

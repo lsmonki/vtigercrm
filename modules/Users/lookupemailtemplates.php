@@ -36,7 +36,7 @@ $theme_path="themes/".$theme."/";
                 <th width="65%" class="lvtCol"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
                 </tr>
 <?php
-   $sql = "select * from emailtemplates order by templateid desc";
+   $sql = "select * from vtiger_emailtemplates order by templateid desc";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
 $cnt=1;

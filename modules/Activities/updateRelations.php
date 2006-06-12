@@ -22,7 +22,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 		if($id != '')
 		{
 			$record = $_REQUEST['parentid'];
-			$sql = "insert into seactivityrel values (".$id.",".$_REQUEST["parentid"].")";
+			$sql = "insert into vtiger_seactivityrel values (".$id.",".$_REQUEST["parentid"].")";
 			$adb->query($sql);
 		}
 	}
@@ -32,7 +32,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
 	$record = $_REQUEST["parid"];
-	$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
+	$sql = "insert into vtiger_seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 }
@@ -40,11 +40,11 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 
 
  
-//This if for adding the users 
+//This if for adding the vtiger_users 
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
-	$sql = "insert into salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
+	$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 

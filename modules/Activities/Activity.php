@@ -32,7 +32,7 @@ class Activity extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored fields
+	// Stored vtiger_fields
   	var $eventid;
 	var $description;
 	var $firstname;
@@ -48,7 +48,7 @@ class Activity extends CRMEntity {
 
 	var $table_name = "activity";
 	#var $object_name = "activity";	
-		// Mike Crowe Mod --------------------------------------------------------Renamed to match tab
+		// Mike Crowe Mod --------------------------------------------------------Renamed to match vtiger_tab
 	var $object_name = "Activities";
 	// Mike Crowe Mod --------------------------------------------------------added for general search
     var $base_table_name = "activity";
@@ -58,17 +58,17 @@ class Activity extends CRMEntity {
 	
 	var $reminder_table = "activity_reminder";
 	
-	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder','recurringevents','invitees');
+	var $tab_name = Array('vtiger_crmentity','vtiger_activity','vtiger_seactivityrel','vtiger_cntactivityrel','vtiger_salesmanactivityrel','vtiger_activity_reminder','vtiger_recurringevents','vtiger_invitees');
 
-	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id','recurringevents'=>'activityid');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_salesmanactivityrel'=>'activityid','vtiger_activity_reminder'=>'activity_id','vtiger_recurringevents'=>'activityid');
 
 	var $column_fields = Array();
 	var $sortby_fields = Array('subject','due_date','date_start','smownerid','activitytype');	//Sorting is added for due date and start date	
 
-	// This is used to retrieve related fields from form posts.
+	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
        'Close'=>Array('activity'=>'status'),
        'Type'=>Array('activity'=>'activitytype'),
@@ -164,12 +164,12 @@ class Activity extends CRMEntity {
 
 			if(isPermitted("Contacts",3,"") == 'yes')
 			{
-				$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+				$button .= '<input title="Change" accessKey="" vtiger_tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
 			}
 			$returnset = '&return_module=Activities&return_action=DetailView&activity_mode=Events&return_id='.$id;
 
 
-			$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+			$query = 'select vtiger_contactdetails.accountid, vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_seactivityrel on vtiger_seactivityrel.crmid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_seactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
 			$log->debug("Exiting get_contacts method ...");
 			return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
         }
@@ -178,7 +178,7 @@ class Activity extends CRMEntity {
 	{
 			global $adb,$log;
 			$log->debug("Entering get_users(".$id.") method ...");
-			$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
+			$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax,vtiger_activity.date_start,vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id  inner join vtiger_activity on vtiger_activity.activityid=vtiger_salesmanactivityrel.activityid where vtiger_activity.activityid='.$id;
 			$activity_id=$id;
 
 			global $mod_strings;
@@ -229,12 +229,12 @@ class Activity extends CRMEntity {
 				}
 
 			// To display the dates for the Group calendar starts -Jaguar
-			$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
+			$recur_dates_qry='select distinct(recurringdate) from vtiger_recurringevents where vtiger_activityid='.$activity_id;
 			$recur_result=$adb->query($recur_dates_qry);
 			$noofrows_recur = $adb->num_rows($recur_result);
 			if($noofrows_recur==0)
 			{
-				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id;
+				$recur_dates_qry='select vtiger_activity.date_start,vtiger_recurringevents.* from vtiger_activity left outer join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid where vtiger_recurringevents.activityid is NULL and vtiger_activity.activityid='.$activity_id;
 				$recur_result=$adb->query($recur_dates_qry);
 				$noofrows_recur = $adb->num_rows($recur_result);
 
@@ -251,7 +251,7 @@ class Activity extends CRMEntity {
 				$activity_start_time=time_to_number($act_time_start);	
 				$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
 
-				$activity_owner_qry='select users.user_name,users.id AS userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
+				$activity_owner_qry='select vtiger_users.user_name,vtiger_users.id AS userid from vtiger_users,crmentity where vtiger_users.id=vtiger_crmentity.smownerid and vtiger_crmentity.crmid='.$id;
 				$result_owner=$adb->query($activity_owner_qry);
 
 				while($row_owner = $adb->fetch_array($result_owner))
@@ -259,7 +259,7 @@ class Activity extends CRMEntity {
 					$owner=$row_owner['userid'];
 				}
 
-				$recur_dates_qry='select recurringdate from recurringevents where activityid ='.$activity_id;
+				$recur_dates_qry='select recurringdate from vtiger_recurringevents where vtiger_activityid ='.$activity_id;
 				$recur_result=$adb->query($recur_dates_qry);
 				$noofrows_recur = $adb->num_rows($recur_result);
 				$userid=$row['id'];
@@ -298,7 +298,7 @@ class Activity extends CRMEntity {
   	{
 	 global $log;
          $log->debug("Entering get_full_list(".$criteria.") method ...");
-    $query = "select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid WHERE crmentity.deleted=0 ".$criteria;
+    $query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 ".$criteria;
     $result =& $this->db->query($query);
 	echo $query;
     $this->log->debug("process_full_list_query: result is ".$result);
@@ -338,7 +338,7 @@ class Activity extends CRMEntity {
 	{
 		global $log;
 	        $log->debug("Entering getCount_Meeting(".$user_name.") method ...");
-      $query = "select count(*) from activity inner join crmentity on crmentity.crmid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting'";
+      $query = "select count(*) from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Meeting'";
 
       $result = $this->db->query($query,true,"Error retrieving contacts count");
       $rows_found =  $this->db->getRowCount($result);
@@ -351,7 +351,7 @@ class Activity extends CRMEntity {
     {   
 	    global $log;
             $log->debug("Entering get_calendars(".$user_name.",".$from_index.",".$offset.") method ...");
-		$query = "select activity.location as location,activity.duration_hours as duehours, activity.duration_minutes as dueminutes,activity.time_start as time_start, activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status, crmentity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting' limit " .$from_index ."," .$offset;
+		$query = "select vtiger_activity.location as location,vtiger_activity.duration_hours as duehours, vtiger_activity.duration_minutes as dueminutes,vtiger_activity.time_start as time_start, vtiger_activity.subject as name,vtiger_crmentity.modifiedtime as date_modified, vtiger_activity.date_start start_date,vtiger_activity.activityid as id,vtiger_activity.status as status, vtiger_crmentity.description as description, vtiger_activity.priority as vtiger_priority, vtiger_activity.due_date as date_due ,vtiger_contactdetails.firstname cfn, vtiger_contactdetails.lastname cln from vtiger_activity inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Meeting' limit " .$from_index ."," .$offset;
 	$log->debug("Exiting get_calendars method ...");
 	    return $this->process_list_query1($query);   
     }       
@@ -361,7 +361,7 @@ class Activity extends CRMEntity {
     {
 	    global $log;
             $log->debug("Entering getCount(".$user_name.") method ...");
-        $query = "select count(*) from activity inner join crmentity on crmentity.crmid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task'";
+        $query = "select count(*) from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Task'";
 
         $result = $this->db->query($query,true,"Error retrieving contacts count");
         $rows_found =  $this->db->getRowCount($result);
@@ -375,7 +375,7 @@ class Activity extends CRMEntity {
     {   
 	global $log;
         $log->debug("Entering get_tasks(".$user_name.",".$from_index.",".$offset.") method ...");
-	 $query = "select activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status, crmentity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task' limit " .$from_index ."," .$offset;
+	 $query = "select vtiger_activity.subject as name,vtiger_crmentity.modifiedtime as date_modified, vtiger_activity.date_start start_date,vtiger_activity.activityid as id,vtiger_activity.status as status, vtiger_crmentity.description as description, vtiger_activity.priority as vtiger_priority, vtiger_activity.due_date as date_due ,vtiger_contactdetails.firstname cfn, vtiger_contactdetails.lastname cln from vtiger_activity inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where user_name='" .$user_name ."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Task' limit " .$from_index ."," .$offset;
 	 $log->debug("Exiting get_tasks method ...");
     return $this->process_list_query1($query);
     
@@ -424,12 +424,12 @@ class Activity extends CRMEntity {
         return $response;
     }
 		
-	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
+	function vtiger_activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
 	{
 		global $log;
-		$log->debug("Entering activity_reminder(".$activity_id.",".$reminder_time.",".$reminder_sent.",".$recurid.",".$remindermode.") method ...");
-		//Check for activityid already present in the reminder_table
-		$query_exist = "SELECT activity_id FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
+		$log->debug("Entering vtiger_activity_reminder(".$activity_id.",".$reminder_time.",".$reminder_sent.",".$recurid.",".$remindermode.") method ...");
+		//Check for vtiger_activityid already present in the reminder_table
+		$query_exist = "SELECT vtiger_activity_id FROM ".$this->reminder_table." WHERE vtiger_activity_id = ".$activity_id;
 		$result_exist = $this->db->query($query_exist);
 
 		if($remindermode == 'edit')
@@ -438,7 +438,7 @@ class Activity extends CRMEntity {
 			{
 				$query = "UPDATE ".$this->reminder_table." SET";
 				$query .=" reminder_sent = ".$reminder_sent.",";
-				$query .=" reminder_time = ".$reminder_time." WHERE activity_id =".$activity_id; 
+				$query .=" reminder_time = ".$reminder_time." WHERE vtiger_activity_id =".$activity_id; 
 			}
 			else
 			{
@@ -447,14 +447,14 @@ class Activity extends CRMEntity {
 		}
 		elseif(($remindermode == 'delete') && ($this->db->num_rows($result_exist) == 1))
 		{
-			$query = "DELETE FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
+			$query = "DELETE FROM ".$this->reminder_table." WHERE vtiger_activity_id = ".$activity_id;
 		}
 		else
 		{
 			$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0,'".$recurid."')";
 		}
-      		$this->db->query($query,true,"Error in processing table $this->reminder_table");
-		$log->debug("Exiting activity_reminder method ...");
+      		$this->db->query($query,true,"Error in processing vtiger_table $this->reminder_table");
+		$log->debug("Exiting vtiger_activity_reminder method ...");
 	}
 
 //Used for vtigerCRM Outlook Add-In
@@ -462,15 +462,15 @@ function get_tasksforol($username)
 {
 	global $log;
         $log->debug("Entering get_tasksforol(".$username.") method ...");
-	$query = "select activity.subject,activity.date_start startdate,
-			 activity.activityid as taskid,activity.status,
-			 crmentity.description,activity.priority as priority,activity.due_date as duedate,
-			 contactdetails.firstname, contactdetails.lastname 
-			 from activity inner join crmentity on crmentity.crmid=activity.activityid 
-			 inner join users on users.id = crmentity.smownerid 
-			 left join cntactivityrel on cntactivityrel.activityid=activity.activityid 
-			 left join contactdetails on contactdetails.contactid=cntactivityrel.contactid 
-			 where users.user_name='".$username."' and crmentity.deleted=0 and activity.activitytype='Task'";
+	$query = "select vtiger_activity.subject,vtiger_activity.date_start startdate,
+			 vtiger_activity.activityid as taskid,vtiger_activity.status,
+			 vtiger_crmentity.description,vtiger_activity.priority as vtiger_priority,vtiger_activity.due_date as duedate,
+			 vtiger_contactdetails.firstname, vtiger_contactdetails.lastname 
+			 from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
+			 inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
+			 left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
+			 left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid 
+			 where vtiger_users.user_name='".$username."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Task'";
 	$log->debug("Exiting get_tasksforol method ...");		 
 	return $query;
 }
@@ -479,17 +479,17 @@ function get_calendarsforol($user_name)
 {
 	global $log;
         $log->debug("Entering get_calendarsforol(".$user_name.") method ...");
-	  $query = "select activity.location, activity.duration_hours as duehours, 
-				activity.duration_minutes as dueminutes,activity.time_start as startime, 
-				activity.subject,activity.date_start as startdate,activity.activityid as clndrid,
-				crmentity.description,activity.due_date as duedate ,
-				contactdetails.firstname, contactdetails.lastname from activity 
-				inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid 
-				inner join users on users.id=salesmanactivityrel.smid 
-				left join cntactivityrel on cntactivityrel.activityid=activity.activityid 
-				left join contactdetails on contactdetails.contactid=cntactivityrel.contactid 
-				inner join crmentity on crmentity.crmid=activity.activityid 
-				where users.user_name='".$user_name."' and crmentity.deleted=0 and activity.activitytype='Meeting'";
+	  $query = "select vtiger_activity.location, vtiger_activity.duration_hours as duehours, 
+			vtiger_activity.duration_minutes as dueminutes,vtiger_activity.time_start as startime, 
+			vtiger_activity.subject,vtiger_activity.date_start as startdate,vtiger_activity.activityid as clndrid,
+			vtiger_crmentity.description,vtiger_activity.due_date as duedate ,
+			vtiger_contactdetails.firstname, vtiger_contactdetails.lastname from vtiger_activity 
+				inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid 
+				inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid 
+				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid=vtiger_activity.activityid 
+				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_cntactivityrel.contactid 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
+				where vtiger_users.user_name='".$user_name."' and vtiger_crmentity.deleted=0 and vtiger_activity.activitytype='Meeting'";
 	$log->debug("Exiting get_calendarsforol method ...");
 	return $query;
 }

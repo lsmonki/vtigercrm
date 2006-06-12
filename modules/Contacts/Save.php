@@ -84,7 +84,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
         {
                 if(isset($_REQUEST[$fieldname]))
                 {
-			$log->debug("Assigning the previous values given for the contact to respective fields ");
+			$log->debug("Assigning the previous values given for the contact to respective vtiger_fields ");
                         $field_values_passed.="&";
                         $value = $_REQUEST[$fieldname];
                         $focus->column_fields[$fieldname] = $value;
@@ -113,7 +113,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 if($saveimage=="true")
 {
         $focus->column_fields['imagename']=$image_name_val;
-        $log->debug("Assign the Image name to the field name ");
+        $log->debug("Assign the Image name to the vtiger_field name ");
 }
 //Saving the contact
 if($image_error=="false")
@@ -134,7 +134,7 @@ if($image_error=="false")
 	//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
 	if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 	{
-		$sql = "update portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
+		$sql = "update vtiger_portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
 		$adb->query($sql);
 	}
 	elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
@@ -145,7 +145,7 @@ if($image_error=="false")
 		if($_REQUEST['mode'] != 'edit')
 			$insert = 'true';
 
-		$sql = "select id,user_name,user_password,isactive from portalinfo";
+		$sql = "select id,user_name,user_password,isactive from vtiger_portalinfo";
 		$result = $adb->query($sql);
 
 		for($i=0;$i<$adb->num_rows($result);$i++)
@@ -159,7 +159,7 @@ if($image_error=="false")
 					$flag = 'true';
 				else
 				{
-					$sql = "update portalinfo set user_name='".$username."', isactive=1 where id=".$id;
+					$sql = "update vtiger_portalinfo set user_name='".$username."', isactive=1 where id=".$id;
 					$adb->query($sql);
 					$update = 'true';
 					$flag = 'true';
@@ -175,7 +175,7 @@ if($image_error=="false")
 		if($insert == 'true')
 		{
 			$password = makeRandomPassword();
-			$sql = "insert into portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
+			$sql = "insert into vtiger_portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
 			$adb->query($sql);
 		}
 

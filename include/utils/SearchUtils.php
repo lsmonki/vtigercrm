@@ -16,7 +16,7 @@ require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
 $column_array=array('accountid','contact_id');
-$table_col_array=array('account.accountname','contactdetails.firstname,contactdetails.lastname');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
@@ -44,10 +44,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         $image_path=$theme_path."images/";
         $search_header = Array();
 
-        //Get the tabid of the module
+        //Get the vtiger_tabid of the module
         //require_once('include/utils/UserInfoUtil.php')
         $tabid = getTabid($module);
-        //added for customview 27/5
+        //added for vtiger_customview 27/5
         if($oCv)
         {
                 if(isset($oCv->list_fields))
@@ -55,7 +55,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         $focus->list_fields = $oCv->list_fields;
                 }
         }
-	//Added to reduce the no. of queries logging for non-admin users -- by Minnie-start
+	//Added to reduce the no. of queries logging for non-admin vtiger_users -- by Minnie-start
 	$field_list ='(';
 	$j=0;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -77,12 +77,12 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		$j++;
 	}
 	$field_list .=')';
-	//Getting the Entries from Profile2 field table
+	//Getting the Entries from Profile2 vtiger_field vtiger_table
 	if($is_admin == false)
 	{
 		$profileList = getCurrentUserProfileList();
-		//changed to get field.fieldname
-		$query  = "select profile2field.*,field.fieldname from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname in ".$field_list." group by field.fieldid";
+		//changed to get vtiger_field.fieldname
+		$query  = "select vtiger_profile2field.*,vtiger_field.fieldname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=".$tabid." and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." and vtiger_field.fieldname in ".$field_list." group by vtiger_field.fieldid";
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -91,11 +91,11 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		}
 	}
 
-        //modified for customview 27/5 - $app_strings change to $mod_strings
+        //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
         foreach($focus->list_fields as $name=>$tableinfo)
         {
-                //$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
-                //added for customview 27/5
+                //$fieldname = $focus->list_fields_name[$name];  //commented for vtiger_customview 27/5
+                //added for vtiger_customview 27/5
                 if($oCv)
                 {
                         if(isset($oCv->list_fields_name))
@@ -122,7 +122,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		{
                         if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
-                                //Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
+                                //Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
 
                                 foreach($focus->list_fields[$name] as $tab=>$col)
                                 {
@@ -228,7 +228,7 @@ function Search($module)
 }
 
 /**This function is used to get user_id's for a given user_name during search
-*Param $table_name - tablename
+*Param $table_name - vtiger_tablename
 *Param $column_name - columnname
 *Param $search_string - searchstring value (username)
 *Returns the where conditions for list query in string format
@@ -240,7 +240,7 @@ function get_usersid($table_name,$column_name,$search_string)
 	global $log;
         $log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
+	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like '%".$search_string."%' ";
 	$user_result=$adb->query($user_qry);
 	$noofuser_rows=$adb->num_rows($user_result);
 	$x=$noofuser_rows-1;
@@ -256,7 +256,7 @@ function get_usersid($table_name,$column_name,$search_string)
 				$where .= " or ";
 			}
 		}
-		$where.=" or groups.groupname like '%".$search_string."%')";
+		$where.=" or vtiger_groups.groupname like '%".$search_string."%')";
 	}
 	else
 	{
@@ -267,7 +267,7 @@ function get_usersid($table_name,$column_name,$search_string)
 	return $where;	
 }
 
-/**This function is used to get where conditions for a given accountid or contactid during search for their respective names
+/**This function is used to get where conditions for a given vtiger_accountid or contactid during search for their respective names
 *Param $column_name - columnname
 *Param $search_string - searchstring value (username)
 *Returns the where conditions for list query in string format
@@ -331,7 +331,7 @@ function BasicSearch($module,$search_field,$search_string)
 		$where="$table_name.$column_name like '%".$search_string."%'";	
 	}else
 	{	
-		$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
+		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where name='".$module."' and fieldname='".$search_field."'";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
@@ -345,7 +345,7 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 			elseif($table_name == "activity" && $column_name == "status")
 			{
-				$where="$table_name.$column_name like '%".$search_string."%' or activity.eventstatus like '%".$search_string."%'";
+				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
 			}
 			else if(in_array($column_name,$column_array))
 			{
@@ -378,18 +378,18 @@ function getAdvSearchfields($module)
 
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-		$sql = "select * from field ";
-		$sql.= " where field.tabid=".$tabid." and";
-		$sql.= " field.displaytype in (1,2)";
+		$sql = "select * from vtiger_field ";
+		$sql.= " where vtiger_field.tabid=".$tabid." and";
+		$sql.= " vtiger_field.displaytype in (1,2)";
 		$sql.= " order by block,sequence";
 	}
 	else
 	{
 		$profileList = getCurrentUserProfileList();
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid ";
-		$sql.= " where field.tabid=".$tabid." and";
-		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
-		$sql.= " and def_org_field.visible=0  and profile2field.profileid in ".$profileList." order by block,sequence";
+		$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
+		$sql.= " where vtiger_field.tabid=".$tabid." and";
+		$sql.= " vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0";
+		$sql.= " and vtiger_def_org_field.visible=0  and vtiger_profile2field.profileid in ".$profileList." order by block,sequence";
 	}
 
 
@@ -410,10 +410,10 @@ function getAdvSearchfields($module)
 		{
 			$module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
 		}
-		//Added to include activity type in activity customview list
+		//Added to include vtiger_activity type in vtiger_activity vtiger_customview list
 		if($module == 'Activities' && $block == 19)
 		{
-			$module_columnlist['activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
+			$module_columnlist['vtiger_activity:activitytype:activitytype:Activities_Activity Type:C'] = 'Activity Type';
 		}
 		if($fieldlabel == "Related To")
 		{
@@ -423,7 +423,7 @@ function getAdvSearchfields($module)
 		{
 			$fieldlabel = "Start Date";
 			if($module == 'Activities' && $block == 19)
-				$module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
+				$module_columnlist['vtiger_activity:time_start::Activities_Start Time:I'] = 'Start Time';
 
 		}
 		$fieldlabel1 = str_replace(" ","_",$fieldlabel);
@@ -456,7 +456,7 @@ function getcriteria_options()
 /**This function is returns the where conditions for each search criteria option in Advance Search
 *Param $criteria - search criteria option
 *Param $searchstring - search string
-*Param $searchfield - fieldname to be search for 
+*Param $searchfield - vtiger_fieldname to be search for 
 *Returns the search criteria option (where condition) to be added in list query
 */
 
@@ -608,13 +608,13 @@ function getdashboardcondition()
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
-		array_push($where_clauses, "potential.closingdate >= ".$adb->quote($date_closed_start)." and potential.closingdate <= ".$adb->quote($date_closed_end));
+		array_push($where_clauses, "potential.closingdate >= ".$adb->quote($date_closed_start)." and vtiger_potential.closingdate <= ".$adb->quote($date_closed_end));
 		$url_string .= "&closingdate_start=".$date_closed_start."&closingdate_end=".$date_closed_end;
 	}
 	
 	if(isset($sales_stage) && $sales_stage!=''){
 		if($sales_stage=='Other')
-		array_push($where_clauses, "(potential.sales_stage <> 'Closed Won' and potential.sales_stage <> 'Closed Lost')");
+		array_push($where_clauses, "(vtiger_potential.sales_stage <> 'Closed Won' and vtiger_potential.sales_stage <> 'Closed Lost')");
 		else
 		array_push($where_clauses, "potential.sales_stage = ".$adb->quote($sales_stage));
 		$url_string .= "&sales_stage=".$sales_stage;

@@ -88,7 +88,7 @@ elseif($_REQUEST['type']=='FieldOrder')
 		global $theme;
 		$theme_path="themes/".$theme."/";
 		$image_path=$theme_path."images/";
-		$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype from field where tabid=".$tabid." and generatedtype=2 order by sequence";
+		$dbQuery = "select vtiger_fieldid,columnname,fieldlabel,uitype,displaytype from vtiger_field where vtiger_tabid=".$tabid." and generatedtype=2 order by sequence";
 		$result = $adb->query($dbQuery);
 		$row = $adb->fetch_array($result);
 		$count=1;

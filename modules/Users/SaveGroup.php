@@ -20,12 +20,12 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
         if($mode != 'edit')
         {
-                $query = 'select groupname from groups where groupname="'.$groupName.'"';
+                $query = 'select groupname from vtiger_groups where groupname="'.$groupName.'"';
         }
         else
         {
                 $groupid = $_REQUEST['groupid'];
-                $query = 'select groupname from groups  where groupname="'.$groupName.'" and groupid !='.$groupid;
+                $query = 'select groupname from vtiger_groups  where groupname="'.$groupName.'" and groupid !='.$groupid;
 
         }
         $result = $adb->query($query);

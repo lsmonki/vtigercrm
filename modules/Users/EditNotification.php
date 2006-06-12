@@ -25,7 +25,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
     $id = $_REQUEST['record'];
 	
-	$sql="select * from notificationscheduler where schedulednotificationid = ".$id;
+	$sql="select * from vtiger_notificationscheduler where schedulednotificationid = ".$id;
 	$result = $adb->query($sql);
 	if($adb->num_rows($result) ==1);
 	{

@@ -193,7 +193,7 @@ if(!rename("install/", $renamefile."install/"))
 </td>
 </tr>
 </table>
-<!-- master table closes -->
+<!-- master vtiger_table closes -->
 
 
 </body></html>

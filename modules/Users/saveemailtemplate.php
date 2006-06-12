@@ -33,7 +33,7 @@ if ($body !='')
 if(isset($templateid) && $templateid !='')
 {
 	$log->info("the templateid is set");  
-	$sql = "update emailtemplates set foldername = '".$folderName."', templatename ='".$templateName."', subject ='".$subject."', description ='".$description."', body ='".$body."' where templateid =".$templateid;
+	$sql = "update vtiger_emailtemplates set foldername = '".$folderName."', templatename ='".$templateName."', subject ='".$subject."', description ='".$description."', body ='".$body."' where templateid =".$templateid;
 	$adb->query($sql);
  
 	$log->info("about to invoke the detailviewemailtemplate file");  
@@ -42,7 +42,7 @@ if(isset($templateid) && $templateid !='')
 else
 {
 	$templateid = $db->getUniqueID('emailtemplates');
-	$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0,".$templateid.")";
+	$sql = "insert into vtiger_emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0,".$templateid.")";
 	$adb->query($sql);
 
 	 $log->info("added to the db the emailtemplate");

@@ -99,7 +99,7 @@ require_once('include/utils/utils.php');
 		if(!isset($organization_logoname))
 			$organization_logoname="";
 
-		$sql="SELECT * FROM organizationdetails WHERE organizationame = ".$adb->quote($org_name);
+		$sql="SELECT * FROM vtiger_organizationdetails WHERE organizationame = ".$adb->quote($org_name);
 		$result = $adb->query($sql);
 		$org_name = $adb->query_result($result,0,'organizationame');
 		$org_logo = $adb->query_result($result,0,'logoname'); 
@@ -107,7 +107,7 @@ require_once('include/utils/utils.php');
 
 		if($org_name=='')
 		{
-			$sql="INSERT INTO organizationdetails
+			$sql="INSERT INTO vtiger_organizationdetails
 				(organizationame, address, city, state, code, country, phone, fax, website, logoname)
 				VALUES (".$adb->quote($organization_name).
 					",".$adb->quote($organization_address).
@@ -142,7 +142,7 @@ require_once('include/utils/utils.php');
 				$organization_logoname=$org_logo;
 			}
 
-			$sql = "UPDATE organizationdetails
+			$sql = "UPDATE vtiger_organizationdetails
 				SET organizationame = ".$adb->quote($organization_name).",
 					address = ".$adb->quote($organization_address).",
 					city = ".$adb->quote($organization_city).",

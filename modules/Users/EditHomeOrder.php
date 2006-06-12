@@ -35,7 +35,7 @@ if ( !isset($_REQUEST['record']) )
 $record = $_REQUEST['record'];
 
 global $adb;
-$query = "SELECT users.homeorder FROM users WHERE id=$record";
+$query = "SELECT vtiger_users.homeorder FROM vtiger_users WHERE id=$record";
 $result =& $adb->query($query, false,"Error getting home order");
 $row = $adb->fetchByAssoc($result);
 
@@ -80,7 +80,7 @@ function update_db($data, $col_check)
 	global $record,$log,$adb;
 	
 	$home_section_order = implode(",",$data['block']);
-	$sql = "UPDATE users SET homeorder='$home_section_order' WHERE id=$record";
+	$sql = "UPDATE vtiger_users SET homeorder='$home_section_order' WHERE id=$record";
 	$log->debug("Updating user $record with SQL=$sql");
 	$result =& $adb->query($sql, false,"Error getting home order");
     return $result;

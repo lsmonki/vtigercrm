@@ -44,7 +44,7 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 global $adb;
 global $current_user;
 
-$query = "SELECT users.homeorder FROM users WHERE id=".$current_user->id;
+$query = "SELECT vtiger_users.homeorder FROM vtiger_users WHERE id=".$current_user->id;
 $result =& $adb->query($query, true,"Error getting home order");
 $row = $adb->fetchByAssoc($result);
 
@@ -140,14 +140,14 @@ foreach ( explode(",",$home_section_order) as $section )
 function getActivityType($id)
 {
 	global $adb;
-	$quer = "select activitytype from activity where activityid=".$id;
+	$quer = "select vtiger_activitytype from vtiger_activity where vtiger_activityid=".$id;
 	$res = $adb->query($quer);
 	$acti_type = $adb->query_result($res,0,"activitytype");
 	return $acti_type;
 
 }
 
-$query="select tagcloud from users where id=".$current_user->id;
+$query="select tagcloud from vtiger_users where id=".$current_user->id;
 $result=$adb->query($query);
 $tagcloud_js=$adb->query_result($result,0,'tagcloud');
 $smarty->assign("TAGCLOUD_JS",$tagcloud_js);
@@ -176,13 +176,13 @@ function getLoginHistory()
 	global $app_strings;
 	$i=0;
 	$userid= $current_user->id;
-	$query="select * from loginhistory inner join users on loginhistory.user_name=users.user_name where users.id=".$userid;
+	$query="select * from vtiger_loginhistory inner join vtiger_users on vtiger_loginhistory.user_name=vtiger_users.user_name where vtiger_users.id=".$userid;
 	$result=$adb->query($query);
 	$count=$adb->num_rows($result);
 	$logout_time=$adb->query_result($result,$count-2,'logout_time');
 	if($logout_time !='' && $logout_time != '0000-00-00 00:00:00' && $count >= 2)
 	{
-		$query ="select * from crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
+		$query ="select * from vtiger_crmentity where modifiedtime > '".$logout_time."'and smownerid =".$userid;
 		$result=$adb->query($query);
 		$entry_list=array();
 		for(;$i < $adb->num_rows($result);$i++)
@@ -210,15 +210,15 @@ function getGroupTaskLists()
 	$groupids = fetchUserGroupids($userid);
 	if($groupids !='')
 	{
-		//code modified to list the groups associates to a user om 21-11-05
+		//code modified to list the vtiger_groups associates to a user om 21-11-05
 		//Get the leads assigned to group
-		$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid inner join groups on leadgrouprelation.groupname=groups.groupname where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
+		$query = "select vtiger_leaddetails.leadid as id,vtiger_leaddetails.lastname as name,vtiger_leadgrouprelation.groupname as groupname, 'Leads     ' as Type from vtiger_leaddetails inner join vtiger_leadgrouprelation on vtiger_leaddetails.leadid=vtiger_leadgrouprelation.leadid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid inner join vtiger_groups on vtiger_leadgrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0  and vtiger_leadgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 		$query .= " union all ";
 		//Get the activities assigned to group
-		$query .= "select activity.activityid id,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid inner join groups on activitygrouprelation.groupname=groups.groupname where  crmentity.deleted=0 and ((activity.eventstatus !='held'and (activity.status is null or activity.status ='')) or (activity.status !='completed' and (activity.eventstatus is null or activity.eventstatus=''))) and activitygrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
+		$query .= "select vtiger_activity.activityid id,vtiger_activity.subject,vtiger_activitygrouprelation.groupname,'Activities' as Type from vtiger_activity inner join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_activity.activityid inner join vtiger_groups on vtiger_activitygrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0 and ((vtiger_activity.eventstatus !='held'and (vtiger_activity.status is null or vtiger_activity.status ='')) or (vtiger_activity.status !='completed' and (vtiger_activity.eventstatus is null or vtiger_activity.eventstatus=''))) and vtiger_activitygrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 		$query .= " union all ";
 		//Get the tickets assigned to group (status not Closed -- hardcoded value)
-		$query .= "select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid inner join groups on ticketgrouprelation.groupname=groups.groupname where crmentity.deleted=0 and troubletickets.status != 'Closed' and ticketgrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
+		$query .= "select vtiger_troubletickets.ticketid,vtiger_troubletickets.title,vtiger_ticketgrouprelation.groupname,'Tickets   ' as Type from vtiger_troubletickets inner join vtiger_ticketgrouprelation on vtiger_ticketgrouprelation.ticketid=vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid inner join vtiger_groups on vtiger_ticketgrouprelation.groupname=vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status != 'Closed' and vtiger_ticketgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 
 
 		$log->info("Here is the where clause for the list view: $query");

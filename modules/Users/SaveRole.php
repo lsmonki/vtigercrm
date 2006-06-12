@@ -17,12 +17,12 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
 	if($mode != 'edit')
 	{
-		$query = 'select rolename from role where rolename="'.$rolename.'"';
+		$query = 'select vtiger_rolename from vtiger_role where vtiger_rolename="'.$rolename.'"';
 	}
 	else
 	{
 		$roleid=$_REQUEST['roleid'];
-		$query = 'select rolename from role where rolename="'.$rolename.'" and roleid !="'.$roleid.'"';
+		$query = 'select vtiger_rolename from vtiger_role where vtiger_rolename="'.$rolename.'" and vtiger_roleid !="'.$roleid.'"';
 
 	}
 	$result = $adb->query($query);
@@ -51,7 +51,7 @@ elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 {
 	$selected_col_string = 	$_REQUEST['selectedColumnsString'];
 	$profile_array = explode(';',$selected_col_string);
-	//Inserting into role Table
+	//Inserting into vtiger_role Table
 	$roleId = createRole($rolename,$parentRoleId,$profile_array);
 	 	
 }

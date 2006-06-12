@@ -27,7 +27,7 @@ if(isset($_REQUEST['record']))
 }
 
 //Retreive lead details from database
-$sql = "SELECT firstname, lastname, company, smownerid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.leadid =".$id;
+$sql = "SELECT firstname, lastname, company, smownerid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.leadid =".$id;
 $result = $adb->query($sql);
 $row = $adb->fetch_array($result);
 
@@ -38,7 +38,7 @@ $log->debug(" the lastname is ".$lastname);
 $company = $row["company"];
 $log->debug(" the company is  ".$company);
 $potentialname = $row["company"] ."-";
-$log->debug(" the potentialname is ".$potentialname);
+$log->debug(" the vtiger_potentialname is ".$potentialname);
 $userid = $row["smownerid"];
 $log->debug(" the userid is ".$userid);
 
@@ -48,7 +48,7 @@ $log->info("Convert Lead view");
 
 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
-$sales_stage_query="select * from sales_stage";
+$sales_stage_query="select * from vtiger_sales_stage";
 $sales_stage_result = $adb->query($sales_stage_query);
 $noofsalesRows = $adb->num_rows($sales_stage_result);
 $sales_stage_fld = '';
@@ -114,13 +114,13 @@ $convertlead .='<tr>
 						<tr>
 							<td align="right" class="dvtCellLabel" width="50%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="50%">
-							<input name="potential_name" value="'.$potentialname.'" tabindex="3">
+							<input name="potential_name" value="'.$potentialname.'" vtiger_tabindex="3">
                                                         </td>
 						</tr>
 						<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
-								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
+								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" vtiger_tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
 							</td>
 						</tr>

@@ -24,7 +24,7 @@ class PopulateComboValues
 
 
 	/** 
-	 * To populate the default combo values for the combo tables
+	 * To populate the default combo values for the combo vtiger_tables
 	 */
 	function insertComboValues($values, $tableName)
 	{
@@ -37,11 +37,11 @@ class PopulateComboValues
 			$id = $adb->getUniqueID($tableName);
 			if($val != '')
 			{
-				$adb->query("insert into ".$tableName. " values(".$id.",'".$val."',".$i.",1)");
+				$adb->query("insert into vtiger_".$tableName. " values(".$id.",'".$val."',".$i.",1)");
 			}
 			else
 			{
-				$adb->query("insert into ".$tableName. " values(".$id.",'--None--',".$i.",1)");
+				$adb->query("insert into vtiger_".$tableName. " values(".$id.",'--None--',".$i.",1)");
 			}
 			$i++;
 		}
@@ -50,7 +50,7 @@ class PopulateComboValues
 
 
 	/** 
-	 * To populate the combo tables at startup time
+	 * To populate the combo vtiger_tables at startup time
 	 */
 
 	function create_tables () 

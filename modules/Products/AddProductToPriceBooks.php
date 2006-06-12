@@ -50,16 +50,16 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0" width="90%" ali
 $list_query = getListQuery("PriceBooks");
 $xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
-$list_query .= ' ORDER BY pricebookid DESC ';
+$list_query .= ' ORDER BY vtiger_pricebookid DESC ';
 
 $list_result = $adb->query($list_query);
 $num_rows = $adb->num_rows($list_result);
 
 $record_string= "Total No of Rows: ".$num_rows;
 
-//Retreiving the array of already releated products;
+//Retreiving the array of already releated vtiger_products;
 
-$sql1="select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_price from pricebookproductrel inner join crmentity on crmentity.crmid=pricebookproductrel.productid inner join products on products.productid=pricebookproductrel.productid where crmentity.deleted=0 and pricebookproductrel.productid=".$productid;
+$sql1="select vtiger_crmentity.crmid, vtiger_pricebookproductrel.pricebookid,vtiger_products.unit_price from vtiger_pricebookproductrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebookproductrel.productid inner join vtiger_products on vtiger_products.productid=vtiger_pricebookproductrel.productid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=".$productid;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
 $pbk_array = Array();

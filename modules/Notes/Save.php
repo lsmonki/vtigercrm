@@ -40,16 +40,16 @@ if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
-//Added for retrieve the old existing attachments when duplicated without new attachment
+//Added for retrieve the old existing vtiger_attachments when duplicated without new attachment
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
-        $sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
+        $sql = "select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ".$_REQUEST['old_id'];
         $result = $adb->query($sql);
         if($adb->num_rows($result) != 0)
                 $attachmentid = $adb->query_result($result,0,'attachmentsid');
 	        if($attachmentid != '')
 	        {
-	                $attachquery = "select * from attachments where attachmentsid = ".$attachmentid;
+	                $attachquery = "select * from vtiger_attachments where vtiger_attachmentsid = ".$attachmentid;
 	                $result = $adb->query($attachquery);
 	                $filename = $adb->query_result($result,0,'name');
 	                $filetype = $adb->query_result($result,0,'type');
@@ -58,8 +58,8 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 	                $_FILES['filename']['name'] = $filename;
 	                $_FILES['filename']['type'] = $filetype;
 
-			//we should read the file and calculate the size, without setting filesize, attachment will not save
-	                $filesize = filesize($filepath.$filename);
+			//we should read the file and calculate the size, without setting vtiger_filesize, attachment will not save
+	                $filesize = vtiger_filesize($filepath.$filename);
 	                $_FILES['filename']['size'] = $filesize;
 	        }
 }
@@ -85,7 +85,7 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_R
 		$crmid = $_REQUEST['ticket_id'];
 	if($crmid != $_REQUEST['parent_id'])
 	{
-		$sql = "insert into senotesrel (notesid, crmid) values('".$focus->id."','".$crmid."')";
+		$sql = "insert into vtiger_senotesrel (notesid, crmid) values('".$focus->id."','".$crmid."')";
 		$adb->query($sql);
 	}
 }

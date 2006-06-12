@@ -14,9 +14,9 @@
  ********************************************************************************/
 
 // takes a string and parses it into one record per line,
-// one field per delimiter, to a maximum number of lines
-// some files have a header, some dont.
-// keeps track of which fields are used
+// one vtiger_field per delimiter, to a maximum number of lines
+// some vtiger_files have a header, some dont.
+// keeps track of which vtiger_fields are used
 
 function parse_import($file_name,$delimiter,$max_lines,$has_header)
 {

@@ -18,24 +18,24 @@ $description= $_REQUEST['profile_description'];
 $def_module = $_REQUEST['selected_module'];
 $def_tab = $_REQUEST['selected_tab'];
 //Inserting values into Profile Table
-$sql1 = "insert into profile values('','".$profilename."','".$description."')";
+$sql1 = "insert into vtiger_profile values('','".$profilename."','".$description."')";
 $adb->query($sql1);
 
-        //Retreiving the profileid
-        $sql2 = "select max(profileid) as current_id from profile";
+        //Retreiving the vtiger_profileid
+        $sql2 = "select max(profileid) as current_id from vtiger_profile";
         $result2 = $adb->query($sql2);
         $profileid = $adb->query_result($result2,0,'current_id');
 
 
-//Retreiving the tabs permission array
-$tab_perr_result = $adb->query("select * from profile2tab where profileid=1");
-$act_perr_result = $adb->query("select * from profile2standardpermissions where profileid=1");
-$act_utility_result = $adb->query("select * from profile2utility where profileid=1");
+//Retreiving the vtiger_tabs permission array
+$tab_perr_result = $adb->query("select * from vtiger_profile2tab where vtiger_profileid=1");
+$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where vtiger_profileid=1");
+$act_utility_result = $adb->query("select * from vtiger_profile2utility where vtiger_profileid=1");
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
 
-	//Updating profile2global permissons table
+	//Updating vtiger_profile2global permissons vtiger_table
 	$view_all_req=$_REQUEST['view_all'];
 	$view_all = getPermissionValue($view_all_req);
 
@@ -43,10 +43,10 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	$edit_all = getPermissionValue($edit_all_req);
 
 
-	$sql4="insert into profile2globalpermissions values(".$profileid.",1, ".$view_all.")";
+	$sql4="insert into vtiger_profile2globalpermissions values(".$profileid.",1, ".$view_all.")";
         $adb->query($sql4);
 
-	$sql4="insert into profile2globalpermissions values(".$profileid.",2, ".$edit_all.")";
+	$sql4="insert into vtiger_profile2globalpermissions values(".$profileid.",2, ".$edit_all.")";
         $adb->query($sql4);
 
 	
@@ -66,23 +66,23 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			{
 				$permission_value = 1;
 			}
-			$sql4="insert into profile2tab values(".$profileid.", ".$tab_id.", ".$permission_value.")";
+			$sql4="insert into vtiger_profile2tab values(".$profileid.", ".$tab_id.", ".$permission_value.")";
                 	$adb->query($sql4);
 
 			if($tab_id ==9)
 			{
-				$sql4="insert into profile2tab values(".$profileid.",16, ".$permission_value.")";
+				$sql4="insert into vtiger_profile2tab values(".$profileid.",16, ".$permission_value.")";
                         	$adb->query($sql4);	
 			}
 		}
 		elseif($tab_id == 13)
 		{
-			$sql4="insert into profile2tab values(".$profileid.",13,0)";
+			$sql4="insert into vtiger_profile2tab values(".$profileid.",13,0)";
                         $adb->query($sql4);
 		}
 		elseif($tab_id == 15)
 		{
-			$sql4="insert into profile2tab values(".$profileid.",15,0)";
+			$sql4="insert into vtiger_profile2tab values(".$profileid.",15,0)";
                         $adb->query($sql4);
 		}
 	}
@@ -118,12 +118,12 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 				$permission_value = 1;
 			}
 
-			$sql7="insert into profile2standardpermissions values(".$profileid.", ".$tab_id.", ".$action_id.", ".$permission_value.")";
+			$sql7="insert into vtiger_profile2standardpermissions values(".$profileid.", ".$tab_id.", ".$action_id.", ".$permission_value.")";
                 	$adb->query($sql7);
 
 			if($tab_id ==9)
 			{
-				$sql7="insert into profile2standardpermissions values(".$profileid.", 16, ".$action_id.", ".$permission_value.")";
+				$sql7="insert into vtiger_profile2standardpermissions values(".$profileid.", 16, ".$action_id.", ".$permission_value.")";
                         	$adb->query($sql7);
 			}
 
@@ -133,7 +133,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 		elseif($tab_id == 15)
 		{
 			
-                          $sql7="insert into profile2standardpermissions values(".$profileid.", 15, ".$action_id.",0)";
+                          $sql7="insert into vtiger_profile2standardpermissions values(".$profileid.", 15, ".$action_id.",0)";
                           $adb->query($sql7);
 		}
 	}
@@ -158,7 +158,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			$permission_value = 1;
 		}
 
-		$sql9="insert into profile2utility values(".$profileid.", ".$tab_id.", ".$action_id.", ".$permission_value.")";
+		$sql9="insert into vtiger_profile2utility values(".$profileid.", ".$tab_id.", ".$action_id.", ".$permission_value.")";
                 $adb->query($sql9);
 
 	}
@@ -185,14 +185,14 @@ foreach($modArr as $fld_module => $fld_label)
 		{
 			$visible_value = 1;
 		}
-		//Updating the Mandatory fields
+		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype				== 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 		{
 			$visible_value = 0;
 		}
 		//Updating the database
-		$sql11="insert into profile2field values(".$profileid.", ".$tab_id.", ".$fieldid.", ".$visible_value.",1)";
+		$sql11="insert into vtiger_profile2field values(".$profileid.", ".$tab_id.", ".$fieldid.", ".$visible_value.",1)";
                 $adb->query($sql11);
 	}
 }

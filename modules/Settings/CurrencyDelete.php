@@ -11,9 +11,9 @@
 
 $del_id = $_REQUEST['delete_currency_id'];
 $tran_id = $_REQUEST['transfer_currency_id'];
-$sql0 = "update users set currency_id=".$tran_id." where currency_id=".$del_id;
+$sql0 = "update vtiger_users set vtiger_currency_id=".$tran_id." where vtiger_currency_id=".$del_id;
 $adb->query($sql0);
-$sql = "delete from currency_info where id =".$del_id;
+$sql = "delete from vtiger_currency_info where id =".$del_id;
 $adb->query($sql);
 header("Location: index.php?action=SettingsAjax&module=Settings&file=CurrencyListView&ajax=true");
 

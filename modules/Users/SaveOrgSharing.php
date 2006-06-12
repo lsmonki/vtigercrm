@@ -12,7 +12,7 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 
-$sql2 = "select * from def_org_share where editstatus=0";
+$sql2 = "select * from vtiger_def_org_share where editstatus=0";
 $result2 = $adb->query($sql2);
 $num_rows = $adb->num_rows($result2);
 
@@ -22,19 +22,19 @@ for($i=0; $i<$num_rows; $i++)
 	$tabid=$adb->query_result($result2,$i,'tabid');
 		$reqval = $tabid.'_per';	
 		$permission=$_REQUEST[$reqval];
-		$sql7="update def_org_share set permission=".$permission." where tabid=".$tabid." and ruleid=".$ruleid;
+		$sql7="update vtiger_def_org_share set permission=".$permission." where vtiger_tabid=".$tabid." and ruleid=".$ruleid;
 		$adb->query($sql7);
 
 		if($tabid == 6)
 		{
-			$sql8="update def_org_share set permission=".$permission." where tabid=4";
+			$sql8="update vtiger_def_org_share set permission=".$permission." where vtiger_tabid=4";
 			$adb->query($sql8);
 			
 		}
 
 		if($tabid == 9)
 		{
-			$sql8="update def_org_share set permission=".$permission." where tabid=16";
+			$sql8="update vtiger_def_org_share set permission=".$permission." where vtiger_tabid=16";
 			$adb->query($sql8);
 			
 		}

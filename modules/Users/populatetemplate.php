@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-//query the specific table and then get the data and write the data here 
+//query the specific vtiger_table and then get the data and write the data here 
 require_once('include/database/PearDatabase.php');
 include_once('modules/Contacts/Contact.php');
 include_once('modules/Leads/Lead.php');
@@ -16,7 +16,7 @@ include_once('modules/Users/User.php');
 global $log;
 
 //download the template file and store it in some specific location
-$sql = "select templatename,body from emailtemplates where templateid='".$_REQUEST["templateid"] ."'";
+$sql = "select templatename,body from vtiger_emailtemplates where templateid='".$_REQUEST["templateid"] ."'";
 $tempresult = $adb->query($sql);
 $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];
@@ -86,7 +86,7 @@ foreach ($focus->column_fields as $columnName=>$value)
 
 global $current_user;
 global $adb;
-$query = 'select * from users where id= '.$current_user->id;
+$query = 'select * from vtiger_users where id= '.$current_user->id;
 $result = $adb->query($query);
 $res_row = $adb->fetchByAssoc($result);
 foreach ($res_row as $columnName=>$value)

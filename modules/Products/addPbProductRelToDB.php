@@ -27,9 +27,9 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 		if($id != '') {
 			$lp_name = $id.'_listprice';
 			$list_price = $_REQUEST[$lp_name];
-			//Updating the pricebook product rel table
-			 $log->info("Products :: Inserting products to price book");
-			$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
+			//Updating the vtiger_pricebook product rel vtiger_table
+			 $log->info("Products :: Inserting vtiger_products to price book");
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
 			$adb->query($query);
 		}
 	}
@@ -44,9 +44,9 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 		if($id != '') {
 			$lp_name = $id.'_listprice';
 			$list_price = $_REQUEST[$lp_name];
-			//Updating the pricebook product rel table
+			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting PriceBooks to Product");
-			$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
 			$adb->query($query);
 		}
 	}

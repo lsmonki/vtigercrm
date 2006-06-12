@@ -52,8 +52,8 @@ $mod_strings = Array(
 	
 'LBL_EXISTING_CONTACT' => 'Used an existing contact',
 'LBL_CREATED_CONTACT' => 'Created a new contact',
-'LBL_EXISTING_ACCOUNT' => 'Used an existing account',
-'LBL_CREATED_ACCOUNT' => 'Created a new account',
+'LBL_EXISTING_ACCOUNT' => 'Used an existing vtiger_account',
+'LBL_CREATED_ACCOUNT' => 'Created a new vtiger_account',
 'LBL_CREATED_CALL' => 'Created a new call',
 'LBL_CREATED_MEETING' => 'Created a new meeting',
 'LBL_ADDMORE_BUSINESSCARD' =>'Add another business card',
@@ -102,13 +102,13 @@ $mod_strings = Array(
 'LBL_CONTACT_ROLE'=>'Role:',
 'LBL_OPP_NAME'=>'Opportunity Name:',
 'LBL_DUPLICATE'=>'Potential Duplicate Contacts',
-'MSG_DUPLICATE' => 'Creating this contact may potentialy create a duplicate contact. You may either select a contact from the list below or you may click on Create New Contact to continue creating a new contact with the previously entered data.',
+'MSG_DUPLICATE' => 'Creating this contact may vtiger_potentialy create a duplicate contact. You may either select a contact from the list below or you may click on Create New Contact to continue creating a new contact with the previously entered data.',
 
 'LNK_NEW_APPOINTMENT' => 'New Appointment',
 'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
-'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct report?',
+'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct vtiger_report?',
 'ERR_DELETE_RECORD'=>"en_us A record number must be specified to delete the contact.",
 'NTC_COPY_PRIMARY_ADDRESS'=>'Copy primary address to alternate address',
 'NTC_COPY_ALTERNATE_ADDRESS'=>'Copy alternate address to primary address',
@@ -176,7 +176,7 @@ $mod_strings = Array(
 'Contact Image'=>'Contact Image',
 'Description'=>'Description',
 
-// Added fields for Add Business Card
+// Added vtiger_fields for Add Business Card
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_NEW_ACCOUNT'=>'New Account',
 'LBL_NOTE_SUBJECT'=>'Note Subject:',
@@ -187,7 +187,7 @@ $mod_strings = Array(
 'LBL_START_DATE'=>'Start Date:',
 'LBL_START_TIME'=>'Start Time:',
 
-//Added field after 4_0_1
+//Added vtiger_field after 4_0_1
 'Portal User'=>'Portal User',
 'LBL_CUSTOMER_PORTAL_INFORMATION'=>'Customer Portal Information',
 'Support Start Date'=>'Support Start Date',
@@ -195,7 +195,7 @@ $mod_strings = Array(
 //Added for 4.2 Release -- CustomView
 'Name'=>'Name',
 'LBL_ALL'=>'All',
-'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
+'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a file smaller than 800000 bytes',
 'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
 'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
 'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',

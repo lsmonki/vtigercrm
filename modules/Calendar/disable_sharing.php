@@ -16,7 +16,7 @@ $returnaction=$_REQUEST['return_action'];
 $storearray = explode(";",$idlist);
 foreach($storearray as $id)
 {
-        $sql="delete from sharedcalendar where sharedid='" .$id ."'";
+        $sql="delete from vtiger_sharedcalendar where sharedid='" .$id ."'";
         $result = $adb->query($sql);
 }
 header("Location:index.php?module=".$returnmodule."&action=".$returnaction);

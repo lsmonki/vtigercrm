@@ -100,7 +100,7 @@ function export_all($type)
 	else if ($type == "Accounts")
 	{
 		$focus = new Account;
-		$exp_query="SELECT columnname, fieldlabel FROM field where tabid=6";
+		$exp_query="SELECT columnname, fieldlabel FROM vtiger_field where tabid=6";
 		$account_result=$adb->query($exp_query);
 		if($adb->num_rows($account_result)!=0)
 		{

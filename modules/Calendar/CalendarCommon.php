@@ -19,13 +19,13 @@ $image_path=$theme_path."images/";
 /**
  * To get the lists of sharedids 
  * @param $id -- The user id :: Type integer
- * @returns $sharedids -- The shared users id :: Type Array
+ * @returns $sharedids -- The shared vtiger_users id :: Type Array
  */
 function getSharedUserId($id)
 {
         global $adb;
 	$sharedid = Array();
-        $query = "SELECT * from sharedcalendar where userid=".$id;
+        $query = "SELECT * from vtiger_sharedcalendar where userid=".$id;
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
@@ -36,14 +36,14 @@ function getSharedUserId($id)
 }
 
 /**
- * To get the lists of users id who shared their calendar with specified user
+ * To get the lists of vtiger_users id who shared their calendar with specified user
  * @param $sharedid -- The shared user id :: Type integer
- * @returns $shared_ids -- a comma seperated users id  :: Type string
+ * @returns $shared_ids -- a comma seperated vtiger_users id  :: Type string
  */
 function getSharedCalendarId($sharedid)
 {
 	global $adb;
-	$query = "SELECT * from sharedcalendar where sharedid=".$sharedid;
+	$query = "SELECT * from vtiger_sharedcalendar where sharedid=".$sharedid;
 	$result = $adb->query($query);
 	if($adb->num_rows($result)!=0)
 	{
@@ -55,7 +55,7 @@ function getSharedCalendarId($sharedid)
 }
 
 /**
- * To get userid and username of all users except the current user
+ * To get userid and username of all vtiger_users except the current user
  * @param $id -- The user id :: Type integer
  * @returns $user_details -- Array in the following format:
  * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
@@ -63,7 +63,7 @@ function getSharedCalendarId($sharedid)
 function getOtherUserName($id)
 {
 	global $adb;
-	$query="select * from users where deleted=0 and status='Active' and id!=".$id;
+	$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	$user_details=Array();

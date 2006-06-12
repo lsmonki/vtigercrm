@@ -177,7 +177,7 @@ $salesforce_contacts_field_map = array(
 
 
 /*
-ommited fields to map:
+ommited vtiger_fields to map:
 "Account Number"=>"",
 "Account Site"=>"",
 "Last Activity"=>"",

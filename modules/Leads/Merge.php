@@ -38,7 +38,7 @@ if($templateid == "")
 }
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from wordtemplates where templateid=".$templateid;
+$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=".$templateid;
 
 $result = $adb->query($sql);
 $temparray = $adb->fetch_array($result);
@@ -74,7 +74,7 @@ if($mass_merge != "")
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tablename,columnname,fieldlabel from field where tabid=7 order by tablename";
+$query1="select vtiger_tablename,columnname,fieldlabel from vtiger_field where vtiger_tabid=7 order by vtiger_tablename";
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
 	
@@ -85,7 +85,7 @@ for ($x=0; $x<$y; $x++)
 	$querycolumns[$x] = $tablename.".".$columnname;
   if($columnname == "smownerid")
   {
-    $querycolumns[$x] = "concat(users.last_name,' ',users.first_name) as username,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
+    $querycolumns[$x] = "concat(vtiger_users.last_name,' ',vtiger_users.first_name) as username,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
   }
   $field_label[$x] = "LEAD_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
 	if($columnname == "smownerid")
@@ -100,13 +100,13 @@ if(count($querycolumns) > 0)
 {
 	$selectcolumns = implode($querycolumns,",");
 
-$query = "select ".$selectcolumns." from leaddetails 
-  inner join crmentity on crmentity.crmid=leaddetails.leadid 
-  inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid 
-  inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid 
-  inner join leadscf on leaddetails.leadid = leadscf.leadid 
-  left join users on users.id = crmentity.smownerid
-  where crmentity.deleted=0 and leaddetails.leadid in (".$mass_merge.")";
+$query = "select ".$selectcolumns." from vtiger_leaddetails 
+  inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
+  inner join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid=vtiger_leaddetails.leadid 
+  inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid=vtiger_leadsubdetails.leadsubscriptionid 
+  inner join vtiger_leadscf on vtiger_leaddetails.leadid = vtiger_leadscf.leadid 
+  left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+  where vtiger_crmentity.deleted=0 and vtiger_leaddetails.leadid in (".$mass_merge.")";
 		
 $result = $adb->query($query);
 	
@@ -140,7 +140,7 @@ while($columnValues = $adb->fetch_array($result))
 $csvdata = implode($mergevalue,"###");
 }else
 {
-	die("No fields to do Merge");
+	die("No vtiger_fields to do Merge");
 }	
 
 $handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");

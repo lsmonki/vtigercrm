@@ -46,7 +46,7 @@ $output ='<div id="DeleteLay">
 $output.='<select class="select" name="transfer_user_id" id="transfer_user_id">';
 	     
 		 global $adb;	
-         $sql = "select * from users";
+         $sql = "select * from vtiger_users";
          $result = $adb->query($sql);
          $temprow = $adb->fetch_array($result);
          do

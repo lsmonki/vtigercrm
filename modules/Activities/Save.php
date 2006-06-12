@@ -106,7 +106,7 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') ||
 		$crmid = $_REQUEST['product_id'];
 	if($crmid != $_REQUEST['parent_id'])
 	{
-		$sql = "insert into seactivityrel (activityid, crmid) values('".$focus->id."','".$crmid."')";
+		$sql = "insert into vtiger_seactivityrel (activityid, crmid) values('".$focus->id."','".$crmid."')";
 		$adb->query($sql);
 	}
 }
@@ -114,7 +114,7 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') ||
 $activemode = "";
 if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
 
-//Added code to send mail to the assigned to user about the details of the activity if sendnotification = on and assigned to user
+//Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
 if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
 {
 	global $current_user;
@@ -128,7 +128,7 @@ if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
         $mail_status  = send_mail('Activities',$to_email,$current_user->user_name,'',$subject,$description);
 }
 
-//code added to send mail to the invitees
+//code added to send mail to the vtiger_invitees
 if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 {
 	global $current_user;
@@ -163,7 +163,7 @@ else
 	$page.='&allflag=Normal';
 header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page");
 
-//Function to get the activity details for mail body
+//Function to get the vtiger_activity details for mail body
 function getActivityDetails($description)
 {
 	global $log;
@@ -175,7 +175,7 @@ function getActivityDetails($description)
 	$status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
 
 	$list = 'Dear '.$name.',';
-	$list .= '<br><br> There is an activity('.$_REQUEST['activity_mode'].')'.$reply.'. The details are :';
+	$list .= '<br><br> There is an vtiger_activity('.$_REQUEST['activity_mode'].')'.$reply.'. The details are :';
 	$list .= '<br>Subject : '.$_REQUEST['subject'];
 	$list .= '<br>Status : '.$status;
 	$list .= '<br>Priority : '.$_REQUEST['taskpriority'];

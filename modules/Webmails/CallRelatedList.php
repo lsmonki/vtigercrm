@@ -52,21 +52,21 @@ $reply_to=$email->replyTo;
 $block["Leads"]= "";
 global $adb;
 if($email->relationship != 0 && $email->relationship["type"] == "Leads") {
-	$q = "SELECT leaddetails.firstname, leaddetails.lastname, leaddetails.email, leaddetails.company, crmentity.smownerid from leaddetails left join crmentity on crmentity.crmid=leaddetails.leadid WHERE leaddetails.leadid='".$email->relationship["id"]."'";
+	$q = "SELECT vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.email, vtiger_leaddetails.company, vtiger_crmentity.smownerid from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid WHERE vtiger_leaddetails.leadid='".$email->relationship["id"]."'";
 	$rs = $adb->query($q);
 	$block["Leads"]["header"]= array("0"=>"First Name","1"=>"Last Name","2"=>"Company Name","3"=>"Email Address","4"=>"Assigned To");
 	$block["Leads"]["entries"]= array("0"=>array($adb->query_result($rs,0,'firstname'),"1"=>$adb->query_result($rs,0,'lastname'),2=>$adb->query_result($rs,0,'company'),3=>$adb->query_result($rs,0,'email'),4=>$adb->query_result($rs,0,'smownerid')));
 }
 $block["Contacts"]= "";
 if($email->relationship != 0 && $email->relationship["type"] == "Contacts") {
-	$q = "SELECT contactdetails.firstname, contactdetails.lastname, contactdetails.email, contactdetails.title, crmentity.smownerid from contactdetails left join crmentity on crmentity.crmid=contactdetails.contactid WHERE contactdetails.contactid='".$email->relationship["id"]."'";
+	$q = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_contactdetails.email, vtiger_contactdetails.title, vtiger_crmentity.smownerid from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE vtiger_contactdetails.contactid='".$email->relationship["id"]."'";
 	$rs = $adb->query($q);
 	$block["Contacts"]["header"]= array("0"=>"First Name","1"=>"Last Name","2"=>"Title","3"=>"Email Address","4"=>"Assigned To");
 	$block["Contacts"]["entries"]= array("0"=>array($adb->query_result($rs,0,'firstname'),"1"=>$adb->query_result($rs,0,'lastname'),2=>$adb->query_result($rs,0,'title'),3=>$adb->query_result($rs,0,'email'),4=>$adb->query_result($rs,0,'smownerid')));
 }
 $block["Accounts"]= "";
 if($email->relationship != 0 && $email->relationship["type"] == "Accounts") {
-	$q = "SELECT acccount.accountname, account.email1, account.website, account.industry, crmentity.smownerid from account left join crmentity on crmentity.crmid=account.accountid WHERE account.accountid='".$email->relationship["id"]."'";
+	$q = "SELECT acccount.accountname, vtiger_account.email1, vtiger_account.website, vtiger_account.industry, vtiger_crmentity.smownerid from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountid='".$email->relationship["id"]."'";
 	$rs = $adb->query($q);
 	$block["Accounts"]["header"]= array("0"=>"Account Name","1"=>"Email","2"=>"Web Site","3"=>"Industry","4"=>"Assigned To");
 	$block["Accounts"]["entries"]= array("0"=>array($adb->query_result($rs,0,'accountname'),"1"=>$adb->query_result($rs,0,'email'),2=>$adb->query_result($rs,0,'website'),3=>$adb->query_result($rs,0,'industry'),4=>$adb->query_result($rs,0,'smownerid')));

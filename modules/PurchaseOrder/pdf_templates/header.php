@@ -67,7 +67,7 @@ $pdf->addRecBlock($vendor_name, "Vendor Name", $termBlock);
 $dueBlock=array("80","65");
 $pdf->addRecBlock($valid_till, "Due Date",$dueBlock);
 
-// invoice number block
+// vtiger_invoice number block
 $invBlock=array("145","65");
 $pdf->addRecBlock($id, "Order Number",$invBlock);
 

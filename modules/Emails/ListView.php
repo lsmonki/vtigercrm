@@ -88,14 +88,14 @@ global $email_title;
 $display_title = $mod_strings['LBL_LIST_FORM_TITLE'];
 if($email_title)$display_title = $email_title;
 
-//to get the search field if exists
+//to get the search vtiger_field if exists
 if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_text'] != '')
 {
 	$url_string .= "&search=".$_REQUEST['search']."&search_field=".$_REQUEST['search_field']."&search_text=".$_REQUEST['search_text'];
 	if($_REQUEST['search_field'] != 'join')
 		$where = $_REQUEST['search_field']." like '%".$_REQUEST['search_text']."%'";	
 	else
-		$where = "(subject like '%".$_REQUEST['search_text']."%' OR users.user_name like '%".$_REQUEST['search_text']."%')";	
+		$where = "(subject like '%".$_REQUEST['search_text']."%' OR vtiger_users.user_name like '%".$_REQUEST['search_text']."%')";	
 }
 
 
@@ -118,23 +118,23 @@ if(isset($where) && $where != '')
 }
 if($_REQUEST['folderid'] =='2')
 {
-	$list_query .= "AND seactivityrel.crmid in (select contactid from contactdetails) AND emaildetails.email_flag !='WEBMAIL'";
+	$list_query .= "AND vtiger_seactivityrel.crmid in (select contactid from vtiger_contactdetails) AND vtiger_emaildetails.email_flag !='WEBMAIL'";
 }
 if($_REQUEST['folderid'] =='3')
 {
-	$list_query .= "AND seactivityrel.crmid in (select accountid from account)";	
+	$list_query .= "AND vtiger_seactivityrel.crmid in (select vtiger_accountid from vtiger_account)";	
 }
 if($_REQUEST['folderid'] =='4')
 {
-	$list_query .= "AND seactivityrel.crmid in (select leadid from leaddetails)";	
+	$list_query .= "AND vtiger_seactivityrel.crmid in (select leadid from vtiger_leaddetails)";	
 }
 if($_REQUEST['folderid'] =='5')
 {
-	$list_query .= "AND salesmanactivityrel.smid in (select id from users)";	
+	$list_query .= "AND vtiger_salesmanactivityrel.smid in (select id from vtiger_users)";	
 }
 if($_REQUEST['folderid'] =='6')
 {
-	$list_query .= "AND emaildetails.email_flag ='WEBMAIL'";	
+	$list_query .= "AND vtiger_emaildetails.email_flag ='WEBMAIL'";	
 }
 if(isset($order_by) && $order_by != '')
 {

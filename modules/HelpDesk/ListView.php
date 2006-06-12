@@ -134,7 +134,7 @@ if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
 	{
-		$list_query .= ' ORDER BY users.user_name '.$sorder;
+		$list_query .= ' ORDER BY vtiger_users.user_name '.$sorder;
 	}
 	else
 	{
@@ -146,7 +146,7 @@ if(isset($order_by) && $order_by != '')
 }
 else
 {
-	$list_query .= ' order by troubletickets.ticketid DESC';
+	$list_query .= ' order by vtiger_troubletickets.ticketid DESC';
 }
 
 

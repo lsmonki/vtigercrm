@@ -21,11 +21,11 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//Added on 09-11-2005 to avoid loading the webmail files in Email process
+//Added on 09-11-2005 to avoid loading the webmail vtiger_files in Email process
 if($_REQUEST['smodule'] != '')
 {
 	define('SM_PATH','modules/squirrelmail-1.4.4/');
-	/* SquirrelMail required files. */
+	/* SquirrelMail required vtiger_files. */
 	require_once(SM_PATH . 'functions/strings.php');
 	require_once(SM_PATH . 'functions/imap_general.php');
 	require_once(SM_PATH . 'functions/imap_messages.php');
@@ -130,7 +130,7 @@ function checkIfContactExists($mailid)
 	global $log;
 	$log->debug("Entering checkIfContactExists(".$mailid.") method ...");
 	global $adb;
-	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= ".$adb->quote($mailid);
+	$sql = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and email= ".$adb->quote($mailid);
 	$result = $adb->query($sql);
 	$numRows = $adb->num_rows($result);
 	if($numRows > 0)
@@ -153,10 +153,10 @@ $focus->column_fields["activitytype"]="Emails";
 $focus->column_fields["date_start"]= date('Y-m-d');
 $focus->save("Emails");
 
-//saving the email details in emaildetails table
+//saving the email details in vtiger_emaildetails vtiger_table
 $return_id = $focus->id;
 $email_id = $return_id;
-$query = 'select emailid from emaildetails where emailid ='.$email_id;
+$query = 'select emailid from vtiger_emaildetails where emailid ='.$email_id;
 $result = $adb->query($query);
 if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
 	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
@@ -167,10 +167,10 @@ $all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
 $all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
+	$query = 'update vtiger_emaildetails set to_email="'.$all_to_ids.'",cc_email="'.$all_cc_ids.'",bcc_email="'.$all_bcc_ids.'",idlists="'.$_REQUEST["parent_id"].'",email_flag="SAVED" where emailid = '.$email_id;
 }else
 {
-	$query = 'insert into emaildetails values ('.$email_id.',"","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
+	$query = 'insert into vtiger_emaildetails values ('.$email_id.',"","'.$all_to_ids.'","'.$all_cc_ids.'","'.$all_bcc_ids.'","","'.$_REQUEST["parent_id"].'","SAVED")';
 }
 $adb->query($query);
 

@@ -85,7 +85,7 @@ $mod_strings = Array(
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_CONTACT_TITLE'=>'Contacts',
 
-//Added fields after RC1 - Release
+//Added vtiger_fields after RC1 - Release
 'LBL_ALL'=>'All',
 'LBL_WON'=>'Won',
 'LBL_LOST'=>'Lost',

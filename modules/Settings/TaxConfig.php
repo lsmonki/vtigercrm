@@ -63,7 +63,7 @@ function getTaxConfigValues($taxes_array)
 	
 	foreach($taxes_array as $tax_type)
 	{
-		$res = $adb->query("select * from inventorytaxinfo where taxname=\"$tax_type\"");
+		$res = $adb->query("select * from vtiger_inventorytaxinfo where taxname=\"$tax_type\"");
 		$tax_percentages[$tax_type] = $adb->query_result($res,0,'percentage');	
 	}
 	
@@ -84,7 +84,7 @@ function updateTaxPercentages($new_percentages)
 	foreach($new_percentages as $tax_type => $new_val)
 	{
 		if($new_val != '')
-			$res = $adb->query("update inventorytaxinfo set percentage = \"$new_val\" where taxname=\"$tax_type\"");
+			$res = $adb->query("update vtiger_inventorytaxinfo set percentage = \"$new_val\" where taxname=\"$tax_type\"");
 	}
 
 	$log->debug("Exiting from the function updateTaxPercentages");

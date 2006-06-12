@@ -16,13 +16,13 @@ require("modules/Emails/class.phpmailer.php");
   *   $module 		-- current module 
   *   $to_email 	-- to email address 
   *   $from_name	-- currently loggedin user name
-  *   $from_email	-- currently loggedin users's email id. you can give as '' if you are not in HelpDesk module
+  *   $from_email	-- currently loggedin vtiger_users's email id. you can give as '' if you are not in HelpDesk module
   *   $subject		-- subject of the email you want to send
   *   $contents		-- body of the email you want to send
   *   $cc		-- add email ids with comma seperated. - optional 
   *   $bcc		-- add email ids with comma seperated. - optional.
-  *   $attachment	-- whether we want to attach the currently selected file or all files.[values = current,all] - optional
-  *   $emailid		-- id of the email object which will be used to get the attachments
+  *   $attachment	-- whether we want to attach the currently selected file or all vtiger_files.[values = current,all] - optional
+  *   $emailid		-- id of the email object which will be used to get the vtiger_attachments
   */
 function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='')
 {
@@ -35,7 +35,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$adb->println("To id => '".$to_email."'\nSubject ==>'".$subject."'\nContents ==> '".$contents."'");
 
-	//Get the email id of assigned_to user -- pass the value and name, name must be "user_name" or "id"(field names of users table)
+	//Get the email id of assigned_to user -- pass the value and name, name must be "user_name" or "id"(field names of vtiger_users vtiger_table)
 	//$to_email = getUserEmailId('id',$assigned_user_id);
 
 	//if module is HelpDesk then from_email will come based on support email id 
@@ -65,7 +65,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 }
 
 /**	Function to get the user Email id based on column name and column value
-  *	$name -- column name of the users table 
+  *	$name -- column name of the vtiger_users vtiger_table 
   *	$val  -- column value 
   */
 function getUserEmailId($name,$val)
@@ -74,9 +74,9 @@ function getUserEmailId($name,$val)
 	$adb->println("Inside the function getUserEmailId. --- ".$name." = '".$val."'");
 	if($val != '')
 	{
-		//$sql = "select email1, email2, yahoo_id from users where ".$name." = '".$val."'";
+		//$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = '".$val."'";
 		//done to resolve the PHP5 specific behaviour
-		$sql = "select email1, email2, yahoo_id from users where ".$name." = ".$adb->quote($val);
+		$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = ".$adb->quote($val);
 		$res = $adb->query($sql);
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')
@@ -106,7 +106,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = $adb->query_result($adb->query("select signature from users where user_name=".$adb->quote($fromname)),0,"signature");
+	$sign = $adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature");
 	if($sign != '')
 	{
 		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
@@ -127,9 +127,9 @@ function addSignature($contents, $fromname)
   *	$from_name	-- from name which will be displayed in the mail
   *	$to_email 	-- to email address  -- This can be an email in a single string, a comma separated
   *			   list of emails or an array of email addresses
-  *	$attachment	-- whether we want to attach the currently selected file or all files.
+  *	$attachment	-- whether we want to attach the currently selected file or all vtiger_files.
   				[values = current,all] - optional
-  *	$emailid	-- id of the email object which will be used to get the attachments - optional
+  *	$emailid	-- id of the email object which will be used to get the vtiger_attachments - optional
   */
 function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='')
 {
@@ -147,7 +147,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
-	$rs = $adb->query("select first_name,last_name from users where user_name='".$from_name."'");
+	$rs = $adb->query("select first_name,last_name from vtiger_users where user_name='".$from_name."'");
 	if($adb->num_rows($rs) > 0)
 		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
 
@@ -176,7 +176,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 		addAttachment(&$mail,$_FILES['filename']['name'],$emailid);
 	}
 
-	//This will add all the files which are related to this record or email
+	//This will add all the vtiger_files which are related to this record or email
 	if($attachment == 'all')
 	{
 		addAllAttachments(&$mail,$emailid);
@@ -197,7 +197,7 @@ function setMailServerProperties($mail)
 	global $adb;
 	$adb->println("Inside the function setMailServerProperties");
 
-	$res = $adb->query("select * from systems where server_type='email'");
+	$res = $adb->query("select * from vtiger_systems where server_type='email'");
 	$server = $adb->query_result($res,0,'server');
         $username = $adb->query_result($res,0,'server_username');
         $password = $adb->query_result($res,0,'server_password');
@@ -231,17 +231,17 @@ function addAttachment($mail,$filename,$record)
         }
 }
 
-/**     Function to add all the files as attachment with the mail object
+/**     Function to add all the vtiger_files as attachment with the mail object
   *     $mail -- reference of the mail object
-  *     $record -- email id ie., record id which is used to get the all attachments from database
+  *     $record -- email id ie., record id which is used to get the all vtiger_attachments from database
   */
 function addAllAttachments($mail,$record)
 {
 	global $adb, $root_directory;
         $adb->println("Inside the function addAllAttachments");
 
-	//Retrieve the files from database where avoid the file which has been currently selected
-	$sql = "select attachments.* from attachments inner join seattachmentsrel on attachments.attachmentsid = seattachmentsrel.attachmentsid inner join crmentity on crmentity.crmid = attachments.attachmentsid where crmentity.deleted=0 and seattachmentsrel.crmid=".$record;
+	//Retrieve the vtiger_files from database where avoid the file which has been currently selected
+	$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.deleted=0 and vtiger_seattachmentsrel.crmid=".$record;
 	$res = $adb->query($sql);
 	$count = $adb->num_rows($res);
 
@@ -316,7 +316,7 @@ function MailSend($mail)
 
 /**	Function to get the Parent email id from HelpDesk to send the details about the ticket via email
   *	$returnmodule -- Parent module value. Contact or Account for send email about the ticket details
-  *	$parentid -- id of the parent ie., contact or account
+  *	$parentid -- id of the parent ie., contact or vtiger_account
   */
 function getParentMailId($parentmodule,$parentid)
 {
@@ -325,14 +325,14 @@ function getParentMailId($parentmodule,$parentid)
 
         if($parentmodule == 'Contacts')
         {
-                $tablename = 'contactdetails';
+                $tablename = 'vtiger_contactdetails';
                 $idname = 'contactid';
 		$first_email = 'email';
 		$second_email = 'yahooid';
         }
         if($parentmodule == 'Accounts')
         {
-                $tablename = 'account';
+                $tablename = 'vtiger_account';
                 $idname = 'accountid';
 		$first_email = 'email1';
 		$second_email = 'email2';
@@ -451,7 +451,7 @@ function parseEmailErrorString($mail_error_str)
 			}
 			elseif($status_str[1] == '0')
 			{
-				$adb->println("first elseif part - status will be 0 which is the case of assigned to users's email is empty.");
+				$adb->println("first elseif part - status will be 0 which is the case of assigned to vtiger_users's email is empty.");
 				$errorstr .= '<br><b><font color=red> Mail could not be sent to the assigned to user. Please check the assigned to user email id...</font></b>';
 				//Added to display the message about the CC && BCC mail sending status
 				if($status_str[0] == 'cc_success')

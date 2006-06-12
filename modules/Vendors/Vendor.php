@@ -22,17 +22,17 @@ class Vendor extends CRMEntity {
 	var $db;
 
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','vendor','vendorcf');
-	var $tab_name_index = Array('crmentity'=>'crmid','vendor'=>'vendorid','vendorcf'=>'vendorid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_vendor','vtiger_vendorcf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('vendorname','category');		  
 
-        // This is the list of fields that are in the lists.
+        // This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
                                 'Vendor Name'=>Array('vendor'=>'vendorname'),
                                 'Phone'=>Array('vendor'=>'phone'),
@@ -84,7 +84,7 @@ class Vendor extends CRMEntity {
 
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.vendorname from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
+		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendor.vendorname from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid left outer join vtiger_vendor on vtiger_vendor.vendorid = vtiger_products.vendor_id where vtiger_vendor.vendorid = '.$id.' and vtiger_crmentity.deleted = 0';
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
 	}
@@ -100,7 +100,7 @@ class Vendor extends CRMEntity {
 
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
+		$query = "select vtiger_crmentity.*, vtiger_purchaseorder.*,vtiger_vendor.vendorname from vtiger_purchaseorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid left outer join vtiger_vendor on vtiger_purchaseorder.vendorid=vtiger_vendor.vendorid left join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid=vtiger_pogrouprelation.purchaseorderid left join vtiger_groups on vtiger_groups.groupname=vtiger_pogrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_purchaseorder.vendorid=".$id;
 		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
@@ -115,7 +115,7 @@ class Vendor extends CRMEntity {
 		$button = '';
 		$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid,vendorcontactrel.vendorid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  inner join vendorcontactrel on vendorcontactrel.contactid=contactdetails.contactid left join contactgrouprelation on contactdetails.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
+		$query = 'SELECT vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_vendorcontactrel.vendorid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid  inner join vtiger_vendorcontactrel on vtiger_vendorcontactrel.contactid=vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_vendorcontactrel.vendorid = '.$id;
 		$log->debug("Exiting get_contacts method ...");
 		return GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
 

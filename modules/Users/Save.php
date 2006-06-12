@@ -29,7 +29,7 @@ global $adb;
 $user_name = $_REQUEST['userName'];
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
-        $query = "SELECT user_name FROM users WHERE user_name ='".$user_name."'";
+        $query = "SELECT user_name FROM vtiger_users WHERE user_name ='".$user_name."'";
         $result = $adb->query($query);
         if($adb->num_rows($result) > 0)
         {
@@ -90,7 +90,7 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	}
 	
 	if (!isset($_POST['is_admin'])) $focus->is_admin = 'off';
-	//Code contributed by mike crowe for rearrange the home page and tab
+	//Code contributed by mike crowe for rearrange the home page and vtiger_tab
 	if (!isset($_POST['deleted'])) $focus->deleted = '0';
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $focus->homeorder = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 	

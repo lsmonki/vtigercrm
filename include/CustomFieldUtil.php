@@ -13,9 +13,9 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 /**
- * Function to get field typename
+ * Function to get vtiger_field typename
  * @param $uitype :: uitype -- Type integer
- * returns the field type name -- Type string
+ * returns the vtiger_field type name -- Type string
  */
 function getCustomFieldTypeName($uitype)
 {
@@ -82,8 +82,8 @@ $log->debug("Exiting getCustomFieldTypeName method ...");
 }
 
 /**
- * Function to get custom fields
- * @param $module :: table name -- Type string
+ * Function to get custom vtiger_fields
+ * @param $module :: vtiger_table name -- Type string
  * returns customfields in key-value pair array format
  */
 function getCustomFieldArray($module)
@@ -91,7 +91,7 @@ function getCustomFieldArray($module)
 	global $log;
 	$log->debug("Entering getCustomFieldArray(".$module.") method ...");
 	global $adb;
-	$custquery = "select * from field where tablename='".$module."'";
+	$custquery = "select * from vtiger_field where vtiger_tablename='".$module."'";
 	$custresult = $adb->query($custquery);
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
@@ -106,9 +106,9 @@ function getCustomFieldArray($module)
 }
 
 /**
- * Function to get columnname and fieldlabel from field table
+ * Function to get columnname and vtiger_fieldlabel from vtiger_field vtiger_table
  * @param $module :: module name -- Type string
- * @param $trans_array :: translated column fields -- Type array
+ * @param $trans_array :: translated column vtiger_fields -- Type array
  * returns trans_array in key-value pair array format
  */
 function getCustomFieldTrans($module, $trans_array)
@@ -117,7 +117,7 @@ function getCustomFieldTrans($module, $trans_array)
 	$log->debug("Entering getCustomFieldTrans(".$module.",". $trans_array.") method ...");
 	global $adb;
 	$tab_id = getTabid($module);	
-	$custquery = "select columnname,fieldlabel from field where generatedtype=2 and tabid=".$tab_id;
+	$custquery = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and vtiger_tabid=".$tab_id;
 	$custresult = $adb->query($custquery);
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
@@ -132,10 +132,10 @@ function getCustomFieldTrans($module, $trans_array)
 
 
 /**
- * Function to get customfield record from field table
+ * Function to get customfield record from vtiger_field vtiger_table
  * @param $tab :: Tab ID -- Type integer
- * @param $datatype :: field name -- Type string
- * @param $id :: field Id -- Type integer
+ * @param $datatype :: vtiger_field name -- Type string
+ * @param $id :: vtiger_field Id -- Type integer
  * returns the data result in string format
  */
 function getCustomFieldData($tab,$id,$datatype)
@@ -143,7 +143,7 @@ function getCustomFieldData($tab,$id,$datatype)
 	global $log;
 	$log->debug("Entering getCustomFieldData(".$tab.",".$id.",".$datatype.") method ...");
 	global $adb;
-	$query = "select * from field where tabid=".$tab." and fieldid=".$id;
+	$query = "select * from vtiger_field where vtiger_tabid=".$tab." and vtiger_fieldid=".$id;
 	$result = $adb->query($query);
 	$return_data=$adb->fetch_array($result);
 	$log->debug("Exiting getCustomFieldData method ...");
@@ -153,9 +153,9 @@ function getCustomFieldData($tab,$id,$datatype)
 
 /**
  * Function to get customfield type,length value,decimal value and picklist value
- * @param $label :: field typename -- Type string
+ * @param $label :: vtiger_field typename -- Type string
  * @param $typeofdata :: datatype -- Type string
- * returns the field type,length,decimal
+ * returns the vtiger_field type,length,decimal
  * and picklist value in ';' separated array format
  */
 function getFldTypeandLengthValue($label,$typeofdata)

@@ -26,7 +26,7 @@ $smarty->assign("RETURN_ACTION","");
 function getListLeadMapping($image_path)
 {
 	global $adb;
-	$sql="select * from convertleadmapping";
+	$sql="select * from vtiger_convertleadmapping";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i =0;$i <$noofrows;$i++)
@@ -38,20 +38,20 @@ function getListLeadMapping($image_path)
 		$cfmid = $adb->query_result($result,$i,'cfmid');
 
 		$display_val .= '<tr height="20" class="Datafield">';
-		$sql1="select fieldlabel from field where fieldid ='".$leadid."'";
+		$sql1="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$leadid."'";
 		$result1 = $adb->query($sql1);
 		$leadfield = $adb->query_result($result1,0,'fieldlabel');
 		$label['leadlabel'] = $leadfield;
-		$sql2="select fieldlabel from field where fieldid ='".$accountid."'";
+		$sql2="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$accountid."'";
 		$result2 = $adb->query($sql2);
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
 		$label['accountlabel'] = $accountfield;
 		
-		$sql3="select fieldlabel from field where fieldid ='".$contactid."'";
+		$sql3="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$contactid."'";
 		$result3 = $adb->query($sql3);
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
 		$label['contactlabel'] = $contactfield;
-		$sql4="select fieldlabel from field where fieldid ='".$potentialid."'";
+		$sql4="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$potentialid."'";
 		$result4 = $adb->query($sql4);
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
 		$label['potentiallabel'] = $potentialfield;

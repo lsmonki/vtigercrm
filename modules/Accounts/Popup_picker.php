@@ -99,9 +99,9 @@ if(!isset($_REQUEST['form']))
 if($_REQUEST['form'] == 'TasksEditView')
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(account_id, account_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_name.value = account_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_id.value = account_id;\n";
+	$the_javascript .= "function set_return(account_id, vtiger_account_name) {\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_name.value = vtiger_account_name;\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_id.value = vtiger_account_id;\n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
 	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
@@ -113,9 +113,9 @@ if($_REQUEST['form'] == 'TasksEditView')
 elseif($_REQUEST['form'] == 'HelpDeskEditView')
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(account_id, account_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_name.value = account_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_id.value = account_id;\n";
+	$the_javascript .= "function set_return(account_id, vtiger_account_name) {\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_name.value = vtiger_account_name;\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_id.value = vtiger_account_id;\n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
 	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
@@ -127,8 +127,8 @@ elseif($_REQUEST['form'] == 'HelpDeskEditView')
 elseif(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'AccountDetailView' && $_REQUEST['form_submit'] == 'true')
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(account_id, account_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.member_id.value = account_id; \n";
+	$the_javascript .= "function set_return(account_id, vtiger_account_name) {\n";
+	$the_javascript .= "	window.opener.document.DetailView.member_id.value = vtiger_account_id; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
@@ -144,9 +144,9 @@ elseif(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'AccountDetailVie
 elseif ($_REQUEST['form'] == 'EditView') 
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(account_id, account_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.account_name.value = account_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.account_id.value = account_id;\n";
+	$the_javascript .= "function set_return(account_id, vtiger_account_name) {\n";
+	$the_javascript .= "	window.opener.document.EditView.account_name.value = vtiger_account_name;\n";
+	$the_javascript .= "	window.opener.document.EditView.account_id.value = vtiger_account_id;\n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
 	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";

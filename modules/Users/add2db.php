@@ -67,7 +67,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		if($genQueryId != '')
 		{
 			$module = $_REQUEST['target_module'];
-			$sql = "INSERT INTO wordtemplates ";
+			$sql = "INSERT INTO vtiger_wordtemplates ";
 			$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
 			$sql .= "VALUES (".$genQueryId.",'".$module."',".$adb->formatString('wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
 			$sql .= "'$filename', '$filesize', '$filetype')";
@@ -108,8 +108,8 @@ else
   {
     include('themes/'.$theme.'/header.php');
     include "upload.php";
-    //$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
-	echo "<script>alert('Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file')</script>";	
+    //$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a smaller file</font></B> <br>";
+	echo "<script>alert('Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a smaller file')</script>";	
     //echo $errormessage;
     //echo $errorCode;
   }

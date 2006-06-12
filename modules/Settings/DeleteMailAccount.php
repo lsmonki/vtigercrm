@@ -21,7 +21,7 @@ foreach($selected_array as $account_id)
 {
 	if($account_id != '')
 	{
-		$query = "update mail_accounts set status=0 where account_id=".$account_id;
+		$query = "update vtiger_mail_accounts set status=0 where vtiger_account_id=".$account_id;
 		$adb->query($query);
 	}
 }

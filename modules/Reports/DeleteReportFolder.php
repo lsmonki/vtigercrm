@@ -17,7 +17,7 @@ $local_log =& LoggerManager::getLogger('index');
 $rfid = $_REQUEST['record'];
 if($rfid != "")
 {
-	$sql .= "delete from reportfolder where folderid=".$rfid;
+	$sql .= "delete from vtiger_reportfolder where folderid=".$rfid;
 	$result = $adb->query($sql);
 	if($result!=false)
 	{

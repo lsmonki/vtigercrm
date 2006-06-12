@@ -137,21 +137,21 @@ function load_headers($mailid,$mbox) {
 function find_relationships($db,$from) {
 
 	// leads search
-	$sql = "SELECT * from leaddetails left join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.email = '".$from."' AND crmentity.deleted='0'";
+	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".$from."' AND vtiger_crmentity.deleted='0'";
 	$res = $db->query($sql,true,"Error: "."<BR>$query");
 	$numRows = $db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Leads",'id'=>$db->query_result($res,0,"leadid"),'name'=>$db->query_result($res,0,"firstname")." ".$db->query_result($res,0,"lastname"));
 
 	// contacts search
-	$sql = "SELECT * from contactdetails left join crmentity on crmentity.crmid=contactdetails.contactid where contactdetails.email = '".$from."'  AND crmentity.deleted='0'";
+	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = '".$from."'  AND vtiger_crmentity.deleted='0'";
 	$res = $db->query($sql,true,"Error: "."<BR>$query");
 	$numRows = $db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Contacts",'id'=>$db->query_result($res,0,"contactid"),'name'=>$db->query_result($res,0,"firstname")." ".$db->query_result($res,0,"lastname"));
 
-	// accounts search
-	$sql = "SELECT * from account left join crmentity on crmentity.crmid=account.accountid where account.email1 = '".$from."' OR account.email1='".$from."'  AND crmentity.deleted='0'";
+	// vtiger_accounts search
+	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = '".$from."' OR vtiger_account.email1='".$from."'  AND vtiger_crmentity.deleted='0'";
 	$res = $db->query($sql,true,"Error: "."<BR>$query");
 	$numRows = $db->num_rows($res);
 	if($numRows > 0)
@@ -262,7 +262,7 @@ function load_mail($mailid,$mbox) {
         $content = array();
         $i = 0;
         if (!$parts) { /* Simple message, only 1 piece */
-         $attachment = array(); /* No attachments */
+         $attachment = array(); /* No vtiger_attachments */
          $bod=imap_body($mbox, $mailid);
          if(preg_match("/\<br\>/",$bod))
                 	$content['body'] = $bod;

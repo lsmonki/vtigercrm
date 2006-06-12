@@ -15,7 +15,7 @@ if(isset($_REQUEST['hour_format']) && $_REQUEST['hour_format'] != '')
 	$hour_format = $_REQUEST['hour_format'];
 else
 	$hour_format = 'am/pm';
-$delquery = "delete from sharedcalendar where userid=".$_REQUEST["current_userid"];
+$delquery = "delete from vtiger_sharedcalendar where userid=".$_REQUEST["current_userid"];
 $adb->query($delquery);
 $sharedid = $_REQUEST['user'];
 if(isset($sharedid) && $sharedid != null)
@@ -24,18 +24,18 @@ if(isset($sharedid) && $sharedid != null)
         {
                 if($sid != '')
                 {
-			$sql = "insert into sharedcalendar values (".$_REQUEST["current_userid"].",".$sid.")";
+			$sql = "insert into vtiger_sharedcalendar values (".$_REQUEST["current_userid"].",".$sid.")";
 		        $adb->query($sql);
                 }
         }
 }
 if(isset($_REQUEST['start_hour']) && $_REQUEST['start_hour'] != '')
 {
-	$sql = "update users set start_hour='".$_REQUEST['start_hour']."' where id=".$current_user->id;
+	$sql = "update vtiger_users set start_hour='".$_REQUEST['start_hour']."' where id=".$current_user->id;
         $adb->query($sql);
 }
 
-$sql = "update users set hour_format='".$hour_format."' where id=".$current_user->id;
+$sql = "update vtiger_users set hour_format='".$hour_format."' where id=".$current_user->id;
 $adb->query($sql);
 header("Location: index.php?action=index&module=Calendar&parenttab=My Home Page");
 

@@ -37,7 +37,7 @@ require_once('include/utils/UserInfoUtil.php');
 class User extends SugarBean {
 	var $log;
 	var $db;
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $user_name;
 	var $user_password;
@@ -85,7 +85,7 @@ class User extends SugarBean {
 
 	var $module_id='id';
 	
-	var $table_name = "users";
+	var $table_name = "vtiger_users";
 	var $module_name = "Users";
 
 	var $object_name = "User";
@@ -144,10 +144,10 @@ class User extends SugarBean {
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
-	// This is used to retrieve related fields from form posts.
+	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('reports_to_name');		
 	
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array('id', 'first_name', 'last_name', 'user_name', 'status', 'department', 'yahoo_id', 'is_admin', 'email1', 'phone_work');
 	//commented as we get issues with sugarbean
 	/*
@@ -359,7 +359,7 @@ class User extends SugarBean {
 		$query = "SELECT * from $this->table_name where user_name='$this->user_name'";
 		$result = $this->db->requireSingleResult($query, false);
 
-		// Get the fields for the user
+		// Get the vtiger_fields for the user
 		$row = $this->db->fetchByAssoc($result);
 
 		$user_hash = strtolower(md5($user_password));
@@ -374,7 +374,7 @@ class User extends SugarBean {
 			$this->db->query($query, true, "Error setting new hash for {$row['user_name']}: ");	
 		}
 		
-		// now fill in the fields.
+		// now fill in the vtiger_fields.
 		foreach($this->column_fields as $field)
 		{
 			//$this->log->info($field);
@@ -453,14 +453,14 @@ class User extends SugarBean {
 
 	function retrieve_user_id($user_name)
 	{
-		$query = "SELECT id from users where user_name='$user_name' AND deleted=0";
+		$query = "SELECT id from vtiger_users where user_name='$user_name' AND deleted=0";
 		$result  =& $this->db->query($query, false,"Error retrieving user ID: ");
 		$row = $this->db->fetchByAssoc($result);
 		return $row['id'];
 	}
 	
 	/** 
-	 * @return -- returns a list of all users in the system.
+	 * @return -- returns a list of all vtiger_users in the system.
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
@@ -469,12 +469,12 @@ class User extends SugarBean {
 	{
 		global $mod_strings;
 		
-		$query = "SELECT user_name from users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
+		$query = "SELECT user_name from vtiger_users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
 		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
 		$dup_users = $this->db->fetchByAssoc($result);
 		
-		$query = "SELECT user_name from users where is_admin = 'on' AND deleted=0";
-		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
+		$query = "SELECT user_name from vtiger_users where is_admin = 'on' AND deleted=0";
+		$result =$this->db->query($query, true, "Error selecting possible duplicate vtiger_users: ");
 		$last_admin = $this->db->fetchByAssoc($result);
 
 		$this->log->debug("last admin length: ".count($last_admin));
@@ -507,7 +507,7 @@ class User extends SugarBean {
 											 "CITY","STATE","POSTALCODE","COUNTRY");	
   	return $mergeflds;
   }
-		//function added for the listview of users for 5.0 beta
+		//function added for the listview of vtiger_users for 5.0 beta
 	function getUserListViewHeader()
 	{
 		global $mod_strings;
@@ -522,9 +522,9 @@ class User extends SugarBean {
 	    	$theme_path="themes/".$theme."/";
 	    	$image_path=$theme_path."images/";
 		if($sorder != '' && $orderby !='')
-			$list_query = ' SELECT * from users where deleted=0 order by '.$orderby.' '.$sorder; 	
+			$list_query = ' SELECT * from vtiger_users where deleted=0 order by '.$orderby.' '.$sorder; 	
 		else
-			$list_query = "SELECT * from users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
+			$list_query = "SELECT * from vtiger_users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
 		$result =$adb->query($list_query);
 		$entries_list = array();
 		$roleinfo = getAllRoleDetails();
@@ -569,9 +569,9 @@ class User extends SugarBean {
 	
 	function fill_in_additional_detail_fields()
 	{
-		//$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$query = "SELECT u1.first_name, u1.last_name from users u1, users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$result =$this->db->query($query, true, "Error filling in additional detail fields") ;
+		//$query = "SELECT u1.first_name, u1.last_name from vtiger_users as u1, vtiger_users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		$query = "SELECT u1.first_name, u1.last_name from vtiger_users u1, vtiger_users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		$result =$this->db->query($query, true, "Error filling in additional detail vtiger_fields") ;
 		
 		$row = $this->db->fetchByAssoc($result);
 		$this->log->debug("additional detail query results: $row");

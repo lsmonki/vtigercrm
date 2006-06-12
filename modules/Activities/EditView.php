@@ -31,7 +31,7 @@ require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 $activity_lbl='';
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -98,7 +98,7 @@ if($focus->mode == 'edit')
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 

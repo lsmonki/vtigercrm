@@ -90,10 +90,10 @@ function create_default_users() {
         $user->save();
 
         // we need to change the admin user to a fixed id of 1.
-        //$query = "update users set id='1' where user_name='$user->user_name'";
+        //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
         //$result = $db->query($query, true, "Error updating admin user ID: ");
 
-        $log->info("Created ".$user->table_name." table. for user $user->id");
+        $log->info("Created ".$user->table_name." vtiger_table. for user $user->id");
 
 	/*
         if($create_default_user) {
@@ -115,16 +115,16 @@ function create_default_users() {
         }
 	*/
 
-	// insert values into user2role table
-	$role_query = "select roleid from role where rolename='administrator'";
+	// insert values into vtiger_user2role vtiger_table
+	$role_query = "select roleid from vtiger_role where rolename='administrator'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 
-	$sql_stmt1 = "insert into user2role values(".$user->id.",'".$role_id."')";
+	$sql_stmt1 = "insert into vtiger_user2role values(".$user->id.",'".$role_id."')";
 	$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
-	//Creating the flat files
+	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
@@ -152,15 +152,15 @@ function create_default_users() {
         $user->email = $std_email;
         $user->save();
 
-	$role_query = "select roleid from role where rolename='standard_user'";
+	$role_query = "select roleid from vtiger_role where rolename='standard_user'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 
-	$sql_stmt2 = "insert into user2role values(".$user->id.",'".$role_id."')";
+	$sql_stmt2 = "insert into vtiger_user2role values(".$user->id.",'".$role_id."')";
 	$db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
-	//Creating the flat files
+	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
@@ -169,8 +169,8 @@ function create_default_users() {
 //$startTime = microtime();
 $modules = array("DefaultDataPopulator");
 $focus=0;				
-// tables creation
-eecho("Creating Core tables: ");
+// vtiger_tables creation
+eecho("Creating Core vtiger_tables: ");
 $success = $db->createTables("schema/DatabaseSchema.xml");
 
 // TODO HTML
@@ -188,34 +188,34 @@ foreach ( $modules as $module )
 }
 			
 
-// populate users table
+// populate vtiger_users vtiger_table
 //$uid = $db->getUniqueID("users");
-//$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
+//$sql_stmt1 = "insert into vtiger_users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
 //$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
-// create and populate combo tables
+// create and populate combo vtiger_tables
 require_once('include/PopulateComboValues.php');
 $combo = new PopulateComboValues();
 $combo->create_tables();
 
 create_default_users();
 
-// default report population
+// default vtiger_report population
 require_once('modules/Reports/PopulateReports.php');
 
-// default customview population
+// default vtiger_customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
-//Writing tab data in flat file
+//Writing vtiger_tab data in flat file
 create_tab_data_file();
 create_parenttab_data_file();
 
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
-$db->getUniqueID("crmentity");
-$db->getUniqueID("seactivityrel");
-$db->getUniqueID("freetags");
+$db->getUniqueID("vtiger_crmentity");
+$db->getUniqueID("vtiger_seactivityrel");
+$db->getUniqueID("vtiger_freetags");
 
 // populate the db with seed data
 if ($db_populate) {

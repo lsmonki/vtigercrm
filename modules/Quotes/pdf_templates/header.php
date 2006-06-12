@@ -62,7 +62,7 @@ $pdf->addRecBlock($account_name, "Customer Name", $termBlock);
 $dueBlock=array("80","65");
 $pdf->addRecBlock($valid_till, "Valid Till",$dueBlock);
 
-// invoice number block
+// vtiger_invoice number block
 $invBlock=array("147","65");
 $pdf->addRecBlock($quote_id, "Quote Number",$invBlock);
 

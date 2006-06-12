@@ -44,7 +44,7 @@ function getNewLeads()
 	require_once($theme_path.'layout_utils.php');
 	if($_REQUEST['lead_view']=='')
 	{	
-		$query = "select lead_view from users where id ='$current_user->id'";
+		$query = "select lead_view from vtiger_users where id ='$current_user->id'";
 		$result=$adb->query($query);
 		$lead_view=$adb->query_result($result,0,'lead_view');
 	}
@@ -66,7 +66,7 @@ function getNewLeads()
 		$start_date = date("Y-m-d", strtotime("-1 week"));
 	}	
 
-	$list_query = 'select leaddetails.*,crmentity.createdtime,crmentity.description from leaddetails inner join crmentity on leaddetails.leadid = crmentity.crmid where crmentity.deleted =0 AND leaddetails.converted =0 AND crmentity.createdtime >='.$start_date.' AND crmentity.smownerid = '.$current_user->id; 
+	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_crmentity.createdtime >='.$start_date.' AND vtiger_crmentity.smownerid = '.$current_user->id; 
 	
 	$list_result = $adb->query($list_query);
 	$noofrows = $adb->num_rows($list_result);

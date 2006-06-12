@@ -28,7 +28,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$sql="select * from systems where server_type = 'email'";
+$sql="select * from vtiger_systems where server_type = 'email'";
 $result = $adb->query($sql);
 $mail_server = $adb->query_result($result,0,'server');
 $mail_server_username = $adb->query_result($result,0,'server_username');

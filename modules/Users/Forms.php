@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Forms.php,v 1.3 2004/11/08 13:48:29 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
- * components such as form headers and footers.  Intended to be modified on a per
+ * components such as form vtiger_headers and footers.  Intended to be modified on a per
  * theme basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -96,7 +96,7 @@ function verify_data(form) {
 		set_fieldfocus(errorMessage,form.email1);
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		errorMessage='"' + form.email2.value + '" value in other email field is $err_invalid_email_address';
+		errorMessage='"' + form.email2.value + '" value in other email vtiger_field is $err_invalid_email_address';
 		set_fieldfocus(errorMessage,form.email2);
 	}
 	if(form.mode.value != 'edit')

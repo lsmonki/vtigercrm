@@ -16,7 +16,7 @@ class GetParentGroups {
 
 	var $parent_groups=Array();
 
-	/** to get all the parent groups of the specified group
+	/** to get all the parent vtiger_groups of the specified group
 	 * @params $groupId --> Group Id :: Type Integer
          * @returns updates the parent group in the varibale $parent_groups of the class
          */
@@ -24,7 +24,7 @@ class GetParentGroups {
 	{
 		global $adb,$log;
 		$log->debug("Entering getAllParentGroups(".$groupid.") method...");
-		$query="select groupid from group2grouprel where containsgroupid=".$groupId;
+		$query="select groupid from vtiger_group2grouprel where containsgroupid=".$groupId;
 		$adb->query($query);
 		$result=$adb->query($query);
 		$num_rows=$adb->num_rows($result);

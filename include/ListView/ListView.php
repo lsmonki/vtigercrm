@@ -75,7 +75,7 @@ class ListView {
 	$this->header_title = $value;	
 	$log->debug("Exiting setHeaderTitle method ...");
 }
-/**sets the header text this is text thats appended to the header table and is usually used for the creation of buttons
+/**sets the header text this is text thats appended to the header vtiger_table and is usually used for the creation of buttons
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________.

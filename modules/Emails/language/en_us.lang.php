@@ -33,7 +33,7 @@ $mod_strings = Array(
 'LBL_LIST_DATE'=>'Date Sent',
 'LBL_LIST_TIME'=>'Time Sent',
 
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 'LBL_DATE_SENT'=>'Date Sent:',
 'LBL_SUBJECT'=>'Subject :',
 'LBL_BODY'=>'Body:',
@@ -99,7 +99,7 @@ $mod_strings = Array(
 'LBL_NEW_ACCOUNT'=>'New Account',
 'LBL_ACCOUNT_TITLE'=>'Accounts',
 
-// Added fields after vtiger4 - Beta
+// Added vtiger_fields after vtiger4 - Beta
 'LBL_USER_TITLE'=>'Users',
 'LBL_NEW_USER'=>'New User',
 

@@ -30,7 +30,7 @@ class Event extends SugarBean {
 	var $log;
 	var $db;
 
-	// Stored fields
+	// Stored vtiger_fields
   	var $eventid;
 	var $description;
 	var $status;
@@ -51,10 +51,10 @@ class Event extends SugarBean {
 
 	var $column_fields = Array();
 
-	// This is used to retrieve related fields from form posts.
+	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
        'Close'=>Array('event'=>'status'),
        'Subject'=>Array('activity'=>'subject'),
@@ -88,7 +88,7 @@ class Event extends SugarBean {
     {
 	global $log;
 	$log->debug("Entering getCount(".$user_name.") method ...");
-        $query = "select count(*) from tasks inner join users on users.id=tasks.assigned_user_id where user_name='" .$user_name ."' and tasks.deleted=0";
+        $query = "select count(*) from tasks inner join vtiger_users on vtiger_users.id=tasks.assigned_user_id where user_name='" .$user_name ."' and tasks.deleted=0";
 
 //       echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");

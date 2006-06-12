@@ -13,46 +13,46 @@ global $adb;
 $del_id =  $_REQUEST['delete_user_id'];
 $tran_id = $_REQUEST['transfer_user_id'];
 
-//Updating the smcreatorid,smownerid, modifiedby in crmentity
-$sql1 = "update crmentity set smcreatorid=".$tran_id." where smcreatorid=".$del_id;
+//Updating the smcreatorid,smownerid, modifiedby in vtiger_crmentity
+$sql1 = "update vtiger_crmentity set smcreatorid=".$tran_id." where smcreatorid=".$del_id;
 $adb->query($sql1);
-$sql2 = "update crmentity set smownerid=".$tran_id." where smownerid=".$del_id;
+$sql2 = "update vtiger_crmentity set smownerid=".$tran_id." where smownerid=".$del_id;
 $adb->query($sql2);
-$sql3 = "update crmentity set modifiedby=".$tran_id." where modifiedby=".$del_id;
+$sql3 = "update vtiger_crmentity set modifiedby=".$tran_id." where modifiedby=".$del_id;
 $adb->query($sql3);
 
-//deleting from tracker
-$sql4 = "delete from tracker where user_id='".$del_id."'";
+//deleting from vtiger_tracker
+$sql4 = "delete from vtiger_tracker where user_id='".$del_id."'";
 $adb->query($sql4);
 
-//updating created by in lar table
-$sql5 = "update lar set createdby=".$tran_id." where createdby=".$del_id;
+//updating created by in vtiger_lar vtiger_table
+$sql5 = "update vtiger_lar set createdby=".$tran_id." where createdby=".$del_id;
 $adb->query($sql5);
 
-//updating the import_maps table
-$sql6 ="update import_maps set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
+//updating the vtiger_import_maps vtiger_table
+$sql6 ="update vtiger_import_maps set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
 $adb->query($sql6);
 
-//update assigned_user_id in files
-$sql7 ="update files set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
+//update assigned_user_id in vtiger_files
+$sql7 ="update vtiger_files set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
 $adb->query($sql7); 
 
 
-//update assigned_user_id in users_last_import
-$sql8 = "update users_last_import set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
+//update assigned_user_id in vtiger_users_last_import
+$sql8 = "update vtiger_users_last_import set assigned_user_id='".$tran_id."' where assigned_user_id='".$del_id."'";
 $adb->query($sql8);
 
-//delete from users to group table
-$sql9 = "delete from user2role where userid=".$del_id;
+//delete from vtiger_users to group vtiger_table
+$sql9 = "delete from vtiger_user2role where userid=".$del_id;
 $adb->query($sql9);
 
-//delete from users to role table
-$sql9 = "delete from users2group where userid=".$del_id;
+//delete from vtiger_users to vtiger_role vtiger_table
+$sql9 = "delete from vtiger_users2group where userid=".$del_id;
 $adb->query($sql9);
 
 
-//delete from user table;
-$sql9 = "delete from users where id=".$del_id;
+//delete from user vtiger_table;
+$sql9 = "delete from vtiger_users where id=".$del_id;
 $adb->query($sql9);
 header("Location: index.php?action=UsersAjax&module=Users&file=ListView&ajax=true");
 ?>

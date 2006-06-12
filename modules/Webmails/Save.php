@@ -76,8 +76,8 @@ $focus->column_fields["time_start"]=$dtime;
 $focus->column_fields["description"]=$msgData;
 
 
-//to save the email details in emaildetails tables
-$fieldid = $adb->query_result($adb->query('select fieldid from field where tablename="contactdetails" and fieldname="email" and columnname="email"'),0,'fieldid');
+//to save the email details in vtiger_emaildetails vtiger_tables
+$fieldid = $adb->query_result($adb->query('select vtiger_fieldid from vtiger_field where vtiger_tablename="contactdetails" and vtiger_fieldname="email" and columnname="email"'),0,'fieldid');
 if($email->relationship != 0) {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
 
@@ -96,7 +96,7 @@ if($email->relationship != 0) {
 }
 
 function add_attachment_to_contact($cid,$email) {
-	// add attachments to contact
+	// add vtiger_attachments to contact
 	global $adb,$current_user;
 	for($j=0;$j<2;$j++) {
 	    if($j==0)
@@ -113,16 +113,16 @@ function add_attachment_to_contact($cid,$email) {
         	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
 		$filesize = $attachments[$i]["filesize"];
 
-                $query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
+                $query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
                 $query .= $current_id."','".$current_user->id."','".$current_user->id."','Contacts Attachment','Uploaded from webmail during qualification','".$date_var."')";
                 $result = $adb->query($query);
 
-                $sql = "insert into attachments values(";
+                $sql = "insert into vtiger_attachments values(";
                 $sql .= $current_id.",'".$filename."','Uploaded ".$filename." from webmail','".$filetype."','".$upload_filepath."')";
 		echo $query;
                 $result = $adb->query($sql);
 
-                $sql1 = "insert into seattachmentsrel values('";
+                $sql1 = "insert into vtiger_seattachmentsrel values('";
                 $sql1 .= $cid."','".$current_id."')";
                 $result = $adb->query($sql1);
 
@@ -136,10 +136,10 @@ function add_attachment_to_contact($cid,$email) {
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 $focus->save("Emails");
 
-//saving in emaildetails table
+//saving in vtiger_emaildetails vtiger_table
 $id_lists = $focus->column_fields['parent_id'].'@'.$fieldid;
 $all_to_ids = $email->from;
-$query = 'insert into emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
+$query = 'insert into vtiger_emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
 $adb->query($query);
 
 $return_id = $_REQUEST["mailid"];

@@ -32,7 +32,7 @@ class Note extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
         var $mode;
 
@@ -49,11 +49,11 @@ class Note extends CRMEntity {
 	var $contact_phone;
 	var $contact_email;
 	var $required_fields =  array("name"=>1);
-	var $default_note_name_dom = array('Meeting notes', 'Reminder');
+	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
 	var $table_name = "notes";
-	var $tab_name = Array('crmentity','notes','senotesrel','attachments');
-	var $tab_name_index = Array('crmentity'=>'crmid','notes'=>'notesid','senotesrel'=>'notesid','attachments'=>'attachmentsid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_senotesrel','vtiger_attachments');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_attachments'=>'attachmentsid');
 
   	var $module_id = "notesid";
 	var $object_name = "Note";
@@ -62,10 +62,10 @@ class Note extends CRMEntity {
 
         var $sortby_fields = Array('title','modifiedtime');		  
 
-	// This is used to retrieve related fields from form posts.
+	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('', '', '', '');
 
-	// This is the list of fields that are in the lists.
+	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'Subject'=>Array('notes'=>'title'),
 				'Contact Name'=>Array('notes'=>'contact_id'),
@@ -101,11 +101,11 @@ class Note extends CRMEntity {
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
              $query = "SELECT
-                                        notes.*,
-                                        contactdetails.firstname,
-                                        contactdetails.lastname
-                                        FROM notes
-                                        LEFT JOIN contactdetails ON notes.contact_id=contactdetails.contactid inner join crmentity on crmentity.crmid=notes.notesid and crmentity.deleted=0 ";
+                                        vtiger_notes.*,
+                                        vtiger_contactdetails.firstname,
+                                        vtiger_contactdetails.lastname
+                                        FROM vtiger_notes
+                                        LEFT JOIN vtiger_contactdetails ON vtiger_notes.contact_id=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_notes.notesid and vtiger_crmentity.deleted=0 ";
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }

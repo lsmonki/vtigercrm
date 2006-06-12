@@ -38,12 +38,12 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	
 	$noofrows = $adb->num_rows($result);
 
-	$dbQuery = 'select attachments.*, activity.subject, crmentity.description  from activity inner join crmentity on crmentity.crmid = activity.activityid left join seattachmentsrel on seattachmentsrel.crmid = activity.activityid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.$adb->quote($_REQUEST['return_id']);
+	$dbQuery = 'select vtiger_attachments.*, vtiger_activity.subject, vtiger_crmentity.description  from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_activity.activityid left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid = vtiger_activity.activityid left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_crmentity.crmid = '.$adb->quote($_REQUEST['return_id']);
 
         $result1 = $adb->query($dbQuery) or die("Couldn't get file list");
 	$temparray = $adb->fetch_array($result1);
 
-	$notequery = 'select  attachments.*, notes.notesid, notes.filename,notes.notecontent  from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$adb->quote($_REQUEST['return_id']);
+	$notequery = 'select  vtiger_attachments.*, vtiger_notes.notesid, vtiger_notes.filename,vtiger_notes.notecontent  from vtiger_notes inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_crmentity.crmid='.$adb->quote($_REQUEST['return_id']);
 	$result2 = $adb->query($notequery) or die("Couldn't get file list");
 
 	$mail = new PHPMailer();
@@ -52,7 +52,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 
 	$DESCRIPTION = $adb->query_result($result1,0,"description");
 	$DESCRIPTION .= '<br><br>';
-	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".$adb->quote($from)),0,"signature")).'</font>';
+	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from vtiger_users where user_name=".$adb->quote($from)),0,"signature")).'</font>';
 
         $mail->Body    = nl2br($DESCRIPTION);
 	$initialfrom = $from;
@@ -60,7 +60,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 
 	if($mail_server=='')
 	{
-	        $mailserverresult = $adb->query("select * from systems where server_type = 'email'");
+	        $mailserverresult = $adb->query("select * from vtiger_systems where server_type = 'email'");
         	$mail_server = $adb->query_result($mailserverresult,0,'server');
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
                 $mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
@@ -73,9 +73,9 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	$mail->SMTPAuth = $smtp_auth;
 	$mail->Username = $mail_server_username;
 	$mail->Password = $mail_server_password;
-	//$mail->From = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"email1");
+	//$mail->From = $adb->query_result($adb->query("select * from vtiger_users where user_name='".$from."'"),0,"email1");
 
-	$mail->From = $adb->query_result($adb->query("select * from users where user_name=".$adb->quote($from)),0,"email1");
+	$mail->From = $adb->query_result($adb->query("select * from vtiger_users where user_name=".$adb->quote($from)),0,"email1");
 	$mail->FromName = $initialfrom;
 	$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;
@@ -93,7 +93,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
 		if(!@fclose($handle)){}
 
-		$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
+		$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add vtiger_attachments
 		$log->info("File '".$filename."' is attached with the mail.");
 	}
 
@@ -108,7 +108,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
 		if(!@fclose($handle)){}
 
-		$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
+		$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add vtiger_attachments
 		$log->info("File '".$filename."' is attached with the mail.");
 	}
 

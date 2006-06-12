@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.93 2005/04/21 16:17:25 ray Exp $
  * Description: Main file and starting point for the application.  Calls the 
- * theme header and footer files defined for the user as well as the module as 
+ * theme header and footer vtiger_files defined for the user as well as the module as 
  * defined by the input parameters.
  ********************************************************************************/
 
@@ -105,7 +105,7 @@ $seclog =& LoggerManager::getLogger('SECURITY');
 if (isset($_REQUEST['PHPSESSID'])) $log->debug("****Starting for session ".$_REQUEST['PHPSESSID']);
 else $log->debug("****Starting for new session");
 
-// We use the REQUEST_URI later to construct dynamic URLs.  IIS does not pass this field
+// We use the REQUEST_URI later to construct dynamic URLs.  IIS does not pass this vtiger_field
 // to prevent an error, if it is not set, we will assign it to ''
 if(!isset($_SERVER['REQUEST_URI']))
 {
@@ -271,7 +271,7 @@ if(isset($action) && isset($module))
 			ereg("^Webmails",$module) ))
 	{
 		$skipHeaders=true;
-		//skip headers for all these invocations as they are mostly popups
+		//skip vtiger_headers for all these invocations as they are mostly popups
 		if(ereg("^Popup", $action) ||
 			ereg("^ChangePassword", $action) ||
 			ereg("^Export", $action) ||
@@ -319,7 +319,7 @@ elseif(isset($module))
 }
 else {
     // use $default_module and $default_action as set in config.php
-    // Redirect to the correct module with the correct action.  We need the URI to include these fields.
+    // Redirect to the correct module with the correct action.  We need the URI to include these vtiger_fields.
   
 
         header("Location: index.php?action=$default_action&module=$default_module");
@@ -501,9 +501,9 @@ if (isset($_SESSION['authenticated_user_language'])) {
         setcookie('ck_login_language_vtiger', $_SESSION['authenticated_user_language']);
 }
 
-//skip headers for popups, deleting, saving, importing and other actions
+//skip vtiger_headers for popups, deleting, saving, importing and other actions
 if(!$skipHeaders) {
-	$log->debug("including headers");
+	$log->debug("including vtiger_headers");
 	if($use_current_login)
 	{
 		if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
@@ -522,7 +522,7 @@ if(!$skipHeaders) {
 	if(isset($_SESSION['administrator_error']))
 	{
 		// only print DB errors once otherwise they will still look broken after they are fixed.
-		// Only print the errors for admin users.
+		// Only print the errors for admin vtiger_users.
 		if(is_admin($current_user)) 
 			echo $_SESSION['administrator_error'];
 		unset($_SESSION['administrator_error']);
@@ -531,7 +531,7 @@ if(!$skipHeaders) {
 	echo "<!-- startscrmprint -->";
 }
 else {
-		$log->debug("skipping headers");
+		$log->debug("skipping vtiger_headers");
 }
 
 

@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Forms.php,v 1.7 2005/04/19 16:49:29 ray Exp $
  * Description:  Contains a variety of utility functions used to display UI
- * components such as form headers and footers.  Intended to be modified on a per
+ * components such as form vtiger_headers and footers.  Intended to be modified on a per
  * theme basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -60,23 +60,23 @@ $the_script  = <<<EOQ
  */
 // Declaring valid date character, minimum year and maximum year
 
-var fieldname,fieldlabel,fielddatatype;	
+var vtiger_fieldname,fieldlabel,fielddatatype;	
 function verify_data(form,fname,flabel,fdatatype) 
 {
 	var form_name=form.name;
 	if(form_name=='ActivitySave')
         {
                form.due_date.value=form.date_start.value;
-	       fieldname =fname.split(",");
-	       fieldlabel = flabel.split(",");
-               fielddatatype = fdatatype.split(",");
+	       vtiger_fieldname =fname.split(",");
+	       vtiger_fieldlabel = flabel.split(",");
+               vtiger_fielddatatype = fdatatype.split(",");
         }
         else
         {
               form.due_date.value=form.date_start.value;
-	      fieldname = fname.split(",");
-              fieldlabel = flabel.split(",");
-              fielddatatype = fdatatype.split(",");
+	      vtiger_fieldname = fname.split(",");
+              vtiger_fieldlabel = flabel.split(",");
+              vtiger_fielddatatype = fdatatype.split(",");
         
         }
 
@@ -93,7 +93,7 @@ return $the_script;
 
 /* Commented for RC
 /**
- * Create HTML form to enter a new record with the minimum necessary fields.
+ * Create HTML form to enter a new record with the minimum necessary vtiger_fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -106,13 +106,13 @@ global $current_user;
 global $theme;
 global $adb;//for dynamic quickcreateform construction
 
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 // global $current_language;
 // global $default_language;
 // global $cal_codes;
 
 $user_id = $current_user->id;
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 // $cal_lang = (empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language];
 $cal_lang = "en";
 $cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
@@ -126,7 +126,7 @@ $fieldName_task = '';
 $fieldLabel_task = '';
 $fldDataType_task = '';
 
-$qcreate_get_field="select * from field where tabid=9 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where vtiger_tabid=9 and quickcreate=0 order by quickcreatesequence";
 $qcreate_get_result=$adb->query($qcreate_get_field);
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 $fieldName_array_task = Array();//for validation
@@ -239,7 +239,7 @@ $fieldName = '';
 $fieldLabel = '';
 $fldDataType = '';
 
-$qcreate_get_field="select * from field where tabid=16 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where vtiger_tabid=16 and quickcreate=0 order by quickcreatesequence";
 $qcreate_get_result=$adb->query($qcreate_get_field);
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 

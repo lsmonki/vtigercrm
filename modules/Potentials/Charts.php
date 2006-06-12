@@ -29,7 +29,7 @@ require_once('include/utils/GraphUtils.php');
 
 class jpgraph {
 	/**
-	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple vtiger_users.
 	 * param $datax- the month data to display in the x-axis
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -345,7 +345,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -355,11 +355,11 @@ class jpgraph {
 	}
 
 	/**
-	 * Creates lead_source_by_outcome pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * Creates lead_source_by_outcome pipeline image as a horizontal accumlated bar graph for multiple vtiger_users.
 	 * param $datay- the lead source data to display in the x-axis
 	 * param $date_start- the begin date of opps to find
 	 * param $date_end- the end date of opps to find
-	 * param $ids - list of assigned users of opps to find
+	 * param $ids - list of assigned vtiger_users of opps to find
 	 * param $cache_file_name - file name to write image to
 	 * param $refresh - boolean whether to rebuild image if exists
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
@@ -680,7 +680,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -690,7 +690,7 @@ class jpgraph {
 	}
 
 	/**
-	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple vtiger_users.
 	 * param $datax- the sales stage data to display in the x-axis
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -1001,7 +1001,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -1103,7 +1103,7 @@ class jpgraph {
 					}
 					else
 					{
-						// put none in if the field is blank.
+						// put none in if the vtiger_field is blank.
 						array_push($visible_legends, $current_module_strings['NTC_NO_LEGENDS']);
 					}
 					array_push($aTargets, "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead_source_key)."&query=true&type=dbrd");
@@ -1229,7 +1229,7 @@ $title->setText($titlestr);
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');

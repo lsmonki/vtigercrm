@@ -49,10 +49,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$image_path=$theme_path."images/";
 	$list_header = Array();
 
-	//Get the tabid of the module
+	//Get the vtiger_tabid of the module
 	$tabid = getTabid($module);
 	global $current_user;
-	//added for customview 27/5
+	//added for vtiger_customview 27/5
 	if($oCv)
 	{
 		if(isset($oCv->list_fields))
@@ -86,17 +86,17 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT field.fieldname
-			FROM field
-			INNER JOIN profile2field
-				ON profile2field.fieldid = field.fieldid
-			INNER JOIN def_org_field
-				ON def_org_field.fieldid = field.fieldid
-			WHERE field.tabid = ".$tabid."
-			AND profile2field.visible = 0
-			AND def_org_field.visible = 0
-			AND profile2field.profileid IN ".$profileList."
-			AND field.fieldname IN ".$field_list;
+		$query  = "SELECT DISTINCT vtiger_field.fieldname
+			FROM vtiger_field
+			INNER JOIN vtiger_profile2field
+				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			INNER JOIN vtiger_def_org_field
+				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			WHERE vtiger_field.tabid = ".$tabid."
+			AND vtiger_profile2field.visible = 0
+			AND vtiger_def_org_field.visible = 0
+			AND vtiger_profile2field.profileid IN ".$profileList."
+			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -106,10 +106,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	}
 	//end
 
-	//modified for customview 27/5 - $app_strings change to $mod_strings
+	//modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
-		//added for customview 27/5
+		//added for vtiger_customview 27/5
 		if($oCv)
 		{
 			if(isset($oCv->list_fields_name))
@@ -128,7 +128,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
-				//Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
+				//Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
 				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
 				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
 
@@ -166,7 +166,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							{
 								$lbl_name = $mod_strings[$name];
 							}
-							//added to display currency symbol in listview header
+							//added to display vtiger_currency symbol in listview header
 							if($lbl_name =='Amount')
 							{
 								$currencyid=fetchCurrency($current_user->id);
@@ -194,7 +194,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 				}
 			}
-																	//added to display currency symbol in related listview header
+																	//added to display vtiger_currency symbol in related listview header
 																	if($name =='Amount' && $relatedlist !='' )
 		{
 			$currencyid=fetchCurrency($current_user->id);
@@ -256,17 +256,17 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT field.fieldname
-			FROM field
-			INNER JOIN profile2field
-				ON profile2field.fieldid = field.fieldid
-			INNER JOIN def_org_field
-				ON def_org_field.fieldid = field.fieldid
-			WHERE field.tabid = ".$tabid."
-			AND profile2field.visible=0
-			AND def_org_field.visible=0
-			AND profile2field.profileid IN ".$profileList."
-			AND field.fieldname IN ".$field_list;
+		$query  = "SELECT DISTINCT vtiger_field.fieldname
+			FROM vtiger_field
+			INNER JOIN vtiger_profile2field
+				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			INNER JOIN vtiger_def_org_field
+				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			WHERE vtiger_field.tabid = ".$tabid."
+			AND vtiger_profile2field.visible=0
+			AND vtiger_def_org_field.visible=0
+			AND vtiger_profile2field.profileid IN ".$profileList."
+			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -287,17 +287,17 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		if($is_admin==false)
 		{
                 	$profileList = getCurrentUserProfileList();
-                	$query = "SELECT profile2field.*
-				FROM field
-				INNER JOIN profile2field
-					ON profile2field.fieldid = field.fieldid
-				INNER JOIN def_org_field
-					ON def_org_field.fieldid = field.fieldid
-				WHERE field.tabid = ".$tabid."
-				AND profile2field.visible = 0
-				AND def_org_field.visible = 0
-				AND profile2field.profileid IN ".$profileList."
-				AND field.fieldname = '".$fieldname."'";
+                	$query = "SELECT vtiger_profile2field.*
+				FROM vtiger_field
+				INNER JOIN vtiger_profile2field
+					ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+				INNER JOIN vtiger_def_org_field
+					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+				WHERE vtiger_field.tabid = ".$tabid."
+				AND vtiger_profile2field.visible = 0
+				AND vtiger_def_org_field.visible = 0
+				AND vtiger_profile2field.profileid IN ".$profileList."
+				AND vtiger_field.fieldname = '".$fieldname."'";
 
                 	$result = $adb->query($query);
                 }
@@ -431,11 +431,11 @@ function getNavigationValues($display, $noofrows, $limit)
 *Param $returnset - list query parameters in url string
 *Param $edit_action - Edit action value
 *Param $del_action - delete action value
-*Param $oCv - customview object
+*Param $oCv - vtiger_customview object
 *Returns an array type
 */
 
-//parameter added for customview $oCv 27/5
+//parameter added for vtiger_customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
 	global $log;
@@ -449,10 +449,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$evt_status;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	//getting the fieldtable entries from database
+	//getting the vtiger_fieldtable entries from database
 	$tabid = getTabid($module);
 
-	//added for customview 27/5
+	//added for vtiger_customview 27/5
 	if($oCv)
 	{
 		if(isset($oCv->list_fields))
@@ -485,17 +485,17 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT field.fieldname
-			FROM field
-			INNER JOIN profile2field
-				ON profile2field.fieldid = field.fieldid
-			INNER JOIN def_org_field
-				ON def_org_field.fieldid = field.fieldid
-			WHERE field.tabid = ".$tabid."
-			AND profile2field.visible = 0
-			AND def_org_field.visible = 0
-			AND profile2field.profileid IN ".$profileList."
-			AND field.fieldname IN ".$field_list;
+		$query  = "SELECT DISTINCT vtiger_field.fieldname
+			FROM vtiger_field
+			INNER JOIN vtiger_profile2field
+				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			INNER JOIN vtiger_def_org_field
+				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			WHERE vtiger_field.tabid = ".$tabid."
+			AND vtiger_profile2field.visible = 0
+			AND vtiger_def_org_field.visible = 0
+			AND vtiger_profile2field.profileid IN ".$profileList."
+			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -507,7 +507,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$ui_col_array=Array();
 
 	$query = "SELECT uitype, columnname, fieldname
-		FROM field
+		FROM vtiger_field
 		WHERE tabid = ".$tabid."
 		AND fieldname IN".$field_list;
 	$result = $adb->query($query);
@@ -555,7 +555,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = $focus->list_fields_name[$name];
 
-			//added for customview 27/5
+			//added for vtiger_customview 27/5
 			if($oCv)
 			{
 				if(isset($oCv->list_fields_name))
@@ -655,7 +655,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($name=='Account Name')
 					{
-						//modified for customview 27/5
+						//modified for vtiger_customview 27/5
 						if($module == 'Accounts')
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
@@ -754,7 +754,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 *Param $returnset - list query parameters in url string
 *Param $edit_action - Edit action value
 *Param $del_action - delete action value
-*Param $oCv - customview object
+*Param $oCv - vtiger_customview object
 *Returns an array type
 */
 
@@ -770,7 +770,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	$image_path=$theme_path."images/";
 	$list_block = Array();
 
-	//getting the fieldtable entries from database
+	//getting the vtiger_fieldtable entries from database
 	$tabid = getTabid($module);
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	
@@ -791,17 +791,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	if($is_admin==false)
 	{
 		$profileList = getCurrentUserProfileList();
-		$query  = "SELECT DISTINCT field.fieldname
-			FROM field
-			INNER JOIN profile2field
-				ON profile2field.fieldid = field.fieldid
-			INNER JOIN def_org_field
-				ON def_org_field.fieldid = field.fieldid
-			WHERE field.tabid = ".$tabid."
-			AND profile2field.visible = 0
-			AND def_org_field.visible = 0
-			AND profile2field.profileid IN ".$profileList."
-			AND field.fieldname IN ".$field_list;
+		$query  = "SELECT DISTINCT vtiger_field.fieldname
+			FROM vtiger_field
+			INNER JOIN vtiger_profile2field
+				ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			INNER JOIN vtiger_def_org_field
+				ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			WHERE vtiger_field.tabid = ".$tabid."
+			AND vtiger_profile2field.visible = 0
+			AND vtiger_def_org_field.visible = 0
+			AND vtiger_profile2field.profileid IN ".$profileList."
+			AND vtiger_field.fieldname IN ".$field_list;
 		$result = $adb->query($query);
 		$field=Array();
 		for($k=0;$k < $adb->num_rows($result);$k++)
@@ -813,7 +813,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	$ui_col_array=Array();
 
 	$query = "SELECT uitype, columnname, fieldname
-		FROM field
+		FROM vtiger_field
 		WHERE tabid=".$tabid."
 		AND fieldname IN ".$field_list;
 	$result = $adb->query($query);
@@ -844,17 +844,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 				if($is_admin==false)
 				{
 					$profileList = getCurrentUserProfileList();
-					$query = "SELECT profile2field.*
-						FROM field
-						INNER JOIN profile2field
-						ON profile2field.fieldid = field.fieldid
-						INNER JOIN def_org_field
-						ON def_org_field.fieldid = field.fieldid
-						WHERE field.tabid = ".$tabid."
-						AND profile2field.visible = 0
-						AND def_org_field.visible = 0
-						AND profile2field.profileid IN ".$profileList."
-						AND field.fieldname = '".$fieldname."'";
+					$query = "SELECT vtiger_profile2field.*
+						FROM vtiger_field
+						INNER JOIN vtiger_profile2field
+						ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+						INNER JOIN vtiger_def_org_field
+						ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+						WHERE vtiger_field.tabid = ".$tabid."
+						AND vtiger_profile2field.visible = 0
+						AND vtiger_def_org_field.visible = 0
+						AND vtiger_profile2field.profileid IN ".$profileList."
+						AND vtiger_field.fieldname = '".$fieldname."'";
 
 					$result = $adb->query($query);
 				}
@@ -927,10 +927,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 }
 
 
-/**This function generates the value for a given field namee 
-*Param $field_result - field result in array
+/**This function generates the value for a given vtiger_field namee 
+*Param $field_result - vtiger_field result in array
 *Param $list_result - resultset of a listview query
-*Param $fieldname - field name
+*Param $fieldname - vtiger_field name
 *Param $focus - module object
 *Param $module - module name
 *Param $entity_id - entity id
@@ -993,7 +993,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		if($temp_val != '' && $temp_val != 0)
-		{       //changes made to remove currency symbol infront of each potential amount
+		{       //changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
                         $value = $temp_val;
 		}
 		else
@@ -1029,7 +1029,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		global $adb;
 		if($temp_val != '')
                 {
-			$sql="SELECT * FROM contactdetails WHERE contactid=".$temp_val;		
+			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=".$temp_val;		
 			$result=$adb->query($sql);
 			$firstname=$adb->query_result($result,0,"firstname");
 			$lastname=$adb->query_result($result,0,"lastname");
@@ -1057,7 +1057,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 			global $adb;
 
-	$attachmentid=$adb->query_result($adb->query("SELECT * FROM seattachmentsrel WHERE crmid = ".$entity_id),0,'attachmentsid');
+	$attachmentid=$adb->query_result($adb->query("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ".$entity_id),0,'attachmentsid');
 	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
 
 	}
@@ -1349,9 +1349,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
 
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM field WHERE tabid=".getTabid($module)." and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
-						//Change this index 0 - to get the fieldid based on email1 or email2
+						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
@@ -1365,9 +1365,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"yahooid");
 
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM field WHERE tabid=".getTabid($module)." and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=".getTabid($module)." and uitype=13;";
 						$queryres = $adb->query($querystr);
-						//Change this index 0 - to get the fieldid based on email or yahooid
+						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
 						//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
@@ -1403,7 +1403,7 @@ $log->debug("Exiting getValue method ...");
 				{
 					if($module == "Contacts")
                                         {
-                                                 $query="SELECT contactdetails.imagename FROM contactdetails WHERE lastname='".$temp_val."'";
+                                                 $query="SELECT vtiger_contactdetails.imagename FROM vtiger_contactdetails WHERE lastname='".$temp_val."'";
                                                 //echo $query;
                                                  $result = $adb->query($query);
                                                  $imagename=$adb->query_result($result,0,'imagename');
@@ -1462,7 +1462,7 @@ $log->debug("Exiting getValue method ...");
 		}
 	}
 	
-	// Mike Crowe Mod --------------------------------------------------------Make right justified and currency value
+	// Mike Crowe Mod --------------------------------------------------------Make right justified and vtiger_currency value
 	if ( in_array($uitype,array(71,72,7,9,90)) )
 	{
 		$value = '<span align="right">'.$value.'</div>';
@@ -1484,29 +1484,29 @@ function getListQuery($module,$where='')
 	$tab_id = getTabid($module);	
 	if($module == "HelpDesk")
 	{
-		$query = "SELECT crmentity.crmid, crmentity.smownerid,
-				troubletickets.title, troubletickets.status,
-				troubletickets.priority, troubletickets.parent_id,
-				contactdetails.contactid, contactdetails.firstname,
-				contactdetails.lastname, account.accountid,
-				account.accountname, ticketcf.*
-			FROM troubletickets
-			INNER JOIN ticketcf
-				ON ticketcf.ticketid = troubletickets.ticketid
-			INNER JOIN crmentity
-				ON crmentity.crmid = troubletickets.ticketid
-			LEFT JOIN ticketgrouprelation
-				ON troubletickets.ticketid = ticketgrouprelation.ticketid
-			LEFT JOIN groups
-				ON groups.groupname = ticketgrouprelation.groupname
-			LEFT JOIN contactdetails
-				ON troubletickets.parent_id = contactdetails.contactid
-			LEFT JOIN account
-				ON account.accountid = troubletickets.parent_id
-			LEFT JOIN users
-				ON crmentity.smownerid = users.id
-				AND troubletickets.ticketid = ticketcf.ticketid
-			WHERE crmentity.deleted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_troubletickets.title, vtiger_troubletickets.status,
+			vtiger_troubletickets.priority, vtiger_troubletickets.parent_id,
+			vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
+			vtiger_contactdetails.lastname, vtiger_account.accountid,
+			vtiger_account.accountname, vtiger_ticketcf.*
+			FROM vtiger_troubletickets
+			INNER JOIN vtiger_ticketcf
+				ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+			LEFT JOIN vtiger_ticketgrouprelation
+				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_troubletickets.parent_id
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+				AND vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid
+			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 				$sec_parameter=getListViewSecurityParameter($module);
@@ -1518,60 +1518,60 @@ function getListQuery($module,$where='')
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "SELECT crmentity.crmid, crmentity.smownerid,
-				account.accountname, account.email1,
-				account.email2, account.website, account.phone,
-				accountbillads.city,
-				accountscf.*
-			FROM account
-			INNER JOIN crmentity
-				ON crmentity.crmid = account.accountid
-			INNER JOIN accountbillads
-				ON account.accountid = accountbillads.accountaddressid
-			INNER JOIN accountshipads
-				ON account.accountid = accountshipads.accountaddressid
-			INNER JOIN accountscf
-				ON account.accountid = accountscf.accountid
-			LEFT JOIN accountgrouprelation
-				ON accountscf.accountid = accountgrouprelation.accountid
-			LEFT JOIN groups
-				ON groups.groupname = accountgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_account.accountname, vtiger_account.email1,
+			vtiger_account.email2, vtiger_account.website, vtiger_account.phone,
+			vtiger_accountbillads.city,
+			vtiger_accountscf.*
+			FROM vtiger_account
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_account.accountid
+			INNER JOIN vtiger_accountbillads
+				ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+			INNER JOIN vtiger_accountshipads
+				ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+			INNER JOIN vtiger_accountscf
+				ON vtiger_account.accountid = vtiger_accountscf.accountid
+			LEFT JOIN vtiger_accountgrouprelation
+				ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
-                    $query .= "AND (crmentity.smownerid IN (".$current_user->id.")
-		   		 OR crmentity.smownerid IN (
-					 SELECT user2role.userid
-					 FROM user2role
-					 INNER JOIN users
-						 ON users.id = user2role.userid
-					 INNER JOIN role
-						 ON role.roleid = user2role.roleid
-					 WHERE role.parentrole LIKE '".$current_user_parent_role_seq."::%')
-					 OR crmentity.smownerid IN (
+                    $query .= "AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
+		   		 OR vtiger_crmentity.smownerid IN (
+					 SELECT vtiger_user2role.userid
+					 FROM vtiger_user2role
+					 INNER JOIN vtiger_users
+						 ON vtiger_users.id = vtiger_user2role.userid
+					 INNER JOIN vtiger_role
+						 ON vtiger_role.roleid = vtiger_user2role.roleid
+					 WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%')
+					 OR vtiger_crmentity.smownerid IN (
 						 SELECT shareduserid
-						 FROM tmp_read_user_sharing_per
+						 FROM vtiger_tmp_read_user_sharing_per
 						 WHERE userid=".$current_user->id."
 						 AND tabid=".$tab_id.")
-					 OR (crmentity.smownerid in (0)
+					 OR (vtiger_crmentity.smownerid in (0)
 					 AND (";
 
                         if(sizeof($current_user_groups) > 0)
                         {
                               $query .= "accountgrouprelation.groupname IN (
 				      		SELECT groupname
-						FROM groups
+						FROM vtiger_groups
 						WHERE groupid IN ".getCurrentUserGroupList().")
 					OR ";
                         }
                          $query .= "accountgrouprelation.groupname IN (
-				 	SELECT groups.groupname
-					FROM tmp_read_group_sharing_per
-					INNER JOIN groups
-						ON groups.groupid = tmp_read_group_sharing_per.sharedgroupid
+				 	SELECT vtiger_groups.groupname
+					FROM vtiger_tmp_read_group_sharing_per
+					INNER JOIN vtiger_groups
+						ON vtiger_groups.groupid = vtiger_tmp_read_group_sharing_per.sharedgroupid
 					WHERE userid=".$current_user->id."
 					AND tabid=".$tab_id.")))) ";
                 }
@@ -1580,27 +1580,27 @@ function getListQuery($module,$where='')
 	if ($module == "Potentials")
 	{
 		//Query modified to sort by assigned to
-		$query = "SELECT crmentity.crmid, crmentity.smownerid,
-				account.accountname,
-				potential.accountid, potential.potentialname,
-				potential.sales_stage, potential.amount,
-				potential.currency, potential.closingdate,
-				potential.typeofrevenue,
-				potentialscf.*
-			FROM potential
-			INNER JOIN crmentity
-				ON crmentity.crmid = potential.potentialid
-			INNER JOIN account
-				ON potential.accountid = account.accountid
-			INNER JOIN potentialscf
-				ON potentialscf.potentialid = potential.potentialid
-			LEFT JOIN potentialgrouprelation
-				ON potential.potentialid = potentialgrouprelation.potentialid
-			LEFT JOIN groups
-				ON groups.groupname = potentialgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where; 
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_account.accountname,
+			vtiger_potential.accountid, vtiger_potential.potentialname,
+			vtiger_potential.sales_stage, vtiger_potential.amount,
+			vtiger_potential.currency, vtiger_potential.closingdate,
+			vtiger_potential.typeofrevenue,
+			vtiger_potentialscf.*
+			FROM vtiger_potential
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			INNER JOIN vtiger_account
+				ON vtiger_potential.accountid = vtiger_account.accountid
+			INNER JOIN vtiger_potentialscf
+				ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_potentialgrouprelation
+				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1612,28 +1612,28 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Leads")
 	{
-		$query = "SELECT crmentity.crmid, crmentity.smownerid,
-				leaddetails.firstname, leaddetails.lastname,
-				leaddetails.company, leadaddress.phone,
-				leadsubdetails.website, leaddetails.email,
-				leadscf.*
-			FROM leaddetails
-			INNER JOIN crmentity
-				ON crmentity.crmid = leaddetails.leadid
-			INNER JOIN leadsubdetails
-				ON leadsubdetails.leadsubscriptionid = leaddetails.leadid
-			INNER JOIN leadaddress
-				ON leadaddress.leadaddressid = leadsubdetails.leadsubscriptionid
-			INNER JOIN leadscf
-				ON leaddetails.leadid = leadscf.leadid
-			LEFT JOIN leadgrouprelation
-				ON leadscf.leadid = leadgrouprelation.leadid
-			LEFT JOIN groups
-				ON groups.groupname = leadgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0
-			AND leaddetails.converted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_leaddetails.firstname, vtiger_leaddetails.lastname,
+			vtiger_leaddetails.company, vtiger_leadaddress.phone,
+			vtiger_leadsubdetails.website, vtiger_leaddetails.email,
+			vtiger_leadscf.*
+			FROM vtiger_leaddetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_leadsubdetails
+				ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid
+			INNER JOIN vtiger_leadaddress
+				ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid
+			INNER JOIN vtiger_leadscf
+				ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
+			LEFT JOIN vtiger_leadgrouprelation
+				ON vtiger_leadscf.leadid = vtiger_leadgrouprelation.leadid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_leaddetails.converted = 0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1642,75 +1642,75 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Products")
 	{
-		$query = "SELECT crmentity.crmid, products.*, productcf.*
-			FROM products
-			INNER JOIN crmentity
-				ON crmentity.crmid = products.productid
-			LEFT JOIN productcf
-				ON products.productid = productcf.productid
-			LEFT JOIN seproductsrel
-				ON seproductsrel.productid = products.productid
-			WHERE crmentity.deleted = 0
-			AND ((seproductsrel.crmid IS NULL
-					AND (products.contactid = 0
-						OR products.contactid IS NULL))
-				OR seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-				OR seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR products.contactid IN (".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_products.*, vtiger_productcf.*
+			FROM vtiger_products
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_products.productid
+			LEFT JOIN vtiger_productcf
+				ON vtiger_products.productid = vtiger_productcf.productid
+			LEFT JOIN vtiger_seproductsrel
+				ON vtiger_seproductsrel.productid = vtiger_products.productid
+			WHERE vtiger_crmentity.deleted = 0
+			AND ((vtiger_seproductsrel.crmid IS NULL
+					AND (vtiger_products.contactid = 0
+						OR vtiger_products.contactid IS NULL))
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) ";
 	}
         if($module == "Notes")
         {
-		$query = "SELECT crmentity.crmid, crmentity.modifiedtime,
-				notes.title, notes.contact_id, notes.filename,
-				senotesrel.crmid AS relatedto,
-				contactdetails.firstname, contactdetails.lastname,
-				notes.*
-			FROM notes
-			INNER JOIN crmentity
-				ON crmentity.crmid = notes.notesid
-			LEFT JOIN senotesrel
-				ON senotesrel.notesid = notes.notesid
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = notes.contact_id
-			WHERE crmentity.deleted = 0
-			AND ((senotesrel.crmid IS NULL
-					AND (notes.contact_id = 0
-						OR notes.contact_id IS NULL))
-				OR senotesrel.crmid IN (".getReadEntityIds('Leads').")
-				OR senotesrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR senotesrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR senotesrel.crmid IN (".getReadEntityIds('Products').")
-				OR senotesrel.crmid IN (".getReadEntityIds('Invoice').")
-				OR senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
-				OR senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
-				OR notes.contact_id IN (".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
+			vtiger_notes.title, vtiger_notes.contact_id, vtiger_notes.filename,
+			vtiger_senotesrel.crmid AS relatedto,
+			vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
+			vtiger_notes.*
+			FROM vtiger_notes
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_notes.notesid
+			LEFT JOIN vtiger_senotesrel
+				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_notes.contact_id
+			WHERE vtiger_crmentity.deleted = 0
+			AND ((vtiger_senotesrel.crmid IS NULL
+					AND (vtiger_notes.contact_id = 0
+						OR vtiger_notes.contact_id IS NULL))
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Leads').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Products').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Invoice').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
+				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
+				OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) ";
         }
 	if($module == "Contacts")
         {
 		//Query modified to sort by assigned to
-		$query = "SELECT contactdetails.firstname, contactdetails.lastname,
-				contactdetails.title, contactdetails.accountid,
-				contactdetails.email, contactdetails.phone,
-				crmentity.smownerid, crmentity.crmid
-			FROM contactdetails
-			INNER JOIN crmentity
-				ON crmentity.crmid = contactdetails.contactid
-			INNER JOIN contactaddress
-				ON contactdetails.contactid = contactaddress.contactaddressid
-			INNER JOIN contactsubdetails
-				ON contactaddress.contactaddressid = contactsubdetails.contactsubscriptionid
-			INNER JOIN contactscf
-				ON contactdetails.contactid = contactscf.contactid
-			LEFT JOIN account
-				ON account.accountid = contactdetails.accountid
-			LEFT JOIN contactgrouprelation
-				ON contactscf.contactid = contactgrouprelation.contactid
-			LEFT JOIN groups
-				ON groups.groupname = contactgrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where;
+		$query = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
+			vtiger_contactdetails.title, vtiger_contactdetails.accountid,
+			vtiger_contactdetails.email, vtiger_contactdetails.phone,
+			vtiger_crmentity.smownerid, vtiger_crmentity.crmid
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			INNER JOIN vtiger_contactaddress
+				ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+			INNER JOIN vtiger_contactsubdetails
+				ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
+			INNER JOIN vtiger_contactscf
+				ON vtiger_contactdetails.contactid = vtiger_contactscf.contactid
+			LEFT JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT JOIN vtiger_contactgrouprelation
+				ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -1720,73 +1720,73 @@ function getListQuery($module,$where='')
         }
 	if($module == "Activities")
         {
-		$query = "SELECT crmentity.crmid, crmentity.smownerid, crmentity.setype,
-				activity.*,
-				contactdetails.lastname, contactdetails.firstname,
-				contactdetails.contactid,
-				account.accountid, account.accountname,
-				recurringevents.recurringtype
-			FROM activity
-			INNER JOIN crmentity
-				ON crmentity.crmid = activity.activityid
-			LEFT JOIN cntactivityrel
-				ON cntactivityrel.activityid = activity.activityid
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = cntactivityrel.contactid
-			LEFT JOIN seactivityrel
-				ON seactivityrel.activityid = activity.activityid
-			LEFT JOIN activitygrouprelation
-				ON activitygrouprelation.activityid = crmentity.crmid
-			LEFT JOIN groups
-				ON groups.groupname = activitygrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			LEFT OUTER JOIN account
-				ON account.accountid = contactdetails.accountid
-			LEFT OUTER JOIN recurringevents
-				ON recurringevents.activityid = activity.activityid
-			WHERE crmentity.deleted = 0
-			AND (activity.activitytype = 'Meeting'
-				OR activity.activitytype = 'Call'
-				OR activity.activitytype = 'Task') ".$where;
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.setype,
+			vtiger_activity.*,
+			vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,
+			vtiger_contactdetails.contactid,
+			vtiger_account.accountid, vtiger_account.accountname,
+			vtiger_recurringevents.recurringtype
+			FROM vtiger_activity
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_contactdetails.accountid
+			LEFT OUTER JOIN vtiger_recurringevents
+				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+			WHERE vtiger_crmentity.deleted = 0
+			AND (vtiger_activity.activitytype = 'Meeting'
+				OR vtiger_activity.activitytype = 'Call'
+				OR vtiger_activity.activitytype = 'Task') ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;		
 
 		}
-		//$query .=" group by activity.activityid ";
+		//$query .=" group by vtiger_activity.activityid ";
 		//included by Jaguar
         }
 	if($module == "Emails")
         {
-		$query = "SELECT DISTINCT crmentity.crmid, crmentity.smownerid,
-				activity.activityid, activity.subject,
-				activity.date_start,
-				contactdetails.lastname, contactdetails.firstname,
-				contactdetails.contactid
-			FROM activity
-			INNER JOIN crmentity
-				ON crmentity.crmid = activity.activityid
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			LEFT JOIN seactivityrel
-				ON seactivityrel.activityid = activity.activityid
-			LEFT JOIN contactdetails
-				ON contactdetails.contactid = seactivityrel.crmid
-			LEFT JOIN cntactivityrel
-				ON cntactivityrel.activityid = activity.activityid
-				AND cntactivityrel.contactid = cntactivityrel.contactid
-			LEFT JOIN activitygrouprelation
-				ON activitygrouprelation.activityid = crmentity.crmid
-			LEFT JOIN groups
-				ON groups.groupname = activitygrouprelation.groupname
-			LEFT JOIN salesmanactivityrel
-				ON salesmanactivityrel.activityid = activity.activityid
-			LEFT JOIN emaildetails
-				ON emaildetails.emailid = activity.activityid
-			WHERE activity.activitytype = 'Emails'
-			AND crmentity.deleted = 0 ";
+		$query = "SELECT DISTINCT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_activity.activityid, vtiger_activity.subject,
+			vtiger_activity.date_start,
+			vtiger_contactdetails.lastname, vtiger_contactdetails.firstname,
+			vtiger_contactdetails.contactid
+			FROM vtiger_activity
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_activity.activityid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_seactivityrel.crmid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+				AND vtiger_cntactivityrel.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			LEFT JOIN vtiger_salesmanactivityrel
+				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_emaildetails
+				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
+			WHERE vtiger_activity.activitytype = 'Emails'
+			AND vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1796,61 +1796,61 @@ function getListQuery($module,$where='')
 
 	if($module == "Faq")
 	{
-		$query = "SELECT crmentity.crmid, crmentity.createdtime, crmentity.modifiedtime,
-				faq.*
-			FROM faq
-			INNER JOIN crmentity
-				ON crmentity.crmid = faq.id
-			LEFT JOIN products
-				ON faq.product_id = products.productid
-			WHERE crmentity.deleted = 0";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime,
+			vtiger_faq.*
+			FROM vtiger_faq
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_faq.id
+			LEFT JOIN vtiger_products
+				ON vtiger_faq.product_id = vtiger_products.productid
+			WHERE vtiger_crmentity.deleted = 0";
 	}
 	
 	if($module == "Vendors")
 	{
-		$query = "SELECT crmentity.crmid, vendor.*
-			FROM vendor
-			INNER JOIN crmentity
-				ON crmentity.crmid = vendor.vendorid
-			WHERE crmentity.deleted = 0";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_vendor.*
+			FROM vtiger_vendor
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
+			WHERE vtiger_crmentity.deleted = 0";
 	}
 	if($module == "PriceBooks")
 	{
-		$query = "SELECT crmentity.crmid, pricebook.*
-			FROM pricebook
-			INNER JOIN crmentity
-				ON crmentity.crmid = pricebook.pricebookid
-			WHERE crmentity.deleted = 0";
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_pricebook.*
+			FROM vtiger_pricebook
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid
+			WHERE vtiger_crmentity.deleted = 0";
 	}
 	if($module == "Quotes")
 	{
 		//Query modified to sort by assigned to
-		$query = "SELECT crmentity.*,
-				quotes.*,
-				quotesbillads.*,
-				quotesshipads.*,
-				potential.potentialname,
-				account.accountname
-			FROM quotes
-			INNER JOIN crmentity
-				ON crmentity.crmid = quotes.quoteid
-			INNER JOIN quotesbillads
-				ON quotes.quoteid = quotesbillads.quotebilladdressid
-			INNER JOIN quotesshipads
-				ON quotes.quoteid = quotesshipads.quoteshipaddressid
-			LEFT JOIN quotescf
-				ON quotes.quoteid = quotescf.quoteid
-			LEFT OUTER JOIN account
-				ON account.accountid = quotes.accountid
-			LEFT OUTER JOIN potential
-				ON potential.potentialid = quotes.potentialid
-			LEFT JOIN quotegrouprelation
-				ON quotes.quoteid = quotegrouprelation.quoteid
-			LEFT JOIN groups
-				ON groups.groupname = quotegrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where;
+		$query = "SELECT vtiger_crmentity.*,
+			vtiger_quotes.*,
+			vtiger_quotesbillads.*,
+			vtiger_quotesshipads.*,
+			vtiger_potential.potentialname,
+			vtiger_account.accountname
+			FROM vtiger_quotes
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
+			INNER JOIN vtiger_quotesbillads
+				ON vtiger_quotes.quoteid = vtiger_quotesbillads.quotebilladdressid
+			INNER JOIN vtiger_quotesshipads
+				ON vtiger_quotes.quoteid = vtiger_quotesshipads.quoteshipaddressid
+			LEFT JOIN vtiger_quotescf
+				ON vtiger_quotes.quoteid = vtiger_quotescf.quoteid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_quotes.accountid
+			LEFT OUTER JOIN vtiger_potential
+				ON vtiger_potential.potentialid = vtiger_quotes.potentialid
+			LEFT JOIN vtiger_quotegrouprelation
+				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1860,29 +1860,29 @@ function getListQuery($module,$where='')
 	if($module == "PurchaseOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "SELECT crmentity.*,
-				purchaseorder.*,
-				pobillads.*,
-				poshipads.*,
-				vendor.vendorname
-			FROM purchaseorder
-			INNER JOIN crmentity
-				ON crmentity.crmid = purchaseorder.purchaseorderid
-			LEFT OUTER JOIN vendor
-				ON purchaseorder.vendorid = vendor.vendorid
-			INNER JOIN pobillads
-				ON purchaseorder.purchaseorderid = pobillads.pobilladdressid
-			INNER JOIN poshipads
-				ON purchaseorder.purchaseorderid = poshipads.poshipaddressid
-			LEFT JOIN purchaseordercf
-				ON purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid
-			LEFT JOIN pogrouprelation
-				ON purchaseorder.purchaseorderid = pogrouprelation.purchaseorderid
-			LEFT JOIN groups
-				ON groups.groupname = pogrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ";
+                $query = "SELECT vtiger_crmentity.*,
+			vtiger_purchaseorder.*,
+			vtiger_pobillads.*,
+			vtiger_poshipads.*,
+			vtiger_vendor.vendorname
+			FROM vtiger_purchaseorder
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
+			LEFT OUTER JOIN vtiger_vendor
+				ON vtiger_purchaseorder.vendorid = vtiger_vendor.vendorid
+			INNER JOIN vtiger_pobillads
+				ON vtiger_purchaseorder.purchaseorderid = vtiger_pobillads.pobilladdressid
+			INNER JOIN vtiger_poshipads
+				ON vtiger_purchaseorder.purchaseorderid = vtiger_poshipads.poshipaddressid
+			LEFT JOIN vtiger_purchaseordercf
+				ON vtiger_purchaseordercf.purchaseorderid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_pogrouprelation
+				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1892,32 +1892,32 @@ function getListQuery($module,$where='')
         if($module == "SalesOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "SELECT crmentity.*,
-				salesorder.*,
-				sobillads.*,
-				soshipads.*,
-				quotes.subject AS quotename,
-				account.accountname
-			FROM salesorder
-			INNER JOIN crmentity
-				ON crmentity.crmid = salesorder.salesorderid
-			INNER JOIN sobillads
-				ON salesorder.salesorderid = sobillads.sobilladdressid
-			INNER JOIN soshipads
-				ON salesorder.salesorderid = soshipads.soshipaddressid
-			LEFT JOIN salesordercf
-				ON salesordercf.salesorderid = salesorder.salesorderid
-			LEFT OUTER JOIN quotes
-				ON quotes.quoteid = salesorder.quoteid
-			LEFT OUTER JOIN account
-				ON account.accountid = salesorder.accountid
-			LEFT JOIN sogrouprelation
-				ON salesorder.salesorderid = sogrouprelation.salesorderid
-			LEFT JOIN groups
-				ON groups.groupname = sogrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where;
+                $query = "SELECT vtiger_crmentity.*,
+			vtiger_salesorder.*,
+			vtiger_sobillads.*,
+			vtiger_soshipads.*,
+			vtiger_quotes.subject AS quotename,
+			vtiger_account.accountname
+			FROM vtiger_salesorder
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
+			INNER JOIN vtiger_sobillads
+				ON vtiger_salesorder.salesorderid = vtiger_sobillads.sobilladdressid
+			INNER JOIN vtiger_soshipads
+				ON vtiger_salesorder.salesorderid = vtiger_soshipads.soshipaddressid
+			LEFT JOIN vtiger_salesordercf
+				ON vtiger_salesordercf.salesorderid = vtiger_salesorder.salesorderid
+			LEFT OUTER JOIN vtiger_quotes
+				ON vtiger_quotes.quoteid = vtiger_salesorder.quoteid
+			LEFT OUTER JOIN vtiger_account
+				ON vtiger_account.accountid = vtiger_salesorder.accountid
+			LEFT JOIN vtiger_sogrouprelation
+				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1928,29 +1928,29 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "SELECT crmentity.*,
-				invoice.*,
-				invoicebillads.*,
-				invoiceshipads.*,
-				salesorder.subject AS salessubject
-			FROM invoice
-			INNER JOIN crmentity
-				ON crmentity.crmid = invoice.invoiceid
-			INNER JOIN invoicebillads
-				ON invoice.invoiceid = invoicebillads.invoicebilladdressid
-			INNER JOIN invoiceshipads
-				ON invoice.invoiceid = invoiceshipads.invoiceshipaddressid
-			LEFT OUTER JOIN salesorder
-				ON salesorder.salesorderid = invoice.salesorderid
-			INNER JOIN invoicecf
-				ON invoice.invoiceid = invoicecf.invoiceid
-			LEFT JOIN invoicegrouprelation
-				ON invoice.invoiceid = invoicegrouprelation.invoiceid
-			LEFT JOIN groups
-				ON groups.groupname = invoicegrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where;
+		$query = "SELECT vtiger_crmentity.*,
+			vtiger_invoice.*,
+			vtiger_invoicebillads.*,
+			vtiger_invoiceshipads.*,
+			vtiger_salesorder.subject AS salessubject
+			FROM vtiger_invoice
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
+			INNER JOIN vtiger_invoicebillads
+				ON vtiger_invoice.invoiceid = vtiger_invoicebillads.invoicebilladdressid
+			INNER JOIN vtiger_invoiceshipads
+				ON vtiger_invoice.invoiceid = vtiger_invoiceshipads.invoiceshipaddressid
+			LEFT OUTER JOIN vtiger_salesorder
+				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
+			INNER JOIN vtiger_invoicecf
+				ON vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
+			LEFT JOIN vtiger_invoicegrouprelation
+				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1961,18 +1961,18 @@ function getListQuery($module,$where='')
 	{
 		//Query modified to sort by assigned to
 		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
-		$query = "SELECT crmentity.*,
-				campaign.*
-			FROM campaign
-			INNER JOIN crmentity
-				ON crmentity.crmid = campaign.campaignid
-			LEFT JOIN campaigngrouprelation
-				ON campaign.campaignid = campaigngrouprelation.campaignid
-			LEFT JOIN groups
-				ON groups.groupname = campaigngrouprelation.groupname
-			LEFT JOIN users
-				ON users.id = crmentity.smownerid
-			WHERE crmentity.deleted = 0 ".$where;
+		$query = "SELECT vtiger_crmentity.*,
+			vtiger_campaign.*
+			FROM vtiger_campaign
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_campaign.campaignid
+			LEFT JOIN vtiger_campaigngrouprelation
+				ON vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1997,16 +1997,16 @@ function getReadEntityIds($module)
 
 	if($module == "Leads")
 	{
-		$query = "SELECT crmentity.crmid
-			FROM leaddetails
-			INNER JOIN crmentity
-				ON crmentity.crmid = leaddetails.leadid
-			LEFT JOIN leadgrouprelation
-				ON leaddetails.leadid = leadgrouprelation.leadid
-			LEFT JOIN groups
-                                ON groups.groupname = leadgrouprelation.groupname
-			WHERE crmentity.deleted = 0
-			AND leaddetails.converted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_leaddetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
+			LEFT JOIN vtiger_leadgrouprelation
+				ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_leaddetails.converted = 0 ";
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2019,15 +2019,15 @@ function getReadEntityIds($module)
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "SELECT crmentity.crmid
-			FROM account
-			INNER JOIN crmentity
-				ON crmentity.crmid = account.accountid
-			LEFT JOIN accountgrouprelation
-				ON account.accountid = accountgrouprelation.accountid
-			LEFT JOIN groups
-                                ON groups.groupname = accountgrouprelation.groupname
-			WHERE crmentity.deleted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_account
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_account.accountid
+			LEFT JOIN vtiger_accountgrouprelation
+				ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ";
 
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
@@ -2041,15 +2041,15 @@ function getReadEntityIds($module)
 	if ($module == "Potentials")
 	{
 		//Query modified to sort by assigned to
-		$query = "SELECT crmentity.crmid
-			FROM potential
-			INNER JOIN crmentity
-				ON crmentity.crmid = potential.potentialid
-			LEFT JOIN potentialgrouprelation
-				ON potential.potentialid = potentialgrouprelation.potentialid
-			LEFT JOIN groups
-                                ON groups.groupname = potentialgrouprelation.groupname
-			WHERE crmentity.deleted = 0 "; 
+		$query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_potential
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_potentialgrouprelation
+				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 "; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -2065,15 +2065,15 @@ function getReadEntityIds($module)
 		//Query modified to sort by assigned to
 
 		
-		$query = "SELECT crmentity.crmid
-			FROM contactdetails
-			INNER JOIN crmentity
-				ON crmentity.crmid = contactdetails.contactid
-			LEFT JOIN contactgrouprelation
-				ON contactdetails.contactid = contactgrouprelation.contactid
-			LEFT JOIN groups
-                                ON groups.groupname = contactgrouprelation.groupname
-			WHERE crmentity.deleted = 0 ";
+		$query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_contactdetails
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+			LEFT JOIN vtiger_contactgrouprelation
+				ON vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ";
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -2083,34 +2083,34 @@ function getReadEntityIds($module)
         }
 	if($module == "Products")
 	{
-		$query = "SELECT DISTINCT crmentity.crmid
-			FROM products
-			INNER JOIN crmentity
-				ON crmentity.crmid = products.productid
-			LEFT JOIN seproductsrel
-				ON seproductsrel.productid = products.productid
-			WHERE crmentity.deleted = 0
-			AND ((seproductsrel.crmid IS NULL
-					OR products.contactid = 0
-					OR products.contactid IS NULL)
-				OR seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-				OR seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR products.contactid IN (".getReadEntityIds('Contacts').")) ";
+		$query = "SELECT DISTINCT vtiger_crmentity.crmid
+			FROM vtiger_products
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_products.productid
+			LEFT JOIN vtiger_seproductsrel
+				ON vtiger_seproductsrel.productid = vtiger_products.productid
+			WHERE vtiger_crmentity.deleted = 0
+			AND ((vtiger_seproductsrel.crmid IS NULL
+					OR vtiger_products.contactid = 0
+					OR vtiger_products.contactid IS NULL)
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
+				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
+				OR vtiger_products.contactid IN (".getReadEntityIds('Contacts').")) ";
 	}
 
 	if($module == "PurchaseOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "SELECT crmentity.crmid
-			FROM purchaseorder
-			INNER JOIN crmentity
-				ON crmentity.crmid = purchaseorder.purchaseorderid
-			LEFT JOIN pogrouprelation
-				ON purchaseorder.purchaseorderid = pogrouprelation.purchaseorderid
-			LEFT JOIN groups
-                                ON groups.groupname = pogrouprelation.groupname
-			WHERE crmentity.deleted = 0 ";
+                $query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_purchaseorder
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_pogrouprelation
+				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2120,15 +2120,15 @@ function getReadEntityIds($module)
         if($module == "SalesOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "SELECT crmentity.crmid
-			FROM salesorder
-			INNER JOIN crmentity
-				ON crmentity.crmid = salesorder.salesorderid
-			LEFT JOIN sogrouprelation
-				ON salesorder.salesorderid = sogrouprelation.salesorderid
-			LEFT JOIN groups
-                                ON groups.groupname = sogrouprelation.groupname
-			WHERE crmentity.deleted = 0 ".$where;
+                $query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_salesorder
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
+			LEFT JOIN vtiger_sogrouprelation
+				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
+			LEFT JOIN vtiger_groups
+                                ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2137,15 +2137,15 @@ function getReadEntityIds($module)
         }
 	if($module == "Invoice")
 	{
-		$query = "SELECT crmentity.crmid
-			FROM invoice
-			INNER JOIN crmentity
-				ON crmentity.crmid = invoice.invoiceid
-			LEFT JOIN invoicegrouprelation
-				ON invoice.invoiceid = invoicegrouprelation.invoiceid
-			LEFT JOIN groups
-				ON groups.groupname = invoicegrouprelation.groupname
-			WHERE crmentity.deleted = 0 ".$where;
+		$query = "SELECT vtiger_crmentity.crmid
+			FROM vtiger_invoice
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
+			LEFT JOIN vtiger_invoicegrouprelation
+				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2159,7 +2159,7 @@ function getReadEntityIds($module)
 }
 
 
-//parameter $viewid added for customview 27/5
+//parameter $viewid added for vtiger_customview 27/5
 function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='',$groupid='')
 {
 	global $log;
@@ -2208,43 +2208,43 @@ function getRelatedToEntity($module,$list_result,$rset)
 		$parent_name=$app_strings['LBL_MULTIPLE'];
         }
         //Raju -- Ends
-			$parent_query = "SELECT accountname FROM account WHERE accountid=".$seid;
+			$parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"accountname");
 		}
 		if($parent_module == 'Leads')
 		{
-			$parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$seid;
+			$parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
 		}
 		if($parent_module == 'Potentials')
 		{
-			$parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$seid;
+			$parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"potentialname");
 		}
 		if($parent_module == 'Products')
 		{
-			$parent_query = "SELECT productname FROM products WHERE productid=".$seid;
+			$parent_query = "SELECT productname FROM vtiger_products WHERE productid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"productname");
 		}
 		if($parent_module == 'PurchaseOrder')
 		{
-			$parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$seid;
+			$parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 		if($parent_module == 'SalesOrder')
 		{
-			$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$seid;
+			$parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 		if($parent_module == 'Invoice')
 		{
-			$parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$seid;
+			$parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
@@ -2261,7 +2261,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 }
 
 
-//used in home page listTop files
+//used in home page listTop vtiger_files
 function getRelatedTo($module,$list_result,$rset)
 {
 	global $log;
@@ -2273,36 +2273,36 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $notesid = $adb->query_result($list_result,$rset,"notesid");
                 $action = "DetailView";
-                $evt_query="SELECT senotesrel.crmid, crmentity.setype
-			FROM senotesrel
-			INNER JOIN crmentity
-				ON  senotesrel.crmid = crmentity.crmid
-			WHERE senotesrel.notesid ='".$notesid."'";
+                $evt_query="SELECT vtiger_senotesrel.crmid, vtiger_crmentity.setype
+			FROM vtiger_senotesrel
+			INNER JOIN vtiger_crmentity
+				ON  vtiger_senotesrel.crmid = vtiger_crmentity.crmid
+			WHERE vtiger_senotesrel.notesid ='".$notesid."'";
 	}else if($module == "Products")
 	{
 		$productid = $adb->query_result($list_result,$rset,"productid");
                 $action = "DetailView";
-                $evt_query="SELECT seproductsrel.crmid, crmentity.setype
-			FROM seproductsrel
-			INNER JOIN crmentity
-				ON seproductsrel.crmid = crmentity.crmid
-			WHERE seproductsrel.productid ='".$productid."'";
+                $evt_query="SELECT vtiger_seproductsrel.crmid, vtiger_crmentity.setype
+			FROM vtiger_seproductsrel
+			INNER JOIN vtiger_crmentity
+				ON vtiger_seproductsrel.crmid = vtiger_crmentity.crmid
+			WHERE vtiger_seproductsrel.productid ='".$productid."'";
 
 	}else
 	{
 		$activity_id = $adb->query_result($list_result,$rset,"activityid");
 		$action = "DetailView";
-		$evt_query="SELECT seactivityrel.crmid, crmentity.setype
-			FROM seactivityrel
-			INNER JOIN crmentity
-				ON  seactivityrel.crmid = crmentity.crmid
-			WHERE seactivityrel.activityid='".$activity_id."'";
+		$evt_query="SELECT vtiger_seactivityrel.crmid, vtiger_crmentity.setype
+			FROM vtiger_seactivityrel
+			INNER JOIN vtiger_crmentity
+				ON  vtiger_seactivityrel.crmid = vtiger_crmentity.crmid
+			WHERE vtiger_seactivityrel.activityid='".$activity_id."'";
 
 		if($module == 'HelpDesk')
 		{
 			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
 			if($activity_id != '')
-				$evt_query = "SELECT * FROM crmentity WHERE crmid=".$activity_id;
+				$evt_query = "SELECT * FROM vtiger_crmentity WHERE crmid=".$activity_id;
 		}
 	}
 	//added by raju to change the related to in emails inot multiple if email is for more than one contact
@@ -2326,55 +2326,55 @@ function getRelatedTo($module,$list_result,$rset)
 	$action = "DetailView";
         if($parent_module == 'Accounts')
         {
-                $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
+                $parent_query = "SELECT accountname FROM vtiger_account WHERE accountid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"accountname");
         }
         if($parent_module == 'Leads')
         {
-                $parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$parent_id;
+                $parent_query = "SELECT firstname,lastname FROM vtiger_leaddetails WHERE leadid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
         if($parent_module == 'Potentials')
         {
-                $parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$parent_id;
+                $parent_query = "SELECT potentialname FROM vtiger_potential WHERE potentialid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"potentialname");
         }
         if($parent_module == 'Products')
         {
-                $parent_query = "SELECT productname FROM products WHERE productid=".$parent_id;
+                $parent_query = "SELECT productname FROM vtiger_products WHERE productid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"productname");
         }
 	if($parent_module == 'Quotes')
         {
-                $parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
+                $parent_query = "SELECT subject FROM vtiger_quotes WHERE quoteid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'PurchaseOrder')
         {
-                $parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
+                $parent_query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'Invoice')
         {
-                $parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$parent_id;
+                $parent_query = "SELECT subject FROM vtiger_invoice WHERE invoiceid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
         if($parent_module == 'SalesOrder')
         {
-                $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
+                $parent_query = "SELECT subject FROM vtiger_salesorder WHERE salesorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
-                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
+                $parent_query = "SELECT firstname,lastname FROM vtiger_contactdetails WHERE contactid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
@@ -2460,11 +2460,11 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
 	{
-		$query = "SELECT contactid FROM contpotentialrel WHERE potentialid = ".$recordid;
+		$query = "SELECT contactid FROM vtiger_contpotentialrel WHERE potentialid = ".$recordid;
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Vendors")
 	{
-		$query = "SELECT contactid FROM vendorcontactrel WHERE vendorid = ".$recordid;
+		$query = "SELECT contactid FROM vtiger_vendorcontactrel WHERE vendorid = ".$recordid;
 	}
 
 	if($query !='')
@@ -2477,7 +2477,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 				$skip_id[]=$adb->query_result($result,$k,"contactid");
 			}
 			$skipids = constructList($skip_id,'INTEGER');
-			$where_relquery = "and contactdetails.contactid not in ".$skipids;
+			$where_relquery = "and vtiger_contactdetails.contactid not in ".$skipids;
 		}
 	}
 	$log->debug("Exiting getRelCheckquery method ...");

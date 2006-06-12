@@ -30,7 +30,7 @@ $ftpserver = '';
 $ftpuser = '';
 $ftppassword = '';
 global $adb;
-$query = "select * from systems where server_type='backup'";
+$query = "select * from vtiger_systems where server_type='backup'";
 $result = $adb->query($query);
 $num_rows = $adb->num_rows($result);
 if($num_rows > 0)

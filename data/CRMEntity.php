@@ -31,9 +31,9 @@ class CRMEntity extends SugarBean
   /**
    * This method implements a generic insert and update logic for any SugarBean
    * This method only works for subclasses that implement the same variable names.
-   * This method uses the presence of an id field that is not null to signify and update.
-   * The id field should not be set otherwise.
-   * todo - Add support for field type validation and encoding of parameters.
+   * This method uses the presence of an id vtiger_field that is not null to signify and update.
+   * The id vtiger_field should not be set otherwise.
+   * todo - Add support for vtiger_field type validation and encoding of parameters.
    * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
    * All Rights Reserved.
    * Contributor(s): ______________________________________..
@@ -68,19 +68,19 @@ class CRMEntity extends SugarBean
 
 	foreach($this->tab_name as $table_name)
 	{
-		if($table_name == "crmentity")
+		if($table_name == "vtiger_crmentity")
 		{
 			$this->insertIntoCrmEntity($module);
 		}
-		elseif($table_name == "salesmanactivityrel")
+		elseif($table_name == "vtiger_salesmanactivityrel")
 		{
 			$this->insertIntoSmActivityRel($module);
 		}
 		//added by raju
-		elseif($table_name=="seactivityrel" )
+		elseif($table_name=="vtiger_seactivityrel" )
 		{
 			if($module=="Emails" && $_REQUEST['smodule']!='webmails')
-			//modified by Richie as raju's implementation broke the feature for addition of webmail to crmentity.need to be more careful in future while integrating code
+			//modified by Richie as raju's implementation broke the feature for addition of webmail to vtiger_crmentity.need to be more careful in future while integrating code
 			//if($_REQUEST['smodule']!='webmails' && $_REQUEST['smodule'] != '')
 			{
 				if($_REQUEST['currentid']!='')
@@ -95,9 +95,9 @@ class CRMEntity extends SugarBean
 				if($_REQUEST['module'] != 'Emails' && $_REQUEST['module'] != 'Webmails')
 				{
 					if(!$parentid) {
-						$parentid = $adb->getUniqueID('seactivityrel');
+						$parentid = $adb->getUniqueID('vtiger_seactivityrel');
 					}
-					$mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
+					$mysql='insert into vtiger_seactivityrel values('.$parentid.','.$actid.')';
 					$adb->query($mysql);
 				}
 				else
@@ -107,11 +107,11 @@ class CRMEntity extends SugarBean
 					{
 						$realid=explode("@",$myids[$i]);
 						$mycrmid=$realid[0];
-						//added to handle the relationship of emails with users
+						//added to handle the relationship of emails with vtiger_users
 						if($realid[1] == -1)
-							$mysql='insert into salesmanactivityrel values('.$mycrmid.','.$actid.')';
+							$mysql='insert into vtiger_salesmanactivityrel values('.$mycrmid.','.$actid.')';
 						else	
-							$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
+							$mysql='insert into vtiger_seactivityrel values('.$mycrmid.','.$actid.')';
 						$adb->query($mysql);
 					}
 				}
@@ -128,7 +128,7 @@ class CRMEntity extends SugarBean
 				}
 			}			
 		}
-		elseif($table_name == "seticketsrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel")
+		elseif($table_name == "vtiger_seticketsrel" || $table_name ==  "vtiger_seproductsrel" || $table_name ==  "vtiger_senotesrel")
 		{
 			if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')//raju - mass mailing ends
 			{
@@ -139,7 +139,7 @@ class CRMEntity extends SugarBean
 				$this->deleteRelation($table_name);
 			}
 		}
-		elseif($table_name ==  "cntactivityrel")
+		elseif($table_name ==  "vtiger_cntactivityrel")
 		{
 			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
 			{
@@ -151,22 +151,22 @@ class CRMEntity extends SugarBean
 			}
 
 		}
-		elseif($table_name ==  "ticketcomments")
+		elseif($table_name ==  "vtiger_ticketcomments")
 		{
                 	$this->insertIntoTicketCommentTable($table_name, $module);
 		}
-		elseif($table_name ==  "faqcomments")
+		elseif($table_name ==  "vtiger_faqcomments")
 		{
                 	$this->insertIntoFAQCommentTable($table_name, $module);
 		}
-		elseif($table_name == "activity_reminder")
+		elseif($table_name == "vtiger_activity_reminder")
 		{
 			if($recur_type == "--None--")
 			{
 				$this->insertIntoReminderTable($table_name,$module,"");
 			}
 		}
-		elseif($table_name == "recurringevents") // Code included by Jaguar -  starts
+		elseif($table_name == "vtiger_recurringevents") // Code included by Jaguar -  starts
 		{
 			$recur_type = trim($_REQUEST['recurringtype']);
 			if($recur_type != "--None--"  && $recur_type != '')
@@ -175,7 +175,7 @@ class CRMEntity extends SugarBean
 			}		
 		}// Code included by Jaguar - Ends
 		// Code included by Minnie  -  starts	
-		elseif($table_name == "invitees") 
+		elseif($table_name == "vtiger_invitees") 
 		{
 			if($invitees_array != '')
 			{
@@ -183,11 +183,11 @@ class CRMEntity extends SugarBean
 			}
 		}
 		// Code included by Minnie  -  Ends
-		elseif($table_name == 'producttaxrel')
+		elseif($table_name == 'vtiger_producttaxrel')
 		{
 			$this->insertTaxInformation($table_name, $module);
 		}
-		elseif($table_name == 'attachments')
+		elseif($table_name == 'vtiger_attachments')
 		{
 			$this->insertIntoAttachment($this->id,$module);
 		}
@@ -226,7 +226,7 @@ class CRMEntity extends SugarBean
 			$data = base64_encode(fread(fopen($filedata, "r"), $filesize));
 		}
 		
-		$current_id = $adb->getUniqueID("crmentity");
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
 
 		if($module=='Emails') 
 		{ 
@@ -241,22 +241,22 @@ class CRMEntity extends SugarBean
 		$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
 		$adb->query($sql);
 
-		$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+		$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
 		$adb->query($sql1);
 
-		$sql2="insert into attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','"."','".$filetype."')";
+		$sql2="insert into vtiger_attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','"."','".$filetype."')";
 		$result=$adb->query($sql2);
 
 		//TODO -- instead of put contents in db now we should store the file in harddisk
 
-		$sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
+		$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
 		$adb->query($sql3);
 	}
 
 
 	/**
-	 *      This function is used to add the attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
-	 *      @param int $id  - entity id to which the files to be uploaded
+	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
+	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
 	 *      @param string $module  - the current module name
 	*/
 	function insertIntoAttachment($id,$module)
@@ -272,17 +272,17 @@ class CRMEntity extends SugarBean
 			}
 		}
 
-		//Remove the deleted attachments from db - Products
+		//Remove the deleted vtiger_attachments from db - Products
 		if($module == 'Products' && $_REQUEST['del_file_list'] != '')
 		{
 			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
 			foreach($del_file_list as $del_file_name)
 			{
-				$attach_res = $adb->query("select attachments.attachmentsid from attachments inner join seattachmentsrel on attachments.attachmentsid=seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
+				$attach_res = $adb->query("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
 				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
 				
-				$del_res1 = $adb->query("delete from attachments where attachmentsid=$attachments_id");
-				$del_res2 = $adb->query("delete from seattachmentsrel where attachmentsid=$attachments_id");
+				$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$attachments_id");
+				$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$attachments_id");
 			}
 		}
 
@@ -344,35 +344,35 @@ class CRMEntity extends SugarBean
 
 		if($save_file == 'true')
 		{
-			$current_id = $adb->getUniqueID("crmentity");
+			$current_id = $adb->getUniqueID("vtiger_crmentity");
 
-			//This is only to update the attached filename in the notes table for the Notes module
+			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
 			if($module=='Notes')
 			{
-				$sql="update notes set filename='".$filename."' where notesid = ".$id;
+				$sql="update vtiger_notes set filename='".$filename."' where notesid = ".$id;
 				$adb->query($sql);
 			}
 
-			$sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
 			$adb->query($sql1);
 
-			$sql2="insert into attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
+			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
 			$result=$adb->query($sql2);
 
 			if($_REQUEST['mode'] == 'edit')
 			{
 				if($id != '' && $_REQUEST['fileid'] != '')
 				{
-					$delquery = 'delete from seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
+					$delquery = 'delete from vtiger_seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
 					$adb->query($delquery);
 				}
 			}
 			if($module == 'Notes')
 			{
-				$query = "delete from seattachmentsrel where crmid = ".$id;
+				$query = "delete from vtiger_seattachmentsrel where crmid = ".$id;
 				$adb->query($query);
 			}
-			$sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
+			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
 			$adb->query($sql3);
 		}
 		else
@@ -413,31 +413,31 @@ class CRMEntity extends SugarBean
 	}
 	if($this->mode == 'edit')
 	{
-		$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-		$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+		$description_val = from_html($adb->formatString("vtiger_crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+		$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 
 		$adb->query($sql);
-		$sql1 ="delete from ownernotify where crmid=".$this->id;
+		$sql1 ="delete from vtiger_ownernotify where crmid=".$this->id;
 		$adb->query($sql1);
 		if($ownerid != $current_user->id)
 		{
-			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",null)";
+			$sql1 = "insert into vtiger_ownernotify values(".$this->id.",".$ownerid.",null)";
 			$adb->query($sql1);
 		}
 	}
 	else
 	{
 		//if this is the create mode and the group allocation is chosen, then do the following
-		$current_id = $adb->getUniqueID("crmentity");
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
 		$_REQUEST['currentid']=$current_id;
 
-		$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-		$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
+		$description_val = from_html($adb->formatString("vtiger_crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
 		$adb->query($sql);
 		$this->id = $current_id;
 	}
 
-	//$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module."','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+	//$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module."','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
 	//$adb->query($sql);
 	//echo $sql;
 	//$this->id = $current_id;
@@ -452,11 +452,11 @@ class CRMEntity extends SugarBean
     if($this->mode == 'edit')
     {
 
-      $sql = "delete from salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
+      $sql = "delete from vtiger_salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
       $adb->query($sql);
 
     }
-	$sql_qry = "insert into salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
+	$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
     $adb->query($sql_qry);
 
   }
@@ -467,8 +467,8 @@ class CRMEntity extends SugarBean
     global $current_user;
     $ticketid = $id;
     //Updating History
-    $tktresult = $adb->query("select * from troubletickets where ticketid='".$ticketid."'");
-    $crmresult = $adb->query("select * from crmentity where crmid='".$ticketid."'");
+    $tktresult = $adb->query("select * from vtiger_troubletickets where ticketid='".$ticketid."'");
+    $crmresult = $adb->query("select * from vtiger_crmentity where crmid='".$ticketid."'");
     $updatelog = $adb->query_result($tktresult,0,"update_log");
     $old_user_id = $adb->query_result($crmresult,0,"smownerid");
     $old_status = $adb->query_result($tktresult,0,"status");
@@ -518,11 +518,11 @@ class CRMEntity extends SugarBean
   function insertIntoEntityTable($table_name, $module)
   {
 	  global $log;	
-	   $log->info("function insertIntoCrmEntity ".$module.' table name ' .$table_name);
+	   $log->info("function insertIntoCrmEntity ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
 
-	  //Checkin whether an entry is already is present in the table to update
+	  //Checkin whether an entry is already is present in the vtiger_table to update
 	  if($insertion_mode == 'edit')
 	  {
 		  $check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
@@ -547,7 +547,7 @@ class CRMEntity extends SugarBean
 	  }
 
 	  $tabid= getTabid($module);	
-	  $sql = "select * from field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+	  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
 	  $result = $adb->query($sql);
 	  $noofrows = $adb->num_rows($result);
 	  for($i=0; $i<$noofrows; $i++)
@@ -616,18 +616,18 @@ class CRMEntity extends SugarBean
 		  if($insertion_mode == 'edit')
 		  {
 			  //code by richie starts
-			  if(($table_name == "troubletickets") && ($columname == "update_log"))
+			  if(($table_name == "vtiger_troubletickets") && ($columname == "update_log"))
 			  {
 				  $fldvalue = $this->constructUpdateLog($this->id);
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 			  }
 			  //code by richie ends
 
-			  if($table_name == 'notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
+			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
 			  {
 				  $fldvalue = $this->getOldFileName($this->id);
 			  }
-			  if($table_name == 'products' && $columname == 'imagename')
+			  if($table_name == 'vtiger_products' && $columname == 'imagename')
 			  {
 			/*	  //Product Image Handling done
 				  if($_FILES['imagename']['name'] != '')
@@ -653,7 +653,7 @@ class CRMEntity extends SugarBean
 		      */		  
 
 			  }
-			  if($table_name != 'ticketcomments')
+			  if($table_name != 'vtiger_ticketcomments')
 			  {
 				  if($i == 0)
 				  {
@@ -668,7 +668,7 @@ class CRMEntity extends SugarBean
 		  else
 		  {
 			  //code by richie starts
-			  if(($table_name == "troubletickets") && ($columname == "update_log"))
+			  if(($table_name == "vtiger_troubletickets") && ($columname == "update_log"))
 			  {
 				  global $current_user;
 				  $fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
@@ -692,7 +692,7 @@ class CRMEntity extends SugarBean
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 				  //echo ' updatevalue is ............. ' .$fldvalue;
 			  }
-			  elseif($table_name == 'products' && $columname == 'imagename')
+			  elseif($table_name == 'vtiger_products' && $columname == 'imagename')
 			  {
 				  //Product Image Handling done
 			/*	  if($_FILES['imagename']['name'] != '')
@@ -733,15 +733,15 @@ class CRMEntity extends SugarBean
 	  {
 		  if($_REQUEST['module'] == 'Potentials')
 		  {
-			  $dbquery = 'select sales_stage from potential where potentialid = '.$this->id;
+			  $dbquery = 'select vtiger_sales_stage from vtiger_potential where potentialid = '.$this->id;
 			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
 			  if($sales_stage != $_REQUEST['sales_stage'])
 			  {
 				  $date_var = date('YmdHis');
-				  //$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
+				  //$sql = "insert into vtiger_potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
 				  //Changed to insert the close date based on user date format - after 4.2 patch2
 				  $closingdate = getDBInsertDateValue($_REQUEST['closingdate']);
-				  $sql = "insert into potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$closingdate).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
+				  $sql = "insert into vtiger_potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("vtiger_potstagehistory","closedate",$closingdate).",".$adb->formatString("vtiger_potstagehistory","lastmodified",$date_var).")";
 				  $adb->query($sql);
 			  }
 		  }
@@ -758,49 +758,49 @@ class CRMEntity extends SugarBean
 		  {
 			  $groupname = $_REQUEST['assigned_group_name'];
 			  //echo 'about to update lead group relation';
-			  if($module == 'Leads' && $table_name == 'leaddetails')
+			  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
 			  {
 				  updateLeadGroupRelation($this->id,$groupname);
 			  }
-                          elseif($module == 'Accounts' && $table_name == 'account')
+                          elseif($module == 'Accounts' && $table_name == 'vtiger_account')
 			  {
 				  updateAccountGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'Contacts' && $table_name == 'contactdetails')
+			  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
 			  {
 				  updateContactGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'Potentials' && $table_name == 'potential')
+			  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
 			  {
 				  updatePotentialGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'Quotes' && $table_name == 'quotes')
+			  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
 			  {
 				  updateQuoteGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'SalesOrder' && $table_name == 'salesorder')
+			  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
 			  {
 				  updateSoGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'Invoice' && $table_name == 'invoice')
+			  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
 			  {
 				  updateInvoiceGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'PurchaseOrder' && $table_name == 'purchaseorder')
+			  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
 			  {
 				  updatePoGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
+			  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'Campaigns' && $table_name == 'campaign')
+			  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
 			  {
 				  updateCampaignGroupRelation($this->id,$groupname);
 			  }
 			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
-				 if($table_name == 'activity')
+				 if($table_name == 'vtiger_activity')
 				 {
 				   updateActivityGroupRelation($this->id,$groupname);
 				 }
@@ -811,49 +811,49 @@ class CRMEntity extends SugarBean
 		  else
 		  {
 			  //echo 'about to update lead group relation again!';
-			  if($module == 'Leads' && $table_name == 'leaddetails')
+			  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
 			  {
 				  updateLeadGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Accounts' && $table_name == 'account')
+			  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
 			  {
 				  updateAccountGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Contacts' && $table_name == 'contactdetails')
+			  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
 			  {
 				  updateContactGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Potentials' && $table_name == 'potential')
+			  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
 			  {
 				  updatePotentialGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Quotes' && $table_name == 'quotes')
+			  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
 			  {
 				  updateQuoteGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'SalesOrder' && $table_name == 'salesorder')
+			  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
 			  {
 				  updateSoGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Invoice' && $table_name == 'invoice')
+			  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
 			  {
 				  updateInvoiceGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'PurchaseOrder' && $table_name == 'purchaseorder')
+			  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
 			  {
 				  updatePoGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
+			  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'Campaigns' && $table_name == 'campaign')
+			  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
 			  {
 				  updateCampaignGroupRelation($this->id,$groupname);
 			  }
 			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
-				  if($table_name == 'activity')
+				  if($table_name == 'vtiger_activity')
                                   {
 			             updateActivityGroupRelation($this->id,$groupname);
 				  }
@@ -868,47 +868,47 @@ class CRMEntity extends SugarBean
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
 		  $groupname = $_REQUEST['assigned_group_name'];
-		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
+		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_leaddetails')
 		  {
 			  insert2LeadGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'account')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_account')
 		  {
 			  insert2AccountGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'contactdetails')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_contactdetails')
 		  {
 			  insert2ContactGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'potential')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_potential')
 		  {
 			  insert2PotentialGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'quotes')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_quotes')
 		  {
 			  insert2QuoteGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'salesorder')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_salesorder')
 		  {
 			  insert2SoGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'invoice')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_invoice')
 		  {
 			  insert2InvoiceGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'purchaseorder')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_purchaseorder')
 		  {
 			  insert2PoGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'activity') 
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_activity') 
 		  {
 			  insert2ActivityGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'troubletickets') 
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_troubletickets') 
 		  {
 			  insert2TicketGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'campaign')
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vitger_campaign')
 		  {
 			  insert2CampaignGroupRelation($this->id,$groupname);
 		  }
@@ -935,14 +935,14 @@ function getOldFileName($notesid)
 	   global $log;
 $log->info("in getOldFileName  ".$notesid);
 	global $adb;
-	$query1 = "select * from seattachmentsrel where crmid=".$notesid;
+	$query1 = "select * from vtiger_seattachmentsrel where crmid=".$notesid;
 	$result = $adb->query($query1);
 	$noofrows = $adb->num_rows($result);
 	if($noofrows != 0)
 		$attachmentid = $adb->query_result($result,0,'attachmentsid');
 	if($attachmentid != '')
 	{
-		$query2 = "select * from attachments where attachmentsid=".$attachmentid;
+		$query2 = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
 		$filename = $adb->query_result($adb->query($query2),0,'name');
 	}
 	return "'".$filename."'";
@@ -963,7 +963,7 @@ function insertIntoTicketCommentTable($table_name, $module)
 	if($_REQUEST['comments'] != '')
 	{
 		$comment = addslashes($_REQUEST['comments']);
-		$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+		$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
 	        $adb->query($sql);
 	}
 }
@@ -978,7 +978,7 @@ function insertIntoFAQCommentTable($table_name, $module)
 	if($_REQUEST['comments'] != '')
 	{
 		$comment = addslashes($_REQUEST['comments']);
-		$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+		$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
 		$adb->query($sql);
 	}
 }
@@ -1028,7 +1028,7 @@ function insertIntoInviteeTable($table_name,$module,$invitees_array)
 	{
 		if($inviteeid != '')
 		{
-			$query="insert into invitees values(".$this->id.",".$inviteeid.")";
+			$query="insert into vtiger_invitees values(".$this->id.",".$inviteeid.")";
 			$adb->query($query);
 		}
 	}
@@ -1059,7 +1059,7 @@ $log->debug("type is ".$type);
 	{
 		$activity_id=$this->id;
 
-		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
+		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from vtiger_recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
 		
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
@@ -1073,15 +1073,15 @@ $log->debug("type is ".$type);
 		{
 			if($_REQUEST['set_reminder'] == 'Yes')
 			{
-				$sql = 'delete from activity_reminder where activity_id='.$activity_id;
+				$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
 				$adb->query($sql);
-				$sql = 'delete  from recurringevents where activityid='.$activity_id;
+				$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
 				$adb->query($sql);
 				$flag="true";
 			}
 			elseif($_REQUEST['set_reminder'] == 'No')
 			{
-				$sql = 'delete  from activity_reminder where activity_id='.$activity_id;
+				$sql = 'delete  from vtiger_activity_reminder where activity_id='.$activity_id;
 				$adb->query($sql);
 				$flag="false";
 			}
@@ -1090,9 +1090,9 @@ $log->debug("type is ".$type);
 		}
 		else
 		{
-			$sql = 'delete from activity_reminder where activity_id='.$activity_id;
+			$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
 			$adb->query($sql);
-			$sql = 'delete  from recurringevents where activityid='.$activity_id;
+			$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
 			$adb->query($sql);
 		}
 	}
@@ -1128,7 +1128,7 @@ $log->debug("type is ".$type);
 				$tdate=$date_array[$k];
 				if($tdate <= $end_date)
 				{
-					$max_recurid_qry = 'select max(recurringid) AS recurid from recurringevents;';
+					$max_recurid_qry = 'select max(recurringid) AS recurid from vtiger_recurringevents;';
 					$result = $adb->query($max_recurid_qry);
 					$noofrows = $adb->num_rows($result);
 					for($i=0; $i<$noofrows; $i++)
@@ -1136,7 +1136,7 @@ $log->debug("type is ".$type);
 						$recur_id = $adb->query_result($result,$i,"recurid");
 					}
 					$current_id =$recur_id+1;
-					$recurring_insert = "insert into recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
+					$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."')";
 					$adb->query($recurring_insert);
 					if($_REQUEST['set_reminder'] == 'Yes')
 					{
@@ -1184,7 +1184,7 @@ $log->debug("type is ".$type);
     $detailview_query .= " where ".$table_list[0].".".$table_index[0]." = ".$record;
     $result = $adb->query($detailview_query);*/
     $tabid = getTabid($module);
-    $sql1 =  "select * from field where tabid=".$tabid;
+    $sql1 =  "select * from vtiger_field where tabid=".$tabid;
     $result1 = $adb->query($sql1);
     $noofrows = $adb->num_rows($result1);
     for($i=0; $i<$noofrows; $i++)
@@ -1316,7 +1316,7 @@ $log->debug("type is ".$type);
 	*/
 	function mark_deleted($id)
 	{
-		$query = "UPDATE crmentity set deleted=1 where crmid='$id'";
+		$query = "UPDATE vtiger_crmentity set deleted=1 where crmid='$id'";
 		$this->db->query($query, true,"Error marking record deleted: ");
 
 
@@ -1349,9 +1349,9 @@ $log->debug("type is ".$type);
 
 	// this method is called during an import before inserting a bean
 	// define an associative array called $special_fields
-	// the keys are user defined, and don't directly map to the bean's fields
+	// the keys are user defined, and don't directly map to the bean's vtiger_fields
 	// the value is the method name within that bean that will do extra
-	// processing for that field. example: 'full_name'=>'get_names_from_full_name'
+	// processing for that vtiger_field. example: 'full_name'=>'get_names_from_full_name'
 
 	function process_special_fields() 
 	{ 
@@ -1365,7 +1365,7 @@ $log->debug("type is ".$type);
 	}
 
 	/**
-         * Function to check if the custom field table exists
+         * Function to check if the custom vtiger_field vtiger_table exists
          * return true or false
          */
         function checkIfCustomTableExists($tablename)
@@ -1385,14 +1385,14 @@ $log->debug("type is ".$type);
         }
 
 	/**
-	 * function to construct the query to fetch the custom fields
-	 * return the query to fetch the custom fields
+	 * function to construct the query to fetch the custom vtiger_fields
+	 * return the query to fetch the custom vtiger_fields
          */
         function constructCustomQueryAddendum($tablename,$module)
         {
                 global $adb;
 		$tabid=getTabid($module);		
-                $sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=".$tabid;
+                $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=".$tabid;
                 $result = $adb->query($sql1);
                 $numRows = $adb->num_rows($result);
                 $sql3 = "select ";
@@ -1420,8 +1420,8 @@ $log->debug("type is ".$type);
         }
 
 
-	/**	function to save the product tax information in producttarel table
-	 *	@param string $tablename - tablename to save the product tax relationship (producttaxrel)
+	/**	function to save the product tax information in producttarel vtiger_table
+	 *	@param string $tablename - vtiger_tablename to save the product tax relationship (producttaxrel)
 	 *	@param string $module	 - current module name
 	 *	$return void
 	*/
@@ -1439,7 +1439,7 @@ $log->debug("type is ".$type);
 			foreach($tax_array as $tax_type)
 			{
 				$taxid = getTaxId($tax_type);
-				$sql = "delete from producttaxrel where productid=$this->id and taxid=$taxid";
+				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
 				$adb->query($sql);
 			}
 		}
@@ -1452,7 +1452,7 @@ $log->debug("type is ".$type);
 
 			$log->debug("Going to save the Product - VAT tax relationship");
 
-			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
 			$adb->query($sql);
 		}
 		//Save the Product - Sales tax relationship if Sales tax check box is enabled
@@ -1465,7 +1465,7 @@ $log->debug("type is ".$type);
 
 			$log->debug("Going to save the Product - Sales tax relationship");
 
-			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
 			$adb->query($sql);
 		}
 		//Save the Product - Service tax relationship if Service tax check box is enabled
@@ -1478,7 +1478,7 @@ $log->debug("type is ".$type);
 
 			$log->debug("Going to save the Product - Service tax relationship");
 
-			$sql = "insert into producttaxrel values($this->id,$taxid,$tax_per)";
+			$sql = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
 			$adb->query($sql);
 		}
 

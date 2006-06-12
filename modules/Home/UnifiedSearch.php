@@ -91,11 +91,11 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 	
 		$listquery = getListQuery($module);
-		//Avoided the modules Faq and PriceBooks. we should remove this if when change the customview function
+		//Avoided the modules Faq and PriceBooks. we should remove this if when change the vtiger_customview function
 		$oCustomView = '';
 		if($module != 'Faq' && $module != 'PriceBooks')
 		{
-			//Added to get the default 'All' customview query
+			//Added to get the default 'All' vtiger_customview query
 			$oCustomView = new CustomView($module);
 			$viewid = $oCustomView->getViewId($module);
 
@@ -163,17 +163,17 @@ else {
 	echo "<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>".$mod_strings['ERR_ONE_CHAR']."</em>";
 }
 
-/**	Function to get the where condition for a module based on the field table entries
+/**	Function to get the where condition for a module based on the vtiger_field vtiger_table entries
   *	@param  string $listquery  -- ListView query for the module 
   *	@param  string $module     -- module name
   *	@param  string $search_val -- entered search string value
-  *	@return string $where      -- where condition for the module based on field table entries
+  *	@return string $where      -- where condition for the module based on vtiger_field vtiger_table entries
   */
 function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
 
-	$query = "SELECT * FROM field WHERE tabid = ".getTabid($module);
+	$query = "SELECT * FROM vtiger_field WHERE vtiger_tabid = ".getTabid($module);
 	$result = $adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -183,7 +183,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		$columnname = $adb->query_result($result,$i,'columnname');
 		$tablename = $adb->query_result($result,$i,'tablename');
 
-		//Before form the where condition, check whether the table for the field has been added in the listview query
+		//Before form the where condition, check whether the vtiger_table for the vtiger_field has been added in the listview query
 		if(strstr($listquery,$tablename))
 		{
 			if($where != '')
@@ -198,7 +198,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 /**	Function to get the Tags where condition
   *	@param  string $search_val -- entered search string value
   *	@param  string $current_user_id     -- current user id
-  *	@return string $where      -- where condition with the list of crmids, will like crmentity.crmid in (1,3,4,etc.,)
+  *	@return string $where      -- where condition with the list of crmids, will like vtiger_crmentity.crmid in (1,3,4,etc.,)
   */
 function getTagWhere($search_val,$current_user_id)
 {
@@ -211,7 +211,7 @@ function getTagWhere($search_val,$current_user_id)
 	$where = '';
 	if(count($crmid_array) > 0)
 	{
-		$where = " crmentity.crmid IN (";
+		$where = " vtiger_crmentity.crmid IN (";
 		foreach($crmid_array as $index => $crmid)
 		{
 			$where .= $crmid.',';

@@ -86,7 +86,7 @@ $role = fetchUserRole($focus->id);
 $rolename =  getRoleName($role);
 $currencyid=fetchCurrency($focus->id);
 $currency=getCurrencyName($currencyid);
-//the user might belong to multiple groups
+//the user might belong to multiple vtiger_groups
 if($focus->id != 1)
 {
  $groupids = fetchUserGroupids($focus->id);
@@ -180,7 +180,7 @@ if (is_admin($current_user))
 	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
 	$smarty->assign('DUPLICATE_BUTTON',$buttons);
 	
-	//done so that only the admin user can see the customize tab button
+	//done so that only the admin user can see the customize vtiger_tab button
 	if($_REQUEST['record'] == $current_user->id)
 	{
 		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
@@ -221,7 +221,7 @@ else
 //Getting the Group Lists
 $groupids = fetchUserGroupids($focus->id);
 if($groupids) {
-	$query ="select groupid,groupname from groups where groupid in (".$groupids.")";
+	$query ="select groupid,groupname from vtiger_groups where groupid in (".$groupids.")";
 	$result = $adb->query($query);
 	$num_rows = $adb->num_rows($result);
 } else {

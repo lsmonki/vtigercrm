@@ -18,10 +18,10 @@ $smarty=new vtigerCRM_Smarty;
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
         $tempid = $_REQUEST['record'];
-        $sql = "select * from currency_info where id=".$tempid;
+        $sql = "select * from vtiger_currency_info where id=".$tempid;
         $result = $adb->query($sql);
         $currencyResult = $adb->fetch_array($result);
-	$sql1 = "select * from users where currency_id=".$tempid;
+	$sql1 = "select * from vtiger_users where vtiger_currency_id=".$tempid;
 	$result1 = $adb->query($sql1);
 	$noofrows = $adb->num_rows($result1);
 	if($noofrows != 0)

@@ -107,7 +107,7 @@ if($_REQUEST['migration_option'] == 'db_details')
 
 	if($continue2 == 1)
 	{
-		//Check whether the table are exist in the databases or not
+		//Check whether the vtiger_table are exist in the databases or not
 		$old_tables = @mysql_num_rows(mysql_list_tables($old_dbname,$oldconn));
 		//$new_tables = @mysql_num_rows(mysql_list_tables($new_dbname));
 
@@ -289,7 +289,7 @@ elseif($_REQUEST['migration_option'] == 'alter_db_details')
 
 	if($continue2 == 1)
 	{
-		//Check whether the table are exist in the databases or not
+		//Check whether the vtiger_table are exist in the databases or not
 		$old_tables = @mysql_num_rows(mysql_list_tables($old_dbname,$oldconn));
 
 		if(!$old_tables)

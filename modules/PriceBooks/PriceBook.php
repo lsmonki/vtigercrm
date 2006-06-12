@@ -22,17 +22,17 @@ class PriceBook extends CRMEntity {
 	var $db;
 
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','pricebook','pricebookcf');
-	var $tab_name_index = Array('crmentity'=>'crmid','pricebook'=>'pricebookid','pricebookcf'=>'pricebookid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_pricebook','vtiger_pricebookcf');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_pricebook'=>'pricebookid','vtiger_pricebookcf'=>'pricebookid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('bookname');		  
 
-        // This is the list of fields that are in the lists.
+        // This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname'),
                                 'Active'=>Array('pricebook'=>'active')
@@ -78,7 +78,7 @@ class PriceBook extends CRMEntity {
 
 		$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
 
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
+		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_pricebookproductrel.listprice from vtiger_products inner join vtiger_pricebookproductrel on vtiger_products.productid = vtiger_pricebookproductrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid  where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0'; 
 		$log->debug("Exiting get_pricebook_products method ...");
 		return getPriceBookRelatedProducts($query,$focus,$returnset);
 	}
@@ -87,11 +87,11 @@ class PriceBook extends CRMEntity {
 		global $log;
 		$log->debug("Entering get_pricebook_noproduct(".$id.") method ...");
 		 
-		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";                                                                                                  $result = $this->db->query($query);
+		$query = "select vtiger_crmentity.crmid, vtiger_pricebook.* from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0";                                                                                                  $result = $this->db->query($query);
 		$no_count = $this->db->num_rows($result);
 		if($no_count !=0)
 		{
-       	 		$pb_query = 'select crmentity.crmid, pricebook.pricebookid,pricebookproductrel.productid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id;
+       	 		$pb_query = 'select vtiger_crmentity.crmid, vtiger_pricebook.pricebookid,vtiger_pricebookproductrel.productid from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid='.$id;
 			$result_pb = $this->db->query($pb_query);
 			if($no_count == $this->db->num_rows($result_pb))
 			{

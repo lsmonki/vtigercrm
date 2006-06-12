@@ -19,7 +19,7 @@ function getLoghistory($theme)
 
 
 
-	$dbQuery = "SELECT * from loginhistory order by login_id DESC";
+	$dbQuery = "SELECT * from vtiger_loginhistory order by login_id DESC";
 
 	//echo $dbQuery;
 

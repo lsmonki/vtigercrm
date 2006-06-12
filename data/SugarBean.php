@@ -32,9 +32,9 @@ class SugarBean
     /**
      * This method implements a generic insert and update logic for any SugarBean
      * This method only works for subclasses that implement the same variable names.
-     * This method uses the presence of an id field that is not null to signify and update.
-     * The id field should not be set otherwise.
-     * todo - Add support for field type validation and encoding of parameters.
+     * This method uses the presence of an id vtiger_field that is not null to signify and update.
+     * The id vtiger_field should not be set otherwise.
+     * todo - Add support for vtiger_field type validation and encoding of parameters.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -89,7 +89,7 @@ class SugarBean
 		$updKeyValues='';
 		foreach($this->column_fields as $field)
 		{
-			// Do not write out the id field on the update statement.
+			// Do not write out the id vtiger_field on the update statement.
 			// We are not allowed to change ids.
 			if($isUpdate && ('id' == $field))
 				continue;
@@ -158,7 +158,7 @@ class SugarBean
     
     /**
      * This function retrieves a record of the appropriate type from the DB.
-     * It fills in all of the fields from the DB into the object it was called on.
+     * It fills in all of the vtiger_fields from the DB into the object it was called on.
      * param $id - If ID is specified, it overrides the current value of $this->id.  If not specified the current value of $this->id will be used.
      * returns this - The object that it was called apon or null if exactly 1 record was not found.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -172,7 +172,7 @@ class SugarBean
 		if($id == '') {
 			return null;
 		}
-// GS porting crmentity
+// GS porting vtiger_crmentity
 $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 //		$query = "SELECT * FROM $this->table_name WHERE ID = '$id'";
 		$this->log->debug("Retrieve $this->object_name: ".$query);
@@ -334,7 +334,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	 */
 	function track_view($user_id, $current_module,$id='')
 	{
-		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
+		$this->log->debug("About to call vtiger_tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
 
 		$tracker = new Tracker();
 		$tracker->track_view($user_id, $current_module, $id, '');
@@ -433,9 +433,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 
 	// this method is called during an import before inserting a bean
 	// define an associative array called $special_fields
-	// the keys are user defined, and don't directly map to the bean's fields
+	// the keys are user defined, and don't directly map to the bean's vtiger_fields
 	// the value is the method name within that bean that will do extra
-	// processing for that field. example: 'full_name'=>'get_names_from_full_name'
+	// processing for that vtiger_field. example: 'full_name'=>'get_names_from_full_name'
 
 	function process_special_fields() 
 	{ 

@@ -46,7 +46,7 @@ if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == '
 $focus->save("PurchaseOrder");
 if($focus->mode == 'edit')
 {
-        $query1 = "delete from poproductrel where purchaseorderid=".$focus->id;
+        $query1 = "delete from vtiger_poproductrel where vtiger_purchaseorderid=".$focus->id;
         $adb->query($query1);
 
 }
@@ -74,7 +74,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
         if($prod_status != 'D')
         {
 
-                $query ="insert into poproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
+                $query ="insert into vtiger_poproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
                 $adb->query($query);
 		if($update_prod_stock == 'true')
                 {

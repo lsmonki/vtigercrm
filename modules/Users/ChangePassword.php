@@ -88,17 +88,17 @@ function set_password(form) {
 <?php if (!is_admin($current_user)) {
 	echo "<tr>";
 	echo "<td width='40%' class='dvtCellLabel' align='right'><b>".$mod_strings['LBL_OLD_PASSWORD']."</b></td>\n";
-	echo "<td width='60%' class='dvtCellInfo'><input name='old_password' type='password' tabindex='1' size='15' maxlength='15'></td>\n";
+	echo "<td width='60%' class='dvtCellInfo'><input name='old_password' type='password' vtiger_tabindex='1' size='15' maxlength='15'></td>\n";
 	echo "<input name='is_admin' type='hidden' value='1'>";
 	echo "</tr><tr>\n";
 }
 else echo "<input name='old_password' type='hidden'><input name='is_admin' type='hidden' value='0'>";
 ?>
 <td width='40%' class='dvtCellLabel' nowrap align="right"><b><?php echo $mod_strings['LBL_NEW_PASSWORD']; ?></b></td>
-<td width='60%' class='dvtCellInfo'><input name='new_password' type='password' tabindex='1' size='15' maxlength='15'></td>
+<td width='60%' class='dvtCellInfo'><input name='new_password' type='password' vtiger_tabindex='1' size='15' maxlength='15'></td>
 </tr><tr>
 <td width='40%' class='dvtCellLabel' nowrap align="right"><b><?php echo $mod_strings['LBL_CONFIRM_PASSWORD']; ?></b></td>
-<td width='60%' class='dvtCellInfo'><input name='confirm_new_password' type='password' tabindex='1' size='15' maxlength='15'></td>
+<td width='60%' class='dvtCellInfo'><input name='confirm_new_password' type='password' vtiger_tabindex='1' size='15' maxlength='15'></td>
 </tr><tr>
 <td width='40%' class='dataLabel'></td>
 <td width='60%' class='dvtCellInfo'></td>

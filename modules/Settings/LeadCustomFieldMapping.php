@@ -31,7 +31,7 @@ function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
 	$accountcf=Array();
-	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Accounts'";
+	$sql="select vtiger_fieldid,fieldlabel from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	
@@ -54,7 +54,7 @@ function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
 	$contactcf=Array();
-	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Contacts'";
+	$sql="select vtiger_fieldid,fieldlabel from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -76,7 +76,7 @@ function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
 	$potentialcf=Array();
-	$sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Potentials'";
+	$sql="select vtiger_fieldid,fieldlabel from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials'";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -93,7 +93,7 @@ function getPotentialCustomValues($leadid,$potentialid)
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
         return $potentialcf;
 }
-$lead_sql="select fieldid,fieldlabel from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Leads'";
+$lead_sql="select vtiger_fieldid,fieldlabel from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads'";
 $result = $adb->query($lead_sql);
 $noofrows = $adb->num_rows($result);
 
@@ -103,7 +103,7 @@ for($i=0; $i<$noofrows; $i++)
 {
 	$lead_field['fieldid']=$adb->query_result($result,$i,"fieldid");
 	$lead_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
-	$convert_sql="select * from convertleadmapping where leadfid=".$lead_field['fieldid'];
+	$convert_sql="select * from vtiger_convertleadmapping where leadfid=".$lead_field['fieldid'];
 	$convert_result = $adb->query($convert_sql);
 
 	$no_rows = $adb->num_rows($convert_result);

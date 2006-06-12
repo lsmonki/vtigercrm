@@ -16,7 +16,7 @@ if($_REQUEST['destination_module']=='Products')
 {
 	if($_REQUEST['smodule']=='VENDOR')
 	{
-		$sql = "update products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
+		$sql = "update vtiger_products set vtiger_vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
 		$adb->query($sql);
 	}
 }
@@ -24,7 +24,7 @@ if($_REQUEST['destination_module']=='Contacts')
 {
 	if($_REQUEST['smodule']=='VENDOR')
 	{
-		$sql = "insert into vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
+		$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
 		$adb->query($sql);
 	}
 }

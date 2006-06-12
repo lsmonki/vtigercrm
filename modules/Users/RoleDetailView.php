@@ -32,9 +32,9 @@ $roleid= $_REQUEST['roleid'];
 //Standard PickList Fields
 function getStdOutput($roleid)
 {
-	//Retreiving the related profiles
+	//Retreiving the related vtiger_profiles
 	$roleProfileArr=getRoleRelatedProfiles($roleid);
-	//Retreving the related users
+	//Retreving the related vtiger_users
 	$roleUserArr=getRoleUsers($roleid);
 
 	//Constructing the Profile list

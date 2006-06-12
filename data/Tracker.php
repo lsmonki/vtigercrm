@@ -34,9 +34,9 @@ require_once('include/database/PearDatabase.php');
 class Tracker {
     var $log;
     var $db;
-    var $table_name = "tracker";
+    var $table_name = "vtiger_tracker";
 
-    // Tracker table
+    // Tracker vtiger_table
     var $column_fields = Array(
         "id",
         "user_id",
@@ -54,7 +54,7 @@ class Tracker {
     }
 
     /**
-     * Add this new item to the tracker table.  If there are too many items (global config for now)
+     * Add this new item to the vtiger_tracker vtiger_table.  If there are too many items (global config for now)
      * then remove the oldest item.  If there is more than one extra item, log an error.
      * If the new item is the same as the most recent item then do not change the list
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -75,7 +75,7 @@ $log->info("in  track view method ".$current_module);
          //get the first name and last name from the respective modules
           if($current_module =='Leads')
           {
-            $query = 'select firstname,lastname from leaddetails where leadid=' .$item_id;
+            $query = 'select firstname,lastname from vtiger_leaddetails where leadid=' .$item_id;
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
@@ -83,7 +83,7 @@ $log->info("in  track view method ".$current_module);
           }
           elseif ($current_module =='Accounts')
           {
-            $query = 'select accountname from account where accountid=' .$item_id;
+            $query = 'select accountname from vtiger_account where accountid=' .$item_id;
             $result = $this->db->query($query);
             $accountname = $adb->query_result($result,0,'accountname');
             $item_summary = $accountname;
@@ -91,7 +91,7 @@ $log->info("in  track view method ".$current_module);
           }
           elseif($current_module =='Contacts')
           {
-            $query = 'select firstname,lastname from contactdetails where contactid=' .$item_id;
+            $query = 'select firstname,lastname from vtiger_contactdetails where contactid=' .$item_id;
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
@@ -100,14 +100,14 @@ $log->info("in  track view method ".$current_module);
           }
           elseif($current_module =='Potentials')
           {
-            $query = 'select potentialname from potential where potentialid=' .$item_id;
+            $query = 'select potentialname from vtiger_potential where potentialid=' .$item_id;
             $result = $this->db->query($query);
             $potentialname =  $adb->query_result($result,0,'potentialname');
             $item_summary = $potentialname;
           }
           elseif($current_module =='Notes')
           {
-            $query = 'select title from notes where notesid=' .$item_id;
+            $query = 'select title from vtiger_notes where notesid=' .$item_id;
             $result = $this->db->query($query);
             $title = $adb->query_result($result,0,'title');
             $item_summary = $title;
@@ -115,7 +115,7 @@ $log->info("in  track view method ".$current_module);
           }
           elseif($current_module =='HelpDesk')
           {
-            $query = 'select title from troubletickets where ticketid=' .$item_id;
+            $query = 'select title from vtiger_troubletickets where ticketid=' .$item_id;
             $result = $this->db->query($query);
             $title = $adb->query_result($result,0,'title');
             $item_summary = $title;
@@ -123,7 +123,7 @@ $log->info("in  track view method ".$current_module);
           elseif($current_module =='Activities')
           {
             //$query = 'select name from calls where callid=' .$item_id;
-	    $query = 'select subject from activity where activityid=' .$item_id;
+	    $query = 'select subject from vtiger_activity where activityid=' .$item_id;
             $result = $this->db->query($query);
             $name = $adb->query_result($result,0,'subject');
             $item_summary = $name;
@@ -131,21 +131,21 @@ $log->info("in  track view method ".$current_module);
           elseif($current_module =='Emails')
           {
             //$query = 'select name from emails where emailid=' .$item_id;
-	    $query = 'select subject from activity where activityid=' .$item_id;
+	    $query = 'select subject from vtiger_activity where activityid=' .$item_id;
             $result = $this->db->query($query);
             $name = $adb->query_result($result,0,'subject');
             $item_summary = $name;
           }
           elseif($current_module =='Products')
           {
-            $query = 'select productname from products where productid=' .$item_id;
+            $query = 'select productname from vtiger_products where productid=' .$item_id;
             $result = $this->db->query($query);
             $productname = $adb->query_result($result,0,'productname');
             $item_summary = $productname;
           }
           elseif($current_module =='Users')
           {
-            $query = 'select first_name,last_name from users where id=' .$item_id;
+            $query = 'select first_name,last_name from vtiger_users where id=' .$item_id;
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'first_name');
             $lastname = $adb->query_result($result,0,'last_name');
@@ -153,49 +153,49 @@ $log->info("in  track view method ".$current_module);
           }
 	  elseif($current_module =='Invoice')
           {
-            $query = 'select subject from invoice where invoiceid=' .$item_id;
+            $query = 'select subject from vtiger_invoice where invoiceid=' .$item_id;
             $result = $this->db->query($query);
             $invoice = $adb->query_result($result,0,'subject');
             $item_summary = $invoice;
           }
           elseif($current_module =='Quotes')
           {
-            $query = 'select subject from quotes where quoteid=' .$item_id;
+            $query = 'select subject from vtiger_quotes where quoteid=' .$item_id;
             $result = $this->db->query($query);
             $quote = $adb->query_result($result,0,'subject');
             $item_summary = $quote;
           }
 	  elseif($current_module =='PurchaseOrder')
           {
-            $query = 'select subject from purchaseorder where purchaseorderid=' .$item_id;
+            $query = 'select subject from vtiger_purchaseorder where purchaseorderid=' .$item_id;
             $result = $this->db->query($query);
             $po = $adb->query_result($result,0,'subject');
             $item_summary = $po;
           }
 	  elseif($current_module =='SalesOrder')
           {
-            $query = 'select subject from salesorder where salesorderid=' .$item_id;
+            $query = 'select subject from vtiger_salesorder where salesorderid=' .$item_id;
             $result = $this->db->query($query);
             $so = $adb->query_result($result,0,'subject');
             $item_summary = $so;
           }
 	  elseif($current_module =='Vendor')
           {
-            $query = 'select vendorname from vendor where vendorid=' .$item_id;
+            $query = 'select vtiger_vendorname from vtiger_vendor where vendorid=' .$item_id;
             $result = $this->db->query($query);
             $vendor = $adb->query_result($result,0,'vendorname');
             $item_summary = $vendor;
           }
 	  elseif($current_module =='PriceBook')
           {
-            $query = 'select bookname from pricebook where pricebookid=' .$item_id;
+            $query = 'select bookname from vtiger_pricebook where pricebookid=' .$item_id;
             $result = $this->db->query($query);
             $pb = $adb->query_result($result,0,'bookname');
             $item_summary = $pb;
           }	
 
 	 
-	 #if condition added to skip faq in last viewed history
+	 #if condition added to skip vtiger_faq in last viewed history
 	  if ($current_module != 'Faq')
 	  {		
           $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
@@ -212,7 +212,7 @@ $log->info("in  track view method ".$current_module);
     /**
      * param $user_id - The id of the user to retrive the history for
      * param $module_name - Filter the history to only return records from the specified module.  If not specified all records are returned
-     * return - return the array of result set rows from the query.  All of the table fields are included
+     * return - return the array of result set rows from the query.  All of the vtiger_table vtiger_fields are included
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -224,7 +224,7 @@ $log->info("in  track view method ".$current_module);
     	}
 
 //        $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
-	$query = "SELECT * from $this->table_name inner join crmentity on crmentity.crmid=tracker.item_id WHERE user_id='$user_id' and crmentity.deleted=0 ORDER BY id DESC";
+	$query = "SELECT * from $this->table_name inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_tracker.item_id WHERE user_id='$user_id' and vtiger_crmentity.deleted=0 ORDER BY id DESC";
         $this->log->debug("About to retrieve list: $query");
         $result = $this->db->query($query, true);
         $list = Array();

@@ -27,7 +27,7 @@ foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
-                $sql="update crmentity set deleted=1 where crmid='" .$id ."'";
+                $sql="update vtiger_crmentity set deleted=1 where crmid='" .$id ."'";
                 $result = $adb->query($sql);
         }
         else

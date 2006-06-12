@@ -65,14 +65,14 @@ $mod_strings = Array(
 'LBL_LIST_LAST_MODIFIED'=>'Last Modified',
 'LBL_LIST_RECURRING_TYPE'=>'Recurring Type',
 
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 'NTC_NONE_SCHEDULED'=>'None scheduled.',
 
-// Added fields for Attachments in Activities/SubPanelView.php
+// Added vtiger_fields for Attachments in Activities/SubPanelView.php
 'LBL_ATTACHMENTS'=>'Attachments',
 'LBL_NEW_ATTACHMENT'=>'New Attachment',
 
-//Added fields after RC1 - Release
+//Added vtiger_fields after RC1 - Release
 'LBL_ALL'=>'All',
 'LBL_CALL'=>'Call',
 'LBL_MEETING'=>'Meeting',

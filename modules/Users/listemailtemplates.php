@@ -18,7 +18,7 @@ global $log;
 
 $log->info("Inside Email Templates List View");
 
-   $sql = "select * from emailtemplates order by templateid DESC";
+   $sql = "select * from vtiger_emailtemplates order by templateid DESC";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
    

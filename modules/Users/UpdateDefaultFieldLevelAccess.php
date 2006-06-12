@@ -32,7 +32,7 @@ foreach($field_module as $fld_module)
 		{
 			$visible_value = 1;
 		}
-		//Updating the Mandatory fields
+		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
 		{
@@ -40,7 +40,7 @@ foreach($field_module as $fld_module)
 		}		
 
 		//Updating the database
-		$update_query = "update def_org_field set visible=".$visible_value." where fieldid='".$fieldid."' and tabid=".$tab_id;
+		$update_query = "update vtiger_def_org_field set visible=".$visible_value." where vtiger_fieldid='".$fieldid."' and vtiger_tabid=".$tab_id;
 		$adb->query($update_query);
 
 	}

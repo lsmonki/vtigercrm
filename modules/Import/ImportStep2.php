@@ -226,7 +226,7 @@ $list_string_key .= "_import_fields";
 
 $translated_column_fields = $mod_list_strings[$list_string_key];
 
-// adding custom fields translations
+// adding custom vtiger_fields translations
 getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
 
 $cnt=1;
@@ -355,7 +355,7 @@ function validate_import_map()
 {
 	var tagName;
 	var count = 0;
-	var field_count = "<?php echo $field_count; ?>";
+	var vtiger_field_count = "<?php echo $field_count; ?>";
 	var required_fields = new Array();
 	var required_fields_name = new Array();
 	var seq_string = '';
@@ -384,7 +384,7 @@ function validate_import_map()
 			}
 			else
 			{
-				//if a field mapped more than once, alert the user and return
+				//if a vtiger_field mapped more than once, alert the user and return
 				alert("'"+tagName.options[tagName.selectedIndex].text+"' is mapped more than once. Please check the mapping.");
 				return false;
 			}
@@ -392,12 +392,12 @@ function validate_import_map()
 
 	}
 
-	//check whether the mandatory fields have been mapped.
+	//check whether the mandatory vtiger_fields have been mapped.
 	for(inner_loop = 0; inner_loop<required_fields.length;inner_loop++)
 	{
 		if(seq_string.indexOf(required_fields[inner_loop]) == -1)
 		{
-			alert('Please map the mandatory field "'+required_fields_name[inner_loop]+'"');
+			alert('Please map the mandatory vtiger_field "'+required_fields_name[inner_loop]+'"');
 			return false;
 		}
 	}

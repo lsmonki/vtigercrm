@@ -154,7 +154,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 </style>
 </head>
 <?
-		$tabavail="SELECT tabid,name from tab where presence !=2";
+		$tabavail="SELECT vtiger_tabid,name from vtiger_tab where presence !=2";
 		$tabrow=$adb->query($tabavail);
 		if($adb->num_rows($tabrow) != 0)
 		{
@@ -163,7 +163,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 				$availabletab[]=$result;
 			}
 		}	
-		$tabsel="SELECT tabid,name from tab where presence=0 order by tabsequence";
+		$tabsel="SELECT vtiger_tabid,name from vtiger_tab where presence=0 order by vtiger_tabsequence";
 		$tabrow=$adb->query($tabsel);
 		if($adb->num_rows($tabrow) != 0)
 		{
@@ -342,7 +342,7 @@ function itemMouseOver(id) {
                 } else if (id.indexOf("fieldlist")>=0) {//if Field List
                         if (currSelItemObj.id.indexOf("fd")<0) {
                                 itemObj.style.cursor='move'
-                                itemObj.className='tableBorder mouseover'       //Hiliting Field List only when added fields are removed
+                                itemObj.className='tableBorder mouseover'       //Hiliting Field List only when added vtiger_fields are removed
                         }
                 }
         }

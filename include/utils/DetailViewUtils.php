@@ -25,13 +25,13 @@ require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 
 
-/** This function returns the detail view form field and and its properties in array format.
-  * Param $uitype - UI type of the field
-  * Param $fieldname - Form field name
-  * Param $fieldlabel - Form field label name
-  * Param $col_fields - array contains the fieldname and values
+/** This function returns the detail view form vtiger_field and and its properties in array format.
+  * Param $uitype - UI type of the vtiger_field
+  * Param $fieldname - Form vtiger_field name
+  * Param $fieldlabel - Form vtiger_field label name
+  * Param $col_fields - array contains the vtiger_fieldname and values
   * Param $generatedtype - Field generated type (default is 1)
-  * Param $tabid - tab id to which the Field belongs to (default is "")
+  * Param $tabid - vtiger_tab id to which the Field belongs to (default is "")
   * Return type is an array
   */
 
@@ -67,7 +67,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	     $label_fld[] = $mod_strings[$fieldlabel];
 	     $label_fld[] = $col_fields[$fieldname];
 	     
-		$pick_query="select * from ".$fieldname;
+		$pick_query="select * from vtiger_".$fieldname;
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -260,7 +260,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         {
 		if($tabid == 4)
            {
-                   $query="select contactdetails.imagename from contactdetails where contactid=".$col_fields['record_id'];
+                   $query="select vtiger_contactdetails.imagename from vtiger_contactdetails where contactid=".$col_fields['record_id'];
                    $result = $adb->query($query);
                    $imagename=$adb->query_result($result,0,'imagename');
                    if($imagename != '')
@@ -333,10 +333,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         {
                 global $adb;
 
-                $attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
+                $attachmentid=$adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
 		if($col_fields[$fieldname] == '' && $attachmentid != '')
 		{
-				$attachquery = "select * from attachments where attachmentsid=".$attachmentid;
+				$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
         		        $col_fields[$fieldname] = $adb->query_result($adb->query($attachquery),0,'name');
 		}
 
@@ -356,7 +356,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==14)
 		{
 			$images=array();
-			$query = 'select productname,attachments.path,attachments.name from products left join seattachmentsrel on seattachmentsrel.crmid=products.productid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
+			$query = 'select productname,vtiger_attachments.path,vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
 			$result_image = $adb->query($query);
 			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 			{
@@ -405,7 +405,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Leads")
 			{
 				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from leaddetails where leadid=".$value;
+				$sql = "select * from vtiger_leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
@@ -415,7 +415,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Accounts")
 			{
 				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
-				$sql = "select * from  account where accountid=".$value;
+				$sql = "select * from  vtiger_account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
@@ -424,7 +424,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Potentials")
 			{
 				$label_fld[] =$app_strings['LBL_POTENTIAL_NAME'];
-				$sql = "select * from  potential where potentialid=".$value;
+				$sql = "select * from  vtiger_potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$potentialname = $adb->query_result($result,0,"potentialname");
 
@@ -433,7 +433,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Products")
 			{
 				$label_fld[] =$app_strings['LBL_PRODUCT_NAME'];
-				$sql = "select * from  products where productid=".$value;
+				$sql = "select * from  vtiger_products where productid=".$value;
 				$result = $adb->query($sql);
 				$productname= $adb->query_result($result,0,"productname");
 
@@ -442,7 +442,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "PurchaseOrder")
 			{
 				$label_fld[] =$app_strings['LBL_PORDER_NAME'];
-				$sql = "select * from  purchaseorder where purchaseorderid=".$value;
+				$sql = "select * from  vtiger_purchaseorder where purchaseorderid=".$value;
 				$result = $adb->query($sql);
 				$pordername= $adb->query_result($result,0,"subject");
 
@@ -451,7 +451,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "SalesOrder")
 			{
 				$label_fld[] = $app_strings['LBL_SORDER_NAME'];
-				$sql = "select * from  salesorder where salesorderid=".$value;
+				$sql = "select * from  vtiger_salesorder where salesorderid=".$value;
 				$result = $adb->query($sql);
 				$sordername= $adb->query_result($result,0,"subject");
 
@@ -460,7 +460,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Invoice")
 			{
 				$label_fld[] = $app_strings['LBL_INVOICE_NAME'];
-				$sql = "select * from  invoice where invoiceid=".$value;
+				$sql = "select * from  vtiger_invoice where invoiceid=".$value;
 				$result = $adb->query($sql);
 				$invoicename= $adb->query_result($result,0,"subject");
 
@@ -484,7 +484,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Leads")
 			{
 				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from leaddetails where leadid=".$value;
+				$sql = "select * from vtiger_leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
@@ -494,7 +494,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Accounts")
 			{
 				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
-				$sql = "select * from  account where accountid=".$value;
+				$sql = "select * from  vtiger_account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
@@ -503,7 +503,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Potentials")
 			{
 				$label_fld[] =$app_strings['LBL_POTENTIAL_NAME'];
-				$sql = "select * from  potential where potentialid=".$value;
+				$sql = "select * from  vtiger_potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$potentialname = $adb->query_result($result,0,"potentialname");
 
@@ -512,7 +512,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Quotes")
                         {
 				$label_fld[] =$app_strings['LBL_QUOTE_NAME'];
-                                $sql = "select * from  quotes where quoteid=".$value;
+                                $sql = "select * from  vtiger_quotes where quoteid=".$value;
                                 $result = $adb->query($sql);
                                 $quotename = $adb->query_result($result,0,"subject");
 
@@ -521,7 +521,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "PurchaseOrder")
                         {
 				$label_fld[] = $app_strings['LBL_PORDER_NAME'];
-                                $sql = "select * from  purchaseorder where purchaseorderid=".$value;
+                                $sql = "select * from  vtiger_purchaseorder where purchaseorderid=".$value;
                                 $result = $adb->query($sql);
                                 $pordername = $adb->query_result($result,0,"subject");
 
@@ -530,7 +530,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         elseif($parent_module == "SalesOrder")
                         {
 				$label_fld[] = $app_strings['LBL_SORDER_NAME'];
-                                $sql = "select * from  salesorder where salesorderid=".$value;
+                                $sql = "select * from  vtiger_salesorder where salesorderid=".$value;
                                 $result = $adb->query($sql);
                                 $sordername = $adb->query_result($result,0,"subject");
 
@@ -539,7 +539,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Invoice")
                         {
 				$label_fld[] = $app_strings['LBL_INVOICE_NAME'];
-                                $sql = "select * from  invoice where invoiceid=".$value;
+                                $sql = "select * from  vtiger_invoice where invoiceid=".$value;
                                 $result = $adb->query($sql);
                                 $invoicename = $adb->query_result($result,0,"subject");
 
@@ -562,7 +562,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Leads")
 			{
 				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-				$sql = "select * from leaddetails where leadid=".$value;
+				$sql = "select * from vtiger_leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
@@ -572,7 +572,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Contacts")
 			{
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$sql = "select * from  contactdetails where contactid=".$value;
+				$sql = "select * from  vtiger_contactdetails where contactid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
@@ -596,7 +596,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_name='';
 			$parent_id='';
 			$myemailid= $_REQUEST['record'];
-			$mysql = "select crmid from seactivityrel where activityid=".$myemailid;
+			$mysql = "select crmid from vtiger_seactivityrel where activityid=".$myemailid;
 			$myresult = $adb->query($mysql);
 			$mycount=$adb->num_rows($myresult);
 			if ($mycount>1){
@@ -609,7 +609,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				if($parent_module == "Leads")
 				{
 					$label_fld[] = $app_strings['LBL_LEAD_NAME'];
-					$sql = "select * from leaddetails where leadid=".$value;
+					$sql = "select * from vtiger_leaddetails where leadid=".$value;
 					$result = $adb->query($sql);
 					$first_name = $adb->query_result($result,0,"firstname");
 					$last_name = $adb->query_result($result,0,"lastname");
@@ -618,7 +618,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				elseif($parent_module == "Contacts")
 				{
 					$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-					$sql = "select * from  contactdetails where contactid=".$value;
+					$sql = "select * from  vtiger_contactdetails where contactid=".$value;
 					$result = $adb->query($sql);
 					$first_name = $adb->query_result($result,0,"firstname");
 					$last_name = $adb->query_result($result,0,"lastname");
@@ -627,7 +627,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				elseif($parent_module == "Accounts")
 				{
 					$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
-					$sql = "select * from  account where accountid=".$value;
+					$sql = "select * from  vtiger_account where accountid=".$value;
 					$result = $adb->query($sql);
 					$accountname = $adb->query_result($result,0,"accountname");
 					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$accountname.'</a>';
@@ -651,7 +651,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($parent_module == "Contacts")
 			{
 				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
-				$sql = "select * from  contactdetails where contactid=".$value;
+				$sql = "select * from  vtiger_contactdetails where contactid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
@@ -661,7 +661,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			elseif($parent_module == "Accounts")
 			{
 				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
-				$sql = "select * from account where accountid=".$value;
+				$sql = "select * from vtiger_account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
@@ -833,7 +833,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	return $label_fld;
 }
 
-/** This function returns a HTML output of associated products for a given entity (Quotes,Invoice,Sales order or Purchase order)
+/** This function returns a HTML output of associated vtiger_products for a given entity (Quotes,Invoice,Sales order or Purchase order)
   * Param $module - module name
   * Param $focus - module object
   * Return type string
@@ -870,19 +870,19 @@ function getDetailAssociatedProducts($module,$focus)
 
 	if($module == 'Quotes')
 	{
-		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_quotesproductrel.* from vtiger_quotesproductrel inner join vtiger_products on vtiger_products.productid=vtiger_quotesproductrel.productid where quoteid=".$focus->id;
 	}
 	elseif($module == 'PurchaseOrder')
 	{
-		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_poproductrel.* from vtiger_poproductrel inner join vtiger_products on vtiger_products.productid=vtiger_poproductrel.productid where purchaseorderid=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select products.productname,products.unit_price,products.qtyinstock,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_soproductrel.* from vtiger_soproductrel inner join vtiger_products on vtiger_products.productid=vtiger_soproductrel.productid where salesorderid=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select products.productname,products.unit_price,products.qtyinstock,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_invoiceproductrel.* from vtiger_invoiceproductrel inner join vtiger_products on vtiger_products.productid=vtiger_invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
@@ -954,7 +954,7 @@ function getDetailAssociatedProducts($module,$focus)
 
 }
 
-/** This function returns the related tab details for a given entity or a module.
+/** This function returns the related vtiger_tab details for a given entity or a module.
 * Param $module - module name
 * Param $focus - module object
 * Return type is an array
@@ -970,7 +970,7 @@ function getRelatedLists($module,$focus)
 	
 	$cur_tab_id = getTabid($module);
 
-	$sql1 = "select * from relatedlists where tabid=".$cur_tab_id;
+	$sql1 = "select * from vtiger_relatedlists where tabid=".$cur_tab_id;
 	$result = $adb->query($sql1);
 	$num_row = $adb->num_rows($result);
 	for($i=0; $i<$num_row; $i++)
@@ -1001,8 +1001,8 @@ function getRelatedLists($module,$focus)
 /** This function returns the detailed block information of a record in a module.
 * Param $module - module name
 * Param $block - block id
-* Param $col_fields - column fields array for the module 
-* Param $tabid - tab id
+* Param $col_fields - column vtiger_fields array for the module 
+* Param $tabid - vtiger_tab id
 * Return type is an array
 */
 

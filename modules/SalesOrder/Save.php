@@ -38,14 +38,14 @@ $focus->save("SalesOrder");
 if($focus->column_fields["quote_id"] != '')
 {
         $qt_id = $focus->column_fields["quote_id"];
-        $query1 = "update quotes set quotestage='Accepted' where quoteid=".$qt_id;
+        $query1 = "update vtiger_quotes set vtiger_quotestage='Accepted' where quoteid=".$qt_id;
         $adb->query($query1);
 }
 
 $ext_prod_arr = Array();
 if($focus->mode == 'edit')
 {
-	$query2  = "select * from soproductrel where salesorderid=".$focus->id;
+	$query2  = "select * from vtiger_soproductrel where vtiger_salesorderid=".$focus->id;
         $result2 = $adb->query($query2);
         $num_rows = $adb->num_rows($result2);
         for($i=0; $i<$num_rows;$i++)
@@ -56,7 +56,7 @@ if($focus->mode == 'edit')
         }
 
 	
-        $query1 = "delete from soproductrel where salesorderid=".$focus->id;
+        $query1 = "delete from vtiger_soproductrel where vtiger_salesorderid=".$focus->id;
         $adb->query($query1);
 
 }
@@ -84,7 +84,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
         if($prod_status != 'D')
         {
 
-                $query ="insert into soproductrel values($focus->id, $prod_id , $qty, $listprice, $vat, $sales, $service)";
+                $query ="insert into vtiger_soproductrel values($focus->id, $prod_id , $qty, $listprice, $vat, $sales, $service)";
                 $adb->query($query);
 		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,'SalesOrder');
         }

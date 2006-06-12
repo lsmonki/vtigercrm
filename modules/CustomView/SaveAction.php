@@ -22,7 +22,7 @@ if($cvid != "")
 {
 	if($mode == "new")
 	{
-		$customactionsql = "insert into customaction(cvid,subject,module,content)";
+		$customactionsql = "insert into vtiger_customaction(cvid,subject,module,content)";
 		$customactionsql .= " values(".$cvid.",'".$subject."','".$cvmodule."','".$body."')";
 		$customactionresult = $adb->query($customactionsql);
 		if($customactionresult == false)
@@ -37,7 +37,7 @@ if($cvid != "")
 
 	}elseif($mode == "edit")
 	{
-		$updatecasql = "update customaction set subject='".$subject."',content='".$body."' where cvid=".$cvid;
+		$updatecasql = "update vtiger_customaction set subject='".$subject."',content='".$body."' where cvid=".$cvid;
 		$updatecaresult = $adb->query($updatecasql);
 		if($updatecaresult == false)
 		{

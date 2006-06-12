@@ -20,7 +20,7 @@ function getComboArray($combofieldNames)
 	{
 		$fldArrName= $arrayName;
 		$arrayName = Array();
-		$result = $adb->query("select * from ".$tableName." where presence=1 order by sortorderid");
+		$result = $adb->query("select * from vtiger_".$tableName." where presence=1 order by sortorderid");
 		while($row = $adb->fetch_array($result))
 		{
 			$val = $row[$tableName];

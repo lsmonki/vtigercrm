@@ -38,7 +38,7 @@ function getTopPotentials()
 	$title[]='myTopOpenPotentials.gif';
 	$title[]=$current_module_strings['LBL_TOP_OPPORTUNITIES'];
 	$title[]='home_mypot';
-	$where = "AND potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' AND potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' AND crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
+	$where = "AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' AND vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' AND vtiger_crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_OPPORTUNITY_NAME'];
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];

@@ -85,7 +85,7 @@ $mod_strings = Array(
 'LBL_NEW_ATTACHMENT'=>'New Attachment',
 'LBL_ATTACHMENT_TITLE'=>'Attachments',
 
-//Added fields after RC1 - Release
+//Added vtiger_fields after RC1 - Release
 'LBL_MANUFACTURER'=>'Manufacturer',
 'LBL_PRODUCTCATEGORY'=>'Product Category',
 'LBL_SUPPORT_START_DATE'=>'Support Start Date',
@@ -167,7 +167,7 @@ $mod_strings = Array(
 'LBL_ADD_PRODUCTS_PRICEBOOK'=>'Add Products to PriceBook',
 
 //Added for 4.2 patch2 release
-'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
+'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a file smaller than 800000 bytes',
 'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
 'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
 'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',

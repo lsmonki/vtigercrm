@@ -48,13 +48,13 @@ $bodysubject = ' Ticket ID : '.$focus->id.'<br> Subject : '.$_REQUEST['ticket_ti
 
 $emailoptout = 0;
 
-//To get the emailoptout field value and then decide whether send mail about the tickets or not
+//To get the emailoptout vtiger_field value and then decide whether send mail about the tickets or not
 if($focus->column_fields['parent_id'] != '')
 {
 	$parent_module = getSalesEntityType($focus->column_fields['parent_id']);
 	if($parent_module == 'Contacts')
 	{
-		$result = $adb->query("select * from contactdetails where contactid=".$focus->column_fields['parent_id']);
+		$result = $adb->query("select * from vtiger_contactdetails where contactid=".$focus->column_fields['parent_id']);
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$contactname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'lastname');
 		$parentname = $contactname;
@@ -62,16 +62,16 @@ if($focus->column_fields['parent_id'] != '')
 	}
 	if($parent_module == 'Accounts')
 	{
-		$result = $adb->query("select * from account where accountid=".$focus->column_fields['parent_id']);
+		$result = $adb->query("select * from vtiger_account where vtiger_accountid=".$focus->column_fields['parent_id']);
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$parentname = $adb->query_result($result,0,'accountname');
 	}
 }
 
-//Get the status of the portal user. if the customer is active then send the portal link in the mail
+//Get the status of the vtiger_portal user. if the customer is active then send the vtiger_portal link in the mail
 if($contact_mailid != '')
 {
-	$sql = "select * from portalinfo where user_name='".$contact_mailid."'";
+	$sql = "select * from vtiger_portalinfo where user_name='".$contact_mailid."'";
 	$isactive = $adb->query_result($adb->query($sql),0,'isactive');
 }
 if($isactive == 1)
@@ -103,7 +103,7 @@ $_REQUEST['return_id'] = $return_id;
 
 if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'edit')
 {
-        $sql = 'insert into seticketsrel values('.$_REQUEST['product_id'].' , '.$focus->id.')';
+        $sql = 'insert into vtiger_seticketsrel values('.$_REQUEST['product_id'].' , '.$focus->id.')';
         $adb->query($sql);
 
 	if($_REQUEST['return_module'] == 'Products')
@@ -122,7 +122,7 @@ else
 {
 	$mail_status_str = "'".$to_email."'=0&&&";
 }
-//added condition to check the emailoptout(this is for contacts and accounts.)
+//added condition to check the emailoptout(this is for contacts and vtiger_accounts.)
 if($emailoptout == 0)
 {
 	//send mail to parent
@@ -159,7 +159,7 @@ function getTicketComments($ticketid)
 	global $adb;
 
 	$commentlist = '';
-	$sql = "select * from ticketcomments where ticketid=".$ticketid;
+	$sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid;
 	$result = $adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{

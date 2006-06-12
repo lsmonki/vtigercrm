@@ -42,7 +42,7 @@ $focus->save("Quotes");
 $ext_prod_arr = Array();
 if($focus->mode == 'edit')
 {	
-	$query2  = "select * from quotesproductrel where quoteid=".$focus->id;
+	$query2  = "select * from vtiger_quotesproductrel where quoteid=".$focus->id;
 	$result2 = $adb->query($query2);
 	$num_rows = $adb->num_rows($result2);
 	for($i=0; $i<$num_rows;$i++)
@@ -52,8 +52,8 @@ if($focus->mode == 'edit')
 		$ext_prod_arr[$pro_id] = $pro_qty;	
 	}
 	
-	 $log->debug("Deleting from quotesproductrel table ");
-	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
+	 $log->debug("Deleting from vtiger_quotesproductrel vtiger_table ");
+	$query1 = "delete from vtiger_quotesproductrel where quoteid=".$focus->id;
 	$adb->query($query1);
 
 }
@@ -82,7 +82,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 	if($prod_status != 'D')
 	{
 		
-		$query ="insert into quotesproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
+		$query ="insert into vtiger_quotesproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
 		$adb->query($query);
 		//Checking the re-order level and sending mail	
 		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,'Quotes');

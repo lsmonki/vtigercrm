@@ -58,7 +58,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	$where_clauses = Array();
 	//Added for Custom Field Search
-	$sql="select * from field where tablename='productcf' order by fieldlabel";
+	$sql="select * from vtiger_field where vtiger_tablename='productcf' order by vtiger_fieldlabel";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
@@ -71,9 +71,9 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
-                                $str=" productcf.".$column[$i]." = 1";
+                                $str=" vtiger_productcf.".$column[$i]." = 1";
                         else
-			        $str=" productcf.".$column[$i]." like '$customfield[$i]%'";
+			        $str=" vtiger_productcf.".$column[$i]." like '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 	        }
@@ -178,9 +178,9 @@ $num_rows = $adb->num_rows($list_result);
 
 $record_string= "Total No of Rows: ".$num_rows;
 
-//Retreiving the array of already releated products;
+//Retreiving the array of already releated vtiger_products;
 
-$sql1 = "select productid from pricebookproductrel where pricebookid=".$pricebook_id;
+$sql1 = "select productid from vtiger_pricebookproductrel where vtiger_pricebookid=".$pricebook_id;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
 $prod_array = Array();
@@ -224,7 +224,7 @@ $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
 	
-	 $log->info("Products :: Showing the List of products to be added in price book");
+	 $log->info("Products :: Showing the List of vtiger_products to be added in price book");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{

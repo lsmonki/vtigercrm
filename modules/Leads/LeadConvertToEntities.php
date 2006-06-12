@@ -40,7 +40,7 @@ $check_unit = explode("-",$potential_name);
 if($check_unit[1] == "")
         $potential_name = $check_unit[0];
 
-//Retrieve info from all the tables related to leads
+//Retrieve info from all the vtiger_tables related to leads
   $focus = new Lead();
  $focus->retrieve_entity_info($id,"Leads");
 
@@ -54,48 +54,48 @@ $date_modified = date('YmdHis');
 
 $crmid = $adb->getUniqueID("crmentity");
 
-//function for getting the custom values from leads and saving to account/contact/potential custom fields -Jag
+//function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields -Jag
 function getInsertValues($type,$type_id)
 {
 	global $id,$adb,$log;
 	$log->debug("Entering getInsertValues(".$type.",".$type_id.") method ...");
-	$sql_convert_lead="select * from convertleadmapping ";
+	$sql_convert_lead="select * from vtiger_convertleadmapping ";
 	$convert_result = $adb->query($sql_convert_lead);
 	$noofrows = $adb->num_rows($convert_result);
 
 	for($i=0;$i<$noofrows;$i++)
 	{
 		$flag="false";
-	 	$log->info("In convertleadmapping function");
+	 	$log->info("In vtiger_convertleadmapping function");
 		$lead_id=$adb->query_result($convert_result,$i,"leadfid");  
-		//Getting the relatd customfields for Accounts/Contact/potential from convertleadmapping table	
+		//Getting the relatd customfields for Accounts/Contact/potential from vtiger_convertleadmapping vtiger_table	
 		$account_id_val=$adb->query_result($convert_result,$i,"accountfid");
 		$contact_id_val=$adb->query_result($convert_result,$i,"contactfid");
 		$potential_id_val=$adb->query_result($convert_result,$i,"potentialfid");
 		
-		$sql_leads_column="select field.fieldid,field.columnname from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name='Leads' and fieldid=".$lead_id; //getting the columnname for the customfield of the lead
+		$sql_leads_column="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and vtiger_fieldid=".$lead_id; //getting the columnname for the customfield of the lead
 
-		 $log->debug("Lead's custom field coumn name is ".$sql_leads_column);
+		 $log->debug("Lead's custom vtiger_field coumn name is ".$sql_leads_column);
 
 		$lead_column_result = $adb->query($sql_leads_column);
 		$leads_no_rows = $adb->num_rows($lead_column_result);
 		if($leads_no_rows>0)
 		{
 			$lead_column_name=$adb->query_result($lead_column_result,0,"columnname");
-			$sql_leads_val="select ".$lead_column_name." from leadscf where leadid=".$id; //custom field value for lead
+			$sql_leads_val="select ".$lead_column_name." from vtiger_leadscf where leadid=".$id; //custom vtiger_field value for lead
 			$lead_val_result = $adb->query($sql_leads_val);
 			$lead_value=$adb->query_result($lead_val_result,0,$lead_column_name);
-			 $log->debug("Lead's custom field value is ".$lead_value);
+			 $log->debug("Lead's custom vtiger_field value is ".$lead_value);
 		}	
-		//Query for getting the column name for Accounts/Contacts/Potentials if custom field for lead is mappped
-		$sql_type="select field.fieldid,field.columnname from field,tab where field.tabid=tab.tabid and generatedtype=2 and tab.name="; 
+		//Query for getting the column name for Accounts/Contacts/Potentials if custom vtiger_field for lead is mappped
+		$sql_type="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
 		if($type=="Accounts")
 		{
 			if($account_id_val!="" && $account_id_val!=0)	
 			{
 				$flag="true";
-				 $log->info("Getting the  Accounts custom field column name  ");
-				$sql_type.="'Accounts' and fieldid=".$account_id_val;
+				 $log->info("Getting the  Accounts custom vtiger_field column name  ");
+				$sql_type.="'Accounts' and vtiger_fieldid=".$account_id_val;
 			}
 		}
 		else if($type == "Contacts")
@@ -103,8 +103,8 @@ function getInsertValues($type,$type_id)
 			if($contact_id_val!="" && $contact_id_val!=0)	
 			{
 				$flag="true";
-				 $log->info("Getting the  Contacts custom field column name  ");
-				$sql_type.="'Contacts' and fieldid=".$contact_id_val;
+				 $log->info("Getting the  Contacts custom vtiger_field column name  ");
+				$sql_type.="'Contacts' and vtiger_fieldid=".$contact_id_val;
 			}
 		}
 		else if($type == "Potentials")
@@ -112,8 +112,8 @@ function getInsertValues($type,$type_id)
 			if($potential_id_val!="" && $potential_id_val!=0)
                         {
 				$flag="true";
-                                  $log->info("Getting the  Potentials custom field column name  ");
-				$sql_type.="'Potentials' and fieldid=".$potential_id_val;
+                                  $log->info("Getting the  Potentials custom vtiger_field column name  ");
+				$sql_type.="'Potentials' and vtiger_fieldid=".$potential_id_val;
                         }
 
 		}
@@ -145,7 +145,7 @@ function getRelatedNotesAttachments($id,$accountid)
 	global $adb,$log,$id;
 	$log->debug("Entering getRelatedNotesAttachments(".$id.",".$accountid.") method ...");
 	
-	$sql_lead_notes	="select * from senotesrel where crmid=".$id;
+	$sql_lead_notes	="select * from vtiger_senotesrel where crmid=".$id;
 	$lead_notes_result = $adb->query($sql_lead_notes);
 	$noofrows = $adb->num_rows($lead_notes_result);
 
@@ -154,14 +154,14 @@ function getRelatedNotesAttachments($id,$accountid)
 
 		$lead_related_note_id=$adb->query_result($lead_notes_result,$i,"notesid");
 		 $log->debug("Lead related note id ".$lead_related_note_id);
-		$sql_delete_lead_notes="delete from senotesrel where crmid=".$id;
+		$sql_delete_lead_notes="delete from vtiger_senotesrel where crmid=".$id;
 		$adb->query($sql_delete_lead_notes);
 
-		$sql_insert_account_notes="insert into senotesrel(crmid,notesid) values (".$accountid.",".$lead_related_note_id.")";
+		$sql_insert_account_notes="insert into vtiger_senotesrel(crmid,notesid) values (".$accountid.",".$lead_related_note_id.")";
 		$adb->query($sql_insert_account_notes);
 	}
 
-	$sql_lead_attachment="select * from seattachmentsrel where crmid=".$id;
+	$sql_lead_attachment="select * from vtiger_seattachmentsrel where crmid=".$id;
         $lead_attachment_result = $adb->query($sql_lead_attachment);
         $noofrows = $adb->num_rows($lead_attachment_result);
 
@@ -171,10 +171,10 @@ function getRelatedNotesAttachments($id,$accountid)
                 $lead_related_attachment_id=$adb->query_result($lead_attachment_result,$i,"attachmentsid");
 		 $log->debug("Lead related attachment id ".$lead_related_attachment_id);
 
-                $sql_delete_lead_attachment="delete from seattachmentsrel where crmid=".$id;
+                $sql_delete_lead_attachment="delete from vtiger_seattachmentsrel where crmid=".$id;
                 $adb->query($sql_delete_lead_attachment);
 
-                $sql_insert_account_attachment="insert into seattachmentsrel(crmid,attachmentsid) values (".$accountid.",".$lead_related_attachment_id.")";                        
+                $sql_insert_account_attachment="insert into vtiger_seattachmentsrel(crmid,attachmentsid) values (".$accountid.",".$lead_related_attachment_id.")";                        
                 $adb->query($sql_insert_account_attachment);
         }
 	$log->debug("Exiting getRelatedNotesAttachments method ...");
@@ -185,61 +185,61 @@ function getRelatedActivities($accountid,$contact_id)
 {
 	global $adb,$log,$id;	
 	$log->debug("Entering getRelatedActivities(".$accountid.",".$contact_id.") method ...");
-	$sql_lead_activity="select * from seactivityrel where crmid=".$id;
+	$sql_lead_activity="select * from vtiger_seactivityrel where crmid=".$id;
 	$lead_activity_result = $adb->query($sql_lead_activity);
         $noofrows = $adb->num_rows($lead_activity_result);
         for($i=0;$i<$noofrows;$i++)
         {
 
                 $lead_related_activity_id=$adb->query_result($lead_activity_result,$i,"activityid");
-		 $log->debug("Lead related activity id ".$lead_related_activity_id);
+		 $log->debug("Lead related vtiger_activity id ".$lead_related_activity_id);
 
-		$sql_type_email="select setype from crmentity where crmid=".$lead_related_activity_id;
+		$sql_type_email="select setype from vtiger_crmentity where crmid=".$lead_related_activity_id;
 		$type_email_result = $adb->query($sql_type_email);
                 $type=$adb->query_result($type_email_result,0,"setype");
-		$log->debug("type of activity id ".$type);
+		$log->debug("type of vtiger_activity id ".$type);
 
-                $sql_delete_lead_activity="delete from seactivityrel where crmid=".$id;
+                $sql_delete_lead_activity="delete from vtiger_seactivityrel where crmid=".$id;
                 $adb->query($sql_delete_lead_activity);
 
 		if($type != "Emails")
 		{
-                	$sql_insert_account_activity="insert into seactivityrel(crmid,activityid) values (".$accountid.",".$lead_related_activity_id.")";
+                	$sql_insert_account_activity="insert into vtiger_seactivityrel(crmid,activityid) values (".$accountid.",".$lead_related_activity_id.")";
 	                $adb->query($sql_insert_account_activity);
 
-			$sql_insert_account_activity="insert into cntactivityrel(contactid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";
+			$sql_insert_account_activity="insert into vtiger_cntactivityrel(contactid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";
                 	$adb->query($sql_insert_account_activity);
 		}
 		else
 		{
-			 $sql_insert_account_activity="insert into seactivityrel(crmid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";                                                                                     $adb->query($sql_insert_account_activity);
+			 $sql_insert_account_activity="insert into vtiger_seactivityrel(crmid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";                                                                                     $adb->query($sql_insert_account_activity);
 		}
         }
 	$log->debug("Exiting getRelatedActivities method ...");
 	
 }
 
-$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
+$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
 
 $adb->query($sql_crmentity);
 
 
-$sql_insert_account = "INSERT INTO account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".$accountname ."','".$row["industry"] ."','" .$row["annualrevenue"] ."','" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["noofemployees"] ."')";
+$sql_insert_account = "INSERT INTO vtiger_account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".$accountname ."','".$row["industry"] ."','" .$row["annualrevenue"] ."','" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["noofemployees"] ."')";
 
 
 $adb->query($sql_insert_account);
 
-$sql_insert_accountbillads = "INSERT INTO accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
 
  $adb->query($sql_insert_accountbillads);
 
 
-$sql_insert_accountshipads = "INSERT INTO accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
 
 
  $adb->query($sql_insert_accountshipads);
 
-//Getting the custom field values from leads and inserting into Accounts if the field is mapped - Jaguar
+//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
 $insert_value=$crmid;
 $insert_column="accountid";	
 $val= getInsertValues("Accounts",$insert_value);
@@ -250,7 +250,7 @@ if($val[1]!="")
 
 $insert_column.=$val[0];
 $insert_value.=$val[1];
-$sql_insert_accountcustomfield = "INSERT INTO accountscf (".$insert_column.") VALUES (".$insert_value.")";
+$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_value.")";
 
 $adb->query($sql_insert_accountcustomfield);
 
@@ -264,7 +264,7 @@ getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments
  $date_modified = date('YmdHis');
 
 $crmcontactid = $adb->getUniqueID("crmentity");
-$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
+$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
 
 $adb->query($sql_crmentity1);
 
@@ -272,16 +272,16 @@ $adb->query($sql_crmentity1);
 $contact_id = $crmcontactid;
 $log->debug("contact id is ".$contact_id);
 
- $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
+ $sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
 
- $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'','','".$row['leadsource']."')";
+ $sql_insert_contactsubdetails = "INSERT INTO vtiger_contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'','','".$row['leadsource']."')";
 
 $adb->query($sql_insert_contactsubdetails);
 
- $sql_insert_contactaddress = "INSERT INTO contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingzip) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["lane"] ."','".$row['state']."','" .$row["country"] ."','".$row['code']."')";
+ $sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingzip) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["lane"] ."','".$row['state']."','" .$row["country"] ."','".$row['code']."')";
 
 $adb->query($sql_insert_contactaddress);
 
@@ -298,7 +298,7 @@ if($val[1]!="")
 
 $insert_column.=$val[0];
 $insert_value.=$val[1];
-$sql_insert_contactcustomfield = "INSERT INTO contactscf (".$insert_column.") VALUES (".$insert_value.")";
+$sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (".$insert_column.") VALUES (".$insert_value.")";
 
 $adb->query($sql_insert_contactcustomfield);
 //
@@ -313,7 +313,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
   
 
   $oppid = $adb->getUniqueID("crmentity");
-  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
+  $sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
   
   $adb->query($sql_crmentity);
 
@@ -323,7 +323,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
 		$potential_amount=0;
         }
 
-	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
+	$sql_insert_opp = "INSERT INTO vtiger_potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
 
 	$adb->query($sql_insert_opp);
 
@@ -339,23 +339,23 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$insert_column.=$val[0];
 	$insert_value.=$val[1];
 
-	$sql_insert_potentialcustomfield = "INSERT INTO potentialscf (".$insert_column.") VALUES (".$insert_value.")";
+	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (".$insert_column.") VALUES (".$insert_value.")";
 //
 
 	$adb->query($sql_insert_potentialcustomfield);
-        $sql_insert2contpotentialrel ="insert into contpotentialrel values(".$contact_id.",".$oppid .")";
+        $sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(".$contact_id.",".$oppid .")";
         
         $adb->query($sql_insert2contpotentialrel);
 
 	
 }
 
-//Deleting from the tracker
-$sql_delete_tracker= "DELETE from tracker where item_id='" .$id ."'";
+//Deleting from the vtiger_tracker
+$sql_delete_tracker= "DELETE from vtiger_tracker where item_id='" .$id ."'";
 $adb->query($sql_delete_tracker);
 
 //Updating the deleted status
-$sql_update_converted = "UPDATE leaddetails SET converted = 1 where leadid='" .$id ."'";
+$sql_update_converted = "UPDATE vtiger_leaddetails SET converted = 1 where leadid='" .$id ."'";
 $adb->query($sql_update_converted); 
 
 header("Location: index.php?action=DetailView&module=Accounts&record=$crmid");

@@ -31,7 +31,7 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 	$templateid = $_REQUEST['templateid'];
 	 $log->debug("the templateid is set to the value ".$templateid);
 }
-$sql = "select * from emailtemplates where templateid=".$templateid;
+$sql = "select * from vtiger_emailtemplates where templateid=".$templateid;
 $result = $adb->query($sql);
 $emailtemplateResult = $adb->fetch_array($result);
 

@@ -34,7 +34,7 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 	$module = $_REQUEST["module"];
 	$useid = $current_user->id;
 	global $adb;
-	$query="select * from freetagged_objects where module = '".$module ."'";
+	$query="select * from vtiger_freetagged_objects where module = '".$module ."'";
 	$result=$adb->query($query);
 	if($adb->num_rows($result) > 0)
 	{

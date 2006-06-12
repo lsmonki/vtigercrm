@@ -126,7 +126,7 @@ class SMTP
         if(substr(PHP_OS, 0, 3) != "WIN")
            socket_set_timeout($this->smtp_conn, $tval, 0);
 
-        # get any announcement stuff
+        # get any vtiger_announcement stuff
         $announce = $this->get_lines();
 
         # set the timeout  of any socket functions at 1/10 of a second
@@ -252,8 +252,8 @@ class SMTP
     /**
      * Issues a data command and sends the msg_data to the server
      * finializing the mail transaction. $msg_data is the message
-     * that is to be send with the headers. Each header needs to be
-     * on a single line followed by a <CRLF> with the message headers
+     * that is to be send with the vtiger_headers. Each header needs to be
+     * on a single line followed by a <CRLF> with the message vtiger_headers
      * and the message body being seperated by and additional <CRLF>.
      *
      * Implements rfc 821: DATA <CRLF>
@@ -313,13 +313,13 @@ class SMTP
         $msg_data = str_replace("\r","\n",$msg_data);
         $lines = explode("\n",$msg_data);
 
-        # we need to find a good way to determine is headers are
+        # we need to find a good way to determine is vtiger_headers are
         # in the msg_data or if it is a straight msg body
-        # currently I'm assuming rfc 822 definitions of msg headers
-        # and if the first field of the first line (':' sperated)
+        # currently I'm assuming rfc 822 definitions of msg vtiger_headers
+        # and if the first vtiger_field of the first line (':' sperated)
         # does not contain a space then it _should_ be a header
         # and we can process all lines before a blank "" line as
-        # headers.
+        # vtiger_headers.
         $field = substr($lines[0],0,strpos($lines[0],":"));
         $in_headers = false;
         if(!empty($field) && !strstr($field," ")) {
@@ -345,9 +345,9 @@ class SMTP
 
                 $lines_out[] = substr($line,0,$pos);
                 $line = substr($line,$pos + 1);
-                # if we are processing headers we need to
+                # if we are processing vtiger_headers we need to
                 # add a LWSP-char to the front of the new line
-                # rfc 822 on long msg headers
+                # rfc 822 on long msg vtiger_headers
                 if($in_headers) {
                     $line = "\t" . $line;
                 }
@@ -805,7 +805,7 @@ class SMTP
      * $from. Returns true if successful or false otherwise. If True
      * the mail transaction is started and then one or more Recipient
      * commands may be called followed by a Data command. This command
-     * will send the message to the users terminal if they are logged
+     * will send the message to the vtiger_users terminal if they are logged
      * in.
      *
      * Implements rfc 821: SEND <SP> FROM:<reverse-path> <CRLF>
@@ -853,7 +853,7 @@ class SMTP
      * $from. Returns true if successful or false otherwise. If True
      * the mail transaction is started and then one or more Recipient
      * commands may be called followed by a Data command. This command
-     * will send the message to the users terminal if they are logged
+     * will send the message to the vtiger_users terminal if they are logged
      * in and send them an email.
      *
      * Implements rfc 821: SAML <SP> FROM:<reverse-path> <CRLF>
@@ -901,7 +901,7 @@ class SMTP
      * $from. Returns true if successful or false otherwise. If True
      * the mail transaction is started and then one or more Recipient
      * commands may be called followed by a Data command. This command
-     * will send the message to the users terminal if they are logged
+     * will send the message to the vtiger_users terminal if they are logged
      * in or mail it to them if they are not.
      *
      * Implements rfc 821: SOML <SP> FROM:<reverse-path> <CRLF>

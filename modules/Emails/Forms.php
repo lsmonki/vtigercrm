@@ -15,7 +15,7 @@
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Forms.php,v 1.4 2005/04/19 16:48:31 ray Exp $
  * Description:  Contains a variety of utility functions used to display UI
- * components such as form headers and footers.  Intended to be modified on a per
+ * components such as form vtiger_headers and footers.  Intended to be modified on a per
  * theme basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -211,7 +211,7 @@ EOQ;
 }
 
 /**
- * Create HTML form to enter a new record with the minimum necessary fields.
+ * Create HTML form to enter a new record with the minimum necessary vtiger_fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -226,7 +226,7 @@ function get_new_record_form ()
 	global $adb;//for dynamic quickcreateform construction
 
 
-	// Unimplemented until jscalendar language files are fixed
+	// Unimplemented until jscalendar language vtiger_files are fixed
 	// global $current_language;
 	// global $default_language;
 	// global $cal_codes;
@@ -244,7 +244,7 @@ function get_new_record_form ()
 	$default_date_start = date('Y-m-d');
 	$default_time_start = date('H:i');
 	$user_id = $current_user->id;
-	// Unimplemented until jscalendar language files are fixed
+	// Unimplemented until jscalendar language vtiger_files are fixed
 	// $cal_lang = (empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language];
 	$cal_lang = "en";
 	$cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
@@ -252,7 +252,7 @@ function get_new_record_form ()
 	$qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
 
-	$qcreate_get_field="select * from field where tabid=10 and quickcreate=0 order by quickcreatesequence";
+	$qcreate_get_field="select * from vtiger_field where vtiger_tabid=10 and quickcreate=0 order by quickcreatesequence";
 	$qcreate_get_result=$adb->query($qcreate_get_field);
 	$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
@@ -345,9 +345,9 @@ function get_new_record_form ()
 inputField : "QCK_date_start", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
 });
 
-		var fieldname = new Array('.$fieldName.')
-		var fieldlabel = new Array('.$fieldLabel.')
-		var fielddatatype = new Array('.$fldDataType.')
+		var vtiger_fieldname = new Array('.$fieldName.')
+		var vtiger_fieldlabel = new Array('.$fieldLabel.')
+		var vtiger_fielddatatype = new Array('.$fldDataType.')
 
 	</script>';
 

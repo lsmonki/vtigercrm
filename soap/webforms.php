@@ -61,7 +61,7 @@ function create_lead_from_webform($lastname, $email, $phone, $company, $country,
 	if($assigned_user_id == '')
 	{
 		//if the user id is empty then assign it to the admin user
-		$assigned_user_id = $adb->query_result($adb->query("select id from users where user_name='admin'"),0,'id');
+		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
 	}
 
 	require_once("modules/Leads/Lead.php");
@@ -95,7 +95,7 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 	if($assigned_user_id == '')
 	{
 		//if the user id is empty then assign it to the admin user
-		$assigned_user_id = $adb->query_result($adb->query("select id from users where user_name='admin'"),0,'id');
+		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
 	}
 
 	require_once('modules/Contacts/Contact.php');

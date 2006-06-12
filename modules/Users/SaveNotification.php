@@ -14,7 +14,7 @@ global $adb;
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$query="UPDATE notificationscheduler set notificationsubject='".$_REQUEST['notifysubject']."', notificationbody='".$_REQUEST['notifybody']."', active =".$_REQUEST['active']." where schedulednotificationid=".$_REQUEST['record'];
+	$query="UPDATE vtiger_notificationscheduler set notificationsubject='".$_REQUEST['notifysubject']."', notificationbody='".$_REQUEST['notifybody']."', active =".$_REQUEST['active']." where schedulednotificationid=".$_REQUEST['record'];
 	$adb->query($query);	
 }
 $loc = "Location: index.php?action=UsersAjax&file=listnotificationschedulers&module=Users&directmode=ajax";

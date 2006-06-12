@@ -56,7 +56,7 @@ function getTopQuotes()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and crmentity.smownerid='.$current_user->id.' and  quotes.validtill >= \''.$date_var.'\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\' ORDER BY total DESC';
 	$query = getListQuery("Quotes",$where);
 
 	//<<<<<<<<customview>>>>>>>>>

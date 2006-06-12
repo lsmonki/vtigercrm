@@ -191,7 +191,7 @@ require_once($theme_path.'layout_utils.php');
 						<b style="color:#006600">Migration Queries Log</b>
 						<div id="successLog" style="border:1px solid #666666;width:90%;position:relative;height:250px;overflow:auto;left:5%;top:10px;">
 							<!-- we should place the All queries executed-->
-							<!-- This table is designed to display all the queries (before this table a div tag is opened. so all these following queries will be put inside the div tab as a table format) -->
+							<!-- This vtiger_table is designed to display all the queries (before this vtiger_table a div tag is opened. so all these following queries will be put inside the div vtiger_tab as a vtiger_table format) -->
 							<style>
 								.MigInfo{
 									border-collapse:collapse;
@@ -238,7 +238,7 @@ require_once($theme_path.'layout_utils.php');
 
 						<br /><br />
 
-						<!-- This table is to show the total, success and failed queries -->
+						<!-- This vtiger_table is to show the total, success and failed queries -->
 						<table width="35%" border="0" cellpadding="5" cellspacing="0" align="center" class="small">
 						   <tr>
 							<td width="75%" align="right" nowrap>

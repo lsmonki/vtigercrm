@@ -50,7 +50,7 @@ function verify_data(form)
 			}
 			if ( hash[ form.elements[i].value ] == 1)
 			{
-				// got same field more than once
+				// got same vtiger_field more than once
 				isError = true;
 			}
 			hash[form.elements[i].value] = 1;
@@ -69,7 +69,7 @@ function verify_data(form)
 		return false;
 	}
 
-	for(var field_name in required)
+	for(var vtiger_field_name in required)
 	{
 		// contacts hack to bypass errors if full_name is set
 		if (field_name == 'last_name' && 
@@ -77,7 +77,7 @@ function verify_data(form)
 		{
 			continue;
 		}
-		if ( hash[ field_name ] != 1 )
+		if ( hash[ vtiger_field_name ] != 1 )
 		{
 				isError = true;
 				errorMessage += "$err_required " + required[field_name];

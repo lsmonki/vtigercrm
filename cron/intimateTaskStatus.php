@@ -16,20 +16,20 @@ else
 $selecteddb = $dbconfig['db_name'];
 mysql_select_db($selecteddb,$db);
 
-$emailresult = mysql_query("SELECT email1 from users",$db);
+$emailresult = mysql_query("SELECT email1 from vtiger_users",$db);
 $emailid = mysql_fetch_row($emailresult);
 $emailaddress = $emailid[0];
-$mailserveresult = mysql_query("SELECT server,server_username,server_password FROM systems",$db);
+$mailserveresult = mysql_query("SELECT server,server_username,server_password FROM vtiger_systems",$db);
 $mailrow = mysql_fetch_row($mailserveresult);
 $mailserver = $mailrow[0];
 
 $mailuname = $mailrow[1];
 $mailpwd = $mailrow[1];
 
-//query the notificationscheduler table and get data for those notifications which are active
+//query the vtiger_notificationscheduler vtiger_table and get data for those notifications which are active
 
 
-$sql = "select active from notificationscheduler where schedulednotificationid=1";
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=1";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
@@ -39,7 +39,7 @@ if($activevalue[0] == 1)
 
 //get all those activities where the status is not completed even after the passing of 24 hours
 $today = date("Ymd"); 
-$result = mysql_query("select (activity.date_start +1) from activity where activity.status !='Completed' and ".$today." > (activity.date_start+1)",$db);
+$result = mysql_query("select (vtiger_activity.date_start +1) from vtiger_activity where vtiger_activity.status !='Completed' and ".$today." > (vtiger_activity.date_start+1)",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
@@ -51,13 +51,13 @@ while ($myrow = mysql_fetch_row($result))
 }
 
 //Big Deal Alert
-$sql = "select active from notificationscheduler where schedulednotificationid=2";
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=2";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
-$result = mysql_query("SELECT sales_stage,amount FROM potential",$db);
+$result = mysql_query("SELECT sales_stage,amount FROM vtiger_potential",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $amount=$myrow[1];
@@ -72,13 +72,13 @@ while ($myrow = mysql_fetch_row($result))
 }
 
 //Pending tickets
-$sql = "select active from notificationscheduler where schedulednotificationid=3";
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=3";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
-$result = mysql_query("SELECT status,ticketid FROM troubletickets",$db);
+$result = mysql_query("SELECT status,ticketid FROM vtiger_troubletickets",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
@@ -94,15 +94,15 @@ while ($myrow = mysql_fetch_row($result))
 
 }
 
-//Too many tickets related to a particular account/company causing concern
-$sql = "select active from notificationscheduler where schedulednotificationid=4";
+//Too many tickets related to a particular vtiger_account/company causing concern
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=4";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
 
-$result = mysql_query("SELECT status,troubletickets.ticketid FROM troubletickets where status!='Completed'",$db);
+$result = mysql_query("SELECT status,vtiger_troubletickets.ticketid FROM vtiger_troubletickets where status!='Completed'",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
@@ -114,13 +114,13 @@ while ($myrow = mysql_fetch_row($result))
 }
 
 //Support Starting
-$sql = "select active from notificationscheduler where schedulednotificationid=5";
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=5";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
-$result = mysql_query("SELECT start_date FROM products",$db);
+$result = mysql_query("SELECT start_date FROM vtiger_products",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
@@ -130,14 +130,14 @@ while ($myrow = mysql_fetch_row($result))
 }
 
 //Support ending
-$sql = "select active from notificationscheduler where schedulednotificationid=6";
+$sql = "select active from vtiger_notificationscheduler where schedulednotificationid=6";
 $result = mysql_query($sql);
 
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
 
-$result = mysql_query("SELECT expiry_date from products",$db);
+$result = mysql_query("SELECT expiry_date from vtiger_products",$db);
 while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];

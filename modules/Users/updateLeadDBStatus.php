@@ -32,7 +32,7 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
 			if($id != '') {
-				$sql = "update crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
+				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 				$result = $adb->query($sql);
 			}
 		}
@@ -49,9 +49,9 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
 			if($id != '') {
-				$sql = "update leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
+				$sql = "update vtiger_leaddetails set vtiger_leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
 				$result = $adb->query($sql);
-				$query = "update crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
+				$query = "update vtiger_crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
 				$result1 = $adb->query($query);
 			}
 		}

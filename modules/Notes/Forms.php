@@ -64,7 +64,7 @@ return $the_script;
 }
 
 /**
- * Create HTML form to enter a new record with the minimum necessary fields.
+ * Create HTML form to enter a new record with the minimum necessary vtiger_fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -86,7 +86,7 @@ $default_parent_type= $app_list_strings['record_type_default_key'];
 
 $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
-$qcreate_get_field="select * from field where tabid=8 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where vtiger_tabid=8 and quickcreate=0 order by quickcreatesequence";
 $qcreate_get_result=$adb->query($qcreate_get_field);
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 $fieldName_array = Array();//for validation 
@@ -167,9 +167,9 @@ $qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save
 $qcreate_form.='</form>';
 $qcreate_form.='<script type="text/javascript">
 		
-	var fieldname = new Array('.$fieldName.')
-	var fieldlabel = new Array('.$fieldLabel.')
-	var fielddatatype = new Array('.$fldDataType.')
+	var vtiger_fieldname = new Array('.$fieldName.')
+	var vtiger_fieldlabel = new Array('.$fieldLabel.')
+	var vtiger_fielddatatype = new Array('.$fldDataType.')
 
 		</script>';
 

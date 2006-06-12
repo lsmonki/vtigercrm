@@ -39,7 +39,7 @@ if($templateid == "")
 }
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from wordtemplates where templateid=".$templateid;
+$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=".$templateid;
 
 $result = $adb->query($sql);
 $temparray = $adb->fetch_array($result);
@@ -75,8 +75,8 @@ if($mass_merge != "")
 
 //echo $mass_merge;
 //die;
-//for setting accountid=0 for the contacts which are deleted
-$ct_query = "select crmid from crmentity where setype='Contacts' and deleted=1";
+//for setting vtiger_accountid=0 for the contacts which are deleted
+$ct_query = "select crmid from vtiger_crmentity where setype='Contacts' and deleted=1";
 $result = $adb->query($ct_query);
 
 while($row = $adb->fetch_array($result))
@@ -87,13 +87,13 @@ while($row = $adb->fetch_array($result))
 if(count($deleted_id) > 0)
 {
 	$deleted_id = implode(",",$deleted_id);
-	$update_query = "update contactdetails set accountid = 0 where contactid in (".$deleted_id.")";
+	$update_query = "update vtiger_contactdetails set vtiger_accountid = 0 where contactid in (".$deleted_id.")";
 	$result = $adb->query($update_query);
 }
-//End setting accountid=0 for the contacts which are deleted
+//End setting vtiger_accountid=0 for the contacts which are deleted
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (4,6) and field.block <> 6 and field.block <> 75 order by field.tablename";
+$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 6 and vtiger_field.block <> 75 order by vtiger_field.tablename";
 
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
@@ -116,7 +116,7 @@ for ($x=0; $x<$y; $x++)
   {
       if($modulename == "Accounts")
       {
-  			$querycolumns[$x] = "concat(users.last_name,' ',users.first_name) as userjoinname,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
+  			$querycolumns[$x] = "concat(vtiger_users.last_name,' ',vtiger_users.first_name) as userjoinname,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
       }
   		if($modulename == "Contacts")
       {
@@ -159,22 +159,22 @@ if(count($querycolumns) > 0)
 {
 	$selectcolumns = implode($querycolumns,",");
 
-$query = "select  ".$selectcolumns." from account 
-				inner join crmentity on crmentity.crmid=account.accountid 
-				inner join accountbillads on account.accountid=accountbillads.accountaddressid 
-				inner join accountshipads on account.accountid=accountshipads.accountaddressid 
-				inner join accountscf on account.accountid = accountscf.accountid 
-				left join account as accountAccount on accountAccount.accountid = account.parentid
-				left join users on users.id = crmentity.smownerid
-				left join contactdetails on contactdetails.accountid=account.accountid
-				left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
-				left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
-				left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
-				left join contactscf on contactdetails.contactid = contactscf.contactid 
-				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
-				left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid
-				where crmentity.deleted=0 and (crmentityContacts.deleted=0 || crmentityContacts.deleted is null) and account.accountid in(".$mass_merge.")";
+$query = "select  ".$selectcolumns." from vtiger_account 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid 
+				inner join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid 
+				inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid 
+				inner join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid 
+				left join vtiger_account as vtiger_accountAccount on vtiger_accountAccount.accountid = vtiger_account.parentid
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+				left join vtiger_contactdetails on vtiger_contactdetails.accountid=vtiger_account.accountid
+				left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid 
+				left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
+				left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
+				left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
+				left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
+				left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
+				left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid
+				where vtiger_crmentity.deleted=0 and (crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null) and vtiger_account.accountid in(".$mass_merge.")";
 //echo $query;
 //die;	
 $result = $adb->query($query);
@@ -209,7 +209,7 @@ while($columnValues = $adb->fetch_array($result))
 $csvdata = implode($mergevalue,"###");
 }else
 {
-	die("No fields to do Merge");
+	die("No vtiger_fields to do Merge");
 }
 
 $handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");

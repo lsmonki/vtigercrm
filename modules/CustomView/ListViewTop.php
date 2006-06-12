@@ -92,8 +92,8 @@ function getKeyMetrics()
 function getMetricList()
 {
 	global $adb;
-	$ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
-	$ssql .= " where customview.setmetrics = 1 order by customview.entitytype";
+	$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
+	$ssql .= " where vtiger_customview.setmetrics = 1 order by vtiger_customview.entitytype";
 	$result = $adb->query($ssql);
 	while($cvrow=$adb->fetch_array($result))
 	{

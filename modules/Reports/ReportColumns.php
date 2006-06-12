@@ -52,9 +52,9 @@ if(isset($_REQUEST["record"]))
 	
 }
 
-/** Function to formulate the fields for the primary modules 
+/** Function to formulate the vtiger_fields for the primary modules 
  *  This function accepts the module name 
- *  as arguments and generates the fields for the primary module as
+ *  as arguments and generates the vtiger_fields for the primary module as
  *  a HTML Combo values
  */
 
@@ -85,9 +85,9 @@ function getPrimaryColumnsHTML($module)
 	return $shtml;
 }
 
-/** Function to formulate the fields for the secondary modules
+/** Function to formulate the vtiger_fields for the secondary modules
  *  This function accepts the module name
- *  as arguments and generates the fields for the secondary module as
+ *  as arguments and generates the vtiger_fields for the secondary module as
  *  a HTML Combo values
  */
 

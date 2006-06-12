@@ -171,7 +171,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	{
 		if(isset($_REQUEST[$fieldname]))
 		{
-			 $log->debug("Assigning the previous values given for the product to respective fields ");
+			 $log->debug("Assigning the previous values given for the product to respective vtiger_fields ");
 			$field_values_passed.="&";
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
@@ -201,7 +201,7 @@ if($saveimage=="true")
 {
 	$image_lists_db=implode("###",$image_lists);
 	$focus->column_fields['imagename']=$image_lists_db;
-	$log->debug("Assign the Image name to the field name ");
+	$log->debug("Assign the Image name to the vtiger_field name ");
 }
 //Saving the product
 if($image_error=="false")

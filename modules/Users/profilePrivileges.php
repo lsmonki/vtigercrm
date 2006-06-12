@@ -71,7 +71,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
 
 
 
-//Initially setting the secondary selected tab
+//Initially setting the secondary selected vtiger_tab
 $mode=$_REQUEST['mode'];
 if($mode == 'create')
 {

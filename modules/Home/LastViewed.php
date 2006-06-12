@@ -24,7 +24,7 @@ global $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-// Create the head of the table.
+// Create the head of the vtiger_table.
 ?>
 		<table cellpadding="2" cellspacing="0" border="0">
 		<tbody>

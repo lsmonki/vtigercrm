@@ -28,7 +28,7 @@ $image_path=$theme_path."images/";
 
 
 //Retreiving the hierarchy
-$hquery = "select * from role order by parentrole asc";
+$hquery = "select * from vtiger_role order by parentrole asc";
 $hr_res = $adb->query($hquery);
 $num_rows = $adb->num_rows($hr_res);
 $hrarray= Array();
@@ -79,7 +79,7 @@ for($l=0; $l<$num_rows; $l++)
 }
 //Constructing the Roledetails array
 $role_det = getAllRoleDetails();
-$query = "select * from role";
+$query = "select * from vtiger_role";
 $result = $adb->query($query);
 $num_rows=$adb->num_rows($result);
 $mask_roleid='';
@@ -95,7 +95,7 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 	foreach($hrarray as $roleid => $value)
 	{
 	
-		//retreiving the role details
+		//retreiving the vtiger_role details
 		$role_det_arr=$role_det[$roleid];
 		$roleid_arr=$role_det_arr[2];
 		$rolename = $role_det_arr[0];

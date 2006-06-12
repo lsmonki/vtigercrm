@@ -44,7 +44,7 @@ $output ='<div id="DeleteLay">
 	<td align="left">';
 	$output.='<select class="select" name="transfer_prof_id">';
 	global $adb;	
-	$sql = "select * from profile";
+	$sql = "select * from vtiger_profile";
 	$result = $adb->query($sql);
 	$temprow = $adb->fetch_array($result);
 	do

@@ -27,7 +27,7 @@ if($_REQUEST['list_module_mode'] != '' && $_REQUEST['list_module_mode'] == 'save
 		$tabid = getTabid($val);
 		if($tabid != '' && $userid != '')
 		{
-			$sql = 'update moduleowners set user_id = '.$userid.' where tabid = '.$tabid;
+			$sql = 'update vtiger_moduleowners set user_id = '.$userid.' where vtiger_tabid = '.$tabid;
 			$adb->query($sql);
 		}
 	}
@@ -81,7 +81,7 @@ else
 function getModuleOwner($tabid)
 {
 	global $adb;
-	$sql = "select * from moduleowners where tabid=".$tabid;
+	$sql = "select * from vtiger_moduleowners where vtiger_tabid=".$tabid;
 	$res = $adb->query($sql);
 	$userid = $adb->query_result($res,0,'user_id');
 
@@ -92,7 +92,7 @@ function getModuleNameList()
 {
 	global $adb;
 
-	$sql = "select moduleowners.*, tab.name from moduleowners inner join tab on moduleowners.tabid = tab.tabid order by tab.tabsequence";
+	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
 	$res = $adb->query($sql);
 	$mod_array = Array();
 	while($row = $adb->fetchByAssoc($res))
@@ -106,7 +106,7 @@ function getUserCombo($user_array,$name)
 	global $adb;
 
 	$tabid = getTabid($name);
-	$sql = "select * from moduleowners where tabid=".$tabid;
+	$sql = "select * from vtiger_moduleowners where vtiger_tabid=".$tabid;
 	$res = $adb->query($sql);
 	$db_userid = $adb->query_result($res,0,'user_id');
 	

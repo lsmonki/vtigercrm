@@ -21,17 +21,17 @@ if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
 else
 	$smtp_auth = 'false';
 
-$sql="select * from systems where server_type = '".$server_type."'";
+$sql="select * from vtiger_systems where server_type = '".$server_type."'";
 $id=$adb->query_result($adb->query($sql),0,"id");
 
 
 if($id=='')
 {
 	$id = $adb->getUniqueID("systems");
-	$sql="insert into systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
+	$sql="insert into vtiger_systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."','".$smtp_auth."')";
 }
 else
-	$sql="update systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."' where id = ".$id;
+	$sql="update vtiger_systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', smtp_auth='".$smtp_auth."', server_type = '".$server_type."' where id = ".$id;
 
 $adb->query($sql);
 if($server_type == 'backup')

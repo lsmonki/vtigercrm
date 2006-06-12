@@ -54,7 +54,7 @@ foreach($pieces as $val)
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
 
-<!-- Master table -->
+<!-- Master vtiger_table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
 <td width="10%" valign="top"></td>
@@ -95,7 +95,7 @@ foreach($pieces as $val)
 <p><b><i>Again, thanks for taking out the time to try vtiger! We want you to know that we really appreciate it.</i></b>
 
 <p><b>Installation Instructions:-</b></p>
-<p>This Configuration Wizard will create vtiger CRM 5.0 Beta databases and tables and configuration files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
+<p>This Configuration Wizard will create vtiger CRM 5.0 Beta databases and vtiger_tables and configuration vtiger_files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
 <br><br>
 <p><span style="color:#555555">- vtiger CRM 5.0 Beta is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
 <p align="center"><font color='red'><b>vtiger CRM 5 Beta will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
@@ -183,7 +183,7 @@ foreach($pieces as $val)
 			form for making modifications,<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; including but not limited to software
 			source code, documentation<br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source, and configuration files.<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source, and configuration vtiger_files.<br>
 			<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "Object" form shall mean any form
 			resulting from mechanical<br>
@@ -233,8 +233,8 @@ foreach($pieces as $val)
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to the Licensor or its representatives,
 			including but not limited to<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; communication on electronic mailing
-			lists, source code control systems,<br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and issue tracking systems that are
+			lists, source code control vtiger_systems,<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and issue tracking vtiger_systems that are
 			managed by, or on behalf of, the<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Licensor for the purpose of discussing
 			and improving the Work, but<br>
@@ -306,10 +306,10 @@ foreach($pieces as $val)
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Derivative Works
 			a copy of this License; and<br>
 			<br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (b) You must cause any modified files to
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (b) You must cause any modified vtiger_files to
 			carry prominent notices<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stating that You
-			changed the files; and<br>
+			changed the vtiger_files; and<br>
 			<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (c) You must retain, in the Source form
 			of any Derivative Works<br>
@@ -460,7 +460,7 @@ foreach($pieces as $val)
 			<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To apply the Apache License to your
 			work, attach the following<br>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; boilerplate notice, with the fields
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; boilerplate notice, with the vtiger_fields
 			enclosed by brackets "[]"<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; replaced with your own identifying
 			information. (Don't include<br>
@@ -547,7 +547,7 @@ foreach($pieces as $val)
 			&nbsp;*<br>
 			&nbsp;* 2. The origin of this software must not be misrepresented,
 			either by<br>
-			&nbsp;* explicit claim or by omission.&nbsp; Since few users ever read
+			&nbsp;* explicit claim or by omission.&nbsp; Since few vtiger_users ever read
 			sources, credits<br>
 			&nbsp;* must appear in the documentation.<br>
 			&nbsp;*<br>
@@ -865,7 +865,7 @@ foreach($pieces as $val)
 			acknowledgments normally appear.<br>
 			&nbsp;*<br>
 			&nbsp;* 4. The names "Apache" and "Apache Software Foundation" must<br>
-			&nbsp;*&nbsp;&nbsp;&nbsp; not be used to endorse or promote products
+			&nbsp;*&nbsp;&nbsp;&nbsp; not be used to endorse or promote vtiger_products
 			derived from this<br>
 			&nbsp;*&nbsp;&nbsp;&nbsp; software without prior written permission.
 			For written<br>
@@ -1018,7 +1018,7 @@ foreach($pieces as $val)
 			<br>
 			&nbsp;&nbsp; somewhere reasonably visible in your documentation and in
 			any relevant<br>
-			&nbsp;&nbsp; files or online help data or similar. A reference to the
+			&nbsp;&nbsp; vtiger_files or online help data or similar. A reference to the
 			ftp site for<br>
 			&nbsp;&nbsp; the source, that is, to<br>
 			<br>
@@ -1092,7 +1092,7 @@ foreach($pieces as $val)
 			and Clark Cooper<br>
 			<br>
 			Permission is hereby granted, free of charge, to any person obtaining<br>
-			a copy of this software and associated documentation files (the<br>
+			a copy of this software and associated documentation vtiger_files (the<br>
 			"Software"), to deal in the Software without restriction, including<br>
 			without limitation the rights to use, copy, modify, merge, publish,<br>
 			distribute, sublicense, and/or sell copies of the Software, and to<br>
@@ -1189,16 +1189,16 @@ foreach($pieces as $val)
 			<br>
 			IMPORTANT:<br>
 			<br>
-			Send bug (error) reports, questions and comments to the mailing list<br>
+			Send bug (error) vtiger_reports, questions and comments to the mailing list<br>
 			at mysql@lists.mysql.com<br>
 			<br>
-			Please use the 'mysqlbug' script when posting bug reports or questions<br>
+			Please use the 'mysqlbug' script when posting bug vtiger_reports or questions<br>
 			about MySQL. mysqlbug will gather some information about your system<br>
 			and start your editor with a form in which you can describe your<br>
-			problem. Bug reports might be silently ignored by the MySQL<br>
-			maintainers if there is not a good reason included in the report as to<br>
-			why mysqlbug has not been used. A report that says 'MySQL does not<br>
-			work for me. Why?' is not considered a valid bug report.<br>
+			problem. Bug vtiger_reports might be silently ignored by the MySQL<br>
+			maintainers if there is not a good reason included in the vtiger_report as to<br>
+			why mysqlbug has not been used. A vtiger_report that says 'MySQL does not<br>
+			work for me. Why?' is not considered a valid bug vtiger_report.<br>
 			<br>
 			The mysqlbug script can be found in the 'scripts' directory of the<br>
 			distribution, that is '&lt;where-you-installed-mysql&gt;/scripts'.<br>
@@ -1228,7 +1228,7 @@ foreach($pieces as $val)
 			provided with the<br>
 			&nbsp;&nbsp;&nbsp;&nbsp; distribution.<br>
 			&nbsp;<br>
-			&nbsp; 3. The name "PHP" must not be used to endorse or promote products<br>
+			&nbsp; 3. The name "PHP" must not be used to endorse or promote vtiger_products<br>
 			&nbsp;&nbsp;&nbsp;&nbsp; derived from this software without prior
 			written permission. For<br>
 			&nbsp;&nbsp;&nbsp;&nbsp; written permission, please contact
@@ -1343,7 +1343,7 @@ foreach($pieces as $val)
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.9. ''Modifications'' means any
 			addition to or deletion from the substance or structure of either the
 			Original Code or any previous Modifications. When Covered Code is
-			released as a series of files, a Modification is:<br>
+			released as a series of vtiger_files, a Modification is:<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A.
 			Any addition to or deletion from the contents of a file containing
 			Original Code or previous Modifications.<br>
@@ -1367,7 +1367,7 @@ foreach($pieces as $val)
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.11. ''Source Code'' means the
 			preferred form of the Covered Code for making modifications to it,
 			including all modules it contains, plus any associated interface
-			definition files, scripts used to control compilation and installation
+			definition vtiger_files, scripts used to control compilation and installation
 			of an Executable, or source code differential comparisons against
 			either the Original Code or another well known, available Covered Code
 			of the Contributor's choice. The Source Code can be in a compressed or
@@ -1686,7 +1686,7 @@ foreach($pieces as $val)
 			such claim is resolved (such as by license or settlement) prior to the
 			initiation of patent infringement litigation, then the reasonable value
 			of the licenses granted by such Participant under Sections 2.1 or 2.2
-			shall be taken into account in determining the amount or value of any
+			shall be taken into vtiger_account in determining the amount or value of any
 			payment or license.<br>
 			<br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8.4.&nbsp; In the event of termination
@@ -1783,7 +1783,7 @@ foreach($pieces as $val)
 			Contributor(s): ______________________________________.<br>
 			<br>
 			[NOTE: The text of this Exhibit A may differ slightly from the text of
-			the notices in the Source Code files of the Original Code. You should
+			the notices in the Source Code vtiger_files of the Original Code. You should
 			use the text of this Exhibit A rather than the text found in the
 			Original Code Source Code for Your Modifications.]<br>
 			<br>
@@ -1834,7 +1834,7 @@ foreach($pieces as $val)
 			intended to<br>
 			guarantee your freedom to share and change free software--to make sure
 			the<br>
-			software is free for all its users.<br>
+			software is free for all its vtiger_users.<br>
 			<br>
 			This license, the Lesser General Public License, applies to some
 			specially<br>
@@ -1871,7 +1871,7 @@ foreach($pieces as $val)
 			must<br>
 			make sure that they, too, receive or can get the source code. If you
 			link<br>
-			other code with the library, you must provide complete object files to
+			other code with the library, you must provide complete object vtiger_files to
 			the<br>
 			recipients, so that they can relink them with the library after making
 			changes<br>
@@ -1946,7 +1946,7 @@ foreach($pieces as $val)
 			<br>
 			In other cases, permission to use a particular library in non-free
 			programs<br>
-			enables a greater number of people to use a large body of free
+			enables a greater number of people to use a vtiger_large body of free
 			software. For<br>
 			example, permission to use the GNU C Library in non-free programs
 			enables many<br>
@@ -2046,23 +2046,23 @@ foreach($pieces as $val)
 			&nbsp;&nbsp;&nbsp; a) The modified work must itself be a software
 			library.<br>
 			<br>
-			&nbsp;&nbsp;&nbsp; b) You must cause the files modified to carry
+			&nbsp;&nbsp;&nbsp; b) You must cause the vtiger_files modified to carry
 			prominent notices stating<br>
-			that you changed the files and the date of any change.<br>
+			that you changed the vtiger_files and the date of any change.<br>
 			<br>
 			&nbsp;&nbsp;&nbsp; c) You must cause the whole of the work to be
 			licensed at no charge to all<br>
 			third parties under the terms of this License.<br>
 			<br>
 			&nbsp;&nbsp;&nbsp; d) If a facility in the modified Library refers to a
-			function or a table<br>
+			function or a vtiger_table<br>
 			of data to be supplied by an application program that uses the
 			facility, other<br>
 			than as an argument passed when the facility is invoked, then you must
 			make a<br>
 			good faith effort to ensure that, in the event an application does not
 			supply<br>
-			such function or table, the facility still operates, and performs
+			such function or vtiger_table, the facility still operates, and performs
 			whatever<br>
 			part of its purpose remains meaningful.<br>
 			<br>
@@ -2233,7 +2233,7 @@ foreach($pieces as $val)
 			executable<br>
 			containing the modified Library. (It is understood that the user who
 			changes<br>
-			the contents of definitions files in the Library will not necessarily
+			the contents of definitions vtiger_files in the Library will not necessarily
 			be able<br>
 			to recompile the application to use the modified definitions.)<br>
 			<br>
@@ -2526,19 +2526,19 @@ foreach($pieces as $val)
 			Acknowledgements:<br>
 			<br>
 			We have used the following software:<br>
-			<br>1. ExcelReader package to read the xls files. We have taken the utility from the following Web site : <br>
+			<br>1. ExcelReader package to read the xls vtiger_files. We have taken the utility from the following Web site : <br>
 			http://freshmeat.net/projects/phpexcelreader/<br>
 			The product is available as GNU General Public License (GPL).<br>
-			2. E-mail Client to handle attachments with PHP. We have taken the ideas from the article by Kevin Steffer available at the<br>
+			2. E-mail Client to handle vtiger_attachments with PHP. We have taken the ideas from the article by Kevin Steffer available at the<br>
   http://www.linuxscope.net/articles/mailAttachmentsPHP.html<br>
-			3. FPDF package to create PDF reports and documents. We have downloaded package from http://www.fpdf.org<br>
+			3. FPDF package to create PDF vtiger_reports and documents. We have downloaded package from http://www.fpdf.org<br>
 			4. Prototype (Object-Oriented JavaScript framework) package to ease development of dynamic web applications. We have downloaded package from http://prototype.conio.net<br>
 			5. class_http to cache scraped content. We have downloaded package from http://www.troywolf.com/articles/php/class_http/ <br>
-			6.Carousel Slideshow package to display large images as thumbnails. We have downloaded package from http://www.dynamicdrive.com/dynamicindex14/carousel2.htm<br>
-			7. Ajax Popup Chat for enabling instant messaging for vtiger CRM users. We have downloaded package from http://www.os-solution.com/demo/ajaxcsspopupchat/index.php<br>
+			6.Carousel Slideshow package to display vtiger_large images as thumbnails. We have downloaded package from http://www.dynamicdrive.com/dynamicindex14/carousel2.htm<br>
+			7. Ajax Popup Chat for enabling instant messaging for vtiger CRM vtiger_users. We have downloaded package from http://www.os-solution.com/demo/ajaxcsspopupchat/index.php<br>
 			8. Image Crossfade Redux for enabling fade effect to images. We have downloaded package from http://slayeroffice.com/code/imageCrossFade/xfade2.html<br>
 			9. Calculator for enabling calculations in vtiger CRM. We have downloaded package from http://www.hmhd.com/steve<br>
-We are grateful to the creators of the respective products for providing such a beautiful utilities.<br>
+We are grateful to the creators of the respective vtiger_products for providing such a beautiful utilities.<br>
 			
 			&nbsp;<br>
 			<br>
@@ -2587,7 +2587,7 @@ We are grateful to the creators of the respective products for providing such a 
 <td width="10%" valign="top"></td>
 </tr>
 </table>
-<!-- Master table closes -->
+<!-- Master vtiger_table closes -->
 
 </body>
 </html>

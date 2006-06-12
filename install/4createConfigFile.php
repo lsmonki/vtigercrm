@@ -121,7 +121,7 @@ $cache_dir = 'cache/';
 
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
-<!-- Master table -->
+<!-- Master vtiger_table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
 	<td align=center>
@@ -290,7 +290,7 @@ if ($templateHandle && $includeHandle) {
 </td>
 </tr>
 </table>
-<!-- Master table closes -->
+<!-- Master vtiger_table closes -->
 
 </body>
 

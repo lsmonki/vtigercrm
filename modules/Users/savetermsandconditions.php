@@ -14,17 +14,17 @@ require_once('include/utils/utils.php');
 $inv_type='Inventory';
 $inv_tandc=$_REQUEST['inventory_tandc'];
 
-$sql="select * from inventory_tandc where type='".$inv_type."'";
+$sql="select * from vtiger_inventory_tandc where type='".$inv_type."'";
 $result = $adb->query($sql);
 $inv_id = $adb->query_result($result,0,'id');
 if($inv_id == '')
 {
         $inv_id=$adb->getUniqueID('inventory_tandc');
-        $sql="insert into inventory_tandc values( '".$inv_id ."','".$inv_type."','". $inv_tandc."')";
+        $sql="insert into vtiger_inventory_tandc values( '".$inv_id ."','".$inv_type."','". $inv_tandc."')";
 }
 else
 {
-	$sql="update inventory_tandc set type = '".$inv_type."', tandc = '".$inv_tandc."' where id = ".$inv_id;
+	$sql="update vtiger_inventory_tandc set type = '".$inv_type."', tandc = '".$inv_tandc."' where id = ".$inv_id;
 }
 $adb->query($sql);
 

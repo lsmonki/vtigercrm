@@ -15,7 +15,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 $delete_currency_id = $_REQUEST['id'];
-$sql = "select * from currency_info where id=".$delete_currency_id;
+$sql = "select * from vtiger_currency_info where id=".$delete_currency_id;
 $result = $adb->query($sql);
 $delete_currencyname = $adb->query_result($result,0,"currency_name");
 
@@ -48,7 +48,7 @@ $output ='<div id="CurrencyDeleteLay">
 $output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
 	     
 		 global $adb;	
-         $sql = "select * from currency_info";
+         $sql = "select * from vtiger_currency_info";
          $result = $adb->query($sql);
          $temprow = $adb->fetch_array($result);
          do

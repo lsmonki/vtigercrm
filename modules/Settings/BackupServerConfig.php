@@ -26,7 +26,7 @@ if($_REQUEST['error'] != '')
 {
 		$smarty->assign("ERROR_MSG",'<b><font color="purple">'.$_REQUEST["error"].'</font></b>');
 }
-$sql="select * from systems where server_type = 'backup'";
+$sql="select * from vtiger_systems where server_type = 'backup'";
 $result = $adb->query($sql);
 $server = $adb->query_result($result,0,'server');
 $server_username = $adb->query_result($result,0,'server_username');

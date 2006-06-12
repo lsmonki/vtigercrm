@@ -52,7 +52,7 @@ function getTopInvoice()
 	$date_var = date('Y-m-d');
 
 	//Changed for Patch 2 by Don
-	$where = ' and crmentity.smownerid='.$current_user->id.' and  invoice.invoicestatus != \'Paid\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_invoice.invoicestatus != \'Paid\' ORDER BY total DESC';
 	$query = getListQuery("Invoice",$where);
 
 	//<<<<<<<<customview>>>>>>>>>

@@ -70,11 +70,11 @@ if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 
-//Code to save the custom field info into database
+//Code to save the custom vtiger_field info into database
 function save_customfields($entity_id)
 {
 	$log->debug("Entering save_customfields(".$entity_id.") method ...");
-	 $log->debug("save custom field invoked ".$entity_id);
+	 $log->debug("save custom vtiger_field invoked ".$entity_id);
 	global $adb;
 	$dbquery="select * from customfields where module='Leads'";
 	$result = $adb->query($dbquery);

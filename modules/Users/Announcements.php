@@ -15,7 +15,7 @@ global $current_user;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$query="select * from announcement where creatorid=".$current_user->id;
+$query="select * from vtiger_announcement where creatorid=".$current_user->id;
 $result=$adb->query($query);
 $announcement=$adb->query_result($result,0,'announcement');
 $title_prev=$adb->query_result($result,0,'title');

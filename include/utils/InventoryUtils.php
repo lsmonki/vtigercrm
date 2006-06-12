@@ -11,8 +11,8 @@
 
 /**
  * This function returns the Product detail block values in array format.
- * Input Parameter are $module - module name, $focus - module object, $num_of_products - no.of products associated with it  * $associated_prod = associated product details
- * column fields/
+ * Input Parameter are $module - module name, $focus - module object, $num_of_products - no.of vtiger_products associated with it  * $associated_prod = associated product details
+ * column vtiger_fields/
  */
 
 function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
@@ -58,7 +58,7 @@ function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',
  * Param $productid - product id
  * Param $qty - product quantity in no's
  * Param $mode - mode type
- * Param $ext_prod_arr - existing products 
+ * Param $ext_prod_arr - existing vtiger_products 
  * Param $module - module name
  * return type void
  */
@@ -175,7 +175,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 		{
 			$notificationname = 'InvoiceNotification';
 		}
-		$query = "select * from inventorynotification where notificationname='".$notification_table."'";
+		$query = "select * from vtiger_inventorynotification where notificationname='".$notification_table."'";
 		$result = $adb->query($query);
 
 		$subject = $adb->query_result($result,0,'notificationsubject');
@@ -210,7 +210,7 @@ function getPrdQtyInStck($product_id)
 	global $log;
 	$log->debug("Entering getPrdQtyInStck(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT qtyinstock FROM products WHERE productid = ".$product_id;
+	$query1 = "SELECT qtyinstock FROM vtiger_products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$qtyinstck= $adb->query_result($result,0,"qtyinstock");
 	$log->debug("Exiting getPrdQtyInStck method ...");
@@ -227,7 +227,7 @@ function getPrdReOrderLevel($product_id)
 	global $log;
 	$log->debug("Entering getPrdReOrderLevel(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT reorderlevel FROM products WHERE productid = ".$product_id;
+	$query1 = "SELECT reorderlevel FROM vtiger_products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
 	$log->debug("Exiting getPrdReOrderLevel method ...");
@@ -244,7 +244,7 @@ function getPrdHandler($product_id)
 	global $log;
 	$log->debug("Entering getPrdHandler(".$product_id.") method ...");
 	global $adb;
-	$query1 = "SELECT handler FROM products WHERE productid = ".$product_id;
+	$query1 = "SELECT handler FROM vtiger_products WHERE productid = ".$product_id;
 	$result=$adb->query($query1);
 	$handler= $adb->query_result($result,0,"handler");
 	$log->debug("Exiting getPrdHandler method ...");
@@ -253,14 +253,14 @@ function getPrdHandler($product_id)
 
 /**	function to get the taxid
  *	@param string $type - tax type (VAT or Sales or Service)
- *	return int   $taxid - taxid corresponding to the Tax type from inventorytaxinfo table
+ *	return int   $taxid - taxid corresponding to the Tax type from vtiger_inventorytaxinfo vtiger_table
  */
 function getTaxId($type)
 {
 	global $adb, $log;
 	$log->debug("Entering into getTaxId($type) function.");
 
-	$res = $adb->query("SELECT taxid FROM inventorytaxinfo WHERE taxname='$type'");
+	$res = $adb->query("SELECT taxid FROM vtiger_inventorytaxinfo WHERE taxname='$type'");
 	$taxid = $adb->query_result($res,0,'taxid');
 
 	$log->debug("Exiting from getTaxId($type) function. return value=$taxid");
@@ -269,7 +269,7 @@ function getTaxId($type)
 
 /**	function to get the taxpercentage
  *	@param string $type       - tax type (VAT or Sales or Service)
- *	return int $taxpercentage - taxpercentage corresponding to the Tax type from inventorytaxinfo table
+ *	return int $taxpercentage - taxpercentage corresponding to the Tax type from vtiger_inventorytaxinfo vtiger_table
  */
 function getTaxPercentage($type)
 {
@@ -278,7 +278,7 @@ function getTaxPercentage($type)
 
 	$taxpercentage = '';
 
-	$res = $adb->query("SELECT percentage FROM inventorytaxinfo WHERE taxname = '$type'");
+	$res = $adb->query("SELECT percentage FROM vtiger_inventorytaxinfo WHERE taxname = '$type'");
 	$taxpercentage = $adb->query_result($res,0,'percentage');
 
 	$log->debug("Exiting from getTaxPercentage($type) function. return value=$taxpercentage");
@@ -289,7 +289,7 @@ function getTaxPercentage($type)
  *	@param string $type       - tax type (VAT or Sales or Service)
  *	@param id  $productid     - productid to which we want the tax percentage
  *	@param id  $default       - if 'default' then first look for product's tax percentage and product's tax is empty then it will return the default configured tax percentage, else it will return the product's tax (not look for default value)
- *	return int $taxpercentage - taxpercentage corresponding to the Tax type from inventorytaxinfo table
+ *	return int $taxpercentage - taxpercentage corresponding to the Tax type from vtiger_inventorytaxinfo vtiger_table
  */
 function getProductTaxPercentage($type,$productid,$default='')
 {
@@ -299,11 +299,11 @@ function getProductTaxPercentage($type,$productid,$default='')
 	$taxpercentage = '';
 
 	$res = $adb->query("SELECT taxpercentage
-			FROM inventorytaxinfo
-			INNER JOIN producttaxrel
-				ON inventorytaxinfo.taxid = producttaxrel.taxid
-			WHERE producttaxrel.productid = $productid
-			AND inventorytaxinfo.taxname = '$type'");
+			FROM vtiger_inventorytaxinfo
+			INNER JOIN vtiger_producttaxrel
+				ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid
+			WHERE vtiger_producttaxrel.productid = $productid
+			AND vtiger_inventorytaxinfo.taxname = '$type'");
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	//This is to retrive the default configured value if the taxpercentage related to product is empty

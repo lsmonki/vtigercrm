@@ -55,7 +55,7 @@ if($focus->is_authenticated())
 	//$rolename = fetchUserRole($focus->id);
 	//$profilename = fetchUserProfile($focus->id);
 	$profileid = fetchUserProfileId($focus->id);	
-	//setting the role into the session
+	//setting the vtiger_role into the session
 	//$_SESSION['authenticated_user_roleid'] = $profilename;
 
 	//Setting the Object in Session
@@ -128,7 +128,7 @@ if($focus->is_authenticated())
         $log->debug("app_unique_key is $application_unique_key");
 
 	
-// Clear all uploaded import files for this user if it exists
+// Clear all uploaded import vtiger_files for this user if it exists
 
 	global $import_dir;
 

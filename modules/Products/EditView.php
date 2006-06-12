@@ -63,7 +63,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 } 
 
-//needed when creating a new product with a default vendor name to passed 
+//needed when creating a new product with a default vtiger_vendor name to passed 
 if (isset($_REQUEST['name']) && is_null($focus->name)) {
 	$focus->name = $_REQUEST['name'];
 	

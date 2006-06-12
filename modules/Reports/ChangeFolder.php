@@ -32,7 +32,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 function ChangeFolder($reportid,$folderid)
 {
 	global $adb;
-	$imovereportsql = "update report set folderid=".$folderid." where reportid=".$reportid;
+	$imovereportsql = "update vtiger_report set folderid=".$folderid." where vtiger_reportid=".$reportid;
 	$imovereportsqlresult = $adb->query($imovereportsql);
 }
 ?>

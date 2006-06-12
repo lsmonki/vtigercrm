@@ -42,7 +42,7 @@ $mod_strings = Array(
 'LBL_EMAIL_ADDRESS'=>'Email Address:',
 'LBL_COLON'=>':',
 
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 'LBL_LIST_FILENAME'=>"File",
 
 // Added for Note(3.2-patch 3) 

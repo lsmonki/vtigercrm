@@ -60,12 +60,12 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 	$xtpl->out("user_settings");
 }
 
-$sql_set = "update tab set presence=1 where presence !=2";
+$sql_set = "update vtiger_tab set presence=1 where presence !=2";
 $adb->query($sql_set);
 $j=1;
 foreach($_POST as $name=>$value)
 {
-  $sql="update tab set presence=0,tabsequence= " . $j . " where tabid = " .$value;
+  $sql="update vtiger_tab set presence=0,tabsequence= " . $j . " where vtiger_tabid = " .$value;
   $adb->query($sql);
   $j++;
 }

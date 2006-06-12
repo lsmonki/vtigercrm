@@ -18,7 +18,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
-$query = "SELECT * FROM inventorynotification";
+$query = "SELECT * FROM vtiger_inventorynotification";
 $result = $adb->query($query);
 $num_rows = $adb->num_rows($result);
 $output = Array();

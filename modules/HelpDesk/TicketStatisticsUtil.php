@@ -19,7 +19,7 @@ function getTotalNoofTickets()
 	global $log;
 	$log->debug("Entering getTotalNoofTickets() method ...");
 	global $adb;
-	$query = "select count(*) as totalticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0";
+	$query = "select count(*) as totalticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0";
 	$result = $adb->query($query);
 	$totTickets = $adb->query_result($result,0,"totalticketcount");
 	$log->debug("Exiting getTotalNoofTickets method ...");
@@ -34,7 +34,7 @@ function getTotalNoofOpenTickets()
 	global $log;
 	$log->debug("Entering getTotalNoofOpenTickets() method ...");
 	global $adb;
-	$query = "select count(*) as totalopenticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status !='Closed'";
+	$query = "select count(*) as totalopenticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status !='Closed'";
 	$result = $adb->query($query);
 	$totOpenTickets = $adb->query_result($result,0,"totalopenticketcount");
 	$log->debug("Exiting getTotalNoofOpenTickets method ...");
@@ -49,7 +49,7 @@ function getTotalNoofClosedTickets()
 	global $log;
 	$log->debug("Entering getTotalNoofClosedTickets() method ...");
 	global $adb;
-	$query = "select count(*) as totalclosedticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status ='Closed'";
+	$query = "select count(*) as totalclosedticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status ='Closed'";
 	$result = $adb->query($query);
 	$totClosedTickets = $adb->query_result($result,0,"totalclosedticketcount");
 	$log->debug("Exiting getTotalNoofClosedTickets method ...");
@@ -170,7 +170,7 @@ function showCategories($image_path, $singleUnit)
 	
 }
 
-/**     Function to display the statistics based on the Users ie., will display all the users and the no. of tickets per user
+/**     Function to display the statistics based on the Users ie., will display all the vtiger_users and the no. of tickets per user
  *      @param  string $image_path - image path of the bar per theme basis
  *      @param  int $singleUnit - the single bar length value which is calculated as 80/total no. of tickets
  *      @return void.
@@ -218,8 +218,8 @@ function showUserBased($image_path, $singleUnit)
 	
 }
 
-/**     Function to retrieve all values from the table which is passed as the parameter
- *      @param  string $tableName - table name in which we want to get the result
+/**     Function to retrieve all values from the vtiger_table which is passed as the parameter
+ *      @param  string $tableName - vtiger_table name in which we want to get the result
  *      @return result $result - the result of the query "select * from $tableName" will be return
 **/
 function getFromDB($tableName)
@@ -235,8 +235,8 @@ function getFromDB($tableName)
 
 /**     Function to get the number of tickets based on the User or Priority or Category which is passed as a parameter
  *      @param  string $mode - the status of the ticket ie., Open or Closed. if Total then all tickets count will be retrieved
- *      @param  string $priority_val - the value based on which we get tickets ie., id of the user or ticketcategories or ticketpriorities
- *      @param  int $critColName - smownerid or category or priority which is the fieldname of the table in which we check $priority_val
+ *      @param  string $priority_val - the value based on which we get tickets ie., id of the user or vtiger_ticketcategories or vtiger_ticketpriorities
+ *      @param  int $critColName - smownerid or category or vtiger_priority which is the vtiger_fieldname of the vtiger_table in which we check $priority_val
  *      @return void.
 **/
 function getTicketCount($mode, $priority_val, $critColName)
@@ -254,16 +254,16 @@ function getTicketCount($mode, $priority_val, $critColName)
 	global $adb;
 	if($mode == 'Open')
 	{
-		$query = "select count(*) as count from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0  and ".$table_name.".".$critColName."='".$priority_val."' and troubletickets.status !='Closed'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0  and ".$table_name.".".$critColName."='".$priority_val."' and vtiger_troubletickets.status !='Closed'";
 		
 	}
 	elseif($mode == 'Closed')
 	{
-		$query = "select count(*) as count from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and troubletickets.status ='Closed'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and vtiger_troubletickets.status ='Closed'";
 	}
 	elseif($mode == 'Total')
 	{
-		$query = "select count(*) as count from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and deleted='0'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and deleted='0'";
 	}
 	$result = $adb->query($query);
 	$nooftickets = $adb->query_result($result,0,"count");

@@ -45,9 +45,9 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	$mode='create';
 	$password='<tr>
 	   		   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Password</td>
-		       <td width="30%"><input name="new_password" type="password" tabindex="1" size="25" maxlength="25"></td>
+		       <td width="30%"><input name="new_password" type="password" vtiger_tabindex="1" size="25" maxlength="25"></td>
 			   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Confirm Password</td>
-			   <td width="30%"><input name="confirm_new_password" type="password" tabindex="2" size="25" maxlength="75"></td>
+			   <td width="30%"><input name="confirm_new_password" type="password" vtiger_tabindex="2" size="25" maxlength="75"></td>
 			  </tr>';
 }
 
@@ -57,9 +57,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$mode='create';
 	$password='<tr>
 	   		   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Password</td>
-		       <td width="30%"><input name="new_password" type="password" tabindex="1" size="25" maxlength="25"></td>
+		       <td width="30%"><input name="new_password" type="password" vtiger_tabindex="1" size="25" maxlength="25"></td>
 			   <td width="20%" class="dataLabel"><FONT class="required">*</FONT>Confirm Password</td>
-			   <td width="30%"><input name="confirm_new_password" type="password" tabindex="2" size="25" maxlength="75"></td>
+			   <td width="30%"><input name="confirm_new_password" type="password" vtiger_tabindex="2" size="25" maxlength="75"></td>
 			  </tr>';
 }
 
@@ -159,7 +159,7 @@ $DATE_FORMAT_SELECT_OPTION .= ' </select>';
 $smarty->assign("DATE_FORMAT", $DATE_FORMAT_SELECT_OPTION);
 
 if (is_admin($current_user)) {
-	$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' tabindex='1'";
+	$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' vtiger_tabindex='1'";
 	if (isset($default_user_name)
 		&& $default_user_name != ""
 		&& $default_user_name == $focus->user_name
@@ -175,7 +175,7 @@ if (is_admin($current_user)) {
 }
 else
 {
-		$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' tabindex='1' disabled>";
+		$status = "<td width='30%'>&nbsp;&nbsp;<select name='status' vtiger_tabindex='1' disabled>";
 		$status .= get_select_options_with_id($app_list_strings['user_status_dom'], $focus->status);
 		$status .= "</select></td>\n";
 		$smarty->assign("USER_STATUS_OPTIONS", $status);
@@ -210,15 +210,15 @@ if (is_admin($current_user)) {
 		$GROUP_SELECT_OPTION .= '<option value="">--None--</option>';
 		if($focus->id) {
 			$sql = "SELECT groupname
-				FROM users2group
-				INNER JOIN groups
-					ON groups.groupid = users2group.groupid
+				FROM vtiger_users2group
+				INNER JOIN vtiger_groups
+					ON vtiger_groups.groupid = vtiger_users2group.groupid
 				WHERE userid = '" .$focus->id ."'";
 			$result = $adb->query($sql);
 			$groupnameArray = $adb->fetch_array($result);
 		}
 		$groupselected = $groupnameArray["groupname"];
-		$sql2 = "SELECT groupname FROM groups";
+		$sql2 = "SELECT groupname FROM vtiger_groups";
                   $result_name = $adb->query($sql2);
                   $temprow = $adb->fetch_array($result_name);
                    do

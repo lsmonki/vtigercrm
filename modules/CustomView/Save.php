@@ -95,32 +95,32 @@ if($cvmodule != "")
 
 			if($setdefault == 1)
 			{
-				$updatedefaultsql = "UPDATE customview SET setdefault = 0 WHERE entitytype = ".$adb->quote($cvmodule);
+				$updatedefaultsql = "UPDATE vtiger_customview SET setdefault = 0 WHERE entitytype = ".$adb->quote($cvmodule);
 				$updatedefaultresult = $adb->query($updatedefaultsql);
 			}
 			$log->info("CustomView :: Save :: setdefault upated successfully");
 
-			$customviewsql = "INSERT INTO customview(cvid, viewname,
+			$customviewsql = "INSERT INTO vtiger_customview(cvid, viewname,
 						setdefault, setmetrics,
 						entitytype)
 					VALUES (".$genCVid.",".$adb->quote($viewname).",
 						".$setdefault.",".$setmetrics.",
 						".$adb->quote($cvmodule).")";
 			$customviewresult = $adb->query($customviewsql);
-			$log->info("CustomView :: Save :: customview created successfully");
+			$log->info("CustomView :: Save :: vtiger_customview created successfully");
 			if($customviewresult)
 			{
 				if(isset($columnslist))
 				{
 					for($i=0;$i<count($columnslist);$i++)
 					{
-						$columnsql = "INSERT INTO cvcolumnlist (cvid, columnindex, columnname)
+						$columnsql = "INSERT INTO vtiger_cvcolumnlist (cvid, columnindex, columnname)
 							VALUES (".$genCVid.", ".$i.", ".$adb->quote($columnslist[$i]).")";
 						$columnresult = $adb->query($columnsql);
 					}
-					$log->info("CustomView :: Save :: cvcolumnlist created successfully");
+					$log->info("CustomView :: Save :: vtiger_cvcolumnlist created successfully");
 
-					$stdfiltersql = "INSERT INTO cvstdfilter
+					$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
 								(cvid,
 								columnname,
 								stdfilter,
@@ -134,10 +134,10 @@ if($cvmodule != "")
 								".$adb->formatDate($std_filter_list["startdate"]).",
 								".$adb->formatDate($std_filter_list["enddate"]).")";
 					$stdfilterresult = $adb->query($stdfiltersql);
-					$log->info("CustomView :: Save :: cvstdfilter created successfully");
+					$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
 					for($i=0;$i<count($adv_filter_col);$i++)
 					{
-						$advfiltersql = "INSERT INTO cvadvfilter
+						$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,
 								columnname,
@@ -151,7 +151,7 @@ if($cvmodule != "")
 								".$adb->quote($adv_filter_value[$i]).")";
 						$advfilterresult = $adb->query($advfiltersql);
 					}
-					$log->info("CustomView :: Save :: cvadvfilter created successfully");
+					$log->info("CustomView :: Save :: vtiger_cvadvfilter created successfully");
 				}
 			}
 			$cvid = $genCVid;
@@ -161,26 +161,26 @@ if($cvmodule != "")
 
 		if($setdefault == 1)
 		{
-			$updatedefaultsql = "UPDATE customview SET setdefault = 0 WHERE entitytype = ".$adb->quote($cvmodule);
+			$updatedefaultsql = "UPDATE vtiger_customview SET setdefault = 0 WHERE entitytype = ".$adb->quote($cvmodule);
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 		}
 		$log->info("CustomView :: Save :: setdefault upated successfully".$genCVid);
-		$updatecvsql = "UPDATE customview
+		$updatecvsql = "UPDATE vtiger_customview
 				SET viewname = ".$adb->quote($viewname).",
 					setdefault = ".$setdefault.",
 					setmetrics = ".$setmetrics."
 				WHERE cvid = ".$cvid;
 		$updatecvresult = $adb->query($updatecvsql);
-		$log->info("CustomView :: Save :: customview upated successfully".$genCVid);
-		$deletesql = "DELETE FROM cvcolumnlist WHERE cvid = ".$cvid;
+		$log->info("CustomView :: Save :: vtiger_customview upated successfully".$genCVid);
+		$deletesql = "DELETE FROM vtiger_cvcolumnlist WHERE cvid = ".$cvid;
 		$deleteresult = $adb->query($deletesql);
 
-		$deletesql = "DELETE FROM cvstdfilter WHERE cvid = ".$cvid;
+		$deletesql = "DELETE FROM vtiger_cvstdfilter WHERE cvid = ".$cvid;
 		$deleteresult = $adb->query($deletesql);
 
-		$deletesql = "DELETE FROM cvadvfilter WHERE cvid = ".$cvid;
+		$deletesql = "DELETE FROM vtiger_cvadvfilter WHERE cvid = ".$cvid;
 		$deleteresult = $adb->query($deletesql);
-		$log->info("CustomView :: Save :: cvcolumnlist,cvstdfilter,cvadvfilter deleted successfully before update".$genCVid);
+		$log->info("CustomView :: Save :: vtiger_cvcolumnlist,cvstdfilter,cvadvfilter deleted successfully before update".$genCVid);
 
 		$genCVid = $cvid;
 		if($updatecvresult)
@@ -189,12 +189,12 @@ if($cvmodule != "")
 			{
 				for($i=0;$i<count($columnslist);$i++)
 				{
-					$columnsql = "INSERT INTO cvcolumnlist (cvid, columnindex, columnname)
+					$columnsql = "INSERT INTO vtiger_cvcolumnlist (cvid, columnindex, columnname)
 						VALUES (".$genCVid.", ".$i.", ".$adb->quote($columnslist[$i]).")";
 					$columnresult = $adb->query($columnsql);
 				}
-				$log->info("CustomView :: Save :: cvcolumnlist update successfully".$genCVid);
-				$stdfiltersql = "INSERT INTO cvstdfilter
+				$log->info("CustomView :: Save :: vtiger_cvcolumnlist update successfully".$genCVid);
+				$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
 							(cvid,
 							columnname,
 							stdfilter,
@@ -207,10 +207,10 @@ if($cvmodule != "")
 							".$adb->formatDate($std_filter_list["startdate"]).",
 							".$adb->formatDate($std_filter_list["enddate"]).")";
 				$stdfilterresult = $adb->query($stdfiltersql);
-				$log->info("CustomView :: Save :: cvstdfilter update successfully".$genCVid);
+				$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
 				for($i=0;$i<count($adv_filter_col);$i++)
 				{
-					$advfiltersql = "INSERT INTO cvadvfilter
+					$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,
 								columnname,
@@ -224,7 +224,7 @@ if($cvmodule != "")
 								".$adb->quote($adv_filter_value[$i]).")";
 					$advfilterresult = $adb->query($advfiltersql);
 				}
-				$log->info("CustomView :: Save :: cvadvfilter update successfully".$genCVid);
+				$log->info("CustomView :: Save :: vtiger_cvadvfilter update successfully".$genCVid);
 			}
 		}
 	}

@@ -83,10 +83,10 @@ $mod_strings = Array(
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
 'LBL_DUPLICATE'=>'Potential Duplicate Accounts',
-'MSG_DUPLICATE' => 'Creating this account may potentialy create a duplicate account. You may either select an account from the list below or you may click on Create New Account to continue creating a new account with the previously entered data.',
+'MSG_DUPLICATE' => 'Creating this vtiger_account may vtiger_potentialy create a duplicate vtiger_account. You may either select an vtiger_account from the list below or you may click on Create New Account to continue creating a new vtiger_account with the previously entered data.',
 
 'LBL_INVITEE'=>'Contacts',
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
 
 'LBL_SELECT_ACCOUNT'=>'Select Account',
 'LBL_GENERAL_INFORMATION'=>'General Information',
@@ -106,7 +106,7 @@ $mod_strings = Array(
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_CONTACT_TITLE'=>'Contacts',
 
-//Added fields after RC1 - Release
+//Added vtiger_fields after RC1 - Release
 'LBL_ALL'=>'All',
 'LBL_PROSPECT'=>'Prospect',
 'LBL_INVESTOR'=>'Investor',
@@ -120,7 +120,7 @@ $mod_strings = Array(
 'Quote Name'=>'Quote Name',
 'Vendor Name'=>'Vendor Name',
 'Invoice Terms'=>'Invoice Terms',
-'Contact Name'=>'Contact Name',//to include contact name field in Invoice
+'Contact Name'=>'Contact Name',//to include contact name vtiger_field in Invoice
 'Invoice Date'=>'Invoice Date',
 'Sub Total'=>'Sub Total',
 'Due Date'=>'Due Date',

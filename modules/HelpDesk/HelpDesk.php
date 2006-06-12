@@ -25,12 +25,12 @@ class HelpDesk extends CRMEntity {
 	var $db;
 
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','troubletickets','seticketsrel','ticketcf','ticketcomments','attachments');
-	var $tab_name_index = Array('crmentity'=>'crmid','troubletickets'=>'ticketid','seticketsrel'=>'ticketid','ticketcf'=>'ticketid','ticketcomments'=>'ticketid','attachments'=>'attachmentsid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_seticketsrel','vtiger_ticketcf','vtiger_ticketcomments','vtiger_attachments');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid','vtiger_attachments'=>'attachmentsid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
@@ -104,7 +104,7 @@ class HelpDesk extends CRMEntity {
 
 		$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT activity.*, crmentity.crmid, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, recurringevents.recurringtype, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or vtiger_activitytype='Call' or vtiger_activitytype='Meeting')";
 		$log->debug("Exiting get_activities method ...");
 		
 		return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
@@ -123,7 +123,7 @@ class HelpDesk extends CRMEntity {
 		global $log, $adb;
 		$log->debug("Entering into get_ticket_history($ticketid) method ...");
 
-		$query="select title,update_log from troubletickets where ticketid=".$ticketid;
+		$query="select title,update_log from vtiger_troubletickets where ticketid=".$ticketid;
 		$result=$adb->query($query);
 		$update_log = $adb->query_result($result,0,"update_log");
 
@@ -138,7 +138,7 @@ class HelpDesk extends CRMEntity {
 		return $return_value;
 	}
 
-	/**	Function to form the query to get the list of attachments and notes
+	/**	Function to form the query to get the list of vtiger_attachments and vtiger_notes
 	 *	@param  int $id - ticket id
 	 *	@return void
 	 *	 but this function will call the function renderRelatedAttachments with parameters query and ticket id
@@ -147,31 +147,31 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
-			attachments.type  FileType,crm2.modifiedtime lastmodified,
-			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
-			crm2.createdtime, notes.notecontent description, users.user_name
-		from notes
-			inner join senotesrel on senotesrel.notesid= notes.notesid
-			inner join crmentity on crmentity.crmid= senotesrel.crmid
-			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
-			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
-			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
-			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;
+		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
+		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
+		vtiger_seattachmentsrel.attachmentsid vtiger_attachmentsid, vtiger_notes.notesid crmid,
+			crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
+		from vtiger_notes
+			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		where vtiger_crmentity.crmid=".$id;
 
 		$query .= ' union all ';
 
-		$query .= "select attachments.description title ,'Attachments'  ActivityType,
-			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
-			attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid,
-			crm2.createdtime, attachments.description, users.user_name
-		from attachments
-			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
-			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
-			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
-			left join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;	
+		$query .= "select vtiger_attachments.description title ,'Attachments'  ActivityType,
+		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
+		vtiger_attachments.attachmentsid vtiger_attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		from vtiger_attachments
+			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
+			left join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		where vtiger_crmentity.crmid=".$id;	
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('HelpDesk',$query,$id);
 	}
@@ -189,7 +189,7 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_ticket_comments_list(".$ticketid.") method ...");
-		 $sql = "select * from ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
+		 $sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
 		 $result = $this->db->query($sql);
 		 $noofrows = $this->db->num_rows($result);
 		 for($i=0;$i<$noofrows;$i++)
@@ -200,7 +200,7 @@ class HelpDesk extends CRMEntity {
 				 $name = getUserName($ownerid);
 			 elseif($ownertype == 'customer')
 			 {
-				 $sql1 = 'select * from portalinfo where id='.$ownerid;
+				 $sql1 = 'select * from vtiger_portalinfo where id='.$ownerid;
 				 $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
 			 }
 
@@ -224,7 +224,7 @@ class HelpDesk extends CRMEntity {
 
 		$this->db->println("where ==> ".$where);
 
-		$query = "select crmentity.crmid, troubletickets.*, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, products.productid, products.productname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join products on products.productid = troubletickets.product_id left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.parent_id = '".$id."'";
+		$query = "select vtiger_crmentity.crmid, vtiger_troubletickets.*, vtiger_crmentity.smownerid, vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_products.productid, vtiger_products.productname, vtiger_ticketcf.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_products on vtiger_products.productid = vtiger_troubletickets.product_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id  where vtiger_crmentity.deleted=0 and vtiger_contactdetails.email='".$user_name."' and vtiger_troubletickets.parent_id = '".$id."'";
 
 		if(trim($where) != '')
 		{
@@ -260,10 +260,10 @@ class HelpDesk extends CRMEntity {
 				$where_conditions = " and ( ".$where_conditions." ) ";
 
 			$query .= $where_conditions;
-			$this->db->println("where condition for customer portal tickets search : ".$where_conditions);
+			$this->db->println("where condition for customer vtiger_portal tickets search : ".$where_conditions);
 		}
 
-		$query .= " order by crmentity.crmid desc";
+		$query .= " order by vtiger_crmentity.crmid desc";
 		$log->debug("Exiting get_user_tickets_list method ...");
 		return $this->process_list_query($query);
 	}
@@ -317,14 +317,14 @@ class HelpDesk extends CRMEntity {
 	        return $response;
 	}
 
-	/**	Function to get the HelpDesk field labels in caps letters without space
+	/**	Function to get the HelpDesk vtiger_field labels in caps letters without space
 	 *	return array $mergeflds - array(	key => val	)    where   key=0,1,2..n & val = ASSIGNEDTO,RELATEDTO, .,etc
 	**/
 	function getColumnNames_Hd()
 	{
 		global $log;
 		$log->debug("Entering getColumnNames_Hd() method ...");
-		$sql1 = "select fieldlabel from field where tabid=13 and block <> 6 ";
+		$sql1 = "select vtiger_fieldlabel from vtiger_field where vtiger_tabid=13 and block <> 6 ";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)
@@ -348,7 +348,7 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Entering getCommentInformation(".$ticketid.") method ...");
 		global $adb;
 		global $mod_strings;
-		$sql = "select * from ticketcomments where ticketid=".$ticketid;
+		$sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid;
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 
@@ -389,7 +389,7 @@ class HelpDesk extends CRMEntity {
 		return $list;
 	}
 
-	/**     Function to get the Customer Name who has made comment to the ticket from the portal
+	/**     Function to get the Customer Name who has made comment to the ticket from the vtiger_portal
 	 *      @param  int    $id   - Ticket id
 	 *      @return string $customername - The contact name
 	**/
@@ -398,7 +398,7 @@ class HelpDesk extends CRMEntity {
 		global $log;
 		$log->debug("Entering getCustomerName(".$id.") method ...");
         	global $adb;
-	        $sql = "select * from portalinfo inner join troubletickets on troubletickets.parent_id = portalinfo.id where troubletickets.ticketid=".$id;
+	        $sql = "select * from vtiger_portalinfo inner join vtiger_troubletickets on vtiger_troubletickets.parent_id = vtiger_portalinfo.id where vtiger_troubletickets.ticketid=".$id;
         	$result = $adb->query($sql);
 	        $customername = $adb->query_result($result,0,'user_name');
 		$log->debug("Exiting getCustomerName method ...");

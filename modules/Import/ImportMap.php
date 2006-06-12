@@ -29,7 +29,7 @@ class ImportMap extends SugarBean
 	var $log;
 	var $db;
 
-	// Stored fields
+	// Stored vtiger_fields
 	var $id;
 	var $name;
 	var $module;

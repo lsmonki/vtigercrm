@@ -108,7 +108,7 @@ $mod_strings = Array(
 
 'LBL_APP_IGNORE_TIME2' => '(i.e. the appointment takes place<br />at no particular time on these day(s) )',
 
-'LBL_APP_ERR001' =>'Invalid Date in field %s!',
+'LBL_APP_ERR001' =>'Invalid Date in vtiger_field %s!',
 'LBL_APP_ERR002' =>'start after end !',
 'LBL_APP_ERR003' =>'Missing Contact !',
 'LBL_APP_ERR004' =>'Missing Subject !',
@@ -208,10 +208,10 @@ $mod_strings = Array(
 'LBL_EVERYMON'=>'Every Month',
 'LBL_REPEATEVENT'=>'Repeat Event',
 
-'LBL_INVITE_INST1'=>'To invite, select the users from the "Available Users" list and click the "Add" button.',
-'LBL_INVITE_INST2'=>'To remove, select the users in the "Selected Users" list and the click "Remove" button.',
-'LBL_SELUSR_INFO'=>' Selected users will receive an email about the Event.',
-'LBL_CALSHAREMESSAGE'=>'Share my calendar with the following selected users',
+'LBL_INVITE_INST1'=>'To invite, select the vtiger_users from the "Available Users" list and click the "Add" button.',
+'LBL_INVITE_INST2'=>'To remove, select the vtiger_users in the "Selected Users" list and the click "Remove" button.',
+'LBL_SELUSR_INFO'=>' Selected vtiger_users will receive an email about the Event.',
+'LBL_CALSHAREMESSAGE'=>'Share my calendar with the following selected vtiger_users',
 'LBL_CALSHARE'=>'Calendar Sharing',
 'LBL_SEL_USERS'=>'Selected Users',
 'LBL_AVL_USERS'=>'Available Users',

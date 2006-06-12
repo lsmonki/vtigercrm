@@ -76,13 +76,13 @@ $mod_strings = Array(
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
-'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct report?',
+'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct vtiger_report?',
 'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
 'ERR_DELETE_RECORD'=>"en_us A record number must be specified to delete the contact.",
 'NTC_COPY_PRIMARY_ADDRESS'=>'Copy primary address to alternate address',
 'NTC_COPY_ALTERNATE_ADDRESS'=>'Copy alternate address to primary address',
 
-// Added fields in fetchfile.php, import.php -- crm4-Beta
+// Added vtiger_fields in fetchfile.php, import.php -- crm4-Beta
 'LBL_COLON'=>' : ', 
 'LBL_IMPORT_LEADS'=>'Import Leads',
 'LBL_LEADS_FILE_LIST'=>'Leads File List',
@@ -114,7 +114,7 @@ $mod_strings = Array(
 'LBL_ATTACHMENT_TITLE'=>'Attachments',
 
 
-//Added fields after RC1 - Release 
+//Added vtiger_fields after RC1 - Release 
 'LBL_ALL'=>'All',
 'LBL_CONTACTED'=>'Contacted',
 'LBL_LOST'=>'Lost',

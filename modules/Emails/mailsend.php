@@ -35,7 +35,7 @@ if($focus->column_fields["assigned_user_id"]==0 && $_REQUEST['assigned_group_nam
 	$grp_obj = new GetGroupUsers();
 	$grp_obj->getAllUsersInGroup(getGrpId($_REQUEST['assigned_group_name']));
 	$users_list = constructList($grp_obj->group_users,'INTEGER');
-	$sql = "select first_name, last_name, email1, email2, yahoo_id from users where id in ".$users_list;
+	$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users where id in ".$users_list;
 	$res = $adb->query($sql);
 	$user_email = '';
 	while ($user_info = $adb->fetch_array($res))
@@ -73,7 +73,7 @@ else
 {
 	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all',$focus->id);
 	
-	$query = 'update emaildetails set email_flag ="SENT" where emailid='.$focus->id;
+	$query = 'update vtiger_emaildetails set email_flag ="SENT" where emailid='.$focus->id;
 	$adb->query($query);
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
@@ -105,8 +105,8 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	$mycrmid=$realid[0];
 	if($realid[1] == -1)
 	{
-		//handle the mail send to users
-		$emailadd = $adb->query_result($adb->query("select email1 from users where id=$mycrmid"),0,'email1');
+		//handle the mail send to vtiger_users
+		$emailadd = $adb->query_result($adb->query("select email1 from vtiger_users where id=$mycrmid"),0,'email1');
 		$pmodule = 'Users';
 		$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
 		$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
@@ -115,12 +115,12 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	}
 	else
 	{
-		//Send mail to account or lead or contact based on their ids
+		//Send mail to vtiger_account or lead or contact based on their ids
 		$pmodule=getSalesEntityType($mycrmid);
 		for ($j=1;$j<$nemail;$j++)
 		{
 			$temp=$realid[$j];
-			$myquery='Select columnname from field where fieldid='.$adb->quote($temp);
+			$myquery='Select columnname from vtiger_field where vtiger_fieldid='.$adb->quote($temp);
 			$fresult=$adb->query($myquery);			
 			if ($pmodule=='Contacts')
 			{
@@ -180,7 +180,7 @@ else
 {
 	global $adb;
 	$date_var = date('Ymd');
-	$query = 'update activity set date_start ='.$date_var.' where activityid = '.$returnid;
+	$query = 'update vtiger_activity set date_start ='.$date_var.' where vtiger_activityid = '.$returnid;
 	$adb->query($query);
 }
 //The following function call is used to parse and form a encoded error message and then pass to result page

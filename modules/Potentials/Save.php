@@ -56,7 +56,7 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-//Added to send mail to the potential-owner about the Potential
+//Added to send mail to the vtiger_potential-owner about the Potential
 $status = sendNotificationToOwner('Potentials',&$focus);
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");

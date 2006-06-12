@@ -23,7 +23,7 @@ if(isset($_REQUEST['orgajax']) && ($_REQUEST['orgajax'] !=''))
 elseif(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 {
 	$announcement='';
-	$sql="select * from announcement order by time";
+	$sql="select * from vtiger_announcement order by time";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
@@ -38,12 +38,12 @@ elseif(isset($_REQUEST['announce_rss']) && ($_REQUEST['announce_rss'] != ''))
 	$date_var = date('YmdHis');
 	$announcement = $_REQUEST['announcement'];
 	$title = $_REQUEST['title_announcement'];
-	$sql="select * from announcement where creatorid=".$current_user->id;
+	$sql="select * from vtiger_announcement where creatorid=".$current_user->id;
 	$is_announce=$adb->query($sql);
 	if($adb->num_rows($is_announce) > 0)
-		$query="update announcement set announcement=".$adb->formatString("announcement","announcement",$announcement).",time=".$adb->formatString("announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
+		$query="update vtiger_announcement set vtiger_announcement=".$adb->formatString("announcement","announcement",$announcement).",time=".$adb->formatString("announcement","time",$date_var).",title='announcement' where creatorid=".$current_user->id;
 	else
-		$query="insert into announcement values (".$current_user->id.",".$adb->formatString("announcement","announcement",$announcement).",'announcement','".$date_var."')";
+		$query="insert into vtiger_announcement values (".$current_user->id.",".$adb->formatString("announcement","announcement",$announcement).",'announcement','".$date_var."')";
 	$result=$adb->query($query);
 	echo $announcement;
 }

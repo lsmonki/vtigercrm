@@ -234,7 +234,7 @@ function verify_data(form) {
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
-		alert("Missing required fields: " + errorMessage);
+		alert("Missing required vtiger_fields: " + errorMessage);
 		return false;
 	}
 
@@ -244,7 +244,7 @@ function verify_data(form) {
 </script>
 
 
-<!-- Master table -->
+<!-- Master vtiger_table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
 	<td align=center>
@@ -291,7 +291,7 @@ function verify_data(form) {
 
 					  If you do not have root access to your database (for example you are installing in a virtual
 					  hosting environment), you will need to have your database created for you before you proceed.
-					  However, this installer will still be able to create the necessary database tables. <br><br>
+					  However, this installer will still be able to create the necessary database vtiger_tables. <br><br>
 			
 					  If you unsure of your database host, username or password, we suggest that you use the default
 					  values below. <br><br>
@@ -433,7 +433,7 @@ function verify_data(form) {
 </td>
 </tr>
 </table>
-<!-- Master table closes -->
+<!-- Master vtiger_table closes -->
 
 <br><br><br>
 

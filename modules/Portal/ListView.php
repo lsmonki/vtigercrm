@@ -21,7 +21,7 @@ global $current_language;
 $current_module_strings = return_module_language($current_language, 'Portal');
 global $adb;
 	
-$query="select * from portal";
+$query="select * from vtiger_portal";
 $result=$adb->query($query);
 $no_of_portals=$adb->num_rows($result);
 $portal_info=array();

@@ -23,7 +23,7 @@
 
 global $adb;
 $flag=0;
-//pass the table id as a parameter and then update directly instead of using the name field 
+//pass the vtiger_table id as a parameter and then update directly instead of using the name vtiger_field 
 for ($i=1;$i<10;$i++)
 {
   if($_POST[$i] == 'on')
@@ -34,7 +34,7 @@ for ($i=1;$i<10;$i++)
   {
     $flag=0;
   }
- $sql = "update notificationscheduler set active=".$flag."  where schedulednotificationid=".$i;
+ $sql = "update vtiger_notificationscheduler set active=".$flag."  where schedulednotificationid=".$i;
  
  $adb->query($sql);
 }

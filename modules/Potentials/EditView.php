@@ -61,7 +61,7 @@ $smarty->assign("OP_MODE",$disp_view);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-//needed when creating a new opportunity with a default account value passed in
+//needed when creating a new opportunity with a default vtiger_account value passed in
 if (isset($_REQUEST['accountname']) && is_null($focus->accountname)) {
 	$focus->accountname = $_REQUEST['accountname'];
 	
@@ -104,7 +104,7 @@ if($focus->mode == 'edit')
 
 
 
-// Unimplemented until jscalendar language files are fixed
+// Unimplemented until jscalendar language vtiger_files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 

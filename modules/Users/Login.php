@@ -111,11 +111,11 @@ function set_focus() {
 													<li>Sexier Dashboards,Reports,Calendar</li>	 		
 													<li>Migration Support</li><br>	
 															How is 'vtiger-experience' ? <br>	
-													<li><a href='http://blogs.vtiger.com' tabindex="6">vtiger blogs </a></li>
-													<li><a href='http://www.bloglines.com' tabindex="7">bloglines </a></li>
-													<li><a href='http://technorati.com/' tabindex="8">technorati</a></li>
-													<li><a href='http://digg.com/' tabindex="9">digg</a></li>
-													<li><a href='http://www.blogger.com' tabindex="10">blogger</a></li>
+													<li><a href='http://blogs.vtiger.com' vtiger_tabindex="6">vtiger blogs </a></li>
+													<li><a href='http://www.bloglines.com' vtiger_tabindex="7">bloglines </a></li>
+													<li><a href='http://technorati.com/' vtiger_tabindex="8">technorati</a></li>
+													<li><a href='http://digg.com/' vtiger_tabindex="9">digg</a></li>
+													<li><a href='http://www.blogger.com' vtiger_tabindex="10">blogger</a></li>
 										</div>
 							</td>
 							<td valign="top"><br>
@@ -181,7 +181,7 @@ function set_focus() {
 																						<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 																				</td>
 																				<td class="small">
-																						<input class="textbox" type="text"  name="user_name"   value="<?php echo $login_user_name ?>" tabindex="1">
+																						<input class="textbox" type="text"  name="user_name"   value="<?php echo $login_user_name ?>" vtiger_tabindex="1">
 																				</td>
 																	</tr>
 																	<tr>
@@ -189,7 +189,7 @@ function set_focus() {
 																							<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 																				</td>
 																				<td class="small">
-																							<input class="textbox" type="password" size='20' name="user_password"  value="<?php echo $login_password ?>" tabindex="2">
+																							<input class="textbox" type="password" size='20' name="user_password"  value="<?php echo $login_password ?>" vtiger_tabindex="2">
 																				</td>
 																	</tr>
 																	<tr>
@@ -197,7 +197,7 @@ function set_focus() {
 																						<?php echo $current_module_strings['LBL_THEME'] ?>
 																				</td>
 																				<td class="small" style="background-color:#f5f5f5">
-																							<select class='small' name='login_theme' style="width:120px;" tabindex="3">
+																							<select class='small' name='login_theme' style="width:120px;" vtiger_tabindex="3">
 																									<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
 																							</select>
 																				</td>
@@ -207,7 +207,7 @@ function set_focus() {
 																							<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
 																				</td>
 																				<td class="small" style="background-color:#f5f5f5">
-																							<select class='small' name='login_language' style="width:120px;" tabindex="4">
+																							<select class='small' name='login_language' style="width:120px;" vtiger_tabindex="4">
 																										<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
 																								</select>
 																				  </td>
@@ -215,7 +215,7 @@ function set_focus() {
 																	<tr>
 																			<td></td>
 																			<td>
-																				<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>"  type="image" src="include/images/loginBtnSignin.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5">
+																				<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>"  type="image" src="include/images/loginBtnSignin.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  vtiger_tabindex="5">
 																				
 																			 </td>
 																	  </tr>

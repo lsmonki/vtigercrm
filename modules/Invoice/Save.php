@@ -34,11 +34,11 @@ setObjectValuesFromRequest(&$focus);
 
 $focus->save("Invoice");
 
-//Checking if salesorderid is present and updating the quote status
+//Checking if vtiger_salesorderid is present and updating the quote status
 if($focus->column_fields["salesorder_id"] != '')
 {
         $so_id = $focus->column_fields["salesorder_id"];
-        $query1 = "update salesorder set sostatus='Approved' where salesorderid=".$so_id;
+        $query1 = "update vtiger_salesorder set vtiger_sostatus='Approved' where vtiger_salesorderid=".$so_id;
         $adb->query($query1);
 }
 
@@ -46,7 +46,7 @@ if($focus->column_fields["salesorder_id"] != '')
 $ext_prod_arr = Array();
 if($focus->mode == 'edit')
 {
-	$query2  = "select * from invoiceproductrel where invoiceid=".$focus->id;
+	$query2  = "select * from vtiger_invoiceproductrel where vtiger_invoiceid=".$focus->id;
 	$result2 = $adb->query($query2);
 	$num_rows = $adb->num_rows($result2);
 	for($i=0; $i<$num_rows;$i++)
@@ -56,7 +56,7 @@ if($focus->mode == 'edit')
 		$ext_prod_arr[$pro_id] = $pro_qty;	
 	}	
 
-        $query1 = "delete from invoiceproductrel where invoiceid=".$focus->id;
+        $query1 = "delete from vtiger_invoiceproductrel where vtiger_invoiceid=".$focus->id;
         $adb->query($query1);
 
 }
@@ -84,7 +84,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
         if($prod_status != 'D')
         {
 
-                $query ="insert into invoiceproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
+                $query ="insert into vtiger_invoiceproductrel values($focus->id, $prod_id, $qty, $listprice, $vat, $sales, $service)";
                 $adb->query($query);
 		//Updating the Quantity in Stock in the Product Table
 		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,'Invoice');

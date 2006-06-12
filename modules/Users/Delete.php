@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 
-$sql= 'delete from salesmanactivityrel where smid='.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
+$sql= 'delete from vtiger_salesmanactivityrel where smid='.$_REQUEST['record'].' and vtiger_activityid = '.$_REQUEST['return_id'];
 $adb->query($sql);
 
 if($_REQUEST['return_module'] == 'Activities')

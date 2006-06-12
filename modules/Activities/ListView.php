@@ -125,7 +125,7 @@ if(isset($where) && $where != '')
 	$list_query .= " AND " .$where;
 }
 
-$list_query .= ' group by activity.activityid';
+$list_query .= ' group by vtiger_activity.activityid';
 
 if(isset($order_by) && $order_by != '')
 {
@@ -177,7 +177,7 @@ $record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-//Cambiado code to add close button in custom field
+//Cambiado code to add close button in custom vtiger_field
 if (($viewid!=0)&&($viewid!="")){
   if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
   if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';

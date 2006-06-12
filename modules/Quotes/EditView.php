@@ -67,7 +67,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
 
-// Get Account address if account is given
+// Get Account address if vtiger_account is given
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();

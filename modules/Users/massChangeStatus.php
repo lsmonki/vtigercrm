@@ -39,7 +39,7 @@ function updateOwner()
 }
 function updateStatus()
 {
-	var leadstatusvalue=document.setLeadStatus.lead_status.value
+	var vtiger_leadstatusvalue=document.setLeadStatus.lead_status.value
 	//alert(leadstatusvalue);
 	document.setLeadStatus.leadval.value=leadstatusvalue;
 	document.setLeadStatus.action="index.php?module=Users&action=updateLeadDBStatus"
@@ -96,7 +96,7 @@ if(isset($_REQUEST['change_status']) && $_REQUEST['change_status']=='true')
 }
 elseif(isset($_REQUEST['change_owner']) && $_REQUEST['change_owner']=='true')
 {
-	$result=$adb->query("select * from users");
+	$result=$adb->query("select * from vtiger_users");
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
 		$useridlist[$i]=$adb->query_result($result,$i,'id');

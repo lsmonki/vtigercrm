@@ -44,7 +44,7 @@ if($num == "" || !isset($num) && count($attachments) >0 ) {
 	echo "</table><br><br>";
 
 } elseif (count(attachments) == 0 && count($inline) == 0) {
-	echo "<center><strong>No attachments for this email</strong></center><br><br>";
+	echo "<center><strong>No vtiger_attachments for this email</strong></center><br><br>";
 } else {
 
 global $root_directory;
