@@ -42,11 +42,11 @@ class PearDatabase{
 		$log1 =& LoggerManager::getLogger('VT');
 		if(is_array($msg))
 		{
-			$log1->fatal("PearDatabse ->".print_r($msg,true));
+			$log1->info("PearDatabse ->".print_r($msg,true));
 		}
 		else
 		{
-			$log1->fatal("PearDatabase ->".$msg);
+			$log1->info("PearDatabase ->".$msg);
 		}
 		return $msg;
 	}
