@@ -63,7 +63,7 @@ class DatabaseConnection {
 	$log1 =& LoggerManager::getLogger('GS');
 	if(is_array($msg))
 	{
-		$log1->fatal("PearDatabse ->".print_r($msg,true));
+		$log1->info("PearDatabse ->".print_r($msg,true));
 /*		$log1->fatal("PearDatabse ->".$this->getString($msg));
 		foreach ($msg as $str)
 		{
@@ -75,7 +75,7 @@ class DatabaseConnection {
 	}
 	else
 	{
-		$log1->fatal("PearDatabase ->".$msg);
+		$log1->info("PearDatabase ->".$msg);
 	}
 	return $msg;
 	}
