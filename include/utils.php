@@ -3050,7 +3050,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                 }
         }
 
-	$relmodule = $_REQUEST['module'] == $module || $_REQUEST['module'] == 'Home' ? '' : $module;
+	$relmodule = ($_REQUEST['module'] == $module || !$relatedlist) || $_REQUEST['module'] == 'Home' ? '' : $module;
 	$start = $relmodule.'start';
 	$end_val = $relmodule.'end_val'; 
 	for ($i=$navigation_array[$start]; $i<=$navigation_array[$end_val]; $i++)
