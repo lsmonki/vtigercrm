@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <schema version="0.2">
 
-	<table name="users">
+	<table name="vtiger_users">
 		<field name="id" type="I" >
 			<key />
 			<autoincrement />
@@ -91,7 +91,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="crmentity">
+	<table name="vtiger_crmentity">
 		<field name="crmid" type="I" size="19">
 			<key />
 		</field>
@@ -152,7 +152,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="sharedcalendar">
+	<table name="vtiger_sharedcalendar">
 		<field name="userid" type="I" size="19">
 			<key />
 		</field>
@@ -161,7 +161,7 @@
 		</field>
 	</table>
 
-	<table name="tab">
+	<table name="vtiger_tab">
 		<field name="tabid" type="I" size="19">
 			<key />
 			<default value="0" />
@@ -194,7 +194,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="blocks">
+	<table name="vtiger_blocks">
 		<field name="blockid" type="I" size="19">
 			<key />
 			<notnull />
@@ -229,14 +229,14 @@
 		</index>
 	</table>
 
-	<table name="field">
+	<table name="vtiger_field">
 		<field name="tabid" type="I" size="19">
 			<notnull />
 		</field>
 		<field name="fieldid" type="I" size="19">
 			<key />
 			<autoincrement />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="30">
 			<notnull />
@@ -295,12 +295,12 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="account">
+	<table name="vtiger_account">
 		<field name="accountid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountname" type="C" size="100">
 			<unique />
@@ -342,11 +342,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountbillads">
+	<table name="vtiger_accountbillads">
 		<field name="accountaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -358,11 +358,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountshipads">
+	<table name="vtiger_accountshipads">
 		<field name="accountaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -374,21 +374,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountscf">
+	<table name="vtiger_accountscf">
 		<field name="accountid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contactdetails">
+	<table name="vtiger_contactdetails">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="campaignid" type="I" size="19" />
@@ -430,11 +430,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contactsubdetails">
+	<table name="vtiger_contactsubdetails">
 		<field name="contactsubscriptionid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="homephone" type="C" size="50" />
 		<field name="otherphone" type="C" size="50" />
@@ -452,11 +452,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contactaddress">
+	<table name="vtiger_contactaddress">
 		<field name="contactaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="mailingcity" type="C" size="40" />
 		<field name="mailingstreet" type="C" size="250" />
@@ -474,20 +474,20 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contactscf">
+	<table name="vtiger_contactscf">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="portalinfo">
+	<table name="vtiger_portalinfo">
 		<field name="id" type="I" size="11">
 			<key />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="user_name" type="C" size="50" />
 		<field name="user_password" type="C" size="30" />
@@ -504,20 +504,20 @@
 		<field name="isactive" type="I" size="1" />
 	</table>
 
-	<table name="customerdetails">
+	<table name="vtiger_customerdetails">
 		<field name="customerid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="portal" type="C" size="3" />
 		<field name="support_start_date" type="D" />
 		<field name="support_end_date" type="D" />
 	</table>
 
-	<table name="leaddetails">
+	<table name="vtiger_leaddetails">
 		<field name="leadid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="campaignid" type="I" size="19" />
 		<field name="email" type="C" size="100" />
@@ -572,11 +572,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadsubdetails">
+	<table name="vtiger_leadsubdetails">
 		<field name="leadsubscriptionid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="currency" type="C" size="20">
 			<default value="Dollars" />
@@ -595,11 +595,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadaddress">
+	<table name="vtiger_leadaddress">
 		<field name="leadaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="city" type="C" size="30" />
 		<field name="code" type="C" size="30" />
@@ -617,21 +617,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadscf">
+	<table name="vtiger_leadscf">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="notes">
+	<table name="vtiger_notes">
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contact_id" type="I" size="19">
 			<default value="0" />
@@ -654,11 +654,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="potential">
+	<table name="vtiger_potential">
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="potentialname" type="C" size="120">
@@ -711,14 +711,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="potstagehistory">
+	<table name="vtiger_potstagehistory">
 		<field name="historyid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="amount" type="N" />
 		<field name="stage" type="C" size="100" />
@@ -733,21 +733,21 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="potentialscf">
+	<table name="vtiger_potentialscf">
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="activity">
+	<table name="vtiger_activity">
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100">
 			<notnull />
@@ -807,10 +807,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="attachments">
+	<table name="vtiger_attachments">
 		<field name="attachmentsid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="name" type="C" size="100">
 			<notnull />
@@ -830,7 +830,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="seattachmentsrel">
+	<table name="vtiger_seattachmentsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
@@ -838,7 +838,7 @@
 		<field name="attachmentsid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES attachments(attachmentsid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_attachments(attachmentsid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seattachmentsrel_attachmentsid_idx">
@@ -846,7 +846,7 @@
 		</index>
 		<index name="seattachmentsrel_crmid_idx">
 			<col>crmid</col>
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</index>
 		<index name="seattachmentsrel_attachmentsid_crmid_idx">
 			<col>attachmentsid</col>
@@ -855,7 +855,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tracker">
+	<table name="vtiger_tracker">
 		<field name="id" type="I" size="11">
 			<key />
 			<autoincrement />
@@ -866,10 +866,10 @@
 		<field name="item_summary" type="C" size="255" />
 	</table>
 
-	<table name="competitor">
+	<table name="vtiger_competitor">
 		<field name="competitorid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="competitorname" type="C" size="100">
 			<notnull />
@@ -881,14 +881,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="potcompetitorrel">
+	<table name="vtiger_potcompetitorrel">
 		<field name="potentialid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="competitorid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES competitor(competitorid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_competitor(competitorid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="potcompetitorrel_potentialid_idx">
@@ -900,12 +900,12 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="vendor">
+	<table name="vtiger_vendor">
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorname" type="C" size="100" />
 		<field name="phone" type="C" size="100" />
@@ -924,10 +924,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="products">
+	<table name="vtiger_products">
 		<field name="productid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productname" type="C" size="50">
 			<notnull />
@@ -970,7 +970,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="currency">
+	<table name="vtiger_currency">
 		<field name="currencyid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -994,7 +994,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="visibility">
+	<table name="vtiger_visibility">
 		<field name="visibilityid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -1018,7 +1018,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="manufacturer">
+	<table name="vtiger_manufacturer">
 		<field name="manufacturerid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -1042,10 +1042,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="productcollaterals">
+	<table name="vtiger_productcollaterals">
 		<field name="productid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="date_entered" type="T">
 			<notnull />
@@ -1070,7 +1070,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="role">
+	<table name="vtiger_role">
 		<field name="roleid" type="C" size="255">
 			<key />
 		</field>
@@ -1081,14 +1081,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="user2role">
+	<table name="vtiger_user2role">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleid" type="C" size="255">
 			<notnull />
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="user2role_roleid_idx">
@@ -1097,7 +1097,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="groups">
+	<table name="vtiger_groups">
 		<field name="groupid" type="I" size="19">
 			<key />
 		</field>
@@ -1111,14 +1111,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="users2group">
+	<table name="vtiger_users2group">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="userid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="users2group_groupname_uerid_idx">
@@ -1127,51 +1127,51 @@
 		</index>
 	</table>
 
-	<table name="group2grouprel">
+	<table name="vtiger_group2grouprel">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="containsgroupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="group2role">
+	<table name="vtiger_group2role">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleid" type="C" size="255">
 			<key />
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 	</table>
 
-	<table name="group2rs">
+	<table name="vtiger_group2rs">
 		<field name="groupid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="roleandsubid" type="C" size="255">
 			<key />
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 	</table>
 
-	<table name="leadpotrel">
+	<table name="vtiger_leadpotrel">
 		<field name="leadid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadpotrel_leadid_idx">
@@ -1181,7 +1181,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaign">
+	<table name="vtiger_campaign">
 		<field name="campaignname" type="C" size="255" />
 		<field name="campaigntype" type="C" size="255" />
 		<field name="campaignstatus" type="C" size="255" />
@@ -1217,26 +1217,26 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaignscf">
+	<table name="vtiger_campaignscf">
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES campaign(campaignid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaigncontrel">
+	<table name="vtiger_campaigncontrel">
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0"/>
-			<constraint>REFERENCES campaign(campaignid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<notnull />
 			<default value="0"/>
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaigncontrel_contractid_idx">
@@ -1245,16 +1245,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaignleadrel">
+	<table name="vtiger_campaignleadrel">
 		<field name="campaignid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES campaign(campaignid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="leadid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaignleadrel_leadid_campaignid_idx">
@@ -1264,11 +1264,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadcontrel">
+	<table name="vtiger_leadcontrel">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<notnull />
@@ -1277,21 +1277,21 @@
 
 		<index name="leadcontrel_contactid_idx">
 			<col>contactid</col>
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadacctrel">
+	<table name="vtiger_leadacctrel">
 		<field name="leadid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="accountid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadacctrel_accountid_idx">
@@ -1300,17 +1300,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contpotentialrel">
+	<table name="vtiger_contpotentialrel">
 		<field name="contactid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="contpotentialrel_potentialid_idx">
@@ -1322,7 +1322,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="dealintimation">
+	<table name="vtiger_dealintimation">
 		<field name="dealintimationid" type="I" size="19">
 			<key />
 			<default value="0" />
@@ -1364,16 +1364,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="cntactivityrel">
+	<table name="vtiger_cntactivityrel">
 		<field name="contactid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="cntactivityrel_contactid_idx">
@@ -1383,7 +1383,7 @@
 	</table>
 
 	<!-- Lead Assignment Rule -->
-	<table name="lar">
+	<table name="vtiger_lar">
 		<field name="larid" type="I" size="19">
 			<key />
 			<default value="0" />
@@ -1394,7 +1394,7 @@
 		<field name="createdby" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="createdon" type="D">
 			<notnull />
@@ -1410,16 +1410,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="crmentitynotesrel">
+	<table name="vtiger_crmentitynotesrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES notes(notesid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="crmentitynotesrel_notesid_idx">
@@ -1431,10 +1431,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="troubletickets">
+	<table name="vtiger_troubletickets">
 		<field name="ticketid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100" />
 		<field name="parent_id" type="C" size="100" />
@@ -1461,13 +1461,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="ticketcomments">
+	<table name="vtiger_ticketcomments">
 		<field name="commentid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
 		<field name="ticketid" type="I" size="19">
-			<constraint>REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="comments" type="X" />
 		<field name="ownerid" type="I" size="19">
@@ -1485,16 +1485,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="salesmanactivityrel">
+	<table name="vtiger_salesmanactivityrel">
 		<field name="smid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="salesmanactivityrel_activityid_idx">
@@ -1506,16 +1506,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="vendorcontactrel">
+	<table name="vtiger_vendorcontactrel">
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="vendorcontactrel_vendorid_idx">
@@ -1527,16 +1527,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="salesmanticketrel">
+	<table name="vtiger_salesmanticketrel">
 		<field name="smid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="id" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="salesmanticketrel_smid_idx">
@@ -1548,14 +1548,14 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="seactivityrel">
+	<table name="vtiger_seactivityrel">
 		<field name="crmid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="activityid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seactivityrel_activityid_idx">
@@ -1567,16 +1567,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="seproductsrel">
+	<table name="vtiger_seproductsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seproductsrel_productid_idx">
@@ -1588,16 +1588,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="seticketsrel">
+	<table name="vtiger_seticketsrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ticketid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="seticketsrel_crmid_idx">
@@ -1609,7 +1609,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="headers">
+	<table name="vtiger_headers">
 		<field name="fileid" type="I" size="3">
 			<key />
 			<autoincrement />
@@ -1619,7 +1619,7 @@
 		</field>
 	</table>
 
-	<table name="import_maps">
+	<table name="vtiger_import_maps">
 		<field name="id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -1661,13 +1661,13 @@
 		</index>
 	</table>
 
-	<table name="leadgrouprelation">
+	<table name="vtiger_leadgrouprelation">
 		<field name="leadid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="leadgrouprelation_leadid_idx">
@@ -1679,13 +1679,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountgrouprelation">
+	<table name="vtiger_accountgrouprelation">
 		<field name="accountid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="accountgrouprelation_groupname_idx">
@@ -1694,13 +1694,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contactgrouprelation">
+	<table name="vtiger_contactgrouprelation">
 		<field name="contactid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="contactgrouprelation_groupname_idx">
@@ -1709,13 +1709,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="potentialgrouprelation">
+	<table name="vtiger_potentialgrouprelation">
 		<field name="potentialid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="potentialgrouprelation_groupname_idx">
@@ -1724,13 +1724,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaigngrouprelation">
+	<table name="vtiger_campaigngrouprelation">
 		<field name="campaignid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES campaign(campaignid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="campaigngrouprelation_IDX1">
@@ -1739,13 +1739,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="activitygrouprelation">
+	<table name="vtiger_activitygrouprelation">
 		<field name="activityid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="activitygrouprelation_activityid_idx">
@@ -1757,13 +1757,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="ticketgrouprelation">
+	<table name="vtiger_ticketgrouprelation">
 		<field name="ticketid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="ticketgrouprelation_ticketid_idx">
@@ -1775,7 +1775,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="systems">
+	<table name="vtiger_systems">
 		<field name="id" type="I" size="19">
 			<key />
 		</field>
@@ -1786,7 +1786,7 @@
 		<field name="smtp_auth" type="C" size="5" />
 	</table>
 
-	<table name="currency_info">
+	<table name="vtiger_currency_info">
 		<field name="id" type="I" >
 			<key />
 			<autoincrement />
@@ -1803,10 +1803,10 @@
 		</field>
 	</table>
 
-	<table name="defaultcv">
+	<table name="vtiger_defaultcv">
 		<field name="tabid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="defaultviewname" type="C" size="50">
 			<notnull />
@@ -1814,7 +1814,7 @@
 		<field name="query" type="X" />
 	</table>
 
-	<table name="emailtemplates">
+	<table name="vtiger_emailtemplates">
 		<field name="foldername" type="C" size="100" />
 		<field name="templatename" type="C" size="100" />
 		<field name="subject" type="C" size="100" />
@@ -1836,11 +1836,11 @@
 		</index>
 	</table>
 
-	<table name="faq">
+	<table name="vtiger_faq">
 		<field name="id" type="I" size="11">
 			<key />
 			<autoincrement />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="product_id" type="C" size="100" />
 		<field name="question" type="X">
@@ -1860,13 +1860,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="faqcomments">
+	<table name="vtiger_faqcomments">
 		<field name="commentid" type="I" size="19">
 			<key />
 			<autoincrement />
 		</field>
 		<field name="faqid" type="I" size="19">
-			<constraint>REFERENCES faq(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_faq(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="comments" type="X" />
 		<field name="createdtime" type="T">
@@ -1879,7 +1879,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="files">
+	<table name="vtiger_files">
 		<field name="id" type="C" size="36">
 			<key />
 		</field>
@@ -1902,7 +1902,7 @@
 		</index>
 	</table>
 
-	<table name="loginhistory">
+	<table name="vtiger_loginhistory">
 		<field name="login_id" type="I" size="11">
 			<key />
 			<autoincrement />
@@ -1922,16 +1922,16 @@
 		<field name="status" type="C" size="25" />
 	</table>
 
-	<table name="senotesrel">
+	<table name="vtiger_senotesrel">
 		<field name="crmid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="notesid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES notes(notesid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="senotesrel_notesid_idx">
@@ -1943,7 +1943,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="ticketstracktime">
+	<table name="vtiger_ticketstracktime">
 		<field name="ticket_id" type="I" size="11">
 			<key />
 			<notnull />
@@ -1966,27 +1966,27 @@
 		</index>
 	</table>
 
-	<table name="ticketcf">
+	<table name="vtiger_ticketcf">
 		<field name="ticketid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="productcf">
+	<table name="vtiger_productcf">
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="users_last_import">
+	<table name="vtiger_users_last_import">
 		<field name="id" type="I" size="36">
 			<autoincrement />
 			<key />
@@ -2004,7 +2004,7 @@
 		</index>
 	</table>
 
-	<table name="wordtemplates">
+	<table name="vtiger_wordtemplates">
 		<field name="templateid" type="I" size="19">
 			<key />
 		</field>
@@ -2038,7 +2038,7 @@
 	</table>
 
 	<!-- Dropdown fields -->
-	<table name="accountdepstatus">
+	<table name="vtiger_accountdepstatus">
 		<field name="deploymentstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2062,7 +2062,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountownership">
+	<table name="vtiger_accountownership">
 		<field name="acctownershipid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2086,7 +2086,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountrating">
+	<table name="vtiger_accountrating">
 		<field name="accountratingid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2110,7 +2110,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accountregion">
+	<table name="vtiger_accountregion">
 		<field name="accountregionid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2134,7 +2134,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="accounttype">
+	<table name="vtiger_accounttype">
 		<field name="accounttypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2158,7 +2158,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="contacttype">
+	<table name="vtiger_contacttype">
 		<field name="contacttypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2182,7 +2182,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadsource">
+	<table name="vtiger_leadsource">
 		<field name="leadsourceid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2206,7 +2206,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="opportunity_type">
+	<table name="vtiger_opportunity_type">
 		<field name="opptypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2230,7 +2230,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadstage">
+	<table name="vtiger_leadstage">
 		<field name="leadstageid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2254,7 +2254,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="leadstatus">
+	<table name="vtiger_leadstatus">
 		<field name="leadstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2278,7 +2278,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="eventstatus">
+	<table name="vtiger_eventstatus">
 		<field name="eventstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2302,7 +2302,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="duration_minutes">
+	<table name="vtiger_duration_minutes">
 		<field name="minutesid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2326,7 +2326,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="licencekeystatus">
+	<table name="vtiger_licencekeystatus">
 		<field name="licencekeystatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2350,7 +2350,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="opportunitystage">
+	<table name="vtiger_opportunitystage">
 		<field name="potstageid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2377,7 +2377,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="priority">
+	<table name="vtiger_priority">
 		<field name="priorityid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2401,7 +2401,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="businesstype">
+	<table name="vtiger_businesstype">
 		<field name="businesstypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2425,7 +2425,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="industry">
+	<table name="vtiger_industry">
 		<field name="industryid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2449,7 +2449,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="revenuetype">
+	<table name="vtiger_revenuetype">
 		<field name="revenuetypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2473,7 +2473,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="salutationtype">
+	<table name="vtiger_salutationtype">
 		<field name="salutationid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2491,7 +2491,7 @@
 		</field>
 	</table>
 
-	<table name="taskpriority">
+	<table name="vtiger_taskpriority">
 		<field name="taskpriorityid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2507,7 +2507,7 @@
 		</field>
 	</table>
 
-	<table name="taskstatus">
+	<table name="vtiger_taskstatus">
 		<field name="taskstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2523,7 +2523,7 @@
 		</field>
 	</table>
 
-	<table name="activitytype">
+	<table name="vtiger_activitytype">
 		<field name="activitytypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2547,7 +2547,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="usertype">
+	<table name="vtiger_usertype">
 		<field name="usertypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2571,7 +2571,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="sales_stage">
+	<table name="vtiger_sales_stage">
 		<field name="sales_stage_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2588,7 +2588,7 @@
 		</field>
 	</table>
 
-	<table name="faqcategories">
+	<table name="vtiger_faqcategories">
 		<field name="faqcategories_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2604,7 +2604,7 @@
 		</field>
 	</table>
 
-	<table name="faqstatus">
+	<table name="vtiger_faqstatus">
 		<field name="faqstatus_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2620,7 +2620,7 @@
 		</field>
 	</table>
 
-	<table name="rating">
+	<table name="vtiger_rating">
 		<field name="rating_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2636,7 +2636,7 @@
 		</field>
 	</table>
 
-	<table name="ticketcategories">
+	<table name="vtiger_ticketcategories">
 		<field name="ticketcategories_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2652,7 +2652,7 @@
 		</field>
 	</table>
 
-	<table name="ticketpriorities">
+	<table name="vtiger_ticketpriorities">
 		<field name="ticketpriorities_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2668,7 +2668,7 @@
 		</field>
 	</table>
 
-	<table name="ticketseverities">
+	<table name="vtiger_ticketseverities">
 		<field name="ticketseverities_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2684,7 +2684,7 @@
 		</field>
 	</table>
 
-	<table name="ticketstatus">
+	<table name="vtiger_ticketstatus">
 		<field name="ticketstatus_id" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2700,7 +2700,7 @@
 		</field>
 	</table>
 
-	<table name="activsubtype">
+	<table name="vtiger_activsubtype">
 		<field name="activesubtypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2716,7 +2716,7 @@
 		</field>
 	</table>
 
-	<table name="downloadpurpose">
+	<table name="vtiger_downloadpurpose">
 		<field name="downloadpurposeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2740,7 +2740,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="durationhrs">
+	<table name="vtiger_durationhrs">
 		<field name="hrsid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2756,7 +2756,7 @@
 		</field>
 	</table>
 
-	<table name="durationmins">
+	<table name="vtiger_durationmins">
 		<field name="minsid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2772,7 +2772,7 @@
 		</field>
 	</table>
 
-	<table name="evaluationstatus">
+	<table name="vtiger_evaluationstatus">
 		<field name="evalstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2796,7 +2796,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="profile">
+	<table name="vtiger_profile">
 		<field name="profileid" type="I" size="10">
 			<key />
 			<autoincrement />
@@ -2809,10 +2809,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="profile2globalpermissions">
+	<table name="vtiger_profile2globalpermissions">
 		<field name="profileid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES profile(profileid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_profile(profileid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="globalactionid" type="I" size="19">
 			<key />
@@ -2826,7 +2826,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="profile2tab">
+	<table name="vtiger_profile2tab">
 		<field name="profileid" type="I" size="11" />
 		<field name="tabid" type="I" size="10" />
 		<field name="permissions" type="I" size="10">
@@ -2840,7 +2840,7 @@
 		</index>
 	</table>
 
-	<table name="profile2standardpermissions">
+	<table name="vtiger_profile2standardpermissions">
 		<field name="profileid" type="I" size="11">
 			<key />
 		</field>
@@ -2859,7 +2859,7 @@
 		</index>
 	</table>
 
-	<table name="profile2field">
+	<table name="vtiger_profile2field">
 		<field name="profileid" type="I" size="11">
 			<key />
 		</field>
@@ -2885,7 +2885,7 @@
 		</index>
 	</table>
 
-	<table name="role2profile">
+	<table name="vtiger_role2profile">
 		<field name="roleid" type="C" size="255">
 			<key />
 		</field>
@@ -2898,7 +2898,7 @@
 		</index>
 	</table>
 
-	<table name="org_share_action_mapping">
+	<table name="vtiger_org_share_action_mapping">
 		<field name="share_action_id" type="I" size="19">
 			<key />
 		</field>
@@ -2907,7 +2907,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="def_org_share">
+	<table name="vtiger_def_org_share">
 		<field name="ruleid" type="I" size="11">
 			<key />
 			<autoincrement />
@@ -2916,12 +2916,12 @@
 			<notnull />
 		</field>
 		<field name="permission" type="I" size="19">
-			<constraint>REFERENCES org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="editstatus" type="I" size="19" />
 	</table>
 
-	<table name="def_org_field">
+	<table name="vtiger_def_org_field">
 		<field name="tabid" type="I" size="10" />
 		<field name="fieldid" type="I" size="19">
 			<key />
@@ -2942,7 +2942,7 @@
 		</index>
 	</table>
 
-	<table name="profile2utility">
+	<table name="vtiger_profile2utility">
 		<field name="profileid" type="I" size="11">
 			<key />
 		</field>
@@ -2961,7 +2961,7 @@
 		</index>
 	</table>
 
-	<table name="productcategory">
+	<table name="vtiger_productcategory">
 		<field name="productcategoryid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -2985,12 +2985,12 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="salesorder">
+	<table name="vtiger_salesorder">
 		<field name="salesorderid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="potentialid" type="I" size="19" />
@@ -2998,10 +2998,10 @@
 		<field name="quoteid" type="I" size="19" />
 		<field name="vendorterms" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorid" type="I" size="19">
-			<constraint>REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
@@ -3027,13 +3027,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="sogrouprelation">
+	<table name="vtiger_sogrouprelation">
 		<field name="salesorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="sogrouprelation_groupname_idx">
@@ -3042,11 +3042,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="sobillads">
+	<table name="vtiger_sobillads">
 		<field name="sobilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3058,11 +3058,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="soshipads">
+	<table name="vtiger_soshipads">
 		<field name="soshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3074,24 +3074,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="salesordercf">
+	<table name="vtiger_salesordercf">
 		<field name="salesorderid" type="I" size="19">
 			<key />
 			<default value="0"/>
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="soproductrel">
+	<table name="vtiger_soproductrel">
 		<field name="salesorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3108,7 +3108,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="notificationscheduler">
+	<table name="vtiger_notificationscheduler">
 		<field name="schedulednotificationid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -3126,16 +3126,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="activityproductrel">
+	<table name="vtiger_activityproductrel">
 		<field name="activityid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="activityproductrel_activityid_idx">
@@ -3147,7 +3147,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="relatedlists">
+	<table name="vtiger_relatedlists">
 		<field name="relation_id" type="I" size="19">
 			<key />
 		</field>
@@ -3166,7 +3166,7 @@
 		</index>
 	</table>
 
-	<table name="rss">
+	<table name="vtiger_rss">
 		<field name="rssid" type="I" size="19">
 			<key />
 		</field>
@@ -3183,22 +3183,22 @@
 		</field>
 	</table>
 
-	<table name="vendorcf">
+	<table name="vtiger_vendorcf">
 		<field name="vendorid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="pricebook">
+	<table name="vtiger_pricebook">
 		<field name="pricebookid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bookname" type="C" size="100" />
 		<field name="active" type="I" size="1" />
@@ -3207,24 +3207,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="pricebookcf">
+	<table name="vtiger_pricebookcf">
 		<field name="pricebookid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES pricebook(pricebookid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="pricebookproductrel">
+	<table name="vtiger_pricebookproductrel">
 		<field name="pricebookid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES pricebook(pricebookid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="listprice" type="N" size="11.3" />
 
@@ -3237,7 +3237,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="mail_accounts">
+	<table name="vtiger_mail_accounts">
 		<field name="account_id" type="I" size="11">
 			<key />
 		</field>
@@ -3266,22 +3266,22 @@
 		<field name="set_default" type="I" size="2" />
 	</table>
 
-	<table name="quotes">
+	<table name="vtiger_quotes">
 		<field name="quoteid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="potentialid" type="I" size="19">
-			<constraint>REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quotestage" type="C" size="200" />
 		<field name="validtill" type="D" />
 		<field name="team" type="C" size="200" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="currency" type="C" size="100" />
 		<field name="subtotal" type="N" size="11.3" />
@@ -3307,11 +3307,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotesbillads">
+	<table name="vtiger_quotesbillads">
 		<field name="quotebilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3323,11 +3323,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotesshipads">
+	<table name="vtiger_quotesshipads">
 		<field name="quoteshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3339,13 +3339,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotegrouprelation">
+	<table name="vtiger_quotegrouprelation">
 		<field name="quoteid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="quotegrouprelation_groupname_idx">
@@ -3354,24 +3354,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotescf">
+	<table name="vtiger_quotescf">
 		<field name="quoteid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotesproductrel">
+	<table name="vtiger_quotesproductrel">
 		<field name="quoteid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3388,24 +3388,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="purchaseorder">
+	<table name="vtiger_purchaseorder">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="quoteid" type="I" size="19">
-			<constraint>REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="vendorid" type="I" size="19">
-			<constraint>REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="requisition_no" type="C" size="100" />
 		<field name="tracking_no" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
-			<constraint>REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="duedate" type="D" />
 		<field name="carrier" type="C" size='100' />
@@ -3431,13 +3431,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="pogrouprelation">
+	<table name="vtiger_pogrouprelation">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="pogrouprelation_groupname_purchaseorderid_idx">
@@ -3447,11 +3447,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="pobillads">
+	<table name="vtiger_pobillads">
 		<field name="pobilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3463,11 +3463,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="poshipads">
+	<table name="vtiger_poshipads">
 		<field name="poshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3479,24 +3479,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="purchaseordercf">
+	<table name="vtiger_purchaseordercf">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="poproductrel">
+	<table name="vtiger_poproductrel">
 		<field name="purchaseorderid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3513,16 +3513,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoice">
+	<table name="vtiger_invoice">
 		<field name="invoiceid" type="I" size="19">
 			<key />
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="100" />
 		<field name="salesorderid" type="I" size="19">
-			<constraint>REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="customerno" type="C" size="100" />
 		<field name="contactid" type="I" size="19" />
@@ -3549,13 +3549,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoicegrouprelation">
+	<table name="vtiger_invoicegrouprelation">
 		<field name="invoiceid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="groupname" type="C" size="100">
-			<constraint>REFERENCES groups(groupname) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupname) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="invoicegrouprelation_groupname_invoiceid_idx">
@@ -3565,11 +3565,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoicebillads">
+	<table name="vtiger_invoicebillads">
 		<field name="invoicebilladdressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="bill_city" type="C" size="30" />
 		<field name="bill_code" type="C" size="30" />
@@ -3581,11 +3581,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoiceshipads">
+	<table name="vtiger_invoiceshipads">
 		<field name="invoiceshipaddressid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="ship_city" type="C" size="30" />
 		<field name="ship_code" type="C" size="30" />
@@ -3597,24 +3597,24 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoicecf">
+	<table name="vtiger_invoicecf">
 		<field name="invoiceid" type="I" size="19">
 			<key />
 			<default value="0" />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoiceproductrel">
+	<table name="vtiger_invoiceproductrel">
 		<field name="invoiceid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="productid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="quantity" type="I" size="19" />
 		<field name="listprice" type="N" size="11.3" />
@@ -3631,7 +3631,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="activity_reminder">
+	<table name="vtiger_activity_reminder">
 		<field name="activity_id" type="I" size="11">
 			<key />
 			<notnull />
@@ -3648,7 +3648,7 @@
 		</field>
 	</table>
 
-	<table name="customview">
+	<table name="vtiger_customview">
 		<field name="cvid" type="I" size="19">
 			<key />
 		</field>
@@ -3668,11 +3668,11 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="cvcolumnlist">
+	<table name="vtiger_cvcolumnlist">
 		<field name="cvid" type="I" size="19">
 			<key />
 			<notnull />
-			<constraint>REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3691,10 +3691,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="cvstdfilter">
+	<table name="vtiger_cvstdfilter">
 		<field name="cvid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<default value="" />
@@ -3715,10 +3715,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="cvadvfilter">
+	<table name="vtiger_cvadvfilter">
 		<field name="cvid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3740,10 +3740,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="customaction">
+	<table name="vtiger_customaction">
 		<field name="cvid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_customview (cvid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="subject" type="C" size="250">
 			<notnull />
@@ -3761,7 +3761,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="selectquery">
+	<table name="vtiger_selectquery">
 		<field name="queryid" type="I" size="19">
 			<key />
 		</field>
@@ -3778,10 +3778,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="selectcolumn">
+	<table name="vtiger_selectcolumn">
 		<field name="queryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3798,10 +3798,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="relcriteria">
+	<table name="vtiger_relcriteria">
 		<field name="queryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<key />
@@ -3823,7 +3823,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="reportfolder">
+	<table name="vtiger_reportfolder">
 		<field name="folderid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -3842,13 +3842,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="report">
+	<table name="vtiger_report">
 		<field name="reportid" type="I" size="19">
 			<key />
 		</field>
 		<field name="folderid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES reportfolder (folderid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_reportfolder (folderid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="reportname" type="C" size="100">
 			<default value="" />
@@ -3862,7 +3862,7 @@
 		<field name="queryid" type="I" size="19">
 			<notnull />
 			<default value="0" />
-			<constraint>REFERENCES selectquery (queryid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_selectquery (queryid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="state" type="C" size="50">
 			<default value="SAVED" />
@@ -3883,10 +3883,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="reportmodules">
+	<table name="vtiger_reportmodules">
 		<field name="reportmodulesid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES report (reportid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="primarymodule" type="C" size="50">
 			<notnull />
@@ -3899,13 +3899,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="reportsortcol">
+	<table name="vtiger_reportsortcol">
 		<field name="sortcolid" type="I" size="19">
 			<key />
 		</field>
 		<field name="reportid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES report (reportid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<default value="" />
@@ -3917,10 +3917,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="reportdatefilter">
+	<table name="vtiger_reportdatefilter">
 		<field name="datefilterid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES report (reportid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="datecolumnname" type="C" size="250">
 			<default value="" />
@@ -3941,10 +3941,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="reportsummary">
+	<table name="vtiger_reportsummary">
 		<field name="reportsummaryid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES report (reportid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_report (reportid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="summarytype" type="I" size="19">
 			<key />
@@ -3960,7 +3960,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="usageunit">
+	<table name="vtiger_usageunit">
 		<field name="usageunitid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -3984,7 +3984,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="glacct">
+	<table name="vtiger_glacct">
 		<field name="glacctid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4008,7 +4008,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="quotestage">
+	<table name="vtiger_quotestage">
 		<field name="quotestageid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4032,7 +4032,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="invoicestatus">
+	<table name="vtiger_invoicestatus">
 		<field name="inovicestatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4056,7 +4056,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="postatus">
+	<table name="vtiger_postatus">
 		<field name="postatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4080,7 +4080,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="sostatus">
+	<table name="vtiger_sostatus">
 		<field name="sostatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4105,7 +4105,7 @@
 
 	</table>
 
-	<table name="carrier">
+	<table name="vtiger_carrier">
 		<field name="carrierid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4129,7 +4129,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="taxclass">
+	<table name="vtiger_taxclass">
 		<field name="taxclassid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4153,7 +4153,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="organizationdetails">
+	<table name="vtiger_organizationdetails">
 		<field name="organizationame" type="C" size="60">
 			<key />
 		</field>
@@ -4171,7 +4171,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="recurringtype">
+	<table name="vtiger_recurringtype">
 		<field name="recurringeventid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4195,7 +4195,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="recurringevents">
+	<table name="vtiger_recurringevents">
 		<field name="recurringid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4209,7 +4209,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="inventorynotification">
+	<table name="vtiger_inventorynotification">
 		<field name="notificationid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4222,7 +4222,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="inventory_tandc">
+	<table name="vtiger_inventory_tandc">
 		<field name="id" type="I" size="19">
 			<key />
 		</field>
@@ -4232,7 +4232,7 @@
 		<field name="tandc" type="X" />
 	</table>
 
-	<table name="convertleadmapping">
+	<table name="vtiger_convertleadmapping">
 		<field name="cfmid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4247,7 +4247,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="actionmapping">
+	<table name="vtiger_actionmapping">
 		<field name="actionid" type="I" size="19">
 			<key />
 		</field>
@@ -4259,25 +4259,25 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="org_share_action2tab">
+	<table name="vtiger_org_share_action2tab">
 		<field name="share_action_id" type="I" size="19">
 			<key />
-			<constraint>REFERENCES org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="moduleowners">
+	<table name="vtiger_moduleowners">
 		<field name="tabid" type="I" size="19">
 			<key />
 			<unique />
 			<default value="0" />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="user_id" type="C" size="11">
 			<notnull />
@@ -4289,7 +4289,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="ownernotify">
+	<table name="vtiger_ownernotify">
 		<field name="crmid" type="I" size="19" />
 		<field name="smownerid" type="I" size="19" />
 		<field name="flag" type="I" size="3" />
@@ -4301,13 +4301,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_module_rel">
+	<table name="vtiger_datashare_module_rel">
 		<field name="shareid" type="I" size="19">
 			<key />
 		</field>
 		<field name="tabid" type="I" size="19">
 			<notnull />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relationtype" type="C" size="200">
 		</field>
@@ -4317,16 +4317,16 @@
 		</index>
 	</table>
 
-	<table name="datashare_grp2grp">
+	<table name="vtiger_datashare_grp2grp">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4339,16 +4339,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_grp2role">
+	<table name="vtiger_datashare_grp2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4361,16 +4361,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_grp2rs">
+	<table name="vtiger_datashare_grp2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4383,16 +4383,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_role2group">
+	<table name="vtiger_datashare_role2group">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4405,16 +4405,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_role2role">
+	<table name="vtiger_datashare_role2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4427,16 +4427,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_role2rs">
+	<table name="vtiger_datashare_role2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4449,16 +4449,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_rs2grp">
+	<table name="vtiger_datashare_rs2grp">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_groupid" type="I" size="19">
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4471,16 +4471,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_rs2role">
+	<table name="vtiger_datashare_rs2role">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4493,16 +4493,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_rs2rs">
+	<table name="vtiger_datashare_rs2rs">
 		<field name="shareid" type="I" size="19">
 			<key />
-			<constraint>REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="share_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="to_roleandsubid" type="C" size="255">
-			<constraint>REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_role(roleid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="permission" type="I" size="19" />
 
@@ -4515,15 +4515,15 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_relatedmodules">
+	<table name="vtiger_datashare_relatedmodules">
 		<field name="datashare_relatedmodule_id" type="I" size="19">
 			<key />
 		</field>
 		<field name="tabid" type="I" size="19">
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedto_tabid" type="I" size="19">
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<index name="datashare_relatedmodules_tabid_idx">
 			<col>tabid</col>
@@ -4534,7 +4534,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="datashare_relatedmodule_permission">
+	<table name="vtiger_datashare_relatedmodule_permission">
 		<field name="shareid" type="I" size="19">
 			<key />
 		</field>
@@ -4550,7 +4550,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="parenttab">
+	<table name="vtiger_parenttab">
 		<field name="parenttabid" type="I" size="19">
 			<notnull />
 			<key />
@@ -4572,18 +4572,18 @@
 		</index>
 	</table>
 
-	<table name="tmp_read_user_sharing_per">
+	<table name="vtiger_tmp_read_user_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_user_sharing_per_userid_shareduserid_idx">
@@ -4593,18 +4593,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_read_group_sharing_per">
+	<table name="vtiger_tmp_read_group_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_group_sharing_per_userid_sharedgroupid_idx">
@@ -4614,18 +4614,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_write_user_sharing_per">
+	<table name="vtiger_tmp_write_user_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_user_sharing_per_userid_shareduserid_idx">
@@ -4635,18 +4635,18 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_write_group_sharing_per">
+	<table name="vtiger_tmp_write_group_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_group_sharing_per_UK1">
@@ -4656,22 +4656,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_read_user_rel_sharing_per">
+	<table name="vtiger_tmp_read_user_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_user_rel_sharing_per_userid_shared_reltabid_idx">
@@ -4682,22 +4682,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_read_group_rel_sharing_per">
+	<table name="vtiger_tmp_read_group_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_read_group_rel_sharing_per_userid_sharedgroupid_tabid">
@@ -4708,22 +4708,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_write_user_rel_sharing_per">
+	<table name="vtiger_tmp_write_user_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="shareduserid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_user_rel_sharing_per_userid_sharduserid_tabid_idx">
@@ -4734,22 +4734,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="tmp_write_group_rel_sharing_per">
+	<table name="vtiger_tmp_write_group_rel_sharing_per">
 		<field name="userid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="tabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="relatedtabid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_tab(tabid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="sharedgroupid" type="I" size="11">
 			<key />
-			<constraint>REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="tmp_write_group_rel_sharing_per_userid_sharedgroupid_tabid_idx">
@@ -4760,7 +4760,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="parenttabrel">
+	<table name="vtiger_parenttabrel">
 		<field name="parenttabid" type="I" size="3">
 			<notnull />
 		</field>
@@ -4778,7 +4778,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaigntype">
+	<table name="vtiger_campaigntype">
 		<field name="campaigntypeid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4802,7 +4802,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="campaignstatus">
+	<table name="vtiger_campaignstatus">
 		<field name="campaignstatusid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4825,7 +4825,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="expectedresponse">
+	<table name="vtiger_expectedresponse">
 		<field name="expectedresponseid" type="I" size="19">
 			<key />
 			<autoincrement />
@@ -4849,7 +4849,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="portal">
+	<table name="vtiger_portal">
 		<field name="portalid" type="I" size="19">
 			<key />
 		</field>
@@ -4869,7 +4869,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="announcement">
+	<table name="vtiger_announcement">
 		<field name="creatorid" type="I" size="19">
 			<key />
 		</field>
@@ -4885,7 +4885,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="chat_users">
+	<table name="vtiger_chat_users">
 		<field name="id" type="I" size="20">
 			<autoincrement />
 			<notnull />
@@ -4917,7 +4917,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="chat_msg">
+	<table name="vtiger_chat_msg">
 		<field name="id" type="I" size="20">
 			<autoincrement />
 			<notnull />
@@ -4926,7 +4926,7 @@
 		<field name="chat_from" type="I" size="20">
 			<default value="0" />
 			<notnull />
-			<constraint>REFERENCES chat_users(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_chat_users(id) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="chat_to" type="I" size="20">
 			<default value="0" />
@@ -4951,7 +4951,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="chat_pchat">
+	<table name="vtiger_chat_pchat">
 		<field name="id" type="I" size="20">
 			<autoincrement />
 			<notnull />
@@ -4959,7 +4959,7 @@
 		</field>
 		<field name="msg" type="I" size="20">
 			<default value="0"/>
-			<constraint>REFERENCES chat_msg(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
 		</field>
 
 		<index name="chat_pchat_msg_idx">
@@ -4969,7 +4969,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="chat_pvchat">
+	<table name="vtiger_chat_pvchat">
 		<field name="id" type="I" size="20">
 			<autoincrement />
 			<notnull />
@@ -4977,7 +4977,7 @@
 		</field>
 		<field name="msg" type="I" size="20">
 			<default value="0"/>
-			<constraint>REFERENCES chat_msg(id) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_chat_msg(id) ON DELETE CASCADE</constraint>
 		</field>
 		<index name="chat_pvchat_msg_idx">
 			<col>msg</col>
@@ -4986,7 +4986,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="freetags">
+	<table name="vtiger_freetags">
 		<field name="id" type="I" size="19">
 			<notnull />
 			<key />
@@ -5001,7 +5001,7 @@
 		</field>
 	</table>
 
-	<table name="freetagged_objects">
+	<table name="vtiger_freetagged_objects">
 		<field name="tag_id" type="I" size="20">
 			<notnull />
 			<default value="0" />
@@ -5033,7 +5033,7 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-	<table name="emaildetails">
+	<table name="vtiger_emaildetails">
 		<field name="emailid" type="I" size="19">
 			<notnull />
 			<key />
@@ -5065,7 +5065,7 @@
 		</field>
 	</table>
 
-	<table name="invitees">
+	<table name="vtiger_invitees">
 		<field name="activityid" type="I" size="19">
 			<KEY/>
 		</field>
@@ -5074,7 +5074,7 @@
 		</field>
 	</table>
 
-	<table name="inventorytaxinfo">
+	<table name="vtiger_inventorytaxinfo">
 		<field name="taxid" type="I" size="3">
 			<KEY/>
 			<notnull />
@@ -5092,10 +5092,10 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="producttaxrel">
+	<table name="vtiger_producttaxrel">
 		<field name="productid" type="I" size="11">
 			<notnull />
-			<constraint>REFERENCES products(productid) ON DELETE CASCADE</constraint>
+			<constraint>REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="taxid" type="I" size="3">
 			<notnull />
