@@ -112,7 +112,7 @@ if($saveflag=="true")
 
 	$sql="SELECT * FROM organizationdetails WHERE organizationame = ".$adb->quote($org_name);
 	$result = $adb->query($sql);
-	$org_name = $adb->query_result($result,0,'organizationame');
+	$org_name = from_html($adb->query_result($result,0,'organizationame'));
 	$org_logo = $adb->query_result($result,0,'logoname'); 
 
 
