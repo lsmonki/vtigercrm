@@ -945,7 +945,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 			else
 			{
 				$profileList = getCurrentUserProfileList();
-				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 and info_type = '".$info_type."' and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype in (1,4) and info_type = '".$info_type."' and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		else
@@ -957,7 +957,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 			else
 			{
 				$profileList = getCurrentUserProfileList();
-				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype in (1,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList.=" group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->query($sql);

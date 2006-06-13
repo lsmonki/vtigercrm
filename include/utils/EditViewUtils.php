@@ -1012,6 +1012,84 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = array($SET_REM,$mod_strings['LBL_YES'],$mod_strings['LBL_NO']);
 		$SET_REM = '';
 	}
+	elseif($uitype == 115)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$pick_query="select * from ".$fieldname;
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		//Mikecrowe fix to correctly default for custom pick lists
+		$options = array();
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
+
+			if($value == $pickListValue)
+			{
+				$chk_val = "selected";	
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$options[] = array($pickListValue=>$chk_val );	
+		}
+		$fieldvalue [] = $options;
+	}
+	elseif($uitype == 116)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$pick_query="select * from currency_info";
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		//Mikecrowe fix to correctly default for custom pick lists
+		$options = array();
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,'currency_name');
+			$currency_id=$adb->query_result($pickListResult,$j,'id');
+			if($value == $pickListValue)
+			{
+				$chk_val = "selected";	
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$options[$currency_id] = array($pickListValue=>$chk_val );	
+		}
+		$fieldvalue [] = $options;
+	}
+	elseif($uitype ==98)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue[]=$value;
+        $fieldvalue[]=getRoleName($value);
+	}
+	elseif($uitype == 105)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+			$query = "select attachments.path, attachments.name from contactdetails left join seattachmentsrel on seattachmentsrel.crmid=contactdetails.contactid inner join attachments on attachments.attachmentsid=seattachmentsrel.attachmentsid where contactdetails.imagename=attachments.name and contactid=".$col_fields['record_id'];
+		$result_image = $adb->query($query);
+		for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
+		{
+			$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+			$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
+		}
+		if(is_array($image_array))
+			for($img_itr=0;$img_itr<count($image_array);$img_itr++)
+			{
+				$fieldvalue[] = array('name'=>$image_array[$img_itr],'path'=>$image_path_array[$img_itr]);
+			}
+		else
+			$fieldvalue[] = '';
+	}
 	else
 	{
 		//Added condition to set the subject if click Reply All from web mail
