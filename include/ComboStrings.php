@@ -292,10 +292,25 @@ $combo_strings = Array(
 			      'Average'=>'Average',
                               'Poor'=>'Poor'
 			      ),			      
-
-			    
+'status_dom' => Array('Active'=>'Active',
+			      'Inactive'=>'Inactive'
+			      ),
+'activity_view_dom' => Array('Today'=>'Today',
+			      'This Week'=>'This Week',
+			      'This Month'=>'This Month',
+			      'This Year'=>'This Year'
+		      ),
+'lead_view_dom' => Array('Today'=>'Today',
+			      'Last 2 Days'=>'Last 2 Days',
+                              'Last Week'=>'Last Week'
+		      ),
+'date_format_dom' => Array('dd-mm-yyyy'=>'dd-mm-yyyy',
+			      'mm-dd-yyyy'=>'mm-dd-yyyy',
+                              'yyyy-mm-dd'=>'yyyy-mm-dd'
+			      ),		      
 		
 );
+
 
 ?>
 
