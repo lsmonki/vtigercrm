@@ -1933,6 +1933,7 @@ function getListQuery($module,$where='')
 			vtiger_invoicebillads.*,
 			vtiger_invoiceshipads.*,
 			vtiger_salesorder.subject AS salessubject
+			vtiger_account.accountname
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
@@ -1942,6 +1943,8 @@ function getListQuery($module,$where='')
 				ON vtiger_invoice.invoiceid = vtiger_invoiceshipads.invoiceshipaddressid
 			LEFT OUTER JOIN vtiger_salesorder
 				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
+			LEFT OUTER JOIN vtiger_account
+			        ON vtiger_account.accountid = vtiger_invoice.accountid
 			INNER JOIN vtiger_invoicecf
 				ON vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
 			LEFT JOIN vtiger_invoicegrouprelation
