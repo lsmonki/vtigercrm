@@ -48,6 +48,8 @@ $graph_array = Array(
           "invoicebystatus" => $mod_strings['invoicebystatus'],
           "ticketsbystatus" => $mod_strings['ticketsbystatus'],
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
+	  "ticketsbycategory" => $mod_strings['ticketsbycategory'], 
+	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
           );
           
 $log = LoggerManager::getLogger('dashboard');
