@@ -9,71 +9,79 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top" class="showPanelBg">
-		<form action="index.php" method="post" name="EditView" id="form">
-		<input type='hidden' name='module' value='Users'>
+
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
+
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<form action="index.php" method="post" name="EditView" id="form">
+<input type='hidden' name='module' value='Users'>
 <input type='hidden' name='action' value='EditView'>
 <input type='hidden' name='return_action' value='ListView'>
 <input type='hidden' name='return_module' value='Users'>
 <input type='hidden' name='parenttab' value='Settings'>
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-			<tr>
-					<td colspan="2" style="padding:5px;">
-							<span class="lvtHeaderText">
-							<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-									 > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
-									<hr noshade="noshade" size="1" />
-					</td>
-			  </tr>
-			  <tr>
-					<td style="padding:5px;"> 
-							<table border="0" cellpadding="0" cellspacing="0" width="100%">
-								<tr>
-									<td colspan="2" align="left"><img src="{$IMAGE_PATH}user.gif" align="absmiddle">&nbsp;<span class="genHeaderGray">{$MOD.LBL_USER_MANAGEMENT}</span></td>
-									<td align="right" style="padding:5px; ">
-											<input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" class='classBtn' type='submit' name='button' value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" >
-								 	 </td>
-								</tr>
-								<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-							</table>
-					</td>
-					<td>&nbsp;</td>
-			</tr>
-			<tr><td colspan=2>
+
+        <br>
+
+	<div align=center>
+			{include file='SetMenu.tpl'}
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-users.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_USERS}</b></td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_USER_DESCRIPTION}</td>
+				</tr>
+				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
 					<div id="ListViewContents">
 						{include file="UserListViewContents.tpl"}
-					</div>
-					
+					</div>	
+				</td>
+				</tr>
+				</table>
+			
+			
+			
 			</td>
 			</tr>
-		</table>
-	</form>
-</td>
-</tr>
-</table>
+			</table>
+		</td>
+	</tr>
+	</table>
+		
+	</div>
 
 </td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
+</form>
 </table>
+
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 {literal}
 <script>
 function getListViewEntries_js(module,url)
 {
-	$("status").style.display="inline";
+        $("status").style.display="inline";
         new Ajax.Request(
-		'index.php',
+                'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
                         postBody: 'module=Users&action=UsersAjax&file=ListView&ajax=true&'+url,
                         onComplete: function(response) {
                                 $("status").style.display="none";
-				$("ListViewContents").innerHTML= response.responseText;
+                                $("ListViewContents").innerHTML= response.responseText;
                         }
                 }
         );
@@ -81,7 +89,7 @@ function getListViewEntries_js(module,url)
 
 function deleteUser(userid)
 {
-	$("status").style.display="inline";
+        $("status").style.display="inline";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -89,17 +97,16 @@ function deleteUser(userid)
                         postBody: 'action=UsersAjax&file=UserDeleteStep1&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='+userid,
                         onComplete: function(response) {
                                 $("status").style.display="none";
-				$("tempdiv").innerHTML= response.responseText;
+                                $("tempdiv").innerHTML= response.responseText;
                         }
                 }
         );
 }
-
 function transferUser(del_userid)
 {
-	$("status").style.display="inline";
-	$("DeleteLay").style.display="none";
-	var trans_userid=$('transfer_user_id').options[$('transfer_user_id').options.selectedIndex].value;
+        $("status").style.display="inline";
+        $("DeleteLay").style.display="none";
+        var trans_userid=$('transfer_user_id').options[$('transfer_user_id').options.selectedIndex].value;
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -116,5 +123,4 @@ function transferUser(del_userid)
 </script>
 {/literal}
 
-	{include file='SettingsSubMenu.tpl'}
 

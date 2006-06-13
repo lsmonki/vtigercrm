@@ -1,59 +1,41 @@
-{*<!--
-/*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
- ********************************************************************************/
--->*}
-<!-- BEGIN: main -->
-<table width="100%" border=0>
-					<tr>
-					<td width="75%" style="border-right:1px dashed #CCCCCC;padding:5px;">
-							<table width="100%" border="0">
-								<tr>
-									<td align="left" style="padding:5px;">{$RECORD_COUNTS}</td>
-									{$NAVIGATION}
-								</tr>
-							</table>
-							<table width="100%" border="0" cellpadding="5" cellspacing="1" class="small" style="background-color: rgb(204, 204, 204);">
-                          <tbody>
-                          	<tr>
-							{foreach item=header from=$LIST_HEADER}
-                              <td class="lvtCol">{$header}</td>
-							{/foreach}	
-                            </tr>
-							{section name=entries loop=$LIST_ENTRIES}
-             <tr  class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-             {foreach item=listvalues from=$LIST_ENTRIES[entries]}
-				  <td >{$listvalues}</td>
-             {/foreach}
-			 </tr>
-		{/section}	
-        </tbody>
-        </table>
-	</td>
-	<td width="25%" class="padTab" align="center" valign="top">
-		<div id="chPhoto" style="display:block;width:80%;">
-			<table width="100%"   cellspacing="0" cellpadding="5" class="small">
-				<tr><td align="left" colspan="2" style="border-bottom:1px dotted #CCCCCC;">
-					<b>{$CMOD.LBL_STATISTICS}</b></td>
-				</tr>
-				<tr><td align="right"><b>{$CMOD.LBL_TOTAL}</b></td>
-					<td  align="left">{$USER_COUNT.user} {$CMOD.LBL_USERS}</td>	
-				</tr>	
-				<tr><td  align="right"><b>{$CMOD.LBL_ADMIN} {$CMOD.LBL_COLON}</b></td>
-					<td  align="left">{$USER_COUNT.admin} {$CMOD.LBL_USERS}</td>	
-				</tr>	
-				<tr><td  align="right"><b>{$CMOD.LBL_OTHERS}</b></td>
-					<td  align="left">{$USER_COUNT.nonadmin} {$CMOD.LBL_USERS}</td>
-				</tr>	
-			</table>
-	    </div>
-	</td>
-	</tr>
+	
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+<tr>
+	<td class="big"><strong>{$MOD.LBL_USERS_LIST}</strong></td>
+	<td class="small" align=right>{$CMOD.LBL_TOTAL} {$USER_COUNT.user} {$MOD.LBL_USERS} ({$USER_COUNT.admin} {$CMOD.LBL_ADMINS}, {$USER_COUNT.nonadmin} {$CMOD.LBL_STD_USERS})</td>
+</tr>
+</table>
+					
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
+<tr>
+	<td class=small align=right><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>
+</tr>
+</table>
+						
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">
+<tr>
+	{foreach item=header from=$LIST_HEADER} 
+		<td class="colHeader small" valign=top>{$header}</td>
+	{/foreach}
+</tr>
+	{foreach name=userlist item=listvalues from=$LIST_ENTRIES}
+<tr>
+	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
+	<td class="listTableRow small" valign=top>{$listvalues.7}</td>
+	<td class="listTableRow small" valign=top><b>{$listvalues.0}</b><br>{$listvalues.3} <a> (</a>{$listvalues.1})</td>
+	<td class="listTableRow small" valign=top>{$listvalues.2}</td>
+	<td class="listTableRow small" valign=top>{$listvalues.6}</td>
+	<td class="listTableRow small" valign=top>{$listvalues.4}</td>
+	{if $listvalues.5 eq 'Active'}
+	<td class="listTableRow small active" valign=top>{$listvalues.5}</td>
+	{else}
+	<td class="listTableRow small inactive" valign=top>{$listvalues.5}</td>
+	{/if}	
+
+</tr>
+	{/foreach}
+</table>
+<table border=0 cellspacing=0 cellpadding=5 width=100% >
+	<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
 </table>
 
