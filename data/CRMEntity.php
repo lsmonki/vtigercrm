@@ -45,7 +45,7 @@ class CRMEntity extends SugarBean
 	global $current_user, $adb;//$adb added by raju for mass mailing
 	$insertion_mode = $this->mode;
 
-	$this->db->println("TRANS saveentity starts");
+	$this->db->println("TRANS saveentity starts $module");
 	$this->db->startTransaction();
 	
 	// Code included by Jaguar - starts    
@@ -196,15 +196,6 @@ class CRMEntity extends SugarBean
 			$this->insertIntoEntityTable($table_name, $module);			
 		}
 	}
-
-
-	/*if($module == 'Emails' || $module == 'Notes' || $module == 'HelpDesk')
-	{
-		if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
-		{
-			$this->insertIntoAttachment($this->id,$module);
-		}
-	}*/
 
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");
@@ -437,10 +428,6 @@ class CRMEntity extends SugarBean
 		$this->id = $current_id;
 	}
 
-	//$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module."','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
-	//$adb->query($sql);
-	//echo $sql;
-	//$this->id = $current_id;
     }
 
 
@@ -543,6 +530,11 @@ class CRMEntity extends SugarBean
 	  else
 	  {
 		  $column = $this->tab_name_index[$table_name];
+		  if($column == 'id' && $table_name == 'users')
+		  {
+		 	$currentuser_id = $adb->getUniqueID("users");
+			$this->id = $currentuser_id;
+		  }
 		  $value = $this->id;
 	  }
 
@@ -629,28 +621,7 @@ class CRMEntity extends SugarBean
 			  }
 			  if($table_name == 'vtiger_products' && $columname == 'imagename')
 			  {
-			/*	  //Product Image Handling done
-				  if($_FILES['imagename']['name'] != '')
-				  {
-
-					  $prd_img_arr = upload_product_image_file("edit",$this->id);
-					  //print_r($prd_img_arr);
-					  if($prd_img_arr["status"] == "yes")
-					  {
-						  $fldvalue ="'".$prd_img_arr["file_name"]."'";
-					  }
-					  else
-					  {
-						  $fldvalue ="'".getProductImageName($this->id)."'";
-					  }	 
-
-
-				  }
-				  else
-				  {
-					  $fldvalue ="'".getProductImageName($this->id)."'";
-				  }
-		      */		  
+					  
 
 			  }
 			  if($table_name != 'vtiger_ticketcomments')
@@ -692,32 +663,6 @@ class CRMEntity extends SugarBean
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 				  //echo ' updatevalue is ............. ' .$fldvalue;
 			  }
-			  elseif($table_name == 'vtiger_products' && $columname == 'imagename')
-			  {
-				  //Product Image Handling done
-			/*	  if($_FILES['imagename']['name'] != '')
-				  {
-
-					  $prd_img_arr = upload_product_image_file("create",$this->id);
-					  //print_r($prd_img_arr);
-					  if($prd_img_arr["status"] == "yes")
-					  {
-						  $fldvalue ="'".$prd_img_arr["file_name"]."'";
-					  }
-					  else
-					  {
-						  $fldvalue ="''";
-					  }	 
-
-
-				  }
-				  else
-				  {
-					  $fldvalue ="''";
-				  }
-			*/	  
-
-			  }
 			  //code by richie ends
 			  $column .= ", ".$columname;
 			  $value .= ", ".$fldvalue."";
@@ -733,13 +678,11 @@ class CRMEntity extends SugarBean
 	  {
 		  if($_REQUEST['module'] == 'Potentials')
 		  {
-			  $dbquery = 'select vtiger_sales_stage from vtiger_potential where potentialid = '.$this->id;
+			  $dbquery = 'select sales_stage from vtiger_potential where potentialid = '.$this->id;
 			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
 			  if($sales_stage != $_REQUEST['sales_stage'])
 			  {
 				  $date_var = date('YmdHis');
-				  //$sql = "insert into vtiger_potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
-				  //Changed to insert the close date based on user date format - after 4.2 patch2
 				  $closingdate = getDBInsertDateValue($_REQUEST['closingdate']);
 				  $sql = "insert into vtiger_potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("vtiger_potstagehistory","closedate",$closingdate).",".$adb->formatString("vtiger_potstagehistory","lastmodified",$date_var).")";
 				  $adb->query($sql);
@@ -1153,36 +1096,12 @@ $log->debug("type is ".$type);
 	
   function retrieve_entity_info($record, $module)
   {
-    global $adb;
+    global $adb,$log;
     $result = Array();
     foreach($this->tab_name_index as $table_name=>$index)
     {
 	    $result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
     }
-    //Integrated&Commented by Minnie -- as common query affecting detailview
-    /*$table_list = Array();
-    $table_index = Array();
-    $table_list = array_keys($this->tab_name_index);
-    $table_index = array_values($this->tab_name_index);
-    $detailview_query = "select ";
-    $j=0;
-    for($i=1;$i<count($table_list);$i++)
-    {
-	if($j != 0)
-	{
-		$detailview_query .= ", ";
-	}
-	$detailview_query .= $table_list[$i].".*";
-	$j++;
-    }
-    $detailview_query .=  ", ".$table_list[0].". * from ".$table_list[0];
-    for($i=1;$i<count($table_list);$i++)
-    {
-	$detailview_query .= " left join ".$table_list[$i]." on ".$table_list[$i].".".$table_index[$i]." = ";
-	$detailview_query .= $table_list[0].".".$table_index[0];
-    }
-    $detailview_query .= " where ".$table_list[0].".".$table_index[0]." = ".$record;
-    $result = $adb->query($detailview_query);*/
     $tabid = getTabid($module);
     $sql1 =  "select * from vtiger_field where tabid=".$tabid;
     $result1 = $adb->query($sql1);
@@ -1197,9 +1116,21 @@ $log->debug("type is ".$type);
       $this->column_fields[$fieldname] = $fld_value;
 				
     }
+	if($module == 'Users')
+	{
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$fieldcolname = $adb->query_result($result1,$i,"columnname");
+			$tablename = $adb->query_result($result1,$i,"tablename");
+			$fieldname = $adb->query_result($result1,$i,"fieldname");
+			$fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+			$this->$fieldname = $fld_value;
+
+		}
+	}
+		
     $this->column_fields["record_id"] = $record;
     $this->column_fields["record_module"] = $module;
-		
   }
 
 	function save($module_name) 
