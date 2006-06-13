@@ -54,15 +54,8 @@ if($_REQUEST['errormsg'] != '')
 if (!isset($where)) $where = "";
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
-else
-	$order_by = (($_SESSION['PRICEBOOK_ORDER_BY'] != '')?($_SESSION['PRICEBOOK_ORDER_BY']):($focus->default_order_by));
-
-if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
-else
-	$sorder = (($_SESSION['PRICEBOOK_SORT_ORDER'] != '')?($_SESSION['PRICEBOOK_SORT_ORDER']):($focus->default_sort_order));
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
 
 $_SESSION['PRICEBOOK_ORDER_BY'] = $order_by;
 $_SESSION['PRICEBOOK_SORT_ORDER'] = $sorder;

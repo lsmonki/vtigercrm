@@ -76,6 +76,32 @@ class Product extends CRMEntity {
 		$this->column_fields = getColumnFields('Products');
 		$this->log->debug("Exiting Product method ...");
 	}
+	
+	function getSortOrder()
+	{
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
+		$sorder = $_REQUEST['sorder'];
+		else
+		$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->defa
+		ult_sort_order));
+		$log->debug("Exiting getSortOrder() method ...");
+		return $sorder;
+	}
+
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+		$order_by = $_REQUEST['order_by'];
+		else
+		$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->defaul
+		t_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}
 
 	function get_attachments($id)
 	{

@@ -104,6 +104,32 @@ class SalesOrder extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('SalesOrder');
 	}
+	
+	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	function getSortOrder()
+	{
+		global $log;
+                $log->debug("Entering getSortOrder() method ...");	
+		if(isset($_REQUEST['sorder'])) 
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['SALESORDER_SORT_ORDER'] != '')?($_SESSION['SALESORDER_SORT_ORDER']):($this->default_sort_order));
+		$log->debug("Exiting getSortOrder() method ...");
+		return $sorder;
+	}
+
+	function getOrderBy()
+	{
+		global $log;
+                $log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by'])) 
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['SALESORDER_ORDER_BY'] != '')?($_SESSION['SALESORDER_ORDER_BY']):($this->default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}	
+	// Mike Crowe Mod --------------------------------------------------------
 
 /** Function to get activities associated with the id
  *  This function accepts the id as arguments and execute the MySQL query using the id
