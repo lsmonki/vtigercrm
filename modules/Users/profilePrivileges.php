@@ -290,7 +290,7 @@ if($mode == 'create')
 	}
 
 }
-$privileges_tab = array_chunk($privileges_tab, 2);
+$privileges_tab = array_chunk($privileges_tab, 4);
 $smarty->assign("TAB_PRIV",$privileges_tab);			
 
 //utilities privileges
@@ -412,7 +412,7 @@ if($mode=='view')
 			$field=array();
 			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src=".$image_path."/yes.gif>";
+				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 			}
 			else
 			{
@@ -422,7 +422,7 @@ if($mode=='view')
 			$field[]=$visible;
 			$field_module[]=$field;
 		}
-		$privilege_field[$module_name] = array_chunk($field_module,2);
+		$privilege_field[$module_name] = array_chunk($field_module,4);
 		next($fieldListResult);
 	}
 }
@@ -458,7 +458,7 @@ elseif($mode=='edit')
 			$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 			$field_module[]=$field;
 		}
-		$privilege_field[$module_name] = array_chunk($field_module,2);
+		$privilege_field[$module_name] = array_chunk($field_module,4);
 		next($fieldListResult);
 	}
 }
@@ -496,7 +496,7 @@ elseif($mode=='create')
 				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 				$field_module[]=$field;
 			}
-			$privilege_field[$module_name] = array_chunk($field_module,2);
+			$privilege_field[$module_name] = array_chunk($field_module,4);
 			next($fieldListResult);
 		}
 	}
@@ -525,7 +525,7 @@ elseif($mode=='create')
 				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 				$field_module[]=$field;
 			}
-			$privilege_field[$module_name] = array_chunk($field_module,2);
+			$privilege_field[$module_name] = array_chunk($field_module,4);
 			next($fieldListResult);
 		}	
 	}
@@ -548,7 +548,7 @@ function getGlobalDisplayValue($id,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'yes.gif">';
+		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
 	}
 	elseif($id == 1)
 	{
@@ -601,7 +601,7 @@ function getDisplayValue($id)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'yes.gif">';
+		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
 	}
 	elseif($id == 1)
 	{
