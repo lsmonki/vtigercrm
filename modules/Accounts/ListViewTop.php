@@ -82,9 +82,10 @@ foreach($open_accounts_list as $account)
 }
 
 $xtpl->parse("main");
-if (count($open_accounts_list)>0) $xtpl->out("main");
-else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-echo "<BR>";
+if (count($open_accounts_list)>0) {
+	$xtpl->out("main");
+	echo "<BR>";
+}
 // Stick on the form footer
 echo get_form_footer();
 

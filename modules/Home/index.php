@@ -68,7 +68,9 @@ if($tab_per_Data[2] == 0)
 		include("modules/Accounts/ListViewTop.php");
 	}
 }
-	
+?>
+<br>
+<?php
 if($tab_per_Data[2] == 0)
 {
 	if($permissionData[2][3] == 0)

@@ -57,8 +57,6 @@ $mod_strings = Array(
 
 'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
 
-'NTC_NONE_SCHEDULED'=>'None scheduled.',
-
 'LBL_SELECT_OPPOPTUNITY'=>'Select Potential',
 'LBL_GENERAL_INFORMATION'=>'General Information',
 
