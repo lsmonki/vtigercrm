@@ -67,27 +67,35 @@ function create_default_users() {
 
         // create default admin user
     	$user = new User();
-        $user->last_name = 'Administrator';
-        $user->user_name = 'admin';
-        $user->status = 'Active';
-        $user->is_admin = 'on';
-        $user->user_password = $user->encrypt_password($admin_password);
-        $user->tz = 'Europe/Berlin';
-        $user->holidays = 'de,en_uk,fr,it,us,';
-        $user->workdays = '0,1,2,3,4,5,6,';
-        $user->weekstart = '1';
-        $user->namedays = '';
-	$user->date_format = 'yyyy-mm-dd';
+        $user->column_fields["last_name"] = 'Administrator';
+        $user->column_fields["user_name"] = 'admin';
+        $user->column_fields["status"] = 'Active';
+        $user->column_fields["is_admin"] = 'on';
+        $user->column_fields["user_password"] = $user->encrypt_password($admin_password);
+        $user->column_fields["tz"] = 'Europe/Berlin';
+        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
+        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
+        $user->column_fields["weekstart"] = '1';
+        $user->column_fields["namedays"] = '';
+        $user->column_fields["currency_id"] = 1;
+	$user->column_fields["date_format"] = 'yyyy-mm-dd';
 	// added by jeri to populate default image and tagcloud for admin	
-	$user->imagename = 'shanky.jpg';
-        $user->tagcloud = '';	
-        $user->activity_view = 'This Year';	
-	$user->defhomeview = 'home_metrics';
+	$user->column_fields["imagename"] = 'shanky.jpg';
+        $user->column_fields["tagcloud"] = '';	
+        $user->column_fields["activity_view"] = 'This Year';	
+	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
 	$admin_email ="admin@administrator.com";
-        $user->email = $admin_email;
-        $user->save();
+        $user->column_fields["email"] = $admin_email;
+	//to get the role id for standard_user	
+	$role_query = "select roleid from role where rolename='administrator'";
+	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
+	$role_result = $db->query($role_query);
+	$role_id = $db->query_result($role_result,0,"roleid");
+	$user->column_fields["roleid"] = $role_id;
+
+        $user->save("Users");
 
         // we need to change the admin user to a fixed id of 1.
         //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
@@ -95,70 +103,41 @@ function create_default_users() {
 
         $log->info("Created ".$user->table_name." vtiger_table. for user $user->id");
 
-	/*
-        if($create_default_user) {
-                $default_user = new User();
-                $default_user->last_name = $default_user_name;
-                $default_user->user_name = $default_user_name;
-                $default_user->status = 'Active';
-
-		if (isset($default_user_is_admin) && $default_user_is_admin)
-			$default_user->is_admin = 'on';
-
-                $default_user->user_password = $default_user->encrypt_password($default_password);
-        	$default_user->tz = 'Europe/Berlin';
-	        $default_user->holidays = 'de,en_uk,fr,it,us,';
-        	$default_user->workdays = '0,1,2,3,4,5,6,';
-	        $default_user->weekstart = '1';
-        	$default_user->namedays = '';
-                $default_user->save();
-        }
-	*/
-
-	// insert values into vtiger_user2role vtiger_table
-	$role_query = "select roleid from vtiger_role where rolename='administrator'";
-	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
-	$role_result = $db->query($role_query);
-	$role_id = $db->query_result($role_result,0,"roleid");
-
-	$sql_stmt1 = "insert into vtiger_user2role values(".$user->id.",'".$role_id."')";
-	$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
-
-	//Creating the flat vtiger_files
+	//Creating the flat files
 	createUserPrivilegesfile($user->id);
         createUserSharingPrivilegesfile($user->id);
 
 
 	//Creating the Standard User
     	$user = new User();
-        $user->last_name = 'StandardUser';
-        $user->user_name = 'standarduser';
-        $user->status = 'Active';
-        $user->user_password = $user->encrypt_password('standarduser');
-        $user->tz = 'Europe/Berlin';
-        $user->holidays = 'de,en_uk,fr,it,us,';
-        $user->workdays = '0,1,2,3,4,5,6,';
-        $user->weekstart = '1';
-        $user->namedays = '';
-	$user->date_format = 'yyyy-mm-dd';
+        $user->column_fields["last_name"] = 'StandardUser';
+        $user->column_fields["user_name"] = 'standarduser';
+        $user->column_fields["status"] = 'Active';
+        $user->column_fields["user_password"] = $user->encrypt_password('standarduser');
+        $user->column_fields["tz"] = 'Europe/Berlin';
+        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
+        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
+        $user->column_fields["weekstart"] = '1';
+        $user->column_fields["namedays"] = '';
+        $user->column_fields["currency_id"] = 1;
+	$user->column_fields["date_format"] = 'yyyy-mm-dd';
 	// added by jeri to populate default image and tagcloud for admin	
-	$user->imagename = 'ela.jpg';
-        $user->activity_view = 'This Year';	
-        $user->tagcloud = '';	
-	$user->defhomeview = 'home_metrics';
+	$user->column_fields["imagename"] = 'ela.jpg';
+        $user->column_fields["activity_view"] = 'This Year';	
+        $user->column_fields["tagcloud"] = '';	
+	$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default default admin emailid
 	if($admin_email == '')
 	$std_email ="standarduser@standarduser.com";
-        $user->email = $std_email;
-        $user->save();
-
+        $user->column_fields["email"] = $std_email;
+	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='standard_user'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
+	$user->column_fields["roleid"] = $role_id;
 
-	$sql_stmt2 = "insert into vtiger_user2role values(".$user->id.",'".$role_id."')";
-	$db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+        $user->save('Users');
 
 	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
@@ -169,8 +148,8 @@ function create_default_users() {
 //$startTime = microtime();
 $modules = array("DefaultDataPopulator");
 $focus=0;				
-// vtiger_tables creation
-eecho("Creating Core vtiger_tables: ");
+// tables creation
+eecho("Creating Core tables: ");
 $success = $db->createTables("schema/DatabaseSchema.xml");
 
 // TODO HTML
@@ -194,20 +173,20 @@ foreach ( $modules as $module )
 //$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
-// create and populate combo vtiger_tables
+// create and populate combo tables
 require_once('include/PopulateComboValues.php');
 $combo = new PopulateComboValues();
 $combo->create_tables();
 
 create_default_users();
 
-// default vtiger_report population
+// default report population
 require_once('modules/Reports/PopulateReports.php');
 
-// default vtiger_customview population
+// default customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
-//Writing vtiger_tab data in flat file
+//Writing tab data in flat file
 create_tab_data_file();
 create_parenttab_data_file();
 

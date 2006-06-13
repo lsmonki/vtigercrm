@@ -121,7 +121,7 @@ $assigned_user_id = $seed_user->retrieve_user_id($assigned_user_name);
 global $current_user;
 
 $current_user = new User();
-$result = $current_user->retrieve($assigned_user_id);
+$result = $current_user->retrieve_entity_info($assigned_user_id,'Users');
 
 $tagkey = 1;
 
@@ -145,7 +145,7 @@ for($i = 0; $i < $company_name_count; $i++)
 	
 	$account_name = $company_name_array[$i];
 
-	// Create new vtiger_accounts.
+	// Create new accounts.
 	$account = new Account();
 	$account->column_fields["accountname"] = $account_name;
 	$account->column_fields["phone"] = create_phone_number();
@@ -227,7 +227,7 @@ for($i = 0; $i < $company_name_count; $i++)
 	
 	$opportunity_ids[] = $opp->id;
 
-//	$adb->println("PSD Potential [".$opp->id."] - vtiger_account[".$account->id."]");
+//	$adb->println("PSD Potential [".$opp->id."] - account[".$account->id."]");
 	
 }
 
@@ -297,10 +297,10 @@ for($i=0; $i<10; $i++)
 	//$query = "insert into opportunities_contacts set id='".create_guid()."', contact_id='$contact->id', contact_role='".$app_list_strings['opportunity_relationship_type_default_key']."', opportunity_id='".$opportunity_ids[$opportunity_key]."'";
 	//$db->query($query, true, "unable to create seed links between opportunities and contacts");
 
-	$query = "insert into vtiger_contpotentialrel ( contactid, vtiger_potentialid ) values (".$contact->id.",".$opportunity_ids[$opportunity_key].")";
+	$query = "insert into vtiger_contpotentialrel ( contactid, potentialid ) values (".$contact->id.",".$opportunity_ids[$opportunity_key].")";
 	$db->query($query);
 
-//	$adb->println("PSD Contact [".$contact->id."] - vtiger_account[".$account_ids[$account_key]."] - vtiger_potential[".$opportunity_ids[$opportunity_key]."]");
+//	$adb->println("PSD Contact [".$contact->id."] - account[".$account_ids[$account_key]."] - potential[".$opportunity_ids[$opportunity_key]."]");
 
 	//Create new tasks
 	/*$task = new Task();
@@ -396,7 +396,7 @@ for($i=0; $i<10; $i++)
 
 }
 
-// Temp fix since user is not logged in while populating data updating creatorid in vtiger_crmentity - GS
+// Temp fix since user is not logged in while populating data updating creatorid in crmentity - GS
 
 
 //Populating Vendor Data
@@ -544,7 +544,7 @@ for($i=0; $i<10; $i++)
 http://support.microsoft.com/default.aspx?scid=kb%3BEN-US%3B263074
 
 If you want to continue working with vtiger Outlook Plug-in, select the Allow access for check box and select the time from drop-down box.",
-	" Since, vtigerCRM & all plugins are open source, it is not signed up with third party vtiger_vendors and IE will ask to download even though the plugin are not signed.
+	" Since, vtigerCRM & all plugins are open source, it is not signed up with third party vendors and IE will ask to download even though the plugin are not signed.
 
 This message if produced by Microsoft Windows XP. I English Windows XP with the SP2 and the last updates. I told IE to accept installation of the ActiveX, but after it, this message has appeared. Provably there is a place where to tall to WinXP to not validate if the code is signed... but I don\'t know where.
 
@@ -633,7 +633,7 @@ for($i=0;$i<5;$i++)
 	$salesorder_ids[] = $so->id;
 	
 	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_soproductrel ( vtiger_salesorderid, productid, quantity, listprice ) values (".$so->id.",".$product_ids[$product_key].",12,499.000 )";
+        $query = "insert into vtiger_soproductrel ( salesorderid, productid, quantity, listprice ) values (".$so->id.",".$product_ids[$product_key].",12,499.000 )";
         $db->query($query);
 
 }
@@ -668,7 +668,7 @@ for($i=0;$i<5;$i++)
 	$purchaseorder_ids[] = $po->id;
 
 	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_poproductrel ( vtiger_purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,1299.000 )";
+        $query = "insert into vtiger_poproductrel ( purchaseorderid, productid, quantity, listprice ) values (".$po->id.",".$product_ids[$product_key].",15,1299.000 )";
         $db->query($query);
 
 }
@@ -710,7 +710,7 @@ for($i=0;$i<5;$i++)
 	}
 
 	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_invoiceproductrel ( vtiger_invoiceid, productid, quantity, listprice ) values (".$invoice->id.",".$product_ids[$product_key].",18,269.000 )";
+        $query = "insert into vtiger_invoiceproductrel ( invoiceid, productid, quantity, listprice ) values (".$invoice->id.",".$product_ids[$product_key].",18,269.000 )";
         $db->query($query);
 	
 }
@@ -781,7 +781,7 @@ for($i=0;$i<7;$i++)
 	$notes_ids[] = $notes ->id;
 	
 	$product_key = array_rand($product_ids);
-        $query = "insert into vtiger_senotesrel (crmid, vtiger_notesid) values (".$product_ids[$product_key].", ".$notes->id.")";
+        $query = "insert into vtiger_senotesrel (crmid, notesid) values (".$product_ids[$product_key].", ".$notes->id.")";
 	$db->query($query);
 		
 }
