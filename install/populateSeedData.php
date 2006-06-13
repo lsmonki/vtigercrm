@@ -607,7 +607,7 @@ for($i=0;$i<5;$i++)
 //Populate SalesOrder Data
 
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
-$status_array = array ("Created",  "Delivered", "Approved" , "Cancelled");
+$status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $sototal_array = array ("5988.000", "5988.000", "5988.000", "5988.000", "5988.000");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 
@@ -685,7 +685,7 @@ for($i=0;$i<5;$i++)
 	
 	$invoice->column_fields["assigned_user_id"] = $assigned_user_id;
 	$account_key = array_rand($account_ids);
-	$invoice->column_fields["accountid"] = $account_ids[$account_key];
+	$invoice->column_fields["account_id"] = $account_ids[$account_key];
 	$so_key = array_rand($salesorder_ids);
 	$invoice->column_fields["salesorder_id"] = $salesorder_ids[$so_key];
 	$contact_key = array_rand($contact_ids);
