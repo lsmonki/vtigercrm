@@ -82,6 +82,9 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 		$smarty = new vtigerCRM_Smarty;
 
+		require_once("modules/$module/language/en_us.lang.php");
+		global $mod_strings;
+
 		$smarty->assign("MOD", $mod_strings);
 		$smarty->assign("APP", $app_strings);
 		$smarty->assign("IMAGE_PATH",$image_path);
@@ -91,11 +94,11 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 	
 		$listquery = getListQuery($module);
-		//Avoided the modules Faq and PriceBooks. we should remove this if when change the vtiger_customview function
+		//Avoided the modules Faq and PriceBooks. we should remove this if when change the customview function
 		$oCustomView = '';
 		if($module != 'Faq' && $module != 'PriceBooks')
 		{
-			//Added to get the default 'All' vtiger_customview query
+			//Added to get the default 'All' customview query
 			$oCustomView = new CustomView($module);
 			$viewid = $oCustomView->getViewId($module);
 
@@ -154,7 +157,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	//Added to display the Total record count
 ?>
 	<script>
-		document.getElementById("global_search_total_count").innerHTML = "Total Number of Records : <b><?php echo $total_record_count; ?></b>";
+		document.getElementById("global_search_total_count").innerHTML = "Total Records found : <b><?php echo $total_record_count; ?></b>";
 	</script>
 <?php
 
@@ -163,17 +166,17 @@ else {
 	echo "<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>".$mod_strings['ERR_ONE_CHAR']."</em>";
 }
 
-/**	Function to get the where condition for a module based on the vtiger_field vtiger_table entries
+/**	Function to get the where condition for a module based on the field table entries
   *	@param  string $listquery  -- ListView query for the module 
   *	@param  string $module     -- module name
   *	@param  string $search_val -- entered search string value
-  *	@return string $where      -- where condition for the module based on vtiger_field vtiger_table entries
+  *	@return string $where      -- where condition for the module based on field table entries
   */
 function getUnifiedWhere($listquery,$module,$search_val)
 {
 	global $adb;
 
-	$query = "SELECT * FROM vtiger_field WHERE vtiger_tabid = ".getTabid($module);
+	$query = "SELECT * FROM vtiger_field WHERE tabid = ".getTabid($module);
 	$result = $adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -183,7 +186,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		$columnname = $adb->query_result($result,$i,'columnname');
 		$tablename = $adb->query_result($result,$i,'tablename');
 
-		//Before form the where condition, check whether the vtiger_table for the vtiger_field has been added in the listview query
+		//Before form the where condition, check whether the table for the field has been added in the listview query
 		if(strstr($listquery,$tablename))
 		{
 			if($where != '')
@@ -267,7 +270,7 @@ function getSearchModulesComboList($search_module)
 							$selected = '';
 							if($search_module != '' && $module == $search_module)
 								$selected = 'selected';
-							if($search_module == '' && $module == 'Contacts')
+							if($search_module == '' && $module == 'All')
 								$selected = 'selected';
 							?>
 							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $module; ?></option>
