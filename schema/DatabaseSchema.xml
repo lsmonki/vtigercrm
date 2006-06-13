@@ -81,6 +81,7 @@
 			<default value="0" />
 		</field>
 		<field name="defhomeview" type="C" size="100" />
+		<field name="confirm_password" type="C" size="30" />
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>
@@ -5112,5 +5113,97 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	<table name="vtiger_status">
+		<field name="statusid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="status" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
 
+		<index name="vtiger_status_status_idx">
+			<col>source</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_activity_view">
+		<field name="activity_viewid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="activity_view" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<index name="vtiger_activity_view_status_idx">
+			<col>source</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_lead_view">
+		<field name="lead_viewid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="lead_view" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<index name="vtiger_lead_viewstatus_idx">
+			<col>source</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_date_format">
+		<field name="date_formatid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="date_format" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<index name="vtiger_date_format_status_idx">
+			<col>source</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
 </schema>
