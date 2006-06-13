@@ -30,9 +30,12 @@ function createUserPrivilegesfile($userid)
 		$newbuf .="\n";		
 		$newbuf .= "//This is the access privilege file\n";
 		$user_focus= new User();
-		$user_focus->retrieve($userid);
+		$user_focus->retrieve_entity_info($userid,'Users');
+		
 		$userInfo=Array();
-		foreach($user_focus->column_fields as $field)
+		$user_focus->column_fields["id"] = '';
+		$user_focus->id = $userid; 
+		foreach($user_focus->column_fields as $field=>$value_iter)
         	{
                		$userInfo[$field]= $user_focus->$field;
         	}
@@ -113,7 +116,7 @@ function createUserSharingPrivilegesfile($userid)
 		$newbuf .="\n";		
 		$newbuf .= "//This is the sharing access privilege file\n";
 		$user_focus= new User();
-		$user_focus->retrieve($userid);
+		$user_focus->retrieve_entity_info($userid,'Users');
 		if($user_focus->is_admin == 'on')
 		{
 			$newbuf .= "\n";
@@ -439,7 +442,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 
 
 
-		//Retreiving from vtiger_role to rs
+		//Retreiving from role to rs
 		$parRoleList = "(";
 		foreach($parent_roles as $par_role_id)
 		{

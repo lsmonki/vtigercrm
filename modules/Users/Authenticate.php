@@ -31,7 +31,7 @@ global $mod_strings;
 $focus = new User();
 
 // Add in defensive code here.
-$focus->user_name = to_html($_REQUEST['user_name']);
+$focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
 $user_password = $_REQUEST['user_password'];
 
 $focus->load_user($user_password);
@@ -43,33 +43,16 @@ if($focus->is_authenticated())
         $intime=date("Y/m/d H:i:s");
         require_once('modules/Users/LoginHistory.php');
         $loghistory=new LoginHistory();
-        $Signin = $loghistory->user_login($focus->user_name,$usip,$intime);
-
-	//Authentication for tutos
-        //include('modules/Calendar/Authenticate.php');
+        $Signin = $loghistory->user_login($focus->column_fields["user_name"],$usip,$intime);
 
 	// save the user information into the session
 	// go to the home screen
 	//Security related entries start
 	require_once('include/utils/UserInfoUtil.php');
-	//$rolename = fetchUserRole($focus->id);
-	//$profilename = fetchUserProfile($focus->id);
 	$profileid = fetchUserProfileId($focus->id);	
-	//setting the vtiger_role into the session
-	//$_SESSION['authenticated_user_roleid'] = $profilename;
-
-	//Setting the Object in Session
-	/*
-	$accessObj = new AccessControl();
-	$accessObj->authenticated_user_profileid = $profileid;
-	$accessObj->tab_permission_set = setPermittedTabs2Session($profileid);
-	
-	$accessObj->action_permission_set = setPermittedActions2Session($profileid);
-	$_SESSION['access_privileges'] = $accessObj; 
-	*/
+	//setting the role into the session
 
 	createUserPrivilegesfile($focus->id);
-        //createUserSharingPrivilegesfile($focus->id);	
 		
 	$_SESSION['authenticated_user_profileid'] = $profileid;
 	setGlobalProfilePermission2Session($profileid);
@@ -128,7 +111,7 @@ if($focus->is_authenticated())
         $log->debug("app_unique_key is $application_unique_key");
 
 	
-// Clear all uploaded import vtiger_files for this user if it exists
+// Clear all uploaded import files for this user if it exists
 
 	global $import_dir;
 
@@ -141,7 +124,7 @@ if($focus->is_authenticated())
 }
 else
 {
-	$_SESSION['login_user_name'] = $focus->user_name;
+	$_SESSION['login_user_name'] = $focus->column_fields["user_name"];
 	$_SESSION['login_password'] = $user_password;
 	$_SESSION['login_error'] = $mod_strings['ERR_INVALID_PASSWORD'];
 	

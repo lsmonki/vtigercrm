@@ -30,14 +30,14 @@
 
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
 
 // User is used to store customer information.
-class User extends SugarBean {
+class User extends CRMEntity {
 	var $log;
 	var $db;
-	// Stored vtiger_fields
+	// Stored fields
 	var $id;
 	var $user_name;
 	var $user_password;
@@ -84,8 +84,22 @@ class User extends SugarBean {
 	var $reports_to_id;
 
 	var $module_id='id';
+	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
+	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
+	var $column_fields = Array();
+	var $table_name = "users";
+	var $sortby_fields = Array();		  
 	
-	var $table_name = "vtiger_users";
+    // This is the list of fields that are in the lists.
+    var $list_fields_name = Array();
+    var $list_link_field= '';
+
+	var $list_mode;
+	var $popup_type;
+
+	var $search_fields = Array();
+    var $search_fields_name = Array();
+	
 	var $module_name = "Users";
 
 	var $object_name = "User";
@@ -96,58 +110,13 @@ class User extends SugarBean {
 	var $imagename;
 	var $defhomeview;
 	//var $sortby_fields = Array('user_name','email1','last_name','is_admin','status');	
-	var $column_fields = Array("id"
-		,"user_name"
-		,"user_password"
-		,"cal_color"
-		,"hour_format"
-		,"start_hour"
-		,"end_hour"
-		,"first_name"
-		,"last_name"
-		,"description"
-		,"date_entered"
-		,"date_modified"
-		,"modified_user_id"
-		,"title"
-		,"department"
-		,"is_admin"
-		,"currency_id"
-		,"phone_home"
-		,"phone_mobile"
-		,"phone_work"
-		,"phone_other"
-		,"phone_fax"
-		,"email1"
-		,"email2"
-		,"signature"
-		,"yahoo_id"
-		,"address_street"
-		,"address_city"
-		,"address_state"
-		,"address_postalcode"
-		,"address_country"
-		,"reports_to_id"
-		,"tz"
-		,"holidays"
-		,"namedays"
-		,"workdays"
-		,"weekstart"
-		,"status"
-		,"date_format"
-		,"activity_view"
-		,"lead_view"
-		,"tagcloud"
-		,"imagename"
-		,"defhomeview"
-		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
-	// This is used to retrieve related vtiger_fields from form posts.
+	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('reports_to_name');		
 	
-	// This is the list of vtiger_fields that are in the lists.
+	// This is the list of fields that are in the lists.
 	var $list_fields = Array('id', 'first_name', 'last_name', 'user_name', 'status', 'department', 'yahoo_id', 'is_admin', 'email1', 'phone_work');
 	//commented as we get issues with sugarbean
 	/*
@@ -169,7 +138,10 @@ class User extends SugarBean {
 
 	function User() {
 		$this->log = LoggerManager::getLogger('user');
+		$this->log->debug("Entering User() method ...");
 		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Users');
+		$this->log->debug("Exiting User() method ...");
 		
 	}
 
@@ -225,19 +197,20 @@ class User extends SugarBean {
 	function encrypt_password($user_password)
 	{
 		// encrypt the password.
-		$salt = substr($this->user_name, 0, 2);
+		$salt = substr($this->column_fields["user_name"], 0, 2);
 		$encrypted_password = crypt($user_password, $salt);	
 
 		return $encrypted_password;
 	}
 	
 	function authenticate_user($password){
+		$usr_name = $this->column_fields["user_name"];
 	
-		$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_hash='$password'";
+		$query = "SELECT * from $this->table_name where user_name='$usr_name' AND user_hash='$password'";
 		$result = $this->db->requireSingleResult($query, false);
 
 		if(empty($result)){
-			$this->log->fatal("SECURITY: failed login by $this->user_name");
+			$this->log->fatal("SECURITY: failed login by $usr_name");
 			return false;
 		}
 
@@ -278,12 +251,13 @@ class User extends SugarBean {
 	 */
 	function doLogin($user_password) {
 		global $AUTHCFG;
+		$usr_name = $this->column_fields["user_name"];
 	
 		switch (strtoupper($AUTHCFG['authType'])) {
 			case 'LDAP':
 				$this->log->debug("Using LDAP authentication");
 				require_once('modules/Users/authTypes/LDAP.php');
-				$result = ldapAuthenticate($this->user_name, $user_password);
+				$result = ldapAuthenticate($this->column_fields["user_name"], $user_password);
 				if ($result == NULL) {
 					return false;
 				} else {
@@ -295,7 +269,7 @@ class User extends SugarBean {
 				$this->log->debug("Using Active Directory authentication");
 				require_once('modules/Users/authTypes/adLDAP.php');
 				$adldap = new adLDAP();
-				if ($adldap->authenticate($this->user_name,$user_password)) {
+				if ($adldap->authenticate($this->column_fields["user_name"],$user_password)) {
 					return true;
 				} else {
 					return false;
@@ -305,7 +279,7 @@ class User extends SugarBean {
 			default:
 				$this->log->debug("Using integrated/SQL authentication");
 				$encrypted_password = $this->encrypt_password($user_password);
-				$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_password='$encrypted_password'";
+				$query = "SELECT * from $this->table_name where user_name='$usr_name' AND user_password='$encrypted_password'";
 				$result = $this->db->requireSingleResult($query, false);
 				if (empty($result)) {
 					return false;
@@ -327,18 +301,19 @@ class User extends SugarBean {
 	 */
 	function load_user($user_password)
 	{
+		$usr_name = $this->column_fields["user_name"];
 		if(isset($_SESSION['loginattempts'])){
 				 $_SESSION['loginattempts'] += 1;
 		}else{
 			$_SESSION['loginattempts'] = 1;	
 		}
 		if($_SESSION['loginattempts'] > 5){
-			$this->log->warn("SECURITY: " . $this->user_name . " has attempted to login ". 	$_SESSION['loginattempts'] . " times.");
+			$this->log->warn("SECURITY: " . $usr_name . " has attempted to login ". 	$_SESSION['loginattempts'] . " times.");
 		}
-		$this->log->debug("Starting user load for $this->user_name");
+		$this->log->debug("Starting user load for $usr_name");
 		$validation = 0;
 		unset($_SESSION['validation']);
-		if( !isset($this->user_name) || $this->user_name == "" || !isset($user_password) || $user_password == "")
+		if( !isset($this->column_fields["user_name"]) || $this->column_fields["user_name"] == "" || !isset($user_password) || $user_password == "")
 			return null;
 			
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f', '866bba5ae0a15180e8613d33b0acc6bd') == -1)$validation = -1;
@@ -352,19 +327,18 @@ class User extends SugarBean {
 		
 		if(!$authCheck)
 		{
-			$this->log->warn("User authentication for $this->user_name failed");
+			$this->log->warn("User authentication for $usr_name failed");
 			return null;
 		}
 		
-		$query = "SELECT * from $this->table_name where user_name='$this->user_name'";
+		$query = "SELECT * from $this->table_name where user_name='$usr_name'";
 		$result = $this->db->requireSingleResult($query, false);
 
-		// Get the vtiger_fields for the user
+		// Get the fields for the user
 		$row = $this->db->fetchByAssoc($result);
+		$this->id = $row['id'];	
 
 		$user_hash = strtolower(md5($user_password));
-		
-		
 		
 		
 		// If there is no user_hash is not present or is out of date, then create a new one.
@@ -372,19 +346,6 @@ class User extends SugarBean {
 		{
 			$query = "UPDATE $this->table_name SET user_hash='$user_hash' where id='{$row['id']}'";
 			$this->db->query($query, true, "Error setting new hash for {$row['user_name']}: ");	
-		}
-		
-		// now fill in the vtiger_fields.
-		foreach($this->column_fields as $field)
-		{
-			//$this->log->info($field);
-			
-			if(isset($row[$field]))
-			{
-				$this->log->debug("=".$row[$field]);
-	
-				$this->$field = $row[$field];
-			}
 		}
 		$this->loadPreferencesFromDB($row['user_preferences']);
 		
@@ -408,9 +369,10 @@ class User extends SugarBean {
 	*/
 	function change_password($user_password, $new_password)
 	{
+		$usr_name = $this->column_fields["user_name"];
 		global $mod_strings;
 		global $current_user;
-		$this->log->debug("Starting password change for $this->user_name");
+		$this->log->debug("Starting password change for $usr_name");
 		
 		if( !isset($new_password) || $new_password == "") {
 			$this->error_string = $mod_strings['ERR_PASSWORD_CHANGE_FAILED_1'].$user_name.$mod_strings['ERR_PASSWORD_CHANGE_FAILED_2'];
@@ -430,7 +392,7 @@ class User extends SugarBean {
 	
 			if($row == null)
 			{
-				$this->log->warn("Incorrect old password for $this->user_name");
+				$this->log->warn("Incorrect old password for $usr_name");
 				$this->error_string = $mod_strings['ERR_PASSWORD_INCORRECT_OLD'];
 				return false;
 			}
@@ -441,7 +403,7 @@ class User extends SugarBean {
 		
 		//set new password
 		$query = "UPDATE $this->table_name SET user_password='$encrypted_new_password', user_hash='$user_hash' where id='$this->id'";
-		$this->db->query($query, true, "Error setting new password for $this->user_name: ");	
+		$this->db->query($query, true, "Error setting new password for $usr_name: ");	
 		return true;
 	}
 	
@@ -460,16 +422,17 @@ class User extends SugarBean {
 	}
 	
 	/** 
-	 * @return -- returns a list of all vtiger_users in the system.
+	 * @return -- returns a list of all users in the system.
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
 	function verify_data()
 	{
+		$usr_name = $this->column_fields["user_name"];
 		global $mod_strings;
 		
-		$query = "SELECT user_name from vtiger_users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
+		$query = "SELECT user_name from vtiger_users where user_name='$usr_name' AND id<>'$this->id' AND deleted=0";
 		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
 		$dup_users = $this->db->fetchByAssoc($result);
 		
@@ -478,20 +441,20 @@ class User extends SugarBean {
 		$last_admin = $this->db->fetchByAssoc($result);
 
 		$this->log->debug("last admin length: ".count($last_admin));
-		$this->log->debug($last_admin['user_name']." == ".$this->user_name);
+		$this->log->debug($last_admin['user_name']." == ".$usr_name);
 
 		$verified = true;
 		if($dup_users != null)
 		{
-			$this->error_string .= $mod_strings['ERR_USER_NAME_EXISTS_1'].$this->user_name.$mod_strings['ERR_USER_NAME_EXISTS_2'];
+			$this->error_string .= $mod_strings['ERR_USER_NAME_EXISTS_1'].$usr_name.''.$mod_strings['ERR_USER_NAME_EXISTS_2'];
 			$verified = false;
 		}
 		if(!isset($_REQUEST['is_admin']) &&
 			count($last_admin) == 1 && 
-			$last_admin['user_name'] == $this->user_name) {
+			$last_admin['user_name'] == $usr_name) {
 			$this->log->debug("last admin length: ".count($last_admin));
 
-			$this->error_string .= $mod_strings['ERR_LAST_ADMIN_1'].$this->user_name.$mod_strings['ERR_LAST_ADMIN_2'];
+			$this->error_string .= $mod_strings['ERR_LAST_ADMIN_1'].$usr_name.$mod_strings['ERR_LAST_ADMIN_2'];
 			$verified = false;
 		}
 		
@@ -589,13 +552,14 @@ class User extends SugarBean {
 	function retrieveCurrentUserInfoFromFile($userid)
 	{
 		require('user_privileges/user_privileges_'.$userid.'.php');
-		foreach($this->column_fields as $field)
+		foreach($this->column_fields as $field=>$value_iter)
                 {
                         if(isset($user_info[$field]))
                         {
                                 $this->$field = $user_info[$field];
                         }
                 }
+		$this->id = $userid;
 		return $this;
 		
 	}

@@ -32,18 +32,18 @@ global $current_user;
 global $theme;
 global $default_language;
 global $adb;
-
+global $currentModule;
 global $app_strings;
 global $mod_strings;
 
 $focus = new User();
 
 if(!empty($_REQUEST['record'])) {
-        $focus->retrieve($_REQUEST['record']);
+	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
+	$focus->id = $_REQUEST['record'];	
 }
 else
 {
- //       header("Location: index.php?module=Users&action=ListView");
 
     echo "
         <script type='text/javascript'>
@@ -82,11 +82,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$role = fetchUserRole($focus->id);
-$rolename =  getRoleName($role);
-$currencyid=fetchCurrency($focus->id);
-$currency=getCurrencyName($currencyid);
-//the user might belong to multiple vtiger_groups
+//the user might belong to multiple groups
 if($focus->id != 1)
 {
  $groupids = fetchUserGroupids($focus->id);
@@ -107,13 +103,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
-$smarty->assign("USER_NAME", $focus->user_name);
-$smarty->assign("FIRST_NAME", $focus->first_name);
-$smarty->assign("LAST_NAME", $focus->last_name);
 $smarty->assign("CATEGORY", $category);
-$smarty->assign("STATUS", $focus->status);
-$smarty->assign("YAHOO_ID", $focus->yahoo_id);
-$smarty->assign("DATE_FORMAT", $focus->date_format);
 if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
@@ -123,11 +113,9 @@ if(isset($focus->imagename) && $focus->imagename!='')
 
 	<div class='scale-image' style='padding: 10px; float: left; width: 83.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
 	<p><script type='text/javascript' src='include/js/scale_demo.js'></script></p>";
-	$smarty->assign("USER_IMAGE",$imagestring);
+	//$smarty->assign("USER_IMAGE",$imagestring);
 }
 				
-if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $smarty->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
-
 if(isset($_REQUEST['modechk']) && $_REQUEST['modechk'] != '' )
 {
 	$modepref = $_REQUEST['modechk'];
@@ -151,11 +139,8 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 	
- //global $AUTHCFG;
- 	//if (strtoupper($AUTHCFG['authType']) == 'SQL') {
 		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='classBtn' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=165,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=100, top=126, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
 		$smarty->assign('CHANGE_PW_BUTTON',$buttons);
-	//}
 	
 	$buttons = "<input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '>";	
 	$smarty->assign('LOGIN_HISTORY_BUTTON',$buttons);
@@ -166,33 +151,18 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 
 	
 }
-/* Forum Display/Hide Button
-if($_REQUEST['forumDisplay'] == "true" || $displayForums == "true"){
-	$buttons .= "<input title='".$app_strings['LBL_FORUM_HIDE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_FORUM_HIDE_BUTTON_KEY']."' class='button' onclick=\"this.form.module.value='Users'; this.form.forumDisplay.value='false'; this.form.action.value='DetailView'\" type='submit' name='Display' value=' ".$app_strings['LBL_FORUM_HIDE_BUTTON_LABEL']." '></td>\n";
-}
-else
-{
-	$buttons .= "<input title='".$app_strings['LBL_FORUM_SHOW_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_FORUM_SHOW_BUTTON_KEY']."' class='button' onclick=\"this.form.module.value='Users'; this.form.forumDisplay.value='true'; this.form.action.value='DetailView'\" type='submit' name='Display' value=' ".$app_strings['LBL_FORUM_SHOW_BUTTON_LABEL']." '></td>\n";
-}
-*/
 if (is_admin($current_user)) 
 {
 	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
 	$smarty->assign('DUPLICATE_BUTTON',$buttons);
 	
-	//done so that only the admin user can see the customize vtiger_tab button
-	if($_REQUEST['record'] == $current_user->id)
-	{
-		$buttons = "<input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '>";
-		$smarty->assign('TABCUSTOMIZE_BUTTON',$buttons);
-	}
+	//done so that only the admin user can see the customize tab button
 	if($_REQUEST['record'] != $current_user->id)
 	{
 		$buttons = "<input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='classBtn' onclick=\"deleteUser('$focus->id')\" type='button' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '>";
 		$smarty->assign('DELETE_BUTTON',$buttons);
 	}
 
-        //$buttons .= "<input title='".$app_strings['LBL_ROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_ROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='ListPermissions'\" type='submit' name='ListPermissions' value=' ".$app_strings['LBL_ROLES_BUTTON_LABEL']." '></td>\n";
 	if($_SESSION['authenticated_user_roleid'] == 'administrator')
 	{
 		$buttons = "<input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='classBtn' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '>";
@@ -202,99 +172,12 @@ if (is_admin($current_user))
 }
 
 
-if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $focus->is_admin == 'on') {
-	$smarty->assign("IS_ADMIN", "checked");
-}
 
-$smarty->assign("DESCRIPTION", nl2br($focus->description));
-if(is_admin($current_user))
-{
-	$smarty->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
-}
-else
-{
-	$smarty->assign("ROLEASSIGNED",$rolename);
-}
-
-	$smarty->assign("CURRENCY_NAME",$currency);
-
-//Getting the Group Lists
-$groupids = fetchUserGroupids($focus->id);
-if($groupids) {
-	$query ="select groupid,groupname from vtiger_groups where groupid in (".$groupids.")";
-	$result = $adb->query($query);
-	$num_rows = $adb->num_rows($result);
-} else {
-	$num_rows = 0;
-}
-
-
-
-//Assigning the group lists
-if(is_admin($current_user))
-{
-	for($i=0;$i < $num_rows;$i++)
-	{
-		$groupid = $adb->query_result($result,$i,'groupid');
-		$groupname = $adb->query_result($result,$i,'groupname');
-		$grouplists[$i] ="<a href='index.php?module=Users&action=GroupDetailView&groupId=".$groupid."'>".$groupname."</a>";
-	}
-	if($grouplists != '')
-	{	
-		$group_lists = implode(",",$grouplists);
-	}	
-	$smarty->assign("GROUPASSIGNED",$group_lists);
-}
-else
-{
-	for($i=0;$i < $num_rows;$i++)
-	{
-		$groupname = $adb->query_result($result,$i,'groupname');
-		$grouplists[$i] =$groupname;
-	}
-	if($grouplists != '')
-	{	
-		$group_lists = implode(",",$grouplists);
-	}
-	$smarty->assign("GROUPASSIGNED",$group_lists);
-}
-$smarty->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
-if($focus->hour_format == 'am/pm')
-{
-	$smarty->assign("CAL_HRFORMAT", "11:00pm");
-}
-else
-{
-	$smarty->assign("CAL_HRFORMAT", "23:00");
-}
-$smarty->assign("CAL_HRDURATION", $focus->start_hour."&nbsp;ends at&nbsp;".$focus->end_hour);
-$smarty->assign("ACTIVITY_VIEW", $focus->activity_view);
-$smarty->assign("LEAD_VIEW", $focus->lead_view);
-$smarty->assign("TITLE", $focus->title);
-$smarty->assign("DEPARTMENT", $focus->department);
-$smarty->assign("REPORTS_TO_ID", $focus->reports_to_id);
-$smarty->assign("REPORTS_TO_NAME", $focus->reports_to_name);
-$smarty->assign("PHONE_HOME", $focus->phone_home);
-$smarty->assign("PHONE_MOBILE", $focus->phone_mobile);
-$smarty->assign("PHONE_WORK", $focus->phone_work);
-$smarty->assign("PHONE_OTHER", $focus->phone_other);
-$smarty->assign("PHONE_FAX", $focus->phone_fax);
-$smarty->assign("EMAIL1", $focus->email1);
-$smarty->assign("EMAIL2", $focus->email2);
-$smarty->assign("ADDRESS_STREET", $focus->address_street);
-$smarty->assign("ADDRESS_CITY", $focus->address_city);
-$smarty->assign("ADDRESS_STATE", $focus->address_state);
-$smarty->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
-$smarty->assign("ADDRESS_COUNTRY", $focus->address_country);
-$smarty->assign("SIGNATURE", nl2br($focus->signature));
 $smarty->assign("MODULE", 'Settings');
+$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
-
-$mode1 = 'pref';
-$smarty->assign("MODE1", $mode1);
 
         $smarty->display("UserDetailView.tpl");
 
-echo "</td></tr>\n";
 
 ?>

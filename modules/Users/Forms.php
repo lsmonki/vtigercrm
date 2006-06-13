@@ -54,7 +54,7 @@ function set_fieldfocus(errorMessage,oMiss_field){
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.email1.value) == "") {
+	if (trim(form.email.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_user_email1";
 		oField_miss = form.email1;
@@ -71,15 +71,15 @@ function verify_data(form) {
 	}
 	if(form.mode.value !='edit')
 	{
-		if (trim(form.new_password.value) == "") {
+		if (trim(form.user_password.value) == "") {
 			isError = true;
 			errorMessage += "\\n$lbl_new_password";
-			oField_miss =form.new_password;
+			oField_miss =form.user_password;
 		}
-		if (trim(form.confirm_new_password.value) == "") {
+		if (trim(form.confirm_password.value) == "") {
 			isError = true;
 			errorMessage += "\\n$lbl_confirm_new_password";
-			oField_miss =form.confirm_new_password;
+			oField_miss =form.confirm_password;
 		}
 	}
 	if (trim(form.user_name.value) == "") {
@@ -91,19 +91,19 @@ function verify_data(form) {
 	if (isError == true) {
 		set_fieldfocus(errorMessage,oField_miss);
 	}
-	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		errorMessage='"' + form.email1.value + '" is $err_invalid_email_address';
+	if (trim(form.email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+		errorMessage='"' + form.email.value + '" is $err_invalid_email_address';
 		set_fieldfocus(errorMessage,form.email1);
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		errorMessage='"' + form.email2.value + '" value in other email vtiger_field is $err_invalid_email_address';
+		errorMessage='"' + form.email2.value + '" value in other email field is $err_invalid_email_address';
 		set_fieldfocus(errorMessage,form.email2);
 	}
 	if(form.mode.value != 'edit')
 	{
-		if(trim(form.new_password.value) != trim(form.confirm_new_password.value))
+		if(trim(form.user_password.value) != trim(form.confirm_password.value))
 		{
-			set_fieldfocus("The password does't match",form.form.new_password);
+			set_fieldfocus("The password does't match",form.user_password);
 		}
 		check_duplicate();
 	}else

@@ -46,13 +46,16 @@ if (isset($_POST['record']) && !is_admin($current_user) && $_POST['record'] != $
 elseif (!isset($_POST['record']) && !is_admin($current_user)) echo ("Unauthorized access to user administration.");
 
 $focus = new User();
-$focus->retrieve($_POST['record']);
-if(isset($focus->id) && $focus->id != '')
-    $mode='edit';
+if(isset($_REQUEST["record"]) && $_REQUEST["record"] != '')
+{
+    $focus->mode='edit';
+	$focus->id = $_REQUEST["record"];
+}
 else
-    $mode='';
+    $focus->mode='';
+	
 //save user Image
-$image_upload_array=SaveImage($_FILES,'user',$focus->id,$mode);
+$image_upload_array=SaveImage($_FILES,'user',$focus->id,$focus->mode);
 $focus->imagename = $image_upload_array['imagename'];
 $image_error = $image_upload_array['imageerror'];
 $errormessage = $image_upload_array['errormessage'];
@@ -69,61 +72,21 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 		exit;
 	}
 	
-	foreach($focus->column_fields as $field)
-	{
-		if(isset($_POST[$field]))
-		{
-			$value = $_POST[$field];
-			$focus->$field = $value;
 			
-		}
-	}
+	if (!isset($_POST['is_admin'])) $_REQUEST["is_admin"] = 'off';
+	//Code contributed by mike crowe for rearrange the home page and tab
+	if (!isset($_POST['deleted'])) $_REQUEST["deleted"] = '0';
+	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $_REQUEST["homeorder"] = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 	
-	foreach($focus->additional_column_fields as $field)
-	{
-		if(isset($_POST[$field]))
-		{
-			$value = $_POST[$field];
-			$focus->$field = $value;
-			
-		}
-	}
-	
-	if (!isset($_POST['is_admin'])) $focus->is_admin = 'off';
-	//Code contributed by mike crowe for rearrange the home page and vtiger_tab
-	if (!isset($_POST['deleted'])) $focus->deleted = '0';
-	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $focus->homeorder = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
-	
-/*	if (!$focus->verify_data()) {
-		header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
-		exit;
-	}
-	else{	*/
+	setObjectValuesFromRequest(&$focus);
 		$focus->save("Users");
-//		include('modules/Calendar/user_ins.php');
-//		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
-//	}
+
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
-	/*	
-		//changing fourm password	
-		define('IN_PHPBB', 1);
-		
-		$phpbb_root_path = "modules/MessageBoard/";
-		require($phpbb_root_path . 'extension.inc');
-		include($phpbb_root_path . 'common.php');
-	*/	
 		$new_pass = $_POST['new_password'];
 		$new_passwd = $_POST['new_password'];
 		$new_pass = md5($new_pass);
 		$uname = $_POST['user_name'];
-		//$sql = "UPDATE " . USERS_TABLE . " SET user_password = '$new_pass' WHERE username = '$uname'";
-	/*
-		if (!($result = $db->sql_query($sql)) )
-		{
-			message_die(GENERAL_ERROR, 'Could not update user password', '', __LINE__, __FILE__, $sql);
-		}
-	*/
 		if (!$focus->change_password($_POST['confirm_new_password'], $_POST['new_password'])) {
 		
 			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
