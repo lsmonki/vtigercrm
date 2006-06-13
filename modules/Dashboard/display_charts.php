@@ -76,8 +76,11 @@ $graph_array = Array(
           "leadindustry" => $mod_strings['leadindustry'],
           "salesbyleadsource" => $mod_strings['salesbyleadsource'],
           "salesbyaccount" => $mod_strings['salesbyaccount'],
+	  "salesbyuser" => $mod_strings['salesbyuser'],
+	  "salesbyteam" => $mod_strings['salesbyteam'],
           "accountindustry" => $mod_strings['accountindustry'],
           "productcategory" => $mod_strings['productcategory'],
+	  "productbyqtyinstock" => $mod_strings['productbyqtyinstock'],
           "sobyaccounts" => $mod_strings['sobyaccounts'],
           "sobystatus" => $mod_strings['sobystatus'],
           "pobystatus" => $mod_strings['pobystatus'],
@@ -89,6 +92,7 @@ $graph_array = Array(
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
 	  "ticketsbycategory" => $mod_strings['ticketsbycategory'],
 	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
+	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
           );
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
@@ -424,6 +428,26 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                          $query=$potential_query;
                          echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
+		    //Sales by User
+		    elseif (($type == "salesbyuser") && (getFieldVisibilityPermission('Potentials',$user_id,'smownerid') == "0"))
+		    {
+			$graph_by="smownerid";
+			$graph_title=$mod_strings['salesbyuser'];
+			$module="Potentials";
+			$where="";
+			$query=$potential_query;
+			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Sales by team
+		    elseif (($type == "salesbyteam") && (getFieldVisibilityPermission('Potentials',$user_id,'groupname') == "0"))
+		    {
+			$graph_by="groupname";
+			$graph_title=$mod_strings['salesbyteam'];
+			$module="Potentials";
+			$where="";
+			$query=$potential_query;
+			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
                     //Charts for Account by Industry
                     elseif (($type == "accountindustry") && (getFieldVisibilityPermission('Accounts',$user_id,'industry') == "0"))
                     {
@@ -444,6 +468,17 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             $query=$products_query;
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
+		    //Charts for Products by Quantity in stock
+		    elseif (($type == "productbyqtyinstock") && (getFieldVisibilityPermission('Products',$user_id,'productqtyinstock') == "0"))
+		    {
+			$graph_by="qtyinstock";
+			    $graph_title=$mod_strings['productbyqtyinstock'];
+			    $module="Products";
+			    $where="";
+			    $query=$products_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+
                     // Sales Order by Accounts
                     elseif (($type == "sobyaccounts") && (getFieldVisibilityPermission('SalesOrder',$user_id,'account_id') == "0"))
                     {
@@ -549,6 +584,16 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		    {
 			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyowner'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$helpdesk_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Tickets by Product
+		    elseif (($type == "ticketsbyproduct") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketproduct') == "0"))
+		    {
+			    $graph_by="product_id";
+			    $graph_title=$mod_strings['ticketsbyproduct'];
 			    $module="HelpDesk";
 			    $where="";
 			    $query=$helpdesk_query;
