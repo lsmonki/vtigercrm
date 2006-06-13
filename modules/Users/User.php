@@ -470,62 +470,64 @@ class User extends CRMEntity {
 											 "CITY","STATE","POSTALCODE","COUNTRY");	
   	return $mergeflds;
   }
-		//function added for the listview of vtiger_users for 5.0 beta
-	function getUserListViewHeader()
-	{
-		global $mod_strings;
-		$header_array=array($mod_strings['LBL_LIST_USER_NAME'],$mod_strings['LBL_USER_ROLE'],$mod_strings['LBL_LIST_EMAIL'],$mod_strings['LBL_LIST_NAME'],$mod_strings['LBL_LIST_ADMIN'],$mod_strings['LBL_STATUS'],$mod_strings['LBL_LIST_TOOLS']);
-		return $header_array;
-	}
 
-	function getUserListViewEntries($navigation_array,$sorder='',$orderby='')
-	{
-		global $theme;
-		global $adb, $current_user;	
-	    	$theme_path="themes/".$theme."/";
-	    	$image_path=$theme_path."images/";
-		if($sorder != '' && $orderby !='')
-			$list_query = ' SELECT * from vtiger_users where deleted=0 order by '.$orderby.' '.$sorder; 	
-		else
-			$list_query = "SELECT * from vtiger_users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
-		$result =$adb->query($list_query);
-		$entries_list = array();
-		$roleinfo = getAllRoleDetails();
-		
-		for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
-		{
-			$entries=array();
-			$id=$adb->query_result($result,$i-1,'id');
-			
-			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
+//function added for the listview of vtiger_users for 5.0 beta
+  function getUserListViewHeader()
+  {
+	  global $mod_strings;
+	  $header_array=array($mod_strings['LBL_LIST_NO'],$mod_strings['LBL_LIST_TOOLS'],$mod_strings['LBL_LIST_USER_NAME_ROLE'],$mod_strings['LBL_LIST_EMAIL'],$mod_strings['LBL_LIST_PHONE'],$mod_strings['LBL_ADMIN'],$mod_strings['LBL_STATUS']);
+	  return $header_array;
+  }
 
-                        $rolecode= fetchUserRole($adb->query_result($result,$i-1,'id'));
-                        $entries[]='<a href="index.php?action=RoleDetailView&module=Users&parenttab=Settings&roleid='.$rolecode.'">'.$roleinfo[$rolecode][0];
+  function getUserListViewEntries($navigation_array,$sorder='',$orderby='')
+  {
+	  global $theme;
+	  global $adb, $current_user;
+	  $theme_path="themes/".$theme."/";
+	  $image_path=$theme_path."images/";
+	  if($sorder != '' && $orderby !='')
+	  $list_query = ' SELECT * from users where deleted=0 order by '.$orderby.' '.$sorder;
+	  else
+	  $list_query = "SELECT * from users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
+	  $result =$adb->query($list_query);
+	  $entries_list = array();
+	  $roleinfo = getAllRoleDetails();
 
-			$entries[]='<a href="mailto:'.$adb->query_result($result,$i-1,'email1').'">'.$adb->query_result($result,$i-1,'email1').' </a>';
+	  for($i = $navigation_array['start'];$i <= $navigation_array['end_val']; $i++)
+	  {
+		  $entries=array();
+		  $id=$adb->query_result($result,$i-1,'id');
 
-			$entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'last_name').' '.$adb->query_result($result,$i-1,'first_name').'</a>';
+		  $entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'.$this->db->query_result($result,$i-1,'user_name').'</a>';
 
-			$entries[]=$adb->query_result($result,$i-1,'is_admin');
-			$entries[]=$adb->query_result($result,$i-1,'status');
-			if($adb->query_result($result,$i-1,'user_name') == 'admin' || $adb->query_result($result,$i-1,'user_name') == 'standarduser' )
-			{
-			      $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
-	                }
-			elseif($adb->query_result($result,$i-1,'id') == $current_user->id)
-                        {
-                              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
-	                }
-		        else
-			  
-	    	              $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<img src="'.$image_path.'delete.gif" onclick="deleteUser('.$id.')" border="0"  alt="Delete" title="Delete"/></a>';
+		  $rolecode= fetchUserRole($adb->query_result($result,$i-1,'id'));
+		  $entries[]='<a href="index.php?action=RoleDetailView&module=Users&parenttab=Settings&roleid='.$rolecode.'">'.$roleinfo[$rolecode][0];
+		  $entries[]='<a href="mailto:'.$adb->query_result($result,$i-1,'email1').'">'.$adb->query_result($result,$i-1,'email1').' </a>';
 
-			$entries_list[]=$entries;
-													
-		}
-		return $entries_list;
-	}
-	function fill_in_additional_list_fields()
+		  $entries[]='<a href="index.php?action=DetailView&module=Users&parenttab=Settings&record='.$id.'">'. $this->db->query_result($result,$i-1,'last_name').' '.$adb->query_result($result,$i-1,'first_name').'</a>';
+
+		  $entries[]=$adb->query_result($result,$i-1,'is_admin');
+		  $entries[]=$adb->query_result($result,$i-1,'status');
+		  $entries[]=$adb->query_result($result,$i-1,'phone_work');
+		  if($adb->query_result($result,$i-1,'user_name') == 'admin' || $adb->query_result($result,$i-1,'user_name') == 'standarduser' )
+		  {
+			  $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
+			  }
+			  elseif($adb->query_result($result,$i-1,'id') == $current_user->id)
+			  {
+				  $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;';
+			  }
+			  else
+
+			  $entries[]='<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record='.$id.'"><img src="'.$image_path.'editfield.gif" border="0" alt="Edit" title="Edit"/></a>&nbsp;&nbsp;<img src="'.$image_path.'delete.gif" onclick="deleteUser('.$id.')" border="0"  alt="Delete" title="Delete"/></a>';
+
+			  $entries_list[]=$entries;
+
+			  }
+			  return $entries_list;
+  }
+
+	  function fill_in_additional_list_fields()
 	{
 		$this->fill_in_additional_detail_fields();	
 	}
