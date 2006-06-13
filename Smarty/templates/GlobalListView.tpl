@@ -35,7 +35,7 @@ displayModuleList(document.getElementById('global_search_module'));
 {elseif $MODULE eq 'Contacts' && $SEARCH_MODULE eq ''}
 	<div id="global_list_{$MODULE}" style="display:block">
 {else}
-	<div id="global_list_{$MODULE}" style="display:none">
+	<div id="global_list_{$MODULE}" style="display:block">
 {/if}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <form name="massdelete" method="POST">
