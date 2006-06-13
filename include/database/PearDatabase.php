@@ -742,20 +742,8 @@ global $log;
         }
 }
 
-/* ADODB converted	
 function quote($string){
-	global $dbconfig;
-	if($dbconfig['db_type'] == 'mysql'){
-		$string = mysql_escape_string($string);
-	}else {$string = quoteSmart($string);}
-	}else {$string = $this->database->qstr($string,get_magic_quotes_gpc());}
-	//$string = strtr($string, array('_' => '\_', '%'=>'\%'));
-	return $string;
-}*/
-
-
-function quote($string){
-	return ADOConnection::qstr($string);	
+	return $this->database->qstr($string);	
 }
 
 
