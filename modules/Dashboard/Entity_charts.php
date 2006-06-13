@@ -194,6 +194,12 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($name_val!="")
 						$name=$name_val;
 				}
+				if($graph_for =="smownerid")
+				{
+					$name_val=get_assigned_user_name($name);
+					if($name_val!="")
+						$name=$name_val;
+				}
 				//Passing name to graph
 				if($mod_name_val!="") $mod_name_val.=",$name";
 				else $mod_name_val="$name";
