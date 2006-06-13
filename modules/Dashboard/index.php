@@ -37,8 +37,11 @@ $graph_array = Array(
           "leadindustry" => $mod_strings['leadindustry'],
           "salesbyleadsource" => $mod_strings['salesbyleadsource'],
           "salesbyaccount" => $mod_strings['salesbyaccount'],
+	  "salesbyuser" => $mod_strings['salesbyuser'],
+	  "salesbyteam" => $mod_strings['salesbyteam'],
           "accountindustry" => $mod_strings['accountindustry'],
           "productcategory" => $mod_strings['productcategory'],
+	  "productbyqtyinstock" => $mod_strings['productbyqtyinstock'],
           "sobyaccounts" => $mod_strings['sobyaccounts'],
           "sobystatus" => $mod_strings['sobystatus'],
           "pobystatus" => $mod_strings['pobystatus'],
@@ -50,6 +53,7 @@ $graph_array = Array(
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
 	  "ticketsbycategory" => $mod_strings['ticketsbycategory'], 
 	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
+	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
           );
           
 $log = LoggerManager::getLogger('dashboard');
