@@ -1570,7 +1570,7 @@ a.submenu:Hover{
 }
 
 .prvPrfTexture {
-	background:url(../images/prvPrfTexture1.gif);
+	background:url(images/prvPrfTexture1.gif);
 
 }
 .prvPrfBgOn{
@@ -1589,19 +1589,19 @@ a.submenu:Hover{
 }
 
 .prvPrfBgImgGlobal {
-	background:url(../images/prvPrfBgImgGlobal.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgGlobal.jpg) top right no-repeat;
 }
 .prvPrfBgImgTab {
-	background:url(../images/prvPrfBgImgTab.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgTab.jpg) top right no-repeat;
 }
 .prvPrfBgImgStandard {
-	background:url(../images/prvPrfBgImgStandard.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgStandard.jpg) top right no-repeat;
 }
 .prvPrfBgImgUtils {
-	background:url(../images/prvPrfBgImgUtils.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgUtils.jpg) top right no-repeat;
 }
 .prvPrfBgImgField {
-	background:url(../images/prvPrfBgImgField.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgField.jpg) top right no-repeat;
 }
 
 .prvPrfTabSample {
@@ -2659,7 +2659,7 @@ ul {
 	background-color:#ffffff;
 	border-bottom:2px solid #aaaaaa;
 }
-.ColHeader{
+.colHeader{
 	background-color:#dadada;
 	border-left:1px solid #eaeaea;
 	border-top:1px solid #eaeaea;
@@ -2770,17 +2770,17 @@ textarea {
 }
 
 .prvPrfSelectedTab {
-	background:url(../images/prvPrfSelectedTab.gif) repeat-x;
+	background:url(images/prvPrfSelectedTab.gif) repeat-x;
 
 }
 
 .prvPrfUnSelectedTab {
-	background:url(../images/prvPrfUnSelectedTab.gif) repeat-x;
+	background:url(images/prvPrfUnSelectedTab.gif) repeat-x;
 
 }
 
 .prvPrfTexture {
-	background:url(../images/prvPrfTexture1.gif);
+	background:url(images/prvPrfTexture1.gif);
 
 }
 .prvPrfBgOn{
@@ -2799,19 +2799,19 @@ textarea {
 }
 
 .prvPrfBgImgGlobal {
-	background:url(../images/prvPrfBgImgGlobal.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgGlobal.jpg) top right no-repeat;
 }
 .prvPrfBgImgTab {
-	background:url(../images/prvPrfBgImgTab.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgTab.jpg) top right no-repeat;
 }
 .prvPrfBgImgStandard {
-	background:url(../images/prvPrfBgImgStandard.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgStandard.jpg) top right no-repeat;
 }
 .prvPrfBgImgUtils {
-	background:url(../images/prvPrfBgImgUtils.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgUtils.jpg) top right no-repeat;
 }
 .prvPrfBgImgField {
-	background:url(../images/prvPrfBgImgField.jpg) top right no-repeat;
+	background:url(images/prvPrfBgImgField.jpg) top right no-repeat;
 }
 
 .prvPrfTabSample {
