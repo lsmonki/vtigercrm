@@ -357,6 +357,12 @@ function BasicSearch($module,$search_field,$search_string)
 			}
 		}
 	}
+	if($_REQUEST['type'] == 'entchar')
+	{
+		$search = array('Un Assigned','%','like');
+		$replace = array('','','=');
+		$where= str_replace($search,$replace,$where);
+	}
 	$log->debug("Exiting BasicSearch method ...");
 	return $where;
 }
