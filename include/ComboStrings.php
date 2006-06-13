@@ -257,14 +257,14 @@ $combo_strings = Array(
 'postatus_dom' => Array('Created'=>'Created',
 			'Approved'=>'Approved',
 			'Delivered'=>'Delivered',
-			'Canceled'=>'Canceled',
+			'Cancelled'=>'Cancelled',
 			'Received Shipment'=>'Received Shipment'
 			),
 
 'sostatus_dom' => Array('Created'=>'Created',
 			'Approved'=>'Approved',
 			'Delivered'=>'Delivered',
-			'Canceled'=>'Canceled'
+			'Cancelled'=>'Cancelled'
 			),
 
 'campaignstatus_dom' => Array(''=>'',
