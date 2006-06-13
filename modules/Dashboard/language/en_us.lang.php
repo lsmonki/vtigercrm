@@ -70,6 +70,8 @@ $mod_strings = Array(
 "invoicebystatus" => "Invoices by Status",
 "ticketsbystatus" => "Tickets by Status",
 "ticketsbypriority" => "Tickets by Priority",
+"ticketsbycategory" => "Tickets by Category",
+"ticketsbyowner" => "Tickets by Owner",
 
 'LBL_DASHBRD_HOME'=>'Dashboard Home',
 'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
