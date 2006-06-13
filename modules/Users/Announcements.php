@@ -9,7 +9,8 @@
  *
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
+
 global $adb;
 global $current_user;
 global $theme;
@@ -20,6 +21,8 @@ $result=$adb->query($query);
 $announcement=$adb->query_result($result,0,'announcement');
 $title_prev=$adb->query_result($result,0,'title');
 $id=$adb->query_result($result,0,'creatorid');
+
+$smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("ANNOUNCE",$announcement);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
