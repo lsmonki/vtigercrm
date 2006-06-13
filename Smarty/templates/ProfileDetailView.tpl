@@ -9,127 +9,191 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_PROFILES}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-	
-	<table width="75%" border="0" cellpadding="5" cellspacing="0" align="center">
-	<tr>
-															<td width="5%" style="border-bottom:1px dashed #CCCCCC;">
-																	<img src="{$IMAGE_PATH}profile.gif" align="absmiddle">
-															</td>
-															<td style="border-bottom:1px dashed #CCCCCC;"> 
-																	<span class="genHeaderGrayBig">{$CMOD.LBL_PROFILE_DETAIL_VIEW}</span><br>
-																	<span	class="genHeaderSmall">{$PROFILE_NAME}</span>
-															</td>
-													</tr>
-	<tr>
-	<td colspan="2"><table border="0" cellspacing="0" cellpadding="0" width="100%">
-	<tr class="small">
-	<td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif" /></td>
-	<td class="prvPrfTopBg" width="100%" ></td>
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 
-	<td><img src="{$IMAGE_PATH}prvPrfTopRight.gif" /></td>
-	</tr>
-	</table>
-	<form action="index.php" method="post" name="new" id="form">
-	<input type="hidden" name="module" value="Users">		
-	<input type="hidden" name="action" value="profilePrivileges">		
-	<input type="hidden" name="parenttab" value="Settings">
-	<input type="hidden" name="return_action" value="profilePrivileges">		
-	<input type="hidden" name="mode" value="edit">	
-	<input type="hidden" name="profileid" value="{$PROFILEID}">	
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
+		{include file="SetMenu.tpl"}	
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&
+parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$PROFILE_NAME}&quot; </b></td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$CMOD.LBL_PROFILE_MESG} &quot;{$PROFILE_NAME}&quot;</td>
+				</tr>
+				</table>
+				
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td valign=top>
+					<table border="0" cellspacing="0" cellpadding="0" width="100%">
+                      <tr>
+                        <td><table border="0" cellspacing="0" cellpadding="0" width="100%">
+                            <tr class="small">
+                              <td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif"></td>
+
+                              <td class="prvPrfTopBg" width="100%" ></td>
+                              <td><img src="{$IMAGE_PATH}prvPrfTopRight.gif"></td>
+                            </tr>
+                          </table>
+				<form action="index.php" method="post" name="new" id="form">
+			        <input type="hidden" name="module" value="Users">
+			        <input type="hidden" name="action" value="profilePrivileges">
+			        <input type="hidden" name="parenttab" value="Settings">
+			        <input type="hidden" name="return_action" value="profilePrivileges">
+			        <input type="hidden" name="mode" value="edit">
+			        <input type="hidden" name="profileid" value="{$PROFILEID}">
 	
-	<table border="0" cellspacing="0" cellpadding=	"0" width="100%" class="prvPrfOutline">
-	<tr>
-	<td>
-	<!-- tabs -->
-	<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
-	<tr>
-	<td width="20%" id="prvPrfTab1" class="prvPrfUnSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');">{$CMOD.LBL_GLOBAL_PRIVILEGES}</td>
-	<td width="20%" id="prvPrfTab2" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('tab_privileges','prvPrfTab2');">{$CMOD.LBL_TAB_PRIVILEGES}</td>
-	<td width="20%" id="prvPrfTab3" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('standard_privileges','prvPrfTab3');">{$CMOD.LBL_STANDARD_PRIVILEGES}</td>
-	<td width="20%" id="prvPrfTab4" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('field_privileges','prvPrfTab4');">{$CMOD.LBL_FIELD_PRIVILEGES}</td>
-	<td width="20%" id="prvPrfTab5" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('utility_privileges','prvPrfTab5');">{$CMOD.LBL_UTILITIES}</td>
-	</tr>
-	</table>
-		<div id="global_privileges" style="display:none;">
-		<!-- Headers -->
-		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="prvPrfBgImgGlobal">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%" class="prvPrfOutline">
+                              <tr>
+                                <td><!-- tabs -->
+                                    <table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
+                                      <tr>
+                                        <td width="20%" id="prvPrfTab1" class="prvPrfSelectedTab" align="center" style="height:31px;" onClick="toggleshowhide('global_privileges','prvPrfTab1');"><a href="#">{$CMOD.LBL_GLOBAL_PRIVILEGES}</a></td>
+                                        <td width="20%" id="prvPrfTab2" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('tab_privileges','prvPrfTab2');"><a href="#">{$CMOD.LBL_TAB_PRIVILEGES}</a></td>
+                                        <td width="20%" id="prvPrfTab3" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('standard_privileges','prvPrfTab3');"><a href="#">{$CMOD.LBL_STANDARD_PRIVILEGES}</a></td>
+                                        <td width="20%" id="prvPrfTab4" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('field_privileges','prvPrfTab4');"><a href="#">{$CMOD.LBL_FIELD_PRIVILEGES}</a></td>
+                                        <td width="20%" id="prvPrfTab5" class="prvPrfUnSelectedTab" align="center" onClick="toggleshowhide('utility_privileges','prvPrfTab5');" ><a href="#">{$CMOD.LBL_UTILITIES}</a></td>
+                                      </tr>
+                                    </table>
+				   <div id="global_privileges" style="display:none;">
+                                    <!-- Headers -->
+                                    <table border="0" cellspacing="0" cellpadding="5" width="100%" class="prvPrfBgImgGlobal">
+                                      <tr>
+                                        <td><table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
+                                            <tr>
+                                              <td><!-- Module name heading -->
+                                                  <table border="0" cellspacing="0" cellpadding="2" class="small">
+                                                    <tr>
+                                                      <td valign="top" ><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif" /> </td>
+                                                      <td class="prvPrfBigText"><b> {$CMOD.LBL_GLOBAL_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
+                                                          <font class="small">{$CMOD.LBL_GLOBAL_MESG_OPTION}</font></td>
+                                                      <td class="small" style="padding-left:10px" align="right"></td>
+                                                    </tr>
+                                                </table></td>
+                                              <td align="right" valign="bottom">
+						<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">
+					        <input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">
+						<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit"></td>
+                                            </tr>
+                                          </table>
+                                            <!-- privilege lists -->
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" >
+                                              <tr>
+                                                <td align="center" style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px" /></td>
+                                              </tr>
+                                            </table>
+                                            <table border="0" cellspacing="0" cellpadding="10" width="100%">
+                                              <tr>
+                                                <td ><table border="0" cellspacing="0" cellpadding="5" width="90%" class="small" align="center">
+                                                  <tr>
+                                                    <td class="prvPrfTexture" style="width:20px">&nbsp;</td>
+                                                    <td width="97%" valign="top"><table border="0" cellspacing="0" cellpadding="2" width="100%" class="small">
+                                                        <tr id="gva">
+                                                          <td valign="top">{$GLOBAL_PRIV.0}</td>
+                                                          <td ><b>{$CMOD.LBL_VIEW_ALL}</b> </td>
+                                                        </tr>
+                                                        <tr >
+                                                          <td valign="top"></td>
+                                                          <td width="100%" >{$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_VIEW}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <td>&nbsp;</td>
+                                                        </tr>
+							<tr>
+							<td valign="top">{$GLOBAL_PRIV.1}</td>
+							<td ><b>{$CMOD.LBL_EDIT_ALL}</b> </td>
+							</tr>
+                                                        <tr>
+                                                          <td valign="top"></td>
+                                                          <td > {$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_EDIT}</td>
+                                                        </tr>
+                                                      </table>
+                                                     </td>
+                                                  </tr>
+                                                </table></td>
+                                              </tr>
+                                          </table></td>
+                                      </tr>
+                                  </table></td>
+                              </tr>
+                            </table>
+			    </div>		
+	
+		<div id="tab_privileges" style="display:none;">
+		<table border=0 cellspacing=0 cellpadding=5 width=100% >
 		<tr>
 		<td>
-		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
+		<table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
 		<tr>
-		<td><!-- Module name heading -->
-		<table border="0" cellspacing="0" cellpadding="2" class="small">
+		<td>
+		<!-- Module name heading -->
+		<table border=0 cellspacing=0 cellpadding=2 class=small>
 		<tr>
-		<td valign="top"><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"/> </td>
-	
-		<td class="prvPrfBigText"><b> {$CMOD.LBL_GLOBAL_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
-		<font class="small">{$CMOD.LBL_GLOBAL_MESG_OPTION} </font> </td>
-		<td class="small" style="padding-left:10px" align="right"></td>
-		</tr>
-		</table></td>
-		<td align="right" valign="bottom">&nbsp; </td>
-
-		</tr>
-		</table>
-		<!-- privilege lists -->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%" >
-		<tr>
-		<td align="center" style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px" /></td>
-		</tr>
-		</table>
-		<table border="0" cellspacing="0" cellpadding="10" width="100%">
-		<tr>
-		<td >
-		<table border="0" cellspacing="0" cellpadding="5" width="90%" class="small" align="center">
-		<tr>
-		<td class="prvPrfTexture" style="width:20px">&nbsp;</td>
-		<td width="97%" valign="top">
-		<table border="0" cellspacing="0" cellpadding="2" width="100%" class="small">
-		<tr id="gva">
-		<td valign="top">{$GLOBAL_PRIV.0}</td>
-		<td ><b>{$CMOD.LBL_VIEW_ALL}</b> </td>
-		</tr>
-		<tr >
-		<td valign="top"></td>
-		<td width="100%" >{$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_VIEW}</td>
-		</tr>
-		<tr>
-		<td>&nbsp;</td>
-		</tr>
-		<tr>
-		<td valign="top">{$GLOBAL_PRIV.1}</td>
-		<td ><b>{$CMOD.LBL_EDIT_ALL}</b> </td>
-		</tr>
-		<tr>
-		<td valign="top"></td>
-		<td > {$CMOD.LBL_ALLOW} "{$PROFILE_NAME}" {$CMOD.LBL_MESG_EDIT}</td>
+		<td valign=top >
+		<img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"></td>
+		<td class="prvPrfBigText">
+		<b> {$CMOD.LBL_TAB_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br>
+		<font class=small>{$CMOD.LBL_TAB_MESG_OPTION} </font> 
+		</td>
 		</tr>
 		</table>
 		</td>
-		</tr>	
-		</table></td>
-		</tr>
-		</table></td>
+		<td align=right valign=bottom>
+			<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">
+			<input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">
+			<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit">
+		</td>
 		</tr>
 		</table>
-		</div>
+		<!-- privilege lists -->
+		<table border=0 cellspacing=0 cellpadding=0 width=100% >
+		<tr>
+		<td align=center style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px"></td>
+		</tr>
+		</table>
+		<table border=0 cellspacing=0 cellpadding=10 width=100%>
+		<tr>
+		<td >
+		<!-- Home tab -->
+		<table border=0 cellspacing=0 cellpadding=5 width=95% class=small align=center >
+		<tr>
+			<td valign=top width="25%" ><table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
 		
+
+		{foreach item=value from=$TAB_PRIV}
+		<tr>
+		{foreach item=element from=$value}
+		<td class="prvPrfTexture" style="width:20px">&nbsp;</td>
+		<td width=5% id="perm{$element.0}">{$element.1}</td>
+		<td width=30% nowrap onMouseOver="this.className='prvPrfHoverOn',$('perm{$element.0}').className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff',$('perm{$element.0}').className='prvPrfHoverOff'">{$APP[$element.0]}</td>
+		{/foreach}
+		</tr>
+		{/foreach}
+	
+		</table>
+		</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+
+		</table>
+		</div>
+	
 		<div id="standard_privileges" style="display:none;">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% >
 		<tr>
@@ -150,9 +214,12 @@
 		</tr>
 		</table>
 		</td>
-		<td align=right valign=bottom>&nbsp;
-		
-		</td>
+		<td align=right valign=bottom>
+			<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">
+			<input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">
+			<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit">
+		</td>	
+
 		</tr>
 		</table>
 		<!-- privilege lists -->
@@ -167,10 +234,10 @@
 		<table border=0 cellspacing=0 cellpadding=5 width=90% class=small align=center >
 		<tr>
 		<td class="prvPrfTexture" style="width:20px">&nbsp;</td>
-		<td width=97% valign=top onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff'" >
+		<td width=97% valign=top>
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
 		
-		<tr>
+		<tr onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff'">
 		<td><b>{$CMOD.LBL_ENTITY}</b></td>
 		<td><b>{$CMOD.LBL_CREATE_EDIT}</b></td>
 		<td><b>{$CMOD.LBL_DELETE}</b></td>
@@ -178,7 +245,7 @@
 		</tr>
 		
 		{foreach item=value from=$STANDARD_PRIV}
-		<tr>
+		<tr onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff'">
 		<td>{$APP[$value.0]}</td>
 		<td>{$value.1}</td>
 		<td>{$value.2}</td>
@@ -198,70 +265,75 @@
 		</table>
 		</div>
 		
-		<div id="tab_privileges" style="display:none;">
-		<table border=0 cellspacing=0 cellpadding=5 width=100% >
+		<div id="field_privileges" style="display:none;">
+		<table border="0" cellspacing="0" cellpadding="5" width="100%" >
 		<tr>
-		<td>
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
+		<td><table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 		<tr>
-		<td>
-		<!-- Module name heading -->
-		<table border=0 cellspacing=0 cellpadding=2 class=small>
+		<td><!-- Module name heading -->
+		<table border="0" cellspacing="0" cellpadding="2" class="small">
 		<tr>
-		<td valign=top >
-		<img src="{$IMAGE_PATH}prvPrfHdrArrow.gif">
-		</td>
-		<td class="prvPrfBigText">
-		<b> {$CMOD.LBL_TAB_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br>
-		<font class=small>{$CMOD.LBL_TAB_MESG_OPTION} </font> 
-		</td>
+		<td valign="top" ><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif" /> </td>
+
+		<td class="prvPrfBigText"><b> {$CMOD.LBL_FIELD_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
+		<font class="small">{$CMOD.LBL_FIELD_MESG_OPTION} </font> </td>
 		</tr>
-		</table>
-		</td>
-		<td align=right valign=bottom>&nbsp;
-		
-		</td>
+		</table></td>
+		<td align="right" valign="bottom">
+			<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">
+			<input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">
+			<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit">
+		</td>	
 		</tr>
 		</table>
 		<!-- privilege lists -->
-		<table border=0 cellspacing=0 cellpadding=0 width=100% >
+		<table border="0" cellspacing="0" cellpadding="0" width="100%" >
 		<tr>
-		<td align=center style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px"></td>
+		<td align="center" style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px" /></td>
 		</tr>
+
 		</table>
-		<table border=0 cellspacing=0 cellpadding=10 width=100%>
+		<table border="0" cellspacing="0" cellpadding="10" width="100%">
 		<tr>
 		<td >
-		<!-- Home tab -->
-		<table border=0 cellspacing=0 cellpadding=5 width=90% class=small align=center >
+		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
 		<tr>
-		<td class="prvPrfTexture" style="width:20px">&nbsp;</td>
-		<td width=97% valign=top onMouseOver="this.className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff'" >
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
-		
-
-		{foreach item=value from=$TAB_PRIV}
-		<tr>
-		{foreach item=element from=$value}
-		<td width=35%>{$APP[$element.0]}</td>
-		<td width=15%>{$element.1}</td>
+		<td>
+		<select id="module_list" name="module_list" onchange="showmoduleperm(this)">
+		{foreach key=module item=label from=$PRI_FIELD_LIST}
+			<option value="{$label}">{$APP.$label}</option>
 		{/foreach}
+		</td>
+		<td width=50%>&nbsp;</td>
 		</tr>
-		{/foreach}
+		<tr>
+		<td colspan=2>
 	
-		</table>
-		</td>
+		{foreach key=module item=value from=$FIELD_PRIVILEGES}
+		<div id="field_{$module}" style="display:none;">
+		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
+		{foreach item=row_value from=$value}
+		<tr>
+		{foreach item=element from=$row_value}
+		<td class="prvPrfTexture" style="width:5px">&nbsp;</td>
+		<td id="fldperm{$element.0}">{$element.1}</td>
+		<td onMouseOver="this.className='prvPrfHoverOn',$('fldperm{$element.0}').className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff',$('fldperm{$element.0}').className='prvPrfHoverOff' ">{$element.0}</td>
+		{/foreach}
 		</tr>
-		</table>
-		</td>
-		</tr>
-		</table>
-		</td>
-		</tr>
-
+		{/foreach}
 		</table>
 		</div>
+		{/foreach}
 		
+		</td>
+		</tr>
+		</table></td>
+		</tr>
+		</table></td>
+		</tr>
+		</table>
+		</div>
+	
 		<div id="utility_privileges" style="display:none;">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% >
 		<tr>
@@ -282,9 +354,10 @@
 		</tr>
 		</table>
 		</td>
-		<td align=right valign=bottom>&nbsp;
-		
-		</td>
+		<td align=right valign=bottom>
+			<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">
+		        <input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">
+			<input type="submit" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="crmButton small edit" name="edit"></td>
 		</tr>
 		</table>
 		<!-- privilege lists -->
@@ -330,114 +403,47 @@
 		</table>
 
 		</div>
-		
-		
-		<div id="field_privileges" style="display:none;">
-		<table border="0" cellspacing="0" cellpadding="5" width="100%" >
-		<tr>
-		<td><table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
-		<tr>
-		<td><!-- Module name heading -->
-		<table border="0" cellspacing="0" cellpadding="2" class="small">
-		<tr>
-		<td valign="top" ><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif" /> </td>
 
-		<td class="prvPrfBigText"><b> {$CMOD.LBL_FIELD_PRIVILEGES} {$CMOD.LBL_FOR} "{$PROFILE_NAME}"</b> <br />
-		<font class="small">{$CMOD.LBL_FIELD_MESG_OPTION} </font> </td>
-		</tr>
-		</table></td>
-		<td align="right" valign="bottom">
-		</td>
-		</tr>
-		</table>
-		<!-- privilege lists -->
-		<table border="0" cellspacing="0" cellpadding="0" width="100%" >
-		<tr>
-		<td align="center" style="height:10px"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width:100%;height:1px" /></td>
-		</tr>
-
-		</table>
-		<table border="0" cellspacing="0" cellpadding="10" width="100%">
-		<tr>
-		<td >
-		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
-		<tr>
-		<td>
-		<select id="module_list" name="module_list" onchange="showmoduleperm(this)">
-		{foreach key=module item=label from=$PRI_FIELD_LIST}
-			<option value="{$label}">{$APP.$label}</option>
-		{/foreach}
-		</td>
-		<td width=50%>&nbsp;</td>
-		</tr>
-		<tr>
-		<td colspan=2>
 	
-		{foreach key=module item=value from=$FIELD_PRIVILEGES}
-		<div id="field_{$module}" style="display:none;">
-		<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small">
-		{foreach item=row_value from=$value}
-		<tr>
-		{foreach item=element from=$row_value}
-		<td>{$element.0}</td>
-		<td>{$element.1}</td>
-		{/foreach}
-		</tr>
-		{/foreach}
-		</table>
-		</div>
-		{/foreach}
-		
-		</td>
-		</tr>
-		</table></td>
-		</tr>
-		</table></td>
-		</tr>
-		</table>
-		</div>
-		
-		</td>
+
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%" class="small">
+                              <tr>
+                                <td><img src="{$IMAGE_PATH}prvPrfBottomLeft.gif" /></td>
+                                <td class="prvPrfBottomBg" width="100%"></td>
+                                <td><img src="{$IMAGE_PATH}prvPrfBottomRight.gif" /></td>
+                              </tr>
+                          </table>
 			
-		</tr>
-		</table>
-	<table border="0" cellspacing="0" cellpadding="0" width="100%" class="small">
-	<tr>
-	<td><img src="{$IMAGE_PATH}prvPrfBottomLeft.gif" /></td>
-	<td class="prvPrfBottomBg" width="100%"></td>
-	<td><img src="{$IMAGE_PATH}prvPrfBottomRight.gif" /></td>
+			</td>
+                      </tr>
+                    </table>
+					<p>&nbsp;</p>
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
+					</table>
+				
+					
+					
+				</td>
+				</tr>
+				</table>
+			
+			
+			
+			</td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-	</table></td>
-
-	</tr>
-	</table></td>
-	</tr>	
-	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-	<td colspan="2" align="center">
-	<input type="hidden" id="selected_tab" name="selected_tab" value="{$SELECTED_TAB}">		
-	<input type="hidden" id="selected_module" name="selected_module" value="{$SELECTED_MODULE}">		
-	<input type="submit" value=" {$APP.LBL_EDIT_BUTTON_LABEL} " onClick="page_submit(this);" name="edit" class="classBtn"/>&nbsp;&nbsp;
-	<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" onClick="window.history.back();" class="classBtn"/>
-
-	</td>
-	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr><td colspan="2" style="border-top:1px solid #CCCCCC;">&nbsp;</td></tr>
 	</table>
-	
+		
+	</div>
+
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 
 <script language="javascript" type="text/javascript">
 var Selected_div= '{$SELECTED_TAB}';
