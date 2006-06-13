@@ -33,16 +33,9 @@ class SalesOrder extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-	
-		
 	var $table_name = "salesorder";
 	var $tab_name = Array('vtiger_crmentity','vtiger_salesorder','vtiger_sobillads','vtiger_soshipads','vtiger_salesordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_salesorder'=>'salesorderid','vtiger_sobillads'=>'sobilladdressid','vtiger_soshipads'=>'soshipaddressid','vtiger_salesordercf'=>'salesorderid');
-				
 	
 	var $entity_table = "crmentity";
 	
@@ -80,10 +73,6 @@ class SalesOrder extends CRMEntity {
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
-
-	var $record_id;
-	var $list_mode;
-        var $popup_type;
 
 	var $search_fields = Array(
 				'Order Id'=>Array('crmentity'=>'crmid'),

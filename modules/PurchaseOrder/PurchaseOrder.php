@@ -32,17 +32,10 @@ require_once('include/utils/utils.php');
 class Order extends CRMEntity {
 	var $log;
 	var $db;
-
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-	
 		
 	var $table_name = "purchaseorder";
 	var $tab_name = Array('vtiger_crmentity','vtiger_purchaseorder','vtiger_pobillads','vtiger_poshipads','vtiger_purchaseordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_purchaseorder'=>'purchaseorderid','vtiger_pobillads'=>'pobilladdressid','vtiger_poshipads'=>'poshipaddressid','vtiger_purchaseordercf'=>'purchaseorderid');
-				
 	
 	var $entity_table = "vtiger_crmentity";
 	
@@ -78,10 +71,6 @@ class Order extends CRMEntity {
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
-
-	var $record_id;
-	var $list_mode;
-        var $popup_type;
 
 	var $search_fields = Array(
 				'Order Id'=>Array('crmentity'=>'crmid'),

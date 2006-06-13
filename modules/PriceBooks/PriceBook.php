@@ -21,11 +21,6 @@ class PriceBook extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-
 	var $tab_name = Array('vtiger_crmentity','vtiger_pricebook','vtiger_pricebookcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_pricebook'=>'pricebookid','vtiger_pricebookcf'=>'pricebookid');
 	var $column_fields = Array();
@@ -42,10 +37,6 @@ class PriceBook extends CRMEntity {
                                         'Active'=>'active'
                                      );
         var $list_link_field= 'bookname';
-
-
-	var $list_mode;
-	var $popup_type;
 
 	var $search_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname')

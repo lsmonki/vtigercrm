@@ -32,20 +32,6 @@ class Activity extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored vtiger_fields
-  	var $eventid;
-	var $description;
-	var $firstname;
-	var $lastname;
-	var $setype;
-	var $status;
-	var $date_start;
-	var $time_start;
-	var $priority;
-   	var $sendnotification;
-	var $duration_hours;
-	var $duration_minutes;
-
 	var $table_name = "activity";
 	#var $object_name = "activity";	
 		// Mike Crowe Mod --------------------------------------------------------Renamed to match vtiger_tab
@@ -54,7 +40,6 @@ class Activity extends CRMEntity {
     var $base_table_name = "activity";
     var $cf_table_name = "";
 	var $module_id = "activityid";
-
 	
 	var $reminder_table = "activity_reminder";
 	

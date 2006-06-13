@@ -32,17 +32,10 @@ require_once('include/RelatedListView.php');
 class Quote extends CRMEntity {
 	var $log;
 	var $db;
-
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-	
 		
 	var $table_name = "quotes";
 	var $tab_name = Array('vtiger_crmentity','vtiger_quotes','vtiger_quotesbillads','vtiger_quotesshipads','vtiger_quotescf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_quotes'=>'quoteid','vtiger_quotesbillads'=>'quotebilladdressid','vtiger_quotesshipads'=>'quoteshipaddressid','vtiger_quotescf'=>'quoteid');
-				
 	
 	var $entity_table = "crmentity";
 	
@@ -82,10 +75,6 @@ class Quote extends CRMEntity {
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
-
-	var $record_id;
-	var $list_mode;
-        var $popup_type;
 
 	var $search_fields = Array(
 				'Quote Id'=>Array('crmentity'=>'crmid'),

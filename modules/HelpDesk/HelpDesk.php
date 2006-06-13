@@ -24,11 +24,6 @@ class HelpDesk extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-
 	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_seticketsrel','vtiger_ticketcf','vtiger_ticketcomments','vtiger_attachments');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid','vtiger_attachments'=>'attachmentsid');
 	var $column_fields = Array();

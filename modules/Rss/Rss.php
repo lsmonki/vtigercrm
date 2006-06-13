@@ -27,12 +27,7 @@ require_once('include/magpierss/rss_fetch.inc');
 
 class vtigerRSS extends CRMEntity
 {
-	var $rss;
 	var $rsscache_time = 1200;
-	var $rss_object;
-	var $rss_title;
-	var $rss_link;
-
 	
 	/** Function to get the Rss Feeds from the Given URL 
 	  * This Function accepts the url string as the argument 

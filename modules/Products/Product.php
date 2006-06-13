@@ -21,17 +21,6 @@ class Product extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-
-	// These are related
-	var $name;
-	var $vendorid;
-	var $contactname;
-	var $contactid;
-	
 	 // Josh added for importing and exporting -added in patch2
         var $unit_price;
         var $table_name = "products";
@@ -64,10 +53,6 @@ class Product extends CRMEntity {
                                         'Unit Price'=>'unit_price'
                                      );
         var $list_link_field= 'productname';
-
-
-	var $list_mode;
-	var $popup_type;
 
 	var $search_fields = Array(
                                 'Product Name'=>Array('products'=>'productname'),

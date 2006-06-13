@@ -32,22 +32,6 @@ class Note extends CRMEntity {
 	var $log;
 	var $db;
 
-	// Stored vtiger_fields
-	var $id;
-        var $mode;
-
-	var $notesid;
-	var $description;
-	var $name;
-	var $filename;
-	var $parent_type;
-	var $parent_id;
-	var $contact_id;
-
-	var $parent_name;
-	var $contact_name;
-	var $contact_phone;
-	var $contact_email;
 	var $required_fields =  array("name"=>1);
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 

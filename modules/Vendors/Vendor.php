@@ -21,11 +21,6 @@ class Vendor extends CRMEntity {
 	var $log;
 	var $db;
 
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-
 	var $tab_name = Array('vtiger_crmentity','vtiger_vendor','vtiger_vendorcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
 	var $column_fields = Array();
@@ -46,10 +41,6 @@ class Vendor extends CRMEntity {
                                         'Category'=>'category'
                                      );
         var $list_link_field= 'vendorname';
-
-
-	var $list_mode;
-	var $popup_type;
 
 	var $search_fields = Array(
                                 'Vendor Name'=>Array('vendor'=>'vendorname'),

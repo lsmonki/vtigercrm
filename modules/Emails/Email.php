@@ -36,14 +36,6 @@ class Email extends CRMEntity {
 	var $db;
 
 	// Stored vtiger_fields
-	var $id;
-	var $mode;
-
-	var $emailid;
-	var $description;
-	var $name;
-	var $date_start;
-	var $time_start;
   	var $module_id="emailid";
 
 	var $rel_users_table = "vtiger_salesmanactivityrel";

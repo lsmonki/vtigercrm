@@ -32,12 +32,6 @@ require_once('include/utils/utils.php');
 class Invoice extends CRMEntity {
 	var $log;
 	var $db;
-
-
-	// Stored vtiger_fields
-	var $id;
-	var $mode;
-	
 		
 	var $table_name = "vtiger_invoice";
 	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf');
@@ -80,10 +74,6 @@ class Invoice extends CRMEntity {
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
-
-	var $record_id;
-	var $list_mode;
-        var $popup_type;
 
 	var $search_fields = Array(
 				'Invoice Id'=>Array('crmentity'=>'crmid'),
