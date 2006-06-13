@@ -67,6 +67,7 @@ class DefaultDataPopulator extends CRMEntity {
  $this->db->query("INSERT INTO vtiger_tab VALUES (26,'Campaigns',0,23,'Campaigns',null,null,1)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (27,'Portal',0,24,'Portal',null,null,1)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)");
+ $this->db->query("insert into vtiger_tab values (29,'Users',0,26,'Users',null,null,1)");
 
 // Populate the vtiger_blocks vtiger_table
 $this->db->query("insert into vtiger_blocks values (1,2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0)");
@@ -147,6 +148,9 @@ $this->db->query("insert into vtiger_blocks values (75,4,'LBL_IMAGE_INFORMATION'
 $this->db->query("insert into vtiger_blocks values (76,26,'LBL_CAMPAIGN_INFORMATION',1,0,0,0,0,0)");
 $this->db->query("insert into vtiger_blocks values (77,26,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into vtiger_blocks values (78,26,'LBL_DESCRIPTION_INFORMATION',3,0,0,0,0,0)");
+$this->db->query("insert into vtiger_blocks values (79,29,'LBL_USERLOGIN_ROLE',1,0,0,0,0,0)");
+$this->db->query("insert into vtiger_blocks values (80,29,'LBL_MORE_INFORMATION',2,0,0,0,0,0)");
+$this->db->query("insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
 
 //
 
@@ -837,6 +841,41 @@ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("
 
 
 //Invoice Details -- END
+ //users Details Starts Block 79,80,81
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'email1','vtiger_users',1,'104','email','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')");
+
+ //user Details End
 
 
 
