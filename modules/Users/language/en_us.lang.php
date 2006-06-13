@@ -31,11 +31,18 @@ $mod_strings = Array(
 'LBL_LIST_LAST_NAME'=>'Last Name',
 'LBL_LIST_USER_NAME'=>'UserName',
 'LBL_LIST_DEPARTMENT'=>'Department',
-'LBL_LIST_EMAIL'=>'Email',
+'LBL_LIST_EMAIL'=>'E-Mail',
 'LBL_LIST_PRIMARY_PHONE'=>'Primary Phone',
 'LBL_LIST_ADMIN'=>'Admin',
 'LBL_LIST_PASSWORD'=>'Password',
 'LBL_LIST_CONFIRM_PASSWORD'=>'Confirm Password',
+'LBL_LIST_USER_NAME_ROLE'=>'User ID , Name & Role',
+'LBL_LIST_SELECT'=>'Select',
+'LBL_LIST_PHONE'=>'Phone',
+'LBL_LIST_NO'=>'#',
+
+'LBL_ADMINS'=>'Admins',
+'LBL_STD_USERS'=>'Standard Users',
 
 'UserName'=>'UserName',
 'Role'=>'Role',
@@ -123,7 +130,7 @@ $mod_strings = Array(
 'ERR_LAST_ADMIN_1'=>'The user name ',
 'ERR_LAST_ADMIN_2'=>' is the last Admin user.  At least one user must be an Admin user.<br>Check the Admin user setting.',
 
-'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 
 // Additional Fields for i18n --- Release vtigerCRM 3.2 Patch 2
 // Users--listroles.php , createrole.php , ListPermissions.php , editpermissions.php
@@ -186,7 +193,7 @@ $mod_strings = Array(
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
-'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge vtiger_fields to personalize your email content.',
+'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge fields to personalize your email content.',
 'LBL_AVAILABLE_MERGE_FIELDS'=>'Available Merge Fields',
 'LBL_SELECT_FIELD_TYPE'=>'Select Field Type :',
 'LBL_SELECT_FIELD'=>'Select Field :',
@@ -194,7 +201,7 @@ $mod_strings = Array(
 'LBL_ACCOUNT_FIELDS'=>'Account Fields',
 'LBL_CONTACT_FIELDS'=>'Contact Fields',
 'LBL_LEAD_FIELDS'=>'Lead Fields',
-'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge vtiger_field value into your template below.',
+'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge field value into your template below.',
 'LBL_EMAIL_TEMPLATE_INFORMATION'=>'Communication Templates > Email Templates > Viewing',
 'LBL_FOLDER'=>'Folder',
 'LBL_PERSONAL'=>'Personal',
@@ -207,9 +214,10 @@ $mod_strings = Array(
 'LBL_TEMPLATE_PRIVATE'=>'Private Access',
 'LBL_TEMPLATE_SUBJECT'=>'Email Subject',
 'LBL_TEMPLATE_MESSAGE'=>'Email Message',
+'LBL_VIEWING'=>'Viewing',
 
 
-// Added vtiger_fields in createnewgroup.php
+// Added fields in createnewgroup.php
 'LBL_CREATE_NEW_GROUP'=>'Create New Group',
 'LBL_NEW_GROUP'=>'New Group',
 'LBL_EDIT_GROUP'=>'Edit Group',
@@ -220,7 +228,7 @@ $mod_strings = Array(
 'LBL_MEMBER_SELECTED'=>'Selected Member',
 'LBL_DESCRIPTION'=>'Description',
 
-// Added vtiger_fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
+// Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
 'LBL_DETAIL_VIEW'=>'Detail View of',
 'LBL_EDIT_VIEW'=>'Edit View of',
@@ -230,7 +238,7 @@ $mod_strings = Array(
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
 'LBL_NEW_WORD_TEMPLATE'=>'New Template',
 
-// Added vtiger_fields in TabCustomise.php,html and UpdateTab.php,html
+// Added fields in TabCustomise.php,html and UpdateTab.php,html
 'LBL_CUSTOMISE_TABS'=>'Customize Tabs',
 'LBL_CHOOSE_TABS'=>'Choose Tabs',
 'LBL_AVAILABLE_TABS'=>'Available Tabs',
@@ -243,10 +251,10 @@ $mod_strings = Array(
 'LBL_CHANGE_HOMEPAGE_LABEL'=>'Homepage Order',
 'LBL_CHANGE_HOMEPAGE_TITLE'=>'Homepage',
 
-// Added vtiger_fields in binaryfilelist.php
+// Added fields in binaryfilelist.php
 'LBL_OERATION'=>'Operation',
 
-// Added vtiger_fields in CreateProfile.php
+// Added fields in CreateProfile.php
 'LBL_PROFILE_NAME'=>'Create New Profile:',
 'LBL_NEW_PROFILE'=>'New Profile',
 'LBL_NEW_PROFILE_NAME'=>'Profile Name',
@@ -263,7 +271,7 @@ $mod_strings = Array(
 'LBL_STANDARD_PRIVILEGES'=>'Standard Privileges',
 'LBL_UTILITY_PRIVILEGES'=>'Utility Privileges',
 'LBL_UTILITIES'=>'Utilities',
-'LBL_BASE_PROFILE_MESG'=>'I would like to setup a base vtiger_profile and edit privileges <b>(Recommended)</b>',
+'LBL_BASE_PROFILE_MESG'=>'I would like to setup a base profile and edit privileges <b>(Recommended)</b>',
 'LBL_BASE_PROFILE'=>'Base Profile:',
 'LBL_OR'=>'OR',
 'LBL_BASE_PROFILE_MESG_ADV'=>'I will choose the privileges from scratch <b>(Advanced Users)</b>',
@@ -275,19 +283,21 @@ $mod_strings = Array(
 'LBL_MESG_VIEW'=>'to view all information / modules of vtiger CRM',
 'LBL_MESG_EDIT'=>'to edit all information / modules of vtiger CRM',
 'LBL_STD_MESG_OPTION'=>'Select the standard actions to be permitted',
-'LBL_TAB_MESG_OPTION'=>'Select the vtiger_tabs/modules to be permitted',
+'LBL_TAB_MESG_OPTION'=>'Select the tabs / modules to be shown',
 'LBL_UTILITY_MESG_OPTION'=>'Select the utility actions to be permitted',
-'LBL_FIELD_MESG_OPTION'=>'Select the vtiger_fields to be permitted',
+'LBL_FIELD_MESG_OPTION'=>'Select the fields to be permitted',
 'LBL_FINISH_BUTTON'=>'Finish',
 'LBL_PROFILE_DETAIL_VIEW'=>'Detail View of Profile',
+'LBL_PROFILE_MESG'=>'Viewing access privileges for',
+'LBL_PROFILE_M'=>'Profile',
 
 
-//Added vtiger_fields in createrole.php
+//Added fields in createrole.php
 'LBL_HDR_ROLE_NAME'=>'Create New Role:',
 'LBL_TITLE_ROLE_NAME'=>'New Role',
 'LBL_ROLE_NAME'=>'Role Name',
 'LBL_ROLE_PROFILE_NAME'=>'Associate With Profile',
-'LBL_SPECIFY_ROLE_NAME'=>'Specify a name for new vtiger_role :',
+'LBL_SPECIFY_ROLE_NAME'=>'Specify a name for new role :',
 'LBL_ASSIGN_PROFILE'=>'Assign Profile(s)',
 'LBL_PROFILE_SELECT_TEXT'=>'Select the Profiles below and click on assign button',
 'LBL_PROFILES_AVLBL'=>'Profiles Available',
@@ -297,7 +307,7 @@ $mod_strings = Array(
 'LBL_ASSOCIATED_USERS'=>'Associated Users :',
 
 
-//Added vtiger_fields in OrgSharingDetailsView.php
+//Added fields in OrgSharingDetailsView.php
 'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
 'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
 'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
@@ -306,7 +316,7 @@ $mod_strings = Array(
 'LBL_READ_CREATE_EDIT_DEL'=>'Public: Read, Create/Edit, Delete',
 'LBL_PRIVATE'=>'Private',
 
-//Added vtiger_fields in listnotificationschedulers.php
+//Added fields in listnotificationschedulers.php
 'LBL_HDR_EMAIL_SCHDS'=>'Users : Email Notifications',
 'LBL_EMAIL_SCHDS_DESC'=>'The following is the list of notifications that are activated automatically when the corresponding event has happened.',
 'LBL_ACTIVE'=>'Active',
@@ -327,13 +337,13 @@ $mod_strings = Array(
 'LBL_BUTTON_UPDATE'=>'Update',
 'LBL_MODULENAMES'=>'Module',
 
-//Added vtiger_fields in ListFieldPermissions.html
+//Added fields in ListFieldPermissions.html
 'LBL_FIELD_PERMISSION_FIELD_NAME'=>'Field Name',
 'LBL_FIELD_PERMISSION_VISIBLE'=>'Visible',
 'LBL_FIELD_PERMISSIOM_TABLE_HEADER'=>'Standard Fields',
 'LBL_FIELD_LEVEL_ACCESS'=>'Field Level Access',
 
-//Added vtiger_fields after 4.0.1
+//Added fields after 4.0.1
 'LBL_SIGNATURE'=>'Signature',
 
 //Added for Event Reminder 4.2 Alpha release
@@ -352,9 +362,9 @@ $mod_strings = Array(
 'Show Details'=>'Show Details',
 'Show Details and Add Events'=>'Show Details and Add Events',
 
-'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other vtiger_users ',
+'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other users ',
 'LBL_USR_CAN_ACCESS'=>'Users can ',
-'LBL_USR_OTHERS'=>' other vtiger_users ',
+'LBL_USR_OTHERS'=>' other users ',
 
 'Read Only '=>'Read Only ',
 'Read, Create/Edit, Delete '=>'Read, Create/Edit, Delete ',
@@ -432,7 +442,7 @@ $mod_strings = Array(
 
 //given for calendar color for an user user
 'LBL_COLOR'=>'Color in Calendar',
-//added for vtiger_activity view in home page
+//added for activity view in home page
 'LBL_ACTIVITY_VIEW'=>'Default Activity View',
 //Added to change Home page order
 'LBL_HOMEPAGE_ORDER_UPDATE'=>'Update Home Page Block Order',
@@ -452,7 +462,7 @@ $mod_strings = Array(
 'MNL'=>'My New Leads',
 'LBL_LEAD_VIEW'=>'Default Lead View',
 'LBL_TAG_CLOUD'=>'Tag Cloud',
-'LBL_LIST_TOOLS'=>'Operations',
+'LBL_LIST_TOOLS'=>'Tools',
 'LBL_STATISTICS'=>'Statistics',
 'LBL_TOTAL'=>'Total :',
 'LBL_OTHERS'=>'Others :',
@@ -486,7 +496,7 @@ $mod_strings = Array(
 'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
 'LBL_SELECT_SCREEN'=>'Select the Screen / Module :',
 'LBL_FIELDS_AVLBL'=>'Fields Available in',
-'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select vtiger_fields to be shown',
+'LBL_FIELDS_SELECT_DESELECT'=>'Select or De-Select fields to be shown',
 'LBL_ROLE_TO_BE_DELETED'=>'Role to be Deleted',
 'LBL_TRANSFER_USER_ROLE'=>'Transfer Users to Role',
 'LBL_DELETE_ROLE'=>'Delete Role'
