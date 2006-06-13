@@ -452,6 +452,104 @@
 				<input name="{$fldname}"  type="file" value="{$secondvalue}"/>
 				<input type="hidden" name="id" value=""/>{$fldvalue}
 			</td>
+		{elseif $uitype eq 156}
+			<td width="20%" class="dvtCellLabel" align=right>
+				{$fldlabel}
+			</td>
+				{if $fldvalue eq 1}
+					<td width="30%" align=left class="dvtCellInfo">
+						<input name="{$fldname}" type="checkbox"  checked>
+					</td>
+				{else}
+					<td width="30%" align=left class="dvtCellInfo">
+						<input name="{$fldname}" type="checkbox">
+					</td>
+				{/if}
+		{elseif $uitype eq 98}<!-- Role Selection Popup -->		
+			<td width="20%" class="dvtCellLabel" align=right>
+			<font color="red">*</font>
+				{$fldlabel}
+			</td>
+			<td width="30%" align=left class="dvtCellInfo">
+			<input name="role_name" id="role_name" class="txtBox" value="{$secondvalue}" type="text">&nbsp;
+			<a href="javascript:openPopup();"><img src="{$IMAGE_PATH}select.gif" align="absmiddle" border="0"></a>
+			<input name="user_role" id="user_role" value="{$fldvalue}" type="hidden">
+			</td>
+		{elseif $uitype eq 104}<!-- Mandatory Email Fields -->			
+			 <td width=20% class="dvtCellLabel" align=right>
+			 <font color="red">*</font>
+			 {$fldlabel}
+			 </td>
+    	     <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" id ="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
+			{elseif $uitype eq 115}<!-- for Status field Disabled for nonadmin -->
+			<td width="20%" class="dvtCellLabel" align=right>
+				{$fldlabel}
+			</td>
+			<td width="30%" align=left class="dvtCellInfo">
+			   <select name="{$fldname}">
+				{foreach item=arr from=$fldvalue}
+					{foreach key=sel_value item=value from=$arr}
+						<option value="{$sel_value}" {$value}>{$sel_value}</option>
+					{/foreach}
+				{/foreach}
+			   </select>
+			</td>
+			{elseif $uitype eq 105}
+			<td width="20%" class="dvtCellLabel" align=right>
+				{$fldlabel}
+			</td>
+			<td width="30%" align=left class="dvtCellInfo">
+					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}"/>
+					<input type="hidden" name="id" value=""/>
+					{$maindata[3].0.name}
+			</td>
+			{elseif $uitype eq 103}
+			<td width="20%" class="dvtCellLabel" align=right>
+				{$fldlabel}
+			</td>
+			<td width="30%" colspan="3" align=left class="dvtCellInfo">
+				<input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+			</td>	
+			{elseif $uitype eq 101}<!-- for reportsto field USERS POPUP -->
+				<td width="20%" class="dvtCellLabel" align=right>
+			       {$fldlabel}
+	            </td>
+				<td width="30%" colspan="3" align=left class="dvtCellInfo">
+				<input readonly name='{$fldname}' class="small" type="text" value='{$fldvalue}'><input name='reports_to_id' type="hidden" value='{$fldvalue}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=640,height=522,resizable=0,scrollbars=0");'>
+	            </td>
+			{elseif $uitype eq 116}<!-- for currency in users details-->	
+			<td width="20%" class="dvtCellLabel" align=right>
+				{$fldlabel}
+			</td>
+			<td width="30%" align=left class="dvtCellInfo">
+			   <select name="{$fldname}">
+				{foreach item=arr key=uivalueid from=$fldvalue}
+					{foreach key=sel_value item=value from=$arr}
+						<option value="{$uivalueid}" {$value}>{$sel_value}</option>
+					{/foreach}
+				{/foreach}
+			   </select>
+			</td>
+			{elseif $uitype eq 106}
+			<td width=20% class="dvtCellLabel" align=right>
+				<font color="red">*</font>{$fldlabel}
+			</td>
+			<td width=30% align=left class="dvtCellInfo">
+				{if $MODE eq 'edit'}
+				<input type="text" readonly name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+				{else}
+				<input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+				{/if}
+			</td>
+			{elseif $uitype eq 99}
+				{if $MODE eq 'create'}
+				<td width=20% class="dvtCellLabel" align=right>
+					<font color="red">*</font>{$fldlabel}
+				</td>
+				<td width=30% align=left class="dvtCellInfo">
+					<input type="password" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'">
+				</td>
+				{/if}
 		{elseif $uitype eq 30}
 			<td width="20%" class="dvtCellLabel" align=right>
 				{$fldlabel}

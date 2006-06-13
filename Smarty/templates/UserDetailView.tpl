@@ -11,11 +11,12 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/slider.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/prototype_fade.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/effectspack.js"></script>
 <script language="javascript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
+<span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
+   <a class="link"  align="right" href="javascript:;">Edit</a>
+</span>
+
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -94,10 +95,8 @@
 			<td>
 			  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
 			  <tr >
-			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
 			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onClick="fnVis('prof')"><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
-				    <td id="more" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onClick="fnVis('more')"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
-				    <td id="addr" width="25%" align="center" nowrap="nowrap" class="dvtUnSelectedCell" onClick="fnVis('addr')"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
+			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
 				    <td class="dvtTabCache" nowrap="nowrap" width="10">&nbsp;</td>
 			  </tr>
 			  </table>
@@ -105,162 +104,50 @@
 		  </tr>
 		  <tr>
 		  	<td align="left" valign="top">
-			<div id="mnuTab">
-				<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
-				<tr><td height="35">&nbsp;</td></tr>
-				<tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
+				{foreach key=header item=detail from=$BLOCKS}
+				<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
   		    	<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_INFORMATION}</b></td>
+    	               <td>&nbsp;</td>
+        	           <td>&nbsp;</td>
+            	       <td>&nbsp;</td>
+                	   <td align=right>
 				</tr>  
 				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_NAME} </td>
-				<td class="dvtCellInfo">{$USER_NAME}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADMIN} </td>
-        	    <td class="dvtCellInfo"><input type="checkbox" name="is_admin" {$IS_ADMIN}/></td>
-				</tr>
-				{if $MODE eq 'edit'}
-				<tr>
-				<td class="dvtCellLabel" align="right" width="20%"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_PASSWORD} </td>
-			    <td class="dvtCellInfo" width="20%"><input  name="new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
-			    <td class="dvtCellLabel" width="20%" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_CONFIRM_PASSWORD} </td>
-			    <td class="dvtCellInfo" width="20%"><input name="confirm_new_password" type="password" class="detailedViewTextBox"  onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" /></td>
+						{strip}
+					     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5">
+							<b>	{$header}</b>
+						 </td>
+						 {/strip}
 			    </tr>
+					{foreach item=detail from=$detail}
+					<tr style="height:25px">
+							{foreach key=label item=data from=$detail}
+							   {assign var=keyid value=$data.ui}
+							   {assign var=keyval value=$data.value}
+							   {assign var=keytblname value=$data.tablename}
+							   {assign var=keyfldname value=$data.fldname}
+							   {assign var=keyoptions value=$data.options}
+							   {assign var=keysecid value=$data.secid}
+							   {assign var=keyseclink value=$data.link}
+							   {assign var=keycursymb value=$data.cursymb}
+							   {assign var=keysalut value=$data.salut}
+							   {assign var=keycntimage value=$data.cntimage}
+							   {assign var=keyadmin value=$data.isadmin}
+							   
+							   <input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>
+							   	{if $label ne ''}
+									<td class="dvtCellLabel" align=right width=25%>{$label}</td>
+									{include file="DetailViewUI.tpl"}
+								{else}
+                                    <td class="dvtCellLabel" align=right>&nbsp;</td>
+                                    <td class="dvtCellInfo" align=left >&nbsp;</td>
 				{/if}	
-			    <tr>
-			    <td class="dvtCellLabel" align="right">{$UMOD.LBL_FIRST_NAME} </td>
-			    <td class="dvtCellInfo">{$FIRST_NAME}&nbsp;</td>
-			    <td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_LAST_NAME}</td>
-			    <td class="dvtCellInfo">{$LAST_NAME}&nbsp;</td>
+							{/foreach}
 			 	</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_USER_ROLE}</td>
-				<td class="dvtCellInfo">{$ROLEASSIGNED}&nbsp;</td>							      <td class="dvtCellLabel" align="right">{$UMOD.LBL_GROUP_NAME}</td>
-				<td class="dvtCellInfo">{$GROUPASSIGNED}&nbsp;</td>
-			    </tr>
-				<tr>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_EMAIL}</td>
-				<td class="dvtCellInfo"><a href="mailto:{$EMAIL1}" target="_blank">{$EMAIL1}</a>&nbsp;</td>
-				<td class="dvtCellLabel" align="right"><span class="style1"><font color='red'>{$APP.LBL_REQUIRED_SYMBOL}</font></span>{$UMOD.LBL_STATUS}</td>
+					{/foreach}
+					</table>
+				 {/foreach}
 
-				<td class="dvtCellInfo">{$STATUS}&nbsp;</td>
-				</tr>
-				<tr><td colspan="4" class="dvtCellInfo" height="30">&nbsp;</td></tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ACTIVITY_VIEW}</td>
-				<td class="dvtCellInfo">{$ACTIVITY_VIEW}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_LEAD_VIEW}</td>
-				<td span class="dvtCellInfo">{$LEAD_VIEW}&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_CURRENCY_NAME}</td>
-		                <td span class="dvtCellInfo">{$CURRENCY_NAME}&nbsp;</td>
-				<td class="dvtCellLabel" align="right"></td>
-				<td class="dvtCellInfo">&nbsp;</td>
-				</tr>
-				<tr><td colspan="4" height="30">&nbsp;</td></tr>
-				</table>
-				</td></tr>
-				</table>
-			</div>
-			<div id="mnuTab1" >
-			  	<table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
-				<tr><td height="35">&nbsp;</td></tr>
-				<tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
-				<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_MORE_INFN}</b></td>
-				</tr>  
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_TITLE}</td>
-				<td class="dvtCellInfo">{$TITLE}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OFFICE_PHONE}</td>
-         		<td class="dvtCellInfo">{$PHONE_WORK}&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right" width="20%">{$UMOD.LBL_DEPARTMENT}</td>
-				<td class="dvtCellInfo" width="20%">{$DEPARTMENT}&nbsp;</td>
-				<td class="dvtCellLabel" width="20%" align="right">{$UMOD.LBL_MOBILE_PHONE}</td>
-				<td class="dvtCellInfo" width="20%">{$PHONE_MOBILE}&nbsp;</td>
-			    </tr>
-			    <tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_REPORTS_TO}</td>
-				<td class="dvtCellInfo" width="20%">{$REPORTS_TO_NAME}{$REPORTS_TO_ID}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OTHER_PHONE}</td>
-				<td class="dvtCellInfo">{$PHONE_OTHER}&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_OTHER_EMAIL}</td>
-				<td class="dvtCellInfo">{$EMAIL2}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_FAX}</td>
-				<td class="dvtCellInfo">{$PHONE_FAX}&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_YAHOO_ID}</td>
-				<td class="dvtCellInfo">{$YAHOO_ID}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_HOME_PHONE}</td>
-				<td class="dvtCellInfo">{$PHONE_HOME}&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_DATE_FORMAT}</td>
-				<td class="dvtCellInfo" width="30%">{$DATE_FORMAT}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">&nbsp;</td>
-				<td class="dvtCellInfo">&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_SIGNATURE}</td>
-				<td class="dvtCellInfo">{$SIGNATURE}&nbsp;</td>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_NOTES}</td>
-				<td span class="dvtCellInfo">{$DESCRIPTION}&nbsp;</td>
-				</tr>
-				<tr><td colspan="4" height="30">&nbsp;</td></tr>
-				</table>
-				</td></tr>
-				</table>
-			</div>
-		  	<div id="mnuTab2" >
- 			    <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
-			    <tr><td height="35">&nbsp;</td></tr>
-			    <tr><td align="left">
-				<table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
-				<tr>
-				<td colspan="4" class="detailedViewHeader"><b>{$UMOD.LBL_USER_ADDR_INFN}</b></td>
-				</tr>  
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_ADDRESS}</td>
-				<td class="dvtCellInfo">{$ADDRESS_STREET}&nbsp;</td>
-				<td class="dvtCellInfo" >&nbsp;</td>
-				<td class="dvtCellInfo">&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right" width="20%">{$UMOD.LBL_CITY}</td>
-				<td class="dvtCellInfo" width="20%">{$ADDRESS_CITY}&nbsp;</td>
-				<td class="dvtCellInfo" width="20%">&nbsp;</td>
-				<td class="dvtCellInfo" width="20%">&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_STATE}</td>
-				<td class="dvtCellInfo">{$ADDRESS_STATE}&nbsp;</td>
-				<td class="dvtCellInfo">&nbsp;</td>
-				<td class="dvtCellInfo">&nbsp;</td>
-				</tr>
-				<tr>
-				<td class="dvtCellLabel" align="right">{$UMOD.LBL_POSTAL_CODE}</td>
-				<td class="dvtCellInfo">{$ADDRESS_POSTALCODE}&nbsp;</td>
-			    <td class="dvtCellInfo">&nbsp;</td>
-			    <td class="dvtCellInfo">&nbsp;</td>
-				</tr>
-				<tr>
-			    <td class="dvtCellLabel" align="right">{$UMOD.LBL_COUNTRY}</td>
-			    <td class="dvtCellInfo">{$ADDRESS_COUNTRY}&nbsp;</td>
-			    <td class="dvtCellInfo" >&nbsp;</td>
-			    <td class="dvtCellInfo">&nbsp;</td>
-			    </tr>
-			    <tr><td colspan="4" height="30">&nbsp;</td></tr>
-				</table>
-				</td></tr>
-				</table>
-			</div>
 			</td>
 			</tr>
 			
