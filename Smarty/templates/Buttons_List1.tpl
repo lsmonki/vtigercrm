@@ -114,16 +114,6 @@
 				</tr>
 				</table>
 		</td>			
-		{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts'}
-                        <td class="small">
-                                <!-- Google Map -->
-                                        <table border=0 cellspacing=0 cellpadding=5>
-                                                <tr>
-                                                        <td style="padding-left:10px;"><a href="#" onclick='window.open("index.php?module={$MODULE}&action=googlemap&record={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="GoogleMap" title="GoogleMap" border="0"></a></td>
-                                                </tr>
-                                        </table>
-                        </td>
-                {/if}
 		</tr>
 		</table>
 	</td>
