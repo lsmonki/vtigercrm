@@ -807,12 +807,10 @@ function createTables($schemaFile, $dbHostName=false, $userName=false, $userPass
 	//$db->debug = true;
 	
 
-	//$this->println("ADODB createTables connect status=".$db->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName));
 	$schema = new adoSchema( $db );
-	//Debug Adodb XML Schema
-	$sehema->XMLS_DEBUG = TRUE;
-	//Debug Adodb
-	$sehema->debug = true;
+	// Debug Adodb XML Schema
+	// $schema->XMLS_DEBUG = TRUE;
+	// $schema->debug = true;
 	$sql = $schema->ParseSchema( $schemaFile );
 
 	$this->println("--------------Starting the table creation------------------");
