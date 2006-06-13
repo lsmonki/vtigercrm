@@ -36,22 +36,12 @@ class Lead extends CRMEntity {
 
 	var $entity_table = "vtiger_crmentity";
 	var $table_name = "vtiger_leaddetails";
-
 	var $object_name = "Lead";
-
 	var $new_schema = true;
 
 	//construct this from database;	
 	var $column_fields = Array();
-
 	var $sortby_fields = Array('lastname','firstname','email','phone','company','smownerid','website');
-
-	var $combofieldNames = Array('leadsource'=>'leadsource_dom'
-	,'salutation'=>'salutation_dom'
-	,'status'=>'leadstatus_dom'
-	,'industry'=>'industry_dom'
-	,'rating'=>'rating_dom'
-	,'licencekey'=>'licensekey_dom');
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('smcreatorid', 'smownerid', 'contactid','potentialid' ,'crmid');

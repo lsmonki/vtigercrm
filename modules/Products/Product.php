@@ -80,9 +80,6 @@ class Product extends CRMEntity {
                                         'Unit Price'=>'unit_price'
                                      );
 	
-	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
-                      ,'productcategory'=>'productcategory_dom');
-
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
