@@ -87,6 +87,8 @@ $graph_array = Array(
           "invoicebystatus" => $mod_strings['invoicebystatus'],
           "ticketsbystatus" => $mod_strings['ticketsbystatus'],
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
+	  "ticketsbycategory" => $mod_strings['ticketsbycategory'],
+	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
           );
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
@@ -532,6 +534,26 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             $query=$helpdesk_query;
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
+		    //Tickets by Category
+		    elseif (($type == "ticketsbycategory") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketcategory') == "0"))
+		    {
+			    $graph_by="category";
+			    $graph_title=$mod_strings['ticketsbycategory'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$helpdesk_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Tickets by Owner   
+		    elseif (($type == "ticketsbyowner") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketowner') == "0"))
+		    {
+			    $graph_by="smownerid";
+			    $graph_title=$mod_strings['ticketsbyowner'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$helpdesk_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
 		    else
                     {
                         echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
