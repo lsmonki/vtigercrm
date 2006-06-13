@@ -26,7 +26,7 @@ require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 
-class CRMEntity extends SugarBean
+class CRMEntity
 {
   /**
    * This method implements a generic insert and update logic for any SugarBean
@@ -526,20 +526,22 @@ class CRMEntity extends SugarBean
 	  if($insertion_mode == 'edit')
 	  {
 		  $update = '';
+		  $tabid= getTabid($module);	
+		  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
 	  }
 	  else
 	  {
 		  $column = $this->tab_name_index[$table_name];
-		  if($column == 'id' && $table_name == 'users')
+		  if($column == 'id' && $table_name == 'vtiger_users')
 		  {
-		 	$currentuser_id = $adb->getUniqueID("users");
+		 	$currentuser_id = $adb->getUniqueID("vtiger_users");
 			$this->id = $currentuser_id;
 		  }
 		  $value = $this->id;
+	  	  $tabid= getTabid($module);	
+		  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3,4)"; 
 	  }
 
-	  $tabid= getTabid($module);	
-	  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
 	  $result = $adb->query($sql);
 	  $noofrows = $adb->num_rows($result);
 	  for($i=0; $i<$noofrows; $i++)

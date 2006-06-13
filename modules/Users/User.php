@@ -87,7 +87,7 @@ class User extends CRMEntity {
 	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
 	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
 	var $column_fields = Array();
-	var $table_name = "users";
+	var $table_name = "vtiger_users";
 	var $sortby_fields = Array();		  
 	
     // This is the list of fields that are in the lists.
@@ -201,6 +201,7 @@ class User extends CRMEntity {
 		$encrypted_password = crypt($user_password, $salt);	
 
 		return $encrypted_password;
+
 	}
 	
 	function authenticate_user($password){
@@ -486,9 +487,9 @@ class User extends CRMEntity {
 	  $theme_path="themes/".$theme."/";
 	  $image_path=$theme_path."images/";
 	  if($sorder != '' && $orderby !='')
-	  $list_query = ' SELECT * from users where deleted=0 order by '.$orderby.' '.$sorder;
+	  $list_query = ' SELECT * from vtiger_users where deleted=0 order by '.$orderby.' '.$sorder;
 	  else
-	  $list_query = "SELECT * from users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
+	  $list_query = "SELECT * from vtiger_users where deleted=0 order by ".$this->default_order_by." ".$this->default_sort_order;
 	  $result =$adb->query($list_query);
 	  $entries_list = array();
 	  $roleinfo = getAllRoleDetails();

@@ -89,7 +89,7 @@ function create_default_users() {
 	$admin_email ="admin@administrator.com";
         $user->column_fields["email"] = $admin_email;
 	//to get the role id for standard_user	
-	$role_query = "select roleid from role where rolename='administrator'";
+	$role_query = "select roleid from vtiger_role where rolename='administrator'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
@@ -160,7 +160,7 @@ elseif ($success==1)
 else
 	eecho("Tables Successfully created.\n");
 
-foreach ( $modules as $module ) 
+foreach ($modules as $module ) 
 {
 	$focus = new $module();
 	$focus->create_tables();
@@ -178,6 +178,10 @@ require_once('include/PopulateComboValues.php');
 $combo = new PopulateComboValues();
 $combo->create_tables();
 
+//Writing tab data in flat file
+create_tab_data_file();
+create_parenttab_data_file();
+
 create_default_users();
 
 // default report population
@@ -186,9 +190,6 @@ require_once('modules/Reports/PopulateReports.php');
 // default customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
-//Writing tab data in flat file
-create_tab_data_file();
-create_parenttab_data_file();
 
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
