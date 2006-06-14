@@ -1330,50 +1330,6 @@ function end_session($user_name)
 	return "Success";	
 }
  
-function add_contacts_matching_email_address(&$output_list, $email_address, &$seed_contact)	
-{
-  //global $log;
-	$safe_email_address = addslashes($email_address);
-	
-	$where = "email1 like '$safe_email_address' OR email2 like '$safe_email_address'";
-	$response = $seed_contact->get_list("first_name,last_name,primary_address_city", $where, 0);
-	$contactList = $response['list'];
-	
-	//$log->fatal("Retrieved the list");
-	
-	// create a return array of names and email addresses.
-	foreach($contactList as $contact)
-	{
-		//$log->fatal("Adding another contact to the list: $contact-first_name");
-		$output_list[] = Array("first_name"	=> $contact->first_name,
-			"last_name" => $contact->last_name,
-                        "primary_address_city" => $contact->primary_address_city,
-                        "account_name" => $contact->account_name,
-			"id" => $contact->id,
-                        "email_address" => $contact->email1,
-                       "salutation"=>$contact->salutation,
-                       "title"=>$contact->title,
-                       "phone_mobile"=>$contact->phone_mobile,
-                      "reports_to_id"=>$contact->reports_to_id,
-                      "primary_address_street"=>$contact->primary_address_street,
-                     "primary_address_city"=>$contact->primary_address_city,
-                     "primary_address_state"=>$contact->primary_address_state ,
-                     "primary_address_postalcode"=>$contact->primary_address_postalcode,
-                     "primary_address_country"=>$contact->primary_address_country,
-                     "alt_address_city"=>$contact->alt_address_city,
-                    "alt_address_street"=>$contact->alt_address_street,
-                    "alt_address_city"=>$contact->alt_address_city,
-                   "alt_address_state"=>$contact->alt_address_state,
-                   "alt_address_postalcode"=>$contact->alt_address_postalcode,
-                   "alt_address_country"=>$contact->alt_address_country,
-);
-        }
-          }
-
-
-
-
-
 
 function delete_contact($user_name,$id)
 {
@@ -1393,60 +1349,6 @@ function delete_contact($user_name,$id)
         return "Suceeded in deleting contact";
 }
 
-/*
-function sync_contact($user_name)
-{
-  return "synchronized contact successfully";
-}
-*/
-
-/*
-function contact_by_email($email_address) 
-{ 
-  //global $log;
-  //$this->log->debug("Contact by email called with: $email_address" .$email_address);
-	
-	$seed_contact = new Contact();
-	$output_list = Array();
-
-	$email_address_list = explode("; ", $email_address);
-
-	// remove duplicate email addresses
-	$non_duplicate_email_address_list = Array();
-	foreach( $email_address_list as $single_address)
-	{
-		// Check to see if the current address is a match of an existing address
-		$found_match = false;
-		foreach( $non_duplicate_email_address_list as $non_dupe_single)
-		{
-			if(strtolower($single_address) == $non_dupe_single)
-			{
-				$found_match = true;
-				break;
-			}
-		}	
-		
-		if($found_match == false)
-		{
-			$non_duplicate_email_address_list[] = strtolower($single_address);
-		}	
-	}
-	
-	// now copy over the non-duplicated list as the original list.
-	$email_address_list = &$non_duplicate_email_address_list;
-	
-	foreach( $email_address_list as $single_address)
-	{
-          add_contacts_matching_email_address($output_list, $single_address, $seed_contact);	
-	}
-
-	//to remove an erroneous compiler warning
-	$seed_contact = $seed_contact;
-	
-	//$log->debug("Contact by email returning");
-	return $output_list;
-}  
-*/
 function contact_by_search($name) 
 { 
 //	global $log;
@@ -1543,20 +1445,6 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	return $email->id;
 }
 
-/*
-function sync_task($user_name)
-{
-  return "synchronized task successfully";
-}
-
-*/
-
-/*
-
-    array('user_name'=>'xsd:string', 'first_name'=>'xsd:string', 'last_name'=>'xsd:string', 'email_address'=>'xsd:string','account_name'=>'xsd:string', 'salutation'=>'xsd:string', 'title'=>'xsd:string', 'phone_mobile'=>'xsd:string' , 'reports_to_id'=>'xsd:string', 'primary_address_street'=>'xsd:string', 'primary_address_city'=>'xsd:string', 'primary_address_state'=>'xsd:string' , 'primary_address_postalcode'=>'xsd:string', 'primary_address_country'=>'xsd:string', 'alt_address_city'=>'xsd:string', 'alt_address_street'=>'xsd:string','alt_address_city'=>'xsd:string', 'alt_address_state'=>'xsd:string', 'alt_address_postalcode'=>'xsd:string', 'alt_address_country'=>'xsd:string'),
-
-
-*/
 
 function create_contact($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone="",$home_phone="",$fax="",$department="",$description="")
 {
@@ -2045,46 +1933,9 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	
 	require_once('modules/Contacts/Contact.php');
 	$contact = new Contact();
-	/*
-        $contact->first_name = $first_name;
-	$contact->last_name = $last_name;
-	$contact->email1 = $email_address;
-        //$contact->account_name = $account_name;
-	$contact->account_id=retrieve_account_id($account_name,$user_id);
-        $contact->salutation = $salutation;
-        $contact->title = $title;
-        $contact->phone_mobile = $phone_mobile;
-        $contact->reports_to_id = retrievereportsto($reports_to,$user_id,$contact->account_id);  
-	$contact->primary_address_city = $primary_address_city;
-        $contact->primary_address_postalcode = $primary_address_postalcode;
-        $contact->primary_address_state = $primary_address_state;
-        $contact->primary_address_street = $primary_address_street;
-   $contact->primary_address_country = $primary_address_country; 
-        $contact->alt_address_country = $alt_address_country;
-        $contact->alt_address_postalcode = $alt_address_postalcode;
-        $contact->alt_address_state = $alt_address_state;
-        $contact->alt_address_street = $alt_address_street;
-
-  $contact->alt_address_city = $alt_address_city;
-
-	$contact->id=$id;
-
-	
-
-	$contact->save();
-	*/
 	
 	$contact->column_fields[firstname]=$first_name;
 	$contact->column_fields['lastname']=$last_name;
-	
-	/*if($account_name=='')
-	{
-		$account_name="Vtiger_Crm";
-	}
-	else if($account_name==null)
-	{
-		$account_name="Vtiger_Crm";
-	}*/
 	
 	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
 	
@@ -2579,10 +2430,6 @@ function create_rss_from_webform($url)
 	}
 }
 
-
-//calendar
-
-//$log->fatal("In soap.php");
 
 /* Begin the HTTP listener service and exit. */ 
 $server->service($HTTP_RAW_POST_DATA); 
