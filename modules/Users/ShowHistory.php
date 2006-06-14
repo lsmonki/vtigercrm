@@ -38,7 +38,7 @@ global $theme;
 $focus = new User();
 
 if(isset($_REQUEST['record'])) {
-	$focus->retrieve($_REQUEST['record']);
+	$focus->retrieve_entity_info($_REQUEST['record'],"Users");
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";

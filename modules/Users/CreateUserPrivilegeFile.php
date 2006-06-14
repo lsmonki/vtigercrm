@@ -30,8 +30,7 @@ function createUserPrivilegesfile($userid)
 		$newbuf .="\n";		
 		$newbuf .= "//This is the access privilege file\n";
 		$user_focus= new User();
-		$user_focus->retrieve_entity_info($userid,'Users');
-		
+		$user_focus->retrieve_entity_info($userid,"Users");
 		$userInfo=Array();
 		$user_focus->column_fields["id"] = '';
 		$user_focus->id = $userid; 
@@ -116,7 +115,7 @@ function createUserSharingPrivilegesfile($userid)
 		$newbuf .="\n";		
 		$newbuf .= "//This is the sharing access privilege file\n";
 		$user_focus= new User();
-		$user_focus->retrieve_entity_info($userid,'Users');
+		$user_focus->retrieve_entity_info($userid,"Users");
 		if($user_focus->is_admin == 'on')
 		{
 			$newbuf .= "\n";
@@ -496,7 +495,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 		}
 
 
-		//Get vtiger_roles from Role2Grp
+		//Get roles from Role2Grp
 		$grpIterator=false;
 		$groupList = "(";
 		foreach($current_user_groups as $grp_id)
@@ -669,7 +668,7 @@ function getUserModuleSharingObjects($module,$userid,$def_org_share,$current_use
 		}
 
 
-		//Get vtiger_roles from Rs2Grp
+		//Get roles from Rs2Grp
 
 
 		$query="select vtiger_datashare_rs2grp.* from vtiger_datashare_rs2grp inner join vtiger_datashare_module_rel on vtiger_datashare_module_rel.shareid=vtiger_datashare_rs2grp.shareid where vtiger_datashare_module_rel.tabid=".$mod_tabid." and vtiger_datashare_rs2grp.to_groupid in ".$groupList;
@@ -1421,7 +1420,7 @@ function populateSharingtmptables($userid)
 		$adb->query($query);
 	}
 
-	//Populating Values into the tmp sharing vtiger_tables
+	//Populating Values into the tmp sharing tables
 	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice');
 	foreach($sharingArray as $module)
 	{
@@ -1430,7 +1429,7 @@ function populateSharingtmptables($userid)
 		populateSharingPrivileges('GROUP',$userid,$module,'read');
 		populateSharingPrivileges('GROUP',$userid,$module,'write');
 	}
-	//Populating Values into the temp related sharing vtiger_tables
+	//Populating Values into the temp related sharing tables
 	foreach($related_module_share as $rel_tab_id => $tabid_arr)
 	{
 		$rel_tab_name=getTabname($rel_tab_id);

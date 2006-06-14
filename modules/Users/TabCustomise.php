@@ -28,7 +28,7 @@ global $mod_strings;
 $focus = new User();
 
 if(isset($_REQUEST['record'])) {
-	$focus->retrieve($_REQUEST['record']);
+	$focus->retrieve_entity_info($_REQUEST['record'],"Users");
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -342,7 +342,7 @@ function itemMouseOver(id) {
                 } else if (id.indexOf("fieldlist")>=0) {//if Field List
                         if (currSelItemObj.id.indexOf("fd")<0) {
                                 itemObj.style.cursor='move'
-                                itemObj.className='tableBorder mouseover'       //Hiliting Field List only when added vtiger_fields are removed
+                                itemObj.className='tableBorder mouseover'       //Hiliting Field List only when added fields are removed
                         }
                 }
         }
