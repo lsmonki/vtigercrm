@@ -46,7 +46,7 @@ $account_query="select vtiger_crmentity.*, vtiger_account.*, vtiger_accountscf.*
 $products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.*, vtiger_poproductrel.purchaseorderid, vtiger_quotesproductrel.quoteid, vtiger_invoiceproductrel.invoiceid,vtiger_productcf.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_poproductrel on vtiger_products.productid = vtiger_poproductrel.productid left join vtiger_quotesproductrel on vtiger_products.productid = vtiger_quotesproductrel.productid left join vtiger_invoiceproductrel on vtiger_products.productid = vtiger_invoiceproductrel.productid left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid where vtiger_crmentity.deleted=0 ";
 
 //Query for Potential
-$potential_query= "select  vtiger_crmentity.*,vtiger_account.accountname, vtiger_potential.*, vtiger_potentialscf.* from vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_potential.accountid = vtiger_account.accountid inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
+$potential_query= "select  vtiger_crmentity.*,vtiger_account.accountname, vtiger_potential.*, vtiger_potentialscf.*, vtiger_potentialgrouprelation.groupname from vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_potential.accountid = vtiger_account.accountid inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
 
 //Query for Sales Order
 $so_query="select vtiger_crmentity.*,vtiger_salesorder.*,vtiger_account.accountid,vtiger_quotes.quoteid from vtiger_salesorder inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid inner join vtiger_sobillads on vtiger_salesorder.salesorderid=vtiger_sobillads.sobilladdressid inner join vtiger_soshipads on vtiger_salesorder.salesorderid=vtiger_soshipads.soshipaddressid left join vtiger_salesordercf on vtiger_salesordercf.salesorderid = vtiger_salesorder.salesorderid left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid=vtiger_sogrouprelation.salesorderid left join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
@@ -63,7 +63,7 @@ $quotes_query="select vtiger_crmentity.*,vtiger_quotes.* from vtiger_quotes inne
 $invoice_query="select vtiger_crmentity.*,vtiger_invoice.* from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid inner join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid inner join vtiger_invoiceshipads on vtiger_invoice.invoiceid=vtiger_invoiceshipads.invoiceshipaddressid left outer join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid inner join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
 
 //Query for tickets
-$helpdesk_query=" select vtiger_troubletickets.status AS vtiger_ticketstatus, vtiger_troubletickets.*,vtiger_crmentity.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_account on vtiger_account.accountid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id and vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid where vtiger_crmentity.deleted=0";
+$helpdesk_query=" select vtiger_troubletickets.status AS ticketstatus, vtiger_ticketgrouprelation.groupname AS ticketgroupname, vtiger_troubletickets.*,vtiger_crmentity.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_account on vtiger_account.accountid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id and vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid where vtiger_crmentity.deleted=0";
 
  /**  This function returns  the values for the graph, for any type of graph needed	 
         * Portions created by vtiger are Copyright (C) vtiger.
@@ -94,7 +94,8 @@ $graph_array = Array(
           "ticketsbystatus" => $mod_strings['ticketsbystatus'],
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
 	  "ticketsbycategory" => $mod_strings['ticketsbycategory'],
-	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
+	  "ticketsbyuser" => $mod_strings['ticketsbyuser'],
+	  "ticketsbyteam" => $mod_strings['ticketsbyteam'],
 	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
           );
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
@@ -437,7 +438,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
-			$where="";
+			$where=" and (crmentity.smownerid != NULL || crmentity.smownerid != ' ')";
 			$query=$potential_query;
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -447,7 +448,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			$graph_by="groupname";
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
-			$where="";
+			$where=" and (potentialgrouprelation.groupname != NULL || potentialgrouprelation.groupname != '')";
 			$query=$potential_query;
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -612,16 +613,26 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			    $query=$helpdesk_query;
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
-		    //Tickets by Owner   
-		    elseif (($type == "ticketsbyowner") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketowner') == "0"))
+		    //Tickets by User   
+		    elseif (($type == "ticketsbyuser") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketuser') == "0"))
 		    {
 			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyowner'];
 			    $module="HelpDesk";
-			    $where="";
+			    $where=" and (crmentity.smownerid != NULL || crmentity.smownerid != ' ')";
 			    $query=$helpdesk_query;
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
+		    //Tickets by Team
+		    elseif (($type == "ticketsbyteam") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketteam') == "0"))
+		    {
+			    $graph_by="ticketgroupname";
+			    $graph_title=$mod_strings['ticketsbyteam'];
+			    $module="HelpDesk";
+			    $where=" and (ticketgrouprelation.groupname != NULL || ticketgrouprelation.groupname != ' ')";
+			    $query=$helpdesk_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }    
 		    //Tickets by Product
 		    elseif (($type == "ticketsbyproduct") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketproduct') == "0"))
 		    {
