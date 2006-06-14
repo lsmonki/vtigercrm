@@ -202,11 +202,35 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="product_id")
 				{
-					$query = "SELECT productname FROM vtiger_products WHERE productid=".$name;
+					$query = "SELECT productname FROM vtiger_products WHERE productid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"productname");
 					if($name_val!="")
-					$name=$name_val;
+						$name=$name_val;
+				}
+				if($graph_for =="purchaseorderid")
+				{
+					$query = "SELECT subject FROM purchaseorder WHERE purchaseorderid='".$name."'";
+					$result = $adb->query($query);
+					$name_val = $adb->query_result($result,0,"subject");
+					if($name_val!="")
+						$name=$name_val;
+				}
+				if($graph_for =="quoteid")
+				{
+					$query = "SELECT subject FROM quotes WHERE quoteid='".$name."'";
+					$result = $adb->query($query);
+					$name_val = $adb->query_result($result,0,"subject");
+					if($name_val!="")
+						$name=$name_val;
+				}
+				if($graph_for =="invoiceid")
+				{
+					$query = "SELECT subject FROM invoice WHERE invoiceid='".$name."'";
+					$result = $adb->query($query);
+					$name_val = $adb->query_result($result,0,"subject");
+					if($name_val!="")
+						$name=$name_val;
 				}
 				//Passing name to graph
 				if($mod_name_val!="") $mod_name_val.=",$name";
