@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once('modules/Activities/Activity.php');
 require_once('themes/'.$theme.'/layout_utils.php');
