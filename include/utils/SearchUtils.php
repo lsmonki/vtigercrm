@@ -288,7 +288,7 @@ function getValuesforColumns($column_name,$search_string)
 			$x=count($explode_column);	
 			if($x == 1 )
 			{
-				$where="$val like '%".$search_string ."%'";
+				$where=" $val like '%".$search_string ."%'";
 			}
 			else 
 			{
@@ -327,7 +327,7 @@ function BasicSearch($module,$search_field,$search_string)
 	if($search_field =='crmid')
 	{
 		$column_name='crmid';
-		$table_name='crmentity';
+		$table_name='vtiger_crmentity';
 		$where="$table_name.$column_name like '%".$search_string."%'";	
 	}else
 	{	
@@ -339,11 +339,11 @@ function BasicSearch($module,$search_field,$search_string)
 			$column_name=$adb->query_result($result,0,'columnname');
 			$table_name=$adb->query_result($result,0,'tablename');
 
-			if($table_name == "crmentity" && $column_name == "smownerid")
+			if($table_name == "vtiger_crmentity" && $column_name == "smownerid")
 			{
 				$where = get_usersid($table_name,$column_name,$search_string);
 			}
-			elseif($table_name == "activity" && $column_name == "status")
+			elseif($table_name == "vtiger_activity" && $column_name == "status")
 			{
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '%".$search_string."%'";
 			}
@@ -555,17 +555,17 @@ function getWhereCondition($currentModule)
 			$srch_val = $_REQUEST[$search_value];
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".$srch_val;
-			if($tab_col == "crmentity.smownerid")
+			if($tab_col == "vtiger_crmentity.smownerid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'users.user_name')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'groups.groupname')." )".$matchtype;	
 			}
-			elseif($tab_col == "activity.status")
+			elseif($tab_col == "vtiger_activity.status")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'activity.status')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'activity.eventstatus')." )".$matchtype;	
 			}
-			elseif($tab_col == "cntactivityrel.contactid")
+			elseif($tab_col == "vtiger_cntactivityrel.contactid")
 			{
 				$adv_string .= " (".getSearch_criteria($srch_cond,$srch_val,'contactdetails.firstname')." or";	
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,'contactdetails.lastname')." )".$matchtype;	
@@ -614,7 +614,7 @@ function getdashboardcondition()
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
-		array_push($where_clauses, "potential.closingdate >= ".$adb->quote($date_closed_start)." and vtiger_potential.closingdate <= ".$adb->quote($date_closed_end));
+		array_push($where_clauses, "vtiger_potential.closingdate >= ".$adb->quote($date_closed_start)." and vtiger_potential.closingdate <= ".$adb->quote($date_closed_end));
 		$url_string .= "&closingdate_start=".$date_closed_start."&closingdate_end=".$date_closed_end;
 	}
 	
@@ -622,16 +622,16 @@ function getdashboardcondition()
 		if($sales_stage=='Other')
 		array_push($where_clauses, "(vtiger_potential.sales_stage <> 'Closed Won' and vtiger_potential.sales_stage <> 'Closed Lost')");
 		else
-		array_push($where_clauses, "potential.sales_stage = ".$adb->quote($sales_stage));
+		array_push($where_clauses, "vtiger_potential.sales_stage = ".$adb->quote($sales_stage));
 		$url_string .= "&sales_stage=".$sales_stage;
 	}
 	if(isset($lead_source) && $lead_source != "") {
-		array_push($where_clauses, "potential.leadsource = ".$adb->quote($lead_source));
+		array_push($where_clauses, "vtiger_potential.leadsource = ".$adb->quote($lead_source));
 		$url_string .= "&leadsource=".$lead_source;
 	}
 	
 	if(isset($date_closed) && $date_closed != "") {
-		array_push($where_clauses, $adb->getDBDateString("potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
+		array_push($where_clauses, $adb->getDBDateString("vtiger_potential.closingdate")." like ".$adb->quote($date_closed.'%')."");
 		$url_string .= "&date_closed=".$date_closed;
 	}
 	$where = "";
