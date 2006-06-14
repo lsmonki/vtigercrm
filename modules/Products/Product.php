@@ -82,9 +82,9 @@ class Product extends CRMEntity {
 		global $log;
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder']))
-		$sorder = $_REQUEST['sorder'];
+			$sorder = $_REQUEST['sorder'];
 		else
-		$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->default_sort_order));
+			$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
 		return $sorder;
 	}
@@ -94,9 +94,9 @@ class Product extends CRMEntity {
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by']))
-		$order_by = $_REQUEST['order_by'];
+			$order_by = $_REQUEST['order_by'];
 		else
-		$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}
