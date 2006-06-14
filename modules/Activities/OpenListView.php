@@ -24,7 +24,6 @@ function getPendingActivities($mode)
 {
 	global $log;
         $log->debug("Entering getPendingActivities() method ...");
-	require_once('XTemplate/xtpl.php');
 	require_once("data/Tracker.php");
 	require_once("include/utils/utils.php");
 
@@ -187,7 +186,6 @@ function getPendingActivities($mode)
 		else
 			$activity_type = 'Task';
 
-		//$xtpl->assign("ACTIVITY", $activity_fields);
 
 
 		//Code included for showing Overdue Activities in Upcoming Activities -Jaguar
