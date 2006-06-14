@@ -27,6 +27,7 @@
 		{assign var="fldname" value="$maindata[2][0]"}
 		{assign var="fldvalue" value="$maindata[3][0]"}
 		{assign var="secondvalue" value="$maindata[3][1]"}
+		{assign var="thirdvalue" value="$maindata[3][2]"}
 
 		{if $uitype eq 2}
 			<td width=20% class="dvtCellLabel" align=right>
@@ -456,13 +457,18 @@
 			<td width="20%" class="dvtCellLabel" align=right>
 				{$fldlabel}
 			</td>
+				{if $secondvalue eq 1}
+					{assign var="disable_status" value=""}
+				{else}
+					{assign var="disable_status" value="disabled"}
+				{/if}	
 				{if $fldvalue eq 1}
 					<td width="30%" align=left class="dvtCellInfo">
-						<input name="{$fldname}" type="checkbox"  checked>
+						<input name="{$fldname}" {$disable_status} type="checkbox"  checked>
 					</td>
 				{else}
 					<td width="30%" align=left class="dvtCellInfo">
-						<input name="{$fldname}" type="checkbox">
+						<input name="{$fldname}" {$disable_status} type="checkbox">
 					</td>
 				{/if}
 		{elseif $uitype eq 98}<!-- Role Selection Popup -->		
@@ -471,8 +477,12 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			<input name="role_name" id="role_name" class="txtBox" value="{$secondvalue}" type="text">&nbsp;
-			<a href="javascript:openPopup();"><img src="{$IMAGE_PATH}select.gif" align="absmiddle" border="0"></a>
+			{if $thirdvalue eq 1}
+				<input name="role_name" id="role_name" class="txtBox" value="{$secondvalue}" type="text">&nbsp;
+				<a href="javascript:openPopup();"><img src="{$IMAGE_PATH}select.gif" align="absmiddle" border="0"></a>
+			{else}	
+				<input name="role_name" id="role_name" class="txtBox" readonly value="{$secondvalue}" type="text">&nbsp;
+			{/if}	
 			<input name="user_role" id="user_role" value="{$fldvalue}" type="hidden">
 			</td>
 		{elseif $uitype eq 104}<!-- Mandatory Email Fields -->			
@@ -486,7 +496,11 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select name="{$fldname}">
+			   {if $secondvalue eq 1}
+			   	<select name="{$fldname}">
+			   {else}
+			   	<select disabled name="{$fldname}">
+			   {/if} 
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$sel_value}" {$value}>{$sel_value}</option>
@@ -514,7 +528,7 @@
 				<td width="20%" class="dvtCellLabel" align=right>
 			       {$fldlabel}
 	            </td>
-				<td width="30%" colspan="3" align=left class="dvtCellInfo">
+				<td width="30%" align=left class="dvtCellInfo">
 				<input readonly name='{$fldname}' class="small" type="text" value='{$fldvalue}'><input name='reports_to_id' type="hidden" value='{$fldvalue}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=640,height=522,resizable=0,scrollbars=0");'>
 	            </td>
 			{elseif $uitype eq 116}<!-- for currency in users details-->	
@@ -522,7 +536,12 @@
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   <select name="{$fldname}">
+			   {if $secondvalue eq 1}
+			   	<select name="{$fldname}">
+			   {else}
+			   	<select disabled name="{$fldname}">
+			   {/if} 
+
 				{foreach item=arr key=uivalueid from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
 						<option value="{$uivalueid}" {$value}>{$sel_value}</option>
