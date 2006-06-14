@@ -1569,15 +1569,6 @@ foreach($alter_query_array16 as $query)
 $create_query15 = "create vtiger_table vtiger_portal(portalid int(19), vtiger_portalname varchar(255) NOT NULL, vtiger_portalurl varchar(255) NOT NULL,sequence int(3) NOT NULL, PRIMARY KEY (portalid))";
 Execute($create_query15);
 
-$alter_query_array = Array( 
-				"alter vtiger_table vtiger_attachments drop column vtiger_attachmentsize",
-				"alter vtiger_table vtiger_attachments drop column attachmentcontents"
-			    );
-foreach($alter_query_array as $query)
-{
-	Execute($query);
-}
-
 $alter_query = "ALTER TABLE vtiger_field ADD column info_type varchar(20) default NULL after quickcreatesequence";
 Execute($alter_query);
 
@@ -2746,7 +2737,7 @@ $query_array2 = Array(
 				"update vtiger_field set uitype=83, vtiger_tablename='producttaxrel' where vtiger_tabid=14 and vtiger_fieldname='taxclass'",
 				"insert into vtiger_moduleowners values(".$this->localGetTabID('Campaigns').",1)",
 
-				"alter vtiger_table vtiger_attachments add column path varchar(255) default NULL"
+				"alter table vtiger_attachments add column path varchar(255) default NULL"
 			     );
 
 foreach($query_array2 as $query)
@@ -2754,7 +2745,65 @@ foreach($query_array2 as $query)
 	Execute($query);
 }
 
-			     
+//This code will retrieve all the attachments from db and write it in a file
+$attach_query_result = $conn->query("select vtiger_crmentity.createdtime, vtiger_attachments.* from vtiger_attachments inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_attachments.attachmentsid");
+$noof_attachments = $conn->num_rows($attach_query_result);
+for($attach_count = 0;$attach_count < $noof_attachments ;$attach_count++)
+{
+	$attach_id   = $conn->query_result($attach_query_result,$attach_count,'attachmentsid');
+	$attach_name = $conn->query_result($attach_query_result,$attach_count,'name');
+	$attach_data = $conn->query_result($attach_query_result,$attach_count,'attachmentcontents');
+
+	$created_time = $conn->query_result($attach_query_result,$attach_count,'createdtime');
+	//$filepath = decideFilePath();
+
+	//Added to set the file path where to store the file based on the created time	
+	$date = explode(" ",$created_time);
+	$date_details = explode("-",$date[0]);
+
+	$year = $date_details[0];
+	$month = $date_details[1];
+	$day = $date_details[2];
+	
+	//this is used to convert the month from number to string ie., 03 - March, 04 - April, etc.,
+	$month = date("F", mktime(0, 0, 0, $month, $day, $year));
+
+	$week_no = floor(($day-1)/7)+1;//decide the week ie., 1-7 = week1, 8-14=week2, 15-21=week3, etc.,
+	$week = "week".$week_no;
+
+	$filepath = 'storage/';
+	
+	if(!is_dir($filepath.$year))
+		mkdir($filepath.$year);
+	if(!is_dir($filepath.$year."/".$month))
+		mkdir($filepath."$year/$month");
+	if(!is_dir($filepath.$year."/".$month."/".$week))
+		mkdir($filepath."$year/$month/$week");
+
+	$filepath = $filepath.$year."/".$month."/".$week."/";
+	$conn->println("File Path = $filepath");
+	//upto this added to set the file path based on attachment created time
+
+	//write the contents in the file
+	$handle = @fopen($filepath.$attach_name,'w');
+	fputs($handle, base64_decode($attach_data));
+	fclose($handle);
+
+	//update the path in the db
+	$update_attach = Execute("update vtiger_attachments set path='".$filepath."' where attachmentsid=$attach_id");
+}
+
+//Before drop these fields we had read the contents of the file from db and wrote it in a file.
+$alter_query_array = Array( 
+				"alter table vtiger_attachments drop column attachmentsize",
+				"alter table vtiger_attachments drop column attachmentcontents"
+			    );
+foreach($alter_query_array as $query)
+{
+	Execute($query);
+}
+
+
 //To populate the comboStrings for Campaigns module which are added newly
 require_once('include/ComboStrings.php');
 global $combo_strings;
