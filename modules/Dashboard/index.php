@@ -55,7 +55,8 @@ $graph_array = Array(
           "ticketsbystatus" => $mod_strings['ticketsbystatus'],
           "ticketsbypriority" => $mod_strings['ticketsbypriority'],
 	  "ticketsbycategory" => $mod_strings['ticketsbycategory'], 
-	  "ticketsbyowner" => $mod_strings['ticketsbyowner'],
+	  "ticketsbyuser" => $mod_strings['ticketsbyuser'],
+	  "ticketsbyteam" => $mod_strings['ticketsbyteam'],
 	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
           );
           
