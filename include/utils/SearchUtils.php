@@ -15,8 +15,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contact_id');
-$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname');
+$column_array=array('accountid','contact_id','product_id');
+$table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname');
 
 /**This function is used to get the list view header values in a list view during search
 *Param $focus - module object
