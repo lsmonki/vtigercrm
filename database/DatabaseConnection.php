@@ -18,44 +18,7 @@
  ********************************************************************************/
 
 class DatabaseConnection {
-/*
-	var $connection;
 
-	function connect() {
-		global $dbconfig;
-		global $disable_persistent_connections;
-
-		$this->connection = false;
-		
-		if(!isset($disable_persistent_connections) || $disable_persistent_connections == false)
-		{
-			$this->connection = @mysql_pconnect($dbconfig['db_host_name'], $dbconfig['db_user_name'], 
-				$dbconfig['db_password']);
-				
-		}
-		
-		if($this->connection == false)
-		{
-			// We were unable to connect with pconnect.  Try connect	
-			$this->connection = mysql_connect($dbconfig['db_host_name'], 
-				$dbconfig['db_user_name'], 
-				$dbconfig['db_password']) 
-				or die("Could not connect to server ".$dbconfig['db_host_name']." as ".$dbconfig['db_user_name'].".".mysql_error());
-
-			if($this->connection == false && !isset($disable_persistent_connections) || $disable_persistent_connections == false)
-			{
-				
-				$_SESSION['administrator_error'] = "<B>Severe Performance Degradation: Persistent Database Connections not working.  Please set \$disable_persistent_connections to true in your config.php file</B>";  			
-			}
-
-		}
-			
-		mysql_select_db($dbconfig['db_name'],$this->connection)
-			or die("Could not select database. Reason: ".mysql_error());
-	}
-	function disconnect() {
-		mysql_close($this->connection);
-	}*/
 
 	function println($msg)
 	{
@@ -63,15 +26,7 @@ class DatabaseConnection {
 	$log1 =& LoggerManager::getLogger('GS');
 	if(is_array($msg))
 	{
-		$log1->info("PearDatabse ->".print_r($msg,true));
-/*		$log1->fatal("PearDatabse ->".$this->getString($msg));
-		foreach ($msg as $str)
-		{
-			if(is_array($str)) 
-				$this->println($str);
-			else
-				$log1->fatal("PearDatabase ->".$str);
-		}*/		
+			$log1->fatal("PearDatabse ->".print_r($msg,true));
 	}
 	else
 	{
