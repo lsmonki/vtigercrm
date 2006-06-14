@@ -438,7 +438,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			$graph_by="smownerid";
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
-			$where=" and (crmentity.smownerid != NULL || crmentity.smownerid != ' ')";
+			$where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
 			$query=$potential_query;
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -448,7 +448,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			$graph_by="groupname";
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
-			$where=" and (potentialgrouprelation.groupname != NULL || potentialgrouprelation.groupname != '')";
+			$where=" and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
 			$query=$potential_query;
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -619,7 +619,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			    $graph_by="smownerid";
 			    $graph_title=$mod_strings['ticketsbyowner'];
 			    $module="HelpDesk";
-			    $where=" and (crmentity.smownerid != NULL || crmentity.smownerid != ' ')";
+			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
 			    $query=$helpdesk_query;
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
@@ -629,7 +629,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			    $graph_by="ticketgroupname";
 			    $graph_title=$mod_strings['ticketsbyteam'];
 			    $module="HelpDesk";
-			    $where=" and (ticketgrouprelation.groupname != NULL || ticketgrouprelation.groupname != ' ')";
+			    $where=" and (vtiger_ticketgrouprelation.groupname != NULL || vtiger_ticketgrouprelation.groupname != ' ')";
 			    $query=$helpdesk_query;
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }    
