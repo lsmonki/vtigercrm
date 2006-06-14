@@ -164,7 +164,6 @@ class SugarBean
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
-     */
 	 function retrieve($id = -1, $encodeThis=true) {
 		if ($id == -1) {
 			$id = $this->id;
@@ -193,11 +192,9 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$this->$field = $row[$field];
 			}
 		}
-
-		$this->fill_in_additional_detail_fields();
-
 		return $this;
 	}
+     */
 
 	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1, $max=-1) {
 		$this->log->debug("get_list:  order_by = '$order_by' and where = '$where' and limit = '$limit'");
@@ -215,8 +212,42 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	 */
 	function get_full_list($order_by = "", $where = "") {
 		$this->log->debug("get_full_list:  order_by = '$order_by' and where = '$where'");
-		$query = $this->create_list_query($order_by, $where);
-		return $this->process_full_list_query($query);
+		$query = "SELECT * FROM $this->table_name ";
+		
+		if($where != "")
+			$query .= "where ($where) AND deleted=0";
+		else
+			$query .= "where deleted=0";
+
+		if(!empty($order_by))
+			$query .= " ORDER BY $order_by";
+
+		$result =& $this->db->query($query, false);
+
+		if($this->db->getRowCount($result) > 0){
+		
+			// We have some data.
+			while ($row = $this->db->fetchByAssoc($result)) {
+				foreach($this->list_fields as $field)
+				{
+					if (isset($row[$field])) {
+						$this->$field = $row[$field];
+						
+						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else {
+ 	                                                $this->$field = '';   
+					}
+				}
+
+
+				$list[] = clone($this);         //added clone tosupport PHP5
+			}
+		}
+
+		if (isset($list)) return $list;
+		else return null;
+
 	}
 
 	function create_list_query($order_by, $where)
@@ -230,8 +261,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 
 		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
-
-		
 
 		return $query;
 	}
@@ -278,7 +307,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 					}
 				}
 
-				$this->fill_in_additional_list_fields();
 
 				$list[] = clone($this);   //added clone to support PHP5
 			}
@@ -293,37 +321,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		return $response;
 	}
 
-	function process_full_list_query($query)
-	{
-		$this->log->debug("process_full_list_query: query is ".$query);
-		$result =& $this->db->query($query, false);
-		$this->log->debug("process_full_list_query: result is ".$result);
-
-		if($this->db->getRowCount($result) > 0){
-		
-			// We have some data.
-			while ($row = $this->db->fetchByAssoc($result)) {
-				foreach($this->list_fields as $field)
-				{
-					if (isset($row[$field])) {
-						$this->$field = $row[$field];
-						
-						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
-					}
-					else {
- 	                                                $this->$field = '';   
-					}
-				}
-
-				$this->fill_in_additional_list_fields();
-
-				$list[] = clone($this);         //added clone tosupport PHP5
-			}
-		}
-
-		if (isset($list)) return $list;
-		else return null;
-	}
 	
 	/**
 	 * Track the viewing of a detail record.  This leverages get_summary_text() which is object specific
@@ -366,7 +363,7 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 	{
 	}
 	*/
-	/* This function assigns all of the values into the template for the list view */
+	/* This function assigns all of the values into the template for the list view 
 	function get_list_view_array(){
 		$return_array = Array();
 		
@@ -427,7 +424,6 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 				$this->$field = $row[$field];
 			}
 		} 
-		$this->fill_in_additional_detail_fields();
 		return $this;
 	}
 
@@ -447,6 +443,8 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 			} 
 		} 
 	}
+
+	*/
 }
 
 
