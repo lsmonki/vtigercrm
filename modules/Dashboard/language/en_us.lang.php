@@ -77,7 +77,8 @@ $mod_strings = Array(
 "ticketsbystatus" => "Tickets by Status",
 "ticketsbypriority" => "Tickets by Priority",
 "ticketsbycategory" => "Tickets by Category",
-"ticketsbyowner" => "Tickets by Owner",
+"ticketsbyuser"=>"Tickets by User",
+"ticketsbyteam"=>"Tickets by Team",
 "ticketsbyproduct"=>"Tickets by Product",
 
 'LBL_DASHBRD_HOME'=>'Dashboard Home',
