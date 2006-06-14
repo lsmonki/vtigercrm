@@ -43,7 +43,7 @@ $account_query="select vtiger_crmentity.*, vtiger_account.*, vtiger_accountscf.*
 
 
 //Query For Products
-$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.*, vtiger_productcf.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid where vtiger_crmentity.deleted=0 ";
+$products_query="select distinct(vtiger_crmentity.crmid),vtiger_crmentity.createdtime,vtiger_products.*, vtiger_poproductrel.purchaseorderid, vtiger_quotesproductrel.quoteid, vtiger_invoiceproductrel.invoiceid,vtiger_productcf.* from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid left join vtiger_poproductrel on vtiger_products.productid = vtiger_poproductrel.productid left join vtiger_quotesproductrel on vtiger_products.productid = vtiger_quotesproductrel.productid left join vtiger_invoiceproductrel on vtiger_products.productid = vtiger_invoiceproductrel.productid left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid where vtiger_crmentity.deleted=0 ";
 
 //Query for Potential
 $potential_query= "select  vtiger_crmentity.*,vtiger_account.accountname, vtiger_potential.*, vtiger_potentialscf.* from vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid inner join vtiger_account on vtiger_potential.accountid = vtiger_account.accountid inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid left join vtiger_potentialgrouprelation on vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid left join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 ";
@@ -81,6 +81,9 @@ $graph_array = Array(
           "accountindustry" => $mod_strings['accountindustry'],
           "productcategory" => $mod_strings['productcategory'],
 	  "productbyqtyinstock" => $mod_strings['productbyqtyinstock'],
+	  "productbypo" => $mod_strings['productbypo'],
+	  "productbyquotes" => $mod_strings['productbyquotes'],
+	  "productbyinvoice" => $mod_strings['productbyinvoice'],
           "sobyaccounts" => $mod_strings['sobyaccounts'],
           "sobystatus" => $mod_strings['sobystatus'],
           "pobystatus" => $mod_strings['pobystatus'],
@@ -473,6 +476,36 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		    {
 			$graph_by="qtyinstock";
 			    $graph_title=$mod_strings['productbyqtyinstock'];
+			    $module="Products";
+			    $where="";
+			    $query=$products_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Charts for Products by PO
+		    elseif (($type == "productbypo") && (getFieldVisibilityPermission('Products',$user_id,'productpurchaseorder') == "0"))
+		    { 
+			$graph_by="purchaseorderid";
+			    $graph_title=$mod_strings['productbypo'];
+			    $module="Products";
+			    $where="";
+			    $query=$products_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Charts for Products by Quotes
+		    elseif (($type == "productbyquotes") && (getFieldVisibilityPermission('Products',$user_id,'productquotes') == "0"))
+		    { 
+                        $graph_by="quoteid";
+   			    $graph_title=$mod_strings['productbyquotes'];
+			    $module="Products";
+			    $where=""; 
+			    $query=$products_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Charts for Products by Invoice
+		    elseif (($type == "productbyinvoice") && (getFieldVisibilityPermission('Products',$user_id,'productinvoice') == "0"))
+		    {
+		        $graph_by="invoiceid";
+			    $graph_title=$mod_strings['productbyinvoice'];
 			    $module="Products";
 			    $where="";
 			    $query=$products_query;
