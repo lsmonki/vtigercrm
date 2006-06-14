@@ -115,8 +115,7 @@ foreach ($rows1 as $row)
 		}	
 
 		// now do any special processing
-		$focus->process_special_fields(); 
-
+	
 		$focus->save($module);
 		//$focus->saveentity($module);
 		$return_id = $focus->id;
