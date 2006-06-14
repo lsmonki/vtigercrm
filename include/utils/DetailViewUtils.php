@@ -55,12 +55,15 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
         if($col_fields[$fieldname]=='--None--')
                 $col_fields[$fieldname]='';
-	
-	if($uitype == 13)
+	if($uitype == 116)
+	{
+		$label_fld[] = $mod_strings[$fieldlabel];
+                $label_fld[] = getCurrencyName($col_fields[$fieldname]);
+	}	
+	elseif($uitype == 13 || $uitype == 115)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
-		//$label_fld[] = '<a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
@@ -808,6 +811,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         $reminder_str= $rem_days.'&nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;'.$rem_hrs.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;'.$rem_min.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'];
                 }
 		$label_fld[] = '&nbsp;'.$reminder_str;
+	}elseif($uitype == 98)
+	{
+	 	$label_fld[] =$mod_strings[$fieldlabel];
+		if(is_admin($current_user))
+			$label_fld[] = '<a href="index.php?module=Users&action=RoleDetailView&roldeid='.$col_fields[$fieldname].'">'.getRoleName($col_fields[$fieldname]).'</a>';
+		else
+			$label_fld[] = getRoleName($col_fields[$fieldname]);
 	}
 	else
 	{

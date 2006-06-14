@@ -245,7 +245,7 @@ function getCurrencyName($currencyid)
 	global $log;
 	$log->debug("Entering getCurrencyName(".$currencyid.") method ...");
         global $adb;
-        $sql1 = "select * from currency_info where id=".$currencyid;
+        $sql1 = "select * from vtiger_currency_info where id=".$currencyid;
         $result = $adb->query($sql1);
         $currencyname = $adb->query_result($result,0,"currency_name");
         $curr_symbol = $adb->query_result($result,0,"currency_symbol");

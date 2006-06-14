@@ -436,6 +436,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		$fieldvalue[] = $value;
 	}
+	elseif($uitype == 156)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue[] = $value;	
+		$fieldvalue[] = $is_admin;
+	}
 	elseif($uitype == 56)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
@@ -1015,7 +1021,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 115)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$pick_query="select * from ".$fieldname;
+		$pick_query="select * from vtiger_".$fieldname;
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -1038,11 +1044,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$options[] = array($pickListValue=>$chk_val );	
 		}
 		$fieldvalue [] = $options;
+		$fieldvalue [] = $is_admin;
 	}
 	elseif($uitype == 116)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$pick_query="select * from currency_info";
+		$pick_query="select * from vtiger_currency_info";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -1065,12 +1072,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$options[$currency_id] = array($pickListValue=>$chk_val );	
 		}
 		$fieldvalue [] = $options;
+		$fieldvalue [] = $is_admin;
 	}
 	elseif($uitype ==98)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue[]=$value;
-        $fieldvalue[]=getRoleName($value);
+        	$fieldvalue[]=getRoleName($value);
+		$fieldvalue[]=$is_admin;
 	}
 	elseif($uitype == 105)
 	{
