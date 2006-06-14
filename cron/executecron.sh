@@ -1,1 +1,1 @@
-wget http://localhost:APACHEPORT/intimateTaskStatus.php -O intimatelog.txt
+wget http://localhost:APACHEPORT/cron/intimateTaskStatus.php -O intimatelog.txt
