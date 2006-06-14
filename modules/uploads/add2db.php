@@ -58,16 +58,16 @@ $crmid = $_REQUEST['return_id'];
 			$description = addslashes($desc);
 			$date_var = date('YmdHis');
 
-			$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
+			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
 			$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."','".$date_var."')";
 			$result = $adb->query($query);
 
-			$sql = "insert into attachments values(";
+			$sql = "insert into vtiger_attachments values(";
 			$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$upload_filepath."')";
 			$result = $adb->query($sql);
 
 
-			$sql1 = "insert into seattachmentsrel values('";
+			$sql1 = "insert into vtiger_seattachmentsrel values('";
 			$sql1 .= $crmid."','".$current_id."')";
 			$result = $adb->query($sql1);
 
