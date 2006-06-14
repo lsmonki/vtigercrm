@@ -210,7 +210,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="purchaseorderid")
 				{
-					$query = "SELECT subject FROM purchaseorder WHERE purchaseorderid='".$name."'";
+					$query = "SELECT subject FROM vtiger_purchaseorder WHERE purchaseorderid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
 					if($name_val!="")
@@ -218,7 +218,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="quoteid")
 				{
-					$query = "SELECT subject FROM quotes WHERE quoteid='".$name."'";
+					$query = "SELECT subject FROM vtiger_quotes WHERE quoteid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
 					if($name_val!="")
@@ -226,7 +226,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="invoiceid")
 				{
-					$query = "SELECT subject FROM invoice WHERE invoiceid='".$name."'";
+					$query = "SELECT subject FROM vtiger_invoice WHERE invoiceid='".$name."'";
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"subject");
 					if($name_val!="")
