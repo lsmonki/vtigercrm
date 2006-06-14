@@ -40,7 +40,7 @@ $current_user = new User();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
-        $result = $current_user->retrieve($_SESSION['authenticated_user_id']);
+        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"users");
         if($result == null)
         {
 		session_destroy();
