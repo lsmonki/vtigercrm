@@ -2,8 +2,8 @@
 require('send_mail.php');
 require_once('../config.php');
 
-$dbhost = $dbconfig['db_host_name'];
-$dbuser =$dbconfig['db_user_name']; 
+$dbhost = $dbconfig['db_hostname'];
+$dbuser =$dbconfig['db_username']; 
 $dbpass = $dbconfig['db_password'];
 $db = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql');
 if (!$db) {
@@ -45,7 +45,7 @@ while ($myrow = mysql_fetch_row($result))
   $status=$myrow[0];
   if($status != 'Completed')
   {
-	 sendmail($emailaddress,$emailaddress,"test mail","Not completed task",$mailserver,$mailuname,$mailpwd,"");	
+	 sendmail($emailaddress,$emailaddress,"Task Not completed","Not completed task",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 }
@@ -86,8 +86,7 @@ while ($myrow = mysql_fetch_row($result))
   if($status != 'Completed')
   {
 
-    echo 'mail sent';
-    sendmail($emailaddress,$emailaddress,"test mail","Ticket number ".$ticketid ." yet to be closed",$mailserver,$mailuname,$mailpwd,"");	
+    sendmail($emailaddress,$emailaddress,"Pending Ticket notification","Ticket number ".$ticketid ." yet to be closed",$mailserver,$mailuname,$mailpwd,"");	
   }
 }
 
@@ -107,8 +106,7 @@ while ($myrow = mysql_fetch_row($result))
 {
   $status=$myrow[0];
   $ticketid = $myrow[1];
-  echo 'mail sent';
-  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Too many pending tickets ".$ticketid ." too many pending tickets",$mailserver,$mailuname,$mailpwd,"");	
+  sendmail($emailaddress,$emailaddress,"Too many pending tickets","Too many tickets pending",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
@@ -120,11 +118,11 @@ $result = mysql_query($sql);
 $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
-$result = mysql_query("SELECT start_date FROM vtiger_products",$db);
+$result = mysql_query("SELECT productname FROM vtiger_products where start_date like '".date('Y-m-d')."%'",$db);
 while ($myrow = mysql_fetch_row($result))
 {
-  $status=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support starting","Support Starting ".$ticketid ."Congratulations! Your support starts from today",$mailserver,$mailuname,$mailpwd,"");	
+  $productname=$myrow[0];
+  sendmail($emailaddress,$emailaddress,"Support starting","Support Starts for ".$productname ."\n Congratulations! Your support starts from today",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
@@ -137,11 +135,11 @@ $activevalue = mysql_fetch_row($result);
 if($activevalue[0] == 1)
 {
 
-$result = mysql_query("SELECT expiry_date from vtiger_products",$db);
+$result = mysql_query("SELECT productname from vtiger_products where expiry_date like '".date('Y-m-d')."%'",$db);
 while ($myrow = mysql_fetch_row($result))
 {
-  $status=$myrow[0];
-  sendmail($emailaddress,$emailaddress,"Support Ending","Support Ending ".$ticketid ." Renew support please",$mailserver,$mailuname,$mailpwd,"");	
+  $productname=$myrow[0];
+  sendmail($emailaddress,$emailaddress,"Support Ending","Support Ends for ".$productname ."\n Renew support please",$mailserver,$mailuname,$mailpwd,"");	
 }
 
 }
