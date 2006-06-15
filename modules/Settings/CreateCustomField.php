@@ -61,7 +61,7 @@ if(isset($fieldid) && $fieldid!='')
 	$readonly = "readonly";
 	if($fieldtype == '7' || $fieldtype == '11')
 	{
-		$query = "select * from ".$customfield_columnname;
+		$query = "select * from vtiger_".$customfield_columnname;
 		$result = $adb->query($query);
 		$fldVal='';
 		while($row = $adb->fetch_array($result))
