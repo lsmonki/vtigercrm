@@ -73,7 +73,7 @@ function getInsertValues($type,$type_id)
 		$contact_id_val=$adb->query_result($convert_result,$i,"contactfid");
 		$potential_id_val=$adb->query_result($convert_result,$i,"potentialfid");
 		
-		$sql_leads_column="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and vtiger_fieldid=".$lead_id; //getting the columnname for the customfield of the lead
+		$sql_leads_column="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and fieldid=".$lead_id; //getting the columnname for the customfield of the lead
 
 		 $log->debug("Lead's custom vtiger_field coumn name is ".$sql_leads_column);
 
@@ -88,14 +88,14 @@ function getInsertValues($type,$type_id)
 			 $log->debug("Lead's custom vtiger_field value is ".$lead_value);
 		}	
 		//Query for getting the column name for Accounts/Contacts/Potentials if custom vtiger_field for lead is mappped
-		$sql_type="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
+		$sql_type="select vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
 		if($type=="Accounts")
 		{
 			if($account_id_val!="" && $account_id_val!=0)	
 			{
 				$flag="true";
 				 $log->info("Getting the  Accounts custom vtiger_field column name  ");
-				$sql_type.="'Accounts' and vtiger_fieldid=".$account_id_val;
+				$sql_type.="'Accounts' and fieldid=".$account_id_val;
 			}
 		}
 		else if($type == "Contacts")
@@ -104,7 +104,7 @@ function getInsertValues($type,$type_id)
 			{
 				$flag="true";
 				 $log->info("Getting the  Contacts custom vtiger_field column name  ");
-				$sql_type.="'Contacts' and vtiger_fieldid=".$contact_id_val;
+				$sql_type.="'Contacts' and fieldid=".$contact_id_val;
 			}
 		}
 		else if($type == "Potentials")
@@ -113,7 +113,7 @@ function getInsertValues($type,$type_id)
                         {
 				$flag="true";
                                   $log->info("Getting the  Potentials custom vtiger_field column name  ");
-				$sql_type.="'Potentials' and vtiger_fieldid=".$potential_id_val;
+				$sql_type.="'Potentials' and fieldid=".$potential_id_val;
                         }
 
 		}
@@ -272,7 +272,7 @@ $adb->query($sql_crmentity1);
 $contact_id = $crmcontactid;
 $log->debug("contact id is ".$contact_id);
 
- $sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,campaignid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid."," .$row["campaignid"]. ",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
+ $sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
@@ -323,7 +323,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
 		$potential_amount=0;
         }
 
-	$sql_insert_opp = "INSERT INTO vtiger_potential (potentialid,accountid,campaignid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",".$row["campaignid"]. ",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
+	$sql_insert_opp = "INSERT INTO vtiger_potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
 
 	$adb->query($sql_insert_opp);
 

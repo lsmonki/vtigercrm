@@ -74,7 +74,7 @@ if($mass_merge != "")
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select vtiger_tablename,columnname,fieldlabel from vtiger_field where vtiger_tabid=7 order by vtiger_tablename";
+$query1="select tablename,columnname,fieldlabel from vtiger_field where tabid=7 order by tablename";
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
 	

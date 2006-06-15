@@ -114,13 +114,13 @@ $convertlead .='<tr>
 						<tr>
 							<td align="right" class="dvtCellLabel" width="50%"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="50%">
-							<input name="potential_name" value="'.$potentialname.'" vtiger_tabindex="3">
+							<input name="potential_name" value="'.$potentialname.'" tabindex="3">
                                                         </td>
 						</tr>
 						<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
-								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" vtiger_tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
+								<input name="closedate" class="dvtCellInfo" id="jscal_field" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
 							</td>
 						</tr>

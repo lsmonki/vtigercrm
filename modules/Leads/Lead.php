@@ -257,7 +257,7 @@ function get_attachments($id)
 	// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 	$query = "select vtiger_notes.title,'Notes      ' ActivityType, vtiger_notes.filename,
 	vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
-	vtiger_seattachmentsrel.attachmentsid vtiger_attachmentsid, vtiger_notes.notesid crmid,
+	vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
 		crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 			from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
@@ -274,7 +274,7 @@ function get_attachments($id)
 	// Inserted order by createdtime desc
 	$query .= "select vtiger_attachments.description title ,'Attachments' ActivityType,
 	vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
-	vtiger_attachments.attachmentsid vtiger_attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+	vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 		crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 			from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
@@ -325,7 +325,7 @@ function getColumnNames_Lead()
 {
 	global $log;
 	$log->debug("Entering getColumnNames_Lead() method ...");
-	$sql1 = "select vtiger_fieldlabel from vtiger_field where vtiger_tabid=7";
+	$sql1 = "select fieldlabel from vtiger_field where tabid=7";
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)
