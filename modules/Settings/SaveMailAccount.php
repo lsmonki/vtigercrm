@@ -33,7 +33,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 
 if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 {
-	$sql="update vtiger_mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', vtiger_account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', int_mailer='".$_REQUEST["int_mailer"]."' where user_id = '".$id."'";
+	$sql="update vtiger_mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', int_mailer='".$_REQUEST["int_mailer"]."' where user_id = '".$id."'";
 }
 else
 {
