@@ -1339,7 +1339,7 @@ $cvid = $conn->query_result($res,0,"cvid");
 $insert_query_array16 = Array(
 		"insert into vtiger_cvcolumnlist values ($cvid,0,'notes:title:title:Notes_Title:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,1,'notes:contact_id:contact_id:Notes_Contact_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'senotesrel:crmid:crmid:Notes_Related_To:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'senotesrel:crmid:parent_id:Notes_Related_to:I')",
 		"insert into vtiger_cvcolumnlist values ($cvid,3,'notes:filename:filename:Notes_File:V')",
 		"insert into vtiger_cvcolumnlist values ($cvid,4,'crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V')"
 			     );
