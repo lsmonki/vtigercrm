@@ -79,8 +79,8 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	if (!isset($_POST['homeorder']) || $_POST['homeorder'] == "" ) $_REQUEST["homeorder"] = 'ILTI,QLTQ,ALVT,PLVT,CVLVT,HLT,OLV,GRT,OLTSO';
 	
 	setObjectValuesFromRequest(&$focus);
-		$focus->save("Users");
-		$return_id = $focus->id;
+	$focus->saveentity("Users");
+	$return_id = $focus->id;
 
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
 		$new_pass = $_POST['new_password'];
@@ -91,7 +91,7 @@ if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
 		
 			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
 		exit;
-	}
+}
 }  
 
 if(isset($focus->id) && $focus->id != '')
@@ -134,9 +134,9 @@ createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
 if($_REQUEST['modechk'] == 'prefview')
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 else
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab");
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab");
 
 
 ?>
