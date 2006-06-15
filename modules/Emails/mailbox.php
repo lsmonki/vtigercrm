@@ -73,7 +73,7 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	      
 	   function handleFile(nr) {
 	   	if (b != "ie") {
- 	      		alert("This feature is currently only available for Microsoft Internet Explorer 5.5+ vtiger_users\n\nWait for an update!");
+ 	      		alert("This feature is currently only available for Microsoft Internet Explorer 5.5+ users\n\nWait for an update!");
 	   	} else {
 	   		check = confirm("Do you want to download the file ?");
 			if (check) {

@@ -122,7 +122,7 @@ if($_REQUEST['folderid'] =='2')
 }
 if($_REQUEST['folderid'] =='3')
 {
-	$list_query .= "AND vtiger_seactivityrel.crmid in (select vtiger_accountid from vtiger_account)";	
+	$list_query .= "AND vtiger_seactivityrel.crmid in (select accountid from vtiger_account)";	
 }
 if($_REQUEST['folderid'] =='4')
 {

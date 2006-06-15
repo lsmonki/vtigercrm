@@ -96,7 +96,7 @@ if($_REQUEST["internal_mailer"] == "true") {
 		elseif ($type == "Contacts")
 			$q = "select email as email1 from vtiger_contactdetails where contactid='".$rec_id."'";
 		elseif ($type == "Accounts")
-			$q = "select email1,email2 from vtiger_account where vtiger_accountid='".$rec_id."'";
+			$q = "select email1,email2 from vtiger_account where accountid='".$rec_id."'";
 
 		$email1 = $adb->query_result($adb->query($q),0,"email1");
 	} elseif ($rec_type == "email_addy") {
@@ -252,7 +252,7 @@ else
 
 if(isset($focus->parent_type) && $focus->parent_type != "") 
 {
-	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' vtiger_tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
+	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
 	$smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 

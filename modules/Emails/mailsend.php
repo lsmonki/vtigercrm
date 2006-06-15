@@ -120,7 +120,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 		for ($j=1;$j<$nemail;$j++)
 		{
 			$temp=$realid[$j];
-			$myquery='Select columnname from vtiger_field where vtiger_fieldid='.$adb->quote($temp);
+			$myquery='Select columnname from vtiger_field where fieldid='.$adb->quote($temp);
 			$fresult=$adb->query($myquery);			
 			if ($pmodule=='Contacts')
 			{
@@ -180,7 +180,7 @@ else
 {
 	global $adb;
 	$date_var = date('Ymd');
-	$query = 'update vtiger_activity set date_start ='.$date_var.' where vtiger_activityid = '.$returnid;
+	$query = 'update vtiger_activity set date_start ='.$date_var.' where activityid = '.$returnid;
 	$adb->query($query);
 }
 //The following function call is used to parse and form a encoded error message and then pass to result page
