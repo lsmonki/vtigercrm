@@ -1031,6 +1031,21 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
 	}
+	//Added by Minnie to get Campaign Source
+	elseif($uitype == 58)
+	{
+		global $adb;
+		if($temp_val != '')
+		{
+			$sql="SELECT * FROM vtiger_campaign WHERE campaignid=".$temp_val;
+			$result=$adb->query($sql);
+			$campaignname=$adb->query_result($result,0,"campaignname");
+			$value= '<a href=index.php?module=Campaigns&action=DetailView&record='.$temp_val.'>'.$campaignname.'</a>';
+		}
+		else
+			$value='';
+	}
+	//End
 	//Added By *Raj* for the Issue ProductName not displayed in CustomView of HelpDesk
 	elseif($uitype == 59)
 	{
@@ -1379,6 +1394,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['treet']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
+				}
+				elseif($popuptype == "specific_campaign")
+				{
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific_campaign("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				else
 				{
