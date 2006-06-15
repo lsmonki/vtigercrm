@@ -14,7 +14,7 @@ $tableName=$_REQUEST["table_name"];
 $fldPickList =  $_REQUEST['listarea'];
 
 //Deleting the already existing values
-$delquery="delete from ".$tableName;
+$delquery="delete from vtiger_".$tableName;
 $adb->query($delquery);
 
 $pickArray = explode("\n",$fldPickList);
@@ -31,9 +31,9 @@ for($i = 0; $i < $count; $i++)
 	if($pickArray[$i] != '')
 	{
 		if($custom)
-			$query = "insert into ".$tableName." values('".$pickArray[$i]."')";
+			$query = "insert into vtiger_".$tableName." values('".$pickArray[$i]."')";
 		else
-			$query = "insert into ".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+			$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
         $adb->query($query);
 	}
 }
