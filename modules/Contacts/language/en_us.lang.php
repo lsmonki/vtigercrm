@@ -158,6 +158,7 @@ $mod_strings = Array(
 'Do Not Call'=>'Do Not Call',
 'Email Opt Out'=>'Email Opt Out',
 'Assigned To'=>'Assigned To',
+'Campaign Source'=>'Campaign Source',
 'Reference' =>'Reference',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',

@@ -154,6 +154,7 @@ $mod_strings = Array(
 'State'=>'State',
 'Description'=>'Description',
 'Po Box'=>'Po Box',
+'Campaign Source'=>'Campaign Source',
 //Added for CustomView 4.2 Release
 'Name'=>'Name',
 'LBL_NEW_LEADS'=>'My New Leads',

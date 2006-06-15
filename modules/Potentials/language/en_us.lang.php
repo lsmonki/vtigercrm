@@ -106,6 +106,7 @@ $mod_strings = Array(
 'Sales Stage'=>'Sales Stage',
 'Assigned To'=>'Assigned To',
 'Probability'=>'Probability (%)',
+'Campaign Source'=>'Campaign Source',
 'Description'=>'Description',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
