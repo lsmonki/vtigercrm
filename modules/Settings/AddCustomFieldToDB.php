@@ -76,57 +76,57 @@ else
 	$tableName ='';
 	if($fldmodule == 'Leads')
 	{
-		$tableName='leadscf';
+		$tableName='vtiger_leadscf';
 	}
 	elseif($fldmodule == 'Accounts')
 	{
 
-		$tableName='accountscf';
+		$tableName='vtiger_accountscf';
 	}
 	elseif($fldmodule == 'Contacts')
 	{
 
-		$tableName='contactscf';
+		$tableName='vtiger_contactscf';
 	}
 	elseif($fldmodule == 'Potentials')
 	{
-		$tableName='potentialscf';
+		$tableName='vtiger_potentialscf';
 	}
 	elseif($fldmodule == 'HelpDesk')
 	{
-		$tableName='ticketcf';
+		$tableName='vtiger_ticketcf';
 	}
 	elseif($fldmodule == 'Products')
 	{
-		$tableName='productcf';
+		$tableName='vtiger_productcf';
 	}
 	elseif($fldmodule == 'Vendor')
 	{
-		$tableName='vendorcf';
+		$tableName='vtiger_vendorcf';
 	}
 	elseif($fldmodule == 'PriceBook')
 	{
-		$tableName='pricebookcf';
+		$tableName='vtiger_pricebookcf';
 	}
 	elseif($fldmodule == 'Quotes')
 	{
-		$tableName='quotescf';
+		$tableName='vtiger_quotescf';
 	}
 	elseif($fldmodule == 'PurchaseOrder')
 	{
-		$tableName='purchaseordercf';
+		$tableName='vtiger_purchaseordercf';
 	}
 	elseif($fldmodule == 'SalesOrder')
 	{
-		$tableName='salesordercf';
+		$tableName='vtiger_salesordercf';
 	}
 	elseif($fldmodule == 'Invoice')
 	{
-		$tableName='invoicecf';
+		$tableName='vtiger_invoicecf';
 	}
 	elseif($fldmodule == 'Campaigns')
 	{
-		$tableName='campaignscf';
+		$tableName='vtiger_campaignscf';
 	}
 	//Assigning the uitype
 	$fldlength=$_REQUEST['fldLength'];
@@ -281,9 +281,9 @@ else
 		if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
 		{
 			// Creating the PickList Table and Populating Values
-			$adb->createTable($columnName, $columnName." C(255)");
+			$adb->createTable('vtiger_'.$columnName, $columnName." C(255)");
 			//Adding Primary Key
-			$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
+			$qur = "ALTER table vtiger_".$columnName." ADD PRIMARY KEY (". $columnName.")";
 			$adb->query($qur);
 
 			$fldPickList =  $_REQUEST['fldPickList'];
@@ -294,7 +294,7 @@ else
 				$pickArray[$i] = trim($pickArray[$i]);
 				if($pickArray[$i] != '')
 				{
-					$query = "insert into ".$columnName." values('".$pickArray[$i]."')";
+					$query = "insert into vtiger_".$columnName." values('".$pickArray[$i]."')";
 					$adb->query($query);
 				}
 			}
