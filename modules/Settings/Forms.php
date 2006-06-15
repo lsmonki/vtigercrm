@@ -115,7 +115,7 @@ $user_id = $current_user->id;
 $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
 
-$qcreate_get_field="select * from vtiger_field where vtiger_tabid=4 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where tabid=4 and quickcreate=0 order by quickcreatesequence";
 $qcreate_get_result=$adb->query($qcreate_get_field);
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
@@ -203,9 +203,9 @@ $qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save
 $qcreate_form.='</form>';
 $qcreate_form.='<script type="text/javascript">
 
-        var vtiger_fieldname = new Array('.$fieldName.')
-        var vtiger_fieldlabel = new Array('.$fieldLabel.')
-        var vtiger_fielddatatype = new Array('.$fldDataType.')
+        var fieldname = new Array('.$fieldName.')
+        var fieldlabel = new Array('.$fieldLabel.')
+        var fielddatatype = new Array('.$fldDataType.')
 
                 </script>';
 
