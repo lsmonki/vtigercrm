@@ -412,6 +412,27 @@ function getContactName($contact_id)
 }
 
 /**
+ * Function to get the Campaign Name when a campaign id is given
+ * Takes the input as $campaign_id - campaign id
+ * returns the Campaign Name in string format.
+ */
+
+function getCampaignName($campaign_id)
+{
+	global $log;
+	$log->debug("Entering getCampaignName(".$campaign_id.") method ...");
+	$log->info("in getCampaignName ".$campaign_id);
+
+	global $adb;
+	$sql = "select * from vtiger_campaign where campaignid=".$campaign_id;
+	$result = $adb->query($sql);
+	$campaign_name = $adb->query_result($result,0,"campaignname");
+	$log->debug("Exiting getCampaignName method ...");
+	return $campaign_name;
+}
+
+
+/**
  * Function to get the Vendor Name when a vtiger_vendor id is given 
  * Takes the input as $vendor_id - vtiger_vendor id
  * returns the Vendor Name in string format.
