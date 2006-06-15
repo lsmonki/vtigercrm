@@ -474,6 +474,32 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue[] = $contact_name;
 		$fieldvalue[] = $value;
 	}
+
+	elseif($uitype == 58)
+	{
+
+		if($value != '')
+		{
+			$campaign_name = getCampaignName($value);
+		}
+		elseif(isset($_REQUEST['campaignid']) && $_REQUEST['campaignid'] != '')
+		{
+			if($_REQUEST['module'] == 'Campaigns' && $fieldname = 'campaignid')
+			{
+				$campaign_name = '';
+			}
+			else
+			{
+				$value = $_REQUEST['campaignid'];
+				$campaign_name = getCampaignName($value);
+			}
+
+		}
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$fieldvalue[]=$campaign_name;
+		$fieldvalue[] = $value;
+	}
+	
 	elseif($uitype == 61)
 	{
 		global $current_user;
