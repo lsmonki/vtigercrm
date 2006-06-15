@@ -14,22 +14,30 @@
 						
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">
 <tr>
-	{foreach item=header from=$LIST_HEADER} 
-		<td class="colHeader small" valign=top>{$header}</td>
-	{/foreach}
+	<td class="colHeader small" valign=top>#</td>
+	<td class="colHeader small" valign=top>{$APP.Tools}</td>
+	<td class="colHeader small" valign=top>{$LIST_HEADER.3}</td>
+	<td class="colHeader small" valign=top>{$LIST_HEADER.5}</td>
+	<td class="colHeader small" valign=top>{$LIST_HEADER.7}</td>
+	<td class="colHeader small" valign=top>{$LIST_HEADER.6}</td>
+	<td class="colHeader small" valign=top>{$LIST_HEADER.4}</td>
 </tr>
-	{foreach name=userlist item=listvalues from=$LIST_ENTRIES}
+	{foreach name=userlist item=listvalues key=userid from=$LIST_ENTRIES}
 <tr>
 	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
+	<td class="listTableRow small" valign=top><a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}"><img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0"></a>&nbsp;
+	{if $userid neq 1 && $userid neq 2}	
+	<img src="{$IMAGE_PATH}delete.gif" onclick="deleteUser('{$userid}')" border="0"  alt="Delete" title="Delete"/></a>
+	{/if}
+&nbsp;</td>
+	<td class="listTableRow small" valign=top><b><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.3} </a></b><br><a href="index.php?module=Users&action=DetailView&parenttab=Settings&record={$userid}"> {$listvalues.1} {$listvalues.0}</a> ({$listvalues.2})</td>
+	<td class="listTableRow small" valign=top>{$listvalues.5}</td>
 	<td class="listTableRow small" valign=top>{$listvalues.7}</td>
-	<td class="listTableRow small" valign=top><b>{$listvalues.0}</b><br>{$listvalues.3} <a> (</a>{$listvalues.1})</td>
-	<td class="listTableRow small" valign=top>{$listvalues.2}</td>
 	<td class="listTableRow small" valign=top>{$listvalues.6}</td>
-	<td class="listTableRow small" valign=top>{$listvalues.4}</td>
-	{if $listvalues.5 eq 'Active'}
-	<td class="listTableRow small active" valign=top>{$listvalues.5}</td>
+	{if $listvalues.4 eq 'Active'}
+	<td class="listTableRow small active" valign=top>{$listvalues.4}</td>
 	{else}
-	<td class="listTableRow small inactive" valign=top>{$listvalues.5}</td>
+	<td class="listTableRow small inactive" valign=top>{$listvalues.4}</td>
 	{/if}	
 
 </tr>

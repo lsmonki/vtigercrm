@@ -462,7 +462,7 @@
 				{else}
 					{assign var="disable_status" value="disabled"}
 				{/if}	
-				{if $fldvalue eq 1}
+				{if $fldvalue eq 'on'}
 					<td width="30%" align=left class="dvtCellInfo">
 						<input name="{$fldname}" {$disable_status} type="checkbox"  checked>
 					</td>
