@@ -20,7 +20,7 @@ $entityid = $_REQUEST['entityid'];
 
 $returnmodule=$_REQUEST['return_module'];
 
-$dbQuery = "SELECT * FROM attachments WHERE attachmentsid = " .$attachmentsid ;
+$dbQuery = "SELECT * FROM vtiger_attachments WHERE attachmentsid = " .$attachmentsid ;
 
 $result = $adb->query($dbQuery) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)

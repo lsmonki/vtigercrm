@@ -53,7 +53,7 @@ $crmid = $_REQUEST['return_id'];
 
 		if($filesize != 0)	
 		{
-			$current_id = $adb->getUniqueID("crmentity");
+			$current_id = $adb->getUniqueID("vtiger_crmentity");
 			$desc = $_REQUEST['txtDescription'];
 			$description = addslashes($desc);
 			$date_var = date('YmdHis');
