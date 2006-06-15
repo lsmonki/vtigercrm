@@ -33,7 +33,7 @@ function getBlocksFields($tabId) {
 	global $adb,$saveNames;
 
 	$b = array();	
-	$sql="select vtiger_fieldid,fieldlabel,block from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and vtiger_tab.tabid=$tabId order by block,sequence";
+	$sql="select fieldid,fieldlabel,block from vtiger_field,tab where vtiger_field.tabid=vtiger_tab.tabid and vtiger_tab.tabid=$tabId order by block,sequence";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	
@@ -244,7 +244,7 @@ sajax_show_javascript();
 	?>
 
 	<p align="left">
-		<b>Please review the vtiger_notes at the bottom for things to keep in mind!<br></b>
+		<b>Please review the notes at the bottom for things to keep in mind!<br></b>
 	</p>
 <script language="JavaScript" type="text/javascript" src="include/dd/dd_files/coordinates.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/dd/dd_files/drag.js"></script>
@@ -289,16 +289,16 @@ echo $fblock;
 	</tr>
 </table>
 <p align="left">
-	1) &nbsp;If you move a vtiger_field into a currently unused block, you will have to update the appropriate language file in
+	1) &nbsp;If you move a field into a currently unused block, you will have to update the appropriate language file in
 	<b>modules/Potentials/language/en_us.lang.php</b>.<br>
-	2) &nbsp;Please see vtiger_notes on arranging vtiger_fields below:
+	2) &nbsp;Please see notes on arranging fields below:
 </p>
 <div align="left">
 	<table border="1" cellpadding="0" cellspacing="0" bordercolordark="white" bordercolorlight="black">
 		<tr>
 			<td width="325" align="right">
 				<p align="center">
-					The vtiger_tabs are arrange in 2 columns as follows:
+					The tabs are arrange in 2 columns as follows:
 				</p>
 			</td>
 			<td width="325" align="right">
