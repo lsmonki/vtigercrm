@@ -38,20 +38,20 @@ function getListLeadMapping($image_path)
 		$cfmid = $adb->query_result($result,$i,'cfmid');
 
 		$display_val .= '<tr height="20" class="Datafield">';
-		$sql1="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$leadid."'";
+		$sql1="select fieldlabel from vtiger_field where fieldid ='".$leadid."'";
 		$result1 = $adb->query($sql1);
 		$leadfield = $adb->query_result($result1,0,'fieldlabel');
 		$label['leadlabel'] = $leadfield;
-		$sql2="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$accountid."'";
+		$sql2="select fieldlabel from vtiger_field where fieldid ='".$accountid."'";
 		$result2 = $adb->query($sql2);
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
 		$label['accountlabel'] = $accountfield;
 		
-		$sql3="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$contactid."'";
+		$sql3="select fieldlabel from vtiger_field where fieldid ='".$contactid."'";
 		$result3 = $adb->query($sql3);
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
 		$label['contactlabel'] = $contactfield;
-		$sql4="select vtiger_fieldlabel from vtiger_field where vtiger_fieldid ='".$potentialid."'";
+		$sql4="select fieldlabel from vtiger_field where fieldid ='".$potentialid."'";
 		$result4 = $adb->query($sql4);
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
 		$label['potentiallabel'] = $potentialfield;
