@@ -46,7 +46,7 @@ if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == '
 $focus->save("PurchaseOrder");
 if($focus->mode == 'edit')
 {
-        $query1 = "delete from vtiger_poproductrel where vtiger_purchaseorderid=".$focus->id;
+        $query1 = "delete from vtiger_poproductrel where purchaseorderid=".$focus->id;
         $adb->query($query1);
 
 }
