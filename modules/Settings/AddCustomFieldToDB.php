@@ -25,7 +25,7 @@ if(get_magic_quotes_gpc() == 1)
 
 //checking if the user is trying to create a custom vtiger_field which already exists  
 
-$checkquery="select * from vtiger_field where vtiger_tabid='".$tabid."'and vtiger_fieldlabel='".$fldlabel."'";
+$checkquery="select * from vtiger_field where tabid='".$tabid."'and fieldlabel='".$fldlabel."'";
 $checkresult=$adb->query($checkquery);
 
 if($adb->num_rows($checkresult) != 0)
@@ -256,7 +256,7 @@ else
 		}
 		else
 		{
-			$query = "update vtiger_field set vtiger_fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where vtiger_fieldid=".$_REQUEST['fieldid'];
+			$query = "update vtiger_field set fieldlabel='".$fldlabel."',typeofdata='".$uichekdata."' where fieldid=".$_REQUEST['fieldid'];
 			$adb->query($query);
 		}
 		//Inserting values into vtiger_profile2field vtiger_tables
@@ -283,7 +283,7 @@ else
 			// Creating the PickList Table and Populating Values
 			$adb->createTable($columnName, $columnName." C(255)");
 			//Adding Primary Key
-			$qur = "ALTER vtiger_table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
+			$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
 			$adb->query($qur);
 
 			$fldPickList =  $_REQUEST['fldPickList'];
