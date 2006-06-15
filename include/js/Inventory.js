@@ -285,15 +285,22 @@ function calcTotal(currObj) {
 }
 
 function calcGrandTotal() {
-	var subTotal=0,grandTotal=0;
+	var subTotal=0, grandTotal=0, txtTaxVal = 0, txtAdjVal = 0;
+
 	for (var i=1;i<=rowCnt;i++) {
 		if (getObj("hdnTotal"+i).value=="") 
 			getObj("hdnTotal"+i).value=0
 		if (!isNaN(getObj("hdnTotal"+i).value)) 
 			subTotal+=parseFloat(getObj("hdnTotal"+i).value)
 	}
-	
-	grandTotal=subTotal+parseFloat(getObj("txtTax").value)+parseFloat(getObj("txtAdjustment").value)
+
+	//Tax and Adjustment values will be taken when they are valid integer or decimal values
+	if(/^-?(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("txtTax").value))
+		txtTaxVal = parseFloat(getObj("txtTax").value);	
+	if(/^-?(0|[1-9]{1}\d{0,})(\.(\d{1}\d{0,}))?$/.test(document.getElementById("txtAdjustment").value))
+		txtAdjVal = parseFloat(getObj("txtAdjustment").value);
+
+	grandTotal=subTotal+txtTaxVal+txtAdjVal
 	
 	getObj("subTotal").value=getObj("hdnSubTotal").value=roundValue(subTotal.toString())
 	getObj("grandTotal").value=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
