@@ -102,8 +102,9 @@ global $mod_strings;
 										<tr><td>Mike Crowe </td></tr>
 										<tr><td>Allan Bush</td></tr>
 										<tr><td>Frank Piepiorra</td></tr>
-										<tr><td>Dino Eberle and Jamie Jackson</td></tr>
-										<tr><td>Bélaïd Aïssa</td></tr>
+										<tr><td>Dino Eberle </td></tr>
+										<tr><td>Jamie Jackson</td></tr>
+										<tr><td>Aissa Belaid</td></tr>
 										<tr><td>Sergio A. Kessler</td></tr>
 										<tr><td>Jeff Kowalczyk</td></tr>
 										<tr><td>Brian Devendorf</td></tr>
@@ -116,6 +117,8 @@ global $mod_strings;
 										<tr><td>Mike Fedyk</td></tr>
 										<tr><td>&nbsp;</td></tr>
 										<tr><td><b>And vtiger Community</b></td></tr>
+										<tr><td>&nbsp;</td></tr>
+										<tr><td>&nbsp;</td></tr>
 								</table>
 						</marquee>
 				</td>
