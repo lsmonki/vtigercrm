@@ -75,12 +75,14 @@
 			<td style="padding-left:10px" nowrap>
 			{if $CNT eq 1}
                                 <select class=small style="width:120px" title="Create New" onclick="QCreate(this);">
+					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
                         {/foreach}
                                 </select>
                         {else}
                                 <select class=small style="width:120px" title="Create New" onchange="QCreate(this);">
+					<option value="none">{$APP.LBL_QUICK_CREATE}</option>
                         {foreach  item=detail from=$QCMODULE}
                                         <option value="{$detail.1}">{$APP[$detail.0]}</option>
                         {/foreach}
@@ -201,8 +203,10 @@ setInterval("Announcement_rss()",300000)
 
 function QCreate(qcoptions)
 {ldelim}
-	$("status").style.display="inline";
 	var module = qcoptions.options[qcoptions.options.selectedIndex].value;
+	if(module != 'none')
+	{ldelim}
+	$("status").style.display="inline";
 	if(module == 'Events')
 	{ldelim}
 		module = 'Activities';
@@ -225,6 +229,9 @@ function QCreate(qcoptions)
                                         {rdelim}
                 {rdelim}
         );
+	{rdelim}
+	else
+		hide('qcform');
 {rdelim}
 
 </script>
