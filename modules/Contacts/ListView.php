@@ -219,13 +219,21 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 
-	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	if (isset($order_by) && $order_by !='')
+	{
+		$search_form->assign("ORDER_BY", $order_by);
+	}
+	
+	if ($sorder !='')
+	{
+		$search_form->assign("SORDER", $sorder);
+	}
 	
 	$search_form->assign("VIEWID",$viewid);
-
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if($order_by != '') {
+	
+	if(isset($order_by) && $order_by != '')
+	{
 		$ordby = "&order_by=".$order_by;
 	}
 	else

@@ -97,14 +97,15 @@ class CustomView extends CRMEntity{
 	function getCustomViewCombo()
 	{
 		global $adb;
-                $tabid = getTabid($this->customviewmodule);
-                $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
-                $ssql .= " where tab.tabid=".$tabid;
-		//echo $ssql;
-                $result = $adb->query($ssql);
-                while($cvrow=$adb->fetch_array($result))
-                {
-                        if($cvrow['setdefault'] == 1)
+        $tabid = getTabid($this->customviewmodule);
+        $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
+        $ssql .= " where tab.tabid=".$tabid;
+        $result = $adb->query($ssql);
+        $shtml = '';
+        
+        while($cvrow=$adb->fetch_array($result))
+        {
+			if($cvrow['setdefault'] == 1)
 			{
 				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];
@@ -113,9 +114,8 @@ class CustomView extends CRMEntity{
 			{
 				$shtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
 			}
-                }
-		//echo $shtml;
-                return $shtml;
+        }
+        return $shtml;
 	}
 	function getColumnsListbyBlock($module,$block)
         {

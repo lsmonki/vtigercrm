@@ -4160,28 +4160,51 @@ function ChangeStatus($status,$activityid,$activity_mode='')
 //parameter $viewid added for customview 27/5
 function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='')
 {
-  /* for access to alphabetical_search values stored in /include/$lang.language.php */
-  global $app_list_strings;
+	/* for access to alphabetical_search values stored in /include/$lang.language.php */
+	global $app_list_strings;
   
 	if($type=='advanced')
-		$flag='&advanced=true';
+	{
+		$flag = '&advanced=true';
+	}
+	else
+	{
+		$flag = '';
+	}
 
 	if($popuptype != '')
-		$popuptypevalue = "&popuptype=".$popuptype;
+	{
+		$popuptypevalue = '&popuptype='.$popuptype;
+	}
+	else
+	{
+		$popuptypevalue = '';
+	}
 
-        if($recordid != '')
-                $returnvalue = '&recordid='.$recordid;
-        if($return_module != '')
-                $returnvalue .= '&return_module='.$return_module;
+    if($return_module != '')
+    {
+    	$returnvalue .= '&return_module='.$return_module;
+    }
+    elseif($recordid != '')
+    {
+    	$returnvalue = '&recordid='.$recordid;
+    }
+    else
+    {
+    	$returnvalue = '';
+    }
+    
 	// gettin' values
 	$alphabetical_search_values = & $app_list_strings['alphabetical_search_values'];
 	/* world alphabets has different count of letters. Plus we can add "special" (multucharacter) values in alphabetical seach bar */
-  $count = count($alphabetical_search_values);
+	$count = count($alphabetical_search_values);
   
 	// building alphabetical search bar from array values
-  for($i =0;$i<=$count;$i++)
-		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$alphabetical_search_values[$i].$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$alphabetical_search_values[$i].'</a></td>';
-
+	for($i =0;$i<$count;$i++)
+	{
+		$list = '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$alphabetical_search_values[$i].$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$alphabetical_search_values[$i].'</a></td>';
+	}
+	
 	return $list;
 }
 

@@ -344,6 +344,7 @@ function verify_data(form) {
 	        <select class="dataInput" name="dbtype">
 		  <option value="mysql" <?php echo $dbconfig['db_type'] == 'mysql' ? 'selected' : '' ?>>MySQL</option>
 		  <option value="pgsql" <?php echo $dbconfig['db_type'] == 'pgsql' ? 'selected' : '' ?>>Postgresql</option>
+		  <option value="oci8" <?php echo $dbconfig['db_type'] == 'oci8' ? 'selected' : '' ?>>Oracle 8+</option>
 	        </select>
 	      </td>
 	    </tr>

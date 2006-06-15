@@ -254,15 +254,19 @@ if (count($history) > 0) {
 
 		$xtpl->assign("RECENT_LABEL",$row['item_summary']);
 
-                if($row['module_name']=='Activities')
-                {
-                        $sql = 'select activitytype from activity where activityid = '.$row['item_id'];
-                        $activitytype = $adb->query_result($adb->query($sql),0,'activitytype');
-                        if($activitytype == 'Task')
-                                $activity_mode = '&activity_mode=Task';
-                        elseif($activitytype == 'Call' || $activitytype == 'Meeting')
-                                $activity_mode = '&activity_mode=Events';
-                }
+        if($row['module_name']=='Activities')
+        {
+                $sql = 'select activitytype from activity where activityid = '.$row['item_id'];
+                $activitytype = $adb->query_result($adb->query($sql),0,'activitytype');
+                if($activitytype == 'Task')
+                        $activity_mode = '&activity_mode=Task';
+                elseif($activitytype == 'Call' || $activitytype == 'Meeting')
+                        $activity_mode = '&activity_mode=Events';
+        }
+        else
+        {
+        	$activity_mode = null;          
+        }
 
 		$url_module = $row['module_name'];
 		$url_action = 'DetailView';

@@ -597,20 +597,20 @@ switch($sub_module) {
 		break;
 }
 
-session_start();
+//session_start();
 if (isset($_REQUEST['order_by'])) {
 	$order_by = $_REQUEST['order_by'];
 	$_SESSION["ListViewOrder[$currentModule_name][0]"] = $order_by;
-} elseif ($_SESSION["ListViewOrder[$currentModule_name][0]"] != '') {
-	$order_by = $_SESSION["ListViewOrder[$currentModule_name][0]"];
+} elseif (isset($_SESSION['ListViewOrder']) && $_SESSION['ListViewOrder[$currentModule_name][0]'] != '') {
+	$order_by = $_SESSION['ListViewOrder[$currentModule_name][0]'];
 }
 
 $sorder = 'ASC';
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '') {
 	        $sorder = $_REQUEST['sorder'];
-		        $_SESSION["ListViewOrder[$currentModule_name][1]"] = $sorder;
-} elseif ($_SESSION["ListViewOrder[$currentModule_name][1]"] != '') {
-	        $sorder = $_SESSION["ListViewOrder[$currentModule_name][1]"];
+		        $_SESSION['ListViewOrder[$currentModule_name][1]'] = $sorder;
+} elseif (isset($_SESSION['ListViewOrder']) && $_SESSION['ListViewOrder[$currentModule_name][1]'] != '') {
+	        $sorder = $_SESSION['ListViewOrder[$currentModule_name][1]'];
 }
 
 
