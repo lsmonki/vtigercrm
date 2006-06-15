@@ -671,7 +671,6 @@
 		<field name="currency" type="C" size="20" />
 		<field name="closingdate" type="D" />
 		<field name="typeofrevenue" type="C" size="50" />
-		<field name="campaignsource" type="C" size="30" />
 		<field name="nextstep" type="C" size="100" />
 		<field name="private" type="I" size="1">
 			<default value="0" />
@@ -679,6 +678,7 @@
 		<field name="probability" type="N" size="7.3">
 			<default value="0" />
 		</field>
+		<field name="campaignid" type="I" size="19" />
 		<field name="sales_stage" type="C" size="50" />
 		<field name="potentialtype" type="C" size="50" />
 		<field name="leadsource" type="C" size="50" />
@@ -1235,6 +1235,7 @@
 			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="contactid" type="I" size="19">
+			<key />
 			<notnull />
 			<default value="0"/>
 			<constraint>REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
@@ -1253,6 +1254,7 @@
 			<constraint>REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
 		</field>
 		<field name="leadid" type="I" size="19">
+			<key />
 			<notnull />
 			<default value="0" />
 			<constraint>REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
