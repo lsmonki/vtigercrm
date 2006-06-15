@@ -849,7 +849,7 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')");
-$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'email1','vtiger_users',1,'104','email','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')");
