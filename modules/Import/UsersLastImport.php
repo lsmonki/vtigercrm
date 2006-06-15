@@ -38,7 +38,7 @@ class UsersLastImport extends SugarBean
 	var $bean_type;
 	var $bean_id;
 
-	var $table_name = "users_last_import";
+	var $table_name = "vtiger_users_last_import";
 	var $object_name = "UsersLastImport";
 	var $column_fields = Array(
 					"id"
