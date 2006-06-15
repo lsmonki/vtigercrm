@@ -103,7 +103,7 @@ function getUserFldArray($fld_module)
 function getPickListValues($tablename)
 {
 	global $adb;	
-	$query = "select * from ".$tablename." order by sortorderid";
+	$query = "select * from vtiger_".$tablename." order by sortorderid";
 	$result = $adb->query($query);
 	$fldVal = Array();
 	while($row = $adb->fetch_array($result))
