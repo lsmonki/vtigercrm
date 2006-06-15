@@ -48,6 +48,18 @@ switch($currentModule)
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','lastname','true','basic',$popuptype,"","","");
 		break;
+	case 'Campaigns':
+		require_once("modules/$currentModule/Campaign.php");
+		$focus = new Campaign();
+		$log = LoggerManager::getLogger('campaign_list');
+		$comboFieldNames = Array('campaignstatus'=>'campaignstatus_dom',
+					 'campaigntype'=>'campaigntype_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);
+		$smarty->assign("SINGLE_MOD",'Campaign');
+		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','campaignname','true','basic',$popuptype,"","","");
+		break;
 	case 'Accounts':
 		require_once("modules/$currentModule/Account.php");
 		$focus = new Account();
