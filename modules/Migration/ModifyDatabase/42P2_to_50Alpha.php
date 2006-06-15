@@ -19,6 +19,20 @@ global $success_query_array, $failure_query_array;
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
 
 
+
+//These changes have been made in 4.2.3. The following queries have been included who has run the migration from 4.2 Patch2
+$wordtemplate_query1 = "alter table wordtemplates DROP PRIMARY KEY";
+Execute($wordtemplate_query1);
+
+$wordtemplate_query2 = "alter table wordtemplates DROP templateid";//this will fail if 4.2 Patch 2.
+$conn->query($wordtemplate_query2);
+
+$wordtemplate_query3 = "alter table wordtemplates add column templateid integer(19) unsigned auto_increment primary key FIRST";
+Execute($wordtemplate_query3);
+//upto this added to modify the wordtemplates table which will be in the case of migrate from 4.2 Path2.
+
+
+
 /****************** 5.0(Alpha) dev version 1 Database changes -- Starts*********************/
 
 
