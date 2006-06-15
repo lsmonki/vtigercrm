@@ -19,15 +19,15 @@ $colName = $_REQUEST["colName"];
 $uitype = $_REQUEST["uitype"];
 
 //Deleting the CustomField from the Custom Field Table
-$query='delete from vtiger_field where vtiger_fieldid="'.$id.'"';
+$query='delete from vtiger_field where fieldid="'.$id.'"';
 $adb->query($query);
 
 //Deleting from vtiger_profile2field vtiger_table
-$query='delete from vtiger_profile2field where vtiger_fieldid="'.$id.'"';
+$query='delete from vtiger_profile2field where fieldid="'.$id.'"';
 $adb->query($query);
 
 //Deleting from vtiger_def_org_field vtiger_table
-$query='delete from vtiger_def_org_field where vtiger_fieldid="'.$id.'"';
+$query='delete from vtiger_def_org_field where fieldid="'.$id.'"';
 $adb->query($query);
 
 //Dropping the column in the module vtiger_table
@@ -57,7 +57,7 @@ elseif($fld_module == "Products")
 }
 //echo '<BR>';
 //echo $tableName;
-$dbquery = 'Alter vtiger_table '.$tableName.' Drop Column '.$colName;
+$dbquery = 'Alter table '.$tableName.' Drop Column '.$colName;
 $adb->query($dbquery);
 
 //Deleting from convert lead mapping vtiger_table- Jaguar
@@ -70,7 +70,7 @@ if($fld_module=="Leads")
 
 if($uitype == 15)
 {
-$deltablequery = 'drop vtiger_table '.$colName;
+$deltablequery = 'drop table '.$colName;
 $adb->query($deltablequery);
 }
 header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module."&parenttab=Settings");
