@@ -93,7 +93,7 @@ function getPotentialCustomValues($leadid,$potentialid)
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
         return $potentialcf;
 }
-$lead_sql="select vtiger_fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads'";
+$lead_sql="select fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads'";
 $result = $adb->query($lead_sql);
 $noofrows = $adb->num_rows($result);
 
