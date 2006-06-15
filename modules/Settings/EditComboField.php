@@ -23,7 +23,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
-$query = "select * from ".$tableName ;//." order by sortorderid";
+$query = "select * from vtiger_".$tableName ;//." order by sortorderid";
 $result = $adb->query($query);
 $fldVal='';
 
