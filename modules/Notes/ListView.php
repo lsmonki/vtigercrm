@@ -150,7 +150,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<td>';
 if(isPermitted('Notes',2,'') == 'yes')
 {
-        $other_text .='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+        $other_text .='<input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>';
 }
 
 if($viewid == 0)
@@ -168,9 +168,9 @@ $cvHTML = '<a href="index.php?module=Notes&action=CustomView&record='.$viewid.'"
 <a href="index.php?module=Notes&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                                <OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -238,22 +238,27 @@ $view_script = "<script language='javascript'>
 	</script>";
 
 //Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
-        $start = $_REQUEST['start'];
-} else {
-        $start = 1;
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+{
+	$start = $_REQUEST['start'];
 }
+else
+{
+	$start = 1;
+}
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
-
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')
-$url_string .="&viewname=".$viewid;
+{
+	$url_string .="&viewname=".$viewid;
+}
 
 $listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
@@ -264,9 +269,13 @@ $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+{
+	$url_string .="&order_by=".$order_by;
+}
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+{
+	$url_string .="&sorder=".$sorder;
+}
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
@@ -274,6 +283,5 @@ $xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");
-
 
 ?>

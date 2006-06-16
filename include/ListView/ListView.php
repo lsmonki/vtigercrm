@@ -598,6 +598,7 @@ switch($sub_module) {
 }
 
 //session_start();
+$order_by = '';
 if (isset($_REQUEST['order_by'])) {
 	$order_by = $_REQUEST['order_by'];
 	$_SESSION["ListViewOrder[$currentModule_name][0]"] = $order_by;

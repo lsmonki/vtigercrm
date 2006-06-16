@@ -892,6 +892,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
 	$fieldlabel = from_html($fieldlabel);
+	$filename = '';
 
 	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
         //$value = htmlentities($col_fields[$fieldname]);
@@ -3030,6 +3031,7 @@ function get_field_list($focus, $oCv, $tabid)
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
 	global $adb, $theme, $app_strings;
+	$filename = '';
 	
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '<script>
@@ -3237,8 +3239,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$mod_dir=getModuleDirName($module);
 		if(isPermitted($module,1,$entity_id) == 'yes')
 		{
-
-
 			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
 		}
 		if(isPermitted($module,2,$entity_id) == 'yes')
