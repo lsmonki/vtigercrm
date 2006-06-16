@@ -555,8 +555,9 @@ class CustomView extends CRMEntity{
 	{
 		global $adb;
 
+		$stdfiltersql = '';
 		$stdfilterlist = $this->getStdFilterByCvid($cvid);
-		//print_r($stdfilterlist);
+
 		if(isset($stdfilterlist))
 		{
 			foreach($stdfilterlist as $columnname=>$value)
@@ -588,9 +589,10 @@ class CustomView extends CRMEntity{
 				$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 			}
 		}
-		//echo $stdfiltersql;
+		
 		return $stdfiltersql;
 	}
+
 	function getCVAdvFilterSQL($cvid)
 	{
 		$advfilter = $this->getAdvFilterByCvid($cvid);

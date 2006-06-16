@@ -437,15 +437,17 @@ global $vtlog;
 
 	function query_result(&$result, $row, $col=0)
 	{		
-		//$this->println("ADODB query_result r=".$row." c=".$col);
-		$result->Move($row);
-		$rowdata = $this->change_key_case($result->FetchRow());
-		//$this->println($rowdata);
-		$coldata = to_html($rowdata[$col]);
-		//$this->println("ADODB query_result ". $coldata);
-		return $coldata;
+		if($result->_numOfRows > $row)
+		{
+			$result->Move($row);
+			$rowdata = $this->change_key_case($result->FetchRow());
+			return to_html($rowdata[$col]);
+		}
+		else
+		{
+			return to_html(null);
+		}
 	}
-	
 
 	/* ADODB Converted	
 	function getAffectedRowCount(&$result){

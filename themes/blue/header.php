@@ -124,45 +124,26 @@ if ($action == "EditView" || $action == "Login") $xtpl->assign("ONLOAD", 'onload
 // For the current tab, parse a tab_on
 
 foreach($moduleList as $module_name)
-
 {
-
 	$xtpl->assign("MODULE_NAME", $app_list_strings['moduleList'][$module_name]);
-
 	$xtpl->assign("MODULE_KEY", $module_name);
 
-	
-
 	if($module_name == $currentModule)
-
 	{
-
 		$xtpl->assign("TAB_CLASS", "currentTab");
-
 		$xtpl->assign("IMAGE_TABTILE", "menu_on_tile.gif");
-
 		$xtpl->assign("IMAGE_TABSTART", "menu_on_start.gif");
-
 		$xtpl->assign("IMAGE_TABEND", "menu_on_end.gif");
-
 	}
-
 	else
-
 	{
-
 		$xtpl->assign("TAB_CLASS", "otherTab");
-
 		$xtpl->assign("IMAGE_TABTILE", "menu_off_tile.gif");
-
 		$xtpl->assign("IMAGE_TABSTART", "menu_off_start.gif");
-
 		$xtpl->assign("IMAGE_TABEND", "menu_off_end.gif");
-
 	}
 
 	$xtpl->parse("main.tab");
-
 }
 
 

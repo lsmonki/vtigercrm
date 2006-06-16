@@ -94,7 +94,7 @@ for($i=0;$i<$noofrows;$i++)
 				     'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
 				     'time_start' => $adb->query_result($list_result,$i,'time_start'),
 				     'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
-				     'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
+				     'recurringtype' => $adb->query_result($list_result,$i,'recurringtype'),
 				     'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
 
 				     'parent'=> $parent_name,	

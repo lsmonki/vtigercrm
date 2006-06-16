@@ -172,15 +172,27 @@ if (count($history) > 0) {
 		$xtpl->assign("ROW_NUMBER",$current_row);
 		$xtpl->assign("RECENT_LABEL",$row['item_summary']);
 
-                if($row['module_name']=='Activities')
-                {
-                        $sql = 'select activitytype from activity where activityid = '.$row['item_id'];
-                        $activitytype = $adb->query_result($adb->query($sql),0,'activitytype');
-                        if($activitytype == 'Task')
-                                $activity_mode = '&activity_mode=Task';
-                        elseif($activitytype == 'Call' || $activitytype == 'Meeting')
-                                $activity_mode = '&activity_mode=Events';
-                }
+        if($row['module_name']=='Activities')
+        {
+	        $sql = 'select activitytype from activity where activityid = '.$row['item_id'];
+	        $activitytype = $adb->query_result($adb->query($sql),0,'activitytype');
+	        if($activitytype == 'Task')
+	        {
+				$activity_mode = '&activity_mode=Task';
+	        }
+	        elseif($activitytype == 'Call' || $activitytype == 'Meeting')
+	        {
+				$activity_mode = '&activity_mode=Events';
+	        }
+	        else
+	        {
+	        	$activity_mode = '';
+	        }
+        }
+        else
+        {
+        	$activity_mode = '';
+        }
 
 		$url_module = $row['module_name'];
 		$url_action = 'DetailView';
@@ -211,8 +223,6 @@ if (count($history) > 0) {
 		{
 			$xtpl->assign("MODULE_IMAGE_NAME",$row['module_name']);
 		}
-
-		 
 
 		$xtpl->assign("RECENT_URL","index.php?module=$url_module&action=$url_action&record=$row[item_id]$activity_mode");	
 

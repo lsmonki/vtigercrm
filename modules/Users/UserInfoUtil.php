@@ -70,12 +70,11 @@ function fetchUserProfileId($userid)
 function fetchUserGroups($userid)
 {
 	global $adb;
+
 	$sql= "select groupname from users2group where userid='" .$userid ."'";
-        //echo $sql;
-        $result = $adb->query($sql);
-        //store the groupnames in a comma separated string
-        //echo 'count is ' .count($result);
-	if($adb->num_rows($result)!=0)	$groupname=  $adb->query_result($result,0,"groupname");
+	$result = $adb->query($sql);
+	$groupname = $adb->query_result($result, 0, 'groupname');
+
 	return $groupname;
 }
 

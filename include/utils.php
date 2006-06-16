@@ -3029,8 +3029,8 @@ function get_field_list($focus, $oCv, $tabid)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
-	global $adb;
-	global $app_strings;
+	global $adb, $theme, $app_strings;
+	
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '<script>
 			function confirmdelete(url)
@@ -3041,32 +3041,35 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 			}
 		</script>';
-	global $theme;
-	$evt_status;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
-	
+
 	//added for customview 27/5
 	if($oCv)
-        {
-                if(isset($oCv->list_fields))
-                {
-                        $focus->list_fields = $oCv->list_fields;
-                }
-        }
+	{
+		if(isset($oCv->list_fields))
+		{
+			$focus->list_fields = $oCv->list_fields;
+		}
+	}
 
 	$relmodule = ($_REQUEST['module'] == $module || !$relatedlist) || $_REQUEST['module'] == 'Home' ? '' : $module;
 	$start = $relmodule.'start';
-	$end_val = $relmodule.'end_val'; 
+	$end_val = $relmodule.'end_val';
+	
 	for ($i=$navigation_array[$start]; $i<=$navigation_array[$end_val]; $i++)
 	{
 		if (($i%2)==0)
+		{
 			$list_header .= '<tr height=20 class=evenListRow>';
+		}
 		else
+		{
 			$list_header .= '<tr height=20 class=oddListRow>';
+		}
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
@@ -3079,163 +3082,163 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$names = get_field_list($focus, $oCv, $tabid);
-			
+
 
 		foreach($names as $fieldname=>$data) {
 			list($name, $is_column) = $data;
 
 			if($is_column)
-					{
+			{
 				$value = $adb->query_result($list_result,$i-1,$fieldname);
-				}
-				else
+			}
+			else
+			{
+				if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 				{
-					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					$status = $adb->query_result($list_result,$i-1,"status");
+					if($status == '')
+					$status = $adb->query_result($list_result,$i-1,"eventstatus");
+					if ($name=='Related to')
+					$value=getRelatedTo($module,$list_result,$i-1);
+					if($name=='Contact Name')
+
 					{
-						$status = $adb->query_result($list_result,$i-1,"status");
-						if($status == '')
-                                                $status = $adb->query_result($list_result,$i-1,"eventstatus");
-						if ($name=='Related to')
-							$value=getRelatedTo($module,$list_result,$i-1);
-						if($name=='Contact Name')
-
+						$first_name = $adb->query_result($list_result,$i-1,"firstname");
+						$last_name = $adb->query_result($list_result,$i-1,"lastname");
+						$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+						$contact_name = "";
+						$value="";
+						if($last_name != 'NULL')
+						$contact_name .= $last_name;
+						if($first_name != 'NULL')
+						$contact_name .= " ".$first_name;
+						//Added to get the contactname for activities custom view - t=2190
+						if($contact_id != '' && $last_name == '')
 						{
-							$first_name = $adb->query_result($list_result,$i-1,"firstname");
-							$last_name = $adb->query_result($list_result,$i-1,"lastname");
-							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-							$contact_name = "";
-							$value="";
-							if($last_name != 'NULL')
-								$contact_name .= $last_name;
-							if($first_name != 'NULL')
-								$contact_name .= " ".$first_name;
-							//Added to get the contactname for activities custom view - t=2190
-                                                        if($contact_id != '' && $last_name == '')
-                                                        {
-                                                                $contact_name = getContactName($contact_id);
-                                                        }
-							
-							if(($contact_name != "") && ($contact_id !='NULL'))
-								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+							$contact_name = getContactName($contact_id);
 						}
-						if ($name == 'Close')
 
+						if(($contact_name != "") && ($contact_id !='NULL'))
+						$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+					}
+					if ($name == 'Close')
+
+					{
+						if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 						{
-							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
+							$value="";
+						}
+						else
+						{
+							$activityid = $adb->query_result($list_result,$i-1,"activityid");
+							$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+							if($activitytype=='Task')
+							$evt_status='&status=Completed';
+							else
+							$evt_status='&eventstatus=Held';
+							if(isPermitted("Activities",1,$activityid) == 'yes')
+
 							{
-								$value="";
+								$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
 							}
 							else
 							{
-								$activityid = $adb->query_result($list_result,$i-1,"activityid");
-								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
-                                                                if($activitytype=='Task')
-                                                                $evt_status='&status=Completed';
-                                                                else
-                                                                $evt_status='&eventstatus=Held';
-								if(isPermitted("Activities",1,$activityid) == 'yes')
-
-                        					{
-                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
-								}
-								else
-								{
-									$value = "";
-								}
+								$value = "";
 							}
 						}
 					}
-					elseif($module == "Products" && $name == "Related to")
-                                        {
-                                                $value=getRelatedTo($module,$list_result,$i-1);
-                                        }
-					elseif($module == 'Notes' && $name=='Related to')
-					{
-						$value=getRelatedTo($module,$list_result,$i-1);
-					}
-					elseif($name=='Account Name')
-					{
-						//modified for customview 27/5
-						if($module == 'Accounts')
-                                                {
-                                                	$account_id = $adb->query_result($list_result,$i-1,"crmid");
-                                                	$account_name = getAccountName($account_id);
-                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-                                                }else
-                                                {
-                                                	$account_id = $adb->query_result($list_result,$i-1,"accountid");
-                                                	$account_name = getAccountName($account_id);
-                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-                                                }
-					}
-					elseif(($module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'Orders' || $module == 'Faq') && $name == 'Product Name')
-					{
-						if($module == 'HelpDesk' || $module == 'Faq')
-							$product_id = $adb->query_result($list_result,$i-1,"product_id");
-						else
-							$product_id = $adb->query_result($list_result,$i-1,"productid");
-
-						if($product_id != '')
-							$product_name = getProductName($product_id);
-						else
-                                                        $product_name = '';
-
-						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
-					}
-					elseif($module == 'Quotes' && $name == 'Potential Name')
-					{
-						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
-						if('' != $potential_id) {
-							$potential_name = getPotentialName($potential_id);
-							$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
-						}
-					}
-					elseif($owner_id == 0 && $name == 'Assigned To')
-                                        {
-                                               $value = getGroupName($entity_id, $module);
-                                       }
-				       else
-				       {
-					       list($uitype, $colname) = get_uitype_colname($tabid, $fieldname);
-					       $list_result_count = $i-1;
-
-					       $value = getValue($uitype, $colname,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
-				       }
 				}
-				//Added condition to hide the close symbol in Related Lists
-//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
-				if($name == $app_strings['Close'] && $relatedlist != '')
+				elseif($module == "Products" && $name == "Related to")
 				{
-					$list_header .= '';
+					$value=getRelatedTo($module,$list_result,$i-1);
+				}
+				elseif($module == 'Notes' && $name=='Related to')
+				{
+					$value=getRelatedTo($module,$list_result,$i-1);
+				}
+				elseif($name=='Account Name')
+				{
+					//modified for customview 27/5
+					if($module == 'Accounts')
+					{
+						$account_id = $adb->query_result($list_result,$i-1,"crmid");
+						$account_name = getAccountName($account_id);
+						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+					}else
+					{
+						$account_id = $adb->query_result($list_result,$i-1,"accountid");
+						$account_name = getAccountName($account_id);
+						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+					}
+				}
+				elseif(($module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'Orders' || $module == 'Faq') && $name == 'Product Name')
+				{
+					if($module == 'HelpDesk' || $module == 'Faq')
+					$product_id = $adb->query_result($list_result,$i-1,"product_id");
+					else
+					$product_id = $adb->query_result($list_result,$i-1,"productid");
+
+					if($product_id != '')
+					$product_name = getProductName($product_id);
+					else
+					$product_name = '';
+
+					$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+				}
+				elseif($module == 'Quotes' && $name == 'Potential Name')
+				{
+					$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
+					if('' != $potential_id) {
+						$potential_name = getPotentialName($potential_id);
+						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+					}
+				}
+				elseif($owner_id == 0 && $name == 'Assigned To')
+				{
+					$value = getGroupName($entity_id, $module);
 				}
 				else
 				{
-					$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-				}
-				if($fieldname=='filename')
-				{
-					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+					list($uitype, $colname) = get_uitype_colname($tabid, $fieldname);
+					$list_result_count = $i-1;
+
+					$value = getValue($uitype, $colname,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
 				}
 			}
+			//Added condition to hide the close symbol in Related Lists
+			//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
+			if($name == $app_strings['Close'] && $relatedlist != '')
+			{
+				$list_header .= '';
+			}
+			else
+			{
+				$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+			}
+			if($fieldname=='filename')
+			{
+				$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+			}
+		}
 
 		if($returnset=='')
-			$returnset = '&return_module='.$module.'&return_action=index';
+		$returnset = '&return_module='.$module.'&return_action=index';
 
 		if($module == 'Activities')
 		{
 			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 			if($actvity_type == 'Task')
-				$returnset .= '&activity_mode=Task';
+			$returnset .= '&activity_mode=Task';
 			else
-				$returnset .= '&activity_mode=Events';
+			$returnset .= '&activity_mode=Events';
 		}
 		$list_header .= '<td style="padding:0px 3px 0px 3px;">';
 		$mod_dir=getModuleDirName($module);
 		if(isPermitted($module,1,$entity_id) == 'yes')
 		{
-			
-			
+
+
 			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
 		}
 		if(isPermitted($module,2,$entity_id) == 'yes')
@@ -4130,24 +4133,25 @@ function getDefOrgFieldList($fld_module)
 
 function getQuickCreate($tabid,$actionid)
 {
-        $QuickCreateForm= 'true';
+	$QuickCreateForm= 'true';
 
-        $profile_id = $_SESSION['authenticated_user_profileid'];
-        $tab_per_Data = getAllTabsPermission($profile_id);
+	$profile_id = $_SESSION['authenticated_user_profileid'];
+	$tab_per_Data = getAllTabsPermission($profile_id);
 
-        $permissionData = $_SESSION['action_permission_set'];
+	$permissionData = $_SESSION['action_permission_set'];
 
-        if($tab_per_Data[$tabid] !=0)
-        {
-                $QuickCreateForm= 'false';
-        }
-        if($permissionData[$tabid][1] !=0)
-        {
-                $QuickCreateForm= 'false';
-        }
+	if(isset($tab_per_Data[$tabid]) && $tab_per_Data[$tabid] !=0)
+	{
+		$QuickCreateForm= 'false';
+	}
+	if(isset($permissionData[$tabid][1]) && $permissionData[$tabid][1] !=0)
+	{
+		$QuickCreateForm= 'false';
+	}
+
 	return $QuickCreateForm;
-
 }
+
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
 	global $vtlog;
@@ -4220,33 +4224,37 @@ function getDisplayDate($cur_date_val)
 {
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
-	
+
 	if($dat_fmt == '')
 	{
 		$dat_fmt = 'dd-mm-yyyy';
 	}
 
 	$date_value = explode(' ',$cur_date_val);
-	list($y,$m,$d) = split('-',$date_value[0]);
-
-	if($dat_fmt == 'dd-mm-yyyy')
-	{
-		$display_date = $d.'-'.$m.'-'.$y;
-	}
-	elseif($dat_fmt == 'mm-dd-yyyy')
-	{
-		$display_date = $m.'-'.$d.'-'.$y;
-	}
-	elseif($dat_fmt == 'yyyy-mm-dd')
-	{
-		$display_date = $y.'-'.$m.'-'.$d;
-	}
-
-	if(isset($date_value[1]) && $date_value[1] != '')
-	{
-		$display_date = $display_date.' '.$date_value[1];
-	}
+	$display_date = '--';
 	
+	if(isset($date_value[0]) && $date_value[0] != 0)
+	{
+		list($y,$m,$d) = split('-',$date_value[0]);
+
+		if($dat_fmt == 'dd-mm-yyyy')
+		{
+			$display_date = $d.'-'.$m.'-'.$y;
+		}
+		elseif($dat_fmt == 'mm-dd-yyyy')
+		{
+			$display_date = $m.'-'.$d.'-'.$y;
+		}
+		elseif($dat_fmt == 'yyyy-mm-dd')
+		{
+			$display_date = $y.'-'.$m.'-'.$d;
+		}
+
+		if(isset($date_value[1]) && $date_value[1] != '')
+		{
+			$display_date = $display_date.' '.$date_value[1];
+		}
+	}
 	return $display_date;
 }
 
