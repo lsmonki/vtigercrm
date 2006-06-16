@@ -16,7 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 global $adb,$app_strings;
 
-$sql="select vtiger_currency_symbol from vtiger_currency_info";
+$sql="select currency_symbol from vtiger_currency_info";
 $result = $adb->query($sql);
 $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
