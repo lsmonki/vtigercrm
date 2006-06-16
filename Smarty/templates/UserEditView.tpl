@@ -31,7 +31,7 @@ function openPopup(){ldelim}
 <script language="javascript">
 function check_duplicate()
 {ldelim}
-	var user_name = $('user_name').value;
+	var user_name = window.document.EditView.user_name.value;
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},

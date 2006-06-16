@@ -939,6 +939,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$block_label[$blockid] = $adb->query_result($result,$i,"blocklabel");
 	}
 	$blockid_list .= ')';
+	if($mode == 'edit')	
+	{
+		$display_type_check = 'vtiger_field.displaytype = 1';
+	}else
+	{
+		$display_type_check = 'vtiger_field.displaytype in (1,4)';
+	}
 	//retreive the vtiger_profileList from database
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($disp_view == "detail_view")
@@ -961,7 +968,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0)
 			{
-				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list ." and vtiger_field.displaytype=1 and info_type = '".$info_type."' order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list ." and ".$display_type_check." and info_type = '".$info_type."' order by block,sequence";
 			}
 			else
 			{
@@ -973,7 +980,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 			{
-				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and vtiger_field.displaytype=1 order by block,sequence";
+				$sql = "select vtiger_field.* from vtiger_field where vtiger_field.tabid=".$tabid." and vtiger_field.block in ".$blockid_list." and ".$display_type_check." order by block,sequence";
 			}
 			else
 			{
