@@ -77,7 +77,7 @@ foreach($pieces as $val)
 <p>This is a product of pure teamwork, passion, and fanaticism!</p>
 <p>We are not perfect and neither do we seek perfection; but we do seek excellence. Yes, there will be issues in the product, but we will fix them too. Your help will be invaluable for the same.</p>
 <p><b>vtiger is 100% pure Open Source.</b> <em>You do not have to pay anything to use the product. If you do subscribe to the support package though, you will be able to get time-bound answers to all your queries</em>. We do provide telephone-support for paid customers only.<b><a href="http://vtiger.com/index.php?option=com_content&task=view&id=19&Itemid=37">Click here</a></b> for subscribing to the Support.</p>
-<p>vtiger believes in word of mouth alone, in fact, vtiger is nearing 0.30 million downloads without any advertisement whatsoever.</p>
+<p>vtiger believes in word of mouth alone, in fact, vtiger has been downloaded more than 0.30 million times without any advertisement whatsoever.</p>
 <p align="center">We do believe that <b>YOU</b> can and will make a difference.</p>
 <p>If you feel we have lived up to your expectations,  do consider spreading the word about vtiger by whichever means convenient to you.</p>
 <p>Please find mentioned below some information about us that you could utilize:<p>
