@@ -525,11 +525,17 @@ function getHistory($parentmodule,$query,$id)
 	}
 }
 
+/**	Function to display the Products which are related to the PriceBook
+ *	@param string $query - query to get the list of products which are related to the current PriceBook
+ *	@param object $focus - PriceBook object which contains all the information of the current PriceBook
+ *	@param string $returnset - return_module, return_action and return_id which are sequenced with & to pass to the URL which is optional
+ *	return array $return_data which will be formed like array('header'=>$header,'entries'=>$entries_list) where as $header contains all the header columns and $entries_list will contain all the Product entries
+ */
 function getPriceBookRelatedProducts($query,$focus,$returnset='')
 {
 	global $log;
 	$log->debug("Entering getPriceBookRelatedProducts(".$query.",".$focus.",".$returnset.") method ...");
-	require_once('Smarty_setup.php');
+
 	global $adb;
 	global $app_strings;
 	global $mod_strings;
@@ -539,84 +545,47 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $list_max_entries_per_page;
 	global $urlPrefix;
 
-
 	global $theme;
 	$pricebook_id = $_REQUEST['record'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	require_once($theme_path.'layout_utils.php');
-	$list_result = 	$adb->query($query);
+
+	//Retreive the list from Database
+	$list_result = $adb->query($query);
 	$num_rows = $adb->num_rows($list_result);
-	$smarty = new vtigerCRM_Smarty;
-	$smarty->assign("MOD", $mod_strings);
-	$smarty->assign("APP", $app_strings);
-	$smarty->assign("IMAGE_PATH",$image_path);
-	$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="selectproduct" method="POST">
-	<tr>
-	<input name="action" type="hidden" value="AddProductsToPriceBook">
-	<input name="module" type="hidden" value="Products">
-	<input name="return_module" type="hidden" value="PriceBooks">
-	<input name="return_action" type="hidden" value="DetailView">
-	<input name="pricebook_id" type="hidden" value="'.$_REQUEST["record"].'">';
 
-        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'PriceBooks\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'"></td>';
-		$other_text .='</tr></table>';
+	$header=array();
+	$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
+	$header[]=$mod_strings['LBL_PRODUCT_CODE'];
+	$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
+	$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
+	$header[]=$mod_strings['LBL_ACTION'];
 
-//Retreive the list from Database
-$list_result = $adb->query($query);
-$num_rows = $adb->num_rows($list_result);
-
-//Retreive the List View Table Header
-
-// Armando Lüscher 15.07.2005 -> §scrollableTables
-// Desc: class="blackLine" deleted because of vertical line in title <tr>
-
-//		$list .= $app_strings['LBL_ICON'].'Icon</td>';
-		$class_black="";
-		if($num_rows<15)
-		{
-			$class_black='class="blackLine"';	
-		}
-
-$header=array();
-$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
-$header[]=$mod_strings['LBL_PRODUCT_CODE'];
-$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
-$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
-$header[]=$mod_strings['LBL_ACTION'];
-
-$smarty->assign("LISTHEADER", $list_header);
-
-// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
-// Desc: 'X'
-//			 Insert new vtiger_table with 1 cell where all entries are in a new vtiger_table.
-//			 This cell will be scrollable when too many entries exist
-		$list_body .= ($num_rows>15) ? '<tr><td colspan="12"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
-// end: Armando Lüscher 14.07.2005 -> §scrollableTablEs
-
-for($i=0; $i<$num_rows; $i++)
-{
-	$entity_id = $adb->query_result($list_result,$i,"crmid");
+	for($i=0; $i<$num_rows; $i++)
+	{
+		$entity_id = $adb->query_result($list_result,$i,"crmid");
 
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$listprice = $adb->query_result($list_result,$i,"listprice");
 		$field_name=$entity_id."_listprice";
+		
 		$entries = Array();
 		$entries[] = $adb->query_result($list_result,$i,"productname");
 		$entries[] = $adb->query_result($list_result,$i,"productcode");
 		$entries[] = $unit_price;
 		$entries[] = $listprice;
-		$entries[] = '<a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a>';
-	$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+		$entries[] = '<a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&return_module=PriceBooks&return_action=CallRelatedList">del</a>';
+
 		$entries_list[] = $entries;
-}
-		if($num_rows>0)
-		{
-			$return_data = array('header'=>$header,'entries'=>$entries_list);
-			$log->debug("Exiting getPriceBookRelatedProducts method ...");
-			return $return_data; 
-		}
+	}
+	if($num_rows>0)
+	{
+		$return_data = array('header'=>$header,'entries'=>$entries_list);
+
+		$log->debug("Exiting getPriceBookRelatedProducts method ...");
+		return $return_data; 
+	}
 }
 
 ?>
