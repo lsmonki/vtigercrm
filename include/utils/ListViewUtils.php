@@ -1282,10 +1282,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					if($colname == "lastname" && $module == 'Contacts')
 						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+					elseif($colname == "lastname" && $module == 'Leads')
+						$firstname=$adb->query_result($list_result,$list_result_count,'firstname');
 					$temp_val =$temp_val.' '.$firstname;
 
 					$focus->record_id = $_REQUEST['recordid'];
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
+					if($module == 'Leads')
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_leaddata_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
+					else
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "formname_specific")
 				{
