@@ -90,13 +90,19 @@ class User {
 	var $table_name = "vtiger_users";
 
 	// This is the list of fields that are in the lists.
-	var $list_link_field= '';
+	var $list_link_field= 'last_name';
 
 	var $list_mode;
 	var $popup_type;
 
-	var $search_fields = Array();
-	var $search_fields_name = Array();
+	var $search_fields = Array(
+		'Name'=>Array('vtiger_users'=>'last_name'),
+		'Email'=>Array('vtiger_users'=>'email1')
+	);
+	var $search_fields_name = Array(
+		'Name'=>'last_name',
+		'Email'=>'email1'
+	);
 
 	var $module_name = "Users";
 
@@ -113,7 +119,7 @@ class User {
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('reports_to_name');		
 
-	var $sortby_fields = Array('status','email1','phone_work','is_admin','user_name');	  
+	var $sortby_fields = Array('status','email1','phone_work','is_admin','user_name','last_name');	  
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(

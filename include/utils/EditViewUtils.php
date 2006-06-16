@@ -1124,6 +1124,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 		else
 			$fieldvalue[] = '';
+	}elseif($uitype == 101)
+	{
+		$editview_label[]=$mod_strings[$fieldlabel];
+        $fieldvalue[] = getUserName($value);
+        $fieldvalue[] = $value;
 	}
 	else
 	{

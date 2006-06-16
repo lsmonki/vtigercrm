@@ -174,6 +174,14 @@ switch($currentModule)
 		}
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','bookname','true','basic',$popuptype,"","","");
 		break;
+	case 'Users':
+                require_once("modules/$currentModule/User.php");
+                $focus = new User();
+                $smarty->assign("SINGLE_MOD",'Users');
+                if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+                    $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+                $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","","");
+                break;	
 
 
 }

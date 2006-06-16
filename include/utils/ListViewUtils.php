@@ -828,7 +828,14 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		{
 
 			//Getting the entityid
-			$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+			if($module != 'Users')	
+			{
+				$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+			}else
+			{
+				$entity_id = $adb->query_result($list_result,$i-1,"id");
+			}	
+				
 			$list_header=Array();
 
 			foreach($focus->search_fields as $name=>$tableinfo)
@@ -949,7 +956,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$uitype = $key;
 		$colname = $value;
         }
-
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Activities' && $colname == "status")
 	{
@@ -997,7 +1003,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
 	}
-	elseif($uitype == 13)
+	elseif($uitype == 13 || $uitype == 104)
         {
 		if(useInternalMailer() == 1)
                 	$value = '<a href="javascript:InternalMailer('.$entity_id.',\'record_id\')">'.$temp_val.'</a>';
@@ -1354,7 +1360,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					{
 						$name = $adb->query_result($list_result,$list_result_count,'accountname');
 						$accid =$adb->query_result($list_result,$list_result_count,'accountid');
-						//$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
 						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
 						if($emailaddress == '')
 							$emailaddress=$adb->query_result($list_result,$list_result_count,"email2");
@@ -1380,11 +1385,19 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
 
-						//$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
 
+					}else
+					{
+						$firstname=$adb->query_result($list_result,$list_result_count,"first_name");
+						$lastname=$adb->query_result($list_result,$list_result_count,"last_name");
+						$name=$lastname.' '.$firstname;
+						$emailaddress=$adb->query_result($list_result,$list_result_count,"email1");
 
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'return set_return_emails('.$entity_id.',-1,"'.$name.'","'.$emailaddress.'"); \'>'.$name.'</a>';
+						
 					}
+						
 				}	
 				elseif($popuptype == "specific_vendor_address")
 				{
