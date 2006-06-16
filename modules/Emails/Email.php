@@ -304,7 +304,7 @@ class Email extends CRMEntity {
 function get_to_emailids($module)
 {
 	global $adb;
-	$query = 'select columnname,fieldid from vtiger_field where vtiger_fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
+	$query = 'select columnname,fieldid from vtiger_field where fieldid in('.ereg_replace(':',',',$_REQUEST["field_lists"]).')';
     $result = $adb->query($query);
 	$columns = Array();
 	$idlists = '';
