@@ -305,11 +305,11 @@ $mod_strings = Array(
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
 
-'LBL_FTP_SERVER_NAME'=>'ftp Server Name',
+'LBL_FTP_SERVER_NAME'=>'FTP Server Name',
 
-'LBL_FTP_USER_NAME'=>'ftp User Name',
+'LBL_FTP_USER_NAME'=>'FTP User Name',
 
-'LBL_FTP_PASSWORD'=>'ftp Password',
+'LBL_FTP_PASSWORD'=>'FTP Password',
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 
