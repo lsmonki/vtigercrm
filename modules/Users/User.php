@@ -90,7 +90,6 @@ class User {
 	var $table_name = "vtiger_users";
 
 	// This is the list of fields that are in the lists.
-	var $list_fields_name = Array();
 	var $list_link_field= '';
 
 	var $list_mode;
@@ -108,7 +107,6 @@ class User {
 	var $tagcloud;
 	var $imagename;
 	var $defhomeview;
-	//var $sortby_fields = Array('user_name','email1','last_name','is_admin','status');	
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
@@ -117,8 +115,6 @@ class User {
 
 	var $sortby_fields = Array('status','email1','phone_work','is_admin','user_name');	  
 
-	var $default_order_by = 'lastname';
-	var $default_sort_order = 'ASC';
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 		'First Name'=>Array('vtiger_users'=>'first_name'),
@@ -795,6 +791,13 @@ class User {
 		$log->debug("Exiting from uploadAndSaveFile($id,$module,$file_details) method.");
 
 		return;
+	}
+	function save($module_name) 
+	{
+		global $log;
+	        $log->debug("module name is ".$module_name);
+		//GS Save entity being called with the modulename as parameter
+		$this->saveentity($module_name);
 	}
 
 }
