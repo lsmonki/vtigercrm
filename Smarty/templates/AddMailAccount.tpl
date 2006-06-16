@@ -10,11 +10,6 @@
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/slider.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/prototype_fade.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/effectspack.js"></script>
 <style type="text/css">@import url(themes/blue/style.css);</style>
 
 
