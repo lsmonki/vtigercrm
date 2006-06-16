@@ -84,6 +84,7 @@ switch($currentModule)
 				,'industry'=>'industry_dom');
 		$comboFieldArray = getComboArray($comboFieldNames);
 		$smarty->assign("SINGLE_MOD",'Lead');
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 		else
