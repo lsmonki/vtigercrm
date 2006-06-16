@@ -2810,6 +2810,8 @@ function getRelatedToEntity($module,$list_result,$rset)
 	if(isset($seid) && $seid != '')
 	{
 		$parent_module = $parent_module = getSalesEntityType($seid);
+		$parent_name = '';
+
 		if($parent_module == 'Accounts')
 		{
 			$parent_query = "SELECT accountname FROM account WHERE accountid=".$seid;
@@ -2867,18 +2869,17 @@ function getRelatedToEntity($module,$list_result,$rset)
 
 function getRelatedTo($module,$list_result,$rset)
 {
-
-        global $adb;
+	global $adb;
 	if($module == "Notes")
-        {
-                $notesid = $adb->query_result($list_result,$rset,"notesid");
-                $action = "DetailView";
-                $evt_query="select senotesrel.crmid,crmentity.setype from senotesrel, crmentity where senotesrel.notesid ='".$notesid."' and senotesrel.crmid = crmentity.crmid";
+	{
+		$notesid = $adb->query_result($list_result,$rset,"notesid");
+		$action = "DetailView";
+		$evt_query="select senotesrel.crmid,crmentity.setype from senotesrel, crmentity where senotesrel.notesid ='".$notesid."' and senotesrel.crmid = crmentity.crmid";
 	}else if($module == "Products")
 	{
 		$productid = $adb->query_result($list_result,$rset,"productid");
-                $action = "DetailView";
-                $evt_query="select seproductsrel.crmid,crmentity.setype from seproductsrel, crmentity where seproductsrel.productid ='".$productid."' and seproductsrel.crmid = crmentity.crmid";
+		$action = "DetailView";
+		$evt_query="select seproductsrel.crmid,crmentity.setype from seproductsrel, crmentity where seproductsrel.productid ='".$productid."' and seproductsrel.crmid = crmentity.crmid";
 
 	}else
 	{
@@ -2890,132 +2891,139 @@ function getRelatedTo($module,$list_result,$rset)
 		{
 			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
 			if($activity_id != '')
-				$evt_query = "select * from crmentity where crmid=".$activity_id;
+			$evt_query = "select * from crmentity where crmid=".$activity_id;
 		}
 	}
-        $evt_result = $adb->query($evt_query);
-        $parent_module = $adb->query_result($evt_result,0,'setype');
-        $parent_id = $adb->query_result($evt_result,0,'crmid');
+
+	$evt_result = $adb->query($evt_query);
+	$parent_module = $adb->query_result($evt_result,0,'setype');
+	$parent_name = '';
+	$parent_id = $adb->query_result($evt_result,0,'crmid');
+
 	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
-        {
-                global $theme;
-                $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
-        }
-	
+	{
+		global $theme;
+		$module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
+	}
+	else
+	{
+		$module_icon = '';
+	}
+
 	$action = "DetailView";
-        if($parent_module == 'Accounts')
-        {
-                $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"accountname");
-        }
-        if($parent_module == 'Leads')
-        {
-                $parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
-        }
-        if($parent_module == 'Potentials')
-        {
-                $parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"potentialname");
-        }
-        if($parent_module == 'Products')
-        {
-                $parent_query = "SELECT productname FROM products WHERE productid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"productname");
-        }
+	if($parent_module == 'Accounts')
+	{
+		$parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"accountname");
+	}
+	if($parent_module == 'Leads')
+	{
+		$parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+	}
+	if($parent_module == 'Potentials')
+	{
+		$parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"potentialname");
+	}
+	if($parent_module == 'Products')
+	{
+		$parent_query = "SELECT productname FROM products WHERE productid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"productname");
+	}
 	if($parent_module == 'Quotes')
-        {
-                $parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"subject");
-        }
+	{
+		$parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"subject");
+	}
 	if($parent_module == 'Orders')
-        {
-                $parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"subject");
-        }
+	{
+		$parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"subject");
+	}
 	if($parent_module == 'Invoice')
-        {
-                $parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"subject");
-        }
-        if($parent_module == 'SalesOrder')
-        {
-                $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"subject");
+	{
+		$parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"subject");
+	}
+	if($parent_module == 'SalesOrder')
+	{
+		$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"subject");
 		$action = "SalesOrderDetailView";
 		$parent_module = "Orders";
-        }
+	}
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
-        {
-                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
-        }
+	{
+		$parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
+		$parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+	}
 
-        $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
-        return $parent_value;
-
-
+	$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
+	
+	return $parent_value;
 }
+
 
 function get_field_list($focus, $oCv, $tabid)
 {
-        static $names = null, $last_tabid = null;
-        if(!is_null($names) && $tabid == $last_tabid) return $names;
+	static $names = null, $last_tabid = null;
+	if(!is_null($names) && $tabid == $last_tabid) return $names;
 
-        $names = null;
-        $last_tabid = $tabid;
+	$names = null;
+	$last_tabid = $tabid;
 
-        foreach($focus->list_fields as $name=>$tableinfo)
-        {
-                $fieldname = $focus->list_fields_name[$name];
+	foreach($focus->list_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->list_fields_name[$name];
 
-                //added for customview 27/5
-                if($oCv && isset($oCv->list_fields_name)) {
-                        $fieldname = $oCv->list_fields_name[$name];
-                }
-                if($fieldname == '') {
-                        foreach($tableinfo as $tablename=>$colname);
-                        $fieldname = $colname;
-                        $is_column = true;
-                } else {
-                        $is_column = false;
-                }
-                $fieldnames[] = $fieldname;
-                $namelist[$fieldname] = array($name, $is_column);
-        }
+		//added for customview 27/5
+		if($oCv && isset($oCv->list_fields_name)) {
+			$fieldname = $oCv->list_fields_name[$name];
+		}
+		if($fieldname == '') {
+			foreach($tableinfo as $tablename=>$colname);
+			$fieldname = $colname;
+			$is_column = true;
+		} else {
+			$is_column = false;
+		}
+		$fieldnames[] = $fieldname;
+		$namelist[$fieldname] = array($name, $is_column);
+	}
 
-        $fieldnamelist = implode($fieldnames, '\', \'');
+	$fieldnamelist = implode($fieldnames, '\', \'');
 
-        global $profile_id, $adb;
-        if($profile_id == '')
-        {
-                global $current_user;
-                $profile_id = fetchUserProfileId($current_user->id);
-        }
+	global $profile_id, $adb;
+	if($profile_id == '')
+	{
+		global $current_user;
+		$profile_id = fetchUserProfileId($current_user->id);
+	}
 
-        $query = "select distinct field.fieldname from field inner join profile2field on field.fieldid=profile2field.fieldid inner join def_org_field on field.fieldid=def_org_field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname in ('".$fieldnamelist."') and profile2field.visible = 0 and def_org_field.visible = 0";
-        $result = $adb->query($query);
-        $noofrows = $adb->num_rows($result);
-        for($j=0; $j<$noofrows; $j++) {
-                $visible_fields[] = $adb->query_result($result, $j, 'fieldname');
-        }
+	$query = "select distinct field.fieldname from field inner join profile2field on field.fieldid=profile2field.fieldid inner join def_org_field on field.fieldid=def_org_field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname in ('".$fieldnamelist."') and profile2field.visible = 0 and def_org_field.visible = 0";
+	$result = $adb->query($query);
+	$noofrows = $adb->num_rows($result);
+	for($j=0; $j<$noofrows; $j++) {
+		$visible_fields[] = $adb->query_result($result, $j, 'fieldname');
+	}
 
-        foreach($fieldnames as $fieldname) {
-                if(is_null($visible_fields) || in_array($fieldname, $visible_fields)) {
-                        $names[$fieldname] = $namelist[$fieldname];
-                }
-        }
+	foreach($fieldnames as $fieldname) {
+		if(is_null($visible_fields) || in_array($fieldname, $visible_fields)) {
+			$names[$fieldname] = $namelist[$fieldname];
+		}
+	}
 
-        return $names;
+	return $names;
 }
 
 //parameter added for customview $oCv 27/5
@@ -4212,40 +4220,34 @@ function getDisplayDate($cur_date_val)
 {
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
+	
 	if($dat_fmt == '')
 	{
 		$dat_fmt = 'dd-mm-yyyy';
 	}
 
-		//echo $dat_fmt;
-		//echo '<BR>'.$cur_date_val.'<BR>';
-		$date_value = explode(' ',$cur_date_val);
-		list($y,$m,$d) = split('-',$date_value[0]);
-		//echo $y.'----'.$m.'------'.$d;
-		if($dat_fmt == 'dd-mm-yyyy')
-		{
-			//echo '<br> inside 1';
-			$display_date = $d.'-'.$m.'-'.$y;
-		}
-		elseif($dat_fmt == 'mm-dd-yyyy')
-		{
+	$date_value = explode(' ',$cur_date_val);
+	list($y,$m,$d) = split('-',$date_value[0]);
 
-			//echo '<br> inside 2';
-			$display_date = $m.'-'.$d.'-'.$y;
-		}
-		elseif($dat_fmt == 'yyyy-mm-dd')
-		{
+	if($dat_fmt == 'dd-mm-yyyy')
+	{
+		$display_date = $d.'-'.$m.'-'.$y;
+	}
+	elseif($dat_fmt == 'mm-dd-yyyy')
+	{
+		$display_date = $m.'-'.$d.'-'.$y;
+	}
+	elseif($dat_fmt == 'yyyy-mm-dd')
+	{
+		$display_date = $y.'-'.$m.'-'.$d;
+	}
 
-			//echo '<br> inside 3';
-			$display_date = $y.'-'.$m.'-'.$d;
-		}
-
-		if($date_value[1] != '')
-		{
-			$display_date = $display_date.' '.$date_value[1];
-		}
+	if(isset($date_value[1]) && $date_value[1] != '')
+	{
+		$display_date = $display_date.' '.$date_value[1];
+	}
+	
 	return $display_date;
- 			
 }
 
 
