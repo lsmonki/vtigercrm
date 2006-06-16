@@ -151,16 +151,16 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				inner join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
 				inner join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
 				inner join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
-				left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
-				left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
+				left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
+				left join vtiger_account as accountContacts on accountContacts.accountid = contactdetails.accountid 
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
-				left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid
+				left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid=vtiger_account.accountid
 				left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 				left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 				left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
-				left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
-				left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid 
+				left join vtiger_account as accountAccounts on accountAccounts.accountid = vtiger_account.parentid
+				left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
 				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
 				
 
@@ -197,7 +197,7 @@ while($columnValues = $adb->fetch_array($result))
 $csvdata = implode($mergevalue,"###");
 }else
 {
-	die("No vtiger_fields to do Merge");
+	die("No fields to do Merge");
 }	
 
 $handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
