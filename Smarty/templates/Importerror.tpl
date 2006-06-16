@@ -9,6 +9,9 @@
   *
  ********************************************************************************/
 -->*}
+
+{include file='Buttons_List1.tpl'}	
+
 <table  cellpadding="0" cellspacing="0" width="100%">
    <tr>
 	<td width="75%" valign=top>

@@ -14,17 +14,7 @@
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 
 <!-- header - level 2 tabs -->
-<br>
-<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
-   <tbody>
-   <tr>
-	<td style="height: 2px;"></td>
-   </tr>
-   <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
-   </tr>
-   </tbody>
-</table>
+{include file='Buttons_List1.tpl'}	
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
    <tbody>
@@ -44,6 +34,7 @@
 				<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
 				<input type="hidden" name="return_id" value="{$RETURN_ID}">
 				<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
+				<input type="hidden" name="parenttab" value="{$CATEGORY}">
 
 				<!-- IMPORT LEADS STARTS HERE  -->
 				<br />
