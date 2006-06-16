@@ -108,7 +108,7 @@ function getParentLink($parent_id)
 	}
 	if($parent_module == 'Accounts')
 	{
-		$sql = "select vtiger_accountname from vtiger_account where vtiger_accountid=".$parent_id;
+		$sql = "select accountname from vtiger_account where accountid=".$parent_id;
 		$parentname = $adb->query_result($adb->query($sql),0,'accountname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}

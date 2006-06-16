@@ -86,7 +86,7 @@ for ($x=0; $x<$y; $x++)
 
 	if($columnname == "parent_id")
 	{
-		$column_name = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then concat(contactdetailsRelHelpDesk.firstname,' ',contactdetailsRelHelpDesk.lastname) End";
+		$column_name = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then concat(contactdetailsRelHelpDesk.firstname,' ',contactdetailsRelHelpDesk.lastname) End";
 	}
 	if($columnname == "product_id")
 	{
@@ -165,27 +165,27 @@ if(count($querycolumns) > 0)
 	$query ="select ".$selectcolumns." from vtiger_troubletickets
 			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
 			inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
-			left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
-			left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid
-			left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid
-			left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id
+			left join vtiger_crmentity as crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
+			left join vtiger_account as accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid
+			left join vtiger_contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
+			left join vtiger_products as productsRel on productsRel.productid = vtiger_troubletickets.product_id
 			left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id
 			left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id               
-			left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid = vtiger_account.accountid 
+			left join vtiger_crmentity as _crmentityAccounts on crmentityAccounts.crmid = vtiger_account.accountid 
 			left join vtiger_accountbillads on vtiger_accountbillads.accountaddressid = vtiger_account.accountid
 			left join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid
 			left join vtiger_accountscf on vtiger_accountbillads.accountaddressid = vtiger_accountscf.accountid 
-			left join vtiger_account as vtiger_accountAccount on vtiger_accountAccount.accountid = vtiger_troubletickets.parent_id
-			left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid
+			left join vtiger_account as accountAccount on accountAccount.accountid = vtiger_troubletickets.parent_id
+			left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid
 			left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id               
-			left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid 
+			left join vtiger_crmentity as crmentityContacts on crmentityContacts.crmid = vtiger_contactdetails.contactid 
 			left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
 			left join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
 			left join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
-			left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
-			left join vtiger_account as vtiger_accountContacts on vtiger_accountContacts.accountid = vtiger_contactdetails.accountid 
-			left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentityContacts.smownerid
-			where vtiger_crmentity.deleted=0 and ((crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null)||(crmentityAccounts.deleted=0 || vtiger_crmentityAccounts.deleted is null)) 
+			left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
+			left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
+			left join vtiger_users as usersContacts on usersContacts.id = crmentityContacts.smownerid
+			where vtiger_crmentity.deleted=0 and ((crmentityContacts.deleted=0 || crmentityContacts.deleted is null)||(crmentityAccounts.deleted=0 || crmentityAccounts.deleted is null)) 
 			and vtiger_troubletickets.ticketid in (".$mass_merge.")";
 
 	$result = $adb->query($query);
@@ -221,7 +221,7 @@ if(count($querycolumns) > 0)
 }
 else
 {
-	die("No vtiger_fields to do Merge");
+	die("No fields to do Merge");
 }	
 
 $handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");

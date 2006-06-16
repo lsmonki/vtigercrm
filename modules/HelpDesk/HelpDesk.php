@@ -124,7 +124,7 @@ class HelpDesk extends CRMEntity {
 
 		$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
-		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or vtiger_activitytype='Call' or vtiger_activitytype='Meeting')";
+		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		$log->debug("Exiting get_activities method ...");
 		
 		return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
@@ -169,7 +169,7 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
 		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
-		vtiger_seattachmentsrel.attachmentsid vtiger_attachmentsid, vtiger_notes.notesid crmid,
+		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
 			crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
@@ -184,7 +184,7 @@ class HelpDesk extends CRMEntity {
 
 		$query .= "select vtiger_attachments.description title ,'Attachments'  ActivityType,
 		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
-		vtiger_attachments.attachmentsid vtiger_attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+		vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
@@ -344,7 +344,7 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering getColumnNames_Hd() method ...");
-		$sql1 = "select vtiger_fieldlabel from vtiger_field where vtiger_tabid=13 and block <> 6 ";
+		$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 6 ";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)

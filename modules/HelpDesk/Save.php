@@ -62,7 +62,7 @@ if($focus->column_fields['parent_id'] != '')
 	}
 	if($parent_module == 'Accounts')
 	{
-		$result = $adb->query("select * from vtiger_account where vtiger_accountid=".$focus->column_fields['parent_id']);
+		$result = $adb->query("select * from vtiger_account where accountid=".$focus->column_fields['parent_id']);
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$parentname = $adb->query_result($result,0,'accountname');
 	}
