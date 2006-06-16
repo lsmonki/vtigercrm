@@ -341,10 +341,8 @@ else
 }
 
 $smarty->assign("MODULE", $_REQUEST['module']);
-
-$category = getParenttab();
-$smarty->assign('CATEGORY' , $category);
-
+$smarty->assign('CATEGORY' , $_REQUEST['parenttab']);
+@$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];
 $smarty->assign("JAVASCRIPT2", get_readonly_js() );
 
 $smarty->display('ImportStep2.tpl');
@@ -355,7 +353,7 @@ function validate_import_map()
 {
 	var tagName;
 	var count = 0;
-	var vtiger_field_count = "<?php echo $field_count; ?>";
+	var field_count = "<?php echo $field_count; ?>";
 	var required_fields = new Array();
 	var required_fields_name = new Array();
 	var seq_string = '';

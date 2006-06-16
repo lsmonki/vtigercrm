@@ -40,8 +40,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMP", $import_mod_strings);
 
-$category = getParenttab();
-$smarty->assign("CATEGORY", $category);
+$smarty->assign("CATEGORY", $_REQUEST['parenttab']);
 
 $import_object_array = Array(
 				"Leads"=>"ImportLead",
