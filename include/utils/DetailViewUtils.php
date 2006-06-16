@@ -125,7 +125,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld["secid"] = $account_id;
 		$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
 	}
-	elseif($uitype == 52 || $uitype == 77)
+	elseif($uitype == 52 || $uitype == 77  || $uitype == 101)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$user_id = $col_fields[$fieldname];
