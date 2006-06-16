@@ -110,7 +110,33 @@ function alphabetic(module,url,dataid)
 </div>
 {/if}
 <!-- Activity createlink layer end  -->
-<!-- SIMPLE SEARCH -->
+
+                                <div id="searchingUI" style="display:none;">
+                                        <table border=0 cellspacing=0 cellpadding=0 width=100%>
+                                        <tr>
+                                                <td align=center>
+                                                <img src="images/searching.gif" alt="Searching... please wait"  title="Searching... please wait">
+                                                </td>
+                                        </tr>
+                                        </table>
+
+                                </div>
+                        </td>
+                </tr>
+                </table>
+        </td>
+</tr>
+</table>
+</form>
+</div>
+
+{*<!-- Contents -->*}
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+     <tr>
+        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+
+	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
+	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
 <form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
@@ -189,31 +215,7 @@ function alphabetic(module,url,dataid)
 	</table>
 </div>		
 {*<!-- Searching UI -->*}
-                                <div id="searchingUI" style="display:none;">
-                                        <table border=0 cellspacing=0 cellpadding=0 width=100%>
-                                        <tr>
-                                                <td align=center>
-                                                <img src="images/searching.gif" alt="Searching... please wait"  title="Searching... please wait">
-                                                </td>
-                                        </tr>
-                                        </table>
-
-                                </div>
-                        </td>
-                </tr>
-                </table>
-        </td>
-</tr>
-</table>
-</form>
-</div>
-
-{*<!-- Contents -->*}
-<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-     <tr>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
-
-	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
+	 <br>
 	   <!-- PUBLIC CONTENTS STARTS-->
 	   <div id="ListViewContents" class="small" style="width:100%;position:relative;">
 	<input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
