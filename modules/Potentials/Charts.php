@@ -345,7 +345,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -680,7 +680,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -1001,7 +1001,7 @@ class jpgraph {
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');
@@ -1229,7 +1229,7 @@ $title->setText($titlestr);
 		}
 		else {
 			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
-			$imgMap = fread($imgMap_fp, vtiger_filesize($cache_file_name.'.map'));
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 			fclose($imgMap_fp);
 		}
 		$fileModTime = filemtime($cache_file_name.'.map');

@@ -37,9 +37,9 @@ class Potential extends CRMEntity {
 	var $db;
 
 	var $module_name="Potentials";
-	var $table_name = "potential";
-	var $rel_product_table = "seproductsrel";
-	var $rel_opportunity_table = "contpotentialrel";
+	var $table_name = "vtiger_potential";
+	var $rel_product_table = "vtiger_seproductsrel";
+	var $rel_opportunity_table = "vtiger_contpotentialrel";
 	var $module_id = "potentialid";
 	var $object_name = "potential";
 
@@ -171,7 +171,7 @@ class Potential extends CRMEntity {
 		{
 			$query = $this->constructCustomQueryAddendum('potentialscf','Potentials') ."
 			vtiger_potential.*,
-			vtiger_account.accountname vtiger_account_name,
+			vtiger_account.accountname account_name,
 			vtiger_users.user_name assigned_user_name
 					FROM vtiger_potential
 					INNER JOIN vtiger_crmentity
@@ -216,7 +216,7 @@ class Potential extends CRMEntity {
 		if(isPermitted("Contacts",3,"") == 'yes')
 		{
 
-			$button .= '<input title="Change" accessKey="" vtiger_tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
 		}
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
@@ -275,7 +275,7 @@ class Potential extends CRMEntity {
 		}
 		if(isPermitted("Products",3,"") == 'yes')
 		{
-			$button .= '<input title="Change" accessKey="" vtiger_tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
 		}
 		$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
