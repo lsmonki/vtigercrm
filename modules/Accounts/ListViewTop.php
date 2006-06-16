@@ -21,7 +21,7 @@
  ********************************************************************************/
 function getTopAccounts()
 {
-	$log = LoggerManager::getLogger('top vtiger_accounts_list');
+	$log = LoggerManager::getLogger('top accounts_list');
 	$log->debug("Entering getTopAccounts() method ...");
 	require_once("data/Tracker.php");
 	require_once('modules/Potentials/Opportunity.php');

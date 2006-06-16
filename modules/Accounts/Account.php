@@ -38,7 +38,7 @@ class Account extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $table_name = "account";
+	var $table_name = "vtiger_account";
 	var $tab_name = Array('vtiger_crmentity','vtiger_account','vtiger_accountbillads','vtiger_accountshipads','vtiger_accountscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_account'=>'accountid','vtiger_accountbillads'=>'accountaddressid','vtiger_accountshipads'=>'accountaddressid','vtiger_accountscf'=>'accountid');
 
@@ -258,8 +258,8 @@ class Account extends CRMEntity {
 				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 			WHERE vtiger_seactivityrel.crmid = ".$id."
 			AND (activitytype='Task'
-				OR vtiger_activitytype='Call'
-				OR vtiger_activitytype='Meeting')
+				OR activitytype='Call'
+				OR activitytype='Meeting')
 			AND vtiger_crmentity.deleted = 0
 			AND ((vtiger_activity.status IS NOT NULL
 					AND vtiger_activity.status != 'Completed')
@@ -669,7 +669,7 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getColumnNames_Acnt() method ...");
-		$sql1 = "SELECT vtiger_fieldlabel FROM vtiger_field WHERE vtiger_tabid = 6";
+		$sql1 = "SELECT fieldlabel FROM vtiger_field WHERE tabid = 6";
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
 		for($i=0; $i < $numRows;$i++)

@@ -87,7 +87,7 @@ while($row = $adb->fetch_array($result))
 if(count($deleted_id) > 0)
 {
 	$deleted_id = implode(",",$deleted_id);
-	$update_query = "update vtiger_contactdetails set vtiger_accountid = 0 where contactid in (".$deleted_id.")";
+	$update_query = "update vtiger_contactdetails set accountid = 0 where contactid in (".$deleted_id.")";
 	$result = $adb->query($update_query);
 }
 //End setting vtiger_accountid=0 for the contacts which are deleted
@@ -209,7 +209,7 @@ while($columnValues = $adb->fetch_array($result))
 $csvdata = implode($mergevalue,"###");
 }else
 {
-	die("No vtiger_fields to do Merge");
+	die("No fields to do Merge");
 }
 
 $handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
