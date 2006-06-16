@@ -678,7 +678,7 @@ class CustomView extends CRMEntity{
 					{
 						if($list[1] == "status")
 						{
-							$sqllist_column = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as vtiger_activitystatus";
+							$sqllist_column = "case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as activitystatus";
 						}
 					}
 					$sqllist[] = $sqllist_column;
