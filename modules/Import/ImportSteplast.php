@@ -33,7 +33,7 @@ global $mod_strings;
 global $app_list_strings;
 global $app_strings;
 global $current_user;
-global $theme;
+
 if (! isset( $_REQUEST['module']))
 {
 	$_REQUEST['module'] = 'Home';
@@ -53,11 +53,29 @@ if (! isset( $_REQUEST['return_action']))
 	$_REQUEST['return_action'] = '';
 }
 
+global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Import Step last");
+
+//This Buttons_List1.tpl is is called to display the add, search, import and export buttons ie., second level tabs
+$smarty = new vtigerCRM_Smarty;
+
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMP", $import_mod_strings);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+
+$smarty->assign("MODULE", $_REQUEST['modulename']);
+$smarty->assign("SINGLE_MOD", $_REQUEST['modulename']);
+$smarty->assign("CATEGORY", $_SESSION['import_parenttab']);
+//@session_unregister("import_parenttab");
+
+$smarty->display("Buttons_List1.tpl");
+
 
 if ( isset($_REQUEST['message']))
 {
