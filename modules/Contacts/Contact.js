@@ -106,7 +106,7 @@ function SelectAll()
 	}
 		if(confirm("Are you sure you want to add the selected "+xx+" records ?"))
 		{
-		opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&return_module=Potentials&return_action=CallRelatedList&idlist="+idstring;
+		opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module=Contacts&idlist="+idstring;
 		self.close();
 		}
 		else
