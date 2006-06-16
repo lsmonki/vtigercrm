@@ -295,11 +295,11 @@ $mod_strings = Array(
 
 'LBL_MAIL_SERVER_INFO'=>'Mail Server Information',
 
-'LBL_OUTGOING_MAIL_SERVER'=>'OutGoing Mail Server',
+'LBL_OUTGOING_MAIL_SERVER'=>'Outgoing Mail Server',
 
-'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'OutGoing Mail Server Login User Name',
+'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'Outgoing Mail Server Login User Name',
 
-'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'OutGoing Mail Server Password',
+'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'Outgoing Mail Server Password',
 
 'LBL_MAIL_SERVER_SMTP'=>'Mail Server (SMTP)',
 
