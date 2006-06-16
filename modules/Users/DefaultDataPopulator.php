@@ -1801,6 +1801,7 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
          $this->db->query("insert into vtiger_relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)");
          $this->db->query("insert into vtiger_relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Leads").",'get_leads',2,'Leads',0)");
 	 $this->db->query("insert into vtiger_relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Potentials").",'get_opportunities',3,'Potentials',0)");
+	 $this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",9,'get_activities',4,'Activities',0)");
 
                $this->db->query("insert into vtiger_notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TASK_NOTIFICATION_DESCRITPION',1,'Task Delay Notification','Tasks delayed beyond 24 hrs ','LBL_TASK_NOTIFICATION')");
 
