@@ -722,9 +722,15 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Vtiger Releases 5.0 Alpha4", "Try Zoho Writer", "Hi There!!!", "Welcome to Open Source", "SOS Vtiger");
+$esubj_array =  array ("Vtiger Beta Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
 $startdate_array =  array ("2006-1-2","2003-3-4","2003-4-5","2001-2-1","2005-8-8");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
+
+$to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
+$cc_array = array("andrewa@a.com","casterb@b.com", "indomine@variancevtiger.com","becker@nosbest.com","electra@violet.com");
+$bcc_array = array("nathan@nathantests.com","jeff@karl1.com", "isotope@uranium.com","bunny@bugs.com","explosive@dud.com");
+$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com");
+$body_array = array("This is a good product! Have a go at it! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
 
 for($i=0;$i<5;$i++)
 {
@@ -738,11 +744,12 @@ for($i=0;$i<5;$i++)
 	$email->column_fields["date_start"] = $startdate_array[$i];
 	$email->column_fields["semodule"] = 'Tasks';
 	$email->column_fields["activitytype"] = 'Emails';
-	
+	$email->column_fields["description"] = $body_array[$i];	
 	$email->save("Emails");
-
 	$email_ids[] = $email->id;
 	
+	$query = "insert into vtiger_emaildetails(emailid,from_email,to_email,cc_email,bcc_email) values (".$email->id.", '".$from_array[$i]."', '".$to_array[$i]."','".$cc_array[$i]."','".$bcc_array[$i] ."')";
+		$res = $adb->query($query);
 }
 
 
