@@ -75,9 +75,9 @@ class Campaign extends CRMEntity {
                 $focus = new Contact();
                 $button = '';
                 $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
-		$query = 'select vtiger_contactdetails.accountid, vtiger_users.user_name,vtiger_groups.groupname,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaigncontrel on vtiger_campaigncontrel.campaignid = vtiger_campaign.campaignid inner join vtiger_contactdetails on vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_campaign.campaignid = '.$id.' and vtiger_crmentity.deleted=0';
+		//$query = 'select vtiger_contactdetails.accountid, vtiger_users.user_name,vtiger_groups.groupname,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.title, vtiger_contactdetails.department, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaigncontrel on vtiger_campaigncontrel.campaignid = vtiger_campaign.campaignid inner join vtiger_contactdetails on vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_campaign.campaignid = '.$id.' and vtiger_crmentity.deleted=0';
 
-		//$query = 'SELECT vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_users.user_name, vtiger_groups.groupname, vtiger_crmentity.smownerid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_crmentity.smownerid = vtiger_users.id left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname  where vtiger_crmentity.deleted=0 and vtiger_contactdetails.campaignid = '.$id;
+		$query = 'SELECT vtiger_contactdetails.*, vtiger_crmentity.crmid, vtiger_users.user_name, vtiger_groups.groupname, vtiger_crmentity.smownerid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_crmentity.smownerid = vtiger_users.id left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname  where vtiger_crmentity.deleted=0 and vtiger_contactdetails.campaignid = '.$id;
 		$log->debug("Exiting get_contacts method ...");
                 return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
         }
@@ -112,6 +112,53 @@ class Campaign extends CRMEntity {
 		$log->debug("Exiting get_opportunities method ...");
 		return GetRelatedList('Campaigns','Potentials',$focus,$query,$button,$returnset);
 
+	}
+	function get_activities($id)
+	{
+		global $log;
+		$log->debug("Entering get_activities(".$id.") method ...");
+		global $app_strings;
+
+		require_once('modules/Activities/Activity.php');
+
+		$focus = new Activity();
+
+		$button = '';
+
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+		$query = "SELECT vtiger_contactdetails.lastname,
+			vtiger_contactdetails.firstname,
+			vtiger_contactdetails.contactid,
+			vtiger_activity.*,
+			vtiger_seactivityrel.*,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
+			vtiger_crmentity.modifiedtime,
+			vtiger_users.user_name,
+			vtiger_recurringevents.recurringtype
+			FROM vtiger_activity
+			INNER JOIN vtiger_seactivityrel
+				ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid=vtiger_activity.activityid
+			LEFT JOIN vtiger_cntactivityrel
+				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT OUTER JOIN vtiger_recurringevents
+				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+			WHERE vtiger_seactivityrel.crmid=".$id."
+			AND (activitytype = 'Task'
+				OR activitytype = 'Call'
+				OR activitytype = 'Meeting')";
+		$log->debug("Exiting get_activities method ...");
+		return GetRelatedList('Campaigns','Activities',$focus,$query,$button,$returnset);
 	}
 
 }
