@@ -139,10 +139,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$fieldvalue [] = $value;
 	}
-	elseif($uitype ==33)
+	elseif($uitype == 33)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$mulsel="select * from ".$fieldname;
+		$mulsel="select * from vtiger_".$fieldname;
 		$multiselect_result = $adb->query($mulsel);
 		$noofoptions = $adb->num_rows($multiselect_result);
 		$options = array();
