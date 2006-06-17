@@ -27,6 +27,10 @@ foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
+		global $current_user;
+                require_once('include/freetag/freetag.class.php');
+                $freetag=new freetag();
+                $freetag->delete_all_object_tags_for_user($current_user->id,$id);
                 $sql="update vtiger_crmentity set deleted=1 where crmid='" .$id ."'";
                 $result = $adb->query($sql);
         }
