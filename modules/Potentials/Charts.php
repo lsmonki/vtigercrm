@@ -266,7 +266,7 @@ class jpgraph {
 			// Setup title
 			$curr_symbol = getCurrencySymbol();
 			$titlestr = $current_module_strings['LBL_TOTAL_PIPELINE'].$curr_symbol.$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
-			$title->setText($titleStr);
+			$title->setText($titlestr);
 
 			// Create the xaxis labels
 			$array_data =& Image_Graph::factory('Image_Graph_DataPreprocessor_Array', 
@@ -1261,7 +1261,8 @@ function save_image_map($filename,$image_map) {
 }
 
 // retrieve the translated strings.
-$app_strings = return_application_language($current_language);
+// not needed, these variables are already loaded...
+//$app_strings = return_application_language($current_language);
 
 if(isset($app_strings['LBL_CHARSET']))
 {

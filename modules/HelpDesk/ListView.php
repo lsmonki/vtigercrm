@@ -47,19 +47,23 @@ $focus = new HelpDesk();
 
 $url_string = ''; // assigning http url string
 
+$date_criteria = isset($_REQUEST['date_crit'])? $_REQUEST['date_crit'] : '';
+$date = isset($_REQUEST['date'])? $_REQUEST['date'] : '';
+$current_user_only = isset($_REQUEST['current_user_only'])? $_REQUEST['current_user_only'] : '';
+
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
-	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
-	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
-	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
-	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
-	if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
-	if (isset($_REQUEST['date'])) $date = $_REQUEST['date'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-
+	
+	$name = isset($_REQUEST['ticket_title'])? $_REQUEST['ticket_title'] : '';
+	$ticket_id_val = isset($_REQUEST['ticket_id'])? $_REQUEST['ticket_id'] : '';
+	$contact_name = isset($_REQUEST['contact_name'])? $_REQUEST['contact_name'] : '';
+	$priority = isset($_REQUEST['priority'])? $_REQUEST['priority'] : '';
+	$status = isset($_REQUEST['status'])? $_REQUEST['status'] : '';
+	$category = isset($_REQUEST['category'])? $_REQUEST['category'] : '';
+	
 	$where_clauses = Array();
 
 	//Added for Custom Field Search
@@ -116,7 +120,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if (isset($date) && $date !='')
 	{
-		$date_criteria = $_REQUEST['date_crit'];
 		$format_date = getDBInsertDateValue($date);
 		if($date_criteria == 'is')
 		{
@@ -278,7 +281,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="viewname" type="hidden" value="'.$viewid.'">';
 if(isPermitted('HelpDesk',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/></td>';
 }
 		/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
@@ -307,9 +310,9 @@ $cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid
 <a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
 			</SELECT>
 			'.$cvHTML.'
@@ -408,7 +411,7 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')

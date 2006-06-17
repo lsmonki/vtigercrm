@@ -88,7 +88,7 @@ echo "\n<BR>\n";
 			if($permissionData[$cur_tabid][3] ==0)
 			{
 				list($lbl,$sname,$title)=split("_",$label);
-				if(stristr($label,$_REQUEST['smodule']))
+				if(stristr($label,isset($_REQUEST['smodule'])? $_REQUEST['smodule'] : null))
 				{
 					echo '<td class="tabOn" nowrap><a href="index.php?module=Products&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
 					$listView = $filename;
@@ -116,7 +116,7 @@ echo "\n<BR>\n";
 </table>
 
 <?
-if($_REQUEST['smodule']=='' || $_REQUEST['smodule']=="PRODUCTS")
+if(!isset($_REQUEST['smodule']) || $_REQUEST['smodule']=='' || $_REQUEST['smodule']=="PRODUCTS")
 {
         echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
         echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);

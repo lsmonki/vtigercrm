@@ -86,7 +86,7 @@ function fetchPermissionData($module,$action)
 
 	$permissionData = $_SESSION['action_permission_set'];
 	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
-	$others_permission_id = $defSharingPermissionData[$tabid];
+	$others_permission_id = isset($defSharingPermissionData[$tabid])? $defSharingPermissionData[$tabid] : 0;
 	
 	$i=0;
 

@@ -50,19 +50,19 @@ $url_string = '&smodule=PRODUCTS'; // assigning http url string
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
 	$url_string .="&query=true";
-	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
-        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
-	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
-        if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
-        if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
-        if (isset($_REQUEST['productcategory'])) $productcategory = $_REQUEST['productcategory'];
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];
-        if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
-        if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
-
+	
+	$productname = isset($_REQUEST['productname'])? $_REQUEST['productname'] : '';
+    $productcode = isset($_REQUEST['productcode'])? $_REQUEST['productcode'] : '';
+    $commissionrate = isset($_REQUEST['commissionrate'])? $_REQUEST['commissionrate'] : '';
+    $qtyperunit = isset($_REQUEST['qtyperunit'])? $_REQUEST['qtyperunit'] : '';
+    $unitprice = isset($_REQUEST['unitprice'])? $_REQUEST['unitprice'] : '';
+    $manufacturer = isset($_REQUEST['manufacturer'])? $_REQUEST['manufacturer'] : '';
+    $productcategory = isset($_REQUEST['productcategory'])? $_REQUEST['productcategory'] : '';
+    $start_date = isset($_REQUEST['start_date'])? $_REQUEST['start_date'] : '';
+    $expiry_date = isset($_REQUEST['expiry_date'])? $_REQUEST['expiry_date'] : '';
+    $purchase_date = isset($_REQUEST['purchase_date'])? $_REQUEST['purchase_date'] : '';
+	
 	$where_clauses = Array();
-	//$search_query='';
 
 	//Added for Custom Field Search
 	$sql="select * from field where tablename='productcf' order by fieldlabel";
@@ -88,70 +88,75 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	}
 	//upto this added for Custom Field
 
-	if (isset($productname) && $productname !='')
+	if($productname !='')
 	{
 		array_push($where_clauses, "productname ".$adb->getLike()." ".$adb->quote($productname.'%'));
-		//$search_query .= " and productname ".$adb->getLike()." '".$productname."%'";
 		$url_string .= "&productname=".$productname;
 	}
 	
-	if (isset($productcode) && $productcode !='')
+	if($productcode !='')
 	{
 		array_push($where_clauses, "productcode ".$adb->getLike()." ".$adb->quote($productcode.'%'));
 		//$search_query .= " and productcode ".$adb->getLike()." '".$productcode."%'";
 		$url_string .= "&productcode=".$productcode;
 	}
 
-	if (isset($commissionrate) && $commissionrate !='')
+	if($commissionrate !='')
 	{
 		array_push($where_clauses, "commissionrate ".$adb->getLike()." ".$adb->quote($commissionrate.'%'));
 		 //$search_query .= " and commissionrate ".$adb->getLike()." '".$commissionrate."%'";
 		 $url_string .= "&commissionrate=".$commissionrate;
 	}
 	
-	if (isset($qtyperunit) && $qtyperunit !='')
+	if($qtyperunit !='')
 	{
 		array_push($where_clauses, "qty_per_unit ".$adb->getLike()." ".$adb->quote($qtyperunit.'%'));
 	 	//$search_query .= " and qty_per_unit ".$adb->getLike()." '".$qtyperunit."%'";
 		$url_string .= "&qtyperunit=".$qtyperunit;
 	}
 	
-	if (isset($unitprice) && $unitprice !='')
+	if($unitprice !='')
 	{
 		array_push($where_clauses, "unit_price ".$adb->getLike()." ".$adb->quote($unitprice.'%'));
 	 //	$search_query .= " and unit_price ".$adb->getLike()." '".$unitprice."%'";
 		$url_string .= "&unitprice=".$unitprice;
 	}
-	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
+	
+	if($manufacturer !='' && $manufacturer !='--None--')
         {
 		array_push($where_clauses, "manufacturer ".$adb->getLike()." ".$adb->quote($manufacturer.'%'));
         	//$search_query .= " and manufacturer ".$adb->getLike()." '".$manufacturer."%'";
                 $url_string .= "&manufacturer=".$manufacturer;
 	}
-	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
+	
+	if($productcategory !='' && $productcategory !='--None--')
         {
 		array_push($where_clauses, "productcategory ".$adb->getLike()." ".$adb->quote($productcategory.'%'));
         	//$search_query .= " and productcategory ".$adb->getLike()." '".$productcategory."%'";
                 $url_string .= "&productcategory=".$productcategory;
 	}
-	if (isset($start_date) && $start_date !='')
-        {
+	
+	if($start_date !='')
+	{
 		array_push($where_clauses, "start_date ".$adb->getLike()." ".$adb->quote($start_date.'%'));
-                //$search_query .= " and start_date = '".$start_date."%'";
-                $url_string .= "&start_date=".$start_date;
-        } 
-	if (isset($expiry_date) && $expiry_date !='')
-        {
+		//$search_query .= " and start_date = '".$start_date."%'";
+		$url_string .= "&start_date=".$start_date;
+	}
+	
+	if($expiry_date !='')
+	{
 		array_push($where_clauses, "expiry_date ".$adb->getLike()." ".$adb->quote($expiry_date.'%'));
-                //$search_query .= " and expiry_date = '".$expiry_date."%'";
-                $url_string .= "&expiry_date=".$expiry_date;
-        } 
-	if (isset($purchase_date) && $purchase_date !='')
-        {
+		//$search_query .= " and expiry_date = '".$expiry_date."%'";
+		$url_string .= "&expiry_date=".$expiry_date;
+	}
+	
+	if($purchase_date !='')
+	{
 		array_push($where_clauses, "purchase_date ".$adb->getLike()." ".$adb->quote($purchase_date.'%'));
-                //$search_query .= " and purchase_date = '".$purchase_date."%'";
-                $url_string .= "&purchase_date=".$purchase_date;
-        }
+		//$search_query .= " and purchase_date = '".$purchase_date."%'";
+		$url_string .= "&purchase_date=".$purchase_date;
+	}
+	
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -286,11 +291,11 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="viewname" type="hidden" value="'.$viewid.'">';
 if(isPermitted('Products',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/></td>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                                <OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
 	                </SELECT>
 			'.$cvHTML.'
@@ -352,7 +357,7 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')

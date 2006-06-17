@@ -65,7 +65,7 @@ echo '<br>';
 				$listView = $filename;
 				$classname = "tabOff";
 			}
-			elseif($_REQUEST['smodule'] && stristr($label,$_REQUEST['smodule']))
+			elseif(isset($_REQUEST['smodule']) && stristr($label,$_REQUEST['smodule']))
 			{
 				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
 				$listView = $filename;
@@ -166,7 +166,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		<td>';
 if(isPermitted('Emails',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>';
 }
 $other_text .= 	'</td>';
 
@@ -185,9 +185,9 @@ $cvHTML = '<a href="index.php?module=Emails&action=CustomView&record='.$viewid.'
 <a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                                <OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -325,7 +325,7 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')

@@ -33,7 +33,7 @@ echo "</td></tr>";
 echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
 echo "<ul>";
 include('modules/Import/ImportButton.php');
-echo "<li><a href='index.php?module=Contacts&action=AddBusinessCard&return_module=Contacts&return_action=ListView'>".$mod_strings[LBL_ADD_BUSINESSCARD]."</a></li>";
+echo "<li><a href='index.php?module=Contacts&action=AddBusinessCard&return_module=Contacts&return_action=ListView'>".$mod_strings['LBL_ADD_BUSINESSCARD']."</a></li>";
 echo "</ul>";
 echo "</td></tr></table>";
 

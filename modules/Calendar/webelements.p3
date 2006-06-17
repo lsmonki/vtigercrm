@@ -435,7 +435,7 @@ Function PHP_Error ($errno,$errstr,$errfile, $errline) {
       $msg .= "\n";
     }
   }
-  error_log($msg,3,$tutos[errlog]);
+  error_log($msg,3,isset($tutos[errlog]) ? $tutos[errlog] : '');
   return;
 }
 /* ---------------------------------------------------------------------------

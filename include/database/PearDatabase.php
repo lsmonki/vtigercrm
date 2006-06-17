@@ -436,17 +436,20 @@ global $vtlog;
 	/* ADODB newly added. replacement for mysql_result() */
 
 	function query_result(&$result, $row, $col=0)
-	{		
+	{
+		$return_val = null;
+		
 		if($result->_numOfRows > $row)
 		{
 			$result->Move($row);
 			$rowdata = $this->change_key_case($result->FetchRow());
-			return to_html($rowdata[$col]);
+			if(isset($rowdata[$col]))
+			{
+				return to_html($rowdata[$col]);
+			}
 		}
-		else
-		{
-			return to_html(null);
-		}
+		
+		return to_html($return_val);
 	}
 
 	/* ADODB Converted	

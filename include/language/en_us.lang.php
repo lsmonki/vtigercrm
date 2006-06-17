@@ -738,7 +738,7 @@ $app_strings = Array(
 'LBL_JSCALENDAR_LANG'=>'en',
 'LNK_CV_EDIT'=>'Edit',
 'LNK_CV_DELETE'=>'Delete',
-'LNK_CV_CREATEVIEW'=>'Create View',
+'LNK_CV_CREATEVIEW'=>'Create View'
 
 );
 

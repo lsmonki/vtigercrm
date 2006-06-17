@@ -60,6 +60,7 @@ $mod_strings = Array(
 'LBL_LIST_ACCOUNT'=>'Account',
 'LBL_LIST_RELATED_TO'=>'Related to',
 'LBL_LIST_DUE_DATE'=>'Due Date',
+//'LBL_LIST_DUE_TIME'=>'Due Time',
 'LBL_LIST_DATE'=>'Date',
 'LBL_LIST_SUBJECT'=>'Subject',
 'LBL_LIST_LAST_MODIFIED'=>'Last Modified',

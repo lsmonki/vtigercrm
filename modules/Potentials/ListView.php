@@ -284,7 +284,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="viewname" type="hidden" value="'.$viewid.'">';
 if(isPermitted('Potentials',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/></td>';
 }
 	/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
@@ -313,9 +313,9 @@ $cvHTML = '<a href="index.php?module=Potentials&action=CustomView&record='.$view
 <a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
 			</SELECT>
 			'.$cvHTML.'
@@ -410,7 +410,7 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')

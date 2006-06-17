@@ -189,11 +189,14 @@ function return_app_list_strings_language($language)
 	$temp_app_list_strings = $app_list_strings;
 	$language_used = $language;
 
-	@include("include/language/$language.lang.php");
+	if(!isset($app_list_strings))
+	{
+		@include("include/language/$language.lang.php");
+	}
 	if(!isset($app_list_strings))
 	{
 		$log->warn("Unable to find the application language file for language: ".$language);
-		require("include/language/$default_language.lang.php");
+		@include("include/language/$default_language.lang.php");
 		$language_used = $default_language;
 	}
 
@@ -221,11 +224,14 @@ function return_application_language($language)
 	$temp_app_strings = $app_strings;
 	$language_used = $language;
 
-	@include("include/language/$language.lang.php");
+	if(!isset($app_strings))
+	{
+		@include("include/language/$language.lang.php");
+	}
 	if(!isset($app_strings))
 	{
 		$log->warn("Unable to find the application language file for language: ".$language);
-		require("include/language/$default_language.lang.php");
+		@include("include/language/$default_language.lang.php");
 		$language_used = $default_language;
 	}
 
@@ -269,11 +275,14 @@ function return_module_language($language, $module)
 	$temp_mod_strings = $mod_strings;
 	$language_used = $language;
 
-	@include("modules/$module/language/$language.lang.php");
+	if(!isset($mod_strings))
+	{
+		@include("include/language/$language.lang.php");
+	}
 	if(!isset($mod_strings))
 	{
 		$log->warn("Unable to find the module language file for language: ".$language." and module: ".$module);
-		require("modules/$module/language/$default_language.lang.php");
+		@include("modules/$module/language/$default_language.lang.php");
 		$language_used = $default_language;
 	}
 
@@ -315,8 +324,10 @@ function return_mod_list_strings_language($language,$module)
 		return $mod_list_strings;
 	}
 
-	@include("modules/$module/language/$language.lang.php");
-
+	if(!isset($mod_list_strings))
+	{
+		@include("include/language/$language.lang.php");
+	}
 	if(!isset($mod_list_strings))
 	{
 		$log->fatal("Unable to load the application list language file for the selected language($language) or the default language($default_language)");
@@ -340,14 +351,16 @@ function return_theme_language($language, $theme)
 
 	$language_used = $language;
 
-	@include("themes/$theme/language/$current_language.lang.php");
+	if(!isset($theme_strings))
+	{
+		@include("themes/$theme/language/$current_language.lang.php");
+	}
 	if(!isset($theme_strings))
 	{
 		$log->warn("Unable to find the theme file for language: ".$language." and theme: ".$theme);
-		require("themes/$theme/language/$default_language.lang.php");
+		@include("themes/$theme/language/$default_language.lang.php");
 		$language_used = $default_language;
 	}
-
 	if(!isset($theme_strings))
 	{
 		$log->fatal("Unable to load the theme($theme) language file for the selected language($language) or the default language($default_language)");
@@ -2710,11 +2723,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 					}
                                         else
 				{
-					if($app_strings[$name])
+					if(isset($app_strings[$name]))
                                                 {
                                                         $name = $app_strings[$name];
                                                 }
-                                                elseif($mod_strings[$name])
+                                                elseif(isset($mod_strings[$name]))
                                                 {
                                                         $name = $mod_strings[$name];
                                                 }
