@@ -320,6 +320,7 @@ $mod_strings = Array(
 'LBL_HDR_EMAIL_SCHDS'=>'Users : Email Notifications',
 'LBL_EMAIL_SCHDS_DESC'=>'The following is the list of notifications that are activated automatically when the corresponding event has happened.',
 'LBL_ACTIVE'=>'Active',
+'LBL_INACTIVE'=>'Inactive',
 'LBL_NOTIFICATION'=>'Notification',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_TASK_NOTIFICATION'=>'Delayed Task Notification',
