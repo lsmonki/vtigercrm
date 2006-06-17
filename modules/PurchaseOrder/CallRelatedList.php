@@ -37,7 +37,9 @@ $related_array=getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+	$smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 $smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);

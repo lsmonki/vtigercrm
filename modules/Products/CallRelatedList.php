@@ -37,7 +37,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+	$smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
