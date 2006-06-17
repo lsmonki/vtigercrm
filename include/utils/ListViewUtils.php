@@ -345,7 +345,7 @@ function getNavigationValues($display, $noofrows, $limit)
 	$log->debug("Entering getNavigationValues(".$display.",".$noofrows.",".$limit.") method ...");
 	$navigation_array = Array();   
 	global $limitpage_navigation;
-	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
+/*	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
 		$navigation_array['start'] =1;
 		$navigation_array['first'] = 1;
 		$navigation_array['end'] = 1;
@@ -357,7 +357,7 @@ function getNavigationValues($display, $noofrows, $limit)
 		$navigation_array['verylast'] =1;
 		$log->debug("Exiting getNavigationValues method ...");
 		return $navigation_array;
-	}
+	}*/
 	if($noofrows != 0)
 	$start = ((($display * $limit) - $limit)+1);
 	else
