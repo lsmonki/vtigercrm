@@ -33,13 +33,13 @@ class SalesOrder extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $table_name = "salesorder";
+	var $table_name = "vtiger_salesorder";
 	var $tab_name = Array('vtiger_crmentity','vtiger_salesorder','vtiger_sobillads','vtiger_soshipads','vtiger_salesordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_salesorder'=>'salesorderid','vtiger_sobillads'=>'sobilladdressid','vtiger_soshipads'=>'soshipaddressid','vtiger_salesordercf'=>'salesorderid');
 	
-	var $entity_table = "crmentity";
+	var $entity_table = "vtiger_crmentity";
 	
-	var $billadr_table = "sobillads";
+	var $billadr_table = "vtiger_sobillads";
 
 	var $object_name = "SalesOrder";
 
@@ -146,7 +146,7 @@ class SalesOrder extends CRMEntity {
 		$button = '';
 
 		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
-		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or vtiger_activitytype='Call' or vtiger_activitytype='Meeting') and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus = 'Planned')";
+		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus = 'Planned')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('SalesOrder','Activities',$focus,$query,$button,$returnset);
 	}
@@ -192,7 +192,7 @@ class SalesOrder extends CRMEntity {
 		// Inserted inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
 		$query = "select vtiger_notes.title,'Notes      '  ActivityType, vtiger_notes.filename,
 		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
-		vtiger_seattachmentsrel.attachmentsid vtiger_attachmentsid, vtiger_notes.notesid crmid,
+		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
 		vtiger_crmentity.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
@@ -209,7 +209,7 @@ class SalesOrder extends CRMEntity {
 		// Inserted order by createdtime desc
 		$query .= "select vtiger_attachments.description  title ,'Attachments'  ActivityType,
 		vtiger_attachments.name  filename, vtiger_attachments.type  FileType, crm2.modifiedtime lastmodified,
-		vtiger_attachments.attachmentsid  vtiger_attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+		vtiger_attachments.attachmentsid  attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
 		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
