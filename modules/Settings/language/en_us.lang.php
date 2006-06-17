@@ -82,6 +82,7 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_TOOL'=>'Tools',
 
+'LBL_CURRENCY_LIST'=>'Currencies List',
 
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
@@ -305,11 +306,15 @@ $mod_strings = Array(
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
 
+'LBL_SERVER_ADDRESS'=>'Server Address',
+
 'LBL_FTP_SERVER_NAME'=>'ftp Server Name',
 
 'LBL_FTP_USER_NAME'=>'ftp User Name',
 
 'LBL_FTP_PASSWORD'=>'ftp Password',
+
+'LBL_FTP'=>'FTP',
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 
@@ -600,8 +605,8 @@ $mod_strings = Array(
 'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',
 'LBL_MODULE_OWNERS'=>'Module Owners',
 'LBL_ASSIGN_MODULE_OWNERS_INFO'=>' - Assign Owners for each modules',
-'LBL_MODULE'=>'Module',
-'LBL_OWNER'=>'Owner',
+'LBL_MODULE'=>'CRM Module',
+'LBL_OWNER'=>'Assigned Owner',
 'LBL_MIGRATION'=>'Migrate from Previous Version',
 'LBL_MIGRATION_INFO'=>' - Migration from previous Version of vTiger',
 
@@ -613,7 +618,7 @@ $mod_strings = Array(
 'LBL_GROUP_DESCRIPTION'=>'Define Groups based on roles, users, profiles etc',
 'LBL_SHARING_ACCESS_DESCRIPTION'=>'Define privileges for each Role to access CRM modules',
 'LBL_SHARING_FIELDS_DESCRIPTION'=>'Show or hide fields in each CRM Module',
-'LBL_MODULE_OWNERS_DESCRIPTION'=>'Assign Owners for each CRM module',
+'LBL_MODULE_OWNERS_DESCRIPTION'=>'Assign Owners to each CRM module',
 'LBL_ANNOUNCEMENT_DESCRIPTION'=>'Edit the contents of Announcements display',
 'LBL_CUSTOM_FIELDS_DESCRIPTION'=>'Create and Manage user-defined fields',
 'LBL_PICKLIST_DESCRIPTION'=>'Manage contents of Picklists in all CRM Modules',
@@ -632,7 +637,8 @@ $mod_strings = Array(
 'LBL_SELECT_LOGO'=>'Select new logo :',
 'LBL_INVEN_TANDC_DESC'=>'Change the text that appears in the Terms & Conditions section in Inventory module',
 'LBL_MAIL_SERVER_DESC'=>'Manage your Email Server Settings',
-
+'LBL_BACKUP_SERVER_DESC'=>'Manage your Backup Server Settings',
+'LBL_MODULES_AND_OWNERS'=>'Modules & Owners',
 
 
 //Added fields after 5.0 Alpha
