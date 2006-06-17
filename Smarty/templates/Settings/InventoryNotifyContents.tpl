@@ -9,21 +9,21 @@
   *
  ********************************************************************************/
 -->*}
-<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
+<table width="100%" cellpadding="5" cellspacing="0" class="listTable" >
 	
 	<tbody>
 	<tr>
-	<td class="lvtCol" width="5%">#</td>
-	<td class="lvtCol" width="40%">{$CMOD.LBL_NOTIFICATION}</td>
-	<td class="lvtCol" width="50%">{$CMOD.LBL_DESCRIPTION}</td>
-	<td class="lvtCol" width="5%">{$CMOD.Tools}</td>
+	<td class="colHeader small" width="5%">#</td>
+	<td class="colHeader small" width="40%">{$CMOD.LBL_NOTIFICATION}</td>
+	<td class="colHeader small" width="50%">{$CMOD.LBL_DESCRIPTION}</td>
+	<td class="colHeader small" width="5%">{$CMOD.Tools}</td>
 	</tr>
 	{foreach name=notifyfor item=elements from=$NOTIFICATION}
-	<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-	<td>{$smarty.foreach.notifyfor.iteration}</td>
-	<td>{$elements.notificationname}</td>
-	<td>{$elements.label}</td>
-	<td align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
+	<tr>
+	<td class="listTableRow small">{$smarty.foreach.notifyfor.iteration}</td>
+	<td class="listTableRow small">{$elements.notificationname}</td>
+	<td class="listTableRow small">{$elements.label}</td>
+	<td class="listTableRow small" align="center" onClick="fetchEditNotify('{$elements.id}');"><img src="{$IMAGE_PATH}editfield.gif"></td>
 	</tr>
 	{/foreach}
 	</tbody>

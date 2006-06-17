@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<div id="orgLay">
+<div id="editnot" class="fixedLay">
 <table width="100%">
 <tbody>
 <tr>
@@ -50,8 +50,8 @@
 <tr><td colspan="2" style="border-bottom: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>
 <tr>
 <td colspan="2" align="center">
-<input name="save" value=" &nbsp;Save&nbsp; " class="classBtn" type="button" onClick="fetchSaveNotify('{$NOTIFY_DETAILS.id}','{$NOTIFY_DETAILS.subject}','{$NOTIFY_DETAILS.body}')">
-<input name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" type="button" onClick="hide('editdiv');">
+<input name="save" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " class="crmButton small save" type="button" onClick="fetchSaveNotify('{$NOTIFY_DETAILS.id}','{$NOTIFY_DETAILS.subject}','{$NOTIFY_DETAILS.body}')">
+<input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmButton small cancel" type="button" onClick="hide('editdiv');">
 </td>
 </tr>
 <tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>

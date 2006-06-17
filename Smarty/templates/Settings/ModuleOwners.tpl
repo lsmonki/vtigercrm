@@ -9,37 +9,60 @@
   *
  ********************************************************************************/
 -->*}
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
+	
+			{include file='SetMenu.tpl'}
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_ASSIGN_MODULE_OWNERS}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
+			<!-- DISPLAY -->
+			<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+			<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}assign.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+				<td class="heading2" valign="bottom" ><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_MODULE_OWNERS} </b></td>
+			</tr>
+			<tr>
+				<td valign=top class="small">{$MOD.LBL_MODULE_OWNERS_DESCRIPTION}</td>
+			</tr>
+			</table>
+			<br>
+			<table border=0 cellspacing=0 cellpadding=10 width=100% >
+			<tr>
+			<td>
+
+					<div id="module_list_owner">	
+						{include file='Settings/ModuleOwnersContents.tpl'}
+					</div>
 	
-	<div id="module_list_owner">	
-	{include file='Settings/ModuleOwnersContents.tpl'}
+	<table border=0 cellspacing=0 cellpadding=5 width=100% >
+	<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</form>
+	</table>
+		
 	</div>
+
+</td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
+</table>
+
 	
-</td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 {literal}
 <script>
 function assignmodulefn(mode)

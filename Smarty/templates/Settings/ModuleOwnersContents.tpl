@@ -11,46 +11,47 @@
 -->*}
 <form name="support_owners" method="POST" action="index.php">
 	<input type="hidden" name="module" value="Settings">
+	<input type="hidden" name="parenttab" value="Settings">
 	<input type="hidden" name="action" value="SettingsAjax">
 	<input type="hidden" name="file" value="ListModuleOwners">
-	<table class="prdTab" align="center" cellpadding="3" cellspacing="0">
-	<tbody><tr><td colspan="3" style="border: 0px none ;">&nbsp;</td></tr>
+<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+<tr>
+	<td class="big"><strong>{$MOD.LBL_MODULES_AND_OWNERS}</strong></td>
+	<td class="small" align=right>
+<div align="right">
+{if $MODULE_MODE neq 'edit'}
+		<input title="{$APP.LBL_EDIT_BUTTON_LABEL}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" type="button" name="button" value="{$APP.LBL_EDIT_BUTTON_LABEL}" onClick="assignmodulefn('edit');">
+{else}
+		<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="button" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onClick="assignmodulefn('save');" >&nbsp;
+						<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="this.form.action.value='ListModuleOwners'; this.form.parenttab.value='Settings';" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" >
+{/if}
+</div>
+</td>
+</tr>
+					
+</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">	
 	<tr>
-	<td style="border: 0px none ;" colspan="2" align="left">&nbsp;</td>
-	<td style="border: 0px none ;" align="right">
-	<div align="right">
-	{if $MODULE_MODE neq 'edit'}
-	<input title="{$APP.LBL_EDIT_BUTTON_LABEL}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" type="button" name="button" value="{$APP.LBL_EDIT_BUTTON_LABEL}" onClick="assignmodulefn('edit');">
-	{else}
-	<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" type="button" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onClick="assignmodulefn('save');" >
-	<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='ListModuleOwners';" type="submit" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" >
-	{/if}
-	</div>
-	</td>
-	</tr>
-	<tr><td colspan="3" style="border: 0px none ;">&nbsp;</td></tr>
-	
-	<tr>
-	<th style="border-top: 1px solid rgb(204, 204, 204); height: 30px;" width="10%"><b>#</b></th>
-	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>{$MOD.LBL_MODULE}</b></th>
-	<th style="border-top: 1px solid rgb(204, 204, 204);" width="45%"><b>{$MOD.LBL_OWNER} </b></th>
+		<td class="colHeader small" width="2%">#</td>
+		<td class="colHeader small" width="30%">{$MOD.LBL_MODULE}</td>
+		<td class="colHeader small" width="65%">{$MOD.LBL_OWNER}</td>
 	</tr>
 	{if $MODULE_MODE neq 'edit'}
 	{foreach name=modulelists item=modules from=$USER_LIST}
-	<tr class="prvPrfHoverOff" onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">
-		<td>{$smarty.foreach.modulelists.iteration}</td>
-		<td>{$APP[$modules.0]}</td>
-		<td><a href="index.php?module=Users&action=DetailView&record={$modules.1}">{$modules.2}</a></td>	
+	<tr>
+		<td class="listTableRow small" valign="top">{$smarty.foreach.modulelists.iteration}</td>
+		<td class="listTableRow small" valign="top">{$APP[$modules.0]}</td>
+		<td class="listTableRow small" valign="top"><a href="index.php?module=Users&action=DetailView&record={$modules.1}">{$modules.2}</a></td>	
 	</tr>
 	{/foreach}
 	{else}
 	{foreach name=modulelists item=modules from=$USER_LIST}
-	<tr class="prvPrfHoverOff">
-		<td>{$smarty.foreach.modulelists.iteration}</td>
-		<td>{$APP[$modules.0]}</td>
-		<td>{$modules.1}</td>	
+	<tr>
+		<td class="listTableRow small" valign="top">{$smarty.foreach.modulelists.iteration}</td>
+		<td class="listTableRow small" valign="top">{$APP[$modules.0]}</td>
+		<td class="listTableRow small" valign="top">{$modules.1}</td>	
 	</tr>
 	{/foreach}
 	{/if}
-	</tbody></table>
-	</form>
+	</table>
+</form>
