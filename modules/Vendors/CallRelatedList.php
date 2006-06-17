@@ -45,6 +45,9 @@ $smarty = new vtigerCRM_Smarty;
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+        $smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 if(isset($focus->name))
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("NAME", $focus->name);
