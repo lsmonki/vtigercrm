@@ -295,21 +295,21 @@ $mod_strings = Array(
 
 'LBL_MAIL_SERVER_INFO'=>'Mail Server Information',
 
-'LBL_OUTGOING_MAIL_SERVER'=>'Outgoing Mail Server',
+'LBL_OUTGOING_MAIL_SERVER'=>'OutGoing Mail Server',
 
-'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'Outgoing Mail Server Login User Name',
+'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'OutGoing Mail Server Login User Name',
 
-'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'Outgoing Mail Server Password',
+'LBL_OUTGOING_MAIL_SERVER_PASSWORD'=>'OutGoing Mail Server Password',
 
-'LBL_MAIL_SERVER_SMTP'=>'Mail Server (SMTP)',
+'LBL_MAIL_SERVER_SMTP'=>'Mail Server Settings (SMTP)',
 
 'LBL_BACKUP_SERVER_CONFIG'=>'Backup Server Configuration',
 
-'LBL_FTP_SERVER_NAME'=>'FTP Server Name',
+'LBL_FTP_SERVER_NAME'=>'ftp Server Name',
 
-'LBL_FTP_USER_NAME'=>'FTP User Name',
+'LBL_FTP_USER_NAME'=>'ftp User Name',
 
-'LBL_FTP_PASSWORD'=>'FTP Password',
+'LBL_FTP_PASSWORD'=>'ftp Password',
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 
@@ -326,6 +326,9 @@ $mod_strings = Array(
 'LBL_YES'=>'yes',
 'LBL_NO'=>'no',
 
+'LBL_USERNAME'=>'Username',
+'LBL_PASWRD'=>'Password',
+'LBL_REQUIRES_AUTHENT'=>'Requires Authentication?',
 
 //Fields for Settings
 
@@ -536,14 +539,14 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_ADDRESS'=>'Address',
 'LBL_ORGANIZATION_CITY'=>'City',
 'LBL_ORGANIZATION_STATE'=>'State',
-'LBL_ORGANIZATION_CODE'=>'Code',
+'LBL_ORGANIZATION_CODE'=>'Pin / Zip',
 'LBL_ORGANIZATION_COUNTRY'=>'Country',
 'LBL_ORGANIZATION_PHONE'=>'Phone',
 'LBL_ORGANIZATION_FAX'=>'Fax',
-'LBL_ORGANIZATION_WEBSITE'=>'Website',
+'LBL_ORGANIZATION_WEBSITE'=>'Web URL',
 'LBL_ORGANIZATION_DETAILS'=>'Company Information',
 'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',
-'LBL_ORGANIZATION_LOGO'=>'Logo',
+'LBL_ORGANIZATION_LOGO'=>'Company Logo',
 'LBL_UPLOAD'=>'Upload',
 'LBL_FILENAME'=>'File Name',
 'LBL_SETTINGS'=>'Settings',
@@ -559,11 +562,12 @@ $mod_strings = Array(
 'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
 'INVENTORYNOTIFICATION'=>'Inventory Notifications',
 'LBL_INVENTORY_NOTIFICATIONS'=>' - Edit Inventory Email Notifications',
-'INVENTORYTERMSANDCONDITIONS'=>'Inventory Terms & Conditions',//newly added for Inventory terms and conditions
+'INVENTORYTERMSANDCONDITIONS'=>'Inventory : Terms & Conditions',//newly added for Inventory terms and conditions
 'LBL_INVENTORY_TERMSANDCONDITIONS'=>' - Edit Inventory Terms & Conditions',//newly added
+'LBL_TANDC_TEXT'=>'Terms & Conditions Text',
 
 'LBL_OTHER_SETTINGS'=>'Other Settings',
-'LBL_SCROLL'=>'Scroll to Top',
+'LBL_SCROLL'=>'[Scroll to Top]',
 
 'LBL_INV_NOT_DESC'=>'The following is the list of notifications that are sent to the product handler regarding the demand and the current quantity in hand during the creation of a Quote, SalesOrder and Invoice.',
 
@@ -623,6 +627,11 @@ $mod_strings = Array(
 'LBL_BACKUP_SERVER_DESCRIPTION'=>'Edit settings of Backup Server',
 'LBL_CURRENCY_DESCRIPTION'=>'Manage Currencies and Exchange Rates',
 'LBL_TAX_DESCRIPTION'=>'Manage values for Sales tax, VAT etc',
+'LBL_TAX_DESC'=>'Manage VAT and other tax settings',
+'LBL_COMPANY_DESC'=>'Information & Contact details of your company',
+'LBL_SELECT_LOGO'=>'Select new logo :',
+'LBL_INVEN_TANDC_DESC'=>'Change the text that appears in the Terms & Conditions section in Inventory module',
+'LBL_MAIL_SERVER_DESC'=>'Manage your Email Server Settings',
 
 
 
