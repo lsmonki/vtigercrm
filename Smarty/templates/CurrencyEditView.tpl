@@ -51,19 +51,19 @@
 							<hr /> </td>
 						</tr>
 					        <tr>
-							<td align="right" width="25%"><b>{$MOD.LBL_CURRENCY_NAME} : </b></td>
+							<td align="right" width="25%"><font color="red">*</font><b>{$MOD.LBL_CURRENCY_NAME} : </b></td>
 							<td width="50%" align="left" ><input type="text" name="currency_name" value="{$CURRENCY_NAME}" class="txtBox" /></td>
 						</tr>
 						<tr>
-							<td align="right"><b>{$MOD.LBL_CURRENCY_CODE} : </b></td>
+							<td align="right"><font color="red">*</font><b>{$MOD.LBL_CURRENCY_CODE} : </b></td>
 							<td><input type="text" name="currency_code" value="{$CURRENCY_CODE}" class="txtBox" /></td>
 						</tr>
 						<tr>
-							<td align="right"><b>{$MOD.LBL_CURRENCY_SYMBOL} : </b></td>
+							<td align="right"><font color="red">*</font><b>{$MOD.LBL_CURRENCY_SYMBOL} : </b></td>
 							<td><input type="text" name="currency_symbol" value="{$CURRENCY_SYMBOL}" class="txtBox" /></td>
 						</tr>
 						<tr>
-							<td align="right"><b>{$MOD.LBL_CURRENCY_CRATE}  : </b></td>
+							<td align="right"><font color="red">*</font><b>{$MOD.LBL_CURRENCY_CRATE}  : </b></td>
 							<td>
 								<input type="text" name="conversion_rate" value="{$CONVERSION_RATE}" class="txtBox" />
 								<br>(Eg: 1 U.S. Dollar equal to 0.78 Euro) 
