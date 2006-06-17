@@ -281,9 +281,13 @@ else
 		if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
 		{
 			// Creating the PickList Table and Populating Values
-			$adb->createTable('vtiger_'.$columnName, $columnName." C(255)");
-			//Adding Primary Key
-			$qur = "ALTER table vtiger_".$columnName." ADD PRIMARY KEY (". $columnName.")";
+			$qur = "CREATE TABLE vtiger_".$columnName." (
+					".$columnName."id int(19) NOT NULL auto_increment,
+					".$columnName." varchar(200) NOT NULL,
+					sortorderid int(19) NOT NULL default '0',
+					presence int(1) NOT NULL default '1',
+				        PRIMARY KEY  (".$columnName."id)
+				)";
 			$adb->query($qur);
 
 			$fldPickList =  $_REQUEST['fldPickList'];
@@ -292,9 +296,10 @@ else
 			for($i = 0; $i < $count; $i++)
 			{
 				$pickArray[$i] = trim($pickArray[$i]);
+				$id = $adb->getUniqueID($columnName);
 				if($pickArray[$i] != '')
 				{
-					$query = "insert into vtiger_".$columnName." values('".$pickArray[$i]."')";
+					$query = "insert into vtiger_".$columnName." values(".$id.",'".$pickArray[$i]."',".$i.",1)";
 					$adb->query($query);
 				}
 			}

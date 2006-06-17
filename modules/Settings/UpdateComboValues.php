@@ -30,11 +30,8 @@ for($i = 0; $i < $count; $i++)
 	$pickArray[$i] = trim($pickArray[$i]);
 	if($pickArray[$i] != '')
 	{
-		if($custom)
-			$query = "insert into vtiger_".$tableName." values('".$pickArray[$i]."')";
-		else
-			$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
-        $adb->query($query);
+		$query = "insert into vtiger_".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+	        $adb->query($query);
 	}
 }
 header("Location:index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module=".$fld_module);
