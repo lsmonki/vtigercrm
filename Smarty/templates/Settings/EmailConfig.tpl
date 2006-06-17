@@ -9,22 +9,14 @@
   *
  ********************************************************************************/
 -->*}
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_CONFIGURATION} > {$MOD.LBL_EMAIL_CONFIG}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
 	{if $EMAILCONFIG_MODE neq 'edit'}	
 	<form action="index.php" method="post" name="MailServer" id="form">
 	<input type="hidden" name="emailconfig_mode">
@@ -37,114 +29,142 @@
 	<input type="hidden" name="parenttab" value="Settings">
 	<input type="hidden" name="return_module" value="Settings">
 	<input type="hidden" name="return_action" value="EmailConfig">
-	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
-	<tbody><tr>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="7"><img src="{$IMAGE_PATH}top_left.jpg" align="top"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif; height: 6px;" bgcolor="#ebebeb"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="8"><img src="{$IMAGE_PATH}top_right.jpg" align="top" height="6" width="8"></td>
-	</tr>
-	<tr>
-	<td bgcolor="#ebebeb" width="7"></td>
-	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
-	<tbody><tr>
-	<td rowspan="8" bgcolor="#ffffff" width="30%" valign="bottom" background="{$IMAGE_PATH}MailServer_top.gif" style="background-position:top right;background-repeat:no-repeat;">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<div align=center>
+			
+			{include file="SetMenu.tpl"}
+
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-						<td background="{$IMAGE_PATH}MailServer_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="150">&nbsp;</td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ogmailserver.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_MAIL_SERVER_SETTINGS} </b></td>
 				</tr>
-		</table>
-	</td>
-	<td colspan="2" class="genHeaderBig" width="70%">{$MOD.LBL_MAIL_SERVER_SMTP} - {$MOD.LBL_SETTINGS}<br>{$ERROR_MSG}<br><hr> </td>
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_MAIL_SERVER_DESC} </td>
+				</tr>
+				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>{$MOD.LBL_MAIL_SERVER_SMTP}</strong>&nbsp;<br>{$ERROR_MSG}</td>
+						{if $EMAILCONFIG_MODE neq 'edit'}	
+						<td class="small" align=right>
+							<input class="crmButton small edit" title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='EmailConfig';this.form.emailconfig_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
+						</td>
+						{else}
+						<td class="small" align=right>
+							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save';" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
+    							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+						</td>
+						{/if}
+					</tr>
+					</table>
+					
+					{if $EMAILCONFIG_MODE neq 'edit'}	
+					<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+					<tr>
+					<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                          <tr>
+                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
+                            <td width="80%" class="small cellText"><strong>{$MAILSERVER}</strong></td>
+                          </tr>
+                          <tr valign="top">
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
+                            <td class="small cellText">{$USERNAME}</td>
+                          </tr>
+                          <tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
+                            <td class="small cellText">
+				{if $PASSWORD neq ''}
+				******
+				{/if}&nbsp;
+			     </td>
+                          </tr>
+                          <tr> 
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
+                            <td class="small cellText">
+				{if $SMTP_AUTH eq 'checked'}
+					{$MOD.LBL_YES}
+				{else}
+					{$MOD.LBL_NO}
+				{/if}
+			    </td>
+                          </tr>
+                        </table>
+			  {else}
+					
+			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+			<tr>
+			<td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_OUTGOING_MAIL_SERVER}</strong></td>
+                            <td width="80%" class="small cellText">
+				<input type="text" class="detailedViewTextBox small" value="{$MAILSERVER}" name="server">
+			    </td>
+                          </tr>
+                          <tr valign="top">
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
+                            <td class="small cellText">
+				<input type="text" class="detailedViewTextBox small" value="{$USERNAME}" name="server_username">
+			    </td>
+                          </tr>
+                          <tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
+                            <td class="small cellText">
+				<input type="password" class="detailedViewTextBox small" value="{$PASSWORD}" name="server_password">
+			    </td>
+                          </tr>
+                          <tr> 
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_REQUIRES_AUTHENT}</strong></td>
+                            <td class="small cellText">
+                              	<input type="checkbox" name="smtp_auth" {$SMTP_AUTH}/>
+			    </td>
+                          </tr>
+                        </table>
+				
+			{/if}
+						
+						</td>
+					  </tr>
+					</table>
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr>
+					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
+					</tr>
+					</table>
+				</td>
+				</tr>
+				</table>
+			
+			
+			
+			</td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-	{if $EMAILCONFIG_MODE neq 'edit'}	
-	<tr><td colspan="2" style="padding-top: 0px;" align="right" width="75%">
-	<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='EmailConfig';this.form.emailconfig_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
-	</tr>
-	<tr>
-	<td align="right" width="40%"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER} :</b></td>
-	<td align="left" width="60%">{$MAILSERVER}</td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME} :</b></td>
-	<td>{$USERNAME}</td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER_PASSWORD} :</b></td>
-	<td>
-	{if $PASSWORD neq ''}
-	******
-	{/if}&nbsp;
-	</td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_REQUIRE_SMTP_AUTHENTICATION} :</b></td>
-	<td>
-	{if $SMTP_AUTH eq 'checked'}
-	{$MOD.LBL_YES}
-	{else}
-	{$MOD.LBL_NO}
-	{/if}
-	</td>
-	</tr>
-	{else}	
-	<tr>
-	<td align="right" width="40%"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER} :</b></td>
-	<td align="left" width="60%"><input class="txtBox" type="text" name="server" value="{$MAILSERVER}" size="50" /></td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME} :</b></td>
-	<td><input class="txtBox" type="text" name="server_username" value="{$USERNAME}" size="50"/></td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_OUTGOING_MAIL_SERVER_PASSWORD} :</b></td>
-	<td><input class="txtBox" type="password" name="server_password" value="{$PASSWORD}" size="50"/></td>
-	</tr>
-	<tr>
-	<td align="right"><b>{$MOD.LBL_REQUIRE_SMTP_AUTHENTICATION} :</b></td>
-	<td><input type="checkbox" name="smtp_auth" {$SMTP_AUTH}/></td>
-	</tr>
-	{/if}
-	<tr><td colspan="2" width="75%">&nbsp; </td></tr>
-	<tr><td colspan="2" width="75%" align="center"><hr>
-	{if $EMAILCONFIG_MODE eq 'edit'}	
-	<br><input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='Save';" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
-    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
-	{/if}
-	</td></tr>
-	<tr><td colspan="2" width="75%">&nbsp; </td></tr>
-	</tbody></table>
-	</td>
-	<td bgcolor="#ebebeb" width="8"></td>
-	</tr>
-
-	<tr>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="7"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"></td>
-	<td style="font-size: 1px;" bgcolor="#ececec" height="8"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="8"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom"></td>
-	</tr>
-	</tbody></table>
+	</table>
+		
+	</div>
 	</form>
-
 	
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 {literal}
 <script>
 function validate_mail_server(form)
 {
 	if(form.server.value =='')
 	{
-		alert("Server Name could not be empty")
+		alert("Server Name cannot be empty")
 			return false;
 	}
 	return true;
