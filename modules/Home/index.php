@@ -166,7 +166,7 @@ $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->assign("ACTIVITIES",$activities);
 $freetag = new freetag();
-$smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html());
+$smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
 $smarty->display("HomePage.tpl");
 
 function getLoginHistory()

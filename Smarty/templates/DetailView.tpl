@@ -12,8 +12,8 @@
 
 -->*}
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-
-
+<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
+<script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
    <a class="link"  align="right" href="javascript:;">{$APP.LBL_EDIT_BUTTON}</a>
@@ -51,6 +51,22 @@ function tagvalidate()
 		alert("Please enter a tag");
 		return false;
 	{rdelim}
+{rdelim}
+function DeleteTag(id)
+{ldelim}
+	$("vtbusy_info").style.display="inline";
+	Effect.Fade('tag_'+id);
+	new Ajax.Request(
+		'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&tagid=" +id,
+                        onComplete: function(response) {ldelim}
+						getTagCloud();
+						$("vtbusy_info").style.display="none";
+                        {rdelim}
+                {rdelim}
+        );
 {rdelim}
 </script>
 
@@ -323,17 +339,21 @@ function tagvalidate()
 {/if}
 
 <script>
+function getTagCloud()
+{ldelim}
 new Ajax.Request(
         'index.php',
         {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
         method: 'post',
-        postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD',
+        postBody: 'module={$MODULE}&action={$MODULE}Ajax&file=TagCloud&ajxaction=GETTAGCLOUD&recordid={$ID}',
         onComplete: function(response) {ldelim}
                                 $("tagfields").innerHTML=response.responseText;
                                 $("txtbox_tagfields").value ='';
                         {rdelim}
         {rdelim}
 );
+{rdelim}
+getTagCloud();
 </script>
 <!-- added for validation -->
 <script language="javascript">

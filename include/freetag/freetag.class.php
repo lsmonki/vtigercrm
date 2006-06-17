@@ -894,13 +894,16 @@ class freetag {
 	 * @return string Returns an HTML snippet that can be used directly as a tag cloud.
 	 */
 
-	function get_tag_cloud_html($module="",$num_tags = 100, $min_font_size = 10, $max_font_size = 20, $font_units = 'px', $span_class = '', $tag_page_url = '/tag/', $tagger_id = NULL) {
-		$tag_list = $this->get_tag_cloud_tags($num_tags, $tagger_id,$module);
-		if(!$tag_list) return;
+	function get_tag_cloud_html($module="",$tagger_id = NULL,$obj_id= NULL,$num_tags = 100, $min_font_size = 10, $max_font_size = 20, $font_units = 'px', $span_class = '', $tag_page_url = '/tag/') {
+		global $theme;
+		$theme_path="themes/".$theme."/";
+		$image_path=$theme_path."images/";	
+		$tag_list = $this->get_tag_cloud_tags($num_tags, $tagger_id,$module,$obj_id);
+		if(!$tag_list[0]) return;
 		// Get the maximum qty of tagged objects in the set
-		$max_qty = max(array_values($tag_list));
+		$max_qty = max(array_values($tag_list[0]));
 		// Get the min qty of tagged objects in the set
-		$min_qty = min(array_values($tag_list));
+		$min_qty = min(array_values($tag_list[0]));
 
 		// For ever additional tagged object from min to max, we add
 		// $step to the font size.
@@ -920,11 +923,22 @@ class freetag {
 		include("config.php");
 		if($module =='')
 			$module = 'All';	
-		foreach ($tag_list as $tag => $qty) {
-          		$size = $min_font_size + ($qty - $min_qty) * 3;
-			$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
+		if($module != 'All')	
+		{	
+			foreach($tag_list[0] as $tag => $qty) {
+				$size = $min_font_size + ($qty - $min_qty) * 3;
+				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].');"><img src="'.$image_path.'del_tag.gif"></span></span>';
 
-		}
+			}
+		}else
+		{
+			foreach($tag_list[0] as $tag => $qty) {
+				$size = $min_font_size + ($qty - $min_qty) * 3;
+				$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
+
+			}
+
+		}	
 		$cloud_html = join("\n ", $cloud_span);
 
 		return $cloud_html;
@@ -948,22 +962,28 @@ class freetag {
 	 * values are numeric quantity of objects tagged with that tag.
 	 */
 
-	function get_tag_cloud_tags($max = 100, $tagger_id = NULL,$module = "") {
+	function get_tag_cloud_tags($max = 100, $tagger_id = NULL,$module = "",$obj_id = NULL) {
 		global $adb;
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = "AND tagger_id = $tagger_id";
+			$tagger_sql = " AND tagger_id = $tagger_id";
 		} else {
 			$tagger_sql = "";
 		}
 
 		if($module != "") {
-			$tagger_sql .= "AND module = '$module'";
+			$tagger_sql .= " AND module = '$module'";
 		} else {
 			$tagger_sql .= "";
 		}
 
+		if(isset($obj_id) && $obj_id > 0) {
+                        $tagger_sql .= " AND object_id = $obj_id";
+                } else {
+                        $tagger_sql .= "";
+                }
+
 		$prefix = $this->_table_prefix;
-		$sql = "SELECT tag, COUNT(object_id) AS quantity
+		$sql = "SELECT tag,tag_id,COUNT(object_id) AS quantity
 			FROM ${prefix}freetags INNER JOIN ${prefix}freetagged_objects
 			ON (${prefix}freetags.id = tag_id)
 			WHERE 1=1
@@ -975,39 +995,15 @@ class freetag {
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[$rs->fields['tag']] = $rs->fields['quantity'];
+			$retarr1[$rs->fields['tag']] = $rs->fields['tag_id'];
 			$rs->MoveNext();
 		}
-
 		if($retarr) ksort($retarr);
+		if($retarr1) ksort($retarr1);
+		$return_value[]=$retarr;
+		$return_value[]=$retarr1;
+		return $return_value;
 
-		return $retarr;
-
-	}
-
-
-	/**
-	 * silly_list
-	 *
-	 * silly_list is now deprecated in favor of using get_tag_cloud_tags. It's still
-	 * available for compatibility. If you're just looking to get a tag cloud going,
-	 * try get_tag_cloud_html().
-	 * 
-	 * This is a function built explicitly to set up a page with most popular tags
-	 * that contains an alphabetically sorted list of tags, which can then be sized
-	 * or colored by popularity.
-	 *
-	 * Also known more popularly as Tag Clouds!
-	 *
-	 * Here's the example case: http://upcoming.org/tag/
-	 *
-	 * @param int The maximum number of tags to return.
-	 *
-	 * @return array Returns an array where the keys are normalized tags, and the
-	 * values are numeric quantity of objects tagged with that tag.
-	 */
-
-	function silly_list($max = 100, $tagger_id = NULL) {
-		return $this->get_tag_cloud_tags($max, $tagger_id);
 	}
 
 	/**
