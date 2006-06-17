@@ -617,7 +617,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		    elseif (($type == "ticketsbyuser") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketuser') == "0"))
 		    {
 			    $graph_by="smownerid";
-			    $graph_title=$mod_strings['ticketsbyowner'];
+			    $graph_title=$mod_strings['ticketsbyuser'];
 			    $module="HelpDesk";
 			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
 			    $query=$helpdesk_query;
