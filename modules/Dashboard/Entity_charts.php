@@ -27,7 +27,7 @@ function get_account_name($acc_id)
 {
 	global $adb;
 
-	$acc_qry="select vtiger_accountname from vtiger_account where vtiger_accountid =".$acc_id;
+	$acc_qry="select accountname from vtiger_account where vtiger_accountid =".$acc_id;
 	$acc_result=$adb->query($acc_qry);
 	$no_acc_rows=$adb->num_rows($acc_result);
 
