@@ -198,8 +198,8 @@
 							</td>
 	
 
-				{elseif $keyid eq 103}<!-- for Tag Cloud -->
-                                                  	<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
+				{elseif $keyid eq 69}<!-- for Image Reflection -->
+                                                  	<td align="left" width=25%">{$keyval}</td>
 				{else}									
                                                   	<td class="dvtCellInfo" align="left" width=25%">{$keyval}</td>
 				{/if}

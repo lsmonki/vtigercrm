@@ -408,7 +408,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==4)
 		{
 			$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
-			$label_fld[] ='<img src="'.$imgpath.'" border="0">';
+			$label_fld[] ='<img src="'.$imgpath.'" class="reflect" width="450" height="300" alt="">';
 		}
 
 	}
