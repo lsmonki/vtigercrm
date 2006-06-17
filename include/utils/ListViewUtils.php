@@ -202,6 +202,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
      }
+
+	//Added for Action - edit and delete link header in listview
+	$list_header[] = $app_strings["LBL_ACTION"];
+
 	$log->debug("Exiting getListViewHeader method ...");
 	return $list_header;
 }
@@ -732,6 +736,23 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			else
 				$varreturnset .= '&activity_mode=Events';
 		}
+
+		//Added for Actions ie., edit and delete links in listview 
+		$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$returnset);
+		$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset);
+
+		$list_header[] = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> | 
+				  <a href=\"javascript:;\" onclick=confirmdelete(\"$del_link\")> ".$app_strings["LNK_DELETE"]." </a>";
+		echo '<script>
+				function confirmdelete(url)
+		                {
+		                        if(confirm("Are you sure?"))
+		                        {
+		                                document.location.href=url;
+		                        }
+		                }
+		        </script>';
+
 		$list_block[$entity_id] = $list_header;
 
 	}
@@ -2609,5 +2630,56 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 		return $output;
 }
 
+/**	Function to get the Edit link details for ListView and RelatedListView
+ *	@param string 	$module 	- module name
+ *	@param int 	$entity_id 	- record id
+ *	@param string 	$relatedlist 	- string "relatedlist" or may be empty. if empty means ListView else relatedlist
+ *	@param string 	$returnset 	- may be empty in case of ListView. For relatedlists, return_module, return_action and return_id values will be passed like &return_module=Accounts&return_action=CallRelatedList&return_id=10
+ *	return string	$edit_link	- url string which cotains the editlink details (module, action, record, etc.,) like index.php?module=Accounts&action=EditView&record=10
+ */
+function getListViewEditLink($module,$entity_id,$relatedlist,$returnset)
+{
+	$edit_link = "index.php?module=$module&action=EditView&record=$entity_id";
+
+	//This is relatedlist listview
+	if($relatedlist == 'relatedlist')
+	{
+		$edit_link .= $returnset;
+	}
+	else
+	{
+		$edit_link .= "&return_module=$module&return_action=index";
+	}
+
+	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
+
+	return $edit_link;
+}
+
+/**	Function to get the Del link details for ListView and RelatedListView
+ *	@param string 	$module 	- module name
+ *	@param int 	$entity_id 	- record id
+ *	@param string 	$relatedlist 	- string "relatedlist" or may be empty. if empty means ListView else relatedlist
+ *	@param string 	$returnset 	- may be empty in case of ListView. For relatedlists, return_module, return_action and return_id values will be passed like &return_module=Accounts&return_action=CallRelatedList&return_id=10
+ *	return string	$del_link	- url string which cotains the editlink details (module, action, record, etc.,) like index.php?module=Accounts&action=Delete&record=10
+ */
+function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
+{
+	$del_link = "index.php?module=$module&action=Delete&record=$entity_id";
+
+	//This is added for relatedlist listview
+	if($relatedlist == 'relatedlist')
+	{
+		$del_link .= $returnset;
+	}
+	else
+	{
+		$del_link .= "&return_module=$module&return_action=index";
+	}
+
+	$del_link .= "&parenttab=".$_REQUEST["parenttab"];
+	
+	return $del_link;
+}
 
 ?>
