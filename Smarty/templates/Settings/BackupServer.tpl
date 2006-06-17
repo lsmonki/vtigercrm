@@ -9,126 +9,129 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<form action="index.php" method="post" name="tandc">
-<input type="hidden" name="server_type" value="backup">
-<input type="hidden" name="module" value="Settings">
-<input type="hidden" name="action" value="index">
-<input type="hidden" name="bkp_server_mode">
-<input type="hidden" name="server_type" value="backup">
-<input type="hidden" name="parenttab" value="Settings">
-<tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_CONFIGURATION} > {$MOD.LBL_BACKUP_SERVER_CONFIG}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
-
-	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
-	<tbody><tr>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="7"><img src="{$IMAGE_PATH}top_left.jpg" align="top"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif; height: 6px;" bgcolor="#ebebeb"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="8"><img src="{$IMAGE_PATH}top_right.jpg" align="top" height="6" width="8"></td>
-	</tr>
-	<tr>
-
-	<td bgcolor="#ebebeb" width="7"></td>
-	<td style="padding-left: 10px; padding-top: 10px; vertical-align: top;" bgcolor="#ececec">
-	<table border="0" cellpadding="10" cellspacing="0" width="100%" class="small">
-	<tbody><tr>
-	<td rowspan="6" bgcolor="#ffffff" width="30%" valign="bottom" background="{$IMAGE_PATH}BackupServer_top.gif" style="background-position:top right;background-repeat:no-repeat;">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
+			{include file="SetMenu.tpl"}
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<form action="index.php" method="post" name="tandc">
+				<input type="hidden" name="server_type" value="backup">
+				<input type="hidden" name="module" value="Settings">
+				<input type="hidden" name="action" value="index">
+				<input type="hidden" name="bkp_server_mode">
+				<input type="hidden" name="server_type" value="backup">
+				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-						<td background="{$IMAGE_PATH}BackupServer_btm.gif" style="background-position:bottom right;background-repeat:no-repeat; " height="150">&nbsp;</td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}backupserver.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_BACKUP_SERVER_SETTINGS} </b></td>
 				</tr>
-		</table>
-	</td>
-	{if $BKP_SERVER_MODE neq 'edit'}
-	<td colspan="2" style="padding-top: 0px;" align="right" width="70%">
-	<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="classBtn" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}"><br><hr>
-	</td>
-	{else}	
-	<td colspan="2" style="padding-top: 0px;" align="left" width="75%">
-	<b>{$MOD.LBL_BACKUP_SERVER_INFO}</b>&nbsp;{$ERROR_MSG}<br><hr>
-	</td>
-	{/if}
-	</tr>
-	
-	{if $BKP_SERVER_MODE eq 'edit'}
-	<tr>
-		<td><font color="red">*</font>{$MOD.LBL_FTP_SERVER_NAME}:</td>
-		<td><input class="dataInput" type="text" name="server" value="{$FTPSERVER}" size="25" /></td>
-	</tr>
-	<tr>
-		<td><font color="red">*</font>{$MOD.LBL_FTP_USER_NAME}:</td>
-		<td><input class="dataInput" type="text" name="server_username" value="{$FTPUSER}" size="25" /></td>
-	</tr>
-	<tr>
-		<td><font color="red">*</font>{$MOD.LBL_FTP_PASSWORD}:</td>
-		<td><input class="dataInput" type="password" name="server_password" value="{$FTPPASSWORD}" size="25" /></td>
-	</tr>
-	{else}
-	<tr>
-		<td width=40%>{$MOD.LBL_FTP_SERVER_NAME}:</td>
-		<td>{$FTPSERVER}</td>
-	</tr>
-	<tr>
-		<td>{$MOD.LBL_FTP_USER_NAME}:</td>
-		<td>{$FTPUSER}</td>
-	</tr>
-	<tr>
-		<td>{$MOD.LBL_FTP_PASSWORD}:</td>
-		<td>
-		{if $FTPPASSWORD neq ''}
-		******
-		{/if}&nbsp;
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_BACKUP_SERVER_DESC} </td>
+				</tr>
+				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>{$MOD.LBL_BACKUP_SERVER_SETTINGS} ({$MOD.LBL_FTP})<br>{$ERROR_MSG}</strong></td>
+						{if $BKP_SERVER_MODE neq 'edit'}
+						<td class="small" align=right>
+							<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
+						</td>
+						{else}
+						<td class="small" align=right>
+							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()">&nbsp;&nbsp;
+						    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+						</td>
+						{/if}
+					</tr>
+					</table>
+				
+			{if $BKP_SERVER_MODE eq 'edit'}	
+			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+			<tr>
+      			    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
+                            <td width="80%" class="small cellText">
+				<input type="text" class="detailedViewTextBox small" value="{$FTPSERVER}" name="server"></strong>
+			    </td>
+                          </tr>
+                          <tr valign="top">
+
+                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
+                            <td class="small cellText">
+				<input type="text" class="detailedViewTextBox small" value="{$FTPUSER}" name="server_username">
+			    </td>
+                          </tr>
+                          <tr>
+                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PASWRD}</strong></td>
+                            <td class="small cellText">
+				<input type="password" class="detailedViewTextBox small" value="{$FTPPASSWORD}" name="server_password">
+			    </td>
+                          </tr>
+                        </table>
+			{else}
+			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+			<tr>
+	         	    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
+                            <td width="80%" class="small cellText"><strong>{$FTPSERVER}</strong></td>
+                        </tr>
+                        <tr valign="top">
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USERNAME}</strong></td>
+                            <td class="small cellText">{$FTPUSER}</td>
+                        </tr>
+                        <tr>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_PASWRD}</strong></td>
+                            <td class="small cellText">
+				{if $FTPPASSWORD neq ''}
+				******
+				{/if}&nbsp;
+			    </td>
+                        </tr>
+                        </table>
+					
+			{/if}				
+						</td>
+					  </tr>
+					</table>
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr>
+					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
+					</tr>
+					</table>
+				</td>
+				</tr>
+				</table>
+			
+			
+			
+			</td>
+			</tr>
+			</table>
 		</td>
 	</tr>
-	{/if}
-
-	<tr><td colspan="2" width="75%">&nbsp; </td></tr>
-	<tr><td colspan="2" align="center"width="75%"><hr> <br>
-	
-	{if $BKP_SERVER_MODE eq 'edit'}
-	<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="classBtn" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()"">&nbsp;&nbsp;&nbsp;
-    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="classBtn" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
-	{/if}	
-
-	</td></tr>
-	</tbody></table>
-	</td>
-	<td bgcolor="#ebebeb" width="8"></td>
-	</tr>
-
-	<tr>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="7"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"></td>
-	<td style="font-size: 1px;" bgcolor="#ececec" height="8"></td>
-	
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="8"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom"></td>
-	</tr>
-	</tbody></table>
-
+	</form>
+	</table>
+		
+	</div>
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
-</form>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 {literal}
 <script>
 function validate() {
