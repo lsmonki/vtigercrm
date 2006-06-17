@@ -145,7 +145,8 @@ class SalesOrder extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
+
 		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred') or (vtiger_activity.eventstatus != '' &&  vtiger_activity.eventstatus = 'Planned')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('SalesOrder','Activities',$focus,$query,$button,$returnset);
@@ -235,7 +236,7 @@ class SalesOrder extends CRMEntity {
 		$focus = new Invoice();
 	
 		$button = '';
-		$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
