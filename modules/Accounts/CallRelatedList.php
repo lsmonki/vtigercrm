@@ -39,7 +39,9 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
-
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+	$smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
  if(!$_SESSION['rlvs'][$module])
  {
        unset($_SESSION['rlvs']);

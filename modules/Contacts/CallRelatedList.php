@@ -53,6 +53,9 @@ $smarty->assign("campaignid",$campaignid);
 if(isset($_request['isduplicate']) && $_request['isduplicate'] == 'true') {
         $focus->id = "";
 }
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+	$smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 $parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 $category = getparenttab();

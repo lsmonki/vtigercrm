@@ -42,7 +42,9 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+        $smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID",$RECORD );

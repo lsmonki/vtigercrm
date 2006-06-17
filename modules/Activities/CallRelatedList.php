@@ -41,7 +41,9 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-
+if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
+	$smarty->assign("OP_MODE",$_REQUEST['mode']);
+}
 $related_array = getRelatedLists("Activities", $focus);
 $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);
