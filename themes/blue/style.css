@@ -2489,8 +2489,7 @@ level2Sel{
 
    
 .tagCloudTopBg {
-    background: url(images/tagCloudBg.gif);
-    background-repeat:repeat-x;
+    background: url(images/tagCloudBg.gif) repeat-x;
    
 }
 
@@ -2554,7 +2553,8 @@ ul {
 
 
 .tagCloudTopBg {
-	background-image:url(images/topCloudBg.gif) repeat-x;
+	background-image: url(images/topCloudBg.gif);
+	background-repeat: repeat-x;	
 }
 
 .tagCloudDisplay {
@@ -2692,6 +2692,10 @@ ul {
 	border-right	:1px solid #eaeaea;
 	border-bottom:1px solid #eaeaea;
 	border-bottom:1px solid #eaeaea;
+}
+.listRow{
+	border-bottom:2px solid #eaeaea;
+
 }
 
 .listTableTopButtons{
