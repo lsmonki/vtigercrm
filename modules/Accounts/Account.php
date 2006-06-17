@@ -146,7 +146,7 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="New Contact" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_CONTACT'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		//SQL
 		$query = "SELECT vtiger_contactdetails.*,
@@ -186,7 +186,7 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="New Potential" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_POTENTIAL'].'">';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.accountid,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
@@ -229,7 +229,7 @@ class Account extends CRMEntity {
 			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
 			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_activity.*,
 			vtiger_seactivityrel.*,
@@ -378,8 +378,7 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
-
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name,
 			vtiger_groups.groupname,
@@ -419,7 +418,7 @@ class Account extends CRMEntity {
 		{
 			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name,
 			vtiger_groups.groupname,
@@ -460,7 +459,7 @@ class Account extends CRMEntity {
 			$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
 		}
 
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
@@ -496,7 +495,7 @@ class Account extends CRMEntity {
 		$button = '';
 
 		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
@@ -567,7 +566,7 @@ class Account extends CRMEntity {
 
 			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Accounts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
 		}
-		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Accounts&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_products.productid, vtiger_products.productname,
 			vtiger_products.productcode, vtiger_products.commissionrate,

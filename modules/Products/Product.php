@@ -186,7 +186,7 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_users.user_name, vtiger_users.id,
 			vtiger_products.productid, vtiger_products.productname,
@@ -226,7 +226,7 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_contactdetails.lastname,
@@ -271,7 +271,7 @@ class Product extends CRMEntity {
 		$focus = new Quote();
 	
 		$button = '';
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.*,
@@ -307,7 +307,7 @@ class Product extends CRMEntity {
 
 		$button = '';
 
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_purchaseorder.*,
@@ -335,10 +335,11 @@ class Product extends CRMEntity {
 		$log->debug("Entering get_salesorder(".$id.") method ...");
 		global $app_strings;
 		require_once('modules/SalesOrder/SalesOrder.php');
-        $focus = new SalesOrder();
+
+	        $focus = new SalesOrder();
  
 		$button = '';
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 		$query = "SELECT vtiger_crmentity.*,
 			vtiger_salesorder.*,
@@ -371,7 +372,7 @@ class Product extends CRMEntity {
 		$focus = new Invoice();
 
 		$button = '';
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.*,
@@ -402,7 +403,7 @@ class Product extends CRMEntity {
 		require_once('modules/PriceBooks/PriceBook.php');
 		$focus = new PriceBook();
 		$button = '';
-		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
 
 		$query = "SELECT vtiger_crmentity.crmid,

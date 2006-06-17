@@ -99,7 +99,7 @@ class Email extends CRMEntity {
 		$focus = new Contact();
 
 		$button = '';
-		$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
+		$returnset = '&return_module=Emails&return_action=CallRelatedList&return_id='.$id;
 
 		$query = 'select vtiger_contactdetails.accountid, vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_contactdetails.emailoptout, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_contactgrouprelation on vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid left join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname where vtiger_cntactivityrel.activityid='.$adb->quote($id).' and vtiger_crmentity.deleted=0';
 		$log->info("Contact Related List for Email is Displayed");

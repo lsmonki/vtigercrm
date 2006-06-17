@@ -189,7 +189,7 @@ function get_activities($id)
 		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';i;this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
 		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
 	}
-	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 
 	// First, get the list of IDs.
@@ -216,7 +216,7 @@ function get_emails($id)
 
 		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
 	}
-	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 	$query ="select vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.semodule, vtiger_activity.activitytype, vtiger_activity.date_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;
 	$log->debug("Exiting get_emails method ...");
@@ -304,7 +304,7 @@ function get_products($id)
 	{
 		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
 	}
-	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+	$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 
 	$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid from vtiger_products inner join vtiger_seproductsrel on vtiger_products.productid = vtiger_seproductsrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  where vtiger_leaddetails.leadid = '.$id.' and vtiger_crmentity.deleted = 0';
 	$log->debug("Exiting get_products method ...");
