@@ -1162,12 +1162,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         }
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
-		if($_REQUEST['convertmode'] != 'update_quote_val' && $_REQUEST['convertmode'] != 'update_so_val')
+		$convertmode = isset($_REQUEST['convertmode']) ? $_REQUEST['convertmode'] : '';
+		
+		if($convertmode != 'update_quote_val' && $convertmode != 'update_so_val')
 		{
                 	if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
                         	$value = $_REQUEST['account_id'];	
 		}
-
+		
+		$account_name = '';
 		if($value != '')
 		{		
 			$account_name = getAccountName($value);	
@@ -1787,6 +1790,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
 		$account_id = $col_fields[$fieldname];
+		$account_name = '';
 		if($account_id != '')
 		{
 			$account_name = getAccountName($account_id);

@@ -24,6 +24,8 @@ function getBlockInformation($module, $block, $mode, $col_fields)
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	$output='';
+	$mvAdd_flag = false;
+
 	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'Orders' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
 		global $vtlog;
@@ -48,8 +50,12 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$output .= '<tr>';
 		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
 		$output .= $custfld;	
+		
 		if ($mvAdd_flag == true)
-		$output .= $moveAddress;
+		{
+			$output .= $moveAddress;
+		}
+		
 		$mvAdd_flag = false;
 		$i++;
 		if($i<$noofrows)

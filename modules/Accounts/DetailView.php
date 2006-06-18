@@ -83,6 +83,7 @@ $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK3", $block_3);
 
 $block_5 = getDetailBlockInformation("Accounts",5,$focus->column_fields);
+$cust_fld = '';
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -140,9 +141,10 @@ if(isPermitted("Accounts",8,'') == 'yes')
 	//$tempVal = mysql_fetch_array($wordTemplateResult);
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
+	$optionString = '';
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
+		$optionString ="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 		//$tempVal = mysql_fetch_array($wordTemplateResult);
 	}

@@ -260,9 +260,12 @@ $vtlog->logthis("module is ".$module,'info');
     global $adb;
     global $current_user;
     global $vtlog;	
+    global $insertion_mode;
+    
+    $assigntype = isset($_REQUEST['assigntype'])? $_REQUEST['assigntype'] : '';
                 
     $date_var = $adb->database->DBTimeStamp(date('YmdHis'));
-    if($_REQUEST['assigntype'] == 'T')
+    if($assigntype == 'T')
     {
       $ownerid= 0;
     }
@@ -413,6 +416,10 @@ $vtlog->logthis("module is =".$module,'info');
 	  $vtlog->logthis("function insertIntoCrmEntity ".$module.' table name ' .$table_name,'info');  
 	  global $adb;
 	  $insertion_mode = $this->mode;
+	  
+	  $assigntype = isset($_REQUEST['assigntype'])? $_REQUEST['assigntype'] : '';
+	  $groupname = isset($_REQUEST['assigned_group_name'])? $_REQUEST['assigned_group_name'] : '';
+
 
 	  //Checkin whether an entry is already is present in the table to update
 	  if($insertion_mode == 'edit')
@@ -546,7 +553,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  {
 				  global $current_user;
 				  $fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-				  if($_REQUEST['assigned_group_name'] != '' && $_REQUEST['assigntype'] == 'T')
+				  if($_REQUEST['assigned_group_name'] != '' && $assigntype == 'T')
                                   {
                                         $group_name = $_REQUEST['assigned_group_name'];
                                   }
@@ -626,10 +633,8 @@ $vtlog->logthis("module is =".$module,'info');
 
 		  	$adb->query($sql1); 
 		  }
-
-		  if($_REQUEST['assigntype'] == 'T')
+		  if($assigntype == 'T')
 		  {
-			  $groupname = $_REQUEST['assigned_group_name'];
 			  //echo 'about to update lead group relation';
 			  if($module == 'Leads' && $table_name == 'leaddetails')
 			  {
@@ -676,26 +681,23 @@ $vtlog->logthis("module is =".$module,'info');
 	  {	
 		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
 		  $adb->query($sql1); 
-		  $groupname = $_REQUEST['assigned_group_name'];
-		//Fix ref to undefined variable during lead import -mikefedyk
-		if (isset($_REQUEST['assigntype']))
-		{
-		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
+
+		  if($assigntype == 'T' && $table_name == 'leaddetails')
 		  {
 			  if($table_name == 'leaddetails')
 			  {
 				  insert2LeadGroupRelation($this->id,$groupname);
 			  }
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'activity') 
+		  elseif($assigntype == 'T' && $table_name == 'activity') 
 		  {
 			  insert2ActivityGroupRelation($this->id,$groupname);
 		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'troubletickets') 
+		  elseif($assigntype == 'T' && $table_name == 'troubletickets') 
 		  {
 			  insert2TicketGroupRelation($this->id,$groupname);
 		  }
-		}
+		
 	  }
 
   }
@@ -944,7 +946,7 @@ $vtlog->logthis("type is ".$type,'debug');
 
   function save($module_name) 
   {
-	global $vtlog;
+	global $vtlog, $migration;
 	$vtlog->logthis("module name is ".$module_name,'debug');  
     //GS Save entity being called with the modulename as parameter
       $this->saveentity($module_name,$migration);
