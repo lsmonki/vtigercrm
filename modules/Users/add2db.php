@@ -108,8 +108,8 @@ else
   {
     include('themes/'.$theme.'/header.php');
     include "upload.php";
-    //$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a smaller file</font></B> <br>";
-	echo "<script>alert('Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a smaller file')</script>";	
+    //$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
+	echo "<script>alert('Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file')</script>";	
     //echo $errormessage;
     //echo $errorCode;
   }
