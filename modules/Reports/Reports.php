@@ -1030,7 +1030,7 @@ function getReportsModuleList()
 				if(isPermitted($key,'index') == "yes")
 				{
 					$count_flag = 1;
-					$modules [] = $value;
+					$modules [$key] = $value;
 				}
 			}
 		}

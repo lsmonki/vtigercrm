@@ -65,8 +65,8 @@
 	<tbody><tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$MOD.LBL_CREATE_NEW} :</b></td></tr>
 	<tr>
 	<td>
-	{foreach item=modules from=$REPT_MODULES}
-	<a href="javascript:CreateReport('{$modules}');" class="reportMnu">- {$modules}</a>
+	{foreach item=modules key=modulename from=$REPT_MODULES}
+	<a href="javascript:CreateReport('{$modulename}');" class="reportMnu">- {$modules}</a>
 	{/foreach}
 	</td>
 	</tr>
