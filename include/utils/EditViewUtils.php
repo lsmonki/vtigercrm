@@ -532,22 +532,23 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		//This query is for Products only
 		if($module_name == 'Products')
 		{
-			$query = 'select vtiger_attachments.path,vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
+			$query = 'select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
 		}
 		else
 		{
-			$query = "select vtiger_attachments.path, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where vtiger_contactdetails.imagename=vtiger_attachments.name and contactid=".$col_fields['record_id'];
+			$query = "select vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where contactid=".$col_fields['record_id'];
 		}
 		$result_image = $adb->query($query);
 		for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 		{
-			$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
+			$image_id_array[] = $adb->query_result($result_image,$image_iter,'attachmentsid');
+			$image_array[] = $adb->query_result($result_image,$image_iter,'name');
 			$image_path_array[] = $adb->query_result($result_image,$image_iter,'path');	
 		}
 		if(is_array($image_array))
 			for($img_itr=0;$img_itr<count($image_array);$img_itr++)
 			{
-				$fieldvalue[] = array('name'=>$image_array[$img_itr],'path'=>$image_path_array[$img_itr]);
+				$fieldvalue[] = array('name'=>$image_array[$img_itr],'path'=>$image_path_array[$img_itr].$image_id_array[$img_itr]."_");
 			}
 		else
 			$fieldvalue[] = '';
