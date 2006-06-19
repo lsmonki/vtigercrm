@@ -111,7 +111,7 @@ class Product extends CRMEntity {
 		$query = "SELECT vtiger_notes.title, 'Notes      ' AS ActivityType,
 			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
 				crm2.modifiedtime AS lastmodified,
-			vtiger_seattachmentsrel.attachmentsid AS vtiger_attachmentsid,
+			vtiger_seattachmentsrel.attachmentsid AS attachmentsid,
 			vtiger_notes.notesid AS crmid, vtiger_crmentity.createdtime,
 			vtiger_notes.notecontent AS description,
 			vtiger_users.user_name
@@ -136,7 +136,7 @@ class Product extends CRMEntity {
 			vtiger_attachments.name AS filename,
 			vtiger_attachments.type AS FileType,
 				crm2.modifiedtime AS lastmodified,
-			vtiger_attachments.attachmentsid AS vtiger_attachmentsid,
+			vtiger_attachments.attachmentsid AS attachmentsid,
 			vtiger_seattachmentsrel.attachmentsid AS crmid,
 			vtiger_crmentity.createdtime,
 			vtiger_attachments.description, vtiger_users.user_name

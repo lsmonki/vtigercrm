@@ -344,7 +344,7 @@ class Contact extends CRMEntity {
 		$log->debug("Entering get_attachments(".$id.") method ...");
 		$query = "select vtiger_notes.title,'Notes      ' AS ActivityType,
 		vtiger_notes.filename, vtiger_attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
-		vtiger_seattachmentsrel.attachmentsid AS vtiger_attachmentsid, vtiger_notes.notesid AS crmid,
+		vtiger_seattachmentsrel.attachmentsid AS attachmentsid, vtiger_notes.notesid AS crmid,
 			crm2.createdtime, vtiger_notes.notecontent AS description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_notes.contact_id
