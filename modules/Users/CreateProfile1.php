@@ -18,7 +18,7 @@ $profilename=$_REQUEST['profile_name'];
 
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
-        $query = 'select vtiger_profilename from vtiger_profile where vtiger_profilename="'.$profilename.'"';
+        $query = 'select profilename from vtiger_profile where profilename="'.$profilename.'"';
         $result = $adb->query($query);
 
         if($adb->num_rows($result) > 0)
