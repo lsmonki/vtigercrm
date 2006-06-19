@@ -12,15 +12,14 @@
 global $adb;
 global $log;
 $log->debug("Going to update the ListPrice in (modules/Products/UpdateListPrice.php).");
-
 $record = $_REQUEST['record'];
 $pricebook_id = $_REQUEST['pricebook_id'];
 $product_id = $_REQUEST['product_id'];
 $listprice = $_REQUEST['list_price'];
 $return_action = $_REQUEST['return_action'];
+$return_module = $_REQUEST['return_module'];
 
 $query = "update vtiger_pricebookproductrel set listprice=".$listprice." where pricebookid=".$pricebook_id." and productid=".$product_id;
 $adb->query($query); 
-
-header("Location: index.php?action=$return_action&module=PriceBooks&record=$record");
+header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=$return_action&ajax=updatelistprice&record=$record");
 ?>
