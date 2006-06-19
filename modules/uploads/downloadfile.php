@@ -29,15 +29,14 @@ if($adb->num_rows($result) == 1)
 	$name = @$adb->query_result($result, 0, "name");
 	$filepath = @$adb->query_result($result, 0, "path");
 
-	$filesize = filesize($filepath.$name);
-	$fileContent = fread(fopen($filepath.$name, "r"), $filesize);
-
-	$org_filename = ltrim($name,$entityid.'_');
+	$saved_filename = $attachmentsid."_".$name;
+	$filesize = filesize($filepath.$saved_filename);
+	$fileContent = fread(fopen($filepath.$saved_filename, "r"), $filesize);
 
 	header("Content-type: $fileType");
 	header("Content-length: $filesize");
 	header("Cache-Control: private");
-	header("Content-Disposition: attachment; filename=$org_filename");
+	header("Content-Disposition: attachment; filename=$name");
 	header("Content-Description: PHP Generated Data");
 	echo $fileContent;
 }

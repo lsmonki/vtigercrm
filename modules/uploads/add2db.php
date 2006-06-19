@@ -14,17 +14,7 @@ require_once('include/utils/utils.php');
 global $current_user;
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
-$directory = $root_directory."/storage/user_".getUserName($current_user->id)."/attachments/";
 
-if(!is_dir($directory))
-{
-	if(!mkdirs($directory, 0777))	
-	{
-		echo "Access denined to create folder";
-		die;
-	}
-}
-$uploaddir = $directory;
 $crmid = $_REQUEST['return_id'];
 
 	// Arbitrary File Upload Vulnerability fix - Philip
@@ -45,15 +35,16 @@ $crmid = $_REQUEST['return_id'];
 	//decide the file path where we should upload the file in the server
 	$upload_filepath = decideFilePath();
 
-	if(move_uploaded_file($_FILES["filename"]["tmp_name"],$upload_filepath.$crmid."_".$_FILES["filename"]["name"])) 
+	$current_id = $adb->getUniqueID("vtiger_crmentity");
+	
+	if(move_uploaded_file($_FILES["filename"]["tmp_name"],$upload_filepath.$current_id."_".$_FILES["filename"]["name"])) 
 	{
-		$filename = $crmid.'_'.basename($binFile);
+		$filename = basename($binFile);
 		$filetype= $_FILES['filename']['type'];
 		$filesize = $_FILES['filename']['size'];
 
 		if($filesize != 0)	
 		{
-			$current_id = $adb->getUniqueID("vtiger_crmentity");
 			$desc = $_REQUEST['txtDescription'];
 			$description = addslashes($desc);
 			$date_var = date('YmdHis');

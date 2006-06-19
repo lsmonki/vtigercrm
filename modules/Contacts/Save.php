@@ -60,9 +60,9 @@ if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
 if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
 
 //Checking If image is given or not
-$image_upload_array=SaveImage($_FILES,'contact',$focus->id,$focus->mode);
+//$image_upload_array=SaveImage($_FILES,'contact',$focus->id,$focus->mode);
 $image_name_val=$image_upload_array['imagename'];
-$image_error=$image_upload_array['imageerror'];
+$image_error="false";
 $errormessage=$image_upload_array['errormessage'];
 $saveimage=$image_upload_array['saveimage'];
 

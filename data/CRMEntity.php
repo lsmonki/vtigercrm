@@ -255,13 +255,27 @@ class CRMEntity
 		global $log, $adb;
 		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
 		
+		$file_saved = false;
+
+		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
+		if($module == 'Contacts')
+			$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
+
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
-				$this->uploadAndSaveFile($id,$module,$files);
+				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
+
+		//This is to handle the delete image for contacts
+		if($module == 'Contacts' && $file_saved)
+		{
+			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
+			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
+		}
+
 
 		//Remove the deleted vtiger_attachments from db - Products
 		if($module == 'Products' && $_REQUEST['del_file_list'] != '')
@@ -291,7 +305,7 @@ class CRMEntity
 	{
 		global $log;
 		$log->debug("Entering into uploadAndSaveFile($id,$module,$file_details) method.");
-		
+
 		global $adb, $current_user;
 		global $upload_badext;
 
@@ -315,16 +329,18 @@ class CRMEntity
 		}
 		// Vulnerability fix ends
 
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
+
 		$filename = basename($binFile);
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
-		
+
 		//get the file path inwhich folder we want to upload the file
 		$upload_file_path = decideFilePath();
 
 		//upload the file in server
-		$upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$binFile);
+		$upload_status = move_uploaded_file($filetmp_name,$upload_file_path.$current_id."_".$binFile);
 
 		$save_file = 'true';
 		//only images are allowed for these modules
@@ -333,10 +349,8 @@ class CRMEntity
 			$save_file = validateImageFile(&$file_details);
 		}
 
-		if($save_file == 'true')
+		if($save_file == 'true' && $upload_status == 'true')
 		{
-			$current_id = $adb->getUniqueID("vtiger_crmentity");
-
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
 			if($module=='Notes')
 			{
@@ -365,14 +379,14 @@ class CRMEntity
 			}
 			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
 			$adb->query($sql3);
+
+			return true;
 		}
 		else
 		{
 			$log->debug("Skip the save attachment process.");
+			return false;
 		}
-		$log->debug("Exiting from uploadAndSaveFile($id,$module,$file_details) method.");
-
-		return;
 	}
 
 

@@ -247,25 +247,16 @@ function addAllAttachments($mail,$record)
 
 	for($i=0;$i<$count;$i++)
 	{
+		$fileid = $adb->query_result($res,$i,'attachmentsid');
 		$filename = $adb->query_result($res,$i,'name');
-		$filewithpath = $root_directory."test/upload/".$filename;
+		$filepath = $adb->query_result($res,$i,'path');
+		$filewithpath = $root_directory.$filepath.$fileid."_".$filename;
 
 		//if the file is exist in test/upload directory then we will add directly
 		//else get the contents of the file and write it as a file and then attach (this will occur when we unlink the file)
 		if(is_file($filewithpath))
 		{
-			$mail->AddAttachment($filewithpath);
-		}
-		elseif($filename != '')
-		{
-			$contents = $adb->query_result($res,$i,'attachmentcontents');
-			$size = $adb->query_result($res,$i,'attachmentsize');
-
-			@$handle = fopen($filewithpath,'wb');
-			@fwrite($handle,base64_decode($contents),$size);
-			@fclose($handle);
-
-			$mail->AddAttachment($filewithpath);
+			$mail->AddAttachment($filewithpath,$filename);
 		}
 	}
 }

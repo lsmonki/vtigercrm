@@ -372,10 +372,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($tabid==14)
 		{
 			$images=array();
-			$query = 'select productname,vtiger_attachments.path,vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
+			$query = 'select productname, vtiger_attachments.path, vtiger_attachments.attachmentsid, vtiger_attachments.name from vtiger_products left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_products.productid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where productid='.$col_fields['record_id'];
 			$result_image = $adb->query($query);
 			for($image_iter=0;$image_iter < $adb->num_rows($result_image);$image_iter++)	
 			{
+				$image_id_array[] = $adb->query_result($result_image,$image_iter,'attachmentsid');	
 				$image_array[] = $adb->query_result($result_image,$image_iter,'name');	
 				$imagepath_array[] = $adb->query_result($result_image,$image_iter,'path');	
 			}
@@ -392,13 +393,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				for($image_iter=0;$image_iter < count($image_array);$image_iter++)
 				{
-					$images[]='"'.$imagepath_array[$image_iter].$image_array[$image_iter].'","'.$imagepath_array[$image_iter].$image_array[$image_iter].'"';
+					$images[]='"'.$imagepath_array[$image_iter].$image_id_array[$image_iter]."_".$image_array[$image_iter].'","'.$imagepath_array[$image_iter].$image_id_array[$image_iter]."_".$image_array[$image_iter].'"';
 				}	
 				$image_lists .=implode(',',$images).');</script>';
 				$label_fld[] =$image_lists;
 			}elseif(count($image_array)==1)
 			{
-				$label_fld[] ='<img src="'.$imagepath_array[0].$image_array[0].'" border="0" width="450" height="300">';
+				$label_fld[] ='<img src="'.$imagepath_array[0].$image_id_array[0]."_".$image_array[0].'" border="0" width="450" height="300">';
 			}else
 			{
 				$label_fld[] ='';
@@ -407,7 +408,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}	
 		if($tabid==4)
 		{
-			$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
+			//$imgpath = getModuleFileStoragePath('Contacts').$col_fields[$fieldname];
+			$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid=".$col_fields['record_id'];
+			$image_res = $adb->query($sql);
+			$image_id = $adb->query_result($image_res,0,'attachmentsid');
+			$image_path = $adb->query_result($image_res,0,'path');
+			$image_name = $adb->query_result($image_res,0,'name');
+			$imgpath = $image_path.$image_id."_".$image_name;
 			$label_fld[] ='<img src="'.$imgpath.'" class="reflect" width="450" height="300" alt="">';
 		}
 
