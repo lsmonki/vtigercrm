@@ -9,15 +9,8 @@
 *
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
-
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], 'PriceBook: Edit List Price', true);
-echo '<br><br>';
-
-global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -39,16 +32,40 @@ else
 	$return_action = "CallRelatedList";
 	$return_id = $_REQUEST['pricebook_id'];
 }
-$xtpl=new XTemplate ('modules/Products/EditListPrice.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("PRICEBOOKID", $pricebook_id);
-$xtpl->assign("PRODUCTID", $product_id);
-$xtpl->assign("LISTPRICE", $listprice);
-$xtpl->assign("RETURN_ACTION", $return_action);
-$xtpl->assign("RETURN_ID", $return_id);
+$output='';
+$output ='<div id="EditListPriceLay">
+	<form action="index.php" name="index">
+	<input type="hidden" name="module" value="Products">
+	<input type="hidden" name="action" value="UpdateListPrice">
+	<input type="hidden" name="record" value="'.$return_id.'">
+	<input type="hidden" name="pricebook_id" value="'.$pricebook_id.'">
+	<input type="hidden" name="product_id" value="'.$product_id.'">
+	<table width="100%" border="0" cellpadding="3" cellspacing="0">
+	<tr>
+		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="50%">EditListPrice</td>
+		<td style="border-bottom:1px solid #CCCCCC;">&nbsp;</td>
+		<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="#" onClick="document.getElementById(\'EditListPriceLay\').style.display=\'none\';">Close</a></td>
+	</tr>
+	<tr>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="50%"><b>EditListPrice</b></td>
+		<td width="2%"><b>:</b></td>
+		<td width="48%" align="left" ><input class="dataInput" type="text" id="list_price" name="list_price" value="'.$listprice.'" /></td>
+	</tr>
+	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
+	<tr>
+		<td colspan="3" align="center">
+			<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.');return verify_data(EditView)" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="small">
+			<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="small" onClick="document.getElementById(\'EditListPriceLay\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
+		</td>
+		
+	</tr>
+	</table>
+</form>
+</div>';
 
-$xtpl->parse("main");
-$xtpl->out("main");
+echo $output;
 
 ?>
