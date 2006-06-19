@@ -63,6 +63,9 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->display("RelatedLists.tpl");
+if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+	$smarty->display("RelatedListContents.tpl");
+else
+	$smarty->display("RelatedLists.tpl");
 
 ?>
