@@ -21,6 +21,10 @@ require_once($theme_path.'layout_utils.php');
 
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
+if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
+	$uitype=$_REQUEST['uitype'];
+else
+	$uitype=1;
 $readonly = '';
 $smarty = new vtigerCRM_Smarty;
 $cfimagecombo = Array($image_path."text.gif",
@@ -55,7 +59,7 @@ if(isset($fieldid) && $fieldid!='')
 	$customfield_columnname=getCustomFieldData($tabid,$fieldid,'columnname');
 	$customfield_typeofdata=getCustomFieldData($tabid,$fieldid,'typeofdata');
 	$customfield_fieldlabel=getCustomFieldData($tabid,$fieldid,'fieldlabel');
-	$customfield_typename=getCustomFieldTypeName($_REQUEST['uitype']);
+	$customfield_typename=getCustomFieldTypeName($uitype);
 	$fieldtype_lengthvalue=getFldTypeandLengthValue($customfield_typename,$customfield_typeofdata);
 	list($fieldtype,$fieldlength,$decimalvalue)= explode(";",$fieldtype_lengthvalue);
 	$readonly = "readonly";
@@ -141,8 +145,43 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 						<tr>
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
 							<td align="left"><input name="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
-						</tr>
-						<tr id="lengthdetails">
+						</tr>';
+					if($mode == 'edit')
+					{
+						switch($uitype)
+						{
+							case 1:
+								$output .= '<tr id="lengthdetails">
+									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
+									<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
+								</tr>';
+								break;
+							case 71:
+							case 9:
+							case 7:
+								$output .= '<tr id="lengthdetails">
+									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
+									<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
+								</tr>';
+								$output .= '<tr id="decimaldetails">
+									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
+									<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" '.$readonly.' class="txtBox"></td>
+								</tr>';
+								break;
+							case 33:
+							case 15:
+								$output .= '<tr id="picklist">
+									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
+									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
+									<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
+								</tr>';
+								break;
+								
+						}
+					}
+					else
+					{
+						$output .= '<tr id="lengthdetails">
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
 							<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
 						</tr>
@@ -154,7 +193,9 @@ $output .= '<form action="index.php" method="post" name="addtodb" onSubmit="retu
 							<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
 							<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
-						</tr>
+						</tr>';
+					}
+				$output .= '	
 					</table>
 				</td>
 			</tr>
