@@ -31,7 +31,7 @@ class LoginHistory extends SugarBean {
 	var $status;
 	var $module_name = "Users";
 
-	var $table_name = "loginhistory";
+	var $table_name = "vtiger_loginhistory";
 
 	var $object_name = "LoginHistory";
 	

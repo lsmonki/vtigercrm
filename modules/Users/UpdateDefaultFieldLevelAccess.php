@@ -40,7 +40,7 @@ foreach($field_module as $fld_module)
 		}		
 
 		//Updating the database
-		$update_query = "update vtiger_def_org_field set visible=".$visible_value." where vtiger_fieldid='".$fieldid."' and vtiger_tabid=".$tab_id;
+		$update_query = "update vtiger_def_org_field set visible=".$visible_value." where fieldid='".$fieldid."' and tabid=".$tab_id;
 		$adb->query($update_query);
 
 	}

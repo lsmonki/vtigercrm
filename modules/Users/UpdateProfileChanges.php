@@ -23,9 +23,9 @@ else
 	$return_action = 'ListProfiles';
 
 //Retreiving the vtiger_tabs permission array
-$tab_perr_result = $adb->query("select * from vtiger_profile2tab where vtiger_profileid=".$profileid);
-$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where vtiger_profileid=".$profileid);
-$act_utility_result = $adb->query("select * from vtiger_profile2utility where vtiger_profileid=".$profileid);
+$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=".$profileid);
+$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=".$profileid);
+$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=".$profileid);
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
@@ -37,9 +37,9 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	$edit_all_req=$_REQUEST['edit_all'];
 	$edit_all = getPermissionValue($edit_all_req);
 
-	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$view_all." where globalactionid=1 and vtiger_profileid=".$profileid;
+	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$view_all." where globalactionid=1 and profileid=".$profileid;
 	$adb->query($update_query);
-	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$edit_all." where globalactionid=2 and vtiger_profileid=".$profileid;
+	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$edit_all." where globalactionid=2 and profileid=".$profileid;
 	$adb->query($update_query);
 
 	
@@ -59,11 +59,11 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			{
 				$permission_value = 1;
 			}
-			$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where vtiger_tabid=".$tab_id." and vtiger_profileid=".$profileid;
+			$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where tabid=".$tab_id." and profileid=".$profileid;
 			$adb->query($update_query);
 			if($tab_id ==9)
 			{
-				$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where vtiger_tabid=16 and vtiger_profileid=".$profileid;
+				$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where tabid=16 and profileid=".$profileid;
 				$adb->query($update_query);
 			}
 		}
@@ -99,11 +99,11 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			{
 				$permission_value = 1;
 			}
-			$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where vtiger_tabid=".$tab_id." and Operation=".$action_id." and vtiger_profileid=".$profileid;
+			$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where tabid=".$tab_id." and Operation=".$action_id." and profileid=".$profileid;
 			$adb->query($update_query);
 			if($tab_id ==9)
 			{
-				$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where vtiger_tabid=16 and Operation=".$action_id." and vtiger_profileid=".$profileid;
+				$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where tabid=16 and Operation=".$action_id." and profileid=".$profileid;
 				$adb->query($update_query);
 			}
 
@@ -132,7 +132,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			$permission_value = 1;
 		}
 
-		$update_query = "update vtiger_profile2utility set permission=".$permission_value." where vtiger_tabid=".$tab_id." and vtiger_activityid=".$action_id." and vtiger_profileid=".$profileid;
+		$update_query = "update vtiger_profile2utility set permission=".$permission_value." where tabid=".$tab_id." and activityid=".$action_id." and profileid=".$profileid;
 
 		$adb->query($update_query);
 
@@ -167,7 +167,7 @@ foreach($modArr as $fld_module => $fld_label)
 			$visible_value = 0;
 		}
 		//Updating the database
-		$update_query = "update vtiger_profile2field set visible=".$visible_value." where vtiger_fieldid='".$fieldid."' and vtiger_profileid=".$profileid." and vtiger_tabid=".$tab_id;
+		$update_query = "update vtiger_profile2field set visible=".$visible_value." where fieldid='".$fieldid."' and profileid=".$profileid." and tabid=".$tab_id;
 		$adb->query($update_query);
 
 	}

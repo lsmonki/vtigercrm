@@ -17,12 +17,12 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
 	if($mode != 'edit')
 	{
-		$query = 'select vtiger_rolename from vtiger_role where vtiger_rolename="'.$rolename.'"';
+		$query = 'select rolename from vtiger_role where rolename="'.$rolename.'"';
 	}
 	else
 	{
 		$roleid=$_REQUEST['roleid'];
-		$query = 'select vtiger_rolename from vtiger_role where vtiger_rolename="'.$rolename.'" and vtiger_roleid !="'.$roleid.'"';
+		$query = 'select rolename from vtiger_role where rolename="'.$rolename.'" and roleid !="'.$roleid.'"';
 
 	}
 	$result = $adb->query($query);

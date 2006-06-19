@@ -28,9 +28,9 @@ $adb->query($sql1);
 
 
 //Retreiving the vtiger_tabs permission array
-$tab_perr_result = $adb->query("select * from vtiger_profile2tab where vtiger_profileid=1");
-$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where vtiger_profileid=1");
-$act_utility_result = $adb->query("select * from vtiger_profile2utility where vtiger_profileid=1");
+$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=1");
+$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=1");
+$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=1");
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);

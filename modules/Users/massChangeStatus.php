@@ -39,7 +39,7 @@ function updateOwner()
 }
 function updateStatus()
 {
-	var vtiger_leadstatusvalue=document.setLeadStatus.lead_status.value
+	var leadstatusvalue=document.setLeadStatus.lead_status.value
 	//alert(leadstatusvalue);
 	document.setLeadStatus.leadval.value=leadstatusvalue;
 	document.setLeadStatus.action="index.php?module=Users&action=updateLeadDBStatus"

@@ -154,7 +154,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 </style>
 </head>
 <?
-		$tabavail="SELECT vtiger_tabid,name from vtiger_tab where presence !=2";
+		$tabavail="SELECT tabid,name from vtiger_tab where presence !=2";
 		$tabrow=$adb->query($tabavail);
 		if($adb->num_rows($tabrow) != 0)
 		{
@@ -163,7 +163,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 				$availabletab[]=$result;
 			}
 		}	
-		$tabsel="SELECT vtiger_tabid,name from vtiger_tab where presence=0 order by vtiger_tabsequence";
+		$tabsel="SELECT tabid,name from vtiger_tab where presence=0 order by tabsequence";
 		$tabrow=$adb->query($tabsel);
 		if($adb->num_rows($tabrow) != 0)
 		{
