@@ -11,13 +11,13 @@
 -->*}
 &#&#&#{$ERROR}&#&#&#
 
+     <form name="massdelete" method="POST">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name='allids' type='hidden' value='{$ALLIDS}'>
-     <form name="massdelete" method="POST">
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">
-<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
+	<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
 	            <tr style="background-color:#efefef">
 		      <td>
 		         <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
@@ -134,5 +134,5 @@
 		   </tr>
 		   
 	    </table>
-   </form>	
+  </form>	
 {$SELECT_SCRIPT}

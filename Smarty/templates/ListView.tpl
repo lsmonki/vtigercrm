@@ -127,10 +127,10 @@ function alphabetic(module,url,dataid)
         </td>
 </tr>
 </table>
-</form>
 </div>
 
 {*<!-- Contents -->*}
+<form name="basicSearch" action="index.php">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
@@ -138,7 +138,6 @@ function alphabetic(module,url,dataid)
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
-<form name="basicSearch" action="index.php">
 <table width="80%" cellpadding="5" cellspacing="0" style="border:1px dashed #CCCCCC;" class="small" align="center">
 	<tr>
 		<td width="15%" class="dvtCellLabel" nowrap align="right"><img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;<b>{$APP.LBL_SEARCH_FOR}</b></td>
@@ -214,12 +213,13 @@ function alphabetic(module,url,dataid)
 		</tr>
 	</table>
 </div>		
+</form>
 {*<!-- Searching UI -->*}
 	 <br>
 	   <!-- PUBLIC CONTENTS STARTS-->
 	   <div id="ListViewContents" class="small" style="width:100%;position:relative;">
-	<input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <form name="massdelete" method="POST">
+     <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">

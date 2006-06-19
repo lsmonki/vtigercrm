@@ -20,7 +20,7 @@ $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['return_module'];
 global $current_user;
 global $adb;
-$storearray = explode(";",$idlist);
+$storearray = explode(";",trim($idlist,';'));
 
 $ids_list = array();
 
@@ -32,7 +32,7 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
 			if($id != '') {
-				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
+				$sql = "update vtiger_crmentity set modifiedby=".$current_user->id.",smownerid='" .$idval ."', modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid='" .$id."'";
 				$result = $adb->query($sql);
 			}
 		}
@@ -44,14 +44,15 @@ if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 }
 elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 {
+
 	foreach($storearray as $id)
 	{
 		if(isPermitted($return_module,'EditView',$id) == 'yes')
 		{
 			if($id != '') {
-				$sql = "update vtiger_leaddetails set vtiger_leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
+				$sql = "update vtiger_leaddetails set leadstatus='" .$leadstatusval ."' where leadid='" .$id."'";
 				$result = $adb->query($sql);
-				$query = "update vtiger_crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$id;
+				$query = "update vtiger_crmentity set modifiedby=".$current_user->id.",modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$id;
 				$result1 = $adb->query($query);
 			}
 		}
@@ -62,13 +63,13 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 
 	}
 }
-$ret_owner = getEntityName($return_module,$ids_list);
-if(count($ret_owner) > 0)
+if(count($ids_list) > 0)
 {
-       $errormsg = implode(',',$ret_owner);
+	$ret_owner = getEntityName($return_module,$ids_list);
+        $errormsg = implode(',',$ret_owner);
 }else
 {
-       $errormsg = '';
+        $errormsg = '';
 }
 
 if($return_module == 'Calendar')
