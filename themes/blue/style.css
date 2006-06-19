@@ -2291,6 +2291,17 @@ level2Sel{
 	padding:5px;
 }
 
+#EditListPriceLay{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	text-align:left;
+	width:300px;
+	border:3px solid #CCCCCC;
+	background-color:#FFFFFF;
+	padding:5px;
+}
+							
+
 
 /* For Report HTML Generation*/
 .rptCellLabel {
