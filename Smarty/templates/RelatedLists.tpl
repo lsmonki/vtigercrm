@@ -13,9 +13,46 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-	{include file='Buttons_List1.tpl'}
+{literal}
+<script>
+function editProductListPrice(id,pbid,price)
+{
+        $("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'action=ProductsAjax&file=EditListPrice&return_action=CallRelatedList&return_module=PriceBooks&module=Products&parenttab=Settings&record='+id+'&pricebook_id='+pbid+'&listprice='+price,
+                        onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("editlistprice").innerHTML= response.responseText;
+                        }
+                }
+        );
+}
 
+function gotoUpdateListPrice(id,pbid,proid)
+{
+        $("status").style.display="inline";
+        $("EditListPriceLay").style.display = "none";
+        var listprice=$("list_price").value;
+                new Ajax.Request(
+                        'index.php',
+                        {queue: {position: 'end', scope: 'command'},
+                                method: 'post',
+                                postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
+                                onComplete: function(response) {
+                                        $("status").style.display="none";
+                                        $("RLContents").innerHTML= response.responseText;
+                                }
+                        }
+                );
+}
+</script>
+{/literal}
+	{include file='Buttons_List1.tpl'}
 <!-- Contents -->
+<div id="editlistprice" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
 	<td valign=top><img src="themes/blue/images/showPanelTopLeft.gif"></td>
@@ -163,40 +200,10 @@
 							{/if}
 							</tr>
 						</table>	
-	                                        {if $detail ne ''} 
-				      	   	  {foreach key=header item=detail from=$detail}
-					      
-							{if $header eq 'header'}
-								<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;" class="small">
-								<tr style="height:25px" bgcolor=white>	
-							          {foreach key=header item=headerfields from=$detail}	
-								    <td class="lvtCol">{$headerfields}</td> 
-							          {/foreach}			
-								</tr>
-							{elseif $header eq 'entries'}	 
-					    			{foreach key=header item=detail from=$detail}
-								  <tr bgcolor=white>
-							            {foreach key=header item=listfields from=$detail}
-        	        	                                      <td>{$listfields}</td>
-                	        	                            {/foreach}		
-								  </tr>	
-								{/foreach}
-								</table>	 
-		                                        {/if}	
-						    {/foreach}
-						
-					   	{else}
-							<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%" class="small">
-							<tbody>
-								<tr style="height: 25px;" bgcolor="white">
-									<td><i>{$APP.LBL_NONE_INCLUDED}</i></td>
-								</tr>
-							</tbody>
-						
-							</table>
-								
-					   	{/if}		
-				  	  <br><br>
+						<div id="RLContents">
+                                                        {include file='RelatedListContents.tpl'}
+                                                </div>
+						<br><br>
 					{/foreach}
 						</form>
 				</table>			
