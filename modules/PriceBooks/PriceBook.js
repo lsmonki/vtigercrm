@@ -150,4 +150,19 @@ function set_return_inventory_pb(listprice, fldname)
 	window.opener.document.EditView.elements[fldname].focus();
 }
 
+function deletePriceBookProductRel(id,pbid)
+{
+        $("status").style.display="inline";
+        new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Products&action=ProductsAjax&file=DeletePriceBookProductRel&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&return_id='+pbid,
+			onComplete: function(response) {
+					$("status").style.display="none";
+                                        $("RLContents").innerHTML= response.responseText;
+			}
+                }
+	);
+}
 
