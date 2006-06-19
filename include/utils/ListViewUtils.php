@@ -741,8 +741,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$returnset);
 		$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset);
 
-		$list_header[] = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> | 
-				  <a href=\"javascript:;\" onclick=confirmdelete(\"$del_link\")> ".$app_strings["LNK_DELETE"]." </a>";
+		$links_info = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
+		if($del_link != '')
+			$links_info .=	" | <a href=\"javascript:;\" onclick=confirmdelete(\"$del_link\")> ".$app_strings["LNK_DELETE"]." </a>";
+
+		$list_header[] = $links_info;
+
 		echo '<script>
 				function confirmdelete(url)
 		                {
@@ -2665,6 +2669,16 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset)
  */
 function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 {
+	$current_module = $_REQUEST['module'];
+
+	//This is added to avoid the del link in Product related list for the following modules
+	$avoid_del_links = Array("PurchaseOrder","SalesOrder","Quotes","Invoice");
+
+	if($current_module == 'Products' && in_array($module,$avoid_del_links))
+	{
+		return '';
+	}
+
 	$del_link = "index.php?module=$module&action=Delete&record=$entity_id";
 
 	//This is added for relatedlist listview
