@@ -79,6 +79,9 @@ function create_default_users() {
         $user->column_fields["namedays"] = '';
         $user->column_fields["currency_id"] = 1;
 	$user->column_fields["date_format"] = 'yyyy-mm-dd';
+	$user->column_fields["hour_format"] = 'am/pm';
+	$user->column_fields["start_hour"] = '08:00';
+	$user->column_fields["end_hour"] = '23:00';
 	// added by jeri to populate default image and tagcloud for admin	
 	$user->column_fields["imagename"] = 'shanky.jpg';
         $user->column_fields["tagcloud"] = '';	
