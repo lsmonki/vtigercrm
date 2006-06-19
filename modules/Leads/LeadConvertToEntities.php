@@ -27,14 +27,7 @@ $potential_amount = $_REQUEST['potential_amount'];
 $potential_sales_stage = $_REQUEST['potential_sales_stage'];
 
 global $log;
-$log->debug("id is ".$id);
-$log->debug("assigned_user_id is ".$assigned_user_id);
-$log->debug("createpotential is ".$createpotential);
-$log->debug("close date is ".$close_date);
-$log->debug("current user id is ".$current_user_id);
-$log->debug("assigned user id is ".$assigned_user_id);
-$log->debug("accountname is ".$accountname);
-$log->debug("module is ".$module);
+$log->debug("id = $id \n assigned_user_id = $assigned_user_id \n createpotential = $createpotential \n close date = $close_date \n current user id = $current_user_id \n accountname = $accountname \n module = $module");
 
 $check_unit = explode("-",$potential_name);
 if($check_unit[1] == "")
@@ -46,13 +39,9 @@ $focus->retrieve_entity_info($id,"Leads");
 
 //get all the lead related columns 
 $row = $focus->column_fields;
-$date_entered;
-$date_modified;
 
 $date_entered = date('YmdHis');
 $date_modified = date('YmdHis');
-
-$crmid = $adb->getUniqueID("vtiger_crmentity");
 
 //function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields -Jag
 function getInsertValues($type,$type_id)
@@ -220,23 +209,48 @@ function getRelatedActivities($accountid,$contact_id)
 
 }
 
+/**	Function used to save the lead related products with other entities Account, Contact and Potential
+ *	$leadid - leadid
+ *	$relatedid - related entity id (accountid/contactid/potentialid)
+ *	$relatedmodule - related entity module name - optional, but for contacts we have to pass Contact because we have to update contactid in vtiger_products table.
+ */
+function saveLeadRelatedProducts($leadid, $relatedid, $relatedmodule = '')
+{
+	global $adb, $log;
+	$log->debug("Entering into function saveLeadRelatedProducts($leadid, $relatedid, \"$relatedmodule\")");
+
+	$product_result = $adb->query("select * from vtiger_seproductsrel where crmid=$leadid");
+	$noofproducts = $adb->num_rows($product_result);
+	for($i = 0; $i < $noofproducts; $i++)
+	{
+		$productid = $adb->query_result($product_result,$i,'productid');
+
+		$adb->query("insert into vtiger_seproductsrel (productid, crmid) values($productid, $relatedid)");
+
+		if($relatedmodule == 'Contacts')
+		{
+			//update contactid in products table then only the products will be shown in contact relatedlist
+			$adb->query("update vtiger_products set contactid=$relatedid where productid=$productid");
+		}
+	}
+
+	$log->debug("Exit from function saveLeadRelatedProducts.");
+}
+
+$crmid = $adb->getUniqueID("vtiger_crmentity");
+
 //Saving Account - starts
 $sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
-
 $adb->query($sql_crmentity);
 
 $sql_insert_account = "INSERT INTO vtiger_account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".addslashes($accountname)."','".$row["industry"] ."','" .$row["annualrevenue"] ."','" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["noofemployees"] ."')";
-
 $adb->query($sql_insert_account);
 
 $sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
-
 $adb->query($sql_insert_accountbillads);
 
 
 $sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
-
-
 $adb->query($sql_insert_accountshipads);
 
 //Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
@@ -251,12 +265,18 @@ if($val[1]!="")
 $insert_column.=$val[0];
 $insert_value.=$val[1];
 $sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_value.")";
-
 $adb->query($sql_insert_accountcustomfield);
 //Saving Account - ends
 
-$acccount_id=$crmid;
+$account_id=$crmid;
 getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
+
+//Retrieve the lead related products and relate them with this new account
+saveLeadRelatedProducts($id, $crmid);
+
+//Up to this, Account related data save finshed
+
+
 
 $date_entered = date('YmdHis');
 $date_modified = date('YmdHis');
@@ -301,7 +321,16 @@ $sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (".$insert_colum
 $adb->query($sql_insert_contactcustomfield);
 //Saving Contact - ends
 
-getRelatedActivities($acccount_id,$contact_id); //To convert relates Activites  and Email -Jaguar
+getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
+
+//Retrieve the lead related products and relate them with this new contact
+saveLeadRelatedProducts($id, $contact_id, "Contacts");
+
+//Up to this, Contact related data save finshed
+
+
+
+
 
 //Saving Potential - starts
 if(! isset($createpotential) || ! $createpotential == "on")
@@ -344,8 +373,13 @@ if(! isset($createpotential) || ! $createpotential == "on")
 
 	$sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(".$contact_id.",".$oppid .")";
         $adb->query($sql_insert2contpotentialrel);
+
+	//Retrieve the lead related products and relate them with this new potential
+	saveLeadRelatedProducts($id, $oppid);
+
 }
 //Saving Potential - ends
+//Up to this, Potential related data save finshed
 
 
 //Deleting from the vtiger_tracker
