@@ -78,5 +78,5 @@ if($server_type != 'backup')
 	if($mail_status != 1)
 		$action = 'EmailConfig&emailconfig_mode=edit';
 }
-header("Location: index.php?module=Settings&action=$action&$error_str");
+header("Location: index.php?module=Settings&parenttab=Settings&action=$action&$error_str");
 ?>
