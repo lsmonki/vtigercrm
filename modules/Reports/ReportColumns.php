@@ -35,21 +35,21 @@ $report_column->assign("APP", $app_strings);
 $report_column->assign("IMAGE_PATH",$image_path);
 if(isset($_REQUEST["record"]))
 {
-        $recordid = $_REQUEST["record"];
-        $oReport = new Reports($recordid);
+	$recordid = $_REQUEST["record"];
+	$oReport = new Reports($recordid);
 	$BLOCK1 = getPrimaryColumnsHTML($oReport->primodule);
 	$BLOCK1 .= getSecondaryColumnsHTML($oReport->secmodule);
-        $BLOCK2 = $oReport->getSelectedColumnsList($recordid);
+	$BLOCK2 = $oReport->getSelectedColumnsList($recordid);
 	$report_column->assign("BLOCK1",$BLOCK1);
 	$report_column->assign("BLOCK2",$BLOCK2);
 }else
 {
 	$primarymodule = $_REQUEST["primarymodule"];
-        $secondarymodule = $_REQUEST["secondarymodule"];
+	$secondarymodule = $_REQUEST["secondarymodule"];
 	$BLOCK1 = getPrimaryColumnsHTML($primarymodule);
 	$BLOCK1 .= getSecondaryColumnsHTML($secondarymodule);
 	$report_column->assign("BLOCK1",$BLOCK1);
-	
+
 }
 
 /** Function to formulate the vtiger_fields for the primary modules 
@@ -60,28 +60,28 @@ if(isset($_REQUEST["record"]))
 
 function getPrimaryColumnsHTML($module)
 {
-        global $ogReport;
+	global $ogReport;
 	global $app_list_strings;
 	global $current_language;
 
 	$mod_strings = return_module_language($current_language,$module);
 	foreach($ogReport->module_list[$module] as $key=>$value)
-        {
-            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
-	    if(isset($ogReport->pri_module_columnslist[$module][$key]))
-	    {
-		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
+	{
+		if(isset($ogReport->pri_module_columnslist[$module][$key]))
 		{
-			if(isset($mod_strings[$fieldlabel]))
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
+			foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 			{
-				$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-			}else
-			{
-				$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+				if(isset($mod_strings[$fieldlabel]))
+				{
+					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+				}
 			}
 		}
-	    }
-        }
+	}
 	return $shtml;
 }
 
@@ -100,30 +100,30 @@ function getSecondaryColumnsHTML($module)
 
 	if($module != "")
 	{
-        $secmodule = explode(":",$module);
-        for($i=0;$i < count($secmodule) ;$i++)
-        {
-		$mod_strings = return_module_language($current_language,$secmodule[$i]);
-	       	foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-        	{
-            		$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
-			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
+		$secmodule = explode(":",$module);
+		for($i=0;$i < count($secmodule) ;$i++)
+		{
+			$mod_strings = return_module_language($current_language,$secmodule[$i]);
+			foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
 			{
-				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+				if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 				{
-					if(isset($mod_strings[$fieldlable]))
+					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
+					foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 					{
-					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-					}else
-					{
-	  			        $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+						if(isset($mod_strings[$fieldlable]))
+						{
+							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+						}
 					}
 				}
 			}
-        	}
+		}
 	}
-	}
-        return $shtml;
+	return $shtml;
 }
 
 $report_column->display("ReportColumns.tpl");

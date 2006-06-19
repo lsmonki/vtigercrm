@@ -11,10 +11,8 @@
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-
 global $adb;
 global $log;
-
 $reportid = $_REQUEST["record"];
 
 //<<<<<<<selectcolumn>>>>>>>>>
@@ -96,7 +94,7 @@ if($reportid == "")
 	{
 		$iquerysql = "insert into vtiger_selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
 		$iquerysqlresult = $adb->query($iquerysql);
-		 $log->info("Reports :: Save->Successfully saved vtiger_selectquery");
+		$log->info("Reports :: Save->Successfully saved vtiger_selectquery");
 		if($iquerysqlresult!=false)
 		{
 			//<<<<step2 vtiger_selectcolumn>>>>>>>>
@@ -112,14 +110,12 @@ if($reportid == "")
 			$log->info("Reports :: Save->Successfully saved vtiger_selectcolumn");
 			//<<<<step2 vtiger_selectcolumn>>>>>>>>
 
-		       //$genReportMId = $adb->getUniqueID("reportmodules");
-
-		       if($genQueryId != "")
-		       {
+			if($genQueryId != "")
+			{
 				$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
 				$ireportsql .= " values (".$genQueryId.",".$folderid.",'".$reportname."','".$reportdescription."','".$reporttype."',".$genQueryId.",'CUSTOM')";
 				$ireportresult = $adb->query($ireportsql);
-			       	$log->info("Reports :: Save->Successfully saved vtiger_report");
+				$log->info("Reports :: Save->Successfully saved vtiger_report");
 				if($ireportresult!=false)
 				{
 					//<<<<reportmodules>>>>>>>
@@ -163,32 +159,30 @@ if($reportid == "")
 					//<<<<step4 columnstototal>>>>>>>
 
 					//<<<<step5 advancedfilter>>>>>>>
-                                        for ($i=0;$i<count($adv_filter_col);$i++)
-                                        {
-                                                $irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (".$genQueryId.",".$i.",'".$adv_filter_col[$i]."','".$adv_filter_option[$i]."','".$adv_filter_value[$i]."')";
-						//echo $irelcriteriasql;
-
-                                                $irelcriteriaresult = $adb->query($irelcriteriasql);
-                                        }
+					for ($i=0;$i<count($adv_filter_col);$i++)
+					{
+						$irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (".$genQueryId.",".$i.",'".$adv_filter_col[$i]."','".$adv_filter_option[$i]."','".$adv_filter_value[$i]."')";
+						$irelcriteriaresult = $adb->query($irelcriteriasql);
+					}
 					$log->info("Reports :: Save->Successfully saved vtiger_relcriteria");
-                                        //<<<<step5 advancedfilter>>>>>>>
+					//<<<<step5 advancedfilter>>>>>>>
 
 				}else
 				{
-					include('themes/'.$theme.'/header.php');
 					$errormessage = "<font color='red'><B>Error Message<ul>
-					<li><font color='red'>Error while inserting the record</font>
-					</ul></B></font> <br>" ;
+						<li><font color='red'>Error while inserting the record</font>
+						</ul></B></font> <br>" ;
 					echo $errormessage;
+					die;
 				}
-		       }
+			}
 		}else
 		{
-			include('themes/'.$theme.'/header.php');
 			$errormessage = "<font color='red'><B>Error Message<ul>
-			<li><font color='red'>Error while inserting the record</font>
-			</ul></B></font> <br>" ;
+				<li><font color='red'>Error while inserting the record</font>
+				</ul></B></font> <br>" ;
 			echo $errormessage;
+			die;
 		}
 		echo '<script>window.opener.location.href =window.opener.location.href;self.close();</script>';
 	}
@@ -200,7 +194,6 @@ if($reportid == "")
 		{
 			$idelcolumnsql = "delete from vtiger_selectcolumn where queryid=".$reportid;
 			$idelcolumnsqlresult = $adb->query($idelcolumnsql);
-			//echo $idelcolumnsql;
 			if($idelcolumnsqlresult != false)
 			{
 				$selectedcolumns = explode(";",$selectedcolumnstring);
@@ -208,7 +201,6 @@ if($reportid == "")
 				{
 					$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (".$reportid.",".$i.",'".$selectedcolumns[$i]."')";
 					$icolumnsqlresult = $adb->query($icolumnsql);
-					//echo $icolumnsql;
 				}
 			}
 		}
@@ -220,12 +212,10 @@ if($reportid == "")
 		$ireportsql .= " where REPORTID=".$reportid;
 		$ireportresult = $adb->query($ireportsql);
 		$log->info("Reports :: Save->Successfully saved vtiger_report");
-		//echo $ireportsql;
 
-		$idelreportsortcolsql = "delete from vtiger_reportsortcol where vtiger_reportid=".$reportid;
+		$idelreportsortcolsql = "delete from vtiger_reportsortcol where reportid=".$reportid;
 		$idelreportsortcolsqlresult = $adb->query($idelreportsortcolsql);
 		$log->info("Reports :: Save->Successfully deleted vtiger_reportsortcol");
-		//echo $idelreportsortcolsql;
 
 		if($idelreportsortcolsqlresult!=false)
 		{
@@ -234,7 +224,6 @@ if($reportid == "")
 			{
 				$sort_by1sql = "insert into vtiger_reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) values (1,".$reportid.",'".$sort_by1."','".$sort_order1."')";
 				$sort_by1result = $adb->query($sort_by1sql);
-				//echo $sort_by1sql;
 			}
 			if($sort_by2 != "")
 			{
@@ -251,7 +240,6 @@ if($reportid == "")
 
 			$idelreportdatefiltersql = "delete from vtiger_reportdatefilter where datefilterid=".$reportid;
 			$idelreportdatefiltersqlresult = $adb->query($idelreportdatefiltersql);
-			//echo $idelreportsortcolsql;
 
 			//<<<<step5 standarfilder>>>>>>>
 			$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
@@ -260,7 +248,7 @@ if($reportid == "")
 			//<<<<step5 standarfilder>>>>>>>
 
 			//<<<<step4 columnstototal>>>>>>>
-			$idelreportsummarysql = "delete from vtiger_reportsummary where vtiger_reportsummaryid=".$reportid;
+			$idelreportsummarysql = "delete from vtiger_reportsummary where reportsummaryid=".$reportid;
 			$idelreportsummarysqlresult = $adb->query($idelreportsummarysql);
 
 			for ($i=0;$i<count($columnstototal);$i++)
@@ -287,20 +275,20 @@ if($reportid == "")
 
 		}else
 		{
-			include('themes/'.$theme.'/header.php');
 			$errormessage = "<font color='red'><B>Error Message<ul>
 				<li><font color='red'>Error while inserting the record</font>
 				</ul></B></font> <br>" ;
 			echo $errormessage;
+			die;
 		}
 	}else
 	{
-		include('themes/'.$theme.'/header.php');
 		$errormessage = "<font color='red'><B>Error Message<ul>
-		<li><font color='red'>Error while inserting the record</font>
-		</ul></B></font> <br>" ;
+			<li><font color='red'>Error while inserting the record</font>
+			</ul></B></font> <br>" ;
 		echo $errormessage;
+		die;
 	}
-	echo '<script>window.opener.location.href =window.opener.location.href;self.close();</script>';
+	echo '<script>window.opener.location.href = window.opener.location.href;self.close();</script>';
 }
 ?>

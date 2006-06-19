@@ -7,7 +7,6 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-
 var typeofdata = new Array();
 typeofdata['V'] = ['e','n','s','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
@@ -159,287 +158,184 @@ function verify_data(form) {
 }
 
 function setObjects() 
-        {
-            availListObj=getObj("availList")
-            selectedColumnsObj=getObj("selectedColumns")
+{
+	availListObj=getObj("availList")
+	selectedColumnsObj=getObj("selectedColumns")
 
-            moveupLinkObj=getObj("moveup_link")
-            moveupDisabledObj=getObj("moveup_disabled")
-            movedownLinkObj=getObj("movedown_link")
-            movedownDisabledObj=getObj("movedown_disabled")
-        }
-
-        function addColumn() 
-        {
-            for (i=0;i<selectedColumnsObj.length;i++) 
-            {
-                selectedColumnsObj.options[i].selected=false
-            }
-
-            for (i=0;i<availListObj.length;i++) 
-            {
-                if (availListObj.options[i].selected==true) 
-                {
-                    for (j=0;j<selectedColumnsObj.length;j++) 
-                    {
-                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
-                        {
-                            var rowFound=true
-                            var existingObj=selectedColumnsObj.options[j]
-                            break
-                        }
-                    }
-
-                    if (rowFound!=true) 
-                    {
-                        var newColObj=document.createElement("OPTION")
-                        newColObj.value=availListObj.options[i].value
-                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
-                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
-                        selectedColumnsObj.appendChild(newColObj)
-                        availListObj.options[i].selected=false
-                        newColObj.selected=true
-                        rowFound=false
-                    } 
-                    else 
-                    {
-                        existingObj.selected=true
-                    }
-                }
-            }
-        }
-
-        function delColumn() 
-        {
-            for (i=0;i<=selectedColumnsObj.options.length;i++) 
-            {
-                if (selectedColumnsObj.options.selectedIndex>=0)
-                selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
-            }
-        }
-                        
-        function formSelectColumnString()
-        {
-            var selectedColStr = "";
-            for (i=0;i<selectedColumnsObj.options.length;i++) 
-            {
-                selectedColStr += selectedColumnsObj.options[i].value + ";";
-            }
-            document.NewReport.selectedColumnsString.value = selectedColStr;
-        }
-        
-        function moveUp() 
-        {
-            var currpos=selectedColumnsObj.options.selectedIndex
-            if (currpos>0) 
-            {
-                var prevpos=selectedColumnsObj.options.selectedIndex-1
-		
-                if (browser_ie) 
-                {
-                    temp=selectedColumnsObj.options[prevpos].innerText
-                    selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
-                    selectedColumnsObj.options[currpos].innerText=temp     
-                } 
-                else if (browser_nn4 || browser_nn6) 
-                {
-                    temp=selectedColumnsObj.options[prevpos].text
-                    selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
-                    selectedColumnsObj.options[currpos].text=temp
-                }
-                temp=selectedColumnsObj.options[prevpos].value
-                selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
-                selectedColumnsObj.options[currpos].value=temp
-	
-            selectedColumnsObj.options[prevpos].selected=true
-            selectedColumnsObj.options[currpos].selected=false
-            }
-        }
-
-        function moveDown() 
-        {
-            var currpos=selectedColumnsObj.options.selectedIndex
-            if (currpos<selectedColumnsObj.options.length-1)	
-            {
-                var nextpos=selectedColumnsObj.options.selectedIndex+1
-
-                if (browser_ie) 
-                {	
-                    temp=selectedColumnsObj.options[nextpos].innerText
-                    selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
-                    selectedColumnsObj.options[currpos].innerText=temp
-                }
-                else if (browser_nn4 || browser_nn6) 
-                {
-                    temp=selectedColumnsObj.options[nextpos].text
-                    selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
-                    selectedColumnsObj.options[currpos].text=temp
-                }
-                temp=selectedColumnsObj.options[nextpos].value
-                selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
-                selectedColumnsObj.options[currpos].value=temp
-                    
-                selectedColumnsObj.options[nextpos].selected=true
-                selectedColumnsObj.options[currpos].selected=false
-            }
-        }
-
-        function disableMove() 
-        {
-            var cnt=0
-            for (i=0;i<selectedColumnsObj.options.length;i++) 
-            {
-                if (selectedColumnsObj.options[i].selected==true)
-                cnt++
-            }
-
-            if (cnt>1) 
-            {
-                moveupLinkObj.style.display=movedownLinkObj.style.display="none"
-                moveupDisabledObj.style.display=movedownDisabledObj.style.display="block"
-            }
-            else 
-            {
-                moveupLinkObj.style.display=movedownLinkObj.style.display="block"
-                moveupDisabledObj.style.display=movedownDisabledObj.style.display="none"
-            }
-        }        
-        
-        function selectAction( url )
-        {
-            formSelectColumnString();
-            document.NewReport.action = url;
-            document.NewReport.submit();
-        }
-
-function getOpenerObj(n) {
-
-   return getObj(n,opener.document)
-
+	moveupLinkObj=getObj("moveup_link")
+	moveupDisabledObj=getObj("moveup_disabled")
+	movedownLinkObj=getObj("movedown_link")
+	movedownDisabledObj=getObj("movedown_disabled")
 }
-function saveReport( dlgType )
-    {
-       if( !emptyCheck( "reportName", "Report Name" ) )
-       return false;    
-                
-        var repNameObj = getObj( "reportName" );
-        var repDescObj = getObj( "reportDesc" );
-        var folderObj = getObj( "folder" );
-        var actionObj = getObj( "actionItem" );
-        var formObj = getObj( "NewReport" );
-		alert(repNameObj+'=='+repDescObj+'=='+folderObj+'=='+actionObj+'=='+formObj);
-        if( dlgType == "save" )
-        {
-           formObj = getObj( "NewReport" );
-            if( getObj( 'reportId' ) != null )
-            {
-                formObj.removeChild( getOpenerObj( 'reportId' ) );
-            }
-        }
-        else
-        {
-//            formObj = getOpenerObj( "SaveAsForm" );
-            actionObj.value = "saveAs";
-        }
-        
-        repNameObj.value = document.NewReport.reportName.value;
-        repDescObj.value = document.NewReport.reportDesc.value;
-        folderObj.value = document.NewReport.folder.value;        
-        formObj.submit();
-        
-        window.self.close();
-        return false;
-    }   
-		function switchToStep( num )
-        {
-            if( num == 1 )
-            {
-                document.StepOne.submit();
-            }
-        }
-        
-        function hideTabs()
-        {
-	    var objreportType = getObj('reportType');
-            if(objreportType[0].checked == true)
-            {
+
+function addColumn() 
+{
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		selectedColumnsObj.options[i].selected=false
+	}
+
+	for (i=0;i<availListObj.length;i++) 
+	{
+		if (availListObj.options[i].selected==true) 
+		{
+			for (j=0;j<selectedColumnsObj.length;j++) 
+			{
+				if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+				{
+					var rowFound=true
+						var existingObj=selectedColumnsObj.options[j]
+						break
+				}
+			}
+
+			if (rowFound!=true) 
+			{
+				var newColObj=document.createElement("OPTION")
+					newColObj.value=availListObj.options[i].value
+					if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+					else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+						selectedColumnsObj.appendChild(newColObj)
+							availListObj.options[i].selected=false
+							newColObj.selected=true
+							rowFound=false
+			} 
+			else 
+			{
+				existingObj.selected=true
+			}
+		}
+	}
+}
+
+function delColumn() 
+{
+	for (i=0;i<=selectedColumnsObj.options.length;i++) 
+	{
+		if (selectedColumnsObj.options.selectedIndex>=0)
+			selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+	}
+}
+
+function formSelectColumnString()
+{
+	var selectedColStr = "";
+	for (i=0;i<selectedColumnsObj.options.length;i++) 
+	{
+		selectedColStr += selectedColumnsObj.options[i].value + ";";
+	}
+	document.NewReport.selectedColumnsString.value = selectedColStr;
+}
+
+function moveUp() 
+{
+	var currpos=selectedColumnsObj.options.selectedIndex
+		if (currpos>0) 
+		{
+			var prevpos=selectedColumnsObj.options.selectedIndex-1
+
+				if (browser_ie) 
+				{
+					temp=selectedColumnsObj.options[prevpos].innerText
+						selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
+						selectedColumnsObj.options[currpos].innerText=temp     
+				} 
+				else if (browser_nn4 || browser_nn6) 
+				{
+					temp=selectedColumnsObj.options[prevpos].text
+						selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+						selectedColumnsObj.options[currpos].text=temp
+				}
+			temp=selectedColumnsObj.options[prevpos].value
+				selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
+				selectedColumnsObj.options[currpos].value=temp
+
+				selectedColumnsObj.options[prevpos].selected=true
+				selectedColumnsObj.options[currpos].selected=false
+		}
+}
+
+function moveDown() 
+{
+	var currpos=selectedColumnsObj.options.selectedIndex
+		if (currpos<selectedColumnsObj.options.length-1)	
+		{
+			var nextpos=selectedColumnsObj.options.selectedIndex+1
+
+				if (browser_ie) 
+				{	
+					temp=selectedColumnsObj.options[nextpos].innerText
+						selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+						selectedColumnsObj.options[currpos].innerText=temp
+				}
+				else if (browser_nn4 || browser_nn6) 
+				{
+					temp=selectedColumnsObj.options[nextpos].text
+						selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+						selectedColumnsObj.options[currpos].text=temp
+				}
+			temp=selectedColumnsObj.options[nextpos].value
+				selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
+				selectedColumnsObj.options[currpos].value=temp
+
+				selectedColumnsObj.options[nextpos].selected=true
+				selectedColumnsObj.options[currpos].selected=false
+		}
+}
+
+function disableMove() 
+{
+	var cnt=0
+		for (i=0;i<selectedColumnsObj.options.length;i++) 
+		{
+			if (selectedColumnsObj.options[i].selected==true)
+				cnt++
+		}
+
+	if (cnt>1) 
+	{
+		moveupLinkObj.style.display=movedownLinkObj.style.display="none"
+			moveupDisabledObj.style.display=movedownDisabledObj.style.display="block"
+	}
+	else 
+	{
+		moveupLinkObj.style.display=movedownLinkObj.style.display="block"
+			moveupDisabledObj.style.display=movedownDisabledObj.style.display="none"
+	}
+}        
+
+
+function hideTabs()
+{
+	var objreportType = getObj('reportType');
+	if(objreportType[0].checked == true)
+	{
 		divarray = new Array('step1','step2','step4','step5');
-            }
-            else
-            {
+	}
+	else
+	{
 		divarray = new Array('step1','step2','step3','step4','step5');
-            }
-        }
+	}
+}
         
-        function showSaveDialog()
-        {    
-            url = "index.php?module=Reports&action=SaveReport";
-            window.open(url,"Save_Report","width=550,height=350,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
-        }
+function showSaveDialog()
+{    
+	url = "index.php?module=Reports&action=SaveReport";
+	window.open(url,"Save_Report","width=550,height=350,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
+}
     
-        function saveAndRunReport()
-        {
-            if(selectedColumnsObj.options.length == 0)
-            {
-                alert("Selected Columns cannot be empty");
-                return false;
-            }
+function saveAndRunReport()
+{
+	if(selectedColumnsObj.options.length == 0)
+	{
+		alert("Selected Columns cannot be empty");
+		return false;
+	}
 
-	    		formSelectColumnString();
-            if( trim(getObj( 'record' ).value) == "" )
-            {
-				saveReport( 'save' );
-            }
-            else
-            {
-		    	document.NewReport.submit();
-            }
-        }       
+	formSelectColumnString();
+	document.NewReport.submit();
+}       
         
-        function saveAsNewAndRunReport()
-        {
-            formSelectColumnString();
-            showSaveDialog();
-        }       
-        
-        function cancelWizard()
-        {
-	    document.location.href = "index.php?module=Reports&action=index";		
-        }       
-        function updateYAxisFields( colToTotalField, value, bool )
-        {
-        }
-        
-        function updateXAxisFields( value, label )
-        {
-        }
-        
-        function displayStep( num )
-        {
-            if( num == 3 || num == 6 )
-            {
-		var typeObj = getObj( 'reportType' );
-                if( typeObj[0].checked == true )
-                {
-                    return;
-                }
-            }
-            
-            for( i=1; i <= 5; i++ )
-            {
-                var stepId = "step" + i;
-                var tabId = "tab" + i;
-                if( i != num )
-                {                    
-                    getObj( stepId ).style.display = "none";
-                }
-                else
-                {
-                    getObj( stepId ).style.display = "block";
-                }
-            }            
-        }
-
 function changeSteps1() 
 {
 	if(getObj('step5').style.display != 'none')
@@ -485,16 +381,6 @@ function changeStepsback1()
 
 		}
 	}
-}
-function saveAndRunReport()
-{
-	if(selectedColumnsObj.options.length == 0)
-	{
-		alert("Selected Columns cannot be empty");
-		return false;
-	}
-	formSelectColumnString();
-	document.NewReport.submit();
 }
 function changeSteps()
 {

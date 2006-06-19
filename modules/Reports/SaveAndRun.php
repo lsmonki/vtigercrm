@@ -176,11 +176,11 @@ function getSecondaryStdFilterHTML($module,$selected="")
 function getReportsinFolder($folderid)
 {
 	global $adb;
-	$query = 'select vtiger_reportid,reportname from vtiger_report where folderid='.$folderid;
+	$query = 'select reportid,reportname from vtiger_report where folderid='.$folderid;
 	$result = $adb->query($query);
 	$reports_array = Array();
 	for($i=0;$i < $adb->num_rows($result);$i++)	
-    {
+	{
 		$reportid = $adb->query_result($result,$i,'reportid');
 		$reportname = $adb->query_result($result,$i,'reportname');
 		$reports_array[$reportid] = $reportname; 

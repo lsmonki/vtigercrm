@@ -34,7 +34,7 @@ function DeleteReport($reportid)
 	$idelreportsql = "delete from vtiger_selectquery where queryid=".$reportid;
 	$idelreportsqlresult = $adb->query($idelreportsql);
 
-	$ireportsql = "delete from vtiger_report where vtiger_reportid=".$reportid;
+	$ireportsql = "delete from vtiger_report where reportid=".$reportid;
     $ireportsqlresult = $adb->query($ireportsql);
 }
 ?>
