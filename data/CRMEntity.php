@@ -905,9 +905,14 @@ function insertIntoTicketCommentTable($table_name, $module)
 	else
 		$ownertype = 'customer';
 
-	if($_REQUEST['comments'] != '')
+	if($this->column_fields['comments'] != '')
+		$comment = $this->column_fields['comments'];
+	else
+		$comment = $_REQUEST['comments'];
+
+	if($comment != '')
 	{
-		$comment = addslashes($_REQUEST['comments']);
+		$comment = addslashes($comment);
 		$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
 	        $adb->query($sql);
 	}
