@@ -575,7 +575,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$entries[] = $adb->query_result($list_result,$i,"productcode");
 		$entries[] = $unit_price;
 		$entries[] = $listprice;
-		$entries[] = '<a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&return_module=PriceBooks&return_action=CallRelatedList">del</a>';
+		$entries[] = '<img src="'.$image_path.'editfield.gif" border="0" onClick="editProductListPrice(\''.$entity_id.'\',\''.$pricebook_id.'\',\''.$listprice.'\')" alt="Edit" title="Edit"/><!--a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a-->&nbsp;|&nbsp;<img src="'.$image_path.'delete.gif" onclick="if(confirm(\'Are you sure?\')) deletePriceBookProductRel('.$entity_id.','.$pricebook_id.');" alt="Delete" title="Delete" border="0">';
 
 		$entries_list[] = $entries;
 	}
