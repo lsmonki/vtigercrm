@@ -1413,7 +1413,7 @@ function populateSharingtmptables($userid)
 	global $adb;
 	require('user_privileges/sharing_privileges_'.$userid.'.php');
 	//Deleting from the existing vtiger_tables
-	$table_arr=Array('tmp_read_user_sharing_per', 'tmp_write_user_sharing_per','tmp_read_group_sharing_per','tmp_write_group_sharing_per','tmp_read_user_rel_sharing_per','tmp_write_user_rel_sharing_per','tmp_read_group_rel_sharing_per','tmp_write_group_rel_sharing_per');
+	$table_arr=Array('vtiger_tmp_read_user_sharing_per', 'vtiger_tmp_write_user_sharing_per','vtiger_tmp_read_group_sharing_per','vtiger_tmp_write_group_sharing_per','vtiger_tmp_read_user_rel_sharing_per','vtiger_tmp_write_user_rel_sharing_per','vtiger_tmp_read_group_rel_sharing_per','vtiger_tmp_write_group_rel_sharing_per');
 	foreach($table_arr as $tabname)
 	{
 		$query = "delete from ".$tabname." where userid=".$userid;
@@ -1454,12 +1454,12 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 	{
 		if($pertype =='read')
 		{
-			$table_name='tmp_read_user_sharing_per';
+			$table_name='vtiger_tmp_read_user_sharing_per';
 			$var_name=$module.'_share_read_permission';
 		}
 		elseif($pertype == 'write')
 		{
-			$table_name='tmp_write_user_sharing_per';
+			$table_name='vtiger_tmp_write_user_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
 		$var_name_arr=$$var_name;	
@@ -1502,12 +1502,12 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 	{
 		if($pertype =='read')
 		{
-			$table_name='tmp_read_group_sharing_per';
+			$table_name='vtiger_tmp_read_group_sharing_per';
 			$var_name=$module.'_share_read_permission';
 		}
 		elseif($pertype == 'write')
 		{
-			$table_name='tmp_write_group_sharing_per';
+			$table_name='vtiger_tmp_write_group_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
 		$var_name_arr=$$var_name;
@@ -1542,12 +1542,12 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 	{
 		if($pertype =='read')
 		{
-			$table_name='tmp_read_user_rel_sharing_per';
+			$table_name='vtiger_tmp_read_user_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_read_permission';
 		}
 		elseif($pertype == 'write')
 		{
-			$table_name='tmp_write_user_rel_sharing_per';
+			$table_name='vtiger_tmp_write_user_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
 		$var_name_arr=$$var_name;	
@@ -1590,12 +1590,12 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 	{
 		if($pertype =='read')
 		{
-			$table_name='tmp_read_group_rel_sharing_per';
+			$table_name='vtiger_tmp_read_group_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_read_permission';
 		}
 		elseif($pertype == 'write')
 		{
-			$table_name='tmp_write_group_rel_sharing_per';
+			$table_name='vtiger_tmp_write_group_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
 		$var_name_arr=$$var_name;
