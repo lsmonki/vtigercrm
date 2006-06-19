@@ -30,5 +30,5 @@ else
 	$adb->query($query); 
 }
 
-header("Location: index.php?action=".$return_action."&module=PriceBooks&record=".$return_id);
+header("Location: index.php?module=".$return_module."&action=".$return_module."Ajax&file=$return_action&ajax=delpbprorel&record=".$return_id);
 ?>
