@@ -84,7 +84,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
         if($prod_status != 'D')
         {
 
-                $query ="insert into vtiger_soproductrel values($focus->id, $prod_id , $qty, $listprice, $vat, $sales, $service)";
+                $query ="insert into vtiger_soproductrel values($focus->id, $prod_id , $qty, $listprice, \"$vat\", \"$sales\", \"$service\")";
                 $adb->query($query);
 		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr,'SalesOrder');
         }

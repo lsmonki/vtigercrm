@@ -80,6 +80,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	}
 		
 	$quoteid = $focus->column_fields['quote_id'];
+	$smarty->assign("QUOTE_ID", $focus->column_fields['quote_id']);
 	$quote_focus = new Quote();
 	$quote_focus->id = $quoteid;
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
@@ -129,6 +130,7 @@ else
 			$associated_prod = getAssociatedProducts("Quotes",$quote_focus,$focus->column_fields['quote_id']);
 		}
 
+		$smarty->assign("QUOTE_ID", $focus->column_fields['quote_id']);
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("MODE", $quote_focus->mode);
 		$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
