@@ -75,9 +75,9 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			$result = $adb->query($sql);
 			if($result!=false)
 			{
-			   $result = $adb->updateBlob('wordtemplates','data'," filename='".$filename."'",$data);
+			   $result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
 			   deleteFile($uploaddir,$filename);
-			   header("Location: index.php?action=listwordtemplates&module=Users");	
+			   header("Location: index.php?action=listwordtemplates&module=Users&parenttab=Settings");	
 			}
 			else
 			{

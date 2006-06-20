@@ -37,7 +37,7 @@ if(isset($templateid) && $templateid !='')
 	$adb->query($sql);
  
 	$log->info("about to invoke the detailviewemailtemplate file");  
-	header("Location:index.php?module=Users&action=detailviewemailtemplate&templateid=".$templateid);
+	header("Location:index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid=".$templateid);
 }
 else
 {
@@ -46,6 +46,6 @@ else
 	$adb->query($sql);
 
 	 $log->info("added to the db the emailtemplate");
-	header("Location:index.php?module=Users&action=detailviewemailtemplate&templateid=".$templateid);
+	header("Location:index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid=".$templateid);
 }
 ?>
