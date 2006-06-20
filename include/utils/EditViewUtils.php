@@ -1367,6 +1367,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['hdnTotal'.$i] = $total;
 
 		//Added to pass the tax percentage values
+		if(!isset($vat)) $vat = 0;
+		if(!isset($sales)) $sales = 0;
+		if(!isset($service)) $service = 0;
 		$product_Detail[$i]['txtVATTax'.$i] = $vat;//getProductTaxPercentage('VAT',$productid,'default');
 		$product_Detail[$i]['txtSalesTax'.$i] = $sales;//getProductTaxPercentage('Sales',$productid,'default');
 		$product_Detail[$i]['txtServiceTax'.$i] = $service;//getProductTaxPercentage('Service',$productid,'default');
