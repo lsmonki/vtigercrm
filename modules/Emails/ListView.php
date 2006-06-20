@@ -162,7 +162,7 @@ $noofrows = $adb->num_rows($list_result);
 
 //Retreive the Navigation array
 $_REQUEST['allflag'] = 'All';
-$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
+$navigation_array = getNavigationValues(1, $noofrows, $noofrows);
 
 //Retreive the List View Table Header
 if($viewid !='')

@@ -20,6 +20,17 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+ //check for mail server configuration thro ajax
+if(isset($_REQUEST['server_check']) && $_REQUEST['server_check'] == 'true')
+{
+	$sql="select * from vtiger_systems where server_type = 'email'";
+	$records=$adb->num_rows($adb->query($sql),0,"id");
+	if($records != '')
+		echo 'SUCESS';
+	else
+		echo 'FAILURE';	
+	die;	
+}
 
 //Added on 09-11-2005 to avoid loading the webmail vtiger_files in Email process
 if($_REQUEST['smodule'] != '')
