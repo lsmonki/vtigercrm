@@ -307,6 +307,8 @@ class Reports extends CRMEntity{
 
 		$tabid = getTabid($module);
 
+		
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		//Security Check 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
