@@ -70,6 +70,8 @@ $mod_strings = Array(
 
 'LBL_NEW_CURRENCY'=>'New Currency',
 
+'LBL_VIEWING'=>'Viewing',
+
 'LBL_CURRENCY_NAME'=>'Currency Name',
 
 'LBL_CURRENCY_CODE'=>'Currency Code',
@@ -342,6 +344,7 @@ $mod_strings = Array(
 'LBL_USERS'=>'Users',
 
 'LBL_USERS_LIST'=>'Users List',
+'LBL_GROUP_LIST'=>'Groups List',
 
 'LBL_CREATE_AND_MANAGE_USERS'=>'- Create and Manage Users (e.g., admin)',
 
@@ -359,7 +362,7 @@ $mod_strings = Array(
 
 'LBL_SHARING_ACCESS'=>'Sharing Access',
 
-'LBL_FIELDS_ACCESS'=>'Fields',
+'LBL_FIELDS_ACCESS'=>'Fields Access',
 
 'LBL_DEFAULT_ORGANIZATION_FIELDS'=>'Default Organization Fields Access',
 
@@ -421,7 +424,7 @@ $mod_strings = Array(
 
 'LBL_COMMUNICATION_TEMPLATES'=>'Communication Templates',
 
-'LBL_CREATE_EMAIL_TEMPLATES'=>'Creating Email Template',
+'LBL_CREATE_EMAIL_TEMPLATES'=>'New Email Template',
 
 'LBL_UPLOAD_MSWORD_TEMPLATES'=>' - Upload MS Word Templates for Mail Merge',
 
@@ -639,6 +642,8 @@ $mod_strings = Array(
 'LBL_MAIL_SERVER_DESC'=>'Manage your Email Server Settings',
 'LBL_BACKUP_SERVER_DESC'=>'Manage your Backup Server Settings',
 'LBL_MODULES_AND_OWNERS'=>'Modules & Owners',
+'LBL_GROUP_DESC'=>'Manage User groups',
+'LBL_MAIL_MERGE_DESC'=>'Manage Mail Merge templates used in CRM modules',
 
 
 //Added fields after 5.0 Alpha
