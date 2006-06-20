@@ -13,7 +13,7 @@ require_once('include/database/PearDatabase.php');
 global $adb;
 $idlist = $_REQUEST['idlist'];
 
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destination_module'] == 'Contacts')
 {
 	//split the string and store in an array
 	$storearray = explode (";",$idlist);
@@ -40,14 +40,29 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 
 
  
-//This if for adding the vtiger_users 
-if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
+//This if for adding the vtiger_users
+if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destination_module'] == 'Users')
+{
+	//split the string and store in an array
+	$storearray = explode (";",$idlist);
+	foreach($storearray as $id)
+	{
+		if($id != '')
+		{
+			$record = $_REQUEST['parentid'];
+			$sql = "insert into vtiger_salesmanactivityrel values (".$id.",".$_REQUEST["parentid"].")";
+			$adb->query($sql);
+		}
+	}
+	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
+}
+elseif(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
 	$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
 	$adb->query($sql);
 	header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
-
+	
 }
 
 
