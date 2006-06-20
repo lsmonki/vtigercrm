@@ -31,6 +31,8 @@ class DefaultDataPopulator extends CRMEntity {
 		$role1_id = $this->db->getUniqueID("role");
 		$role2_id = $this->db->getUniqueID("role");
 		$role3_id = $this->db->getUniqueID("role");
+		$role4_id = $this->db->getUniqueID("role");
+		$role5_id = $this->db->getUniqueID("role");
 
 		$profile1_id = $this->db->getUniqueID("profile");
 		$profile2_id = $this->db->getUniqueID("profile");
@@ -38,8 +40,10 @@ class DefaultDataPopulator extends CRMEntity {
 		$profile4_id = $this->db->getUniqueID("profile");
 
                 $this->db->query("insert into vtiger_role values('H".$role1_id."','Organisation','H".$role1_id."',0)");
-                $this->db->query("insert into vtiger_role values('H".$role2_id."','administrator','H".$role1_id."::H".$role2_id."',1)");
-                $this->db->query("insert into vtiger_role values('H".$role3_id."','standard_user','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
+                $this->db->query("insert into vtiger_role values('H".$role2_id."','CEO','H".$role1_id."::H".$role2_id."',1)");
+                $this->db->query("insert into vtiger_role values('H".$role3_id."','Vice President','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
+                $this->db->query("insert into vtiger_role values('H".$role4_id."','Sales Manager','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
+                $this->db->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
                 
 
  $this->db->query("INSERT INTO vtiger_tab VALUES (3,'Home',0,1,'Home',null,null,1)");
