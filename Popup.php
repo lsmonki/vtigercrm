@@ -22,10 +22,8 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 
 global $app_strings;
-global $current_language;
 global $currentModule;
 global $theme;
-$current_module_strings = return_module_language($current_language,$currentModule);
 $url_string = '';
 $smarty = new vtigerCRM_Smarty;
 if (!isset($where)) $where = "";
@@ -182,6 +180,7 @@ switch($currentModule)
                 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
                     $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
                 $alphabetical = AlphabeticalSearch($currentModule,'Popup','user_name','true','basic',$popuptype,"","","");
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
                 break;	
 
 
