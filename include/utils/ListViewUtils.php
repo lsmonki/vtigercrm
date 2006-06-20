@@ -1620,13 +1620,13 @@ function getListQuery($module,$where='')
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= "accountgrouprelation.groupname IN (
+                              $query .= "vtiger_accountgrouprelation.groupname IN (
 				      		SELECT groupname
 						FROM vtiger_groups
 						WHERE groupid IN ".getCurrentUserGroupList().")
 					OR ";
                         }
-                         $query .= "accountgrouprelation.groupname IN (
+                         $query .= "vtiger_accountgrouprelation.groupname IN (
 				 	SELECT vtiger_groups.groupname
 					FROM vtiger_tmp_read_group_sharing_per
 					INNER JOIN vtiger_groups
