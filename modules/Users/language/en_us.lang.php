@@ -53,7 +53,7 @@ $mod_strings = Array(
 
 
 //added for patch2
-'LBL_GROUP_NAME'=>'Group',
+'LBL_GROUP'=>'Group',
 'LBL_CURRENCY_NAME'=>'Currency',
 
 'LBL_NEW_USER_BUTTON_TITLE'=>'New User [Alt+N]',
@@ -178,6 +178,7 @@ $mod_strings = Array(
 'LBL_TEMPLATE_HEADER'=>'Template',
 'LBL_TEMPLATE_DETAILS'=>'Template Details',
 'LBL_EDIT_TEMPLATE'=>'Edit Template',
+'LBL_TEMPLATE_FILE'=>'Template File',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_EMAIL_TEMPLATES_LIST'=>'Communication Templates > Email Templates',
 'LBL_MAILMERGE_TEMPLATES_LIST'=>' > Communication Templates > Mail Merge Templates',
@@ -187,15 +188,17 @@ $mod_strings = Array(
 'LBL_SELECT_MODULE'=>'Select Module',
 'LBL_MERGE_FILE'=>'File : ',
 'LBL_MERGE_MSG'=>'Select a module to assign this Template',
-
+'LBL_MERGE_FIELDS'=>'Merge Fields',
+'LBL_COPY_PASTE'=>'Copy & Paste',
 'LNK_GO_TO_TOP'=>'Go to Page Top',
 'LNK_SAMPLE_EMAIL'=>'View Sample Email',
 'LBL_COLON'=>':',
 'LBL_EMAIL_TEMPLATE'=>'Email Template',
 'LBL_NEW_TEMPLATE'=>'New Template',
+'LBL_ADD_TEMPLATE'=>'Add Template',
 'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge fields to personalize your email content.',
 'LBL_AVAILABLE_MERGE_FIELDS'=>'Available Merge Fields',
-'LBL_SELECT_FIELD_TYPE'=>'Select Field Type :',
+'LBL_SELECT_FIELD_TYPE'=>'Select Field Type',
 'LBL_SELECT_FIELD'=>'Select Field :',
 'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value :',
 'LBL_ACCOUNT_FIELDS'=>'Account Fields',
@@ -215,6 +218,8 @@ $mod_strings = Array(
 'LBL_TEMPLATE_SUBJECT'=>'Email Subject',
 'LBL_TEMPLATE_MESSAGE'=>'Email Message',
 'LBL_VIEWING'=>'Viewing',
+'LBL_PROPERTIES'=>'Properties of',
+
 
 
 // Added fields in createnewgroup.php
@@ -223,10 +228,14 @@ $mod_strings = Array(
 'LBL_EDIT_GROUP'=>'Edit Group',
 'LBL_GROUP_NAME'=>'Group Name',
 'LBL_GROUP_DETAILS'=>'Group Details',
-'LBL_MEMBER_LIST'=>'Member List',
-'LBL_MEMBER_AVLBL'=>'Member Available',
-'LBL_MEMBER_SELECTED'=>'Selected Member',
+'LBL_MEMBER'=>'Members',
+'LBL_MEMBER_AVLBL'=>'Available Entities & Members',
+'LBL_MEMBER_SELECTED'=>'Selected Members',
 'LBL_DESCRIPTION'=>'Description',
+'LBL_GROUP_MESG1'=>'Groups are a flexible way to assign access rights, when complex access rights has to be defined. You can combine multiple entities like Roles, Users, profiles etc into a single group.',
+'LBL_GROUP_MESG2'=>'To add, select the Entity members from left and click the ">>" button.',
+'LBL_GROUP_MESG3'=>'To remove, select the group members from the right and click the "<<" button.',
+
 
 // Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
@@ -237,6 +246,8 @@ $mod_strings = Array(
 'LBL_ADD_GROUP_BUTTON'=>'Add Group',
 'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
 'LBL_NEW_WORD_TEMPLATE'=>'New Template',
+'LBL_EMAIL_TEMPLATE_DESC'=>'Manage email templates used for Campaigns and Mass mailing',
+'LBL_NAME'=>'Name',
 
 // Added fields in TabCustomise.php,html and UpdateTab.php,html
 'LBL_CUSTOMISE_TABS'=>'Customize Tabs',
@@ -263,6 +274,7 @@ $mod_strings = Array(
 'LBL_STEP_1_3'=>'Step 1 of 3',
 'LBL_STEP_2_3'=>'Step 2 of 3',
 'LBL_STEP_3_3'=>'Step 3 of 3',
+'LBL_STEP'=>'Step',
 'LBL_SELECT_BASE_PROFILE'=>'Select Base Profile',
 'LBL_PROFILE_PRIVILEGES'=>'Profile Privileges',
 'LBL_GLOBAL_PRIVILEGES'=>'Global Privileges',

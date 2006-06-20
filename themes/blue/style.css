@@ -2291,17 +2291,6 @@ level2Sel{
 	padding:5px;
 }
 
-#EditListPriceLay{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:11px;
-	text-align:left;
-	width:300px;
-	border:3px solid #CCCCCC;
-	background-color:#FFFFFF;
-	padding:5px;
-}
-							
-
 
 /* For Report HTML Generation*/
 .rptCellLabel {
@@ -2544,18 +2533,15 @@ level2Sel{
 
 }
 
-
-
-
 ul {
-	list-style:none;
+	list-style:circle;
 	line-height:20px;
-	padding-left:20px;
-	margin-left:0px;
+	padding-left:5px;
+	margin-left:20px;
 	font-weight:normal;
-	border-top:1px dotted #dadada;
 
 }
+
 	
 .branch {
 	list-style-image: url("secAdd.gif");
@@ -2833,5 +2819,30 @@ textarea {
 	border-top:1px solid #ababab;
 	border-left:1px solid #ababab;
 	border-right:1px solid #a1a1a1;
+}
+
+.cellBottomDotLine {
+	border-bottom-width: 2px;
+	border-bottom-style: dotted;
+	border-bottom-color: #CCCCCC;
+	background-color:#ededed;
+}
+.crmFormList{
+	border:1px solid #cccccc;
+	width:90%;
+	height:120px;
+
+}
+.cellBottomDotLinePlain {
+	border-bottom-width: 2px;
+	border-bottom-style: dotted;
+	border-bottom-color: #CCCCCC;
+	
+}
+.crmFormDropDown {
+border-width:1px;
+}
+.thickBorder {
+	border: 2px solid #999999;
 }
 
