@@ -244,11 +244,11 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <input type="hidden" name="shareId" value="'.$shareid.'">
 <input type="hidden" name="mode" value="'.$mode.'">
 
-<div id="orgLay" style="display:block;">
+<div id="sharingRule" class="fixedLay">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
 <td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$sharing_module.' - Add Custom Privilege Rule</td>
-<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'orgLay\')";>Close</a></td>
+<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>Close</a></td>
 
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
@@ -318,7 +318,7 @@ $output .=$relatedlistscombo.'</table>
 </tr>
 <tr>
 <td colspan="2" align="center">
-<input type="submit" class="small" name="add" value="Add Rule" onClick="return validate()">&nbsp;&nbsp;
+<input type="submit" class="crmButton small save" name="add" value="Add Rule" onClick="return validate()">&nbsp;&nbsp;
 </td>
 </tr>
 </table>
