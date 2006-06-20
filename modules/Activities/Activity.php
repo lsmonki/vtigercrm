@@ -154,7 +154,7 @@ class Activity extends CRMEntity {
 			$returnset = '&return_module=Activities&return_action=DetailView&activity_mode=Events&return_id='.$id;
 
 
-			$query = 'select vtiger_users.user_name,vtiger_contactdetails.accountid, vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_seactivityrel on vtiger_seactivityrel.crmid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_seactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
+			$query = 'select vtiger_users.user_name,vtiger_contactdetails.accountid,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_seactivityrel on vtiger_seactivityrel.crmid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_seactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
 			$log->debug("Exiting get_contacts method ...");
 			return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
         }
@@ -236,7 +236,7 @@ class Activity extends CRMEntity {
 				$activity_start_time=time_to_number($act_time_start);	
 				$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
 
-				$activity_owner_qry='select vtiger_users.user_name,vtiger_users.id AS userid from vtiger_users,crmentity where vtiger_users.id=vtiger_crmentity.smownerid and vtiger_crmentity.crmid='.$id;
+				$activity_owner_qry='select vtiger_users.user_name,vtiger_users.id AS userid from vtiger_users,vtiger_crmentity where vtiger_users.id=vtiger_crmentity.smownerid and vtiger_crmentity.crmid='.$id;
 				$result_owner=$adb->query($activity_owner_qry);
 
 				while($row_owner = $adb->fetch_array($result_owner))
