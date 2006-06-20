@@ -1314,6 +1314,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$focus->record_id = $_REQUEST['recordid'];
 					if($module == 'Leads')
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_leaddata_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
+					elseif($module == 'Users')
+						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_userdata_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
 					else
 						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
@@ -1690,7 +1692,7 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_leaddetails.converted = 0 ";
+			AND vtiger_leaddetails.converted = 0 ".$where;
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2041,7 +2043,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Users")
 	{
-		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0";
+		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0 ".$where ;
 	}
 	
 
@@ -2521,15 +2523,51 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	global $adb;
 	$skip_id = Array();
 	$where_relquery = "";
-
 	if($currentmodule=="Contacts" && $returnmodule == "Potentials")
 	{
-		$query = "SELECT contactid FROM vtiger_contpotentialrel WHERE potentialid = ".$recordid;
+		$reltable = 'vtiger_contpotentialrel';
+		$condition = 'WHERE potentialid = '.$recordid;
+		$field = $selectfield = 'contactid';
+		$table = 'vtiger_contactdetails';
 	}
 	elseif($currentmodule=="Contacts" && $returnmodule == "Vendors")
 	{
-		$query = "SELECT contactid FROM vtiger_vendorcontactrel WHERE vendorid = ".$recordid;
+		$reltable = 'vtiger_vendorcontactrel';
+		$condition = 'WHERE vendorid = '.$recordid;
+		$field = $selectfield = 'contactid';
+		$table = 'vtiger_contactdetails';
 	}
+	elseif($currentmodule=="Contacts" && $returnmodule == "Campaigns")
+	{
+		$reltable = 'vtiger_campaigncontrel';
+		$condition = 'WHERE campaignid = '.$recordid;
+		$field = $selectfield = 'contactid';
+		$table = 'vtiger_contactdetails';
+	}
+	elseif($currentmodule=="Contacts" && $returnmodule == "Activities")
+	{
+		$reltable = 'vtiger_seactivityrel';
+		$condition = 'WHERE activityid = '.$recordid;
+		$selectfield = 'crmid';
+		$field = 'contactid';
+		$table = 'vtiger_contactdetails';
+	}
+	elseif($currentmodule=="Leads" && $returnmodule == "Campaigns")
+	{
+		$reltable = 'vtiger_campaignleadrel';
+		$condition = 'WHERE campaignid = '.$recordid;;
+		$field = $selectfield = 'leadid';
+		$table = 'vtiger_leaddetails';
+	}
+	elseif($currentmodule=="Users" && $returnmodule == "Activities")
+	{
+		$reltable = 'vtiger_salesmanactivityrel';
+		$condition = 'WHERE activityid = '.$recordid;;
+		$selectfield = 'smid';
+		$field = 'id';
+		$table = 'vtiger_users';
+	}
+	$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
 
 	if($query !='')
 	{
@@ -2538,10 +2576,10 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		{
 			for($k=0;$k < $adb->num_rows($result);$k++)
 			{
-				$skip_id[]=$adb->query_result($result,$k,"contactid");
+				$skip_id[]=$adb->query_result($result,$k,$selectfield);
 			}
 			$skipids = constructList($skip_id,'INTEGER');
-			$where_relquery = "and vtiger_contactdetails.contactid not in ".$skipids;
+			$where_relquery = "and ".$table.".".$field." not in ".$skipids;
 		}
 	}
 	$log->debug("Exiting getRelCheckquery method ...");
