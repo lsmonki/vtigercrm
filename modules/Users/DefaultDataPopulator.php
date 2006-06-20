@@ -2152,6 +2152,8 @@ title';
 	$this->db->query("insert into vtiger_parenttabrel values (2,4,3)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,10,4)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,10,7)");
+	$this->db->query("insert into vtiger_parenttabrel values (2,7,5)");
+	$this->db->query("insert into vtiger_parenttabrel values (4,9,6)");
 
 	//Added to populate the default inventory tax informations
 	$this->db->query("insert into vtiger_inventorytaxinfo values(".$this->db->getUniqueID("inventorytaxinfo").",'VAT','4.5')");
