@@ -9,91 +9,109 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-<!-- EMAIL TEMPLATE PAGE STARTS HERE -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%" class="small">
-	<tr>
-	   <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
-              <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a>
-		<a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">&gt; {$UMOD.LBL_EMAIL_TEMPLATE_INFORMATION} &quot;{$TEMPLATENAME}&quot;</a></b></span>
-	        <hr noshade="noshade" size="1" />
-	   </td>
-		<td width="10%" class="showPanelBg">&nbsp;</td>
-	</tr>
-	 <tr>
-	     <td width="90%" style="padding-left:20px;" valign="top">
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-		    <form method="post" action="index.php" name="etemplatedetailview">  
-			<input type="hidden" name="action" >
-			<input type="hidden" name="module" value="Users">
-			<input type="hidden" name="templatename" value="{$TEMPLATENAME}">
-			<input type="hidden" name="templateid" value="{$TEMPLATEID}">
-			<input type="hidden" name="foldername" value="{$FOLDERNAME}">
-		    
-			<tr><td colspan="2">&nbsp;</td></tr>
-			<tr><td colspan="2">
-			    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-				<tr><td width="75%" valign="middle" >
-					<img src="{$IMAGE_PATH}ViewTemplate.gif" align="left" />
-					<span class="genHeaderBig">{$TEMPLATENAME}</span><br />
-					<span class="dashMnuUnSel">{$TEMPLATENAME} {$UMOD.LBL_TEMPLATE_HEADER} </span> 
-				    </td>
-				    <td width="25%" align="right" valign="bottom"><input type="submit" name="Button" value="{$UMOD.LBL_EDIT_TEMPLATE}" class="small" onclick="this.form.action.value='editemailtemplate'"/></td>
-				</tr>
-			    </table>
-			    </td>
-			</tr>
-			  <tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			  </tr>
-			  
-			  <tr>
-			    <td colspan="2" style="border:2px solid #CCCCCC;">
-				<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-			          <tr>
-			
-    	                		<td width="25%" align="right" bgcolor="#F6F6F6"><b>{$UMOD.LBL_FOLDER}</b></td>
-        	            		<td width="75%" class="mnuTab">{$FOLDERNAME}</td>
-            	      		  </tr>
-					  <tr><td bgcolor="#F6F6F6">&nbsp;</td>
-					  <td>&nbsp;</td></tr>
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
 	
-	                  	  <tr>
+			{include file='SetMenu.tpl'}
+
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+		    		<form method="post" action="index.php" name="etemplatedetailview">  
+				<input type="hidden" name="action" value="editemailtemplate">
+				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="templatename" value="{$TEMPLATENAME}">
+				<input type="hidden" name="templateid" value="{$TEMPLATEID}">
+				<input type="hidden" name="foldername" value="{$FOLDERNAME}">
+				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" width="45" height="60" border=0 ></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$UMOD.LBL_EMAIL_TEMPLATES}</a> &gt; {$MOD.LBL_VIEWING} &quot;{$TEMPLATENAME}&quot; </b></td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$UMOD.LBL_EMAIL_TEMPLATE_DESC}</td>
+				</tr>
+				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>{$UMOD.LBL_PROPERTIES} &quot;{$TEMPLATENAME}&quot; </strong></td>
+						<td class="small" align=right>						  &nbsp;&nbsp;
+						  <input class="crmButton edit small" type="submit" name="Button" value="{$APP.LBL_EDIT_BUTTON_LABEL}" class="small" onclick="this.form.action.value='editemailtemplate'; this.form.parenttab.value='Settings'">&nbsp;&nbsp;
+						</td>
+					</tr>
+					</table>
+					
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr>
+						<td width=20% class="small cellLabel"><strong>{$UMOD.LBL_NAME}</strong></td>
+						<td width=80% class="small cellText"><strong>{$TEMPLATENAME}</strong></td>
+					  </tr>
+					<tr>
+						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_DESCRIPTION}</strong></td>
+						<td class="cellText small" valign=top>{$DESCRIPTION}</td>
+					  </tr>
+					<tr>
+						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_FOLDER}</strong></td>
+						<td class="cellText small" valign=top>{$FOLDERNAME}</td>
+					  </tr>
+					
+					
+					<tr>
+					  <td colspan="2" valign=top class="cellText small"><table width="100%"  border="0" cellspacing="0" cellpadding="0" class="thickBorder">
+                        <tr>
+                          <td valign=top><table width="100%"  border="0" cellspacing="0" cellpadding="5" >
+                              <tr>
+                                <td colspan="2" valign="top" class="small" style="background-color:#cccccc"><strong>{$UMOD.LBL_EMAIL_TEMPLATE}</strong></td>
+                                </tr>
+                              <tr>
+                                <td width="15%" valign="top" class="cellLabel small">{$UMOD.LBL_SUBJECT}</td>
+                                <td width="85%" class="cellText small">{$SUBJECT}</td>
+                              </tr>
+                              <tr>
+                                <td valign="top" class="cellLabel small">{$UMOD.LBL_MESSAGE}</td>
+                                <td class="cellText small">{$BODY}</td>
+                              </tr>
+                          </table></td>
+                          
+                        </tr>
+                      </table></td>
+					  </tr>
+					</table>
+					<br>
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr>
+					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
+					</tr>
+					</table>
+				</td>
+				</tr>
+				</table>
 			
-    	        		        <td width="25%" align="right" bgcolor="#F6F6F6"><b>{$UMOD.LBL_SUBJECT}</b></td>
-        	            		<td width="75%" class="mnuTab">{$SUBJECT}</td>
-            	      		  </tr>
-					  <tr><td bgcolor="#F6F6F6">&nbsp;</td>
-					  <td>&nbsp;</td></tr>
-
-	                  	  <tr>
-	                    		<td  align="right" bgcolor="#F6F6F6" valign="top"><b>{$UMOD.LBL_MESSAGE}</b></td>
-	                    		<td width="75%" valign="top" class="mnuTab">{$BODY}</td>
-                      		  </tr>
-                		</table>
-			   </td>
-		         </tr>
-		</table>
+			
+			
+			</td>
+			</tr>
+			</table>
 		</td>
-		<td>&nbsp;</td>
-
-</form>	</tr>
-</table>
-<!-- END -->
-
+	</tr>
+	</form>
+	</table>
+		
+	</div>
 
 </td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-
-{$JAVASCRIPT}
-{include file='SettingsSubMenu.tpl'}
-
-
