@@ -1355,6 +1355,7 @@ function getProfileName($profileid)
  */
 function isPermitted($module,$actionname,$record_id='')
 {
+
 	global $log;
 	$log->debug("Entering isPermitted(".$module.",".$actionname.",".$record_id.") method ...");
 
@@ -1576,6 +1577,11 @@ function isPermitted($module,$actionname,$record_id='')
 			$log->debug("Exiting isPermitted method ...");
 			return $permission;	
 		}
+		elseif($actionid ==2)
+		{
+				$permission ="no";
+				return $permission;	
+		}		
 		else
 		{
 			$permission = "yes";
@@ -4209,9 +4215,9 @@ function getListViewSecurityParameter($module)
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                              $sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                         }
-                         $sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";	
+                         $sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";	
 	}
 	elseif($module == 'Accounts')
 	{
@@ -4219,9 +4225,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'Contacts')
@@ -4230,9 +4236,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'Potentials')
@@ -4241,9 +4247,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'HelpDesk')
@@ -4252,9 +4258,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'Emails')
@@ -4273,9 +4279,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
 	
 	}
 	elseif($module == 'Activities')
@@ -4303,9 +4309,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}	
 	elseif($module == 'PurchaseOrder')
@@ -4314,9 +4320,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'SalesOrder')
@@ -4336,9 +4342,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'Invoice')
@@ -4356,9 +4362,9 @@ function getListViewSecurityParameter($module)
 
                 if(sizeof($current_user_groups) > 0)
                 {
-                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
 	
 	}
 	elseif($module == 'Campaigns')
@@ -4368,9 +4374,9 @@ function getListViewSecurityParameter($module)
 
 		if(sizeof($current_user_groups) > 0)
 		{
-			$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+			$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
 		}
-		$sec_query .= "groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
+		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
 
 			
 	}	
