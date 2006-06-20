@@ -43,11 +43,15 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 		$smarty->assign("INACTSELECT","selected");
 	$smarty->assign("ID",$tempid);
 }
+
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("PARENTTAB",$_REQUEST['parenttab']);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$smarty->display("CurrencyEditView.tpl");
+if(isset($_REQUEST['detailview']) && $_REQUEST['detailview'] != '')
+	$smarty->display('CurrencyDetailView.tpl');
+else
+	$smarty->display("CurrencyEditViewN.tpl");
 
 ?>
