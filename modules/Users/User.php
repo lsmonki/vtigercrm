@@ -627,6 +627,10 @@ class User {
 					}
 					$fldvalue = $field_list;
 				}
+				elseif($uitype == 99)
+				{
+					$fldvalue = $this->encrypt_password($this->column_fields[$fieldname]);
+				}
 				else
 				{
 					$fldvalue = $this->column_fields[$fieldname]; 
