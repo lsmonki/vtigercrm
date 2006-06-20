@@ -129,8 +129,8 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
 	
-	//Storing Listview session object
-	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='')
+	//Setting Listview session object while sorting/pagination
+	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
 	{
 		$relmodule = $_REQUEST['relmodule'];
 		if($_SESSION['rlvs'][$module][$relmodule])
