@@ -42,8 +42,11 @@ $smod_strings = return_module_language($current_language,'Settings');
 $smarty->assign("MOD", $smod_strings);
 $smarty->assign("MODULE", 'Settings');
 $smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
 
 $return_data=array();
+if ($temprow != null)
+{
 do
 {
   $templatearray=array();
@@ -54,6 +57,7 @@ do
   $return_data[]=$templatearray;
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
+}
 
 $log->info("Exiting Email Templates List View");
 
