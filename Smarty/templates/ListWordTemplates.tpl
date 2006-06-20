@@ -9,10 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-<style type="text/css">@import url(../themes/blue/style.css);</style>
-
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script>
 function massDelete()
 {ldelim}
@@ -24,7 +21,8 @@ function massDelete()
 
                 if (document.massdelete.selected_id.checked)
                {ldelim}
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value+';';
+			xx=1;
                 {rdelim}
                 else
                 {ldelim}
@@ -64,76 +62,94 @@ function massDelete()
 
 {rdelim}
 </script>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
+	
+			{include file='SetMenu.tpl'}
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-<!-- MAIL MERGE TEMPLATE PAGE STARTS HERE -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-	<tr>
-		 <td class="showPanelBg" valign="top" width="90%"  style="padding-left:20px; "><br />
-        	        <span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$UMOD.LBL_MAILMERGE_TEMPLATES_LIST}</a></b> </span>
-
-            	    <hr noshade="noshade" size="1" />
-		</td>
-
-		<td width="10%" class="showPanelBg">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="90%" style="padding-left:20px;" valign="top">
-			  <form  name="massdelete" method="POST">
-    			<input name="idlist" type="hidden">
-    			<input name="module" type="hidden" value="Users">
-    			<input name="action" type="hidden" value="deletewordtemplate">
-			<table width="100%" cellpadding="3" cellspacing="0" class="small" >
-			   
-				<tr><td colspan="6" style="border:0px;">&nbsp;</td></tr>
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+	               		<form  name="massdelete" method="POST">
+	    			<input name="idlist" type="hidden">
+    				<input name="module" type="hidden" value="Users">
+    				<input name="parenttab" type="hidden" value="Settings">
+    				<input name="action" type="hidden" value="deletewordtemplate">
 				<tr>
-					<td colspan="2" align="left" style="border:0px;"><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="classBtn" /></td>
-					<td style="border:0px;">&nbsp;</td>
-
-					<td align="right" colspan="3" style="border:0px;">
-						<div align="right" ><input type="submit" value="{$UMOD.LBL_NEW_TEMPLATE}" name="profile"  class="classBtn" onclick="this.form.action.value='upload';"/></div>
-					</td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}mailmarge.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_WORD_TEMPLATES} </b></td>
 				</tr>
-				<tr>{*<td colspan="6" style="border:0px;">&nbsp;</td>*}</tr>
 				<tr>
-				<td colspan="6">
-					<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="100%">
-						<tr>
-						  <th width="5%" class="lvtCol" ><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id") ></th>
-						  <th width="20%" nowrap class="lvtCol"><b>{$UMOD.LBL_FILE}</b></th>
-						  <th width="50%" nowrap class="lvtCol"><b>{$UMOD.LBL_DESCRIPTION}</b></th>
-						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_MODULENAMES}</b></th>
-						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_DOWNLOAD}</b></th>
-						  <th width="25%"  nowrap class="lvtCol"><b>{$UMOD.LBL_FILE_TYPE}</b></th>
-					  </tr>
-						{foreach item=template from=$WORDTEMPLATES}
-						<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-							<td><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall") /></td>
-							<td nowrap>{$template.filename}</td>
-							<td nowrap>{$template.description}</td>
-							<td nowrap>{$template.module}</td>
-							<td nowrap><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD_NOW}</a></td>
-							<td nowrap>{$template.filetype}</td>	
-				  	</tr>
-					{/foreach}
+					<td valign=top class="small">{$MOD.LBL_MAIL_MERGE_DESC}</td>
+				</tr>
 				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>{$UMOD.LBL_WORD_TEMPLATES}</strong></td>
+						<td class="small" align=right>&nbsp;
+						</td>
+					</tr>
+					</table>
+					
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
+					<tr>
+						<td class=small><input type="submit" value="{$UMOD.LBL_DELETE}" onclick="return massDelete();" class="crmButton delete small"></td>
+						<td class=small align=right><input class="crmButton create small" type="submit" value="{$UMOD.LBL_ADD_TEMPLATE}" name="profile"  onclick="this.form.action.value='upload'; this.form.parenttab.value='Settings'">&nbsp;&nbsp;</td>
+					</tr>
+					</table>
+						
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">
+					<tr>
+						<td width=2% class="colHeader small">#</td>
+						<td width=3% class="colHeader small">{$UMOD.LBL_LIST_SELECT}</td>
+						<td width=20% class="colHeader small">{$UMOD.LBL_TEMPLATE_FILE}</td>
+						<td width=50% class="colHeader small">{$UMOD.LBL_DESCRIPTION}</td>
+				        <td width=15% class="colHeader small">{$UMOD.LBL_MODULENAMES}</td>
+				        <td width=15% class="colHeader small">{$UMOD.LBL_LIST_TOOLS}</td>
+			          </tr>
+					{foreach item=template name=mailmerge from=$WORDTEMPLATES}
+					<tr>
+						<td class="listTableRow small" valign=top>{$smarty.foreach.mailmerge.iteration}</td>
+						<td class="listTableRow small" valign=top><input type="checkbox" class=small name="selected_id" value="{$template.templateid}" onClick=toggleSelectAll(this.name,"selectall")></td>
+						<td class="listTableRow small" valign=top><b>{$template.filename}</b></a></td>
+						<td class="listTableRow small" valign=top>{$template.description}</td>
+				        <td class="listTableRow small" valign=top>{$template.module}</td>
+				        <td class="listTableRow small" valign=top><a href="index.php?module=Users&action=downloadfile&record={$template.templateid}">{$UMOD.LBL_DOWNLOAD}</a></td>
+			          </tr>
+					{/foreach}
+					</table>
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr>
+					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
+					</tr>
+					</table>
+				</td>
+				</tr>
+				</table>
+			
+			
+			
 			</td>
-		</tr>	
-	</table>
-			</form>
+			</tr>
+			</table>
 		</td>
-		<td>&nbsp;</td>
 	</tr>
-</table>
-<!-- END -->
-
+	</form>
+	</table>
+		
+	</div>
 </td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-
-{$JAVASCRIPT}
-{include file='SettingsSubMenu.tpl'}
-
