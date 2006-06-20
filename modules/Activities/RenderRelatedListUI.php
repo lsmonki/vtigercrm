@@ -64,11 +64,11 @@ require_once('include/utils/UserInfoUtil.php');
 		if( $owner != $userid)
 		{
 			
-			$usr_query="select activityid,vtiger_activity.date_start,vtiger_activity.due_date, vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes,vtiger_crmentity.smownerid from vtiger_activity,crmentity where vtiger_crmentity.crmid=vtiger_activity.activityid and ('".$avail_date."' like date_start) and vtiger_crmentity.smownerid=".$userid." and vtiger_activity.activityid !=".$activity_id."  and vtiger_crmentity.deleted=0";
+			$usr_query="select activityid,vtiger_activity.date_start,vtiger_activity.due_date, vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes,vtiger_crmentity.smownerid from vtiger_activity,vtiger_crmentity where vtiger_crmentity.crmid=vtiger_activity.activityid and ('".$avail_date."' like date_start) and vtiger_crmentity.smownerid=".$userid." and vtiger_activity.activityid !=".$activity_id."  and vtiger_crmentity.deleted=0";
 		}
 		else
 		{
-			$usr_query="select activityid,vtiger_activity.date_start,vtiger_activity.due_date, vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes,vtiger_crmentity.smownerid from vtiger_activity,crmentity where vtiger_crmentity.crmid=vtiger_activity.activityid and ('".$avail_date."' like date_start) and vtiger_crmentity.smownerid=".$userid." and vtiger_activity.activityid !=".$activity_id." and vtiger_crmentity.deleted=0";
+			$usr_query="select activityid,vtiger_activity.date_start,vtiger_activity.due_date, vtiger_activity.time_start,vtiger_activity.duration_hours,vtiger_activity.duration_minutes,vtiger_crmentity.smownerid from vtiger_activity,vtiger_crmentity where vtiger_crmentity.crmid=vtiger_activity.activityid and ('".$avail_date."' like date_start) and vtiger_crmentity.smownerid=".$userid." and vtiger_activity.activityid !=".$activity_id." and vtiger_crmentity.deleted=0";
 		}
 		$result_cal=$adb->query($usr_query);   
 		$noofrows_cal = $adb->num_rows($result_cal);
