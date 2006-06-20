@@ -51,6 +51,7 @@ $smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
 $smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
 $smarty->assign("BODY", $emailtemplateResult["body"]);
 $smarty->assign("MODULE", 'Settings');
+$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
 $smarty->assign("EMODE", $mode);
 
 $smarty->display("CreateEmailTemplate.tpl");

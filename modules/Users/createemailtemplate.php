@@ -31,6 +31,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("THEME_PATH", $theme_path);
 $smarty->assign("UMOD", $mod_strings);
+$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
 
 $smarty->assign("MOD", $smod_strings);
 $smarty->assign("MODULE", 'Settings');
