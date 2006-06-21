@@ -1483,11 +1483,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 					if($actvity_type == "Task")
 					{
-						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task&parenttab=My Home Page">'.$temp_val.'</a>';
+						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task&parenttab='.$tabname.'">'.$temp_val.'</a>';
 					}
 					else
 					{
-						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events&parenttab=My Home Page">'.$temp_val.'</a>';
+						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events&parenttab='.$tabname.'">'.$temp_val.'</a>';
 					}
 				}
 				elseif($module == "Vendors")
