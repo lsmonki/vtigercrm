@@ -43,8 +43,8 @@ $mod_strings = Array(
 'LBL_LEADS_BY_SOURCE'=>'Leads By Source',
 'LBL_LEADS_BY_STATUS'=>'Leads By Status',
 
-'LBL_UPCOMING_EVENTS'=>'Upcoming Events',
-'LBL_PENDING_EVENTS'=>'Pending Events',
+'lBL_UPCOMING_EVENTS'=>'Upcoming Activities',
+'LBL_PENDING_EVENTS'=>'Pending Activities',
 'LBL_TODAYEVENT'=>'Events for Last Ten days',
 
 
