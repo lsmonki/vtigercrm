@@ -704,7 +704,29 @@ class CRMEntity
 				  $adb->query($sql);
 			  }
 		  }
-		
+		  elseif($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice')
+		  {
+			  //added to update the history for PO, SO, Quotes and Invoice
+			  $history_field_array = Array(
+				  			"PurchaseOrder"=>"postatus",
+							"SalesOrder"=>"sostatus",
+							"Quotes"=>"quotestage",
+							"Invoice"=>"invoicestatus"
+						      );
+
+			  $inventory_module = $_REQUEST['module'];
+			  if($inventory_module == "PurchaseOrder")
+			  	$relatedname = $_REQUEST["vendor_name"];
+			  else
+			  	$relatedname = $_REQUEST["account_name"];
+
+			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
+			  if($oldvalue != $this->column_fields["$history_field_array[$inventory_module]"])
+			  {
+				  addInventoryHistory($inventory_module, $this->id,$relatedname,$_REQUEST['grandTotal'],$this->column_fields["$history_field_array[$inventory_module]"]);
+			  }
+		  }
+
 		  //Check done by Don. If update is empty the the query fails
 		  if(trim($update) != '')
         	  {

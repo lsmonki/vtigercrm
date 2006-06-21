@@ -315,5 +315,30 @@ function getProductTaxPercentage($type,$productid,$default='')
 	return $taxpercentage;
 }
 
+/**	Function used to add the history entry in the relevant tables for PO, SO, Quotes and Invoice modules
+ *	@param string 	$module		- current module name
+ *	@param int 	$id		- entity id
+ *	@param string 	$relatedname	- parent name of the entity ie, required field venor name for PO and account name for SO, Quotes and Invoice
+ *	@param float 	$total		- grand total value of the product details included tax
+ *	@param string 	$history_fldval	- history field value ie., quotestage for Quotes and status for PO, SO and Invoice
+ */
+function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval)
+{
+	global $log, $adb;
+	$log->debug("Entering into function addInventoryHistory($module, $id, $relatedname, $total, $history_fieldvalue)");
+
+	$history_table_array = Array(
+					"PurchaseOrder"=>"vtiger_postatushistory",
+					"SalesOrder"=>"vtiger_sostatushistory",
+					"Quotes"=>"vtiger_quotestagehistory",
+					"Invoice"=>"vtiger_invoicestatushistory"
+				    );
+
+	$modifiedtime = date('YmdHis');
+	$query = "insert into $history_table_array[$module] values('',$id,\"$relatedname\",\"$total\",\"$history_fldval\",\"$modifiedtime\")";
+	$adb->query($query);
+
+	$log->debug("Exit from function addInventoryHistory");
+}
 
 ?>

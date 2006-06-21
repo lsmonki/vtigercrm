@@ -5207,5 +5207,82 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-	
+
+	<table name="vtiger_postatushistory">
+		<field name="historyid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="purchaseorderid" type="I" size="19">
+			<notnull />
+			<constraint>REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="vendorname" type="C" size="100" />
+		<field name="total" type="N" />
+		<field name="postatus" type="C" size="200" />
+		<field name="lastmodified" type="T" />
+
+		<index name="postatushistory_purchaseorderid_idx">
+			<col>purchaseorderid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_sostatushistory">
+		<field name="historyid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="salesorderid" type="I" size="19">
+			<notnull />
+			<constraint>REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="accountname" type="C" size="100" />
+		<field name="total" type="N" />
+		<field name="sostatus" type="C" size="200" />
+		<field name="lastmodified" type="T" />
+
+		<index name="sostatushistory_salesorderid_idx">
+			<col>salesorderid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_quotestagehistory">
+		<field name="historyid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="quoteid" type="I" size="19">
+			<notnull />
+			<constraint>REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="accountname" type="C" size="100" />
+		<field name="total" type="N" />
+		<field name="quotestage" type="C" size="200" />
+		<field name="lastmodified" type="T" />
+
+		<index name="quotestagehistory_quoteid_idx">
+			<col>quoteid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_invoicestatushistory">
+		<field name="historyid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="invoiceid" type="I" size="19">
+			<notnull />
+			<constraint>REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
+		</field>
+		<field name="accountname" type="C" size="100" />
+		<field name="total" type="N" />
+		<field name="invoicestatus" type="C" size="200" />
+		<field name="lastmodified" type="T" />
+
+		<index name="invoicestatushistory_invoiceid_idx">
+			<col>invoiceid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 </schema>
