@@ -16,7 +16,7 @@ require_once('modules/Users/UserInfoUtil.php');
 
 function getHiddenValues($id,$sid='purchaseorderid')
 {
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
+        $hidden = '<form border="0" action="index.php" method="post" name="form" id="form">';
         $hidden .= '<input type="hidden" name="module">';
         $hidden .= '<input type="hidden" name="mode">';
         $hidden .= '<input type="hidden" name="'.$sid.'" value="'.$id.'">';

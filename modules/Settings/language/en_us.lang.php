@@ -258,6 +258,8 @@ $mod_strings = Array(
 
 'LBL_MAIL_SERVER_INFO'=>'Mail Server Information',
 
+'LBL_MAIL_UNAME'=>'',
+
 'LBL_OUTGOING_MAIL_SERVER'=>'OutGoing Mail Server',
 
 'LBL_OUTGOING_MAIL_SERVER_LOGIN_USER_NAME'=>'OutGoing Mail Server Login User Name',

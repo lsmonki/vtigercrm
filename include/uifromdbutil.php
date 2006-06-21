@@ -145,8 +145,10 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	$image_path=$theme_path."images/";
 
 	$record = isset($_REQUEST['record']) ? $_REQUEST['record'] : '';
-	$relmodule = $_REQUEST['module'] == $module ? '' : $module;
-	$start = $relmodule.'start';
+	
+//	$relmodule = $_REQUEST['module'] == $module ? '' : $module;
+	$relmodule = '';
+$start = $relmodule.'start';
 	$end_val = $relmodule.'end_val';
 	$first = $relmodule.'first';
 	$end = $relmodule.'end';
@@ -157,6 +159,9 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	$prev = $relmodule.'prev';
 	$dir_name = $_REQUEST['module'];
 
+	
+	
+	
 	$output = '<td align="right">';
 	$output .= '<a href="index.php?module='.$dir_name.'&record='.$record.'&action='.$action_val.$url_qry.'&'.$start.'=1&viewname='.$viewid.'&'.$allflag.'='.$navigation_array[$allflag].'" >'.$navigation_array[$allflag].'</a>&nbsp;';
 	if(($navigation_array[$prev]) != 0) {

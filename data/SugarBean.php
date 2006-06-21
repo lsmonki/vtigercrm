@@ -289,25 +289,25 @@ $query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
 		$rows_found =  $this->db->getRowCount($result);
 
 		$this->log->debug("Found $rows_found ".$this->object_name."s");
-                
+
 		$previous_offset = $row_offset - $max_per_page;
 		$next_offset = $row_offset + $max_per_page;
 
 		if($rows_found != 0)
 		{
-
 			// We have some data.
-
-			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page || $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
+			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page || $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index))
+			{
 				foreach($this->list_fields as $field)
 				{
-					if (isset($row[$field])) {
+					if (isset($row[$field]))
+					{
 						$this->$field = $row[$field];
-						
-						
-						$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
+						// this used to display {$row['id']}, but that was broken and I'm
+						// 		not certain what that was supposed to display
+						$this->log->debug("$this->object_name(): ".$field." = ".$this->$field);
 					}
-					else 
+					else
 					{
 						$this->$field = "";
 					}

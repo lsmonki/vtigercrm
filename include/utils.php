@@ -879,19 +879,34 @@ function getTabid($module)
 {
 	global $adb, $vtlog;
 	static $res = null;
-	$vtlog->logthis("module  is ".$module,'info');  
-        
-	if(!is_null($res)) return $res[$module];
+	$vtlog->logthis("module is ".$module,'info');
 
+	// if we've already built static variable $res, let's not do it again...
+	if(sizeof($res) > 0)
+	{
+		if(isset($res[$module]))
+		{
+			return $res[$module];
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	// ok, we must not have built $res; so let's grab the db data for a
 	$sql = "select tabid, name from tab";
 	$result = $adb->query($sql);
 	$tab_count = $adb->num_rows($result);
-	for($i=0; $i<$tab_count; $i++) {
+
+	for($i=0; $i<$tab_count; $i++)
+	{
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$tabname = $adb->query_result($result, $i, "name");
 		$res[$tabname] = $tabid;
 	}
-	return $res[$module];
+	
+	return isset($res[$module])? $res[$module] : 0;
 }
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype)
@@ -1316,33 +1331,29 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 57)
 	{
-		//if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-		//	$value = $_REQUEST['contact_id'];
-
-	       if($value != '')
-               {
-                       $contact_name = getContactName($value);
-               }
-	       elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-	       {
+		$contact_name = '';
+		
+		if($value != '')
+		{
+			$contact_name = getContactName($value);
+		}
+		elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
+		{
 			if($_REQUEST['module'] == 'Contacts' && $fieldname = 'contact_id')
 			{
-				$contact_name = '';	
+				$contact_name = '';
 			}
 			else
 			{
 				$value = $_REQUEST['contact_id'];
-				$contact_name = getContactName($value);		
+				$contact_name = getContactName($value);
 			}
-			
-	       }
-	
-		//Checking for contacts duplicate
-					 	
+		}
+
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
 		$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
-        elseif($uitype == 61 || $uitype == 69)
+	elseif($uitype == 61 || $uitype == 69)
         {
                 global $current_user;
                 if($value != '')
@@ -1653,31 +1664,31 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 76)
 	{
-
+		$potential_name = '';
 		if($value != '')
-               {
-                       $potential_name = getPotentialName($value);
-               }
-	       elseif(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '')
-	       {
+		{
+			$potential_name = getPotentialName($value);
+		}
+		elseif(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '')
+		{
 			$value = $_REQUEST['potental_id'];
 			$potential_name = getPotentialName($value);
-	       }		 	
+		}
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
 		$custfld .= '<td width="30%"><input name="potential_name" readonly type="text" value="'.$potential_name.'"><input name="potential_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.potential_id.value=\'\';this.form.potential_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
 	elseif($uitype == 78)
 	{
-
+		$quote_name = '';
 		if($value != '')
-               {
-                       $quote_name = getQuoteName($value);
-               }
-	       elseif(isset($_REQUEST['quote_id']) && $_REQUEST['quote_id'] != '')
-	       {
+		{
+			$quote_name = getQuoteName($value);
+		}
+		elseif(isset($_REQUEST['quote_id']) && $_REQUEST['quote_id'] != '')
+		{
 			$value = $_REQUEST['quote_id'];
 			$potential_name = getQuoteName($value);
-	       }		 	
+		}
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
 		$custfld .= '<td width="30%"><input name="quote_name" readonly type="text" value="'.$quote_name.'"><input name="quote_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.quote_id.value=\'\';this.form.quote_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
@@ -1778,7 +1789,13 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 19)
 	{
 		$col_fields[$fieldname]=html_entity_decode(nl2br($col_fields[$fieldname]));
-		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">';
+		// not all fields (e.g. Terms & Conditions) have a field label
+		if(isset($mod_strings[$fieldlabel]))
+		{
+			$custfld .= $mod_strings[$fieldlabel].':';
+		}
+		$custfld .= '&nbsp;</td>';
 		$custfld .= '<td colspan="3" valign="top">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
 	}
 	elseif($uitype == 20 || $uitype == 21 || $uitype == 22 || $uitype == 24) // Armando LC<scher 11.08.2005 -> B'descriptionSpan -> Desc: removed $uitype == 19 and made an aditional elseif above
@@ -1877,6 +1894,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         {
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $contact_id = $col_fields[$fieldname];
+                $contact_name = '';
                 if($contact_id != '')
                 {
                         $contact_name = getContactName($contact_id);
@@ -2217,6 +2235,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         {
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $potential_id = $col_fields[$fieldname];
+				$potential_name = '';
                 if($potential_id != '')
                 {
                         $potential_name = getPotentialName($potential_id);
@@ -2228,6 +2247,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
         {
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $quote_id = $col_fields[$fieldname];
+                $quote_name = '';
                 if($quote_id != '')
                 {
                         $quote_name = getQuoteName($quote_id);
@@ -3049,6 +3069,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 {
 	global $adb, $theme, $app_strings;
 	$filename = '';
+	$potential_name = '';
 	
 	$noofrows = $adb->num_rows($list_result);
 	$list_header = '<script>
@@ -4597,6 +4618,7 @@ function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
 	global $theme;
+	global $app_strings;
 	global $vtlog;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";

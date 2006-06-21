@@ -96,7 +96,7 @@ $xtpl->assign("ADDRESS_CITY", $focus->address_city);
 $xtpl->assign("ADDRESS_STATE", $focus->address_state);
 $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("SIGNATURE", $focus->signature);
+//$xtpl->assign("SIGNATURE", $focus->signature);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 $map_options = array('--None--', 'Home', 'Work');
@@ -109,27 +109,13 @@ $map_start_options .= '</select>';
 $xtpl->assign("MAP_START_OPTIONS", $map_start_options);
 
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
-		
-               
-if($focus->date_format == 'dd-mm-yyyy')
-{
-	$selected1 = 'selected';
-}
-elseif($focus->date_format == 'mm-dd-yyyy')
-{
-	$selected2 = 'selected';
-}
-elseif($focus->date_format == 'yyyy-mm-dd')
-{
-	$selected3 = 'selected';
-}
-$DATE_FORMAT_SELECT_OPTION .= '<option value="dd-mm-yyyy" '.$selected1.'>';
+$DATE_FORMAT_SELECT_OPTION .= '<option value="dd-mm-yyyy" '.($focus->date_format == 'dd-mm-yyyy'? 'selected' : '') .'>';
 $DATE_FORMAT_SELECT_OPTION .= 'dd-mm-yyyy';
 $DATE_FORMAT_SELECT_OPTION .= '</option>';
-$DATE_FORMAT_SELECT_OPTION .= '<option value="mm-dd-yyyy" '.$selected2.'>';
+$DATE_FORMAT_SELECT_OPTION .= '<option value="mm-dd-yyyy" '.($focus->date_format == 'mm-dd-yyyy'? 'selected' : '').'>';
 $DATE_FORMAT_SELECT_OPTION .= 'mm-dd-yyyy';
 $DATE_FORMAT_SELECT_OPTION .= '</option>';
-$DATE_FORMAT_SELECT_OPTION .= '<option value="yyyy-mm-dd" '.$selected3.'>';
+$DATE_FORMAT_SELECT_OPTION .= '<option value="yyyy-mm-dd" '.($focus->date_format == 'yyyy-mm-dd'? 'selected' : '').'>';
 $DATE_FORMAT_SELECT_OPTION .= 'yyyy-mm-dd';
 $DATE_FORMAT_SELECT_OPTION .= '</option>';	
 $DATE_FORMAT_SELECT_OPTION .= ' </select>';

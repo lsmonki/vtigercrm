@@ -46,16 +46,17 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $focus = new SalesOrder();
 
 $url_string = '&smodule=SO'; // assigning http url string
-
-if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
+	
+$query = isset($_REQUEST['query'])? $_REQUEST['query'] : '';
+$subject = isset($_REQUEST['subject'])? $_REQUEST['subject'] : '';
+$accountname = isset($_REQUEST['accountname'])? $_REQUEST['accountname'] : '';
+$quotename = isset($_REQUEST['quotename'])? $_REQUEST['quotename'] : '';
+	
+if($query == 'true')
 {
 	$url_string .="&query=true";
-	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-        if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-        if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
 
 	$where_clauses = Array();
-	//$search_query='';
 
 	//Added for Custom Field Search
 	$sql="select * from field where tablename='salesordercf' order by fieldlabel";
@@ -211,7 +212,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<td>';
 if(isPermitted('SalesOrder',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>&nbsp;';
 }
 
 if($viewid == 0)
@@ -228,9 +229,9 @@ $cvHTML = '<a href="index.php?module=Orders&action=CustomView&smodule=SO&record=
 <span class="sep">|</span>
 <a href="index.php?module=Orders&action=CustomView&smodule=SO" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$other_text .='<td align="right">'.$app_strings['LBL_VIEW'].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                                <OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -293,7 +294,7 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val'];
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')

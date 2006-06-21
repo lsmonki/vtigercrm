@@ -53,6 +53,7 @@ class User extends SugarBean {
 	var $address_country;
 	var $tz;
 	var $holidays;
+	var $map_source;
 	var $namedays;
 	var $workdays;
 	var $weekstart;

@@ -19,7 +19,7 @@ function getHiddenValues($id)
 //	$image_path=$theme_path."images/";
 //	require_once ($theme_path."layout_utils.php");
 
-	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
+	$hidden = '<form border="0" action="index.php" method="post" name="form" id="form">';
 	$hidden .= '<input type="hidden" name="module">';
 	$hidden .= '<input type="hidden" name="mode">';
 	$hidden .= '<input type="hidden" name="account_id" value="'.$id.'">';

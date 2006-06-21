@@ -11,6 +11,7 @@ require_once('include/database/PearDatabase.php');
 
 global $adb;
 global $app_strings;
+global $mod_strings;
 global $current_language;
 
 $mod_dir=getModuleDirName($module);
@@ -191,6 +192,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
+	
 	if($sid=='salesorderid')
 	{
 		$return_action = "SalesOrderDetailView";
@@ -199,7 +201,8 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	{
 		$return_action = "DetailView";
 	}
-	$button .= '<table cellspacing=0 cellpadding=2><tr><td>';
+	
+	$button = '<table cellspacing=0 cellpadding=2><tr><td>';
 	$button .= '<input type="hidden" name="fileid">';
 	$button .= '<input title="New Attachment" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_ATTACHMENT'].'">&nbsp;';
 
@@ -381,7 +384,7 @@ function getHistory($parentmodule,$query,$id)
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 	
-	$button .= '<table cellspacing=0 cellpadding=2><tr><td>';
+	$button = '<table cellspacing=0 cellpadding=2><tr><td>';
 	$button .= '</td></tr></table>';
 
 	echo '<br><br>';

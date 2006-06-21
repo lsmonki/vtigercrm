@@ -59,9 +59,11 @@ require_once($theme_path.'layout_utils.php');
 $role = fetchUserRole($focus->id);
 $rolename =  getRoleName($role);
 //the user might belong to multiple groups
+$group = '';
+
 if($focus->id != 1)
 {
- $group = fetchUserGroups($focus->id);
+	$group = fetchUserGroups($focus->id);
 }
 $log->info("User detail view");
 
@@ -103,25 +105,22 @@ else
 	$buttons .= "<td><input title='".$app_strings['LBL_FORUM_SHOW_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_FORUM_SHOW_BUTTON_KEY']."' class='button' onclick=\"this.form.module.value='Users'; this.form.forumDisplay.value='true'; this.form.action.value='DetailView'\" type='submit' name='Display' value=' ".$app_strings['LBL_FORUM_SHOW_BUTTON_LABEL']." '></td>\n";
 }
 */
-if (is_admin($current_user)) 
+if (is_admin($current_user))
 {
 	$buttons .= "<td><input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >&nbsp; </td>\n";
+
 	//done so that only the admin user can see the customize tab button
 	if($_REQUEST['record'] == $current_user->id)
 	{
 		$buttons .= "<td><input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '></td>\n";
 	}
+
 	if($_REQUEST['record'] != $current_user->id)
 	{
-	$buttons .= "<td><input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '></td>\n";
+		$buttons .= "<td><input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '></td>\n";
 	}
 
-        //$buttons .= "<td><input title='".$app_strings['LBL_ROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_ROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='ListPermissions'\" type='submit' name='ListPermissions' value=' ".$app_strings['LBL_ROLES_BUTTON_LABEL']." '></td>\n";
-	if($_SESSION['authenticated_user_roleid'] == 'administrator')
-	{
-	 $buttons .= "<td><input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '></td>\n";
-	}
-
+	//$buttons .= "<td><input title='".$app_strings['LBL_LISTROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_LISTROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='listroles'; this.form.record.value= '". $current_user->id ."'\" type='submit' name='ListRoles' value=' ".$app_strings['LBL_LISTROLES_BUTTON_LABEL']." '></td>\n";
 }
 
  // $buttons .="<td width='100%'></td><TD  align='right' nowrap='nowrap'><a href='".$_SERVER['PHP_SELF'] .'?'.$_SERVER['QUERY_STRING']."&reset_preferences=true' >". $mod_strings['LBL_RESET_PREFERENCES']. " </a></td>";
@@ -167,7 +166,8 @@ $xtpl->assign("ADDRESS_CITY", $focus->address_city);
 $xtpl->assign("ADDRESS_STATE", $focus->address_state);
 $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("SIGNATURE", nl2br($focus->signature));
+// signature doesn't exist in the Users class definition
+//$xtpl->assign("SIGNATURE", nl2br($focus->signature));
 $xtpl->assign("MAP_START", nl2br($focus->map_source));
 $xtpl->parse("user_info");
 $xtpl->out("user_info");
