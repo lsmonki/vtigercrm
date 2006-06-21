@@ -21,7 +21,7 @@ if(isset($_REQUEST["record"]))
 	global $adb;
 	$query = 'update vtiger_rss set starred=0';
 	$adb->query($query);
-	$query = 'update vtiger_rss set starred=1 where vtiger_rssid ='.$_REQUEST["record"]; 
+	$query = 'update vtiger_rss set starred=1 where rssid ='.$_REQUEST["record"]; 
 	$adb->query($query);
 	echo $_REQUEST["record"];
 }

@@ -136,7 +136,7 @@ class vtigerRSS extends CRMEntity
 			}else
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 				\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
@@ -164,7 +164,7 @@ class vtigerRSS extends CRMEntity
 			}else
 			{		
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
 			$shtml .= "</tr>";
@@ -378,7 +378,7 @@ class vtigerRSS extends CRMEntity
 				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}else
 			{
-				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
+				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"  onClick=\"makedefaultRss($allrssrow[rssid])\">";
 			}
 					   $shtml .= "</td>";
 			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";

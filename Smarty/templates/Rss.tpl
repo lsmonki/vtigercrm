@@ -22,7 +22,7 @@ function GetRssFeedList(id)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Rss&action=RssAjax&vtigerfile=ListView&directmode=ajax&record='+id,
+                        postBody: 'module=Rss&action=RssAjax&file=ListView&directmode=ajax&record='+id,
                         onComplete: function(response) {
                                 $("status").style.display="none";
 				$("rssfeedscont").innerHTML=response.responseText;
@@ -44,7 +44,7 @@ function DeleteRssFeeds(id)
                 	'index.php',
         	        {queue: {position: 'end', scope: 'command'},
                         	method: 'post',
-	                        postBody: 'module=Rss&return_module=Rss&action=RssAjax&vtigerfile=Delete&directmode=ajax&record='+id,
+	                        postBody: 'module=Rss&return_module=Rss&action=RssAjax&file=Delete&directmode=ajax&record='+id,
         	                onComplete: function(response) {
 	        	                $("status").style.display="none";
                                 	$("rssfeedscont").innerHTML=response.responseText;
@@ -59,12 +59,11 @@ function SaveRssFeeds()
 	$("status").style.display="inline";
 	rssurl = $('rssurl').value;
 	rssurl = rssurl.replace(/&/gi,"##amp##");
-	var category = $('rsscategory')[$('rsscategory').selectedIndex].value;
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody:'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&rsscategory='+category+'&rssurl='+rssurl, 
+			postBody:'module=Rss&action=RssAjax&file=Popup&directmode=ajax&rssurl='+rssurl, 
 			onComplete: function(response) {
 	
                                         $("status").style.display="none";
@@ -177,10 +176,6 @@ function SaveRssFeeds()
 	<td align="left" width="70%"><input type="text" id="rssurl" class="txtBox" /></td>
 	</tr>
 	
-	<tr>
-	<td align="right"><b>{$MOD.LBL_CATEGORY}</b></td>
-	<td align="left"><select id="rsscategory" class="importBox" style="width:100%">{$RSSCATEG}</select></td>
-	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	<tr>
 	<td	colspan="2" align="center">
@@ -192,18 +187,6 @@ function SaveRssFeeds()
 	</div>
 
 <script type="text/javascript" language="Javascript">
-function toggleRSSFolder(id) {ldelim}
-	if (document.getElementById(id+"_feeds").style.display=="none") {ldelim}
-		document.getElementById(id+"_feeds").style.display="block"
-		document.getElementById(id+"_folder").src="{$IMAGE_PATH}rss_folder_opn.gif"
-		document.getElementById(id+"_toggle").src="{$IMAGE_PATH}minus.gif"
-	{rdelim} else {ldelim}
-		document.getElementById(id+"_feeds").style.display="none"
-		document.getElementById(id+"_folder").src="{$IMAGE_PATH}rss_folder_cls.gif"
-		document.getElementById(id+"_toggle").src="{$IMAGE_PATH}plus.gif"
-	{rdelim}
-
-{rdelim}
 function makedefaultRss(id)
 {ldelim}
 	if(id != '')
@@ -213,7 +196,7 @@ function makedefaultRss(id)
                 	'index.php',
 	                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
         	                method: 'post',
-                	        postBody:'module=Rss&action=RssAjax&vtigerfile=Popup&directmode=ajax&record='+id, 
+                	        postBody:'module=Rss&action=RssAjax&file=Popup&directmode=ajax&record='+id, 
                         	onComplete: function(response) {ldelim}
                                 	$("status").style.display="none";
         				getrssfolders();
@@ -228,7 +211,7 @@ function getrssfolders()
         	'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                 	method: 'post',
-                        postBody:'module=Rss&action=RssAjax&vtigerfile=ListView&folders=true',
+                        postBody:'module=Rss&action=RssAjax&file=ListView&folders=true',
 			onComplete: function(response) {ldelim}
                         		$("status").style.display="none";
 					$("rssfolders").innerHTML=response.responseText;

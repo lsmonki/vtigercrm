@@ -10,5 +10,5 @@
   ********************************************************************************/
 	
 
-	require_once('modules/'.$_REQUEST['module'].'/'.$_REQUEST['vtigerfile'].'.php');
+	require_once('modules/'.$_REQUEST['module'].'/'.$_REQUEST['file'].'.php');
 ?>

@@ -25,5 +25,5 @@ if(!isset($_REQUEST['record']))
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],'',$_REQUEST['record'],'');
 
  //code added for returning back to the current view after delete from list view
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=RssAjax&vtigerfile=ListView&directmode=ajax");
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=RssAjax&file=ListView&directmode=ajax");
 ?>
