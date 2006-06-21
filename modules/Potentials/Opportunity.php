@@ -283,126 +283,55 @@ class Potential extends CRMEntity {
 		$log->debug("Exiting get_products method ...");
 		return GetRelatedList('Potentials','Products',$focus,$query,$button,$returnset);
 	}
+
+	/**	Function used to get the Sales Stage history of the Potential
+	 *	@param $id - potentialid
+	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 */
 	function get_stage_history($id)
 	{	
-		 global $log;
+		global $log;
 		$log->debug("Entering get_stage_history(".$id.") method ...");
-		global $theme;
-		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
-		require_once ($theme_path."layout_utils.php");
 
 		global $adb;
 		global $mod_strings;
 		global $app_strings;
 
+		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = '.$id;
 		$result=$adb->query($query);
 		$noofrows = $adb->num_rows($result);
 
+		$header[] = $app_strings['LBL_AMOUNT'];
+		$header[] = $app_strings['LBL_SALES_STAGE'];
+		$header[] = $app_strings['LBL_PROBABILITY'];
+		$header[] = $app_strings['LBL_CLOSE_DATE'];
+		$header[] = $app_strings['LBL_LAST_MODIFIED'];
 
-		if($noofrows == 0)
+		while($row = $adb->fetch_array($result))
 		{
-		}
-		else
-		{	
-			if ($noofrows > 15)
-			{
-				$list .= '<div style="overflow:auto;height:315px;width:100%;">';
-			}
+			$entries = Array();
 
-			$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-			$list .= '<tr class="ModuleListTitle" height=20>';
+			$entries[] = $row['amount'];
+			$entries[] = $row['stage'];
+			$entries[] = $row['probability'];
+			$entries[] = getDisplayDate($row['closedate']);
+			$entries[] = getDisplayDate($row['lastmodified']);
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle" height="21">';
-
-			$list .= $app_strings['LBL_AMOUNT'].'</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle">';
-
-			$list .= $app_strings['LBL_SALES_STAGE'].'</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle">';
-
-			$list .= $app_strings['LBL_PROBABILITY'].'</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle">';
-
-			$list .= $app_strings['LBL_CLOSE_DATE'].'</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle">';
-
-			$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td class="moduleListTitle">';
-
-			$list .= '</td>';
-			$list .= '</tr>';
-
-			$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-			$i=1;
-			while($row = $adb->fetch_array($result))
-			{
-
-				if ($i%2==0)
-					$trowclass = 'evenListRow';
-				else
-					$trowclass = 'oddListRow';
-
-				$list .= '<tr class="'. $trowclass.'">';
-
-				$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-				$list .= '<td width="15%">'.$row['amount'].'</td>';
-
-				$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-				$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
-				$list .= $row['stage'];
-				$list .= '</td>';
-
-				$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-				$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-				$list .= $row['probability'];
-				$list .= '</td>';
-
-				$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-				$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
-				//changed to show the close date as user date format -- after 4.2 patch2
-				$closedate = getDisplayDate($row['closedate']);
-				$list .= $closedate;
-				$list .= '</td>';
-
-				$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-				$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-				//changed to show the last modified date as user date format -- after 4.2 patch2
-				$lastmodified = getDisplayDate($row['lastmodified']);
-				$list .= $lastmodified;
-				$list .= '</td>';
-
-				$list .= '</td>';
-
-				$list .= '</tr>';
-				$i++;
-			}
-
-			$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-			$list .= '</table>';
-			if ($noofrows > 15)
-			{
-				$list .= '</div>';
-			}
-
+			$entries_list[] = $entries;
 		}
 
-		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = '.$id;
-	 $log->debug("Exiting get_stage_history method ...");
+		$return_data = Array('header'=>$header,'entries'=>$entries_list);
+
+	 	$log->debug("Exiting get_stage_history method ...");
+
+		return $return_data;
 	}
 
-	function get_history($id)
-	{
-		 global $log;
-		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
+		function get_history($id)
+		{
+			global $log;
+			$log->debug("Entering get_history(".$id.") method ...");
+			$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
 		vtiger_activity.eventstatus, vtiger_activity.activitytype, vtiger_contactdetails.contactid,
 		vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_crmentity.modifiedtime,
 		vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
