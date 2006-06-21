@@ -67,7 +67,7 @@ $smarty->assign("UMOD", $mod_strings);
 global $current_language;
 $smod_strings = return_module_language($current_language,'Settings');
 $smarty->assign("MOD", $smod_strings);
-
+$smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("APP", $app_strings);
 
 if (isset($_REQUEST['error_string'])) $smarty->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
