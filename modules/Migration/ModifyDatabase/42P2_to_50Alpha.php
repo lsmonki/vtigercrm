@@ -3046,6 +3046,119 @@ foreach($insert_query_array27 as $query)
 }
 
 
+//User fields added in field table
+$user_query_array = Array(
+
+"alter table vtiger_users add column confirm_password varchar(50)",
+"insert into vtiger_tab values (29,'Users',0,26,'Users',null,null,1)",
+
+"insert into vtiger_blocks values (79,29,'LBL_USERLOGIN_ROLE',1,0,0,0,0,0)",
+"insert into vtiger_blocks values (80,29,'LBL_MORE_INFORMATION',2,0,0,0,0,0)",
+"insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)",
+
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')",
+			 );
+foreach($user_query_array as $query)
+{
+	Execute($query);
+}
+
+$create_query29 = "CREATE TABLE vtiger_status (
+			`statusid` int(19) NOT NULL auto_increment,
+			`status` varchar(200) NOT NULL,
+			`sortorderid` int(19) NOT NULL default '0',
+			`presence` int(1) NOT NULL default '1',
+			PRIMARY KEY  (`statusid`)
+			)";
+Execute($create_query29);
+
+Execute("insert into vtiger_status values (1,'Active',0,1)");
+Execute("insert into vtiger_status values (2,'Inactive',1,1)");
+
+$create_query30 = "CREATE TABLE vtiger_activity_view (
+			`activity_viewid` int(19) NOT NULL auto_increment,
+			`activity_view` varchar(200) NOT NULL,
+			`sortorderid` int(19) NOT NULL default '0',
+			`presence` int(1) NOT NULL default '1',
+			PRIMARY KEY  (`activity_viewid`)
+			)";
+Execute($create_query30);
+
+Execute("insert into vtiger_activity_view values (1,'Today',0,1)");
+Execute("insert into vtiger_activity_view values (2,'This Week',1,1)");
+Execute("insert into vtiger_activity_view values (3,'This Month',2,1)");
+Execute("insert into vtiger_activity_view values (4,'This Year',3,1)");
+
+
+$create_query31 = "CREATE TABLE vtiger_lead_view (
+			`lead_viewid` int(19) NOT NULL auto_increment,
+			`lead_view` varchar(200) NOT NULL,
+			`sortorderid` int(19) NOT NULL default '0',
+			`presence` int(1) NOT NULL default '1',
+			PRIMARY KEY  (`lead_viewid`)
+			)";
+Execute($create_query31);
+
+Execute("insert into vtiger_lead_view values (1,'Today',0,1)");
+Execute("insert into vtiger_lead_view values (2,'Last 2 Days',1,1)");
+Execute("insert into vtiger_lead_view values (3,'Last Week',2,1)");
+
+
+$create_query32 = "CREATE TABLE vtiger_date_format (
+			`date_formatid` int(19) NOT NULL auto_increment,
+			`date_format` varchar(200) NOT NULL,
+			`sortorderid` int(19) NOT NULL default '0',
+			`presence` int(1) NOT NULL default '1',
+			PRIMARY KEY  (`date_formatid`)
+			)";
+Execute($create_query32);
+
+Execute("insert into vtiger_date_format values (1,'dd-mm-yyyy',0,1)");
+Execute("insert into vtiger_date_format values (2,'mm-dd-yyyy',1,1)");
+Execute("insert into vtiger_date_format values (3,'yyyy-mm-dd',2,1)");
+//end of User fields added in field table
+
+//Activities and Leads Added under Marketing
+Execute("insert into vtiger_parenttabrel values (2,7,5)");
+Execute("insert into vtiger_parenttabrel values (2,9,6)");
+Execute("insert into vtiger_parenttabrel values (4,9,8)");
+
+//Queries to remove the rss categories
+Execute("drop table vtiger_rsscategory");
+Execute("delete from vtiger_field where tabid=24");
+
+
 
 			     
 
