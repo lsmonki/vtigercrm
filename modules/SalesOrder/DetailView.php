@@ -85,9 +85,8 @@ $smarty->assign("CONVERTMODE",'sotoinvoice');
 //Get the associated Products and then display above Terms and Conditions
 $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('SalesOrder',$focus));
 
- $so_tables = Array('salesorder','sobillads','soshipads','salesordercf');
  $tabid = getTabid("SalesOrder");
- $validationData = getDBValidationData($so_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
