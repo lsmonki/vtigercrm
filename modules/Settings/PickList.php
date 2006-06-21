@@ -115,7 +115,7 @@ function getPickListValues($tablename)
 function getPickListModules()
 {
 	global $adb;
-	$query = 'select distinct vtiger_field.fieldname,vtiger_field.tabid,tablabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,16)';
+	$query = 'select distinct vtiger_field.fieldname,vtiger_field.tabid,tablabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,16) and vtiger_field.tabid != 29';
 	$result = $adb->query($query);
 	while($row = $adb->fetch_array($result))
 	{
