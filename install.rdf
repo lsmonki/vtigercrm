@@ -15,12 +15,11 @@ $Id:
 	 <Description about="urn:mozilla:install-manifest">
         <em:id>{e4aab225-76d8-4f86-a8d0-0935fa80cccf}</em:id>
         <em:name>vtiger Thunderbird Extension</em:name>
-        <em:version>5.0</em:version>
-        <em:description>vtiger CRM Extension for Thunderbird.</em:description>
+        <em:version>5.0.0</em:version>
+        <em:description>vtiger CRM Extension for Thunderbird</em:description>
         <em:creator>vtiger.com</em:creator>
 		  <em:iconURL>chrome://vtiger/skin/vtiger32.png</em:iconURL>
         <em:homepageURL>http://www.vtiger.com</em:homepageURL>
-		  <em:updateURL>http://www.vtiger.com/products/crm/downloads/tbird/update.rdf</em:updateURL>
         <em:file>
             <Description about="urn:mozilla:extension:file:vtiger.jar">
 					<em:package>content/vtiger/</em:package>
