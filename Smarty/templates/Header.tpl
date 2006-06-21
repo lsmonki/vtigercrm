@@ -38,7 +38,7 @@ DIV.fixedLay {
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
 	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small onLoad="Announcement_rss()">
-	<a name="top">
+	<a name="top"></a>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
