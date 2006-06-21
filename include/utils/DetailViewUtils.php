@@ -835,7 +835,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 	 	$label_fld[] =$mod_strings[$fieldlabel];
 		if(is_admin($current_user))
-			$label_fld[] = '<a href="index.php?module=Users&action=RoleDetailView&roldeid='.$col_fields[$fieldname].'">'.getRoleName($col_fields[$fieldname]).'</a>';
+			$label_fld[] = '<a href="index.php?module=Users&action=RoleDetailView&roleid='.$col_fields[$fieldname].'">'.getRoleName($col_fields[$fieldname]).'</a>';
 		else
 			$label_fld[] = getRoleName($col_fields[$fieldname]);
 	}
