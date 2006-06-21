@@ -90,5 +90,6 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 $smarty->display("DetailView.tpl");
 ?>
