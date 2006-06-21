@@ -14,6 +14,9 @@
 <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
+<span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
+   <a class="link"  align="right" href="javascript:;">{$APP.LBL_EDIT_BUTTON}</a>
+</span>
 <script>
 function tagvalidate()
 {ldelim}

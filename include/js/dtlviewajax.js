@@ -11,7 +11,9 @@ var globaldtlviewspanid = "";
 var globaleditareaspanid = ""; 
 var globaltxtboxid = "";
 var itsonview=false;
-
+// to retain the old value if we cancel the ajax edit
+var globaltempvalue = '';
+var globaluitype = '';
 function showHide(showId, hideId)
 {
 	show(showId);
@@ -22,6 +24,16 @@ function hndCancel(valuespanid,textareapanid,fieldlabel)
 {
 
   showHide(valuespanid,textareapanid);
+  if(globaluitype == '56')
+  {	  
+	  if(globaltempvalue == 1)
+	  	getObj(globaltxtboxid).checked = true; 
+	  else		
+	  	getObj(globaltxtboxid).checked = false; 
+  }
+  else		  
+	  getObj(globaltxtboxid).value = globaltempvalue; 
+  globaltempvalue = '';
   itsonview=false;
   return false;
 }
@@ -37,6 +49,7 @@ function hndMouseOver(uitype,fieldLabel)
       }
       
       show("crmspanid");
+	  globaluitype = uitype;
       globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
       globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
       globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
@@ -59,6 +72,7 @@ function handleEdit()
 {
      show(globaleditareaspanid) ;
      fnhide(globaldtlviewspanid);
+	 globaltempvalue = getObj(globaltxtboxid).value;
      getObj(globaltxtboxid).focus();
      fnhide('crmspanid');
      itsonview=true;
@@ -87,6 +101,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	}
 
 
+	$("vtbusy_info").style.display="inline";
 	var isAdmin = document.getElementById("hdtxt_IsAdmin").value; 
 
 	var tagValue = trim(document.getElementById(txtBox).value);
@@ -105,7 +120,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
-	$("vtbusy_info").style.display="inline";
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -116,12 +130,12 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 				{
 					alert("Error while Editing");
 				}
-				else if(item.indexOf(":#:SUCCESS")>-1)
-     				{
+				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
+    			{
 					$("vtbusy_info").style.display="none";
-     				}
-                       	}
-                }
+    			}
+           	}
+        }
         );
 	if(uitype == '13')
 	{
