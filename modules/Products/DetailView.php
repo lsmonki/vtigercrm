@@ -10,7 +10,6 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('include/utils/utils.php');
 require_once('modules/Products/Product.php');
 require_once('include/utils/utils.php');
 
@@ -79,8 +78,8 @@ $smarty->assign("SERVICE_TAX", $service_tax);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
- $product_tables = Array('products','productcf','productcollaterals');
- $validationData = getDBValidationData($product_tables);
+ $tabid = getTabid("Products");
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);

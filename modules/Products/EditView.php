@@ -164,9 +164,8 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 
 
 
-$product_tables = Array('products','productcf','productcollaterals'); 
-
- $validationData = getDBValidationData($product_tables);
+ $tabid = getTabid("Products");
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 if($errormessage==2)
 {
