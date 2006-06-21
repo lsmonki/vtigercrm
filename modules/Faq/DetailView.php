@@ -92,6 +92,6 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 //Added to display the Faq comments information
 $smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
-
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 $smarty->display("DetailView.tpl");
 ?>
