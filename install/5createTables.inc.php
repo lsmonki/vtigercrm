@@ -71,7 +71,7 @@ function create_default_users() {
         $user->column_fields["user_name"] = 'admin';
         $user->column_fields["status"] = 'Active';
         $user->column_fields["is_admin"] = 'on';
-        $user->column_fields["user_password"] = $user->encrypt_password($admin_password);
+        $user->column_fields["user_password"] = $admin_password;
         $user->column_fields["tz"] = 'Europe/Berlin';
         $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
         $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
@@ -115,8 +115,9 @@ function create_default_users() {
     	$user = new User();
         $user->column_fields["last_name"] = 'StandardUser';
         $user->column_fields["user_name"] = 'standarduser';
+        $user->column_fields["is_admin"] = 'off';
         $user->column_fields["status"] = 'Active';
-        $user->column_fields["user_password"] = $user->encrypt_password('standarduser');
+        $user->column_fields["user_password"] = 'standarduser';
         $user->column_fields["tz"] = 'Europe/Berlin';
         $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
         $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
@@ -140,7 +141,7 @@ function create_default_users() {
 	$role_id = $db->query_result($role_result,0,"roleid");
 	$user->column_fields["roleid"] = $role_id;
 
-        $user->save('Users');
+    $user->save('Users');
 
 	//Creating the flat vtiger_files
 	createUserPrivilegesfile($user->id);
@@ -169,12 +170,6 @@ foreach ($modules as $module )
 	$focus->create_tables();
 }
 			
-
-// populate vtiger_users vtiger_table
-//$uid = $db->getUniqueID("users");
-//$sql_stmt1 = "insert into vtiger_users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
-//$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
-
 
 // create and populate combo tables
 require_once('include/PopulateComboValues.php');
