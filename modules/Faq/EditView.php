@@ -95,10 +95,9 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 
-$faq_tables = Array('faq'); 
-
-$validationData = getDBValidationData($faq_tables);
- $data = split_validationdataArray($validationData);
+$tabid = getTabid("Faq");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);

@@ -82,9 +82,8 @@ if(isPermitted("Faq","Delete",$_REQUEST['record']) == 'yes')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-
-$faq_tables = Array('faq');
-$validationData = getDBValidationData($faq_tables);
+$tabid = getTabid("Faq");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
