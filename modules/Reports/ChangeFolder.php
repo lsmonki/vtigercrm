@@ -29,10 +29,16 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }
 
+
+/** To Change the Report to another folder
+  * @param $reportid -- The report id
+  * @param $folderid -- The folderid the which the report to be moved
+  * @returns nothing 
+ */
 function ChangeFolder($reportid,$folderid)
 {
 	global $adb;
-	$imovereportsql = "update vtiger_report set folderid=".$folderid." where vtiger_reportid=".$reportid;
+	$imovereportsql = "update vtiger_report set folderid=".$folderid." where reportid=".$reportid;
 	$imovereportsqlresult = $adb->query($imovereportsql);
 }
 ?>
