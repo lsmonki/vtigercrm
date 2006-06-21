@@ -450,7 +450,11 @@
 				{else}
 					<input name="{$fldname}"  type="file" value="{$maindata[3].0.name}" tabindex="{$vt_tab}" />
 					<input type="hidden" name="id" value=""/>
-					{$maindata[3].0.name}
+					{ if $maindata[3].0.name != "" }
+						
+				<div id="replaceimage">[{$maindata[3].0.name}] <a href="javascript:;" onClick="delimage({$ID})">Del</a></div>
+					{/if}
+					
 				{/if}
 			</td>
 
@@ -680,6 +684,22 @@
 			if(temp == false)
 				alert("Please enter Valid TAX value");
 	{rdelim}	
+
+function delimage(id)
+{ldelim}
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Contacts&action=ContactsAjax&file=DelImage&recordid='+id,
+			onComplete: function(response)
+				    {ldelim}
+					$("replaceimage").innerHTML=response.responseText;
+				    {rdelim}
+		{rdelim}
+	);
+
+{rdelim}
 
 
 </script>
