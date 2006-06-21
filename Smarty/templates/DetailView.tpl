@@ -70,6 +70,26 @@ function DeleteTag(id)
         );
 {rdelim}
 </script>
+{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads'}
+        {if $MODULE eq 'Accounts'}
+                {assign var=address1 value='Billing'}
+                {assign var=address2 value='Shipping'}
+        {/if}
+        {if $MODULE eq 'Contacts'}
+                {assign var=address1 value='Mailing'}
+                {assign var=address2 value='Other'}
+        {/if}
+        <div id="locateMap" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('locateMap')" onmouseover="fnvshNrm('locateMap')">
+                <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                                <td>
+                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Main' );" class="calMnu">{$address1} {$APP.LBL_ADDRESS}</a>
+                                        <a href="javascript:;" onClick="fninvsh('locateMap'); searchMapLocation( 'Other' );" class="calMnu">{$address2} {$APP.LBL_ADDRESS}</a>
+                                </td>
+                        </tr>
+                </table>
+        </div>
+{/if}
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
@@ -189,32 +209,11 @@ function DeleteTag(id)
                                                         <td align=right>
 							{if $header eq 'Address Information' && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
                                                         {if $MODULE eq 'Leads'}
-                                                        <input id="locateMap" name="locateMap" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
+                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
                                                         {else}
-                                                                {if $MODULE eq 'Accounts'}
-                                                                       {assign var=address1 value='Billing'}
-                                                                       {assign var=address2 value='Shipping'}
-                                                                {/if}
-                                                                {if $MODULE eq 'Contacts'}
-                                                                       {assign var=address1 value='Mailing'}
-                                                                       {assign var=address2 value='Other'}
-                                                                {/if}
-                                                                <input id="locateMap" name="locateMap" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="javascript:showLocateMapMenu()" title="{$APP.LBL_LOCATE_MAP}">
-                                                        <div id="dropDownMenu" style="position:absolute;display:none;z-index:60">
-							<table border="0" cellspacing="0" cellpadding="4">
-                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'" onClick="searchMapLocation( 'Main' )">
-                                                <td>{$address1} {$APP.LBL_ADDRESS}</td>
-                                                </tr>
-                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" style="cursor:pointer;" onMouseOut="this.className='lvtColData'"  onClick="searchMapLocation( 'Other' )">
-                                                <td>{$address2} {$APP.LBL_ADDRESS}</td>
-                                                </tr>
-                                                </table>
-                                                </div>
-                                                {/if}
-                                                <script>
-                                                        document.onclick=hideLocateMapMenu;
-                                                </script>
-                                               {/if}
+                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="fnvshobj(this,'locateMap');" onmouseout="fninvsh('locateMap');" title="{$APP.LBL_LOCATE_MAP}">
+							{/if}
+                                                        {/if}
                                                         </td>
                                                         </tr>
 
