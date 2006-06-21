@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Potentials/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 
@@ -78,9 +77,8 @@ if(isPermitted("Invoice","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("Potentials","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
-$potential_tables = Array('potential','crmentity','potentialscf');
 $tabid = getTabid("Potentials");
-$validationData = getDBValidationData($potential_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);

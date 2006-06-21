@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Potentials/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -118,15 +117,13 @@ if (isset($_REQUEST['return_viewname']))
 $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Potential']);
 
 
- $potential_tables = Array('potential','crmentity','potentialscf'); 
  $tabid = getTabid("Potentials");
- $validationData = getDBValidationData($potential_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
