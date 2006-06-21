@@ -95,9 +95,8 @@ if(isPermitted("Accounts","Merge",'') == 'yes')
         $smarty->assign("TOPTIONS",$optionString);
 }
 
-$account_tables = Array('account','crmentity','accountbillads','accountshipads','accountscf');
 $tabid = getTabid("Accounts");
-$validationData = getDBValidationData($account_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
