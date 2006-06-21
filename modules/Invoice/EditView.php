@@ -25,7 +25,6 @@ require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
 require_once('modules/Quotes/Quote.php');
 require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Invoice/Forms.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -316,9 +315,8 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$invoice_tables = Array('invoice','invoicebillads','invoiceshipads','invoicecf'); 
  $tabid = getTabid("Invoice");
- $validationData = getDBValidationData($invoice_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
