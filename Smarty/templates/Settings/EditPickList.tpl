@@ -33,8 +33,8 @@
 	<tr><td style="border-bottom: 1px dashed rgb(204, 204, 204);" colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td colspan="2" align="center">
-	<input name="save" value=" &nbsp;Save&nbsp; " class="classBtn" onClick="SavePickList('{$FIELDNAME}','{$MODULE}');" type="button">
-	<input name="cancel" value=" &nbsp;Cancel&nbsp; " class="classBtn" onClick="hide('editdiv');" type="button">
+	<input name="save" value=" &nbsp;Save&nbsp; " class="crmButton small save" onClick="SavePickList('{$FIELDNAME}','{$MODULE}');" type="button">
+	<input name="cancel" value=" &nbsp;Cancel&nbsp; " class="crmButton small cancel" onClick="hide('editdiv');" type="button">
 	</td>
 	</tr>
 	<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);">&nbsp;</td></tr>

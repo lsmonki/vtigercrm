@@ -9,6 +9,7 @@
   *
  ********************************************************************************/
 -->*}
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
@@ -84,78 +85,84 @@ function validate() {
 
 {/literal}
 </script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br/>
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_STUDIO} > {$MOD.LBL_PICKLIST_SETTINGS}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
 	
-	<table class="leadTable" align="center" cellpadding="5" cellspacing="0" width="95%">
-	<tbody><tr>
-	<td style="border-bottom: 2px dotted rgb(204, 204, 204); padding: 5px;" width="5%">
-	<img src="{$IMAGE_PATH}picklistEditor.gif" align="left">
-	</td>
-	<td style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">
-	<span class="genHeaderGrayBig">{$MOD.LBL_PICKLIST_EDITOR}</span><br>
-	
-	</td>
+			{include file='SetMenu.tpl'}
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}picklist.gif" width="48" height="48" border=0 ></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_PICKLIST_EDITOR}</b></td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_PICKLIST_DESC}</td>
+				</tr>
+				</table>
+				
+				
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td valign=top>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>1. {$MOD.LBL_SELECT_MODULE}</strong></td>
+						<td class="small" align=right>&nbsp;</td>
+					</tr>
+					</table>
+					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+						<tr class="small">
+                        	<td width="35%" class="small cellLabel"><strong>{$MOD.LBL_SELECT_CRM_MODULE}</strong></td>
+	                        <td width="65%" class="cellText" >
+					<select name="pickmodule" class="detailedViewTextBox" onChange="changeModule(this);">
+					{foreach key=tabid item=module from=$MODULE_LISTS}
+						<option value="{$module}">{$APP.$module}</option>
+					{/foreach}
+					</select>
+				</td>
+                      </tr>
+					</table>
+					<br>
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+				<tr>
+				    <td class="big" rowspan="2">
+					<div id="picklist_datas">	
+						{include file='Settings/PickListContentsN.tpl'}
+					</div>
+				    </td>	
+				</td>
+				</tr>
+			    	</table>
+				<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr><td class="small" nowrap align=right><a href="#top">Scroll to Top</a></td></tr>
+				</table>
+				
+				</td>
+				</tr>
+				</table>
+			
+			
+			
+			</td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-	<td align="right"><img src="{$IMAGE_PATH}one.gif"></td>
-	<td><b class="lvtHeaderText">{$MOD.LBL_SELECT_MODULE}</b></td>
-	</tr>
-
-	<tr>
-	<td>&nbsp;</td>
-	<td>
-	{$MOD.LBL_SELECT_CRM_MODULE} :
-	<select name="pickmodule" class="importBox" onChange="changeModule(this);">
-	{foreach key=tabid item=module from=$MODULE_LISTS}
-	<option value="{$module}">{$module}</option>
-	{/foreach}
-	</select>
-	</td>
-	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-
-	<td align="right" valign="top"><img src="{$IMAGE_PATH}two.gif" height="31" width="29"></td>
-	<td rowspan="2">
-	<div id="picklist_datas">	
-		{include file='Settings/PickListContents.tpl'}
-	</div>
-	</td>
-	</tr>
-	<tr>
-	<td>&nbsp;</td>
-	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	</tbody>
 	</table>
-
-
+		
+	</div>
 
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 <div id="editdiv" style="display:block;position:absolute;width:510px;"></div>
 {literal}
 <script>
