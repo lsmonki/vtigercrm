@@ -7,34 +7,130 @@
 		<!--Left Side Navigation Table-->
 		<table border=0 cellspacing=0 cellpadding=0 width=100%>
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_USER_MANAGEMENT}</td></tr>
-				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_USERS}</td></tr>
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td></tr>
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
+				{if $smarty.request.action eq 'index' ||  $smarty.request.action eq 'DetailView' || $smarty.request.action eq 'EditView' }
+					<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_USERS}</td></tr>
+				{else}
+					<tr><td class="settingsTabList" nowrap><a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'listroles' ||  $smarty.request.action eq 'RoleDetailView' ||  $smarty.request.action eq 'saverole' ||  $smarty.request.action eq 'createrole'} 		
+					<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_ROLES}</td></tr>
+				{else}	
+					<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listroles&parenttab=Settings">{$MOD.LBL_ROLES}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'ListProfiles' || $smarty.request.action eq 'profilePrivileges' ||  $smarty.request.action eq 'CreateProfile' ||  $smarty.request.action eq 'SaveProfile' || $smarty.request.action eq 'UpdateProfileChanges' }
+					<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_PROFILES}</td></tr>
+				{else}
+					<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$MOD.LBL_PROFILES}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'listgroups' || $smarty.request.action eq 'GroupDetailView' || $smarty.request.action eq 'createnewgroup' || $smarty.request.action eq 'SaveGroup'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.USERGROUPLIST}</td></tr>   	
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$MOD.USERGROUPLIST}</a></td></tr>
+				{/if}
+
+				{if  $smarty.request.action eq 'OrgSharingEditView' || $smarty.request.action eq 'OrgSharingDetailView' || $smarty.request.action eq 'SaveOrgSharing'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_SHARING_ACCESS}</td></tr>  	
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings">{$MOD.LBL_SHARING_ACCESS}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'DefaultFieldPermissions' || $smarty.request.action eq 'UpdateDefaultFieldLevelAccess' || $smarty.request.action eq 'EditDefOrgFieldLevelAccess' }
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_FIELDS_ACCESS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=DefaultFieldPermissions&parenttab=Settings">{$MOD.LBL_FIELDS_ACCESS}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'ListModuleOwners' || $smarty.request.action eq 'SettingsAjax'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_MODULE_OWNERS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings">{$MOD.LBL_MODULE_OWNERS}</a></td></tr>
+				{/if}
+
+				{if  $smarty.request.action eq 'Announcements' ||  $smarty.request.action eq 'UsersAjax' }
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_ANNOUNCEMENT}</td></tr>		
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=Announcements&parenttab=Settings">{$MOD.LBL_ANNOUNCEMENT}</a></td></tr>
+				{/if}
 	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_STUDIO}</td></tr>
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
+				
+				{if  $smarty.request.action eq 'PickList' ||  $smarty.request.action eq 'SettingsAjax'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_PICKLIST_EDITOR}</td></tr>						     {else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td></tr>
+				{/if}
 	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_COMMUNICATION_TEMPLATES}</td></tr>
+
+				{if $smarty.request.action eq 'listemailtemplates' || $smarty.request.action eq 'detailviewemailtemplate' || $smarty.request.action eq 'editemailtemplate' || $smarty.request.action eq 'saveemailtemplate' || $smarty.request.action eq 'deleteemailtemplate'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.EMAILTEMPLATES}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.EMAILTEMPLATES}</td></tr>
+				
+				{else}	
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
+				{/if}
+
+				{if $smarty.request.action eq 'listnotificationschedulers' || $smarty.request.action eq 'UsersAjax'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.NOTIFICATIONSCHEDULERS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings">{$MOD.NOTIFICATIONSCHEDULERS}</a></td></tr>
+				{/if}
+				
+				{if $smarty.request.action eq 'listinventorynotifications' || $smarty.request.action eq 'UsersAjax'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.INVENTORYNOTIFICATION}</td></tr>
+				{else}	
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings">{$MOD.INVENTORYNOTIFICATION}</a></td></tr>
+				{/if} 	
+
+				{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.INVENTORYNOTIFICATION}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORYTERMSANDCONDITIONS}</a></td></tr>
+				{/if}
+
 	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_OTHER_SETTINGS}</td></tr>
+				{if $smarty.request.action eq 'OrganizationConfig' || $smarty.request.action eq 'EditCompanyDetails' || $smarty.request.action eq 'add2db'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_COMPANY_DETAILS}</td></tr>
+				{else}	
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings">{$MOD.LBL_COMPANY_DETAILS}</a></td></tr>
+				{/if}
+				
+				{if  $smarty.request.action eq 'EmailConfig' ||  $smarty.request.action eq 'Save' }
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_MAIL_SERVER_SETTINGS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings">{$MOD.LBL_MAIL_SERVER_SETTINGS}</a></td></tr>
+				{/if}
+				
+				{if $smarty.request.action eq 'BackupServerConfig' || $smarty.request.action eq 'index' || $smarty.request.action eq 'Save'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_BACKUP_SERVER_SETTINGS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings">{$MOD.LBL_BACKUP_SERVER_SETTINGS}</a></td></tr>
+				{/if}
+				
+				{if $smarty.request.action eq 'CurrencyListView' ||  $smarty.request.action eq 'CurrencyEditView' ||  $smarty.request.action eq 'index' ||  $smarty.request.action eq 'SaveCurrencyInfo'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_CURRENCY_SETTINGS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a></td></tr>
+				{/if}
+				
+				{if $smarty.request.action eq 'TaxConfig'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_TAX_SETTINGS}</td></tr>
+				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings">{$MOD.LBL_TAX_SETTINGS}</a></td></tr>
+				{/if}
 				</table>
 			</td>
 			<td width=90% class="small settingsSelectedUI" valign=top >
+
+
 
 
