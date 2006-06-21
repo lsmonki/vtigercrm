@@ -33,7 +33,7 @@ class Order extends CRMEntity {
 	var $log;
 	var $db;
 		
-	var $table_name = "purchaseorder";
+	var $table_name = "vtiger_purchaseorder";
 	var $tab_name = Array('vtiger_crmentity','vtiger_purchaseorder','vtiger_pobillads','vtiger_poshipads','vtiger_purchaseordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_purchaseorder'=>'purchaseorderid','vtiger_pobillads'=>'pobilladdressid','vtiger_poshipads'=>'poshipaddressid','vtiger_purchaseordercf'=>'purchaseorderid');
 	
