@@ -60,9 +60,8 @@ $smarty->assign("NAME", $focus->name);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$pb_tables = Array('pricebook','pricebookcf');
-
-$validationData = getDBValidationData($pb_tables);
+$tabid = getTabid("PriceBooks");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
