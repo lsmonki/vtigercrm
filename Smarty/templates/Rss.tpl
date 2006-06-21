@@ -112,7 +112,7 @@ function SaveRssFeeds()
 			<tr>
 			
 			<td style="padding:10px;vertical-align:middle;" width="28%">
-			<img src='{$IMAGE_PATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
+			<img src='{$IMAGE_PATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');$('rssurl').focus();" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a>
 			</td>
 			<td width="2%">&nbsp;</td>
 			<td width="60%"><img src="{$IMAGE_PATH}rssimage.gif" width="176" height="44"  align="right"/></td>
@@ -164,7 +164,7 @@ function SaveRssFeeds()
 	<td>&nbsp;</td>
 	</tr>
 </table>
-	<div id="PopupLay">
+	<div id="PopupLay" class="fixedLay">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0">
 	<tr>
 	<td class="genHeaderSmall" align="left"><img src="{$IMAGE_PATH}rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
