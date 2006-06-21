@@ -1483,11 +1483,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 					if($actvity_type == "Task")
 					{
-						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task">'.$temp_val.'</a>';
+						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task&parenttab=My Home Page">'.$temp_val.'</a>';
 					}
 					else
 					{
-						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events">'.$temp_val.'</a>';
+						$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events&parenttab=My Home Page">'.$temp_val.'</a>';
 					}
 				}
 				elseif($module == "Vendors")
@@ -2567,7 +2567,9 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = 'id';
 		$table = 'vtiger_users';
 	}
-	$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
+	
+	if($reltable != null)
+		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
 
 	if($query !='')
 	{
