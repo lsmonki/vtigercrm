@@ -470,7 +470,7 @@
 			<td width="20%" class="dvtCellLabel" align=right>
 				{$fldlabel}
 			</td>
-				{if $secondvalue eq 1}
+				{if ($secondvalue eq 1 && $CURRENT_USERID != $smarty.request.record) || ($MODE == 'create')}
 					{assign var="disable_status" value=""}
 				{else}
 					{assign var="disable_status" value="disabled"}
