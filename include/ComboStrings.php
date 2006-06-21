@@ -188,10 +188,6 @@ $combo_strings = Array(
                           'Public'=>'Public'
 			 ),
 				     
-'rsscategory_dom' => Array('vtiger Discussions'=>'vtiger Discussions',
-                       'vtiger Wiki'=>'vtiger Wiki'
-                      ),
-
 'usageunit_dom' => Array('Box'=>'Box',
                         'Carton'=>'Carton',
                         'Caton'=>'Caton',

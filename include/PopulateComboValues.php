@@ -60,7 +60,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus','invoicestatus','postatus','sostatus','visibility','campaigntype','campaignstatus','expectedresponse','status','activity_view','lead_view','date_format');
+		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus','invoicestatus','postatus','sostatus','visibility','campaigntype','campaignstatus','expectedresponse','status','activity_view','lead_view','date_format');
 
 		foreach ($comboTables as $comTab)
 		{
