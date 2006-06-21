@@ -388,37 +388,6 @@ class vtigerRSS extends CRMEntity
 
 	}
 
-	/** Function to get the vtiger_rsscategories   
-	* This Function accepts no argument and returns the categorylist as an array
-	*/
-
-	function getRsscategory()
-	{
-		global $adb;
-		global $image_path;
-		$sSQL = "select * from vtiger_rsscategory where presence = 1 order by sortorderid";
-		$result = $adb->query($sSQL);
-
-		while($categoryrow = $adb->fetch_array($result))
-		{
-			$rsscategories[] = $categoryrow["rsscategory"];
-		}
-
-		return $rsscategories;
-	}
-	
-	function getRsscategory_html()
-	{
-		$rsscategory = $this->getRsscategory();
-		if(isset($rsscategory)) 
-		{
-			for($i=0;$i<count($rsscategory);$i++)
-			{
-				$shtml .= "<option value=\"$rsscategory[$i]\">$rsscategory[$i]</option>";
-			}
-		}
-		return $shtml;
-	}
 }
 
 /** Function to get the vtiger_rsstitle for the given vtiger_rssid  
