@@ -1459,7 +1459,9 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 		//Insert into vtiger_role2profile
 		$this->db->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
 		$this->db->query("insert into vtiger_role2profile values ('H".$role3_id."',".$profile2_id.")");
-	
+	  $this->db->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
+		$this->db->query("insert into vtiger_role2profile values ('H".$role5_id."',".$profile2_id.")"); 
+	   
 		//Insert into vtiger_profile2field
 			
                 insertProfile2field($profile1_id);
