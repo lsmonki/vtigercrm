@@ -117,7 +117,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		}
 
 		if($where != '')
-			$listquery .= ' and '.$where;
+			$listquery .= ' and ('.$where.')';
 		
 		$list_result = $adb->query($listquery);
 		$noofrows = $adb->num_rows($list_result);
