@@ -14,6 +14,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
@@ -26,7 +27,6 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
-
 $roleid= $_REQUEST['roleid'];
 
 //Standard PickList Fields
@@ -64,7 +64,19 @@ function getStdOutput($roleid)
 	return $return_data;
 }
 
+if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
+{	
+	$roleid= $_REQUEST['roleid'];
+	$mode = $_REQUEST['mode'];
+	$roleInfo=getRoleInformation($roleid);
+	$thisRoleDet=$roleInfo[$roleid];
+	$rolename = $thisRoleDet[0]; 
+	$parent = $thisRoleDet[3]; 
+	//retreiving the vtiger_profileid
+	$roleRelatedProfiles=getRoleRelatedProfiles($roleid);
 
+}
+$parentname=getRoleName($parent);
 //Retreiving the Role Info
 $roleInfoArr=getRoleInformation($roleid);
 $rolename=$roleInfoArr[$roleid][0];
@@ -75,8 +87,9 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("ROLEINFO",getStdOutput($roleid));
+$smarty->assign("PARENTNAME",$parentname);            
 
 
-$smarty->display("RoleDetailView.tpl");
+$smarty->display("RoleDetailViewN.tpl");
 
 ?>
