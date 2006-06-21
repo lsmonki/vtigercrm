@@ -185,7 +185,11 @@ function tagvalidate()
 							<td class="dvtCellLabel" align=right width=25%>{$label}</td>
 						{/if}
 					{/if}  
-						{include file="DetailViewUI.tpl"}
+						{if $EDIT_PERMISSION eq 'yes'}
+							{include file="DetailViewUI.tpl"}
+						{else}
+							{include file="DetailViewFields.tpl"}
+						{/if}
 				{else} 
 					<td class="dvtCellLabel" align=right>&nbsp;</td>
 					<td class="dvtCellInfo" align=left >&nbsp;</td>
