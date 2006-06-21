@@ -9,6 +9,8 @@
   *
  ********************************************************************************/
 -->*}
+
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <style type="text/css">
 a.x {ldelim}
 		color:black;
@@ -82,57 +84,86 @@ ul {ldelim}color:black;{rdelim}
 	{rdelim}
 
 </script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0" onMouseMove="displayCoords(event)">
-		<tr>
-				{include file='SettingsMenu.tpl'}
-				<td width="75%" valign="top">
-					<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-							<tr>
-									<td class="showPanelBg" valign="top" width="100%" style="padding-left:20px; "><br />
-															<span class="lvtHeaderText"><b>
-															<a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a>
-															 > {$MOD.LBL_USER_MANAGEMENT} > {$CMOD.LBL_CREATE_NEW_ROLE}</b></span>
-															<hr noshade="noshade" size="1"/>
-									  </td>
-							 </tr>
-							 <tr>
-									<td  valign="top" class="leadTable">
-										<table width="100%" cellpadding="0" cellspacing="0">
-											 <tr>
-													<td align="left" style="padding:10px;border-bottom:1px dashed #CCCCCC;">
-																				<img src="{$IMAGE_PATH}roles.gif" align="absmiddle">
-																				<span class="genHeaderGray">Role List View</span>
-																		</td>
-																</tr>
-														</table>
-		<div id='RoleTreeFull'>
-			{include file='RoleTree.tpl'}
-		</div>
 
-		{*
-														<table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
-													   <tr>
-														    <td style="padding:10px;" valign="top">{$ROLETREE}</td>
-													  </tr>
-													</table> *}
-											  </td>
-											</tr>
-										</table>
-								</td>
-						</tr>
-		</table>
-	</td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+	<div align=center>
+<br>
 	
+				{include file="SetMenu.tpl"}
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="Roles" width="48" height="48" border=0 title="Roles"></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_ROLES}</b></td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_ROLE_DESCRIPTION}</td>
+				</tr>
+				</table>
+				
+				<br>
+				<table border=0 cellspacing=0 cellpadding=10 width=100% >
+				<tr>
+				<td>
+				
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+						<td class="big"><strong>Roles & Hierarchy Tree</strong></td>
+						<td class="small" align=right>Total : 7 Roles </td>
+					</tr>
+					</table>
+
+					<div id='RoleTreeFull'>
+                			        {include file='RoleTree.tpl'}
+		                	</div>
+
+{*					<table border=0 cellspacing=0 cellpadding=20 width=100% >
+					<tr>
+						<td>
+							<!-- Home node -->
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeHome.gif"></td><td class="small">&nbsp;<strong>Organization</strong></td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeExSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Administrator</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeExSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">CEO</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeExSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Manager - Sales</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeNorthSouth.gif"><img src="images/treeSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Asst Manager - Sales</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeExSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Manager - Products</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeNorthSouth.gif"><img src="images/treeSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Asst Manager - Products</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Manager - Office</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeNorthSouth.gif"><img src="images/treeGap.gif"><img src="images/treeSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">Asst Manager - Office</td><tr></table>
+							<table cellspacing=0 cellpadding=0 class="treeTable1"><tr><td><img src="images/treeSubNode.gif"><img src="images/treePaper.gif"></td><td class="small">CFO</td><tr></table>
+						</td>
+					</tr>
+					</table> *}
+					
+					
+					
+					
+					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<tr><td class="small" nowrap align=right><a href="#top">Scroll to Top</a></td></tr>
+					</table>
+				</td>
+				</tr>
+				</table>
+			
+			
+			
+			</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	</table>
+		
+	</div>
+
+</td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 	<div id="Drag_content">&nbsp;</div>
 
 <script language="javascript" type="text/javascript">
