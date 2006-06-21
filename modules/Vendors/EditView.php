@@ -83,10 +83,8 @@ if(isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQ
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-
-$vendor_tables = Array('vendor','vendorcf'); 
-
-$validationData = getDBValidationData($vendor_tables);
+$tabid = getTabid("Vendors");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

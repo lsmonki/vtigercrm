@@ -62,8 +62,8 @@ $smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$vendor_tables = Array('vendor','vendorcf');
-$validationData = getDBValidationData($vendor_tables);
+$tabid = getTabid("Vendors");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
