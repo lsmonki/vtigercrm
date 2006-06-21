@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Contacts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -129,7 +128,6 @@ $log->info("Contact detail view");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("NAME",$focus->lastname." ".$focus->firstname);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);
@@ -165,11 +163,8 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-
-$contact_tables = Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress','customerdetails'); 
-
  $tabid = getTabid("Contacts");
- $validationData = getDBValidationData($contact_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);

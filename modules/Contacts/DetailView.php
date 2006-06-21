@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Contacts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -111,10 +110,8 @@ $smarty->assign("CATEGORY",$category);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$contact_tables =Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress','customerdetails');
-
 $tabid = getTabid("Contacts");
-$validationData = getDBValidationData($contact_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
