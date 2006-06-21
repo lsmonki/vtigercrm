@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
-require_once('modules/Emails/Forms.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -143,7 +142,6 @@ else
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 if(isPermitted("Emails","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
-require_once('modules/Emails/Forms.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
@@ -233,7 +232,6 @@ if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_RE
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("ENTITY_ID", $_REQUEST["record"]);
 $smarty->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
@@ -255,9 +253,6 @@ if(isset($focus->parent_type) && $focus->parent_type != "")
 	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
 	$smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
-
-$email_tables = Array('emails','crmentity','activity'); 
-$tabid = getTabid("Emails");
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
