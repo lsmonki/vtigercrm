@@ -532,7 +532,7 @@ $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("f
  
  $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("field").",'recurringtype','vtiger_recurringevents',1,'15','recurringtype','Recurrence',1,0,0,100,6,19,3,'O~O',1,null,'BAS')");
 
- $this->db->query("Insert into vtiger_field values (9,".$this->db->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,19,3,'C~O',1,null,'BAS')");
+ $this->db->query("Insert into vtiger_field values (9,".$this->db->getUniqueID("field").",'notime','vtiger_activity',1,56,'notime','No Time',1,0,0,100,20,19,3,'C~O',1,null,'BAS')");
 //Block19 -- End
 //Task Details -- END
 
