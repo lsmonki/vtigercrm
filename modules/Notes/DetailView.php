@@ -23,7 +23,6 @@
 require_once('data/Tracker.php');
 require_once('Smarty_setup.php');
 require_once('modules/Notes/Note.php');
-require_once('modules/Notes/Forms.php');
 require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
@@ -84,7 +83,6 @@ if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['retur
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -105,6 +103,13 @@ if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$tabid = getTabid("Notes");
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
+ $data = split_validationdataArray($validationData);
+
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->display("DetailView.tpl");

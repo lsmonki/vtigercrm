@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
-require_once('modules/Notes/Forms.php');
 require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
@@ -154,7 +153,6 @@ $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("OLD_ID", $old_id );
 
@@ -177,6 +175,13 @@ if ($focus->parent_type == "Account") $smarty->assign("DEFAULT_SEARCH", "&query=
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$tabid = getTabid("Notes");
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
+ $data = split_validationdataArray($validationData);
+
+ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
