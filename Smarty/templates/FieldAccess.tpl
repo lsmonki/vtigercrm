@@ -1,64 +1,63 @@
 {*<!--
 /*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
  ********************************************************************************/
 -->*}
+<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	{include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
-<tr>
-<td class="showPanelBg" valign="top" width="100%" colspan="3" style="padding-left:20px; "><br />
-<span class="lvtHeaderText"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</b></span>
-<hr noshade="noshade" size="1" />
-</td>
-</tr>
-<tr>
-<td width="75%" style="padding-left:20px;" valign="top">
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+<br>
+	<div align=center>
 	
-		<table border="0" cellpadding="0" cellspacing="0" width="100%">
-		<form action="index.php" method="post" name="new" id="form">
-		<input type="hidden" name="module" value="Users">
-		<input type="hidden" name="parenttab" value="Settings">
-		<input type="hidden" name="fld_module" id="fld_module">
-		{if $MODE neq 'view'}
-		<input type="hidden" name="action" value="UpdateDefaultFieldLevelAccess">
-		{else}
-		<input type="hidden" name="action" value="EditDefOrgFieldLevelAccess">
-		{/if}	
-		<tbody><tr>
-		<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="7"><img src="{$IMAGE_PATH}top_left.jpg" align="top"></td>
-		<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif; height: 6px;" bgcolor="#ebebeb"></td>
-		<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="6" width="8"><img src="{$IMAGE_PATH}top_right.jpg" align="top" height="6" width="8"></td>
-	 	</tr>
-		<tr>
-		<td bgcolor="#ebebeb" width="7"></td>
-		<td bgcolor="#ebebeb">	
-			<table border="0" cellpadding="3" cellspacing="0" width="100%">
-			<tbody><tr>
-			<td class="genHeaderSmall" height="25" valign="middle">{$CMOD.LBL_GLOBAL_FIELDS_MANAGER}</td>
-			<td align="right">&nbsp;</td>
-			</tr>
-			<tr><td colspan="2"></td></tr>
-		    <tr>
-			<td colspan="2" nowrap="nowrap">
-				
-				<table border="0" cellpadding="0" cellspacing="0" width="100%">
-				<tbody><tr bgcolor="#ffffff">
-				<td style="padding: 10px;" align="left">
-				<b>{$CMOD.LBL_SELECT_SCREEN}</b>
-				
-				<select name="selectmodule" style="width: 200px; font-size: 10px;" onChange="changemodules(this)">
+			{include file='SetMenu.tpl'}
+				<!-- DISPLAY -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
+				<form action="index.php" method="post" name="new" id="form">
+				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="parenttab" value="Settings">
+				<input type="hidden" name="fld_module" id="fld_module">
+				{if $MODE neq 'view'}
+				<input type="hidden" name="action" value="UpdateDefaultFieldLevelAccess">
+				{else}
+				<input type="hidden" name="action" value="EditDefOrgFieldLevelAccess">
+				{/if}	
+				<tr>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}orgshar.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td colspan=2 class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_FIELDS_ACCESS} </b></td>
+					<td rowspan=2 class="small" align=right>&nbsp;</td>
+				</tr>
+				<tr>
+					<td valign=top class="small">{$MOD.LBL_SHARING_FIELDS_DESCRIPTION}</td>
+				</tr>
+				</table>
+				<br>
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+				<tr>
+					<td class="big"><strong>{$CMOD.LBL_GLOBAL_FIELDS_MANAGER}</strong></td>
+					<td class="small" align=right>
+					{if $MODE neq 'edit'}
+						<input name="Edit" type="submit" class="crmButton small edit" value="{$APP.LBL_EDIT_BUTTON}" >									
+					{else}
+						<input title="save" accessKey="S" class="crmButton small save" type="submit" name="Save" value="{$APP.LBL_SAVE_LABEL}">
+						<input name="Cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmButton small cancel" type="button" onClick="window.history.back();">
+					{/if}
+					</td>
+				</tr>
+				</table>
+				<table width="100%" border="0" cellpadding="5" cellspacing="0" class="listTableTopButtons">
+                  <tr >
+                    <td  style="padding-left:5px;" class="big">{$CMOD.LBL_SELECT_SCREEN}&nbsp; 
+			<select name="Screen" class="detailedViewTextBox" style="width:30%;"  onChange="changemodules(this)">
 				{foreach item=module from=$FIELD_INFO}
 				{if $module == $DEF_MODULE}
 					<option selected value='{$module}'>{$APP.$module}</option>
@@ -66,83 +65,66 @@
 					<option value='{$module}' >{$APP.$module}</option>
 				{/if}
 				{/foreach}
-				</select>
-				
-				</td>
-				<td style="padding-right: 10px;" align="right">&nbsp;
-				{if $MODE neq 'edit'}
-				<input title="Edit" accessKey="E" class="classBtn" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON}"></td>
+			</select>
+		    </td>
+                    <td align="right">&nbsp;</td>
+                  </tr>
+		  </table>
+				{foreach key=module item=info name=allmodules from=$FIELD_LISTS}
+				{$module}      {$DEF_MODULE}
+				{if $module == $DEF_MODULE}
+				<div id="{$module}_fields" style="display:block">	
 				{else}
-				<input title="save" accessKey="S" class="classBtn" type="submit" name="Save" value="{$APP.LBL_SAVE_LABEL}"></td>
+				<div id="{$module}_fields" style="display:none">	
 				{/if}
-			    </tr>
-				<tr><td colspan="2" height="7"></td></tr>
-				<tr bgcolor="#ffffff">
-				<td style="padding: 10px;" colspan="2">
-					
-					{foreach key=module item=info from=$FIELD_LISTS}
-					{if $module == $DEF_MODULE}
-					<div id="{$module}_fields" style="display:block">	
-					{else}
-					<div id="{$module}_fields" style="display:none">	
-					{/if}	
-					<table class="small" border="0" cellpadding="5" cellspacing="0" width="100%">
-	                <tbody><tr><td colspan="4" style="border-bottom: 1px dashed rgb(204, 204, 204);">
-					<b>{$CMOD.LBL_FIELDS_AVLBL} {$APP.$module} </b><br>
-	  				 {$CMOD.LBL_FIELDS_SELECT_DESELECT}
-				    </td></tr>
-					<tr><td colspan="4">&nbsp;</td></tr>
-					
-					{foreach item=elements from=$info}
-					<tr>
-					
-						{foreach item=elementinfo from=$elements}
-        	            <td width="5%">{$elementinfo.1}</td>
-						<td width="45%">{$elementinfo.0}</td>
-				   		{/foreach}
-						
-            	    </tr>
-					{/foreach}
-
-					<tr><td colspan="4">&nbsp;</td></tr>
-                	</tbody></table>
-					</div>
-					{/foreach}
-				
-				</td>
- 				</tr>
-				<tr><td colspan="2" style="border-top: 1px dashed rgb(204, 204, 204);padding:10px;" bgcolor="white" align="center">
-				<input name="Cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="classBtn" type="button" onClick="window.history.back();">
-				</td></tr>
-				</tbody>
-				</table>
-
+				 <table cellspacing=0 cellpadding=5 width=100% class="listTable small">
+                   <tr>
+				   			<td colspan="2" class="listRow" valign="top" nowrap>
+								<b>{$CMOD.LBL_FIELDS_AVLBL} {$APP.$module}</b>
+							</td>
+				   </tr>
+				   <tr>
+                     <td valign=top width="25%" >
+		     <table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
+			{foreach item=elements name=groupfields from=$info}
+                         <tr>
+				{foreach item=elementinfo name=curvalue from=$elements}
+                           <td class="prvPrfTexture" style="width:20px">&nbsp;</td>
+                           <td width="5%" id="{$smarty.foreach.allmodules.iteration}_{$smarty.foreach.groupfields.iteration}_{$smarty.foreach.curvalue.iteration}">{$elementinfo.1}</td>
+                           <td width="25%" nowrap  onMouseOver="this.className='prvPrfHoverOn',$('{$smarty.foreach.allmodules.iteration}_{$smarty.foreach.groupfields.iteration}_{$smarty.foreach.curvalue.iteration}').className='prvPrfHoverOn'" onMouseOut="this.className='prvPrfHoverOff',$('{$smarty.foreach.allmodules.iteration}_{$smarty.foreach.groupfields.iteration}_{$smarty.foreach.curvalue.iteration}').className='prvPrfHoverOff'">{$elementinfo.0}</td>
+				{/foreach}
+                         </tr>
+                         	{/foreach}
+                     </table>
+				</div>
 			</td>
-		  	</tr>
-			</tbody></form></table>
-		 <!-- End of Module Display -->
-    </td>
-	<td bgcolor="#ebebeb" width="8"></td>
-    </tr>
- 	<tr>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="7"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"></td>
-	<td style="font-size: 1px;" bgcolor="#ebebeb" height="8"></td>
-	<td style="font-size: 1px; font-family: Arial,Helvetica,sans-serif;" height="8" width="8"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom"></td>
+                   </tr>
+				{/foreach}
+                 </table></td>
+			</tr>
+                </table>
+				<br>
+				<br>
+				<table border=0 cellspacing=0 cellpadding=5 width=100% >
+				<tr><td class="small" ><div align=right><a href="#top">{$MOD.LBL_SCROLL}</a></div></td></tr>				</table>
+				
+			
+			
+			
+			</td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-	</tbody></table>
-		  
-	
+	</form>
+	</table>
+		
+	</div>
 </td>
-<td width="1%" style="border-right:1px dotted #CCCCCC;">&nbsp;</td>
-</tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+   </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-	{include file='SettingsSubMenu.tpl'}
 <script>
 var def_field='{$DEF_MODULE}_fields';
 {literal}
