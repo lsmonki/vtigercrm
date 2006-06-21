@@ -12,7 +12,6 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/HelpDesk/HelpDesk.php');
-require_once('modules/HelpDesk/Forms.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$theme,$currentModule;
@@ -90,9 +89,8 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$ticket_tables = Array('troubletickets','crmentity','ticketcf');
 $tabid = getTabid("HelpDesk");
-$validationData = getDBValidationData($ticket_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);

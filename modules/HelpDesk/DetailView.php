@@ -11,7 +11,6 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('include/utils/utils.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/utils/utils.php');
 
@@ -91,9 +90,8 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$ticket_tables = Array('troubletickets','crmentity','ticketcf');
 $tabid = getTabid("HelpDesk");
-$validationData = getDBValidationData($ticket_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
