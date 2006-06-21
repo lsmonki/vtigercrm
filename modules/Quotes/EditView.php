@@ -203,9 +203,8 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$quote_tables = Array('quotes','quotesbillads','quotesshipads','quotescf'); 
  $tabid = getTabid("Quotes");
- $validationData = getDBValidationData($quote_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
  
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);

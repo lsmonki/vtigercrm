@@ -91,49 +91,13 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('Quotes',$focu
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
- $quote_tables = Array('quotes','quotesbillads','quotesshipads','quotescf'); 
  $tabid = getTabid("Quotes");
- $validationData = getDBValidationData($quote_tables,$tabid);
- $fieldName = '';
- $fieldLabel = '';
- $fldDataType = '';
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
+ $data = split_validationdataArray($validationData);
 
- $rows = count($validationData);
- foreach($validationData as $fldName => $fldLabel_array)
- {
-   if($fieldName == '')
-   {
-     $fieldName="'".$fldName."'";
-   }
-   else
-   {
-     $fieldName .= ",'".$fldName ."'";
-   }
-   foreach($fldLabel_array as $fldLabel => $datatype)
-   {
-	if($fieldLabel == '')
-	{
-			
-     		$fieldLabel = "'".$fldLabel ."'";
-	}		
-      else
-       {
-      $fieldLabel .= ",'".$fldLabel ."'";
-        }
- 	if($fldDataType == '')
-         {
-      		$fldDataType = "'".$datatype ."'";
-    	}
-	 else
-        {
-       		$fldDataType .= ",'".$datatype ."'";
-     	}
-   }
- }
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);$quote_tables = Array('quotes','quotesbillads','quotesshipads'); 
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
