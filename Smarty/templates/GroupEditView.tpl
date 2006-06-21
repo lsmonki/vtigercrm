@@ -134,6 +134,12 @@ function validate()
 	if( !emptyCheck( "groupName", "Group Name" ) )
 		return false;
 
+	if(trim(document.newGroupForm.groupName.value) == "")
+	{ldelim}	
+		alert('Group Name cannot be none');
+		return false;		
+	{rdelim}
+
 	//alert(document.newGroupForm.selectedColumnsString.value);
 	if(document.newGroupForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
