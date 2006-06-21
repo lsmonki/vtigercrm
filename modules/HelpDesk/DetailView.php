@@ -101,6 +101,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record']));
 
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 $smarty->display("DetailView.tpl");
 $focus->id = $_REQUEST['record'];
 
