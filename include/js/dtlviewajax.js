@@ -118,7 +118,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		}
 	}
 
-	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId ;
+	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
 	new Ajax.Request(
 		'index.php',
