@@ -23,7 +23,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Activities/Activity.php');
-require_once('modules/Activities/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -117,12 +116,10 @@ $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 
- $activities_tables = Array('activity','crmentity'); 
  $tabid = getTabid($tab_type);
- $validationData = getDBValidationData($activities_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
