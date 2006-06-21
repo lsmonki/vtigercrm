@@ -192,7 +192,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 
 		//Added condition to hide the close column in Related Lists
-		if($name == 'Close' && $relatedlist != '')
+		if($name == $app_strings['Close'] && $relatedlist != '')
 		{
 			// $list_header[] = '';
 		}
