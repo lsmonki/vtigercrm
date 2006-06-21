@@ -15,7 +15,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
-require_once('modules/Leads/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -88,7 +87,6 @@ if (isset($_REQUEST['return_viewname']))
 $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id());
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Lead']);
@@ -100,9 +98,8 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 
- $lead_tables = Array('leaddetails','crmentity','leadsubdetails','leadaddress','leadscf'); 
  $tabid = getTabid("Leads");
- $validationData = getDBValidationData($lead_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);

@@ -15,7 +15,6 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
-require_once('modules/Leads/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
@@ -110,9 +109,8 @@ if(isPermitted("Leads","Merge",'') == 'yes')
         $smarty->assign("TOPTIONS",$optionString);
 }
 
-$lead_tables = Array('leaddetails','crmentity','leadsubdetails','leadaddress','leadscf');
 $tabid = getTabid("Leads");
-$validationData = getDBValidationData($lead_tables,$tabid);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
