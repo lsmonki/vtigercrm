@@ -27,11 +27,11 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 
 	global $log,$root_directory,$lang_crm,$theme;
 	//We'll be getting the values in the form of a string separated by commas
-	$datay=explode(",",$referdata); // The datay values
-	$datax=explode(",",$refer_code); // The datax values
+	$datay=explode("::",$referdata); // The datay values
+	$datax=explode("::",$refer_code); // The datax values
 
 	$target_val=urldecode($target_val);
-	$target=explode(",",$target_val);
+	$target=explode("::",$target_val);
 
 	$alts=array();
 	for($i=0;$i<count($datax); $i++)
