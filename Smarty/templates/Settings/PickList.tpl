@@ -133,7 +133,7 @@ function validate() {
 				<tr>
 				    <td class="big" rowspan="2">
 					<div id="picklist_datas">	
-						{include file='Settings/PickListContentsN.tpl'}
+						{include file='Settings/PickListContents.tpl'}
 					</div>
 				    </td>	
 				</td>
