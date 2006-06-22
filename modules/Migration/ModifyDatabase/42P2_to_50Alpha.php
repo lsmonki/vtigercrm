@@ -36,8 +36,8 @@ Execute($wordtemplate_query3);
 /****************** 5.0(Alpha) dev version 1 Database changes -- Starts*********************/
 
 
-//Added the vtiger_announcement vtiger_table creation to avoid the error
-$ann_query = "CREATE TABLE `announcement` (
+//Added the vtiger_announcement table creation to avoid the error
+$ann_query = "CREATE TABLE vtiger_announcement (
 	  `creatorid` int(19) NOT NULL,
 	    `announcement` text,
 	      `title` varchar(255) default NULL,
@@ -47,34 +47,34 @@ $ann_query = "CREATE TABLE `announcement` (
 	    ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
 Execute($ann_query);
 
-//Added Primay Keys for the left out vtiger_tables
+//Added Primay Keys for the left out tables
 $alter_array1 = Array(
-		"alter vtiger_table vtiger_activity_reminder ADD PRIMARY KEY (activity_id,recurringid)",
-		"alter vtiger_table vtiger_activitygrouprelation ADD PRIMARY KEY (activityid)",
-		"alter vtiger_table vtiger_cvadvfilter ADD PRIMARY KEY (cvid,columnindex)",
-		"alter vtiger_table vtiger_cvcolumnlist ADD PRIMARY KEY (cvid,columnindex)",
-		"alter vtiger_table vtiger_cvstdfilter ADD PRIMARY KEY (cvid)",
-		"alter vtiger_table vtiger_def_org_field ADD PRIMARY KEY (fieldid)",
-		"alter vtiger_table vtiger_leadgrouprelation ADD PRIMARY KEY (leadid)",
-		"alter vtiger_table vtiger_leadgrouprelation drop key vtiger_leadgrouprelation_IDX0",
-		"alter vtiger_table vtiger_organizationdetails ADD PRIMARY KEY (organizationame)",
-		"alter vtiger_table vtiger_profile2field ADD PRIMARY KEY (profileid,fieldid)",
-		"alter vtiger_table vtiger_profile2standardpermissions ADD PRIMARY KEY (profileid,tabid,Operation)",
-		"alter vtiger_table vtiger_profile2standardpermissions drop index idx_prof2stad",
-		"alter vtiger_table vtiger_profile2utility ADD PRIMARY KEY (profileid,tabid,activityid)",
-		"alter vtiger_table vtiger_profile2utility drop index idx_prof2utility",
-		"alter vtiger_table vtiger_relcriteria ADD PRIMARY KEY (queryid,columnindex)",
-		"alter vtiger_table vtiger_reportdatefilter ADD PRIMARY KEY (datefilterid)",
-		"alter vtiger_table vtiger_reportdatefilter DROP INDEX vtiger_reportdatefilter_IDX0",
-		"alter vtiger_table vtiger_reportsortcol ADD PRIMARY KEY (sortcolid,reportid)",
-		"alter vtiger_table vtiger_reportsummary ADD PRIMARY KEY (reportsummaryid,summarytype,columnname)",
-		"drop vtiger_table vtiger_role2action",
-		"drop vtiger_table vtiger_role2tab",
-		"alter vtiger_table vtiger_selectcolumn ADD PRIMARY KEY (queryid,columnindex)",
-		"alter vtiger_table vtiger_ticketgrouprelation ADD PRIMARY KEY (ticketid)",
-		"alter vtiger_table vtiger_ticketstracktime ADD PRIMARY KEY (ticket_id)",
-		"alter vtiger_table vtiger_users2group ADD PRIMARY KEY (groupname,userid)",
-		"alter vtiger_table vtiger_users2group DROP INDEX idx_users2group",
+		"alter table vtiger_activity_reminder ADD PRIMARY KEY (activity_id,recurringid)",
+		"alter table vtiger_activitygrouprelation ADD PRIMARY KEY (activityid)",
+		"alter table vtiger_cvadvfilter ADD PRIMARY KEY (cvid,columnindex)",
+		"alter table vtiger_cvcolumnlist ADD PRIMARY KEY (cvid,columnindex)",
+		"alter table vtiger_cvstdfilter ADD PRIMARY KEY (cvid)",
+		"alter table vtiger_def_org_field ADD PRIMARY KEY (fieldid)",
+		"alter table vtiger_leadgrouprelation ADD PRIMARY KEY (leadid)",
+		"alter table vtiger_leadgrouprelation drop key vtiger_leadgrouprelation_IDX0",
+		"alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationame)",
+		"alter table vtiger_profile2field ADD PRIMARY KEY (profileid,fieldid)",
+		"alter table vtiger_profile2standardpermissions ADD PRIMARY KEY (profileid,tabid,Operation)",
+		"alter table vtiger_profile2standardpermissions drop index idx_prof2stad",
+		"alter table vtiger_profile2utility ADD PRIMARY KEY (profileid,tabid,activityid)",
+		"alter table vtiger_profile2utility drop index idx_prof2utility",
+		"alter table vtiger_relcriteria ADD PRIMARY KEY (queryid,columnindex)",
+		"alter table vtiger_reportdatefilter ADD PRIMARY KEY (datefilterid)",
+		"alter table vtiger_reportdatefilter DROP INDEX vtiger_reportdatefilter_IDX0",
+		"alter table vtiger_reportsortcol ADD PRIMARY KEY (sortcolid,reportid)",
+		"alter table vtiger_reportsummary ADD PRIMARY KEY (reportsummaryid,summarytype,columnname)",
+		"drop table vtiger_role2action",
+		"drop table vtiger_role2tab",
+		"alter table vtiger_selectcolumn ADD PRIMARY KEY (queryid,columnindex)",
+		"alter table vtiger_ticketgrouprelation ADD PRIMARY KEY (ticketid)",
+		"alter table vtiger_ticketstracktime ADD PRIMARY KEY (ticket_id)",
+		"alter table vtiger_users2group ADD PRIMARY KEY (groupname,userid)",
+		"alter table vtiger_users2group DROP INDEX idx_users2group",
 		);
 foreach($alter_array1 as $query)
 {
@@ -83,11 +83,11 @@ foreach($alter_array1 as $query)
 
 //Tables vtiger_profile2globalpermissions, vtiger_actionmapping creation
 
-$create_sql1 ="CREATE TABLE `profile2globalpermissions` (`profileid` int(19) NOT NULL, `globalactionid` int(19) NOT NULL, `globalactionpermission` int(19) default NULL, PRIMARY KEY  (`profileid`,`globalactionid`),  KEY `idx_profile2globalpermissions` (`profileid`,`globalactionid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+$create_sql1 ="CREATE TABLE vtiger_profile2globalpermissions (`profileid` int(19) NOT NULL, `globalactionid` int(19) NOT NULL, `globalactionpermission` int(19) default NULL, PRIMARY KEY  (`profileid`,`globalactionid`),  KEY `idx_profile2globalpermissions` (`profileid`,`globalactionid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1";
 
 Execute($create_sql1);
 
-$create_sql2 = "CREATE TABLE `actionmapping` (
+$create_sql2 = "CREATE TABLE vtiger_actionmapping (
 	`actionid` int(19) NOT NULL default '0',
 	`actionname` varchar(200) NOT NULL default '',
 	`securitycheck` int(19) default NULL,
@@ -95,7 +95,7 @@ PRIMARY KEY (`actionid`,`actionname`)
 	) TYPE=InnoDB";
 Execute($create_sql2);
 
-//For all Profiles, insert the following entries into vtiger_profile2global permissions vtiger_table:
+//For all Profiles, insert the following entries into vtiger_profile2global permissions table:
 $sql = 'select * from vtiger_profile';
 $res = $conn->query($sql);
 $noofprofiles = $conn->num_rows($res);
@@ -112,11 +112,11 @@ for($i=0;$i<$noofprofiles;$i++)
 }
 
 
-//Removing entries for Dashboard and Home module from vtiger_profile2standardpermissions vtiger_table
+//Removing entries for Dashboard and Home module from vtiger_profile2standardpermissions table
 $del_query1 = "delete from vtiger_profile2standardpermissions where vtiger_tabid in(1,3)";
 Execute($del_query1);
 
-//For all Profile do the following insert into vtiger_profile2utility vtiger_table:
+//For all Profile do the following insert into vtiger_profile2utility table:
 $sql = 'select * from vtiger_profile';
 $res = $conn->query($sql);
 $noofprofiles = $conn->num_rows($res);
@@ -134,7 +134,7 @@ for($i=0;$i<$noofprofiles;$i++)
 }
 */
 
-//Insert Values into action mapping vtiger_table:
+//Insert Values into action mapping table:
 $actionmapping_array = Array(
 		"insert into vtiger_actionmapping values(0,'Save',0)",
 		"insert into vtiger_actionmapping values(1,'EditView',0)",
@@ -167,7 +167,7 @@ foreach($actionmapping_array as $query)
 }
 
 
-//Added two columns in vtiger_field vtiger_table to construct the quickcreate form dynamically
+//Added two columns in vtiger_field table to construct the quickcreate form dynamically
 $alter_array2 = Array(
 		"ALTER TABLE vtiger_field ADD column quickcreate int(10) after typeofdata",
 		"ALTER TABLE vtiger_field ADD column quickcreatesequence int(19) after quickcreate",
@@ -180,48 +180,48 @@ foreach($alter_array2 as $query)
 $update_array1 = Array(
 		"UPDATE vtiger_field SET quickcreate = 1,quickcreatesequence = 0",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 2 and vtiger_fieldlabel = 'Potential Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 2 and vtiger_fieldlabel = 'Account Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 2 and vtiger_fieldlabel = 'Expected Close Date'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE vtiger_tabid = 2 and vtiger_fieldlabel = 'Sales Stage'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE vtiger_tabid = 2 and vtiger_fieldlabel = 'Amount'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 2 and fieldlabel = 'Potential Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 2 and fieldlabel = 'Account Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 2 and fieldlabel = 'Expected Close Date'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE tabid = 2 and fieldlabel = 'Sales Stage'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE tabid = 2 and fieldlabel = 'Amount'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'First Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Last Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Account Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Office Phone'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Email'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 4 and fieldlabel = 'First Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 4 and fieldlabel = 'Last Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 4 and fieldlabel = 'Account Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE tabid = 4 and fieldlabel = 'Office Phone'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE tabid = 4 and fieldlabel = 'Email'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Account Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Phone'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Website'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 6 and fieldlabel = 'Account Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 6 and fieldlabel = 'Phone'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 6 and fieldlabel = 'Website'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'First Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Last Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Company'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Phone'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Email'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 7 and fieldlabel = 'First Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 7 and fieldlabel = 'Last Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 7 and fieldlabel = 'Company'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE tabid = 7 and fieldlabel = 'Phone'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 5 WHERE tabid = 7 and fieldlabel = 'Email'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 8 and vtiger_fieldlabel = 'Subject'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 8 and fieldlabel = 'Subject'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 9 and vtiger_fieldlabel = 'Subject'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 9 and vtiger_fieldlabel = 'Start Date & Time'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 9 and fieldlabel = 'Subject'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 9 and fieldlabel = 'Start Date & Time'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 10 and vtiger_fieldlabel = 'Subject'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 10 and vtiger_fieldlabel = 'Date & Time Sent'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 10 and fieldlabel = 'Subject'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 10 and fieldlabel = 'Date & Time Sent'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 13 and vtiger_fieldlabel = 'Title'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 13 and vtiger_fieldlabel = 'Description'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 13 and vtiger_fieldlabel = 'Priority'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 13 and fieldlabel = 'Title'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 13 and fieldlabel = 'Description'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 13 and fieldlabel = 'Priority'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Product Name'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Product Code'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Product Category'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 14 and fieldlabel = 'Product Name'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 14 and fieldlabel = 'Product Code'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 14 and fieldlabel = 'Product Category'",
 
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 16 and vtiger_fieldlabel = 'Subject'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 16 and vtiger_fieldlabel = 'Start Date & Time'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 16 and vtiger_fieldlabel = 'Activity Type'",
-		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE vtiger_tabid = 16 and vtiger_fieldlabel = 'Duration'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 16 and fieldlabel = 'Subject'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 16 and fieldlabel = 'Start Date & Time'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 16 and fieldlabel = 'Activity Type'",
+		"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 4 WHERE tabid = 16 and fieldlabel = 'Duration'",
 		);
 foreach($update_array1 as $query)
 {
@@ -239,7 +239,7 @@ Execute($insert_query1);
 
 //Added on 23-12-2005 which is missed from Fredy's contribution for Color vtiger_priority
 populateFieldForSecurity('16',$newfieldid);
-$activity_alter_query = "alter vtiger_table vtiger_activity add column vtiger_priority varchar(150) default NULL";
+$activity_alter_query = "alter table vtiger_activity add column priority varchar(150) default NULL";
 Execute($activity_alter_query);
 
 //Code contributed by Raju for better emailing 
@@ -253,12 +253,12 @@ $insert_array1 = Array(
 */
 //commented the above array as that queries are wrong queries -- changed on 23-12-2005
 $insert_array1 = array(
-			"update vtiger_field set uitype='357' where vtiger_tabid=10 and vtiger_fieldname='parent_id' and vtiger_tablename='seactivityrel'",
-			"update vtiger_field set sequence=1 where vtiger_tabid=10 and vtiger_fieldname in ('parent_id','subject','filename','description')",
-			"update vtiger_field set block=2 where vtiger_tabid=10 and vtiger_fieldname='parent_id'",
-			"update vtiger_field set block=3 where vtiger_tabid=10 and vtiger_fieldname='subject'",
-			"update vtiger_field set block=4 where vtiger_tabid=10 and vtiger_fieldname='filename'",
-			"update vtiger_field set block=5 where vtiger_tabid=10 and vtiger_fieldname='description'",
+			"update vtiger_field set uitype='357' where tabid=10 and fieldname='parent_id' and tablename='seactivityrel'",
+			"update vtiger_field set sequence=1 where tabid=10 and fieldname in ('parent_id','subject','filename','description')",
+			"update vtiger_field set block=2 where tabid=10 and fieldname='parent_id'",
+			"update vtiger_field set block=3 where tabid=10 and fieldname='subject'",
+			"update vtiger_field set block=4 where tabid=10 and fieldname='filename'",
+			"update vtiger_field set block=5 where tabid=10 and fieldname='description'",
 		      );
 foreach($insert_array1 as $query)
 {
@@ -266,40 +266,40 @@ foreach($insert_array1 as $query)
 }
 
 //code contributed by mike to rearrange the home page
-$alter_query2 = "alter vtiger_table vtiger_users add column homeorder varchar(255) default 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI' after date_format";
+$alter_query2 = "alter table vtiger_users add column homeorder varchar(255) default 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI' after date_format";
 Execute($alter_query2);
 
-//Added one column in vtiger_invoice vtiger_table to include 'Contact Name' vtiger_field in Invoice module
+//Added one column in vtiger_invoice table to include 'Contact Name' vtiger_field in Invoice module
 $alter_query3 = "ALTER TABLE vtiger_invoice ADD column contactid int(19) after customerno";
 Execute($alter_query3);
 
 $newfieldid = $conn->getUniqueID("field");
 $insert_query2 = "insert into vtiger_field values (23,".$newfieldid.",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')";
 Execute($insert_query2);
-//Added on 23-12-2005 because we must populate vtiger_field entries in vtiger_profile2field and vtiger_def_org_field if we add a vtiger_field in vtiger_field vtiger_table
+//Added on 23-12-2005 because we must populate vtiger_field entries in vtiger_profile2field and vtiger_def_org_field if we add a vtiger_field in vtiger_field table
 populateFieldForSecurity('23',$newfieldid);
 
 //changes made to fix the bug in Address Information block of Accounts and Contacs module
 $update_array2 = Array(
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Billing City' WHERE vtiger_tabid=6 and vtiger_tablename='accountbillads' and vtiger_fieldname='bill_city'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Billing State' WHERE vtiger_tabid=6 and vtiger_tablename='accountbillads' and vtiger_fieldname='bill_state'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Billing Code' WHERE vtiger_tabid=6 and vtiger_tablename='accountbillads' and vtiger_fieldname='bill_code'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Billing Country' WHERE vtiger_tabid=6 and vtiger_tablename='accountbillads' and vtiger_fieldname='bill_country'",
+		"UPDATE vtiger_field SET fieldlabel='Billing City' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_city'",
+		"UPDATE vtiger_field SET fieldlabel='Billing State' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_state'",
+		"UPDATE vtiger_field SET fieldlabel='Billing Code' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_code'",
+		"UPDATE vtiger_field SET fieldlabel='Billing Country' WHERE tabid=6 and tablename='accountbillads' and fieldname='bill_country'",
 
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Shipping City' WHERE vtiger_tabid=6 and vtiger_tablename='accountshipads' and vtiger_fieldname='ship_city'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Shipping Country' WHERE vtiger_tabid=6 and vtiger_tablename='accountshipads' and vtiger_fieldname='ship_country'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Shipping State' WHERE vtiger_tabid=6 and vtiger_tablename='accountshipads' and vtiger_fieldname='ship_state'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Shipping Code' WHERE vtiger_tabid=6 and vtiger_tablename='accountshipads' and vtiger_fieldname='ship_code'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping City' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_city'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping Country' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_country'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping State' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_state'",
+		"UPDATE vtiger_field SET fieldlabel='Shipping Code' WHERE tabid=6 and tablename='accountshipads' and fieldname='ship_code'",
 
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Mailing City' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='mailingcity'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Mailing State' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='mailingstate'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Mailing Zip' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='mailingzip'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Mailing Country' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='mailingcountry'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing City' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingcity'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing State' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingstate'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing Zip' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingzip'",
+		"UPDATE vtiger_field SET fieldlabel='Mailing Country' WHERE tabid=4 and tablename='contactaddress' and fieldname='mailingcountry'",
 
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Other City' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='othercity'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Other State' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='otherstate'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Other Zip' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='otherzip'",
-		"UPDATE vtiger_field SET vtiger_fieldlabel='Other Country' WHERE vtiger_tabid=4 and vtiger_tablename='contactaddress' and vtiger_fieldname='othercountry'",
+		"UPDATE vtiger_field SET fieldlabel='Other City' WHERE tabid=4 and tablename='contactaddress' and fieldname='othercity'",
+		"UPDATE vtiger_field SET fieldlabel='Other State' WHERE tabid=4 and tablename='contactaddress' and fieldname='otherstate'",
+		"UPDATE vtiger_field SET fieldlabel='Other Zip' WHERE tabid=4 and tablename='contactaddress' and fieldname='otherzip'",
+		"UPDATE vtiger_field SET fieldlabel='Other Country' WHERE tabid=4 and tablename='contactaddress' and fieldname='othercountry'",
 		);
 foreach($update_array2 as $query)
 {
@@ -307,22 +307,22 @@ foreach($update_array2 as $query)
 }
 
 
-//Added vtiger_field emailoptout in vtiger_account vtiger_table
+//Added vtiger_field emailoptout in vtiger_account table
 $newfieldid = $conn->getUniqueID("field");
 $insert_query3 = "insert into vtiger_field values (6,".$newfieldid.",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,1,1,'C~O',1,'')";
 Execute($insert_query3);
 
-//Added on 23-12-2005 because we must populate vtiger_field entries in vtiger_profile2field and vtiger_def_org_field if we add a vtiger_field in vtiger_field vtiger_table
+//Added on 23-12-2005 because we must populate vtiger_field entries in vtiger_profile2field and vtiger_def_org_field if we add a vtiger_field in vtiger_field table
 populateFieldForSecurity('6',$newfieldid);
 
 //Added on 22-12-2005
-$alter_query4 = "alter vtiger_table vtiger_account add column emailoptout varchar(3) default 0";
+$alter_query4 = "alter table vtiger_account add column emailoptout varchar(3) default 0";
 Execute($alter_query4);
 
 $update_array3 = Array(
-		"update vtiger_field set sequence=18 where vtiger_tabid=6 and vtiger_fieldname ='assigned_user_id'",
-		"update vtiger_field set sequence=19 where vtiger_tabid=6 and vtiger_fieldname ='createdtime'",
-		"update vtiger_field set sequence=19 where vtiger_tabid=6 and vtiger_fieldname ='modifiedtime'",
+		"update vtiger_field set sequence=18 where tabid=6 and fieldname ='assigned_user_id'",
+		"update vtiger_field set sequence=19 where tabid=6 and fieldname ='createdtime'",
+		"update vtiger_field set sequence=19 where tabid=6 and fieldname ='modifiedtime'",
 		);
 foreach($update_array3 as $query)
 {
@@ -330,8 +330,8 @@ foreach($update_array3 as $query)
 }
 
 
-//create vtiger_table vtiger_moduleowners to assign the module and corresponding owners
-$create_query2 = "CREATE TABLE `moduleowners` (
+//create table vtiger_moduleowners to assign the module and corresponding owners
+$create_query2 = "CREATE TABLE vtiger_moduleowners (
 	  `tabid` int(19) NOT NULL default '0',
 	    `user_id` varchar(11) NOT NULL,
 	      PRIMARY KEY  (`tabid`),
@@ -339,7 +339,7 @@ $create_query2 = "CREATE TABLE `moduleowners` (
 	) ENGINE=InnoDB";
 
 /*
-$create_query2 = "CREATE TABLE `moduleowners` 
+$create_query2 = "CREATE TABLE vtiger_moduleowners 
 (
  `tabid` int(19) NOT NULL default '0',
  `user_id` varchar(11) NOT NULL default '',
@@ -378,11 +378,11 @@ foreach($module_array as $mod)
 
 //Changes made to include status vtiger_field in Activity Quickcreate Form
 $update_array4 = Array(
-		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=3 WHERE vtiger_tabid=16 and vtiger_fieldname='eventstatus'",
-		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=4 WHERE vtiger_tabid=16 and vtiger_fieldname='activitytype'",
-		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=5 WHERE vtiger_tabid=16 and vtiger_fieldname='duration_hours'",
+		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=3 WHERE tabid=16 and fieldname='eventstatus'",
+		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=4 WHERE tabid=16 and fieldname='activitytype'",
+		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=5 WHERE tabid=16 and fieldname='duration_hours'",
 
-		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=3 WHERE vtiger_tabid=9 and vtiger_fieldname='taskstatus'",
+		"UPDATE vtiger_field SET quickcreate=0,quickcreatesequence=3 WHERE tabid=9 and fieldname='taskstatus'",
 		);
 foreach($update_array4 as $query)
 {
@@ -415,13 +415,13 @@ $query1 = "ALTER TABLE vtiger_leadaddress change lane lane varchar(250)";
 Execute($query1);
 
 $rename_table_array1 = Array(
-		"update vtiger_field set vtiger_tablename='customerdetails' where vtiger_tabid=4 and vtiger_fieldname in ('portal','support_start_date','support_end_date')",
-		"alter vtiger_table PortalInfo drop foreign key fk_PortalInfo",
-		"rename vtiger_table PortalInfo to vtiger_portalinfo",
-		"alter vtiger_table vtiger_portalinfo add CONSTRAINT `fk_portalinfo` FOREIGN KEY (`id`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-		"alter vtiger_table CustomerDetails drop foreign key fk_CustomerDetails",
-		"rename vtiger_table CustomerDetails to vtiger_customerdetails",
-		"alter vtiger_table vtiger_customerdetails add CONSTRAINT `fk_customerdetails` FOREIGN KEY (`customerid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE"
+		"update vtiger_field set tablename='customerdetails' where tabid=4 and fieldname in ('portal','support_start_date','support_end_date')",
+		"alter table vtiger_PortalInfo drop foreign key fk_PortalInfo",
+		"rename table vtiger_PortalInfo to vtiger_portalinfo",
+		"alter table vtiger_portalinfo add CONSTRAINT `fk_portalinfo` FOREIGN KEY (`id`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+		"alter table vtiger_CustomerDetails drop foreign key fk_CustomerDetails",
+		"rename table vtiger_CustomerDetails to vtiger_customerdetails",
+		"alter table vtiger_customerdetails add CONSTRAINT `fk_customerdetails` FOREIGN KEY (`customerid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE"
 		);
 foreach($rename_table_array1 as $query)
 {
@@ -429,7 +429,7 @@ foreach($rename_table_array1 as $query)
 }
 
 
-$query2 = "create vtiger_table vtiger_ownernotify(crmid int(19),smownerid int(19),flag int(3))";
+$query2 = "create table vtiger_ownernotify(crmid int(19),smownerid int(19),flag int(3))";
 Execute($query2);
 
 
@@ -445,7 +445,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 }
 //echo '<pre> List of vtiger_roles :';print_r($role_map_array);echo '</pre>';
 
-//Before delete the vtiger_role take a backup array for the vtiger_table vtiger_user2role
+//Before delete the vtiger_role take a backup array for the table vtiger_user2role
 $sql = "select * from vtiger_user2role";
 $res = $conn->query($sql);
 $user2role_array = array();
@@ -462,16 +462,16 @@ $sql = "truncate vtiger_role";
 Execute($sql);
 
 
-$query3 = "alter vtiger_table vtiger_user2role drop FOREIGN KEY fk_user2role2";
+$query3 = "alter table vtiger_user2role drop FOREIGN KEY fk_user2role2";
 Execute($query3);
 
 //4,5 th are the Extra added queries
 $alter_query_array1 = Array(
-		"alter vtiger_table vtiger_user2role change vtiger_roleid vtiger_roleid varchar(255)",
-		"alter vtiger_table vtiger_role2profile change vtiger_roleid vtiger_roleid varchar(255)",
-		"alter vtiger_table vtiger_role CHANGE vtiger_roleid vtiger_roleid varchar(255)",
-		"alter vtiger_table vtiger_role2profile drop PRIMARY KEY",
-		"alter vtiger_table vtiger_role2profile ADD PRIMARY KEY (roleid,profileid)"
+		"alter table vtiger_user2role change roleid roleid varchar(255)",
+		"alter table vtiger_role2profile change roleid roleid varchar(255)",
+		"alter table vtiger_role CHANGE roleid roleid varchar(255)",
+		"alter table vtiger_role2profile drop PRIMARY KEY",
+		"alter table vtiger_role2profile ADD PRIMARY KEY (roleid,profileid)"
 		);
 foreach($alter_query_array1 as $query)
 {
@@ -483,10 +483,10 @@ $query4 = "ALTER TABLE vtiger_user2role ADD CONSTRAINT fk_user2role2 FOREIGN KEY
 Execute($query4);
 
 $alter_query_array2 = Array(
-		"alter vtiger_table vtiger_role CHANGE name vtiger_rolename varchar(200)",
-		"alter vtiger_table vtiger_role DROP description",
-		"alter vtiger_table vtiger_role add parentrole varchar(255)",
-		"alter vtiger_table vtiger_role add depth int(19)"
+		"alter table vtiger_role CHANGE name rolename varchar(200)",
+		"alter table vtiger_role DROP description",
+		"alter table vtiger_role add parentrole varchar(255)",
+		"alter table vtiger_role add depth int(19)"
 		);
 foreach($alter_query_array2 as $query)
 {
@@ -505,7 +505,7 @@ foreach($role_map_array as $roleid => $rolename)
 	$parentRole = 'H1';
 	if($rolename == 'standard_user')
 	{
-		$rs = $conn->query("select * from vtiger_role where vtiger_rolename='administrator'");
+		$rs = $conn->query("select * from vtiger_role where rolename='administrator'");
 		$parentRole = $conn->query_result($rs,0,'roleid');
 	}
 	$empty_array = array(""=>"");
@@ -517,14 +517,14 @@ foreach($role_map_array as $roleid => $rolename)
 $user2role_del = "truncate vtiger_user2role";
 Execute($user2role_del);
 
-//First we will insert the old values from vtiger_user2role_array to vtiger_user2role vtiger_table and then update the new vtiger_role id
+//First we will insert the old values from vtiger_user2role_array to vtiger_user2role table and then update the new vtiger_role id
 foreach($user2role_array as $userid => $roleid)
 {
-	$sql = "insert into vtiger_user2role (userid, vtiger_roleid) values(".$userid.",'".$new_role_map_array[$roleid]."')";
+	$sql = "insert into vtiger_user2role (userid, roleid) values(".$userid.",'".$new_role_map_array[$roleid]."')";
 	Execute($sql);
 }
 //Commented the following loop as we have backup the vtiger_user2role and insert the entries with the new rold id using new_role_map_array above
-//Update the vtiger_user2role vtiger_table with new vtiger_roleid
+//Update the vtiger_user2role table with new vtiger_roleid
 /*
    foreach($new_role_map_array as $old_roleid => $new_roleid)
    {
@@ -532,21 +532,21 @@ foreach($user2role_array as $userid => $roleid)
    Execute($update_user2role);
    }
  */
-//Update the vtiger_role2profile vtiger_table with new vtiger_roleid
+//Update the vtiger_role2profile table with new vtiger_roleid
 foreach($new_role_map_array as $old_roleid => $new_roleid)
 {
-	$update_role2profile = "update vtiger_role2profile set vtiger_roleid='".$new_roleid."' where vtiger_roleid=".$old_roleid;
+	$update_role2profile = "update vtiger_role2profile set roleid='".$new_roleid."' where roleid=".$old_roleid;
 	Execute($update_role2profile);
 }
 
 
 
 //Group Migration:
-//Step 1 :  form and group_map_array as groupname => description from vtiger_groups vtiger_table
-//Step 2 :  form an vtiger_users2group_map_array array as userid => groupname from vtiger_users2group vtiger_table
-//Step 3 :  delete all entries from vtiger_groups vtiger_table and enter new values from group_map_array
-//Step 4 :  drop the vtiger_table vtiger_users2group and create new vtiger_table
-//Step 5 :  put entries to vtiger_users2group vtiger_table based on vtiger_users2group_map_array. Here get the groupid from vtiger_groups vtiger_table based on groupname
+//Step 1 :  form and group_map_array as groupname => description from vtiger_groups table
+//Step 2 :  form an vtiger_users2group_map_array array as userid => groupname from vtiger_users2group table
+//Step 3 :  delete all entries from vtiger_groups table and enter new values from group_map_array
+//Step 4 :  drop the table vtiger_users2group and create new table
+//Step 5 :  put entries to vtiger_users2group table based on vtiger_users2group_map_array. Here get the groupid from vtiger_groups table based on groupname
 
 //Step 1 : Form the group_map_array as groupname => description
 $sql = "select * from vtiger_groups";
@@ -561,7 +561,7 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 //echo '<pre>List of Groups : ';print_r($group_map_array);echo '</pre>';
 
 
-//Step 2 : form an vtiger_users2group_map_array array as userid => groupname from vtiger_users2group vtiger_table
+//Step 2 : form an vtiger_users2group_map_array array as userid => groupname from vtiger_users2group table
 $sql = "select * from vtiger_users2group";
 $res = $conn->query($sql);
 $users2group_map_array = Array();
@@ -573,16 +573,16 @@ for($i=0;$i<$conn->num_rows($res);$i++)
 }
 //echo '<pre>List of vtiger_users2group : ';print_r($users2group_map_array);echo '</pre>';
 
-//Step 3 : delete all entries from vtiger_groups vtiger_table
+//Step 3 : delete all entries from vtiger_groups table
 $sql = "truncate vtiger_groups";
 Execute($sql);
 
 $alter_query_array3 = Array(
-		"alter vtiger_table vtiger_users2group drop FOREIGN KEY fk_users2group",
-		"alter vtiger_table vtiger_leadgrouprelation drop FOREIGN KEY fk_leadgrouprelation2",
-		"alter vtiger_table vtiger_activitygrouprelation drop FOREIGN KEY fk_activitygrouprelation2",
-		"alter vtiger_table vtiger_ticketgrouprelation drop FOREIGN KEY fk_ticketgrouprelation2",
-		"alter vtiger_table vtiger_groups drop PRIMARY KEY"
+		"alter table vtiger_users2group drop FOREIGN KEY fk_users2group",
+		"alter table vtiger_leadgrouprelation drop FOREIGN KEY fk_leadgrouprelation2",
+		"alter table vtiger_activitygrouprelation drop FOREIGN KEY fk_activitygrouprelation2",
+		"alter table vtiger_ticketgrouprelation drop FOREIGN KEY fk_ticketgrouprelation2",
+		"alter table vtiger_groups drop PRIMARY KEY"
 		);
 foreach($alter_query_array3 as $query)
 {
@@ -590,12 +590,12 @@ foreach($alter_query_array3 as $query)
 }
 
 //2 nd query is the Extra added query
-//Adding columns in group vtiger_table:
+//Adding columns in group table:
 $alter_query_array4 = Array(
-		"alter vtiger_table vtiger_groups add column groupid int(19) FIRST",
-		"alter vtiger_table vtiger_groups change name  groupname varchar(100)",
-		"alter vtiger_table vtiger_groups ADD PRIMARY KEY (groupid)",
-		"alter vtiger_table vtiger_groups add index (groupname)"
+		"alter table vtiger_groups add column groupid int(19) FIRST",
+		"alter table vtiger_groups change name  groupname varchar(100)",
+		"alter table vtiger_groups ADD PRIMARY KEY (groupid)",
+		"alter table vtiger_groups add index (groupname)"
 		);
 foreach($alter_query_array4 as $query)
 {
@@ -603,15 +603,15 @@ foreach($alter_query_array4 as $query)
 }
 
 
-//Moved the create vtiger_table queries for vtiger_group2grouprel, vtiger_group2role, vtiger_group2rs from the end of this block
+//Moved the create table queries for vtiger_group2grouprel, vtiger_group2role, vtiger_group2rs from the end of this block
 //Added on 06-06-06
-$query8 = "CREATE TABLE `group2grouprel` (
+$query8 = "CREATE TABLE vtiger_group2grouprel (
 	  `groupid` int(19) NOT NULL,
 	    `containsgroupid` int(19) NOT NULL,
 	      PRIMARY KEY  (`groupid`,`containsgroupid`)
       ) ENGINE=InnoDB";
       /*
-$query8 = "CREATE TABLE `group2grouprel` 
+$query8 = "CREATE TABLE vtiger_group2grouprel 
 (
  `groupid` int(19) NOT NULL default '0',
  `containsgroupid` int(19) NOT NULL default '0',
@@ -622,13 +622,13 @@ $query8 = "CREATE TABLE `group2grouprel`
 Execute($query8);
 
 //Added on 06-06-06
-$query9 = "CREATE TABLE `group2role` (
+$query9 = "CREATE TABLE vtiger_group2role (
 	  `groupid` int(19) NOT NULL,
 	    `roleid` varchar(255) NOT NULL,
 	      PRIMARY KEY  (`groupid`,`roleid`)
       ) ENGINE=InnoDB";
 /*
-$query9 = "CREATE TABLE `group2role` 
+$query9 = "CREATE TABLE vtiger_group2role 
 (
  `groupid` int(19) NOT NULL default '0',
  `roleid` varchar(255) NOT NULL default '',
@@ -639,13 +639,13 @@ $query9 = "CREATE TABLE `group2role`
 Execute($query9);
 
 //Added on 06-06-06
-$query10 = "CREATE TABLE `group2rs` (
+$query10 = "CREATE TABLE vtiger_group2rs (
 	  `groupid` int(19) NOT NULL,
 	    `roleandsubid` varchar(255) NOT NULL,
 	      PRIMARY KEY  (`groupid`,`roleandsubid`)
       ) ENGINE=InnoDB";
 /*
-$query10 = "CREATE TABLE `group2rs` 
+$query10 = "CREATE TABLE vtiger_group2rs 
 (
  `groupid` int(19) NOT NULL default '0',
  `roleandsubid` varchar(255) NOT NULL default '',
@@ -655,7 +655,7 @@ $query10 = "CREATE TABLE `group2rs`
 */
 Execute($query10);
 
-//Insert all the retrieved old values to the new vtiger_groups vtiger_table ie., create new vtiger_groups
+//Insert all the retrieved old values to the new vtiger_groups table ie., create new vtiger_groups
 foreach($group_map_array as $groupname => $description)
 {
 	$empty_array = array(
@@ -669,21 +669,21 @@ foreach($group_map_array as $groupname => $description)
 }
 
 
-//Copy all mappings in a user2grop vtiger_table in a array;
+//Copy all mappings in a user2grop table in a array;
 
-//Step 4 : Drop and again create vtiger_users2group
-$query6 = "drop vtiger_table vtiger_users2group";
+//Step 4 : Drop and again create users2group
+$query6 = "drop table vtiger_users2group";
 Execute($query6);
 
 //Added on 06-06-06
-$query7 = "CREATE TABLE `users2group` (
+$query7 = "CREATE TABLE vtiger_users2group (
 	  `groupid` int(19) NOT NULL,
 	    `userid` int(19) NOT NULL,
 	      PRIMARY KEY  (`groupid`,`userid`),
 	        KEY `users2group_groupname_uerid_idx` (`groupid`,`userid`)
 	) ENGINE=InnoDB";
 /*
-$query7 = "CREATE TABLE `users2group` 
+$query7 = "CREATE TABLE vtiger_users2group 
 (
  `groupid` int(19) NOT NULL default '0',
  `userid` int(19) NOT NULL default '0',
@@ -693,7 +693,7 @@ $query7 = "CREATE TABLE `users2group`
 */
 Execute($query7);
 
-//Step 5 : put entries to vtiger_users2group vtiger_table based on vtiger_users2group_map_array. Here get the groupid from vtiger_groups vtiger_table based on groupname
+//Step 5 : put entries to vtiger_users2group table based on vtiger_users2group_map_array. Here get the groupid from vtiger_groups table based on groupname
 foreach($users2group_map_array as $userid => $groupname)
 {
 	//$groupid = $conn->query_result($conn->query("select * from vtiger_groups where groupname='".$groupname."'"),0,'groupid');
@@ -703,7 +703,7 @@ foreach($users2group_map_array as $userid => $groupname)
 
 
 $alter_query_array5 = Array(
-		"alter vtiger_table vtiger_leadgrouprelation ADD CONSTRAINT fk_leadgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE",
+		"alter table vtiger_leadgrouprelation ADD CONSTRAINT fk_leadgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE",
 		"ALTER TABLE vtiger_activitygrouprelation ADD CONSTRAINT fk_activitygrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE",
 		"ALTER TABLE vtiger_ticketgrouprelation ADD CONSTRAINT fk_ticketgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 		);
@@ -711,10 +711,10 @@ foreach($alter_query_array5 as $query)
 {
 	Execute($query);
 }
-//Moved the create vtiger_table queries for vtiger_group2grouprel, vtiger_group2role, vtiger_group2rs to before creatinf the Group ie., before call the createGroup
+//Moved the create table queries for vtiger_group2grouprel, vtiger_group2role, vtiger_group2rs to before creatinf the Group ie., before call the createGroup
 
 
-/***Added to include decimal places for amount vtiger_field in vtiger_potential vtiger_table  --by Mangai 15-Nov-2005***/
+/***Added to include decimal places for amount vtiger_field in vtiger_potential table  --by Mangai 15-Nov-2005***/
 
 $query11 = "ALTER TABLE vtiger_potential change amount amount decimal(10,2)";
 Execute($query11);
@@ -734,21 +734,21 @@ Execute($query11);
 
 /****************** 5.0(Alpha) dev version 3 Database changes -- Starts*********************/
 
-//Drop the column company_name from vtiger_vendor vtiger_table ---- modified by Mickie on 18-11-2005
-$altersql1 = "alter vtiger_table vtiger_vendor drop column company_name";
+//Drop the column company_name from vtiger_vendor table ---- modified by Mickie on 18-11-2005
+$altersql1 = "alter table vtiger_vendor drop column company_name";
 Execute($altersql1);
-//TODO (check): Remove this company_name entry from the vtiger_field vtiger_table if it already exists
+//TODO (check): Remove this company_name entry from the vtiger_field table if it already exists
 
 //Migration for Default Organisation Share -- Added by Don on 20-11-2005
 
-$query1 = "CREATE TABLE `org_share_action_mapping` (
+$query1 = "CREATE TABLE vtiger_org_share_action_mapping (
 `share_action_id` int(19) NOT NULL default '0',
 	`share_action_name` varchar(200) NOT NULL default '',
 PRIMARY KEY  (`share_action_id`,`share_action_name`)
 	) TYPE=InnoDB ";
 Execute($query1);
 
-$query2 = "CREATE TABLE `org_share_action2tab` (
+$query2 = "CREATE TABLE vtiger_org_share_action2tab (
 	`share_action_id` int(19) NOT NULL default '0',
 	`tabid` int(19) NOT NULL default '0',
 	PRIMARY KEY  (`share_action_id`,`tabid`),
@@ -757,10 +757,10 @@ $query2 = "CREATE TABLE `org_share_action2tab` (
 Execute($query2);
 
 
-$query3 = "alter vtiger_table vtiger_def_org_share add column editstatus int(19)";
+$query3 = "alter table vtiger_def_org_share add column editstatus int(19)";
 Execute($query3);
 
-$query4 = "delete from vtiger_def_org_share where vtiger_tabid in(8,14,15,18,19)";
+$query4 = "delete from vtiger_def_org_share where tabid in(8,14,15,18,19)";
 Execute($query4);
 
 
@@ -812,9 +812,9 @@ foreach($insert_query_array3 as $query)
 $query_array1 = Array(
 		"insert into vtiger_def_org_share values(9,17,7,0)",
 		"update vtiger_def_org_share set editstatus=0",
-		"update vtiger_def_org_share set editstatus=2 where vtiger_tabid=4",
-		"update vtiger_def_org_share set editstatus=1 where vtiger_tabid=9",
-		"update vtiger_def_org_share set editstatus=2 where vtiger_tabid=16"
+		"update vtiger_def_org_share set editstatus=2 where tabid=4",
+		"update vtiger_def_org_share set editstatus=1 where tabid=9",
+		"update vtiger_def_org_share set editstatus=2 where tabid=16"
 		);
 foreach($query_array1 as $query)
 {
@@ -828,7 +828,7 @@ foreach($query_array1 as $query)
 $conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha starts here.");
 //echo "<br><br><b>Database Modifications for 5.0(Alpha) Dev3 ==> 5.0 Alpha starts here.....</b><br>";
 $alter_query_array6 = Array(
-				"ALTER TABLE vtiger_users ADD column vtiger_activity_view VARCHAR(25) DEFAULT 'Today' AFTER homeorder",
+				"ALTER TABLE vtiger_users ADD column activity_view VARCHAR(25) DEFAULT 'Today' AFTER homeorder",
 				"ALTER TABLE vtiger_activity ADD column notime CHAR(3) DEFAULT '0' AFTER location"
 			   );
 foreach($alter_query_array6 as $query)
@@ -846,20 +846,20 @@ foreach($insert_field_array1 as $query)
 }
 
 $alter_query_array7 = Array(
-				"alter vtiger_table vtiger_vendor add column pobox varchar(30) after state",
-				"alter vtiger_table vtiger_leadaddress add column pobox varchar(30) after state",
-				"alter vtiger_table vtiger_accountbillads add column pobox varchar(30) after state",
-				"alter vtiger_table vtiger_accountshipads add column pobox varchar(30) after state",
-				"alter vtiger_table vtiger_contactaddress add column mailingpobox varchar(30) after mailingstate",
-				"alter vtiger_table vtiger_contactaddress add column otherpobox varchar(30) after otherstate",
-				"alter vtiger_table vtiger_quotesbillads add column bill_pobox varchar(30) after bill_street",
-				"alter vtiger_table vtiger_quotesshipads add column ship_pobox varchar(30) after ship_street",
-				"alter vtiger_table vtiger_pobillads add column bill_pobox varchar(30) after bill_street",
-				"alter vtiger_table vtiger_poshipads add column ship_pobox varchar(30) after ship_street",
-				"alter vtiger_table vtiger_sobillads add column bill_pobox varchar(30) after bill_street",
-				"alter vtiger_table vtiger_soshipads add column ship_pobox varchar(30) after ship_street",
-				"alter vtiger_table vtiger_invoicebillads add column bill_pobox varchar(30) after bill_street",
-				"alter vtiger_table vtiger_invoiceshipads add column ship_pobox varchar(30) after ship_street"
+				"alter table vtiger_vendor add column pobox varchar(30) after state",
+				"alter table vtiger_leadaddress add column pobox varchar(30) after state",
+				"alter table vtiger_accountbillads add column pobox varchar(30) after state",
+				"alter table vtiger_accountshipads add column pobox varchar(30) after state",
+				"alter table vtiger_contactaddress add column mailingpobox varchar(30) after mailingstate",
+				"alter table vtiger_contactaddress add column otherpobox varchar(30) after otherstate",
+				"alter table vtiger_quotesbillads add column bill_pobox varchar(30) after bill_street",
+				"alter table vtiger_quotesshipads add column ship_pobox varchar(30) after ship_street",
+				"alter table vtiger_pobillads add column bill_pobox varchar(30) after bill_street",
+				"alter table vtiger_poshipads add column ship_pobox varchar(30) after ship_street",
+				"alter table vtiger_sobillads add column bill_pobox varchar(30) after bill_street",
+				"alter table vtiger_soshipads add column ship_pobox varchar(30) after ship_street",
+				"alter table vtiger_invoicebillads add column bill_pobox varchar(30) after bill_street",
+				"alter table vtiger_invoiceshipads add column ship_pobox varchar(30) after ship_street"
 			   );
 foreach($alter_query_array7 as $query)
 {
@@ -906,7 +906,7 @@ for($j = 0;$j < 8;$j++)
 	$n = $n+5;
 	for($i = 0;$i < 5;$i++)
 	{
-		$query1 = "update vtiger_field set sequence=".$sequence[$j]." where vtiger_tablename='".$tablename[$n+$i]."' && vtiger_fieldname='".$fieldname[$j]."'";
+		$query1 = "update vtiger_field set sequence=".$sequence[$j]." where tablename='".$tablename[$n+$i]."' && fieldname='".$fieldname[$j]."'";
 		Execute($query1);
 	}
 }
@@ -916,7 +916,7 @@ $tablename = 'leadaddress';
 $sequence = array(3,4,5,6);
 for($i = 0;$i < 4;$i++)
 {
-	$query2 = "update vtiger_field set sequence=".$sequence[$i]." where vtiger_tablename='".$tablename."' && vtiger_fieldname='".$fieldname[$i]."'";
+	$query2 = "update vtiger_field set sequence=".$sequence[$i]." where tablename='".$tablename."' && fieldname='".$fieldname[$i]."'";
 	Execute($query2);
 }
 
@@ -926,7 +926,7 @@ $sequence = array(3,4,5,6);
 
 for($i = 0;$i < 4;$i++)
 {
-	$query3 = "update vtiger_field set sequence=".$sequence[$i]." where vtiger_tablename='".$tablename."' && vtiger_fieldname='".$fieldname[$i]."'";
+	$query3 = "update vtiger_field set sequence=".$sequence[$i]." where tablename='".$tablename."' && fieldname='".$fieldname[$i]."'";
 	Execute($query3);
 }
 
@@ -936,20 +936,20 @@ $sequence = array(5,6,7,8,9,10,11,12);
 
 for($i = 0;$i < 8;$i++)
 {
-	$query = "update vtiger_field set sequence=".$sequence[$i]." where vtiger_tablename='".$tablename."' && vtiger_fieldname='".$fieldname[$i]."'";
+	$query = "update vtiger_field set sequence=".$sequence[$i]." where tablename='".$tablename."' && fieldname='".$fieldname[$i]."'";
 	Execute($query);
 }
 
 $query_array1 = Array(
-			"update vtiger_field set vtiger_tablename='crmentity' where vtiger_tabid=10 and vtiger_fieldname='description'",
-			"update vtiger_field set vtiger_tablename='attachments' where vtiger_tabid=10 and vtiger_fieldname='filename'",
-			"drop vtiger_table emails",
+			"update vtiger_field set tablename='crmentity' where tabid=10 and fieldname='description'",
+			"update vtiger_field set tablename='attachments' where tabid=10 and fieldname='filename'",
+			"drop table emails",
 
-			"alter vtiger_table vtiger_activity drop column description",
-			"update vtiger_field set vtiger_tablename='crmentity' where vtiger_tabid in (9,16) and vtiger_fieldname='description'",
+			"alter table vtiger_activity drop column description",
+			"update vtiger_field set tablename='crmentity' where tabid in (9,16) and fieldname='description'",
 
-			"update vtiger_tab set name='PurchaseOrder',tablabel='PurchaseOrder' where vtiger_tabid=21",
-			"update vtiger_tab set presence=0 where vtiger_tabid=22 and name='SalesOrder'",
+			"update vtiger_tab set name='PurchaseOrder',tablabel='PurchaseOrder' where tabid=21",
+			"update vtiger_tab set presence=0 where tabid=22 and name='SalesOrder'",
 
 			"delete from vtiger_actionmapping where actionname='SalesOrderDetailView'",
 			"delete from vtiger_actionmapping where actionname='SalesOrderEditView'",
@@ -958,16 +958,16 @@ $query_array1 = Array(
 
 			"insert into vtiger_field values (13,".$conn->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)",
 
-			"alter vtiger_table vtiger_troubletickets add column filename varchar(50) default NULL after title"
+			"alter table vtiger_troubletickets add column filename varchar(50) default NULL after title"
 		     );
 foreach($query_array1 as $query)
 {
 	Execute($query);
 }
 
-$create_query3 = "create vtiger_table vtiger_parenttab(parenttabid int(19) not null, vtiger_parenttab_label varchar(100) not null, sequence int(10) not null, visible int(2) not null default '0', Primary Key(parenttabid))";
+$create_query3 = "create table vtiger_parenttab(parenttabid int(19) not null, parenttab_label varchar(100) not null, sequence int(10) not null, visible int(2) not null default '0', Primary Key(parenttabid))";
 Execute($create_query3);
-$create_query4 = "create vtiger_table vtiger_parenttabrel(parenttabid int(3) not null, vtiger_tabid int(3) not null,sequence int(3) not null)";
+$create_query4 = "create table vtiger_parenttabrel(parenttabid int(3) not null, tabid int(3) not null,sequence int(3) not null)";
 Execute($create_query4);
 
 $insert_query_array4 = Array(
@@ -980,100 +980,100 @@ foreach($insert_query_array4 as $query)
 }
 
 
-$create_query5 = "CREATE TABLE vtiger_blocks ( blockid int(19) NOT NULL, vtiger_tabid int(19) NOT NULL, blocklabel varchar(100) NOT NULL, sequence int(19) NOT NULL, show_title int(2) NOT NULL, visible int(2) NOT NULL DEFAULT 0, create_view int(2) NOT NULL DEFAULT 0, edit_view int(2) NOT NULL DEFAULT 0, detail_view int(2) NOT NULL DEFAULT 0, PRIMARY KEY (blockid))";
+$create_query5 = "CREATE TABLE vtiger_blocks ( blockid int(19) NOT NULL, tabid int(19) NOT NULL, blocklabel varchar(100) NOT NULL, sequence int(19) NOT NULL, show_title int(2) NOT NULL, visible int(2) NOT NULL DEFAULT 0, create_view int(2) NOT NULL DEFAULT 0, edit_view int(2) NOT NULL DEFAULT 0, detail_view int(2) NOT NULL DEFAULT 0, PRIMARY KEY (blockid))";
 Execute($create_query5);
 
 $update_query_array1 = Array(
-				"update vtiger_field set block=2 where vtiger_tabid=2 and block=5",
-				"update vtiger_field set block=3 where vtiger_tabid=2 and block=2",
+				"update vtiger_field set block=2 where tabid=2 and block=5",
+				"update vtiger_field set block=3 where tabid=2 and block=2",
 
-				//"update vtiger_field set block=4 where vtiger_tabid=4 and block=1",
-				"update vtiger_field set block=5 where vtiger_tabid=4 and block=5",
-				"update vtiger_field set block=6 where vtiger_tabid=4 and block=4",//Modified on 24-04-06
-				"update vtiger_field set block=4 where vtiger_tabid=4 and block=1",
-				"update vtiger_field set block=7 where vtiger_tabid=4 and block=2",
-				"update vtiger_field set block=8 where vtiger_tabid=4 and block=3",
+				//"update vtiger_field set block=4 where tabid=4 and block=1",
+				"update vtiger_field set block=5 where tabid=4 and block=5",
+				"update vtiger_field set block=6 where tabid=4 and block=4",//Modified on 24-04-06
+				"update vtiger_field set block=4 where tabid=4 and block=1",
+				"update vtiger_field set block=7 where tabid=4 and block=2",
+				"update vtiger_field set block=8 where tabid=4 and block=3",
 
-				"update vtiger_field set block=9 where vtiger_tabid=6 and block=1",
-				"update vtiger_field set block=10 where vtiger_tabid=6 and block=5",
-				"update vtiger_field set block=11 where vtiger_tabid=6 and block=2",
-				"update vtiger_field set block=12 where vtiger_tabid=6 and block=3",
+				"update vtiger_field set block=9 where tabid=6 and block=1",
+				"update vtiger_field set block=10 where tabid=6 and block=5",
+				"update vtiger_field set block=11 where tabid=6 and block=2",
+				"update vtiger_field set block=12 where tabid=6 and block=3",
 
-				"update vtiger_field set block=13 where vtiger_tabid=7 and block=1",
-				"update vtiger_field set block=14 where vtiger_tabid=7 and block=5",
-				"update vtiger_field set block=15 where vtiger_tabid=7 and block=2",
-				"update vtiger_field set block=16 where vtiger_tabid=7 and block=3",
+				"update vtiger_field set block=13 where tabid=7 and block=1",
+				"update vtiger_field set block=14 where tabid=7 and block=5",
+				"update vtiger_field set block=15 where tabid=7 and block=2",
+				"update vtiger_field set block=16 where tabid=7 and block=3",
 
-				"update vtiger_field set block=17 where vtiger_tabid=8 and block=1",
-				"update vtiger_field set block=17 where vtiger_tabid=8 and block=2",
-				"update vtiger_field set block=18 where vtiger_tabid=8 and block=3",
+				"update vtiger_field set block=17 where tabid=8 and block=1",
+				"update vtiger_field set block=17 where tabid=8 and block=2",
+				"update vtiger_field set block=18 where tabid=8 and block=3",
 
-				"update vtiger_field set block=19 where vtiger_tabid=9 and block=1",
-				"update vtiger_field set block=19 where vtiger_tabid=9 and block=7",
-				"update vtiger_field set block=20 where vtiger_tabid=9 and block=2",
+				"update vtiger_field set block=19 where tabid=9 and block=1",
+				"update vtiger_field set block=19 where tabid=9 and block=7",
+				"update vtiger_field set block=20 where tabid=9 and block=2",
 
-				"update vtiger_field set block=21 where vtiger_tabid=10 and block=1",
-				"update vtiger_field set block=22 where vtiger_tabid=10 and block=2",
-				"update vtiger_field set block=23 where vtiger_tabid=10 and block=3",
-				"update vtiger_field set block=23 where vtiger_tabid=10 and block=4",
-				"update vtiger_field set block=24 where vtiger_tabid=10 and block=5",
+				"update vtiger_field set block=21 where tabid=10 and block=1",
+				"update vtiger_field set block=22 where tabid=10 and block=2",
+				"update vtiger_field set block=23 where tabid=10 and block=3",
+				"update vtiger_field set block=23 where tabid=10 and block=4",
+				"update vtiger_field set block=24 where tabid=10 and block=5",
 
-				"update vtiger_field set block=25 where vtiger_tabid=13 and block=1",
-				"update vtiger_field set block=26 where vtiger_tabid=13 and block=2",
-				"update vtiger_field set block=27 where vtiger_tabid=13 and block=5",
-				"update vtiger_field set block=28 where vtiger_tabid=13 and block=3",
-				"update vtiger_field set block=29 where vtiger_tabid=13 and block=4",
-				"update vtiger_field set block=30 where vtiger_tabid=13 and block=6",
+				"update vtiger_field set block=25 where tabid=13 and block=1",
+				"update vtiger_field set block=26 where tabid=13 and block=2",
+				"update vtiger_field set block=27 where tabid=13 and block=5",
+				"update vtiger_field set block=28 where tabid=13 and block=3",
+				"update vtiger_field set block=29 where tabid=13 and block=4",
+				"update vtiger_field set block=30 where tabid=13 and block=6",
 
-				"update vtiger_field set block=31 where vtiger_tabid=14 and block=1",
-				"update vtiger_field set block=32 where vtiger_tabid=14 and block=2",
-				"update vtiger_field set block=33 where vtiger_tabid=14 and block=3",
-				"update vtiger_field set block=34 where vtiger_tabid=14 and block=5",
-				"update vtiger_field set block=35 where vtiger_tabid=14 and block=6",
-				"update vtiger_field set block=36 where vtiger_tabid=14 and block=4",
+				"update vtiger_field set block=31 where tabid=14 and block=1",
+				"update vtiger_field set block=32 where tabid=14 and block=2",
+				"update vtiger_field set block=33 where tabid=14 and block=3",
+				"update vtiger_field set block=34 where tabid=14 and block=5",
+				"update vtiger_field set block=35 where tabid=14 and block=6",
+				"update vtiger_field set block=36 where tabid=14 and block=4",
 
-				"update vtiger_field set block=37 where vtiger_tabid=15 and block=1",
-				"update vtiger_field set block=38 where vtiger_tabid=15 and block=2",
-				"update vtiger_field set block=39 where vtiger_tabid=15 and block=3",
-				"update vtiger_field set block=40 where vtiger_tabid=15 and block=4",
+				"update vtiger_field set block=37 where tabid=15 and block=1",
+				"update vtiger_field set block=38 where tabid=15 and block=2",
+				"update vtiger_field set block=39 where tabid=15 and block=3",
+				"update vtiger_field set block=40 where tabid=15 and block=4",
 
-				"update vtiger_field set block=41 where vtiger_tabid=16 and block=1",
-				"update vtiger_field set block=42 where vtiger_tabid=16 and block=7",
-				"update vtiger_field set block=43 where vtiger_tabid=16 and block=2",
+				"update vtiger_field set block=41 where tabid=16 and block=1",
+				"update vtiger_field set block=42 where tabid=16 and block=7",
+				"update vtiger_field set block=43 where tabid=16 and block=2",
 
-				"update vtiger_field set block=44 where vtiger_tabid=18 and block=1",
-				"update vtiger_field set block=45 where vtiger_tabid=18 and block=5",
-				"update vtiger_field set block=36 where vtiger_tabid=18 and block=2",
-				"update vtiger_field set block=47 where vtiger_tabid=18 and block=3",
+				"update vtiger_field set block=44 where tabid=18 and block=1",
+				"update vtiger_field set block=45 where tabid=18 and block=5",
+				"update vtiger_field set block=36 where tabid=18 and block=2",
+				"update vtiger_field set block=47 where tabid=18 and block=3",
 
-				"update vtiger_field set block=48 where vtiger_tabid=19 and block=1",
-				"update vtiger_field set block=49 where vtiger_tabid=19 and block=5",
-				"update vtiger_field set block=50 where vtiger_tabid=19 and block=2",
+				"update vtiger_field set block=48 where tabid=19 and block=1",
+				"update vtiger_field set block=49 where tabid=19 and block=5",
+				"update vtiger_field set block=50 where tabid=19 and block=2",
 
-				"update vtiger_field set block=51 where vtiger_tabid=20 and block=1",
-				"update vtiger_field set block=52 where vtiger_tabid=20 and block=5",
-				"update vtiger_field set block=53 where vtiger_tabid=20 and block=2",
-				"update vtiger_field set block=55 where vtiger_tabid=20 and block=6",
-				"update vtiger_field set block=56 where vtiger_tabid=20 and block=3",
+				"update vtiger_field set block=51 where tabid=20 and block=1",
+				"update vtiger_field set block=52 where tabid=20 and block=5",
+				"update vtiger_field set block=53 where tabid=20 and block=2",
+				"update vtiger_field set block=55 where tabid=20 and block=6",
+				"update vtiger_field set block=56 where tabid=20 and block=3",
 
-				"update vtiger_field set block=57 where vtiger_tabid=21 and block=1",
-				"update vtiger_field set block=58 where vtiger_tabid=21 and block=5",
-				"update vtiger_field set block=59 where vtiger_tabid=21 and block=2",
-				"update vtiger_field set block=61 where vtiger_tabid=21 and block=6",
-				"update vtiger_field set block=62 where vtiger_tabid=21 and block=3",
+				"update vtiger_field set block=57 where tabid=21 and block=1",
+				"update vtiger_field set block=58 where tabid=21 and block=5",
+				"update vtiger_field set block=59 where tabid=21 and block=2",
+				"update vtiger_field set block=61 where tabid=21 and block=6",
+				"update vtiger_field set block=62 where tabid=21 and block=3",
 
-				"update vtiger_field set block=63 where vtiger_tabid=22 and block=1",
-				"update vtiger_field set block=64 where vtiger_tabid=22 and block=5",
-				"update vtiger_field set block=65 where vtiger_tabid=22 and block=2",
-				"update vtiger_field set block=67 where vtiger_tabid=22 and block=6",
-				"update vtiger_field set block=68 where vtiger_tabid=22 and block=3",
+				"update vtiger_field set block=63 where tabid=22 and block=1",
+				"update vtiger_field set block=64 where tabid=22 and block=5",
+				"update vtiger_field set block=65 where tabid=22 and block=2",
+				"update vtiger_field set block=67 where tabid=22 and block=6",
+				"update vtiger_field set block=68 where tabid=22 and block=3",
 
 
-				"update vtiger_field set block=69 where vtiger_tabid=23 and block=1",
-				"update vtiger_field set block=70 where vtiger_tabid=23 and block=5",
-				"update vtiger_field set block=71 where vtiger_tabid=23 and block=2",
-				"update vtiger_field set block=73 where vtiger_tabid=23 and block=6",
-				"update vtiger_field set block=74 where vtiger_tabid=23 and block=3",
+				"update vtiger_field set block=69 where tabid=23 and block=1",
+				"update vtiger_field set block=70 where tabid=23 and block=5",
+				"update vtiger_field set block=71 where tabid=23 and block=2",
+				"update vtiger_field set block=73 where tabid=23 and block=6",
+				"update vtiger_field set block=74 where tabid=23 and block=3",
 			    );
 foreach($update_query_array1 as $query)
 {
@@ -1162,10 +1162,10 @@ foreach($insert_query_array5 as $query)
 }
 
 $update_query_array2 = Array(
-				"update vtiger_tab set name='Vendors', vtiger_tablabel='Vendors' where vtiger_tabid=18",
-				"update vtiger_tab set name='PriceBooks', vtiger_tablabel='PriceBooks' where vtiger_tabid=19",
-				"update vtiger_tab set presence=0 where vtiger_tabid in(18,19)",
-				"update vtiger_relatedlists set label='PriceBooks' where vtiger_tabid=14 and related_tabid=19"
+				"update vtiger_tab set name='Vendors', tablabel='Vendors' where tabid=18",
+				"update vtiger_tab set name='PriceBooks', tablabel='PriceBooks' where tabid=19",
+				"update vtiger_tab set presence=0 where tabid in(18,19)",
+				"update vtiger_relatedlists set label='PriceBooks' where tabid=14 and related_tabid=19"
 			    );
 foreach($update_query_array2 as $query)
 {
@@ -1203,13 +1203,13 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array7 = Array(
-			"insert into vtiger_cvcolumnlist values ($cvid,0,'leaddetails:lastname:lastname:Leads_Last_Name:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,1,'leaddetails:firstname:firstname:Leads_First_Name:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,2,'leaddetails:company:company:Leads_Company:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,3,'leadaddress:phone:phone:Leads_Phone:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,4,'leadsubdetails:website:website:Leads_Website:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,5,'leaddetails:email:email:Leads_Email:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,6,'crmentity:smownerid:assigned_user_id:Leads_Assigned_To:V')"
+			"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_leaddetails:firstname:firstname:Leads_First_Name:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_leaddetails:company:company:Leads_Company:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_leadaddress:phone:phone:Leads_Phone:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_leadsubdetails:website:website:Leads_Website:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_leaddetails:email:email:Leads_Email:V')",
+			"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Leads_Assigned_To:V')"
 			    );
 foreach($insert_query_array7 as $query)
 {
@@ -1220,11 +1220,11 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array8 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'account:accountname:accountname:Accounts_Account_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'accountbillads:city:bill_city:Accounts_City:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'account:website:website:Accounts_Website:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'account:phone:phone:Accounts_Phone:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_account:accountname:accountname:Accounts_Account_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_accountbillads:city:bill_city:Accounts_City:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_account:website:website:Accounts_Website:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:phone:phone:Accounts_Phone:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V')"
 			    );
 foreach($insert_query_array8 as $query)
 {
@@ -1235,13 +1235,13 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array9 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'contactdetails:firstname:firstname:Contacts_First_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'contactdetails:lastname:lastname:Contacts_Last_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'contactdetails:title:title:Contacts_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'account:accountname:accountname:Contacts_Account_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'contactdetails:email:email:Contacts_Email:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'contactdetails:phone:phone:Contacts_Phone_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,6,'crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_contactdetails:title:title:Contacts_Title:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_account:accountname:accountname:Contacts_Account_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_contactdetails:email:email:Contacts_Email:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_contactdetails:phone:phone:Contacts_Phone_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V')"
 			    );
 foreach($insert_query_array9 as $query)
 {
@@ -1252,11 +1252,11 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array10 = Array(
-	"insert into vtiger_cvcolumnlist values ($cvid,0,'potential:potentialname:potentialname:Potentials_Potential_Name:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,1,'potential:accountid:account_id:Potentials_Account_Name:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,2,'potential:amount:amount:Potentials_Amount:N')",
-	"insert into vtiger_cvcolumnlist values ($cvid,3,'potential:closingdate:closingdate:Potentials_Expected_Close_Date:D')",
-	"insert into vtiger_cvcolumnlist values ($cvid,4,'crmentity:smownerid:assigned_user_id:Potentials_Assigned_To:V')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_potential:potentialname:potentialname:Potentials_Potential_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_potential:accountid:account_id:Potentials_Account_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_potential:amount:amount:Potentials_Amount:N')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_potential:closingdate:closingdate:Potentials_Expected_Close_Date:D')",
+	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_crmentity:smownerid:assigned_user_id:Potentials_Assigned_To:V')"
 			     );
 foreach($insert_query_array10 as $query)
 {
@@ -1267,12 +1267,12 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array11 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'crmentity:crmid::HelpDesk_Ticket_ID:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'troubletickets:title:ticket_title:HelpDesk_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'troubletickets:parent_id:parent_id:HelpDesk_Related_to:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'troubletickets:status:ticketstatus:HelpDesk_Status:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'troubletickets:priority:ticketpriorities:HelpDesk_Priority:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_troubletickets:title:ticket_title:HelpDesk_Title:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_troubletickets:status:ticketstatus:HelpDesk_Status:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_troubletickets:priority:ticketpriorities:HelpDesk_Priority:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V')"
 			     );
 foreach($insert_query_array11 as $query)
 {
@@ -1284,13 +1284,13 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array12 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'crmentity:crmid::Quotes_Quote_ID:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'quotes:subject:subject:Quotes_Subject:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'quotes:quotestage:quotestage:Quotes_Quote_Stage:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'quotes:potentialid:potential_id:Quotes_Potential_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'quotes:accountid:account_id:Quotes_Account_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'quotes:total:hdnGrandTotal:Quotes_Total:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,6,'crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_crmentity:crmid::Quotes_Quote_ID:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_quotes:subject:subject:Quotes_Subject:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_quotes:accountid:account_id:Quotes_Account_Name:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_quotes:total:hdnGrandTotal:Quotes_Total:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_crmentity:smownerid:assigned_user_id:Quotes_Assigned_To:V')"
 			     );
 foreach($insert_query_array12 as $query)
 {
@@ -1301,14 +1301,14 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array13 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'activity:status:taskstatus:Activities_Status:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'activity:activitytype:activitytype:Activities_Type:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'activity:subject:subject:Activities_Subject:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'contactdetails:lastname:lastname:Activities_Contact_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'seactivityrel:crmid:parent_id:Activities_Related_To:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'activity:date_start:date_start:Activities_Start_Date:D')",
-		"insert into vtiger_cvcolumnlist values ($cvid,6,'activity:due_date:due_date:Activities_End_Date:D')",
-		"insert into vtiger_cvcolumnlist values ($cvid,7,'crmentity:smownerid:assigned_user_id:Activities_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_activity:status:taskstatus:Activities_Status:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_activity:activitytype:activitytype:Activities_Type:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_activity:subject:subject:Activities_Subject:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_contactdetails:lastname:lastname:Activities_Contact_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_seactivityrel:crmid:parent_id:Activities_Related_To:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_activity:date_start:date_start:Activities_Start_Date:D')",
+		"insert into vtiger_cvcolumnlist values ($cvid,6,'vtiger_activity:due_date:due_date:Activities_End_Date:D')",
+		"insert into vtiger_cvcolumnlist values ($cvid,7,'vtiger_crmentity:smownerid:assigned_user_id:Activities_Assigned_To:V')"
 			     );
 foreach($insert_query_array13 as $query)
 {
@@ -1320,10 +1320,10 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array14 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'activity:subject:subject:Emails_Subject:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'seactivityrel:crmid:parent_id:Emails_Related_To:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'activity:date_start:date_start:Emails_Date_Sent:D')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'crmentity:smownerid:assigned_user_id:Emails_Assigned_To:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_activity:subject:subject:Emails_Subject:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_seactivityrel:crmid:parent_id:Emails_Related_To:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_activity:date_start:date_start:Emails_Date_Sent:D')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_crmentity:smownerid:assigned_user_id:Emails_Assigned_To:V')"
 			     );
 foreach($insert_query_array14 as $query)
 {
@@ -1334,12 +1334,12 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array15 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'crmentity:crmid::Invoice_Invoice_Id:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'invoice:subject:subject:Invoice_Subject:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'invoice:salesorderid:salesorder_id:Invoice_Sales_Order:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'invoice:invoicestatus:invoicestatus:Invoice_Status:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'invoice:total:hdnGrandTotal:Invoice_Total:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_crmentity:crmid::Invoice_Invoice_Id:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_invoice:subject:subject:Invoice_Subject:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_invoice:salesorderid:salesorder_id:Invoice_Sales_Order:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_invoice:invoicestatus:invoicestatus:Invoice_Status:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_invoice:total:hdnGrandTotal:Invoice_Total:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V')"
 			     );
 foreach($insert_query_array15 as $query)
 {
@@ -1351,11 +1351,11 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array16 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'notes:title:title:Notes_Title:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'notes:contact_id:contact_id:Notes_Contact_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'senotesrel:crmid:parent_id:Notes_Related_to:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'notes:filename:filename:Notes_File:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_notes:title:title:Notes_Title:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_notes:contact_id:contact_id:Notes_Contact_Name:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I')",
+		"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_notes:filename:filename:Notes_File:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V')"
 			     );
 foreach($insert_query_array16 as $query)
 {
@@ -1366,8 +1366,8 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array17 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'pricebook:active:active:PriceBooks_Active:V')"
+		"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V')",
+		"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_pricebook:active:active:PriceBooks_Active:V')"
 			     );
 foreach($insert_query_array17 as $query)
 {
@@ -1379,11 +1379,11 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array18 = Array(
-	"insert into vtiger_cvcolumnlist values ($cvid,0,'products:productname:productname:Products_Product_Name:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,1,'products:productcode:productcode:Products_Product_Code:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,2,'products:commissionrate:commissionrate:Products_Commission_Rate:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,3,'products:qty_per_unit:qty_per_unit:Products_Qty/Unit:V')",
-	"insert into vtiger_cvcolumnlist values ($cvid,4,'products:unit_price:unit_price:Products_Unit_Price:V')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_products:productname:productname:Products_Product_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_products:productcode:productcode:Products_Product_Code:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_products:commissionrate:commissionrate:Products_Commission_Rate:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_products:qty_per_unit:qty_per_unit:Products_Qty/Unit:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_products:unit_price:unit_price:Products_Unit_Price:V')"
 			     );
 foreach($insert_query_array18 as $query)
 {
@@ -1394,11 +1394,11 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array19 = Array(
-	"insert into vtiger_cvcolumnlist values($cvid,0,'crmentity:crmid::PurchaseOrder_Order_Id:I')",
-	"insert into vtiger_cvcolumnlist values($cvid,1,'purchaseorder:subject:subject:PurchaseOrder_Subject:V')",
-	"insert into vtiger_cvcolumnlist values($cvid,2,'purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I')",
-	"insert into vtiger_cvcolumnlist values($cvid,3,'purchaseorder:tracking_no:tracking_no:PurchaseOrder_Tracking_Number:V')",
-	"insert into vtiger_cvcolumnlist values($cvid,4,'crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V')"
+	"insert into vtiger_cvcolumnlist values($cvid,0,'vtiger_crmentity:crmid::PurchaseOrder_Order_Id:I')",
+	"insert into vtiger_cvcolumnlist values($cvid,1,'vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V')",
+	"insert into vtiger_cvcolumnlist values($cvid,2,'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I')",
+	"insert into vtiger_cvcolumnlist values($cvid,3,'vtiger_purchaseorder:tracking_no:tracking_no:PurchaseOrder_Tracking_Number:V')",
+	"insert into vtiger_cvcolumnlist values($cvid,4,'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V')"
 			     );
 foreach($insert_query_array19 as $query)
 {
@@ -1409,12 +1409,12 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array20 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'crmentity:crmid::SalesOrder_Order_Id:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'salesorder:subject:subject:SalesOrder_Subject:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'account:accountid:account_id:SalesOrder_Account_Name:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'quotes:quoteid:quote_id:SalesOrder_Quote_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'salesorder:total:hdnGrandTotal:SalesOrder_Total:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_crmentity:crmid::SalesOrder_Order_Id:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_salesorder:subject:subject:SalesOrder_Subject:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_account:accountid:account_id:SalesOrder_Account_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_quotes:quoteid:quote_id:SalesOrder_Quote_Name:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_salesorder:total:hdnGrandTotal:SalesOrder_Total:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V')"
 			     );
 foreach($insert_query_array20 as $query)
 {
@@ -1425,10 +1425,10 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array21 = Array(
-			"insert into vtiger_cvcolumnlist values ($cvid,0,'vendor:vendorname:vendorname:Vendors_Vendor_Name:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,1,'vendor:phone:phone:Vendors_Phone:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,2,'vendor:email:email:Vendors_Email:V')",
-			"insert into vtiger_cvcolumnlist values ($cvid,3,'vendor:category:category:Vendors_Category:V')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_vendor:vendorname:vendorname:Vendors_Vendor_Name:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_vendor:phone:phone:Vendors_Phone:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_vendor:email:email:Vendors_Email:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_vendor:category:category:Vendors_Category:V')"
 			     );
 foreach($insert_query_array21 as $query)
 {
@@ -1439,12 +1439,12 @@ $res=$conn->query("select cvid from vtiger_customview where viewname='All' and e
 $cvid = $conn->query_result($res,0,"cvid");
 
 $insert_query_array22 = Array(
-		"insert into vtiger_cvcolumnlist values ($cvid,0,'faq:id::Faq_FAQ_Id:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,1,'faq:question:question:Faq_Question:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,2,'faq:category:faqcategories:Faq_Category:V')",
-		"insert into vtiger_cvcolumnlist values ($cvid,3,'faq:product_id:product_id:Faq_Product_Name:I')",
-		"insert into vtiger_cvcolumnlist values ($cvid,4,'crmentity:createdtime:createdtime:Faq_Created_Time:D')",
-		"insert into vtiger_cvcolumnlist values ($cvid,5,'crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D')"
+	"insert into vtiger_cvcolumnlist values ($cvid,0,'vtiger_faq:id::Faq_FAQ_Id:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,1,'vtiger_faq:question:question:Faq_Question:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,2,'vtiger_faq:category:faqcategories:Faq_Category:V')",
+	"insert into vtiger_cvcolumnlist values ($cvid,3,'vtiger_faq:product_id:product_id:Faq_Product_Name:I')",
+	"insert into vtiger_cvcolumnlist values ($cvid,4,'vtiger_crmentity:createdtime:createdtime:Faq_Created_Time:D')",
+	"insert into vtiger_cvcolumnlist values ($cvid,5,'vtiger_crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D')"
 			     );
 foreach($insert_query_array22 as $query)
 {
@@ -1453,23 +1453,23 @@ foreach($insert_query_array22 as $query)
 
 
 $update_query_array3 = Array(
-				"update vtiger_field set uitype=53 where vtiger_tabid=2 and columnname='smownerid'",
-				"update vtiger_field set uitype=53 where vtiger_tabid=4 and columnname='smownerid'",
-				"update vtiger_field set uitype=53 where vtiger_tabid=20 and columnname='smownerid'",
-				"update vtiger_field set uitype=53 where vtiger_tabid=22 and columnname='smownerid'",
-				"update vtiger_field set uitype=53 where vtiger_tabid=23 and columnname='smownerid'"
+				"update vtiger_field set uitype=53 where tabid=2 and columnname='smownerid'",
+				"update vtiger_field set uitype=53 where tabid=4 and columnname='smownerid'",
+				"update vtiger_field set uitype=53 where tabid=20 and columnname='smownerid'",
+				"update vtiger_field set uitype=53 where tabid=22 and columnname='smownerid'",
+				"update vtiger_field set uitype=53 where tabid=23 and columnname='smownerid'"
 			    );
 foreach($update_query_array3 as $query)
 {
 	Execute($query);
 }
 
-$create_query6 = "CREATE TABLE vtiger_accountgrouprelation ( vtiger_accountid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`accountid`))";
+$create_query6 = "CREATE TABLE vtiger_accountgrouprelation ( accountid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`accountid`))";
 Execute($create_query6);
 
 $alter_query_array8 = Array(
-				"alter vtiger_table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			   );
 foreach($alter_query_array8 as $query)
 {
@@ -1480,8 +1480,8 @@ $create_query7 = "CREATE TABLE vtiger_contactgrouprelation ( contactid int(19) N
 Execute($create_query7);
 
 $alter_query_array9 = Array(
-				"alter vtiger_table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE",
+				"alter table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			   );
 foreach($alter_query_array9 as $query)
 {
@@ -1489,12 +1489,12 @@ foreach($alter_query_array9 as $query)
 }
 
 
-$create_query10 = "CREATE TABLE vtiger_potentialgrouprelation ( vtiger_potentialid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`potentialid`))";
+$create_query10 = "CREATE TABLE vtiger_potentialgrouprelation ( potentialid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`potentialid`))";
 Execute($create_query10);
 
 $alter_query_array10 = Array(
-				"alter vtiger_table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE",
+				"alter table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array10 as $query)
 {
@@ -1505,44 +1505,44 @@ $create_query11 = "CREATE TABLE vtiger_quotegrouprelation ( quoteid int(19) NOT 
 Execute($create_query11);
 
 $alter_query_array11 = Array(
-				"alter vtiger_table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE",
+				"alter table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array11 as $query)
 {
 	Execute($query);
 }
 
-$create_query12 = "CREATE TABLE vtiger_sogrouprelation ( vtiger_salesorderid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`salesorderid`) )";
+$create_query12 = "CREATE TABLE vtiger_sogrouprelation ( salesorderid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`salesorderid`) )";
 Execute($create_query12);
 
 $alter_query_array12 = Array(
-				"alter vtiger_table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE",
+				"alter table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array12 as $query)
 {
 	Execute($query);
 }
 
-$create_query13 = "CREATE TABLE vtiger_invoicegrouprelation ( vtiger_invoiceid int(19) NOT NULL default '0',  groupname varchar(100) default NULL,  PRIMARY KEY  (`invoiceid`))";
+$create_query13 = "CREATE TABLE vtiger_invoicegrouprelation ( invoiceid int(19) NOT NULL default '0',  groupname varchar(100) default NULL,  PRIMARY KEY  (`invoiceid`))";
 Execute($create_query13);
 
 $alter_query_array13 = Array(
-				"alter vtiger_table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE",
+				"alter table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array13 as $query)
 {
 	Execute($query);
 }
 
-$create_query14 = "CREATE TABLE vtiger_pogrouprelation ( vtiger_purchaseorderid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`purchaseorderid`))";
+$create_query14 = "CREATE TABLE vtiger_pogrouprelation ( purchaseorderid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`purchaseorderid`))";
 Execute($create_query14);
 
 $alter_query_array14 = Array(
-				"alter vtiger_table vtiger_pogrouprelation ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE",
-				"alter vtiger_table vtiger_pogrouprelation ADD CONSTRAINT fk_productgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_pogrouprelation ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE",
+				"alter table vtiger_pogrouprelation ADD CONSTRAINT fk_productgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array14 as $query)
 {
@@ -1558,12 +1558,12 @@ Execute($update_query1);
 $alter_query2 = "ALTER TABLE vtiger_products change column imagename imagename text";
 Execute($alter_query2);
 
-$alter_query3 = "alter vtiger_table vtiger_systems modify server varchar(50), modify server_username varchar(50), modify server_password varchar(50), add column smtp_auth char(5)";
+$alter_query3 = "alter table vtiger_systems modify server varchar(50), modify server_username varchar(50), modify server_password varchar(50), add column smtp_auth char(5)";
 Execute($alter_query3);
 
 $alter_query_array15 = Array( 
-				"alter vtiger_table vtiger_users add column imagename varchar(250)",
-				"alter vtiger_table vtiger_users add column tagcloud varchar(250)"
+				"alter table vtiger_users add column imagename varchar(250)",
+				"alter table vtiger_users add column tagcloud varchar(250)"
 			    );
 foreach($alter_query_array15 as $query)
 {
@@ -1571,8 +1571,8 @@ foreach($alter_query_array15 as $query)
 }
 
 $alter_query_array16 = Array(
-			"alter vtiger_table vtiger_systems change column server server varchar(80) default NULL",
-			"alter vtiger_table vtiger_systems change column server_username server_username varchar(80) default NULL"
+			"alter table vtiger_systems change column server server varchar(80) default NULL",
+			"alter table vtiger_systems change column server_username server_username varchar(80) default NULL"
 			    );
 foreach($alter_query_array16 as $query)
 {
@@ -1580,62 +1580,62 @@ foreach($alter_query_array16 as $query)
 }
 
 
-$create_query15 = "create vtiger_table vtiger_portal(portalid int(19), vtiger_portalname varchar(255) NOT NULL, vtiger_portalurl varchar(255) NOT NULL,sequence int(3) NOT NULL, PRIMARY KEY (portalid))";
+$create_query15 = "create table vtiger_portal(portalid int(19), portalname varchar(255) NOT NULL, portalurl varchar(255) NOT NULL,sequence int(3) NOT NULL, PRIMARY KEY (portalid))";
 Execute($create_query15);
 
 $alter_query = "ALTER TABLE vtiger_field ADD column info_type varchar(20) default NULL after quickcreatesequence";
 Execute($alter_query);
 
-//$update_query2 = "UPDATE vtiger_field SET vtiger_fieldlabel = 'Reference' WHERE vtiger_tabid = 4 and vtiger_tablename = 'contactdetails' and vtiger_fieldname='reference'";
-//changed in 24-04-06 because the reference has not been entered into the vtiger_field vtiger_table. 
+//$update_query2 = "UPDATE vtiger_field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
+//changed in 24-04-06 because the reference has not been entered into the vtiger_field table. 
 $update_query2 = "insert into vtiger_field values (4,".$conn->getUniqueID("field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
 Execute($update_query2);
 
 $update_query_array4 = Array(
 				"UPDATE vtiger_field SET info_type = 'BAS'",
 
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Website'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Industry'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Annual Revenue'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'No Of Employees'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 7 and vtiger_fieldlabel = 'Yahoo Id'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 7 and fieldlabel = 'Website'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 7 and fieldlabel = 'Industry'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 7 and fieldlabel = 'Annual Revenue'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 7 and fieldlabel = 'No Of Employees'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 7 and fieldlabel = 'Yahoo Id'",
 
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Ticker Symbol'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Other Phone'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Member Of'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Employees'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Other Email'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Ownership'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Rating'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'industry'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'SIC Code'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Type'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Annual Revenue'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 6 and vtiger_fieldlabel = 'Email Opt Out'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Ticker Symbol'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Other Phone'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Member Of'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Employees'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Other Email'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Ownership'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Rating'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'industry'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'SIC Code'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Type'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Annual Revenue'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 6 and fieldlabel = 'Email Opt Out'",
 
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Home Phone'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Department'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Birthdate'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Email'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Reports To'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Assistant'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Yahoo Id'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Assistant Phone'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Do Not Call'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Email Opt Out'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Reference'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Portal User'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Support Start Date'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Support End Date'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 4 and vtiger_fieldlabel = 'Contact Image'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Home Phone'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Department'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Birthdate'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Email'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Reports To'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Assistant'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Yahoo Id'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Assistant Phone'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Do Not Call'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Email Opt Out'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Reference'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Portal User'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Support Start Date'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Support End Date'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 4 and fieldlabel = 'Contact Image'",
 
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Usage Unit'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Qty/Unit'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Qty In Stock'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Reorder Level'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Handler'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Qty In Demand'",
-				"UPDATE vtiger_field SET info_type = 'ADV' WHERE vtiger_tabid = 14 and vtiger_fieldlabel = 'Product Image'"
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Usage Unit'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Qty/Unit'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Qty In Stock'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Reorder Level'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Handler'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Qty In Demand'",
+				"UPDATE vtiger_field SET info_type = 'ADV' WHERE tabid = 14 and fieldlabel = 'Product Image'"
 			    );
 foreach($update_query_array4 as $query)
 {
@@ -1643,15 +1643,15 @@ foreach($update_query_array4 as $query)
 }
 
 
-$create_query16 = "CREATE TABLE `chat_msg` ( `id` bigint(20) NOT NULL auto_increment, `chat_from` bigint(20) NOT NULL default '0', `chat_to` bigint(20) NOT NULL default '0', `born` timestamp NULL default '0000-00-00 00:00:00', `msg` varchar(255) NOT NULL, PRIMARY KEY  (`id`), KEY `chat_to` (`chat_to`), KEY `chat_from` (`chat_from`), KEY `born` (`born`)) ENGINE=InnoDB";
+$create_query16 = "CREATE TABLE vtiger_chat_msg ( `id` bigint(20) NOT NULL auto_increment, `chat_from` bigint(20) NOT NULL default '0', `chat_to` bigint(20) NOT NULL default '0', `born` timestamp NULL default '0000-00-00 00:00:00', `msg` varchar(255) NOT NULL, PRIMARY KEY  (`id`), KEY `chat_to` (`chat_to`), KEY `chat_from` (`chat_from`), KEY `born` (`born`)) ENGINE=InnoDB";
 Execute($create_query16);
-$create_query17 = "CREATE TABLE `chat_pchat` ( `id` bigint(20) NOT NULL auto_increment, `msg` bigint(20) NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `msg` (`msg`)) ENGINE=InnoDB";
+$create_query17 = "CREATE TABLE vtiger_chat_pchat ( `id` bigint(20) NOT NULL auto_increment, `msg` bigint(20) NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `msg` (`msg`)) ENGINE=InnoDB";
 Execute($create_query17);
 
-$create_query18 = "CREATE TABLE `chat_pvchat` ( `id` bigint(20) NOT NULL auto_increment, `msg` bigint(20) NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `msg` (`msg`)) ENGINE=InnoDB";
+$create_query18 = "CREATE TABLE vtiger_chat_pvchat ( `id` bigint(20) NOT NULL auto_increment, `msg` bigint(20) NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `msg` (`msg`)) ENGINE=InnoDB";
 Execute($create_query18);
 
-$create_query19 = "CREATE TABLE `chat_users` ( `id` bigint(20) NOT NULL auto_increment, `nick` varchar(50) NOT NULL, `session` varchar(50) NOT NULL, `ip` varchar(20) NOT NULL default '000.000.000.000', `ping` timestamp NULL default '0000-00-00 00:00:00', PRIMARY KEY  (`id`), UNIQUE KEY `session` (`session`), UNIQUE KEY `nick` (`nick`), KEY `ping` (`ping`)) ENGINE=InnoDB";
+$create_query19 = "CREATE TABLE vtiger_chat_users ( `id` bigint(20) NOT NULL auto_increment, `nick` varchar(50) NOT NULL, `session` varchar(50) NOT NULL, `ip` varchar(20) NOT NULL default '000.000.000.000', `ping` timestamp NULL default '0000-00-00 00:00:00', PRIMARY KEY  (`id`), UNIQUE KEY `session` (`session`), UNIQUE KEY `nick` (`nick`), KEY `ping` (`ping`)) ENGINE=InnoDB";
 Execute($create_query19);
 
 $alter_query_array17 = Array(
@@ -1673,10 +1673,10 @@ $create_query21 = "CREATE TABLE vtiger_freetagged_objects ( tag_id int(19) NOT N
 ) TYPE=MyISAM";
 Execute($create_query21);
   
-$alter_query4 = "alter vtiger_table vtiger_profile add column description text";
+$alter_query4 = "alter table vtiger_profile add column description text";
 Execute($alter_query4);
 
-$alter_query5 = "alter vtiger_table vtiger_contactdetails add column imagename varchar(250) after vtiger_currency";
+$alter_query5 = "alter table vtiger_contactdetails add column imagename varchar(250) after currency";
 Execute($alter_query5);
 
 $alter_query = "ALTER TABLE vtiger_contactdetails ADD column reference varchar(3) default NULL after imagename";
@@ -1694,14 +1694,14 @@ foreach($insert_query_array23 as $query)
 	Execute($query);
 }
 
-$alter_query6 = "alter vtiger_table vtiger_activity add column vtiger_visibility varchar(50) NOT NULL after notime";
+$alter_query6 = "alter table vtiger_activity add column visibility varchar(50) NOT NULL after notime";
 Execute($alter_query6);
 
-$create_query22 = "CREATE TABLE `visibility` ( `visibilityid` int(19) NOT NULL auto_increment, `visibility` varchar(200) NOT NULL default '', `sortorderid` int(19) NOT NULL default '0', `presence` int(1) NOT NULL default '1', PRIMARY KEY  (`visibilityid`), UNIQUE KEY `Visibility_VLY` (`visibility`)) ENGINE=InnoDB";
+$create_query22 = "CREATE TABLE vtiger_visibility ( `visibilityid` int(19) NOT NULL auto_increment, `visibility` varchar(200) NOT NULL default '', `sortorderid` int(19) NOT NULL default '0', `presence` int(1) NOT NULL default '1', PRIMARY KEY  (`visibilityid`), UNIQUE KEY `Visibility_VLY` (`visibility`)) ENGINE=InnoDB";
 Execute($create_query22);
 
 
-$create_query23 = "CREATE TABLE `sharedcalendar` ( `userid` int(19) NOT NULL default '0',  `sharedid` int(19) NOT NULL default '0', PRIMARY KEY  (`userid`,`sharedid`)) ENGINE=MyISAM";
+$create_query23 = "CREATE TABLE vtiger_sharedcalendar ( `userid` int(19) NOT NULL default '0',  `sharedid` int(19) NOT NULL default '0', PRIMARY KEY  (`userid`,`sharedid`)) ENGINE=MyISAM";
 Execute($create_query23);
 
 $insert_query6 = "INSERT INTO vtiger_tab VALUES(26,'Campaigns',0,23,'Campaigns',null,null,1)";
@@ -1766,7 +1766,7 @@ foreach($insert_query_array26 as $query)
 }
 
 $create_query24 = "
-CREATE TABLE `campaign` (
+CREATE TABLE vtiger_campaign (
    `campaignname` varchar(255) default NULL,
    `campaigntype` varchar(255) default NULL,
    `campaignstatus` varchar(255) default NULL,
@@ -1797,14 +1797,14 @@ Execute($create_query24);
 
 
 //Added on 06-06-06
-$create_query25 = "CREATE TABLE `campaigncontrel` (
+$create_query25 = "CREATE TABLE vtiger_campaigncontrel (
 	  `campaignid` int(19) NOT NULL default '0',
 	    `contactid` int(19) NOT NULL default '0',
 	      PRIMARY KEY  (`campaignid`),
 	        KEY `campaigncontrel_contractid_idx` (`contactid`)
 	) ENGINE=InnoDB";
 /*
-$create_query25 = "CREATE TABLE `campaigncontrel` (
+$create_query25 = "CREATE TABLE vtiger_campaigncontrel (
   `campaignid` int(19) NOT NULL default '0',
   `contactid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
@@ -1816,7 +1816,7 @@ $create_query25 = "CREATE TABLE `campaigncontrel` (
 Execute($create_query25);
 
 //Added on 06-06-06
-$create_table_query = "CREATE TABLE `campaigngrouprelation` (
+$create_table_query = "CREATE TABLE vtiger_campaigngrouprelation (
 	  `campaignid` int(19) NOT NULL,
 	    `groupname` varchar(100) default NULL,
 	      PRIMARY KEY  (`campaignid`),
@@ -1824,7 +1824,7 @@ $create_table_query = "CREATE TABLE `campaigngrouprelation` (
 	) ENGINE=InnoDB";
 /*
 $create_table_query = "
-CREATE TABLE `campaigngrouprelation` (
+CREATE TABLE vtiger_campaigngrouprelation (
        `campaignid` int(19) NOT NULL,
        `groupname` varchar(100) default NULL,
 	PRIMARY KEY  (`campaignid`),
@@ -1837,14 +1837,14 @@ Execute($create_table_query);
 
 
 //Added on 06-06-06
-$create_query26 = "CREATE TABLE `campaignleadrel` (
+$create_query26 = "CREATE TABLE vtiger_campaignleadrel (
 			`campaignid` int(19) NOT NULL default '0',
 			`leadid` int(19) NOT NULL default '0',
 			PRIMARY KEY  (`campaignid`),
 			KEY `campaignleadrel_leadid_campaignid_idx` (`leadid`,`campaignid`)
 		   ) ENGINE=InnoDB";
 /*
-$create_query26 = "CREATE TABLE `campaignleadrel` (
+$create_query26 = "CREATE TABLE vtiger_campaignleadrel (
   `campaignid` int(19) NOT NULL default '0',
   `leadid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
@@ -1855,7 +1855,7 @@ $create_query26 = "CREATE TABLE `campaignleadrel` (
 */
 Execute($create_query26);
 
-$create_table_query1 = "CREATE TABLE `campaignscf` (
+$create_table_query1 = "CREATE TABLE vtiger_campaignscf (
   `campaignid` int(19) NOT NULL default '0',
    PRIMARY KEY  (`campaignid`),
    CONSTRAINT `fk_CampaignsCF` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
@@ -1863,11 +1863,11 @@ $create_table_query1 = "CREATE TABLE `campaignscf` (
 Execute($create_table_query1);
 
 $alter_query_array18 = Array(
-				"alter vtiger_table vtiger_leaddetails add column vtiger_campaignid int(19) default NULL after leadid",
-				"alter vtiger_table vtiger_contactdetails add column  vtiger_campaignid int(19) default NULL after vtiger_accountid",
-				//"alter vtiger_table vtiger_notes drop PRIMARY KEY contact_id",
-				"alter vtiger_table vtiger_notes drop PRIMARY KEY , add primary key(notesid)",
-				"update vtiger_field set uitype=99 where vtiger_fieldname='update_log' and vtiger_tabid=13"
+			"alter table vtiger_leaddetails add column campaignid int(19) default NULL after leadid",
+			"alter table vtiger_contactdetails add column  campaignid int(19) default NULL after accountid",
+			//"alter table vtiger_notes drop PRIMARY KEY contact_id",
+			"alter table vtiger_notes drop PRIMARY KEY , add primary key(notesid)",
+			"update vtiger_field set uitype=99 where fieldname='update_log' and tabid=13"
 			    );
 foreach($alter_query_array18 as $query)
 {
@@ -1876,8 +1876,8 @@ foreach($alter_query_array18 as $query)
 
 
 
-//echo "<br><br><b>Database Modifications for Indexing and some missded vtiger_tables starts here.....</b><br>";
-//Added queries which are for indexing and the missing vtiger_tables - Mickie - on 06-04-2006
+//echo "<br><br><b>Database Modifications for Indexing and some missded tables starts here.....</b><br>";
+//Added queries which are for indexing and the missing tables - Mickie - on 06-04-2006
 
 $query_array = Array(
 
@@ -1989,7 +1989,7 @@ $query_array = Array(
 "ALTER TABLE `users_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
 "ALTER TABLE `wordtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 
-"CREATE TABLE `actualcost` (
+"CREATE TABLE vtiger_actualcost (
   `actualcostid` int(19) NOT NULL auto_increment,
   `actualcost` varchar(200) NOT NULL,
   `sortorderid` int(19) NOT NULL default '0',
@@ -1998,7 +1998,7 @@ $query_array = Array(
   UNIQUE KEY `CampaignActCst_UK01` (`actualcost`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `campaignstatus` (
+"CREATE TABLE vtiger_campaignstatus (
   `campaignstatusid` int(19) NOT NULL auto_increment,
   `campaignstatus` varchar(200) NOT NULL,
   `sortorderid` int(19) NOT NULL default '0',
@@ -2007,7 +2007,7 @@ $query_array = Array(
   KEY `Campaignstatus_UK01` (`campaignstatus`)
 ) ENGINE=InnoDB",
 
-"CREATE TABLE `campaigntype` (
+"CREATE TABLE vtiger_campaigntype (
   `campaigntypeid` int(19) NOT NULL auto_increment,
   `campaigntype` varchar(200) NOT NULL,
   `sortorderid` int(19) NOT NULL default '0',
@@ -2016,11 +2016,11 @@ $query_array = Array(
   UNIQUE KEY `Campaigntype_UK01` (`campaigntype`)
 ) ENGINE=InnoDB",
 
-"CREATE TABLE `currency_info_seq` (
+"CREATE TABLE vtiger_currency_info_seq (
   `id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `datashare_module_rel` (
+"CREATE TABLE vtiger_datashare_module_rel (
   `shareid` int(19) NOT NULL,
   `tabid` int(19) NOT NULL,
   `relationtype` varchar(200) default NULL,
@@ -2029,7 +2029,7 @@ $query_array = Array(
 ) ENGINE=InnoDB",
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_grp2grp` (
+"CREATE TABLE vtiger_datashare_grp2grp (
 	  `shareid` int(19) NOT NULL,
 	    `share_groupid` int(19) default NULL,
 	      `to_groupid` int(19) default NULL,
@@ -2039,7 +2039,7 @@ $query_array = Array(
 		      KEY `datashare_grp2grp_to_groupid_idx` (`to_groupid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_grp2grp` (
+"CREATE TABLE vtiger_datashare_grp2grp (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
   `to_groupid` int(19) default NULL,
@@ -2053,7 +2053,7 @@ $query_array = Array(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
-"CREATE TABLE `datashare_grp2role` (
+"CREATE TABLE vtiger_datashare_grp2role (
 	  `shareid` int(19) NOT NULL,
 	    `share_groupid` int(19) default NULL,
 	      `to_roleid` varchar(255) default NULL,
@@ -2063,7 +2063,7 @@ $query_array = Array(
 		      KEY `idx_datashare_grp2role_to_roleid` (`to_roleid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_grp2role` (
+"CREATE TABLE vtiger_datashare_grp2role (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
   `to_roleid` varchar(255) default NULL,
@@ -2078,7 +2078,7 @@ $query_array = Array(
 */
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_grp2rs` (
+"CREATE TABLE vtiger_datashare_grp2rs (
 	  `shareid` int(19) NOT NULL,
 	    `share_groupid` int(19) default NULL,
 	      `to_roleandsubid` varchar(255) default NULL,
@@ -2088,7 +2088,7 @@ $query_array = Array(
 		      KEY `datashare_grp2rs_to_roleandsubid_idx` (`to_roleandsubid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_grp2rs` (
+"CREATE TABLE vtiger_datashare_grp2rs (
   `shareid` int(19) NOT NULL,
   `share_groupid` int(19) default NULL,
   `to_roleandsubid` varchar(255) default NULL,
@@ -2102,7 +2102,7 @@ $query_array = Array(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
-"CREATE TABLE `datashare_relatedmodule_permission` (
+"CREATE TABLE vtiger_datashare_relatedmodule_permission (
   `shareid` int(19) NOT NULL,
   `datashare_relatedmodule_id` int(19) NOT NULL,
   `permission` int(19) default NULL,
@@ -2111,7 +2111,7 @@ $query_array = Array(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_relatedmodules` (
+"CREATE TABLE vtiger_datashare_relatedmodules (
 	  `datashare_relatedmodule_id` int(19) NOT NULL,
 	    `tabid` int(19) default NULL,
 	      `relatedto_tabid` int(19) default NULL,
@@ -2120,7 +2120,7 @@ $query_array = Array(
 		    KEY `datashare_relatedmodules_relatedto_tabid_idx` (`relatedto_tabid`)
 	    ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_relatedmodules` (
+"CREATE TABLE vtiger_datashare_relatedmodules (
   `datashare_relatedmodule_id` int(19) NOT NULL,
   `tabid` int(19) default NULL,
   `relatedto_tabid` int(19) default NULL,
@@ -2132,12 +2132,12 @@ $query_array = Array(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
-"CREATE TABLE `datashare_relatedmodules_seq` (
+"CREATE TABLE vtiger_datashare_relatedmodules_seq (
   `id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1",
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_role2group` (
+"CREATE TABLE vtiger_datashare_role2group (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
 	      `to_groupid` int(19) default NULL,
@@ -2147,7 +2147,7 @@ $query_array = Array(
 		      KEY `idx_datashare_role2group_to_groupid` (`to_groupid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_role2group` (
+"CREATE TABLE vtiger_datashare_role2group (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
   `to_groupid` int(19) default NULL,
@@ -2162,7 +2162,7 @@ $query_array = Array(
 */
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_role2role` (
+"CREATE TABLE vtiger_datashare_role2role (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
 	      `to_roleid` varchar(255) default NULL,
@@ -2172,7 +2172,7 @@ $query_array = Array(
 		      KEY `datashare_role2role_to_roleid_idx` (`to_roleid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_role2role` (
+"CREATE TABLE vtiger_datashare_role2role (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
   `to_roleid` varchar(255) default NULL,
@@ -2187,7 +2187,7 @@ $query_array = Array(
 */
 
 //Added on 06-06-06
-"CREATE TABLE `datashare_role2rs` (
+"CREATE TABLE vtiger_datashare_role2rs (
 	  `shareid` int(19) NOT NULL,
 	    `share_roleid` varchar(255) default NULL,
 	      `to_roleandsubid` varchar(255) default NULL,
@@ -2197,7 +2197,7 @@ $query_array = Array(
 		      KEY `datashare_role2s_to_roleandsubid_idx` (`to_roleandsubid`)
 	      ) ENGINE=InnoDB",
 /*
-"CREATE TABLE `datashare_role2rs` (
+"CREATE TABLE vtiger_datashare_role2rs (
   `shareid` int(19) NOT NULL,
   `share_roleid` varchar(255) default NULL,
   `to_roleandsubid` varchar(255) default NULL,
@@ -2211,7 +2211,7 @@ $query_array = Array(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
-"CREATE TABLE `datashare_rs2grp` (
+"CREATE TABLE vtiger_datashare_rs2grp (
   `shareid` int(19) NOT NULL,
   `share_roleandsubid` varchar(255) default NULL,
   `to_groupid` int(19) default NULL,
@@ -2221,7 +2221,7 @@ $query_array = Array(
   KEY `datashare_rs2grp_to_groupid_idx` (`to_groupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `datashare_rs2role` (
+"CREATE TABLE vtiger_datashare_rs2role (
   `shareid` int(19) NOT NULL,
   `share_roleandsubid` varchar(255) default NULL,
   `to_roleid` varchar(255) default NULL,
@@ -2231,7 +2231,7 @@ $query_array = Array(
   KEY `datashare_rs2role_to_roleid_idx` (`to_roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `datashare_rs2rs` (
+"CREATE TABLE vtiger_datashare_rs2rs (
   `shareid` int(19) NOT NULL,
   `share_roleandsubid` varchar(255) default NULL,
   `to_roleandsubid` varchar(255) default NULL,
@@ -2241,7 +2241,7 @@ $query_array = Array(
   KEY `idx_datashare_rs2rs_to_roleandsubid_idx` (`to_roleandsubid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `expectedresponse` (
+"CREATE TABLE vtiger_expectedresponse (
   `expectedresponseid` int(19) NOT NULL auto_increment,
   `expectedresponse` varchar(200) NOT NULL,
   `sortorderid` int(19) NOT NULL default '0',
@@ -2250,7 +2250,7 @@ $query_array = Array(
   UNIQUE KEY `CampaignExpRes_UK01` (`expectedresponse`)
 ) ENGINE=InnoDB",
 
-"CREATE TABLE `expectedrevenue` (
+"CREATE TABLE vtiger_expectedrevenue (
   `expectedrevenueid` int(19) NOT NULL auto_increment,
   `expectedrevenue` varchar(200) NOT NULL,
   `sortorderid` int(19) NOT NULL default '0',
@@ -2259,7 +2259,7 @@ $query_array = Array(
   UNIQUE KEY `CampaignExpRev_UK01` (`expectedrevenue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_read_group_rel_sharing_per` (
+"CREATE TABLE vtiger_tmp_read_group_rel_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `relatedtabid` int(11) NOT NULL,
@@ -2268,7 +2268,7 @@ $query_array = Array(
   KEY `tmp_read_group_rel_sharing_per_userid_sharedgroupid_tabid` (`userid`,`sharedgroupid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_read_group_sharing_per` (
+"CREATE TABLE vtiger_tmp_read_group_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
@@ -2276,7 +2276,7 @@ $query_array = Array(
   KEY `tmp_read_group_sharing_per_userid_sharedgroupid_idx` (`userid`,`sharedgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_read_user_rel_sharing_per` (
+"CREATE TABLE vtiger_tmp_read_user_rel_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `relatedtabid` int(11) NOT NULL,
@@ -2285,7 +2285,7 @@ $query_array = Array(
   KEY `tmp_read_user_rel_sharing_per_userid_shared_reltabid_idx` (`userid`,`shareduserid`,`relatedtabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_read_user_sharing_per` (
+"CREATE TABLE vtiger_tmp_read_user_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
@@ -2293,7 +2293,7 @@ $query_array = Array(
   KEY `tmp_read_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_write_group_rel_sharing_per` (
+"CREATE TABLE vtiger_tmp_write_group_rel_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `relatedtabid` int(11) NOT NULL,
@@ -2302,7 +2302,7 @@ $query_array = Array(
   KEY `tmp_write_group_rel_sharing_per_userid_sharedgroupid_tabid_idx` (`userid`,`sharedgroupid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_write_group_sharing_per` (
+"CREATE TABLE vtiger_tmp_write_group_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `sharedgroupid` int(11) NOT NULL,
@@ -2310,7 +2310,7 @@ $query_array = Array(
   KEY `tmp_write_group_sharing_per_UK1` (`userid`,`sharedgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_write_user_rel_sharing_per` (
+"CREATE TABLE vtiger_tmp_write_user_rel_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `relatedtabid` int(11) NOT NULL,
@@ -2319,7 +2319,7 @@ $query_array = Array(
   KEY `tmp_write_user_rel_sharing_per_userid_sharduserid_tabid_idx` (`userid`,`shareduserid`,`tabid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"CREATE TABLE `tmp_write_user_sharing_per` (
+"CREATE TABLE vtiger_tmp_write_user_sharing_per (
   `userid` int(11) NOT NULL,
   `tabid` int(11) NOT NULL,
   `shareduserid` int(11) NOT NULL,
@@ -2669,18 +2669,18 @@ $conn->println("Database Modifications after 5.0(Alpha 5) starts here.");
 
 //Added on 22-04-06 - to add the Notify Owner vtiger_field in Contacts and Accounts
 $notify_owner_array = Array(
-	"update vtiger_field set sequence=26 where vtiger_tabid=4 and vtiger_fieldname='modifiedtime'",
-	"update vtiger_field set sequence=25 where vtiger_tabid=4 and vtiger_fieldname='createdtime'",
+	"update vtiger_field set sequence=26 where tabid=4 and fieldname='modifiedtime'",
+	"update vtiger_field set sequence=25 where tabid=4 and fieldname='createdtime'",
 	
 	"insert into vtiger_field values(4,".$conn->getUniqueID("field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
-	"alter vtiger_table vtiger_contactdetails add column notify_owner varchar(3) default 0 after reference",
+	"alter table vtiger_contactdetails add column notify_owner varchar(3) default 0 after reference",
 
-	"update vtiger_field set sequence=21 where vtiger_tabid=6 and vtiger_fieldname='modifiedtime'",
-	"update vtiger_field set sequence=20 where vtiger_tabid=6 and vtiger_fieldname='createdtime'",
-	"update vtiger_field set sequence=19 where vtiger_tabid=6 and vtiger_fieldname='assigned_user_id'",
+	"update vtiger_field set sequence=21 where tabid=6 and fieldname='modifiedtime'",
+	"update vtiger_field set sequence=20 where tabid=6 and fieldname='createdtime'",
+	"update vtiger_field set sequence=19 where tabid=6 and fieldname='assigned_user_id'",
 	
 	"insert into vtiger_field values(6,".$conn->getUniqueID("field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
-	"alter vtiger_table vtiger_account add column notify_owner varchar(3) default 0 after emailoptout"
+	"alter table vtiger_account add column notify_owner varchar(3) default 0 after emailoptout"
 			   );
 foreach($notify_owner_array as $query)
 {
@@ -2693,12 +2693,12 @@ Execute($rss_insert_query);
 
 //Quick Create Feature added for Vendor & PriceBook
 $quickcreate_query = Array(
-	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 18 and vtiger_fieldname = 'vendorname'",
-	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 18 and vtiger_fieldname = 'phone'",
-	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE vtiger_tabid = 18 and vtiger_fieldname = 'email'",
+	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 18 and fieldname = 'vendorname'",
+	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 18 and fieldname = 'phone'",
+	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 3 WHERE tabid = 18 and fieldname = 'email'",
 
-	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE vtiger_tabid = 19 and vtiger_fieldname = 'bookname'",
-	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE vtiger_tabid = 19 and vtiger_fieldname = 'active'"
+	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 1 WHERE tabid = 19 and fieldname = 'bookname'",
+	"UPDATE vtiger_field SET quickcreate = 0,quickcreatesequence = 2 WHERE tabid = 19 and fieldname = 'active'"
 			  );
 foreach($quickcreate_query as $query)
 {
@@ -2711,12 +2711,12 @@ $cvid1 = $conn->getUniqueID("customview");
 $cvid2 = $conn->getUniqueID("customview");
 $customview_query_array = Array(
 	"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$cvid1.",'All',1,0,'Campaigns')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",0,'campaign:campaignname:campaignname:Campaigns_Campaign_Name:V')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",1,'campaign:campaigntype:campaigntype:Campaigns_Campaign_Type:N')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",2,'campaign:campaignstatus:campaignstatus:Campaigns_Campaign_Status:N')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",3,'campaign:expectedrevenue:expectedrevenue:Campaigns_Expected_Revenue:V')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",4,'campaign:closingdate:closingdate:Campaigns_Expected_Close_Date:D')",
-	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",5,'crmentity:smownerid:assigned_user_id:Campaigns_Assigned_To:V')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",0,'vtiger_campaign:campaignname:campaignname:Campaigns_Campaign_Name:V')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",1,'vtiger_campaign:campaigntype:campaigntype:Campaigns_Campaign_Type:N')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",2,'vtiger_campaign:campaignstatus:campaignstatus:Campaigns_Campaign_Status:N')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",3,'vtiger_campaign:expectedrevenue:expectedrevenue:Campaigns_Expected_Revenue:V')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",4,'vtiger_campaign:closingdate:closingdate:Campaigns_Expected_Close_Date:D')",
+	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",5,'vtiger_crmentity:smownerid:assigned_user_id:Campaigns_Assigned_To:V')",
 
 
 	"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$cvid2.",'All',1,0,'Webmails')",
@@ -2735,20 +2735,20 @@ foreach($customview_query_array as $query)
 $query_array2 = Array(
 				"INSERT INTO vtiger_parenttabrel VALUES(2,4,2)",
 				"INSERT INTO vtiger_parenttabrel VALUES(2,6,3)",
-				"update vtiger_cvcolumnlist set columnname ='crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
-				"update vtiger_field set sequence = 2 where columnname='filename' and vtiger_tablename = 'attachments'",
-				"delete from vtiger_cvcolumnlist where columnname = 'seactivityrel:crmid:parent_id:Emails_Related_To:I'",
+				"update vtiger_cvcolumnlist set columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V' where cvid=20 and columnindex=3",
+				"update vtiger_field set sequence = 2 where columnname='filename' and tablename = 'vtiger_attachments'",
+				"delete from vtiger_cvcolumnlist where columnname = 'vtiger_seactivityrel:crmid:parent_id:Emails_Related_To:I'",
 				"update vtiger_cvcolumnlist set columnindex = 1 where cvid=3 and columnindex=3",
-				"update vtiger_field set info_type='ADV' where vtiger_tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
-				"update vtiger_field set info_type='ADV' where vtiger_tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
+				"update vtiger_field set info_type='ADV' where tabid=18 and columnname in ('street','pobox','city','state','postalcode','country','description')",
+				"update vtiger_field set info_type='ADV' where tabid in (20,21,22,23) and columnname in ('description','terms_conditions')",
 
-				"create vtiger_table vtiger_inventorytaxinfo (taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL,  PRIMARY KEY  (taxid), KEY vtiger_inventorytaxinfo_taxname_idx (taxname))",
-				"create vtiger_table vtiger_producttaxrel ( productid int(11) NOT NULL, taxid int(3) NOT NULL, taxpercentage decimal(7,3) default NULL, KEY vtiger_producttaxrel_productid_idx (productid), KEY vtiger_producttaxrel_taxid_idx (taxid))",
+				"create table vtiger_inventorytaxinfo (taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL,  PRIMARY KEY  (taxid), KEY vtiger_inventorytaxinfo_taxname_idx (taxname))",
+				"create table vtiger_producttaxrel ( productid int(11) NOT NULL, taxid int(3) NOT NULL, taxpercentage decimal(7,3) default NULL, KEY vtiger_producttaxrel_productid_idx (productid), KEY vtiger_producttaxrel_taxid_idx (taxid))",
 
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'VAT','4.5')",
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Sales','10')",
 				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Service','12.5')",
-				"update vtiger_field set uitype=83, vtiger_tablename='producttaxrel' where vtiger_tabid=14 and vtiger_fieldname='taxclass'",
+				"update vtiger_field set uitype=83, tablename='producttaxrel' where tabid=14 and fieldname='taxclass'",
 				"insert into vtiger_moduleowners values(".$this->localGetTabID('Campaigns').",1)",
 
 				"alter table vtiger_attachments add column path varchar(255) default NULL"
@@ -2842,10 +2842,10 @@ foreach ($comboTables as $tablename)
 
 }
 
-$update_query3 = "update vtiger_currency_info set conversion_rate=1, vtiger_currency_status='Active', defaultid='-11' where id=1";
+$update_query3 = "update vtiger_currency_info set conversion_rate=1, currency_status='Active', defaultid='-11' where id=1";
 Execute($update_query3);
 
-$update_query4 = "update vtiger_relatedlists set label='Purchase Order' where vtiger_tabid=18 and name='get_purchase_orders'";
+$update_query4 = "update vtiger_relatedlists set label='Purchase Order' where tabid=18 and name='get_purchase_orders'";
 Execute($update_query4);
 
 
@@ -2880,12 +2880,12 @@ Execute($create_query28);
 
 
 $obj_array = Array('Leads'=>'leaddetails','Contacts'=>'contactdetails');
-$leadfieldid = $conn->query_result($conn->query("select vtiger_fieldid from vtiger_field where vtiger_tabid=7 and vtiger_fieldname='email'"),0,'fieldid');
-$contactfieldid = $conn->query_result($conn->query("select vtiger_fieldid from vtiger_field where vtiger_tabid=4 and vtiger_fieldname='email'"),0,'fieldid');
+$leadfieldid = $conn->query_result($conn->query("select fieldid from vtiger_field where tabid=7 and fieldname='email'"),0,'fieldid');
+$contactfieldid = $conn->query_result($conn->query("select fieldid from vtiger_field where tabid=4 and fieldname='email'"),0,'fieldid');
 $fieldid_array = Array("Leads"=>"$leadfieldid","Contacts"=>"$contactfieldid");
 $idname_array = Array("Leads"=>"leadid","Contacts"=>"contactid");
 
-$query = 'select * from vtiger_seactivityrel where vtiger_activityid in (select vtiger_activityid from vtiger_activity where vtiger_activitytype="Emails")';
+$query = 'select * from vtiger_seactivityrel where activityid in (select activityid from vtiger_activity where activitytype="Emails")';
 $result = $conn->query($query);
 $numofrows = $conn->num_rows($result);
 
@@ -2907,7 +2907,7 @@ for($i=0;$i<$numofrows;$i++)
 		$result2 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = $parentid");
 		$toemail = $conn->query_result($result2,0,'lastname').' '.$conn->query_result($result2,0,'firstname').'<'.$conn->query_result($result2,0,'email').'>###';
 
-		//insert this idlists and toemail values in vtiger_emaildetails vtiger_table
+		//insert this idlists and toemail values in vtiger_emaildetails table
 		$sql = "insert into vtiger_emaildetails values ($emailid,'',\"$toemail\",'','','',\"$idlists\",'SAVE')";
 		Execute($sql);
 	}
@@ -2917,25 +2917,25 @@ for($i=0;$i<$numofrows;$i++)
 	}
 }
 
-$update_query5 = "update vtiger_field set quickcreate=1, quickcreatesequence=NULL where vtiger_tabid in (10,14)";
+$update_query5 = "update vtiger_field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";
 Execute($update_query5);
 
 $alter_query_array18 = Array(
-				"alter vtiger_table vtiger_soproductrel add column vattax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_soproductrel add column salestax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_soproductrel add column servicetax decimal(7,3) default NULL",
+				"alter table vtiger_soproductrel add column vattax decimal(7,3) default NULL",
+				"alter table vtiger_soproductrel add column salestax decimal(7,3) default NULL",
+				"alter table vtiger_soproductrel add column servicetax decimal(7,3) default NULL",
 				
-				"alter vtiger_table vtiger_poproductrel add column vattax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_poproductrel add column salestax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_poproductrel add column servicetax decimal(7,3) default NULL",
+				"alter table vtiger_poproductrel add column vattax decimal(7,3) default NULL",
+				"alter table vtiger_poproductrel add column salestax decimal(7,3) default NULL",
+				"alter table vtiger_poproductrel add column servicetax decimal(7,3) default NULL",
 				
-				"alter vtiger_table vtiger_quotesproductrel add column vattax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_quotesproductrel add column salestax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_quotesproductrel add column servicetax decimal(7,3) default NULL",
+				"alter table vtiger_quotesproductrel add column vattax decimal(7,3) default NULL",
+				"alter table vtiger_quotesproductrel add column salestax decimal(7,3) default NULL",
+				"alter table vtiger_quotesproductrel add column servicetax decimal(7,3) default NULL",
 				
-				"alter vtiger_table vtiger_invoiceproductrel add column vattax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_invoiceproductrel add column salestax decimal(7,3) default NULL",
-				"alter vtiger_table vtiger_invoiceproductrel add column servicetax decimal(7,3) default NULL",
+				"alter table vtiger_invoiceproductrel add column vattax decimal(7,3) default NULL",
+				"alter table vtiger_invoiceproductrel add column salestax decimal(7,3) default NULL",
+				"alter table vtiger_invoiceproductrel add column servicetax decimal(7,3) default NULL",
 			    );
 foreach($alter_query_array18 as $query)
 {
@@ -2944,8 +2944,8 @@ foreach($alter_query_array18 as $query)
 
 
 
-//Security vtiger_profile and vtiger_tab vtiger_table handling by DON starts
-$sql_sec="select vtiger_profileid from  vtiger_profile";
+//Security vtiger_profile and vtiger_tab table handling by DON starts
+$sql_sec="select profileid from  vtiger_profile";
 $result_sec=$conn->query($sql_sec);
 $num_rows=$conn->num_rows($result_sec);
 for($i=0;$i<$num_row;$i++)
@@ -2980,18 +2980,18 @@ for($i=0;$i<$num_row;$i++)
 
 }
 
-//Inserting into vtiger_tab vtiger_tables
+//Inserting into vtiger_tab tables
 $sec2="INSERT INTO vtiger_tab VALUES (27,'Portal',0,24,'Portal',null,null,1)";
 $sec3="INSERT INTO vtiger_tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)";
 
-//Insert into vtiger_def_org_share vtiger_tables
+//Insert into vtiger_def_org_share tables
 $sec4="insert into vtiger_def_org_share values (".$conn->getUniqueID('def_org_share').",26,2,0)";	
 
 Execute($sec2);
 Execute($sec3);
 Execute($sec4);
 
-//Inserting into datashare related modules vtiger_table
+//Inserting into datashare related modules table
 
 Execute("insert into vtiger_datashare_relatedmodules_seq values(1)");
 	
@@ -3021,14 +3021,14 @@ Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueI
 //By Don Ends
 
 //Added the vtiger_tabel vtiger_mail_accounts which has been added by mmbrich
-$alter_query18 = "alter vtiger_table vtiger_mail_accounts add column int_mailer int(1) default '0'";
+$alter_query18 = "alter table vtiger_mail_accounts add column int_mailer int(1) default '0'";
 Execute($alter_query18);
 
 $update_query_array5 = Array(
-	"update vtiger_field set info_type='BAS' where vtiger_tabid=6 and vtiger_fieldname in ('tickersymbol','account_id')",
-	"update vtiger_relatedlists set label = 'Activity History' where vtiger_tabid in (4,6,7,20,21,22,23) and label = 'History'",
-	"update vtiger_relatedlists set label = 'Products' where vtiger_tabid=2 and name='get_products' and label='History'",
-	"update vtiger_relatedlists set label = 'Activity History' where vtiger_tabid=2 and name='get_history' and label='History'"
+	"update vtiger_field set info_type='BAS' where tabid=6 and fieldname in ('tickersymbol','account_id')",
+	"update vtiger_relatedlists set label = 'Activity History' where tabid in (4,6,7,20,21,22,23) and label = 'History'",
+	"update vtiger_relatedlists set label = 'Products' where tabid=2 and name='get_products' and label='History'",
+	"update vtiger_relatedlists set label = 'Activity History' where tabid=2 and name='get_history' and label='History'"
 			    );
 foreach($update_query_array5 as $query)
 {
@@ -3172,14 +3172,14 @@ Execute("delete from vtiger_field where tabid=24");
 		alert("Currency Changes has been made Successfully");
 	}
 
-	if(!confirm("Are you using Dollar $ as Currency? \n Click OK to remain as $, Cancel to change the vtiger_currency conversion rate."))
+	if(!confirm("Are you using Dollar $ as Currency? \n Click OK to remain as $, Cancel to change the currency conversion rate."))
 	{
 		getConversionRate('');
 	}
 
 	function getConversionRate(err)
 	{
-		var crate = prompt(err+"\nPlease enter the conversion rate of your vtiger_currency");
+		var crate = prompt(err+"\nPlease enter the conversion rate of your currency");
 
 		if(crate != 0 && crate > 0)
 		{
@@ -3227,8 +3227,8 @@ function Execute($query)
 	}
 }
 
-//Added on 23-12-2005 which is used to populate the vtiger_profile2field and vtiger_def_org_field vtiger_table entries for the vtiger_field per vtiger_tab
-//if we enter a vtiger_field in vtiger_field vtiger_table then we must populate that vtiger_field in these vtiger_table for security access
+//Added on 23-12-2005 which is used to populate the vtiger_profile2field and vtiger_def_org_field table entries for the field per tab
+//if we enter a vtiger_field in vtiger_field table then we must populate that vtiger_field in these table for security access
 function populateFieldForSecurity($tabid,$fieldid)
 {
 	global $conn;
