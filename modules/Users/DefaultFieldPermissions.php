@@ -58,7 +58,7 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 		
 		if($adb->query_result($fieldListResult,$i,"visible") == 0)
 		{
-			$visible = "<img src=".$image_path."/yes.gif>";
+			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 		}
 		else
 		{
@@ -67,7 +67,7 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 		$standCustFld []= $visible;
 	}
 	$standCustFld=array_chunk($standCustFld,2);	
-	$standCustFld=array_chunk($standCustFld,2);	
+	$standCustFld=array_chunk($standCustFld,4);	
 	return $standCustFld;
 }
 
