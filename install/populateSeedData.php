@@ -782,7 +782,7 @@ for($i=0;$i<7;$i++)
 	$rand = array_rand($num_array);
 	$contact_key = array_rand($contact_ids);
         $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
-	$notes->column_fields["title"]		=	$notes_array[$i];
+	$notes->column_fields["notes_title"]		=	$notes_array[$i];
 
 	$notes->save("Notes");
 	$notes_ids[] = $notes ->id;
