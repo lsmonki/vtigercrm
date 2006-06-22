@@ -40,7 +40,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Notes");
-        $focus->name=$focus->column_fields['title'];
+        $focus->name=$focus->column_fields['notes_title'];
 }
 if(isset($_REQUEST['parent_id']))
 {
