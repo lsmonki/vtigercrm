@@ -233,12 +233,12 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						$name=$name_val;
 				}
 				//Passing name to graph
-				if($mod_name_val!="") $mod_name_val.=",$name";
+				if($mod_name_val!="") $mod_name_val.="::$name";
 				else $mod_name_val="$name";
 
 
 				//Passing count to graph
-				if($mod_cnt_val!="") $mod_cnt_val.=",$mod_count_val";
+				if($mod_cnt_val!="") $mod_cnt_val.="::$mod_count_val";
 				else $mod_cnt_val="$mod_count_val";	
 
 				if($module!="")
@@ -259,7 +259,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($i==0)
 						$bar_target_val .=$link_val;
 					else
-						$bar_target_val .=",".$link_val;
+						$bar_target_val .="::".$link_val;
 				}
 				//The data as per given date
 				if($i==0)
