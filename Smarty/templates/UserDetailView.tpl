@@ -25,6 +25,7 @@
 	{include file='SettingsMenu.tpl'}
 {/if}
 <td width="75%" valign="top">
+
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
 	<tr><td class="padTab" align="left">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -52,7 +53,7 @@
 				<td style="border-bottom:1px dashed #CCCCCC;">
 					<table width="100%" cellpadding="5" cellspacing="0" border="0">
 					<tr>
-						<td colspan="2" style="padding:5px;">
+						<td colspan=2 style="padding:5px;">
 						{if $CATEGORY eq 'Settings'}
 							<span class="lvtHeaderText">
 							<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
@@ -61,9 +62,10 @@
 							<b>{$APP.LBL_MY_PREFERENCES}</b>
 							</span>
 						{/if}
-											
+						<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>					
 				<hr noshade="noshade" size="1" />
-											</td>
+						</td>
+						<td align="right"><hr noshade="noshade" size="1" /></td>
 									  </tr>
 									<tr>
 											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
@@ -172,3 +174,10 @@
 {if $CATEGORY eq 'Settings'}
 	{include file='SettingsSubMenu.tpl'}
 {/if}
+
+<!-- added for validation -->
+<script language="javascript">
+  var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
+  var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
+  var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
+</script>
