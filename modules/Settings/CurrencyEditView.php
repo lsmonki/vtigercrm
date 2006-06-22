@@ -52,6 +52,6 @@ $smarty->assign("IMAGE_PATH",$image_path);
 if(isset($_REQUEST['detailview']) && $_REQUEST['detailview'] != '')
 	$smarty->display('CurrencyDetailView.tpl');
 else
-	$smarty->display("CurrencyEditViewN.tpl");
+	$smarty->display("CurrencyEditView.tpl");
 
 ?>
