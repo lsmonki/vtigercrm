@@ -1076,6 +1076,26 @@ function toggleAssignType(currType)
                 getObj("assign_team").style.display="block"
         }
 }
+//to display type of address for google map
+function showLocateMapMenu()
+    {
+            getObj("dropDownMenu").style.display="block"
+            getObj("dropDownMenu").style.left=findPosX(getObj("locateMap"))
+            getObj("dropDownMenu").style.top=findPosY(getObj("locateMap"))+getObj("locateMap").offsetHeight
+    }
+
+
+function hideLocateMapMenu(ev)
+    {
+            if (browser_ie)
+                    currElement=window.event.srcElement
+            else if (browser_nn4 || browser_nn6)
+                    currElement=ev.target
+
+            if (currElement.id!="locateMap")
+                    if (getObj("dropDownMenu").style.display=="block")
+                            getObj("dropDownMenu").style.display="none"
+    }
 /*
 * javascript function to display the div tag
 * @param divId :: div tag ID

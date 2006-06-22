@@ -117,6 +117,17 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			tagValue = "0";
 		}
 	}
+	if(uitype == '156')
+	{
+		if(document.getElementById(txtBox).checked == true)
+		{
+			tagValue = "on";
+		}else
+		{
+			tagValue = "off";
+		}
+	}
+
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
@@ -131,13 +142,13 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 					alert("Error while Editing");
 				}
 				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-    			{
+     				{
 					$("vtbusy_info").style.display="none";
-    			}
-           	}
-        }
+     				}
+                       	}
+                }
         );
-	if(uitype == '13')
+	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
 	}
@@ -166,8 +177,10 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = "";
 		}
 
+	}else if(uitype == 116)
+	{
+			getObj(dtlView).innerHTML = document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text; 
 	}
-
 	else if(getObj(popupTxt))
 	{
 		var popObj = getObj(popupTxt);
@@ -226,8 +239,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			getObj(dtlView).innerHTML = popObj.value;
 		}
-	}
-	else
+	}else
 	{
 		getObj(dtlView).innerHTML = tagValue;
 	}
