@@ -38,7 +38,6 @@
 {if $CATEGORY eq 'Settings'}
 			<input type="hidden" name="modechk" value="prefview">
 {/if}
-			<input type="hidden" name="user_name" value="{$USER_NAME}">
 			<input type="hidden" name="old_password">
 			<input type="hidden" name="new_password">
 			<input type="hidden" name="return_module">
