@@ -44,27 +44,27 @@ class Note extends CRMEntity {
 
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('title','modifiedtime','contact_id','filename');		  
+        var $sortby_fields = Array('notes_title','modifiedtime','contact_id','filename');		  
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('', '', '', '');
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Subject'=>Array('notes'=>'title'),
+				'Subject'=>Array('notes'=>'notes_title'),
 				'Contact Name'=>Array('notes'=>'contact_id'),
 				'Related to'=>Array('senotesrel'=>'crmid'),
 				'File'=>Array('notes'=>'filename'),
 				'Last Modified'=>Array('crmentity'=>'modifiedtime')
 				);
 	var $list_fields_name = Array(
-					'Subject'=>'title',
+					'Subject'=>'notes_title',
 					'Contact Name'=>'contact_id',
 					'Related to'=>'crmid',
 					'File'=>'filename',
 					'Last Modified'=>'modifiedtime'
 				     );	
-	var $list_link_field= 'title';
+	var $list_link_field= 'notes_title';
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'modifiedtime';
