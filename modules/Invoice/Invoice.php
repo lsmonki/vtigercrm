@@ -209,6 +209,48 @@ class Invoice extends CRMEntity {
 		return getAttachmentsAndNotes('Invoice',$query,$id);
 	}
 
+	/**	Function used to get the Status history of the Invoice
+	 *	@param $id - invoice id
+	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 */
+	function get_invoicestatushistory($id)
+	{	
+		global $log;
+		$log->debug("Entering get_invoicestatushistory(".$id.") method ...");
+
+		global $adb;
+		global $mod_strings;
+		global $app_strings;
+
+		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = '.$id;
+		$result=$adb->query($query);
+		$noofrows = $adb->num_rows($result);
+
+		$header[] = $app_strings['Invoice Id'];
+		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
+		$header[] = $app_strings['LBL_AMOUNT'];
+		$header[] = $app_strings['LBL_INVOICE_STATUS'];
+		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+
+		while($row = $adb->fetch_array($result))
+		{
+			$entries = Array();
+
+			$entries[] = $row['invoiceid'];
+			$entries[] = $row['accountname'];
+			$entries[] = $row['total'];
+			$entries[] = $row['invoicestatus'];
+			$entries[] = getDisplayDate($row['lastmodified']);
+
+			$entries_list[] = $entries;
+		}
+
+		$return_data = Array('header'=>$header,'entries'=>$entries_list);
+
+	 	$log->debug("Exiting get_invoicestatushistory method ...");
+
+		return $return_data;
+	}
 
 
 }

@@ -245,6 +245,50 @@ class SalesOrder extends CRMEntity {
 	
 	}
 
+	/**	Function used to get the Status history of the Sales Order
+	 *	@param $id - salesorder id
+	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 */
+	function get_sostatushistory($id)
+	{	
+		global $log;
+		$log->debug("Entering get_sostatushistory(".$id.") method ...");
+
+		global $adb;
+		global $mod_strings;
+		global $app_strings;
+
+		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = '.$id;
+		$result=$adb->query($query);
+		$noofrows = $adb->num_rows($result);
+
+		$header[] = $app_strings['Order Id'];
+		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
+		$header[] = $app_strings['LBL_AMOUNT'];
+		$header[] = $app_strings['LBL_SO_STATUS'];
+		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+
+		while($row = $adb->fetch_array($result))
+		{
+			$entries = Array();
+
+			$entries[] = $row['salesorderid'];
+			$entries[] = $row['accountname'];
+			$entries[] = $row['total'];
+			$entries[] = $row['sostatus'];
+			$entries[] = getDisplayDate($row['lastmodified']);
+
+			$entries_list[] = $entries;
+		}
+
+		$return_data = Array('header'=>$header,'entries'=>$entries_list);
+
+	 	$log->debug("Exiting get_sostatushistory method ...");
+
+		return $return_data;
+	}
+
+	
 }
 
 ?>

@@ -216,6 +216,50 @@ class Order extends CRMEntity {
 		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
 	}
 
+	/**	Function used to get the Status history of the Purchase Order
+	 *	@param $id - purchaseorder id
+	 *	return $return_data - array with header and the entries in format Array('header'=>$header,'entries'=>$entries_list) where as $header and $entries_list are array which contains all the column values of an row
+	 */
+	function get_postatushistory($id)
+	{	
+		global $log;
+		$log->debug("Entering get_postatushistory(".$id.") method ...");
+
+		global $adb;
+		global $mod_strings;
+		global $app_strings;
+
+		$query = 'select vtiger_postatushistory.*, vtiger_purchaseorder.subject from vtiger_postatushistory inner join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_postatushistory.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid where vtiger_crmentity.deleted = 0 and vtiger_purchaseorder.purchaseorderid = '.$id;
+		$result=$adb->query($query);
+		$noofrows = $adb->num_rows($result);
+
+		$header[] = $app_strings['Order Id'];
+		$header[] = $app_strings['Vendor Name'];
+		$header[] = $app_strings['LBL_AMOUNT'];
+		$header[] = $app_strings['LBL_PO_STATUS'];
+		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+
+		while($row = $adb->fetch_array($result))
+		{
+			$entries = Array();
+
+			$entries[] = $row['purchaseorderid'];
+			$entries[] = $row['vendorname'];
+			$entries[] = $row['total'];
+			$entries[] = $row['postatus'];
+			$entries[] = getDisplayDate($row['lastmodified']);
+
+			$entries_list[] = $entries;
+		}
+
+		$return_data = Array('header'=>$header,'entries'=>$entries_list);
+
+	 	$log->debug("Exiting get_postatushistory method ...");
+
+		return $return_data;
+	}
+
+	
 }
 
 ?>

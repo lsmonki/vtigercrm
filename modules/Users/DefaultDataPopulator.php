@@ -1769,6 +1769,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_history',3,'Activity History',0)");
 
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",0,'get_quotestagehistory',4,'Quote Stage History',0)");
+
 	// Inserting Purchase order Related Lists
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",9,'get_activities',1,'Activities',0)");
@@ -1777,6 +1779,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",".getTabid("Activities").",'get_history',3,'Activity History',0)");
 	
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",0,'get_postatushistory',4,'PurchaseOrder Status History',0)");
+
 	// Inserting Sales order Related Lists
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",9,'get_activities',1,'Activities',0)");
@@ -1787,6 +1791,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",".getTabid("Activities").",'get_history',4,'Activity History',0)");
 	
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",0,'get_sostatushistory',5,'SalesOrder Status History',0)");
+
 	// Inserting Invoice Related Lists
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",9,'get_activities',1,'Activities',0)");
@@ -1794,6 +1800,8 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",0,'get_attachments',2,'Attachments',0)");
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",".getTabid("Activities").",'get_history',3,'Activity History',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",0,'get_invoicestatushistory',4,'Invoice Status History',0)");
 
 	// Inserting Activities Related Lists
 	

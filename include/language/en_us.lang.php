@@ -756,7 +756,10 @@ $app_strings = Array(
 'Purchase Order'=>'Purchase Order',
 'Sales Stage History'=>'Sales Stage History',
 'Users'=>'Users',
-
+'PurchaseOrder Status History'=>'PurchaseOrder Status History',
+'SalesOrder Status History'=>'SalesOrder Status History',
+'Quote Stage History'=>'Quote Stage History',
+'Invoice Status History'=>'Invoice Status History',
 
 
 //Added language for Parent Tab
@@ -908,6 +911,10 @@ $app_strings = Array(
 
 'LBL_TAG_CLOUD'=>'Tag Cloud',
 'LBL_FOR'=>'for',
+'LBL_PO_STATUS'=>'PurchaseOrder Status',
+'LBL_SO_STATUS'=>'SalesOrder Status',
+'LBL_INVOICE_STATUS'=>'Invoice Status',
+
 );
 
 
