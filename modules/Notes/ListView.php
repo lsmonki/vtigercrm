@@ -190,7 +190,7 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes","index",$viewid);
-$alphabetical = AlphabeticalSearch($currentModule,'index','title','true','basic',"","","","",$viewid);
+$alphabetical = AlphabeticalSearch($currentModule,'index','notes_title','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
