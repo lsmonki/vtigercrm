@@ -549,16 +549,15 @@ $this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("f
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'duration_hours','vtiger_activity',1,'63','duration_hours','Duration',1,0,0,100,7,41,1,'I~M',0,5,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'duration_minutes','vtiger_activity',1,'15','duration_minutes','Duration Minutes',1,0,0,100,8,41,3,'O~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'crmid','vtiger_seactivityrel',1,'66','parent_id','Related To',1,0,0,100,9,41,1,'I~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,10,41,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'eventstatus','vtiger_activity',1,'15','eventstatus','Status',1,0,0,100,11,41,1,'V~O',0,3,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'sendnotification','vtiger_activity',1,'56','sendnotification','Send Notification',1,0,0,100,12,41,1,'C~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'activitytype','vtiger_activity',1,'15','activitytype','Activity Type',1,0,0,100,13,41,1,'V~O',0,4,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'location','vtiger_activity',1,'1','location','Location',1,0,0,100,14,41,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,41,2,'T~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,41,2,'T~O',1,null,'BAS')");
- $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'priority','vtiger_activity',1,15,'taskpriority','Priority',1,0,0,100,17,41,1,'V~O',1,null,'BAS')");
- $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'notime','vtiger_activity',1,56,'notime','No Time',1,0,0,100,18,41,1,'C~O',1,null,'BAS')");
- $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'visibility','vtiger_activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'eventstatus','vtiger_activity',1,'15','eventstatus','Status',1,0,0,100,10,41,1,'V~O',0,3,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'sendnotification','vtiger_activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,41,1,'C~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'activitytype','vtiger_activity',1,'15','activitytype','Activity Type',1,0,0,100,12,41,1,'V~O',0,4,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'location','vtiger_activity',1,'1','location','Location',1,0,0,100,13,41,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,41,2,'T~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,15,41,2,'T~O',1,null,'BAS')");
+ $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'priority','vtiger_activity',1,15,'taskpriority','Priority',1,0,0,100,16,41,1,'V~O',1,null,'BAS')");
+ $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'notime','vtiger_activity',1,56,'notime','No Time',1,0,0,100,17,41,1,'C~O',1,null,'BAS')");
+ $this->db->query("Insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'visibility','vtiger_activity',1,15,'visibility','Visibility',1,0,0,100,18,41,1,'V~O',1,null,'BAS')");
  
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,43,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("field").",'reminder_time','vtiger_activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,42,1,'I~O',1,null,'BAS')");
