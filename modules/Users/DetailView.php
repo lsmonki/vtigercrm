@@ -172,8 +172,16 @@ if (is_admin($current_user))
 }
 
 
+$lead_tables = Array('vtiger_users','vtiger_user2role');
+$tabid = getTabid("Users");
+$validationData = getDBValidationData($lead_tables,$tabid);
+$data = split_validationdataArray($validationData);
 
-$smarty->assign("MODULE", 'Settings');
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+$smarty->assign("MODULE", 'Users');
+$smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 
