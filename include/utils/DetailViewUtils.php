@@ -59,13 +59,36 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
                 $label_fld[] = getCurrencyName($col_fields[$fieldname]);
+		$pick_query="select * from vtiger_currency_info";
+		$pickListResult = $adb->query($pick_query);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		//Mikecrowe fix to correctly default for custom pick lists
+		$options = array();
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=$adb->query_result($pickListResult,$j,'currency_name');
+			$currency_id=$adb->query_result($pickListResult,$j,'id');
+			if($col_fields[$fieldname] == $pickListValue)
+			{
+				$chk_val = "selected";	
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$options[$currency_id] = array($pickListValue=>$chk_val );	
+		}
+		$label_fld ["options"] = $options;	
 	}	
-	elseif($uitype == 13 || $uitype == 115)
+	elseif($uitype == 13)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];
 	}
-	elseif($uitype == 15 || $uitype == 16)
+	elseif($uitype == 15 || $uitype == 16 || $uitype == 115)
 	{
 	     $label_fld[] = $mod_strings[$fieldlabel];
 	     $label_fld[] = $col_fields[$fieldname];
