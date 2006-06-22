@@ -34,7 +34,7 @@ $focus = new Note();
 if(isset($_REQUEST['record'])) {
    $focus->retrieve_entity_info($_REQUEST['record'],"Notes");
    $focus->id = $_REQUEST['record'];
-   $focus->name=$focus->column_fields['title'];
+   $focus->name=$focus->column_fields['notes_title'];
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
