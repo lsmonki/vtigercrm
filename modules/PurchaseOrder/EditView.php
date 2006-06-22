@@ -193,9 +193,8 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 
 
-$po_tables = Array('purchaseorder','pobillads','poshipads','purchaseordercf'); 
  $tabid = getTabid("PurchaseOrder");
- $validationData = getDBValidationData($po_tables,$tabid);
+ $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
