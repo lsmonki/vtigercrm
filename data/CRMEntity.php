@@ -1459,5 +1459,51 @@ $log->debug("type is ".$type);
 		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");
 	}	
 
+	/**
+	 * This function returns a full (ie non-paged) list of the current object type.  
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function get_full_list($order_by = "", $where = "") {
+		$this->log->debug("get_full_list:  order_by = '$order_by' and where = '$where'");
+		$query = "SELECT * FROM $this->table_name ";
+		
+		if($where != "")
+			$query .= "where ($where) AND deleted=0";
+		else
+			$query .= "where deleted=0";
+
+		if(!empty($order_by))
+			$query .= " ORDER BY $order_by";
+
+		$result =& $this->db->query($query, false);
+
+		if($this->db->getRowCount($result) > 0){
+		
+			// We have some data.
+			while ($row = $this->db->fetchByAssoc($result)) {
+				foreach($this->list_fields as $field)
+				{
+					if (isset($row[$field])) {
+						$this->$field = $row[$field];
+						
+						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else {
+ 	                                                $this->$field = '';   
+					}
+				}
+
+
+				$list[] = clone($this);         //added clone tosupport PHP5
+			}
+		}
+
+		if (isset($list)) return $list;
+		else return null;
+
+	}
+
 }
 ?>
