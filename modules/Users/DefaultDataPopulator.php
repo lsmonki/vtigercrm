@@ -477,7 +477,7 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
 $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'contact_id','vtiger_notes',1,'57','contact_id','Contact Name',1,0,0,100,1,17,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'crmid','vtiger_senotesrel',1,'62','parent_id','Related To',1,0,0,100,2,17,1,'I~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'title','vtiger_notes',1,'2','title','Subject',1,0,0,100,3,17,1,'V~M',0,1,'BAS')");
+ $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'title','vtiger_notes',1,'2','notes_title','Subject',1,0,0,100,3,17,1,'V~M',0,1,'BAS')");
 $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,17,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,17,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("field").",'filename','vtiger_notes',1,'61','filename','Attachment',1,0,0,100,4,17,1,'V~O',1,null,'BAS')");
