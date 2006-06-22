@@ -14,36 +14,57 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
+$profilename=$_REQUEST['profile_name'];
+
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
+{
+        $query = 'select profilename from vtiger_profile where profilename="'.$profilename.'"';
+        $result = $adb->query($query);
+
+        if($adb->num_rows($result) > 0)
+        {
+                echo 'A Profile in the specified name "'.$profilename.'" already exists';
+                die;
+        }else
+        {
+                echo 'SUCESS';
+                die;
+        }
+
+}
+
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
+
 if(isset($_REQUEST['parent_profile']) && $_REQUEST['parent_profile'] != '')
 	$smarty->assign("PARENT_PROFILE",$_REQUEST['parent_profile']);
 if(isset($_REQUEST['radio_button']) && $_REQUEST['radio_button'] != '')
 	$smarty->assign("RADIO_BUTTON",$_REQUEST['radio_button']);
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '')
 	$smarty->assign("PROFILE_NAME",$_REQUEST['profile_name']);
+if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '')
+	$smarty->assign("PROFILE_DESCRIPTION",$_REQUEST['profile_description']);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
 	$smarty->assign("MODE",$_REQUEST['mode']);
-if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '')
-	$smarty->assign("PROFILENAME",$_REQUEST['profile_name']);
-if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '')	
-	$smarty->assign("PROFILEDESC",$_REQUEST['profile_description']);
-if(isset($_REQUEST['profileid']) && $_REQUEST['profileid'] != '')
-{
-	global $adb;	
-	$sql = "select * from vtiger_profile where profileid=".$_REQUEST['profileid'];
-	$profileResult = $adb->query($sql);
-	$profile_name = $adb->query_result($profileResult,0,"profilename");
-	$profile_description = $adb->query_result($profileResult,0,"description");
-	$smarty->assign("PROFILE_NAME",$profile_name);
-	$smarty->assign("PROFILE_DESCRIPTION",$profile_description);
-}
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
+
+$sql = "select * from vtiger_profile";
+$result = $adb->query($sql);
+$profilelist = array();
+$temprow = $adb->fetch_array($result);
+do
+{
+	$name=$temprow["profilename"];
+	$profileid=$temprow["profileid"];
+	$profilelist[] = array($name,$profileid); 
+}while($temprow = $adb->fetch_array($result));
+$smarty->assign("PROFILE_LISTS", $profilelist);
                     
 $smarty->display("CreateProfile.tpl");

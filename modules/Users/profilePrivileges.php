@@ -143,7 +143,7 @@ if($mode == 'view')
 		$stand[]=$tab_create_per;
 		$stand[]=$tab_delete_per;
 		$stand[]=$tab_view_per;
-		$privileges_stand[]=$stand;
+		$privileges_stand[$tabid]=$stand;
 	}
 }
 if($mode == 'edit')
@@ -167,7 +167,7 @@ if($mode == 'edit')
 		$stand[]=$tab_create_per;
 		$stand[]=$tab_delete_per;
 		$stand[]=$tab_view_per;
-		$privileges_stand[]=$stand;
+		$privileges_stand[$tabid]=$stand;
 	}
 }
 if($mode == 'create')
@@ -193,7 +193,7 @@ if($mode == 'create')
 			$stand[]=$tab_create_per;
 			$stand[]=$tab_delete_per;
 			$stand[]=$tab_view_per;
-			$privileges_stand[]=$stand;
+			$privileges_stand[$tabid]=$stand;
 		}	
 	}
 	else
@@ -217,7 +217,7 @@ if($mode == 'create')
 			$stand[]=$tab_create_per;
 			$stand[]=$tab_delete_per;
 			$stand[]=$tab_view_per;
-			$privileges_stand[]=$stand;
+			$privileges_stand[$tabid]=$stand;
 		}
 	}
 
@@ -238,7 +238,7 @@ if($mode == 'view')
 		$tab_allow_per = getDisplayValue($tab_allow_per_id,$tabid,'');	
 		$tab[]=$entity_name;
 		$tab[]=$tab_allow_per;
-		$privileges_tab[]=$tab;
+		$privileges_tab[$tabid]=$tab;
 	}
 }
 if($mode == 'edit')
@@ -253,7 +253,7 @@ if($mode == 'edit')
 		$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
 		$tab[]=$entity_name;
 		$tab[]=$tab_allow_per;
-		$privileges_tab[]=$tab;
+		$privileges_tab[$tabid]=$tab;
 	}
 }
 if($mode == 'create')
@@ -270,7 +270,7 @@ if($mode == 'create')
 			$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');	
 			$tab[]=$entity_name;
 			$tab[]=$tab_allow_per;
-			$privileges_tab[]=$tab;
+			$privileges_tab[$tabid]=$tab;
 		}
 	}
 	else
@@ -285,12 +285,11 @@ if($mode == 'create')
 			$tab_allow_per = getDisplayOutput(0,$tabid,'');	
 			$tab[]=$entity_name;
 			$tab[]=$tab_allow_per;
-			$privileges_tab[]=$tab;
+			$privileges_tab[$tabid]=$tab;
 		}
 	}
 
 }
-$privileges_tab = array_chunk($privileges_tab, 4);
 $smarty->assign("TAB_PRIV",$privileges_tab);			
 
 //utilities privileges
@@ -312,8 +311,8 @@ if($mode == 'view')
 			$util[]=$tab_util_per;
 		}
 		$util=array_chunk($util,2);
-		$util=array_chunk($util,2);
-		$privilege_util[$entity_name] = $util;
+		$util=array_chunk($util,3);
+		$privilege_util[$tabid] = $util;
 	}
 }
 elseif($mode == 'edit')
@@ -333,8 +332,8 @@ elseif($mode == 'edit')
 			$util[]=$tab_util_per;
 		}
 		$util=array_chunk($util,2);
-		$util=array_chunk($util,2);
-		$privilege_util[$entity_name] = $util;
+		$util=array_chunk($util,3);
+		$privilege_util[$tabid] = $util;
 	}
 }
 elseif($mode == 'create')
@@ -356,8 +355,8 @@ elseif($mode == 'create')
 				$util[]=$tab_util_per;
 			}
 			$util=array_chunk($util,2);
-			$util=array_chunk($util,2);
-			$privilege_util[$entity_name] = $util;
+			$util=array_chunk($util,3);
+			$privilege_util[$tabid] = $util;
 		}
 	}
 	else
@@ -377,8 +376,8 @@ elseif($mode == 'create')
 				$util[]=$tab_util_per;
 			}
 			$util=array_chunk($util,2);
-			$util=array_chunk($util,2);
-			$privilege_util[$entity_name] = $util;
+			$util=array_chunk($util,3);
+			$privilege_util[$tabid] = $util;
 		}
 
 	}
@@ -407,6 +406,7 @@ if($mode=='view')
 	{
 		$field_module=array();
 		$module_name=key($fieldListResult);
+		$module_id = getTabid($module_name);
 		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
 			$field=array();
@@ -422,7 +422,7 @@ if($mode=='view')
 			$field[]=$visible;
 			$field_module[]=$field;
 		}
-		$privilege_field[$module_name] = array_chunk($field_module,4);
+		$privilege_field[$module_id] = array_chunk($field_module,3);
 		next($fieldListResult);
 	}
 }
@@ -433,6 +433,7 @@ elseif($mode=='edit')
 	{
 		$field_module=array();
 		$module_name=key($fieldListResult);
+		$module_id = getTabid($module_name);
 		for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 		{
 			$fldLabel= $fieldListResult[$module_name][$j][0];
@@ -455,10 +456,10 @@ elseif($mode=='edit')
 				$visible = "";
 			}
 			$field[]=$mandatory.' '.$fldLabel;
-			$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+			$field[]='<input id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'" onClick="selectUnselect(this);" type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 			$field_module[]=$field;
 		}
-		$privilege_field[$module_name] = array_chunk($field_module,4);
+		$privilege_field[$module_id] = array_chunk($field_module,3);
 		next($fieldListResult);
 	}
 }
@@ -471,6 +472,7 @@ elseif($mode=='create')
 		{
 			$field_module=array();
 			$module_name=key($fieldListResult);
+			$module_id = getTabid($module_name);
 			for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 			{
 				$fldLabel= $fieldListResult[$module_name][$j][0];
@@ -493,10 +495,10 @@ elseif($mode=='create')
 					$visible = "";
 				}
 				$field[]=$mandatory.' '.$fldLabel;
-				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+				$field[]='<input type="checkbox" id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'" onClick="selectUnselect(this);" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 				$field_module[]=$field;
 			}
-			$privilege_field[$module_name] = array_chunk($field_module,4);
+			$privilege_field[$module_id] = array_chunk($field_module,3);
 			next($fieldListResult);
 		}
 	}
@@ -507,6 +509,7 @@ elseif($mode=='create')
 		{
 			$field_module=array();
 			$module_name=key($fieldListResult);
+			$module_id = getTabid($module_name);
 			for($j=0; $j<count($fieldListResult[$module_name]); $j++)
 			{
 				$fldLabel= $fieldListResult[$module_name][$j][0];
@@ -522,10 +525,10 @@ elseif($mode=='create')
 				}	
 				$visible = "checked";
 				$field[]=$mandatory.' '.$fldLabel;
-				$field[]='<input type="checkbox" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
+				$field[]='<input type="checkbox" id="'.$module_id.'_field_'.$fieldListResult[$module_name][$j][4].'"  onClick="selectUnselect(this);" name="'.$fieldListResult[$module_name][$j][4].'" '.$visible.' '.$readonly.'>';
 				$field_module[]=$field;
 			}
-			$privilege_field[$module_name] = array_chunk($field_module,4);
+			$privilege_field[$module_id] = array_chunk($field_module,3);
 			next($fieldListResult);
 		}	
 	}
@@ -581,11 +584,11 @@ function getGlobalDisplayOutput($id,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<input type="checkbox" name="'.$name.'" checked>';
+		$value = '<input type="checkbox" id="'.$name.'_chk" onClick="invoke'.$name.'();" name="'.$name.'" checked>';
 	}
 	elseif($id == 1)
 	{
-		$value = '<input type="checkbox" name="'.$name.'">';
+		$value = '<input type="checkbox" id="'.$name.'_chk" onClick="invoke'.$name.'();" name="'.$name.'">';
 	}
 	return $value;
 
@@ -620,11 +623,25 @@ function getDisplayOutput($id,$tabid,$actionid)
 	if($actionid == '')
 	{
 		$name = $tabid.'_tab';
+		$ckbox_id = 'tab_chk_com_'.$tabid; 
+		$jsfn = 'hideTab('.$tabid.')';
 	}
 	else
 	{
 		$temp_name = getActionname($actionid);
 		$name = $tabid.'_'.$temp_name;
+		$ckbox_id = 'tab_chk_'.$actionid.'_'.$tabid; 
+		if($actionid == 1)	
+			$jsfn = 'unSelectCreate('.$tabid.')'; 
+		elseif($actionid == 4)	
+			$jsfn = 'unSelectView('.$tabid.')';
+		elseif($actionid == 2)	
+			$jsfn = 'unSelectDelete('.$tabid.')';
+		else
+		{
+			$ckbox_id = $tabid.'_field_util_'.$actionid; 
+			$jsfn = 'javascript:';
+		}	
 	}
 
 
@@ -635,11 +652,11 @@ function getDisplayOutput($id,$tabid,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<input type="checkbox" name="'.$name.'" checked>';
+		$value = '<input type="checkbox" onClick="'.$jsfn.';" id="'.$ckbox_id.'" name="'.$name.'" checked>';
 	}
 	elseif($id == 1)
 	{
-		$value = '<input type="checkbox" name="'.$name.'">';
+		$value = '<input type="checkbox" onClick="'.$jsfn.';" id="'.$ckbox_id.'" name="'.$name.'">';
 	}
 	return $value;
 
