@@ -277,7 +277,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_invoice:total:hdnGrandTotal:Invoice_Total:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V'),
 		
-		  Array('vtiger_notes:title:title:Notes_Title:V',
+		  Array('vtiger_notes:title:notes_title:Notes_Title:V',
                         'vtiger_notes:contact_id:contact_id:Notes_Contact_Name:I',
                         'vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I',
                         'vtiger_notes:filename:filename:Notes_File:V',
