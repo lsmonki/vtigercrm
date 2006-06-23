@@ -165,7 +165,7 @@ class Migration
 	{
 		global $conn;
 
-		$sql = "select vtiger_tabid from vtiger_tab where name='".$module."'";
+		$sql = "select tabid from vtiger_tab where name='".$module."'";
 		$result = $conn->query($sql);
 		$tabid=  $conn->query_result($result,0,"tabid");
 
@@ -207,7 +207,7 @@ class Migration
 		$failure_query_array = Array();
 
 		//To handle the file includes for each and every version
-		//Here we have to decide which vtiger_files should be included, where the vtiger_files will be added newly for every public release
+		//Here we have to decide which files should be included, where the files will be added newly for every public release
 		//Handle Here -- Mickie
 		include("modules/Migration/ModifyDatabase/MigrationInfo.php");
 
@@ -289,16 +289,16 @@ class Migration
 			$this->conn->println("Going to apply the old database dump to the new database.");
 			$this->applyDumpData($new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$dump_file);
 
-			//get the number of vtiger_tables in new database 
+			//get the number of tables in new database 
 			$new_tables_count = $this->getTablesCountInNewDatabase();
 
-			//get the number of vtiger_tables in old database 
+			//get the number of tables in old database 
 			$old_tables_count = $this->getTablesCountInOldDatabase();
 
-			//if vtiger_tables are missing after apply the dump, then alert the user and quit
+			//if tables are missing after apply the dump, then alert the user and quit
 			if(($new_tables_count != $old_tables_count && $option == 'dbsource') || ($new_tables_count < 180 && $option == 'dumpsource'))
 			{
-				$this->conn->println("New Database vtiger_tables not equal to Old Database vtiger_tables count. Reload the current database again and quit.");
+				$this->conn->println("New Database tables not equal to Old Database tables count. Reload the current database again and quit.");
 				
 				$continue_process = 0;
 				$msg = "The dump may not be applied correctly. Tables exist in 4.2.3 database : $old_tables_count. Tables exist in current database after apply the dump : $new_tables_count";
