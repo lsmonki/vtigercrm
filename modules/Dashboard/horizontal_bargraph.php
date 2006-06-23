@@ -43,7 +43,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 		$alts[]=$name."=%d";
 //If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=14)
-                        $name=substr($name, 0, 14);
+                        $name=substr($name, 0, 44);
 		if($pos>=2)
 		{
 			$val=explode(" ",$name);
