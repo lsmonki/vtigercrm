@@ -127,7 +127,6 @@ function alphabetic(module,url,dataid)
         </td>
 </tr>
 </table>
-</div>
 
 {*<!-- Contents -->*}
 <form name="basicSearch" action="index.php">
@@ -156,10 +155,11 @@ function alphabetic(module,url,dataid)
 		<td width="35%" class="dvtCellLabel">
 			  <input name="submit" type="button" class="classBtn" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
 			   <span class="hiliteBtn4Search"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>	
-							</td>
+		</td>
+		<td valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 	</tr>
 	<tr>
-		<td colspan="4" align="center" class="dvtCellLabel">
+		<td colspan="5" align="center" class="dvtCellLabel">
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 				<tr>
                                                 {$ALPHABETICAL}
@@ -177,6 +177,7 @@ function alphabetic(module,url,dataid)
 					<td nowrap width="30%" class="dvtCellLabel"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
 					<td nowrap class="dvtCellLabel" width="30%"><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
 					<td width="35%" class="dvtCellLabel"><span class="hiliteBtn4Search"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
+					<td valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 			</tr>
 		</table>
 		<table style="border-left:1px dashed #CCCCCC;border-right:1px dashed #CCCCCC;" cellpadding="2" cellspacing="0" width="80%" align="center" class="small">
