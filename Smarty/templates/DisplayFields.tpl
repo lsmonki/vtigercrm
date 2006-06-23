@@ -84,7 +84,13 @@
 			   <select name="{$fldname}" tabindex="{$vt_tab}" >
 				{foreach item=arr from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
-						<option value="{$sel_value}" {$value}>{$sel_value}</option>
+						<option value="{$sel_value}" {$value}>
+                                                {if $APP[$sel_value] neq ''}
+                                                        {$APP[$sel_value]}
+                                                {else}
+                                                        {$sel_value}
+                                                {/if}
+                                                </option>
 					{/foreach}
 				{/foreach}
 			   </select>
