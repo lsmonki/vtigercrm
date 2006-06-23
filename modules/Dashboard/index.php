@@ -58,6 +58,9 @@ $graph_array = Array(
 	  "ticketsbyuser" => $mod_strings['ticketsbyuser'],
 	  "ticketsbyteam" => $mod_strings['ticketsbyteam'],
 	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
+	  "contactbycampaign"=> $mod_strings['contactbycampaign'],
+	  "ticketsbyaccount"=> $mod_strings['ticketsbyaccount'],
+	  "ticketsbycontact"=> $mod_strings['ticketsbycontact'],
           );
           
 $log = LoggerManager::getLogger('dashboard');
