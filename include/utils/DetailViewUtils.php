@@ -765,12 +765,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
 		$label_fld[] =$mod_strings[$fieldlabel];
 		$display_val = '';
-		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
+		$currencyid=fetchCurrency($current_user->id);
+		$rate_symbol = getCurrencySymbolandCRate($currencyid);
+		$rate = $rate_symbol['rate'];
+		$curr_symbol = $rate_symbol['symbol'];
+	        if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{
-		    $currencyid=fetchCurrency($current_user->id);
-		    $rate_symbol = getCurrencySymbolandCRate($currencyid);
-		    $rate = $rate_symbol['rate'];
-		    $curr_symbol = $rate_symbol['symbol'];
 	 	    $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
                     $display_val = $amount_user_specific;	
 		}
