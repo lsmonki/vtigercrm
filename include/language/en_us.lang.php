@@ -441,8 +441,7 @@ $app_strings = Array(
 
 'LBL_ADD_ITEM'=>'Add',
 
-'LBL_ADD_NEW'=>'Add new',
-
+'LBL_ADD_NEW'=>'Add',
 //Added for version 5
 
 'LBL_CALENDAR_TITLE'=>'Open Calendar...',
