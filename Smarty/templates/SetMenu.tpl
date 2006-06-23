@@ -76,7 +76,7 @@
 				{/if}
 
 				{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate'}
-				<tr><td class="settingsTabSelected" nowrap>{$MOD.EMAILTEMPLATES}</td></tr>
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.WORDINTEGRATION}</td></tr>
 				
 				{else}	
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
