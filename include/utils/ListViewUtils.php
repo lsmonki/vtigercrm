@@ -738,12 +738,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 
 		//Added for Actions ie., edit and delete links in listview 
-		$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$returnset);
-		$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset);
+		$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);
+		$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
 
 		$links_info = "<a href=\"$edit_link\"> &nbsp;".$app_strings["LNK_EDIT"]." </a> ";
 		if($del_link != '')
-			$links_info .=	" | <a href=\"javascript:;\" onclick=confirmdelete(\"$del_link\")> ".$app_strings["LNK_DELETE"]." </a>";
+			$links_info .=	" | <a href=\"javascript:;\" onclick='confirmdelete(\"$del_link\")'> ".$app_strings["LNK_DELETE"]." </a>";
 
 		$list_header[] = $links_info;
 
@@ -2690,8 +2690,9 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
  *	@param string 	$returnset 	- may be empty in case of ListView. For relatedlists, return_module, return_action and return_id values will be passed like &return_module=Accounts&return_action=CallRelatedList&return_id=10
  *	return string	$edit_link	- url string which cotains the editlink details (module, action, record, etc.,) like index.php?module=Accounts&action=EditView&record=10
  */
-function getListViewEditLink($module,$entity_id,$relatedlist,$returnset)
+function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,$count)
 {
+	global $adb;
 	$edit_link = "index.php?module=$module&action=EditView&record=$entity_id";
 
 	//This is relatedlist listview
@@ -2701,6 +2702,14 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset)
 	}
 	else
 	{
+		if($module == 'Activities')
+		{
+			$actvity_type = $adb->query_result($result,$count,'activitytype');
+			if($actvity_type == 'Task')
+				$edit_link .= '&activity_mode=Task';
+			else
+				$edit_link .= '&activity_mode=Events';
+		}
 		$edit_link .= "&return_module=$module&return_action=index";
 	}
 
