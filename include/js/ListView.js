@@ -18,7 +18,7 @@ function change(obj,divid)
 	
 		if (document.massdelete.selected_id.checked)
 		{
-			document.massdelete.idlist.value=document.massdelete.selected_id.value;
+			document.massdelete.idlist.value=document.massdelete.selected_id.value +";";
 		}
 		else 
 		{
@@ -60,7 +60,7 @@ function massDelete(module)
 
                 if (document.massdelete.selected_id.checked)
                 {
-                        idstring = document.massdelete.selected_id.value+':';
+                        idstring = document.massdelete.selected_id.value+';';
                 		xx = 1;
                 }
                 else
