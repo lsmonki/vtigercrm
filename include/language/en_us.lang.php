@@ -917,7 +917,8 @@ $app_strings = Array(
 'LBL_PO_STATUS'=>'PurchaseOrder Status',
 'LBL_SO_STATUS'=>'SalesOrder Status',
 'LBL_INVOICE_STATUS'=>'Invoice Status',
-
+'LBL_NOTE'=>'Note',
+'LBL_MODULE'=>'Module',
 );
 
 
