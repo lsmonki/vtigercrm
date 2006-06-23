@@ -61,6 +61,8 @@
 				{/if}
 			{elseif $header eq 'HelpDesk'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Ticket}" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Ticket}"></td>
+			{elseif $header eq 'Campaigns'}
+                                <input title="Change" accessKey="" class="small" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaign}" LANGUAGE=javascript onclick='return window.open("index.php?module=Campaigns&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=640,height=570,resizable=0,scrollbars=0");' type="button"  name="button"></td>
 			{elseif $header eq 'Attachments'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Note}" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Note}">&nbsp;
 				<input type="hidden" name="fileid">
