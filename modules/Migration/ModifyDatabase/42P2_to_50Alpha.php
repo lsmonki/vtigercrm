@@ -16,19 +16,30 @@ global $conn;
 global $query_count, $success_query_count, $failure_query_count;
 global $success_query_array, $failure_query_array;
 
+//Added to put prefix vtiger_ in some of the columns in tables which are used for CV and Reports and field -- 23-06-06
+$conn->println("First we will rename the existing tables with prefix vtiger_");
+include("modules/Migration/ModifyDatabase/rename_tables.php");
+$conn->println("Renaming the existing tables with prefix vtiger_ has been finished");
+
+
+
+
+
+
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 Starts here.");
 
 
 
 //These changes have been made in 4.2.3. The following queries have been included who has run the migration from 4.2 Patch2
-$wordtemplate_query1 = "alter table wordtemplates DROP PRIMARY KEY";
-Execute($wordtemplate_query1);
+$wordtemp = $conn->getColumnNames("vtiger_wordtemplates");
+if(is_array($wordtemp) && !in_array("templateid",$wordtemp))
+{
+	$wordtemplate_query1 = "alter table vtiger_wordtemplates DROP PRIMARY KEY";
+	Execute($wordtemplate_query1);
 
-$wordtemplate_query2 = "alter table wordtemplates DROP templateid";//this will fail if 4.2 Patch 2.
-$conn->query($wordtemplate_query2);
-
-$wordtemplate_query3 = "alter table wordtemplates add column templateid integer(19) unsigned auto_increment primary key FIRST";
-Execute($wordtemplate_query3);
+	$wordtemplate_query3 = "alter table vtiger_wordtemplates add column templateid integer(19) unsigned auto_increment primary key FIRST";
+	Execute($wordtemplate_query3);
+}
 //upto this added to modify the wordtemplates table which will be in the case of migrate from 4.2 Path2.
 
 
@@ -56,7 +67,7 @@ $alter_array1 = Array(
 		"alter table vtiger_cvstdfilter ADD PRIMARY KEY (cvid)",
 		"alter table vtiger_def_org_field ADD PRIMARY KEY (fieldid)",
 		"alter table vtiger_leadgrouprelation ADD PRIMARY KEY (leadid)",
-		"alter table vtiger_leadgrouprelation drop key vtiger_leadgrouprelation_IDX0",
+		"alter table vtiger_leadgrouprelation drop key leadgrouprelation_IDX0",
 		"alter table vtiger_organizationdetails ADD PRIMARY KEY (organizationame)",
 		"alter table vtiger_profile2field ADD PRIMARY KEY (profileid,fieldid)",
 		"alter table vtiger_profile2standardpermissions ADD PRIMARY KEY (profileid,tabid,Operation)",
@@ -65,7 +76,7 @@ $alter_array1 = Array(
 		"alter table vtiger_profile2utility drop index idx_prof2utility",
 		"alter table vtiger_relcriteria ADD PRIMARY KEY (queryid,columnindex)",
 		"alter table vtiger_reportdatefilter ADD PRIMARY KEY (datefilterid)",
-		"alter table vtiger_reportdatefilter DROP INDEX vtiger_reportdatefilter_IDX0",
+		"alter table vtiger_reportdatefilter DROP INDEX reportdatefilter_IDX0",
 		"alter table vtiger_reportsortcol ADD PRIMARY KEY (sortcolid,reportid)",
 		"alter table vtiger_reportsummary ADD PRIMARY KEY (reportsummaryid,summarytype,columnname)",
 		"drop table vtiger_role2action",
@@ -113,7 +124,7 @@ for($i=0;$i<$noofprofiles;$i++)
 
 
 //Removing entries for Dashboard and Home module from vtiger_profile2standardpermissions table
-$del_query1 = "delete from vtiger_profile2standardpermissions where vtiger_tabid in(1,3)";
+$del_query1 = "delete from vtiger_profile2standardpermissions where tabid in(1,3)";
 Execute($del_query1);
 
 //For all Profile do the following insert into vtiger_profile2utility table:
@@ -229,26 +240,29 @@ foreach($update_array1 as $query)
 }
 
 //Added for the "Color By User in Calendar " which has been contributed by Cesar
-$alter_query1 = "ALTER TABLE `users` ADD `cal_color` VARCHAR(25) DEFAULT '#E6FAD8' AFTER `user_hash`";
+$alter_query1 = "ALTER TABLE vtiger_users ADD cal_color VARCHAR(25) DEFAULT '#E6FAD8' AFTER user_hash";
 Execute($alter_query1);
 
 //code contributed by Fredy for color vtiger_priority
-$newfieldid = $conn->getUniqueID("field");
+$newfieldid = $conn->getUniqueID("vtiger_field");
 $insert_query1 = "insert into vtiger_field values (16,".$newfieldid.",'priority','activity',1,15,'taskpriority','Priority',1,0,0,100,17,1,1,'V~O',1,'')";
 Execute($insert_query1);
 
 //Added on 23-12-2005 which is missed from Fredy's contribution for Color vtiger_priority
 populateFieldForSecurity('16',$newfieldid);
-$activity_alter_query = "alter table vtiger_activity add column priority varchar(150) default NULL";
-Execute($activity_alter_query);
-
+$activity_cols = $conn->getColumnNames("vtiger_activity");
+if(is_array($activity_cols) && !in_array("priority",$activity_cols))
+{
+	$activity_alter_query = "alter table vtiger_activity add column priority varchar(150) default NULL";
+	Execute($activity_alter_query);
+}
 //Code contributed by Raju for better emailing 
 /*
 $insert_array1 = Array(
-		"insert into vtiger_field values (10,".$conn->getUniqueID("field").",'crmid','seactivityrel',1,'357','parent_id','Related To',1,0,0,100,1,2,1,'I~O',1,'')",
-		"insert into vtiger_field values (10,".$conn->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,3,1,'V~M',0,1)",
-		"insert into vtiger_field values (10,".$conn->getUniqueID("field").",'filename','emails',1,'61','filename','Attachment',1,0,0,100,1,4,1,'V~O',1,'')",
-		"insert into vtiger_field values (10,".$conn->getUniqueID("field").",'description','emails',1,'19','description','Description',1,0,0,100,1,5,1,'V~O',1,'')",
+		"insert into vtiger_field values (10,".$conn->getUniqueID("vtiger_field").",'crmid','seactivityrel',1,'357','parent_id','Related To',1,0,0,100,1,2,1,'I~O',1,'')",
+		"insert into vtiger_field values (10,".$conn->getUniqueID("vtiger_field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,3,1,'V~M',0,1)",
+		"insert into vtiger_field values (10,".$conn->getUniqueID("vtiger_field").",'filename','emails',1,'61','filename','Attachment',1,0,0,100,1,4,1,'V~O',1,'')",
+		"insert into vtiger_field values (10,".$conn->getUniqueID("vtiger_field").",'description','emails',1,'19','description','Description',1,0,0,100,1,5,1,'V~O',1,'')",
 		);
 */
 //commented the above array as that queries are wrong queries -- changed on 23-12-2005
@@ -273,7 +287,7 @@ Execute($alter_query2);
 $alter_query3 = "ALTER TABLE vtiger_invoice ADD column contactid int(19) after customerno";
 Execute($alter_query3);
 
-$newfieldid = $conn->getUniqueID("field");
+$newfieldid = $conn->getUniqueID("vtiger_field");
 $insert_query2 = "insert into vtiger_field values (23,".$newfieldid.",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')";
 Execute($insert_query2);
 //Added on 23-12-2005 because we must populate vtiger_field entries in vtiger_profile2field and vtiger_def_org_field if we add a vtiger_field in vtiger_field table
@@ -308,7 +322,7 @@ foreach($update_array2 as $query)
 
 
 //Added vtiger_field emailoptout in vtiger_account table
-$newfieldid = $conn->getUniqueID("field");
+$newfieldid = $conn->getUniqueID("vtiger_field");
 $insert_query3 = "insert into vtiger_field values (6,".$newfieldid.",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,1,1,'C~O',1,'')";
 Execute($insert_query3);
 
@@ -395,7 +409,7 @@ foreach($update_array4 as $query)
 $create_query1 = "CREATE TABLE  vtiger_inventory_tandc(id INT(19),type VARCHAR(30) NOT NULL,tandc LONGTEXT default NULL,PRIMARY KEY(id))";
 Execute($create_query1);
 
-$insert_query4 = "insert into vtiger_inventory_tandc values('".$conn->getUniqueID('inventory_tandc')."','Inventory','  ')";
+$insert_query4 = "insert into vtiger_inventory_tandc values('".$conn->getUniqueID('vtiger_inventory_tandc')."','Inventory','  ')";
 Execute($insert_query4);
 
 /****************** 5.0(Alpha) dev version 1 Database changes -- Ends*********************/
@@ -837,8 +851,8 @@ foreach($alter_query_array6 as $query)
 }
 
 $insert_field_array1 = Array(
-				"Insert into vtiger_field values (9,".$conn->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,1,3,'C~O',1,'')",
-				"Insert into vtiger_field values (16,".$conn->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,1,1,'C~O',1,'')"
+				"Insert into vtiger_field values (9,".$conn->getUniqueID("vtiger_field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,1,3,'C~O',1,'')",
+				"Insert into vtiger_field values (16,".$conn->getUniqueID("vtiger_field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,1,1,'C~O',1,'')"
 			    );
 foreach($insert_field_array1 as $query)
 {
@@ -867,27 +881,27 @@ foreach($alter_query_array7 as $query)
 }
 
 $insert_field_array2 = Array(
-				"insert into vtiger_field values (23,".$conn->getUniqueID("field").",'bill_pobox','invoicebillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (23,".$conn->getUniqueID("field").",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'bill_pobox','invoicebillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (23,".$conn->getUniqueID("vtiger_field").",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
 				
-				"insert into vtiger_field values (6,".$conn->getUniqueID("field").",'pobox','accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (6,".$conn->getUniqueID("field").",'pobox','accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (6,".$conn->getUniqueID("vtiger_field").",'pobox','accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (6,".$conn->getUniqueID("vtiger_field").",'pobox','accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
 				
-				"insert into vtiger_field values (7,".$conn->getUniqueID("field").",'pobox','leadaddress',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (7,".$conn->getUniqueID("vtiger_field").",'pobox','leadaddress',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
 
-				"insert into vtiger_field values (4,".$conn->getUniqueID("field").",'mailingpobox','contactaddress',1,'1','mailingpobox','Mailing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (4,".$conn->getUniqueID("field").",'otherpobox','contactaddress',1,'1','otherpobox','Other Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'mailingpobox','contactaddress',1,'1','mailingpobox','Mailing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'otherpobox','contactaddress',1,'1','otherpobox','Other Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
 
-				"insert into vtiger_field values (18,".$conn->getUniqueID("field").",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (18,".$conn->getUniqueID("vtiger_field").",'pobox','vendor',1,'1','pobox','Po Box',1,0,0,100,2,2,1,'V~O',1,'')",
 
-				"insert into vtiger_field values (20,".$conn->getUniqueID("field").",'bill_pobox','quotesbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (20,".$conn->getUniqueID("field").",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'bill_pobox','quotesbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (20,".$conn->getUniqueID("vtiger_field").",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
 
-				"insert into vtiger_field values (21,".$conn->getUniqueID("field").",'bill_pobox','pobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (21,".$conn->getUniqueID("field").",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'bill_pobox','pobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (21,".$conn->getUniqueID("vtiger_field").",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')",
 
-				"insert into vtiger_field values (22,".$conn->getUniqueID("field").",'bill_pobox','sobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
-				"insert into vtiger_field values (22,".$conn->getUniqueID("field").",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')"
+				"insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'bill_pobox','sobillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,2,1,'V~O',1,'')",
+				"insert into vtiger_field values (22,".$conn->getUniqueID("vtiger_field").",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,2,1,'V~O',1,'')"
 			    );
 foreach($insert_field_array2 as $query)
 {
@@ -941,12 +955,12 @@ for($i = 0;$i < 8;$i++)
 }
 
 $query_array1 = Array(
-			"update vtiger_field set tablename='crmentity' where tabid=10 and fieldname='description'",
-			"update vtiger_field set tablename='attachments' where tabid=10 and fieldname='filename'",
-			"drop table emails",
+			"update vtiger_field set tablename='vtiger_crmentity' where tabid=10 and fieldname='description'",
+			"update vtiger_field set tablename='vtiger_attachments' where tabid=10 and fieldname='filename'",
+			"drop table vtiger_emails",
 
 			"alter table vtiger_activity drop column description",
-			"update vtiger_field set tablename='crmentity' where tabid in (9,16) and fieldname='description'",
+			"update vtiger_field set tablename='vtiger_crmentity' where tabid in (9,16) and fieldname='description'",
 
 			"update vtiger_tab set name='PurchaseOrder',tablabel='PurchaseOrder' where tabid=21",
 			"update vtiger_tab set presence=0 where tabid=22 and name='SalesOrder'",
@@ -956,7 +970,7 @@ $query_array1 = Array(
 			"delete from vtiger_actionmapping where actionname='SaveSalesOrder'",
 			"delete from vtiger_actionmapping where actionname='DeleteSalesOrder'",
 
-			"insert into vtiger_field values (13,".$conn->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)",
+			"insert into vtiger_field values (13,".$conn->getUniqueID("vtiger_field").",'filename','vtiger_attachments',1,'61','filename','Attachment',1,0,0,100,12,2,1,'V~O',0,1)",
 
 			"alter table vtiger_troubletickets add column filename varchar(50) default NULL after title"
 		     );
@@ -1176,23 +1190,23 @@ $delete_query1 = "delete from vtiger_actionmapping where actionname in ('SavePri
 Execute($query);
 
 $insert_query_array6 = Array(
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Leads')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Accounts')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Contacts')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Potentials')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'HelpDesk')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Quotes')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Activities')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Emails')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Invoice')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Notes')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'PriceBooks')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Products')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'PurchaseOrder')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Leads')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Accounts')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Contacts')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Potentials')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'HelpDesk')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Quotes')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Activities')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Emails')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Invoice')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Notes')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PriceBooks')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Products')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PurchaseOrder')",
 				
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'SalesOrder')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Vendors')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('customview').",'All',1,0,'Faq')"
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'SalesOrder')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Vendors')",
+			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Faq')"
 			    );
 foreach($insert_query_array6 as $query)
 {
@@ -1588,7 +1602,7 @@ Execute($alter_query);
 
 //$update_query2 = "UPDATE vtiger_field SET fieldlabel = 'Reference' WHERE tabid = 4 and tablename = 'contactdetails' and fieldname='reference'";
 //changed in 24-04-06 because the reference has not been entered into the vtiger_field table. 
-$update_query2 = "insert into vtiger_field values (4,".$conn->getUniqueID("field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
+$update_query2 = "insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'reference','contactdetails',1,'56','reference','Reference',1,0,0,10,23,4,1,'C~O',1,null,'ADV')";
 Execute($update_query2);
 
 $update_query_array4 = Array(
@@ -1655,11 +1669,11 @@ $create_query19 = "CREATE TABLE vtiger_chat_users ( `id` bigint(20) NOT NULL aut
 Execute($create_query19);
 
 $alter_query_array17 = Array(
-				"ALTER TABLE `chat_msg`  ADD CONSTRAINT `chat_msg_ibfk_1` FOREIGN KEY (`chat_from`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE",
+				"ALTER TABLE `vtiger_chat_msg`  ADD CONSTRAINT `chat_msg_ibfk_1` FOREIGN KEY (`chat_from`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE",
 
-				"ALTER TABLE `chat_pchat`  ADD CONSTRAINT `chat_pchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE",
+				"ALTER TABLE `vtiger_chat_pchat`  ADD CONSTRAINT `chat_pchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE",
 
-				"ALTER TABLE `chat_pvchat`  ADD CONSTRAINT `chat_pvchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE"
+				"ALTER TABLE `vtiger_chat_pvchat`  ADD CONSTRAINT `chat_pvchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array17 as $query)
 {
@@ -1684,10 +1698,10 @@ Execute($alter_query);
 
 $insert_query_array23 = Array(
 				"insert into vtiger_blocks values(75,4,'LBL_IMAGE_INFORMATION',5,0,0,0,0,0)",
-				"insert into vtiger_field values(4,".$conn->getUniqueID("field").",'imagename','contactdetails',1,'69','imagename','Contact Image',1,0,0,100,1,75,1,'V~O',1,null,'ADV')",
+				"insert into vtiger_field values(4,".$conn->getUniqueID("vtiger_field").",'imagename','contactdetails',1,'69','imagename','Contact Image',1,0,0,100,1,75,1,'V~O',1,null,'ADV')",
 
-				"Insert into vtiger_field values(9,".$conn->getUniqueID("field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')",
-				"Insert into vtiger_field values(16,".$conn->getUniqueID("field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')"
+				"Insert into vtiger_field values(9,".$conn->getUniqueID("vtiger_field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,17,19,3,'V~O',1,null,'BAS')",
+				"Insert into vtiger_field values(16,".$conn->getUniqueID("vtiger_field").",'visibility','activity',1,15,'visibility','Visibility',1,0,0,100,19,41,1,'V~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array23 as $query)
 {
@@ -1717,29 +1731,29 @@ $insert_query9 = "insert into vtiger_blocks values(78,26,'LBL_DESCRIPTION_INFORM
 Execute($insert_query9);
 
 $insert_query_array24 = Array(
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'product_id','campaign',1,59,'product_id','Product',1,0,0,100,3,76,1,'I~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'expectedresponse','campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'sponsor','campaign',1,'1','sponsor','Sponsor',1,0,0,100,12,76,1,'V~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')",
-	"insert into vtiger_field values (26,".$conn->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,78,1,'V~O',1,null,'BAS')"
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'V~O',0,5,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'product_id','campaign',1,59,'product_id','Product',1,0,0,100,3,76,1,'I~O',0,5,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,4,76,1,'V~O',0,5,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedrevenue','campaign',1,'1','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'I~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'I~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualcost','campaign',1,'1','actualcost','Actual Cost',1,0,0,100,8,76,1,'I~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedresponse','campaign',1,'15','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'sponsor','campaign',1,'1','sponsor','Sponsor',1,0,0,100,12,76,1,'V~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'targetaudience','campaign',1,'1','targetaudience','Target Audience',1,0,0,100,13,76,1,'V~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'targetsize','campaign',1,'1','targetsize','TargetSize',1,0,0,100,14,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedresponsecount','campaign',1,'1','expectedresponsecount','Expected Response Count',1,0,0,100,17,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedsalescount','campaign',1,'1','expectedsalescount','Expected Sales Count',1,0,0,100,15,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'expectedroi','campaign',1,'1','expectedroi','Expected ROI',1,0,0,100,19,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualresponsecount','campaign',1,'1','actualresponsecount','Actual Response Count',1,0,0,100,18,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualsalescount','campaign',1,'1','actualsalescount','Actual Sales Count',1,0,0,100,16,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'actualroi','campaign',1,'1','actualroi','Actual ROI',1,0,0,100,20,76,1,'N~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,15,76,2,'T~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,76,2,'T~O',1,null,'BAS')",
+	"insert into vtiger_field values (26,".$conn->getUniqueID("vtiger_field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,78,1,'V~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array24 as $query)
 {
@@ -1747,8 +1761,8 @@ foreach($insert_query_array24 as $query)
 }
 
 $insert_query_array25 = Array(
-	"insert into vtiger_relatedlists values (".$conn->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)",
-	"insert into vtiger_relatedlists values (".$conn->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Leads").",'get_leads',2,'Leads',0)"
+	"insert into vtiger_relatedlists values (".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)",
+	"insert into vtiger_relatedlists values (".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",".getTabid("Leads").",'get_leads',2,'Leads',0)"
 			     );
 foreach($insert_query_array25 as $query)
 {
@@ -1757,8 +1771,8 @@ foreach($insert_query_array25 as $query)
 
 
 $insert_query_array26 = Array(
-	"insert into vtiger_field values (7,".$conn->getUniqueID("field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,13,3,'I~O',1,null,'BAS')",
-	"insert into vtiger_field values (4,".$conn->getUniqueID("field").",'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')"
+	"insert into vtiger_field values (7,".$conn->getUniqueID("vtiger_field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,13,3,'I~O',1,null,'BAS')",
+	"insert into vtiger_field values (4,".$conn->getUniqueID("vtiger_field").",'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,null,'BAS')"
 			     );
 foreach($insert_query_array26 as $query)
 {
@@ -1881,113 +1895,110 @@ foreach($alter_query_array18 as $query)
 
 $query_array = Array(
 
-"ALTER TABLE `accountgrouprelation` DROP INDEX `fk_accountgrouprelation2`",
-//"ALTER TABLE `accountscf` DROP COLUMN `cf_356`",
-"ALTER TABLE `activity` DROP INDEX `status`",
-"ALTER TABLE `attachments` DROP INDEX `attachmentsid`",
-"ALTER TABLE `carrier` DROP INDEX `carrier_UK0`",
-"ALTER TABLE `chat_msg` DROP INDEX `chat_to`",
-"ALTER TABLE `chat_msg` DROP INDEX `chat_from`",
-"ALTER TABLE `chat_msg` DROP INDEX `born`",
-"ALTER TABLE `chat_pchat` DROP INDEX `msg`",
-"ALTER TABLE `chat_pvchat` DROP INDEX `msg`",
-"ALTER TABLE `chat_users` DROP INDEX `session`",
-"ALTER TABLE `chat_users` DROP INDEX `nick`",
-"ALTER TABLE `chat_users` DROP INDEX `ping`",
-"ALTER TABLE `contactgrouprelation` DROP INDEX `fk_contactgrouprelation2`",
-"ALTER TABLE `customview` DROP INDEX `customview`",
-"ALTER TABLE `def_org_field` DROP INDEX `tabid`",
-"ALTER TABLE `field` DROP INDEX `tabid`",
-"ALTER TABLE `freetagged_objects` DROP INDEX `tagger_id_index`",
-"ALTER TABLE `freetagged_objects` DROP INDEX `object_id_index`",
-"ALTER TABLE `groups` DROP INDEX `groupname`",
-"ALTER TABLE `invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
-//"ALTER TABLE `leadscf` DROP COLUMN `cf_354`",
-//"ALTER TABLE `leadscf` DROP COLUMN `cf_358`",
-//"ALTER TABLE `leadscf` DROP COLUMN `cf_360`",
-"ALTER TABLE `pogrouprelation` DROP INDEX `fk_productgrouprelation2`",
-"ALTER TABLE `potential` DROP INDEX `potentialid`",
-"ALTER TABLE `potentialgrouprelation` DROP INDEX `fk_potentialgrouprelation2`",
-"ALTER TABLE `profile2field` DROP INDEX `tabid`",
-"ALTER TABLE `profile2tab` DROP INDEX `idx_profile2tab`",
-"ALTER TABLE `quotegrouprelation` DROP INDEX `fk_quotegrouprelation2`",
-"ALTER TABLE `reportmodules` DROP INDEX `reportmodules_IDX0`",
-"ALTER TABLE `reportsortcol` DROP INDEX `reportsortcol_IDX0`",
-"ALTER TABLE `reportsummary` DROP INDEX `reportsummary_IDX0`",
-"ALTER TABLE `seattachmentsrel` DROP INDEX `attachmentsid`",
-"ALTER TABLE `sogrouprelation` DROP INDEX `fk_sogrouprelation2`",
-"ALTER TABLE `soproductrel` DROP COLUMN `shortdescription`",
-"ALTER TABLE `tab` DROP INDEX `tabid`",
-"ALTER TABLE `troubletickets` DROP INDEX `status`",
-"ALTER TABLE `accountgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `activity_reminder` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `activsubtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `contactgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+//"ALTER TABLE `vtiger_accountgrouprelation` DROP INDEX `fk_accountgrouprelation2`",
+//"ALTER TABLE `vtiger_activity` DROP INDEX `status`",
+"ALTER TABLE `vtiger_carrier` DROP INDEX `carrier_UK0`",
+"ALTER TABLE `vtiger_chat_msg` DROP INDEX `chat_to`",
+"ALTER TABLE `vtiger_chat_msg` DROP INDEX `chat_from`",
+"ALTER TABLE `vtiger_chat_msg` DROP INDEX `born`",
+"ALTER TABLE `vtiger_chat_pchat` DROP INDEX `msg`",
+"ALTER TABLE `vtiger_chat_pvchat` DROP INDEX `msg`",
+"ALTER TABLE `vtiger_chat_users` DROP INDEX `session`",
+"ALTER TABLE `vtiger_chat_users` DROP INDEX `nick`",
+"ALTER TABLE `vtiger_chat_users` DROP INDEX `ping`",
+//"ALTER TABLE `vtiger_contactgrouprelation` DROP INDEX `fk_contactgrouprelation2`",
+//"ALTER TABLE `vtiger_customview` DROP INDEX `customview`",
+//"ALTER TABLE `vtiger_def_org_field` DROP INDEX `tabid`",
+//"ALTER TABLE `vtiger_field` DROP INDEX `tabid`",
+"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `tagger_id_index`",
+"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `object_id_index`",
+"ALTER TABLE `vtiger_groups` DROP INDEX `groupname`",
+//"ALTER TABLE `vtiger_invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
+//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_354`",
+//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_358`",
+//"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_360`",
+//"ALTER TABLE `vtiger_pogrouprelation` DROP INDEX `fk_productgrouprelation2`",
+//"ALTER TABLE `vtiger_potential` DROP INDEX `potentialid`",
+//"ALTER TABLE `vtiger_potentialgrouprelation` DROP INDEX `fk_potentialgrouprelation2`",
+//"ALTER TABLE `vtiger_profile2field` DROP INDEX `tabid`",
+"ALTER TABLE `vtiger_profile2tab` DROP INDEX `idx_profile2tab`",
+//"ALTER TABLE `vtiger_quotegrouprelation` DROP INDEX `fk_quotegrouprelation2`",
+"ALTER TABLE `vtiger_reportmodules` DROP INDEX `reportmodules_IDX0`",
+"ALTER TABLE `vtiger_reportsortcol` DROP INDEX `reportsortcol_IDX0`",
+"ALTER TABLE `vtiger_reportsummary` DROP INDEX `reportsummary_IDX0`",
+//"ALTER TABLE `vtiger_seattachmentsrel` DROP INDEX `attachmentsid`",
+//"ALTER TABLE `vtiger_sogrouprelation` DROP INDEX `fk_sogrouprelation2`",
+//"ALTER TABLE `vtiger_soproductrel` DROP COLUMN `shortdescription`",
+//"ALTER TABLE `vtiger_tab` DROP INDEX `tabid`",
+//"ALTER TABLE `vtiger_troubletickets` DROP INDEX `status`",
+"ALTER TABLE `vtiger_accountgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_activity_reminder` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_activsubtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_contactgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
 //"DROP TABLE `crmentity_seq`",
-"ALTER TABLE `currency_info` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `customerdetails` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_customerdetails` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 //"DROP TABLE `customfield_sequence_seq`",
-"ALTER TABLE `customview_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `def_org_field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `def_org_share` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `def_org_share_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `defaultcv` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `durationhrs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `durationmins` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `emailtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `emailtemplates_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `faqcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `faqstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `field_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `files` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `freetagged_objects` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `group2grouprel` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `group2role` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `group2rs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_customview_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_def_org_field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_def_org_share` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_def_org_share_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_defaultcv` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_durationhrs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_durationmins` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_emailtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_emailtemplates_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_faqcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_faqstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_field_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_files` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_freetagged_objects` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_group2grouprel` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_group2role` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_group2rs` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 //"DROP TABLE `groups_seq`",
-"ALTER TABLE `headers` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `import_maps` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `inventorynotification_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `invoicegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `loginhistory` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `mail_accounts` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `notificationscheduler_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `ownernotify` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `parenttabrel` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `pogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `portal` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `portalinfo` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `potentialgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `profile2field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `profile2globalpermissions` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `profile2standardpermissions` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `profile2tab` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `profile2utility` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `profile_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `quotegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `rating` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `relatedlists` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `relatedlists_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `role2profile` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `role_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `rss` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `sales_stage` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `salutationtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `selectquery_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `sogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
-"ALTER TABLE `systems` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `taskpriority` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `taskstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `ticketcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `ticketpriorities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `ticketseverities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `ticketstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `ticketstracktime` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `tracker` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `users2group` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `users_last_import` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
-"ALTER TABLE `users_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
-"ALTER TABLE `wordtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_headers` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_import_maps` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_inventorynotification_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_invoicegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_loginhistory` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_mail_accounts` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_notificationscheduler_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_ownernotify` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_parenttabrel` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_pogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_portal` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_portalinfo` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_potentialgrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_profile2field` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_profile2globalpermissions` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_profile2standardpermissions` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_profile2tab` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_profile2utility` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_profile_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_quotegrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_rating` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_relatedlists` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_relatedlists_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_role2profile` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_role_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_rss` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_sales_stage` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_salutationtype` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_selectquery_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_sogrouprelation` TYPE=InnoDB, COMMENT='', ROW_FORMAT=COMPACT",
+"ALTER TABLE `vtiger_systems` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_taskpriority` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_taskstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_ticketcategories` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_ticketpriorities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_ticketseverities` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_ticketstatus` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_ticketstracktime` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_tracker` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_users2group` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+"ALTER TABLE `vtiger_users_last_import` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
+"ALTER TABLE `vtiger_users_seq` TYPE=MyISAM, COMMENT='', ROW_FORMAT=FIXED",
+//"ALTER TABLE `vtiger_wordtemplates` TYPE=MyISAM, COMMENT='', ROW_FORMAT=DYNAMIC",
 
 "CREATE TABLE vtiger_actualcost (
   `actualcostid` int(19) NOT NULL auto_increment,
@@ -2016,16 +2027,12 @@ $query_array = Array(
   UNIQUE KEY `Campaigntype_UK01` (`campaigntype`)
 ) ENGINE=InnoDB",
 
-"CREATE TABLE vtiger_currency_info_seq (
-  `id` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1",
-
 "CREATE TABLE vtiger_datashare_module_rel (
   `shareid` int(19) NOT NULL,
   `tabid` int(19) NOT NULL,
   `relationtype` varchar(200) default NULL,
   PRIMARY KEY  (`shareid`),
-  KEY `idx_datashare_module_rel_tabid` (`tabid`),
+  KEY `idx_datashare_module_rel_tabid` (`tabid`)
 ) ENGINE=InnoDB",
 
 //Added on 06-06-06
@@ -2327,338 +2334,361 @@ $query_array = Array(
   KEY `tmp_write_user_sharing_per_userid_shareduserid_idx` (`userid`,`shareduserid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 
-"ALTER TABLE `account` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `account` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-"ALTER TABLE `accountgrouprelation` MODIFY COLUMN `accountid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `actionmapping` MODIFY COLUMN `actionid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `activity` MODIFY COLUMN `date_start` DATE NOT NULL UNIQUE",
-"ALTER TABLE `activity` MODIFY COLUMN `sendnotification` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
-"ALTER TABLE `activity` MODIFY COLUMN `duration_hours` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `activity` MODIFY COLUMN `duration_minutes` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `activity` MODIFY COLUMN `notime` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
-"ALTER TABLE `activity_reminder` MODIFY COLUMN `activity_id` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `activity_reminder` MODIFY COLUMN `reminder_time` INTEGER(11) NOT NULL",
-"ALTER TABLE `activity_reminder` MODIFY COLUMN `reminder_sent` INTEGER(2) NOT NULL",
-"ALTER TABLE `activity_reminder` MODIFY COLUMN `recurringid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `activitygrouprelation` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `announcement` MODIFY COLUMN `creatorid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `attachments` MODIFY COLUMN `attachmentsid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `blocks` MODIFY COLUMN `blockid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `blocks` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `blocks` MODIFY COLUMN `sequence` INTEGER(10) DEFAULT NULL",
-"ALTER TABLE `blocks` MODIFY COLUMN `show_title` INTEGER(2) DEFAULT NULL",
-"ALTER TABLE `chat_msg` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `chat_msg` MODIFY COLUMN `chat_from` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
-"ALTER TABLE `chat_msg` MODIFY COLUMN `chat_to` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
-"ALTER TABLE `chat_msg` MODIFY COLUMN `born` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
-"ALTER TABLE `chat_pchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `chat_pchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
-"ALTER TABLE `chat_pvchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `chat_pvchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
-"ALTER TABLE `chat_users` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
-"ALTER TABLE `chat_users` MODIFY COLUMN `nick` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `chat_users` MODIFY COLUMN `session` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `chat_users` MODIFY COLUMN `ping` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
-"ALTER TABLE `competitor` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `contactdetails` MODIFY COLUMN `donotcall` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `contactdetails` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-"ALTER TABLE `contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `contactdetails` MODIFY COLUMN `reference` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `contactgrouprelation` MODIFY COLUMN `contactid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `convertleadmapping` MODIFY COLUMN `leadfid` INTEGER(19) NOT NULL",
-"ALTER TABLE `crmentity` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `crmentity` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `crmentity` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
-"ALTER TABLE `crmentity` MODIFY COLUMN `modifiedtime` DATETIME NOT NULL",
-"ALTER TABLE `customaction` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `customaction` MODIFY COLUMN `content` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `customerdetails` MODIFY COLUMN `customerid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `customerdetails` MODIFY COLUMN `portal` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `customview` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `customview_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `cvadvfilter` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `cvadvfilter` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `cvcolumnlist` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `cvcolumnlist` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `cvstdfilter` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `dealintimation` MODIFY COLUMN `dealprobability` DECIMAL(3,2) NOT NULL DEFAULT '0.00'",
-"ALTER TABLE `def_org_field` MODIFY COLUMN `fieldid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `def_org_share` MODIFY COLUMN `tabid` INTEGER(11) NOT NULL",
-"ALTER TABLE `def_org_share` MODIFY COLUMN `permission` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `def_org_share_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `defaultcv` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `defaultcv` MODIFY COLUMN `query` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `emailtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `emailtemplates` MODIFY COLUMN `body` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `emailtemplates_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `faq` MODIFY COLUMN `question` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `faq` MODIFY COLUMN `answer` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `faqcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `faqcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
-"ALTER TABLE `field` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `field` MODIFY COLUMN `readonly` INTEGER(1) NOT NULL",
-"ALTER TABLE `field` MODIFY COLUMN `selected` INTEGER(1) NOT NULL",
-"ALTER TABLE `field` MODIFY COLUMN `block` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `field` MODIFY COLUMN `displaytype` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `field` MODIFY COLUMN `quickcreate` INTEGER(10) NOT NULL DEFAULT '1'",
-"ALTER TABLE `field_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `freetagged_objects` MODIFY COLUMN `tag_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-"ALTER TABLE `freetagged_objects` MODIFY COLUMN `tagger_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-"ALTER TABLE `freetagged_objects` MODIFY COLUMN `object_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
-"ALTER TABLE `freetags` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `group2grouprel` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `group2grouprel` MODIFY COLUMN `containsgroupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `group2role` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `group2rs` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `groups` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `groups` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `import_maps` MODIFY COLUMN `is_published` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no'",
-"ALTER TABLE `inventory_tandc` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `inventory_tandc` MODIFY COLUMN `tandc` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `inventory_tandc_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `inventorynotification` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `inventorynotification_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `invoice` MODIFY COLUMN `salesorderid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `invoice` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `invoicegrouprelation` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `invoiceproductrel` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `invoiceproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `lar` MODIFY COLUMN `createdon` DATE NOT NULL",
-"ALTER TABLE `leaddetails` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `leaddetails` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `leadgrouprelation` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `mail_accounts` MODIFY COLUMN `account_id` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `mail_accounts` MODIFY COLUMN `user_id` INTEGER(11) NOT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `box_refresh` INTEGER(10) DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `mails_per_page` INTEGER(10) DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `ssltype` VARCHAR(50) DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `sslmeth` VARCHAR(50) DEFAULT NULL",
-"ALTER TABLE `mail_accounts` ADD COLUMN `showbody` VARCHAR(10) DEFAULT NULL",
-"ALTER TABLE `notes` MODIFY COLUMN `contact_id` INTEGER(19) DEFAULT '0'",
-"ALTER TABLE `notes` MODIFY COLUMN `notecontent` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `notificationscheduler` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `notificationscheduler_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `opportunitystage` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT '0.00'",
-"ALTER TABLE `org_share_action2tab` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `org_share_action2tab` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `org_share_action_mapping` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `organizationdetails` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `organizationdetails` MODIFY COLUMN `logo` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `ownernotify` MODIFY COLUMN `crmid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `parenttab` MODIFY COLUMN `parenttabid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `parenttab` MODIFY COLUMN `sequence` INTEGER(10) NOT NULL",
-"ALTER TABLE `parenttabrel` MODIFY COLUMN `parenttabid` INTEGER(3) NOT NULL",
-"ALTER TABLE `parenttabrel` MODIFY COLUMN `tabid` INTEGER(3) NOT NULL UNIQUE",
-"ALTER TABLE `parenttabrel` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
-"ALTER TABLE `pogrouprelation` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `poproductrel` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `poproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `portal` MODIFY COLUMN `portalid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `portal` MODIFY COLUMN `portalname` VARCHAR(200) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `portal` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
-"ALTER TABLE `portalinfo` MODIFY COLUMN `id` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `portalinfo` MODIFY COLUMN `last_login_time` DATETIME NOT NULL",
-"ALTER TABLE `portalinfo` MODIFY COLUMN `login_time` DATETIME NOT NULL",
-"ALTER TABLE `portalinfo` MODIFY COLUMN `logout_time` DATETIME NOT NULL",
-"ALTER TABLE `potcompetitorrel` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `potcompetitorrel` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `potential` MODIFY COLUMN `amount` DECIMAL(10,2) DEFAULT '0.00'",
-"ALTER TABLE `potential` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `potentialgrouprelation` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `potstagehistory` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `potstagehistory` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT NULL",
-"ALTER TABLE `potstagehistory` MODIFY COLUMN `lastmodified` DATETIME NOT NULL",
-"ALTER TABLE `pricebook` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `pricebookproductrel` MODIFY COLUMN `pricebookid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `pricebookproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `productcollaterals` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `productcollaterals` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `products` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `products` MODIFY COLUMN `product_description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `products` MODIFY COLUMN `commissionrate` DECIMAL(3,3) DEFAULT NULL",
-"ALTER TABLE `profile2field` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2field` MODIFY COLUMN `fieldid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2globalpermissions` MODIFY COLUMN `profileid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2globalpermissions` MODIFY COLUMN `globalactionid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2standardpermissions` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2standardpermissions` MODIFY COLUMN `tabid` INTEGER(10) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2standardpermissions` MODIFY COLUMN `Operation` INTEGER(10) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2utility` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2utility` MODIFY COLUMN `tabid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile2utility` MODIFY COLUMN `activityid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `profile_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-//"ALTER TABLE `purchaseorder` MODIFY COLUMN `quoteid` INTEGER(19) DEFAULT NULL UNIQUE",
-//"ALTER TABLE `purchaseorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
-//"ALTER TABLE `purchaseorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `purchaseorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `quotegrouprelation` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `quotes` MODIFY COLUMN `potentialid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `quotes` MODIFY COLUMN `quotestage` VARCHAR(200) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `quotes` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `quotes` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `quotesproductrel` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `quotesproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `recurringevents` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL",
-"ALTER TABLE `relatedlists` MODIFY COLUMN `relation_id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `relatedlists_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `relcriteria` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `relcriteria` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `report` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `report` MODIFY COLUMN `folderid` INTEGER(19) NOT NULL UNIQUE",
-"ALTER TABLE `reportdatefilter` MODIFY COLUMN `datefilterid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `reportmodules` MODIFY COLUMN `reportmodulesid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `reportsortcol` MODIFY COLUMN `sortcolid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `reportsortcol` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `reportsummary` MODIFY COLUMN `reportsummaryid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `reportsummary` MODIFY COLUMN `summarytype` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `role2profile` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `role_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `rss` MODIFY COLUMN `rssid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `salesorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `salesorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
-"ALTER TABLE `salesorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `seactivityrel` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `seactivityrel` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `selectcolumn` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `selectquery` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `selectquery_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `sharedcalendar` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `sharedcalendar` MODIFY COLUMN `sharedid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `sogrouprelation` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `soproductrel` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `soproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `systems` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `systems` MODIFY COLUMN `server` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `systems` MODIFY COLUMN `server_username` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `systems` MODIFY COLUMN `server_password` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `ticketcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `ticketcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
-"ALTER TABLE `ticketgrouprelation` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `troubletickets` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `troubletickets` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `troubletickets` MODIFY COLUMN `solution` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `troubletickets` MODIFY COLUMN `update_log` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `user2role` MODIFY COLUMN `userid` INTEGER(11) NOT NULL PRIMARY KEY",
-"ALTER TABLE `user2role` MODIFY COLUMN `roleid` VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
-"ALTER TABLE `users` MODIFY COLUMN `is_admin` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
-"ALTER TABLE `users` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `users` MODIFY COLUMN `user_preferences` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `users` MODIFY COLUMN `homeorder` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL'",
-"ALTER TABLE `users` ADD COLUMN `currency_id` INTEGER(19) NOT NULL DEFAULT '1'",
-"ALTER TABLE `users` ADD COLUMN `defhomeview` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT 'home_metrics'",
-"ALTER TABLE `users2group` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `users2group` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `users_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
-"ALTER TABLE `vendor` MODIFY COLUMN `street` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `vendor` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `wordtemplates` MODIFY COLUMN `templateid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `wordtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
-"ALTER TABLE `accountgrouprelation` ADD KEY `accountgrouprelation_IDX1` (`groupname`)",
-"ALTER TABLE `activity` ADD KEY `status1` (`status`, `eventstatus`)",
-"ALTER TABLE `attachments` ADD KEY `attachmentsid1` (`attachmentsid`)",
-"ALTER TABLE `blocks` ADD KEY `block_tabid` (`tabid`)",
-"ALTER TABLE `carrier` ADD UNIQUE KEY `carrier_UK01` (`carrier`)",
-"ALTER TABLE `chat_msg` ADD KEY `chat_msg_IDX0` (`chat_from`)",
-"ALTER TABLE `chat_msg` ADD KEY `chat_msg_IDX1` (`chat_to`)",
-"ALTER TABLE `chat_msg` ADD KEY `chat_msg_IDX2` (`born`)",
-"ALTER TABLE `chat_pchat` ADD UNIQUE KEY `chat_pchat_UK0` (`msg`)",
-"ALTER TABLE `chat_pvchat` ADD UNIQUE KEY `chat_pvchat_UK0` (`msg`)",
-"ALTER TABLE `chat_users` ADD KEY `chat_users_IDX0` (`nick`)",
-"ALTER TABLE `chat_users` ADD KEY `chat_users_IDX1` (`session`)",
-"ALTER TABLE `chat_users` ADD KEY `chat_users_IDX2` (`ping`)",
-"ALTER TABLE `contactgrouprelation` ADD KEY `contactgrouprelation_IDX1` (`groupname`)",
-"ALTER TABLE `currency_info` DROP PRIMARY KEY",
-"ALTER TABLE `currency_info` MODIFY COLUMN `currency_name` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `id` INTEGER(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST",
-"ALTER TABLE `currency_info` ADD COLUMN `conversion_rate` DECIMAL(10,3) DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `currency_status` VARCHAR(25) COLLATE latin1_swedish_ci DEFAULT NULL",
-"ALTER TABLE `currency_info` ADD COLUMN `defaultid` VARCHAR(10) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
-"ALTER TABLE `currency_info` ADD PRIMARY KEY ()",
-"ALTER TABLE `def_org_field` ADD KEY `tabid4` (`tabid`)",
-"ALTER TABLE `def_org_share` ADD KEY `fk_def_org_share23` (`permission`)",
-"ALTER TABLE `field` ADD KEY `tabid2` (`tabid`)",
-"ALTER TABLE `field` ADD KEY `blockid` (`block`)",
-"ALTER TABLE `field` ADD KEY `displaytypeid` (`displaytype`)",
-"ALTER TABLE `freetagged_objects` DROP INDEX tag_id_index",
-"ALTER TABLE `freetagged_objects` ADD INDEX `tag_id_index` (`tag_id`, `tagger_id`, `object_id`)",
-"ALTER TABLE `group2grouprel` ADD KEY `fk_group2grouprel2` (`containsgroupid`)",
-"ALTER TABLE `group2role` ADD KEY `fk_group2role2` (`roleid`)",
-"ALTER TABLE `group2rs` ADD KEY `fk_group2rs2` (`roleandsubid`)",
-"ALTER TABLE `groups` ADD KEY `idx_groups_123group` (`groupname`)",
-"ALTER TABLE `invoice` ADD KEY `SoPo_IDX` (`invoiceid`)",
-"ALTER TABLE `invoice` ADD KEY `fk_Invoice2` (`salesorderid`)",
-"ALTER TABLE `invoicegrouprelation` ADD KEY `invoicegrouprelation_IDX1` (`groupname`, `invoiceid`)",
-"ALTER TABLE `leadgrouprelation` ADD KEY `leadgrouprelation_IDX0` (`leadid`)",
-"ALTER TABLE `moduleowners` ADD KEY `moduleowners_UK11` (`tabid`, `user_id`)",
-"ALTER TABLE `org_share_action2tab` ADD KEY `fk_org_share_action2tab12345` (`tabid`)",
-"ALTER TABLE `ownernotify` ADD KEY `ownernotify_UK1` (`crmid`, `flag`)",
-"ALTER TABLE `parenttab` ADD KEY `parenttab_UK1` (`parenttabid`, `parenttab_label`, `visible`)",
-"ALTER TABLE `parenttabrel` ADD KEY `parenttabrelUK01` (`tabid`, `parenttabid`)",
-"ALTER TABLE `pogrouprelation` ADD KEY `pogrouprelation_IDX1` (`groupname`, `purchaseorderid`)",
-"ALTER TABLE `portal` ADD KEY `portal_UK01` (`portalname`)",
-"ALTER TABLE `potential` ADD KEY `potentialid1` (`potentialid`)",
-"ALTER TABLE `potentialgrouprelation` ADD KEY `potentialgrouprelation_IDX1` (`groupname`)",
-"ALTER TABLE `potstagehistory` DROP INDEX PotStageHistory_IDX1",
-"ALTER TABLE `potstagehistory` ADD INDEX `PotStageHistory_IDX1` (`historyid`)",
-"ALTER TABLE `potstagehistory` ADD KEY `fk_PotStageHistory` (`potentialid`)",
-"ALTER TABLE `profile2field` ADD KEY `tabid3` (`tabid`, `profileid`)",
-"ALTER TABLE `profile2globalpermissions` ADD KEY `idx_profile2globalpermissions` (`profileid`, `globalactionid`)",
-"ALTER TABLE `profile2standardpermissions` ADD KEY `idx_prof2stad` (`profileid`, `tabid`, `Operation`)",
-"ALTER TABLE `profile2tab` ADD KEY `idx_profile2tab1` (`profileid`, `tabid`)",
-"ALTER TABLE `profile2utility` ADD KEY `idx_prof2utility` (`profileid`, `tabid`, `activityid`)",
-"ALTER TABLE `purchaseorder` ADD KEY `PO_Vend_IDX` (`vendorid`)",
-"ALTER TABLE `purchaseorder` ADD KEY `PO_Quote_IDX` (`quoteid`)",
-"ALTER TABLE `purchaseorder` ADD KEY `PO_Contact_IDX` (`contactid`)",
-"ALTER TABLE `quotegrouprelation` ADD KEY `quotegrouprelation_IDX1` (`groupname`)",
-"ALTER TABLE `quotes` DROP INDEX vtiger_quotestage",
-"ALTER TABLE `quotes` ADD INDEX `quotestage` (`quoteid`)",
-"ALTER TABLE `quotes` ADD KEY `potentialid2` (`potentialid`)",
-"ALTER TABLE `quotes` ADD KEY `contactid` (`contactid`)",
-"ALTER TABLE `recurringtype` ADD UNIQUE KEY `RecurringEvent_UK0` (`recurringtype`)",
-"ALTER TABLE `reportsortcol` ADD KEY `FK1_reportsortcol` (`reportid`)",
-"ALTER TABLE `role2profile` ADD KEY `idx_role2profileid1` (`roleid`, `profileid`)",
-"ALTER TABLE `salesorder` ADD KEY `SoVend_IDX` (`vendorid`)",
-"ALTER TABLE `salesorder` ADD KEY `SoContact_IDX` (`contactid`)",
-"ALTER TABLE `seattachmentsrel` ADD KEY `attachmentsid2` (`attachmentsid`, `crmid`)",
-"ALTER TABLE `selectquery` ADD KEY `selectquery_IDX0` (`queryid`)",
-"ALTER TABLE `sogrouprelation` ADD KEY `sogrouprelation_IDX1` (`groupname`)",
-"ALTER TABLE `tab` ADD KEY `tabid1` (`tabid`)",
-"ALTER TABLE `taxclass` ADD UNIQUE KEY `carrier_UK02` (`taxclass`)",
-"ALTER TABLE `troubletickets` ADD KEY `status2` (`status`)",
-"ALTER TABLE `users2group` ADD KEY `idx_users2group` (`groupid`, `userid`)",
-"ALTER TABLE `users2group` ADD KEY `fk_users2group2` (`userid`)",
-"ALTER TABLE `accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation123` FOREIGN KEY (`accountid`) REFERENCES `account` (`accountid`) ON DELETE CASCADE",
-"ALTER TABLE `contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation123` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `customview` (`cvid`) ON DELETE CASCADE",
-"ALTER TABLE `invoice` ADD CONSTRAINT `fk_Invoice2` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
-"ALTER TABLE `invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation234` FOREIGN KEY (`invoiceid`) REFERENCES `invoice` (`invoiceid`) ON DELETE CASCADE",
-"ALTER TABLE `invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `org_share_action2tab` ADD CONSTRAINT `fk_org_share_action2tab12345` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE",
-"ALTER TABLE `pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation123` FOREIGN KEY (`purchaseorderid`) REFERENCES `purchaseorder` (`purchaseorderid`) ON DELETE CASCADE",
-"ALTER TABLE `potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation67` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
-"ALTER TABLE `profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `profile` (`profileid`) ON DELETE CASCADE",
-"ALTER TABLE `purchaseorder` ADD CONSTRAINT `fk_PO3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `purchaseorder` ADD CONSTRAINT `fk_PO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
-"ALTER TABLE `purchaseorder` ADD CONSTRAINT `fk_PO2345` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
-"ALTER TABLE `quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation132` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
-"ALTER TABLE `quotes` ADD CONSTRAINT `fk_Quotes3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `quotes` ADD CONSTRAINT `fk_Quotes2` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
-"ALTER TABLE `salesorder` ADD CONSTRAINT `fk_SO4` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `salesorder` ADD CONSTRAINT `fk_SO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
-"ALTER TABLE `sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-"ALTER TABLE `sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation78` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
-"ALTER TABLE `vendorcontactrel` ADD CONSTRAINT `fk_VendorContactRel45` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE"
+"ALTER TABLE `vtiger_account` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_account` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
+//"ALTER TABLE `vtiger_accountgrouprelation` MODIFY COLUMN `accountid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_actionmapping` MODIFY COLUMN `actionid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_activity` MODIFY COLUMN `date_start` DATE NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `sendnotification` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_hours` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `duration_minutes` VARCHAR(2) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_activity` MODIFY COLUMN `notime` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT '0'",
+//"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `activity_id` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `reminder_time` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `reminder_sent` INTEGER(2) NOT NULL",
+//"ALTER TABLE `vtiger_activity_reminder` MODIFY COLUMN `recurringid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_activitygrouprelation` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_announcement` MODIFY COLUMN `creatorid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_attachments` MODIFY COLUMN `attachmentsid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `blockid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `sequence` INTEGER(10) DEFAULT NULL",
+"ALTER TABLE `vtiger_blocks` MODIFY COLUMN `show_title` INTEGER(2) DEFAULT NULL",
+//"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
+"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `chat_from` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
+"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `chat_to` INTEGER(20) NOT NULL DEFAULT '0' UNIQUE",
+"ALTER TABLE `vtiger_chat_msg` MODIFY COLUMN `born` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
+//"ALTER TABLE `vtiger_chat_pchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
+"ALTER TABLE `vtiger_chat_pchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
+//"ALTER TABLE `vtiger_chat_pvchat` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
+"ALTER TABLE `vtiger_chat_pvchat` MODIFY COLUMN `msg` INTEGER(20) DEFAULT '0'",
+//"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `id` INTEGER(20) NOT NULL AUTO_INCREMENT PRIMARY KEY",
+"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `nick` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `session` VARCHAR(50) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_chat_users` MODIFY COLUMN `ping` DATETIME DEFAULT '0000-00-00 00:00:00' UNIQUE",
+//"ALTER TABLE `vtiger_competitor` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `donotcall` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `emailoptout` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `imagename` VARCHAR(150) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_contactdetails` MODIFY COLUMN `reference` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
+//"ALTER TABLE `vtiger_contactgrouprelation` MODIFY COLUMN `contactid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_convertleadmapping` MODIFY COLUMN `leadfid` INTEGER(19) NOT NULL",
+//"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_crmentity` MODIFY COLUMN `modifiedtime` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_customaction` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_customaction` MODIFY COLUMN `content` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_customerdetails` MODIFY COLUMN `customerid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_customerdetails` MODIFY COLUMN `portal` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT NULL",
+//"ALTER TABLE `vtiger_customview` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_customview_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_cvadvfilter` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_cvadvfilter` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_cvcolumnlist` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_cvcolumnlist` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_cvstdfilter` MODIFY COLUMN `cvid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_dealintimation` MODIFY COLUMN `dealprobability` DECIMAL(3,2) NOT NULL DEFAULT '0.00'",
+//"ALTER TABLE `vtiger_def_org_field` MODIFY COLUMN `fieldid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_def_org_share` MODIFY COLUMN `tabid` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_def_org_share` MODIFY COLUMN `permission` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_def_org_share_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_defaultcv` MODIFY COLUMN `query` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_emailtemplates` MODIFY COLUMN `body` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_emailtemplates_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_faq` MODIFY COLUMN `question` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_faq` MODIFY COLUMN `answer` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_faqcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
+//"ALTER TABLE `vtiger_field` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_field` MODIFY COLUMN `readonly` INTEGER(1) NOT NULL",
+"ALTER TABLE `vtiger_field` MODIFY COLUMN `selected` INTEGER(1) NOT NULL",
+//"ALTER TABLE `vtiger_field` MODIFY COLUMN `block` INTEGER(19) DEFAULT NULL UNIQUE",
+//"ALTER TABLE `vtiger_field` MODIFY COLUMN `displaytype` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_field` MODIFY COLUMN `quickcreate` INTEGER(10) NOT NULL DEFAULT '1'",
+"ALTER TABLE `vtiger_field_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `tag_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
+//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `tagger_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
+//"ALTER TABLE `vtiger_freetagged_objects` MODIFY COLUMN `object_id` INTEGER(20) NOT NULL DEFAULT '0' PRIMARY KEY",
+//"ALTER TABLE `vtiger_freetags` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_group2grouprel` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_group2grouprel` MODIFY COLUMN `containsgroupid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_group2role` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_group2rs` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_groups` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_groups` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_import_maps` MODIFY COLUMN `is_published` VARCHAR(3) COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no'",
+//"ALTER TABLE `vtiger_inventory_tandc` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_inventory_tandc` MODIFY COLUMN `tandc` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_inventory_tandc_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_inventorynotification` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_inventorynotification_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `salesorderid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_invoicegrouprelation` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_lar` MODIFY COLUMN `createdon` DATE NOT NULL",
+//"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_leadgrouprelation` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_mail_accounts` MODIFY COLUMN `account_id` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_mail_accounts` MODIFY COLUMN `user_id` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `box_refresh` INTEGER(10) DEFAULT NULL",
+"ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `mails_per_page` INTEGER(10) DEFAULT NULL",
+"ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `ssltype` VARCHAR(50) DEFAULT NULL",
+"ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `sslmeth` VARCHAR(50) DEFAULT NULL",
+"ALTER TABLE `vtiger_mail_accounts` ADD COLUMN `showbody` VARCHAR(10) DEFAULT NULL",
+"ALTER TABLE `vtiger_notes` MODIFY COLUMN `contact_id` INTEGER(19) DEFAULT '0'",
+"ALTER TABLE `vtiger_notes` MODIFY COLUMN `notecontent` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_notificationscheduler` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_notificationscheduler_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_opportunitystage` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT '0.00'",
+"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_org_share_action_mapping` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `logo` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_ownernotify` MODIFY COLUMN `crmid` INTEGER(19) DEFAULT NULL UNIQUE",
+//"ALTER TABLE `vtiger_parenttab` MODIFY COLUMN `parenttabid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_parenttab` MODIFY COLUMN `sequence` INTEGER(10) NOT NULL",
+"ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `parenttabid` INTEGER(3) NOT NULL",
+//"ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `tabid` INTEGER(3) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_parenttabrel` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
+//"ALTER TABLE `vtiger_pogrouprelation` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_poproductrel` MODIFY COLUMN `purchaseorderid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_poproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_portal` MODIFY COLUMN `portalname` VARCHAR(200) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_portal` MODIFY COLUMN `sequence` INTEGER(3) NOT NULL",
+//"ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `id` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `last_login_time` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `login_time` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_portalinfo` MODIFY COLUMN `logout_time` DATETIME NOT NULL",
+//"ALTER TABLE `vtiger_potcompetitorrel` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_potcompetitorrel` MODIFY COLUMN `competitorid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_potential` MODIFY COLUMN `amount` DECIMAL(10,2) DEFAULT '0.00'",
+"ALTER TABLE `vtiger_potential` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_potentialgrouprelation` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `potentialid` INTEGER(19) NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT NULL",
+"ALTER TABLE `vtiger_potstagehistory` MODIFY COLUMN `lastmodified` DATETIME NOT NULL",
+"ALTER TABLE `vtiger_pricebook` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `pricebookid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_pricebookproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_productcollaterals` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_productcollaterals` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_products` MODIFY COLUMN `productid` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_products` MODIFY COLUMN `product_description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_products` MODIFY COLUMN `commissionrate` DECIMAL(3,3) DEFAULT NULL",
+//"ALTER TABLE `vtiger_profile2field` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2field` MODIFY COLUMN `fieldid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2globalpermissions` MODIFY COLUMN `profileid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2globalpermissions` MODIFY COLUMN `globalactionid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2standardpermissions` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2standardpermissions` MODIFY COLUMN `tabid` INTEGER(10) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2standardpermissions` MODIFY COLUMN `Operation` INTEGER(10) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2utility` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2utility` MODIFY COLUMN `tabid` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_profile2utility` MODIFY COLUMN `activityid` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_profile_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `quoteid` INTEGER(19) DEFAULT NULL UNIQUE",
+//"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
+//"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_purchaseorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_quotegrouprelation` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `potentialid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `quotestage` VARCHAR(200) COLLATE latin1_swedish_ci DEFAULT NULL",
+//"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_quotes` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_quotesproductrel` MODIFY COLUMN `quoteid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_quotesproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_recurringevents` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL",
+//"ALTER TABLE `vtiger_relatedlists` MODIFY COLUMN `relation_id` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_relatedlists_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_relcriteria` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_relcriteria` MODIFY COLUMN `columnindex` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_report` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_report` MODIFY COLUMN `folderid` INTEGER(19) NOT NULL UNIQUE",
+//"ALTER TABLE `vtiger_reportdatefilter` MODIFY COLUMN `datefilterid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_reportmodules` MODIFY COLUMN `reportmodulesid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `sortcolid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_reportsortcol` MODIFY COLUMN `reportid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `reportsummaryid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_reportsummary` MODIFY COLUMN `summarytype` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_role2profile` MODIFY COLUMN `profileid` INTEGER(11) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_role_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_rss` MODIFY COLUMN `rssid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `contactid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `vendorid` INTEGER(19) DEFAULT NULL UNIQUE",
+"ALTER TABLE `vtiger_salesorder` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_seactivityrel` MODIFY COLUMN `crmid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_seactivityrel` MODIFY COLUMN `activityid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_selectcolumn` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_selectquery` MODIFY COLUMN `queryid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_selectquery_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+//"ALTER TABLE `vtiger_sharedcalendar` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_sharedcalendar` MODIFY COLUMN `sharedid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_sogrouprelation` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_soproductrel` MODIFY COLUMN `salesorderid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_soproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_systems` MODIFY COLUMN `id` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_username` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_systems` MODIFY COLUMN `server_password` VARCHAR(30) COLLATE latin1_swedish_ci DEFAULT NULL",
+"ALTER TABLE `vtiger_ticketcomments` MODIFY COLUMN `comments` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_ticketcomments` MODIFY COLUMN `createdtime` DATETIME NOT NULL",
+//"ALTER TABLE `vtiger_ticketgrouprelation` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `ticketid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `solution` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_troubletickets` MODIFY COLUMN `update_log` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_user2role` MODIFY COLUMN `userid` INTEGER(11) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_user2role` MODIFY COLUMN `roleid` VARCHAR(255) COLLATE latin1_swedish_ci NOT NULL UNIQUE",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `is_admin` VARCHAR(3) COLLATE latin1_swedish_ci DEFAULT '0'",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `user_preferences` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_users` MODIFY COLUMN `homeorder` VARCHAR(255) COLLATE latin1_swedish_ci DEFAULT 'ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL'",
+"ALTER TABLE `vtiger_users` ADD COLUMN `currency_id` INTEGER(19) NOT NULL DEFAULT '1'",
+"ALTER TABLE `vtiger_users` ADD COLUMN `defhomeview` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT 'home_metrics'",
+//"ALTER TABLE `vtiger_users2group` MODIFY COLUMN `groupid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_users2group` MODIFY COLUMN `userid` INTEGER(19) NOT NULL PRIMARY KEY",
+"ALTER TABLE `vtiger_users_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
+"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `street` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_vendor` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+//"ALTER TABLE `vtiger_wordtemplates` MODIFY COLUMN `templateid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_wordtemplates` MODIFY COLUMN `description` TEXT COLLATE latin1_swedish_ci",
+"ALTER TABLE `vtiger_accountgrouprelation` ADD KEY `accountgrouprelation_IDX1` (`groupname`)",
+"ALTER TABLE `vtiger_activity` ADD KEY `status1` (`status`, `eventstatus`)",
+"ALTER TABLE `vtiger_attachments` ADD KEY `attachmentsid1` (`attachmentsid`)",
+"ALTER TABLE `vtiger_blocks` ADD KEY `block_tabid` (`tabid`)",
+"ALTER TABLE `vtiger_carrier` ADD UNIQUE KEY `carrier_UK01` (`carrier`)",
+"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX0` (`chat_from`)",
+"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX1` (`chat_to`)",
+"ALTER TABLE `vtiger_chat_msg` ADD KEY `chat_msg_IDX2` (`born`)",
+"ALTER TABLE `vtiger_chat_pchat` ADD UNIQUE KEY `chat_pchat_UK0` (`msg`)",
+"ALTER TABLE `vtiger_chat_pvchat` ADD UNIQUE KEY `chat_pvchat_UK0` (`msg`)",
+"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX0` (`nick`)",
+"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX1` (`session`)",
+"ALTER TABLE `vtiger_chat_users` ADD KEY `chat_users_IDX2` (`ping`)",
+"ALTER TABLE `vtiger_contactgrouprelation` ADD KEY `contactgrouprelation_IDX1` (`groupname`)",
+"ALTER TABLE `vtiger_def_org_field` ADD KEY `tabid4` (`tabid`)",
+"ALTER TABLE `vtiger_def_org_share` ADD KEY `fk_def_org_share23` (`permission`)",
+"ALTER TABLE `vtiger_field` ADD KEY `tabid2` (`tabid`)",
+"ALTER TABLE `vtiger_field` ADD KEY `blockid` (`block`)",
+"ALTER TABLE `vtiger_field` ADD KEY `displaytypeid` (`displaytype`)",
+"ALTER TABLE `vtiger_freetagged_objects` DROP INDEX tag_id_index",
+"ALTER TABLE `vtiger_freetagged_objects` ADD INDEX `tag_id_index` (`tag_id`, `tagger_id`, `object_id`)",
+"ALTER TABLE `vtiger_group2grouprel` ADD KEY `fk_group2grouprel2` (`containsgroupid`)",
+"ALTER TABLE `vtiger_group2role` ADD KEY `fk_group2role2` (`roleid`)",
+"ALTER TABLE `vtiger_group2rs` ADD KEY `fk_group2rs2` (`roleandsubid`)",
+"ALTER TABLE `vtiger_groups` ADD KEY `idx_groups_123group` (`groupname`)",
+"ALTER TABLE `vtiger_invoice` ADD KEY `SoPo_IDX` (`invoiceid`)",
+"ALTER TABLE `vtiger_invoice` ADD KEY `fk_Invoice2` (`salesorderid`)",
+"ALTER TABLE `vtiger_invoicegrouprelation` ADD KEY `invoicegrouprelation_IDX1` (`groupname`, `invoiceid`)",
+"ALTER TABLE `vtiger_leadgrouprelation` ADD KEY `leadgrouprelation_IDX0` (`leadid`)",
+"ALTER TABLE `vtiger_moduleowners` ADD KEY `moduleowners_UK11` (`tabid`, `user_id`)",
+//"ALTER TABLE `vtiger_org_share_action2tab` ADD KEY `fk_org_share_action2tab12345` (`tabid`)",
+"ALTER TABLE `vtiger_ownernotify` ADD KEY `ownernotify_UK1` (`crmid`, `flag`)",
+"ALTER TABLE `vtiger_parenttab` ADD KEY `parenttab_UK1` (`parenttabid`, `parenttab_label`, `visible`)",
+"ALTER TABLE `vtiger_parenttabrel` ADD KEY `parenttabrelUK01` (`tabid`, `parenttabid`)",
+"ALTER TABLE `vtiger_pogrouprelation` ADD KEY `pogrouprelation_IDX1` (`groupname`, `purchaseorderid`)",
+"ALTER TABLE `vtiger_portal` ADD KEY `portal_UK01` (`portalname`)",
+"ALTER TABLE `vtiger_potential` ADD KEY `potentialid1` (`potentialid`)",
+"ALTER TABLE `vtiger_potentialgrouprelation` ADD KEY `potentialgrouprelation_IDX1` (`groupname`)",
+"ALTER TABLE `vtiger_potstagehistory` DROP INDEX PotStageHistory_IDX1",
+"ALTER TABLE `vtiger_potstagehistory` ADD INDEX `PotStageHistory_IDX1` (`historyid`)",
+"ALTER TABLE `vtiger_potstagehistory` ADD KEY `fk_PotStageHistory` (`potentialid`)",
+"ALTER TABLE `vtiger_profile2field` ADD KEY `tabid3` (`tabid`, `profileid`)",
+//"ALTER TABLE `vtiger_profile2globalpermissions` ADD KEY `idx_profile2globalpermissions` (`profileid`, `globalactionid`)",
+"ALTER TABLE `vtiger_profile2standardpermissions` ADD KEY `idx_prof2stad` (`profileid`, `tabid`, `Operation`)",
+"ALTER TABLE `vtiger_profile2tab` ADD KEY `idx_profile2tab1` (`profileid`, `tabid`)",
+"ALTER TABLE `vtiger_profile2utility` ADD KEY `idx_prof2utility` (`profileid`, `tabid`, `activityid`)",
+"ALTER TABLE `vtiger_purchaseorder` ADD KEY `PO_Vend_IDX` (`vendorid`)",
+"ALTER TABLE `vtiger_purchaseorder` ADD KEY `PO_Quote_IDX` (`quoteid`)",
+"ALTER TABLE `vtiger_purchaseorder` ADD KEY `PO_Contact_IDX` (`contactid`)",
+"ALTER TABLE `vtiger_quotegrouprelation` ADD KEY `quotegrouprelation_IDX1` (`groupname`)",
+//"ALTER TABLE `vtiger_quotes` DROP INDEX vtiger_quotestage",
+"ALTER TABLE `vtiger_quotes` ADD INDEX `quotestage` (`quoteid`)",
+"ALTER TABLE `vtiger_quotes` ADD KEY `potentialid2` (`potentialid`)",
+"ALTER TABLE `vtiger_quotes` ADD KEY `contactid` (`contactid`)",
+"ALTER TABLE `vtiger_recurringtype` ADD UNIQUE KEY `RecurringEvent_UK0` (`recurringtype`)",
+"ALTER TABLE `vtiger_reportsortcol` ADD KEY `FK1_reportsortcol` (`reportid`)",
+"ALTER TABLE `vtiger_role2profile` ADD KEY `idx_role2profileid1` (`roleid`, `profileid`)",
+"ALTER TABLE `vtiger_salesorder` ADD KEY `SoVend_IDX` (`vendorid`)",
+"ALTER TABLE `vtiger_salesorder` ADD KEY `SoContact_IDX` (`contactid`)",
+"ALTER TABLE `vtiger_seattachmentsrel` ADD KEY `attachmentsid2` (`attachmentsid`, `crmid`)",
+"ALTER TABLE `vtiger_selectquery` ADD KEY `selectquery_IDX0` (`queryid`)",
+"ALTER TABLE `vtiger_sogrouprelation` ADD KEY `sogrouprelation_IDX1` (`groupname`)",
+"ALTER TABLE `vtiger_tab` ADD KEY `tabid1` (`tabid`)",
+"ALTER TABLE `vtiger_taxclass` ADD UNIQUE KEY `carrier_UK02` (`taxclass`)",
+"ALTER TABLE `vtiger_troubletickets` ADD KEY `status2` (`status`)",
+"ALTER TABLE `vtiger_users2group` ADD KEY `idx_users2group` (`groupid`, `userid`)",
+"ALTER TABLE `vtiger_users2group` ADD KEY `fk_users2group2` (`userid`)",
+//"ALTER TABLE `vtiger_accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation123` FOREIGN KEY (`accountid`) REFERENCES `account` (`accountid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation123` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `customview` (`cvid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_invoice` ADD CONSTRAINT `fk_Invoice2` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation234` FOREIGN KEY (`invoiceid`) REFERENCES `invoice` (`invoiceid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_org_share_action2tab` ADD CONSTRAINT `fk_org_share_action2tab12345` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation123` FOREIGN KEY (`purchaseorderid`) REFERENCES `purchaseorder` (`purchaseorderid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation67` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `profile` (`profileid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2345` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation132` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes2` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO4` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation78` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_vendorcontactrel` ADD CONSTRAINT `fk_VendorContactRel45` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE"
 		    );
 foreach($query_array as $query)
 {
 	Execute($query);
 }
 
+//First check whether this table is exist and the proceed
+$currency_columns = $conn->getColumnNames("vtiger_currency_info");
+if(!is_array($currency_columns))
+{
+	$currency_query = "CREATE TABLE `vtiger_currency_info` (
+	  `id` int(11) NOT NULL auto_increment,
+	  `currency_name` varchar(100) default NULL,
+	  `currency_code` varchar(100) default NULL,
+	  `currency_symbol` varchar(30) default NULL,
+	  `conversion_rate` decimal(10,3) default NULL,
+	  `currency_status` varchar(25) default NULL,
+	  `defaultid` varchar(10) NOT NULL default '0',
+	   PRIMARY KEY  (`id`)
+	) ENGINE=InnoDB";
+	Execute($currency_query);
+}
+elseif(!in_array("id",$currency_columns))
+{
+	$currency_query_array = Array(
+		"alter table vtiger_currency_info drop primary key",
+		"alter table vtiger_currency_info add column id int(11) NOT NULL auto_increment primary key FIRST",
+		"alter table vtiger_currency_info add column conversion_rate decimal(10,3) default NULL",
+		"alter table vtiger_currency_info add column currency_status varchar(25) default NULL",
+		"alter table vtiger_currency_info add column defaultid varchar(10) NOT NULL default '0'",
+				     );
+	foreach($currency_query_array as $query)
+	{
+		Execute($query);
+	}
+}
 
 $conn->println("Database Modifications for 5.0(Alpha) Dev 3 ==> 5.0 Alpha (5) ends here.");
 
@@ -2672,14 +2702,14 @@ $notify_owner_array = Array(
 	"update vtiger_field set sequence=26 where tabid=4 and fieldname='modifiedtime'",
 	"update vtiger_field set sequence=25 where tabid=4 and fieldname='createdtime'",
 	
-	"insert into vtiger_field values(4,".$conn->getUniqueID("field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
+	"insert into vtiger_field values(4,".$conn->getUniqueID("vtiger_field").",'notify_owner','contactdetails',1,56,'notify_owner','Notify Owner',1,0,0,10,24,4,1,'C~O',1,NULL,'ADV')",
 	"alter table vtiger_contactdetails add column notify_owner varchar(3) default 0 after reference",
 
 	"update vtiger_field set sequence=21 where tabid=6 and fieldname='modifiedtime'",
 	"update vtiger_field set sequence=20 where tabid=6 and fieldname='createdtime'",
 	"update vtiger_field set sequence=19 where tabid=6 and fieldname='assigned_user_id'",
 	
-	"insert into vtiger_field values(6,".$conn->getUniqueID("field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
+	"insert into vtiger_field values(6,".$conn->getUniqueID("vtiger_field").",'notify_owner','account',1,56,'notify_owner','Notify Owner',1,0,0,10,18,9,1,'C~O',1,NULL,'ADV')",
 	"alter table vtiger_account add column notify_owner varchar(3) default 0 after emailoptout"
 			   );
 foreach($notify_owner_array as $query)
@@ -2688,7 +2718,7 @@ foreach($notify_owner_array as $query)
 }
 
 //Added for RSS entries
-$rss_insert_query = "insert into vtiger_field values (24,".$conn->getUniqueID("field").",'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')";
+$rss_insert_query = "insert into vtiger_field values (24,".$conn->getUniqueID("vtiger_field").",'rsscategory','rss',1,'15','rsscategory','rsscategory',1,0,0,255,13,null,1,'V~O',1,null,'BAS')";
 Execute($rss_insert_query);
 
 //Quick Create Feature added for Vendor & PriceBook
@@ -2707,8 +2737,8 @@ foreach($quickcreate_query as $query)
 
 
 //Added on 24-04-06 to populate vtiger_customview All for Campaign and webmails modules
-$cvid1 = $conn->getUniqueID("customview");
-$cvid2 = $conn->getUniqueID("customview");
+$cvid1 = $conn->getUniqueID("vtiger_customview");
+$cvid2 = $conn->getUniqueID("vtiger_customview");
 $customview_query_array = Array(
 	"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$cvid1.",'All',1,0,'Campaigns')",
 	"insert into vtiger_cvcolumnlist (cvid,columnindex,columnname) values (".$cvid1.",0,'vtiger_campaign:campaignname:campaignname:Campaigns_Campaign_Name:V')",
@@ -2745,9 +2775,9 @@ $query_array2 = Array(
 				"create table vtiger_inventorytaxinfo (taxid int(3) NOT NULL auto_increment, taxname varchar(50) default NULL, percentage decimal(7,3) default NULL,  PRIMARY KEY  (taxid), KEY vtiger_inventorytaxinfo_taxname_idx (taxname))",
 				"create table vtiger_producttaxrel ( productid int(11) NOT NULL, taxid int(3) NOT NULL, taxpercentage decimal(7,3) default NULL, KEY vtiger_producttaxrel_productid_idx (productid), KEY vtiger_producttaxrel_taxid_idx (taxid))",
 
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'VAT','4.5')",
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Sales','10')",
-				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("inventorytaxinfo").",'Service','12.5')",
+				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'VAT','4.5')",
+				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Sales','10')",
+				"insert into vtiger_inventorytaxinfo values(".$conn->getUniqueID("vtiger_inventorytaxinfo").",'Service','12.5')",
 				"update vtiger_field set uitype=83, tablename='producttaxrel' where tabid=14 and fieldname='taxclass'",
 				"insert into vtiger_moduleowners values(".$this->localGetTabID('Campaigns').",1)",
 
@@ -2798,8 +2828,10 @@ for($attach_count = 0;$attach_count < $noof_attachments ;$attach_count++)
 	$conn->println("File Path = $filepath");
 	//upto this added to set the file path based on attachment created time
 
+	//In this file name (attachmentid_filename) the file will be stored in the harddisk
+	$moved_filename = $attach_id."_".$attach_name;
 	//write the contents in the file
-	$handle = @fopen($filepath.$attach_name,'w');
+	$handle = @fopen($filepath.$moved_filename,'w');
 	fputs($handle, base64_decode($attach_data));
 	fclose($handle);
 
@@ -2831,11 +2863,11 @@ foreach ($comboTables as $tablename)
 	{
 		if($val != '')
 		{
-			$conn->query("insert into ".$tablename. " values(null,'".$val."',".$i.",1)");
+			$conn->query("insert into vtiger_".$tablename. " values(null,'".$val."',".$i.",1)");
 		}
 		else
 		{
-			$conn->query("insert into ".$tablename. " values(null,'--None--',".$i.",1)");
+			$conn->query("insert into vtiger_".$tablename. " values(null,'--None--',".$i.",1)");
 		}
 		$i++;
 	}
@@ -2879,7 +2911,7 @@ $create_query28 = "CREATE TABLE vtiger_emaildetails (
 Execute($create_query28);
 
 
-$obj_array = Array('Leads'=>'leaddetails','Contacts'=>'contactdetails');
+$obj_array = Array('Leads'=>'vtiger_leaddetails','Contacts'=>'vtiger_contactdetails');
 $leadfieldid = $conn->query_result($conn->query("select fieldid from vtiger_field where tabid=7 and fieldname='email'"),0,'fieldid');
 $contactfieldid = $conn->query_result($conn->query("select fieldid from vtiger_field where tabid=4 and fieldname='email'"),0,'fieldid');
 $fieldid_array = Array("Leads"=>"$leadfieldid","Contacts"=>"$contactfieldid");
@@ -2985,7 +3017,7 @@ $sec2="INSERT INTO vtiger_tab VALUES (27,'Portal',0,24,'Portal',null,null,1)";
 $sec3="INSERT INTO vtiger_tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)";
 
 //Insert into vtiger_def_org_share tables
-$sec4="insert into vtiger_def_org_share values (".$conn->getUniqueID('def_org_share').",26,2,0)";	
+$sec4="insert into vtiger_def_org_share values (".$conn->getUniqueID('vtiger_def_org_share').",26,2,0)";	
 
 Execute($sec2);
 Execute($sec3);
@@ -2996,26 +3028,26 @@ Execute($sec4);
 Execute("insert into vtiger_datashare_relatedmodules_seq values(1)");
 	
 //Lead Related Module
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",7,10)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",7,10)");
 
 //Account Related Module
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,2)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,13)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,20)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,22)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,23)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",6,10)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,2)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,13)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,20)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,22)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,23)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",6,10)");
 
 
 //Potential Related Module
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,20)");
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",2,22)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",2,20)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",2,22)");
 
 //Quote Related Module
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",20,22)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",20,22)");
 
 //SO Related Module
-Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('datashare_relatedmodules').",22,23)");
+Execute("insert into vtiger_datashare_relatedmodules values (".$conn->getUniqueID('vtiger_datashare_relatedmodules').",22,23)");
 	
 
 //By Don Ends
@@ -3036,7 +3068,7 @@ foreach($update_query_array5 as $query)
 }
 
 $insert_query_array27 = Array(
-	"insert into vtiger_relatedlists values(".$conn->getUniqueID('relatedlists').",13,0,'get_ticket_history',3,'Ticket History',0)",
+	"insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",13,0,'get_ticket_history',3,'Ticket History',0)",
 	"insert into vtiger_parenttabrel values (2,10,4)",
 	"insert into vtiger_parenttabrel values (4,10,7)"
 			     );
@@ -3056,38 +3088,38 @@ $user_query_array = Array(
 "insert into vtiger_blocks values (80,29,'LBL_MORE_INFORMATION',2,0,0,0,0,0)",
 "insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)",
 
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')",
-"insert into vtiger_field values (29,".$conn->getUniqueID("field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'user_name','vtiger_users',1,'106','user_name','User Name',1,0,0,11,1,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'is_admin','vtiger_users',1,'156','is_admin','Admin',1,0,0,3,2,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'user_password','vtiger_users',1,'99','user_password','Password',1,0,0,30,3,79,4,'P~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'confirm_password','vtiger_users',1,'99','confirm_password','Confirm Password',1,0,0,30,4,79,4,'P~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'first_name','vtiger_users',1,'1','first_name','First Name',1,0,0,30,5,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'last_name','vtiger_users',1,'2','last_name','Last Name',1,0,0,30,6,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'roleid','vtiger_user2role',1,'98','roleid','Role',1,0,0,200,7,79,1,'V~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'email1','vtiger_users',1,'104','email1','Email',1,0,0,100,9,79,1,'E~M',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'status','vtiger_users',1,'115','status','Status',1,0,0,100,10,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'activity_view','vtiger_users',1,'15','activity_view','Default Activity View',1,0,0,100,13,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'lead_view','vtiger_users',1,'15','lead_view','Default Lead View',1,0,0,100,12,79,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'currency_id','vtiger_users',1,'116','currency_id','Currency',1,0,0,100,11,79,1,'I~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'title','vtiger_users',1,'1','title','Title',1,0,0,50,1,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_work','vtiger_users',1,'1','phone_work','Office Phone',1,0,0,50,2,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'department','vtiger_users',1,'1','department','Department',1,0,0,50,3,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_mobile','vtiger_users',1,'1','phone_mobile','Mobile',1,0,0,50,4,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'reports_to_id','vtiger_users',1,'101','reports_to_id','Reports To',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_other','vtiger_users',1,'1','phone_other','Other Phone',1,0,0,50,5,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'email2','vtiger_users',1,'13','email2','Other Email',1,0,0,100,6,80,1,'E~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_fax','vtiger_users',1,'1','phone_fax','Fax',1,0,0,50,7,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'yahoo_id','vtiger_users',1,'13','yahoo_id','Yahoo id',1,0,0,100,7,80,1,'E~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'phone_home','vtiger_users',1,'1','phone_home','Home Phone',1,0,0,50,8,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,9,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'date_format','vtiger_users',1,'15','date_format','Date Format',1,0,0,30,10,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'tagcloud','vtiger_users',1,'103','tagcloud','Tag Cloud',1,0,0,250,13,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'signature','vtiger_users',1,'21','signature','Signature',1,0,0,250,11,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'description','vtiger_users',1,'21','description','Notes',1,0,0,250,12,80,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_street','vtiger_users',1,'21','address_street','Street Address',1,0,0,250,1,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_city','vtiger_users',1,'1','address_city','City',1,0,0,100,2,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_state','vtiger_users',1,'1','address_state','State',1,0,0,100,3,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_postalcode','vtiger_users',1,'1','address_postalcode','Postal Code',1,0,0,100,4,81,1,'V~O',1,null,'BAS')",
+"insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'address_country','vtiger_users',1,'1','address_country','Country',1,0,0,100,5,81,1,'V~O',1,null,'BAS')",
 			 );
 foreach($user_query_array as $query)
 {
@@ -3157,6 +3189,20 @@ Execute("insert into vtiger_parenttabrel values (4,9,8)");
 //Queries to remove the rss categories
 Execute("drop table vtiger_rsscategory");
 Execute("delete from vtiger_field where tabid=24");
+
+//Added on 23-06-06
+Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'hour_format','vtiger_users',1,'116','hour_format','Calendar Hour Format',1,0,0,100,13,79,3,'I~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'end_hour','vtiger_users',1,'116','end_hour','Day ends at',1,0,0,100,15,79,3,'I~O',1,null,'BAS')");
+Execute("insert into vtiger_field values (29,".$conn->getUniqueID("vtiger_field").",'start_hour','vtiger_users',1,'116','start_hour','Day starts at',1,0,0,100,14,79,3,'I~O',1,null,'BAS')");
+
+Execute("insert into vtiger_relatedlists values (".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",".getTabid("Potentials").",'get_opportunities',3,'Potentials',0)");
+Execute("insert into vtiger_relatedlists values(".$conn->getUniqueID('vtiger_relatedlists').",".getTabid("Campaigns").",9,'get_activities',4,'Activities',0)");
+
+Execute("insert into vtiger_field values (2,".$conn->getUniqueID("vtiger_field").",'campaignid','vtiger_potential',1,'58','campaignid','Campaign Source',1,0,0,100,12,1,1,'N~O',1,null,'BAS')");
+
+
+
+
 
 
 
