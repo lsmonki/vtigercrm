@@ -494,6 +494,7 @@ class Contact extends CRMEntity {
 		global $mod_strings;
 
 		$focus = new Campaign();
+		$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 		$button = '';
 
 		$returnset = '';
