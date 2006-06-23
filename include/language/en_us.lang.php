@@ -190,6 +190,8 @@ $app_strings = Array(
 
 'LBL_SELECT_CONTACT_BUTTON_LABEL'=>'Select Contact',
 
+'LBL_SELECT_CAMPAIGN_BUTTON_LABEL'=>'Select Campaign',
+
 'LBL_SELECT_USER_BUTTON_TITLE'=>'Select User [Alt+U]',
 
 'LBL_SELECT_USER_BUTTON_KEY'=>'U',
@@ -900,6 +902,7 @@ $app_strings = Array(
 
 //Added after 5.0 Alpha5
 'Campaign Name'=>'Campaign Name',
+'Campaign Type'=>'Campaign Type',
 'LBL_ACTIONS'=>'Actions',
 'LBL_SEND'=>'Send',
 'LBL_VAT'=>'VAT',
