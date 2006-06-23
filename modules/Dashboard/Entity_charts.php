@@ -232,6 +232,38 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($name_val!="")
 						$name=$name_val;
 				}
+	if($graph_for =="campaignid")
+				{
+					//this will return the list of the names of the campaign``:w for the y-axis
+					$query = "SELECT campaignname FROM vtiger_campaign WHERE campaignid='".$name."'";
+					$result = $adb->query($query);
+					$name_val = $adb->query_result($result,0,"campaignname");
+					if($name_val!="")
+						$name=$name_val;
+				}
+			if($graph_for =="contactid")
+				{
+					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid='".$name."'";
+					echo '>>>>>>>>>. '.$query;
+					$result = $adb->query($query);
+					$name_val = $adb->query_result($result,0,"lastname");
+					if($name_val!="")
+						$name=$name_val;
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+				
 				//Passing name to graph
 				if($mod_name_val!="") $mod_name_val.="::$name";
 				else $mod_name_val="$name";
