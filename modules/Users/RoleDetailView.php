@@ -90,6 +90,6 @@ $smarty->assign("ROLEINFO",getStdOutput($roleid));
 $smarty->assign("PARENTNAME",$parentname);            
 
 
-$smarty->display("RoleDetailViewN.tpl");
+$smarty->display("RoleDetailView.tpl");
 
 ?>
