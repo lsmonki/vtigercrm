@@ -13,7 +13,7 @@ require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 
    global $adb;
-   $sql = "select templateid, module, description, filename, vtiger_filesize, filetype from vtiger_wordtemplates order by filename ASC";
+   $sql = "select templateid, module, description, filename, filesize, filetype from vtiger_wordtemplates order by filename ASC";
    $result = $adb->query($sql);
 
 $edit="Edit  ";
