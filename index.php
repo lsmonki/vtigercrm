@@ -24,6 +24,7 @@ global $display;
 global $category;
 require_once('include/utils/utils.php');
 
+
 if (version_compare(phpversion(), '5.0') < 0) {
     eval('
     function clone($object) {
@@ -189,6 +190,7 @@ $viewAttachment = false;
 $skipSecurityCheck= false;
 //echo $module;
 // echo $action;
+
 if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
@@ -311,16 +313,19 @@ if(isset($action) && isset($module))
 
 	$currentModuleFile = 'modules/'.$module.'/'.$action.'.php';
 	$currentModule = $module;
+	
+      	
 }
 elseif(isset($module))
 {
+	
 	$currentModule = $module;
 	$currentModuleFile = $moduleDefaultFile[$currentModule];
 }
 else {
     // use $default_module and $default_action as set in config.php
     // Redirect to the correct module with the correct action.  We need the URI to include these fields.
-  
+	  
 
         header("Location: index.php?action=$default_action&module=$default_module");
     exit();
@@ -547,6 +552,14 @@ else
 	$theme = $default_theme;
 }
 
+	
+
+//auditing
+$date_var = date('YmdHis');
+$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$current_user->id.",'".$module."','".$action."',$date_var)";
+$adb->query($query);
+
+
 //logging the security Information
 $seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.'  #######');
 
@@ -555,8 +568,7 @@ if(!$skipSecurityCheck)
 
 
 	require_once('include/utils/UserInfoUtil.php');
-
-        if(ereg('Ajax',$action))
+	if(ereg('Ajax',$action))
         {
                 $now_action=$_REQUEST['file'];
         }
@@ -564,6 +576,7 @@ if(!$skipSecurityCheck)
         {
                 $now_action=$action;
         }
+        
 
         if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         {
