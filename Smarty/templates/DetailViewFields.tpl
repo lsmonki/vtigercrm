@@ -17,8 +17,8 @@
                                          		<td width=25% class="dvtCellInfo" align="left">&nbsp;
                                          		      {if $keyid eq '55'}<!--SalutationSymbol-->
                                          		            {$keysalut}
-                                         		      {elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
-                                         		            {$keycursymb}
+                                         		      {*elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
+                                         		            {$keycursymb*}
                                                         	{/if}
                                                        {$keyval}
                                                   </td>

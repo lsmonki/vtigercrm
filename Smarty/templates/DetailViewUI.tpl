@@ -17,8 +17,8 @@
                                          		<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">
                                          		      {if $keyid eq '55'}<!--SalutationSymbol-->
                                          		            {$keysalut}
-                                         		      {elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
-                                         		            {$keycursymb}
+                                         		      {*elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
+                                         		            {$keycursymb*}
                                                         {/if}
                                                        &nbsp;&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
                                               		<div id="editarea_{$label}" style="display:none;">
