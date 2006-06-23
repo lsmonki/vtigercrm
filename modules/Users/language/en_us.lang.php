@@ -474,7 +474,7 @@ $mod_strings = Array(
 'CVLVT'=>'Key Metrics',
 'HLT'=>'HelpDesk Top Tickets',
 'OLV'=>'Top Open Activities',
-'GRT'=>'Top Group Tasks',
+'GRT'=>'My Group Allocation',
 'OLTSO'=>'Top Sales Orders',
 'ILTI'=>'Top Invoices',
 //Added for 5.0 alpha
