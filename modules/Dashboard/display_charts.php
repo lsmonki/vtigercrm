@@ -65,7 +65,17 @@ $invoice_query="select vtiger_crmentity.*,vtiger_invoice.* from vtiger_invoice i
 //Query for tickets
 $helpdesk_query=" select vtiger_troubletickets.status AS ticketstatus, vtiger_ticketgrouprelation.groupname AS ticketgroupname, vtiger_troubletickets.*,vtiger_crmentity.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_account on vtiger_account.accountid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id and vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid where vtiger_crmentity.deleted=0";
 
- /**  This function returns  the values for the graph, for any type of graph needed	 
+//Query for campaigns
+$campaign_query=" select vtiger_campaign.*,vtiger_crmentity.* from vtiger_campaign inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_campaign.campaignid inner join vtiger_campaigncontrel where vtiger_campaigncontrel.campaignid=vtiger_campaign.campaignid and vtiger_crmentity.deleted=0";
+
+
+//Query for tickets by account
+$tickets_by_account="select vtiger_troubletickets.*, vtiger_account.* from vtiger_troubletickets inner join vtiger_account on vtiger_account.accountid=vtiger_troubletickets.parent_id";
+ 
+//Query for tickets by contact
+$tickets_by_contact="select vtiger_troubletickets.*, vtiger_contactdetails.* from vtiger_troubletickets inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id";
+
+/**  This function returns  the values for the graph, for any type of graph needed	 
         * Portions created by vtiger are Copyright (C) vtiger.
         * All Rights Reserved.
         * Contributor(s): ______________________________________..
@@ -97,6 +107,9 @@ $graph_array = Array(
 	  "ticketsbyuser" => $mod_strings['ticketsbyuser'],
 	  "ticketsbyteam" => $mod_strings['ticketsbyteam'],
 	  "ticketsbyproduct"=> $mod_strings['ticketsbyproduct'],
+	  "contactbycampaign"=> $mod_strings['contactbycampaign'],
+	  "ticketsbyaccount"=> $mod_strings['ticketsbyaccount'],
+	  "ticketsbycontact"=> $mod_strings['ticketsbycontact'],
           );
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
@@ -643,6 +656,36 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 			    $query=$helpdesk_query;
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
+		    //Campaigns by Contact
+		    elseif (($type == "contactbycampaign") && (getFieldVisibilityPermission('Campaigns',$user_id,'campaignid') == "0"))
+		    {
+			    $graph_by="campaignid";
+			    $graph_title=$mod_strings['ticketsbycampaign'];
+			    $module="Campaigns";
+			    $where="";
+			    $query=$campaign_query;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+		    //Tickets by Account
+		    elseif (($type == "ticketsbyaccount") && (getFieldVisibilityPermission('HelpDesk',$user_id,'accountid') == "0"))
+		    {
+			    $graph_by="accountid";
+			    $graph_title=$mod_strings['ticketsbyaccount'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$tickets_by_account;
+			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+		    }
+			    //Tickets by Contact
+			    elseif (($type == "ticketsbycontact") && (getFieldVisibilityPermission('HelpDesk',$user_id,'contactid') == "0"))
+			    {
+				    $graph_by="contactid";
+				    $graph_title=$mod_strings['ticketsbycontact'];
+				    $module="HelpDesk";
+				    $where="";
+				    $query=$tickets_by_contact;
+				    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+				    }
 		    else
                     {
                         echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
