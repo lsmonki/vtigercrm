@@ -33,10 +33,6 @@ $sql = $adb->query('select accountid from vtiger_contactdetails where contactid=
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 
-$sql1 = $adb->query('select campaignid from vtiger_contactdetails where contactid='.$focus->id);
-$campaignid = $adb->query_result($sql1,0,'campaignid');
-if($campaignid == 0) $campaignid='';
-
 global $mod_strings;
 global $app_strings;
 global $theme;
@@ -47,7 +43,6 @@ require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("accountid",$accountid);
-$smarty->assign("campaignid",$campaignid);
 	
 
 if(isset($_request['isduplicate']) && $_request['isduplicate'] == 'true') {

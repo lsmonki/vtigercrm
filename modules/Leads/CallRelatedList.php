@@ -50,11 +50,6 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
        unset($_SESSION['rlvs']);
  }
 	
-$sql1 = $adb->query('select campaignid from vtiger_leaddetails where leadid='.$focus->id);
-$campaignid = $adb->query_result($sql1,0,'campaignid');
-if($campaignid == 0) $campaignid='';
-$smarty->assign("campaignid",$campaignid);
-
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
