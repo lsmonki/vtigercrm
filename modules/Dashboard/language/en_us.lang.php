@@ -80,6 +80,9 @@ $mod_strings = Array(
 "ticketsbyuser"=>"Tickets by User",
 "ticketsbyteam"=>"Tickets by Team",
 "ticketsbyproduct"=>"Tickets by Product",
+"contactbycampaign"=>"Contacts by Campaign",
+"ticketsbyaccount"=>"Tickets by Account",
+"ticketsbycontact"=>"Tickets by Contact",
 
 'LBL_DASHBRD_HOME'=>'Dashboard Home',
 'LBL_HORZ_BAR_CHART'=>'Horizontal Bar Chart',
