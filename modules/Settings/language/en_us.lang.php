@@ -408,11 +408,11 @@ $mod_strings = Array(
 
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings',
 
-'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Create and Manage user defined fields...',
+'LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS'=>'Manage user defined fields...',
 
 'LBL_SELECT_MODULE'=>'Select Module',
 
-'LBL_SELECT_CF_TEXT'=>'Select the CRM module to show CustomFields :',
+'LBL_SELECT_CF_TEXT'=>'Select the CRM module:',
 
 
 
@@ -666,6 +666,10 @@ $mod_strings = Array(
 'LBL_SELECT_CRM_MODULE'=>'Select crm module',
 'LBL_TAX_SETTINGS'=>'Tax Settings',
 'LBL_INVENTORY_TAX_CONFIG'=>'Inventory Tax Configuration',
+'LBL_CUSTOM_MAPP_INFO'=>'Only Leads module support mapping of fields with other modules.',
+'LBL_MAPPING_OTHER_MODULES'=>'Mapping with other Modules',
+'LBL_CUSTOM_FILED_IN'=>'Custom Fields in ',
+'LBL_EDIT_FIELD_MAPPING'=>'Editing Field Mapping',
 );
 
 
