@@ -23,7 +23,7 @@
 require_once('modules/Users/User.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
-//require_once('modules/Users/AccessControl.php');
+
 
 global $mod_strings;
 
@@ -38,6 +38,13 @@ $focus->load_user($user_password);
 
 if($focus->is_authenticated())
 {
+
+	$date_var = date('YmdHis');
+	$query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate',$date_var)";
+	$adb->query($query);
+
+
+	
 	// Recording the login info
         $usip=$_SERVER['REMOTE_ADDR'];
         $intime=date("Y/m/d H:i:s");
