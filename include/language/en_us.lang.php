@@ -918,6 +918,15 @@ $app_strings = Array(
 'LBL_INVOICE_STATUS'=>'Invoice Status',
 'LBL_NOTE'=>'Note',
 'LBL_MODULE'=>'Module',
+'Active'=>'Active',
+'Inactive'=>'Inactive',
+'Today'=>'Today',
+'Last 2 Days'=>'Last 2 Days',
+'Last Week'=>'Last Week',
+'This Week'=>'This Week',
+'This Month'=>'This Month',
+'This Year'=>'This Year',
+
 );
 
 
