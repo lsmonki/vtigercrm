@@ -17,18 +17,11 @@
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
-function add_data_to_relatedlist(entity_id,recordid) {ldelim}
+function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid;
 {rdelim}
 
-function add_leaddata_to_relatedlist(entity_id,recordid) {ldelim}
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module=Leads&entityid="+entity_id+"&parid="+recordid;
-{rdelim}
-
-function add_userdata_to_relatedlist(userid,recordid) {ldelim}
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module=Users&user_id="+userid+"&record="+recordid;
-{rdelim}
 </script>
 <body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
