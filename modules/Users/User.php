@@ -32,6 +32,8 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('modules/Activities/Activity.php');
+require_once('modules/Contacts/Contact.php');
 
 // User is used to store customer information.
 class User {
@@ -802,6 +804,63 @@ class User {
 
 		return;
 	}
+
+
+
+
+
+
+
+
+//Function Call for Related List -- Start
+        function get_contacts($id)
+	{
+			global $log;
+                        $log->debug("Entering get_contacts(".$id.") method ...");
+			global $app_strings;
+
+			$focus = new Contact();
+
+			
+			
+			$button = '';
+			$query = 'select vtiger_contactdetails.*, vtiger_crmentity.* from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.smownerid='.$id.' and vtiger_crmentity.deleted=0';
+			$log->debug("Exiting get_contacts method ...");
+			return GetRelatedList('Users','Contacts',$focus,$query,$button,$returnset);
+        }
+
+
+
+
+//Function Call for Related List -- Start
+        function get_activities($id)
+	{
+			global $log;
+                        $log->debug("Entering get_contacts(".$id.") method ...");
+			global $app_strings;
+
+			$focus = new Activity();
+			
+			$button = '';
+			$query = 'select vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid where vtiger_crmentity.smownerid='.$id.' and (vtiger_activity.activitytype="Meeting" || vtiger_activity.activitytype="Task" || vtiger_activity.activitytype="Call" ) and vtiger_crmentity.deleted=0';
+			$log->debug("Exiting get_contacts method ...");
+			return GetRelatedList('Users','Activities',$focus,$query,$button,$returnset);
+        }
+
+function get_user_groups($id)
+{
+		global $log;
+                        $log->debug("Entering get_contacts(".$id.") method ...");
+			global $app_strings;
+			$button = '';
+			$query = 'select vtiger_users.*,vtiger_groups.* from vtiger_users inner join vtiger_users2group on vtiger_users.id=vtiger_users2group.userid left join vtiger_groups on vtiger_groups.groupid=vtiger_users2group.groupid where vtiger_users.id='.$id;
+			$log->debug("Exiting get_contacts method ...");
+			echo '<pre>';print_r(getAllGroupInfo($query));echo '</pre>';
+			return getAllGroupInfo($query);
+			}
+
+
+	
 	function save($module_name) 
 	{
 		global $log;
