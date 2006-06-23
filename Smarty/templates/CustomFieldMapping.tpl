@@ -9,100 +9,119 @@
 *
  ********************************************************************************/ *}
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		{include file='SettingsMenu.tpl'}
-		<td width="75%" valign="top">
-		<table width="99%" border="0" cellpadding="0" cellspacing="0" align="center">
-			<tr>
-				<td class="showPanelBg" valign="top" style="padding-left:20px; "><br />
-				<span class="lvtHeaderText">{$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_STUDIO} &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS} </span>
-				<hr noshade="noshade" size="1" />
-				</td>
-			</tr>
-			<tr><td>&nbsp;</td></tr>
-			<tr>
-				</td>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+        <br>
+
+		<div align=center>
+			{include file='SetMenu.tpl'}
+			<!-- DISPLAY -->
+				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
+					<td class="heading2" valign="bottom"><b>{$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_STUDIO} &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
+				</tr>
+
+				<tr>
+					<td class="small" valign="top">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</td>
+				</tr>
+				</table>
+				
+				<br>
 				<form action="index.php?module=Settings&action=SaveConvertLead" method="post" name="index">
-				<table class="leadTable" align="center" cellpadding="5" cellspacing="0" width="95%">
-					<tr>
-						<td style="border-bottom: 2px dotted rgb(204, 204, 204); padding: 5px;" width="5%">
-						<img src="{$IMAGE_PATH}mapping.gif" align="middle" height="48" width="48">
-						</td>
-						<td style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">
-						<span class="genHeaderGrayBig">{$MOD.LBL_LEAD_MAP_CUSTOM_FIELD}</span><br>
-						<span>{$MOD.leadCustomFieldDescription}</span>
-						</td>
-					</tr>
-					<tr><td colspan="2">&nbsp;</td></tr>
-					<tr>
-						<td align="right">&nbsp;</td>
-						<td><b class="lvtHeaderText">{$MOD.LBL_MAPPING_INFO}</b></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td>
-							<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="5" cellspacing="1" width="95%">
-								<tr>
-									<td class="lvtCol" width="25%">{$MOD.LBL_LEAD_FIELD}</td>
-									<td class="lvtCol" width="25%">{$MOD.LBL_ACCOUNT_FIELD}</td>
-									<td class="lvtCol" width="25%">{$MOD.LBL_CONTACT_FIELD}</td>
-									<td class="lvtCol" width="25%">{$MOD.LBL_POTENTIAL_FIELD}</td>	
-								<tr>
-								{foreach key=leadcf item=cfarray from=$CUSTOMFIELDMAPPING}
-									<tr class="lvtColData" bgcolor="white">
-									<td bgcolor="#e1e1e1">{$leadcf}</td>
-									{foreach item=acc_cf key=fldnameacc from=$cfarray.account}
-										<td>
-										<select name='{$fldnameacc}'>
-										<option value='None'>{$APP.LBL_NONE}</option>
-										{foreach item=element from=$acc_cf}
-										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
-										{/foreach}
-										</td>
-										</select>
-									{/foreach}
-									{foreach item=con_cf key=fldnamecon from=$cfarray.contact}
-                                                                                <td>
-                                                                                <select name='{$fldnamecon}'>
-										<option value='None'>{$APP.LBL_NONE}</option>
-										{foreach item=element from=$con_cf}
-										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
-										{/foreach}
-										</td>
-                                                                                </select>                                                                                             {/foreach}
-									{foreach item=pot_cf key=fldnamepot from=$cfarray.potential}
-										<td>
-										<select name='{$fldnamepot}'>
-										<option value='None'>{$APP.LBL_NONE}</option>
-										{foreach item=element from=$pot_cf}
-										<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
-										{/foreach}
-										</td>
-                                                                                </select>                                                                                             {/foreach}
-									</tr>
-								{/foreach}
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2" style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="2" style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;" align="center">
-							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="classBtn" type="submit" onclick ="return validateCustomFieldAccounts();">&nbsp;
-							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads&parenttab=Settings')"  class="classBtn" type="button">
-					  	</td>
-					</tr>
-					<tr>
-						<td colspan="2">&nbsp;</td>
-					</tr>
+				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td class="big"><strong>{$MOD.LBL_EDIT_FIELD_MAPPING}</strong> </td>
+					<td class="small" align="right">&nbsp;
+					</td>
+				</tr>
+				</table>
+
+				<table class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td class="small">&nbsp;</td>
+					<td class="small" align="right">&nbsp;&nbsp;
+					<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" type="submit" onclick ="return validateCustomFieldAccounts();">&nbsp;
+                     <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads&parenttab=Settings')"  class="crmButton small cancel" type="button">
+				</tr>
+				</table>
+				<table class="listTable" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td rowspan="2" class="colHeader small" width="2%">#</td>
+					<td rowspan="2" class="colHeader small" width="15%">Field Label</td>
+					<td rowspan="2" class="colHeader small" width="15%">Field Type </td>
+					<td colspan="3" class="colHeader small" valign="top"><div align="center">{$MOD.LBL_MAPPING_OTHER_MODULES}</div></td>
+				</tr>
+				<tr>
+					<td class="colHeader small" valign="top" width="23%">{$APP.Accounts}</td>
+					<td class="colHeader small" valign="top" width="23%">{$APP.Contacts}</td>
+					<td class="colHeader small" valign="top" width="24%">{$APP.Potentials}</td>
+				</tr>
+				{foreach key=leadcf item=cfarray from=$CUSTOMFIELDMAPPING}
+				<tr>
+					<td class="listTableRow small">{$cfarray.sno}</td>
+					<td class="listTableRow small">{$cfarray.leadid}</td>
+					<td class="listTableRow small">{$cfarray.fieldtype}</td>
+					{foreach item=acc_cf key=fldnameacc from=$cfarray.account}
+					<td class="listTableRow small">
+						<select name='{$fldnameacc}'>
+						<option value='None'>{$APP.LBL_NONE}</option>
+						{foreach item=element from=$acc_cf}
+							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
+						{/foreach}
+						</select>
+					</td>
+					{/foreach}
+					{foreach item=con_cf key=fldnamecon from=$cfarray.contact}
+                    <td class="listTableRow small">
+                        <select name='{$fldnamecon}'>
+						<option value='None'>{$APP.LBL_NONE}</option>
+						{foreach item=element from=$con_cf}
+							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
+						{/foreach}
+                        </select>
+					</td>
+				  	{/foreach}
+					{foreach item=pot_cf key=fldnamepot from=$cfarray.potential}
+					<td class="listTableRow small">
+						<select name='{$fldnamepot}'>
+						<option value='None'>{$APP.LBL_NONE}</option>
+						{foreach item=element from=$pot_cf}
+							<option value="{$element.fieldid}" {$element.selected}>{$element.fieldlabel}</option>
+						{/foreach}
+                        </select>
+					</td>
+				    {/foreach}
+				</tr>
+				{/foreach}
+				</table>
+				<table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+					<td class="small">
+		        	<strong>{$APP.LBL_NOTE}: </strong> {$MOD.LBL_CUSTOM_MAPP_INFO}
+					</td>
+				</tr>
+				</table>
+				<table border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tr>
+		  			<td class="small" align="right" nowrap="nowrap"><a href="#top">[Scroll to Top]</a></td>
+				</tr>
 				</table>
 				</form>
-			</td>
+				<br>
+		</td>
 		</tr>
-	</td>
-</tr></table>
-{include file='SettingsSubMenu.tpl'}			
-</td></tr></table>
-			
+		</table>
+        </td>
+        </tr>
+        </table>
+        </div>
+
+        </td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        </tr>
+</tbody>
+</table>

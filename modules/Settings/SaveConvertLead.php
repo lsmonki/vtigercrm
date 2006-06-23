@@ -13,10 +13,8 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
-//echo"<h3> In Save</h3>";
 	
 	$sql="select fieldid from vtiger_field, vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads';";	
-//	echo $sql;	
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	
@@ -47,6 +45,6 @@ require_once('include/utils/utils.php');
 
 		$adb->query($update_sql);
 	}
-	 header("Location: index.php?action=ListLeadCustomFieldMapping&module=Settings&parenttab=Settings");
+	 header("Location: index.php?action=CustomFieldList&module=Settings&parenttab=Settings");
 	
 ?>

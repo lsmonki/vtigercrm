@@ -8,24 +8,18 @@
 * All Rights Reserved.
 *
 ********************************************************************************/
-
-require_once('Smarty_setup.php');	
+require_once('Smarty_setup.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/CustomFieldUtil.php');
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
-global $adb;
+
+$smarty=new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
-$smarty=new vtigerCRM_Smarty;
-$smarty->assign("MOD", $mod_strings);
-$smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
-
-$smarty->assign("RETURN_MODULE","Settings");
-$smarty->assign("RETURN_ACTION","");
 
 function getAccountCustomValues($leadid,$accountid)
 {
@@ -93,34 +87,36 @@ function getPotentialCustomValues($leadid,$potentialid)
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
         return $potentialcf;
 }
-$lead_sql="select fieldid,fieldlabel from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads'";
-$result = $adb->query($lead_sql);
-$noofrows = $adb->num_rows($result);
 
-$display_val="<table border=0 cellspacing=1 cellpadding=2 width=75%>";
-$leadcf=Array();
-for($i=0; $i<$noofrows; $i++)
+function customFieldMappings()
 {
-	$lead_field['fieldid']=$adb->query_result($result,$i,"fieldid");
-	$lead_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
-	$convert_sql="select * from vtiger_convertleadmapping where leadfid=".$lead_field['fieldid'];
+	global $adb;
+
+	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid";
 	$convert_result = $adb->query($convert_sql);
 
 	$no_rows = $adb->num_rows($convert_result);
 	for($j=0; $j<$no_rows; $j++)
 	{
+		$leadid = $adb->query_result($convert_result,$j,"leadfid");
 		$accountid=$adb->query_result($convert_result,$j,"accountfid");
 		$contactid=$adb->query_result($convert_result,$j,"contactfid");
 		$potentialid=$adb->query_result($convert_result,$j,"potentialfid");
-	
-		
+		$lead_field['sno'] = $j+1;
+		$lead_field['leadid'] = $adb->query_result($convert_result,$j,"fieldlabel"); 
+		$lead_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($convert_result,$j,"uitype"));; 
+		$lead_field['account'] = getAccountCustomValues($leadid,$accountid);
+		$lead_field['contact'] = getContactCustomValues($leadid,$contactid);
+		$lead_field['potential'] = getPotentialCustomValues($leadid,$potentialid);
+		$leadcf[]= $lead_field;
 	}
-	$lead_field['account']=getAccountCustomValues($lead_field['fieldid'],$accountid);
-	$lead_field['contact']=getContactCustomValues($lead_field['fieldid'],$contactid);
-	$lead_field['potential']=getPotentialCustomValues($lead_field['fieldid'],$potentialid);
-	$leadcf[$lead_field['fieldlabel']]= $lead_field;
+
+	return $leadcf;
 }
-$smarty->assign("CUSTOMFIELDMAPPING",$leadcf);
+
+$smarty->assign("MOD",$mod_strings);
+$smarty->assign("APP",$app_strings);
+$smarty->assign("CUSTOMFIELDMAPPING",customFieldMappings());
 
 $smarty->display("CustomFieldMapping.tpl");
 

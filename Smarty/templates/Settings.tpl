@@ -182,8 +182,8 @@
 					<!-- icon 9-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}custom.gif" alt="{$MOD.LBL_CUSTOM_FIELDS}" title="{$MOD.LBL_CUSTOM_FIELDS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}custom.gif" alt="{$MOD.LBL_CUSTOM_FIELDS}" title="{$MOD.LBL_CUSTOM_FIELDS}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td>
 						</tr>
 						<tr>
 

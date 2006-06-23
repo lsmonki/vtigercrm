@@ -10,23 +10,23 @@
  ********************************************************************************/ *}
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 <script language="javascript">
-{literal}
-
 function getCustomFieldList(customField)
-{
+{ldelim}
 	var modulename = customField.options[customField.options.selectedIndex].value;
+	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulename+'" {$APP.LBL_MODULE}';
 	new Ajax.Request(
 		'index.php',
-		{queue: {position: 'end', scope: 'command'},
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
 			postBody: 'module=Settings&action=SettingsAjax&file=CustomFieldList&fld_module='+modulename+'&parenttab=Settings&ajax=true',
-			onComplete: function(response) {
+			onComplete: function(response) {ldelim}
 				$("cfList").innerHTML=response.responseText;
-			}
-		}
+			{rdelim}
+		{rdelim}
 	);	
-}
+{rdelim}
 
+{literal}
 function deleteCustomField(id, fld_module, colName, uitype)
 {
         if(confirm("Are you sure?"))
@@ -60,49 +60,78 @@ function CustomFieldMapping()
 {/literal}
 </script>
 <div id="createcf" style="display:block;position:absolute;top:175px;left:275px;"></div>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-        {include file='SettingsMenu.tpl'}
-<td width="75%" valign="top">
-<b><font color=red>{$DUPLICATE_ERROR} </font></b>
-<table width="99%" border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr>
-		<td class="showPanelBg" valign="top" style="padding-left:20px; "><br />
-	       	        <span class="lvtHeaderText">{$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_STUDIO} &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS} </span>
-        	        <hr noshade="noshade" size="1" />
-		</td>
-	</tr>
-	
-	<tr><td>&nbsp;</td></tr>
-	<tr>
-		<td>
-			<table width="95%" cellpadding="5" cellspacing="0" class="leadTable" align="center">
-				<tr>
-					<td style="padding:5px;border-bottom:2px dotted #CCCCCC;" width="5%" >
-						<img src="{$IMAGE_PATH}mapping.gif" align="left" />
-					</td>
-					<td style="padding:5px;border-bottom:2px dotted #AAAAAA;">
-						<span class="genHeaderGrayBig">{$MOD.LBL_CUSTOM_FIELD_SETTINGS}</span>
-						<br />
-						<span class="big">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</span>
-					</td>
-				</tr>
-				<tr><td colspan="2">&nbsp;</td></tr>
-				{include file="CustomFieldCombo.tpl"}
-				<tr><td colspan="2">&nbsp;</td></tr>
-				<tr><td colspan ="2">
-				
-						<div id="cfList">
-				{include file="CustomFieldEntries.tpl"}					
-						</div>
+<br>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+        <br>
 
-				</td></tr>
-				<tr><td colspan="2">&nbsp;</td></tr>
+	<div align=center>
+			{include file='SetMenu.tpl'}
+			<!-- DISPLAY -->
+			<b><font color=red>{$DUPLICATE_ERROR} </font></b>
+			
+				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tbody><tr>
+					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
+					<td class="heading2" valign="bottom"><b>{$MOD.LBL_SETTINGS} &gt; {$MOD.LBL_STUDIO} &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
+				</tr>
+
+				<tr>
+					<td class="small" valign="top">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</td>
+				</tr>
+				</tbody></table>
+				
+				<br>
+				<table border="0" cellpadding="10" cellspacing="0" width="100%">
+				<tbody><tr>
+				<td>
+
+				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+				<tbody><tr>
+					<td class="big" nowrap><strong><span id="module_info">{$MOD.LBL_CUSTOM_FILED_IN} "{$APP.$MODULE}" {$APP.LBL_MODULE}</span></strong> </td>
+					<td class="small" align="right">
+					{$MOD.LBL_SELECT_CF_TEXT}
+		                	<select name="pick_module" class="importBox" onChange="getCustomFieldList(this)">
+                		        {foreach key=sel_value item=value from=$MODULES}
+		                        {if $MODULE eq $sel_value}
+                	                       	{assign var = "selected_val" value="selected"}
+		                        {else}
+                        	                {assign var = "selected_val" value=""}
+                                	{/if}
+	                                <option value="{$sel_value}" {$selected_val}>{$APP.$value}</option>
+        		                {/foreach}
+			                </select>
+					</td>
+					</tr>
+				</tbody>
+				</table>
+				<div id="cfList">
+                                {include file="CustomFieldEntries.tpl"}
+                </div>	
+			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+			<tr>
+
+		  	<td class="small" align="right" nowrap="nowrap"><a href="#top">[Scroll to Top]</a></td>
+			</tr>
 			</table>
+			</td>
+			</tr>
+			</table>
+		<!-- End of Display -->
+		
 		</td>
-	</tr>
+        </tr>
+        </table>
+        </td>
+        </tr>
+        </table>
+        </div>
+
+        </td>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        </tr>
+</tbody>
 </table>
-</td>
-</tr>
-</table>
-        {include file='SettingsSubMenu.tpl'}
+<br>

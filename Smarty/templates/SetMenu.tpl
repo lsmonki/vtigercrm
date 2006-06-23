@@ -56,7 +56,11 @@
 				{/if}
 	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_STUDIO}</td></tr>
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=SettingsSubMenu&type=CustomField&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
+				{if  $smarty.request.action eq 'CustomFieldList' || $smarty.request.action eq 'LeadCustomFieldMapping'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_CUSTOM_FIELDS}</td></tr>
+				{else}
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings">{$MOD.LBL_CUSTOM_FIELDS}</a></td></tr>
+				{/if}
 				
 				{if  $smarty.request.action eq 'PickList' ||  $smarty.request.action eq 'SettingsAjax'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_PICKLIST_EDITOR}</td></tr>						     {else}
@@ -65,7 +69,7 @@
 	
 				<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_COMMUNICATION_TEMPLATES}</td></tr>
 
-				{if $smarty.request.action eq 'listemailtemplates' || $smarty.request.action eq 'detailviewemailtemplate' || $smarty.request.action eq 'editemailtemplate' || $smarty.request.action eq 'saveemailtemplate' || $smarty.request.action eq 'deleteemailtemplate'}
+				{if $smarty.request.action eq 'listemailtemplates' || $smarty.request.action eq 'detailviewemailtemplate' || $smarty.request.action eq 'editemailtemplate' || $smarty.request.action eq 'saveemailtemplate' || $smarty.request.action eq 'deleteemailtemplate' || $smarty.request.action eq 'createemailtemplate'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.EMAILTEMPLATES}</td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
