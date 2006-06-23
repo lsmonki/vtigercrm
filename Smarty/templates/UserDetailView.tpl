@@ -98,6 +98,8 @@
 			  <tr >
 			        <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onClick="fnVis('prof')"><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
 			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
+
+			     <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
 				    <td class="dvtTabCache" nowrap="nowrap" width="10">&nbsp;</td>
 			  </tr>
 			  </table>
