@@ -1312,12 +1312,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val =$temp_val.' '.$firstname;
 
 					$focus->record_id = $_REQUEST['recordid'];
-					if($module == 'Leads')
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_leaddata_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
-					elseif($module == 'Users')
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_userdata_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
-					else
-						$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "formname_specific")
 				{
@@ -2567,7 +2562,21 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = 'id';
 		$table = 'vtiger_users';
 	}
-	
+	elseif($currentmodule=="Campaigns" && $returnmodule == "Leads")
+	{
+		$reltable = 'vtiger_campaignleadrel';
+		$condition = 'WHERE leadid = '.$recordid;;
+		$field = $selectfield = 'campaignid';
+		$table = 'vtiger_campaign';
+	}
+	elseif($currentmodule=="Campaigns" && $returnmodule == "Contacts")
+	{
+		$reltable = 'vtiger_campaigncontrel';
+		$condition = 'WHERE contactid = '.$recordid;;
+		$field = $selectfield = 'campaignid';
+		$table = 'vtiger_campaign';
+	}
+
 	if($reltable != null)
 		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
 
