@@ -27,8 +27,13 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 
 	switch($module):
 	case Leads:
-		$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
-		$adb->query($sql);
+		if($return_module == "Campaigns") {
+			$sql = 'delete from vtiger_campaignleadrel where leadid='.$record.' and campaignid='.$return_id;
+			$adb->query($sql);
+		} else {
+			$sql = 'delete from vtiger_seactivityrel where crmid = '.$record.' and activityid = '.$return_id;
+			$adb->query($sql);
+		}
 	break;
 	case Accounts:
 		if($return_id!='')
@@ -46,6 +51,10 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		if($return_module == 'Potentials' && $record != '' && $return_id != '')
 		{
 			$sql = 'delete from vtiger_contpotentialrel where contactid='.$record.' and potentialid='.$return_id;
+			$adb->query($sql);
+		}
+		if($return_module == "Campaigns") {
+			$sql = 'delete from vtiger_campaigncontrel where contactid='.$record.' and campaignid='.$return_id;
 			$adb->query($sql);
 		}
 		if($record != '' && $return_id != '')
