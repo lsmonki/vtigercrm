@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 
-ini_set("include_path","../");
 require_once("config.php");
 require_once('include/logging.php');
 require_once('include/nusoap/nusoap.php');
