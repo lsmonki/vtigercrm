@@ -275,6 +275,10 @@ function return_module_language($language, $module)
 	$temp_mod_strings = $mod_strings;
 	$language_used = $language;
 
+	if(file_exists("modules/$module/language/$language.lang.php")) {
+		include("modules/$module/language/$language.lang.php");
+	}
+
 	if(!isset($mod_strings))
 	{
 		@include("include/language/$language.lang.php");
