@@ -35,7 +35,7 @@ http://www.nusphere.com
 /* load classes
 
 // necessary classes
-require_once('class.soapclient2.php');
+require_once('class.soapclient.php');
 require_once('class.soap_val.php');
 require_once('class.soap_parser.php');
 require_once('class.soap_fault.php');
