@@ -12,6 +12,7 @@
 
 require_once('Smarty_setup.php');
 require_once('modules/Campaigns/Campaign.php');
+require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/utils.php');
 
 $focus = new Campaign();
@@ -47,6 +48,15 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
+
+$cvObj = new CustomView("Contacts");
+$cvcombo = $cvObj->getCustomViewCombo();
+$smarty->assign("CONTCVCOMBO","<select id='cont_cv_list' onchange='loadCvList(\"Contacts\",".$_REQUEST["record"].");'><option>-- Select One --</option>".$cvcombo."</select>");
+
+$cvObj = new CustomView("Leads");
+$cvcombo = $cvObj->getCustomViewCombo();
+$smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"Leads\",".$_REQUEST["record"].");'> <option>-- Select One --</option>".$cvcombo."</select>");
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

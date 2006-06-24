@@ -48,6 +48,14 @@ function gotoUpdateListPrice(id,pbid,proid)
                         }
                 );
 }
+
+function loadCvList(type,id) {
+	if(type === 'Leads')
+		$("lead_list_button").innerHTML = '<input title="Change" accessKey="" class="small" value="Load List" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value+'\'">';
+
+	if(type === 'Contacts')
+		$("contact_list_button").innerHTML = '<input title="Change" accessKey="" class="small" value="Load List" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value+'\'">';
+}
 </script>
 {/literal}
 	{include file='Buttons_List1.tpl'}
