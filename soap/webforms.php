@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 
+ini_set("include_path","../");
 require_once("config.php");
 require_once('include/logging.php');
 require_once('include/nusoap/nusoap.php');
@@ -18,7 +19,7 @@ require_once('modules/HelpDesk/HelpDesk.php');
 $log = &LoggerManager::getLogger('webforms');
 
 //$serializer = new XML_Serializer();
-$NAMESPACE = 'http://www.vtigercrm.com/vtigercrm';
+$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
 
 $server->configureWSDL('vtigersoap');
