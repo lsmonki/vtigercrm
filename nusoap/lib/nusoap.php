@@ -4952,24 +4952,24 @@ class soap_parser extends nusoap_base {
 
 /**
 *
-* soapclient higher level class for easy usage.
+* soapclient2 higher level class for easy usage.
 *
 * usage:
 *
 * // instantiate client with server info
-* $soapclient = new soapclient( string path [ ,boolean wsdl] );
+* $soapclient2 = new soapclient2( string path [ ,boolean wsdl] );
 *
 * // call method, get results
-* echo $soapclient->call( string methodname [ ,array parameters] );
+* echo $soapclient2->call( string methodname [ ,array parameters] );
 *
 * // bye bye client
-* unset($soapclient);
+* unset($soapclient2);
 *
 * @author   Dietrich Ayala <dietrich@ganx4.com>
 * @version  $Id: nusoap.php,v 1.1 2005/04/29 05:09:16 sarajkumar Exp $
 * @access   public
 */
-class soapclient extends nusoap_base  {
+class soapclient2 extends nusoap_base  {
 
 	var $username = '';
 	var $password = '';
@@ -5021,7 +5021,7 @@ class soapclient extends nusoap_base  {
 	* @param	integer $response_timeout set the response timeout
 	* @access   public
 	*/
-	function soapclient($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30){
+	function soapclient2($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30){
 		$this->endpoint = $endpoint;
 		$this->proxyhost = $proxyhost;
 		$this->proxyport = $proxyport;
@@ -5506,7 +5506,7 @@ class soapclient extends nusoap_base  {
 			}
 		}
 		$r = rand();
-		$evalStr = 'class soap_proxy_'.$r.' extends soapclient {
+		$evalStr = 'class soap_proxy_'.$r.' extends soapclient2 {
 				'.$evalStr.'
 			}';
 		//print "proxy class:<pre>$evalStr</pre>";
