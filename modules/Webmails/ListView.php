@@ -285,13 +285,15 @@ if (is_array($list)) {
                         $boxes .= '<option value="'.$tmpval.'" SELECTED>'.$tmpval;
 			$_SESSION["mailboxes"][$tmpval] = $new_msgs;
 
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span> of <span id="'.$tmpval.'_read">'.$numEmails.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
+			if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu" onmouseover="show_remfolder(\''.$tmpval.'\');" onmouseout="show_remfolder(\''.$tmpval.'\');">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$new_msgs.'</span> of <span id="'.$tmpval.'_read">'.$num.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 		} else {
 			$box = imap_status($mbox, "{".$imapServerAddress."}".$tmpval, SA_ALL);
 			$_SESSION["mailboxes"][$tmpval] = $box->unseen;
 
+			if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
                       	$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span> of <span id="'.$tmpval.'_read">'.$box->messages.'</span>)</span></li>';
+			$folders .= '<li><img src="'.$image_path.'/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="webMnu">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span> of <span id="'.$tmpval.'_read">'.$num.'</span>)</span></li>';
 		}
  	}
         $boxes .= '</select>';
