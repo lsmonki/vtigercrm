@@ -165,43 +165,31 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	elseif($uitype == 53)
 	{
 		$user_id = $col_fields[$fieldname];
+		$user_name = getUserName($user_id);
+		$id = $col_fields["record_id"];	
+		$module = $col_fields["record_module"];
+		$group_info = getGroupName($id, $module);
+		$groupname = $group_info[0];
+		$groupid = $group_info[1];
 		if($user_id != 0)
-		{
+		{	
 			$label_fld[] =$mod_strings[$fieldlabel].' '.$app_strings['LBL_USER'];
-			$user_name = getUserName($user_id);
-			if(is_admin($current_user))
-			{
-				$label_fld[] =$user_name;
-        $label_fld["secid"] = $user_id;
-		    $label_fld["link"] = "index.php?module=Users&action=DetailView&record=".$user_id;
-			}
-			else
-			{
-				$label_fld[] =$user_name;
-			}
-		}
-		elseif($user_id == 0)
+			$label_fld[] =$user_name;
+			$label_fld ["options"][] = 'User';
+		}else
 		{
+			
 			$label_fld[] =$mod_strings[$fieldlabel].' '.$app_strings['LBL_GROUP'];
-
-			$id = $col_fields["record_id"];	
-			$module = $col_fields["record_module"];
-			$group_info = getGroupName($id, $module);
-			$groupname = $group_info[0];
-			$groupid = $group_info[1];
-			if(is_admin($current_user))
-      {
-				$label_fld[] =$groupname;
-        $label_fld["secid"] = $groupid;
-        $label_fld["link"] = "index.php?module=Users&action=GroupDetailView&groupId=".$groupid;
-        //$label_fld[] ='<a href="index.php?module=Users&action=GroupDetailView&groupId='.$groupid.'">'.$groupname.'</a>';
-			}
-			else
-			{
-				$label_fld[] =$groupname;
-			}			
+			$label_fld[] =$groupname;
+			$label_fld ["options"][] = 'Group';
 		}
-		
+		if(is_admin($current_user))
+		{
+			$label_fld["secid"][] = $user_id;
+			$label_fld["link"][] = "index.php?module=Users&action=DetailView&record=".$user_id;
+			$label_fld["secid"][] = $groupid;
+			$label_fld["link"][] = "index.php?module=Users&action=GroupDetailView&groupId=".$groupid;
+		}
 		//Security Checks
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
@@ -246,7 +234,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$team_style='display:none';
 			}	
 		}
-		
+
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
@@ -255,9 +243,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
-	
-    if($noof_group_rows != 0)
-		{
 			do
 			{
 				$groupname=$nameArray["groupname"];
@@ -269,18 +254,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$group_option[] = array($groupname=>$selected);
 
 			}while($nameArray = $adb->fetch_array($result));
-      
-		}
-		
-		if($user_id == 0)
-		{
-      $label_fld ["options"] = $group_option; 
-    }else
-    {
-      $label_fld ["options"] = $users_combo;
-    }
-    //print_r($users_combo);
-		
+
+
+			$label_fld ["options"][] = $users_combo;
+			$label_fld ["options"][] = $group_option; 
 	}
 	elseif($uitype == 55)
         {
