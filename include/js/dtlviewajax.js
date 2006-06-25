@@ -31,7 +31,7 @@ function hndCancel(valuespanid,textareapanid,fieldlabel)
 	  else		
 	  	getObj(globaltxtboxid).checked = false; 
   }
-  else		  
+  else if(globaluitype != '53')	  
 	  getObj(globaltxtboxid).value = globaltempvalue; 
   globaltempvalue = '';
   itsonview=false;
@@ -42,7 +42,6 @@ function hndMouseOver(uitype,fieldLabel)
 {
       var mouseArea="";
       mouseArea="mouseArea_"+ fieldLabel;
-      
       if(itsonview)
       {
             return;
@@ -52,7 +51,19 @@ function hndMouseOver(uitype,fieldLabel)
 	  globaluitype = uitype;
       globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
       globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
-      globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
+	  globalfieldlabel = fieldLabel;
+	  if(globaluitype == 53)
+	  {
+		  var assign_type_U = document.DetailView.assigntype[0].checked;
+		  var assign_type_G = document.DetailView.assigntype[1].checked;
+		  if(assign_type_U == true)
+			  globaltxtboxid= 'txtbox_U'+fieldLabel;
+		  else if(assign_type_G == true)
+			  globaltxtboxid= 'txtbox_G'+fieldLabel;
+	  }else
+	  {
+      	  globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
+	  }
       divObj = getObj('crmspanid'); 
       crmy = findPosY(getObj(mouseArea));
       crmx = findPosX(getObj(mouseArea));
@@ -72,8 +83,11 @@ function handleEdit()
 {
      show(globaleditareaspanid) ;
      fnhide(globaldtlviewspanid);
-	 globaltempvalue = getObj(globaltxtboxid).value;
-     getObj(globaltxtboxid).focus();
+	 if(globaluitype != 53)
+	 {
+		 globaltempvalue = getObj(globaltxtboxid).value;
+     	 getObj(globaltxtboxid).focus();
+	 }
      fnhide('crmspanid');
      itsonview=true;
      return false;
@@ -91,7 +105,26 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 {
 	var dtlView = "dtlview_"+ fieldLabel;
 	var editArea = "editarea_"+ fieldLabel;
-	var txtBox= "txtbox_"+ fieldLabel;
+	var groupurl = "";
+	if(globaluitype == 53)
+	{
+		var assign_type_U = document.DetailView.assigntype[0].checked;
+		var assign_type_G = document.DetailView.assigntype[1].checked;
+		if(assign_type_U == true)
+		{
+			var txtBox= 'txtbox_U'+fieldLabel;
+		}
+		else if(assign_type_G == true)
+		{
+			var txtBox= 'txtbox_G'+fieldLabel;
+			var group_name = $(txtBox).options[$(txtBox).selectedIndex].text; 
+			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
+		}
+
+	}else
+	{
+		var txtBox= "txtbox_"+ fieldLabel;
+	}
 	var popupTxt= "popuptxt_"+ fieldLabel;      
 	var hdTxt = "hdtxt_"+ fieldLabel;
 
@@ -130,7 +163,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
-	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW";
+	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -159,13 +192,18 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	else if(uitype == '53')
 	{
 		var hdObj = getObj(hdTxt);
-			if(isAdmin == "0")
-			{
-				getObj(dtlView).innerHTML = hdObj.value;
-			}else if(isAdmin == "1")
-			{
-				getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";;
-			}
+		var assign_type_U = document.DetailView.assigntype[0].checked;
+		var assign_type_G = document.DetailView.assigntype[1].checked;
+		if(isAdmin == "0")
+		{
+			getObj(dtlView).innerHTML = hdObj.value;
+		}else if(isAdmin == "1" && assign_type_U == true)
+		{
+			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
+		}else if(isAdmin == "1" && assign_type_G == true)
+		{
+			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=GroupDetailView&groupId="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
+		}
 	}
 	else if(uitype == '56')
 	{
@@ -267,8 +305,19 @@ function SaveTag(txtBox,crmId,module)
 }
 function setSelectValue(fieldLabel)
 {
+	if(globaluitype == 53)
+	{
+		var assign_type_U = document.DetailView.assigntype[0].checked;
+        var assign_type_G = document.DetailView.assigntype[1].checked;
+		if(assign_type_U == true)
+			var selCombo= 'txtbox_U'+fieldLabel;
+		else if(assign_type_G == true)	
+			var selCombo= 'txtbox_G'+fieldLabel;
+	}else
+	{
+			var selCombo= 'txtbox_'+fieldLabel;
+	}
 	var hdTxtBox = 'hdtxt_'+fieldLabel;
-	var selCombo= 'txtbox_'+fieldLabel;
 	var oHdTxtBox = document.getElementById(hdTxtBox);
 	var oSelCombo = document.getElementById(selCombo);
 
