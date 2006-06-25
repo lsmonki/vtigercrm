@@ -1,12 +1,9 @@
 A {
   text-decoration: none;
+	color:#003399;
 }
 A:link {
-  color: #486591;
-  background-color: transparent;
-}
-A:visited {
-  color: #6f6c81;
+	color:#003399;
   background-color: transparent;
 }
 A:active {
