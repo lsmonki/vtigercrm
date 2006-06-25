@@ -76,7 +76,7 @@
 				{/if}
 
 				{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate'}
-				<tr><td class="settingsTabSelected" nowrap>{$MOD.WORDINTEGRATION}</td></tr>
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.EMAILTEMPLATES}</td></tr>
 				
 				{else}	
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings">{$MOD.WORDINTEGRATION}</a></td></tr>
@@ -130,6 +130,11 @@
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_TAX_SETTINGS}</td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings">{$MOD.LBL_TAX_SETTINGS}</a></td></tr>
+				{/if}
+				{if $smarty.request.action eq 'systemconfig'}
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_SYSTEM_INFO}</td></tr>
+				{else}
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
 				{/if}
 				</table>
 			</td>
