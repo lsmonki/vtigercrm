@@ -41,14 +41,7 @@
                     							   <select id="txtbox_{$label}" name="{$keyfldname}">
                     								{foreach item=arr from=$keyoptions}
                     									{foreach key=sel_value item=value from=$arr}
-												 <option value="{$sel_value}" {$value}>
-                                                {if $APP[$sel_value] neq ''}
-                                                        {$APP[$sel_value]}
-                                                {else}
-                                                        {$sel_value}
-                                                {/if}
-                                                </option>
-	
+                    										<option value="{$sel_value}" {$value}>{$sel_value}</option>
                     									{/foreach}
                     								{/foreach}
                     							   </select>
@@ -184,22 +177,48 @@
                     <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">
 				
                     &nbsp;<span id="dtlview_{$label}">
-                    {if $keyseclink eq ''}
+                    {if $keyoptions.0 eq 'User' && $keyadmin eq 1}
+                        <a href="{$keyseclink.0}">{$keyval}</a>         
+                    {elseif $keyoptions.0 eq 'Group' && $keyadmin eq 1}
+                        <a href="{$keyseclink.1}">{$keyval}</a>         
+					{else}	
                         {$keyval}
-                    {else}
-                        <a href="{$keyseclink}">{$keyval}</a>         
                     {/if}
 					&nbsp;
                     </span>
                     <div id="editarea_{$label}" style="display:none;">
                    	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
-                   	<select id="txtbox_{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
-                    {foreach item=arr key=id from=$keyoptions}
+					{if $keyoptions.0 eq 'User'}
+						<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;User
+						<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;Group
+						<span id="assign_user" style="display: block;">
+					{else}
+						<input name="assigntype" id="assigntype" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;User
+						<input name="assigntype" checked="checked" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;Group
+						<span id="assign_user" style="display: none;">
+					{/if}
+                   	<select id="txtbox_U{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
+                    {foreach item=arr key=id from=$keyoptions.1}
                     	{foreach key=sel_value item=value from=$arr}
                        		 <option value="{$id}" {$value}>{$sel_value}</option>
                         {/foreach}
                     {/foreach}
                     </select>
+					</span>
+					{if $keyoptions.0 eq 'Group'}
+						<span id="assign_team" style="display: block;">
+					{else}
+						<span id="assign_team" style="display: none;">
+					{/if}
+                   	<select id="txtbox_G{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
+                    {foreach item=arr key=id from=$keyoptions.2}
+                    	{foreach key=sel_value item=value from=$arr}
+                       		 <option value="{$id}" {$value}>{$sel_value}</option>
+                        {/foreach}
+                    {/foreach}
+                    </select>
+					</span>
+
                     <br>
                     <input name="button_{$label}" type="button" class="small" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');"/> or
                     <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
