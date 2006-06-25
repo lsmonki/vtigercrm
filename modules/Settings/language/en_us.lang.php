@@ -319,6 +319,7 @@ $mod_strings = Array(
 'LBL_FTP'=>'FTP',
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
+'LBL_SYSTEM_INFO'=>'System Information',
 
 'LBL_CURRENCY_CONFIGURATION'=>'- Currency Information',
 
@@ -635,6 +636,7 @@ $mod_strings = Array(
 'LBL_BACKUP_SERVER_DESCRIPTION'=>'Edit settings of Backup Server',
 'LBL_CURRENCY_DESCRIPTION'=>'Manage Currencies and Exchange Rates',
 'LBL_TAX_DESCRIPTION'=>'Manage values for Sales tax, VAT etc',
+'LBL_SYSTEM_DESCRIPTION'=>'Display System Settings',
 'LBL_TAX_DESC'=>'Manage VAT and other tax settings',
 'LBL_COMPANY_DESC'=>'Information & Contact details of your company',
 'LBL_SELECT_LOGO'=>'Select new logo :',
