@@ -474,7 +474,7 @@
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
 							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>&nbsp;</td>
