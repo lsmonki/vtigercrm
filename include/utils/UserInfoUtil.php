@@ -4265,23 +4265,7 @@ function getListViewSecurityParameter($module)
 	}
 	elseif($module == 'Emails')
 	{
-		echo '<BR>now<BR>'; 
-		$sec_query .= "and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%') or vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
-
-		//Adding crterial for vtiger_account related emails sharing
-		 $sec_query .= "or vtiger_seactivityrel.crmid in (select crmid from vtiger_crmentity where setype='Accounts' and vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or vtiger_seactivityrel.crmid in (select crmid from vtiger_crmentity left join vtiger_accountgrouprelation on vtiger_accountgrouprelation.accountid=vtiger_crmentity.crmid inner join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname where setype='Accounts' and vtiger_crmentity.smownerid=0 and vtiger_groups.groupid in(select vtiger_tmp_read_group_rel_sharing_per.sharedgroupid from vtiger_tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid."))";
-		//Adding crterial for lead related emails sharing
-		 $sec_query .= " or vtiger_seactivityrel.crmid in (select crmid from vtiger_crmentity where setype='Leads' and vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Leads')." and relatedtabid=".$tabid.")) or vtiger_seactivityrel.crmid in (select crmid from vtiger_crmentity left join vtiger_leadgrouprelation on vtiger_leadgrouprelation.leadid=vtiger_crmentity.crmid inner join vtiger_groups on vtiger_groups.groupname=vtiger_leadgrouprelation.groupname where setype='Leads' and vtiger_crmentity.smownerid=0 and vtiger_groups.groupid in(select vtiger_tmp_read_group_rel_sharing_per.sharedgroupid from vtiger_tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Leads')." and relatedtabid=".$tabid."))";
-	
-
-		//Adding crteria for group sharing
-		 $sec_query .= " or (vtiger_crmentity.smownerid in (0) and (";
-
-                if(sizeof($current_user_groups) > 0)
-                {
-                	$sec_query .= "vtiger_groups.groupid in".getCurrentUserGroupList()." or ";
-                }
-		$sec_query .= "vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
+		$sec_query .= "and vtiger_crmentity.smownerid=".$current_user->id." "; 
 	
 	}
 	elseif($module == 'Activities')
@@ -4523,7 +4507,6 @@ function getFieldModuleAccessArray()
                 'HelpDesk'=>'LBL_HELPDESK_FIELD_ACCESS',
                 'Products'=>'LBL_PRODUCT_FIELD_ACCESS',
                 'Notes'=>'LBL_NOTE_FIELD_ACCESS',
-                'Emails'=>'LBL_EMAIL_FIELD_ACCESS',
                 'Activities'=>'LBL_TASK_FIELD_ACCESS',
                 'Events'=>'LBL_EVENT_FIELD_ACCESS',
                 'Vendors'=>'LBL_VENDOR_FIELD_ACCESS',
