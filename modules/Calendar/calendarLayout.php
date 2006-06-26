@@ -221,7 +221,7 @@ function get_cal_header_data(& $cal_arr)
 				<td align='center' width='65%'>";
 	$headerdata .= getEventTodoInfo($cal_arr,'listcnt'); 
 	$headerdata .= "	</td>
-				<td align='right' width='25%'><b>View : </b>";
+				<td align='right' width='25%'><b>".$mod_strings['LBL_VIEW']." : </b>";
 	$view_options = getEventViewOption($cal_arr);
 	$headerdata .=$view_options."
 				</td>
@@ -1204,7 +1204,7 @@ function constructEventListView($entry_list)
 	else
 	{
 		$list_view .="<tr style='height: 25px;' bgcolor='white'>";
-                	$list_view .="<td colspan='".$header_rows."'><i>None Scheduled</i></td>";
+                	$list_view .="<td colspan='".$header_rows."'><i>".$mod_strings['LBL_NONE_SCHEDULED']."</i></td>";
                 $list_view .="</tr>";
 	}
 	$list_view .="</table>";
@@ -1277,7 +1277,7 @@ function constructTodoListView($todo_list,$cal)
         else
         {
                 $list_view .="<tr style='height: 25px;' bgcolor='white'>";
-                        $list_view .="<td colspan='".$header_rows."'><i>None Scheduled</i></td>";
+                        $list_view .="<td colspan='".$header_rows."'><i>".$mod_strings['LBL_NONE_SCHEDULED']."</i></td>";
                 $list_view .="</tr>";
         }
         $list_view .="</table><br></div>";
