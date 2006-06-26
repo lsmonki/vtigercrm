@@ -141,17 +141,17 @@ function mandatoryCheck()
 		 </td>
 		</tr>
 		<tr class="dvtCellLabel">
-		  <td><select name="column1" id="column1">
+		  <td><select name="column1" id="column1" onChange="checkDuplicate();">
 	                <option value="">{$MOD.LBL_NONE}</option>
 			{foreach item=filteroption key=label from=$CHOOSECOLUMN1}
 				<optgroup label="{$label}" class=\"select\" style=\"border:none\">
-				{foreach item=text from=$filteroption}
-		                     <option {$text.selected} value={$text.value}>{$text.text}</option>
-                	        {/foreach}
+					{foreach item=text from=$filteroption}
+		   		         <option {$text.selected} value={$text.value}>{$text.text}</option>
+                    {/foreach}
 			{/foreach}
           	        {$CHOOSECOLUMN1}
 	              </select></td>
-		   <td><select name="column2" id="column2">
+		   <td><select name="column2" id="column2" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN2}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -161,7 +161,7 @@ function mandatoryCheck()
                         {/foreach}
                         {$CHOOSECOLUMN2}
                       </select></td>
-		   <td><select name="column3" id="column3">
+		   <td><select name="column3" id="column3" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN3}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -171,7 +171,7 @@ function mandatoryCheck()
                         {/foreach}
                         {$CHOOSECOLUMN3}
                       </select></td>
-		   <td><select name="column4" id="column4">
+		   <td><select name="column4" id="column4" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN4}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -184,7 +184,7 @@ function mandatoryCheck()
 			
 		</tr>
 		<tr class="dvtCellInfo">
-		   <td><select name="column5" id="column5">
+		   <td><select name="column5" id="column5" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN5}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -194,7 +194,7 @@ function mandatoryCheck()
                         {/foreach}
                         {$CHOOSECOLUMN5}
                       </select></td>
-                   <td><select name="column6" id="column6">
+                   <td><select name="column6" id="column6" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN6}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -204,7 +204,7 @@ function mandatoryCheck()
                         {/foreach}
                         {$CHOOSECOLUMN6}
                       </select></td>
-                   <td><select name="column7" id="column7">
+                   <td><select name="column7" id="column7" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN7}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -214,7 +214,7 @@ function mandatoryCheck()
                         {/foreach}
                         {$CHOOSECOLUMN7}
                       </select></td>
-                   <td><select name="column8" id="column8">
+                   <td><select name="column8" id="column8" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN8}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -226,7 +226,7 @@ function mandatoryCheck()
 			</select></td>
 		</tr>
 		<tr class="dvtCellLabel">
-		   <td><select name="column9" id="column9">
+		   <td><select name="column9" id="column9" onChange="checkDuplicate();">
                         <option value="">{$MOD.LBL_NONE}</option>
                         {foreach item=filteroption key=label from=$CHOOSECOLUMN9}
                                 <optgroup label="{$label}" class=\"select\" style=\"border:none\">
@@ -463,7 +463,7 @@ function mandatoryCheck()
   <tr><td colspan="4">&nbsp;</td></tr>
   <tr><td colspan="4" style="padding: 5px;">
 	<div align="center">
-	  <input title="Save [Alt+S]" accesskey="S" class="small"  name="button2" value="{$APP.LBL_SAVE_BUTTON_LABEL}" style="width: 70px;" type="submit" />
+	  <input title="Save [Alt+S]" accesskey="S" class="small"  name="button2" value="{$APP.LBL_SAVE_BUTTON_LABEL}" style="width: 70px;" type="submit" onClick="return checkDuplicate();"/>
 	  <input title="Cancel [Alt+X]" accesskey="X" class="small" name="button2" onclick='window.history.back()' value="{$APP.LBL_CANCEL_BUTTON_LABEL}" style="width: 70px;" type="button" />
 	</div>
   </td></tr>
@@ -476,19 +476,47 @@ function mandatoryCheck()
 var k;
 var colOpts;
 var manCheck = new Array({$MANDATORYCHECK});
+{literal}
 if(document.CustomView.record.value == '')
-{ldelim}
+{
   for(k=0;k<manCheck.length;k++)
-  {ldelim}
+  {
       selname = "column"+(k+1);
       colOpts = document.getElementById(selname).options;
       for (l=0;l<colOpts.length;l++)
-      {ldelim}
+      {
         if(colOpts[l].value == manCheck[k])
-        {ldelim}
+        {
           colOpts[l].selected = true;
-        {rdelim}
-      {rdelim}
-  {rdelim}
-{rdelim}
+        }
+      }
+  }
+}
+function checkDuplicate()
+{
+	var cvselect_array = new Array('column1','column2','column3','column4','column5','column6','column7','column8','column9')
+		for(var loop=0;loop < cvselect_array.length-1;loop++)
+		{
+			selected_cv_columnvalue = $(cvselect_array[loop]).options[$(cvselect_array[loop]).selectedIndex].value;
+			if(selected_cv_columnvalue != '')
+			{	
+				for(var iloop=0;iloop < cvselect_array.length;iloop++)
+				{
+					if(iloop == loop)
+						iloop++;
+					selected_cv_icolumnvalue = $(cvselect_array[iloop]).options[$(cvselect_array[iloop]).selectedIndex].value;	
+					if(selected_cv_columnvalue == selected_cv_icolumnvalue)
+					{
+						alert('Columns cannot be duplicated');
+						$(cvselect_array[iloop]).selectedIndex = 0;
+						return false;
+					}
+
+				}
+			}
+		}
+		return true;
+}
+checkDuplicate();
+{/literal}
 </script>
