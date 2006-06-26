@@ -372,6 +372,14 @@ $app_strings = Array(
 'Merge'=>'Merge',
 'ConvertLead'=>'ConvertLead',
 
+
+'LBL_SHOW_RESULTS'=>'Show Results in',
+'LBL_TOTAL_RECORDS_FOUND'=>'Total Records found :',
+'LBL_SEARCH_RESULTS_FOR'=>' -- Search results for ',
+'LBL_TAG_SEARCH'=>' -- Tag search for ',
+'LBL_NO_DATA'=>'No Data Found',
+
+
 //3.2 release
 
 'NTC_MERGE_CONFIRMATION'=>'Are you sure you want to merge this record?',
