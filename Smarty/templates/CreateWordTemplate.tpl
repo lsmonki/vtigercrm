@@ -43,7 +43,7 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>{$UMOD.LBL_NEW_TEMPLATE}</strong></td>
+						<td class="big"><strong>{$UMOD.LBL_NEW_TEMPLATE}</strong><br>{$ERRORFLAG}</br></td>
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" type="submit" tabindex="4" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='add2db'; this.form.parenttab.value='Settings'" class="crmButton small save" />&nbsp;
 							&nbsp;<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" tabindex="5"  onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" />
