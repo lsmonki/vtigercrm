@@ -4433,7 +4433,7 @@ function get_current_user_access_groups($module)
 	global $adb,$noof_group_rows;
 	$current_user_group_list=getCurrentUserGroupList();
 	$sharing_write_group_list=getWriteSharingGroupsList($module);
-	$query ="select groupname from vtiger_groups";
+	$query ="select groupname,groupid from vtiger_groups";
 	if($current_user_group_list != '' && $sharing_write_group_list != '')
 	{
 		$query .= " where (groupid in".$current_user_group_list." or groupid in".$sharing_write_group_list.")";
