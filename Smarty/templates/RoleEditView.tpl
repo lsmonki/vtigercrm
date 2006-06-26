@@ -70,7 +70,7 @@ function validate()
 				<input type="hidden" name="mode" value="{$MODE}">
 				<input type="hidden" name="parent" value="{$PARENT}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="Groups" width="48" height="48" border=0 title="Roles"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="Roles" width="48" height="48" border=0 title="Roles"></td>
 					{if $MODE eq 'edit'}
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
 					{else}	
