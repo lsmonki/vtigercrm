@@ -320,6 +320,7 @@ $mod_strings = Array(
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 'LBL_SYSTEM_INFO'=>'System Information',
+'LBL_PROXY_SETTINGS'=>'Proxy Server Settings',
 
 'LBL_CURRENCY_CONFIGURATION'=>'- Currency Information',
 
@@ -446,6 +447,16 @@ $mod_strings = Array(
 'LBL_CONFIGURE_BACKUP_SERVER'=>' - Configure Backup Server',
 
 'LBL_SYSTEM_CONFIGURATION'=>' - System Configuration',
+
+'LBL_PROXY_SERVER_CONFIGURATION'=>'Proxy Server Configuration',
+
+'LBL_PROXY_SERVER_INFO'=>'Proxy Server Information',
+
+'LBL_PROXY_SERVER_SETTINGS'=>'Proxy Server Settings',
+
+'LBL_CONFIGURE_PROXY_SERVER'=>' - Configure Proxy Server',
+
+'LBL_PROXY_PORT'=>'Port Number',
 
 
 
