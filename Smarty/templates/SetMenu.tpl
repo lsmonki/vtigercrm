@@ -136,6 +136,11 @@
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=System&action=systemconfig&parenttab=Settings">{$MOD.LBL_SYSTEM_INFO}</a></td></tr>
 				{/if}
+				{if $smarty.request.action eq 'ProxyServerConfig'}
+                                <tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_PROXY_SETTINGS}</td></tr>
+                                {else}
+                                <tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings">{$MOD.LBL_PROXY_SETTINGS}</a></td></tr>
+                                {/if}
 				</table>
 			</td>
 			<td width=90% class="small settingsSelectedUI" valign=top >
