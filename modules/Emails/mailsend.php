@@ -146,7 +146,10 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			if($emailadd != '')
 			{
 				$description = getMergedDescription($focus->column_fields['description'],$mycrmid,$pmodule);
-				$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+				if(isPermitted($pmodule,'DetailView',$mycrmid) == 'yes')
+				{
+					$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$description,'','','all',$focus->id);
+				}	
 
 				$all_to_emailids []= $emailadd;
 				$mail_status_str .= $emailadd."=".$mail_status."&&&";
