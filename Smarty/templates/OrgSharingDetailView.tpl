@@ -18,7 +18,7 @@ DIV.fixedLay{
 	width:500px;
 	position:fixed;
 	left:250px;
-	top:200px;
+	top:98px;
 	display:block;
 }
 </style>
