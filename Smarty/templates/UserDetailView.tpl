@@ -14,7 +14,7 @@
 <script language="javascript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
-   <a class="link"  align="right" href="javascript:;">Edit</a>
+   <a class="link"  align="right" href="javascript:;">{$APP.LBL_EDIT_BUTTON}</a>
 </span>
 
 <style type="text/css">@import url(themes/blue/style.css);</style>
