@@ -84,6 +84,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 
 		require_once("modules/$module/language/en_us.lang.php");
 		global $mod_strings;
+		global $app_strings;
 
 		$smarty->assign("MOD", $mod_strings);
 		$smarty->assign("APP", $app_strings);
@@ -107,13 +108,15 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		
 		if($search_module != '')//This is for Tag search
 		{
-			$where = getTagWhere($search_val,$current_user->id);
-			$search_msg = " -- Tag search for <b>".$search_val."</b>";
+		
+			$Where = getTagWhere($search_val,$current_user->id);
+			$search_msg =  $app_strings['LBL_TAG_SEARCH'];				       	$search_msg .=	"<b>".$search_val."</b>";
 		}
 		else			//This is for Global search
 		{
 			$where = getUnifiedWhere($listquery,$module,$search_val);
-			$search_msg = " -- Search results for <b>".$search_val."</b>";
+			$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
+			$search_msg .=	"<b>".$search_val."</b>";
 		}
 
 		if($where != '')
@@ -157,7 +160,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	//Added to display the Total record count
 ?>
 	<script>
-		document.getElementById("global_search_total_count").innerHTML = "Total Records found : <b><?php echo $total_record_count; ?></b>";
+document.getElementById("global_search_total_count").innerHTML = " <? echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
 	</script>
 <?php
 
@@ -232,7 +235,9 @@ function getTagWhere($search_val,$current_user_id)
 function getSearchModulesComboList($search_module)
 {
 	global $object_array;
-
+	global $app_strings;
+	global $mod_strings;
+	
 	?>
 		<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 		<script>
@@ -261,9 +266,9 @@ function getSearchModulesComboList($search_module)
 		 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		     <tr>
 		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
-		        <td nowrap align="right">Show Results in &nbsp;
+		<td nowrap align="right"><? echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
 		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);">
-		                        <option value="All">All</option>
+			<option value="All"><? echo $app_strings['COMBO_ALL'] ?></option>
 						<?php
 						foreach($object_array as $module => $object_name)
 						{
@@ -273,7 +278,7 @@ function getSearchModulesComboList($search_module)
 							if($search_module == '' && $module == 'All')
 								$selected = 'selected';
 							?>
-							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $module; ?></option>
+							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $app_strings[$module]; ?></option>
 							<?php
 						}
 						?>
