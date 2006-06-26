@@ -265,7 +265,7 @@ function get_group_options()
 	global $log;
 	$log->debug("Entering get_group_options() method ...");
 	global $adb,$noof_group_rows;;
-	$sql = "select groupname from vtiger_groups";
+	$sql = "select groupname,groupid from vtiger_groups";
 	$result = $adb->query($sql);
 	$noof_group_rows=$adb->num_rows($result);
 	$log->debug("Exiting get_group_options method ...");
