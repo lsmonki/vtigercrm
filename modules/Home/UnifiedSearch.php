@@ -109,7 +109,7 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 		if($search_module != '')//This is for Tag search
 		{
 		
-			$Where = getTagWhere($search_val,$current_user->id);
+			$where = getTagWhere($search_val,$current_user->id);
 			$search_msg =  $app_strings['LBL_TAG_SEARCH'];				       	$search_msg .=	"<b>".$search_val."</b>";
 		}
 		else			//This is for Global search
