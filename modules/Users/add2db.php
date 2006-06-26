@@ -33,13 +33,31 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
   $binFile = $_FILES['binFile']['name'];
   $filename = basename($binFile);
   $filetype= $_FILES['binFile']['type'];
+  $filesize = $_FILES['binFile']['size'];
 
-    $filesize = $_FILES['binFile']['size'];
+  $error_flag ="";
+  $filetype_array = explode("/",$filetype);
+
+  $file_type_value = strtolower($filetype_array[1]);
+  
     if($filesize != 0)	
     {
-		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+	    if($file_type_value == "msword" || $file_type_value == "doc" || $file_type_value == "document")
+	    {
+		    if($result!=false)
+	    	    {
+			 $savefile="true";	
+		    }			 
+	    }
+	    else
+	    {
+		    $savefile="false";
+		    $error_flag="1";
+	    }		    
+	    
+ 		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-	   $textDesc = $_REQUEST['txtDescription'];	
+	        $textDesc = $_REQUEST['txtDescription'];	
 		$strDescription = addslashes($textDesc);
 	//    $fileid = create_guid();
 		$date_entered = date('YmdHis');
@@ -66,6 +84,8 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		$genQueryId = $adb->getUniqueID("wordtemplates");
 		if($genQueryId != '')
 		{
+			if($result!=false && $savefile=="true")
+			{
 			$module = $_REQUEST['target_module'];
 			$sql = "INSERT INTO vtiger_wordtemplates ";
 			$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
@@ -73,12 +93,15 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			$sql .= "'$filename', '$filesize', '$filetype')";
 
 			$result = $adb->query($sql);
-			if($result!=false)
-			{
 			   $result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='".$filename."'",$data);
 			   deleteFile($uploaddir,$filename);
-			   header("Location: index.php?action=listwordtemplates&module=Users&parenttab=Settings");	
+			   	header("Location: index.php?action=listwordtemplates&module=Users&parenttab=Settings");	
 			}
+		   	   elseif($savefile=="false")
+	                   {
+			   	header("Location: index.php?action=upload&module=Users&parenttab=Settings&flag=".$error_flag);	
+				   
+			   }  			   
 			else
 			{
 				include('themes/'.$theme.'/header.php');

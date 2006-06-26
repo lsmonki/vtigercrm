@@ -25,7 +25,19 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
-
+//error handling
+if(isset($_REQUEST['flag']) && $_REQUEST['flag'] != '')
+{
+	$flag = $_REQUEST['flag'];
+	switch($flag)
+	{
+		case 1:
+			$smarty->assign("ERRORFLAG","<font color='red'><B>File has to be a Document of type doc/msword</B></font>");
+			break;
+		default:
+			$smarty->assign("ERRORFLAG","");
+	}		
+}
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
