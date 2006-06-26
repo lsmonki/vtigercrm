@@ -25,7 +25,7 @@ if(isset($_REQUEST['service']))
 	}
 	elseif($_REQUEST['service'] == "firefox")
 	{
-		include("soap/contactserialize.php");
+		include("soap/firefoxtoolbar.php");
 	}
 	elseif($_REQUEST['service'] == "wordplugin")
 	{
@@ -33,7 +33,7 @@ if(isset($_REQUEST['service']))
 	}
 	elseif($_REQUEST['service'] == "thunderbird")
 	{
-		include("soap/contactserialize.php");
+		include("soap/thunderbirdplugin.php");
 	}
 	else
 	{
