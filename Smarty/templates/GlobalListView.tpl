@@ -53,7 +53,7 @@ displayModuleList(document.getElementById('global_search_module'));
 			<td>
 				<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 				   <tr>
-					<td style="padding-right:20px" nowrap><b>{$MODULE}</b>{$SEARCH_CRITERIA}</td>
+					<td style="padding-right:20px" nowrap><b>{$APP.$MODULE}</b>{$SEARCH_CRITERIA}</td>
 					<!-- Not used, may be used in future when we do the pagination and customeviews
 						<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 						<td nowrap >
@@ -77,7 +77,7 @@ displayModuleList(document.getElementById('global_search_module'));
 							<td class="lvtCol">{$header}</td>
 			         		{/foreach}
 					{else}
-						<td colspan=$HEADERCOUNT> No Data Found </td>
+						<td colspan=$HEADERCOUNT> {$APP.LBL_NO_DATA} </td>
 					{/if}
 				   </tr>
 				   {foreach item=entity key=entity_id from=$LISTENTITY}
