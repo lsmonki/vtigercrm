@@ -1841,7 +1841,7 @@ function getListQuery($module,$where='')
 				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
 			WHERE vtiger_activity.activitytype = 'Emails'
 			AND vtiger_crmentity.deleted = 0 ";
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;	
