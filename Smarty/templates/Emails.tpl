@@ -11,6 +11,23 @@
 -->*}
 <!--  USER  SETTINGS PAGE STARTS HERE -->
 <script language="javascript">
+function gotoWebmail()
+{ldelim}
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                	method: 'post',
+			postBody: "module=Webmails&action=WebmailsAjax&file=ListView&config_chk=true",
+			onComplete: function(response) {ldelim}
+				if(response.responseText != 'SUCESS')
+					$('mailconfchk').style.display = 'block';
+				else
+					window.location.href = "index.php?module=Webmails&action=index&parenttab=My Home Page";
+			{rdelim}
+		{rdelim}
+	);
+
+{rdelim}
 
 function setSubject(subject)
 {ldelim}
@@ -112,7 +129,7 @@ function getListViewEntries_js(module,url)
 </script>
 		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Email.js"></script>
-
+<div class="fixedLay" id="mailconfchk" style="display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><h3>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Settings&action=AddMailAccount&record={$USERID}">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</h3></font></div>
 <!-- Shadow starts here -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
@@ -169,7 +186,7 @@ function getListViewEntries_js(module,url)
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{$IMAGE_PATH}webmail_downarrow.gif" align="absmiddle" />&nbsp;&nbsp;
-									<a href="index.php?module=Webmails&action=index&parenttab=My Home Page" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
+									<a href="javascript:;" onClick="gotoWebmail();" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul>
 								<!-- Sent mail -->

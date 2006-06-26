@@ -16,6 +16,17 @@ require_once('modules/Webmails/MailParse.php');
 
 global $adb,$mbox,$current_user;
 $mailInfo = getMailServerInfo($current_user);
+if($_REQUEST['config_chk'] == 'true')
+{
+	if($adb->num_rows($mailInfo) < 1) {
+		echo 'FAILED';
+		exit();
+	}else
+	{
+		echo 'SUCESS';
+		exit();
+	}
+}
 if($adb->num_rows($mailInfo) < 1) {
         echo "<center><font color='red'><h3>Please configure your mail settings</h3></font></center>";
         exit();

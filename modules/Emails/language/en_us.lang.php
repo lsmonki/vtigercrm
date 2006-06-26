@@ -142,6 +142,7 @@ $mod_strings = Array(
 'LBL_IN_SUBJECT_OR_SENDER'=>'in Subject or Sender',
 'CHOSE_EMAIL'=>'Choose Email ID',
 'Sender'=>'Sender',
+'LBL_CONFIGURE_MAIL_SETTINGS'=>'Your Incoming Mail Server is not configured',
 );
 
 ?>

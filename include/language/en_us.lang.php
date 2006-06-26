@@ -936,7 +936,9 @@ $app_strings = Array(
 'This Week'=>'This Week',
 'This Month'=>'This Month',
 'This Year'=>'This Year',
-
+'LBL_PLEASE_CLICK'=>'Please Click',
+'LBL_TO_CONFIGURE'=>'to Configure',
+'LBL_HERE'=>'here',
 );
 
 
