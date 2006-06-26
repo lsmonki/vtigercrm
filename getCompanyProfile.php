@@ -18,6 +18,7 @@ require_once('class_http/class_http.php');
  */
 function getComdata($url,$variable="")
 {
+
 	$h = new http();
 	$desc = array();
 	$h->dir = "class_http_dir/";
