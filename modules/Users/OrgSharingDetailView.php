@@ -61,7 +61,7 @@ $custom_access['Potentials'] = getSharingRuleList('Potentials');
 $custom_access['HelpDesk'] = getSharingRuleList('HelpDesk');
 
 //Email Sharing
-$custom_access['Emails'] = getSharingRuleList('Emails');
+//$custom_access['Emails'] = getSharingRuleList('Emails');
 
 //Campaign Sharing
 $custom_access['Campaigns'] = getSharingRuleList('Campaigns');
