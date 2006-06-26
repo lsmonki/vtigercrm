@@ -2714,7 +2714,8 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 	}
 
 	$edit_link .= "&parenttab=".$_REQUEST["parenttab"];
-
+	if($module == 'Emails')
+	        $edit_link = 'javascript:;" onclick="OpenCompose(\'123\',\'edit\');';
 	return $edit_link;
 }
 
