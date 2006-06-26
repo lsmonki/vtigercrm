@@ -486,9 +486,9 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Charts for Products by Quantity in stock
-		    elseif (($type == "productbyqtyinstock") && (getFieldVisibilityPermission('Products',$user_id,'productqtyinstock') == "0"))
+		    elseif (($type == "productbyqtyinstock") && (getFieldVisibilityPermission('Products',$user_id,'qtyinstock') == "0"))
 		    {
-			$graph_by="qtyinstock";
+			$graph_by="productid";
 			    $graph_title=$mod_strings['productbyqtyinstock'];
 			    $module="Products";
 			    $where="";

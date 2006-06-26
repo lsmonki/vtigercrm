@@ -98,9 +98,20 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 			}
 
 			//Counting the number of values for a type of graph
-			if(!isset($mod_count_array[$mod_name]))
-				$mod_count_array[$mod_name]=0;
-			$mod_count_array[$mod_name]++;
+			if($graph_for == "productid")
+			{
+				if($row['qtyinstock'] =='')
+					$mod_count_array[$mod_name] = 0;
+				else
+					$mod_count_array[$mod_name]=$row['qtyinstock'];
+
+			}
+			else
+			{
+				if(!isset($mod_count_array[$mod_name]))
+					$mod_count_array[$mod_name]=0;
+				$mod_count_array[$mod_name]++;
+			}
 
 			//Counting the number of values for a type of graph for a particular date
 			if(!isset($count_by_date[$mod_name][$crtd_date]))
@@ -200,7 +211,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($name_val!="")
 						$name=$name_val;
 				}
-				if($graph_for =="product_id")
+				if($graph_for =="product_id" || $graph_for =="productid")
 				{
 					$query = "SELECT productname FROM vtiger_products WHERE productid='".$name."'";
 					$result = $adb->query($query);
@@ -241,29 +252,15 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 					if($name_val!="")
 						$name=$name_val;
 				}
-			if($graph_for =="contactid")
+				if($graph_for =="contactid")
 				{
 					$query = "SELECT lastname FROM vtiger_contactdetails WHERE contactid='".$name."'";
-					echo '>>>>>>>>>. '.$query;
 					$result = $adb->query($query);
 					$name_val = $adb->query_result($result,0,"lastname");
 					if($name_val!="")
 						$name=$name_val;
 				}
 
-
-
-
-
-
-
-
-
-
-
-
-
-				
 				//Passing name to graph
 				if($mod_name_val!="") $mod_name_val.="::$name";
 				else $mod_name_val="$name";
@@ -315,7 +312,15 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				if($period_type!="yday")
 					$mod_cnt_table.="<td>$tot</td>";
 			}
-			$cnt_total=array_sum($mod_tot_cnt_array);
+			if($graph_for == "productid")
+			{
+				$cnt_total=array_sum($mod_count_array);
+			}
+			else
+			{
+				$cnt_total=array_sum($mod_tot_cnt_array);
+			}
+
 			$mod_cnt_table.="<td align=\"center\" class=\"$class\">$cnt_total</td></tr></table>";
 			$mod_cnt_table.="</table>";
 			$title_of_graph="$title : $cnt_total";
