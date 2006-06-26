@@ -207,6 +207,7 @@ $mod_strings = Array(
 'LBL_EVERYWEEK'=>'Every Week',
 'LBL_EVERYMON'=>'Every Month',
 'LBL_REPEATEVENT'=>'Repeat Event',
+'LBL_NONE_SCHEDULED'=>'None Scheduled',
 
 'LBL_INVITE_INST1'=>'To invite, select the vtiger_users from the "Available Users" list and click the "Add" button.',
 'LBL_INVITE_INST2'=>'To remove, select the vtiger_users in the "Selected Users" list and the click "Remove" button.',
