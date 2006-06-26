@@ -15,7 +15,7 @@ require_once('include/nusoap/nusoap.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 
-$log = &LoggerManager::getLogger('webforms');
+$log = &LoggerManager::getLogger('firefoxlog');
 
 $NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
