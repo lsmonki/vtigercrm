@@ -75,7 +75,7 @@
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$MOD.EMAILTEMPLATES}</a></td></tr>
 				{/if}
 
-				{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate'}
+				{if $smarty.request.action eq 'listwordtemplates' || $smarty.request.action eq 'add2db' || $smarty.request.action eq 'deletewordtemplate' || $smarty.request.action eq 'upload'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.WORDINTEGRATION}</td></tr>
 				
 				{else}	
@@ -95,7 +95,7 @@
 				{/if} 	
 
 				{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
-				<tr><td class="settingsTabSelected" nowrap>{$MOD.INVENTORYNOTIFICATION}</td></tr>
+				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_INVENTORY_TANDC}</td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORYTERMSANDCONDITIONS}</a></td></tr>
 				{/if}
@@ -114,13 +114,13 @@
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings">{$MOD.LBL_MAIL_SERVER_SETTINGS}</a></td></tr>
 				{/if}
 				
-				{if $smarty.request.action eq 'BackupServerConfig' || $smarty.request.action eq 'index' || $smarty.request.action eq 'Save'}
+				{if $smarty.request.action eq 'BackupServerConfig' || $smarty.request.action eq 'Save'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_BACKUP_SERVER_SETTINGS}</td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings">{$MOD.LBL_BACKUP_SERVER_SETTINGS}</a></td></tr>
 				{/if}
 				
-				{if $smarty.request.action eq 'CurrencyListView' ||  $smarty.request.action eq 'CurrencyEditView' ||  $smarty.request.action eq 'index' ||  $smarty.request.action eq 'SaveCurrencyInfo'}
+				{if $smarty.request.action eq 'CurrencyListView' ||  $smarty.request.action eq 'CurrencyEditView' ||  $smarty.request.action eq 'SaveCurrencyInfo'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_CURRENCY_SETTINGS}</td></tr>
 				{else}
 				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a></td></tr>
