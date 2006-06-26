@@ -317,7 +317,7 @@
 						<tr>
 
 							<td rowspan=2 valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}terms.gif" alt="{$MOD.INVENTORYTERMSANDCONDITIONS}" title="{$MOD.INVENTORYTERMSANDCONDITIONS}"></a></td>
-							<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORYTERMSANDCONDITIONS}</a></td>
+							<td class=big valign=top><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td>
 						</tr>
 						<tr>
 							<td class="small" valign=top>{$MOD.LBL_INV_TANDC_DESCRIPTION}</td>
