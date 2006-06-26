@@ -54,12 +54,18 @@ function hndMouseOver(uitype,fieldLabel)
 	  globalfieldlabel = fieldLabel;
 	  if(globaluitype == 53)
 	  {
-		  var assign_type_U = document.DetailView.assigntype[0].checked;
-		  var assign_type_G = document.DetailView.assigntype[1].checked;
-		  if(assign_type_U == true)
+		  if(typeof(document.DetailView.assigntype[0]) != 'undefined')
+		  {
+			  var assign_type_U = document.DetailView.assigntype[0].checked;
+			  var assign_type_G = document.DetailView.assigntype[1].checked;
+			  if(assign_type_U == true)
+				  globaltxtboxid= 'txtbox_U'+fieldLabel;
+			  else if(assign_type_G == true)
+				  globaltxtboxid= 'txtbox_G'+fieldLabel;
+		  }else
+		  {
 			  globaltxtboxid= 'txtbox_U'+fieldLabel;
-		  else if(assign_type_G == true)
-			  globaltxtboxid= 'txtbox_G'+fieldLabel;
+		  }
 	  }else
 	  {
       	  globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
@@ -108,8 +114,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	var groupurl = "";
 	if(globaluitype == 53)
 	{
-		var assign_type_U = document.DetailView.assigntype[0].checked;
-		var assign_type_G = document.DetailView.assigntype[1].checked;
+		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
+		{
+			var assign_type_U = document.DetailView.assigntype[0].checked;
+			var assign_type_G = document.DetailView.assigntype[1].checked;
+		}else
+		{
+			var assign_type_U = document.DetailView.assigntype.checked;
+		}
 		if(assign_type_U == true)
 		{
 			var txtBox= 'txtbox_U'+fieldLabel;
@@ -192,8 +204,14 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	else if(uitype == '53')
 	{
 		var hdObj = getObj(hdTxt);
-		var assign_type_U = document.DetailView.assigntype[0].checked;
-		var assign_type_G = document.DetailView.assigntype[1].checked;
+		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
+        {
+			var assign_type_U = document.DetailView.assigntype[0].checked;
+			var assign_type_G = document.DetailView.assigntype[1].checked;
+		}else
+		{
+			var assign_type_U = document.DetailView.assigntype.checked;
+		}
 		if(isAdmin == "0")
 		{
 			getObj(dtlView).innerHTML = hdObj.value;
@@ -307,12 +325,18 @@ function setSelectValue(fieldLabel)
 {
 	if(globaluitype == 53)
 	{
-		var assign_type_U = document.DetailView.assigntype[0].checked;
-        var assign_type_G = document.DetailView.assigntype[1].checked;
-		if(assign_type_U == true)
+		if(typeof(document.DetailView.assigntype[0]) != 'undefined')
+		{
+			var assign_type_U = document.DetailView.assigntype[0].checked;
+			var assign_type_G = document.DetailView.assigntype[1].checked;
+			if(assign_type_U == true)
+				var selCombo= 'txtbox_U'+fieldLabel;
+			else if(assign_type_G == true)	
+				var selCombo= 'txtbox_G'+fieldLabel;
+		}else
+		{
 			var selCombo= 'txtbox_U'+fieldLabel;
-		else if(assign_type_G == true)	
-			var selCombo= 'txtbox_G'+fieldLabel;
+		}
 	}else
 	{
 			var selCombo= 'txtbox_'+fieldLabel;

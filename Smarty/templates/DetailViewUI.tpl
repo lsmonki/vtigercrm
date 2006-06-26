@@ -190,7 +190,9 @@
                    	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
 					{if $keyoptions.0 eq 'User'}
 						<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;User
-						<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;Group
+						{if $keyoptions.2 neq ''}
+							<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;Group
+						{/if}
 						<span id="assign_user" style="display: block;">
 					{else}
 						<input name="assigntype" id="assigntype" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;User

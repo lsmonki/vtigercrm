@@ -243,21 +243,21 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
-			do
-			{
+			do{
 				$groupname=$nameArray["groupname"];
+				$group_id=$nameArray["groupid"];
 				$selected = '';	
 				if($groupname == $selected_groupname[0])
 				{
 					$selected = "selected";
 				}	
-				$group_option[] = array($groupname=>$selected);
-
+				if($groupname != '')
+					$group_option[$group_id] = array($groupname=>$selected);
 			}while($nameArray = $adb->fetch_array($result));
-
-
+			
 			$label_fld ["options"][] = $users_combo;
-			$label_fld ["options"][] = $group_option; 
+			if(count($group_option) >0)
+				$label_fld ["options"][] = $group_option; 
 	}
 	elseif($uitype == 55)
         {
