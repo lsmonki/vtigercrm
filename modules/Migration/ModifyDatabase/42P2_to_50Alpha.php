@@ -17,9 +17,9 @@ global $query_count, $success_query_count, $failure_query_count;
 global $success_query_array, $failure_query_array;
 
 //Added to put prefix vtiger_ in some of the columns in tables which are used for CV and Reports and field -- 23-06-06
-$conn->println("First we will rename the existing tables with prefix vtiger_");
+$conn->println("Going to rename the table names with prefix vtiger_");
 include("modules/Migration/ModifyDatabase/rename_tables.php");
-$conn->println("Renaming the existing tables with prefix vtiger_ has been finished");
+$conn->println("Renaming the table names with prefix vtiger_ has been finished");
 
 
 
@@ -358,7 +358,7 @@ $create_query2 = "CREATE TABLE vtiger_moduleowners
  `tabid` int(19) NOT NULL default '0',
  `user_id` varchar(11) NOT NULL default '',
  PRIMARY KEY  (`tabid`),
- CONSTRAINT `fk_ModuleOwners` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+ CONSTRAINT `fk_ModuleOwners` FOREIGN KEY (`tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
 */
 Execute($create_query2);
@@ -432,10 +432,10 @@ $rename_table_array1 = Array(
 		"update vtiger_field set tablename='customerdetails' where tabid=4 and fieldname in ('portal','support_start_date','support_end_date')",
 		"alter table vtiger_PortalInfo drop foreign key fk_PortalInfo",
 		"rename table vtiger_PortalInfo to vtiger_portalinfo",
-		"alter table vtiger_portalinfo add CONSTRAINT `fk_portalinfo` FOREIGN KEY (`id`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
+		"alter table vtiger_portalinfo add CONSTRAINT `fk_portalinfo` FOREIGN KEY (`id`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
 		"alter table vtiger_CustomerDetails drop foreign key fk_CustomerDetails",
 		"rename table vtiger_CustomerDetails to vtiger_customerdetails",
-		"alter table vtiger_customerdetails add CONSTRAINT `fk_customerdetails` FOREIGN KEY (`customerid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE"
+		"alter table vtiger_customerdetails add CONSTRAINT `fk_customerdetails` FOREIGN KEY (`customerid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE"
 		);
 foreach($rename_table_array1 as $query)
 {
@@ -630,7 +630,7 @@ $query8 = "CREATE TABLE vtiger_group2grouprel
  `groupid` int(19) NOT NULL default '0',
  `containsgroupid` int(19) NOT NULL default '0',
  PRIMARY KEY (`groupid`,`containsgroupid`),
- CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+ CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
 */
 Execute($query8);
@@ -647,7 +647,7 @@ $query9 = "CREATE TABLE vtiger_group2role
  `groupid` int(19) NOT NULL default '0',
  `roleid` varchar(255) NOT NULL default '',
  PRIMARY KEY (`groupid`,`roleid`),
- CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+ CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
 */
 Execute($query9);
@@ -664,7 +664,7 @@ $query10 = "CREATE TABLE vtiger_group2rs
  `groupid` int(19) NOT NULL default '0',
  `roleandsubid` varchar(255) NOT NULL default '',
  PRIMARY KEY (`groupid`,`roleandsubid`),
- CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+ CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE
 ) TYPE=InnoDB";
 */
 Execute($query10);
@@ -766,7 +766,7 @@ $query2 = "CREATE TABLE vtiger_org_share_action2tab (
 	`share_action_id` int(19) NOT NULL default '0',
 	`tabid` int(19) NOT NULL default '0',
 	PRIMARY KEY  (`share_action_id`,`tabid`),
-	CONSTRAINT `fk_org_share_action2tab` FOREIGN KEY (`share_action_id`) REFERENCES `org_share_action_mapping` (`share_action_id`) ON DELETE CASCADE
+	CONSTRAINT `fk_org_share_action2tab` FOREIGN KEY (`share_action_id`) REFERENCES `vtiger_org_share_action_mapping` (`share_action_id`) ON DELETE CASCADE
 	) TYPE=InnoDB";
 Execute($query2);
 
@@ -1478,12 +1478,20 @@ foreach($update_query_array3 as $query)
 	Execute($query);
 }
 
+//Added on 26-06-06 - we cannot add foreign key in type MyISAM, so we have to change the type to InnoDB
+$alter_tables_array = Array("vtiger_groups","vtiger_potential","vtiger_quotes","vtiger_salesorder","vtiger_invoice","vtiger_purchaseorder");
+foreach($alter_tables_array as $tablename)
+{
+	Execute("alter table $tablename type=InnoDB");
+}
+
+
 $create_query6 = "CREATE TABLE vtiger_accountgrouprelation ( accountid int(19) NOT NULL default '0', groupname varchar(100) default NULL, PRIMARY KEY  (`accountid`))";
 Execute($create_query6);
 
 $alter_query_array8 = Array(
 				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE",
-				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_accountgrouprelation ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			   );
 foreach($alter_query_array8 as $query)
 {
@@ -1495,7 +1503,7 @@ Execute($create_query7);
 
 $alter_query_array9 = Array(
 				"alter table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE",
-				"alter table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_contactgrouprelation ADD CONSTRAINT fk_contactgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			   );
 foreach($alter_query_array9 as $query)
 {
@@ -1508,7 +1516,7 @@ Execute($create_query10);
 
 $alter_query_array10 = Array(
 				"alter table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE",
-				"alter table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_potentialgrouprelation ADD CONSTRAINT fk_potentialgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array10 as $query)
 {
@@ -1520,7 +1528,7 @@ Execute($create_query11);
 
 $alter_query_array11 = Array(
 				"alter table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE",
-				"alter table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_quotegrouprelation ADD CONSTRAINT fk_quotegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array11 as $query)
 {
@@ -1532,7 +1540,7 @@ Execute($create_query12);
 
 $alter_query_array12 = Array(
 				"alter table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE",
-				"alter table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_sogrouprelation ADD CONSTRAINT fk_sogrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array12 as $query)
 {
@@ -1544,7 +1552,7 @@ Execute($create_query13);
 
 $alter_query_array13 = Array(
 				"alter table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE",
-				"alter table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_invoicegrouprelation ADD CONSTRAINT fk_invoicegrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array13 as $query)
 {
@@ -1556,7 +1564,7 @@ Execute($create_query14);
 
 $alter_query_array14 = Array(
 				"alter table vtiger_pogrouprelation ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE",
-				"alter table vtiger_pogrouprelation ADD CONSTRAINT fk_productgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(name) ON DELETE CASCADE"
+				"alter table vtiger_pogrouprelation ADD CONSTRAINT fk_productgrouprelation2 FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array14 as $query)
 {
@@ -1669,11 +1677,11 @@ $create_query19 = "CREATE TABLE vtiger_chat_users ( `id` bigint(20) NOT NULL aut
 Execute($create_query19);
 
 $alter_query_array17 = Array(
-				"ALTER TABLE `vtiger_chat_msg`  ADD CONSTRAINT `chat_msg_ibfk_1` FOREIGN KEY (`chat_from`) REFERENCES `chat_users` (`id`) ON DELETE CASCADE",
+				"ALTER TABLE `vtiger_chat_msg`  ADD CONSTRAINT `chat_msg_ibfk_1` FOREIGN KEY (`chat_from`) REFERENCES `vtiger_chat_users` (`id`) ON DELETE CASCADE",
 
-				"ALTER TABLE `vtiger_chat_pchat`  ADD CONSTRAINT `chat_pchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE",
+				"ALTER TABLE `vtiger_chat_pchat`  ADD CONSTRAINT `chat_pchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `vtiger_chat_msg` (`id`) ON DELETE CASCADE",
 
-				"ALTER TABLE `vtiger_chat_pvchat`  ADD CONSTRAINT `chat_pvchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `chat_msg` (`id`) ON DELETE CASCADE"
+				"ALTER TABLE `vtiger_chat_pvchat`  ADD CONSTRAINT `chat_pvchat_ibfk_1` FOREIGN KEY (`msg`) REFERENCES `vtiger_chat_msg` (`id`) ON DELETE CASCADE"
 			    );
 foreach($alter_query_array17 as $query)
 {
@@ -1823,8 +1831,8 @@ $create_query25 = "CREATE TABLE vtiger_campaigncontrel (
   `contactid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
   KEY `CampaignContRel_IDX1` (`contactid`),
-  CONSTRAINT `fk_CampaignContRel2` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_CampaignContRel1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
+  CONSTRAINT `fk_CampaignContRel2` FOREIGN KEY (`contactid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_CampaignContRel1` FOREIGN KEY (`campaignid`) REFERENCES `vtiger_campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 */
 Execute($create_query25);
@@ -1843,8 +1851,8 @@ CREATE TABLE vtiger_campaigngrouprelation (
        `groupname` varchar(100) default NULL,
 	PRIMARY KEY  (`campaignid`),
 	KEY `campaigngrouprelation_IDX1` (`groupname`),
-	CONSTRAINT `fk_campaigngrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE,
-	CONSTRAINT `fk_campaigngrouprelation1` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
+	CONSTRAINT `fk_campaigngrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `vtiger_groups` (`groupname`) ON DELETE CASCADE,
+	CONSTRAINT `fk_campaigngrouprelation1` FOREIGN KEY (`campaignid`) REFERENCES `vtiger_campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 */
 Execute($create_table_query);
@@ -1863,8 +1871,8 @@ $create_query26 = "CREATE TABLE vtiger_campaignleadrel (
   `leadid` int(19) NOT NULL default '0',
   PRIMARY KEY  (`campaignid`),
   KEY `CampaignLeadRel_IDX1` (`leadid`,`campaignid`),
-  CONSTRAINT `fk_CampaignLeadRel1234` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_CampaignLeadRel2423` FOREIGN KEY (`leadid`) REFERENCES `leaddetails` (`leadid`) ON DELETE CASCADE
+  CONSTRAINT `fk_CampaignLeadRel1234` FOREIGN KEY (`campaignid`) REFERENCES `vtiger_campaign` (`campaignid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_CampaignLeadRel2423` FOREIGN KEY (`leadid`) REFERENCES `vtiger_leaddetails` (`leadid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 */
 Execute($create_query26);
@@ -1872,7 +1880,7 @@ Execute($create_query26);
 $create_table_query1 = "CREATE TABLE vtiger_campaignscf (
   `campaignid` int(19) NOT NULL default '0',
    PRIMARY KEY  (`campaignid`),
-   CONSTRAINT `fk_CampaignsCF` FOREIGN KEY (`campaignid`) REFERENCES `campaign` (`campaignid`) ON DELETE CASCADE
+   CONSTRAINT `fk_CampaignsCF` FOREIGN KEY (`campaignid`) REFERENCES `vtiger_campaign` (`campaignid`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
 Execute($create_table_query1);
 
@@ -1912,7 +1920,7 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_field` DROP INDEX `tabid`",
 "ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `tagger_id_index`",
 "ALTER TABLE `vtiger_freetagged_objects` DROP INDEX `object_id_index`",
-"ALTER TABLE `vtiger_groups` DROP INDEX `groupname`",
+//"ALTER TABLE `vtiger_groups` DROP INDEX `groupname`",
 //"ALTER TABLE `vtiger_invoicegrouprelation` DROP INDEX `fk_invoicegrouprelation2`",
 //"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_354`",
 //"ALTER TABLE `vtiger_leadscf` DROP COLUMN `cf_358`",
@@ -2054,9 +2062,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_grp2grp_share_groupid` (`share_groupid`),
   KEY `idx_datashare_grp2grp_to_groupid` (`to_groupid`),
-  CONSTRAINT `fk_datashare_grp2grp2` FOREIGN KEY (`to_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2grp1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2grp789` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_grp2grp2` FOREIGN KEY (`to_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2grp1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2grp789` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2078,9 +2086,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_grp2role_share_groupid` (`share_groupid`),
   KEY `idx_datashare_grp2role_to_roleid` (`to_roleid`),
-  CONSTRAINT `fk_datashare_grp2role2` FOREIGN KEY (`to_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2role1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2role345` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_grp2role2` FOREIGN KEY (`to_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2role1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2role345` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2103,9 +2111,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_grp2rs_share_groupid` (`share_groupid`),
   KEY `idx_datashare_grp2rs_to_roleandsubid` (`to_roleandsubid`),
-  CONSTRAINT `fk_datashare_grp2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2rs1` FOREIGN KEY (`share_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_grp2rs36` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_grp2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2rs1` FOREIGN KEY (`share_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_grp2rs36` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2134,8 +2142,8 @@ $query_array = Array(
   PRIMARY KEY  (`datashare_relatedmodule_id`),
   KEY `idx_datashare_relatedmodules_tabid` (`tabid`),
   KEY `idx_datashare_relatedmodules_relatedto_tabid` (`relatedto_tabid`),
-  CONSTRAINT `fk_datashare_relatedmodules1` FOREIGN KEY (`relatedto_tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_relatedmodules123` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_relatedmodules1` FOREIGN KEY (`relatedto_tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_relatedmodules123` FOREIGN KEY (`tabid`) REFERENCES `vtiger_tab` (`tabid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2162,9 +2170,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_role2group_share_roleid` (`share_roleid`),
   KEY `idx_datashare_role2group_to_groupid` (`to_groupid`),
-  CONSTRAINT `fk_datashare_role2group3` FOREIGN KEY (`to_groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2group1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2group568` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_role2group3` FOREIGN KEY (`to_groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2group1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2group568` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2187,9 +2195,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_role2role_share_roleid` (`share_roleid`),
   KEY `idx_datashare_role2role_to_roleid` (`to_roleid`),
-  CONSTRAINT `fk_datashare_role2role3` FOREIGN KEY (`to_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2role1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2role345` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_role2role3` FOREIGN KEY (`to_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2role1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2role345` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2212,9 +2220,9 @@ $query_array = Array(
   PRIMARY KEY  (`shareid`),
   KEY `idx_datashare_role2s_share_roleid` (`share_roleid`),
   KEY `idx_datashare_role2s_to_roleandsubid` (`to_roleandsubid`),
-  CONSTRAINT `fk_datashare_role2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2rs1` FOREIGN KEY (`share_roleid`) REFERENCES `role` (`roleid`) ON DELETE CASCADE,
-  CONSTRAINT `fk_datashare_role2rs987` FOREIGN KEY (`shareid`) REFERENCES `datashare_module_rel` (`shareid`) ON DELETE CASCADE
+  CONSTRAINT `fk_datashare_role2rs3` FOREIGN KEY (`to_roleandsubid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2rs1` FOREIGN KEY (`share_roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE,
+  CONSTRAINT `fk_datashare_role2rs987` FOREIGN KEY (`shareid`) REFERENCES `vtiger_datashare_module_rel` (`shareid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1",
 */
 
@@ -2428,7 +2436,7 @@ $query_array = Array(
 //"ALTER TABLE `vtiger_invoice` MODIFY COLUMN `salesorderid` INTEGER(19) DEFAULT NULL UNIQUE",
 "ALTER TABLE `vtiger_invoice` MODIFY COLUMN `terms_conditions` TEXT COLLATE latin1_swedish_ci",
 //"ALTER TABLE `vtiger_invoicegrouprelation` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `invoiceid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_invoiceproductrel` MODIFY COLUMN `productid` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_lar` MODIFY COLUMN `createdon` DATE NOT NULL",
 //"ALTER TABLE `vtiger_leaddetails` MODIFY COLUMN `leadid` INTEGER(19) NOT NULL PRIMARY KEY",
@@ -2446,8 +2454,8 @@ $query_array = Array(
 "ALTER TABLE `vtiger_notificationscheduler` MODIFY COLUMN `notificationbody` TEXT COLLATE latin1_swedish_ci",
 "ALTER TABLE `vtiger_notificationscheduler_seq` MODIFY COLUMN `id` INTEGER(11) NOT NULL",
 "ALTER TABLE `vtiger_opportunitystage` MODIFY COLUMN `probability` DECIMAL(3,2) DEFAULT '0.00'",
-"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
-"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
+//"ALTER TABLE `vtiger_org_share_action2tab` MODIFY COLUMN `tabid` INTEGER(19) NOT NULL PRIMARY KEY",
 //"ALTER TABLE `vtiger_org_share_action_mapping` MODIFY COLUMN `share_action_id` INTEGER(19) NOT NULL PRIMARY KEY",
 "ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `website` VARCHAR(100) COLLATE latin1_swedish_ci DEFAULT NULL",
 "ALTER TABLE `vtiger_organizationdetails` MODIFY COLUMN `logo` TEXT COLLATE latin1_swedish_ci",
@@ -2627,32 +2635,17 @@ $query_array = Array(
 "ALTER TABLE `vtiger_troubletickets` ADD KEY `status2` (`status`)",
 "ALTER TABLE `vtiger_users2group` ADD KEY `idx_users2group` (`groupid`, `userid`)",
 "ALTER TABLE `vtiger_users2group` ADD KEY `fk_users2group2` (`userid`)",
-//"ALTER TABLE `vtiger_accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_accountgrouprelation` ADD CONSTRAINT `fk_accountgrouprelation123` FOREIGN KEY (`accountid`) REFERENCES `account` (`accountid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_contactgrouprelation` ADD CONSTRAINT `fk_contactgrouprelation123` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `customview` (`cvid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_invoice` ADD CONSTRAINT `fk_Invoice2` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation234` FOREIGN KEY (`invoiceid`) REFERENCES `invoice` (`invoiceid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_invoicegrouprelation` ADD CONSTRAINT `fk_invoicegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_org_share_action2tab` ADD CONSTRAINT `fk_org_share_action2tab12345` FOREIGN KEY (`tabid`) REFERENCES `tab` (`tabid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_pogrouprelation` ADD CONSTRAINT `fk_pogrouprelation123` FOREIGN KEY (`purchaseorderid`) REFERENCES `purchaseorder` (`purchaseorderid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_potentialgrouprelation` ADD CONSTRAINT `fk_potentialgrouprelation67` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `profile` (`profileid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2345` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_quotegrouprelation` ADD CONSTRAINT `fk_quotegrouprelation132` FOREIGN KEY (`quoteid`) REFERENCES `quotes` (`quoteid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes3` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes2` FOREIGN KEY (`potentialid`) REFERENCES `potential` (`potentialid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO4` FOREIGN KEY (`contactid`) REFERENCES `contactdetails` (`contactid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO2` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation2` FOREIGN KEY (`groupname`) REFERENCES `groups` (`groupname`) ON DELETE CASCADE",
-//"ALTER TABLE `vtiger_sogrouprelation` ADD CONSTRAINT `fk_sogrouprelation78` FOREIGN KEY (`salesorderid`) REFERENCES `salesorder` (`salesorderid`) ON DELETE CASCADE",
-"ALTER TABLE `vtiger_vendorcontactrel` ADD CONSTRAINT `fk_VendorContactRel45` FOREIGN KEY (`vendorid`) REFERENCES `vendor` (`vendorid`) ON DELETE CASCADE"
+"ALTER TABLE `vtiger_customaction` ADD CONSTRAINT `customaction_FK1` FOREIGN KEY (`cvid`) REFERENCES `vtiger_customview` (`cvid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_invoice` ADD CONSTRAINT `fk_Invoice2` FOREIGN KEY (`salesorderid`) REFERENCES `vtiger_salesorder` (`salesorderid`) ON DELETE CASCADE",
+//"ALTER TABLE `vtiger_profile2globalpermissions` ADD CONSTRAINT `fk_profile2globalpermissions57` FOREIGN KEY (`profileid`) REFERENCES `vtiger_profile` (`profileid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO3` FOREIGN KEY (`contactid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2` FOREIGN KEY (`vendorid`) REFERENCES `vtiger_vendor` (`vendorid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_purchaseorder` ADD CONSTRAINT `fk_PO2345` FOREIGN KEY (`quoteid`) REFERENCES `vtiger_quotes` (`quoteid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes3` FOREIGN KEY (`contactid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_quotes` ADD CONSTRAINT `fk_Quotes2` FOREIGN KEY (`potentialid`) REFERENCES `vtiger_potential` (`potentialid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO4` FOREIGN KEY (`contactid`) REFERENCES `vtiger_contactdetails` (`contactid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_salesorder` ADD CONSTRAINT `fk_SO2` FOREIGN KEY (`vendorid`) REFERENCES `vtiger_vendor` (`vendorid`) ON DELETE CASCADE",
+"ALTER TABLE `vtiger_vendorcontactrel` ADD CONSTRAINT `fk_VendorContactRel45` FOREIGN KEY (`vendorid`) REFERENCES `vtiger_vendor` (`vendorid`) ON DELETE CASCADE"
 		    );
 foreach($query_array as $query)
 {
