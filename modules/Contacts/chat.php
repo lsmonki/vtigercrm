@@ -354,7 +354,7 @@ class Chat
     if($to != 0)
       $chat .= "v";
     
-      $res = $adb->query("INSERT INTO chat_".$chat."chat (msg) VALUES (".$id.")");
+      $res = $adb->query("INSERT INTO vtiger_chat_".$chat."chat (msg) VALUES (".$id.")");
   }
 
   /**
