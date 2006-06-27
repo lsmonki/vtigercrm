@@ -67,14 +67,15 @@
 {foreach item=row from=$BLOCKS}	
 	{foreach item=elements key=title from=$row}	
 	{if $title eq 'Attachment'}
-	<div id="reportLay" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
+	<div id="reportLay" style="width:130px;" onmouseout="fninvsh('reportLay')" onmouseover="fnvshNrm('reportLay')">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+		{foreach item=attachments from=$elements.options}
 		<tr>
-			<td>
-				{$elements.value}
+			<td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;">
+				{$attachments}
 			</td>
 		</tr>
-		<tr><td style="padding:5px;">&nbsp;</td></tr>
+		{/foreach}
 		</table>
 	</div>
 	{/if}

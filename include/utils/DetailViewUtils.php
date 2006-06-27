@@ -346,26 +346,45 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		
 	}
         elseif($uitype == 61)
-        {
-                global $adb;
-
-                $attachmentid=$adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
-		if($col_fields[$fieldname] == '' && $attachmentid != '')
 		{
-				$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
-        		        $col_fields[$fieldname] = $adb->query_result($adb->query($attachquery),0,'name');
+			global $adb;
+			$label_fld[] =$mod_strings[$fieldlabel];
+
+			if($tabid ==10)
+			{
+				$attach_result = $adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']);
+				for($ii=0;$ii < $adb->num_rows($attach_result);$ii++)
+				{
+					$attachmentid = $adb->query_result($attach_result,0,'attachmentsid');
+					if($attachmentid != '')
+					{
+						$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
+						$attachmentsname = $adb->query_result($adb->query($attachquery),0,'name');
+						if($attachmentsname != '')	
+							$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$attachmentsname.'</a>';
+						else
+							$custfldval = '';
+					}
+					$label_fld['options'][] = $custfldval;
+				}
+			}else
+			{
+				$attachmentid=$adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
+				if($col_fields[$fieldname] == '' && $attachmentid != '')
+				{
+					$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
+					$col_fields[$fieldname] = $adb->query_result($adb->query($attachquery),0,'name');
+				}
+
+				//This is added to strip the crmid and _ from the file name and show the original filename
+				$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
+				if($org_filename != '')
+					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
+				else
+					$custfldval = '';
+			}
+			$label_fld[] =$custfldval;
 		}
-
-		//This is added to strip the crmid and _ from the file name and show the original filename
-		$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
-		if($org_filename != '')
-        	$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
-		else
-			$custfldval = '';
-		$label_fld[] =$mod_strings[$fieldlabel];
-
-		$label_fld[] =$custfldval;
-        }
 	elseif($uitype == 69)
 	{
 		$label_fld[] =$mod_strings[$fieldlabel];
