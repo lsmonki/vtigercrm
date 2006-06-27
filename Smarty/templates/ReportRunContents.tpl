@@ -29,7 +29,7 @@
 		<span class="genHeaderGray">{$REPORTNAME}</span><br>
 		</td>
 		<td align="right" width="25%">
-		<span class="genHeaderGray">Total : {$REPORTHTML.1}  Records</span>
+		<span class="genHeaderGray">{$APP.LBL_TOTAL} : {$REPORTHTML.1}  {$APP.LBL_RECORDS}</span>
 		</td>
 		</tr>
 		<tr><td id="report_info" align="left" colspan="2">&nbsp;</td></tr>

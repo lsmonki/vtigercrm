@@ -939,6 +939,7 @@ $app_strings = Array(
 'LBL_PLEASE_CLICK'=>'Please Click',
 'LBL_TO_CONFIGURE'=>'to Configure',
 'LBL_HERE'=>'here',
+'LBL_RECORDS'=>'Records',
 );
 
 
