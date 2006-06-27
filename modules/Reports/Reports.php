@@ -21,9 +21,7 @@ global $log;
 
 global $report_modules;
 global $related_modules;
-global $profileList;
 
-$profileList = getCurrentUserProfileList();
 $adv_filter_options = array("e"=>"equals",
 		            "n"=>"not equal to",
 			    "s"=>"starts with",
@@ -301,7 +299,6 @@ class Reports extends CRMEntity{
 	{
 		global $adb;
 		global $log;
-		global $profileList;
 		global $current_user;
 
 
@@ -317,6 +314,7 @@ class Reports extends CRMEntity{
 		else
 		{
 			
+			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.block in (".$block .") and vtiger_field.displaytype in (1,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList." group by vtiger_field.fieldid order by sequence";
 		}
 		$result = $adb->query($sql);
@@ -458,7 +456,6 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 		global $current_user;
-		global $profileList;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');		
 
 		$tabid = getTabid($module);
@@ -474,6 +471,8 @@ class Reports extends CRMEntity{
 		}
 		else
 		{
+
+			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid  where vtiger_field.tabid=".$tabid." and (vtiger_field.uitype =5 or vtiger_field.displaytype=2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.block in (".$blockids.") and vtiger_profile2field.profileid in ".$profileList." order by vtiger_field.sequence";
 
 		}
@@ -925,7 +924,6 @@ class Reports extends CRMEntity{
 		global $adb;
 		global $log;
 		global $current_user;
-		global $profileList;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		$tabid = getTabid($module);
 		$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
@@ -935,6 +933,7 @@ class Reports extends CRMEntity{
 		}
 		else
 		{
+			$profileList = getCurrentUserProfileList();
 			$ssql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid  where vtiger_field.uitype != 50 and vtiger_field.tabid=".$tabid." and vtiger_field.displaytype = 1 and vtiger_def_org_field.visible=0 and vtiger_profile2field.visible=0 and vtiger_profile2field.profileid in ".$profileList." order by sequence";
 		}
 		$result = $adb->query($ssql);
