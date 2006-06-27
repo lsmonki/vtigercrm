@@ -16,6 +16,7 @@ require_once('include/database/PearDatabase.php');
 
 $log = &LoggerManager::getLogger('thunderbirdplugin');
 
+$accessDenied = "You are not authorized for performing this action";
 $NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
 
@@ -50,38 +51,46 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	
 	$date_sent = getDisplayDate($date_sent);
 
-	require_once('modules/Emails/Email.php');
-	
-	$email = new Email();
-
-	$email_body = str_replace("'", "''", $email_body);
-	$email_subject = str_replace("'", "''", $email_subject);
-	
-	//fixed subject issue 9/6/05
-	$email->column_fields[activitytype]='Emails';
-	$email->column_fields[subject]=$email_subject;
-	$email->column_fields[assigned_user_id] = $user_id;
-	$email->column_fields[date_start] = $date_sent;
-	$email->column_fields[description]  = $email_body;
-
-	
-	// Save one copy of the email message
-	//$email->saveentity("Emails");
-	$email->save("Emails");
-
-
-	
-	// for each contact, add a link between the contact and the email message
-	$contact_id_list = explode(";", $contact_ids);
-
-	foreach( $contact_id_list as $contact_id)
+	if(isPermitted("Emails","EditView") == "yes")
 	{
-		$email->set_emails_contact_invitee_relationship($email->id, $contact_id);
-		$email->set_emails_se_invitee_relationship($email->id,$contact_id);
+		require_once('modules/Emails/Email.php');
+
+		$email = new Email();
+
+		$email_body = str_replace("'", "''", $email_body);
+		$email_subject = str_replace("'", "''", $email_subject);
+
+		//fixed subject issue 9/6/05
+		$email->column_fields[activitytype]='Emails';
+		$email->column_fields[subject]=$email_subject;
+		$email->column_fields[assigned_user_id] = $user_id;
+		$email->column_fields[date_start] = $date_sent;
+		$email->column_fields[description]  = $email_body;
+
+
+		// Save one copy of the email message
+		//$email->saveentity("Emails");
+		$email->save("Emails");
+
+
+
+		// for each contact, add a link between the contact and the email message
+		$contact_id_list = explode(";", $contact_ids);
+
+		foreach( $contact_id_list as $contact_id)
+		{
+			$email->set_emails_contact_invitee_relationship($email->id, $contact_id);
+			$email->set_emails_se_invitee_relationship($email->id,$contact_id);
+			}
+			$email->set_emails_user_invitee_relationship($email->id, $user_id);
+
+			return $email->id;
 	}
-	$email->set_emails_user_invitee_relationship($email->id, $user_id);
-	
-	return $email->id;
+	else
+	{
+		return $accessDenied;
+	}
+
 }
 
 
