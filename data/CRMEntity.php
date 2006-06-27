@@ -419,8 +419,32 @@ class CRMEntity
 	if($this->mode == 'edit')
 	{
 		$description_val = from_html($adb->formatString("vtiger_crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-		$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		$tabid = getTabid($module);
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+		{
+			$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+		}
+		else
+		{
+			$profileList = getCurrentUserProfileList();
+			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ".$tabid." AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN ".$profileList." AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3);";
+			$perm_result = $adb->query($perm_qry);
+			$perm_rows = $adb->num_rows($perm_result);
+			for($i=0; $i<$perm_rows; $i++)
+			{
+				$columname[]=$adb->query_result($perm_result,$i,"columnname");
+			}
+			if(is_array($columname) && in_array("description",$columname))
+			{
+				$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+			}
+			else
+			{
+				$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+			}
+		}
 		$adb->query($sql);
 		$sql1 ="delete from vtiger_ownernotify where crmid=".$this->id;
 		$adb->query($sql1);
@@ -541,7 +565,27 @@ class CRMEntity
 	  {
 		  $update = '';
 		  $tabid= getTabid($module);	
-		  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+		  {
+
+			  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+		  }
+		  else
+		  {
+			  $profileList = getCurrentUserProfileList();
+			  $sql = "SELECT *
+			  FROM vtiger_field
+			  INNER JOIN vtiger_profile2field
+			  ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			  INNER JOIN vtiger_def_org_field
+			  ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			  WHERE vtiger_field.tabid = ".$tabid."
+			  AND vtiger_profile2field.visible = 0 
+			  AND vtiger_profile2field.profileid IN ".$profileList."
+			  AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='".$table_name."' and vtiger_field.displaytype in (1,3)";
+		  }	   
+
 	  }
 	  else
 	  {
