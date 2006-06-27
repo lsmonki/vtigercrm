@@ -306,7 +306,7 @@ if(isset($action) && isset($module))
  	         header( "Pragma: no-cache" );        
  	}
 
-        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' || $module == 'Calendar')
+        if($module == 'Users' || $module == 'Home' || $module == 'uploads' || $module == 'Calendar')
         {
           $skipSecurityCheck=true;
         }
