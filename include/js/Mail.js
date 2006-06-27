@@ -11,44 +11,29 @@
 
 function eMail(module,oButton)
 {
-    x = document.massdelete.selected_id.length;
+	var select_options  =  document.getElementsByName('selected_id');
+	var x = select_options.length;
 	var viewid = document.massdelete.viewname.value;
+	var idstring= new Array();
 
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        else
-        {
-				var idstring= new Array();
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring[xx]= document.massdelete.selected_id[i].value;
-                                xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring.join(':');
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
+	xx = 0;
+	for(i = 0; i < x ; i++)
+	{
+		if(select_options[i].checked)
+		{
+			idstring[xx] = select_options[i].value;
+				xx++
+		}
+	}
+	if (xx != 0)
+	{
+                document.massdelete.idlist.value=idstring.join(':');
+	}
+	else
+	{
+		alert("Please select atleast one entity");
+		return false;
+	}
 	allids = document.massdelete.idlist.value;	
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(module,allids);
