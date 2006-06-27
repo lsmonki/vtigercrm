@@ -11,7 +11,6 @@
 -->*}
 <!-- BEGIN: main -->
 <div id="roleLay" style="z-index:12;display:block;">
-	<form name="SendMail">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 		<tr>
 			<td width="50%" align="left" class="genHeaderSmall">{$MOD.CHOSE_EMAIL}</td>
@@ -34,6 +33,5 @@
 		</tr>
 		<tr><td colspan="2" style="border-top:1px dashed #CCCCCC;">&nbsp;</td></tr>
 	</table>
-	</form>
 </div> 
 

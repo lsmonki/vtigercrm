@@ -131,7 +131,7 @@ function loadCvList(type,id) {
 </table>
 
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<div id="sendmail_cont" style="z-index:100001;position:absolute;width:310px;"></div>
+<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}
 
 <script>

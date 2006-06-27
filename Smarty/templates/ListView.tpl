@@ -407,8 +407,7 @@ function alphabetic(module,url,dataid)
 </div>
 {/if}
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
-
+<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}
 <script>
 {literal}

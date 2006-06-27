@@ -21,7 +21,7 @@
 </span>
 
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<div id="sendmail_cont" style="z-index:100001;position:absolute;"></div>
+<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}
 
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
