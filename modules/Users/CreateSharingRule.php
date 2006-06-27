@@ -21,7 +21,10 @@ $output='';
 $grpDetails=getAllGroupName();
 $combovalues='';
 
+global $mod_strings;
+global $app_strings;
 global $adb;
+
 $mode = $_REQUEST['mode'];
 if(isset($_REQUEST['shareid']) && $_REQUEST['shareid'] != '')
 {	
@@ -41,17 +44,17 @@ if($mode == 'create')
 {
 	foreach($roleDetails as $roleid=>$rolename)
 	{
-		$combovalues .='<option value="roles::'.$roleid.'">Roles::'.$rolename[0].'</option>';
+		$combovalues .='<option value="roles::'.$roleid.'">'.$mod_strings[LBL_ROLES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($roleDetails as $roleid=>$rolename)
 	{
-		$combovalues .='<option value="rs::'.$roleid.'">Roles and Subordinates::'.$rolename[0].'</option>';
+		$combovalues .='<option value="rs::'.$roleid.'">'.$mod_strings[LBL_ROLES_SUBORDINATES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($grpDetails as $groupid=>$groupname)
 	{
-		$combovalues .='<option value="groups::'.$groupid.'">Group::'.$groupname.'</option>';
+		$combovalues .='<option value="groups::'.$groupid.'">'.$mod_strings[LBL_GROUP].'::'.$groupname.'</option>';
 	}
 
 	$fromComboValues=$combovalues;
@@ -78,7 +81,7 @@ elseif($mode == 'edit')
 				$selected='selected';	
 			}	
 		}
-		$fromComboValues .='<option value="roles::'.$roleid.'" '.$selected.'>Roles::'.$rolename[0].'</option>';
+		$fromComboValues .='<option value="roles::'.$roleid.'" '.$selected.'>'.$mod_strings[LBL_ROLES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($roleDetails as $roleid=>$rolename)
@@ -93,7 +96,7 @@ elseif($mode == 'edit')
 			}	
 		}	
 	
-		$fromComboValues .='<option value="rs::'.$roleid.'" '.$selected.'>Roles and Subordinates::'.$rolename[0].'</option>';
+		$fromComboValues .='<option value="rs::'.$roleid.'" '.$selected.'>'.$mod_strings[LBL_ROLES_SUBORDINATES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($grpDetails as $groupid=>$groupname)
@@ -108,7 +111,7 @@ elseif($mode == 'edit')
 		}	
 		
 
-		$fromComboValues .='<option value="groups::'.$groupid.'" '.$selected.'>Group::'.$groupname.'</option>';
+		$fromComboValues .='<option value="groups::'.$groupid.'" '.$selected.'>'.$mod_strings[LBL_GROUP].'::'.$groupname.'</option>';
 	}
 
 	//constructing the to combo values
@@ -127,7 +130,7 @@ elseif($mode == 'edit')
 				$selected='selected';	
 			}	
 		}
-		$toComboValues .='<option value="roles::'.$roleid.'" '.$selected.'>Roles::'.$rolename[0].'</option>';
+		$toComboValues .='<option value="roles::'.$roleid.'" '.$selected.'>'.$mod_strings[LBL_ROLES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($roleDetails as $roleid=>$rolename)
@@ -142,7 +145,7 @@ elseif($mode == 'edit')
 			}	
 		}	
 	
-		$toComboValues .='<option value="rs::'.$roleid.'" '.$selected.'>Roles and Subordinates::'.$rolename[0].'</option>';
+		$toComboValues .='<option value="rs::'.$roleid.'" '.$selected.'>'.$mod_strings[LBL_ROLES_SUBORDINATES].'::'.$rolename[0].'</option>';
 	}
 
 	foreach($grpDetails as $groupid=>$groupname)
@@ -157,7 +160,7 @@ elseif($mode == 'edit')
 		}	
 		
 
-		$toComboValues .='<option value="groups::'.$groupid.'" '.$selected.'>Group::'.$groupname.'</option>';
+		$toComboValues .='<option value="groups::'.$groupid.'" '.$selected.'>'.$mod_strings[LBL_GROUP].'::'.$groupname.'</option>';
 	}
 
 }
@@ -201,11 +204,11 @@ if($size > 0)
 			}
 		}	
 
-		$relatedlistscombo.='<tr><td align="right" nowrap style="padding-right:10px;"><b>'.$rel_module.' :</b></td>
+		$relatedlistscombo.='<tr><td align="right" nowrap style="padding-right:10px;"><b>'.$app_strings[$rel_module].' :</b></td>
 			<td width="70%">';
-		$relatedlistscombo.='<select id="'.$rel_module.'_accessopt" name="'.$rel_module.'_accessopt" onChange=fnwriteRules("'.$sharing_module.'","'.$relatedmodule.'")>
-			<option value="0" '.$ro_selected.' >Read Only</option>
-			<option value="1" '.$rw_selected.' >Read/Write</option>
+		$relatedlistscombo.='<select id="'.$rel_module.'_accessopt" name="'.$rel_module.'_accessopt" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>
+			<option value="0" '.$ro_selected.' >'.$mod_strings["Read Only "].'</option>
+			<option value="1" '.$rw_selected.' >'.$mod_strings["Read/Write"].'</option>
 			</select></td></tr>';
 
 
@@ -215,8 +218,8 @@ if($size > 0)
 
 if($mode == 'create')
 {
-	$sharPerCombo = '<option value="0" selected>Read Only</option>';
-        $sharPerCombo .= '<option value="1">Read/Write</option>';
+	$sharPerCombo = '<option value="0" selected>'.$mod_strings["Read Only "].'</option>';
+        $sharPerCombo .= '<option value="1">'.$mod_strings["Read/Write"].'</option>';
 }
 elseif($mode == 'edit')
 {
@@ -231,8 +234,8 @@ elseif($mode == 'edit')
 		$selected2='selected';
 	}
 
-	$sharPerCombo = '<option value="0" '.$selected1.'>Read Only</option>';
-        $sharPerCombo .= '<option value="1" '.$selected2.'>Read/Write</option>';	
+	$sharPerCombo = '<option value="0" '.$selected1.'>'.$mod_strings["Read Only "].'</option>';
+        $sharPerCombo .= '<option value="1" '.$selected2.'>'.$mod_strings["Read/Write"].'</option>';	
 }
 
 	
@@ -247,13 +250,13 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <div id="sharingRule" class="fixedLay">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
-<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$sharing_module.' - Add Custom Privilege Rule</td>
-<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>Close</a></td>
+<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">'.$app_strings[$sharing_module].' - '.$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>
+<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:onClick=hide(\'sharingRule\')";>'.$mod_strings[LBL_CLOSE].'</a></td>
 
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
-<td><b>Step 1 :'.$sharing_module.'  of </b>(Select an entity below)</td>
+<td><b>'.$mod_strings[LBL_STEP].' 1 : '.$app_strings[$sharing_module].' '.$app_strings[LBL_LIST_OF].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
 <td>&nbsp;</td>
 
 </tr>
@@ -261,7 +264,7 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <td style="padding-left:20px;text-align:left;">';
 //combovalues
 
-$output.='<select id="'.$sharing_module.'_share" name="'.$sharing_module.'_share" onChange=fnwriteRules("'.$sharing_module.'","'.$relatedmodule.'")>'.$fromComboValues.'</select>';	
+$output.='<select id="'.$sharing_module.'_share" name="'.$sharing_module.'_share" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>'.$fromComboValues.'</select>';	
 $output.='</td>
 
 <td>&nbsp;</td>
@@ -269,19 +272,19 @@ $output.='</td>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
 
-<td style="text-align:left;"><b>Step 2 : Can be accessed by</b>(Select an entity below)</td>
-<td align="left"><b>Permissions</b></td>
+<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 2 : '.$mod_strings[LBL_CAN_BE_ACCESSED_BY].' </b>('.$mod_strings[LBL_SELECT_ENTITY].')</td>
+<td align="left"><b>'.$mod_strings[LBL_PERMISSIONS].'</b></td>
 </tr>
 <tr>
 <td style="padding-left:20px;text-align:left;">
 
-<select id="'.$sharing_module.'_access" name="'.$sharing_module.'_access" onChange=fnwriteRules("'.$sharing_module.'","'.$relatedmodule.'")>';
+<select id="'.$sharing_module.'_access" name="'.$sharing_module.'_access" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>';
 
 $output.=$toComboValues.'</select>
 
 </td><td>
 
-<select	id="share_memberType" name="share_memberType" onChange=fnwriteRules("'.$sharing_module.'","'.$relatedmodule.'")>';
+<select	id="share_memberType" name="share_memberType" onChange=fnwriteRules("'.$app_strings[$sharing_module].'","'.$relatedmodule.'")>';
 $output .= $sharPerCombo;
 $output .= '</select>
 
@@ -289,7 +292,7 @@ $output .= '</select>
 </tr>
 <tr><td colspan="2">&nbsp;</td></tr>
 <tr>
-<td style="text-align:left;"><b>Step 3 : Access rights for relative modules </b></td>
+<td style="text-align:left;"><b>'.$mod_strings[LBL_STEP].' 3 : '.$mod_strings[LBL_ACCESS_RIGHTS_FOR_MODULES].' </b></td>
 <td>&nbsp;</td>
 
 </tr>
@@ -305,7 +308,7 @@ $output .=$relatedlistscombo.'</table>
 </tr>
 <tr><td colspan="2" align="left">&nbsp;</td></tr>
 <tr>
-<td colspan="2" class="detailedViewHeader"><b>Rule Construction Display</b></td>
+<td colspan="2" class="detailedViewHeader"><b>'.$mod_strings[LBL_RULE_CONSTRUCTION].'</b></td>
 
 </tr>
 <tr>
@@ -318,7 +321,7 @@ $output .=$relatedlistscombo.'</table>
 </tr>
 <tr>
 <td colspan="2" align="center">
-<input type="submit" class="crmButton small save" name="add" value="Add Rule" onClick="return validate()">&nbsp;&nbsp;
+<input type="submit" class="crmButton small save" name="add" value="'.$mod_strings[LBL_ADD_RULE].'" onClick="return validate()">&nbsp;&nbsp;
 </td>
 </tr>
 </table>
