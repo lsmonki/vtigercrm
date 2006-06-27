@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */-->
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="vtigerCRM Create Product"
+	id="vtigercrmproductconfig"
+	onload="get_vtigercrmconfig()"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+	
+	<script type="application/x-javascript" src="chrome://vtiger/content/vtigercrm_toolbar.js"/>
+
+
+<vbox flex="1" style="margin:5px">
+<groupbox flex="1">
+	<caption style="font-weight: bold" label="vtigerCRM Create Product"/>
+	   <vbox>
+		
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="color:red" value="*"/>	
+		  <label value="Product Name:" style="padding: 0px;margin-top: 3px;" />
+		  <hbox style="width: 25em">
+			 <textbox id="txtproductname" flex="1"/>
+		  </hbox>
+	  	</hbox>
+	  
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Product Code:"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtproductcode" flex="1"/>
+		  </hbox>
+	  	</hbox>
+	  
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Website:"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtproductwebsite" flex="1"/>
+		  </hbox>
+	        </hbox>
+	  	  
+	</vbox>
+</groupbox>
+	<hbox>
+		  <spacer flex="1"/>
+		  <hbox style="width:25em" align="left">
+			  <label style="color:red" value="*"/>
+			  <label value="Indicates mandatory fields"/>
+		  </hbox>	
+	</hbox>
+
+	<hbox id="commandbar" flex="1" align="right">
+		<hbox>
+			<button label="Add as Product" oncommand="add_product_to_vtigercrm();"/>
+			<button label="Cancel" oncommand="window.close();"/>
+		</hbox>
+	</hbox>
+</vbox>
+</window>
