@@ -54,7 +54,7 @@ if($row != null)
 }
 if( count($home_section_order) < 1 )
 {
-	$home_section_order = array("ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI");
+	$home_section_order = array("ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","HDB");
 }
 
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -136,6 +136,13 @@ foreach ( explode(",",$home_section_order) as $section )
 		$home_values['Invoice']=getTopInvoice();
 	}
         	break;
+	case 'HDB':
+	if(isPermitted('Dashboard','index') == "yes")
+	{
+		require_once('modules/Dashboard/HomepageDB.php');
+		$home_values['Dashboard']=getHomepageDB();
+	}
+	        break;
     }
 }
 function getActivityType($id)
