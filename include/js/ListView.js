@@ -32,7 +32,6 @@ function change(obj,divid)
 		alert("Please select atleast one entity");
 		return false;
 	}
-	alert(document.massdelete.idlist.value)
 	fnvshobj(obj,divid);
 }
 function massDelete(module)
@@ -64,7 +63,6 @@ function massDelete(module)
 		{
 			
 			$("status").style.display="inline";
-			alert("module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring)
 			new Ajax.Request(
           	  	      'index.php',
 			      	{queue: {position: 'end', scope: 'command'},
