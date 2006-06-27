@@ -18,7 +18,7 @@ $log = &LoggerManager::getLogger('wordplugin');
 
 $NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
-
+$accessDenied = "You are not permitted to perform this action";
 $server->configureWSDL('vtigersoap');
 
 $server->register(
@@ -89,6 +89,9 @@ function get_contacts_columns($user_name, $password)
 	    $contact = new Contact();
 	    return $contact->getColumnNames();	   
     }
+ else
+    return null;
+
 }
 
 
@@ -100,6 +103,9 @@ function get_accounts_columns($user_name, $password)
 	    $account = new Account();
 	    return $account->getColumnNames_Acnt();
     }
+ else
+    return null;
+
 }
 
 
@@ -111,6 +117,9 @@ function get_leads_columns($user_name, $password)
     $lead = new Lead();
     return $lead->getColumnNames_Lead();
     }
+ else
+    return null;
+
 }
 
 function get_user_columns($user_name, $password)
@@ -122,6 +131,9 @@ function get_user_columns($user_name, $password)
     $user = new User();
     return $user->getColumnNames_User();
     }
+ else
+    return null;
+
 }
 
 
