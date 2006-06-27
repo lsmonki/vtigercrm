@@ -9,91 +9,62 @@
  ********************************************************************************/
 function change(obj,divid)
 {
-	x = document.massdelete.selected_id.length;
+	var select_options  =  document.getElementsByName('selected_id');
+	var x = select_options.length;
 	var viewid = document.massdelete.viewname.value;
-
 	idstring = "";
-	if ( x == undefined)
+
+	xx = 0;
+	for(i = 0; i < x ; i++)
 	{
-	
-		if (document.massdelete.selected_id.checked)
+		if(select_options[i].checked)
 		{
-			document.massdelete.idlist.value=document.massdelete.selected_id.value +";";
+			idstring = select_options[i].value +";"+idstring
+				xx++
 		}
-		else 
-		{
-			alert("Please select atleast one entity ");
-			return false;
-		}
+	}
+	if (xx != 0)
+	{
+		document.massdelete.idlist.value=idstring;
 	}
 	else
 	{
-		xx = 0;
-		for(i = 0; i < x ; i++)
-		{
-			if(document.massdelete.selected_id[i].checked)
-			{
-				idstring = document.massdelete.selected_id[i].value +";"+idstring
-			xx++	
-			}
-		}
-		if (xx != 0)
-		{
-			document.massdelete.idlist.value=idstring;
-		}
-		else
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
+		alert("Please select atleast one entity");
+		return false;
 	}
+	alert(document.massdelete.idlist.value)
 	fnvshobj(obj,divid);
 }
 function massDelete(module)
 {
-        x = document.massdelete.selected_id.length;
+		var select_options  =  document.getElementsByName('selected_id');
+		var x = select_options.length;
 		var viewid = document.massdelete.viewname.value;
         idstring = "";
 
-        if ( x == undefined)
+        xx = 0;
+        for(i = 0; i < x ; i++)
         {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        idstring = document.massdelete.selected_id.value+';';
-                		xx = 1;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
+        	if(select_options[i].checked)
+            {
+            	idstring = select_options[i].value +";"+idstring
+                xx++
+            }
+        }
+        if (xx != 0)
+        {
+            document.massdelete.idlist.value=idstring;
         }
         else
         {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                        xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-               else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
+            alert("Please select atleast one entity");
+            return false;
         }
 		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
 		{
 			
 			$("status").style.display="inline";
+			alert("module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring)
 			new Ajax.Request(
           	  	      'index.php',
 			      	{queue: {position: 'end', scope: 'command'},
