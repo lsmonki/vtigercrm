@@ -141,7 +141,7 @@
 	   <!-- SO Actions ends -->
 
 	{elseif $MODULE eq 'Quotes'}
-	   <!-- Vendors Actions starts -->
+	   <!-- Quotes Actions starts -->
 	   <tr>
 		<td align="left" style="padding-left:10px;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/> 
@@ -151,10 +151,10 @@
 	   <tr>
 		<td align="left" style="padding-left:10px;border-bottom:1px dotted #CCCCCC;">
 			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="javascript: document.DetailView.return_module.value='SalesOrder'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='quotetoso'; document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.SalesOrder}</a> 
+			<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.convertmode.value='quotetoso'; document.DetailView.module.value='SalesOrder'; document.DetailView.action.value='EditView'; document.DetailView.submit();" class="webMnu">{$APP.LBL_GENERATE} {$APP.SalesOrder}</a> 
 		</td>
 	   </tr>
-	   <!-- Vendors Actions ends -->
+	   <!-- Quotes Actions ends -->
 
 	{elseif $MODULE eq 'Invoice'}
 	   <!-- Invoice Actions starts -->
