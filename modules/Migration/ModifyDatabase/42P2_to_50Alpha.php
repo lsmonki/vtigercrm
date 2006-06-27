@@ -2910,37 +2910,41 @@ $contactfieldid = $conn->query_result($conn->query("select fieldid from vtiger_f
 $fieldid_array = Array("Leads"=>"$leadfieldid","Contacts"=>"$contactfieldid");
 $idname_array = Array("Leads"=>"leadid","Contacts"=>"contactid");
 
-$query = 'select * from vtiger_seactivityrel where activityid in (select activityid from vtiger_activity where activitytype="Emails")';
+$query = 'select * from vtiger_seactivityrel where activityid in (select activityid from vtiger_activity where activitytype="Emails") group by activityid';
 $result = $conn->query($query);
 $numofrows = $conn->num_rows($result);
 
-$islists = '';
-$toemail = '';
 for($i=0;$i<$numofrows;$i++)
 {
-	$parentid = $conn->query_result($result,$i,'crmid');
+	$toemail = "";
+	$idlists = '';
+
 	$emailid = $conn->query_result($result,$i,'activityid');
 
-	$query = 'select setype from vtiger_crmentity where crmid='.$parentid;
-	$result1 = $conn->query($query);
-	$module = $conn->query_result($result1,0,'setype');
-
-	$idlists = "$parentid@$fieldid_array[$module]|";
-
-	if($module == 'Leads' || $module == 'Contacts')
+	$result1 = $conn->query("select * from vtiger_seactivityrel where activityid = $emailid");
+	while($row = $conn->fetch_array($result1))
 	{
-		$result2 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = $parentid");
-		$toemail = $conn->query_result($result2,0,'lastname').' '.$conn->query_result($result2,0,'firstname').'<'.$conn->query_result($result2,0,'email').'>###';
+		$result2 = $conn->query("select setype from vtiger_crmentity where crmid=".$row['crmid']);
+		$module = $conn->query_result($result2,0,'setype');
+		$idlists .= $row['crmid']."@$fieldid_array[$module]|";
 
-		//insert this idlists and toemail values in vtiger_emaildetails table
-		$sql = "insert into vtiger_emaildetails values ($emailid,'',\"$toemail\",'','','',\"$idlists\",'SAVE')";
-		Execute($sql);
+		if($module == 'Leads' || $module == 'Contacts')
+		{
+			$result3 = $conn->query("select lastname, firstname, email from $obj_array[$module] where $idname_array[$module] = ".$row['crmid']);
+
+			$toemail .= $conn->query_result($result3,0,'lastname')." ".$conn->query_result($result3,0,'firstname')."<".$conn->query_result($result3,0,'email').">###";
+		}
+		else
+		{
+			//the parent is not a Lead or Contact. so we have avoided the insert query
+		}
 	}
-	else
-	{
-		//the parent is not a Lead or Contact. so we have avoided the insert query
-	}
+
+	//insert this idlists and toemail values in vtiger_emaildetails table
+	$sql = "insert into vtiger_emaildetails values ($emailid,'',\"$toemail\",'','','',\"$idlists\",'SAVE')";
+	Execute($sql);
 }
+
 
 $update_query5 = "update vtiger_field set quickcreate=1, quickcreatesequence=NULL where tabid in (10,14)";
 Execute($update_query5);
