@@ -46,7 +46,7 @@
 						 						
 						<menuseparator/>		
 						
-						<menuitem label="Uninstall" tooltiptext="Uninstall  vtigerCRM Toolbar" oncommand="VTIGER_Uninstall()" />
+						<!-- menuitem label="Uninstall" tooltiptext="Uninstall  vtigerCRM Toolbar" oncommand="VTIGER_Uninstall()" / -->
 					</menupopup>
 					
 				</toolbarbutton>
