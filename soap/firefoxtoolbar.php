@@ -19,7 +19,7 @@ $log = &LoggerManager::getLogger('firefoxlog');
 
 $NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
 $server = new soap_server;
-
+$accessDenied = "You are not authorized for performing this action";
 $server->configureWSDL('vtigersoap');
 
 $server->register(
@@ -134,7 +134,11 @@ function create_site_from_webform($name,$url)
 		return 'Thank you for your interest. Information has been successfully added as Portal';
 		else
 		return "Portal creation failed. Try again";
-		}
+	}
+	else
+	{
+		return $accessDenied;
+	}
 }
 
 
@@ -147,19 +151,24 @@ function create_rss_from_webform($url)
 	$oRss = new vtigerRSS();
 	if(isPermitted("RSS","EditView") == "yes")
 	{
-	if($oRss->setRSSUrl($url))
-	{
-		if($oRss->saveRSSUrl($url) == false)
+		if($oRss->setRSSUrl($url))
 		{
-			return "RSS creation failed. Try again";
-		}
-		else
-		{
-			return 'Thank you for your interest. Information has been successfully added as RSS.';
-        	}
+			if($oRss->saveRSSUrl($url) == false)
+			{
+				return "RSS creation failed. Try again";
+			}
+			else
+			{
+					return 'Thank you for your interest. Information has been successfully added as RSS.';
+			}
 
+	       }
 	}
+	else
+	{
+		return $accessDenied;
 	}
+
 }
 
 
@@ -172,20 +181,25 @@ function create_note_from_webform($subject,$desc)
 	$focus = new Note();
 	if(isPermitted("Notes","EditView") == "yes")
 	{
-	$focus->column_fields['title'] = $subject;
-	$focus->column_fields['notecontent'] = $desc;
+		$focus->column_fields['title'] = $subject;
+		$focus->column_fields['notecontent'] = $desc;
 
-	$focus->save("Notes");
-	
-	$focus->retrieve_entity_info($focus->id,"Notes");
+		$focus->save("Notes");
 
-	$adb->println("Create New Note from Web Form - Ends");
+		$focus->retrieve_entity_info($focus->id,"Notes");
 
-	if($focus->id != '')
+		$adb->println("Create New Note from Web Form - Ends");
+
+		if($focus->id != '')
 		return 'Thank you for your interest. Information has been successfully added as Note.';
-	else
+		else
 		return "Note creation failed. Try again";
-		}
+	}
+	else
+	{
+		return $accessDenied;
+	}
+
 }
 
 
@@ -214,7 +228,13 @@ function create_product_from_webform($productname,$code,$website)
 		return 'Thank you for your interest. Information has been successfully added as Product.';
 		else
 		return "Product creation failed. Try again";
-		}
+	}
+	else
+	{
+		return $accessDenied;
+	}
+
+	
 }
 
 
@@ -243,7 +263,13 @@ function create_vendor_from_webform($vendorname,$email,$phone,$website)
 		return 'Thank you for your interest. Information has been successfully added as Vendor.';
 		else
 		return "Vendor creation failed. Try again";
-		}
+       }		
+       else
+	{
+		return $accessDenied;
+	}
+
+	
 }
 
 
@@ -277,7 +303,13 @@ function create_ticket_from_toolbar($title,$description,$priority,$severity,$cat
 		$ticket->save("HelpDesk");
 
 		return $ticket->id;
-		}
+	}
+	else
+	{
+		return $accessDenied;
+	}
+
+
 }
 
 function create_account($username,$accountname,$email,$phone,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country)
@@ -304,6 +336,12 @@ function create_account($username,$accountname,$email,$phone,$primary_address_st
 		$account->save('Accounts');
 		return $account->id;
 	}
+	else
+	{
+		return $accessDenied;
+	}
+
+
 }
 
 
@@ -322,22 +360,28 @@ function create_lead_from_webform($lastname,$email,$phone,$company,$country,$des
 	require_once("modules/Leads/Lead.php");
 
 	$focus = new Lead();
-	 if(isPermitted("Leads","EditView") == "yes")
-	     {
-	$focus->column_fields['lastname'] = $lastname;
-	$focus->column_fields['email'] = $email;
-	$focus->column_fields['phone'] = $phone;
-	$focus->column_fields['company'] = $company;
-	$focus->column_fields['country'] = $country;
-	$focus->column_fields['description'] = $description;
-	$focus->save("Leads");
-	$focus->retrieve_entity_info($focus->id,"Leads");
-	$adb->println("Create New Lead from Web Form - Ends");
-	     }
-	if($focus->id != '')
+	if(isPermitted("Leads","EditView") == "yes")
+	{
+		$focus->column_fields['lastname'] = $lastname;
+		$focus->column_fields['email'] = $email;
+		$focus->column_fields['phone'] = $phone;
+		$focus->column_fields['company'] = $company;
+		$focus->column_fields['country'] = $country;
+		$focus->column_fields['description'] = $description;
+		$focus->save("Leads");
+		$focus->retrieve_entity_info($focus->id,"Leads");
+		$adb->println("Create New Lead from Web Form - Ends");
+		if($focus->id != '')
 		return 'Thank you for your interest. Information has been successfully added as Lead.';
-	else
+		else
 		return "Lead creation failed. Try again";
+     }
+	else
+	{
+		return $accessDenied;
+	}
+
+
 }
 
 function create_contacts($user_name,$output_list)
@@ -370,54 +414,60 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	$adb->println("OUTLOOK: The user id is ".$current_user->id);
 	
 	require_once('modules/Contacts/Contact.php');
-	 if(isPermitted("Contacts","EditView") == "yes")
+     if(isPermitted("Contacts","EditView") == "yes")
      {
 
-	$contact = new Contact();
+	     $contact = new Contact();
 
-	$contact->column_fields[firstname]=$first_name;
-	$contact->column_fields[lastname]=$last_name;
-		
-	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
-	
-	$contact->column_fields[salutation]=$salutation;
-	// EMAIL IS NOT ADDED
-	$contact->column_fields[title]=$title;
-	$contact->column_fields[email]=$email_address;
-	
-	
-	$contact->column_fields[mobile]=$phone_mobile;
-	$contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
-	$contact->column_fields[mailingstreet]=$primary_address_street;
-	$contact->column_fields[mailingcity]=$primary_address_city;
-	$contact->column_fields[mailingcountry]=$primary_address_country;
-	$contact->column_fields[mailingstate]=$primary_address_state;
-	$contact->column_fields[mailingzip]=$primary_address_postalcode;
+	     $contact->column_fields[firstname]=$first_name;
+	     $contact->column_fields[lastname]=$last_name;
 
-	$contact->column_fields[otherstreet]=$alt_address_street;
-	$contact->column_fields[othercity]=$alt_address_city;
-	$contact->column_fields[othercountry]=$alt_address_country;
-	$contact->column_fields[otherstate]=$alt_address_state;
-	$contact->column_fields[otherzip]=$alt_address_postalcode;
+	     $contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
 
-	$contact->column_fields[assigned_user_id]=$user_id;
+	     $contact->column_fields[salutation]=$salutation;
+	     // EMAIL IS NOT ADDED
+	     $contact->column_fields[title]=$title;
+	     $contact->column_fields[email]=$email_address;
 
-    // new Fields
-    $contact->column_fields[phone]= $office_phone;
-    $contact->column_fields[homephone]= $home_phone;
-    $contact->column_fields[otherphone]= $other_phone;
-    $contact->column_fields[fax]= $fax;
-    $contact->column_fields[department]=$department;
-    $contact->column_fields[birthday]= getDisplayDate($birthdate);
-    $contact->column_fields[assistant]= $assistant_name;
-    $contact->column_fields[assistantphone]= $assistant_phone;
-    $contact->column_fields[description]= $description;
 
-	//$contact->saveentity("Contacts");
-	$contact->save("Contacts");
+	     $contact->column_fields[mobile]=$phone_mobile;
+	     $contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+	     $contact->column_fields[mailingstreet]=$primary_address_street;
+	     $contact->column_fields[mailingcity]=$primary_address_city;
+	     $contact->column_fields[mailingcountry]=$primary_address_country;
+	     $contact->column_fields[mailingstate]=$primary_address_state;
+	     $contact->column_fields[mailingzip]=$primary_address_postalcode;
 
-	return $contact->id;
+	     $contact->column_fields[otherstreet]=$alt_address_street;
+	     $contact->column_fields[othercity]=$alt_address_city;
+	     $contact->column_fields[othercountry]=$alt_address_country;
+	     $contact->column_fields[otherstate]=$alt_address_state;
+	     $contact->column_fields[otherzip]=$alt_address_postalcode;
+
+	     $contact->column_fields[assigned_user_id]=$user_id;
+
+	     // new Fields
+	     $contact->column_fields[phone]= $office_phone;
+	     $contact->column_fields[homephone]= $home_phone;
+	     $contact->column_fields[otherphone]= $other_phone;
+	     $contact->column_fields[fax]= $fax;
+	     $contact->column_fields[department]=$department;
+	     $contact->column_fields[birthday]= getDisplayDate($birthdate);
+	     $contact->column_fields[assistant]= $assistant_name;
+	     $contact->column_fields[assistantphone]= $assistant_phone;
+	     $contact->column_fields[description]= $description;
+
+	     //$contact->saveentity("Contacts");
+	     $contact->save("Contacts");
+
+	     return $contact->id;
+     }
+	else
+	{
+		return $accessDenied;
 	}
+
+
 }
 
 
