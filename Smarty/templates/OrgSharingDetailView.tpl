@@ -225,8 +225,8 @@ function fnwriteRules(module,related)
 		var select1 = tagName.options[tagName.selectedIndex].text;
 		var select2 = tagName2.options[tagName2.selectedIndex].text;
 		var select3 = tagName3.options[tagName3.selectedIndex].text;
-		soucre.innerHTML = module +" of <b>\"" + select1 + "\"</b> can be accessed by <b>\"" +select2 + "\"</b> in the permission "+select3;
-		soucre1.innerHTML = "<b>Related Module Rights</b> "+ relatedstring;
+		soucre.innerHTML = module +" {$APP.LBL_LIST_OF} <b>\"" + select1 + "\"</b> {$CMOD.LBL_CAN_BE_ACCESSED} <b>\"" +select2 + "\"</b> {$CMOD.LBL_IN_PERMISSION} "+select3;
+		soucre1.innerHTML = "<b>{$CMOD.LBL_RELATED_MODULE_RIGHTS}</b> " + relatedstring;
 {rdelim}
 
 </script>
