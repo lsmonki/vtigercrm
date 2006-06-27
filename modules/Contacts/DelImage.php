@@ -13,6 +13,7 @@
 
 function DelImage($id)
 {
+		
 	global $adb;
 	$query="delete from vtiger_attachments where attachmentsid=(select attachmentsid from vtiger_seattachmentsrel where crmid=".$id.")";
 	$adb->query($query);
@@ -24,6 +25,8 @@ function DelImage($id)
 function DelAttachment($id)
 {
 	global $adb;
+	$selresult = $adb->query("select name,path from vtiger_attachments where attachmentsid=$id");
+	unlink($adb->query_result($selresult,0,'path').$id."_".$adb->query_result($selresult,0,'name'));
 	$query="delete from vtiger_seattachmentsrel where attachmentsid=".$id;
 	$adb->query($query);
 	$query="delete from vtiger_attachments where attachmentsid=".$id.")";
