@@ -20,6 +20,7 @@
 <link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 <style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+<script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
@@ -77,14 +78,13 @@
 	<td class="dvtCellLabel" style="padding: 5px;">
 		<input name="ccmail" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
 	</td>	
-	<td class="dvtCellLabel">&nbsp;</td>
+	<td valign="top" class="dvtCellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
    </tr>
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
 	<td class="dvtCellLabel" style="padding: 5px;">
 		<input name="bccmail" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
-	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
@@ -94,17 +94,22 @@
         {else}
                 <td class="dvtCellLabel" style="padding: 5px;"><input type="text" class="txtBox" name="{$elements.2.0}" value="{$elements.3.0}" id="{$elements.2.0}" style="width:99%"></td>
         {/if}
-	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'filename'}
 
    <tr>
 	<td class="lvtCol" style="padding: 5px;" align="right" nowrap>{$elements.1.0}  :</td>
 	<td class="dvtCellLabel" style="padding: 5px;">
-		<input name="{$elements.2.0}"  type="file" class="small" value="{$elements.3.1}" size="78"/>
-		<input type="hidden" name="id" value=""/>{$elements.3.0}
+		<input name="{$elements.2.0}"  type="file" class="small" value="" size="78"/>
+		<div id="attach_temp_cont" style="display:none;">
+		<table class="small" width="100% ">
+		{foreach item="attach_files" key="attach_id" from=$elements.3}	
+			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
+		{/foreach}	
+		</table>	
+		</div>	
+		{$elements.3.0}
 	</td>
-	<td class="dvtCellLabel">&nbsp;</td>
    </tr>
 	{elseif $elements.2.0 eq 'description'}
    <tr>
@@ -182,7 +187,22 @@ function server_check()
                 }
         );
 }
+$('attach_cont').innerHTML = $('attach_temp_cont').innerHTML;
+function delAttachments(id)
+{
+    new Ajax.Request(
+        'index.php',
+        {queue: {position: 'end', scope: 'command'},
+            method: 'post',
+            postBody: 'module=Contacts&action=ContactsAjax&file=DelImage&attachmodule=Emails&recordid='+id,
+            onComplete: function(response)
+            {
+		Effect.Fade('row_'+id);	                
+            }
+        }
+    );
 
+}
 </script>
 <script type="text/javascript" defer="1">
 var oFCKeditor = null;

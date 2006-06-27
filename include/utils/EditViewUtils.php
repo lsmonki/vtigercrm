@@ -511,20 +511,38 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$assigned_user_id = $current_user->id;
 		}
-		if($col_fields['record_id'] != '')
+		if($module_name == 'Emails')
 		{
-			$attachmentid=$adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
-			if($col_fields[$fieldname] == '' && $attachmentid != '')
+			$attach_result = $adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']);
+			for($ii=0;$ii < $adb->num_rows($attach_result);$ii++)
 			{
-				$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
-				$value = $adb->query_result($adb->query($attachquery),0,'name');
+				$attachmentid = $adb->query_result($attach_result,$ii,'attachmentsid');
+				if($attachmentid != '')
+				{
+					$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
+					$attachmentsname = $adb->query_result($adb->query($attachquery),0,'name');
+					if($attachmentsname != '')	
+						$fieldvalue[$attachmentid] = '[ '.$attachmentsname.' ]';
+				}
+
 			}
+		}else
+		{
+			if($col_fields['record_id'] != '')
+			{
+				$attachmentid=$adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
+				if($col_fields[$fieldname] == '' && $attachmentid != '')
+				{
+					$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
+					$value = $adb->query_result($adb->query($attachquery),0,'name');
+				}
+			}
+			if($value!='')
+				$filename=' [ '.$value. ' ]';
+			$fieldvalue[] = $filename;
+			$fieldvalue[] = $value;
 		}
-		if($value!='')
-			$filename=' [ '.$value. ' ]';
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$fieldvalue[] = $filename;
-		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 69)
 	{
