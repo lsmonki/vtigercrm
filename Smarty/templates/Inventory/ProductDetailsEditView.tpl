@@ -71,7 +71,7 @@
 				{$data.$unitPrice}&nbsp;
 			</td>
 			<td nowrap valign="top">
-				<input type="text" name="{$txtListPrice}" value="{$data.$txtListPrice}" class="txtBox" readonly onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;
+				<input type="text" name="{$txtListPrice}" value="{$data.$txtListPrice}" class="txtBox" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;
 				<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" />
 			</td>
 			<!-- Added for Tax calculation-->

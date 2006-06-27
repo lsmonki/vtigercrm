@@ -56,7 +56,7 @@
 				
 			</td>
 			<td nowrap valign="top">
-				<input type="text" id="txtListPrice1" name="txtListPrice1" value="{$UNIT_PRICE}" class="txtBox" readonly onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" />
+				<input type="text" id="txtListPrice1" name="txtListPrice1" value="{$UNIT_PRICE}" class="txtBox" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(this)"/>&nbsp;<img src="themes/blue/images/pricebook.gif" onclick="priceBookPickList(this)" style="cursor: pointer;" title="Price Book" align="absmiddle" />
 			</td>
 			<!-- Added for Tax calculation-->
 			<td valign="top" style="padding-bottom:5px;">
