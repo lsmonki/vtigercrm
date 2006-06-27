@@ -16,8 +16,8 @@
 
       <em:id>{C37F0C52-7B57-4df8-8E86-6FA3BA508585}</em:id>
       <em:name>vtigerCRM Toolbar</em:name>
-      <em:version>1.0</em:version>
-      <em:description>Toolbar for vtigerCRM</em:description>
+      <em:version>2.0</em:version>
+      <em:description>Toolbar for vtigerCRM5.0.0</em:description>
       <em:creator>vtiger.com</em:creator>
       <em:homepageURL>http://www.vtiger.com/</em:homepageURL>
       <em:iconURL>chrome://vtiger/skin/vtigerToolbar32x32.png</em:iconURL>
