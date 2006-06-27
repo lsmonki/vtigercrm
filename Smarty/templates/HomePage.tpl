@@ -146,6 +146,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 
 	<div id="MainMatrix">
 				{foreach key=modulename item=tabledetail from=$HOMEDETAILS}
+				{if $modulename neq 'Dashboard'}
 				{if $tabledetail neq ''}
 				
 					<div class="MatrixLayer" style="float:left;" id="{$tabledetail.Title.2}">
@@ -164,6 +165,7 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 		{else}	
 		<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.1}</td>
 		{/if}
+
            </tr>
 {/foreach}
 	<tr><td colspan="2" align="right" valign="bottom"><a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a></td></tr>
@@ -171,6 +173,14 @@ ro1DataCell>{$detail.modifiedby}</td><td class=tblPro1DataCell>{$detail.modified
 				
 			</div>
 			{/if}	
+		{else}
+                        <div class="MatrixLayer" style="float:left;width:63%;" id="homepagedb">
+                        <table width="100%" height="100%" border="0" cellpadding="5" cellspacing="0" class="small">
+                          <tr><td>
+                                {$tabledetail}
+                          </td></tr>
+                        </table>
+                {/if}
 {/foreach}
 </div>
 </td>
