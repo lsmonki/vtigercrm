@@ -97,7 +97,7 @@
 				{if $smarty.request.action eq 'OrganizationTermsandConditions' || $smarty.request.action eq 'savetermsandconditions'}
 				<tr><td class="settingsTabSelected" nowrap>{$MOD.LBL_INVENTORY_TANDC}</td></tr>
 				{else}
-				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORYTERMSANDCONDITIONS}</a></td></tr>
+				<tr><td class="settingsTabList" nowrap><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.INVENTORY_TANDC}</a></td></tr>
 				{/if}
 
 	
