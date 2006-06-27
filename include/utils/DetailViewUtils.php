@@ -355,7 +355,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$attach_result = $adb->query("select * from vtiger_seattachmentsrel where crmid = ".$col_fields['record_id']);
 				for($ii=0;$ii < $adb->num_rows($attach_result);$ii++)
 				{
-					$attachmentid = $adb->query_result($attach_result,0,'attachmentsid');
+					$attachmentid = $adb->query_result($attach_result,$ii,'attachmentsid');
 					if($attachmentid != '')
 					{
 						$attachquery = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
