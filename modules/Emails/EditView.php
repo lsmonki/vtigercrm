@@ -153,17 +153,9 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $details = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields);
-if(isset($_REQUEST['templateid']) && $_REQUEST['templateid'] !='')
-{
-	$templatedetails = getTemplateDetails($_REQUEST['templateid']);
-	$details['Email Information'][2][0][3][0] = $templatedetails[2]; //Subject	
-	$details['Email Information'][3][0][3][0] = nl2br($templatedetails[1]);	//Body
-}
 $smarty->assign("BLOCKS",$details['Email Information']);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$app_strings['Email']);
-//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
-$smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
 
 
 //needed when creating a new email with default values passed in
@@ -248,24 +240,9 @@ else
         $smarty->assign("FILENAME", $focus->filename);
 }
 
-if(isset($focus->parent_type) && $focus->parent_type != "") 
-{
-	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
-	$smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
-}
-
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->display("ComposeEmail.tpl");
 ?>
-<script type="text/javascript" defer="1">
-addOnloadEvent(function () {
-	var oFCKeditor = null;
-	oFCKeditor = new FCKeditor("description") ;
-	oFCKeditor.BasePath  = "include/fckeditor/" ;
-	oFCKeditor.Height = 500;
-	oFCKeditor.Width = "100%";
-	oFCKeditor.ReplaceTextarea();
-});
-</script>
+

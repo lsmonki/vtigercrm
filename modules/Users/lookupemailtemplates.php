@@ -56,8 +56,7 @@ do
 <script>
 function submittemplate(templateid)
 {
-	window.opener.location.href = window.opener.location.href +'&templateid='+templateid;
-	self.close();
+	window.document.location.href = 'index.php?module=Users&action=UsersAjax&file=TemplateMerge&templateid='+templateid;
 }
 </script>
 </html>

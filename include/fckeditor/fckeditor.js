@@ -27,7 +27,7 @@ var FCKeditor = function( instanceName, width, height, toolbarSet, value )
 	// Properties
 	this.InstanceName	= instanceName ;
 	this.Width			= width			|| '100%' ;
-	this.Height			= height		|| '200' ;
+	this.Height			= height		|| '370' ;
 	this.ToolbarSet		= toolbarSet	|| 'Default' ;
 	this.Value			= value			|| '' ;
 	this.BasePath		= '/fckeditor/' ;
@@ -71,6 +71,11 @@ FCKeditor.prototype.Create = function()
 
 FCKeditor.prototype.ReplaceTextarea = function()
 {
+	if(document.getElementById('description___Config') != null)	
+	{
+		document.getElementById('description___Config').parentNode.removeChild(document.getElementById('description___Config'));
+		document.getElementById('description___Frame').parentNode.removeChild(document.getElementById('description___Frame'));
+	}
 	if ( !this.CheckBrowser || this._IsCompatibleBrowser() )
 	{
 		// We must check the elements firstly using the Id and then the name.

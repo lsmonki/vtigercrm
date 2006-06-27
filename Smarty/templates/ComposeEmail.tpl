@@ -20,6 +20,7 @@
 <link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 <style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
@@ -107,12 +108,11 @@
    </tr>
 	{elseif $elements.2.0 eq 'description'}
    <tr>
-	<td colspan="3" align="center" height="320">
-        <input id="description___Config" value="" style="display: none;" type="hidden"><iframe id="description___Frame" src="include/fckeditor/editor/fckeditor.html?InstanceName=description&amp;Toolbar=Default" frameborder="no" height="370" scrolling="no" width="100%"></iframe>
+	<td colspan="3" align="center" valign="top" height="320">
         {if $WEBMAIL eq 'true'}
                 <textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$DESCRIPTION}</textarea>
         {else}
-                <textarea style="display: none;" class="detailedViewTextBox" name="description" cols="90" rows="8">{$elements.3.0}</textarea>        {/if}
+                <textarea style="display: none;" class="detailedViewTextBox" id="description" name="description" cols="90" rows="16">{$elements.3.0}</textarea>        {/if}
 	</td>
    </tr>
 	{/if}
@@ -182,6 +182,13 @@ function server_check()
                 }
         );
 }
+
+</script>
+<script type="text/javascript" defer="1">
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "description" ,"100%","370") ;
+oFCKeditor.BasePath   = "include/fckeditor/" ;
+oFCKeditor.ReplaceTextarea();
 </script>
 {/literal}
 </html>
