@@ -185,21 +185,27 @@ DIV.fixedLay {
 </table>
 <div id="tempdiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
-
 function callEditDiv(modulename,mode,id)
 {ldelim}
-	$("status").style.display="inline";
-	new Ajax.Request(
-		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-			method: 'post',
-			postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
-			onComplete: function(response) {ldelim}
-				$("status").style.display="none";
-				$("tempdiv").innerHTML=response.responseText;
-			{rdelim}
-		{rdelim}
-	);
+        $("status").style.display="inline";
+        new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&sh
+areid='+id,
+                        onComplete: function(response) {ldelim}
+                                $("status").style.display="none";
+                                $("tempdiv").innerHTML=response.responseText;
+                                if(mode == 'edit')
+                                {ldelim}
+                                        setTimeout("",10000);
+                                        var related = $('rel_module_lists').value;
+                                        fnwriteRules(modulename,related);
+                                {rdelim}
+                        {rdelim}
+                {rdelim}
+        );
 {rdelim}
 
 function fnwriteRules(module,related)

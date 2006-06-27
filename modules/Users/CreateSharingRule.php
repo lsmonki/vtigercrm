@@ -246,7 +246,7 @@ $output.='<form name="newGroupForm" action="index.php" method="post">
 <input type="hidden" name="sharing_module" value="'.$sharing_module.'">
 <input type="hidden" name="shareId" value="'.$shareid.'">
 <input type="hidden" name="mode" value="'.$mode.'">
-
+<input type="hidden" id="rel_module_lists" name="rel_module_lists" value="'.$relatedmodule.'">
 <div id="sharingRule" class="fixedLay">
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
