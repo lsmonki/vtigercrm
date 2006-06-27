@@ -310,6 +310,16 @@ $mod_strings = Array(
 'LBL_TOOLS_TO_BE_SHOWN'=>'Tools to be shown',
 'LBL_WELCOME_PROFILE_CREATE'=>'Welcome to Privilege Profile Creator ',
 'LBL_SELECT_CHOICE_NEW_PROFILE'=>'Select your choice of creating the new profile',
+'LBL_ADD_CUSTOM_RULE'=>'Add Custom Privilege Rule',
+'LBL_CLOSE'=>'Close',
+'LBL_SELECT_ENTITY'=>'Select an entity below',
+'LBL_CAN_BE_ACCESSED_BY'=>'Can be accessed by',
+'LBL_PERMISSIONS'=>'Permissions',
+'LBL_ACCESS_RIGHTS_FOR_MODULES'=>'Access rights for relative modules',
+'LBL_RULE_CONSTRUCTION'=>'Rule Construction Display',
+'LBL_ADD_RULE'=>'Add Rule',
+'LBL_RELATED_MODULE_RIGHTS'=>'Related Module Rights',
+'LBL_IN_PERMISSION'=>'in the permission',
 
 //Added fields in createrole.php
 'LBL_HDR_ROLE_NAME'=>'Create New Role:',
