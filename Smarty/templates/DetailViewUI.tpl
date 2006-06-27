@@ -189,7 +189,7 @@
                     <div id="editarea_{$label}" style="display:none;">
                    	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
 					{if $keyoptions.0 eq 'User'}
-						<input name="aSsigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
+						<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
 						{if $keyoptions.2 neq ''}
 							<input name="assigntype" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
 						{/if}
