@@ -26,8 +26,38 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $focus = new Campaign();
-
+ global $current_user;
+ $currencyid=fetchCurrency($current_user->id);
+ $rate_symbol = getCurrencySymbolandCRate($currencyid);
+ $rate = $rate_symbol['rate'];
 setObjectValuesFromRequest(&$focus);
+
+if(isset($_REQUEST['expectedrevenue']))
+{
+	$value = convertToDollar($_REQUEST['expectedrevenue'],$rate);
+	$focus->column_fields['expectedrevenue'] = $value;
+}
+if(isset($_REQUEST['budgetcost']))
+{
+	$value = convertToDollar($_REQUEST['budgetcost'],$rate);
+	$focus->column_fields['budgetcost'] = $value;
+}
+if(isset($_REQUEST['actualcost']))
+{
+	$value = convertToDollar($_REQUEST['actualcost'],$rate);
+	$focus->column_fields['actualcost'] = $value;
+}
+if(isset($_REQUEST['actualroi']))
+{
+	$value = convertToDollar($_REQUEST['actualroi'],$rate);
+	$focus->column_fields['actualroi'] = $value;
+}
+if(isset($_REQUEST['expectedroi']))
+{
+	$value = convertToDollar($_REQUEST['expectedroi'],$rate);
+	$focus->column_fields['expectedroi'] = $value;
+}
+
 
 $focus->save("Campaigns");
 $return_id = $focus->id;
