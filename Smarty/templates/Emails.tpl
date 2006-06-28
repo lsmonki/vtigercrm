@@ -11,53 +11,6 @@
 -->*}
 <!--  USER  SETTINGS PAGE STARTS HERE -->
 <script language="javascript">
-function gotoWebmail()
-{ldelim}
-	new Ajax.Request(
-		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-                	method: 'post',
-			postBody: "module=Webmails&action=WebmailsAjax&file=ListView&config_chk=true",
-			onComplete: function(response) {ldelim}
-				if(response.responseText != 'SUCESS')
-					$('mailconfchk').style.display = 'block';
-				else
-					window.location.href = "index.php?module=Webmails&action=index&parenttab=My Home Page";
-			{rdelim}
-		{rdelim}
-	);
-
-{rdelim}
-
-function setSubject(subject)
-{ldelim}
-	document.getElementById("subjectsetter").innerHTML=subject
-{rdelim}
-
-function getEmailContents(id)
-{ldelim}
-	$("status").style.display="inline";
-	var rowid = 'row_'+id;
-	getObj(rowid).className = 'prvPrfHoverOn';
-	if(gselectedrowid != 0 && gselectedrowid != id)
-	{ldelim}
-		var prev_selected_rowid = 'row_'+gselectedrowid;
-		getObj(prev_selected_rowid).className = 'prvPrfHoverOff';
-	{rdelim}
-	gselectedrowid = id;
-	new Ajax.Request(
-		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-			method: 'post',
-			postBody: 'module=Emails&action=EmailsAjax&file=DetailView&mode=ajax&record='+id,
-			onComplete: function(response) {ldelim}
-						$("status").style.display="none";
-						$("EmailDetails").innerHTML = response.responseText;
-					{rdelim}
-			{rdelim}
-		);
-{rdelim}
-
 function ShowFolders(folderid)
 {ldelim}
 	$("status").style.display="inline";
@@ -106,23 +59,6 @@ function ShowFolders(folderid)
                                         {rdelim}
                                 {rdelim}
                         {rdelim}
-	);
-
-{rdelim}
-function getListViewEntries_js(module,url)
-{ldelim}
-	$("status").style.display="inline";
-	new Ajax.Request(
-		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-                	method: 'post',
-			postBody: "module="+module+"&action="+module+"Ajax&file=ListView&ajax=true&"+url,
-			onComplete: function(response) {ldelim}
-				$("status").style.display="none";
-				$("email_con").innerHTML=response.responseText;
-				execJS(document.getElementById('email_con'));
-			{rdelim}
-		{rdelim}
 	);
 
 {rdelim}

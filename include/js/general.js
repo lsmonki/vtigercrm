@@ -1685,3 +1685,30 @@ function SelectAll(mod)
                 }
 }
 
+var bSaf = (navigator.userAgent.indexOf('Safari') != -1);
+var bOpera = (navigator.userAgent.indexOf('Opera') != -1);
+var bMoz = (navigator.appName == 'Netscape');
+function execJS(node) {
+    var st = node.getElementsByTagName('SCRIPT');
+    var strExec;
+    for(var i=0;i<st.length; i++) {
+      if (bSaf) {
+        strExec = st[i].innerHTML;
+      }
+      else if (bOpera) {
+        strExec = st[i].text;
+      }
+      else if (bMoz) {
+        strExec = st[i].textContent;
+      }
+      else {
+        strExec = st[i].text;
+      }
+      try {
+        eval(strExec);
+      } catch(e) {
+        alert(e);
+      }
+    }
+}
+
