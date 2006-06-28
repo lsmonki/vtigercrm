@@ -59,6 +59,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$ui_type[]= $uitype;
 	$editview_fldname[] = $fieldname;
 
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
+	$currency= $rate_symbol['symbol'];
+
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
@@ -953,10 +958,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$currencyid=fetchCurrency($current_user->id);
-		$rate_symbol = getCurrencySymbolandCRate($currencyid);
-		$rate = $rate_symbol['rate'];
-		$currency= $rate_symbol['symbol'];
 		$editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';
 		if($value!='')
 		        $fieldvalue[] = convertFromDollar($value,$rate);
@@ -1155,7 +1156,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['mg_subject'];
 		}
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$fieldvalue[] = $value;
+		if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ) && ($module_name=='Campaigns'))
+		{
+			$fieldvalue[] = convertFromDollar($value,$rate);
+		}
+		else
+			$fieldvalue[] = $value;
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------force numerics right justified.
@@ -1305,7 +1311,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$log->debug("Entering getAssociatedProducts(".$module.",".$focus.",".$seid=''.") method ...");
 	global $adb;
 	$output = '';
-	global $theme;
+	global $theme,$current_user;
+	$currencyid=fetchCurrency($current_user->id);
+	$rate_symbol = getCurrencySymbolandCRate($currencyid);
+	$rate = $rate_symbol['rate'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$product_Detail = Array();
@@ -1370,6 +1379,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
+		$unitprice=convertFromDollar($unitprice,$rate);
+		$listprice=convertFromDollar($listprice,$rate);
+		$total_with_tax =convertFromDollar($total_with_tax,$rate);
 		$product_Detail[$i]['txtQty'.$i]=$qty;
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
 		$product_Detail[$i]['txtListPrice'.$i]=$listprice;
