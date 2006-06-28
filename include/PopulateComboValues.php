@@ -34,7 +34,7 @@ class PopulateComboValues
 		$i=0;
 		foreach ($values as $val => $cal)
 		{
-			$id = $adb->getUniqueID($tableName);
+			$id = $adb->getUniqueID('vtiger_'.$tableName);
 			if($val != '')
 			{
 				$adb->query("insert into vtiger_".$tableName. " values(".$id.",'".$val."',".$i.",1)");
