@@ -566,7 +566,12 @@ $mod_strings = Array(
 'Country'=>'Country',
 'Password'=>'Password',
 'Confirm Password'=>'Confirm Password',
-
+'LBL_SHOWN'=>'Shown',
+'LBL_HIDDEN'=>'Hidden',
+'LBL_SHOW'=>'Show',
+'LBL_HIDE'=>'Hide',
+'LBL_HOME_PAGE_COMP'=>'Home Page Components',
+'LBL_LOGIN_HISTORY'=>'Login History',
 );
 
 ?>
