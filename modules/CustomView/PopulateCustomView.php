@@ -427,7 +427,7 @@ function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 {
 	global $adb;
 
-	$genCVid = $adb->getUniqueID("customview");
+	$genCVid = $adb->getUniqueID("vtiger_customview");
 
 	if($genCVid != "")
 	{
