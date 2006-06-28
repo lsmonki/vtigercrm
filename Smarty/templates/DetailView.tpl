@@ -79,7 +79,7 @@ function DeleteTag(id)
                 {assign var=address1 value='Mailing'}
                 {assign var=address2 value='Other'}
         {/if}
-        <div id="locateMap" style="width: 125px; right: 159px; top: 260px; display: none; z-index:50" onmouseout="fninvsh('locateMap')" onmouseover="fnvshNrm('locateMap')">
+        <div id="locateMap" onMouseOut="fninvsh('locateMap')" onMouseOver="fnvshNrm('locateMap')">
                 <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                                 <td>
@@ -211,7 +211,7 @@ function DeleteTag(id)
                                                         {if $MODULE eq 'Leads'}
                                                         <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="{$APP.LBL_LOCATE_MAP}">
                                                         {else}
-                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="fnvshobj(this,'locateMap');" onmouseout="fninvsh('locateMap');" title="{$APP.LBL_LOCATE_MAP}">
+                                                        <input name="mapbutton" value="{$APP.LBL_LOCATE_MAP}" class="small" type="button" onClick="fnvshobj(this,'locateMap');" onMouseOut="fninvsh('locateMap');" title="{$APP.LBL_LOCATE_MAP}">
 							{/if}
                                                         {/if}
                                                         </td>
