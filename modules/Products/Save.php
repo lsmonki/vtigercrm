@@ -24,8 +24,10 @@
 require_once('modules/Products/Product.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $log;
-
+global $log,$current_user;
+$currencyid=fetchCurrency($current_user->id);
+$rate_symbol = getCurrencySymbolandCRate($currencyid);
+$rate = $rate_symbol['rate'];
 $focus = new Product();
 if(isset($_REQUEST['record']))
 {
@@ -45,6 +47,11 @@ foreach($focus->column_fields as $fieldname => $val)
 	{
 		$value = $_REQUEST[$fieldname];
 		$focus->column_fields[$fieldname] = $value;
+	}
+	if(isset($_REQUEST['unit_price']))
+	{
+		$value = convertToDollar($_REQUEST['unit_price'],$rate);
+		$focus->column_fields['unit_price'] = $value;
 	}
 }
 
