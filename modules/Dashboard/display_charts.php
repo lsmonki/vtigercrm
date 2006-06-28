@@ -15,6 +15,7 @@
 	
 global $tmp_dir;
 global $mod_strings,$app_strings;
+global $current_user;
 
 $period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; // Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek; lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
@@ -72,6 +73,25 @@ $tickets_by_account="select vtiger_troubletickets.*, vtiger_account.* from vtige
 //Query for tickets by contact
 $tickets_by_contact="select vtiger_troubletickets.*, vtiger_contactdetails.* from vtiger_troubletickets inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id";
 
+
+/**This function generates the security parameters for a given module based on the assigned profile 
+*Param $module - module name
+*Returns an string value
+*/
+
+function dashboard_check($module)
+{
+	global $current_user;
+	$sec_parameter = '';
+	$tab_id = getTabid($module);
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter($module);
+	}
+	return $sec_parameter;
+}
 /**  This function returns  the values for the graph, for any type of graph needed	 
         * Portions created by vtiger are Copyright (C) vtiger.
         * All Rights Reserved.
@@ -221,7 +241,7 @@ $graph_array = Array(
                     	$graph_title= $mod_strings['leadsource'];
                     	$module="Leads";
                     	$where="";
-                    	$query=$leads_query;                   
+                    	$query=$leads_query." ".dashboard_check($module);                   
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     
                     }
@@ -232,7 +252,7 @@ $graph_array = Array(
                     	$graph_title= $mod_strings['leadstatus'];
                     	$module="Leads";
                     	$where="";
-                    	$query=$leads_query;
+                    	$query=$leads_query." ".dashboard_check($module);
                     	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Lead Industry
@@ -242,7 +262,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['leadindustry'];
                             $module="Leads";
                             $where="";
-                            $query=$leads_query;
+                            $query=$leads_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Lead Source
@@ -252,7 +272,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['salesbyleadsource'];
                             $module="Potentials";
                             $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
-                            $query=$potential_query;
+                            $query=$potential_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales by Account
@@ -262,7 +282,7 @@ $graph_array = Array(
                          $graph_title=$mod_strings['salesbyaccount'];
                          $module="Potentials";
                          $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
-                         $query=$potential_query;
+                         $query=$potential_query." ".dashboard_check($module);
                          echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Sales by User
@@ -272,7 +292,7 @@ $graph_array = Array(
 			$graph_title=$mod_strings['salesbyuser'];
 			$module="Potentials";
 			$where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
-			$query=$potential_query;
+			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Sales by team
@@ -282,7 +302,7 @@ $graph_array = Array(
 			$graph_title=$mod_strings['salesbyteam'];
 			$module="Potentials";
 			$where=" and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
-			$query=$potential_query;
+			$query=$potential_query." ".dashboard_check($module);
 			echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
                     //Charts for Account by Industry
@@ -292,7 +312,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['accountindustry'];
                             $module="Accounts";
                             $where="";
-                            $query=$account_query;
+                            $query=$account_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Products by Category
@@ -302,7 +322,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['productcategory'];
                             $module="Products";
                             $where="";
-                            $query=$products_query;
+                            $query=$products_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Charts for Products by Quantity in stock
@@ -312,7 +332,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['productbyqtyinstock'];
 			    $module="Products";
 			    $where="";
-			    $query=$products_query;
+			    $query=$products_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by PO
@@ -322,7 +342,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['productbypo'];
 			    $module="Products";
 			    $where="";
-			    $query=$products_query;
+			    $query=$products_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Quotes
@@ -332,7 +352,7 @@ $graph_array = Array(
    			    $graph_title=$mod_strings['productbyquotes'];
 			    $module="Products";
 			    $where=""; 
-			    $query=$products_query;
+			    $query=$products_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Charts for Products by Invoice
@@ -342,7 +362,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['productbyinvoice'];
 			    $module="Products";
 			    $where="";
-			    $query=$products_query;
+			    $query=$products_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 
@@ -353,7 +373,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['sobyaccounts'];
                             $module="SalesOrder";
                             $where="";
-                            $query=$so_query;
+                            $query=$so_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Sales Order by Status
@@ -363,7 +383,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['sobystatus'];
                             $module="SalesOrder";
                             $where="";
-                            $query=$so_query;
+                            $query=$so_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Purchase Order by Status
@@ -373,7 +393,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['pobystatus'];
                             $module="PurchaseOrder";
                             $where="";
-                            $query=$po_query;
+                            $query=$po_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Quotes by Accounts
@@ -383,7 +403,7 @@ $graph_array = Array(
                             $graph_title= $mod_strings['quotesbyaccounts'];
                             $module="Quotes";
                             $where="";
-                            $query=$quotes_query;
+                            $query=$quotes_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Quotes by Stage
@@ -393,7 +413,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['quotesbystage'];
                             $module="Quotes";
                             $where="";
-                            $query=$quotes_query;
+                            $query=$quotes_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Invoice by Accounts
@@ -403,7 +423,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['invoicebyacnts'];
                             $module="Invoice";
                             $where="";
-                            $query=$invoice_query;
+                            $query=$invoice_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Invoices by status
@@ -413,7 +433,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['invoicebystatus'];
                             $module="Invoice";
                             $where="";
-                            $query=$invoice_query;
+                            $query=$invoice_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Status
@@ -423,7 +443,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['ticketsbystatus'];
                             $module="HelpDesk";
                             $where="";
-                            $query=$helpdesk_query;
+                            $query=$helpdesk_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Priority
@@ -433,7 +453,7 @@ $graph_array = Array(
                             $graph_title=$mod_strings['ticketsbypriority'];
                             $module="HelpDesk";
                             $where="";
-                            $query=$helpdesk_query;
+                            $query=$helpdesk_query." ".dashboard_check($module);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
 		    //Tickets by Category
@@ -443,7 +463,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbycategory'];
 			    $module="HelpDesk";
 			    $where="";
-			    $query=$helpdesk_query;
+			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by User   
@@ -453,7 +473,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbyuser'];
 			    $module="HelpDesk";
 			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
-			    $query=$helpdesk_query;
+			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by Team
@@ -463,7 +483,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbyteam'];
 			    $module="HelpDesk";
 			    $where=" and (vtiger_ticketgrouprelation.groupname != NULL || vtiger_ticketgrouprelation.groupname != ' ')";
-			    $query=$helpdesk_query;
+			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }    
 		    //Tickets by Product
@@ -473,7 +493,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbyproduct'];
 			    $module="HelpDesk";
 			    $where="";
-			    $query=$helpdesk_query;
+			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Campaigns by Contact
@@ -483,7 +503,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbycampaign'];
 			    $module="Campaigns";
 			    $where="";
-			    $query=$campaign_query;
+			    $query=$campaign_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 		    //Tickets by Account
@@ -493,7 +513,7 @@ $graph_array = Array(
 			    $graph_title=$mod_strings['ticketsbyaccount'];
 			    $module="HelpDesk";
 			    $where="";
-			    $query=$tickets_by_account;
+			    $query=$tickets_by_account." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
 			    //Tickets by Contact
@@ -503,7 +523,7 @@ $graph_array = Array(
 				    $graph_title=$mod_strings['ticketsbycontact'];
 				    $module="HelpDesk";
 				    $where="";
-				    $query=$tickets_by_contact;
+				    $query=$tickets_by_contact." ".dashboard_check($module);
 				    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 				    }
 		    else

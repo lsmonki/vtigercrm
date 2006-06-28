@@ -383,14 +383,14 @@ function save_image_map($filename,$image_map)
 
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
-	global $user_id,$date_start,$end_date,$type;
+	global $user_id,$date_start,$end_date,$type,$mod_strings;
 
 	//Giving the Cached image name
 	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).".png";
 	$html_imagename=$graph_by; //Html image name for the graph
 
 	$graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
-
+	
 	if($graph_details!=0)
 	{
 		$name_val=$graph_details[0];
@@ -414,7 +414,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 	}
 	else
 	{
-		
+                 echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
 	}
 	
 }
