@@ -343,7 +343,7 @@ function validateInventory(module)
 
 	if(rowCnt == 0)
 	{
-		alert('No product is selected. Select atleast one Product');
+		alert('No product is selected. Select at least one Product');
 		return false;
 	}
 
