@@ -37,7 +37,7 @@ if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 }
 else
 {
-	$account_id = $adb->getUniqueID("mail_accounts");
+	$account_id = $adb->getUniqueID("vtiger_mail_accounts");
 	$sql="insert into vtiger_mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."','".$box_refresh."','".$mails_per_page."', '".$ssltype."', '".$sslmeth."', '".$_REQUEST["int_mailer"]."','1','0')";
 }
 
