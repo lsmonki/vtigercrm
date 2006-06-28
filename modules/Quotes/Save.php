@@ -28,8 +28,10 @@ include("modules/Emails/mail.php");
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $log;
-
+global $log,$current_user;
+$currencyid=fetchCurrency($current_user->id);
+$rate_symbol = getCurrencySymbolandCRate($currencyid);
+$rate = $rate_symbol['rate'];
 $log->debug("Inside Quote Save");
 
 $focus = new Quote();
@@ -75,6 +77,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 	$prod_status = $_REQUEST[$status_var];
 	$qty = $_REQUEST[$qty_var];
 	$listprice = $_REQUEST[$list_price_var];
+	$listprice = convertToDollar($listprice,$rate);
 	$vat = $_REQUEST[$vat_var];
 	$sales = $_REQUEST[$sales_var];
 	$service = $_REQUEST[$service_var];
