@@ -32,10 +32,6 @@ class freetag {
 	 *  @access private
 	 *  @param string
 	 */ 
-	//var $_db_user = 'root';
-	//var $_db_pass = '';
-	//var $_db_host = 'jerijohn';
-	//var $_db_name = 'vtigercrm06_03'; 
 	/**#@-*/
 
 	/**
@@ -919,22 +915,20 @@ class freetag {
 		// by $step.
 		$cloud_html = '';
 		$cloud_spans = array();
-		//included to get the site URL
-		include("config.php");
 		if($module =='')
 			$module = 'All';	
 		if($module != 'All')	
 		{	
 			foreach($tag_list[0] as $tag => $qty) {
 				$size = $min_font_size + ($qty - $min_qty) * 3;
-				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].');"><img src="'.$image_path.'del_tag.gif"></span></span>';
+				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].');"><img src="'.$image_path.'del_tag.gif"></span></span>';
 
 			}
 		}else
 		{
 			foreach($tag_list[0] as $tag => $qty) {
 				$size = $min_font_size + ($qty - $min_qty) * 3;
-				$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="'.$site_URL.'/index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
+				$cloud_span[] = '<span class="' . $span_class . '"><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. $tag . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a></span>';
 
 			}
 
