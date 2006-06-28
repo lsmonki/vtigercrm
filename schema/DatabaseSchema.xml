@@ -66,7 +66,7 @@
 			<default value="23:00" />
 		</field>	
 		<field name="homeorder" type="C" size="255">
-			<default value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL" />
+			<default value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL,HDB" />
 		</field>
 		<field name="activity_view" type="C" size="25">
 			<default value="Today" />
@@ -1184,9 +1184,9 @@
 		<field name="campaignname" type="C" size="255" />
 		<field name="campaigntype" type="C" size="255" />
 		<field name="campaignstatus" type="C" size="255" />
-		<field name="expectedrevenue" type="I" size="19" />
-		<field name="budgetcost" type="I" size="19" />
-		<field name="actualcost" type="I" size="19" />
+		<field name="expectedrevenue" type="N" size="11.3" />
+		<field name="budgetcost" type="N" size="11.3" />
+		<field name="actualcost" type="N" size="11.3" />
 		<field name="expectedresponse" type="C" size="255" />
 		<field name="numsent" type="N" size="11.0" />
 		<field name="product_id" type="I" size="19" />
@@ -1195,10 +1195,10 @@
 		<field name="targetsize" type="I" size="19" />
 		<field name="expectedresponsecount" type="I" size="19" />
 		<field name="expectedsalescount" type="I" size="19" />
-		<field name="expectedroi" type="I" size="19" />
+		<field name="expectedroi" type="N" size="11.3" />
 		<field name="actualresponsecount" type="I" size="19" />
 		<field name="actualsalescount" type="I" size="19" />
-		<field name="actualroi" type="I" size="19" />
+		<field name="actualroi" type="N" size="11.3" />
 		<field name="campaignid" type="I" size="19">
 			<key />
 		</field>
@@ -1781,6 +1781,7 @@
 			<key />
 		</field>
 		<field name="server" type="C" size="30" />
+		<field name="server_port" type="I" size="19" />
 		<field name="server_username" type="C" size="30" />
 		<field name="server_password" type="C" size="30" />
 		<field name="server_type" type="C" size="20" />
