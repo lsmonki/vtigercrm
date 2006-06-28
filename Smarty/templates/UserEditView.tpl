@@ -11,7 +11,6 @@
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ColorPicker2.js"></script>
-<style type="text/css">@import url(themes/blue/style.css);</style>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -51,115 +50,155 @@ function check_duplicate()
 </script>
 
 
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
+<tbody><tr>
+        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
+        <br>
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-{if $PARENTTAB neq ''}	
-	{include file='SettingsMenu.tpl'}
-{/if}
-<td width="75%" valign="top">
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	<div align=center>
+	{if $PARENTTAB eq 'Settings'}
+		{include file='SetMenu.tpl'}
+	{/if}
+
+
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 	<tr><td align="left">
-			<table width="100%" cellpadding="5" cellspacing="0" border="0">
-			<tr>
-			<td colspan="2" style="padding:5px;">
-				<span class="lvtHeaderText">
-					{if $PARENTTAB neq ''}	
-					<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
-					{else}
-                                            <span class="lvtHeaderText">
-                                            <b>{$APP.LBL_MY_PREFERENCES}</b>
-                                            </span>
-                                        {/if}
-				<hr noshade="noshade" size="1" />
-			</td>
-		  </tr>
+		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-											<td width="5%"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
-										{if $MODE eq 'edit'}
-												<td width="95%"><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
-												<b class="small">{$UMOD.LBL_EDIT_VIEW} {$FIRST_NAME} {$LAST_NAME}</b>
-											</td>
-										{else}
-												<td width="95%"><span class="genHeaderGrayBig">{$UMOD.LBL_NEW_USER_BUTTON_LABEL}</span><br>
-												<b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
-											</td>
-										{/if}
-											
-									</tr>
-							</table>
-	</td></tr>
-	
+			<td rowspan="2"><img src="{$IMAGE_PATH}user.gif" align="absmiddle"></td>
+			<td>	
+				<span class="lvtHeaderText">
+				{if $PARENTTAB neq ''}	
+				<b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS} </a> > {$MOD.LBL_USER_MANAGEMENT} > {$MOD.LBL_USERS}</b></span>
+				{else}
+                                <span class="lvtHeaderText">
+                                <b>{$APP.LBL_MY_PREFERENCES}</b>
+                                </span>
+                                {/if}
+			</td>
+			<td rowspan="2" nowrap>
+				<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small crmbutton save"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
+				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small crmbutton cancel" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
+						
+			</td>
+	 	</tr>
+		<tr>
+			{if $MODE eq 'edit'}
+				<td><span class="genHeaderGrayBig">{$USER_NAME}</span><br>
+				<b class="small">{$UMOD.LBL_EDIT_VIEW} {$FIRST_NAME} {$LAST_NAME}</b>
+			{else}
+				<td><span class="genHeaderGrayBig">{$UMOD.LBL_NEW_USER_BUTTON_LABEL}</span><br>
+				<b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
+			{/if}
+			</td>
+                </tr>
+		</table>
+	</td>
+	</tr>
 	<tr><td class="padTab" align="left">
 		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
-			<input type="hidden" name="module" value="Users">
-			<input type="hidden" name="record" value="{$ID}">
-			<input type="hidden" name="mode" value="{$MODE}">
-			<input type='hidden' name='parenttab' value='{$PARENTTAB}'>
-			<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
-			<input type="hidden" name="action">
-			<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
-			<input type="hidden" name="return_id" value="{$RETURN_ID}">
-			<input type="hidden" name="return_action" value="{$RETURN_ACTION}">			
-			<input type="hidden" name="tz" value="Europe/Berlin">			
-			<input type="hidden" name="holidays" value="de,en_uk,fr,it,us,">			
-			<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
-			<input type="hidden" name="namedays" value="">			
-			<input type="hidden" name="weekstart" value="1">
+		<input type="hidden" name="module" value="Users">
+		<input type="hidden" name="record" value="{$ID}">
+		<input type="hidden" name="mode" value="{$MODE}">
+		<input type='hidden' name='parenttab' value='{$PARENTTAB}'>
+		<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+		<input type="hidden" name="action">
+		<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
+		<input type="hidden" name="return_id" value="{$RETURN_ID}">
+		<input type="hidden" name="return_action" value="{$RETURN_ACTION}">			
+		<input type="hidden" name="tz" value="Europe/Berlin">			
+		<input type="hidden" name="holidays" value="de,en_uk,fr,it,us,">			
+		<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
+		<input type="hidden" name="namedays" value="">			
+		<input type="hidden" name="weekstart" value="1">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
-		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">
-		<table align="center" border="0" cellpadding="0" cellspacing="0" width="99%">
-		  <tr>
-			<td>
-			  <table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
-			  <tr>
-			     <td id="prof" width="25%" align="center" nowrap="nowrap" class="dvtSelectedCell" onclick="fnVis('prof')" ><b>{$UMOD.LBL_USER_LOGIN_ROLE}</b></td>
-			     <td class="dvtTabCache" width="10" nowrap="nowrap">&nbsp;</td>
-			  </tr>
-			  </table>
-			</td>
-		  </tr>
+			<table align="center" border="0" cellpadding="0" cellspacing="0" width="99%">
 			<tr>
 			    <td align="left" valign="top">
-			        <div id="mnuTab">
-			             <table class="dvtContentSpace" border="0" cellpadding="0" cellspacing="0" width="100%">
-				        <tr><td height="35">&nbsp;</td></tr>
+			             <table border="0" cellpadding="0" cellspacing="0" width="100%">
 					<tr><td align="left">
-					   <table width="99%"  border="0" cellspacing="0" cellpadding="5" align="center" class="small">
-
-									   {foreach key=header item=data from=$BLOCKS}
-					     <tr>
-											<td colspan=4 class="detailedViewHeader">
-											<b>{$header}</b>
-						</td>
-					     </tr>
-										<!-- Handle the ui types display -->
-										{include file="DisplayFields.tpl"}
-
-									   {/foreach}
-
-
-							        <tr>
-							            <td colspan=4><div align="center">
-								    <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
-								    <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
-								        </div></td>
-								</tr>
-							  </table>
-							  </td></tr>
+						{foreach key=header name=blockforeach item=data from=$BLOCKS}
+						<br>
+		                                <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+                		                <tr>
+                                		    {strip}
+		                                     <td class="big">
+                		                        <strong>{$smarty.foreach.blockforeach.iteration}. {$header}</strong>
+                                		     </td>
+		                                     <td class="small" align="right">&nbsp;</td>
+		                                  {/strip}
+                		              	</tr>
+                                		</table>
+		                                <table border="0" cellpadding="5" cellspacing="0" width="100%">
+						<!-- Handle the ui types display -->
+							{include file="DisplayFields.tpl"}
 						</table>
-						</form>
+					   	{/foreach}
+				<br>
+			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+			    	<tr>
+				     <td class="big">	
+					<strong>4.sdjhfsjkhfjalkssdjhfsjkhfjalks</strong>
+				     </td>
+				     <td class="small" align="right">&nbsp;</td>	
+			        </tr>
+			    	</table>
+			    	<table border="0" cellpadding="5" cellspacing="0" width="100%">
+				{foreach item=homeitems key=values from=$HOMEORDER}
+					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+					    {if $homeitems neq ''}
+					    	<td class="dvtCellInfo" align="center" width="5%">
+					   	<input name="{$values}" value="{$values}" checked type="radio"></td><td class="dvtCellInfo" align="left" width="20%">Show</td> 		
+					    	<td class="dvtCellInfo" align="center" width="5%">
+					   	<input name="{$values}" value="" type="radio"></td><td class="dvtCellInfo" align="left">Hide</td> 		
+					    {else}	
+					    	<td class="dvtCellInfo" align="center" width="5%">
+					   	<input name="{$values}" value="{$values}" type="radio"></td><td class="dvtCellInfo" align="left">Show</td> 		
+					    	<td class="dvtCellInfo" align="center" width="5%">
+					   	<input name="{$values}" value="" checked type="radio"></td><td class="dvtCellInfo" align="left">Hide</td> 		
+					    {/if}	
+					</tr>			
+				{/foreach}
+			    	</table>	
+				<br>
+			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+			    	<tr>
+				     <td class="big">	
+					<strong>5.kssdjhfsjkhfjalks</strong>
+				     </td>
+				     <td class="small" align="right">&nbsp;</td>	
+			        </tr>
+			    	</table>
+			    	<table border="0" cellpadding="5" cellspacing="0" width="100%">
+					<tr><td>&nbsp;</td><td></td></tr>	
+			    	</table>	
+				<tr><td colspan=4>&nbsp;</td></tr>
+							
+					        <tr>
+					       		<td colspan=4 align="right">
+							<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accesskey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small crmbutton save"  name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  "  onclick="this.form.action.value='Save'; return verify_data(EditView)" style="width: 70px;" type="button" />
+							<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accesskey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small crmbutton cancel" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " onclick="window.history.back()" style="width: 70px;" type="button" />
+							</td>
+						</tr>
+					    </table>
+					 </td></tr>
+					</table>
 			  	   </td></tr>
 				   </table>
-				    </td></tr>
+				 <br>
+				  </td></tr>
+				<tr><td class="small"><div align="right"><a href="#top">{$MOD.LBL_SCROLL}</a></div></td></tr>
 				</table>
+				</form>	
+			</td>
+			</tr>
+			</table>
 </td>
 </tr>
 </table>
-
+</td></tr></table>
+<br>
 {$JAVASCRIPT}
-{if $PARENTTAB neq ''}
-	{include file='SettingsSubMenu.tpl'}
-{/if}
