@@ -940,6 +940,8 @@ $app_strings = Array(
 'LBL_TO_CONFIGURE'=>'to Configure',
 'LBL_HERE'=>'here',
 'LBL_RECORDS'=>'Records',
+'LBL_SCROLL'=>'[Scroll to Top]',
+'LBL_EXPAND_COLLAPSE'=>'Expand/Collapse',
 );
 
 
