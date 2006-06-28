@@ -181,7 +181,7 @@ for($i = 0; $i < $company_name_count; $i++)
 	
 	if ($i > 3)
 	{
-		$freetag = $adb->getUniqueId('freetags');
+		$freetag = $adb->getUniqueId('vtiger_freetags');
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[1]', '$cloudtag[1]')";
 		$res = $adb->query($query);
 
@@ -284,7 +284,7 @@ for($i=0; $i<10; $i++)
 	
 	if ($i > 8)
 	{
-		$freetag = $adb->getUniqueId('freetags');
+		$freetag = $adb->getUniqueId('vtiger_freetags');
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[2]', '$cloudtag[2]')";
 		$res1 = $adb->query($query);
 
@@ -700,7 +700,7 @@ for($i=0;$i<5;$i++)
 	$invoice_ids[] = $invoice->id;
 	if ($i > 3)
 	{
-		$freetag = $adb->getUniqueId('freetags');
+		$freetag = $adb->getUniqueId('vtiger_freetags');
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[0]', '$cloudtag[0]')";
 		$res_inv = $adb->query($query);
 
@@ -829,7 +829,7 @@ for($i=0;$i<5;$i++)
 	
 	if ($i > 3)
 	{
-		$freetag = $adb->getUniqueId('freetags');
+		$freetag = $adb->getUniqueId('vtiger_freetags');
 		$query = "insert into vtiger_freetags values ($freetag, '$cloudtag[3]', '$cloudtag[3]')";
 		$res_tkt = $adb->query($query);
 
