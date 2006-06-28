@@ -63,7 +63,7 @@ else
 {
 	if($_REQUEST['fieldid'] == '')
 	{
-		$max_fieldid = $adb->getUniqueID("field");
+		$max_fieldid = $adb->getUniqueID("vtiger_field");
 		$columnName = 'cf_'.$max_fieldid;
 	}
 	else
@@ -234,13 +234,13 @@ else
 	//retreiving the sequence
 	if($_REQUEST['fieldid'] == '')
 	{
-		$custfld_fieldid=$adb->getUniqueID("field");
+		$custfld_fieldid=$adb->getUniqueID("vtiger_field");
 	}
 	else
 	{
 		$custfld_fieldid= $_REQUEST['fieldid'];
 	}
-	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
+	$custfld_sequece=$adb->getUniqueId("vtiger_customfield_sequence");
     	
 	$blockid ='';
         //get the blockid for this custom block
@@ -296,7 +296,7 @@ else
 			for($i = 0; $i < $count; $i++)
 			{
 				$pickArray[$i] = trim($pickArray[$i]);
-				$id = $adb->getUniqueID($columnName);
+				$id = $adb->getUniqueID('vtiger_'.$columnName);
 				if($pickArray[$i] != '')
 				{
 					$query = "insert into vtiger_".$columnName." values(".$id.",'".$pickArray[$i]."',".$i.",1)";
