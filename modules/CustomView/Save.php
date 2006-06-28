@@ -89,7 +89,7 @@ if($cvmodule != "")
 
 	if(!$cvid)
 	{
-		$genCVid = $adb->getUniqueID("customview");
+		$genCVid = $adb->getUniqueID("vtiger_customview");
 		if($genCVid != "")
 		{
 
