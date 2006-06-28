@@ -14,7 +14,7 @@ function SavePortal($portalname,$portalurl)
 {
 	global $adb;
 	$adb->println("just entered the SavePortal method");
-	$portalid=$adb->getUniqueID('portal');
+	$portalid=$adb->getUniqueID('vtiger_portal');
 	$query="insert into vtiger_portal values(".$portalid.",'".$portalname."','".$portalurl."',0)";
 	$adb->println($query);
 	$result=$adb->query($query);
