@@ -456,7 +456,7 @@ class freetag {
 			$tag_id = $rs->fields['id'];
 		} else {
 			// Add new tag! 
-			$tag_id = $adb->getUniqueId('freetags');
+			$tag_id = $adb->getUniqueId('vtiger_freetags');
 			$sql = "INSERT INTO ${prefix}freetags (id,tag, raw_tag) VALUES ($tag_id,$normalized_tag, $tag)";
 			$rs = $adb->query($sql) or die("Syntax Error: $sql");
 			
