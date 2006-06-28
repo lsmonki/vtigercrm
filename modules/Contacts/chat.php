@@ -172,7 +172,7 @@ class Chat
 	return;
       }
     
-    $_SESSION['chat_user'] = $adb->getUniqueID('chat_users');
+    $_SESSION['chat_user'] = $adb->getUniqueID('vtiger_chat_users');
     
     $res = $adb->query("INSERT INTO vtiger_chat_users (id, nick, session, ping, ip)
    			 VALUES ('".$_SESSION['chat_user']."',
@@ -346,7 +346,7 @@ class Chat
     $msg = $this->msgParse($msg);
     if(strlen($msg) == 0) return;
     
-    $id = $adb->getUniqueID('chat_msg');
+    $id = $adb->getUniqueID('vtiger_chat_msg');
     $res = $adb->query("INSERT INTO vtiger_chat_msg (id, chat_from, chat_to, born, msg)
     			VALUES (".$id.", '".$_SESSION['chat_user']."', '".$to."', ".$adb->database->sysTimeStamp.", '".$msg."')");
     
