@@ -41,7 +41,7 @@ if(isset($templateid) && $templateid !='')
 }
 else
 {
-	$templateid = $db->getUniqueID('emailtemplates');
+	$templateid = $db->getUniqueID('vtiger_emailtemplates');
 	$sql = "insert into vtiger_emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0,".$templateid.")";
 	$adb->query($sql);
 
