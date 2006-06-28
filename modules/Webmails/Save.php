@@ -107,7 +107,7 @@ function add_attachment_to_contact($cid,$email) {
 
 	    $upload_filepath = decideFilePath();
 	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++) {
-		$current_id = $adb->getUniqueID("crmentity");
+		$current_id = $adb->getUniqueID("vtiger_crmentity");
 		$date_var = date('YmdHis');
 
 		$filename = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
