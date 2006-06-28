@@ -81,7 +81,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			$parent_type = 'Potential';
 		}
 	 
-		$genQueryId = $adb->getUniqueID("wordtemplates");
+		$genQueryId = $adb->getUniqueID("vtiger_wordtemplates");
 		if($genQueryId != '')
 		{
 			if($result!=false && $savefile=="true")
