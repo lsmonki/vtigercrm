@@ -590,10 +590,10 @@ class Account extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('accountscf'))
+		if($this->checkIfCustomTableExists('vtiger_accountscf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum('accountscf','Accounts') . "
+			$query = $this->constructCustomQueryAddendum('vtiger_accountscf','Accounts') . "
 				vtiger_account.*,
 					".$this->entity_table.".*,
 				vtiger_accountbillads.city AS billing_city,

@@ -23,9 +23,9 @@ class Product extends CRMEntity {
 
 	 // Josh added for importing and exporting -added in patch2
         var $unit_price;
-        var $table_name = "products";
+        var $table_name = "vtiger_products";
         var $object_name = "Product";
-        var $entity_table = "crmentity";
+        var $entity_table = "vtiger_crmentity";
         var $required_fields = Array(
                 'productname'=>1
         );
@@ -440,16 +440,16 @@ class Product extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('productcf'))
+		if($this->checkIfCustomTableExists('vtiger_productcf'))
 		{
 
-		$query = $this->constructCustomQueryAddendum('productcf','Products') ."    
+		$query = $this->constructCustomQueryAddendum('vtiger_productcf','Products') ."    
 			vtiger_products.productid AS productid,
 			vtiger_products.productname AS productname,
 			vtiger_products.productcode AS productcode,
-			vtiger_products.productcategory AS vtiger_productcategory,
-			vtiger_products.manufacturer AS vtiger_manufacturer,
-			vtiger_products.product_description AS product_description,
+			vtiger_products.productcategory AS productcategory,
+			vtiger_products.manufacturer AS manufacturer,
+			vtiger_crmentity.description AS product_description,
 			vtiger_products.qty_per_unit AS qty_per_unit,
 			vtiger_products.unit_price AS unit_price,
 			vtiger_products.weight AS weight,
@@ -462,16 +462,16 @@ class Product extends CRMEntity {
 			vtiger_products.discontinued AS discontinued,
 			vtiger_products.sales_start_date AS sales_start_date,
 			vtiger_products.sales_end_date AS sales_end_date,
-			vtiger_products.usageunit AS vtiger_usageunit,
+			vtiger_products.usageunit AS usageunit,
 			vtiger_products.serialno AS serialno,
-			vtiger_products.currency AS vtiger_currency,
+			vtiger_products.currency AS currency,
 			vtiger_products.reorderlevel AS reorderlevel,
 			vtiger_products.website AS website,
-			vtiger_products.taxclass AS vtiger_taxclass,
+			vtiger_products.taxclass AS taxclass,
 			vtiger_products.mfr_part_no AS mfr_part_no,
-			vtiger_products.vendor_part_no AS vtiger_vendor_part_no,
+			vtiger_products.vendor_part_no AS vendor_part_no,
 			vtiger_products.qtyinstock AS qtyinstock,
-			vtiger_products.productsheet AS vtiger_productsheet,
+			vtiger_products.productsheet AS productsheet,
 			vtiger_products.qtyindemand AS qtyindemand
 			FROM ".$this->entity_table."
 			INNER JOIN vtiger_products
@@ -487,9 +487,9 @@ class Product extends CRMEntity {
 			$query = "SELECT vtiger_products.productid AS productid,
 			vtiger_products.productname AS productname,
 			vtiger_products.productcode AS productcode,
-			vtiger_products.productcategory AS vtiger_productcategory,
-			vtiger_products.manufacturer AS vtiger_manufacturer,
-			vtiger_products.product_description AS product_description,
+			vtiger_products.productcategory AS productcategory,
+			vtiger_products.manufacturer AS manufacturer,
+			vtiger_crmentity.description AS product_description,
 			vtiger_products.qty_per_unit AS qty_per_unit,
 			vtiger_products.unit_price AS unit_price,
 			vtiger_products.weight AS weight,
@@ -502,16 +502,16 @@ class Product extends CRMEntity {
 			vtiger_products.discontinued AS discontinued,
 			vtiger_products.sales_start_date AS sales_start_date,
 			vtiger_products.sales_end_date AS sales_end_date,
-			vtiger_products.usageunit AS vtiger_usageunit,
+			vtiger_products.usageunit AS usageunit,
 			vtiger_products.serialno AS serialno,
 			vtiger_products.currency AS vtiger_currency,
 			vtiger_products.reorderlevel AS reorderlevel,
 			vtiger_products.website AS website,
-			vtiger_products.taxclass AS vtiger_taxclass,
+			vtiger_products.taxclass AS taxclass,
 			vtiger_products.mfr_part_no AS mfr_part_no,
-			vtiger_products.vendor_part_no AS vtiger_vendor_part_no,
+			vtiger_products.vendor_part_no AS vendor_part_no,
 			vtiger_products.qtyinstock AS qtyinstock,
-			vtiger_products.productsheet AS vtiger_productsheet,
+			vtiger_products.productsheet AS productsheet,
 			vtiger_products.qtyindemand AS qtyindemand
 			FROM ".$this->table_name ."
 			INNER JOIN vtiger_crmentity

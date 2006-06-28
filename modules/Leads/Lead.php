@@ -125,10 +125,10 @@ class Lead extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('leadscf'))
+		if($this->checkIfCustomTableExists('vtiger_leadscf'))
 		{
 
-			$query = $this->constructCustomQueryAddendum('leadscf','Leads') . " 
+			$query = $this->constructCustomQueryAddendum('vtiger_leadscf','Leads') . " 
 			vtiger_leaddetails.*, ".$this->entity_table.".*, vtiger_leadsubdetails.*,vtiger_leadaddress.city city, vtiger_leadaddress.state state,vtiger_leadaddress.code code,vtiger_leadaddress.country country, vtiger_leadaddress.phone phone, vtiger_users.user_name, vtiger_users.status user_status
 				FROM ".$this->entity_table."
 				INNER JOIN vtiger_leaddetails

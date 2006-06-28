@@ -513,9 +513,9 @@ class Contact extends CRMEntity {
         {
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
-		if($this->checkIfCustomTableExists('contactscf'))
+		if($this->checkIfCustomTableExists('vtiger_contactscf'))
 		{
-			$query =  $this->constructCustomQueryAddendum('contactscf','Contacts') ."
+			$query =  $this->constructCustomQueryAddendum('vtiger_contactscf','Contacts') ."
                                 vtiger_contactdetails.*, vtiger_contactaddress.*,
                                 vtiger_account.accountname account_name,
                                 vtiger_users.user_name assigned_user_name

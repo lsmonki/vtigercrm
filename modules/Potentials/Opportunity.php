@@ -167,28 +167,31 @@ class Potential extends CRMEntity {
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
 
-		if($this->checkIfCustomTableExists('potentialscf'))
+		if($this->checkIfCustomTableExists('vtiger_potentialscf'))
 		{
-			$query = $this->constructCustomQueryAddendum('potentialscf','Potentials') ."
+			$query = $this->constructCustomQueryAddendum('vtiger_potentialscf','Potentials') ."
 			vtiger_potential.*,
 			vtiger_account.accountname account_name,
 			vtiger_users.user_name assigned_user_name
-					FROM vtiger_potential
-					INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-					LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid
-					left join vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid
-					left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_crmentity.deleted=0 ";
+				FROM vtiger_potential
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_potential.potentialid
+				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid
+				left join vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid
+				left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id 
+			where vtiger_crmentity.deleted=0 ";
 		}
 		else
 		{
 			$query = "SELECT
 			vtiger_potential.*,
-			vtiger_account.accountname vtiger_account_name,
+			vtiger_account.accountname account_name,
 			vtiger_users.user_name assigned_user_name
-					FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid                                LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid=vtiger_users.id
-					LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid  LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid where vtiger_crmentity.deleted=0 ";
+				FROM vtiger_potential 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
+				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid  
+				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid 
+			where vtiger_crmentity.deleted=0 ";
 		}	
 
 		$log->debug("Exiting create_export_query method ...");
