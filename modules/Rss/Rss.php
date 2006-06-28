@@ -106,7 +106,7 @@ class vtigerRSS extends CRMEntity
 			{
 				$rsstitle = $url;
 			}
-			$genRssId = $adb->getUniqueID("rss");
+			$genRssId = $adb->getUniqueID("vtiger_rss");
 			$sSQL = "insert into vtiger_rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (".$genRssId.",'".addslashes($url);
 			$sSQL .= "','".addslashes($rsstitle)."',0,".$makestarred.")";
 			$result = $adb->query($sSQL);
