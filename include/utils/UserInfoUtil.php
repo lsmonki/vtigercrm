@@ -529,7 +529,7 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
 	global $adb;
 	$parentRoleDetails=getRoleInformation($parentRoleId);
 	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
-	$roleid_no=$adb->getUniqueId("role");
+	$roleid_no=$adb->getUniqueId("vtiger_role");
         $roleId='H'.$roleid_no;
         $parentRoleHr=$parentRoleInfo[1];
         $parentRoleDepth=$parentRoleInfo[2];
@@ -2803,7 +2803,7 @@ function createGroup($groupName,$groupMemberArray,$description)
 	global $log;
 	$log->debug("Entering createGroup(".$groupName.",".$groupMemberArray.",".$description.") method ...");
 	global $adb;
-	$groupId=$adb->getUniqueId("groups");
+	$groupId=$adb->getUniqueId("vtiger_groups");
 	//Insert into group vtiger_table
 	$query = "insert into vtiger_groups values(".$groupId.",'".$groupName."','".$description."')";
 	$adb->query($query);
@@ -3266,7 +3266,7 @@ function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$to
 	$log->debug("Entering addSharingRule(".$tabid.",".$shareEntityType.",".$toEntityType.",".$shareEntityId.",".$toEntityId.",".$sharePermission.") method ...");
 	
 	global $adb;
-	$shareid=$adb->getUniqueId("datashare_module_rel");
+	$shareid=$adb->getUniqueId("vtiger_datashare_module_rel");
 	
 
 	if($shareEntityType == 'groups' && $toEntityType == 'groups')
